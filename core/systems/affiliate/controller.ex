@@ -179,14 +179,21 @@ defmodule Systems.Affiliate.Controller do
     participant_id = get_participant(params)
     %{user: user} = affiliate_user = Affiliate.Public.obtain_user!(participant_id, affiliate)
 
-    conn
-    |> assign(:current_user, user)
-    |> log_in_user_without_redirect(user)
-    |> authorize_user(assignment)
-    |> ensure_user_info(params, affiliate_user)
-    |> obtain_instance(assignment)
-    |> add_panel_info_for_participant(params, affiliate, affiliate_user)
-    |> redirect(to: path(assignment))
+    conn =
+      conn
+      |> assign(:current_user, user)
+      |> log_in_user_without_redirect(user)
+
+    if full?(assignment) and not returning_participant?(conn, assignment) do
+      assignment_full(conn)
+    else
+      conn
+      |> authorize_user(assignment)
+      |> ensure_user_info(params, affiliate_user)
+      |> obtain_instance(assignment)
+      |> add_panel_info_for_participant(params, affiliate, affiliate_user)
+      |> redirect(to: path(assignment))
+    end
   end
 
   defp path(%{id: id}), do: "/assignment/#{id}"
@@ -210,6 +217,20 @@ defmodule Systems.Affiliate.Controller do
     |> put_status(:service_unavailable)
     |> put_view(html: CoreWeb.ErrorHTML)
     |> render(:"503")
+  end
+
+  defp assignment_full(conn) do
+    conn
+    |> put_view(html: Assignment.ErrorHTML)
+    |> render(:assignment_full)
+  end
+
+  defp full?(%Assignment.Model{} = assignment) do
+    not Assignment.Public.has_budget_capacity?(assignment)
+  end
+
+  defp returning_participant?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment) do
+    Assignment.Public.member?(assignment, user)
   end
 
   defp authorize_user(%{assigns: %{current_user: user}} = conn, assignment) do

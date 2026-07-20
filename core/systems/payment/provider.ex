@@ -101,9 +101,25 @@ defmodule Systems.Payment.Provider do
 
   # Withdrawals
 
+  @typedoc """
+  Provider-agnostic lifecycle status. Each adapter maps its own vocabulary onto
+  these three atoms, so domain code never matches on a provider's status strings.
+  An unrecognised provider status maps to `:pending`: an unknown state must never
+  finalize money movement.
+
+  The provider's own word is kept alongside it as `raw_status`, so an audit trail
+  can record that OPP said "disapproved" rather than the collapsed `:failed`.
+
+  Transactions and transfers still carry raw provider strings — normalizing those
+  is the remaining scope of the "normalize provider statuses" tech-debt ticket.
+  """
+  @type lifecycle_status :: :pending | :completed | :failed
+
   @type withdrawal :: %{
           uid: String.t(),
-          status: String.t(),
+          status: lifecycle_status(),
+          raw_status: String.t(),
+          reference: String.t() | nil,
           amount: integer()
         }
 
@@ -131,28 +147,42 @@ defmodule Systems.Payment.Provider do
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
 
-  # Charges
+  @doc """
+  Every withdrawal the provider holds for a merchant.
 
-  @type charge :: %{
+  This is how a withdrawal is found again when its uid was never recorded — the
+  caller matches on `reference`, which carries the caller's own idempotence key.
+  Deliberately unfiltered: these are participant merchants, which have a handful
+  of withdrawals in their lifetime, so there is nothing to paginate around and no
+  need to depend on a provider's filter vocabulary.
+  """
+  @callback list_withdrawals(merchant_uid :: String.t()) ::
+              {:ok, [withdrawal()]} | {:error, Error.t()}
+
+  # Transfers
+
+  @type transfer :: %{
           uid: String.t(),
           status: String.t(),
           amount: integer()
         }
 
   @doc """
-  Move funds between two merchant balances on the platform — a "charge" of
-  type `balance`. Debits `from_owner_uid` and credits `to_owner_uid`.
+  Move funds from one merchant balance to another within the provider. Debits
+  `from_owner_uid` and credits `to_owner_uid`.
 
   Used to fund a participant's merchant from the platform (eyra) merchant before
-  the participant withdraws to their bank account.
+  the participant withdraws to their bank account. Providers name this operation
+  differently (OPP: a "charge" of type `balance`; Stripe Connect: a transfer);
+  that vocabulary stays inside the adapter.
 
   The `idempotence_key` is a stable, caller-owned unique id so retrying the same
-  logical charge never moves the money twice.
+  logical transfer never moves the money twice.
   """
-  @callback create_charge(
+  @callback transfer_to_merchant(
               from_owner_uid :: String.t(),
               to_owner_uid :: String.t(),
               amount :: non_neg_integer(),
               idempotence_key :: String.t()
-            ) :: {:ok, charge()} | {:error, Error.t()}
+            ) :: {:ok, transfer()} | {:error, Error.t()}
 end

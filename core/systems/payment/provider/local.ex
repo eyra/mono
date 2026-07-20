@@ -7,7 +7,6 @@ defmodule Systems.Payment.Provider.Local do
 
   # Merchants
 
-  # Always "fully verified" so the dev/test pay-out path skips OPP's KYC funnel.
   defp stub_merchant(uid) do
     %{
       uid: uid,
@@ -112,23 +111,36 @@ defmodule Systems.Payment.Provider.Local do
       "[Payment.Local] create_withdrawal merchant=#{merchant_uid} currency=#{currency} uid=#{uid} idempotence_key=#{idempotence_key} attrs=#{inspect(attrs)}"
     )
 
-    {:ok, %{uid: uid, status: "created", amount: Map.get(attrs, :amount, 0)}}
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       reference: idempotence_key,
+       amount: Map.get(attrs, :amount, 0)
+     }}
   end
 
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
-    {:ok, %{uid: uid, status: "created", amount: 0}}
+    {:ok, %{uid: uid, status: :pending, raw_status: "created", reference: nil, amount: 0}}
   end
 
   @impl true
-  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+  def list_withdrawals(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_withdrawals merchant=#{merchant_uid} -> []")
+    {:ok, []}
+  end
+
+  @impl true
+  def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
       when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
              is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
-      "[Payment.Local] create_charge from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
+      "[Payment.Local] transfer_to_merchant from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
     )
 
     {:ok, %{uid: uid, status: "created", amount: amount}}

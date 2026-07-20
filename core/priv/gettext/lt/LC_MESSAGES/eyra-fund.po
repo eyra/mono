@@ -190,3 +190,15 @@ msgstr "Į patvirtinimą"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.title"
 msgstr "Banko sąskaita dar nepatvirtinta"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.retry"
+msgstr ""

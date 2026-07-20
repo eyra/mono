@@ -962,26 +962,72 @@ defmodule Systems.Fund.Public do
 
   @doc """
   Requests a payout for all of the participant's `:approved` rewards: locks
-  them, then charges and withdraws via OPP. Returns `{:ok, result}` or
+  them, then transfers and withdraws via the payment provider. Returns `{:ok, result}` or
   `{:error, reason}`.
   """
   def request_payout(%Account.User{} = user, currency) do
-    # Reload: the caller may hold a struct from before prepare_payout/1 set merchant_uid.
-    case Repo.reload!(user) do
-      %Account.User{merchant_uid: nil} ->
-        {:error, :no_merchant}
+    # Reload: the caller may hold a struct from before prepare_payout/2 set merchant_uid.
+    user |> Repo.reload!() |> resume_or_start_payout(currency)
+  end
 
-      %Account.User{id: user_id, merchant_uid: merchant_uid} ->
-        approved = list_approved_rewards(user_id, currency)
-        total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+  defp resume_or_start_payout(%Account.User{merchant_uid: nil}, _currency),
+    do: {:error, :no_merchant}
 
-        if total < @payout_threshold_cents do
-          {:error, {:below_threshold, total}}
-        else
-          do_request_payout(user_id, merchant_uid, approved, total)
-        end
+  # Resume an unresolved payout rather than start a fresh one: a new payout only
+  # sees :approved rewards, so it would strand the ones locked on the old one.
+  defp resume_or_start_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}, currency) do
+    case find_unresolved_payout(user_id) do
+      %Fund.PayoutModel{} = payout -> resume_payout(payout)
+      nil -> start_new_payout(user_id, merchant_uid, currency)
     end
   end
+
+  defp start_new_payout(user_id, merchant_uid, currency) do
+    approved = list_approved_rewards(user_id, currency)
+    total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+
+    if total < @payout_threshold_cents do
+      {:error, {:below_threshold, total}}
+    else
+      do_request_payout(user_id, merchant_uid, approved, total)
+    end
+  end
+
+  # A :failed payout is still unresolved only if its funds moved; without a
+  # commit it reverted its own lock and its rewards are back in :approved.
+  defp find_unresolved_payout(user_id) do
+    from(p in Fund.PayoutModel,
+      where: p.user_id == ^user_id,
+      where: p.status == :pending or (p.status == :failed and not is_nil(p.funds_committed_at)),
+      order_by: [asc: p.inserted_at],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  @doc """
+  The participant's payout situation for display, so the home card can surface a
+  stranded payout the reward-status columns don't show:
+
+    * `:none`        — no unresolved payout; the normal "Uitbetalen" flow applies.
+    * `:in_progress` — issued and awaiting the bank; nothing for the user to do.
+    * `:retryable`   — stranded but recoverable; a "retry" resumes it.
+    * `:manual`      — an unconfirmed transfer that only support can resolve.
+  """
+  @spec payout_status(Account.User.t()) :: :none | :in_progress | :retryable | :manual
+  def payout_status(%Account.User{id: user_id}) do
+    case find_unresolved_payout(user_id) do
+      nil -> :none
+      payout -> display_status(Fund.PayoutModel.phase(payout))
+    end
+  end
+
+  defp display_status(:awaiting_provider), do: :in_progress
+
+  defp display_status(phase) when phase in [:awaiting_withdrawal, :withdrawal_retryable],
+    do: :retryable
+
+  defp display_status(:awaiting_transfer), do: :manual
 
   @doc """
   Pure pre-flight threshold check (no side effects), used by `prepare_payout/2`.
@@ -1126,61 +1172,61 @@ defmodule Systems.Fund.Public do
 
   # Per-leg idempotence keys so retries never double-move money.
   defp withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids) do
-    base_key = Fund.PayoutModel.idempotence_key(payout)
-
-    case Payment.Public.create_charge(
+    case Payment.Public.transfer_to_merchant(
            platform_uid,
            merchant_uid,
            total,
-           base_key <> ",type=charge"
+           Fund.PayoutModel.transfer_key(payout)
          ) do
-      {:ok, _charge} ->
-        # OPP accepted the charge — never revert past here (double-payout risk).
-        withdraw_after_charge(payout, merchant_uid, total, base_key)
+      {:ok, transfer} ->
+        payout
+        |> commit_funds(transfer)
+        |> Fund.PayoutWithdrawal.issue(merchant_uid, total)
 
-      {:error, reason} ->
-        # Nothing moved yet — safe to revert (UC-OPP-06.A3).
-        revert_payout_lock(reward_ids, "opp_charge_failed: #{inspect(reason)}")
-        {:error, {:opp_failed, reason}}
+      {:error, %Payment.Error{} = error} ->
+        handle_transfer_error(error, reward_ids)
     end
   end
 
-  defp withdraw_after_charge(payout, merchant_uid, total, base_key) do
-    attrs = %{amount: total, description: "Reward payout"}
+  # Reverting after the money moved lets a later payout re-lock and re-charge, so
+  # only revert on a definitive rejection; leave an uncertain outcome to reconciliation.
+  defp handle_transfer_error(%Payment.Error{} = error, reward_ids) do
+    if transfer_rejected?(error) do
+      revert_payout_lock(reward_ids, "transfer_rejected: #{inspect(error)}")
+      {:error, {:opp_failed, error}}
+    else
+      Logger.error(
+        "[Fund] transfer outcome uncertain, leaving payout :pending for reconciliation: " <>
+          inspect(error)
+      )
 
-    case Payment.Public.create_withdrawal(
-           merchant_uid,
-           :EUR,
-           attrs,
-           base_key <> ",type=withdrawal"
-         ) do
-      {:ok, withdrawal} ->
-        record_withdrawal(payout, withdrawal, total)
-
-      {:error, reason} ->
-        # Funds already on the participant merchant — don't revert; SF-OPP-02 completes it.
-        Logger.error(
-          "[Fund] charge succeeded but withdrawal failed for payout #{payout.id}; " <>
-            "left :pending for reconciliation: #{inspect(reason)}"
-        )
-
-        {:error, {:opp_failed, reason}}
+      {:error, {:opp_uncertain, error}}
     end
   end
 
-  defp record_withdrawal(payout, %{uid: uid} = withdrawal, total) do
-    case payout |> Fund.PayoutModel.changeset(%{provider_uid: uid}) |> Repo.update() do
+  defp transfer_rejected?(%Payment.Error{code: :api_error, details: %{status: status}})
+       when is_integer(status) and status >= 400 and status < 500,
+       do: true
+
+  defp transfer_rejected?(%Payment.Error{}), do: false
+
+  # A charge cannot be listed at OPP, so this uid is the only handle on the
+  # transfer — persist it before anything downstream can fail.
+  defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
+    payout
+    |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
+    |> Repo.update()
+    |> case do
       {:ok, payout} ->
-        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+        payout
 
       {:error, _changeset} ->
-        # Withdrawal exists at OPP but uid unsaved — don't revert; SF-OPP-02 recovers it.
         Logger.error(
-          "[Fund] OPP withdrawal #{uid} created but provider_uid not persisted for " <>
-            "payout #{payout.id}; left :pending for reconciliation"
+          "[Fund] transfer #{transfer_uid} accepted but not persisted for payout " <>
+            "##{payout.id}; the funds are committed and the uid is lost"
         )
 
-        {:ok, %{payout: payout, withdrawal: withdrawal, amount: total}}
+        payout
     end
   end
 
@@ -1269,39 +1315,39 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Applies an OPP withdrawal status change to the linked payout and its rewards.
+  Applies a provider withdrawal status change to the linked payout and its rewards.
   Idempotent: terminal payouts short-circuit. Returns `{:ok, payout}` when a
   payout was found, `{:ok, nil}` when none matched the uid, or `{:error, reason}`.
   """
-  def apply_withdrawal_status(provider_uid, opp_status)
-      when is_binary(provider_uid) and is_binary(opp_status) do
+  def apply_withdrawal_status(provider_uid, %{status: status, raw_status: raw_status})
+      when is_binary(provider_uid) and is_atom(status) and is_binary(raw_status) do
     case Repo.get_by(Fund.PayoutModel, provider_uid: provider_uid) do
       nil ->
         Logger.warning("[Fund] withdrawal #{provider_uid} not linked to any Payout — ignoring")
 
         {:ok, nil}
 
-      %Fund.PayoutModel{status: status} = payout when status in [:completed, :failed] ->
-        # Already terminal; tolerate OPP's webhook retries.
+      %Fund.PayoutModel{status: payout_status} = payout
+      when payout_status in [:completed, :failed] ->
+        # Already terminal; tolerate the provider's webhook retries.
         {:ok, payout}
 
       %Fund.PayoutModel{} = payout ->
-        apply_status(payout, opp_status)
+        apply_status(payout, status, raw_status)
     end
   end
 
-  defp apply_status(%Fund.PayoutModel{} = payout, "completed") do
+  defp apply_status(%Fund.PayoutModel{} = payout, :completed, _raw_status) do
     finalize_payout(payout, :completed, :paid, nil)
   end
 
-  defp apply_status(%Fund.PayoutModel{} = payout, opp_status)
-       when opp_status in ["failed", "disapproved"] do
-    # Charge already moved funds — don't revert to :approved (would re-charge). SF-OPP-02 reconciles.
-    fail_payout(payout, "opp_status: #{opp_status}")
+  defp apply_status(%Fund.PayoutModel{} = payout, :failed, raw_status) do
+    # Transfer already moved funds — don't revert to :approved (would re-pay). SF-OPP-02 reconciles.
+    fail_payout(payout, "provider_status: #{raw_status}")
   end
 
-  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, opp_status) do
-    Logger.info("[Fund] withdrawal #{uid} OPP status=#{opp_status} — no local transition")
+  defp apply_status(%Fund.PayoutModel{provider_uid: uid} = payout, :pending, raw_status) do
+    Logger.info("[Fund] withdrawal #{uid} provider status=#{raw_status} — no local transition")
 
     {:ok, payout}
   end
@@ -1344,6 +1390,12 @@ defmodule Systems.Fund.Public do
     Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
     {:ok, payout}
   end
+
+  @doc """
+  Drives a stranded payout forward, without ever re-moving money.
+  See `Systems.Fund.PayoutWithdrawal.resume/1`.
+  """
+  def resume_payout(%Fund.PayoutModel{} = payout), do: Fund.PayoutWithdrawal.resume(payout)
 
   @doc """
   Reconciles `:pending` payouts against the payment provider.

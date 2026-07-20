@@ -927,7 +927,7 @@ defmodule Systems.Fund.PublicTest do
     # The payout first charges the funds platform (eyra) -> participant merchant,
     # then withdraws. Stub the charge leg as succeeding.
     defp stub_charge_ok do
-      expect(ProviderMock, :create_charge, fn _from, _to, _amount, _key ->
+      expect(ProviderMock, :transfer_to_merchant, fn _from, _to, _amount, _key ->
         {:ok, %{uid: "chg_ok", status: "created", amount: 0}}
       end)
     end
@@ -974,10 +974,10 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(merchant_uid)
 
       # Charge moves the funds platform (eyra) -> participant merchant first.
-      expect(ProviderMock, :create_charge, fn "mer_platform_test",
-                                              ^merchant_uid,
-                                              1000,
-                                              "payout=" <> _ ->
+      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform_test",
+                                                     ^merchant_uid,
+                                                     1000,
+                                                     "payout=" <> _ ->
         {:ok, %{uid: "chg_2", status: "created", amount: 1000}}
       end)
 
@@ -1006,7 +1006,7 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(merchant_uid)
 
       # Only the 600 euro cents move — the 600 dollar cents are not summed in.
-      expect(ProviderMock, :create_charge, fn _from, ^merchant_uid, 600, _key ->
+      expect(ProviderMock, :transfer_to_merchant, fn _from, ^merchant_uid, 600, _key ->
         {:ok, %{uid: "chg_eur", status: "created", amount: 600}}
       end)
 
@@ -1019,20 +1019,44 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(dollar_reward_id), [])
     end
 
-    test "reverts the lock when OPP returns an error", %{user: user, fund: fund} do
+    test "reverts the lock when the provider definitively rejects the transfer",
+         %{user: user, fund: fund} do
       %{id: id} = insert_reward(user, fund, 1000, :approved)
 
       stub_payout_ready(user.merchant_uid)
 
-      # Charge (platform -> participant) fails before any money moves -> revert.
-      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      # A 4xx means the provider received the transfer and refused it before
+      # moving any money, so releasing the lock is safe.
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
       end)
 
       assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
                Fund.Public.request_payout(user, "euro")
 
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
+    end
+
+    test "leaves the lock in place when the transfer outcome is uncertain",
+         %{user: user, fund: fund} do
+      %{id: id} = insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+
+      # A dropped connection tells us nothing: the transfer may have moved the
+      # money. Reverting would let a retry charge again, so the rewards stay
+      # locked and the payout stays :pending for reconciliation.
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
+               Fund.Public.request_payout(user, "euro")
+
+      assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id), [])
+
+      [payout] = Core.Repo.all(Fund.PayoutModel)
+      assert payout.status == :pending
     end
 
     test "rolls back without an OPP charge when the rewards are locked concurrently",
@@ -1050,7 +1074,7 @@ defmodule Systems.Fund.PublicTest do
         {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
       end)
 
-      # No create_charge / create_withdrawal expectations: the compare-and-swap
+      # No transfer_to_merchant / create_withdrawal expectations: the compare-and-swap
       # lock must find 0 approved rows and bail before any money moves. Mox's
       # verify_on_exit! raises if either OPP call is made.
       assert {:error, :lock_failed} = Fund.Public.request_payout(user, "euro")
@@ -1102,14 +1126,14 @@ defmodule Systems.Fund.PublicTest do
       assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r2_id)
     end
 
-    test "marks the Payout :failed (with reason) and detaches reverted rewards on OPP failure",
+    test "marks the Payout :failed (with reason) and detaches reverted rewards on a rejected transfer",
          %{user: user, fund: fund} do
       %{id: r_id} = insert_reward(user, fund, 1000, :approved)
 
       stub_payout_ready(user.merchant_uid)
 
-      expect(ProviderMock, :create_charge, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
       end)
 
       assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user, "euro")
@@ -1120,12 +1144,369 @@ defmodule Systems.Fund.PublicTest do
 
       [payout] = Core.Repo.all(Fund.PayoutModel)
       assert payout.status == :failed
-      assert payout.failure_reason =~ "opp_charge_failed"
+      assert payout.failure_reason =~ "transfer_rejected"
       assert payout.provider_uid == nil
+    end
+
+    # The shortchange fix: a participant with a stranded payout must not have a
+    # fresh one started for only their newly-earned rewards — that would silently
+    # abandon the money locked on the stranded payout.
+    test "resumes an unresolved payout instead of starting a new one",
+         %{user: user, fund: fund} do
+      # Stranded: funds moved to the participant merchant, no withdrawal recorded.
+      stranded =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: 1000,
+          currency: "eur",
+          payment_adapter: "opp",
+          status: :pending,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      locked =
+        insert_reward(user, fund, 1000, :pending_payout)
+        |> Ecto.Changeset.change(%{payout_id: stranded.id})
+        |> Core.Repo.update!()
+
+      # A newly-earned reward the participant would be shortchanged out of.
+      fresh = insert_reward(user, fund, 500, :approved)
+
+      # Resume drives the stranded payout: it looks for an existing withdrawal
+      # (none) and issues one. No new payout, no charge, no bank recheck.
+      expect(ProviderMock, :list_withdrawals, fn "m_test_123" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_test_123", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{
+           uid: "w_resumed",
+           status: :pending,
+           raw_status: "created",
+           reference: nil,
+           amount: 1000
+         }}
+      end)
+
+      assert {:ok, _} = Fund.Public.request_payout(user, "euro")
+
+      # Exactly one payout — the stranded one, now driven forward.
+      assert [%{id: id, provider_uid: "w_resumed"}] = Core.Repo.all(Fund.PayoutModel)
+      assert id == stranded.id
+
+      # The locked reward stays with it; the fresh reward is untouched, to be paid
+      # out on a later request once this payout resolves.
+      assert %{status: :pending_payout, payout_id: ^id} = Core.Repo.reload!(locked)
+      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+    end
+
+    # The unconfirmed-transfer case: the money may or may not have moved and no
+    # charge can be looked up, so request_payout must surface it for manual review
+    # — never start a fresh payout over the approved rewards (risking a double
+    # charge) nor touch them.
+    test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
+         %{user: user, fund: fund} do
+      stranded =
+        Core.Repo.insert!(%Fund.PayoutModel{
+          user_id: user.id,
+          amount_cents: 1000,
+          currency: "eur",
+          payment_adapter: "opp",
+          status: :pending,
+          funds_committed_at: nil,
+          provider_uid: nil
+        })
+
+      # A newly-earned reward that must not be swept into a fresh payout.
+      fresh = insert_reward(user, fund, 500, :approved)
+
+      # No provider calls at all: an unconfirmed transfer with no findable charge
+      # is left for a human — nothing is issued and no bank recheck happens.
+      assert {:error, :manual_review} = Fund.Public.request_payout(user, "euro")
+
+      # Still exactly one payout (the stranded one); the fresh reward is untouched.
+      assert [%{id: id}] = Core.Repo.all(Fund.PayoutModel)
+      assert id == stranded.id
+      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+    end
+
+    # A :failed payout that moved no money already released its lock, so it must
+    # not block a fresh payout of the reverted (now :approved) rewards.
+    test "starts a new payout when the only prior one failed before moving money",
+         %{user: user, fund: fund} do
+      Core.Repo.insert!(%Fund.PayoutModel{
+        user_id: user.id,
+        amount_cents: 1000,
+        currency: "eur",
+        payment_adapter: "opp",
+        status: :failed,
+        funds_committed_at: nil,
+        provider_uid: nil
+      })
+
+      insert_reward(user, fund, 1000, :approved)
+
+      stub_payout_ready(user.merchant_uid)
+      stub_charge_ok()
+
+      expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
+        {:ok,
+         %{uid: "w_fresh", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      end)
+
+      assert {:ok, %{payout: %{provider_uid: "w_fresh"}}} =
+               Fund.Public.request_payout(user, "euro")
     end
 
     defp reward_key(id) do
       Core.Repo.get!(Fund.RewardModel, id).idempotence_key
+    end
+  end
+
+  describe "resume_payout/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_resume_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    defp stranded_payout(user, fund, attrs) do
+      payout =
+        Core.Repo.insert!(
+          struct!(
+            %Fund.PayoutModel{
+              user_id: user.id,
+              amount_cents: 1000,
+              currency: "eur",
+              payment_adapter: "opp",
+              status: :pending
+            },
+            attrs
+          )
+        )
+
+      reward =
+        Factories.insert!(:reward, %{
+          user: user,
+          fund: fund,
+          amount: 1000,
+          status: :pending_payout,
+          payout_id: payout.id,
+          idempotence_key: "resume-#{System.unique_integer([:positive])}"
+        })
+
+      {payout, reward}
+    end
+
+    # :awaiting_withdrawal, and the withdrawal was created at the provider but its
+    # uid was never recorded. Resume must adopt the existing one, not issue a new
+    # one (that would withdraw twice).
+    test "adopts an existing withdrawal found by reference instead of issuing another",
+         %{user: user, fund: fund} do
+      {payout, reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" ->
+        {:ok,
+         [
+           %{
+             uid: "w_found",
+             status: :completed,
+             raw_status: "completed",
+             reference: prefix <> ",attempt=0",
+             amount: 1000
+           }
+         ]}
+      end)
+
+      # No create_withdrawal expectation: issuing one would be a second withdrawal.
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{status: :completed, provider_uid: "w_found"} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Core.Repo.reload!(reward)
+    end
+
+    # :awaiting_withdrawal after a retry whose response was lost: the provider now
+    # holds both the rejected attempt=0 and a still-pending attempt=1. Matching by
+    # prefix alone could adopt the failed attempt (listed first here), mark the
+    # payout :failed, and drive a fresh retry while attempt=1 is still live —
+    # paying the participant twice. Resume must adopt the *current* attempt.
+    test "adopts the live current attempt, never a stale failed one, when both exist",
+         %{user: user, fund: fund} do
+      {payout, reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil,
+          withdrawal_attempt: 1
+        })
+
+      prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" ->
+        {:ok,
+         [
+           # The earlier, rejected attempt — listed first, must NOT be adopted.
+           %{
+             uid: "w_failed_0",
+             status: :failed,
+             raw_status: "disapproved",
+             reference: prefix <> ",attempt=0",
+             amount: 1000
+           },
+           # The current attempt, still pending after the lost response.
+           %{
+             uid: "w_live_1",
+             status: :pending,
+             raw_status: "pending",
+             reference: prefix <> ",attempt=1",
+             amount: 1000
+           }
+         ]}
+      end)
+
+      # No create_withdrawal: a live attempt already exists, so nothing new is issued.
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      # Adopts the live current attempt and stays pending — not :failed (which would
+      # trigger a double-paying retry).
+      assert %{status: :pending, provider_uid: "w_live_1"} = Core.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+    end
+
+    # :awaiting_withdrawal, and no withdrawal was ever created. Resume must issue
+    # one under the current attempt.
+    test "issues a withdrawal when the provider holds none for the payout",
+         %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: nil
+        })
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
+        assert key =~ "type=withdrawal,attempt=0"
+
+        {:ok,
+         %{uid: "w_new", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending, provider_uid: "w_new"} = Core.Repo.reload!(payout)
+    end
+
+    # :withdrawal_retryable — a withdrawal failed after the money moved. Resume
+    # must issue a fresh one under a NEW attempt (the failed one keeps its key).
+    test "retries a failed withdrawal under a fresh attempt", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          status: :failed,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_failed",
+          withdrawal_attempt: 0,
+          failure_reason: "provider_status: disapproved"
+        })
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
+        # A fresh key, distinct from the failed attempt=0 withdrawal.
+        assert key =~ "type=withdrawal,attempt=1"
+
+        {:ok,
+         %{uid: "w_retry", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{
+               status: :pending,
+               provider_uid: "w_retry",
+               withdrawal_attempt: 1,
+               failure_reason: nil
+             } =
+               Core.Repo.reload!(payout)
+    end
+
+    # :awaiting_transfer — the transfer was never confirmed and a charge cannot be
+    # looked up, so resume must not guess. No provider calls at all.
+    test "leaves an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending} = Core.Repo.reload!(payout)
+    end
+
+    test "is a no-op for a healthy in-flight payout", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_inflight"
+        })
+
+      assert {:ok, {:in_flight, _}} = Fund.Public.resume_payout(payout)
+    end
+
+    test "is a no-op for a completed payout", %{user: user, fund: fund} do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{
+          status: :completed,
+          funds_committed_at: ~N[2026-07-15 08:00:00],
+          provider_uid: "w_done"
+        })
+
+      assert {:ok, {:resolved, _}} = Fund.Public.resume_payout(payout)
+    end
+  end
+
+  describe "payout_status/1" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_status_1"})
+      {:ok, fund: fund, user: user}
+    end
+
+    test "is :none without an unresolved payout", %{user: user} do
+      assert :none = Fund.Public.payout_status(user)
+    end
+
+    test "is :in_progress while the withdrawal is in flight", %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: "w_inflight"
+      })
+
+      assert :in_progress = Fund.Public.payout_status(user)
+    end
+
+    test "is :retryable when funds moved but no withdrawal was recorded",
+         %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: nil
+      })
+
+      assert :retryable = Fund.Public.payout_status(user)
+    end
+
+    test "is :retryable when a withdrawal failed after the funds moved",
+         %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{
+        status: :failed,
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: "w_failed"
+      })
+
+      assert :retryable = Fund.Public.payout_status(user)
+    end
+
+    test "is :manual when the transfer was never confirmed", %{user: user, fund: fund} do
+      stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      assert :manual = Fund.Public.payout_status(user)
     end
   end
 
@@ -1434,51 +1815,68 @@ defmodule Systems.Fund.PublicTest do
       {payout, rewards}
     end
 
-    test ~s(maps OPP "completed" to Payout :completed and rewards :paid),
+    # The provider adapter normalizes its own vocabulary before the domain sees
+    # it (see Provider.OPPTest); the domain only ever handles these three atoms.
+    defp withdrawal(status, raw_status) do
+      %{uid: "w_test", status: status, raw_status: raw_status, amount: 0}
+    end
+
+    test "maps :completed to Payout :completed and rewards :paid",
          %{user: user, fund: fund} do
       {payout, [r1, r2]} = insert_pending_payout(user, fund, [600, 400], "w_completed_1")
 
       assert {:ok, %Fund.PayoutModel{status: :completed, failure_reason: nil}} =
-               Fund.Public.apply_withdrawal_status("w_completed_1", "completed")
+               Fund.Public.apply_withdrawal_status(
+                 "w_completed_1",
+                 withdrawal(:completed, "completed")
+               )
 
       assert %{status: :paid} = Core.Repo.reload!(r1)
       assert %{status: :paid} = Core.Repo.reload!(r2)
       assert %{status: :completed} = Core.Repo.reload!(payout)
     end
 
-    test ~s(maps OPP "failed" to Payout :failed and leaves rewards :pending_payout),
+    test "maps :failed to Payout :failed and leaves rewards :pending_payout",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_failed_1")
 
       assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
-               Fund.Public.apply_withdrawal_status("w_failed_1", "failed")
+               Fund.Public.apply_withdrawal_status("w_failed_1", withdrawal(:failed, "failed"))
 
       assert reason =~ "failed"
-      # The charge already funded the participant merchant, so the rewards stay
+      # The transfer already funded the participant merchant, so the rewards stay
       # locked (:pending_payout) for reconciliation rather than reverting to
       # :approved (a re-payout would charge the platform again).
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
     end
 
-    test ~s(maps OPP "disapproved" to Payout :failed with a disapproved reason),
+    test ~s(records the provider's own word, not the normalized atom, as the failure reason),
          %{user: user, fund: fund} do
-      {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
+      {payout, _} = insert_pending_payout(user, fund, [1000], "w_disapproved_1")
 
       assert {:ok, %Fund.PayoutModel{status: :failed, failure_reason: reason}} =
-               Fund.Public.apply_withdrawal_status("w_disapproved_1", "disapproved")
+               Fund.Public.apply_withdrawal_status(
+                 "w_disapproved_1",
+                 withdrawal(:failed, "disapproved")
+               )
 
+      # :failed collapses OPP's "failed" and "disapproved"; the audit trail must
+      # still say which one it actually was.
       assert reason =~ "disapproved"
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
     end
 
-    test "intermediate OPP statuses (approved/pending/new) are no-ops",
+    test ":pending is a no-op regardless of the provider's own word",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_intermediate_1")
 
-      for opp_status <- ["approved", "pending", "new", "unknown_future_value"] do
-        assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_intermediate_1", opp_status)
+      for raw_status <- ["approved", "pending", "new", "unknown_future_value"] do
+        assert {:ok, _} =
+                 Fund.Public.apply_withdrawal_status(
+                   "w_intermediate_1",
+                   withdrawal(:pending, raw_status)
+                 )
       end
 
       # Nothing should have moved from the original :pending / :pending_payout state.
@@ -1487,20 +1885,26 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "returns {:ok, nil} and does nothing when the provider_uid is unknown" do
-      assert {:ok, nil} = Fund.Public.apply_withdrawal_status("w_unknown_999", "completed")
+      assert {:ok, nil} =
+               Fund.Public.apply_withdrawal_status(
+                 "w_unknown_999",
+                 withdrawal(:completed, "completed")
+               )
     end
 
     test "is idempotent: re-applying to an already-:completed payout short-circuits",
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_completed")
 
-      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+      done = withdrawal(:completed, "completed")
+
+      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
       assert %{status: :paid} = Core.Repo.reload!(r1)
 
       # A second "completed" webhook must not flip the (now :paid) reward back
       # to :pending_payout or otherwise change state.
       assert {:ok, %Fund.PayoutModel{status: :completed}} =
-               Fund.Public.apply_withdrawal_status("w_idempotent_completed", "completed")
+               Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
 
       assert %{status: :paid} = Core.Repo.reload!(r1)
       assert %{status: :completed} = Core.Repo.reload!(payout)
@@ -1510,13 +1914,21 @@ defmodule Systems.Fund.PublicTest do
          %{user: user, fund: fund} do
       {payout, [r1]} = insert_pending_payout(user, fund, [1000], "w_idempotent_failed")
 
-      assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_failed", "failed")
+      assert {:ok, _} =
+               Fund.Public.apply_withdrawal_status(
+                 "w_idempotent_failed",
+                 withdrawal(:failed, "failed")
+               )
+
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
 
-      # Late "completed" must not flip a :failed payout to :completed or move
+      # Late :completed must not flip a :failed payout to :completed or move
       # the still-locked reward.
       assert {:ok, %Fund.PayoutModel{status: :failed}} =
-               Fund.Public.apply_withdrawal_status("w_idempotent_failed", "completed")
+               Fund.Public.apply_withdrawal_status(
+                 "w_idempotent_failed",
+                 withdrawal(:completed, "completed")
+               )
 
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
