@@ -92,7 +92,7 @@ defmodule Frameworks.Pixel.ClickableCard do
       <div class="flex flex-col h-full">
         <div class="flex-grow">
           <div
-            class="flex flex-col cursor-pointer"
+            class="flex flex-col cursor-pointer h-full"
             phx-target={@target}
             phx-click="card_clicked"
             phx-value-item={@id}
@@ -106,7 +106,7 @@ defmodule Frameworks.Pixel.ClickableCard do
             <% else %>
               <div class="pt-6 px-6 lg:pl-8 lg:pr-8 lg:pt-8" />
             <% end %>
-            <div>
+            <div class="mt-auto">
               <div
                 class="relative pl-6 pr-6 pb-6 lg:pl-8 lg:pr-8 lg:pb-8"
               >

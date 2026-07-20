@@ -9,6 +9,12 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
   alias Systems.Fund
   alias Systems.Pool
 
+  defp promote_pool_to_panl!(pool) do
+    pool
+    |> Ecto.Changeset.change(name: "Panl")
+    |> Core.Repo.update!()
+  end
+
   describe "Promotion Landing Page" do
     setup [:login_as_member]
 
@@ -19,7 +25,19 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       assert html =~ "Participate"
     end
 
-    test "shows the budget-full state when the fund cannot cover a reward", %{conn: conn} do
+    test "uses the on-dark Panl wordmark for the banner icon", %{conn: conn} do
+      creator = Factories.insert!(:creator)
+
+      %{submission_id: submission_id, promotion_id: promotion_id} =
+        Advert.Factories.create_advert(creator, :accepted, 1)
+
+      submission_id |> Pool.Public.get_by_submission!() |> promote_pool_to_panl!()
+
+      {:ok, _view, html} = live(conn, ~p"/promotion/#{promotion_id}")
+      assert html =~ "/images/logos/pools/panl_wide_dark.svg"
+    end
+
+    test "shows a fully-booked dialog when clicking apply on a full assignment", %{conn: conn} do
       creator = Factories.insert!(:creator)
       currency = Fund.Factories.create_currency("eur_promo", :legal, "€", 2)
       fund = Fund.Factories.create_fund("promo_fund_full", currency)
@@ -31,10 +49,15 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       |> Ecto.Changeset.change(subject_reward: 6000)
       |> Core.Repo.update!()
 
-      {:ok, _view, html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, view, html} = live(conn, ~p"/promotion/#{promotion_id}")
 
-      assert html =~ "Fully booked"
-      assert html =~ "promotion-apply-button-hero-disabled"
+      refute html =~ "This study is fully booked"
+      assert html =~ "promotion-apply-button-hero"
+
+      result = view |> render_click("call-to-action-1")
+
+      # backstop: no navigation; participant stays on the promotion page.
+      assert result =~ "promotion-apply-button-hero"
     end
 
     test "non-member Apply routes through the pool join gate", %{

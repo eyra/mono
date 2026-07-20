@@ -281,75 +281,75 @@ msgstr "Troppe richieste. Riprova tra un attimo."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
-msgstr ""
+msgstr "Aggiungi"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.error.flash"
-msgstr ""
+msgstr "Si è verificato un errore durante la verifica del tuo conto bancario. Riprova più tardi."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.intro"
-msgstr ""
+msgstr "I pagamenti sono gestiti dal nostro partner di pagamento Online Payment Platform"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.not_verified"
-msgstr ""
+msgstr "Non verificato"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.pending"
-msgstr ""
+msgstr "In verifica"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.status.verified"
-msgstr ""
+msgstr "Verificato"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.title"
-msgstr ""
+msgstr "Conto bancario"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.verified.flash"
-msgstr ""
+msgstr "Il tuo conto bancario è stato verificato."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.empty"
-msgstr ""
+msgstr "Non sono ancora stati effettuati pagamenti. Una volta effettuati, troverai qui un riepilogo."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.intro"
-msgstr ""
+msgstr "Di seguito trovi un riepilogo di tutti i tuoi pagamenti."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.title"
-msgstr ""
+msgstr "Riepilogo"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.total"
-msgstr ""
+msgstr "Totale"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.completed"
-msgstr ""
+msgstr "Pagato"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.failed"
-msgstr ""
+msgstr "Fallito"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.status.pending"
-msgstr ""
+msgstr "In attesa"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.amount"
-msgstr ""
+msgstr "Importo"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.date"
-msgstr ""
+msgstr "Data"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.table.status"
-msgstr ""
+msgstr "Stato"
 
 #, elixir-autogen, elixir-format
 msgid "payouts.title"
@@ -373,11 +373,11 @@ msgstr "Verifica conto bancario"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.error.flash"
-msgstr ""
+msgstr "Si è verificato un errore durante la verifica del tuo conto bancario. Riprova più tardi."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.label"
-msgstr ""
+msgstr "Numero di cellulare"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "payouts.phone.modal.body"
