@@ -47,6 +47,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
         user_id: user.id,
         amount_cents: 1000,
         currency: "eur",
+        payment_adapter: "opp",
         status: :pending,
         provider_uid: "w_payout"
       })
@@ -92,6 +93,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       %Budget.TransactionModel{}
       |> Budget.TransactionModel.changeset(%{
         transaction_id: "tx_payin",
+        payment_adapter: "opp",
         status: :pending,
         idempotence_key: Ecto.UUID.generate(),
         invoice_id: "NEXT-W-#{System.unique_integer([:positive])}",

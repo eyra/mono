@@ -46,6 +46,12 @@ defmodule Systems.Budget.TransactionReconciliation do
     |> Repo.all()
   end
 
+  # Local-only (free pay-ins, local simulator) never existed at the provider, so
+  # there is nothing to reconcile against.
+  defp reconcile_transaction(%Budget.TransactionModel{payment_adapter: "local"}, state) do
+    State.tally(state, :verified)
+  end
+
   defp reconcile_transaction(
          %Budget.TransactionModel{transaction_id: nil, id: id, status: status},
          state
@@ -55,10 +61,6 @@ defmodule Systems.Budget.TransactionReconciliation do
     )
 
     record(state, :unresolvable, id, nil, status, nil, %{reason: "no provider uid"})
-  end
-
-  defp reconcile_transaction(%Budget.TransactionModel{transaction_id: "free_" <> _}, state) do
-    State.tally(state, :verified)
   end
 
   defp reconcile_transaction(

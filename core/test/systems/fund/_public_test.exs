@@ -1414,6 +1414,7 @@ defmodule Systems.Fund.PublicTest do
           user_id: user.id,
           amount_cents: total,
           currency: "eur",
+          payment_adapter: "opp",
           status: :pending,
           provider_uid: provider_uid
         })

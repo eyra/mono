@@ -38,6 +38,7 @@ defmodule Systems.Payment.ControllerTest do
         user_id: user.id,
         amount_cents: amount,
         currency: "eur",
+        payment_adapter: "opp",
         status: :pending,
         provider_uid: provider_uid
       })

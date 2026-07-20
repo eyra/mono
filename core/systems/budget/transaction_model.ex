@@ -10,6 +10,7 @@ defmodule Systems.Budget.TransactionModel do
 
   schema "transactions" do
     field(:transaction_id, :string)
+    field(:payment_adapter, :string)
     field(:status, Ecto.Enum, values: @statuses)
     field(:idempotence_key, :string)
     field(:invoice_id, :string)
@@ -22,7 +23,7 @@ defmodule Systems.Budget.TransactionModel do
     timestamps()
   end
 
-  @fields ~w(transaction_id status idempotence_key invoice_id subject_count total_amount)a
+  @fields ~w(transaction_id payment_adapter status idempotence_key invoice_id subject_count total_amount)a
   @required_fields @fields
 
   def changeset(%__MODULE__{} = transaction, attrs) do

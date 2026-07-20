@@ -56,6 +56,7 @@ defmodule Systems.Budget.CompleteTransactionTest do
       %Budget.TransactionModel{}
       |> Budget.TransactionModel.changeset(%{
         transaction_id: "provider-" <> Ecto.UUID.generate(),
+        payment_adapter: "opp",
         status: status,
         idempotence_key: Ecto.UUID.generate(),
         invoice_id: "NEXT-TEST-#{System.unique_integer([:positive])}",

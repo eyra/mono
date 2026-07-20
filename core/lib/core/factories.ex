@@ -1002,6 +1002,7 @@ defmodule Core.Factories do
       user: user,
       amount_cents: 1000,
       currency: "eur",
+      payment_adapter: "opp",
       status: :pending
     }
     |> struct!(attributes)

@@ -22,6 +22,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
   defp setup_transaction(status, opts \\ []) do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
     with_ledger? = Keyword.get(opts, :ledger, true)
+    adapter = Keyword.get(opts, :adapter, "opp")
     user = Factories.insert!(:member)
 
     fund =
@@ -45,6 +46,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
       %Budget.TransactionModel{}
       |> Budget.TransactionModel.changeset(%{
         transaction_id: uid,
+        payment_adapter: adapter,
         status: status,
         idempotence_key: Ecto.UUID.generate(),
         invoice_id: "NEXT-TEST-#{System.unique_integer([:positive])}",
@@ -168,6 +170,16 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     # default min_age is 60 minutes; no OPP call expected.
 
     assert %{scanned: 0} = reconcile()
+  end
+
+  test "skips a local-only transaction without querying the provider" do
+    # Free pay-ins and local-simulator transactions never existed at OPP; the
+    # stored adapter — not the id — tells reconciliation to leave them alone.
+    transaction = setup_transaction(:completed, adapter: "local")
+
+    # No ProviderMock stub: verify_on_exit! fails if the provider is queried.
+    assert %{scanned: 1, verified: 1} = reconcile()
+    assert %{status: :completed} = Repo.reload!(transaction)
   end
 
   test "counts an OPP query error and leaves the transaction untouched" do

@@ -36,12 +36,14 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
   defp insert_payout(user, fund, amount, provider_uid, opts \\ []) do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
     status = Keyword.get(opts, :status, :pending)
+    adapter = Keyword.get(opts, :adapter, "opp")
 
     payout =
       Factories.insert!(:payout, %{
         user: user,
         amount_cents: amount,
         currency: "eur",
+        payment_adapter: adapter,
         status: status,
         provider_uid: provider_uid
       })
@@ -112,6 +114,16 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     # No ProviderMock stub: Mox would raise if get_withdrawal were called.
 
     assert %{scanned: 1, unresolvable: 1} = reconcile()
+    assert %{status: :pending} = Repo.reload!(payout)
+  end
+
+  test "skips a local-only payout without querying the provider", %{user: user, fund: fund} do
+    # A payout realized by the local simulator never existed at OPP; the stored
+    # adapter tells reconciliation to leave it alone.
+    {payout, _reward} = insert_payout(user, fund, 1000, "w_local", adapter: "local")
+
+    # No ProviderMock stub: verify_on_exit! fails if the provider is queried.
+    assert %{scanned: 1, verified: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
   end
 

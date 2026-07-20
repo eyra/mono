@@ -282,6 +282,14 @@ defmodule Systems.Payment.Public do
     div(base_amount * partner_fee_percentage(), 100)
   end
 
+  @doc """
+  Short name of the currently configured payment adapter ("opp" or "local"),
+  stored on transactions and payouts at creation so reconciliation can skip
+  local-only records instead of guessing from the id.
+  """
+  @spec adapter_name() :: String.t()
+  def adapter_name, do: provider_name()
+
   defp provider do
     Application.fetch_env!(:core, :payment_provider)
   end

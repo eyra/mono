@@ -69,9 +69,19 @@ defmodule Systems.Budget.CreatePayInTest do
       assert %{status: :failed} = Repo.get!(Budget.TransactionModel, failed.id)
       assert %{status: :pending} = Repo.get!(Budget.TransactionModel, retry.id)
     end
+
+    test "stores the local adapter on a free (zero-reward) pay-in, so reconciliation skips it" do
+      %{assignment: assignment, user: user} = setup_assignment(0)
+
+      # Zero reward → no provider call; the transaction is realized locally.
+      {:ok, %{transaction: transaction}} = Budget.Public.create_pay_in(assignment, user, 10)
+
+      assert transaction.payment_adapter == "local"
+      assert String.starts_with?(transaction.transaction_id, "free_")
+    end
   end
 
-  defp setup_assignment do
+  defp setup_assignment(subject_reward \\ 500) do
     ensure_currency_ledger(:EUR)
 
     user =
@@ -84,7 +94,8 @@ defmodule Systems.Budget.CreatePayInTest do
     currency = Factories.insert!(:currency, %{name: "eur_pay_in"})
     fund = Fund.Factories.create_fund("pay_in_fund", currency)
 
-    info = Factories.insert!(:assignment_info, %{subject_count: 10, subject_reward: 500})
+    info =
+      Factories.insert!(:assignment_info, %{subject_count: 10, subject_reward: subject_reward})
 
     assignment =
       Factories.insert!(:assignment, %{

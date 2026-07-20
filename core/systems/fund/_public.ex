@@ -1201,6 +1201,7 @@ defmodule Systems.Fund.Public do
     Fund.PayoutModel.changeset(%Fund.PayoutModel{}, %{
       user_id: user_id,
       amount_cents: total,
+      payment_adapter: Payment.Public.adapter_name(),
       status: :pending
     })
   end

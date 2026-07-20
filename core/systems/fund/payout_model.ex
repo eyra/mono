@@ -17,6 +17,7 @@ defmodule Systems.Fund.PayoutModel do
   schema "fund_payouts" do
     field(:amount_cents, :integer)
     field(:currency, :string, default: "eur")
+    field(:payment_adapter, :string)
     field(:status, Ecto.Enum, values: @statuses, default: :pending)
     field(:provider_uid, :string)
     field(:failure_reason, :string)
@@ -36,7 +37,7 @@ defmodule Systems.Fund.PayoutModel do
   def idempotence_key(%__MODULE__{id: id}) when is_integer(id), do: "payout=#{id}"
 
   @required_fields ~w(user_id amount_cents)a
-  @optional_fields ~w(currency status provider_uid failure_reason)a
+  @optional_fields ~w(currency payment_adapter status provider_uid failure_reason)a
   @fields @required_fields ++ @optional_fields
 
   def changeset(payout, attrs) do

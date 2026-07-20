@@ -26,6 +26,7 @@ defmodule Systems.Account.PayoutsViewTest do
       user_id: user.id,
       amount_cents: cents,
       currency: "eur",
+      payment_adapter: "opp",
       status: status,
       inserted_at: inserted_at,
       updated_at: inserted_at

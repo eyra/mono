@@ -110,6 +110,7 @@ defmodule Systems.Budget.Public do
            %Budget.TransactionModel{}
            |> Budget.TransactionModel.changeset(%{
              transaction_id: provider_result.uid,
+             payment_adapter: Payment.Public.adapter_name(),
              status: :pending,
              idempotence_key: idempotence_key,
              invoice_id: invoice_id,
@@ -144,6 +145,7 @@ defmodule Systems.Budget.Public do
            %Budget.TransactionModel{}
            |> Budget.TransactionModel.changeset(%{
              transaction_id: "free_#{Ecto.UUID.generate()}",
+             payment_adapter: "local",
              status: :completed,
              idempotence_key: idempotence_key,
              invoice_id: invoice_id,

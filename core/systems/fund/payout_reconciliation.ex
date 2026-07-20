@@ -45,6 +45,12 @@ defmodule Systems.Fund.PayoutReconciliation do
     |> Repo.all()
   end
 
+  # Local-only payouts (local simulator) never existed at the provider, so there
+  # is nothing to reconcile against.
+  defp reconcile_payout(%Fund.PayoutModel{payment_adapter: "local"}, state) do
+    State.tally(state, :verified)
+  end
+
   defp reconcile_payout(%Fund.PayoutModel{id: id, status: status, provider_uid: nil}, state) do
     Logger.error(
       "[Fund] reconcile: payout ##{id} (#{status}) has no provider_uid — manual review"
