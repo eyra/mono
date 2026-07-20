@@ -975,7 +975,6 @@ defmodule Systems.Fund.Public do
 
   @doc """
   Pure pre-flight threshold check (no side effects), used by `prepare_payout/2`.
-  Scoped to `currency` (the payable currency is decided by the UI layer).
   """
   def payout_eligibility(%Account.User{id: user_id}, currency) do
     total =
@@ -1252,8 +1251,6 @@ defmodule Systems.Fund.Public do
     )
   end
 
-  # Scoped to euro funds so rewards in other currencies are never summed into a
-  # EUR withdrawal; they stay :approved until multi-currency payouts exist.
   defp list_approved_rewards(user_id, currency) do
     reward_query_in_currency(user_id, currency)
     |> where([reward: r], r.status == :approved)

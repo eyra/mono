@@ -45,8 +45,6 @@ defmodule Systems.Home.PageBuilderTest do
     })
   end
 
-  # The rewards-summary card lists payable (euro) rewards only, so tests that
-  # expect the card to appear must fund their rewards in euro.
   defp euro_fund do
     euro = Fund.Factories.create_currency("euro", :legal, "€", 2)
     Fund.Factories.create_fund("euro-fund-#{System.unique_integer([:positive])}", euro)

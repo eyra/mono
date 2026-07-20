@@ -20,11 +20,6 @@ defmodule Systems.Home.PageBuilder do
   # Number of studies shown on the home page before linking to the marketplace
   @home_card_limit 3
 
-  # The currency participants are paid out in. Hardcoded to euro for now: OPP
-  # settles to a EUR bank account, so only euro-fund rewards are payable and
-  # listed. This is the single place to change when multi-currency payouts land —
-  # the currency is supplied from here (the UI layer) into Fund.Public, never
-  # pinned inside the domain.
   @payout_currency "euro"
 
   # For guest users

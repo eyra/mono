@@ -61,8 +61,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   end
 
   defp user_with_reward(amount, merchant_uid) do
-    # Payouts settle in EUR, so rewards must live in a euro fund to be payable
-    # (see Fund.Public list_approved_rewards).
     currency = Fund.Factories.create_currency("euro", :legal, "€", 2)
 
     fund = Fund.Factories.create_fund("h_fund_#{System.unique_integer([:positive])}", currency)
