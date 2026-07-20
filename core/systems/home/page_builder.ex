@@ -20,6 +20,8 @@ defmodule Systems.Home.PageBuilder do
   # Number of studies shown on the home page before linking to the marketplace
   @home_card_limit 3
 
+  @payout_currency "euro"
+
   # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
@@ -72,7 +74,7 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
-    case {Fund.Public.summarize_rewards(user), Fund.Public.payout_status(user)} do
+    case {Fund.Public.summarize_rewards(user, @payout_currency), Fund.Public.payout_status(user)} do
       # No rewards and no unresolved payout — nothing to show.
       {%{pending_cents: 0, approved_cents: 0, rejected_cents: 0}, :none} ->
         nil
@@ -85,6 +87,7 @@ defmodule Systems.Home.PageBuilder do
             |> Map.put(:labels, rewards_summary_labels(approved_cents))
             |> Map.put(:payout_status, payout_status)
             |> Map.put(:user, user)
+            |> Map.put(:payout_currency, @payout_currency)
         }
     end
   end

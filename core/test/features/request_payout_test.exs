@@ -65,7 +65,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
         merchant_uid: merchant_uid
       })
 
-    currency = Factories.insert!(:currency, %{name: "eur_test"})
+    currency = Factories.insert!(:currency, %{name: "euro"})
     fund = Fund.Factories.create_fund("payout_fund_#{participant.id}", currency)
 
     # Approved reward — what makes `payout-button` visible on the home page.

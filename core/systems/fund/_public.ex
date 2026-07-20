@@ -934,13 +934,11 @@ defmodule Systems.Fund.Public do
   @doc """
   Per-status reward totals (in cents) for the home rewards-summary card.
   """
-  def summarize_rewards(%Account.User{id: user_id}) do
+  def summarize_rewards(%Account.User{id: user_id}, currency) do
     totals =
-      from(r in Fund.RewardModel,
-        where: r.user_id == ^user_id,
-        group_by: r.status,
-        select: {r.status, sum(r.amount)}
-      )
+      reward_query_in_currency(user_id, currency)
+      |> group_by([reward: r], r.status)
+      |> select([reward: r], {r.status, sum(r.amount)})
       |> Repo.all()
       |> Enum.into(%{})
 
@@ -967,23 +965,25 @@ defmodule Systems.Fund.Public do
   them, then transfers and withdraws via the payment provider. Returns `{:ok, result}` or
   `{:error, reason}`.
   """
-  def request_payout(%Account.User{} = user) do
-    user |> Repo.reload!() |> resume_or_start_payout()
+  def request_payout(%Account.User{} = user, currency) do
+    # Reload: the caller may hold a struct from before prepare_payout/2 set merchant_uid.
+    user |> Repo.reload!() |> resume_or_start_payout(currency)
   end
 
-  defp resume_or_start_payout(%Account.User{merchant_uid: nil}), do: {:error, :no_merchant}
+  defp resume_or_start_payout(%Account.User{merchant_uid: nil}, _currency),
+    do: {:error, :no_merchant}
 
   # Resume an unresolved payout rather than start a fresh one: a new payout only
   # sees :approved rewards, so it would strand the ones locked on the old one.
-  defp resume_or_start_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}) do
+  defp resume_or_start_payout(%Account.User{id: user_id, merchant_uid: merchant_uid}, currency) do
     case find_unresolved_payout(user_id) do
       %Fund.PayoutModel{} = payout -> resume_payout(payout)
-      nil -> start_new_payout(user_id, merchant_uid)
+      nil -> start_new_payout(user_id, merchant_uid, currency)
     end
   end
 
-  defp start_new_payout(user_id, merchant_uid) do
-    approved = list_approved_rewards(user_id)
+  defp start_new_payout(user_id, merchant_uid, currency) do
+    approved = list_approved_rewards(user_id, currency)
     total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
 
     if total < @payout_threshold_cents do
@@ -1030,11 +1030,11 @@ defmodule Systems.Fund.Public do
   defp display_status(:awaiting_transfer), do: :manual
 
   @doc """
-  Pure pre-flight threshold check (no side effects), used by `prepare_payout/1`.
+  Pure pre-flight threshold check (no side effects), used by `prepare_payout/2`.
   """
-  def payout_eligibility(%Account.User{id: user_id}) do
+  def payout_eligibility(%Account.User{id: user_id}, currency) do
     total =
-      list_approved_rewards(user_id)
+      list_approved_rewards(user_id, currency)
       |> Enum.reduce(0, fn %{amount: amount}, acc -> acc + amount end)
 
     if total < @payout_threshold_cents do
@@ -1048,8 +1048,8 @@ defmodule Systems.Fund.Public do
   Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
   account exist, then reports payout readiness via `payout_ready_for/1`.
   """
-  def prepare_payout(%Account.User{} = user) do
-    with :ok <- payout_eligibility(user),
+  def prepare_payout(%Account.User{} = user, currency) do
+    with :ok <- payout_eligibility(user, currency),
          {:ok, {_user, merchant}} <- Payment.Public.ensure_merchant_for(user),
          {:ok, bank_account} <- Payment.Public.ensure_bank_account_for(merchant.uid) do
       payout_ready_for(bank_account)
@@ -1307,10 +1307,9 @@ defmodule Systems.Fund.Public do
     )
   end
 
-  defp list_approved_rewards(user_id) do
-    from(r in Fund.RewardModel,
-      where: r.user_id == ^user_id and r.status == :approved
-    )
+  defp list_approved_rewards(user_id, currency) do
+    reward_query_in_currency(user_id, currency)
+    |> where([reward: r], r.status == :approved)
     |> Repo.all()
   end
 

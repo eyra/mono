@@ -35,7 +35,8 @@ defmodule Systems.Home.RewardsSummaryView do
           rejected_cents: rejected_cents,
           payout_status: payout_status,
           labels: labels,
-          user: user
+          user: user,
+          payout_currency: payout_currency
         },
         socket
       ) do
@@ -48,7 +49,8 @@ defmodule Systems.Home.RewardsSummaryView do
         rejected_cents: rejected_cents,
         payout_status: payout_status,
         labels: labels,
-        user: user
+        user: user,
+        payout_currency: payout_currency
       )
       |> assign_new(:handoff_mode, fn -> :payout end)
     }
@@ -87,8 +89,12 @@ defmodule Systems.Home.RewardsSummaryView do
   end
 
   @impl true
-  def handle_event("request_payout", _params, %{assigns: %{user: user, labels: labels}} = socket) do
-    case Fund.Public.prepare_payout(user) do
+  def handle_event(
+        "request_payout",
+        _params,
+        %{assigns: %{user: user, payout_currency: payout_currency, labels: labels}} = socket
+      ) do
+    case Fund.Public.prepare_payout(user, payout_currency) do
       :ok ->
         {:noreply, present_handoff(socket, :payout)}
 
@@ -107,10 +113,14 @@ defmodule Systems.Home.RewardsSummaryView do
 
   # A stranded payout is already past the bank-verification handoff, so the retry
   # resumes it directly. request_payout resumes an unresolved payout rather than
-  # starting a new one.
+  # starting a new one, so the currency only satisfies the signature here.
   @impl true
-  def handle_event("retry_payout", _params, %{assigns: %{user: user}} = socket) do
-    case Fund.Public.request_payout(user) do
+  def handle_event(
+        "retry_payout",
+        _params,
+        %{assigns: %{user: user, payout_currency: payout_currency}} = socket
+      ) do
+    case Fund.Public.request_payout(user, payout_currency) do
       {:ok, _result} ->
         send(self(), :payout_completed)
         {:noreply, socket}
@@ -124,11 +134,11 @@ defmodule Systems.Home.RewardsSummaryView do
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
-        %{assigns: %{user: user}} = socket
+        %{assigns: %{user: user, payout_currency: payout_currency}} = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
-    case Fund.Public.request_payout(user) do
+    case Fund.Public.request_payout(user, payout_currency) do
       {:ok, _result} ->
         # Redirecting here is forbidden — this handler runs inside the
         # component's update/2 lifecycle (Fabric delivers the modal event via
@@ -166,12 +176,12 @@ defmodule Systems.Home.RewardsSummaryView do
     |> show_modal(:handoff_modal, :compact)
   end
 
-  defp refresh_totals(socket, user) do
+  defp refresh_totals(%{assigns: %{payout_currency: payout_currency}} = socket, user) do
     %{
       pending_cents: pending_cents,
       approved_cents: approved_cents,
       rejected_cents: rejected_cents
-    } = Fund.Public.summarize_rewards(user)
+    } = Fund.Public.summarize_rewards(user, payout_currency)
 
     assign(socket,
       pending_cents: pending_cents,

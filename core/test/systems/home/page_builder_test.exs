@@ -5,6 +5,7 @@ defmodule Systems.Home.PageBuilderTest do
   alias Systems.Pool
   alias Systems.Advert
   alias Systems.Assignment
+  alias Systems.Fund
 
   alias Core.Factories
 
@@ -38,9 +39,15 @@ defmodule Systems.Home.PageBuilderTest do
   defp give_reward(user, amount \\ 1500) do
     Factories.insert!(:reward, %{
       user: user,
+      fund: euro_fund(),
       amount: amount,
       idempotence_key: "test=#{System.unique_integer([:positive])}"
     })
+  end
+
+  defp euro_fund do
+    euro = Fund.Factories.create_currency("euro", :legal, "€", 2)
+    Fund.Factories.create_fund("euro-fund-#{System.unique_integer([:positive])}", euro)
   end
 
   defp make_panl_participant(user) do
@@ -107,6 +114,7 @@ defmodule Systems.Home.PageBuilderTest do
 
       Factories.insert!(:reward, %{
         user: user,
+        fund: euro_fund(),
         amount: 2000,
         status: :approved,
         idempotence_key: "approved=#{System.unique_integer([:positive])}"
