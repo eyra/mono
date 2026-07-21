@@ -25,9 +25,10 @@ defmodule Systems.Assignment.BudgetForm do
         socket
       ) do
     reward_cents = subject_reward || 0
+    subject_count = Map.get(socket.assigns, :subject_count, 0)
 
     slots_changeset =
-      {%{subject_count: 0}, %{subject_count: :integer}}
+      {%{subject_count: subject_count}, %{subject_count: :integer}}
       |> Ecto.Changeset.change()
 
     reward_changeset = Assignment.InfoModel.changeset(info, :create, %{})
@@ -44,24 +45,31 @@ defmodule Systems.Assignment.BudgetForm do
         reward_locked?: reward_locked?,
         slots_changeset: slots_changeset,
         reward_changeset: reward_changeset,
-        subject_count: 0,
+        subject_count: subject_count,
         reward_cents: reward_cents,
         reward_input: CurrencyHelpers.cents_to_display(reward_cents),
         partner_fee_percentage: Payment.Public.partner_fee_percentage()
       )
-      |> assign_totals(0, reward_cents)
+      |> assign_totals(subject_count, reward_cents)
     }
   end
 
   @impl true
-  def handle_event("update_slots", %{"slots" => %{"subject_count" => count_str}}, socket) do
+  def handle_event(
+        "update_slots",
+        %{"slots" => %{"subject_count" => count_str}},
+        %{assigns: %{slots_changeset: slots_changeset, reward_cents: reward_cents}} = socket
+      ) do
     count = parse_int(count_str)
 
     {
       :noreply,
       socket
-      |> assign(subject_count: count)
-      |> assign_totals(count, socket.assigns.reward_cents)
+      |> assign(
+        subject_count: count,
+        slots_changeset: Ecto.Changeset.change(slots_changeset, subject_count: count)
+      )
+      |> assign_totals(count, reward_cents)
     }
   end
 
