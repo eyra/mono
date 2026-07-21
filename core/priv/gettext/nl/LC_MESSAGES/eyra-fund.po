@@ -189,3 +189,15 @@ msgstr "Naar verificatie"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.title"
 msgstr "Bankrekening nog niet geverifieerd"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.in_progress"
+msgstr "Je uitbetaling wordt verwerkt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.manual"
+msgstr "Je uitbetaling wordt verwerkt. Neem contact op als dit lang duurt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Opnieuw uitbetalen"

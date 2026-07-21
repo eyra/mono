@@ -48,7 +48,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
         amount_cents: 1000,
         currency: "eur",
         status: :pending,
-        provider_uid: "w_payout"
+        provider_uid: "w_payout",
+        funds_committed_at: ~N[2026-01-01 00:00:00]
       })
 
     Factories.insert!(:reward, %{
@@ -110,7 +111,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     transaction = stuck_transaction()
 
     expect(ProviderMock, :get_withdrawal, fn "w_payout" ->
-      {:ok, %{uid: "w_payout", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_payout", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->
@@ -128,7 +129,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     transaction = stuck_transaction()
 
     expect(ProviderMock, :get_withdrawal, fn "w_payout" ->
-      {:ok, %{uid: "w_payout", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_payout", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->

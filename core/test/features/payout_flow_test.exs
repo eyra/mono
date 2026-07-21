@@ -105,7 +105,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     auth_node = Factories.insert!(:auth_node)
     info = Factories.insert!(:assignment_info, %{subject_count: 10, subject_reward: 500})
 
-    currency = Factories.insert!(:currency, %{name: "eur_journey"})
+    currency = Factories.insert!(:currency, %{name: "euro"})
     fund = Fund.Factories.create_fund("journey_fund", currency)
 
     assignment =

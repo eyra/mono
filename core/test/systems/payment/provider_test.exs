@@ -87,7 +87,7 @@ defmodule Systems.Payment.ProviderTest do
     test "delegates to configured provider" do
       ProviderMock
       |> expect(:create_withdrawal, fn "m1", :EUR, %{amount: 1000}, "payout=1" ->
-        {:ok, %{uid: "w1", status: "created", amount: 1000}}
+        {:ok, %{uid: "w1", status: :pending, raw_status: "created", amount: 1000}}
       end)
 
       assert {:ok, %{uid: "w1", amount: 1000}} =
@@ -95,22 +95,22 @@ defmodule Systems.Payment.ProviderTest do
     end
   end
 
-  describe "create_charge/4" do
+  describe "transfer_to_merchant/4" do
     test "delegates to configured provider" do
       ProviderMock
-      |> expect(:create_charge, fn "mer_platform",
-                                   "mer_participant",
-                                   1000,
-                                   "payout=1,type=charge" ->
+      |> expect(:transfer_to_merchant, fn "mer_platform",
+                                          "mer_participant",
+                                          1000,
+                                          "payout=1,type=transfer" ->
         {:ok, %{uid: "chg1", status: "created", amount: 1000}}
       end)
 
       assert {:ok, %{uid: "chg1", amount: 1000}} =
-               ProviderMock.create_charge(
+               ProviderMock.transfer_to_merchant(
                  "mer_platform",
                  "mer_participant",
                  1000,
-                 "payout=1,type=charge"
+                 "payout=1,type=transfer"
                )
     end
   end
@@ -119,10 +119,38 @@ defmodule Systems.Payment.ProviderTest do
     test "delegates to configured provider" do
       ProviderMock
       |> expect(:get_withdrawal, fn "w1" ->
-        {:ok, %{uid: "w1", status: "completed", amount: 500}}
+        {:ok,
+         %{
+           uid: "w1",
+           status: :completed,
+           raw_status: "completed",
+           reference: "payout=abc,type=withdrawal,attempt=0",
+           amount: 500
+         }}
       end)
 
-      assert {:ok, %{uid: "w1", status: "completed"}} = ProviderMock.get_withdrawal("w1")
+      assert {:ok, %{uid: "w1", status: :completed}} = ProviderMock.get_withdrawal("w1")
+    end
+  end
+
+  describe "list_withdrawals/1" do
+    test "delegates to configured provider" do
+      ProviderMock
+      |> expect(:list_withdrawals, fn "m1" ->
+        {:ok,
+         [
+           %{
+             uid: "w1",
+             status: :pending,
+             raw_status: "pending",
+             reference: "payout=abc,type=withdrawal,attempt=0",
+             amount: 500
+           }
+         ]}
+      end)
+
+      assert {:ok, [%{uid: "w1", reference: "payout=abc,type=withdrawal,attempt=0"}]} =
+               ProviderMock.list_withdrawals("m1")
     end
   end
 end

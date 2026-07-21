@@ -20,6 +20,8 @@ defmodule Systems.Home.PageBuilder do
   # Number of studies shown on the home page before linking to the marketplace
   @home_card_limit 3
 
+  @payout_currency "euro"
+
   # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
@@ -72,17 +74,20 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
-    case Fund.Public.summarize_rewards(user) do
-      %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
+    case {Fund.Public.summarize_rewards(user, @payout_currency), Fund.Public.payout_status(user)} do
+      # No rewards and no unresolved payout — nothing to show.
+      {%{pending_cents: 0, approved_cents: 0, rejected_cents: 0}, :none} ->
         nil
 
-      %{approved_cents: approved_cents} = totals ->
+      {%{approved_cents: approved_cents} = totals, payout_status} ->
         %{
           module: Home.RewardsSummaryView,
           params:
             totals
             |> Map.put(:labels, rewards_summary_labels(approved_cents))
+            |> Map.put(:payout_status, payout_status)
             |> Map.put(:user, user)
+            |> Map.put(:payout_currency, @payout_currency)
         }
     end
   end
@@ -166,7 +171,10 @@ defmodule Systems.Home.PageBuilder do
       payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel"),
       payout_verify_title: dgettext("eyra-fund", "rewards_summary.payout.verify.title"),
       payout_verify_body: dgettext("eyra-fund", "rewards_summary.payout.verify.body"),
-      payout_verify_confirm: dgettext("eyra-fund", "rewards_summary.payout.verify.confirm")
+      payout_verify_confirm: dgettext("eyra-fund", "rewards_summary.payout.verify.confirm"),
+      payout_in_progress: dgettext("eyra-fund", "rewards_summary.payout.in_progress"),
+      payout_retry_button: dgettext("eyra-fund", "rewards_summary.payout.retry"),
+      payout_manual: dgettext("eyra-fund", "rewards_summary.payout.manual")
     }
   end
 

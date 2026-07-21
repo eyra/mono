@@ -145,9 +145,9 @@ defmodule Systems.Payment.Controller do
 
   defp handle_withdrawal_status_change(uid) do
     case Systems.Payment.Public.get_withdrawal(uid) do
-      {:ok, %{status: status}} ->
+      {:ok, %{status: status} = withdrawal} ->
         Logger.info("[Payment.Webhook] Provider withdrawal status=#{status} for uid=#{uid}")
-        result = Systems.Fund.Public.apply_withdrawal_status(uid, status)
+        result = Systems.Fund.Public.apply_withdrawal_status(uid, withdrawal)
         Logger.info("[Payment.Webhook] Withdrawal apply result: #{inspect(result)}")
 
       {:error, error} ->

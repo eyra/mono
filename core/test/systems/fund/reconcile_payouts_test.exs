@@ -37,13 +37,18 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     minutes_ago = Keyword.get(opts, :minutes_ago, 120)
     status = Keyword.get(opts, :status, :pending)
 
+    # A recorded withdrawal uid implies the transfer already committed the funds.
+    funds_committed_at =
+      Keyword.get(opts, :funds_committed_at, provider_uid && ~N[2026-01-01 00:00:00])
+
     payout =
       Factories.insert!(:payout, %{
         user: user,
         amount_cents: amount,
         currency: "eur",
         status: status,
-        provider_uid: provider_uid
+        provider_uid: provider_uid,
+        funds_committed_at: funds_committed_at
       })
 
     reward =
@@ -74,7 +79,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, reward} = insert_payout(user, fund, 1000, "w_done")
 
     expect(ProviderMock, :get_withdrawal, fn "w_done" ->
-      {:ok, %{uid: "w_done", status: "completed", amount: 1000}}
+      {:ok, %{uid: "w_done", status: :completed, raw_status: "completed", amount: 1000}}
     end)
 
     assert %{scanned: 1, resolved_completed: 1} = reconcile()
@@ -86,12 +91,12 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, reward} = insert_payout(user, fund, 1000, "w_failed")
 
     expect(ProviderMock, :get_withdrawal, fn "w_failed" ->
-      {:ok, %{uid: "w_failed", status: "failed", amount: 1000}}
+      {:ok, %{uid: "w_failed", status: :failed, raw_status: "failed", amount: 1000}}
     end)
 
     assert %{scanned: 1, resolved_failed: 1} = reconcile()
     assert %{status: :failed} = Repo.reload!(payout)
-    # Charge already moved funds, so rewards stay locked for reconciliation.
+    # Transfer already moved funds, so rewards stay locked for reconciliation.
     assert %{status: :pending_payout} = Repo.reload!(reward)
   end
 
@@ -99,7 +104,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, _reward} = insert_payout(user, fund, 1000, "w_inflight")
 
     expect(ProviderMock, :get_withdrawal, fn "w_inflight" ->
-      {:ok, %{uid: "w_inflight", status: "pending", amount: 1000}}
+      {:ok, %{uid: "w_inflight", status: :pending, raw_status: "pending", amount: 1000}}
     end)
 
     assert %{scanned: 1, still_pending: 1} = reconcile()
@@ -155,5 +160,82 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
 
     assert %{scanned: 1, missing_at_provider: 1} = reconcile()
     assert %{status: :completed} = Repo.reload!(payout)
+  end
+
+  # A stranded payout — funds moved, no withdrawal uid recorded — used to be
+  # flagged :unresolvable. It is now healed: the withdrawal already exists at the
+  # provider and is adopted by its reference.
+  test "heals a stranded payout by adopting the existing withdrawal",
+       %{user: user, fund: fund} do
+    {payout, reward} =
+      insert_payout(user, fund, 1000, nil, funds_committed_at: ~N[2026-01-01 00:00:00])
+
+    prefix = Fund.PayoutModel.withdrawal_key_prefix(payout)
+
+    expect(ProviderMock, :list_withdrawals, fn "m_recon" ->
+      {:ok,
+       [
+         %{
+           uid: "w_adopted",
+           status: :completed,
+           raw_status: "completed",
+           reference: prefix <> ",attempt=0",
+           amount: 1000
+         }
+       ]}
+    end)
+
+    assert %{scanned: 1, resolved_completed: 1} = reconcile()
+    assert %{status: :completed, provider_uid: "w_adopted"} = Repo.reload!(payout)
+    assert %{status: :paid} = Repo.reload!(reward)
+  end
+
+  # Stranded with no withdrawal at the provider at all: the reconciler issues one.
+  # It is now in flight, so it counts as still pending, to be completed on a later pass.
+  test "heals a stranded payout by issuing a withdrawal when none exists",
+       %{user: user, fund: fund} do
+    {payout, _reward} =
+      insert_payout(user, fund, 1000, nil, funds_committed_at: ~N[2026-01-01 00:00:00])
+
+    expect(ProviderMock, :list_withdrawals, fn "m_recon" -> {:ok, []} end)
+
+    expect(ProviderMock, :create_withdrawal, fn "m_recon", :EUR, %{amount: 1000}, _key ->
+      {:ok,
+       %{uid: "w_issued", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+    end)
+
+    assert %{scanned: 1, still_pending: 1} = reconcile()
+    assert %{status: :pending, provider_uid: "w_issued"} = Repo.reload!(payout)
+  end
+
+  # A withdrawal that failed after the funds moved is now scanned (it was not
+  # before) and retried under a fresh attempt.
+  test "heals a payout whose withdrawal failed after the funds moved",
+       %{user: user, fund: fund} do
+    {payout, _reward} =
+      insert_payout(user, fund, 1000, "w_failed",
+        status: :failed,
+        funds_committed_at: ~N[2026-01-01 00:00:00]
+      )
+
+    expect(ProviderMock, :create_withdrawal, fn "m_recon", :EUR, %{amount: 1000}, key ->
+      assert key =~ "attempt=1"
+
+      {:ok,
+       %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+    end)
+
+    assert %{scanned: 1, still_pending: 1} = reconcile()
+
+    assert %{status: :pending, provider_uid: "w_retry", withdrawal_attempt: 1} =
+             Repo.reload!(payout)
+  end
+
+  # An unconfirmed transfer with no findable charge stays manual: no provider calls.
+  test "flags an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+    {payout, _reward} = insert_payout(user, fund, 1000, nil, funds_committed_at: nil)
+
+    assert %{scanned: 1, unresolvable: 1} = reconcile()
+    assert %{status: :pending} = Repo.reload!(payout)
   end
 end
