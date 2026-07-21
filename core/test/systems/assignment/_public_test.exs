@@ -498,6 +498,21 @@ defmodule Systems.Assignment.PublicTest do
       assert Assignment.Public.open_spot_count(assignment) == 3
     end
 
+    # Regression: FX#10029220671. A researcher adding themselves (or a colleague)
+    # to a study as a non-participant crew member (e.g. tester/owner) must not
+    # occupy one of the paid participant spots.
+    test "open_spot_count/1 excludes non-participant crew members" do
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 2)
+
+      tester = Factories.insert!(:member)
+      Crew.Factories.create_member(crew, tester)
+
+      participant = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, participant)
+
+      assert Assignment.Public.open_spot_count(assignment) == 1
+    end
+
     test "next_action (Assignment.CheckRejection) after rejection of task" do
       %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
       user = Factories.insert!(:member)
