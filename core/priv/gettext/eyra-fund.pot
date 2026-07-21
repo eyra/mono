@@ -201,3 +201,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.title"
+msgstr ""

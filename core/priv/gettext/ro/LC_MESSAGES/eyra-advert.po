@@ -164,17 +164,13 @@ msgid "pool.visibility.filled.banner.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.button"
-msgstr "Complet ocupat"
-
-#, elixir-autogen, elixir-format
-msgid "promotion.full.inform.title"
-msgstr "Acest studiu este complet ocupat"
+msgid "promotion.full.inform.button"
+msgstr "Închide"
 
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.text"
 msgstr "Din păcate, toate locurile pentru acest studiu au fost ocupate. Rămâi conectat — mai multe studii sunt pe drum!"
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.inform.button"
-msgstr "Închide"
+msgid "promotion.full.inform.title"
+msgstr "Acest studiu este complet ocupat"

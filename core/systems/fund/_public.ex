@@ -1061,9 +1061,18 @@ defmodule Systems.Fund.Public do
   # account is approved, so a withdrawal never fires against an unapproved account.
   defp payout_ready_for(%{status: "approved"}), do: :ok
 
-  defp payout_ready_for(%{verification_url: verification_url})
+  # "new" is the only status where the participant still has something to do —
+  # complete the provider's hosted iDEAL flow at the verification URL. Any
+  # other non-approved status ("pending", etc.) means the provider is reviewing
+  # and the participant just needs to wait, even if a stale verification_url is
+  # still returned — so match on status first, URL second.
+  defp payout_ready_for(%{status: "new", verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, :bank, verification_url}}
+
+  defp payout_ready_for(%{status: status})
+       when is_binary(status) and status not in ["new", ""],
+       do: {:error, :awaiting_verification}
 
   defp payout_ready_for(_bank_account), do: {:error, :kyc_unavailable}
 

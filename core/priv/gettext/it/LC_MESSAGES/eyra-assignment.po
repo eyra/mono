@@ -590,10 +590,6 @@ msgid "budget_form.fee.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Inserisci un importo, es. 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -752,3 +748,7 @@ msgstr "Purtroppo questo studio è al completo e non accetta più nuovi partecip
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Questo studio è al completo"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Inserisci un importo, es. 3,75"

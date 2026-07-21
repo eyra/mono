@@ -600,10 +600,6 @@ msgid "budget_form.fee.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Introdu o sumă, de ex. 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -762,3 +758,7 @@ msgstr "Din păcate, acest studiu este complet și nu mai acceptă participanți
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Acest studiu este complet"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Introdu o sumă, de ex. 3,75"

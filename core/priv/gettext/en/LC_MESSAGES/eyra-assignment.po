@@ -589,10 +589,6 @@ msgid "budget_form.fee.hint"
 msgstr "Please note that the minimum fee is €8,00 per hour"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Please enter a plain amount, like 3.75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr "Participant fee"
 
@@ -751,3 +747,7 @@ msgstr "Unfortunately, this study is full and is no longer accepting new partici
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "This study is full"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Please enter a plain amount, like 3.75"

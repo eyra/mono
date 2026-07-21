@@ -747,3 +747,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr ""
