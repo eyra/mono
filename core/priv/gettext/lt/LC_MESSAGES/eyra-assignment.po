@@ -600,6 +600,10 @@ msgid "budget_form.fee.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Įveskite sumą, pvz., 3,75"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 

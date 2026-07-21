@@ -589,6 +589,10 @@ msgid "budget_form.fee.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Voer een bedrag in, bijv. 3,75"
+
+#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
