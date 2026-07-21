@@ -910,8 +910,8 @@ defmodule Systems.Assignment.Public do
         0
       end
 
-    all_non_expired_members = Crew.Public.count_members(crew)
-    max(0, subject_count - all_non_expired_members)
+    participants = Crew.Public.count_participants(crew)
+    max(0, subject_count - participants)
   end
 
   @doc """
