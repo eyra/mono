@@ -69,45 +69,14 @@ defmodule Systems.Assignment.BudgetForm do
   def handle_event(
         "save_reward",
         %{"info_model" => %{"subject_reward" => raw_reward} = attrs},
-        %{assigns: %{assignment: assignment, info: info, subject_count: subject_count}} = socket
+        %{assigns: %{info: info}} = socket
       ) do
-    case CurrencyHelpers.display_to_cents(raw_reward) do
-      {:ok, cents} ->
-        attrs = Map.put(attrs, "subject_reward", cents)
-        changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
-
-        case Core.Persister.save(changeset.data, changeset) do
-          {:ok, updated_info} ->
-            reward_cents = updated_info.subject_reward || 0
-
-            {
-              :noreply,
-              socket
-              |> assign(
-                assignment: %{assignment | info: updated_info},
-                info: updated_info,
-                reward_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
-                reward_cents: reward_cents,
-                reward_input: raw_reward
-              )
-              |> assign_totals(subject_count, reward_cents)
-            }
-
-          {:error, changeset} ->
-            {:noreply, assign(socket, reward_changeset: changeset, reward_input: raw_reward)}
-        end
-
-      :error ->
-        changeset =
-          info
-          |> Assignment.InfoModel.changeset(:create, %{})
-          |> Ecto.Changeset.add_error(
-            :subject_reward,
-            dgettext("eyra-assignment", "budget_form.fee.invalid")
-          )
-          |> Map.put(:action, :insert)
-
-        {:noreply, assign(socket, reward_changeset: changeset, reward_input: raw_reward)}
+    with {:ok, cents} <- CurrencyHelpers.display_to_cents(raw_reward),
+         {:ok, updated_info} <- persist_reward(info, attrs, cents) do
+      {:noreply, apply_saved_reward(socket, updated_info, raw_reward)}
+    else
+      {:error, changeset} -> {:noreply, apply_save_error(socket, changeset, raw_reward)}
+      :error -> {:noreply, apply_invalid_reward(socket, raw_reward)}
     end
   end
 
@@ -139,6 +108,47 @@ defmodule Systems.Assignment.BudgetForm do
   @impl true
   def handle_event("cancel", _, socket) do
     {:noreply, socket |> send_event(:parent, "budget_form_cancelled")}
+  end
+
+  defp persist_reward(info, attrs, cents) do
+    attrs = Map.put(attrs, "subject_reward", cents)
+    changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
+    Core.Persister.save(changeset.data, changeset)
+  end
+
+  defp apply_saved_reward(
+         %{assigns: %{assignment: assignment, subject_count: subject_count}} = socket,
+         updated_info,
+         raw_reward
+       ) do
+    reward_cents = updated_info.subject_reward || 0
+
+    socket
+    |> assign(
+      assignment: %{assignment | info: updated_info},
+      info: updated_info,
+      reward_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
+      reward_cents: reward_cents,
+      reward_input: raw_reward
+    )
+    |> assign_totals(subject_count, reward_cents)
+  end
+
+  defp apply_save_error(socket, changeset, raw_reward) do
+    assign(socket, reward_changeset: changeset, reward_input: raw_reward)
+  end
+
+  defp apply_invalid_reward(%{assigns: %{info: info}} = socket, raw_reward) do
+    changeset =
+      info
+      |> Assignment.InfoModel.changeset(:create, %{})
+      |> Ecto.Changeset.add_error(
+        :subject_reward,
+        dgettext("eyra-assignment", "budget_form.fee.invalid")
+      )
+      |> Map.put(:action, :insert)
+
+    assign(socket, reward_changeset: changeset, reward_input: raw_reward)
   end
 
   defp assign_totals(socket, subject_count, reward_cents) do
