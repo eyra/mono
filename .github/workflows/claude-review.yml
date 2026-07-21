@@ -19,12 +19,12 @@ jobs:
       issues: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v7.0.0
+        uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
 
       - name: Run Claude Review
-        uses: anthropics/claude-code-action@v1.0.174
+        uses: anthropics/claude-code-action@v1.0.179
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
           prompt: "Review PR #${{ github.event.inputs.pr_number }}"
