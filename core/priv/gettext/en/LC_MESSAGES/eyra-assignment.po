@@ -642,11 +642,11 @@ msgstr "Recruit participants"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr "Service fee"
+msgstr "Service fee (%{percentage}%)"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr "Subtotal (%{count} × %{reward} fee)"
+msgstr "%{count} x participant fee of %{reward}"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
