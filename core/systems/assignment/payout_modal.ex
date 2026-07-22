@@ -5,7 +5,20 @@ defmodule Systems.Assignment.PayoutModal do
 
   All data access, transformation and i18n live in
   `Systems.Assignment.PayoutModalBuilder`; this component only renders the
-  view model and handles events (delegating mutations to `Assignment.Public`).
+  view model and owns local UI state (active tab, decline expansion,
+  search query, error banner).
+
+  Mutations (`pay_out_all`, `submit_decline`) do NOT run here — the button
+  click and form submit fire the local shim clauses, which only bubble
+  the event to the parent via `send_event(:parent, ...)`. The auth-gated
+  parent (`Systems.Assignment.ParticipantsView`) owns the actual mutation.
+  Composing this modal under any other parent gives the parent the choice
+  whether to implement those events — with no such handler, no mutation.
+
+  The parent signals the outcome back via `send_event(socket, :payout_modal,
+  ...)`, which this component receives as `"post_pay_out_all"` /
+  `"post_submit_decline"` events and uses to update the local error banner
+  and refresh the view model.
 
   Two tabs: `:waiting` (default) lists rewards in `:pending_approval` with
   per-row Decline expansion + bulk "Pay out all"; `:overview` shows historical
@@ -20,7 +33,6 @@ defmodule Systems.Assignment.PayoutModal do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
 
-  alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Assignment.PayoutModalBuilder, as: Builder
 
@@ -66,24 +78,6 @@ defmodule Systems.Assignment.PayoutModal do
   end
 
   @impl true
-  def handle_event("pay_out_all", _, %{assigns: %{vm: %{assignment: assignment}}} = socket) do
-    error =
-      case Assignment.Public.bulk_approve_pending_payouts(assignment) do
-        {:ok, _count} ->
-          nil
-
-        {:error, reason} ->
-          Logger.warning("[PayoutModal] bulk approve failed: #{inspect(reason)}")
-          :pay_out_all
-      end
-
-    {:noreply,
-     socket
-     |> assign(declining_task_id: nil, decline_reason: "", error: error)
-     |> assign_vm()}
-  end
-
-  @impl true
   def handle_event("expand_decline", %{"task-id" => task_id}, socket) do
     {:noreply,
      socket
@@ -102,35 +96,65 @@ defmodule Systems.Assignment.PayoutModal do
     {:noreply, assign(socket, decline_reason: reason)}
   end
 
+  # Shim: mutation is not performed here. The auth-gated parent
+  # (ParticipantsView) owns the actual bulk-approve handler. This clause
+  # just bubbles the event up so the parent can decide (auth by
+  # construction — an unauthenticated parent that hasn't wired the handler
+  # simply does nothing).
+  @impl true
+  def handle_event("pay_out_all", _, socket) do
+    {:noreply, send_event(socket, :parent, "pay_out_all")}
+  end
+
+  # Shim: same rationale as pay_out_all. Task id + reason come from local
+  # UI state (updated by expand_decline / update_reason) and are passed up
+  # to the parent, which is the only place the reject actually runs.
   @impl true
   def handle_event(
         "submit_decline",
         _,
-        %{
-          assigns: %{
-            vm: %{assignment: assignment},
-            declining_task_id: task_id,
-            decline_reason: reason
-          }
-        } = socket
+        %{assigns: %{declining_task_id: task_id, decline_reason: reason}} = socket
       )
       when is_integer(task_id) do
-    {declining_task_id, error} =
-      case Assignment.Public.reject_task_by_id(assignment, task_id, %{
-             category: :other,
-             message: reason
-           }) do
-        {:ok, _} ->
-          {nil, nil}
+    {:noreply, send_event(socket, :parent, "submit_decline", %{task_id: task_id, reason: reason})}
+  end
 
-        error ->
-          Logger.warning("[PayoutModal] reject_task #{task_id} failed: #{inspect(error)}")
-          {task_id, :decline}
-      end
-
+  # Result signal from the auth-gated parent after a bulk approve. Success
+  # clears the decline UI and the error banner; failure keeps the modal state
+  # and surfaces the error. Either way the view model re-fetches to reflect
+  # whatever the mutation did (or didn't) change.
+  @impl true
+  def handle_event("post_pay_out_all", %{result: {:ok, _count}}, socket) do
     {:noreply,
      socket
-     |> assign(declining_task_id: declining_task_id, decline_reason: "", error: error)
+     |> assign(declining_task_id: nil, decline_reason: "", error: nil)
+     |> assign_vm()}
+  end
+
+  @impl true
+  def handle_event("post_pay_out_all", %{result: {:error, _reason}}, socket) do
+    {:noreply,
+     socket
+     |> assign(declining_task_id: nil, decline_reason: "", error: :pay_out_all)
+     |> assign_vm()}
+  end
+
+  # Result signal for a per-row decline. On success clear the decline UI; on
+  # failure keep the decline expanded so the user can retry after seeing the
+  # error banner.
+  @impl true
+  def handle_event("post_submit_decline", %{result: {:ok, _}}, socket) do
+    {:noreply,
+     socket
+     |> assign(declining_task_id: nil, decline_reason: "", error: nil)
+     |> assign_vm()}
+  end
+
+  @impl true
+  def handle_event("post_submit_decline", %{result: {:error, _reason}}, socket) do
+    {:noreply,
+     socket
+     |> assign(decline_reason: "", error: :decline)
      |> assign_vm()}
   end
 
