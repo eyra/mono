@@ -93,11 +93,13 @@ defmodule Systems.Pool.MarketplaceView do
       <%= if Enum.empty?(@items) do %>
         <Text.body><%= dgettext("eyra-pool", "marketplace.empty.message") %></Text.body>
       <% else %>
-        <div class="flex flex-row items-center gap-3">
-          <div class="font-label text-label"><%= dgettext("eyra-pool", "marketplace.filter.label") %></div>
-          <.child name={:marketplace_year_selector} fabric={@fabric} />
-          <div class="flex-grow" />
-          <div class="flex-shrink-0">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-3">
+          <div class="flex flex-row flex-wrap items-center gap-3">
+            <div class="font-label text-label"><%= dgettext("eyra-pool", "marketplace.filter.label") %></div>
+            <.child name={:marketplace_year_selector} fabric={@fabric} />
+          </div>
+          <div class="hidden sm:block sm:flex-grow" />
+          <div class="w-full sm:w-auto sm:flex-shrink-0">
             <.child name={:marketplace_search_bar} fabric={@fabric} />
           </div>
         </div>
