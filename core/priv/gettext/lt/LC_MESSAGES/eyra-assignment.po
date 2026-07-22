@@ -651,13 +651,13 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr ""
+msgstr "Aptarnavimo mokestis (%{percentage}%)"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr ""
+msgstr "%{count} x dalyvio mokestis po %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.total.label"
