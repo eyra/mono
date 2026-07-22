@@ -585,14 +585,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Voer een bedrag in, bijv. 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -638,10 +630,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payment.transactions.empty"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -751,3 +739,11 @@ msgstr "Helaas zit deze studie vol en worden er geen nieuwe deelnemers meer aang
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Deze studie zit vol"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Voer een bedrag in, bijv. 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Een korte omschrijving van je studie"
