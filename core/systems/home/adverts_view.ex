@@ -68,12 +68,12 @@ defmodule Systems.Home.AdvertsView do
           <Advert.CardView.dynamic card={card} target={@myself}/>
         <% end %>
       </Grid.dynamic>
-      <%= if @more_path && @count > Enum.count(@cards) do %>
+      <%= if @more_path && @count > 0 do %>
         <.spacing value="M" />
         <div class="flex flex-row justify-end">
           <.link navigate={@more_path}>
             <div class="flex flex-row items-center gap-2 text-button font-button text-primary">
-              <%= dgettext("eyra-pool", "marketplace.show_more") %>
+              <%= dgettext("eyra-pool", "marketplace.see_all") %>
               <img src={~p"/images/icons/forward.svg"} alt="" />
             </div>
           </.link>
