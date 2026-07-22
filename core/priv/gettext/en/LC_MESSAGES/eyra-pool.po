@@ -43,10 +43,6 @@ msgid "landing.description.visitor"
 msgstr "🚫 You are not a member of this pool."
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.breadcrumb.overview"
-msgstr "Overview"
-
-#, elixir-autogen, elixir-format
 msgid "marketplace.empty.message"
 msgstr "The marketplace is currently empty."
 
@@ -61,10 +57,6 @@ msgstr "Filter:"
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
 msgstr "Search"
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.show_more"
-msgstr "Show more"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
@@ -133,3 +125,7 @@ msgstr "You already joined %{pool_name}"
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
 msgstr "Join pool"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.see_all"
+msgstr "See all"

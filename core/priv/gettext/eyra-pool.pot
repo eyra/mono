@@ -43,10 +43,6 @@ msgid "landing.description.visitor"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.breadcrumb.overview"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "marketplace.empty.message"
 msgstr ""
 
@@ -60,10 +56,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.show_more"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -132,4 +124,8 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.see_all"
 msgstr ""
