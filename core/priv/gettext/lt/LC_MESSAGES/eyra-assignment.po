@@ -596,14 +596,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Įveskite sumą, pvz., 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -649,10 +641,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payment.transactions.empty"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -762,3 +750,11 @@ msgstr "Deja, šis tyrimas yra pilnas ir nebepriima naujų dalyvių."
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Šis tyrimas yra pilnas"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Įveskite sumą, pvz., 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Trumpas jūsų tyrimo aprašymas"

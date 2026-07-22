@@ -586,14 +586,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Introduce un importe, p. ej., 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -639,10 +631,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payment.transactions.empty"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -752,3 +740,11 @@ msgstr "Lamentablemente, este estudio está completo y ya no acepta nuevos parti
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Este estudio está completo"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Introduce un importe, p. ej., 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Una breve descripción de tu estudio"

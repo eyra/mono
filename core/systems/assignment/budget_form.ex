@@ -206,12 +206,12 @@ defmodule Systems.Assignment.BudgetForm do
             form={reward_form}
             field={:aim_of_study}
             label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
+            placeholder={dgettext("eyra-assignment", "budget_form.aim.placeholder")}
             maxlength="250"
+            reserve_error_space={false}
             testid="budget-form-aim-input"
           />
-          <div class="-mt-3 mb-4 text-label font-label text-grey2">
-            <%= dgettext("eyra-assignment", "budget_form.aim.hint") %>
-          </div>
+          <.spacing value="S" />
           <.currency_input
             form={reward_form}
             field={:subject_reward}
@@ -222,13 +222,8 @@ defmodule Systems.Assignment.BudgetForm do
             reserve_error_space={false}
             testid="budget-form-reward-input"
           />
-          <div class={[
-            "mb-4 text-label font-label text-grey2",
-            not Enum.empty?(reward_form[:subject_reward].errors) && "mt-2"
-          ]}>
-            <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
-          </div>
         </.form>
+        <.spacing value="S" />
       <% end %>
 
       <.form id={"#{@id}_slots"} :let={form} for={@slots_changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
@@ -237,6 +232,7 @@ defmodule Systems.Assignment.BudgetForm do
           field={:subject_count}
           label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
           debounce="300"
+          reserve_error_space={false}
           testid="budget-form-slots-input"
         />
       </.form>
