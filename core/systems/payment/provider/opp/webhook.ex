@@ -168,15 +168,18 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
 
   # Resolve the owning merchant so the domain can refresh the participant's badge.
   # When it can't be resolved the event is unroutable — log the OPP-specific
-  # identifiers here (they never reach the controller) and drop it to `:ignored`.
+  # identifiers here (they never reach the controller); the event stays `:kyc`
+  # with a nil merchant, which the controller no-ops on.
   defp classify_kyc(type, object_uid, data) do
     case resolve_merchant_uid(type, object_uid, data) do
       merchant_uid when is_binary(merchant_uid) ->
         event(:kyc, object_uid, type, merchant_uid)
 
       nil ->
+        # Stays a :kyc event with no merchant. The controller no-ops on it, so the
+        # only log is this one detailed :error — not also a generic "ignoring" line.
         log_unresolvable_kyc(type, object_uid, data)
-        event(:ignored, object_uid, type)
+        event(:kyc, object_uid, type)
     end
   end
 

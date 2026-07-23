@@ -49,9 +49,11 @@ defmodule Systems.Payment.Controller do
   defp route(%{category: :kyc, merchant_uid: merchant_uid}) when is_binary(merchant_uid),
     do: notify_kyc(merchant_uid)
 
-  # `:ignored`, or a `:kyc` the adapter couldn't tie to a merchant — nothing to
-  # act on but the raw type, which we log. The guard above keeps a merchant-less
-  # KYC event from ever reaching notify_kyc/1 with a nil uid.
+  # A KYC event the adapter couldn't tie to a merchant. The guard above keeps it
+  # from reaching notify_kyc/1 with a nil uid; the adapter has already logged why
+  # the badge won't refresh, so we stay silent rather than emit a second line.
+  defp route(%{category: :kyc}), do: :ok
+
   defp route(%{raw_type: raw_type}),
     do: Logger.info("[Payment.Webhook] Ignoring event type=#{raw_type}")
 

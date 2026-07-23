@@ -149,6 +149,22 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
       assert event.category == :ignored
       assert event.raw_type == "some.other.event"
     end
+
+    test "a KYC event with no resolvable merchant stays :kyc with a nil merchant_uid" do
+      body =
+        Jason.encode!(%{
+          "uid" => "notif_orphan",
+          "type" => "bank_account.status.changed",
+          "object_uid" => "ba_orphan",
+          "object_type" => "bank_account"
+        })
+
+      conn = build_signed_conn(body)
+
+      assert {:ok, event} = Webhook.verify_and_parse(conn)
+      assert event.category == :kyc
+      assert event.merchant_uid == nil
+    end
   end
 
   describe "verify_and_parse/1 signature verification" do
