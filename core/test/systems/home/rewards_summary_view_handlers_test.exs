@@ -36,7 +36,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     payout_handoff_cancel: "Cancel",
     payout_verify_title: "Bank account not verified",
     payout_verify_body: "Verify your bank account first",
-    payout_verify_confirm: "Go to verification"
+    payout_verify_confirm: "Go to verification",
+    payout_awaiting_title: "Verification in progress",
+    payout_awaiting_body: "Your bank is being reviewed by the payment provider",
+    payout_awaiting_confirm: "OK"
   }
 
   defp socket(user, extra \\ %{}) do
@@ -158,6 +161,35 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
+    # Regression: FX#10005449329. After the participant finishes iDEAL, the
+    # payment provider puts the bank in a review state ("pending") but may keep
+    # returning a verification_url. Instead of nagging them with "please verify
+    # your bank account", show a clear "verification in progress, please wait"
+    # modal.
+    test "awaiting_verification -> presents the awaiting modal, not the verify one" do
+      user = user_with_reward(1000, "m_awaiting")
+
+      stub(ProviderMock, :get_merchant, fn _ ->
+        {:ok,
+         %{
+           uid: "m_awaiting",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub(ProviderMock, :list_bank_accounts, fn _ ->
+        {:ok, [%{uid: "ba", status: "pending", verification_url: "https://opp.test/ba/verify"}]}
+      end)
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :awaiting
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
     test "kyc_unavailable -> no modal (B1: no fall-through to a payout)" do
       user = user_with_reward(1000, "m_unavail")
 
@@ -269,6 +301,24 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert socket.assigns.approved_cents == 0
+    end
+
+    # FX#10005449329. The awaiting modal is info-only — its single "OK" button
+    # must not trigger a payout, only dismiss.
+    test "awaiting variant only dismisses; no provider call, no payout completion" do
+      user = user_with_reward(1000, "m_awaiting_confirm")
+      # No ProviderMock stubs -> Mox raises if any provider call is made.
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :awaiting})
+        )
+
+      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      refute_received :payout_completed
+      assert reward_status(user) == :approved
     end
   end
 

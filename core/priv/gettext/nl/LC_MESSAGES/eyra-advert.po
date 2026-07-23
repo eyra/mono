@@ -163,17 +163,13 @@ msgid "pool.visibility.filled.banner.title"
 msgstr "Alle plekken gereserveerd"
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.button"
-msgstr "Volgeboekt"
-
-#, elixir-autogen, elixir-format
-msgid "promotion.full.inform.title"
-msgstr "Deze studie is volgeboekt"
+msgid "promotion.full.inform.button"
+msgstr "Sluiten"
 
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.text"
 msgstr "Helaas zijn alle plekken voor deze studie inmiddels vergeven. Blijf ons volgen — er komen zeker weer nieuwe studies!"
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.inform.button"
-msgstr "Sluiten"
+msgid "promotion.full.inform.title"
+msgstr "Deze studie is volgeboekt"

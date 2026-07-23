@@ -163,17 +163,13 @@ msgid "pool.visibility.filled.banner.title"
 msgstr "All spots are filled"
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.button"
-msgstr "Fully booked"
-
-#, elixir-autogen, elixir-format
-msgid "promotion.full.inform.title"
-msgstr "This study is fully booked"
+msgid "promotion.full.inform.button"
+msgstr "Close"
 
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.text"
 msgstr "Unfortunately, all spots have been taken. Stay tuned — more studies are on the way!"
 
 #, elixir-autogen, elixir-format
-msgid "promotion.full.inform.button"
-msgstr "Close"
+msgid "promotion.full.inform.title"
+msgstr "This study is fully booked"
