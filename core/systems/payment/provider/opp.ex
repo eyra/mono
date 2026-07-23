@@ -266,12 +266,23 @@ defmodule Systems.Payment.Provider.OPP do
   # Parsers
 
   defp parse_bank_account(uid, data) do
+    raw_status = Map.get(data, "status", "new")
+
     %{
       uid: uid,
-      status: Map.get(data, "status", "new"),
+      status: normalize_kyc_status(raw_status),
+      raw_status: raw_status,
       verification_url: Map.get(data, "verification_url")
     }
   end
+
+  # Only OPP's terminal KYC words are recognised. Everything else — including a
+  # status OPP adds later — stays :pending, so an unknown state is never treated
+  # as verified (which would authorize a payout).
+  defp normalize_kyc_status("approved"), do: :verified
+  defp normalize_kyc_status("disapproved"), do: :rejected
+  defp normalize_kyc_status("new"), do: :new
+  defp normalize_kyc_status(_status), do: :pending
 
   defp parse_merchant(uid, data) do
     compliance = Map.get(data, "compliance", %{})
@@ -286,9 +297,12 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   defp parse_transaction(uid, data) do
+    raw_status = Map.get(data, "status", "unknown")
+
     %{
       uid: uid,
-      status: Map.get(data, "status", "unknown"),
+      status: normalize_lifecycle_status(raw_status),
+      raw_status: raw_status,
       payment_url: Map.get(data, "redirect_url"),
       amount: Map.get(data, "total_amount", 0)
     }
@@ -299,28 +313,33 @@ defmodule Systems.Payment.Provider.OPP do
 
     %{
       uid: uid,
-      status: normalize_withdrawal_status(raw_status),
+      status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
       reference: Map.get(data, "reference"),
       amount: Map.get(data, "amount", 0)
     }
   end
 
-  # Only OPP's two terminal words are recognised. Everything else — including a
-  # status OPP adds later — stays :pending, so an unknown state can never
-  # finalize or fail a payout.
-  defp normalize_withdrawal_status("completed"), do: :completed
-  defp normalize_withdrawal_status("failed"), do: :failed
-  defp normalize_withdrawal_status("disapproved"), do: :failed
-  defp normalize_withdrawal_status(_status), do: :pending
-
   defp parse_transfer(uid, data) do
+    raw_status = Map.get(data, "status", "unknown")
+
     %{
       uid: uid,
-      status: Map.get(data, "status", "unknown"),
+      status: normalize_lifecycle_status(raw_status),
+      raw_status: raw_status,
       amount: Map.get(data, "amount", 0)
     }
   end
+
+  # Only OPP's terminal words are recognised. Everything else — including a status
+  # OPP adds later — stays :pending, so an unknown state can never finalize or
+  # fail money movement. Shared by transactions, withdrawals and transfers;
+  # "disapproved" is a withdrawal/KYC rejection and simply never occurs for the
+  # other two.
+  defp normalize_lifecycle_status("completed"), do: :completed
+  defp normalize_lifecycle_status("failed"), do: :failed
+  defp normalize_lifecycle_status("disapproved"), do: :failed
+  defp normalize_lifecycle_status(_status), do: :pending
 
   defp put_opts(body, opts) do
     Enum.reduce(opts, body, fn {key, value}, acc ->

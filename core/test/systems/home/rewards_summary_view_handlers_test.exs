@@ -92,7 +92,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     end)
 
     stub(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_ok", status: :verified, raw_status: "approved", verification_url: nil}]}
     end)
   end
 
@@ -124,7 +124,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       end)
 
       stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
@@ -149,7 +149,15 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       end)
 
       stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :new,
+             raw_status: "new",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
@@ -173,7 +181,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       end)
 
       stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :new, raw_status: "new", verification_url: nil}]}
       end)
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))

@@ -81,11 +81,24 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     Ecto.Changeset.put_change(changeset, :currency_ledger_id, ensure_currency_ledger(:EUR).id)
   end
 
-  defp stub_opp_status(uid, status) do
+  # Simulates the provider contract: a raw provider word in, a normalized
+  # lifecycle atom plus the preserved raw_status out.
+  defp stub_opp_status(uid, raw_status) do
     expect(ProviderMock, :get_transaction, fn ^uid ->
-      {:ok, %{uid: uid, status: status, payment_url: nil, amount: 0}}
+      {:ok,
+       %{
+         uid: uid,
+         status: normalize_lifecycle(raw_status),
+         raw_status: raw_status,
+         payment_url: nil,
+         amount: 0
+       }}
     end)
   end
+
+  defp normalize_lifecycle("completed"), do: :completed
+  defp normalize_lifecycle("failed"), do: :failed
+  defp normalize_lifecycle(_), do: :pending
 
   test "completes a pending transaction that OPP has completed" do
     transaction = setup_transaction(:pending)
@@ -148,7 +161,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
       from(t in Budget.TransactionModel, where: t.transaction_id == ^uid)
       |> Repo.update_all(set: [status: :completed])
 
-      {:ok, %{uid: uid, status: "failed", payment_url: nil, amount: 0}}
+      {:ok, %{uid: uid, status: :failed, raw_status: "failed", payment_url: nil, amount: 0}}
     end)
 
     assert %{scanned: 1, verified: 1, errors: 0, resolved_failed: 0} = reconcile()

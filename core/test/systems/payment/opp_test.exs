@@ -41,7 +41,12 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:ok,
-              %{uid: "ba_1", status: "new", verification_url: "https://opp.test/verify/ba_1"}} =
+              %{
+                uid: "ba_1",
+                status: :new,
+                raw_status: "new",
+                verification_url: "https://opp.test/verify/ba_1"
+              }} =
                OPP.create_bank_account("m_1", %{notify_url: "x", return_url: "y"})
     end
 
@@ -51,7 +56,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "ba_2"}>)
       end)
 
-      assert {:ok, %{uid: "ba_2", status: "new", verification_url: nil}} =
+      assert {:ok, %{uid: "ba_2", status: :new, raw_status: "new", verification_url: nil}} =
                OPP.create_bank_account("m_1", %{})
     end
 
@@ -77,8 +82,8 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:ok,
               [
-                %{uid: "ba_a", status: "approved"},
-                %{uid: "ba_b", status: "disapproved"}
+                %{uid: "ba_a", status: :verified, raw_status: "approved"},
+                %{uid: "ba_b", status: :rejected, raw_status: "disapproved"}
               ]} = OPP.list_bank_accounts("m_1")
     end
 
@@ -329,7 +334,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
       end)
 
-      assert {:ok, %{uid: "chg_1", status: "created", amount: 1000}} =
+      assert {:ok, %{uid: "chg_1", status: :pending, raw_status: "created", amount: 1000}} =
                OPP.transfer_to_merchant(
                  "mer_platform",
                  "mer_participant",

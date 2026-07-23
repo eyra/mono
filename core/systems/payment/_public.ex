@@ -181,7 +181,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp usable_or_new_bank_account(merchant_uid, accounts) do
-    case Enum.find(accounts, &(&1.status != "disapproved")) do
+    case Enum.find(accounts, &(&1.status != :rejected)) do
       nil -> create_bank_account(merchant_uid, bank_account_attrs())
       usable -> {:ok, usable}
     end
