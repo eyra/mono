@@ -920,7 +920,7 @@ defmodule Systems.Fund.PublicTest do
     # locking (list_bank_accounts only — the bank account gates the payout).
     defp stub_payout_ready(merchant_uid) do
       expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
-        {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba_ok", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
     end
 
@@ -1071,7 +1071,7 @@ defmodule Systems.Fund.PublicTest do
         |> Ecto.Changeset.change(%{status: :pending_payout})
         |> Core.Repo.update!()
 
-        {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba_ok", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       # No transfer_to_merchant / create_withdrawal expectations: the compare-and-swap
@@ -1577,7 +1577,8 @@ defmodule Systems.Fund.PublicTest do
     # idempotent in tests that don't care about that step.
     defp stub_existing_bank_account(merchant_uid) do
       expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
-        {:ok, [%{uid: "ba_existing", status: "approved", verification_url: nil}]}
+        {:ok,
+         [%{uid: "ba_existing", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
     end
 
@@ -1689,7 +1690,13 @@ defmodule Systems.Fund.PublicTest do
         assert is_binary(attrs.notify_url)
         assert is_binary(attrs.return_url)
 
-        {:ok, %{uid: "ba_new", status: "new", verification_url: "https://opp.test/ba/verify"}}
+        {:ok,
+         %{
+           uid: "ba_new",
+           status: :new,
+           raw_status: "new",
+           verification_url: "https://opp.test/ba/verify"
+         }}
       end)
 
       # Freshly created bank account is not yet approved -> drive the iDEAL flow.
@@ -1722,7 +1729,7 @@ defmodule Systems.Fund.PublicTest do
 
       # Bank account is not approved and carries no verification_url.
       expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :new, raw_status: "new", verification_url: nil}]}
       end)
 
       assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user, "euro")
@@ -1745,7 +1752,14 @@ defmodule Systems.Fund.PublicTest do
 
       expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
         {:ok,
-         [%{uid: "ba_pending", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+         [
+           %{
+             uid: "ba_pending",
+             status: :new,
+             raw_status: "new",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       assert {:error, {:kyc_required, :bank, "https://opp.test/ba/verify"}} =
@@ -1770,7 +1784,7 @@ defmodule Systems.Fund.PublicTest do
       # Bank not approved and no verification_url; the merchant overview_url is
       # irrelevant now that a verified bank account is all we require.
       expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
-        {:ok, [%{uid: "ba_pending", status: "new", verification_url: nil}]}
+        {:ok, [%{uid: "ba_pending", status: :new, raw_status: "new", verification_url: nil}]}
       end)
 
       assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user, "euro")
@@ -1798,7 +1812,14 @@ defmodule Systems.Fund.PublicTest do
 
       expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
         {:ok,
-         [%{uid: "ba_pending", status: "pending", verification_url: "https://opp.test/ba/verify"}]}
+         [
+           %{
+             uid: "ba_pending",
+             status: :pending,
+             raw_status: "pending",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       assert {:error, :awaiting_verification} = Fund.Public.prepare_payout(user, "euro")

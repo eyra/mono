@@ -23,8 +23,11 @@ defmodule Systems.Payment.Controller do
   defp handle_webhook(conn, handler) do
     case handler.verify_and_parse(conn) do
       {:ok, event} ->
-        Logger.info("[Payment.Webhook] Received event=#{event.type} object=#{event.object_uid}")
-        process_event(event)
+        Logger.info(
+          "[Payment.Webhook] Received category=#{event.category} type=#{event.raw_type}"
+        )
+
+        route(event)
         json(conn, %{status: "ok"})
 
       {:error, error} ->
@@ -36,63 +39,23 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp process_event(%{type: type, object_uid: uid, object_type: object_type} = event) do
-    Logger.info("[Payment.Webhook] Processing event type=#{type} object_uid=#{uid}")
-    Logger.info("[Payment.Webhook] Full event: #{inspect(event)}")
+  # The adapter has already translated its wire format into a provider-agnostic
+  # category, so routing knows nothing about any provider's event strings.
+  defp route(%{category: :transaction, object_uid: uid}),
+    do: handle_transaction_status_change(uid)
 
-    route_event(object_type, type, uid, event)
-  end
+  defp route(%{category: :withdrawal, object_uid: uid}), do: handle_withdrawal_status_change(uid)
 
-  # Route on the authoritative `object_type`. OPP prefixes the event `type` with
-  # the owning resource (e.g. "merchant.withdrawal.status.changed"), so matching
-  # the type string alone misclassifies withdrawal/transaction events as KYC —
-  # their object_type is settled first, before the KYC type-prefix heuristic.
-  defp route_event("withdrawal", _type, uid, _event), do: handle_withdrawal_status_change(uid)
-  defp route_event("transaction", _type, uid, _event), do: handle_transaction_status_change(uid)
-
-  defp route_event(object_type, type, uid, event) do
-    if kyc_event?(type, object_type) do
-      handle_kyc_change(event)
-    else
-      handle_event(type, uid)
-    end
-  end
-
-  # OPP's exact bank-account/merchant event-type strings vary; match on either the
-  # object_type or a type prefix so a KYC status change is never missed.
-  defp kyc_event?(type, object_type) do
-    object_type in ["bank_account", "merchant"] or
-      String.starts_with?(type, "bank_account") or
-      String.starts_with?(type, "merchant")
-  end
-
-  # A bank-account event's owning merchant is the parent; a merchant event is itself.
-  defp handle_kyc_change(%{object_type: "merchant", object_uid: merchant_uid}),
+  defp route(%{category: :kyc, merchant_uid: merchant_uid}) when is_binary(merchant_uid),
     do: notify_kyc(merchant_uid)
 
-  defp handle_kyc_change(%{parent_type: "merchant", parent_uid: merchant_uid})
-       when is_binary(merchant_uid),
-       do: notify_kyc(merchant_uid)
+  # A KYC event the adapter couldn't tie to a merchant. The guard above keeps it
+  # from reaching notify_kyc/1 with a nil uid; the adapter has already logged why
+  # the badge won't refresh, so we stay silent rather than emit a second line.
+  defp route(%{category: :kyc}), do: :ok
 
-  # OPP's type-prefix carries the ownership when object_type isn't "merchant"
-  # itself — e.g. "merchant.something.changed" on an untyped envelope.
-  defp handle_kyc_change(%{type: "merchant" <> _, object_uid: merchant_uid}),
-    do: notify_kyc(merchant_uid)
-
-  # A bank_account event without parent info is unroutable — we can't resolve
-  # the owning merchant, so the participant's badge won't refresh reactively.
-  # Log at :error with the identifying fields so a real occurrence is visible
-  # in production (and can drive a follow-up fetch-by-uid resolver).
-  defp handle_kyc_change(event) do
-    Logger.error(
-      "[Payment.Webhook] KYC event missing merchant reference — badge will not refresh. " <>
-        "type=#{inspect(Map.get(event, :type))} " <>
-        "object_type=#{inspect(Map.get(event, :object_type))} " <>
-        "object_uid=#{inspect(Map.get(event, :object_uid))} " <>
-        "parent_type=#{inspect(Map.get(event, :parent_type))} " <>
-        "parent_uid=#{inspect(Map.get(event, :parent_uid))}"
-    )
-  end
+  defp route(%{raw_type: raw_type}),
+    do: Logger.info("[Payment.Webhook] Ignoring event type=#{raw_type}")
 
   defp notify_kyc(merchant_uid) do
     case Account.Public.get_user_by_merchant_uid(merchant_uid) do
@@ -108,16 +71,6 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)
-  defp handle_event("transaction.status.changed", uid), do: handle_transaction_status_change(uid)
-
-  defp handle_event("withdrawal.status_changed", uid), do: handle_withdrawal_status_change(uid)
-  defp handle_event("withdrawal.status.changed", uid), do: handle_withdrawal_status_change(uid)
-
-  defp handle_event(type, _uid) do
-    Logger.info("[Payment.Webhook] Ignoring event type=#{type}")
-  end
-
   defp handle_transaction_status_change(uid) do
     case Systems.Payment.Public.get_transaction(uid) do
       {:ok, %{status: status}} ->
@@ -129,12 +82,12 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp apply_transaction_status("completed", uid) do
+  defp apply_transaction_status(:completed, uid) do
     result = Budget.Public.complete_transaction(uid)
     Logger.info("[Payment.Webhook] Complete result: #{inspect(result)}")
   end
 
-  defp apply_transaction_status("failed", uid) do
+  defp apply_transaction_status(:failed, uid) do
     result = Budget.Public.fail_transaction(uid)
     Logger.info("[Payment.Webhook] Fail result: #{inspect(result)}")
   end

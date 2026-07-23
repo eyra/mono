@@ -66,8 +66,8 @@ defmodule Systems.Budget.TransactionReconciliation do
          state
        ) do
     case Payment.Public.reconcile_get_transaction(state, uid) do
-      {{:ok, %{status: provider_status}}, state} ->
-        apply_status(state, transaction, provider_status)
+      {{:ok, %{status: provider_status, raw_status: raw_status}}, state} ->
+        apply_status(state, transaction, provider_status, raw_status)
 
       {:not_found, state} ->
         Logger.error(
@@ -85,27 +85,33 @@ defmodule Systems.Budget.TransactionReconciliation do
     end
   end
 
-  defp apply_status(state, %Budget.TransactionModel{status: :completed}, _provider_status),
-    do: State.tally(state, :verified)
+  defp apply_status(
+         state,
+         %Budget.TransactionModel{status: :completed},
+         _provider_status,
+         _raw_status
+       ),
+       do: State.tally(state, :verified)
 
   defp apply_status(
          state,
          %Budget.TransactionModel{id: id, transaction_id: uid, status: status} = transaction,
-         provider_status
+         provider_status,
+         raw_status
        ) do
     case resolve(transaction, provider_status) do
       {:ok, trivial} when trivial in [:still_pending, :verified] ->
         State.tally(state, trivial)
 
       {:ok, outcome} ->
-        record(state, outcome, id, uid, status, provider_status, %{})
+        record(state, outcome, id, uid, status, raw_status, %{})
 
       {:error, reason} ->
-        record(state, :errors, id, uid, status, provider_status, %{error: inspect(reason)})
+        record(state, :errors, id, uid, status, raw_status, %{error: inspect(reason)})
     end
   end
 
-  defp resolve(%{transaction_id: uid}, "completed") do
+  defp resolve(%{transaction_id: uid}, :completed) do
     case Budget.Public.complete_transaction(uid) do
       {:ok, _} -> {:ok, :resolved_completed}
       other -> {:error, other}
@@ -114,11 +120,9 @@ defmodule Systems.Budget.TransactionReconciliation do
     error -> {:error, error}
   end
 
-  defp resolve(%{status: :pending, transaction_id: uid}, "failed") do
+  defp resolve(%{status: :pending, transaction_id: uid}, :failed) do
     case Budget.Public.fail_transaction(uid) do
       {:ok, _} -> {:ok, :resolved_failed}
-      # Provider completed the transaction in the gap between our read and this
-      # write; the guard refused the stale "failed" — a benign no-op, not an error.
       {:error, :already_completed} -> {:ok, :verified}
       other -> {:error, other}
     end
@@ -126,7 +130,7 @@ defmodule Systems.Budget.TransactionReconciliation do
     error -> {:error, error}
   end
 
-  defp resolve(%{status: :failed}, "failed"), do: {:ok, :verified}
+  defp resolve(%{status: :failed}, :failed), do: {:ok, :verified}
   defp resolve(_transaction, _status), do: {:ok, :still_pending}
 
   defp record(state, outcome, id, uid, local_status, provider_status, details) do

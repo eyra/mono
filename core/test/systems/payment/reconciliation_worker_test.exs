@@ -115,7 +115,14 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->
-      {:ok, %{uid: "tx_payin", status: "completed", payment_url: nil, amount: 0}}
+      {:ok,
+       %{
+         uid: "tx_payin",
+         status: :completed,
+         raw_status: "completed",
+         payment_url: nil,
+         amount: 0
+       }}
     end)
 
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
@@ -133,7 +140,14 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     end)
 
     expect(ProviderMock, :get_transaction, fn "tx_payin" ->
-      {:ok, %{uid: "tx_payin", status: "completed", payment_url: nil, amount: 0}}
+      {:ok,
+       %{
+         uid: "tx_payin",
+         status: :completed,
+         raw_status: "completed",
+         payment_url: nil,
+         amount: 0
+       }}
     end)
 
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})

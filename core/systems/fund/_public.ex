@@ -1059,19 +1059,19 @@ defmodule Systems.Fund.Public do
   # A verified bank account (OPP Level 200) is sufficient for participant payouts;
   # merchant identity-KYC (Level 400) is never required. Ready iff the bank
   # account is approved, so a withdrawal never fires against an unapproved account.
-  defp payout_ready_for(%{status: "approved"}), do: :ok
+  defp payout_ready_for(%{status: :verified}), do: :ok
 
-  # "new" is the only status where the participant still has something to do —
-  # complete the provider's hosted iDEAL flow at the verification URL. Any
-  # other non-approved status ("pending", etc.) means the provider is reviewing
-  # and the participant just needs to wait, even if a stale verification_url is
-  # still returned — so match on status first, URL second.
-  defp payout_ready_for(%{status: "new", verification_url: verification_url})
+  # `:new` is the only status where the participant still has something to do —
+  # complete the provider's hosted iDEAL flow at the verification URL. Any other
+  # non-verified status (`:pending`, etc.) means the provider is reviewing and the
+  # participant just needs to wait, even if a stale verification_url is still
+  # returned — so match on status first, URL second.
+  defp payout_ready_for(%{status: :new, verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, :bank, verification_url}}
 
   defp payout_ready_for(%{status: status})
-       when is_binary(status) and status not in ["new", ""],
+       when is_atom(status) and not is_nil(status) and status != :new,
        do: {:error, :awaiting_verification}
 
   defp payout_ready_for(_bank_account), do: {:error, :kyc_unavailable}
@@ -1092,7 +1092,7 @@ defmodule Systems.Fund.Public do
     case Payment.Public.list_bank_accounts(merchant_uid) do
       {:ok, accounts} ->
         accounts
-        |> Enum.find(&(&1.status != "disapproved"))
+        |> Enum.find(&(&1.status != :rejected))
         |> bank_account_status()
 
       {:error, _} ->
@@ -1100,17 +1100,14 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  # OPP's `status` is authoritative for the display state. A bank account that is
-  # under review ("pending") can still carry a `verification_url`, so status must
+  # The normalized `status` is authoritative for the display state. A bank account
+  # under review (`:pending`) can still carry a `verification_url`, so status must
   # be matched before any URL fallback — otherwise a pending account is mislabeled
-  # "not verified". "new" means the participant still has to complete verification
-  # (the "Toevoegen" iDEAL flow); anything else non-approved is being reviewed.
-  defp bank_account_status(%{status: "approved"}), do: :verified
-  defp bank_account_status(%{status: "new"}), do: :not_verified
-
-  defp bank_account_status(%{status: status}) when is_binary(status) and status != "",
-    do: :pending
-
+  # "not verified". `:new` means the participant still has to complete verification
+  # (the "Toevoegen" iDEAL flow); anything else non-verified is being reviewed.
+  defp bank_account_status(%{status: :verified}), do: :verified
+  defp bank_account_status(%{status: :new}), do: :not_verified
+  defp bank_account_status(%{status: status}) when is_atom(status), do: :pending
   defp bank_account_status(_bank_account), do: :not_verified
 
   @doc """
@@ -1143,7 +1140,7 @@ defmodule Systems.Fund.Public do
 
   # A verified bank account is all we need; we never hand off to OPP's hosted
   # merchant-overview screen. Approved → done; otherwise drive the iDEAL flow.
-  defp bank_handoff(_merchant, %{status: "approved"}), do: :verified
+  defp bank_handoff(_merchant, %{status: :verified}), do: :verified
 
   defp bank_handoff(_merchant, %{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
