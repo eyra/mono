@@ -46,10 +46,6 @@ defmodule Systems.Fund.RewardModelTest do
     end
   end
 
-  # Guards the invariant at the database (approved_requires_payment CHECK), so a
-  # non-Multi path — a raw struct insert like Factories.insert! here — can't leave
-  # an approved reward without a payment. The app-level Multi is the primary path;
-  # this is the backstop.
   describe "approved_requires_payment constraint" do
     test "the database rejects an :approved reward with no payment" do
       assert_raise Ecto.ConstraintError, ~r/approved_requires_payment/, fn ->

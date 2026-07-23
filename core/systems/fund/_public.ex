@@ -410,10 +410,6 @@ defmodule Systems.Fund.Public do
     |> Repo.commit()
   end
 
-  # Create the payment entry BEFORE the status flip, so `cas_approve_step` can set
-  # status and payment_id in a single atomic update — the row is never transiently
-  # :approved with a nil payment_id (which the approved_requires_payment CHECK
-  # would reject). Reuse an already-linked payment if one somehow exists.
   defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do
     Multi.run(multi, :payment, fn _, _ -> {:ok, payment} end)
   end
@@ -424,9 +420,6 @@ defmodule Systems.Fund.Public do
     end)
   end
 
-  # Flip to :approved and set payment_id in one CAS update, using the entry the
-  # payment step created. The status precondition still serializes concurrent
-  # approvals: a losing writer updates 0 rows and rolls its payment back with the tx.
   defp cas_approve_step(multi, %Fund.RewardModel{} = reward, from_statuses, extra_set) do
     Multi.run(multi, :reward, fn repo, %{payment: %Bookkeeping.EntryModel{id: payment_id}} ->
       cas_update(
