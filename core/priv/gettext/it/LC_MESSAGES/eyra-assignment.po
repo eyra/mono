@@ -586,10 +586,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -637,10 +633,6 @@ msgstr ""
 msgid "payment.transactions.empty"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
@@ -649,13 +641,13 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr ""
+msgstr "Costo di servizio (%{percentage}%)"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr ""
+msgstr "%{count} x tariffa per partecipante di %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.total.label"
@@ -752,3 +744,7 @@ msgstr "Questo studio è al completo"
 #, elixir-autogen, elixir-format
 msgid "budget_form.fee.invalid"
 msgstr "Inserisci un importo, es. 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Una breve descrizione del tuo studio"

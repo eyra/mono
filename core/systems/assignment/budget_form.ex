@@ -192,13 +192,13 @@ defmodule Systems.Assignment.BudgetForm do
 
     ~H"""
     <div>
-      <Text.title2>
+      <Text.title3>
         <%= dgettext("eyra-assignment", "budget_form.title") %>
-      </Text.title2>
+      </Text.title3>
       <Text.body>
         <%= dgettext("eyra-assignment", "budget_form.description") %>
       </Text.body>
-      <.spacing value="L" />
+      <.spacing value="M" />
 
       <%= if not @reward_locked? do %>
         <.form id={"#{@id}_reward"} :let={reward_form} for={@reward_changeset} phx-change="save_reward" phx-target={@myself}>
@@ -206,12 +206,12 @@ defmodule Systems.Assignment.BudgetForm do
             form={reward_form}
             field={:aim_of_study}
             label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
+            placeholder={dgettext("eyra-assignment", "budget_form.aim.placeholder")}
             maxlength="250"
+            reserve_error_space={false}
             testid="budget-form-aim-input"
           />
-          <div class="-mt-3 mb-4 text-label font-label text-grey2">
-            <%= dgettext("eyra-assignment", "budget_form.aim.hint") %>
-          </div>
+          <.spacing value="S" />
           <.currency_input
             form={reward_form}
             field={:subject_reward}
@@ -222,13 +222,8 @@ defmodule Systems.Assignment.BudgetForm do
             reserve_error_space={false}
             testid="budget-form-reward-input"
           />
-          <div class={[
-            "mb-4 text-label font-label text-grey2",
-            not Enum.empty?(reward_form[:subject_reward].errors) && "mt-2"
-          ]}>
-            <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
-          </div>
         </.form>
+        <.spacing value="S" />
       <% end %>
 
       <.form id={"#{@id}_slots"} :let={form} for={@slots_changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
@@ -237,6 +232,7 @@ defmodule Systems.Assignment.BudgetForm do
           field={:subject_count}
           label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
           debounce="300"
+          reserve_error_space={false}
           testid="budget-form-slots-input"
         />
       </.form>
@@ -249,7 +245,7 @@ defmodule Systems.Assignment.BudgetForm do
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
+        <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
           <div>
             <%= dgettext("eyra-assignment", "budget_form.subtotal.label",
               count: display_count(@subject_count),
@@ -258,16 +254,16 @@ defmodule Systems.Assignment.BudgetForm do
           </div>
           <div><%= format_cents(@base_cents) %></div>
         </div>
-        <%= if @fee_cents > 0 do %>
-          <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
-            <div>
-              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label") %>
-            </div>
-            <div><%= format_cents(@fee_cents) %></div>
+        <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
+          <div>
+            <%= dgettext("eyra-assignment", "budget_form.partner_fee.label",
+              percentage: @partner_fee_percentage
+            ) %>
           </div>
-        <% end %>
+          <div><%= format_cents(@fee_cents) %></div>
+        </div>
         <div class="border-t border-grey4 my-2"></div>
-        <div class="flex flex-row justify-between text-bodylarge font-body text-grey1 font-bold">
+        <div class="flex flex-row justify-between text-title6 font-title6 text-grey1">
           <div><%= dgettext("eyra-assignment", "budget_form.total.label") %></div>
           <div><%= format_cents(@total_cents) %></div>
         </div>

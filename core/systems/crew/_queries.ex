@@ -8,6 +8,7 @@ defmodule Systems.Crew.Queries do
   alias Systems.Crew
   alias CoreWeb.UI.Timestamp
   alias Systems.Account.User
+  alias Core.Authorization.RoleAssignment
 
   # MEMBERS
 
@@ -70,15 +71,8 @@ defmodule Systems.Crew.Queries do
 
   def members_by_crew_role_not_expired_query(%Crew.Model{} = crew, role_list)
       when is_list(role_list) do
-    build(member_query(), :member, [
-      expired == false,
-      crew: [
-        id == ^crew.id,
-        auth_node: [
-          role_assignments: [role in ^role_list]
-        ]
-      ]
-    ])
+    crew
+    |> members_with_crew_role_query(role_list)
     |> distinct(true)
   end
 
@@ -86,17 +80,27 @@ defmodule Systems.Crew.Queries do
       when is_list(role_list) do
     user_ids = user_ids(users_finished_query())
 
-    build(member_query(), :member, [
-      expired == false,
-      user: [id in subquery(user_ids)],
-      crew: [
-        id == ^crew.id,
-        auth_node: [
-          role_assignments: [role in ^role_list]
-        ]
-      ]
-    ])
+    crew
+    |> members_with_crew_role_query(role_list)
+    |> where([member: m], m.user_id in subquery(user_ids))
     |> distinct(true)
+  end
+
+  # Correlates each crew member to a role_assignment on the crew's auth_node
+  # whose principal_id == member.user_id — so filtering by role actually filters
+  # per-member, not "does the crew have any assignment with this role."
+  defp members_with_crew_role_query(
+         %Crew.Model{id: crew_id, auth_node_id: auth_node_id},
+         role_list
+       ) do
+    member_query()
+    |> join(:inner, [member: m], ra in RoleAssignment,
+      on:
+        ra.principal_id == m.user_id and ra.node_id == ^auth_node_id and
+          ra.role in ^role_list,
+      as: :role_assignment
+    )
+    |> where([member: m], m.crew_id == ^crew_id and m.expired == false)
   end
 
   def member_expired_query(%Crew.Model{} = crew, user_ref) do

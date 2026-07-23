@@ -585,10 +585,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -636,10 +632,6 @@ msgstr ""
 msgid "payment.transactions.empty"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
@@ -648,13 +640,13 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr ""
+msgstr "Servicekosten (%{percentage}%)"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr ""
+msgstr "%{count} x participant fee van %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.total.label"
@@ -751,3 +743,7 @@ msgstr "Deze studie zit vol"
 #, elixir-autogen, elixir-format
 msgid "budget_form.fee.invalid"
 msgstr "Voer een bedrag in, bijv. 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Een korte omschrijving van je studie"

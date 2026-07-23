@@ -585,10 +585,6 @@ msgid "budget_form.description"
 msgstr "Proceed to pay the fee and recruit Panl participants."
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr "Please note that the minimum fee is €8,00 per hour"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr "Participant fee"
 
@@ -637,10 +633,6 @@ msgid "payment.transactions.empty"
 msgstr "No transactions yet."
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.hint"
-msgstr "A short description of your study"
-
-#, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr "Share this link on social media or other platforms to recruit participants. Each participant receives a unique participant ID automatically. After participating, participants will be invited to leave their email address for future research via Panl."
 
@@ -650,11 +642,11 @@ msgstr "Recruit participants"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr "Service fee"
+msgstr "Service fee (%{percentage}%)"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr "Subtotal (%{count} × %{reward} fee)"
+msgstr "%{count} x participant fee of %{reward}"
 
 #, elixir-autogen, elixir-format
 msgid "budget_form.total.label"
@@ -751,3 +743,7 @@ msgstr "This study is full"
 #, elixir-autogen, elixir-format
 msgid "budget_form.fee.invalid"
 msgstr "Please enter a plain amount, like 3.75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "A short description of your study"
