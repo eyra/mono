@@ -88,6 +88,23 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
+  # Bank account submitted to the payment provider and awaiting review: nothing
+  # for the participant to do but wait, so an info-only modal (no redirect) —
+  # clearer than the verify modal which nags them to redo completed steps.
+  def compose(:handoff_modal, %{handoff_mode: :awaiting, labels: labels}) do
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.payout_awaiting_title,
+          body: labels.payout_awaiting_body,
+          confirm_label: labels.payout_awaiting_confirm,
+          cancel_label: nil
+        }
+      }
+    }
+  end
+
   @impl true
   def handle_event(
         "request_payout",
@@ -102,6 +119,12 @@ defmodule Systems.Home.RewardsSummaryView do
         # Bank account not verified yet: show an info modal offering to continue
         # to the account page, where the "Uitbetalingen" tab handles verification.
         {:noreply, present_handoff(socket, :verify)}
+
+      {:error, :awaiting_verification} ->
+        # Bank account is submitted and the provider is reviewing: nothing for
+        # the participant to do, so show a "please wait" info modal instead of
+        # the redirect-to-KYC one.
+        {:noreply, present_handoff(socket, :awaiting)}
 
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
@@ -128,6 +151,17 @@ defmodule Systems.Home.RewardsSummaryView do
       error ->
         {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
     end
+  end
+
+  @impl true
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :handoff_modal}},
+        %{assigns: %{handoff_mode: :awaiting}} = socket
+      ) do
+    # Awaiting-verification info modal: "OK" only dismisses; the participant
+    # can't do anything but wait for the provider's review to complete.
+    {:noreply, hide_modal(socket, :handoff_modal)}
   end
 
   @impl true

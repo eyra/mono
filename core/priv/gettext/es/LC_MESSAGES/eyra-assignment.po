@@ -586,10 +586,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -637,10 +633,6 @@ msgstr ""
 msgid "payment.transactions.empty"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
@@ -649,13 +641,13 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr ""
+msgstr "Tarifa de servicio (%{percentage}%)"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr ""
+msgstr "%{count} x tarifa por participante de %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.total.label"
@@ -748,3 +740,11 @@ msgstr "Lamentablemente, este estudio está completo y ya no acepta nuevos parti
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Este estudio está completo"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Introduce un importe, p. ej., 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "Una breve descripción de tu estudio"

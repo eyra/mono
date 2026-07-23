@@ -201,3 +201,15 @@ msgstr "Your payout is being processed. Please contact support if this takes a w
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr "Retry payout"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.body"
+msgstr "Your bank account is being reviewed by our payment provider. This usually takes a few minutes — please try again shortly."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr "OK"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.title"
+msgstr "Verification in progress"

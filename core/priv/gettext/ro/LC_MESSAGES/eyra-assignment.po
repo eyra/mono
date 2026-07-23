@@ -596,10 +596,6 @@ msgid "budget_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.fee.label"
 msgstr ""
 
@@ -647,10 +643,6 @@ msgstr ""
 msgid "payment.transactions.empty"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
@@ -659,13 +651,13 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.partner_fee.label"
-msgstr ""
+msgstr "Taxă de serviciu (%{percentage}%)"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "budget_form.subtotal.label"
-msgstr ""
+msgstr "%{count} x taxă per participant de %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "budget_form.total.label"
@@ -758,3 +750,11 @@ msgstr "Din păcate, acest studiu este complet și nu mai acceptă participanți
 #, elixir-autogen, elixir-format
 msgid "assignment_full.title"
 msgstr "Acest studiu este complet"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.invalid"
+msgstr "Introdu o sumă, de ex. 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.placeholder"
+msgstr "O scurtă descriere a studiului tău"

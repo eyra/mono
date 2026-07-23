@@ -172,6 +172,9 @@ defmodule Systems.Home.PageBuilder do
       payout_verify_title: dgettext("eyra-fund", "rewards_summary.payout.verify.title"),
       payout_verify_body: dgettext("eyra-fund", "rewards_summary.payout.verify.body"),
       payout_verify_confirm: dgettext("eyra-fund", "rewards_summary.payout.verify.confirm"),
+      payout_awaiting_title: dgettext("eyra-fund", "rewards_summary.payout.awaiting.title"),
+      payout_awaiting_body: dgettext("eyra-fund", "rewards_summary.payout.awaiting.body"),
+      payout_awaiting_confirm: dgettext("eyra-fund", "rewards_summary.payout.awaiting.confirm"),
       payout_in_progress: dgettext("eyra-fund", "rewards_summary.payout.in_progress"),
       payout_retry_button: dgettext("eyra-fund", "rewards_summary.payout.retry"),
       payout_manual: dgettext("eyra-fund", "rewards_summary.payout.manual")

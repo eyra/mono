@@ -25,12 +25,13 @@ defmodule Systems.Assignment.BudgetForm do
         socket
       ) do
     reward_cents = subject_reward || 0
+    subject_count = Map.get(socket.assigns, :subject_count, 0)
 
     slots_changeset =
-      {%{subject_count: 0}, %{subject_count: :integer}}
+      {%{subject_count: subject_count}, %{subject_count: :integer}}
       |> Ecto.Changeset.change()
 
-    fee_changeset = Assignment.InfoModel.changeset(info, :create, %{})
+    reward_changeset = Assignment.InfoModel.changeset(info, :create, %{})
 
     {
       :ok,
@@ -43,54 +44,47 @@ defmodule Systems.Assignment.BudgetForm do
         active_currency: active_currency,
         reward_locked?: reward_locked?,
         slots_changeset: slots_changeset,
-        fee_changeset: fee_changeset,
-        subject_count: 0,
+        reward_changeset: reward_changeset,
+        subject_count: subject_count,
         reward_cents: reward_cents,
+        reward_input: CurrencyHelpers.cents_to_display(reward_cents),
         partner_fee_percentage: Payment.Public.partner_fee_percentage()
       )
-      |> assign_totals(0, reward_cents)
-    }
-  end
-
-  @impl true
-  def handle_event("update_slots", %{"slots" => %{"subject_count" => count_str}}, socket) do
-    count = parse_int(count_str)
-
-    {
-      :noreply,
-      socket
-      |> assign(subject_count: count)
-      |> assign_totals(count, socket.assigns.reward_cents)
+      |> assign_totals(subject_count, reward_cents)
     }
   end
 
   @impl true
   def handle_event(
-        "save_fee",
-        %{"info_model" => attrs},
-        %{assigns: %{assignment: assignment, info: info, subject_count: subject_count}} = socket
+        "update_slots",
+        %{"slots" => %{"subject_count" => count_str}},
+        %{assigns: %{slots_changeset: slots_changeset, reward_cents: reward_cents}} = socket
       ) do
-    attrs = convert_subject_reward(attrs)
-    changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
+    count = parse_int(count_str)
 
-    case Core.Persister.save(changeset.data, changeset) do
-      {:ok, updated_info} ->
-        reward_cents = updated_info.subject_reward || 0
+    {
+      :noreply,
+      socket
+      |> assign(
+        subject_count: count,
+        slots_changeset: Ecto.Changeset.change(slots_changeset, subject_count: count)
+      )
+      |> assign_totals(count, reward_cents)
+    }
+  end
 
-        {
-          :noreply,
-          socket
-          |> assign(
-            assignment: %{assignment | info: updated_info},
-            info: updated_info,
-            fee_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
-            reward_cents: reward_cents
-          )
-          |> assign_totals(subject_count, reward_cents)
-        }
-
-      {:error, changeset} ->
-        {:noreply, assign(socket, fee_changeset: changeset)}
+  @impl true
+  def handle_event(
+        "save_reward",
+        %{"info_model" => %{"subject_reward" => raw_reward} = attrs},
+        %{assigns: %{info: info}} = socket
+      ) do
+    with {:ok, cents} <- CurrencyHelpers.display_to_cents(raw_reward),
+         {:ok, updated_info} <- persist_reward(info, attrs, cents) do
+      {:noreply, apply_saved_reward(socket, updated_info, raw_reward)}
+    else
+      {:error, changeset} -> {:noreply, apply_save_error(socket, changeset, raw_reward)}
+      :error -> {:noreply, apply_invalid_reward(socket, raw_reward)}
     end
   end
 
@@ -124,6 +118,47 @@ defmodule Systems.Assignment.BudgetForm do
     {:noreply, socket |> send_event(:parent, "budget_form_cancelled")}
   end
 
+  defp persist_reward(info, attrs, cents) do
+    attrs = Map.put(attrs, "subject_reward", cents)
+    changeset = Assignment.InfoModel.changeset(info, :auto_save, attrs)
+    Core.Persister.save(changeset.data, changeset)
+  end
+
+  defp apply_saved_reward(
+         %{assigns: %{assignment: assignment, subject_count: subject_count}} = socket,
+         updated_info,
+         raw_reward
+       ) do
+    reward_cents = updated_info.subject_reward || 0
+
+    socket
+    |> assign(
+      assignment: %{assignment | info: updated_info},
+      info: updated_info,
+      reward_changeset: Assignment.InfoModel.changeset(updated_info, :create, %{}),
+      reward_cents: reward_cents,
+      reward_input: raw_reward
+    )
+    |> assign_totals(subject_count, reward_cents)
+  end
+
+  defp apply_save_error(socket, changeset, raw_reward) do
+    assign(socket, reward_changeset: changeset, reward_input: raw_reward)
+  end
+
+  defp apply_invalid_reward(%{assigns: %{info: info}} = socket, raw_reward) do
+    changeset =
+      info
+      |> Assignment.InfoModel.changeset(:create, %{})
+      |> Ecto.Changeset.add_error(
+        :subject_reward,
+        dgettext("eyra-assignment", "budget_form.fee.invalid")
+      )
+      |> Map.put(:action, :insert)
+
+    assign(socket, reward_changeset: changeset, reward_input: raw_reward)
+  end
+
   defp assign_totals(socket, subject_count, reward_cents) do
     base_cents = subject_count * reward_cents
     fee_cents = Payment.Public.partner_fee_amount(base_cents)
@@ -144,13 +179,6 @@ defmodule Systems.Assignment.BudgetForm do
 
   defp parse_int(_), do: 0
 
-  defp convert_subject_reward(%{"subject_reward" => value} = attrs) when is_binary(value) do
-    Map.put(attrs, "subject_reward", CurrencyHelpers.display_to_cents(value))
-  end
-
-  defp convert_subject_reward(attrs), do: attrs
-
-  defp cents_to_display(value), do: CurrencyHelpers.cents_to_display(value)
   defp format_cents(value), do: CurrencyHelpers.format_cents(value)
 
   defp confirm_enabled?(%{reward_locked?: true, subject_count: count}), do: count > 0
@@ -164,39 +192,38 @@ defmodule Systems.Assignment.BudgetForm do
 
     ~H"""
     <div>
-      <Text.title2>
+      <Text.title3>
         <%= dgettext("eyra-assignment", "budget_form.title") %>
-      </Text.title2>
+      </Text.title3>
       <Text.body>
         <%= dgettext("eyra-assignment", "budget_form.description") %>
       </Text.body>
-      <.spacing value="L" />
+      <.spacing value="M" />
 
       <%= if not @reward_locked? do %>
-        <.form id={"#{@id}_fee"} :let={fee_form} for={@fee_changeset} phx-change="save_fee" phx-target={@myself}>
+        <.form id={"#{@id}_reward"} :let={reward_form} for={@reward_changeset} phx-change="save_reward" phx-target={@myself}>
           <.text_input
-            form={fee_form}
+            form={reward_form}
             field={:aim_of_study}
             label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
+            placeholder={dgettext("eyra-assignment", "budget_form.aim.placeholder")}
             maxlength="250"
+            reserve_error_space={false}
             testid="budget-form-aim-input"
           />
-          <div class="-mt-3 mb-4 text-label font-label text-grey2">
-            <%= dgettext("eyra-assignment", "budget_form.aim.hint") %>
-          </div>
+          <.spacing value="S" />
           <.currency_input
-            form={fee_form}
+            form={reward_form}
             field={:subject_reward}
             label_text={dgettext("eyra-assignment", "budget_form.fee.label")}
-            value={cents_to_display(input_value(fee_form, :subject_reward))}
+            value={@reward_input}
             active_currency={@active_currency}
             currencies={[@active_currency]}
+            reserve_error_space={false}
             testid="budget-form-reward-input"
           />
-          <div class="-mt-3 mb-4 text-label font-label text-grey2">
-            <%= dgettext("eyra-assignment", "budget_form.fee.hint") %>
-          </div>
         </.form>
+        <.spacing value="S" />
       <% end %>
 
       <.form id={"#{@id}_slots"} :let={form} for={@slots_changeset} as={:slots} phx-change="update_slots" phx-target={@myself}>
@@ -205,6 +232,7 @@ defmodule Systems.Assignment.BudgetForm do
           field={:subject_count}
           label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
           debounce="300"
+          reserve_error_space={false}
           testid="budget-form-slots-input"
         />
       </.form>
@@ -217,7 +245,7 @@ defmodule Systems.Assignment.BudgetForm do
         </div>
       </div>
       <div class="flex flex-col gap-1">
-        <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
+        <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
           <div>
             <%= dgettext("eyra-assignment", "budget_form.subtotal.label",
               count: display_count(@subject_count),
@@ -226,16 +254,16 @@ defmodule Systems.Assignment.BudgetForm do
           </div>
           <div><%= format_cents(@base_cents) %></div>
         </div>
-        <%= if @fee_cents > 0 do %>
-          <div class="flex flex-row justify-between text-bodymedium font-body text-grey2">
-            <div>
-              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label") %>
-            </div>
-            <div><%= format_cents(@fee_cents) %></div>
+        <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
+          <div>
+            <%= dgettext("eyra-assignment", "budget_form.partner_fee.label",
+              percentage: @partner_fee_percentage
+            ) %>
           </div>
-        <% end %>
+          <div><%= format_cents(@fee_cents) %></div>
+        </div>
         <div class="border-t border-grey4 my-2"></div>
-        <div class="flex flex-row justify-between text-bodylarge font-body text-grey1 font-bold">
+        <div class="flex flex-row justify-between text-title6 font-title6 text-grey1">
           <div><%= dgettext("eyra-assignment", "budget_form.total.label") %></div>
           <div><%= format_cents(@total_cents) %></div>
         </div>

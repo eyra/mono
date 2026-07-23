@@ -19,7 +19,7 @@ defmodule Systems.Pool.MarketplacePageBuilder do
         }
       },
       breadcrumbs: [
-        %{label: dgettext("eyra-pool", "marketplace.breadcrumb.overview"), path: ~p"/"},
+        %{label: dgettext("eyra-home", "member.title"), path: ~p"/"},
         %{
           label: dgettext("eyra-pool", "marketplace.title"),
           path: ~p"/pool/#{pool.id}/marketplace"

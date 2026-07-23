@@ -41,13 +41,22 @@ defmodule Frameworks.Pixel.ConfirmationModal do
       testid: "confirmation-modal-confirm-button"
     }
 
-    cancel = %{
-      action: %{type: :send, target: myself, event: "cancel"},
-      face: %{type: :secondary, label: cancel_label},
-      testid: "confirmation-modal-cancel-button"
-    }
+    # Pass cancel_label: nil to render an info-only modal with just the confirm
+    # button (e.g. "OK — got it").
+    buttons =
+      if is_nil(cancel_label) do
+        [confirm]
+      else
+        cancel = %{
+          action: %{type: :send, target: myself, event: "cancel"},
+          face: %{type: :secondary, label: cancel_label},
+          testid: "confirmation-modal-cancel-button"
+        }
 
-    assign(socket, buttons: [confirm, cancel])
+        [confirm, cancel]
+      end
+
+    assign(socket, buttons: buttons)
   end
 
   def handle_event("confirm", _, socket) do

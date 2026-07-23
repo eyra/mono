@@ -1789,6 +1789,41 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:error, :kyc_unavailable} = Fund.Public.prepare_payout(user, "euro")
     end
+
+    # Regression: FX#10005449329. After the participant finishes iDEAL, the
+    # payment provider puts the bank account in a review state ("pending") but
+    # often keeps returning a verification_url. Reporting :kyc_required at that
+    # point makes us show the "please verify your bank account" modal — the
+    # participant thinks they must redo KYC when in fact they only need to wait.
+    test "returns :awaiting_verification when the bank is pending provider review",
+         %{user: user, fund: fund} do
+      eligible_reward(user, fund)
+
+      expect(ProviderMock, :get_merchant, fn "m_prep_1" ->
+        {:ok,
+         %{
+           uid: "m_prep_1",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      expect(ProviderMock, :list_bank_accounts, fn "m_prep_1" ->
+        {:ok,
+         [
+           %{
+             uid: "ba_pending",
+             status: :pending,
+             raw_status: "pending",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
+      end)
+
+      assert {:error, :awaiting_verification} = Fund.Public.prepare_payout(user, "euro")
+    end
   end
 
   describe "apply_withdrawal_status/2" do

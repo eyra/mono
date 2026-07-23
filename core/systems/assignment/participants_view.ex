@@ -117,6 +117,61 @@ defmodule Systems.Assignment.ParticipantsView do
     }
   end
 
+  # Auth-gated mutation. Reaching this handler means the request went through
+  # a routed page whose live_view guarantees the researcher can only see their
+  # own assignment. PayoutModal has no such guarantee, so it bubbles the click
+  # to us via `send_event(:parent, "pay_out_all")` instead of running the
+  # mutation itself. Result flows back to the modal via `send_event(:payout_modal,
+  # "post_pay_out_all", …)`, which the modal handles to clear its decline UI
+  # / set the error banner and re-fetch its view model.
+  @impl true
+  def handle_event(
+        "pay_out_all",
+        _,
+        %{assigns: %{assignment: assignment}} = socket
+      ) do
+    result = Assignment.Public.bulk_approve_pending_payouts(assignment)
+
+    if match?({:error, _}, result) do
+      Logger.warning("[ParticipantsView] bulk approve failed: #{inspect(result)}")
+    end
+
+    {
+      :noreply,
+      socket
+      |> send_event(:payout_modal, "post_pay_out_all", %{result: result})
+      |> assign_pending_approvals()
+    }
+  end
+
+  # Auth-gated mutation. task_id + reason come up in the payload from
+  # PayoutModal's shim `send_event(:parent, "submit_decline", %{...})`; the
+  # modal's expand_decline / update_reason UI state is what supplied them.
+  @impl true
+  def handle_event(
+        "submit_decline",
+        %{task_id: task_id, reason: reason},
+        %{assigns: %{assignment: assignment}} = socket
+      )
+      when is_integer(task_id) do
+    result =
+      Assignment.Public.reject_task_by_id(assignment, task_id, %{
+        category: :other,
+        message: reason
+      })
+
+    if match?({:error, _}, result) do
+      Logger.warning("[ParticipantsView] reject_task #{task_id} failed: #{inspect(result)}")
+    end
+
+    {
+      :noreply,
+      socket
+      |> send_event(:payout_modal, "post_submit_decline", %{result: result})
+      |> assign_pending_approvals()
+    }
+  end
+
   defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
     assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end

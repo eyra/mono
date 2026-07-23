@@ -443,9 +443,28 @@ defmodule Systems.Advert.PublicTest do
 
       # Fill the single subject slot, mimicking one completed participant.
       participant = Factories.insert!(:member)
-      Crew.Factories.create_member(advert.assignment.crew, participant)
+      Systems.Assignment.Public.add_participant!(advert.assignment, participant)
 
       assert Advert.Public.pool_visibility(reload(advert)) == :filled
+    end
+
+    # Regression: FX#10029220671. A researcher/tester added to the crew for
+    # preview must not occupy a paid participant spot. With 2 subject slots +
+    # 1 real participant + 1 tester, the advert must stay :visible.
+    test "stays :visible when a tester joins the crew alongside a real participant", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("mixed_members", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 2, fund) |> online()
+
+      tester = Factories.insert!(:member)
+      Crew.Factories.create_member(advert.assignment.crew, tester)
+
+      participant = Factories.insert!(:member)
+      Systems.Assignment.Public.add_participant!(advert.assignment, participant)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :visible
     end
 
     test "is nil when online but the submission is not released (scheduled in the future)",
