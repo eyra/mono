@@ -986,6 +986,23 @@ defmodule Core.Factories do
     {deposit, attributes} = Map.pop(attributes, :deposit, nil)
     {payment, attributes} = Map.pop(attributes, :payment, nil)
 
+    # An :approved reward always has a payment (approved_requires_payment CHECK),
+    # so persist one and set payment_id unless the caller supplied a payment or
+    # payment_id. Applies to :approved only — other statuses are unaffected.
+    attributes =
+      if payment == nil and attributes[:status] == :approved and
+           not Map.has_key?(attributes, :payment_id) do
+        entry =
+          insert!(:book_entry, %{
+            idempotence_key: "reward-payment-#{System.unique_integer([:positive])}",
+            journal_message: "reward payment"
+          })
+
+        Map.put(attributes, :payment_id, entry.id)
+      else
+        attributes
+      end
+
     %Fund.RewardModel{
       fund: fund,
       user: user,

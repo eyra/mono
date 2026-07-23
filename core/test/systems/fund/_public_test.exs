@@ -577,7 +577,7 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "transitions :reserved → :approved and creates wallet payment", %{key: key} do
-      assert {:ok, %{reward: %{status: :approved}, payment: %{payment_id: payment_id}}} =
+      assert {:ok, %{reward: %{status: :approved, payment_id: payment_id}}} =
                Fund.Public.approve_reward(key)
 
       refute is_nil(payment_id)
