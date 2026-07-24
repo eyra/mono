@@ -339,6 +339,8 @@ defmodule Systems.Payment.Provider.OPP do
   defp normalize_lifecycle_status("completed"), do: :completed
   defp normalize_lifecycle_status("failed"), do: :failed
   defp normalize_lifecycle_status("disapproved"), do: :failed
+  defp normalize_lifecycle_status("cancelled"), do: :failed
+  defp normalize_lifecycle_status("expired"), do: :failed
   defp normalize_lifecycle_status(_status), do: :pending
 
   defp put_opts(body, opts) do
