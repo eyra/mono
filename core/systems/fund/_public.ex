@@ -367,6 +367,20 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  def approve_pending_rewards(cutoff) do
+    query =
+      from(r in Fund.RewardModel,
+        where: r.status == :pending_approval and r.updated_at < ^cutoff
+      )
+
+    query
+    |> Repo.all()
+    |> Enum.reduce([], fn %{idempotence_key: idempotence_key}, acc ->
+      result = approve_reward(idempotence_key)
+      [result | acc]
+    end)
+  end
+
   @doc """
   Approves a reward and pays it out to the participant's wallet.
 
@@ -384,6 +398,7 @@ defmodule Systems.Fund.Public do
 
       %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
         if Fund.Model.amount_available(fund) < amount do
+          Logger.warning("Tried to approve reward #{idempotence_key} with unsufficient funds")
           {:error, :insufficient_fund}
         else
           do_override_rejected(reward)

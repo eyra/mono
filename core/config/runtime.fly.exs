@@ -105,6 +105,9 @@ if config_env() == :prod do
           "auth_code_cleanup" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
 
+          "auto_approve" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
+
           _ ->
             nil
         end

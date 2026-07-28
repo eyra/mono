@@ -103,6 +103,11 @@ if config_env() == :prod do
           "auth_code_cleanup" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
 
+          # Approves rewards left in :pending_approval past the timeout window
+          # Add "auto_approve" to ENABLED_OBAN_PLUGINS to enable
+          "auto_approve" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
+
           _ ->
             nil
         end
