@@ -120,6 +120,12 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  def list_rejected_rewards(%Fund.Model{} = fund, preload \\ [:user]) do
+    reward_query(fund, :rejected)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
   def get!(id, preload \\ [:available, :pending]) when is_integer(id) do
     from(fund in Fund.Model, preload: ^preload)
     |> Repo.get!(id)

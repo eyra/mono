@@ -9,6 +9,7 @@ defprotocol Systems.Assignment.Template do
           participants: {title(), Template.Flags.Participants.t()} | nil,
           affiliate: {title(), Template.Flags.Affiliate.t()} | nil,
           workflow: {title(), Template.Flags.Workflow.t()} | nil,
+          contributions: {title(), Template.Flags.Contributions.t()} | nil,
           monitor: {binary(), Template.Flags.Monitor.t()} | nil
         ]
 
@@ -287,4 +288,16 @@ defmodule Systems.Assignment.Template.Flags.Monitor do
   - `:consent` - Enable consent tracking and monitoring
   """
   use Systems.Assignment.Template.Flags, [:consent]
+end
+
+defmodule Systems.Assignment.Template.Flags.Contributions do
+  @moduledoc """
+  Feature flags for the Contributions tab (researcher-side review of
+  participant contributions ready for approval / decline / payout).
+
+  Currently no opt-in flags — the tab is either enabled or not on a
+  template. Templates that support paid participation include this
+  tab; templates without paid_slots omit it.
+  """
+  use Systems.Assignment.Template.Flags, []
 end

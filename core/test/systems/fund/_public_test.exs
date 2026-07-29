@@ -685,6 +685,55 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "list_rejected_rewards/2" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      rejected =
+        Factories.insert!(:reward, %{
+          idempotence_key: "rejected-1",
+          amount: 500,
+          status: :rejected,
+          user: user,
+          fund: fund
+        })
+
+      {:ok, fund: fund, user: user, rejected: rejected}
+    end
+
+    test "returns only :rejected rewards for the fund",
+         %{fund: fund, user: %{id: user_id}, rejected: %{id: rejected_id}} do
+      assert [%{id: ^rejected_id, status: :rejected, user: %{id: ^user_id}}] =
+               Fund.Public.list_rejected_rewards(fund)
+    end
+
+    test "excludes rewards in other statuses", %{fund: fund, user: user} do
+      Factories.insert!(:reward, %{
+        idempotence_key: "pending-1",
+        amount: 500,
+        status: :pending_approval,
+        user: user,
+        fund: fund
+      })
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "paid-1",
+        amount: 500,
+        status: :paid,
+        user: user,
+        fund: fund
+      })
+
+      assert [%{status: :rejected}] = Fund.Public.list_rejected_rewards(fund)
+    end
+
+    test "returns empty list for an unrelated fund" do
+      currency = Fund.Factories.create_currency("iso-rejected", :legal, "Ω", 2)
+      other_fund = Fund.Factories.create_fund("other-rejected", currency)
+      assert [] = Fund.Public.list_rejected_rewards(other_fund)
+    end
+  end
+
   describe "reject_reward/2 reason + override" do
     setup %{fund: fund} do
       participant = Factories.insert!(:member, %{creator: false})

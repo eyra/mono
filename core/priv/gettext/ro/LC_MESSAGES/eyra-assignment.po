@@ -680,6 +680,10 @@ msgid "payout.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "payout.declined.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "payout.overview.heading"
 msgstr ""
 
@@ -688,27 +692,11 @@ msgid "payout.pagination.single_page"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.error"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "payout.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "payout.subject_label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.tab.overview"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.tab.waiting"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -732,18 +720,6 @@ msgid "payout.overview.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "pending_approvals.open.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "pending_approvals.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment_full.body"
 msgstr "Din păcate, acest studiu este complet și nu mai acceptă participanți noi."
 
@@ -758,3 +734,15 @@ msgstr "Introdu o sumă, de ex. 3,75"
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.placeholder"
 msgstr "O scurtă descriere a studiului tău"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.contributions"
+msgstr "Contribuții"
+
+#, elixir-autogen, elixir-format
+msgid "payout.confirm_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payout.confirm_all.error"
+msgstr ""

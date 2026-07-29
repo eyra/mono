@@ -706,7 +706,7 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
-  describe "list_pending_payouts/1" do
+  describe "list_pending_contributions/1" do
     setup do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
@@ -731,7 +731,7 @@ defmodule Systems.Assignment.PublicTest do
         status: :completed
       )
 
-      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+      assert [%{amount: 1000}] = Assignment.Public.list_pending_contributions(assignment)
     end
 
     test "lists the reward even when the participant's newest task is not the completed one", %{
@@ -747,7 +747,7 @@ defmodule Systems.Assignment.PublicTest do
       # A newer (higher-id) non-completed task must not hide the payout.
       Crew.Factories.create_task(crew, member, ["task2", "member=#{member.id}"], minutes_ago: 1)
 
-      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+      assert [%{amount: 1000}] = Assignment.Public.list_pending_contributions(assignment)
     end
   end
 
@@ -847,7 +847,7 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
-  describe "list_completed_payouts/1" do
+  describe "list_confirmed_contributions/1" do
     setup do
       user = Factories.insert!(:member)
       %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
@@ -867,7 +867,7 @@ defmodule Systems.Assignment.PublicTest do
           entry =
             Factories.insert!(:book_entry, %{
               idempotence_key: "pay-#{System.unique_integer([:positive])}",
-              journal_message: "test_list_completed_payouts"
+              journal_message: "test_list_confirmed_contributions"
             })
 
           if paid_at do
@@ -900,7 +900,7 @@ defmodule Systems.Assignment.PublicTest do
                  currency: %Fund.CurrencyModel{},
                  paid_at: %NaiveDateTime{}
                }
-             ] = Assignment.Public.list_completed_payouts(assignment)
+             ] = Assignment.Public.list_confirmed_contributions(assignment)
 
       assert reward_id == reward.id
       assert member_public_id == member.public_id
@@ -918,13 +918,13 @@ defmodule Systems.Assignment.PublicTest do
         fund: fund
       })
 
-      assert [%{amount: 500}] = Assignment.Public.list_completed_payouts(assignment)
+      assert [%{amount: 500}] = Assignment.Public.list_confirmed_contributions(assignment)
     end
 
     test "returns [] when the assignment has no fund" do
       assignment = Factories.insert!(:assignment, %{fund: nil})
 
-      assert [] = Assignment.Public.list_completed_payouts(assignment)
+      assert [] = Assignment.Public.list_confirmed_contributions(assignment)
     end
 
     test "sorts rows by paid_at descending (most recent first)",
@@ -933,14 +933,108 @@ defmodule Systems.Assignment.PublicTest do
       %{id: newer_id} = insert_paid_reward(user, fund, paid_at: ~N[2025-06-01 00:00:00])
 
       assert [%{reward_id: ^newer_id}, %{reward_id: ^older_id}] =
-               Assignment.Public.list_completed_payouts(assignment)
+               Assignment.Public.list_confirmed_contributions(assignment)
     end
 
     test "falls back to reward.updated_at when the reward has no payment",
          %{user: user, fund: fund, assignment: assignment} do
       %{updated_at: updated_at} = insert_paid_reward(user, fund, with_payment: false)
 
-      assert [%{paid_at: ^updated_at}] = Assignment.Public.list_completed_payouts(assignment)
+      assert [%{paid_at: ^updated_at}] =
+               Assignment.Public.list_confirmed_contributions(assignment)
+    end
+  end
+
+  describe "list_declined_contributions/1" do
+    # Same shape as list_confirmed_contributions/1 setup — one member on an
+    # assignment. Kept as its own block on purpose; extracting a helper for
+    # two tiny setups would obscure more than it saves.
+    # credo:disable-for-lines:6 Credo.Check.Design.DuplicatedCode
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      member = Crew.Factories.create_member(crew, user) |> Repo.reload!()
+
+      {:ok, user: user, fund: fund, crew: crew, member: member, assignment: assignment}
+    end
+
+    defp insert_rejected_reward(user, fund, opts \\ []) do
+      amount = Keyword.get(opts, :amount, 500)
+
+      rejected_at =
+        Keyword.get(
+          opts,
+          :rejected_at,
+          NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        )
+
+      rejection_reason = Keyword.get(opts, :rejection_reason)
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "rw-rejected-#{System.unique_integer([:positive])}",
+        amount: amount,
+        status: :rejected,
+        rejected_at: rejected_at,
+        rejection_reason: rejection_reason,
+        user: user,
+        fund: fund
+      })
+    end
+
+    test "returns rejected rewards as rows joined to crew members",
+         %{user: user, fund: fund, member: member, assignment: assignment} do
+      reward = insert_rejected_reward(user, fund, amount: 750, rejection_reason: "bad data")
+
+      assert [
+               %{
+                 reward_id: reward_id,
+                 member_public_id: member_public_id,
+                 amount: 750,
+                 currency: %Fund.CurrencyModel{},
+                 rejected_at: %NaiveDateTime{},
+                 rejection_reason: "bad data"
+               }
+             ] = Assignment.Public.list_declined_contributions(assignment)
+
+      assert reward_id == reward.id
+      assert member_public_id == member.public_id
+    end
+
+    test "excludes rewards that are not rejected",
+         %{user: user, fund: fund, assignment: assignment} do
+      insert_rejected_reward(user, fund)
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "rw-pending-#{System.unique_integer([:positive])}",
+        amount: 100,
+        status: :pending_approval,
+        user: user,
+        fund: fund
+      })
+
+      assert [%{amount: 500}] = Assignment.Public.list_declined_contributions(assignment)
+    end
+
+    test "returns [] when there are no rejected rewards", %{assignment: assignment} do
+      assert [] == Assignment.Public.list_declined_contributions(assignment)
+    end
+
+    test "returns [] when the assignment has no fund" do
+      assignment = Factories.insert!(:assignment, %{fund: nil})
+
+      assert [] = Assignment.Public.list_declined_contributions(assignment)
+    end
+
+    test "sorts rows by rejected_at descending (most recent first)",
+         %{user: user, fund: fund, assignment: assignment} do
+      %{id: older_id} =
+        insert_rejected_reward(user, fund, rejected_at: ~N[2024-01-01 00:00:00])
+
+      %{id: newer_id} =
+        insert_rejected_reward(user, fund, rejected_at: ~N[2025-06-01 00:00:00])
+
+      assert [%{reward_id: ^newer_id}, %{reward_id: ^older_id}] =
+               Assignment.Public.list_declined_contributions(assignment)
     end
   end
 

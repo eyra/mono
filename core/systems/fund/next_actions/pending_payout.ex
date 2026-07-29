@@ -5,8 +5,8 @@ defmodule Systems.Fund.NextActions.PendingPayout do
 
   Created when a participant completes their assignment task; cleared once no
   pending approvals remain on the assignment. The CTA links to the assignment's
-  pay-out page where the researcher can approve, decline, or override past
-  decisions.
+  Contributions tab where the researcher can approve or decline each
+  contribution.
   """
   @behaviour Systems.NextAction.ViewModel
   use CoreWeb, :verified_routes
@@ -21,7 +21,7 @@ defmodule Systems.Fund.NextActions.PendingPayout do
       cta_label: dgettext("eyra-nextaction", "fund.pending_payout.cta"),
       cta_action: %{
         type: :redirect,
-        to: ~p"/assignment/#{assignment_id}/content?tab=participants&modal=payout"
+        to: ~p"/assignment/#{assignment_id}/content?tab=contributions"
       }
     }
   end

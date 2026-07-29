@@ -1,0 +1,136 @@
+#!/bin/bash
+# Seed a single pending contribution (fund reward + deposit + completed crew
+# task) for testing the Contributions tab in local dev.
+#
+# The reward is inserted with the *canonical* idempotence_key
+#   assignment=<A>,user=<U>
+# so the Confirm / Decline flows can look it up. A matching book_entries
+# deposit with two book_entry_lines is also inserted so the decline path
+# (which reverts the deposit) works.
+#
+# Idempotent per (assignment, user): re-running for the same pair updates the
+# existing reward back to :pending_approval.
+#
+# Usage (from the core/ directory):
+#   scripts/seed_pending_contribution <assignment_id> <user_id> <amount_cents>
+#
+# Example — €7.50 for user 2 on assignment 26:
+#   scripts/seed_pending_contribution 26 2 750
+#
+# Roll back with:
+#   DELETE FROM fund_rewards WHERE idempotence_key LIKE 'seed:%';   -- unused prefix, kept for legacy runs
+#   DELETE FROM fund_rewards WHERE idempotence_key LIKE 'assignment=%';
+#   DELETE FROM book_entries WHERE idempotence_key LIKE 'assignment=%';
+#   DELETE FROM crew_tasks   WHERE 'seed' = ANY(identifier);
+#
+# Reads DB creds from env with dev defaults.
+
+set -euo pipefail
+
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 <assignment_id> <user_id> <amount_cents>" >&2
+  exit 1
+fi
+
+ASSIGNMENT_ID=$1
+USER_ID=$2
+AMOUNT=$3
+
+PGHOST=${PGHOST:-localhost}
+PGUSER=${PGUSER:-postgres}
+PGPASSWORD=${PGPASSWORD:-postgres}
+PGDATABASE=${PGDATABASE:-next_dev}
+
+export PGPASSWORD
+
+psql -h "$PGHOST" -U "$PGUSER" -d "$PGDATABASE" -v ON_ERROR_STOP=1 <<SQL
+BEGIN;
+
+DO \$\$
+DECLARE
+  v_crew_id               bigint;
+  v_fund_id               bigint;
+  v_available_account_id  bigint;
+  v_pending_account_id    bigint;
+  v_node_id               bigint;
+  v_entry_id              bigint;
+  v_reward_id             bigint;
+  v_reward_key            text := 'assignment=$ASSIGNMENT_ID,user=$USER_ID';
+  v_deposit_key           text := 'assignment=$ASSIGNMENT_ID,user=$USER_ID,type=deposit,attempt=0';
+BEGIN
+  -- Assignment → crew + fund + fund's bookkeeping accounts.
+  SELECT a.crew_id, a.fund_id, f.fund_id, f.reserve_id
+    INTO v_crew_id, v_fund_id, v_available_account_id, v_pending_account_id
+    FROM assignments a JOIN funds f ON f.id = a.fund_id
+    WHERE a.id = $ASSIGNMENT_ID;
+
+  IF v_crew_id IS NULL THEN
+    RAISE EXCEPTION 'assignment % not found', $ASSIGNMENT_ID;
+  END IF;
+
+  -- Auth node with an :owner role for the participant.
+  INSERT INTO authorization_nodes (inserted_at, updated_at)
+    VALUES (NOW(), NOW()) RETURNING id INTO v_node_id;
+
+  INSERT INTO authorization_role_assignments
+    (node_id, role, principal_id, inserted_at, updated_at)
+    VALUES (v_node_id, 'owner', $USER_ID, NOW(), NOW());
+
+  -- Crew member — idempotent per (crew, user).
+  INSERT INTO crew_members (crew_id, user_id, inserted_at, updated_at)
+    VALUES (v_crew_id, $USER_ID, NOW(), NOW())
+    ON CONFLICT (user_id, crew_id) DO UPDATE SET expired = false;
+
+  -- Completed crew task owned by the participant.
+  INSERT INTO crew_tasks
+    (crew_id, auth_node_id, identifier, status, completed_at, expired,
+     inserted_at, updated_at)
+    VALUES (v_crew_id, v_node_id,
+            ARRAY['seed', 'user=$USER_ID',
+                  'ts=' || extract(epoch from now())::bigint::text],
+            'completed', NOW(), false, NOW(), NOW());
+
+  -- Deposit: book_entries + two book_entry_lines
+  -- (debit fund.available, credit fund.pending/reserve).
+  -- Idempotent: reuse if already present.
+  SELECT id INTO v_entry_id
+    FROM book_entries
+    WHERE idempotence_key = v_deposit_key;
+
+  IF v_entry_id IS NULL THEN
+    INSERT INTO book_entries
+      (idempotence_key, journal_message, inserted_at, updated_at)
+      VALUES (v_deposit_key,
+              'Reserved seed contribution',
+              NOW(), NOW())
+      RETURNING id INTO v_entry_id;
+
+    INSERT INTO book_entry_lines
+      (entry_id, account_id, debit, credit)
+      VALUES (v_entry_id, v_available_account_id, $AMOUNT, 0),
+             (v_entry_id, v_pending_account_id, 0, $AMOUNT);
+  END IF;
+
+  -- Fund reward with canonical idempotence_key + linked deposit.
+  -- On conflict, reset to :pending_approval so the reward can be re-tested.
+  INSERT INTO fund_rewards
+    (fund_id, user_id, amount, idempotence_key, status, attempt,
+     deposit_id, inserted_at, updated_at)
+    VALUES (v_fund_id, $USER_ID, $AMOUNT, v_reward_key,
+            'pending_approval', 0, v_entry_id, NOW(), NOW())
+    ON CONFLICT (idempotence_key) DO UPDATE
+      SET amount = EXCLUDED.amount,
+          status = 'pending_approval',
+          deposit_id = EXCLUDED.deposit_id,
+          rejection_reason = NULL,
+          rejected_at = NULL,
+          updated_at = NOW()
+    RETURNING id INTO v_reward_id;
+
+  RAISE NOTICE 'seeded pending contribution: reward=%, deposit=%, task_auth_node=%, amount=%',
+    v_reward_id, v_entry_id, v_node_id, $AMOUNT;
+END
+\$\$;
+
+COMMIT;
+SQL

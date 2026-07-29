@@ -2,9 +2,9 @@ defmodule CoreWeb.Features.ApproveRewardTest do
   @moduledoc """
   Wallaby version of the Playwright `approve_reward.spec.ts` (UC-OPP-05).
 
-  Verifies the researcher's PayoutModal flow: open from the
-  pending-approvals banner → click "Pay out all" → the waiting list goes
-  empty (reward leaves `:pending_approval`).
+  Verifies the researcher's Contributions-tab flow: land on the tab →
+  click "Pay out all" → the waiting list goes empty (reward leaves
+  `:pending_approval`).
 
   The precondition state (funded assignment, participant with completed
   task, reward in `:pending_approval`) is built directly via Factories
@@ -29,7 +29,7 @@ defmodule CoreWeb.Features.ApproveRewardTest do
   end
 
   @tag :feature
-  feature "researcher approves a participant reward via PayoutModal",
+  feature "researcher approves a participant reward from the Contributions tab",
           %{session: session} do
     password = Factories.valid_user_password()
 
@@ -106,9 +106,7 @@ defmodule CoreWeb.Features.ApproveRewardTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> visit("/assignment/#{assignment.id}/content?tab=participants")
-    |> assert_has(Query.css("[data-testid='pending-approvals-cta']"))
-    |> click(Query.css("[data-testid='pending-approvals-cta']"))
+    |> visit("/assignment/#{assignment.id}/content?tab=contributions")
     |> assert_has(Query.css("[data-testid='payout-modal']"))
     |> assert_has(Query.css("[data-testid='pay-out-all-button']"))
     |> click(Query.css("[data-testid='pay-out-all-button']"))

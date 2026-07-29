@@ -37,6 +37,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
           dgettext("eyra-assignment", "tabbar.item.participants"),
           Assignment.Template.Flags.Participants.new(opt_in: participants_opt_in())
         },
+        contributions: contributions_tab(),
         monitor: {
           dgettext("eyra-assignment", "tabbar.item.monitor"),
           Assignment.Template.Flags.Monitor.new()
@@ -49,6 +50,18 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
         if feature_enabled?(:panl_post_launch),
           do: [:advert_in_pool, :paid_slots],
           else: []
+    end
+
+    # Contributions is only meaningful when paid_slots is on — otherwise
+    # there's nothing to approve/decline. Same gate as the Participants
+    # paid_slots opt-in so the two surfaces stay in sync.
+    defp contributions_tab do
+      if feature_enabled?(:panl_post_launch) do
+        {
+          dgettext("eyra-assignment", "tabbar.item.contributions"),
+          Assignment.Template.Flags.Contributions.new()
+        }
+      end
     end
 
     def currency(_t), do: :EUR

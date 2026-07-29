@@ -402,6 +402,38 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp create_tab(
+         :contributions,
+         assignment,
+         {title, content_flags},
+         _workflow_config,
+         show_errors,
+         _assigns
+       ) do
+    element =
+      CoreWeb.Live.Element.prepare_live_view(
+        "contributions",
+        Assignment.ContributionsView,
+        live_context:
+          Frameworks.Concept.LiveContext.new(%{
+            assignment_id: assignment.id,
+            title: title,
+            content_flags: content_flags
+          })
+      )
+
+    %{
+      id: :contributions,
+      ready: false,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      element: element,
+      testid: "assignment-tab-contributions"
+    }
+  end
+
+  defp create_tab(
          :monitor,
          assignment,
          {title, content_flags},

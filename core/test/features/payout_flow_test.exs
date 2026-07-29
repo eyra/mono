@@ -10,7 +10,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
 
     * task-complete signal → Fund.Public.mark_pending_approval/1 →
       reward `:reserved` → `:pending_approval`
-    * approve-task signal (from PayoutModal "Pay out all") →
+    * approve-task signal (from Contributions "Pay out all") →
       Fund.Public.approve_reward/1 → reward `:pending_approval` →
       `:approved`
 
@@ -129,7 +129,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> Core.Repo.insert!()
 
     # Researcher is owner of the assignment so they can navigate to the
-    # participants tab + open PayoutModal.
+    # Contributions tab and approve.
     Factories.insert!(:role_assignment, %{
       node: auth_node,
       role: :owner,
@@ -140,7 +140,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     # flow. Creates a crew member with :participant role AND a reward in
     # :reserved state. The state transitions we want to verify:
     #   :reserved -> :pending_approval  (participant completes task)
-    #   :pending_approval -> :approved  (researcher approves via PayoutModal)
+    #   :pending_approval -> :approved  (researcher approves via Contributions tab)
     {:ok, _} = Assignment.Public.add_participant!(assignment, participant)
 
     # ========================================================================
@@ -161,8 +161,8 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> assert_has(Query.css("[data-testid='finished-view']"))
 
     # ========================================================================
-    # Researcher — sees pending-approvals banner, opens PayoutModal,
-    #              clicks "Pay out all" → reward :pending_approval -> :approved
+    # Researcher — lands on the Contributions tab, clicks "Pay out all"
+    #              → reward :pending_approval -> :approved
     # ========================================================================
 
     researcher_session
@@ -170,9 +170,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: researcher_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> visit("/assignment/#{assignment.id}/content?tab=participants")
-    |> assert_has(Query.css("[data-testid='pending-approvals-cta']"))
-    |> click(Query.css("[data-testid='pending-approvals-cta']"))
+    |> visit("/assignment/#{assignment.id}/content?tab=contributions")
     |> assert_has(Query.css("[data-testid='payout-modal']"))
     |> click(Query.css("[data-testid='pay-out-all-button']"))
     |> assert_has(Query.css("[data-testid='payout-empty']"))

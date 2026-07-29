@@ -758,13 +758,13 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Returns one row per `:pending_approval` reward on the assignment, joined to
-  the crew member + completed task so the researcher's pay-out modal can
+  the crew member + completed task so the researcher's Contributions tab can
   render them.
 
   Each row: `%{reward_id, task_id, member_public_id, amount, currency,
-  completed_at}`.
+  completed_at, finished_task_count}`.
   """
-  def list_pending_payouts(%Assignment.Model{
+  def list_pending_contributions(%Assignment.Model{
         crew: %Crew.Model{} = crew,
         fund: %Fund.Model{} = fund
       }) do
@@ -775,12 +775,12 @@ defmodule Systems.Assignment.Public do
 
     fund
     |> Fund.Public.list_pending_approvals(fund: [:currency])
-    |> Enum.flat_map(&pending_payout_row(&1, crew, members_by_user_id))
+    |> Enum.flat_map(&pending_contribution_row(&1, crew, members_by_user_id))
   end
 
-  def list_pending_payouts(_), do: []
+  def list_pending_contributions(_), do: []
 
-  def list_completed_payouts(%Assignment.Model{
+  def list_confirmed_contributions(%Assignment.Model{
         crew: %Crew.Model{} = crew,
         fund: %Fund.Model{} = fund
       }) do
@@ -791,13 +791,51 @@ defmodule Systems.Assignment.Public do
 
     fund
     |> Fund.Public.list_paid_rewards(fund: [:currency], payment: [])
-    |> Enum.map(&completed_payout_row(&1, members_by_user_id))
+    |> Enum.map(&confirmed_contribution_row(&1, members_by_user_id))
     |> Enum.sort_by(& &1.paid_at, {:desc, NaiveDateTime})
   end
 
-  def list_completed_payouts(_), do: []
+  def list_confirmed_contributions(_), do: []
 
-  defp completed_payout_row(
+  def list_declined_contributions(%Assignment.Model{
+        crew: %Crew.Model{} = crew,
+        fund: %Fund.Model{} = fund
+      }) do
+    members_by_user_id =
+      crew
+      |> Crew.Public.list_members()
+      |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
+
+    fund
+    |> Fund.Public.list_rejected_rewards(fund: [:currency])
+    |> Enum.map(&declined_contribution_row(&1, members_by_user_id))
+    |> Enum.sort_by(& &1.rejected_at, {:desc, NaiveDateTime})
+  end
+
+  def list_declined_contributions(_), do: []
+
+  defp declined_contribution_row(
+         %Fund.RewardModel{
+           id: reward_id,
+           user_id: user_id,
+           amount: amount,
+           rejected_at: rejected_at,
+           rejection_reason: rejection_reason,
+           fund: %Fund.Model{currency: currency}
+         },
+         members_by_user_id
+       ) do
+    %{
+      reward_id: reward_id,
+      member_public_id: member_public_id(members_by_user_id, user_id),
+      amount: amount,
+      currency: currency,
+      rejected_at: rejected_at,
+      rejection_reason: rejection_reason
+    }
+  end
+
+  defp confirmed_contribution_row(
          %Fund.RewardModel{
            id: reward_id,
            user_id: user_id,
@@ -822,7 +860,7 @@ defmodule Systems.Assignment.Public do
 
   # Per-row task lookup remains: the task↔owner link is role-based and lives in
   # Crew, so full O(1) batching would need a dedicated Crew.Public query.
-  defp pending_payout_row(
+  defp pending_contribution_row(
          %Fund.RewardModel{
            id: reward_id,
            user_id: user_id,
@@ -832,11 +870,13 @@ defmodule Systems.Assignment.Public do
          %Crew.Model{} = crew,
          members_by_user_id
        ) do
-    crew
-    |> Crew.Public.list_tasks_for_user(user_id)
-    |> Enum.find(&match?(%Crew.TaskModel{status: :completed}, &1))
-    |> case do
+    tasks = Crew.Public.list_tasks_for_user(crew, user_id)
+
+    case Enum.find(tasks, &match?(%Crew.TaskModel{status: :completed}, &1)) do
       %Crew.TaskModel{id: task_id, completed_at: completed_at} ->
+        finished_task_count =
+          Enum.count(tasks, &(&1.status in Crew.TaskStatus.finished_states()))
+
         [
           %{
             reward_id: reward_id,
@@ -844,7 +884,8 @@ defmodule Systems.Assignment.Public do
             member_public_id: member_public_id(members_by_user_id, user_id),
             amount: amount,
             currency: currency,
-            completed_at: completed_at
+            completed_at: completed_at,
+            finished_task_count: finished_task_count
           }
         ]
 
@@ -861,16 +902,16 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
-  Bulk-approves every reward currently in `:pending_approval` on the assignment
+  Confirms every contribution currently in `:pending_approval` on the assignment
   by accepting the matching crew task. Each accept fires the existing assignment
   switch which calls `Fund.Public.approve_reward/1`. A failing row is logged
   and does not block subsequent rows, but the overall outcome is reported:
   `{:ok, count}` when all succeeded, or
   `{:error, {:partial, %{ok: n, failed: [task_id, ...]}}}` otherwise.
   """
-  def bulk_approve_pending_payouts(%Assignment.Model{} = assignment) do
+  def confirm_all_pending_contributions(%Assignment.Model{} = assignment) do
     results =
-      list_pending_payouts(assignment)
+      list_pending_contributions(assignment)
       |> Enum.map(fn %{task_id: task_id} ->
         case Crew.Public.accept_task(task_id) do
           {:ok, _} ->
@@ -878,7 +919,7 @@ defmodule Systems.Assignment.Public do
 
           error ->
             Logger.warning(
-              "[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}"
+              "[Assignment] confirm-all failed for task #{task_id}: #{inspect(error)}"
             )
 
             {:error, task_id}
