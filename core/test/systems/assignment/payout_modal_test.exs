@@ -416,16 +416,38 @@ defmodule Systems.Assignment.PayoutModalTest do
     identifier = ["item=#{workflow_item.id}", "member=#{member.id}"]
     task = Crew.Factories.create_task(assignment.crew, member, identifier, status: :completed)
 
-    {:ok, %{reward: reward}} =
+    idempotence_key = "assignment=#{assignment.id},user=#{participant.id}"
+
+    {:ok, _} =
       Fund.Public.create_reward(
         Repo.preload(fund, [:available, :pending, :currency]),
         1000,
         participant,
-        "assignment=#{assignment.id},user=#{participant.id}"
+        idempotence_key
       )
 
-    reward = reward |> Ecto.Changeset.change(%{status: reward_status}) |> Repo.update!()
+    reward = transition_reward(idempotence_key, reward_status)
 
     %{task: task, reward: reward, public_id: public_id}
+  end
+
+  # Go through the real transitions rather than writing the status directly:
+  # an :approved reward must carry a payment to satisfy the
+  # approved_requires_payment check constraint.
+  defp transition_reward(idempotence_key, :pending_approval) do
+    {:ok, reward} = Fund.Public.mark_pending_approval(idempotence_key)
+    reward
+  end
+
+  defp transition_reward(idempotence_key, :approved) do
+    {:ok, %{reward: reward}} = Fund.Public.approve_reward(idempotence_key)
+    reward
+  end
+
+  defp transition_reward(idempotence_key, :paid) do
+    idempotence_key
+    |> transition_reward(:approved)
+    |> Ecto.Changeset.change(%{status: :paid})
+    |> Repo.update!()
   end
 end

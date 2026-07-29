@@ -367,6 +367,20 @@ defmodule Systems.Fund.Public do
     end
   end
 
+  def approve_pending_rewards(cutoff) do
+    query =
+      from(r in Fund.RewardModel,
+        where: r.status == :pending_approval and r.updated_at < ^cutoff
+      )
+
+    query
+    |> Repo.all()
+    |> Enum.reduce([], fn %{idempotence_key: idempotence_key}, acc ->
+      result = approve_reward(idempotence_key)
+      [result | acc]
+    end)
+  end
+
   @doc """
   Approves a reward and pays it out to the participant's wallet.
 
@@ -384,6 +398,7 @@ defmodule Systems.Fund.Public do
 
       %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
         if Fund.Model.amount_available(fund) < amount do
+          Logger.warning("Tried to approve reward #{idempotence_key} with insufficient funds")
           {:error, :insufficient_fund}
         else
           do_override_rejected(reward)
@@ -396,8 +411,8 @@ defmodule Systems.Fund.Public do
 
   defp do_approve_reward(%Fund.RewardModel{} = reward) do
     Multi.new()
-    |> cas_status_step(:reward, reward, [:reserved, :pending_approval], status: :approved)
     |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:reserved, :pending_approval], [])
     |> Repo.commit()
   end
 
@@ -405,46 +420,52 @@ defmodule Systems.Fund.Public do
   # from there (the `deposit: nil` branch of create_payment_transaction).
   defp do_override_rejected(%Fund.RewardModel{} = reward) do
     Multi.new()
-    |> cas_status_step(:reward, reward, [:rejected],
-      status: :approved,
-      rejection_reason: nil,
-      rejected_at: nil
-    )
     |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:rejected], rejection_reason: nil, rejected_at: nil)
     |> Repo.commit()
   end
 
-  # A reward must never be :approved with a nil payment_id.
-  defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{}} = reward) do
-    Multi.run(multi, :payment, fn _, _ -> {:ok, reward} end)
+  defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do
+    Multi.run(multi, :payment, fn _, _ -> {:ok, payment} end)
   end
 
   defp approve_payment_step(multi, %Fund.RewardModel{} = reward) do
     Multi.run(multi, :payment, fn _, _ ->
-      with {:ok, %{entry: payment}} <- create_payment_transaction(reward) do
-        link_payment_transaction(reward, payment)
-      end
+      with {:ok, %{entry: payment}} <- create_payment_transaction(reward), do: {:ok, payment}
     end)
+  end
+
+  defp cas_approve_step(multi, %Fund.RewardModel{} = reward, from_statuses, extra_set) do
+    Multi.run(multi, :reward, fn repo, %{payment: %Bookkeeping.EntryModel{id: payment_id}} ->
+      cas_update(
+        repo,
+        reward,
+        from_statuses,
+        [status: :approved, payment_id: payment_id] ++ extra_set
+      )
+    end)
+  end
+
+  defp cas_status_step(multi, name, %Fund.RewardModel{} = reward, from_statuses, set)
+       when is_list(from_statuses) and is_list(set) do
+    Multi.run(multi, name, fn repo, _ -> cas_update(repo, reward, from_statuses, set) end)
   end
 
   # Compare-and-swap: the status precondition serializes concurrent transitions
   # so a losing writer hits 0 rows and rolls back instead of double-applying.
-  defp cas_status_step(multi, name, %Fund.RewardModel{id: id}, from_statuses, set)
-       when is_list(from_statuses) and is_list(set) do
+  defp cas_update(repo, %Fund.RewardModel{id: id}, from_statuses, set) do
     set = Keyword.put_new(set, :updated_at, now())
 
-    Multi.run(multi, name, fn repo, _ ->
-      query =
-        from(r in Fund.RewardModel,
-          where: r.id == ^id and r.status in ^from_statuses,
-          select: r
-        )
+    query =
+      from(r in Fund.RewardModel,
+        where: r.id == ^id and r.status in ^from_statuses,
+        select: r
+      )
 
-      case repo.update_all(query, set: set) do
-        {1, [reward]} -> {:ok, reward}
-        {0, _} -> {:error, :stale_reward}
-      end
-    end)
+    case repo.update_all(query, set: set) do
+      {1, [reward]} -> {:ok, reward}
+      {0, _} -> {:error, :stale_reward}
+    end
   end
 
   defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)

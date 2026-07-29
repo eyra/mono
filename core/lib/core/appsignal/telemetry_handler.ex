@@ -30,7 +30,8 @@ defmodule Core.AppSignal.TelemetryHandler do
   @event_prefixes [
     [:feldspar, :donate],
     [:feldspar, :log],
-    [:payment, :reconciliation]
+    [:payment, :reconciliation],
+    [:fund, :auto_approve]
   ]
 
   def attach do
