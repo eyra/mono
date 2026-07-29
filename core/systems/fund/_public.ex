@@ -398,7 +398,7 @@ defmodule Systems.Fund.Public do
 
       %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
         if Fund.Model.amount_available(fund) < amount do
-          Logger.warning("Tried to approve reward #{idempotence_key} with unsufficient funds")
+          Logger.warning("Tried to approve reward #{idempotence_key} with insufficient funds")
           {:error, :insufficient_fund}
         else
           do_override_rejected(reward)

@@ -86,8 +86,6 @@ if config_env() == :prod do
           "advert_expiration" ->
             {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
 
-          # Cleans up old data donation files from filesystem (2 weeks+ old by default)
-          # Add "data_donation_cleanup" to ENABLED_OBAN_PLUGINS to enable
           "data_donation_cleanup" ->
             {Oban.Plugins.Cron,
              crontab: [
@@ -98,13 +96,9 @@ if config_env() == :prod do
           "payment_reconciliation" ->
             {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
 
-          # Prunes auth_codes older than the validity window
-          # Add "auth_code_cleanup" to ENABLED_OBAN_PLUGINS to enable
           "auth_code_cleanup" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
 
-          # Approves rewards left in :pending_approval past the timeout window
-          # Add "auto_approve" to ENABLED_OBAN_PLUGINS to enable
           "auto_approve" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
 
@@ -303,6 +297,9 @@ if config_env() == :prod do
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 
   config :core, payment_provider: Core.Config.payment_provider()
+
+  config :core,
+    auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer()
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

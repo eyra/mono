@@ -264,6 +264,9 @@ if config_env() == :prod do
 
   config :core, payment_provider: Core.Config.payment_provider()
 
+  config :core,
+    auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer()
+
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do

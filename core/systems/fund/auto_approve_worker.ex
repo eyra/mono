@@ -4,8 +4,6 @@ defmodule Systems.Fund.AutoApproveWorker do
   after n days
   """
 
-  @approve_timeout 14
-
   use Oban.Worker,
     max_attempts: 3,
     unique: [period: :infinity, states: [:available, :scheduled, :executing, :retryable]]
@@ -17,10 +15,11 @@ defmodule Systems.Fund.AutoApproveWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
     started = System.monotonic_time()
+    approve_timeout = Application.get_env(:core, :auto_approve_timeout, 14)
 
     results =
-      DateTime.utc_now()
-      |> DateTime.add(-@approve_timeout, :day)
+      NaiveDateTime.utc_now()
+      |> NaiveDateTime.add(-approve_timeout, :day)
       |> Fund.Public.approve_pending_rewards()
 
     approved = Enum.count(results, &approved_now?/1)
@@ -32,9 +31,6 @@ defmodule Systems.Fund.AutoApproveWorker do
     :ok
   end
 
-  # A completed approval is the Multi result, which carries both :reward and
-  # :payment. The already-approved no-op returns a bare `Fund.RewardModel`,
-  # which also has a :payment field — so :reward is what tells them apart.
   defp approved_now?({:ok, %{reward: _, payment: _}}), do: true
   defp approved_now?(_), do: false
 
