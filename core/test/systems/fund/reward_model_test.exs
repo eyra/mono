@@ -1,6 +1,8 @@
 defmodule Systems.Fund.RewardModelTest do
   use Core.DataCase
 
+  alias Core.Factories
+  alias Core.Repo
   alias Systems.Fund
 
   describe "status field" do
@@ -42,5 +44,33 @@ defmodule Systems.Fund.RewardModelTest do
       refute changeset.valid?
       assert "is invalid" in errors_on(changeset).status
     end
+  end
+
+  describe "approved_requires_payment constraint" do
+    test "the database rejects an :approved reward with no payment" do
+      assert_raise Ecto.ConstraintError, ~r/approved_requires_payment/, fn ->
+        Repo.insert!(reward(status: :approved, payment_id: nil))
+      end
+    end
+
+    test "an :approved reward with a payment is allowed" do
+      payment =
+        Factories.insert!(:book_entry, %{
+          idempotence_key: "pay-#{System.unique_integer([:positive])}",
+          journal_message: "reward payment"
+        })
+
+      assert %Fund.RewardModel{status: :approved} =
+               Repo.insert!(reward(status: :approved, payment_id: payment.id))
+    end
+
+    test "a non-approved reward with no payment is allowed" do
+      assert %Fund.RewardModel{status: :reserved} = Repo.insert!(reward(status: :reserved))
+    end
+  end
+
+  defp reward(attrs) do
+    defaults = %{idempotence_key: "rwd-#{System.unique_integer([:positive])}", amount: 100}
+    Factories.build(:reward, Map.merge(defaults, Map.new(attrs)))
   end
 end
