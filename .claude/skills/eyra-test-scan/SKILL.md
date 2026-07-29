@@ -1,25 +1,20 @@
 ---
 name: eyra-test-scan
 description: |
-  Test gap analysis for a new feature, milestone, or branch in the Eyra Next platform (mono repo).
+  Test gap analysis for a branch on the Eyra Next platform (mono repo).
   Scans changed production code and checks whether there are enough unit tests (ExUnit), feature
   tests (Wallaby), and E2E tests (Playwright). Output is concrete advice for developers,
   plus the question whether an E2E spec is still missing.
 triggers:
-  - test-scan
-  - /test-scan
-  - test gap
-  - test gap analysis
-  - test coverage
-  - test coverage check
+  - /ey-test-scan
 ---
 
 # Test Scan — gap analysis for Eyra Next
 
-This skill helps assess a new feature or milestone:
+This skill helps assess a branch:
 
 1. Whether the developers have written enough unit/feature tests (if not → advice back).
-2. Whether an E2E spec is still needed (if so → `/e2e-create`).
+2. Whether an E2E spec is still needed (if so → flag it as a gap).
 
 ## Step 1 — Determine scope
 
@@ -28,8 +23,6 @@ Ask (if not given): what is the scope?
 - **Branch** — a feature branch that is still open. Use `git diff develop..HEAD --stat`
   to find changed files.
 - **PR number / URL** — `gh pr view <id>` to get the branch, then diff as above.
-- **Free-form** — a feature is mentioned by name. Then ask which modules that touches or search
-  with `grep -r` for relevant symbols.
 
 ## Step 2 — Read the conventions
 
@@ -40,12 +33,7 @@ find core/test -maxdepth 4 -name CLAUDE.md
 find core/test -maxdepth 4 -name AGENTS.md
 ```
 
-Expected (at time of writing): `core/test/.claude/CLAUDE.md` (the 5 rules: atomic, guards first,
-let-it-crash, standard tuples, pattern match in function heads), `core/test/CLAUDE.md`
-(Wallaby selectors, signal isolation), `core/test/e2e/CLAUDE.md` (Playwright conventions). Read
-all of them before formulating advice.
-
-## Step 3 — List production code
+## Step 3 — List code
 
 ```bash
 git diff develop..HEAD --stat -- 'core/lib/**' 'core/systems/**' 'core/frameworks/**'
@@ -66,8 +54,8 @@ For each production module:
    ```bash
    grep -c "^    test " core/test/systems/foo/bar_test.exs
    ```
-3. **LiveComponent or LiveView?** (grep for `use Phoenix.LiveComponent` / `use Phoenix.LiveView`)
-   - Check whether the test uses `live_isolated`. If not → flag this specifically; LiveComponent
+3. **LiveView?** (grep for `use Phoenix.LiveView`)
+   - Check whether the test uses `live_isolated`. If not → flag this specifically; LiveView
      state should be tested at the unit level, not deferred to feature/E2E.
 4. **Public functions without guards?** Flag it, since rule 3 says: guards first, with tests.
 5. **Coverage number** for the touched paths:
@@ -109,7 +97,7 @@ ls core/test/e2e/*.spec.ts
 ```
 
 If the PR introduces a new critical system (= a new top-level user journey) without an existing
-E2E spec → note this as a candidate for `/e2e-create`. If the system already has a spec →
+E2E spec → note this as a missing E2E spec. If the system already has a spec →
 add nothing, E2E is not an edge-case layer.
 
 ## Step 7 — Write the report
@@ -128,13 +116,11 @@ Output in this format:
   Suggestion: <concrete action>
 
 ### E2E (Playwright)
-- [ ] E2E spec missing for <system> → candidate for /e2e-create
+- [ ] E2E spec missing for <system>
 - [x] Existing spec covers the system (<spec.ts>) — nothing to add
 
 ### Summary
-- Production lines added: <N>
-- Test lines added: <M>
-- Ratio: <M/N> (red flag if < 1:1 for core components)
+- Unit test coverage: <% from mix test --cover, if run>
 - New test distribution: <X>% unit / <Y>% feature / <Z>% E2E (target: 90/9/1)
 ```
 
@@ -142,12 +128,5 @@ Output in this format:
 
 - **Don't advise adding feature tests if the unit layer can do it better** — the test pyramid
   says: focus on unit, feature is the middle ground, E2E is the happy path. Be strict.
-- **Flag a LiveComponent without a `live_isolated` test** as a recurring gap — this is often forgotten.
+- **Flag a LiveView without a `live_isolated` test** as a recurring gap — this is often forgotten.
 - **Buggy-behavior tests that break after a fix** are normal — if you see these, no red flag, but do mention they'll need action after the fix.
-- **Mix tasks don't clash with `mix phx.server`** as long as they don't start an endpoint. `mix ecto.migrate`
-  and `mix seed` are safe in parallel, `mix run priv/repo/seeds.exs` is not (it starts the whole app).
-- **No recommendation to run `mix test --cover` on the whole suite** — only on the touched
-  paths. Otherwise too slow and not PR-relevant.
-- Path shifts: if `find core/test -name CLAUDE.md` returns less than before, check whether the content
-  has moved to `AGENTS.md` or another location before basing your judgment on an outdated
-  document.
