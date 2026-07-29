@@ -251,6 +251,15 @@ defmodule Core.Authorization do
       has_required_roles_in_context?(principal, entity, permission)
   end
 
+  @doc """
+  Users with `role` assigned directly on the auth node of `entity`.
+
+  Role assignments on ancestor nodes are ignored. Use `users_with_inherited_role/3`
+  when the role is expected to be inherited from higher up the tree, the way
+  `can?/3` resolves it.
+
+  An integer argument is interpreted as an auth node id, not as an entity id.
+  """
   def users_with_role(_, _, preload \\ [])
 
   def users_with_role(node_id, role, preload) when is_number(node_id) do
@@ -267,6 +276,31 @@ defmodule Core.Authorization do
     principal_ids = query_principal_ids(role: role, entity: entity)
 
     Ecto.Query.from(u in Systems.Account.User,
+      where: u.id in subquery(principal_ids),
+      preload: ^preload
+    )
+    |> Core.Repo.all()
+  end
+
+  @doc """
+  Users with `role` assigned on the auth node of `entity` or on any of its ancestors.
+
+  This mirrors the inheritance applied by `can?/3` and `roles_intersect?/3`: a role
+  granted on a parent node applies to everything below it. Prefer this over
+  `users_with_role/3` whenever the role lives higher up the tree than the entity
+  being asked about, e.g. the `:owner` of an assignment, which is assigned on the
+  project node.
+
+  An integer argument is interpreted as an auth node id, not as an entity id.
+  """
+  def users_with_inherited_role(entity, role, preload \\ []) do
+    principal_ids =
+      from(ra in Core.Authorization.RoleAssignment,
+        where: ra.node_id in subquery(parent_node_query(entity)) and ra.role == ^role,
+        select: ra.principal_id
+      )
+
+    from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
       preload: ^preload
     )

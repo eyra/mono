@@ -475,7 +475,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp notify_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
-    case auth_module().users_with_role(assignment, :owner) do
+    case auth_module().users_with_inherited_role(assignment, :owner) do
       [] ->
         :ok
 
@@ -489,18 +489,18 @@ defmodule Systems.Assignment.Switch do
     end
   end
 
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: nil}) do
-    clear_pending_payout(assignment_id)
+  defp clear_pending_payout_if_empty(%Assignment.Model{fund: nil} = assignment) do
+    clear_pending_payout(assignment)
   end
 
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: fund}) do
+  defp clear_pending_payout_if_empty(%Assignment.Model{fund: fund} = assignment) do
     if Systems.Fund.Public.list_pending_approvals(fund) == [] do
-      clear_pending_payout(assignment_id)
+      clear_pending_payout(assignment)
     end
   end
 
-  defp clear_pending_payout(assignment_id) do
-    case auth_module().users_with_role(assignment_id, :owner) do
+  defp clear_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
+    case auth_module().users_with_inherited_role(assignment, :owner) do
       [] ->
         :ok
 
