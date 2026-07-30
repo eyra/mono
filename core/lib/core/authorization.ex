@@ -267,7 +267,8 @@ defmodule Core.Authorization do
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: u.id
     )
     |> Core.Repo.all()
   end
@@ -277,7 +278,8 @@ defmodule Core.Authorization do
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: u.id
     )
     |> Core.Repo.all()
   end
@@ -302,7 +304,8 @@ defmodule Core.Authorization do
 
     from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: u.id
     )
     |> Core.Repo.all()
   end
@@ -314,28 +317,6 @@ defmodule Core.Authorization do
   def user_has_role?(user_id, entity, role) do
     users_with_role(entity, role)
     |> Enum.any?(&(&1.id == user_id))
-  end
-
-  def first_user_with_role(entity, role, preload) do
-    user =
-      entity
-      |> users_with_role(role, preload)
-      |> List.first()
-
-    case user do
-      nil ->
-        Logger.error("No user found with role #{role} for #{entity}")
-        {:error}
-
-      user ->
-        {:ok, user}
-    end
-  end
-
-  def top_entity(%{auth_node_id: _auth_node_id} = entity) do
-    entity
-    |> get_parent_nodes()
-    |> List.last()
   end
 
   def link(auth_tree) do

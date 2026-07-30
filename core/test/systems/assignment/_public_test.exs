@@ -1000,6 +1000,77 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "owner!/1" do
+    test "finds an owner assigned on the top of the tree" do
+      %{id: user_id} = user = Factories.insert!(:creator)
+      top = Core.Authorization.create_node!()
+      assignment = assignment_under(Core.Authorization.create_node!(top))
+
+      :ok = assign_owner(user, top)
+
+      assert %{id: ^user_id} = Assignment.Public.owner!(assignment)
+    end
+
+    # The reason for using users_with_inherited_role/3 over a walk to the top
+    # entity: an owner assigned halfway up the tree is a real configuration and
+    # asking only the top node would miss it.
+    test "finds an owner assigned on an intermediate node" do
+      %{id: user_id} = user = Factories.insert!(:creator)
+      middle = Core.Authorization.create_node!(Core.Authorization.create_node!())
+      assignment = assignment_under(Core.Authorization.create_node!(middle))
+
+      :ok = assign_owner(user, middle)
+
+      assert %{id: ^user_id} = Assignment.Public.owner!(assignment)
+    end
+
+    test "finds an owner assigned directly on the assignment" do
+      %{id: user_id} = user = Factories.insert!(:creator)
+      node = Core.Authorization.create_node!(Core.Authorization.create_node!())
+      assignment = assignment_under(node)
+
+      :ok = assign_owner(user, node)
+
+      assert %{id: ^user_id} = Assignment.Public.owner!(assignment)
+    end
+
+    test "ignores a role that is not :owner" do
+      user = Factories.insert!(:creator)
+      top = Core.Authorization.create_node!()
+      assignment = assignment_under(Core.Authorization.create_node!(top))
+
+      :ok = Core.Authorization.assign_role(user, node_id(top), :participant)
+
+      assert Assignment.Public.owner!(assignment) == nil
+    end
+
+    test "does not pick up an owner from a sibling tree" do
+      user = Factories.insert!(:creator)
+      assignment = assignment_under(Core.Authorization.create_node!())
+
+      :ok = assign_owner(user, Core.Authorization.create_node!())
+
+      assert Assignment.Public.owner!(assignment) == nil
+    end
+
+    test "returns nil when the tree carries no owner" do
+      assignment = assignment_under(Core.Authorization.create_node!())
+
+      assert Assignment.Public.owner!(assignment) == nil
+    end
+  end
+
+  defp assignment_under(%Core.Authorization.Node{id: parent_id}) do
+    auth_node = Factories.insert!(:auth_node, %{parent_id: parent_id})
+    Factories.insert!(:assignment, %{auth_node: auth_node})
+  end
+
+  # assign_role/3 resolves its target through the AuthorizationNode protocol,
+  # which a raw Node struct does not implement — it takes the id.
+  defp assign_owner(user, node), do: Core.Authorization.assign_role(user, node_id(node), :owner)
+
+  defp node_id(%Core.Authorization.Node{id: id}), do: id
+
   defp funded_assignment(fund, subject_reward) do
     info =
       Factories.insert!(:assignment_info, %{
