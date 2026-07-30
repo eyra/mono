@@ -164,7 +164,12 @@ defmodule Systems.Assignment.ContributionsPendingView do
       <td class="py-3 text-right">
         <Button.dynamic
           action={%{type: :send, event: "expand_decline", item: to_string(@row.task_id), target: @myself}}
-          face={%{type: :link, text: @labels.decline_link}}
+          face={%{
+            type: :plain,
+            icon: :reject,
+            icon_align: :left,
+            label: @labels.decline_link
+          }}
           testid={"decline-#{@row.task_id}"}
         />
       </td>
