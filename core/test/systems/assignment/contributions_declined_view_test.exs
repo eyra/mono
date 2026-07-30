@@ -1,45 +1,33 @@
 defmodule Systems.Assignment.ContributionsDeclinedViewTest do
-  use Core.DataCase
+  use ExUnit.Case, async: true
 
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
-  alias Systems.Assignment
-  alias Systems.Assignment.ContributionsTestHelper
+  alias Systems.Assignment.ContributionsDeclinedView
 
-  setup do
-    {:ok, ContributionsTestHelper.setup_assignment_with_member()}
-  end
-
-  defp render_view(assignment) do
-    render_component(Assignment.ContributionsDeclinedView,
+  defp render_view(rows) do
+    render_component(ContributionsDeclinedView,
       id: "contributions-declined",
-      assignment: assignment
+      rows: rows,
+      count: length(rows)
     )
   end
 
-  defp insert_rejected(user, fund, amount \\ 500) do
-    Factories.insert!(:reward, %{
-      idempotence_key: "rw-rejected-#{System.unique_integer([:positive])}",
-      amount: amount,
-      status: :rejected,
-      rejected_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-      user: user,
-      fund: fund
-    })
+  defp row(reward_id, opts \\ []) do
+    %{
+      reward_id: reward_id,
+      member_public_id: Keyword.get(opts, :member_public_id, reward_id),
+      rejected_at: Keyword.get(opts, :rejected_at, ~N[2026-01-01 00:00:00]),
+      rejection_reason: Keyword.get(opts, :rejection_reason, "not eligible")
+    }
   end
 
-  test "renders the declined section container", %{assignment: assignment, user: user, fund: fund} do
-    insert_rejected(user, fund)
-    assert render_view(assignment) =~ ~s(data-testid="contributions-declined")
+  test "renders the declined section container" do
+    assert render_view([row(1)]) =~ ~s(data-testid="contributions-declined")
   end
 
-  test "renders a count matching the number of declined rewards",
-       %{assignment: assignment, user: user, fund: fund} do
-    insert_rejected(user, fund)
-    insert_rejected(user, fund)
-
-    html = render_view(assignment)
+  test "renders a count matching the number of declined rewards" do
+    html = render_view([row(1), row(2)])
 
     count =
       html
@@ -51,14 +39,17 @@ defmodule Systems.Assignment.ContributionsDeclinedViewTest do
     assert count == "2"
   end
 
-  test "renders one row per declined reward",
-       %{assignment: assignment, user: user, fund: fund} do
-    r1 = insert_rejected(user, fund, 500)
-    r2 = insert_rejected(user, fund, 800)
+  test "renders one row per declined reward" do
+    html = render_view([row(11), row(22)])
 
-    html = render_view(assignment)
+    assert html =~ ~s(data-testid="contributions-declined-row-11")
+    assert html =~ ~s(data-testid="contributions-declined-row-22")
+  end
 
-    assert html =~ ~s(data-testid="contributions-declined-row-#{r1.id}")
-    assert html =~ ~s(data-testid="contributions-declined-row-#{r2.id}")
+  test "renders the rejection reason in the row" do
+    html = render_view([row(9, rejection_reason: "duplicate submission")])
+
+    assert html =~ ~s(data-testid="contributions-declined-reason-9")
+    assert html =~ "duplicate submission"
   end
 end

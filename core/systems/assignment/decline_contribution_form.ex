@@ -18,6 +18,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
   use CoreWeb, :live_component
 
   import Frameworks.Pixel.Form
+  import LiveNest.Event.Publisher, only: [publish_event: 3]
 
   alias Ecto.Changeset
   alias Frameworks.Pixel.Text
@@ -27,7 +28,8 @@ defmodule Systems.Assignment.DeclineContributionForm do
         %{
           id: id,
           task_id: task_id,
-          subject_label: subject_label
+          subject_label: subject_label,
+          live_nest: %{modal: %LiveNest.Modal{controller_pid: controller_pid}}
         },
         socket
       ) do
@@ -38,6 +40,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
         id: id,
         task_id: task_id,
         subject_label: subject_label,
+        controller_pid: controller_pid,
         show_errors: false,
         loading: false
       )
@@ -95,7 +98,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
       action: %{type: :submit, target: myself},
       face: %{
         type: :primary,
-        label: dgettext("eyra-assignment", "payout.decline.submit.button"),
+        label: dgettext("eyra-assignment", "contributions.decline.submit.button"),
         bg_color: "bg-delete",
         loading: loading
       },
@@ -124,28 +127,33 @@ defmodule Systems.Assignment.DeclineContributionForm do
   def handle_event(
         "submit",
         _,
-        %{assigns: %{changeset: changeset, task_id: task_id}} = socket
+        %{assigns: %{changeset: changeset, task_id: task_id, controller_pid: pid}} = socket
       ) do
     if changeset.valid? do
       reason = Changeset.get_field(changeset, :reason)
-      send(self(), {:submit_decline, %{task_id: task_id, reason: reason}})
-      {:noreply, socket |> assign(loading: true, show_errors: false) |> update_buttons()}
+
+      socket =
+        socket
+        |> publish_event({:submit_decline, %{task_id: task_id, reason: reason}}, pid)
+        |> assign(loading: true, show_errors: false)
+        |> update_buttons()
+
+      {:noreply, socket}
     else
       {:noreply, assign(socket, show_errors: true)}
     end
   end
 
   @impl true
-  def handle_event("cancel", _, socket) do
-    send(self(), :hide_decline_modal)
-    {:noreply, socket}
+  def handle_event("cancel", _, %{assigns: %{controller_pid: pid}} = socket) do
+    {:noreply, publish_event(socket, :hide_decline_modal, pid)}
   end
 
   @impl true
   def render(assigns) do
     ~H"""
     <div id={@id} phx-hook="LiveContent" data-show-errors={@show_errors} data-testid="decline-contribution-form">
-      <Text.title2><%= dgettext("eyra-assignment", "payout.decline.modal.title") %></Text.title2>
+      <Text.title2><%= dgettext("eyra-assignment", "contributions.decline.modal.title") %></Text.title2>
       <.spacing value="M" />
 
       <.form
@@ -162,23 +170,23 @@ defmodule Systems.Assignment.DeclineContributionForm do
           <.text_area
             form={form}
             field={:reason}
-            label_text={dgettext("eyra-assignment", "payout.decline.reason.label")}
+            label_text={dgettext("eyra-assignment", "contributions.decline.reason.label")}
             height="h-24"
             reserve_error_space={false}
           />
 
           <div class="flex flex-col gap-4">
             <div class="flex flex-col gap-2">
-              <Text.title6 margin=""><%= dgettext("eyra-assignment", "payout.decline.confirm.title") %></Text.title6>
+              <Text.title6 margin=""><%= dgettext("eyra-assignment", "contributions.decline.confirm.title") %></Text.title6>
               <Text.body_medium>
-                <%= raw(dgettext("eyra-assignment", "payout.decline.confirm.body", subject: @subject_label)) %>
+                <%= raw(dgettext("eyra-assignment", "contributions.decline.confirm.body", subject: @subject_label)) %>
               </Text.body_medium>
             </div>
             <.text_input
               form={form}
               field={:confirm_input}
               debounce="0"
-              placeholder={dgettext("eyra-assignment", "payout.decline.confirm.placeholder", subject: @subject_label)}
+              placeholder={dgettext("eyra-assignment", "contributions.decline.confirm.placeholder", subject: @subject_label)}
               reserve_error_space={false}
             />
           </div>

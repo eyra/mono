@@ -1,60 +1,57 @@
 defmodule Systems.Assignment.ContributionsPendingViewTest do
-  use Core.DataCase
+  use ExUnit.Case, async: true
 
   import Phoenix.LiveViewTest
 
-  alias Systems.Assignment
-  alias Systems.Assignment.ContributionsTestHelper
-  alias Systems.Crew
-  alias Systems.Fund
+  alias Systems.Assignment.ContributionsPendingView
 
-  setup do
-    {:ok, ContributionsTestHelper.setup_assignment_with_member()}
-  end
-
-  defp render_view(assignment) do
-    render_component(Assignment.ContributionsPendingView,
+  defp render_view(rows) do
+    render_component(ContributionsPendingView,
       id: "contributions-pending",
-      assignment: assignment
+      rows: rows,
+      count: length(rows)
     )
   end
 
-  defp create_pending_contribution(assignment, user, crew, member) do
-    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-    {:ok, _} = Fund.Public.create_reward(assignment.fund, 1000, user, idempotence_key)
-    {:ok, _} = Fund.Public.mark_pending_approval(idempotence_key)
-
-    Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"], status: :completed)
-
-    Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+  defp row(overrides \\ %{}) do
+    Map.merge(
+      %{
+        reward_id: 1,
+        user_id: 100,
+        member_public_id: 1,
+        completed_task_count: 1,
+        total_task_count: 1
+      },
+      overrides
+    )
   end
 
-  test "renders the pending section container", %{assignment: assignment} do
-    assert render_view(assignment) =~ ~s(data-testid="contributions-pending")
+  test "renders the pending section container" do
+    assert render_view([]) =~ ~s(data-testid="contributions-pending")
   end
 
-  test "renders the empty state and hides the confirm button when count is 0",
-       %{assignment: assignment} do
-    html = render_view(assignment)
+  test "renders the empty state and hides the confirm button when count is 0" do
+    html = render_view([])
 
     assert html =~ ~s(data-testid="contributions-pending-empty")
     refute html =~ ~s(data-testid="confirm-all-button")
   end
 
-  test "renders one row per pending contribution",
-       %{assignment: assignment, user: user, crew: crew, member: member} do
-    assignment = create_pending_contribution(assignment, user, crew, member)
-
-    html = render_view(assignment)
+  test "renders one row per pending contribution" do
+    html = render_view([row(%{reward_id: 42})])
 
     refute html =~ ~s(data-testid="contributions-pending-empty")
-    assert html =~ ~s(data-testid="payout-row-)
+    assert html =~ ~s(data-testid="pending-row-42")
   end
 
-  test "renders the confirm-all button when count > 0",
-       %{assignment: assignment, user: user, crew: crew, member: member} do
-    assignment = create_pending_contribution(assignment, user, crew, member)
+  test "renders the confirm-all button when count > 0" do
+    assert render_view([row()]) =~ ~s(data-testid="confirm-all-button")
+  end
 
-    assert render_view(assignment) =~ ~s(data-testid="confirm-all-button")
+  test "styles the tasks label as warning when not all tasks are finished" do
+    html = render_view([row(%{reward_id: 7, completed_task_count: 1, total_task_count: 3})])
+
+    assert html =~ ~s(text-warning)
+    assert html =~ ~s(data-testid="tasks-finished-7")
   end
 end

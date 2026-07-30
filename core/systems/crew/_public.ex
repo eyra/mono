@@ -112,6 +112,18 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
+  @doc """
+  Returns a `%{user_id => count}` map of tasks in `status_list` on the
+  given crew, grouped by the task's owner. Non-expired tasks only.
+  Missing keys mean zero.
+  """
+  def task_status_counts_by_user(%Crew.Model{} = crew, status_list) when is_list(status_list) do
+    crew
+    |> task_counts_by_user_query(status_list)
+    |> Repo.all()
+    |> Map.new()
+  end
+
   def expired_pending_started_tasks(crew) do
     tasks_expired_pending_started_query(crew)
     |> Repo.all()

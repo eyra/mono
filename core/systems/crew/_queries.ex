@@ -199,6 +199,22 @@ defmodule Systems.Crew.Queries do
     build(task_query(), :task, [status in ^status_list])
   end
 
+  def task_counts_by_user_query(%Crew.Model{id: crew_id}, status_list)
+      when is_list(status_list) do
+    from(task in Crew.TaskModel,
+      as: :task,
+      join: node in assoc(task, :auth_node),
+      as: :auth_node,
+      join: role in assoc(node, :role_assignments),
+      as: :role_assignments,
+      where:
+        task.crew_id == ^crew_id and task.expired == false and task.status in ^status_list and
+          role.role == :owner,
+      group_by: role.principal_id,
+      select: {role.principal_id, count(task.id, :distinct)}
+    )
+  end
+
   def task_query_by_template(crew, task_template) when is_list(task_template) do
     task_query(crew)
     |> where([task: t], fragment("?::text[] @> ?", t.identifier, ^task_template))

@@ -654,59 +654,59 @@ msgid "budget_form.total.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.error"
+msgid "contributions.decline.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.link"
+msgid "contributions.decline.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.reason.label"
+msgid "contributions.decline.reason.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.submit.button"
+msgid "contributions.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.declined.heading"
+msgid "contributions.declined.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.heading"
+msgid "contributions.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
+msgid "contributions.pagination.single_page"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
+msgid "contributions.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.subject_label"
+msgid "contributions.subject_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.empty"
+msgid "contributions.waiting.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.heading"
+msgid "contributions.waiting.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.amount_label"
+msgid "contributions.overview.amount_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.date_label"
+msgid "contributions.overview.date_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.empty"
+msgid "contributions.overview.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -730,9 +730,9 @@ msgid "tabbar.item.contributions"
 msgstr "Contributi"
 
 #, elixir-autogen, elixir-format
-msgid "payout.confirm_all.button"
+msgid "contributions.confirm_all.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.confirm_all.error"
+msgid "contributions.confirm_all.error"
 msgstr ""

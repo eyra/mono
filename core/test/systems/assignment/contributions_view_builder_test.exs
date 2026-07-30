@@ -50,7 +50,8 @@ defmodule Systems.Assignment.ContributionsViewBuilderTest do
               %{
                 module: Assignment.ContributionsPendingView,
                 id: "contributions-pending",
-                assignment: ^assignment
+                rows: _,
+                count: _
               }} = Enum.find(sections, &match?({:pending, _}, &1))
     end
 
@@ -62,7 +63,8 @@ defmodule Systems.Assignment.ContributionsViewBuilderTest do
               %{
                 module: Assignment.ContributionsConfirmedView,
                 id: "contributions-confirmed",
-                assignment: ^assignment
+                rows: _,
+                count: _
               }} = Enum.find(sections, &match?({:confirmed, _}, &1))
     end
   end
@@ -103,7 +105,8 @@ defmodule Systems.Assignment.ContributionsViewBuilderTest do
               %{
                 module: Assignment.ContributionsDeclinedView,
                 id: "contributions-declined",
-                assignment: ^assignment
+                rows: _,
+                count: _
               }} = Enum.find(sections, &match?({:declined, _}, &1))
     end
   end

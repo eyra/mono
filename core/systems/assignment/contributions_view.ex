@@ -1,23 +1,12 @@
 defmodule Systems.Assignment.ContributionsView do
-  @moduledoc """
-  "Contributions" tab of an assignment. Reviews participant contributions
-  (fraud check) before pay-out. The tab is composed of two sections,
-  each rendered as its own LiveComponent:
-
-  - `Systems.Assignment.ContributionsPendingView` — awaiting review
-  - `Systems.Assignment.ContributionsConfirmedView` — confirmed history
-
-  This module is a thin embedded LiveView that just resolves the
-  assignment and composes the two sub-views.
-  """
   use CoreWeb, :embedded_live_view
 
   require Logger
 
   alias Frameworks.Pixel.Text
   alias Systems.Assignment
+  alias Systems.Crew
 
-  @pending_id "contributions-pending"
   @decline_modal_id "decline-contribution-modal"
 
   def dependencies(), do: [:assignment_id, :title]
@@ -34,24 +23,55 @@ defmodule Systems.Assignment.ContributionsView do
   @impl true
   def handle_view_model_updated(socket), do: socket
 
-  # Auth-gated mutations. Sub-components bubble events up here (they run in
-  # the same LV process, so a bare `send(self(), …)` reaches these handlers).
-  # Composing a sub-component elsewhere without a matching parent handler
-  # is a no-op — auth by construction.
   @impl true
-  def handle_info(:confirm_all, %{assigns: %{model: assignment}} = socket) do
-    result = Assignment.Public.confirm_all_pending_contributions(assignment)
+  def handle_info(:confirm_all, %{assigns: %{model: assignment, vm: vm}} = socket) do
+    task_ids =
+      vm
+      |> pending_rows()
+      |> Enum.flat_map(&completed_task_ids_for(assignment, &1.user_id))
 
-    if match?({:error, _}, result) do
-      Logger.warning("[ContributionsView] bulk approve failed: #{inspect(result)}")
-    end
+    result = Assignment.Public.accept_tasks(task_ids)
 
-    send_update(Assignment.ContributionsPendingView,
-      id: @pending_id,
-      mutation_result: {:confirm_all, result}
-    )
+    socket =
+      case result do
+        {:ok, _} ->
+          socket
+
+        _ ->
+          Logger.warning("[ContributionsView] accept_tasks failed: #{inspect(result)}")
+
+          Frameworks.Pixel.Flash.push_error(
+            socket,
+            dgettext("eyra-assignment", "contributions.confirm_all.error")
+          )
+      end
 
     {:noreply, socket}
+  end
+
+  @impl true
+  def handle_info(
+        {:show_decline_modal, %{user_id: user_id} = row},
+        %{assigns: %{model: assignment}} = socket
+      ) do
+    case completed_task_ids_for(assignment, user_id) do
+      [task_id | _] ->
+        modal =
+          LiveNest.Modal.prepare_live_component(
+            @decline_modal_id,
+            Assignment.DeclineContributionForm,
+            params: [
+              task_id: task_id,
+              subject_label: subject_label(row)
+            ],
+            style: :compact
+          )
+
+        {:noreply, socket |> present_modal(modal)}
+
+      [] ->
+        {:noreply, socket}
+    end
   end
 
   @impl true
@@ -66,34 +86,21 @@ defmodule Systems.Assignment.ContributionsView do
         message: reason
       })
 
-    if match?({:error, _}, result) do
-      Logger.warning("[ContributionsView] reject_task #{task_id} failed: #{inspect(result)}")
-    end
+    socket =
+      case result do
+        {:ok, _} ->
+          socket
 
-    send_update(Assignment.ContributionsPendingView,
-      id: @pending_id,
-      mutation_result: {:submit_decline, result}
-    )
+        _ ->
+          Logger.warning("[ContributionsView] reject_task #{task_id} failed: #{inspect(result)}")
+
+          Frameworks.Pixel.Flash.push_error(
+            socket,
+            dgettext("eyra-assignment", "contributions.decline.error")
+          )
+      end
 
     {:noreply, socket |> hide_decline_modal()}
-  end
-
-  # Pending sub-component asks the parent to open the decline modal. We build
-  # the LiveNest modal here so the sub-component stays free of modal wiring.
-  @impl true
-  def handle_info({:show_decline_modal, row}, socket) do
-    modal =
-      LiveNest.Modal.prepare_live_component(
-        @decline_modal_id,
-        Assignment.DeclineContributionForm,
-        params: [
-          task_id: row.task_id,
-          subject_label: subject_label(row)
-        ],
-        style: :compact
-      )
-
-    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
@@ -106,9 +113,22 @@ defmodule Systems.Assignment.ContributionsView do
     hide_modal(socket, modal)
   end
 
-  defp subject_label(%{member_public_id: member_public_id, task_id: task_id}) do
-    id = member_public_id || task_id
-    "#{dgettext("eyra-assignment", "payout.subject_label")} #{id}"
+  defp pending_rows(%{sections: sections}) do
+    case Enum.find(sections, fn {key, _} -> key == :pending end) do
+      {_, %{rows: rows}} -> rows
+      _ -> []
+    end
+  end
+
+  defp completed_task_ids_for(%Assignment.Model{crew: crew}, user_id) do
+    crew
+    |> Crew.Public.list_tasks_for_user(user_id)
+    |> Enum.filter(&(&1.status == :completed))
+    |> Enum.map(& &1.id)
+  end
+
+  defp subject_label(%{member_public_id: member_public_id}) do
+    "#{dgettext("eyra-assignment", "contributions.subject_label")} #{member_public_id}"
   end
 
   @impl true
@@ -124,7 +144,12 @@ defmodule Systems.Assignment.ContributionsView do
             <%= if index > 0 do %>
               <div class="border-t border-grey4 mb-8" />
             <% end %>
-            <.live_component module={section.module} id={section.id} assignment={section.assignment} />
+            <.live_component
+              module={section.module}
+              id={section.id}
+              rows={section.rows}
+              count={section.count}
+            />
           <% end %>
         </div>
       </Area.content>

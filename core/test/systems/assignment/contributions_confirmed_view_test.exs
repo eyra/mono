@@ -1,59 +1,39 @@
 defmodule Systems.Assignment.ContributionsConfirmedViewTest do
-  use Core.DataCase
+  use ExUnit.Case, async: true
 
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
-  alias Systems.Assignment
-  alias Systems.Assignment.ContributionsTestHelper
+  alias Systems.Assignment.ContributionsConfirmedView
 
-  setup do
-    {:ok, ContributionsTestHelper.setup_assignment_with_member()}
-  end
-
-  defp render_view(assignment) do
-    render_component(Assignment.ContributionsConfirmedView,
+  defp render_view(rows) do
+    render_component(ContributionsConfirmedView,
       id: "contributions-confirmed",
-      assignment: assignment
+      rows: rows,
+      count: length(rows)
     )
   end
 
-  test "renders the confirmed section container", %{assignment: assignment} do
-    assert render_view(assignment) =~ ~s(data-testid="contributions-confirmed")
+  defp row(reward_id, member_public_id \\ nil) do
+    %{reward_id: reward_id, member_public_id: member_public_id || reward_id}
   end
 
-  test "renders zero-count and empty message when there are no confirmed contributions",
-       %{assignment: assignment} do
-    html = render_view(assignment)
+  test "renders the confirmed section container" do
+    assert render_view([]) =~ ~s(data-testid="contributions-confirmed")
+  end
+
+  test "renders zero-count and empty message when there are no confirmed contributions" do
+    html = render_view([])
 
     assert html =~ ~s(data-testid="contributions-confirmed-count")
     assert html =~ ~s(data-testid="contributions-confirmed-empty")
-    refute html =~ ~s(data-testid=\"contributions-confirmed-row-)
+    refute html =~ ~s(data-testid="contributions-confirmed-row-)
   end
 
-  test "renders one row per paid reward", %{assignment: assignment, user: user, fund: fund} do
-    r1 =
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-paid-1-#{System.unique_integer([:positive])}",
-        amount: 500,
-        status: :paid,
-        user: user,
-        fund: fund
-      })
+  test "renders one row per confirmed reward" do
+    html = render_view([row(11), row(22)])
 
-    r2 =
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-paid-2-#{System.unique_integer([:positive])}",
-        amount: 700,
-        status: :paid,
-        user: user,
-        fund: fund
-      })
-
-    html = render_view(assignment)
-
-    assert html =~ ~s(data-testid="contributions-confirmed-row-#{r1.id}")
-    assert html =~ ~s(data-testid="contributions-confirmed-row-#{r2.id}")
+    assert html =~ ~s(data-testid="contributions-confirmed-row-11")
+    assert html =~ ~s(data-testid="contributions-confirmed-row-22")
     refute html =~ ~s(data-testid="contributions-confirmed-empty")
   end
 end

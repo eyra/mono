@@ -120,6 +120,18 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  @doc """
+  Rewards from `:approved` onwards — the researcher has confirmed the
+  contribution and everything downstream (pending payout, paid).
+  """
+  def list_confirmed_rewards(%Fund.Model{id: fund_id}, preload \\ [:user, :payment]) do
+    from(r in Fund.RewardModel,
+      where: r.fund_id == ^fund_id and r.status in [:approved, :pending_payout, :paid]
+    )
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
   def list_rejected_rewards(%Fund.Model{} = fund, preload \\ [:user]) do
     reward_query(fund, :rejected)
     |> preload(^preload)

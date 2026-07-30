@@ -50,15 +50,17 @@ DO \$\$
 DECLARE
   v_crew_id               bigint;
   v_fund_id               bigint;
+  v_workflow_item_id      bigint;
   v_available_account_id  bigint;
   v_pending_account_id    bigint;
+  v_member_id             bigint;
   v_node_id               bigint;
   v_entry_id              bigint;
   v_reward_id             bigint;
   v_reward_key            text := 'assignment=$ASSIGNMENT_ID,user=$USER_ID';
   v_deposit_key           text := 'assignment=$ASSIGNMENT_ID,user=$USER_ID,type=deposit,attempt=0';
 BEGIN
-  -- Assignment → crew + fund + fund's bookkeeping accounts.
+  -- Assignment → crew + fund + fund's bookkeeping accounts + first workflow item.
   SELECT a.crew_id, a.fund_id, f.fund_id, f.reserve_id
     INTO v_crew_id, v_fund_id, v_available_account_id, v_pending_account_id
     FROM assignments a JOIN funds f ON f.id = a.fund_id
@@ -66,6 +68,17 @@ BEGIN
 
   IF v_crew_id IS NULL THEN
     RAISE EXCEPTION 'assignment % not found', $ASSIGNMENT_ID;
+  END IF;
+
+  SELECT wi.id INTO v_workflow_item_id
+    FROM workflow_items wi
+    JOIN assignments a ON a.workflow_id = wi.workflow_id
+    WHERE a.id = $ASSIGNMENT_ID
+    ORDER BY wi.position, wi.id
+    LIMIT 1;
+
+  IF v_workflow_item_id IS NULL THEN
+    RAISE EXCEPTION 'assignment % has no workflow items', $ASSIGNMENT_ID;
   END IF;
 
   -- Auth node with an :owner role for the participant.
@@ -76,18 +89,26 @@ BEGIN
     (node_id, role, principal_id, inserted_at, updated_at)
     VALUES (v_node_id, 'owner', $USER_ID, NOW(), NOW());
 
-  -- Crew member — idempotent per (crew, user).
+  -- Crew member — idempotent per (crew, user). Capture the row's id so we
+  -- can build a real task identifier ("item=...,member=...") — the signal
+  -- handlers in Assignment.Switch expect that shape.
   INSERT INTO crew_members (crew_id, user_id, inserted_at, updated_at)
     VALUES (v_crew_id, $USER_ID, NOW(), NOW())
-    ON CONFLICT (user_id, crew_id) DO UPDATE SET expired = false;
+    ON CONFLICT (user_id, crew_id) DO UPDATE SET expired = false
+    RETURNING id INTO v_member_id;
 
-  -- Completed crew task owned by the participant.
+  -- Completed crew task owned by the participant. The extra "seed" +
+  -- timestamp segments make identifiers unique across re-runs.
   INSERT INTO crew_tasks
     (crew_id, auth_node_id, identifier, status, completed_at, expired,
      inserted_at, updated_at)
     VALUES (v_crew_id, v_node_id,
-            ARRAY['seed', 'user=$USER_ID',
-                  'ts=' || extract(epoch from now())::bigint::text],
+            ARRAY[
+              'seed',
+              'item=' || v_workflow_item_id::text,
+              'member=' || v_member_id::text,
+              'ts=' || extract(epoch from now())::bigint::text
+            ],
             'completed', NOW(), false, NOW(), NOW());
 
   -- Deposit: book_entries + two book_entry_lines
@@ -127,8 +148,8 @@ BEGIN
           updated_at = NOW()
     RETURNING id INTO v_reward_id;
 
-  RAISE NOTICE 'seeded pending contribution: reward=%, deposit=%, task_auth_node=%, amount=%',
-    v_reward_id, v_entry_id, v_node_id, $AMOUNT;
+  RAISE NOTICE 'seeded pending contribution: reward=%, member=%, deposit=%, task_auth_node=%, amount=%',
+    v_reward_id, v_member_id, v_entry_id, v_node_id, $AMOUNT;
 END
 \$\$;
 
