@@ -22,6 +22,7 @@ defmodule Systems.Assignment.Public do
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Fund
+  alias Systems.NextAction
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
@@ -956,6 +957,51 @@ defmodule Systems.Assignment.Public do
   def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     idempotence_key = idempotence_key(assignment_id, user_id)
     Fund.Public.approve_reward(idempotence_key)
+  end
+
+  @doc """
+  Marks a participant's work on this assignment as done — flips their reward
+  to `:pending_approval` and creates a `PendingContributions` next-action for
+  the owner(s). Callers are responsible for deciding *when* this is
+  appropriate (last task finished, or explicit "I'm done" click).
+
+  No-op for unpaid assignments (no fund → no reward to flip, no
+  contributions to review).
+  """
+  def mark_participation_done(%Assignment.Model{fund: nil}, _member), do: :ok
+
+  def mark_participation_done(
+        %Assignment.Model{id: assignment_id} = assignment,
+        %Crew.MemberModel{user_id: user_id}
+      ) do
+    idempotence_key = idempotence_key(assignment_id, user_id)
+    Fund.Public.mark_pending_approval(idempotence_key)
+
+    case owners(assignment) do
+      [] ->
+        :ok
+
+      owners ->
+        NextAction.Public.create_next_action(
+          owners,
+          Systems.Assignment.NextActions.PendingContributions,
+          key: "#{assignment_id}",
+          params: %{"assignment_id" => assignment_id}
+        )
+
+        :ok
+    end
+  end
+
+  @doc """
+  Users with `:owner` on the top of this assignment's auth tree — typically
+  the owner(s) of the containing project. Assignment auth nodes rarely carry
+  direct owner assignments; inheritance is via the project node.
+  """
+  def owners(%Assignment.Model{} = assignment) do
+    assignment
+    |> auth_module().top_entity()
+    |> auth_module().users_with_role(:owner)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

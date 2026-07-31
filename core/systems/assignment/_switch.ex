@@ -431,6 +431,12 @@ defmodule Systems.Assignment.Switch do
       model: assignment,
       from_pid: from_pid
     })
+
+    dispatch!({:embedded_live_view, Assignment.ContributionsView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
   end
 
   defp update_crew_task_next_action(%{id: assignment_id}, %{
@@ -465,48 +471,31 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp mark_rewards_pending_approval(assignment, crew_task) do
-    auth_module().users_with_role(crew_task, :owner)
-    |> Enum.each(fn participant ->
-      idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
-      Systems.Fund.Public.mark_pending_approval(idempotence_key)
-    end)
+    member = Assignment.Public.get_member_by_task(crew_task)
 
-    notify_pending_payout(assignment)
-  end
-
-  defp notify_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
-    case auth_module().users_with_role(assignment, :owner) do
-      [] ->
-        :ok
-
-      researchers ->
-        NextAction.Public.create_next_action(
-          researchers,
-          Systems.Assignment.NextActions.PendingContributions,
-          key: "#{assignment_id}",
-          params: %{"assignment_id" => assignment_id}
-        )
+    if member && Crew.Public.finished?(member) do
+      Assignment.Public.mark_participation_done(assignment, member)
     end
   end
 
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: nil}) do
-    clear_pending_payout(assignment_id)
+  defp clear_pending_payout_if_empty(%Assignment.Model{fund: nil} = assignment) do
+    clear_pending_payout(assignment)
   end
 
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: fund}) do
+  defp clear_pending_payout_if_empty(%Assignment.Model{fund: fund} = assignment) do
     if Systems.Fund.Public.list_pending_approvals(fund) == [] do
-      clear_pending_payout(assignment_id)
+      clear_pending_payout(assignment)
     end
   end
 
-  defp clear_pending_payout(assignment_id) do
-    case auth_module().users_with_role(assignment_id, :owner) do
+  defp clear_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
+    case Assignment.Public.owners(assignment) do
       [] ->
         :ok
 
-      researchers ->
+      owners ->
         NextAction.Public.clear_next_action(
-          researchers,
+          owners,
           Systems.Assignment.NextActions.PendingContributions,
           key: "#{assignment_id}"
         )

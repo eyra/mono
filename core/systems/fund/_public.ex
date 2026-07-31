@@ -121,7 +121,7 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Rewards from `:approved` onwards — the researcher has confirmed the
+  Rewards from `:approved` onwards — the owner has confirmed the
   contribution and everything downstream (pending payout, paid).
   """
   def list_confirmed_rewards(%Fund.Model{id: fund_id}, preload \\ [:user, :payment]) do
@@ -344,11 +344,11 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Marks a reserved reward as awaiting researcher approval.
+  Marks a reserved reward as awaiting owner approval.
 
   Called when the participant completes the assignment task. The deposit was
   already made at apply time (see `create_reward/4`); this only flips the
-  status so the researcher can act on it.
+  status so the owner can act on it.
 
   Idempotent: calling on a reward that is already past `:reserved` is a no-op.
   """

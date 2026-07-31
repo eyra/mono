@@ -13,6 +13,7 @@ defmodule Systems.Assignment.CrewPage do
   alias Frameworks.Pixel.Hero
 
   alias Systems.Assignment
+  alias Systems.Crew
   alias Systems.Project
   alias Systems.Storage
 
@@ -129,7 +130,14 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def consume_event(%{name: :work_done}, socket) do
+  def consume_event(
+        %{name: :work_done},
+        %{assigns: %{model: assignment, current_user: user}} = socket
+      ) do
+    if member = Crew.Public.get_member(assignment.crew, user) do
+      Assignment.Public.mark_participation_done(assignment, member)
+    end
+
     {:stop, socket |> handle_action(:work_done)}
   end
 
