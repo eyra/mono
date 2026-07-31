@@ -3,6 +3,8 @@ defmodule Systems.Project.NodePageGridView do
 
   import Frameworks.Pixel.Empty
   alias Frameworks.Pixel.Grid
+  alias Systems.Assignment
+  alias Systems.NextAction
   alias Systems.Project
 
   alias Frameworks.Utility.ViewModelBuilder
@@ -19,15 +21,29 @@ defmodule Systems.Project.NodePageGridView do
     }
   end
 
-  def view_model(%{assigns: %{node: %{id: id, name: name, items: node_items}} = assigns} = socket) do
+  def view_model(
+        %{assigns: %{node: %{id: id, name: name, items: node_items}, user: user} = assigns} =
+          socket
+      ) do
     socket
     |> assign(%{
       id: id,
       title: name,
       breadcrumbs: breadcrumbs(id),
       active_menu_item: :projects,
-      item_cards: item_cards(node_items, assigns)
+      item_cards: item_cards(node_items, assigns),
+      next_best_action: next_best_action(user, node_items)
     })
+  end
+
+  defp next_best_action(user, node_items) do
+    assignment_ids = for %{assignment_id: id} <- node_items, not is_nil(id), do: id
+
+    NextAction.Public.next_best_action_for_scope(
+      user,
+      Assignment.NextActions.PendingContributions,
+      assignment_ids
+    )
   end
 
   defp breadcrumbs(id) when is_integer(id) do
@@ -124,6 +140,12 @@ defmodule Systems.Project.NodePageGridView do
       <div>
       <Area.content>
           <Margin.y id={:page_top} />
+          <%= if @next_best_action do %>
+            <div>
+              <NextAction.View.highlight {@next_best_action} />
+              <.spacing value="XL" />
+            </div>
+          <% end %>
           <%= if Enum.count(@item_cards) > 0 do %>
           <div class="flex flex-row items-center justify-center">
               <div class="h-full">

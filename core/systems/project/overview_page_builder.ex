@@ -3,6 +3,7 @@ defmodule Systems.Project.OverviewPageBuilder do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Systems.NextAction
   alias Systems.Project
 
   def view_model(
@@ -16,6 +17,7 @@ defmodule Systems.Project.OverviewPageBuilder do
       title: dgettext("eyra-project", "overview.title"),
       projects: projects,
       cards: cards,
+      next_best_action: NextAction.Public.next_best_action(user),
       active_menu_item: :projects
     }
   end

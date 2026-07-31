@@ -482,8 +482,8 @@ defmodule Systems.Assignment.Switch do
       researchers ->
         NextAction.Public.create_next_action(
           researchers,
-          Systems.Fund.NextActions.PendingPayout,
-          key: "assignment=#{assignment_id}",
+          Systems.Assignment.NextActions.PendingContributions,
+          key: "#{assignment_id}",
           params: %{"assignment_id" => assignment_id}
         )
     end
@@ -507,8 +507,8 @@ defmodule Systems.Assignment.Switch do
       researchers ->
         NextAction.Public.clear_next_action(
           researchers,
-          Systems.Fund.NextActions.PendingPayout,
-          key: "assignment=#{assignment_id}"
+          Systems.Assignment.NextActions.PendingContributions,
+          key: "#{assignment_id}"
         )
     end
   end
