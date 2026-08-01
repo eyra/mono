@@ -11,11 +11,15 @@ defmodule Systems.Assignment.ParticipationModel do
     belongs_to(:user, Account.User)
     belongs_to(:assignment, Assignment.Model)
 
+    field(:completed_at, :naive_datetime)
+    field(:accepted_at, :naive_datetime)
+    field(:rejected_at, :naive_datetime)
+    field(:rejected_message, :string)
+
     timestamps()
   end
 
-  @fields ~w()a
-  @required_fields ~w(panel_info)a
+  @fields ~w(completed_at accepted_at rejected_at rejected_message)a
 
   def changeset(participation, attrs) do
     participation
@@ -24,7 +28,6 @@ defmodule Systems.Assignment.ParticipationModel do
 
   def validate(changeset) do
     changeset
-    |> validate_required(@required_fields)
     |> unique_constraint([:user_id, :assignment_id], name: :assignment_participation_unique)
   end
 
