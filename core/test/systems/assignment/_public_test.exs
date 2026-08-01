@@ -10,57 +10,58 @@ defmodule Systems.Assignment.PublicTest do
 
   alias Core.Factories
 
-  describe "assignment instances" do
-    test "obtain_instance!/3 inserts an instance and inserts external panel info" do
+  describe "assignment participations" do
+    test "obtain_participation!/2 inserts a participation" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      Assignment.Public.obtain_instance!(assignment, user)
+      Assignment.Public.obtain_participation!(assignment, user)
 
-      assert Assignment.Public.get_instance(assignment, user) != nil
+      assert Assignment.Public.get_participation(assignment, user) != nil
     end
 
-    test "obtain_instance!/3 updates instance" do
+    test "obtain_participation!/2 is idempotent per (assignment, user)" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      instance = Assignment.Public.obtain_instance!(assignment, user)
-      instance_2 = Assignment.Public.obtain_instance!(assignment, user)
+      participation = Assignment.Public.obtain_participation!(assignment, user)
+      participation_2 = Assignment.Public.obtain_participation!(assignment, user)
 
-      assert instance.id == instance_2.id
+      assert participation.id == participation_2.id
     end
 
-    test "get_instance/2 returns nil if no instance exists" do
+    test "get_participation/2 returns nil if no participation exists" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      assert Assignment.Public.get_instance(assignment, user) == nil
+      assert Assignment.Public.get_participation(assignment, user) == nil
     end
 
-    test "get_instance/2 returns instance if it exists" do
+    test "get_participation/2 returns the participation if it exists" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
+      %{id: participation_id} = Assignment.Public.obtain_participation!(assignment, user)
 
-      assert %{id: ^instance_id} = Assignment.Public.get_instance(assignment, user)
+      assert %{id: ^participation_id} =
+               Assignment.Public.get_participation(assignment, user)
     end
 
-    test "list_instances/1 returns all instances" do
+    test "list_participations/1 returns all participations" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
       %{user: user_2} = Factories.build(:affiliate_user) |> Repo.insert!()
       %{user: user_3} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
-      %{id: instance_id_2} = Assignment.Public.obtain_instance!(assignment, user_2)
-      %{id: instance_id_3} = Assignment.Public.obtain_instance!(assignment, user_3)
+      %{id: id_1} = Assignment.Public.obtain_participation!(assignment, user)
+      %{id: id_2} = Assignment.Public.obtain_participation!(assignment, user_2)
+      %{id: id_3} = Assignment.Public.obtain_participation!(assignment, user_3)
 
       assert [
-               %{id: ^instance_id},
-               %{id: ^instance_id_2},
-               %{id: ^instance_id_3}
-             ] = Assignment.Public.list_instances(assignment)
+               %{id: ^id_1},
+               %{id: ^id_2},
+               %{id: ^id_3}
+             ] = Assignment.Public.list_participations(assignment)
     end
   end
 

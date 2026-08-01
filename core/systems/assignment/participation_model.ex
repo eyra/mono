@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.InstanceModel do
+defmodule Systems.Assignment.ParticipationModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -7,7 +7,7 @@ defmodule Systems.Assignment.InstanceModel do
   alias Systems.Assignment
   alias Systems.Account
 
-  schema "assignment_instance" do
+  schema "assignment_participation" do
     belongs_to(:user, Account.User)
     belongs_to(:assignment, Assignment.Model)
 
@@ -17,15 +17,15 @@ defmodule Systems.Assignment.InstanceModel do
   @fields ~w()a
   @required_fields ~w(panel_info)a
 
-  def changeset(instance, attrs) do
-    instance
+  def changeset(participation, attrs) do
+    participation
     |> cast(attrs, @fields)
   end
 
   def validate(changeset) do
     changeset
     |> validate_required(@required_fields)
-    |> unique_constraint([:user_id, :assignment_id], name: :assignment_instance_unique)
+    |> unique_constraint([:user_id, :assignment_id], name: :assignment_participation_unique)
   end
 
   def preload_graph(:up), do: []

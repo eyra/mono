@@ -170,7 +170,7 @@ defmodule Systems.Affiliate.Controller do
     redirect_url = Affiliate.Public.get_redirect_url(affiliate)
 
     conn
-    |> obtain_instance(assignment)
+    |> obtain_participation(assignment)
     |> add_panel_info(get_participant(params), redirect_url)
     |> redirect(to: path(assignment))
   end
@@ -190,7 +190,7 @@ defmodule Systems.Affiliate.Controller do
       conn
       |> authorize_user(assignment)
       |> ensure_user_info(params, affiliate_user)
-      |> obtain_instance(assignment)
+      |> obtain_participation(assignment)
       |> add_panel_info_for_participant(params, affiliate, affiliate_user)
       |> redirect(to: path(assignment))
     end
@@ -249,9 +249,13 @@ defmodule Systems.Affiliate.Controller do
     conn
   end
 
-  defp obtain_instance(%{assigns: %{current_user: user}} = conn, assignment) do
-    instance = Assignment.Public.obtain_instance!(assignment, user)
-    Logger.debug("Starting session for assignment #{assignment.id} with instance #{instance.id}")
+  defp obtain_participation(%{assigns: %{current_user: user}} = conn, assignment) do
+    participation = Assignment.Public.obtain_participation!(assignment, user)
+
+    Logger.debug(
+      "Starting session for assignment #{assignment.id} with participation #{participation.id}"
+    )
+
     conn
   end
 

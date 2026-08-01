@@ -35,11 +35,11 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
-        {:assignment_instance, :obtained} = _signal,
-        %{assignment_instance: instance, user: user, from_pid: from_pid} = _message
+        {:assignment_participation, :obtained} = _signal,
+        %{assignment_participation: participation, user: user, from_pid: from_pid} = _message
       ) do
     assignment =
-      Assignment.Public.get!(instance.assignment_id, Assignment.Model.preload_graph(:down))
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     update_content_page(assignment, from_pid)
     # update only the page for the user that changed

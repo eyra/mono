@@ -136,42 +136,44 @@ defmodule Systems.Assignment.Public do
     )
   end
 
-  def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
-    {:ok, instance} = obtain_instance(assignment, user)
-    instance
+  def obtain_participation!(%Assignment.Model{} = assignment, %Account.User{} = user) do
+    {:ok, participation} = obtain_participation(assignment, user)
+    participation
   end
 
-  def obtain_instance(%Assignment.Model{} = assignment, %Account.User{} = user) do
+  def obtain_participation(%Assignment.Model{} = assignment, %Account.User{} = user) do
     Multi.new()
     |> Multi.insert(
-      :assignment_instance,
-      prepare_instance(assignment, user),
+      :assignment_participation,
+      prepare_participation(assignment, user),
       on_conflict: {:replace, [:updated_at]},
       conflict_target: [:assignment_id, :user_id]
     )
-    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, message: %{user: user})
+    |> Signal.Public.multi_dispatch({:assignment_participation, :obtained},
+      message: %{user: user}
+    )
     |> Repo.commit()
     |> case do
-      {:ok, %{assignment_instance: instance}} ->
-        {:ok, instance}
+      {:ok, %{assignment_participation: participation}} ->
+        {:ok, participation}
 
       error ->
         error
     end
   end
 
-  def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
-    from(i in Assignment.InstanceModel,
-      where: i.assignment_id == ^assignment.id,
-      where: i.user_id == ^user.id
+  def get_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id,
+      where: p.user_id == ^user.id
     )
     |> Repo.one()
   end
 
-  def list_instances(%Assignment.Model{} = assignment, preload \\ []) do
-    from(i in Assignment.InstanceModel,
-      where: i.assignment_id == ^assignment.id,
-      order_by: [asc: i.id]
+  def list_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id,
+      order_by: [asc: p.id]
     )
     |> Repo.all()
     |> Repo.preload(preload)
@@ -212,9 +214,9 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_instance(%Assignment.Model{} = assignment, %User{} = user) do
-    %Assignment.InstanceModel{}
-    |> Assignment.InstanceModel.changeset(%{})
+  def prepare_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    %Assignment.ParticipationModel{}
+    |> Assignment.ParticipationModel.changeset(%{})
     |> Ecto.Changeset.put_assoc(:assignment, assignment)
     |> Ecto.Changeset.put_assoc(:user, user)
   end
