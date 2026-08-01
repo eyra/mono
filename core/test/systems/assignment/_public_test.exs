@@ -704,6 +704,146 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "mark_participation_done/2" do
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+
+      # Owners are :owner on an ancestor node (the project), not directly on
+      # the assignment's auth node. Recreate that here so `Public.owners/1`
+      # can find them via `top_entity`.
+      project_owner = Factories.insert!(:member)
+      top = Core.Authorization.top_entity(assignment)
+      :ok = Core.Authorization.assign_role(project_owner, top, :owner)
+
+      assignment =
+        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      member = Crew.Factories.create_member(crew, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+
+      {:ok,
+       user: user,
+       assignment: assignment,
+       member: member,
+       project_owner: project_owner,
+       idempotence_key: idempotence_key}
+    end
+
+    test "flips the reserved reward to :pending_approval", %{
+      assignment: assignment,
+      member: member,
+      idempotence_key: idempotence_key
+    } do
+      :ok = Assignment.Public.mark_participation_done(assignment, member)
+
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "creates a PendingContributions next-action for the owner", %{
+      assignment: %{id: id} = assignment,
+      member: member,
+      project_owner: project_owner
+    } do
+      :ok = Assignment.Public.mark_participation_done(assignment, member)
+
+      assert_next_action(
+        project_owner,
+        "/assignment/#{id}/content?tab=contributions"
+      )
+    end
+
+    test "is idempotent — second call does not undo the pending state", %{
+      assignment: assignment,
+      member: member,
+      idempotence_key: idempotence_key
+    } do
+      :ok = Assignment.Public.mark_participation_done(assignment, member)
+      :ok = Assignment.Public.mark_participation_done(assignment, member)
+
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "no-ops on an assignment without a fund", %{member: member} do
+      unfunded = Factories.insert!(:assignment, %{fund: nil})
+      assert :ok = Assignment.Public.mark_participation_done(unfunded, member)
+    end
+  end
+
+  describe "owners/1" do
+    test "returns owners inherited from the top of the auth tree" do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment(31, 1)
+      top = Core.Authorization.top_entity(assignment)
+      :ok = Core.Authorization.assign_role(user, top, :owner)
+
+      assert [%{id: user_id}] = Assignment.Public.owners(assignment)
+      assert user_id == user.id
+    end
+
+    test "returns [] when no one has :owner at any level" do
+      assignment = Assignment.Factories.create_assignment(31, 1)
+      assert [] = Assignment.Public.owners(assignment)
+    end
+  end
+
+  describe "auto reward transition on task completion (guarded by finished?)" do
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+
+      assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+      [%{id: workflow_item_id} | _] = assignment.workflow.items
+
+      member = Crew.Factories.create_member(crew, user)
+
+      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+
+      task_a =
+        Crew.Factories.create_task(
+          crew,
+          member,
+          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=a"]
+        )
+
+      task_b =
+        Crew.Factories.create_task(
+          crew,
+          member,
+          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=b"]
+        )
+
+      {:ok, task_a: task_a, task_b: task_b, idempotence_key: idempotence_key}
+    end
+
+    test "reward stays :reserved after completing only one of two tasks", %{
+      task_a: task_a,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Crew.Public.complete_task(task_a)
+
+      assert %{status: :reserved} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "reward flips to :pending_approval after completing the last task", %{
+      task_a: task_a,
+      task_b: task_b,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Crew.Public.complete_task(task_a)
+      {:ok, _} = Crew.Public.complete_task(task_b)
+
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
   describe "add_participant!/2 reserves reward at join" do
     setup do
       user = Factories.insert!(:member)
