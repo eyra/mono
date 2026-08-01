@@ -13,7 +13,6 @@ defmodule Systems.Assignment.CrewPage do
   alias Frameworks.Pixel.Hero
 
   alias Systems.Assignment
-  alias Systems.Crew
   alias Systems.Project
   alias Systems.Storage
 
@@ -134,9 +133,8 @@ defmodule Systems.Assignment.CrewPage do
         %{name: :work_done},
         %{assigns: %{model: assignment, current_user: user}} = socket
       ) do
-    if member = Crew.Public.get_member(assignment.crew, user) do
-      Assignment.Public.mark_participation_done(assignment, member)
-    end
+    {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
+    Assignment.Public.complete_participation(participation)
 
     {:stop, socket |> handle_action(:work_done)}
   end

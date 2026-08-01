@@ -49,6 +49,31 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
+  # Contribution was submitted (last task finished OR "I'm done" click). Flip
+  # the participant's reward to :pending_approval and notify the assignment's
+  # owner(s) via a next-action. No-op for unpaid assignments.
+  @impl true
+  def intercept(
+        {:assignment_participation, :completed} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if assignment.fund do
+      idempotence_key =
+        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
+
+      Systems.Fund.Public.mark_pending_approval(idempotence_key)
+      create_pending_contributions_next_action(assignment)
+    end
+
+    update_content_page(assignment, from_pid)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
   @impl true
   def intercept(
         {:content_page, _} = signal,
@@ -253,7 +278,7 @@ defmodule Systems.Assignment.Switch do
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
           Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
 
-          mark_rewards_pending_approval(assignment, crew_task)
+          mark_participation_completed_if_finished(assignment, crew_task)
 
           Assignment.Public.get_member_by_task(crew_task)
           |> dispatch_finished_assignment()
@@ -470,11 +495,12 @@ defmodule Systems.Assignment.Switch do
     end
   end
 
-  defp mark_rewards_pending_approval(assignment, crew_task) do
-    member = Assignment.Public.get_member_by_task(crew_task)
+  defp mark_participation_completed_if_finished(assignment, crew_task) do
+    member = Assignment.Public.get_member_by_task(crew_task, [:user])
 
     if member && Crew.Public.finished?(member) do
-      Assignment.Public.mark_participation_done(assignment, member)
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, member.user)
+      Assignment.Public.complete_participation(participation)
     end
   end
 
@@ -498,6 +524,21 @@ defmodule Systems.Assignment.Switch do
           owners,
           Systems.Assignment.NextActions.PendingContributions,
           key: "#{assignment_id}"
+        )
+    end
+  end
+
+  defp create_pending_contributions_next_action(%Assignment.Model{id: assignment_id} = assignment) do
+    case Assignment.Public.owners(assignment) do
+      [] ->
+        :ok
+
+      owners ->
+        NextAction.Public.create_next_action(
+          owners,
+          Systems.Assignment.NextActions.PendingContributions,
+          key: "#{assignment_id}",
+          params: %{"assignment_id" => assignment_id}
         )
     end
   end

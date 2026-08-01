@@ -705,10 +705,10 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
-  describe "mark_participation_done/2" do
+  describe "complete_participation/1" do
     setup do
       user = Factories.insert!(:member)
-      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
+      %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       # Owners are :owner on an ancestor node (the project), not directly on
       # the assignment's auth node. Recreate that here so `Public.owners/1`
@@ -720,36 +720,39 @@ defmodule Systems.Assignment.PublicTest do
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
 
-      member = Crew.Factories.create_member(crew, user)
-
       idempotence_key = Assignment.Public.idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
 
       {:ok,
        user: user,
        assignment: assignment,
-       member: member,
+       participation: participation,
        project_owner: project_owner,
        idempotence_key: idempotence_key}
     end
 
-    test "flips the reserved reward to :pending_approval", %{
-      assignment: assignment,
-      member: member,
+    test "sets completed_at on the participation", %{participation: participation} do
+      {:ok, updated} = Assignment.Public.complete_participation(participation)
+      assert %NaiveDateTime{} = updated.completed_at
+    end
+
+    test "flips the reserved reward to :pending_approval via signal chain", %{
+      participation: participation,
       idempotence_key: idempotence_key
     } do
-      :ok = Assignment.Public.mark_participation_done(assignment, member)
+      {:ok, _} = Assignment.Public.complete_participation(participation)
 
       assert %{status: :pending_approval} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
     end
 
     test "creates a PendingContributions next-action for the owner", %{
-      assignment: %{id: id} = assignment,
-      member: member,
+      assignment: %{id: id},
+      participation: participation,
       project_owner: project_owner
     } do
-      :ok = Assignment.Public.mark_participation_done(assignment, member)
+      {:ok, _} = Assignment.Public.complete_participation(participation)
 
       assert_next_action(
         project_owner,
@@ -757,21 +760,26 @@ defmodule Systems.Assignment.PublicTest do
       )
     end
 
-    test "is idempotent — second call does not undo the pending state", %{
-      assignment: assignment,
-      member: member,
+    test "is idempotent — second call is a no-op", %{
+      participation: participation,
       idempotence_key: idempotence_key
     } do
-      :ok = Assignment.Public.mark_participation_done(assignment, member)
-      :ok = Assignment.Public.mark_participation_done(assignment, member)
+      {:ok, once} = Assignment.Public.complete_participation(participation)
+      {:ok, twice} = Assignment.Public.complete_participation(once)
+
+      assert once.completed_at == twice.completed_at
 
       assert %{status: :pending_approval} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
     end
 
-    test "no-ops on an assignment without a fund", %{member: member} do
+    test "does not flip reward when the assignment has no fund" do
       unfunded = Factories.insert!(:assignment, %{fund: nil})
-      assert :ok = Assignment.Public.mark_participation_done(unfunded, member)
+      user = Factories.insert!(:member)
+      {:ok, participation} = Assignment.Public.obtain_participation(unfunded, user)
+
+      assert {:ok, %{completed_at: %NaiveDateTime{}}} =
+               Assignment.Public.complete_participation(participation)
     end
   end
 

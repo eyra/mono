@@ -22,7 +22,6 @@ defmodule Systems.Assignment.Public do
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Fund
-  alias Systems.NextAction
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.Storage
@@ -962,36 +961,30 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
-  Marks a participant's work on this assignment as done — flips their reward
-  to `:pending_approval` and creates a `PendingContributions` next-action for
-  the owner(s). Callers are responsible for deciding *when* this is
-  appropriate (last task finished, or explicit "I'm done" click).
+  Marks a participation as complete — the participant has submitted their
+  work (either by finishing the last task, or by explicitly clicking "I'm
+  done"). Sets `completed_at` and dispatches
+  `{:assignment_participation, :completed}`. Idempotent: a second call on
+  an already-completed participation returns `{:ok, participation}` without
+  re-firing.
 
-  No-op for unpaid assignments (no fund → no reward to flip, no
-  contributions to review).
+  Downstream reward/NA effects live in `Assignment.Switch`, not here.
   """
-  def mark_participation_done(%Assignment.Model{fund: nil}, _member), do: :ok
+  def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p),
+    do: {:ok, p}
 
-  def mark_participation_done(
-        %Assignment.Model{id: assignment_id} = assignment,
-        %Crew.MemberModel{user_id: user_id}
-      ) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.mark_pending_approval(idempotence_key)
+  def complete_participation(%Assignment.ParticipationModel{} = participation) do
+    changeset =
+      participation
+      |> Assignment.ParticipationModel.changeset(%{completed_at: Timestamp.naive_now()})
 
-    case owners(assignment) do
-      [] ->
-        :ok
-
-      owners ->
-        NextAction.Public.create_next_action(
-          owners,
-          Systems.Assignment.NextActions.PendingContributions,
-          key: "#{assignment_id}",
-          params: %{"assignment_id" => assignment_id}
-        )
-
-        :ok
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
     end
   end
 
