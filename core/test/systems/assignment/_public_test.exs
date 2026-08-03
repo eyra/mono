@@ -799,6 +799,57 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "state transitions across accept/reject" do
+    setup do
+      completed_participation_with_reward()
+    end
+
+    test "accept after reject overrides — reward flips back to :approved with a fresh payment", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, rejected} = Assignment.Public.reject_participation(participation, "changed my mind")
+
+      assert %{status: :rejected, deposit_id: nil} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      {:ok, accepted} = Assignment.Public.accept_participation(rejected)
+
+      # Both timestamps stay populated — accept only clears rejected_at on the
+      # reward (via Fund), not on the participation. The audit trail survives.
+      assert %NaiveDateTime{} = accepted.accepted_at
+      assert %NaiveDateTime{} = accepted.rejected_at
+
+      assert %{status: :approved, rejected_at: nil, payment_id: payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(payment_id)
+    end
+
+    test "reject after accept fails and leaves participation + reward untouched", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, accepted} = Assignment.Public.accept_participation(participation)
+
+      assert %{status: :approved, payment_id: payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(payment_id)
+
+      assert {:error, :reject_guard, :reward_already_approved, _} =
+               Assignment.Public.reject_participation(accepted, "too late")
+
+      # Multi rolled back: no rejected_at written, reward still :approved.
+      reloaded = Core.Repo.get!(Assignment.ParticipationModel, accepted.id)
+      assert reloaded.rejected_at == nil
+      assert reloaded.rejected_message == nil
+
+      assert %{status: :approved, payment_id: ^payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
   describe "owners/1" do
     test "returns owners inherited from the top of the auth tree" do
       user = Factories.insert!(:member)
