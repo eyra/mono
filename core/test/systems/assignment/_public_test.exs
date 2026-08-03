@@ -804,7 +804,7 @@ defmodule Systems.Assignment.PublicTest do
       completed_participation_with_reward()
     end
 
-    test "accept after reject overrides — reward flips back to :approved with a fresh payment", %{
+    test "accept after reject is blocked — spot has already reopened", %{
       participation: participation,
       idempotence_key: idempotence_key
     } do
@@ -813,17 +813,25 @@ defmodule Systems.Assignment.PublicTest do
       assert %{status: :rejected, deposit_id: nil} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
 
-      {:ok, accepted} = Assignment.Public.accept_participation(rejected)
+      assert {:error, :participation_already_rejected} =
+               Assignment.Public.accept_participation(rejected)
 
-      # Both timestamps stay populated — accept only clears rejected_at on the
-      # reward (via Fund), not on the participation. The audit trail survives.
-      assert %NaiveDateTime{} = accepted.accepted_at
-      assert %NaiveDateTime{} = accepted.rejected_at
+      # Participation stays rejected: no accepted_at written, reject state intact.
+      reloaded = Core.Repo.get!(Assignment.ParticipationModel, rejected.id)
+      assert reloaded.accepted_at == nil
+      assert %NaiveDateTime{} = reloaded.rejected_at
 
-      assert %{status: :approved, rejected_at: nil, payment_id: payment_id} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+      # And the Fund reward stays rejected too — the Multi never ran.
+      assert %{status: :rejected} = Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
 
-      refute is_nil(payment_id)
+    test "accept after reject is blocked when called by id", %{
+      participation: %{id: id} = participation
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(participation, "no")
+
+      assert {:error, :participation_already_rejected} =
+               Assignment.Public.accept_participation(id)
     end
 
     test "reject after accept fails and leaves participation + reward untouched", %{

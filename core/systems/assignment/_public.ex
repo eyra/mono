@@ -984,6 +984,12 @@ defmodule Systems.Assignment.Public do
   Sets `accepted_at`, approves the associated reward (which triggers
   payout) if any, and dispatches `{:assignment_participation, :accepted}`.
   All in one transaction. Idempotent on `accepted_at`.
+
+  Returns `{:error, :participation_already_rejected}` when the
+  participation was previously rejected. Business rule: rejection
+  reopens the assignment spot for a new participant, so accepting
+  after a rejection would double-book. Any dispute resolution happens
+  outside the system.
   """
   def accept_participation(id) when is_integer(id) do
     case Repo.get(Assignment.ParticipationModel, id) do
@@ -994,6 +1000,9 @@ defmodule Systems.Assignment.Public do
 
   def accept_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}} = p),
     do: {:ok, p}
+
+  def accept_participation(%Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}}),
+    do: {:error, :participation_already_rejected}
 
   def accept_participation(%Assignment.ParticipationModel{} = participation) do
     participation = Repo.preload(participation, :assignment)
