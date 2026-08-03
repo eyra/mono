@@ -128,42 +128,6 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
-
-    test "crew_task accepted", %{user: user, crew: crew, crew_task: crew_task} do
-      message = %{
-        crew: crew,
-        crew_task: crew_task,
-        from_pid: self(),
-        changeset: %{data: %{status: :pending}}
-      }
-
-      assert :ok = Switch.intercept({:crew_task, :accepted}, message)
-      refute_signal_dispatched({:assignment, :monitor_event})
-      assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
-      message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
-      assert message.user_id == user.id
-
-      # Verify embedded views are updated
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
-    end
-
-    test "crew_task rejected", %{user: user, crew: crew, crew_task: crew_task} do
-      message = %{crew: crew, crew_task: crew_task, from_pid: self()}
-      assert :ok = Switch.intercept({:crew_task, :rejected}, message)
-      refute_signal_dispatched({:assignment, :monitor_event})
-      assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
-      message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
-      assert message.user_id == user.id
-
-      # Verify embedded views are updated
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
-    end
   end
 
   describe "assignment events" do

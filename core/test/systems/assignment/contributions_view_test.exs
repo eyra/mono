@@ -139,10 +139,8 @@ defmodule Systems.Assignment.ContributionsViewTest do
 
       _ = render(view)
 
-      assert %Fund.RewardModel{
-               status: :rejected,
-               rejection_reason: "bad data"
-             } = Fund.Public.get_reward(idempotence_key, [])
+      assert %Fund.RewardModel{status: :rejected} =
+               Fund.Public.get_reward(idempotence_key, [])
     end
   end
 end

@@ -512,37 +512,6 @@ defmodule Systems.Assignment.PublicTest do
       assert Assignment.Public.open_spot_count(assignment) == 1
     end
 
-    test "next_action (Assignment.CheckRejection) after rejection of task" do
-      %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-
-      %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
-
-      Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
-
-      assert_next_action(user, "/assignment/#{id}/landing")
-    end
-
-    test "next_action cleared after acceptence of task" do
-      %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-
-      %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
-
-      Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
-      Crew.Public.accept_task(task_id)
-
-      refute_next_action(user, "/assignment/#{id}/landing")
-    end
-
     test "exclude/2" do
       %{id: id1} = assignment1 = Assignment.Factories.create_assignment(31, 2)
       %{id: id2} = assignment2 = Assignment.Factories.create_assignment(31, 2)
@@ -649,59 +618,6 @@ defmodule Systems.Assignment.PublicTest do
       assert Assignment.Public.excluded?(assignment2, user) == false
       assert Assignment.Public.excluded?(assignment3, user) == false
       assert Assignment.Public.excluded?(assignment4, user) == false
-    end
-  end
-
-  describe "approval flow (researcher UI wiring)" do
-    setup do
-      user = Factories.insert!(:member)
-      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
-      member = Crew.Factories.create_member(crew, user)
-
-      task =
-        Crew.Factories.create_task(
-          crew,
-          member,
-          ["task1", "member=#{member.id}"],
-          status: :completed
-        )
-
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
-      {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
-
-      {:ok,
-       user: user,
-       assignment: assignment,
-       member: member,
-       task: task,
-       idempotence_key: idempotence_key}
-    end
-
-    test "Crew.Public.accept_task triggers reward approval via switch", %{
-      task: task,
-      idempotence_key: idempotence_key
-    } do
-      {:ok, _} = Crew.Public.accept_task(task.id)
-
-      assert %{status: :approved, payment_id: payment_id} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
-
-      refute is_nil(payment_id)
-    end
-
-    test "Assignment.Public.reject_task flips reward to :rejected and rolls back deposit", %{
-      assignment: assignment,
-      task: task,
-      idempotence_key: idempotence_key
-    } do
-      [first_category | _] = Crew.RejectCategories.values()
-      rejection = %{category: first_category, message: "test"}
-
-      assert {:ok, _} = Assignment.Public.reject_task(assignment, task, rejection)
-
-      assert %{status: :rejected, deposit_id: nil} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
     end
   end
 

@@ -423,11 +423,7 @@ defmodule Systems.Fund.Public do
   # from there (the `deposit: nil` branch of create_payment_transaction).
   defp do_override_rejected(%Fund.RewardModel{} = reward) do
     Multi.new()
-    |> cas_status_step(:reward, reward, [:rejected],
-      status: :approved,
-      rejection_reason: nil,
-      rejected_at: nil
-    )
+    |> cas_status_step(:reward, reward, [:rejected], status: :approved, rejected_at: nil)
     |> approve_payment_step(reward)
     |> Repo.commit()
   end
@@ -471,13 +467,10 @@ defmodule Systems.Fund.Public do
   Rejects a reward and returns the reserved money to the assignment fund.
 
   Atomic: the status flip and the deposit reversal happen in one transaction.
-  Idempotent on `:rejected`.
+  Idempotent on `:rejected`. The reviewer's rejection reason lives on
+  `Assignment.Participation` — Fund only records the outcome.
   """
   def reject_reward(idempotence_key) when is_binary(idempotence_key) do
-    reject_reward(idempotence_key, nil)
-  end
-
-  def reject_reward(idempotence_key, reason) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
       nil ->
         Logger.warning("No reward to reject for #{idempotence_key}")
@@ -490,57 +483,45 @@ defmodule Systems.Fund.Public do
         {:error, :reward_already_approved}
 
       %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
-        do_reject_reward(reward, reason)
+        do_reject_reward(reward)
     end
   end
 
   @doc """
   Multi-aware variant of `reject_reward/1`. Use when the rejection must commit
-  atomically alongside other operations (e.g. flipping a `Crew.TaskModel` to
-  `:rejected` in `Assignment.Public.reject_task/3`).
+  atomically alongside other operations.
 
   On a `:rejected` reward this is a no-op; on `:approved`/`:paid` it fails the
   surrounding transaction with `{:error, :reward_already_approved}` (rather
   than raising deep in `rollback_deposit/2`). The status flip is a guarded
   compare-and-swap, so a concurrent transition makes this a safe rollback.
-
-  The third argument is the optional rejection reason; nil leaves it unset.
   """
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
-    reject_reward(multi, reward, nil)
-  end
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}), do: multi
 
-  def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
-    reject_reward(multi, idempotence_key, nil)
-  end
-
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}, _reason), do: multi
-
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status}, _reason)
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
       when status in [:approved, :paid] do
     Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
   end
 
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward, reason) do
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
     multi
     |> rollback_deposit(reward)
     |> cas_status_step(:reject_status, reward, [:reserved, :pending_approval],
       status: :rejected,
-      rejection_reason: reason,
       rejected_at: now()
     )
   end
 
-  def reject_reward(%Multi{} = multi, idempotence_key, reason) when is_binary(idempotence_key) do
+  def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
     case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
       nil -> raise FundError, message: "No reward available to reject"
-      reward -> reject_reward(multi, reward, reason)
+      reward -> reject_reward(multi, reward)
     end
   end
 
-  defp do_reject_reward(reward, reason) do
+  defp do_reject_reward(reward) do
     Multi.new()
-    |> reject_reward(reward, reason)
+    |> reject_reward(reward)
     |> Repo.commit()
   end
 

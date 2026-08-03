@@ -19,7 +19,6 @@ defmodule Systems.Fund.RewardModel do
     field(:amount, :integer)
     field(:attempt, :integer)
     field(:status, Ecto.Enum, values: @statuses, default: :reserved)
-    field(:rejection_reason, :string)
     field(:rejected_at, :naive_datetime)
     belongs_to(:fund, Fund.Model)
     belongs_to(:user, Account.User)
@@ -34,7 +33,7 @@ defmodule Systems.Fund.RewardModel do
   def statuses, do: @statuses
 
   @required_fields ~w(idempotence_key amount)a
-  @optional_fields ~w(attempt status rejection_reason rejected_at payout_id)a
+  @optional_fields ~w(attempt status rejected_at payout_id)a
   @fields @required_fields ++ @optional_fields
 
   @doc false

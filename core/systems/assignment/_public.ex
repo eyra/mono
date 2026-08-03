@@ -659,35 +659,6 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def reject_task(
-        %Assignment.Model{} = assignment,
-        %Crew.TaskModel{} = task,
-        rejection
-      ) do
-    case auth_module().users_with_role(task, :owner) do
-      [%User{} = user | _] ->
-        reason = Map.get(rejection, :message) || Map.get(rejection, "message")
-
-        Multi.new()
-        |> Crew.Public.reject_task(task, rejection)
-        |> reject_reward(assignment, user, reason)
-        |> Repo.commit()
-
-      [] ->
-        Logger.error("[Assignment] reject_task: task #{task.id} has no owner")
-        {:error, :no_task_owner}
-    end
-  end
-
-  @doc """
-  Rejects the pending task identified by `task_id`. Keeps the `Crew` lookup
-  inside the `Assignment` system so views never query `Crew` directly.
-  """
-  def reject_task_by_id(%Assignment.Model{} = assignment, task_id, rejection)
-      when is_integer(task_id) do
-    reject_task(assignment, Crew.Public.get_task!(task_id), rejection)
-  end
-
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
     Multi.new()
     |> Crew.Public.cancel(crew, user)
@@ -797,34 +768,6 @@ defmodule Systems.Assignment.Public do
   def task_labels(%{workflow: workflow}) do
     [tool] = Workflow.Model.flatten(workflow)
     Concept.ToolModel.task_labels(tool)
-  end
-
-  @doc """
-  Accepts each of the given completed crew tasks. Each accept fires the
-  existing assignment switch which calls `Fund.Public.approve_reward/1`.
-  A failing accept is logged and does not block subsequent accepts.
-  Returns `{:ok, count}` when all succeeded, or
-  `{:error, {:partial, %{ok: n, failed: [task_id, ...]}}}` otherwise.
-  """
-  def accept_tasks(task_ids) when is_list(task_ids) do
-    results = Enum.map(task_ids, &accept_task/1)
-    failed = for {:error, task_id} <- results, do: task_id
-
-    case failed do
-      [] -> {:ok, length(results)}
-      _ -> {:error, {:partial, %{ok: length(results) - length(failed), failed: failed}}}
-    end
-  end
-
-  defp accept_task(task_id) do
-    case Crew.Public.accept_task(task_id) do
-      {:ok, _} ->
-        {:ok, task_id}
-
-      error ->
-        Logger.warning("[Assignment] accept_task #{task_id} failed: #{inspect(error)}")
-        {:error, task_id}
-    end
   end
 
   def has_open_spots?(%{crew: _crew} = assignment) do
@@ -976,16 +919,11 @@ defmodule Systems.Assignment.Public do
     |> Fund.Public.rollback_deposit(idempotence_key)
   end
 
-  defp reject_reward(
-         %Multi{} = multi,
-         %Assignment.Model{} = assignment,
-         %User{} = user,
-         reason \\ nil
-       ) do
+  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
     idempotence_key = idempotence_key(assignment, user)
 
     multi
-    |> Fund.Public.reject_reward(idempotence_key, reason)
+    |> Fund.Public.reject_reward(idempotence_key)
   end
 
   def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

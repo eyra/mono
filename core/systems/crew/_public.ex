@@ -137,13 +137,13 @@ defmodule Systems.Crew.Public do
 
   def rejected_tasks(crew) do
     task_query(crew, [:rejected])
-    |> order_by([task: t], desc: t.rejected_at)
+    |> order_by([task: t], desc: t.updated_at)
     |> Repo.all()
   end
 
   def accepted_tasks(crew) do
     task_query(crew, [:accepted])
-    |> order_by([task: t], desc: t.accepted_at)
+    |> order_by([task: t], desc: t.updated_at)
     |> Repo.all()
   end
 
@@ -197,54 +197,6 @@ defmodule Systems.Crew.Public do
       {:ok, %{crew_task: task}} -> task
       _ -> nil
     end
-  end
-
-  def reject_task(multi, %Crew.TaskModel{} = task, %{category: category, message: message}) do
-    multi_update(
-      multi,
-      :task,
-      task,
-      %{
-        status: :rejected,
-        rejected_at: Timestamp.naive_now(),
-        rejected_category: category,
-        rejected_message: message
-      },
-      :rejected
-    )
-  end
-
-  def reject_task(multi, id, rejection) do
-    task = get_task!(id)
-    reject_task(multi, task, rejection)
-  end
-
-  def reject_task(%Crew.TaskModel{} = task, rejection) do
-    Multi.new()
-    |> reject_task(task, rejection)
-    |> Repo.commit()
-  end
-
-  def reject_task(id, rejection) do
-    Multi.new()
-    |> reject_task(id, rejection)
-    |> Repo.commit()
-  end
-
-  def accept_task(%Crew.TaskModel{} = task) do
-    update_task(
-      task,
-      %{
-        status: :accepted,
-        accepted_at: Timestamp.naive_now()
-      },
-      :accepted
-    )
-  end
-
-  def accept_task(id) do
-    get_task!(id)
-    |> accept_task()
   end
 
   def update_task(%Crew.TaskModel{} = task, attrs, event) do

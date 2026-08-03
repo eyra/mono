@@ -114,7 +114,7 @@ defmodule Systems.Assignment.Switch do
       idempotence_key =
         Assignment.Public.idempotence_key(assignment.id, participation.user_id)
 
-      Systems.Fund.Public.reject_reward(idempotence_key, participation.rejected_message)
+      Systems.Fund.Public.reject_reward(idempotence_key)
       clear_pending_payout_if_empty(assignment)
     end
 
@@ -333,12 +333,8 @@ defmodule Systems.Assignment.Switch do
           Assignment.Public.get_member_by_task(crew_task)
           |> dispatch_finished_assignment()
 
-        :accepted ->
-          payout_participants(assignment, crew_task, message)
-          clear_pending_payout_if_empty(assignment)
-
-        :rejected ->
-          clear_pending_payout_if_empty(assignment)
+        _ ->
+          :ok
       end
 
       update_crew_task_next_action(assignment, message)
@@ -537,13 +533,6 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp update_crew_task_next_action(_, _), do: nil
-
-  defp payout_participants(assignment, crew_task, %{changeset: %{data: %{status: old_status}}}) do
-    if old_status != :accepted do
-      participants = auth_module().users_with_role(crew_task, :owner)
-      Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
-    end
-  end
 
   defp mark_participation_completed_if_finished(assignment, crew_task) do
     member = Assignment.Public.get_member_by_task(crew_task, [:user])

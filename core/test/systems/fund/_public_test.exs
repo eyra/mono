@@ -744,33 +744,23 @@ defmodule Systems.Fund.PublicTest do
       {:ok, fund: fund, key: key}
     end
 
-    test "stores rejection_reason and rejected_at when reason given", %{key: key} do
-      assert {:ok, _} = Fund.Public.reject_reward(key, "No valid answers given")
-
-      reward = Fund.Public.get_reward(key, [])
-      assert reward.status == :rejected
-      assert reward.rejection_reason == "No valid answers given"
-      refute is_nil(reward.rejected_at)
-    end
-
-    test "leaves rejection_reason nil when no reason given", %{key: key} do
+    test "flips reward to :rejected with a rejected_at timestamp", %{key: key} do
       assert {:ok, _} = Fund.Public.reject_reward(key)
 
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :rejected
-      assert is_nil(reward.rejection_reason)
+      refute is_nil(reward.rejected_at)
     end
 
     test "approve_reward overrides a rejected reward, paying from fund.available",
          %{key: key, fund: %{id: fund_id}} do
-      {:ok, _} = Fund.Public.reject_reward(key, "initial decline")
+      {:ok, _} = Fund.Public.reject_reward(key)
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
 
       assert {:ok, _} = Fund.Public.approve_reward(key)
 
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :approved
-      assert is_nil(reward.rejection_reason)
       assert is_nil(reward.rejected_at)
       refute is_nil(reward.payment_id)
 
@@ -779,7 +769,7 @@ defmodule Systems.Fund.PublicTest do
 
     test "approve_reward of a rejected reward errors when fund.available is insufficient",
          %{key: key, fund: %{id: fund_id}} do
-      {:ok, _} = Fund.Public.reject_reward(key, "decline")
+      {:ok, _} = Fund.Public.reject_reward(key)
 
       drain_amount = Fund.Model.amount_available(Fund.Public.get!(fund_id))
 
