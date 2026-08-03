@@ -20,6 +20,7 @@ defmodule Systems.Payment.ReconciliationRunModel do
     field(:still_pending, :integer, default: 0)
     field(:verified, :integer, default: 0)
     field(:missing_at_provider, :integer, default: 0)
+    field(:missing_locally, :integer, default: 0)
     field(:unresolvable, :integer, default: 0)
     field(:errors, :integer, default: 0)
     field(:skipped, :integer, default: 0)
@@ -32,7 +33,7 @@ defmodule Systems.Payment.ReconciliationRunModel do
   def run_types, do: @run_types
 
   @counters ~w(scanned resolved_completed resolved_failed still_pending verified
-               missing_at_provider unresolvable errors skipped)a
+               missing_at_provider missing_locally unresolvable errors skipped)a
   @fields ~w(run_type started_at finished_at)a ++ @counters
 
   def changeset(run, attrs) do

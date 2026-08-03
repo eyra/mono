@@ -118,19 +118,40 @@ defmodule Systems.Payment.Provider.Local do
        status: :pending,
        raw_status: "created",
        reference: idempotence_key,
-       amount: Map.get(attrs, :amount, 0)
+       amount: Map.get(attrs, :amount, 0),
+       created: nil
      }}
   end
 
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
-    {:ok, %{uid: uid, status: :pending, raw_status: "created", reference: nil, amount: 0}}
+
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       reference: nil,
+       amount: 0,
+       created: nil
+     }}
   end
 
   @impl true
   def list_withdrawals(merchant_uid) when is_binary(merchant_uid) do
     Logger.info("[Payment.Local] list_withdrawals merchant=#{merchant_uid} -> []")
+    {:ok, []}
+  end
+
+  # The local simulator holds no provider-side history, so it can never orphan a
+  # payout: an empty list is the honest answer, not a stub.
+  @impl true
+  def list_recent_withdrawals(%DateTime{} = since) do
+    Logger.info(
+      "[Payment.Local] list_recent_withdrawals since=#{DateTime.to_iso8601(since)} -> []"
+    )
+
     {:ok, []}
   end
 
@@ -144,7 +165,21 @@ defmodule Systems.Payment.Provider.Local do
       "[Payment.Local] transfer_to_merchant from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
     )
 
-    {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: amount}}
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       amount: amount,
+       reference: idempotence_key,
+       created: nil
+     }}
+  end
+
+  @impl true
+  def list_recent_transfers(%DateTime{} = since) do
+    Logger.info("[Payment.Local] list_recent_transfers since=#{DateTime.to_iso8601(since)} -> []")
+    {:ok, []}
   end
 
   defp generate_uid do

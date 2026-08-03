@@ -33,6 +33,17 @@ defmodule Systems.Payment.Reconciliation do
   def get_transaction(state, uid),
     do: guarded(state, fn -> Payment.Public.get_transaction(uid) end)
 
+  @doc """
+  Provider-side listings for the provider→local pass, under the same breaker and
+  throttle as the per-row lookups. One call covers a whole sweep, so a tripped
+  breaker here skips the entire pass rather than a single row.
+  """
+  def list_recent_withdrawals(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_withdrawals(since) end)
+
+  def list_recent_transfers(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_transfers(since) end)
+
   defp guarded(%State{circuit_open: true} = state, _fun), do: {:circuit_open, state}
 
   defp guarded(%State{} = state, fun) do

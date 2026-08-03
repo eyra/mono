@@ -1429,6 +1429,13 @@ defmodule Systems.Fund.Public do
   """
   def reconcile_pending_payouts(opts, state), do: Fund.PayoutReconciliation.run(opts, state)
 
+  @doc """
+  Flags provider withdrawals and transfers that have no local payout row.
+  See `Systems.Fund.PayoutOrphanReconciliation`.
+  """
+  def reconcile_orphaned_payouts(opts, state),
+    do: Fund.PayoutOrphanReconciliation.run(opts, state)
+
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)
 

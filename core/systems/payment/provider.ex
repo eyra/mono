@@ -136,7 +136,8 @@ defmodule Systems.Payment.Provider do
           status: lifecycle_status(),
           raw_status: String.t(),
           reference: String.t() | nil,
-          amount: integer()
+          amount: integer(),
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -175,13 +176,30 @@ defmodule Systems.Payment.Provider do
   @callback list_withdrawals(merchant_uid :: String.t()) ::
               {:ok, [withdrawal()]} | {:error, Error.t()}
 
+  @doc """
+  Every withdrawal the provider created at or after `since`, across all
+  merchants — the provider-side half of the provider→local reconciliation pass.
+
+  Unlike `list_withdrawals/1` this is not anchored to a merchant we already know
+  about, which is the point: a restore can roll back the local row that recorded
+  the merchant, so anchoring on local state would skip exactly the objects this
+  is meant to find.
+
+  Implementations page internally and apply the `since` cutoff themselves —
+  callers get a complete list, oldest-cutoff enforced, no pagination to thread.
+  """
+  @callback list_recent_withdrawals(since :: DateTime.t()) ::
+              {:ok, [withdrawal()]} | {:error, Error.t()}
+
   # Transfers
 
   @type transfer :: %{
           uid: String.t(),
           status: lifecycle_status(),
           raw_status: String.t(),
-          amount: integer()
+          amount: integer(),
+          reference: String.t() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -202,4 +220,12 @@ defmodule Systems.Payment.Provider do
               amount :: non_neg_integer(),
               idempotence_key :: String.t()
             ) :: {:ok, transfer()} | {:error, Error.t()}
+
+  @doc """
+  Every transfer the provider created at or after `since`, across all merchants.
+  The transfer-leg counterpart of `list_recent_withdrawals/1`; see there for why
+  this is not anchored to local state.
+  """
+  @callback list_recent_transfers(since :: DateTime.t()) ::
+              {:ok, [transfer()]} | {:error, Error.t()}
 end

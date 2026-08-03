@@ -4,6 +4,10 @@ defmodule Systems.Payment.ReconciliationFindingModel do
   could not be resolved, errored, or diverged from the provider). Trivial
   outcomes (`:still_pending`, `:verified`) are counted on the run but not stored
   here.
+
+  `subject_id` is null for `:missing_locally` findings: a provider object with no
+  local row has no local id to point at, and `provider_uid` plus `details` carry
+  the identification instead.
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -15,6 +19,7 @@ defmodule Systems.Payment.ReconciliationFindingModel do
     :resolved_completed,
     :resolved_failed,
     :missing_at_provider,
+    :missing_locally,
     :unresolvable,
     :errors,
     :skipped
@@ -36,8 +41,8 @@ defmodule Systems.Payment.ReconciliationFindingModel do
 
   def outcomes, do: @outcomes
 
-  @required ~w(reconciliation_run_id subject_type subject_id outcome)a
-  @optional ~w(provider_uid local_status_before provider_status details)a
+  @required ~w(reconciliation_run_id subject_type outcome)a
+  @optional ~w(subject_id provider_uid local_status_before provider_status details)a
 
   def changeset(finding, attrs) do
     finding

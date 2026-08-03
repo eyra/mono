@@ -1,6 +1,8 @@
 defmodule Systems.Payment.Provider.OPP do
   @behaviour Systems.Payment.Provider
 
+  require Logger
+
   alias Systems.Payment.Error
   alias Systems.Payment.Transaction
   alias Systems.Payment.Provider.OPP.HTTP
@@ -10,6 +12,11 @@ defmodule Systems.Payment.Provider.OPP do
   }
 
   @default_withdrawal_description "Payout"
+
+  # OPP caps perpage at 100. The page cap is a runaway guard, not a real limit:
+  # 50 pages is far more money movement than a reconciliation window can hold.
+  @page_size 100
+  @max_pages 50
 
   # Merchants
 
@@ -227,6 +234,10 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  @impl true
+  def list_recent_withdrawals(%DateTime{} = since),
+    do: list_since("/withdrawals", since, &parse_withdrawal(Map.get(&1, "uid"), &1))
+
   # Transfers
 
   # OPP models a merchant-to-merchant transfer as a charge of type `balance`.
@@ -251,6 +262,10 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
+
+  @impl true
+  def list_recent_transfers(%DateTime{} = since),
+    do: list_since("/charges", since, &parse_transfer(Map.get(&1, "uid"), &1))
 
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
@@ -316,10 +331,14 @@ defmodule Systems.Payment.Provider.OPP do
       status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
       reference: Map.get(data, "reference"),
-      amount: Map.get(data, "amount", 0)
+      amount: Map.get(data, "amount", 0),
+      created: parse_timestamp(Map.get(data, "created"))
     }
   end
 
+  # A charge carries no `reference` field of its own, so `transfer_to_merchant/4`
+  # writes the idempotence key into metadata under that name; read it back from
+  # there so both payout legs are identified the same way.
   defp parse_transfer(uid, data) do
     raw_status = Map.get(data, "status", "unknown")
 
@@ -327,9 +346,26 @@ defmodule Systems.Payment.Provider.OPP do
       uid: uid,
       status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
-      amount: Map.get(data, "amount", 0)
+      amount: Map.get(data, "amount", 0),
+      reference: metadata_value(Map.get(data, "metadata"), "reference"),
+      created: parse_timestamp(Map.get(data, "created"))
     }
   end
+
+  # OPP returns metadata as a list of %{"key" => k, "value" => v} pairs on reads,
+  # even though it is written as an object.
+  defp metadata_value(metadata, key) when is_list(metadata) do
+    Enum.find_value(metadata, fn
+      %{"key" => ^key, "value" => value} -> value
+      _other -> nil
+    end)
+  end
+
+  defp metadata_value(%{} = metadata, key), do: Map.get(metadata, key)
+  defp metadata_value(_metadata, _key), do: nil
+
+  defp parse_timestamp(seconds) when is_integer(seconds), do: DateTime.from_unix!(seconds)
+  defp parse_timestamp(_other), do: nil
 
   # Only OPP's terminal words are recognised. Everything else — including a status
   # OPP adds later — stays :pending, so an unknown state can never finalize or
@@ -348,4 +384,49 @@ defmodule Systems.Payment.Provider.OPP do
       Map.put(acc, key, value)
     end)
   end
+
+  # Paged listing bounded by a creation cutoff.
+  #
+  # The cutoff is applied here rather than server-side on purpose: OPP's `date`
+  # filter on /withdrawals is silently ignored (it returns the full history
+  # instead of erroring, so a server-side window would look like it worked while
+  # scanning everything), and /charges has no date filter at all. Ordering
+  # newest-first and stopping at the first page containing an older object is the
+  # only reliable window.
+  defp list_since(path, since, parse, page \\ 1, acc \\ [])
+
+  defp list_since(path, _since, _parse, page, acc) when page > @max_pages do
+    Logger.warning("[OPP] list_since #{path}: hit #{@max_pages}-page cap, results truncated")
+    {:ok, acc}
+  end
+
+  defp list_since(path, since, parse, page, acc) do
+    query = "perpage=#{@page_size}&order[]=-date_created&page=#{page}"
+
+    case HTTP.get("#{path}?#{query}") do
+      {:ok, %{"data" => items} = body} when is_list(items) ->
+        parsed = Enum.map(items, parse)
+        acc = acc ++ Enum.filter(parsed, &within?(&1, since))
+
+        if more_pages?(body, page) and Enum.all?(parsed, &within?(&1, since)) do
+          list_since(path, since, parse, page + 1, acc)
+        else
+          {:ok, acc}
+        end
+
+      {:ok, _data} ->
+        {:ok, acc}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  defp more_pages?(body, page), do: page < Map.get(body, "last_page", page)
+
+  # An object with no parseable creation timestamp is kept rather than dropped:
+  # the pass exists to surface unknown objects, so an unreadable date must not
+  # silently exclude one.
+  defp within?(%{created: nil}, _since), do: true
+  defp within?(%{created: created}, since), do: DateTime.compare(created, since) != :lt
 end

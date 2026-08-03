@@ -1,9 +1,10 @@
 defmodule Systems.Payment.ReconciliationWorkerTest do
   @moduledoc """
   Integration: one worker run reconciles both a stuck pay-in (Budget) and a
-  stuck payout (Fund) against OPP. The per-type resolution rules are covered by
-  ReconcileTransactionsTest / ReconcilePayoutsTest; here we assert the worker
-  delegates to both and returns :ok.
+  stuck payout (Fund) against OPP, then runs the provider→local orphan pass. The
+  per-type rules are covered by ReconcileTransactionsTest / ReconcilePayoutsTest /
+  ReconcileOrphanedPayoutsTest; here we assert the worker delegates to all three
+  and returns :ok.
   """
   use Core.DataCase, async: true
   import Mox
@@ -20,6 +21,13 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   alias Systems.Payment.ReconciliationWorker
 
   setup :verify_on_exit!
+
+  # The orphan pass lists the provider side on every run. Tests that are about
+  # the local-first passes stub it empty so it contributes nothing to the tally.
+  defp expect_no_orphans do
+    expect(ProviderMock, :list_recent_withdrawals, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+  end
 
   defp backdate(queryable, id, minutes_ago) do
     ts =
@@ -125,6 +133,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
        }}
     end)
 
+    expect_no_orphans()
+
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
 
     assert %{status: :completed} = Repo.reload!(payout)
@@ -149,6 +159,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
          amount: 0
        }}
     end)
+
+    expect_no_orphans()
 
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
 

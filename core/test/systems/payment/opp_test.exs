@@ -419,4 +419,146 @@ defmodule Systems.Payment.Provider.OPPTest do
                )
     end
   end
+
+  # OPP's `date` filter on /withdrawals is silently ignored and /charges has no
+  # date filter at all, so the creation cutoff is enforced client-side. These
+  # cover that windowing, since a server that ignores the filter cannot.
+  describe "list_recent_withdrawals/1" do
+    defp unix(iso), do: iso |> DateTime.from_iso8601() |> elem(1) |> DateTime.to_unix()
+
+    defp withdrawal_json(uid, reference, created) do
+      ~s<{"uid": "#{uid}", "object": "withdrawal", "status": "completed", > <>
+        ~s<"reference": "#{reference}", "amount": 1000, "created": #{created}}>
+    end
+
+    defp page_json(items, last_page) do
+      ~s<{"object": "list", "last_page": #{last_page}, "data": [#{Enum.join(items, ",")}]}>
+    end
+
+    test "parses reference and created into the withdrawal", %{bypass: bypass} do
+      created = unix("2026-07-20T12:00:00Z")
+
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          page_json(
+            [withdrawal_json("wtd_1", "payout=abc,type=withdrawal,attempt=0", created)],
+            1
+          )
+        )
+      end)
+
+      assert {:ok, [withdrawal]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert %{
+               uid: "wtd_1",
+               status: :completed,
+               reference: "payout=abc,type=withdrawal,attempt=0",
+               amount: 1000
+             } = withdrawal
+
+      assert DateTime.to_unix(withdrawal.created) == created
+    end
+
+    test "drops objects created before the cutoff", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        items = [
+          withdrawal_json("wtd_new", "payout=a", unix("2026-07-20T12:00:00Z")),
+          withdrawal_json("wtd_old", "payout=b", unix("2026-01-01T12:00:00Z"))
+        ]
+
+        Plug.Conn.resp(conn, 200, page_json(items, 1))
+      end)
+
+      assert {:ok, [%{uid: "wtd_new"}]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "keeps paging while every object on the page is within the window",
+         %{bypass: bypass} do
+      Agent.start_link(fn -> [] end, name: :opp_pages)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        %{"page" => page} = URI.decode_query(conn.query_string)
+        Agent.update(:opp_pages, &[page | &1])
+
+        item = withdrawal_json("wtd_#{page}", "payout=#{page}", unix("2026-07-20T12:00:00Z"))
+        Plug.Conn.resp(conn, 200, page_json([item], 3))
+      end)
+
+      assert {:ok, withdrawals} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert Enum.map(withdrawals, & &1.uid) == ["wtd_1", "wtd_2", "wtd_3"]
+      assert Agent.get(:opp_pages, &Enum.reverse/1) == ["1", "2", "3"]
+    end
+
+    test "stops paging at the first page containing an object past the cutoff",
+         %{bypass: bypass} do
+      Agent.start_link(fn -> 0 end, name: :opp_page_count)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        Agent.update(:opp_page_count, &(&1 + 1))
+
+        items = [
+          withdrawal_json("wtd_new", "payout=a", unix("2026-07-20T12:00:00Z")),
+          withdrawal_json("wtd_old", "payout=b", unix("2026-01-01T12:00:00Z"))
+        ]
+
+        Plug.Conn.resp(conn, 200, page_json(items, 10))
+      end)
+
+      assert {:ok, [%{uid: "wtd_new"}]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+      assert Agent.get(:opp_page_count, & &1) == 1
+    end
+
+    test "requests newest-first ordering", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        assert conn.query_string =~ "order[]=-date_created"
+        Plug.Conn.resp(conn, 200, page_json([], 1))
+      end)
+
+      assert {:ok, []} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "nope"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} =
+               OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+  end
+
+  describe "list_recent_transfers/1" do
+    test "reads the payout reference back out of charge metadata", %{bypass: bypass} do
+      # A charge has no `reference` field of its own — transfer_to_merchant/4
+      # writes the idempotence key into metadata, and OPP returns metadata as a
+      # list of key/value pairs rather than the object it was written as.
+      Bypass.expect_once(bypass, "GET", "/charges", fn conn ->
+        item =
+          ~s<{"uid": "chg_1", "object": "charge", "status": "completed", "amount": 500, > <>
+            ~s<"created": 1785329635, > <>
+            ~s<"metadata": [{"key": "reference", "value": "payout=abc,type=transfer"}]}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "chg_1", reference: "payout=abc,type=transfer", amount: 500}]} =
+               OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "leaves the reference nil when the charge carries no metadata", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/charges", fn conn ->
+        item =
+          ~s<{"uid": "chg_2", "object": "charge", "status": "completed", "amount": 500, > <>
+            ~s<"created": 1785329635, "metadata": []}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "chg_2", reference: nil}]} =
+               OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
+    end
+  end
 end
