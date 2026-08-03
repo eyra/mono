@@ -21,7 +21,29 @@ defmodule Systems.Payment.Reconciliation do
   @max_throttle_waits 5
   @retryable_statuses [429, 500, 502, 503, 504]
 
+  @min_age_minutes 60
+  @max_age_days 7
+
   def new_state, do: State.new()
+
+  @doc """
+  Creation window a provider→local scan considers, as `{oldest, newest}`.
+
+  `oldest` bounds how far back the provider listing reaches. `newest` is a
+  min-age guard: an object created moments ago may have a local row committing
+  right now, and flagging it would flap.
+
+  Overridable per run via `:min_age_minutes` and `:max_age_days`, matching the
+  options the local-first reconcilers take.
+  """
+  def scan_window(opts) do
+    min_age = Keyword.get(opts, :min_age_minutes, @min_age_minutes)
+    max_age = Keyword.get(opts, :max_age_days, @max_age_days)
+    now = DateTime.utc_now()
+
+    {DateTime.add(now, -max_age * 24 * 60 * 60, :second),
+     DateTime.add(now, -min_age * 60, :second)}
+  end
 
   @doc """
   Provider withdrawal lookup guarded by the circuit breaker, throttle and
@@ -43,6 +65,9 @@ defmodule Systems.Payment.Reconciliation do
 
   def list_recent_transfers(state, %DateTime{} = since),
     do: guarded(state, fn -> Payment.Public.list_recent_transfers(since) end)
+
+  def list_recent_transactions(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_transactions(since) end)
 
   defp guarded(%State{circuit_open: true} = state, _fun), do: {:circuit_open, state}
 

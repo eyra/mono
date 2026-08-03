@@ -137,6 +137,14 @@ defmodule Systems.Payment.Provider do
               {:ok, transaction()} | {:error, Error.t()}
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
 
+  @doc """
+  Every transaction the provider created at or after `since`, across all
+  merchants — the provider-side half of the provider→local pay-in scan. See
+  `list_recent_withdrawals/1` for why this is not anchored to local state.
+  """
+  @callback list_recent_transactions(since :: DateTime.t()) ::
+              {:ok, [transaction()]} | {:error, Error.t()}
+
   # Withdrawals
 
   @type withdrawal :: %{

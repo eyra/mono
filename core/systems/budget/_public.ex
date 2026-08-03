@@ -271,6 +271,13 @@ defmodule Systems.Budget.Public do
 
   def reconcile_transactions(opts, state), do: Budget.TransactionReconciliation.run(opts, state)
 
+  @doc """
+  Flags provider transactions that have no local pay-in row.
+  See `Systems.Budget.TransactionOrphanReconciliation`.
+  """
+  def reconcile_orphaned_transactions(opts, state),
+    do: Budget.TransactionOrphanReconciliation.run(opts, state)
+
   # --- Helpers ---
 
   defp get_reward_per_participant(%Budget.TransactionModel{target_fund_id: fund_id}) do

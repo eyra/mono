@@ -7,10 +7,10 @@ defmodule Systems.Payment.ReconciliationWorker do
   also flags the critical case the synchronous path can't: local terminal state
   the provider has no record of.
 
-  A final provider→local pass runs the comparison in the opposite direction,
-  flagging provider-side payout legs with no local row at all — the restore-orphan
-  case, which a local-first scan cannot see. It runs last so a breaker tripped by
-  its whole-listing calls cannot starve the per-row passes.
+  Two final provider→local passes run the comparison in the opposite direction,
+  flagging provider-side payout legs and pay-ins with no local row at all — the
+  restore-orphan case, which a local-first scan cannot see. They run last so a
+  breaker tripped by their whole-listing calls cannot starve the per-row passes.
 
   Each run is recorded in `reconciliation_runs` (with per-row
   `reconciliation_findings`) and emits a `[:payment, :reconciliation, :stop]`
@@ -49,6 +49,7 @@ defmodule Systems.Payment.ReconciliationWorker do
     state = Fund.Public.reconcile_pending_payouts(opts, state)
     state = Budget.Public.reconcile_transactions(opts, state)
     state = Fund.Public.reconcile_orphaned_payouts(opts, state)
+    state = Budget.Public.reconcile_orphaned_transactions(opts, state)
 
     Payment.Public.finish_reconciliation_run(run_record, state)
 

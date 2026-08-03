@@ -112,6 +112,15 @@ defmodule Systems.Payment.Provider.Local do
      }}
   end
 
+  @impl true
+  def list_recent_transactions(%DateTime{} = since) do
+    Logger.info(
+      "[Payment.Local] list_recent_transactions since=#{DateTime.to_iso8601(since)} -> []"
+    )
+
+    {:ok, []}
+  end
+
   # Withdrawals
 
   @impl true

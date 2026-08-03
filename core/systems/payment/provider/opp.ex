@@ -151,6 +151,14 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  # OPP does offer a server-side `date_completed` filter here, unlike the other
+  # listings — but it is unusable for this: an orphaned pay-in that never
+  # completed has completed=null, so filtering on it would drop exactly the
+  # transactions the scan exists to find. Windowed client-side like the rest.
+  @impl true
+  def list_recent_transactions(%DateTime{} = since),
+    do: list_since("/transactions", since, &parse_transaction(Map.get(&1, "uid"), &1))
+
   # Bank accounts
 
   @impl true

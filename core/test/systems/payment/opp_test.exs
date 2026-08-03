@@ -635,6 +635,42 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
+  describe "list_recent_transactions/1" do
+    test "reads the payout reference and created stamp off each list item",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions", fn conn ->
+        item =
+          ~s<{"uid": "tra_1", "object": "transaction", "status": "completed", > <>
+            ~s<"amount": 1440, "created": 1785329635, > <>
+            ~s<"metadata": [{"key": "invoice_id", "value": "NEXT-NL-0128"}, > <>
+            ~s<{"key": "reference", "value": "pay_in:fund=1:abc"}]}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "tra_1", reference: "pay_in:fund=1:abc", amount: 1440}]} =
+               OPP.list_recent_transactions(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "includes a never-completed transaction, which a date_completed filter would drop",
+         %{bypass: bypass} do
+      # An orphaned pay-in is precisely one that never completed, so the server-
+      # side filter OPP does offer here cannot be used.
+      Bypass.expect_once(bypass, "GET", "/transactions", fn conn ->
+        refute conn.query_string =~ "date_completed"
+
+        item =
+          ~s<{"uid": "tra_2", "object": "transaction", "status": "created", > <>
+            ~s<"completed": null, "amount": 500, "created": 1785329635, "metadata": []}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "tra_2", status: :pending, reference: nil}]} =
+               OPP.list_recent_transactions(~U[2026-07-01 00:00:00Z])
+    end
+  end
+
   describe "list_recent_transfers/1" do
     test "reads the payout reference back out of charge metadata", %{bypass: bypass} do
       # A charge has no `reference` field of its own — transfer_to_merchant/4

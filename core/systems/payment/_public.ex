@@ -208,6 +208,16 @@ defmodule Systems.Payment.Public do
     provider().get_transaction(uid)
   end
 
+  @doc """
+  Every transaction the provider created at or after `since`, across all
+  merchants — the provider-side input to the provider→local pay-in scan.
+  """
+  @spec list_recent_transactions(since :: DateTime.t()) ::
+          {:ok, [Provider.transaction()]} | {:error, Error.t()}
+  def list_recent_transactions(%DateTime{} = since) do
+    provider().list_recent_transactions(since)
+  end
+
   # Withdrawals
 
   @spec create_withdrawal(
@@ -248,6 +258,7 @@ defmodule Systems.Payment.Public do
   # Reconciliation
 
   defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state
+  defdelegate reconciliation_scan_window(opts), to: Reconciliation, as: :scan_window
   defdelegate reconcile_get_withdrawal(state, uid), to: Reconciliation, as: :get_withdrawal
   defdelegate reconcile_get_transaction(state, uid), to: Reconciliation, as: :get_transaction
 
@@ -258,6 +269,10 @@ defmodule Systems.Payment.Public do
   defdelegate reconcile_list_recent_transfers(state, since),
     to: Reconciliation,
     as: :list_recent_transfers
+
+  defdelegate reconcile_list_recent_transactions(state, since),
+    to: Reconciliation,
+    as: :list_recent_transactions
 
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run

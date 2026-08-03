@@ -29,30 +29,18 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   alias Systems.Payment
   alias Systems.Payment.ReconciliationState, as: State
 
-  @min_age_minutes 60
-  @max_age_days 7
-
   @doc """
   Scans provider withdrawals and transfers created in the
   `[max_age_days, min_age_minutes]` window, returning the updated state.
   """
   def run(opts, %State{} = state) do
-    {oldest, newest} = window(opts)
+    {oldest, newest} = Payment.Public.reconciliation_scan_window(opts)
 
     {withdrawals, state} = list_recent_withdrawals(state, oldest)
     state = reconcile_leg(withdrawals, :withdrawal, newest, state)
 
     {transfers, state} = list_recent_transfers(state, oldest)
     reconcile_leg(transfers, :transfer, newest, state)
-  end
-
-  defp window(opts) do
-    min_age = Keyword.get(opts, :min_age_minutes, @min_age_minutes)
-    max_age = Keyword.get(opts, :max_age_days, @max_age_days)
-    now = DateTime.utc_now()
-
-    {DateTime.add(now, -max_age * 24 * 60 * 60, :second),
-     DateTime.add(now, -min_age * 60, :second)}
   end
 
   defp list_recent_withdrawals(state, oldest) do
