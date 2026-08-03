@@ -1,6 +1,7 @@
 defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
   import Systems.NextAction.TestHelper
+  import Systems.Fund.TestHelper
 
   alias Systems.Assignment
   alias Systems.Crew
@@ -410,14 +411,14 @@ defmodule Systems.Assignment.PublicTest do
              } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 creates transaction from fund reserve to user wallet" do
+    test "approve_reward creates transaction from fund reserve to user wallet" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      Assignment.Public.payout_participant(assignment, user)
+      {:ok, _} = approve_reward(Assignment.Private.reward_idempotence_key(assignment, user))
 
       deposit_idempotence_key =
         "assignment=#{assignment.id},user=#{user.id},type=deposit,attempt=1"
@@ -439,27 +440,27 @@ defmodule Systems.Assignment.PublicTest do
              } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 is idempotent" do
+    test "approve_reward is idempotent" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      assert {:ok, _} = Assignment.Public.payout_participant(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
-      assert {:ok, %Systems.Fund.RewardModel{status: :approved}} =
-               Assignment.Public.payout_participant(assignment, user)
+      assert {:ok, %Fund.RewardModel{status: :approved}} = approve_reward(idempotence_key)
+      assert {:ok, %Fund.RewardModel{status: :approved}} = approve_reward(idempotence_key)
     end
 
-    test "rewarded_amount/2 after payout" do
+    test "rewarded_amount/2 after approve_reward" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      Assignment.Public.payout_participant(assignment, user)
+      {:ok, _} = approve_reward(Assignment.Private.reward_idempotence_key(assignment, user))
 
       assert Assignment.Public.rewarded_amount(assignment, user) == 2000
     end
@@ -636,7 +637,7 @@ defmodule Systems.Assignment.PublicTest do
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
       {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
 
@@ -706,9 +707,9 @@ defmodule Systems.Assignment.PublicTest do
     assignment =
       Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
 
-    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+    idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
     {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
-    {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+    {:ok, _} = mark_pending_approval(idempotence_key)
     {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
     {:ok, participation} = Assignment.Public.complete_participation(participation)
 
@@ -825,7 +826,7 @@ defmodule Systems.Assignment.PublicTest do
 
       member = Crew.Factories.create_member(crew, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
 
       task_a =
@@ -886,7 +887,7 @@ defmodule Systems.Assignment.PublicTest do
     test "creates a :reserved reward with deposit", %{user: user, assignment: assignment} do
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
                Fund.Public.get_reward(idempotence_key, [])
@@ -899,7 +900,7 @@ defmodule Systems.Assignment.PublicTest do
       assignment: %{fund_id: fund_id, crew: crew} = assignment
     } do
       Assignment.Public.add_participant!(assignment, user)
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       original_available_after_join = Fund.Model.amount_available(Fund.Public.get!(fund_id))
 
       member = Crew.Public.get_member(crew, user)
@@ -929,7 +930,7 @@ defmodule Systems.Assignment.PublicTest do
 
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       assert nil == Fund.Public.get_reward(idempotence_key, [])
     end
 
@@ -955,7 +956,7 @@ defmodule Systems.Assignment.PublicTest do
 
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
                Fund.Public.get_reward(idempotence_key, [])

@@ -3,6 +3,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
 
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
+  import Systems.Fund.TestHelper
 
   alias Core.Factories
   alias Frameworks.Concept.LiveContext
@@ -46,9 +47,9 @@ defmodule Systems.Assignment.ContributionsViewTest do
   end
 
   defp create_pending_contribution(assignment, participant, crew, member) do
-    idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
+    idempotence_key = Assignment.Private.reward_idempotence_key(assignment, participant)
     {:ok, _} = Fund.Public.create_reward(assignment.fund, 1000, participant, idempotence_key)
-    {:ok, _} = Fund.Public.mark_pending_approval(idempotence_key)
+    {:ok, _} = mark_pending_approval(idempotence_key)
 
     {:ok, participation} = Assignment.Public.obtain_participation(assignment, participant)
     {:ok, _} = Assignment.Public.complete_participation(participation)

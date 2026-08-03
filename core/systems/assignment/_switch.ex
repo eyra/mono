@@ -49,9 +49,10 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
-  # Contribution was submitted (last task finished OR "I'm done" click). Flip
-  # the participant's reward to :pending_approval and notify the assignment's
-  # owner(s) via a next-action. No-op for unpaid assignments.
+  # Contribution submitted — the reward flip already happened inside the
+  # Multi that fired this signal (see Assignment.Public.complete_participation).
+  # We only do the post-commit housekeeping here: create the owner's
+  # next-action and refresh the affected views.
   @impl true
   def intercept(
         {:assignment_participation, :completed} = _signal,
@@ -61,10 +62,6 @@ defmodule Systems.Assignment.Switch do
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     if assignment.fund do
-      idempotence_key =
-        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
-
-      Systems.Fund.Public.mark_pending_approval(idempotence_key)
       create_pending_contributions_next_action(assignment)
     end
 
@@ -74,9 +71,8 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
-  # Owner confirmed the contribution. Approve the reward (which triggers
-  # payout) and clear the PendingContributions next-action once no more
-  # participations are awaiting review.
+  # Contribution accepted — reward already approved inside the Multi. Clear
+  # the owner's next-action if this was the last one and refresh views.
   @impl true
   def intercept(
         {:assignment_participation, :accepted} = _signal,
@@ -86,10 +82,6 @@ defmodule Systems.Assignment.Switch do
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     if assignment.fund do
-      idempotence_key =
-        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
-
-      Systems.Fund.Public.approve_reward(idempotence_key)
       clear_pending_payout_if_empty(assignment)
     end
 
@@ -99,9 +91,8 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
-  # Owner declined the contribution. Reject the reward (rolling the deposit
-  # back into the fund) and clear the PendingContributions next-action once
-  # no more participations are awaiting review.
+  # Contribution rejected — reward already rejected inside the Multi. Same
+  # housekeeping as :accepted.
   @impl true
   def intercept(
         {:assignment_participation, :rejected} = _signal,
@@ -111,10 +102,6 @@ defmodule Systems.Assignment.Switch do
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     if assignment.fund do
-      idempotence_key =
-        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
-
-      Systems.Fund.Public.reject_reward(idempotence_key)
       clear_pending_payout_if_empty(assignment)
     end
 

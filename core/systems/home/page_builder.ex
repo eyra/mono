@@ -201,8 +201,7 @@ defmodule Systems.Home.PageBuilder do
          } = assignment,
          user
        ) do
-    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-    reward_row = Fund.Public.get_reward(idempotence_key, [])
+    reward_row = Assignment.Public.get_reward(assignment, user)
 
     %{
       path: ~p"/assignment/#{assignment_id}",

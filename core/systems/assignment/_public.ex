@@ -5,6 +5,7 @@ defmodule Systems.Assignment.Public do
   use Core, :public
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
+  import Systems.Assignment.Private, only: [reward_idempotence_key: 1, reward_idempotence_key: 2]
 
   require Logger
 
@@ -478,12 +479,17 @@ defmodule Systems.Assignment.Public do
          %User{} = user
        )
        when is_integer(amount) and amount > 0 do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
-    if Fund.Public.reward_has_outstanding_deposit?(idempotence_key) do
+    if Fund.Public.reward_has_outstanding_deposit?(reward_idempotence_key) do
       :ok
     else
-      case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
+      case Fund.Public.create_reward(
+             ensure_fund_currency(fund),
+             amount,
+             user,
+             reward_idempotence_key
+           ) do
         {:ok, _} ->
           :ok
 
@@ -634,9 +640,14 @@ defmodule Systems.Assignment.Public do
   end
 
   defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
-    case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
+    case Fund.Public.create_reward(
+           ensure_fund_currency(fund),
+           amount,
+           user,
+           reward_idempotence_key
+         ) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end
@@ -902,7 +913,7 @@ defmodule Systems.Assignment.Public do
     |> Multi.run(:rollback, fn _, _ ->
       expired_user_assignments(from)
       |> Enum.map(fn {user_id, assignment_id} ->
-        idempotence_key(assignment_id, user_id)
+        reward_idempotence_key(assignment_id, user_id)
       end)
       |> Enum.filter(&Fund.Public.reward_has_outstanding_deposit?(&1))
       |> Enum.each(&Fund.Public.rollback_deposit(&1))
@@ -913,53 +924,53 @@ defmodule Systems.Assignment.Public do
   end
 
   def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
     multi
-    |> Fund.Public.rollback_deposit(idempotence_key)
+    |> Fund.Public.rollback_deposit(reward_idempotence_key)
   end
 
   defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
-    idempotence_key = idempotence_key(assignment, user)
-
-    multi
-    |> Fund.Public.reject_reward(idempotence_key)
+    case Fund.Public.get_reward(
+           reward_idempotence_key(assignment, user),
+           Fund.RewardModel.preload_graph(:full)
+         ) do
+      %Fund.RewardModel{} = reward -> Fund.Public.reject_reward(multi, reward)
+      nil -> multi
+    end
   end
 
-  def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key(assignment_id, user_id)
-  end
-
-  def idempotence_key(assignment_id, user_id)
-      when is_integer(assignment_id) and is_integer(user_id) do
-    "assignment=#{assignment_id},user=#{user_id}"
-  end
-
-  def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.approve_reward(idempotence_key)
+  def get_reward(%Assignment.Model{} = assignment, %User{} = user, preload \\ []) do
+    Fund.Public.get_reward(reward_idempotence_key(assignment, user), preload)
   end
 
   @doc """
   Marks a participation as complete — the participant has submitted their
   work (either by finishing the last task, or by explicitly clicking "I'm
-  done"). Sets `completed_at` and dispatches
-  `{:assignment_participation, :completed}`. Idempotent: a second call on
-  an already-completed participation returns `{:ok, participation}` without
-  re-firing.
+  done"). Sets `completed_at`, flips the associated reward to
+  `:pending_approval` (if any), and dispatches
+  `{:assignment_participation, :completed}`. All three happen in one
+  transaction; a failure anywhere rolls the whole thing back.
 
-  Downstream reward/NA effects live in `Assignment.Switch`, not here.
+  Idempotent on `completed_at`: a second call is a no-op.
+
+  Downstream housekeeping (owner next-action, view refreshes) lives in
+  `Assignment.Switch` and runs after the transaction commits.
   """
   def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p),
     do: {:ok, p}
 
   def complete_participation(%Assignment.ParticipationModel{} = participation) do
+    participation = Repo.preload(participation, :assignment)
+
     changeset =
-      participation
-      |> Assignment.ParticipationModel.changeset(%{completed_at: Timestamp.naive_now()})
+      Assignment.ParticipationModel.changeset(participation, %{
+        completed_at: Timestamp.naive_now()
+      })
 
     Multi.new()
     |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.mark_pending_approval/2)
     |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
     |> Repo.commit()
     |> case do
@@ -970,8 +981,9 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Marks a participation as accepted — the owner confirmed the contribution.
-  Sets `accepted_at` and dispatches `{:assignment_participation, :accepted}`.
-  Idempotent.
+  Sets `accepted_at`, approves the associated reward (which triggers
+  payout) if any, and dispatches `{:assignment_participation, :accepted}`.
+  All in one transaction. Idempotent on `accepted_at`.
   """
   def accept_participation(id) when is_integer(id) do
     case Repo.get(Assignment.ParticipationModel, id) do
@@ -984,12 +996,16 @@ defmodule Systems.Assignment.Public do
     do: {:ok, p}
 
   def accept_participation(%Assignment.ParticipationModel{} = participation) do
+    participation = Repo.preload(participation, :assignment)
+
     changeset =
-      participation
-      |> Assignment.ParticipationModel.changeset(%{accepted_at: Timestamp.naive_now()})
+      Assignment.ParticipationModel.changeset(participation, %{
+        accepted_at: Timestamp.naive_now()
+      })
 
     Multi.new()
     |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.approve_reward/2)
     |> Signal.Public.multi_dispatch({:assignment_participation, :accepted})
     |> Repo.commit()
     |> case do
@@ -1000,8 +1016,10 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Marks a participation as rejected — the owner declined the contribution.
-  Sets `rejected_at` + `rejected_message` and dispatches
-  `{:assignment_participation, :rejected}`. Idempotent.
+  Sets `rejected_at` + `rejected_message`, rejects the associated reward
+  (rolling the deposit back into the fund) if any, and dispatches
+  `{:assignment_participation, :rejected}`. All in one transaction.
+  Idempotent on `rejected_at`.
   """
   def reject_participation(id, message) when is_integer(id) do
     case Repo.get(Assignment.ParticipationModel, id) do
@@ -1018,20 +1036,39 @@ defmodule Systems.Assignment.Public do
 
   def reject_participation(%Assignment.ParticipationModel{} = participation, message)
       when is_binary(message) or is_nil(message) do
+    participation = Repo.preload(participation, :assignment)
+
     changeset =
-      participation
-      |> Assignment.ParticipationModel.changeset(%{
+      Assignment.ParticipationModel.changeset(participation, %{
         rejected_at: Timestamp.naive_now(),
         rejected_message: message
       })
 
     Multi.new()
     |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.reject_reward/2)
     |> Signal.Public.multi_dispatch({:assignment_participation, :rejected})
     |> Repo.commit()
     |> case do
       {:ok, %{assignment_participation: participation}} -> {:ok, participation}
       error -> error
+    end
+  end
+
+  # Load the reward and add the Fund step, or skip if there's no reward
+  # (unpaid assignment, or the participation flow reached us before the
+  # reward was ever created).
+  defp maybe_reward_step(multi, %Assignment.ParticipationModel{} = participation, step) do
+    with %Assignment.Model{fund_id: fund_id} <- participation.assignment,
+         true <- not is_nil(fund_id),
+         %Fund.RewardModel{} = reward <-
+           Fund.Public.get_reward(
+             reward_idempotence_key(participation),
+             Fund.RewardModel.preload_graph(:full)
+           ) do
+      step.(multi, reward)
+    else
+      _ -> multi
     end
   end
 
@@ -1047,8 +1084,8 @@ defmodule Systems.Assignment.Public do
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.rewarded_amount(idempotence_key)
+    reward_idempotence_key = reward_idempotence_key(assignment_id, user_id)
+    Fund.Public.rewarded_amount(reward_idempotence_key)
   end
 end
 

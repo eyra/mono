@@ -1,8 +1,10 @@
 defmodule Systems.Advert.PublicTest do
   use Core.DataCase
+  import Systems.Fund.TestHelper
 
   describe "assignments" do
     alias Systems.Advert
+    alias Systems.Assignment
     alias Systems.Crew
     alias Systems.Bookkeeping
     alias Systems.Fund
@@ -136,7 +138,7 @@ defmodule Systems.Advert.PublicTest do
       assert %{expired: true} = Crew.Public.get_task!(task.id)
     end
 
-    test "payout_participant/2 One transaction of one participant", %{fund: fund, user: user} do
+    test "approve_reward: one transaction of one participant", %{fund: fund, user: user} do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew} = assignment} =
@@ -145,7 +147,8 @@ defmodule Systems.Advert.PublicTest do
       Advert.Factories.create_task(["task1"], participant, crew, :accepted, false, 31)
       Fund.Factories.create_reward(assignment, participant, fund)
 
-      Advert.Public.payout_participant(assignment, participant)
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment, participant))
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
@@ -163,7 +166,7 @@ defmodule Systems.Advert.PublicTest do
                Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 Two transactions of one participant", %{fund: fund, user: user} do
+    test "approve_reward: two transactions of one participant", %{fund: fund, user: user} do
       participant = Factories.insert!(:member, %{creator: false})
 
       %{assignment: %{crew: crew1} = assignment1} =
@@ -178,8 +181,11 @@ defmodule Systems.Advert.PublicTest do
       Fund.Factories.create_reward(assignment1, participant, fund)
       Fund.Factories.create_reward(assignment2, participant, fund)
 
-      Advert.Public.payout_participant(assignment1, participant)
-      Advert.Public.payout_participant(assignment2, participant)
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment1, participant))
+
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment2, participant))
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
@@ -197,7 +203,7 @@ defmodule Systems.Advert.PublicTest do
                Bookkeeping.Public.balance({:wallet, "fake_currency", participant.id})
     end
 
-    test "payout_participant/2 Two transactions of two participants", %{
+    test "approve_reward: two transactions of two participants", %{
       fund: fund,
       user: user
     } do
@@ -220,10 +226,17 @@ defmodule Systems.Advert.PublicTest do
       Fund.Factories.create_reward(assignment1, participant2, fund)
       Fund.Factories.create_reward(assignment2, participant2, fund)
 
-      Advert.Public.payout_participant(assignment1, participant1)
-      Advert.Public.payout_participant(assignment2, participant1)
-      Advert.Public.payout_participant(assignment1, participant2)
-      Advert.Public.payout_participant(assignment2, participant2)
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment1, participant1))
+
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment2, participant1))
+
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment1, participant2))
+
+      {:ok, _} =
+        approve_reward(Assignment.Private.reward_idempotence_key(assignment2, participant2))
 
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
