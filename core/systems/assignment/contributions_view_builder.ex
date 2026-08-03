@@ -3,22 +3,20 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
 
   alias Systems.Assignment
   alias Systems.Crew
-  alias Systems.Fund
   alias Systems.Workflow
 
   @section_keys [:pending, :declined, :confirmed]
 
   def view_model(
-        %Assignment.Model{crew: %Crew.Model{} = crew, fund: %Fund.Model{} = fund} = assignment,
+        %Assignment.Model{crew: %Crew.Model{} = crew} = assignment,
         %{} = assigns
       ) do
     context = %{
-      fund: fund,
+      assignment: assignment,
       members_by_user_id: members_by_user_id(crew),
       completed_task_counts_by_user_id:
         Crew.Public.task_status_counts_by_user(crew, [:completed]),
-      total_task_count: total_task_count(assignment),
-      participation_ids_by_user_id: participation_ids_by_user_id(assignment)
+      total_task_count: total_task_count(assignment)
     }
 
     %{
@@ -33,13 +31,10 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     |> Enum.reject(&is_nil/1)
   end
 
-  defp section(:pending = key, %{fund: fund, completed_task_counts_by_user_id: counts} = context) do
+  defp section(:pending = key, %{assignment: assignment} = context) do
     rows =
-      fund
-      |> Fund.Public.list_pending_approvals([])
-      |> Enum.filter(fn %Fund.RewardModel{user_id: user_id} ->
-        Map.get(counts, user_id, 0) > 0
-      end)
+      assignment
+      |> Assignment.Public.list_pending_participations()
       |> Enum.map(&row(key, &1, context))
 
     {key,
@@ -51,18 +46,15 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
      }}
   end
 
-  defp section(:declined = key, %{fund: fund} = context) do
-    rewards =
-      fund
-      |> Fund.Public.list_rejected_rewards([])
-      |> Enum.sort_by(& &1.rejected_at, {:desc, NaiveDateTime})
+  defp section(:declined = key, %{assignment: assignment} = context) do
+    rejected = Assignment.Public.list_rejected_participations(assignment)
 
-    case rewards do
+    case rejected do
       [] ->
         nil
 
       _ ->
-        rows = Enum.map(rewards, &row(key, &1, context))
+        rows = Enum.map(rejected, &row(key, &1, context))
 
         {key,
          %{
@@ -74,11 +66,10 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     end
   end
 
-  defp section(:confirmed = key, %{fund: fund} = context) do
+  defp section(:confirmed = key, %{assignment: assignment} = context) do
     rows =
-      fund
-      |> Fund.Public.list_confirmed_rewards([])
-      |> Enum.sort_by(& &1.id, :desc)
+      assignment
+      |> Assignment.Public.list_accepted_participations()
       |> Enum.map(&row(key, &1, context))
 
     {key,
@@ -92,51 +83,45 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
 
   defp row(
          :pending,
-         %Fund.RewardModel{id: reward_id, user_id: user_id},
+         %Assignment.ParticipationModel{id: id, user_id: user_id},
          %{
            completed_task_counts_by_user_id: counts,
            members_by_user_id: mbi,
-           participation_ids_by_user_id: pids,
            total_task_count: total
          }
        ) do
     %{
-      reward_id: reward_id,
-      user_id: user_id,
-      participation_id: Map.get(pids, user_id),
-      member_public_id: member_public_id(mbi, user_id) || reward_id,
+      participation_id: id,
+      member_public_id: member_public_id(mbi, user_id) || id,
       completed_task_count: Map.get(counts, user_id, 0),
       total_task_count: total
     }
   end
 
-  defp row(:confirmed, %Fund.RewardModel{id: reward_id, user_id: user_id}, %{
-         members_by_user_id: mbi,
-         participation_ids_by_user_id: pids
+  defp row(:confirmed, %Assignment.ParticipationModel{id: id, user_id: user_id}, %{
+         members_by_user_id: mbi
        }) do
     %{
-      reward_id: reward_id,
-      participation_id: Map.get(pids, user_id),
-      member_public_id: member_public_id(mbi, user_id) || reward_id
+      participation_id: id,
+      member_public_id: member_public_id(mbi, user_id) || id
     }
   end
 
   defp row(
          :declined,
-         %Fund.RewardModel{
-           id: reward_id,
+         %Assignment.ParticipationModel{
+           id: id,
            user_id: user_id,
            rejected_at: rejected_at,
-           rejection_reason: rejection_reason
+           rejected_message: rejected_message
          },
-         %{members_by_user_id: mbi, participation_ids_by_user_id: pids}
+         %{members_by_user_id: mbi}
        ) do
     %{
-      reward_id: reward_id,
-      participation_id: Map.get(pids, user_id),
-      member_public_id: member_public_id(mbi, user_id) || reward_id,
+      participation_id: id,
+      member_public_id: member_public_id(mbi, user_id) || id,
       rejected_at: rejected_at,
-      rejection_reason: rejection_reason
+      rejection_reason: rejected_message
     }
   end
 
@@ -150,12 +135,6 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     crew
     |> Crew.Public.list_members()
     |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
-  end
-
-  defp participation_ids_by_user_id(%Assignment.Model{} = assignment) do
-    assignment
-    |> Assignment.Public.list_participations()
-    |> Map.new(fn %Assignment.ParticipationModel{user_id: user_id, id: id} -> {user_id, id} end)
   end
 
   defp member_public_id(members_by_user_id, user_id) do

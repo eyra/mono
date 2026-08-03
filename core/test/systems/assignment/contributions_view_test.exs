@@ -49,7 +49,9 @@ defmodule Systems.Assignment.ContributionsViewTest do
     idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
     {:ok, _} = Fund.Public.create_reward(assignment.fund, 1000, participant, idempotence_key)
     {:ok, _} = Fund.Public.mark_pending_approval(idempotence_key)
-    {:ok, _} = Assignment.Public.obtain_participation(assignment, participant)
+
+    {:ok, participation} = Assignment.Public.obtain_participation(assignment, participant)
+    {:ok, _} = Assignment.Public.complete_participation(participation)
 
     task =
       Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
@@ -79,16 +81,10 @@ defmodule Systems.Assignment.ContributionsViewTest do
       refute view |> has_element?("[data-testid='contributions-declined']")
     end
 
-    test "mounts the declined sub-component when there is at least one declined reward",
-         %{conn: conn, context: context, participant: participant, fund: fund} do
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-rejected-#{System.unique_integer([:positive])}",
-        amount: 300,
-        status: :rejected,
-        rejected_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        user: participant,
-        fund: fund
-      })
+    test "mounts the declined sub-component when there is at least one declined participation",
+         %{conn: conn, context: context, assignment: assignment, participant: participant} do
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, participant)
+      {:ok, _} = Assignment.Public.reject_participation(participation, "not eligible")
 
       {:ok, view, _html} = mount_view(conn, context)
       assert view |> has_element?("[data-testid='contributions-declined']")

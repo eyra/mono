@@ -106,7 +106,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
     ~H"""
     <tr
       class="text-bodymedium font-body"
-      data-testid={"pending-row-#{@row.reward_id}"}
+      data-testid={"pending-row-#{@row.participation_id}"}
     >
       <td class="py-3 pr-8">
         <%= @labels.subject_label %>
@@ -114,7 +114,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
       </td>
       <td
         class={"py-3 pr-8 " <> tasks_class(@row)}
-        data-testid={"tasks-finished-#{@row.reward_id}"}
+        data-testid={"tasks-finished-#{@row.participation_id}"}
       >
         <%= tasks_label(@row, @labels) %>
       </td>
@@ -132,7 +132,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
             icon_align: :left,
             label: @labels.decline_link
           }}
-          testid={"decline-#{@row.reward_id}"}
+          testid={"decline-#{@row.participation_id}"}
         />
       </td>
     </tr>

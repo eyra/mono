@@ -178,6 +178,48 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Participations that have been submitted but not yet reviewed — the
+  "pending" section of the Contributions tab. Ordered oldest-first so the
+  reviewer works through them FIFO.
+  """
+  def list_pending_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where:
+        p.assignment_id == ^assignment.id and not is_nil(p.completed_at) and
+          is_nil(p.accepted_at) and is_nil(p.rejected_at),
+      order_by: [asc: p.completed_at, asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Participations that have been accepted by the owner — the "confirmed"
+  section. Most-recently-accepted first.
+  """
+  def list_accepted_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id and not is_nil(p.accepted_at),
+      order_by: [desc: p.accepted_at, desc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Participations that have been rejected by the owner — the "declined"
+  section. Most-recently-rejected first.
+  """
+  def list_rejected_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id and not is_nil(p.rejected_at),
+      order_by: [desc: p.rejected_at, desc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
   def list_user_ids(assignment_ids) when is_list(assignment_ids) do
     from(u in User,
       join: m in Crew.MemberModel,

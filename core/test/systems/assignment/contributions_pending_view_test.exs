@@ -16,8 +16,6 @@ defmodule Systems.Assignment.ContributionsPendingViewTest do
   defp row(overrides \\ %{}) do
     Map.merge(
       %{
-        reward_id: 1,
-        user_id: 100,
         participation_id: 500,
         member_public_id: 1,
         completed_task_count: 1,
@@ -39,7 +37,7 @@ defmodule Systems.Assignment.ContributionsPendingViewTest do
   end
 
   test "renders one row per pending contribution" do
-    html = render_view([row(%{reward_id: 42})])
+    html = render_view([row(%{participation_id: 42})])
 
     refute html =~ ~s(data-testid="contributions-pending-empty")
     assert html =~ ~s(data-testid="pending-row-42")
@@ -50,7 +48,8 @@ defmodule Systems.Assignment.ContributionsPendingViewTest do
   end
 
   test "styles the tasks label as warning when not all tasks are finished" do
-    html = render_view([row(%{reward_id: 7, completed_task_count: 1, total_task_count: 3})])
+    html =
+      render_view([row(%{participation_id: 7, completed_task_count: 1, total_task_count: 3})])
 
     assert html =~ ~s(text-warning)
     assert html =~ ~s(data-testid="tasks-finished-7")

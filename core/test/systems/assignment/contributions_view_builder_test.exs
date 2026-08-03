@@ -73,17 +73,11 @@ defmodule Systems.Assignment.ContributionsViewBuilderTest do
     setup do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
-      %{fund: fund, crew: crew} = assignment
+      %{crew: crew} = assignment
       _member = Crew.Factories.create_member(crew, user)
 
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-rejected-#{System.unique_integer([:positive])}",
-        amount: 500,
-        status: :rejected,
-        rejected_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        user: user,
-        fund: fund
-      })
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
+      {:ok, _} = Assignment.Public.reject_participation(participation, "not eligible")
 
       assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
       %{assignment: assignment}

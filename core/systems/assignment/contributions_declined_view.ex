@@ -62,7 +62,7 @@ defmodule Systems.Assignment.ContributionsDeclinedView do
     ~H"""
     <tr
       class="text-bodymedium font-body"
-      data-testid={"contributions-declined-row-#{@row.reward_id}"}
+      data-testid={"contributions-declined-row-#{@row.participation_id}"}
     >
       <td class="py-3 pr-8 whitespace-nowrap">
         <%= @labels.subject_label %>
@@ -70,13 +70,13 @@ defmodule Systems.Assignment.ContributionsDeclinedView do
       </td>
       <td
         class="py-3 pr-8 text-grey2 whitespace-nowrap"
-        data-testid={"contributions-declined-date-#{@row.reward_id}"}
+        data-testid={"contributions-declined-date-#{@row.participation_id}"}
       >
         <%= format_date(@row.rejected_at) %>
       </td>
       <td
         class="py-3 text-delete w-full max-w-0"
-        data-testid={"contributions-declined-reason-#{@row.reward_id}"}
+        data-testid={"contributions-declined-reason-#{@row.participation_id}"}
       >
         <div class="relative group cursor-help">
           <div class="truncate">

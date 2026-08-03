@@ -13,8 +13,8 @@ defmodule Systems.Assignment.ContributionsConfirmedViewTest do
     )
   end
 
-  defp row(reward_id, member_public_id \\ nil) do
-    %{reward_id: reward_id, member_public_id: member_public_id || reward_id}
+  defp row(participation_id, member_public_id \\ nil) do
+    %{participation_id: participation_id, member_public_id: member_public_id || participation_id}
   end
 
   test "renders the confirmed section container" do

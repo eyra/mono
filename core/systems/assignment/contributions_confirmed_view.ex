@@ -66,7 +66,7 @@ defmodule Systems.Assignment.ContributionsConfirmedView do
     ~H"""
     <tr
       class="text-bodymedium font-body"
-      data-testid={"contributions-confirmed-row-#{@row.reward_id}"}
+      data-testid={"contributions-confirmed-row-#{@row.participation_id}"}
     >
       <td class="py-3">
         <%= @labels.subject_label %>

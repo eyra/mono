@@ -13,10 +13,10 @@ defmodule Systems.Assignment.ContributionsDeclinedViewTest do
     )
   end
 
-  defp row(reward_id, opts \\ []) do
+  defp row(participation_id, opts \\ []) do
     %{
-      reward_id: reward_id,
-      member_public_id: Keyword.get(opts, :member_public_id, reward_id),
+      participation_id: participation_id,
+      member_public_id: Keyword.get(opts, :member_public_id, participation_id),
       rejected_at: Keyword.get(opts, :rejected_at, ~N[2026-01-01 00:00:00]),
       rejection_reason: Keyword.get(opts, :rejection_reason, "not eligible")
     }
