@@ -98,12 +98,20 @@ defmodule Systems.Payment.Provider do
   """
   @type lifecycle_status :: :pending | :completed | :failed
 
+  @typedoc """
+  `reference` carries back the caller's own `idempotence_key`, which each adapter
+  stores alongside the transaction. It is the only identifier on a pay-in that
+  survives a database restore — `invoice_id` comes from a sequence a restore
+  rewinds — so it is what a provider→local scan matches on.
+  """
   @type transaction :: %{
           uid: String.t(),
           status: lifecycle_status(),
           raw_status: String.t(),
           payment_url: String.t() | nil,
-          amount: integer()
+          amount: integer(),
+          reference: String.t() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """

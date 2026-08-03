@@ -9,6 +9,7 @@ defmodule Systems.Payment.Provider.OPPTest do
 
   alias Systems.Payment.Provider.OPP
   alias Systems.Payment.Error
+  alias Systems.Payment.Transaction
 
   setup do
     bypass = Bypass.open()
@@ -311,6 +312,110 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:ok, %{status: :pending, raw_status: "some_future_status"}} =
                OPP.get_withdrawal("w_1")
+    end
+  end
+
+  # invoice_id comes from a Postgres sequence a restore rewinds, so it cannot
+  # identify a pay-in across one. The idempotence key embeds a UUID and can, but
+  # it only travels as an HTTP header — these pin it into metadata instead, which
+  # is what a provider-side listing can actually read back.
+  describe "create_transaction/1 reference metadata" do
+    defp transaction_request(idempotence_key) do
+      %Transaction.Request{
+        merchant_uid: "m_1",
+        total_amount: 1000,
+        currency: :EUR,
+        invoice_id: "NEXT-NL-0128",
+        idempotence_key: idempotence_key,
+        description: %Transaction.Description{
+          platform: "Next",
+          assignment: "Study",
+          participant_count: 2,
+          amount_per_participant: 500
+        },
+        metadata: %Transaction.Metadata{
+          contact_person: "Researcher #1",
+          study_title: "Study",
+          study_goal: "Goal",
+          participant_count: 2,
+          amount_per_participant: 500
+        }
+      }
+    end
+
+    test "sends the idempotence key as metadata.reference", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/transactions", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        assert %{"metadata" => metadata} = Jason.decode!(raw)
+        assert metadata["reference"] == "pay_in:fund=1:abc-uuid"
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "created"}>)
+      end)
+
+      assert {:ok, _} = OPP.create_transaction(transaction_request("pay_in:fund=1:abc-uuid"))
+    end
+
+    test "keeps sending invoice_id alongside it", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/transactions", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        assert %{"metadata" => metadata} = Jason.decode!(raw)
+        assert metadata["invoice_id"] == "NEXT-NL-0128"
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "created"}>)
+      end)
+
+      assert {:ok, _} = OPP.create_transaction(transaction_request("pay_in:fund=1:abc-uuid"))
+    end
+
+    test "reads the reference back off a retrieved transaction", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "total_amount": 1000, "created": 1785329635, > <>
+            ~s<"metadata": [{"key": "reference", "value": "pay_in:fund=1:abc-uuid"}]}>
+        )
+      end)
+
+      assert {:ok, %{reference: "pay_in:fund=1:abc-uuid", created: created}} =
+               OPP.get_transaction("t_1")
+
+      assert DateTime.to_unix(created) == 1_785_329_635
+    end
+
+    test "reads the amount OPP echoes back as `amount`, not the posted `total_amount`",
+         %{bypass: bypass} do
+      # OPP returns the value under `amount` and leaves `total_amount` null on
+      # reads, so reading only total_amount reported 0 for every transaction.
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "amount": 1440, "total_amount": null}>
+        )
+      end)
+
+      assert {:ok, %{amount: 1440}} = OPP.get_transaction("t_1")
+    end
+
+    test "still reads total_amount when that is the field present", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "completed", "total_amount": 999}>)
+      end)
+
+      assert {:ok, %{amount: 999}} = OPP.get_transaction("t_1")
+    end
+
+    test "leaves the reference nil for a transaction created before it was sent",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "total_amount": 1000, > <>
+            ~s<"metadata": [{"key": "invoice_id", "value": "NEXT-NL-0128"}]}>
+        )
+      end)
+
+      assert {:ok, %{reference: nil}} = OPP.get_transaction("t_1")
     end
   end
 

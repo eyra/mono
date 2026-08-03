@@ -118,7 +118,7 @@ defmodule Systems.Payment.Provider.OPP do
         total_amount: total_amount,
         currency: Map.fetch!(@currency_mapping, currency),
         description: Transaction.Description.format(description, invoice_id),
-        metadata: Transaction.Metadata.to_map(metadata, invoice_id),
+        metadata: transaction_metadata(metadata, invoice_id, idempotence_key),
         notify_url: notify_url,
         products: [
           %{
@@ -319,7 +319,12 @@ defmodule Systems.Payment.Provider.OPP do
       status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
       payment_url: Map.get(data, "redirect_url"),
-      amount: Map.get(data, "total_amount", 0)
+      # `total_amount` is what we POST, but OPP echoes the value back as `amount`
+      # and leaves total_amount null, so reading only the former reported 0 for
+      # every retrieved transaction. Accept either.
+      amount: Map.get(data, "amount") || Map.get(data, "total_amount", 0),
+      reference: metadata_value(Map.get(data, "metadata"), "reference"),
+      created: parse_timestamp(Map.get(data, "created"))
     }
   end
 
@@ -334,6 +339,20 @@ defmodule Systems.Payment.Provider.OPP do
       amount: Map.get(data, "amount", 0),
       created: parse_timestamp(Map.get(data, "created"))
     }
+  end
+
+  # Every object we create at OPP carries the caller's idempotence key in
+  # metadata under `reference` (withdrawals have a real `reference` field and use
+  # that instead), so a provider→local scan can identify any of them the same way.
+  #
+  # `invoice_id` cannot serve that purpose: it comes from a Postgres sequence,
+  # which a restore rewinds, so post-restore a new transaction is handed the same
+  # invoice_id an orphaned one already holds. The idempotence key embeds a UUID
+  # and stays unique across a restore.
+  defp transaction_metadata(%Transaction.Metadata{} = metadata, invoice_id, idempotence_key) do
+    metadata
+    |> Transaction.Metadata.to_map(invoice_id)
+    |> Map.put(:reference, idempotence_key)
   end
 
   # A charge carries no `reference` field of its own, so `transfer_to_merchant/4`

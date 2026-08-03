@@ -90,14 +90,26 @@ defmodule Systems.Payment.Provider.Local do
        status: :pending,
        raw_status: "created",
        payment_url: "#{CoreWeb.Endpoint.url()}/payment/local/#{uid}",
-       amount: total_amount
+       amount: total_amount,
+       reference: idempotence_key,
+       created: nil
      }}
   end
 
   @impl true
   def get_transaction(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_transaction uid=#{uid}")
-    {:ok, %{uid: uid, status: :pending, raw_status: "created", payment_url: nil, amount: 0}}
+
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       payment_url: nil,
+       amount: 0,
+       reference: nil,
+       created: nil
+     }}
   end
 
   # Withdrawals
