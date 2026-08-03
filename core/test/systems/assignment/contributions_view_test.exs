@@ -49,6 +49,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
     idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
     {:ok, _} = Fund.Public.create_reward(assignment.fund, 1000, participant, idempotence_key)
     {:ok, _} = Fund.Public.mark_pending_approval(idempotence_key)
+    {:ok, _} = Assignment.Public.obtain_participation(assignment, participant)
 
     task =
       Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
@@ -118,7 +119,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
   end
 
   describe "handle_info :submit_decline" do
-    test "rejects the reward for the given task_id",
+    test "rejects the reward for the given participation_id",
          %{
            conn: conn,
            context: context,
@@ -127,10 +128,18 @@ defmodule Systems.Assignment.ContributionsViewTest do
            crew: crew,
            member: member
          } do
-      {idempotence_key, task} = create_pending_contribution(assignment, participant, crew, member)
+      {idempotence_key, _task} =
+        create_pending_contribution(assignment, participant, crew, member)
+
+      {:ok, participation} =
+        Assignment.Public.obtain_participation(assignment, participant)
 
       {:ok, view, _html} = mount_view(conn, context)
-      send(view.pid, {:submit_decline, %{task_id: task.id, reason: "bad data"}})
+
+      send(
+        view.pid,
+        {:submit_decline, %{participation_id: participation.id, reason: "bad data"}}
+      )
 
       _ = render(view)
 

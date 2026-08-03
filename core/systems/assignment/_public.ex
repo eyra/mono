@@ -989,6 +989,73 @@ defmodule Systems.Assignment.Public do
   end
 
   @doc """
+  Marks a participation as accepted — the owner confirmed the contribution.
+  Sets `accepted_at` and dispatches `{:assignment_participation, :accepted}`.
+  Idempotent.
+  """
+  def accept_participation(id) when is_integer(id) do
+    case Repo.get(Assignment.ParticipationModel, id) do
+      nil -> {:error, :participation_not_found}
+      participation -> accept_participation(participation)
+    end
+  end
+
+  def accept_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}} = p),
+    do: {:ok, p}
+
+  def accept_participation(%Assignment.ParticipationModel{} = participation) do
+    changeset =
+      participation
+      |> Assignment.ParticipationModel.changeset(%{accepted_at: Timestamp.naive_now()})
+
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :accepted})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
+    end
+  end
+
+  @doc """
+  Marks a participation as rejected — the owner declined the contribution.
+  Sets `rejected_at` + `rejected_message` and dispatches
+  `{:assignment_participation, :rejected}`. Idempotent.
+  """
+  def reject_participation(id, message) when is_integer(id) do
+    case Repo.get(Assignment.ParticipationModel, id) do
+      nil -> {:error, :participation_not_found}
+      participation -> reject_participation(participation, message)
+    end
+  end
+
+  def reject_participation(
+        %Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}} = p,
+        _message
+      ),
+      do: {:ok, p}
+
+  def reject_participation(%Assignment.ParticipationModel{} = participation, message)
+      when is_binary(message) or is_nil(message) do
+    changeset =
+      participation
+      |> Assignment.ParticipationModel.changeset(%{
+        rejected_at: Timestamp.naive_now(),
+        rejected_message: message
+      })
+
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :rejected})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
+    end
+  end
+
+  @doc """
   Users with `:owner` on the top of this assignment's auth tree — typically
   the owner(s) of the containing project. Assignment auth nodes rarely carry
   direct owner assignments; inheritance is via the project node.

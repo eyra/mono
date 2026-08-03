@@ -29,12 +29,12 @@ defmodule Systems.Assignment.ContributionsPendingView do
   @impl true
   def handle_event(
         "expand_decline",
-        %{"item" => user_id_str},
+        %{"item" => participation_id_str},
         %{assigns: %{rows: rows}} = socket
       ) do
-    user_id = String.to_integer(user_id_str)
+    participation_id = String.to_integer(participation_id_str)
 
-    case Enum.find(rows, &(&1.user_id == user_id)) do
+    case Enum.find(rows, &(&1.participation_id == participation_id)) do
       nil ->
         {:noreply, socket}
 
@@ -123,7 +123,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
           action={%{
             type: :send,
             event: "expand_decline",
-            item: to_string(@row.user_id),
+            item: to_string(@row.participation_id),
             target: @myself
           }}
           face={%{

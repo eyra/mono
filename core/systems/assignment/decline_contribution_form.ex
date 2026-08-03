@@ -12,7 +12,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
   render, so the first render is clean until the researcher tries to submit
   an invalid form.
 
-  On submit the form sends `{:submit_decline, %{task_id, reason}}` to the
+  On submit the form sends `{:submit_decline, %{participation_id, reason}}` to the
   parent LV process (`ContributionsView`) which runs the actual mutation.
   """
   use CoreWeb, :live_component
@@ -27,7 +27,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
   def update(
         %{
           id: id,
-          task_id: task_id,
+          participation_id: participation_id,
           subject_label: subject_label,
           live_nest: %{modal: %LiveNest.Modal{controller_pid: controller_pid}}
         },
@@ -38,7 +38,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
       socket
       |> assign(
         id: id,
-        task_id: task_id,
+        participation_id: participation_id,
         subject_label: subject_label,
         controller_pid: controller_pid,
         show_errors: false,
@@ -127,14 +127,23 @@ defmodule Systems.Assignment.DeclineContributionForm do
   def handle_event(
         "submit",
         _,
-        %{assigns: %{changeset: changeset, task_id: task_id, controller_pid: pid}} = socket
+        %{
+          assigns: %{
+            changeset: changeset,
+            participation_id: participation_id,
+            controller_pid: pid
+          }
+        } = socket
       ) do
     if changeset.valid? do
       reason = Changeset.get_field(changeset, :reason)
 
       socket =
         socket
-        |> publish_event({:submit_decline, %{task_id: task_id, reason: reason}}, pid)
+        |> publish_event(
+          {:submit_decline, %{participation_id: participation_id, reason: reason}},
+          pid
+        )
         |> assign(loading: true, show_errors: false)
         |> update_buttons()
 

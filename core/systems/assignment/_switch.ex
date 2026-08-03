@@ -74,6 +74,56 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
+  # Owner confirmed the contribution. Approve the reward (which triggers
+  # payout) and clear the PendingContributions next-action once no more
+  # participations are awaiting review.
+  @impl true
+  def intercept(
+        {:assignment_participation, :accepted} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if assignment.fund do
+      idempotence_key =
+        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
+
+      Systems.Fund.Public.approve_reward(idempotence_key)
+      clear_pending_payout_if_empty(assignment)
+    end
+
+    update_content_page(assignment, from_pid)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
+  # Owner declined the contribution. Reject the reward (rolling the deposit
+  # back into the fund) and clear the PendingContributions next-action once
+  # no more participations are awaiting review.
+  @impl true
+  def intercept(
+        {:assignment_participation, :rejected} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if assignment.fund do
+      idempotence_key =
+        Assignment.Public.idempotence_key(assignment.id, participation.user_id)
+
+      Systems.Fund.Public.reject_reward(idempotence_key, participation.rejected_message)
+      clear_pending_payout_if_empty(assignment)
+    end
+
+    update_content_page(assignment, from_pid)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
   @impl true
   def intercept(
         {:content_page, _} = signal,

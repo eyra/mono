@@ -17,7 +17,8 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
       members_by_user_id: members_by_user_id(crew),
       completed_task_counts_by_user_id:
         Crew.Public.task_status_counts_by_user(crew, [:completed]),
-      total_task_count: total_task_count(assignment)
+      total_task_count: total_task_count(assignment),
+      participation_ids_by_user_id: participation_ids_by_user_id(assignment)
     }
 
     %{
@@ -95,12 +96,14 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
          %{
            completed_task_counts_by_user_id: counts,
            members_by_user_id: mbi,
+           participation_ids_by_user_id: pids,
            total_task_count: total
          }
        ) do
     %{
       reward_id: reward_id,
       user_id: user_id,
+      participation_id: Map.get(pids, user_id),
       member_public_id: member_public_id(mbi, user_id) || reward_id,
       completed_task_count: Map.get(counts, user_id, 0),
       total_task_count: total
@@ -108,10 +111,12 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
   end
 
   defp row(:confirmed, %Fund.RewardModel{id: reward_id, user_id: user_id}, %{
-         members_by_user_id: mbi
+         members_by_user_id: mbi,
+         participation_ids_by_user_id: pids
        }) do
     %{
       reward_id: reward_id,
+      participation_id: Map.get(pids, user_id),
       member_public_id: member_public_id(mbi, user_id) || reward_id
     }
   end
@@ -124,10 +129,11 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
            rejected_at: rejected_at,
            rejection_reason: rejection_reason
          },
-         %{members_by_user_id: mbi}
+         %{members_by_user_id: mbi, participation_ids_by_user_id: pids}
        ) do
     %{
       reward_id: reward_id,
+      participation_id: Map.get(pids, user_id),
       member_public_id: member_public_id(mbi, user_id) || reward_id,
       rejected_at: rejected_at,
       rejection_reason: rejection_reason
@@ -144,6 +150,12 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     crew
     |> Crew.Public.list_members()
     |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
+  end
+
+  defp participation_ids_by_user_id(%Assignment.Model{} = assignment) do
+    assignment
+    |> Assignment.Public.list_participations()
+    |> Map.new(fn %Assignment.ParticipationModel{user_id: user_id, id: id} -> {user_id, id} end)
   end
 
   defp member_public_id(members_by_user_id, user_id) do

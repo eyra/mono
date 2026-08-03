@@ -18,6 +18,7 @@ defmodule Systems.Assignment.ContributionsPendingViewTest do
       %{
         reward_id: 1,
         user_id: 100,
+        participation_id: 500,
         member_public_id: 1,
         completed_task_count: 1,
         total_task_count: 1

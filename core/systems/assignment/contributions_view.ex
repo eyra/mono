@@ -5,7 +5,6 @@ defmodule Systems.Assignment.ContributionsView do
 
   alias Frameworks.Pixel.Text
   alias Systems.Assignment
-  alias Systems.Crew
 
   @decline_modal_id "decline-contribution-modal"
 
@@ -24,75 +23,58 @@ defmodule Systems.Assignment.ContributionsView do
   def handle_view_model_updated(socket), do: socket
 
   @impl true
-  def handle_info(:confirm_all, %{assigns: %{model: assignment, vm: vm}} = socket) do
-    task_ids =
-      vm
-      |> pending_rows()
-      |> Enum.flat_map(&completed_task_ids_for(assignment, &1.user_id))
-
-    result = Assignment.Public.accept_tasks(task_ids)
-
-    socket =
-      case result do
+  def handle_info(:confirm_all, %{assigns: %{vm: vm}} = socket) do
+    vm
+    |> pending_rows()
+    |> Enum.map(& &1.participation_id)
+    |> Enum.reject(&is_nil/1)
+    |> Enum.each(fn id ->
+      case Assignment.Public.accept_participation(id) do
         {:ok, _} ->
-          socket
+          :ok
 
-        _ ->
-          Logger.warning("[ContributionsView] accept_tasks failed: #{inspect(result)}")
-
-          Frameworks.Pixel.Flash.push_error(
-            socket,
-            dgettext("eyra-assignment", "contributions.confirm_all.error")
+        error ->
+          Logger.warning(
+            "[ContributionsView] accept_participation #{id} failed: #{inspect(error)}"
           )
       end
+    end)
 
     {:noreply, socket}
   end
 
   @impl true
-  def handle_info(
-        {:show_decline_modal, %{user_id: user_id} = row},
-        %{assigns: %{model: assignment}} = socket
-      ) do
-    case completed_task_ids_for(assignment, user_id) do
-      [task_id | _] ->
-        modal =
-          LiveNest.Modal.prepare_live_component(
-            @decline_modal_id,
-            Assignment.DeclineContributionForm,
-            params: [
-              task_id: task_id,
-              subject_label: subject_label(row)
-            ],
-            style: :compact
-          )
+  def handle_info({:show_decline_modal, %{participation_id: participation_id} = row}, socket)
+      when is_integer(participation_id) do
+    modal =
+      LiveNest.Modal.prepare_live_component(
+        @decline_modal_id,
+        Assignment.DeclineContributionForm,
+        params: [
+          participation_id: participation_id,
+          subject_label: subject_label(row)
+        ],
+        style: :compact
+      )
 
-        {:noreply, socket |> present_modal(modal)}
-
-      [] ->
-        {:noreply, socket}
-    end
+    {:noreply, socket |> present_modal(modal)}
   end
 
   @impl true
   def handle_info(
-        {:submit_decline, %{task_id: task_id, reason: reason}},
-        %{assigns: %{model: assignment}} = socket
+        {:submit_decline, %{participation_id: participation_id, reason: reason}},
+        socket
       )
-      when is_integer(task_id) do
-    result =
-      Assignment.Public.reject_task_by_id(assignment, task_id, %{
-        category: :other,
-        message: reason
-      })
-
+      when is_integer(participation_id) do
     socket =
-      case result do
+      case Assignment.Public.reject_participation(participation_id, reason) do
         {:ok, _} ->
           socket
 
-        _ ->
-          Logger.warning("[ContributionsView] reject_task #{task_id} failed: #{inspect(result)}")
+        error ->
+          Logger.warning(
+            "[ContributionsView] reject_participation #{participation_id} failed: #{inspect(error)}"
+          )
 
           Frameworks.Pixel.Flash.push_error(
             socket,
@@ -118,13 +100,6 @@ defmodule Systems.Assignment.ContributionsView do
       {_, %{rows: rows}} -> rows
       _ -> []
     end
-  end
-
-  defp completed_task_ids_for(%Assignment.Model{crew: crew}, user_id) do
-    crew
-    |> Crew.Public.list_tasks_for_user(user_id)
-    |> Enum.filter(&(&1.status == :completed))
-    |> Enum.map(& &1.id)
   end
 
   defp subject_label(%{member_public_id: member_public_id}) do
