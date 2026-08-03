@@ -364,7 +364,10 @@ defmodule Systems.Fund.Public do
 
   Idempotent on `:approved`/`:paid`. Overrides a `:rejected` reward by
   flipping it back to `:approved` and paying from `fund.available` (the
-  deposit was already rolled back when the reward was rejected).
+  deposit was already rolled back when the reward was rejected). The
+  balance guard on the override path mirrors `guard_fund_balance` on
+  reserve: only `:legal` currencies are constrained by real available
+  balance; `:virtual` currencies have no such constraint.
   """
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
       when status in [:approved, :paid],
@@ -373,13 +376,8 @@ defmodule Systems.Fund.Public do
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected} = reward) do
     multi
     |> Multi.run(:approve_guard, fn _, _ ->
-      %{fund: fund, amount: amount} = Repo.preload(reward, :fund)
-
-      if Fund.Model.amount_available(fund) < amount do
-        {:error, :insufficient_fund}
-      else
-        {:ok, :ok}
-      end
+      %{fund: fund, amount: amount} = Repo.preload(reward, fund: [:currency])
+      check_available_balance(fund, amount)
     end)
     |> cas_status_step(:reward, reward, [:rejected], status: :approved, rejected_at: nil)
     |> approve_payment_step(reward)
@@ -391,6 +389,16 @@ defmodule Systems.Fund.Public do
     |> cas_status_step(:reward, reward, [:reserved, :pending_approval], status: :approved)
     |> approve_payment_step(reward)
   end
+
+  defp check_available_balance(%Fund.Model{currency: %{type: :legal}} = fund, amount) do
+    if Fund.Model.amount_available(fund) < amount do
+      {:error, :insufficient_fund}
+    else
+      {:ok, :ok}
+    end
+  end
+
+  defp check_available_balance(%Fund.Model{}, _amount), do: {:ok, :ok}
 
   # A reward must never be :approved with a nil payment_id.
   defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{}} = reward) do
