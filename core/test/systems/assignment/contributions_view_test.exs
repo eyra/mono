@@ -4,12 +4,14 @@ defmodule Systems.Assignment.ContributionsViewTest do
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   import Systems.Fund.TestHelper
+  import Systems.NextAction.TestHelper
 
   alias Core.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Fund
+  alias Systems.NextAction
 
   setup ctx do
     isolate_signals(except: [Systems.Assignment.Switch])
@@ -112,6 +114,66 @@ defmodule Systems.Assignment.ContributionsViewTest do
 
       assert %Fund.RewardModel{status: :approved} =
                Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "approves multiple pending participations in one bulk action",
+         %{
+           conn: conn,
+           context: context,
+           assignment: assignment,
+           crew: crew,
+           participant: participant_a,
+           member: member_a
+         } do
+      {key_a, _} = create_pending_contribution(assignment, participant_a, crew, member_a)
+
+      participant_b = Factories.insert!(:member)
+      member_b = Crew.Factories.create_member(crew, participant_b)
+      {key_b, _} = create_pending_contribution(assignment, participant_b, crew, member_b)
+
+      {:ok, view, _html} = mount_view(conn, context)
+      send(view.pid, :confirm_all)
+      _ = render(view)
+
+      assert %Fund.RewardModel{status: :approved} = Fund.Public.get_reward(key_a, [])
+      assert %Fund.RewardModel{status: :approved} = Fund.Public.get_reward(key_b, [])
+    end
+
+    test "clears the PendingContributions NA once the pending queue drains",
+         %{
+           conn: conn,
+           context: context,
+           user: user,
+           assignment: %{id: id} = assignment,
+           crew: crew,
+           participant: participant_a,
+           member: member_a
+         } do
+      # Signed-in user is the assignment's owner (via top of the auth tree).
+      :ok =
+        Core.Authorization.assign_role(user, Core.Authorization.top_entity(assignment), :owner)
+
+      {_, _} = create_pending_contribution(assignment, participant_a, crew, member_a)
+
+      participant_b = Factories.insert!(:member)
+      member_b = Crew.Factories.create_member(crew, participant_b)
+      {_, _} = create_pending_contribution(assignment, participant_b, crew, member_b)
+
+      # Seed the NA the Switch would have created on the first :completed signal.
+      NextAction.Public.create_next_action(
+        [user],
+        Systems.Assignment.NextActions.PendingContributions,
+        key: "#{id}",
+        params: %{"assignment_id" => id}
+      )
+
+      assert_next_action(user, "/assignment/#{id}/content?tab=contributions")
+
+      {:ok, view, _html} = mount_view(conn, context)
+      send(view.pid, :confirm_all)
+      _ = render(view)
+
+      refute_next_action(user, "/assignment/#{id}/content?tab=contributions")
     end
   end
 
