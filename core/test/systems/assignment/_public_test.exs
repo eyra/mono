@@ -699,6 +699,105 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  defp completed_participation_with_reward do
+    user = Factories.insert!(:member)
+    %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
+
+    assignment =
+      Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+    {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+    {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+    {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
+    {:ok, participation} = Assignment.Public.complete_participation(participation)
+
+    {:ok, participation: participation, idempotence_key: idempotence_key}
+  end
+
+  describe "accept_participation/1" do
+    setup do
+      completed_participation_with_reward()
+    end
+
+    test "sets accepted_at on the participation", %{participation: participation} do
+      {:ok, updated} = Assignment.Public.accept_participation(participation)
+      assert %NaiveDateTime{} = updated.accepted_at
+    end
+
+    test "flips reward to :approved and pays out via signal chain", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.accept_participation(participation)
+
+      assert %{status: :approved, payment_id: payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(payment_id)
+    end
+
+    test "is idempotent — second call is a no-op", %{participation: participation} do
+      {:ok, once} = Assignment.Public.accept_participation(participation)
+      {:ok, twice} = Assignment.Public.accept_participation(once)
+
+      assert once.accepted_at == twice.accepted_at
+    end
+
+    test "also accepts by id", %{
+      participation: %{id: id},
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.accept_participation(id)
+
+      assert %{status: :approved} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
+  describe "reject_participation/2" do
+    setup do
+      completed_participation_with_reward()
+    end
+
+    test "sets rejected_at and rejected_message on the participation", %{
+      participation: participation
+    } do
+      {:ok, updated} = Assignment.Public.reject_participation(participation, "bad data")
+
+      assert %NaiveDateTime{} = updated.rejected_at
+      assert updated.rejected_message == "bad data"
+    end
+
+    test "flips reward to :rejected and rolls back the deposit via signal chain", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(participation, "bad data")
+
+      assert %{status: :rejected, deposit_id: nil} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "is idempotent — second call is a no-op", %{participation: participation} do
+      {:ok, once} = Assignment.Public.reject_participation(participation, "first reason")
+      {:ok, twice} = Assignment.Public.reject_participation(once, "second reason (ignored)")
+
+      assert once.rejected_at == twice.rejected_at
+      assert once.rejected_message == twice.rejected_message
+    end
+
+    test "also rejects by id", %{
+      participation: %{id: id},
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(id, "bad data")
+
+      assert %{status: :rejected} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
   describe "owners/1" do
     test "returns owners inherited from the top of the auth tree" do
       user = Factories.insert!(:member)
