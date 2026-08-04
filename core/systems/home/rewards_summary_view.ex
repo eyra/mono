@@ -234,7 +234,7 @@ defmodule Systems.Home.RewardsSummaryView do
       </Text.title2>
       <.spacing value="M" />
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="flex flex-col md:flex-row gap-16">
         <.column
           pill_label={@labels.pending_pill}
           pill_color="bg-warning"
@@ -246,14 +246,16 @@ defmodule Systems.Home.RewardsSummaryView do
           amount_cents={@approved_cents}
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
-          payout_enabled?={@payout_status == :none and @approved_cents > 0}
+          payout_enabled?={@approved_cents >= Fund.Public.payout_threshold_cents()}
           target={@myself}
         />
-        <.column
-          pill_label={@labels.rejected_pill}
-          pill_color="bg-delete"
-          amount_cents={@rejected_cents}
-        />
+        <%= if @rejected_cents > 0 do %>
+          <.column
+            pill_label={@labels.rejected_pill}
+            pill_color="bg-delete"
+            amount_cents={@rejected_cents}
+          />
+        <% end %>
       </div>
       <.payout_status_section status={@payout_status} labels={@labels} target={@myself} />
     </div>
@@ -343,10 +345,11 @@ defmodule Systems.Home.RewardsSummaryView do
             testid="payout-button"
           />
         </div>
+      <% else %>
+        <div class="text-bodysmall font-body text-grey2">
+          <%= @caption %>
+        </div>
       <% end %>
-      <div class="text-bodysmall font-body text-grey2">
-        <%= @caption %>
-      </div>
     </div>
     """
   end
