@@ -77,12 +77,43 @@ defmodule Systems.Account.MerchantOrphanReconciliation do
     if MapSet.member?(known, uid) do
       State.tally(state, :verified)
     else
-      Logger.error(
-        "[Account] orphan scan: merchant #{uid} is not recorded on any user — " <>
-          "the participant cannot be paid out and cannot re-register, manual review"
-      )
-
-      OrphanScan.record(state, :missing_locally, :merchant, merchant, %{}, :merchant)
+      flag(merchant, state)
     end
+  end
+
+  # Since the match deliberately cannot identify the person, the compliance
+  # fields are the triage signal: an empty shell needs no action, while a
+  # verified merchant with a bank account attached is urgent and unrecoverable
+  # without help. `overview_url` is the provider's own page for the account, so
+  # whoever picks the finding up has somewhere to start.
+  defp flag(
+         %{
+           uid: uid,
+           status: status,
+           kyc_level: kyc_level,
+           compliance_status: compliance_status,
+           overview_url: overview_url
+         } = merchant,
+         state
+       ) do
+    Logger.error(
+      "[Account] orphan scan: merchant #{uid} (status=#{status} kyc_level=#{kyc_level} " <>
+        "compliance=#{compliance_status}) is not recorded on any user — the participant " <>
+        "cannot be paid out and cannot re-register, manual review"
+    )
+
+    OrphanScan.record(
+      state,
+      :missing_locally,
+      :merchant,
+      merchant,
+      %{
+        status: status,
+        kyc_level: kyc_level,
+        compliance_status: compliance_status,
+        overview_url: overview_url
+      },
+      :merchant
+    )
   end
 end

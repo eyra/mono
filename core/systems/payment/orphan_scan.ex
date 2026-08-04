@@ -35,8 +35,29 @@ defmodule Systems.Payment.OrphanScan do
   listing — there are no rows to attribute it to, and the alternative (silently
   scanning nothing) would read as "no orphans found". `source` names the listing
   for the log line and the finding.
+
+  A truncated listing is the same hazard in subtler form: the objects it did
+  return are still scanned, but the run records that the sweep never reached the
+  end, so a partial pass cannot be read off the tally as a clean one.
   """
   def take_listing({{:ok, objects}, state}, _subject_type, _source), do: {objects, state}
+
+  def take_listing({{:truncated, objects}, state}, subject_type, source) do
+    Logger.error(
+      "[Payment] orphan scan: #{source} listing truncated at the provider paging cap — " <>
+        "#{length(objects)} scanned, anything older was never seen, manual review"
+    )
+
+    {objects,
+     record(
+       state,
+       :errors,
+       subject_type,
+       nil,
+       %{error: "listing truncated at paging cap"},
+       source
+     )}
+  end
 
   def take_listing({:circuit_open, state}, subject_type, source),
     do: {[], record(state, :skipped, subject_type, nil, %{reason: "circuit_open"}, source)}

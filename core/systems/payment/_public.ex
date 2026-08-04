@@ -32,8 +32,7 @@ defmodule Systems.Payment.Public do
   Every merchant the provider created at or after `since` — the provider-side
   input to the provider→local merchant scan.
   """
-  @spec list_recent_merchants(since :: DateTime.t()) ::
-          {:ok, [Provider.merchant()]} | {:error, Error.t()}
+  @spec list_recent_merchants(since :: DateTime.t()) :: Provider.listing(Provider.merchant())
   def list_recent_merchants(%DateTime{} = since) do
     provider().list_recent_merchants(since)
   end
@@ -223,7 +222,7 @@ defmodule Systems.Payment.Public do
   merchants — the provider-side input to the provider→local pay-in scan.
   """
   @spec list_recent_transactions(since :: DateTime.t()) ::
-          {:ok, [Provider.transaction()]} | {:error, Error.t()}
+          Provider.listing(Provider.transaction())
   def list_recent_transactions(%DateTime{} = since) do
     provider().list_recent_transactions(since)
   end
@@ -259,8 +258,7 @@ defmodule Systems.Payment.Public do
   Every withdrawal the provider created at or after `since`, across all
   merchants — the provider-side input to the provider→local pass.
   """
-  @spec list_recent_withdrawals(since :: DateTime.t()) ::
-          {:ok, [Provider.withdrawal()]} | {:error, Error.t()}
+  @spec list_recent_withdrawals(since :: DateTime.t()) :: Provider.listing(Provider.withdrawal())
   def list_recent_withdrawals(%DateTime{} = since) do
     provider().list_recent_withdrawals(since)
   end
@@ -306,8 +304,7 @@ defmodule Systems.Payment.Public do
   @doc """
   Every transfer the provider created at or after `since`, across all merchants.
   """
-  @spec list_recent_transfers(since :: DateTime.t()) ::
-          {:ok, [Provider.transfer()]} | {:error, Error.t()}
+  @spec list_recent_transfers(since :: DateTime.t()) :: Provider.listing(Provider.transfer())
   def list_recent_transfers(%DateTime{} = since) do
     provider().list_recent_transfers(since)
   end

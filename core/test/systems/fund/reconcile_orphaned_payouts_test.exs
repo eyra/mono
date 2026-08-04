@@ -218,6 +218,51 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       assert [%{outcome: :errors, subject_id: nil, details: %{source: "withdrawal"}}] = findings
     end
 
+    test "a truncated listing is recorded, so a partial sweep cannot read as a clean one" do
+      orphan = Ecto.UUID.generate()
+
+      expect(ProviderMock, :list_recent_withdrawals, fn _since ->
+        {:truncated, [withdrawal("payout=#{orphan},type=withdrawal,attempt=0")]}
+      end)
+
+      expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+
+      %{summary: summary, findings: findings} =
+        Fund.Public.reconcile_orphaned_payouts([], state())
+
+      assert summary.errors == 1
+
+      assert Enum.any?(
+               findings,
+               &(&1.outcome == :errors and &1.details.error =~ "truncated")
+             )
+    end
+
+    test "objects returned alongside a truncation are still scanned" do
+      orphan = Ecto.UUID.generate()
+
+      expect(ProviderMock, :list_recent_withdrawals, fn _since ->
+        {:truncated, [withdrawal("payout=#{orphan},type=withdrawal,attempt=0", uid: "wtd_lost")]}
+      end)
+
+      expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+
+      %{summary: summary, findings: findings} =
+        Fund.Public.reconcile_orphaned_payouts([], state())
+
+      assert summary.missing_locally == 1
+      assert Enum.any?(findings, &(&1.provider_uid == "wtd_lost"))
+    end
+
+    test "a truncated listing does not push the circuit breaker toward open" do
+      # It is a call that succeeded and returned partial data, not a fault.
+      expect(ProviderMock, :list_recent_withdrawals, fn _since -> {:truncated, []} end)
+      expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+
+      assert %{consecutive_failures: 0, circuit_open: false} =
+               Fund.Public.reconcile_orphaned_payouts([], state())
+    end
+
     test "an open circuit skips the pass rather than reporting no orphans" do
       open_circuit =
         Enum.reduce(1..5, state(), fn _i, acc ->

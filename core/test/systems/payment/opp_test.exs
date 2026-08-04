@@ -633,6 +633,24 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert {:error, %Error{code: :api_error}} =
                OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
     end
+
+    test "reports hitting the paging cap as :truncated, never as a complete listing",
+         %{bypass: bypass} do
+      # A listing that stops at the cap must not look like one that reached the
+      # end, or a sweep that never saw the older pages reads as finding nothing
+      # there. Every page is in-window and claims more follow, so paging only
+      # ends at the cap.
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        %{"page" => page} = URI.decode_query(conn.query_string)
+        item = withdrawal_json("wtd_#{page}", "payout=#{page}", unix("2026-07-20T12:00:00Z"))
+        Plug.Conn.resp(conn, 200, page_json([item], 9999))
+      end)
+
+      assert {:truncated, withdrawals} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      # Partial results are still returned — they may hold orphans.
+      assert length(withdrawals) == 50
+    end
   end
 
   describe "list_recent_transactions/1" do

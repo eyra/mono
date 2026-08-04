@@ -19,10 +19,10 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
   defp merchant(uid, opts \\ []) do
     %{
       uid: uid,
-      status: "live",
-      kyc_level: 100,
-      compliance_status: "verified",
-      overview_url: nil,
+      status: Keyword.get(opts, :status, "live"),
+      kyc_level: Keyword.get(opts, :kyc_level, 100),
+      compliance_status: Keyword.get(opts, :compliance_status, "verified"),
+      overview_url: Keyword.get(opts, :overview_url),
       created: Keyword.get(opts, :created, hours_ago(24))
     }
   end
@@ -59,6 +59,35 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
       assert summary.verified == 1
       assert summary.missing_locally == 0
       assert findings == []
+    end
+
+    test "records the compliance fields a resolver triages on" do
+      # The match deliberately cannot identify the person, so these are the only
+      # signal for whether a finding is an empty shell or a verified account with
+      # a bank account attached.
+      %{findings: [%{details: details}]} =
+        run([
+          merchant("mer_lost",
+            status: "live",
+            kyc_level: 200,
+            compliance_status: "verified",
+            overview_url: "https://opp.test/overview/mer_lost"
+          )
+        ])
+
+      assert %{
+               status: "live",
+               kyc_level: 200,
+               compliance_status: "verified",
+               overview_url: "https://opp.test/overview/mer_lost"
+             } = details
+    end
+
+    test "distinguishes an empty shell from a verified account" do
+      %{findings: [%{details: shell}]} =
+        run([merchant("mer_shell", kyc_level: 0, compliance_status: "unverified")])
+
+      assert %{kyc_level: 0, compliance_status: "unverified"} = shell
     end
 
     test "separates known from unknown in one batch" do

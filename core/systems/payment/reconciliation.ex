@@ -79,12 +79,16 @@ defmodule Systems.Payment.Reconciliation do
 
     case classify(with_backoff(fun, @max_retries)) do
       {:ok, _} = ok -> {ok, State.record_success(state)}
+      # Truncation is a provider call that succeeded and returned partial data,
+      # not a provider fault — it must not push the circuit breaker toward open.
+      {:truncated, _} = truncated -> {truncated, State.record_success(state)}
       :not_found -> {:not_found, State.record_success(state)}
       {:error, _} = error -> {error, State.record_failure(state)}
     end
   end
 
   defp classify({:ok, _} = ok), do: ok
+  defp classify({:truncated, _} = truncated), do: truncated
   defp classify({:error, %Payment.Error{code: :not_found}}), do: :not_found
   defp classify({:error, %Payment.Error{details: %{status: 404}}}), do: :not_found
   defp classify({:error, _} = error), do: error

@@ -2,6 +2,18 @@ defmodule Systems.Payment.Provider do
   alias Systems.Payment.Error
   alias Systems.Payment.Transaction
 
+  @typedoc """
+  Result of a bulk listing.
+
+  `{:truncated, objects}` means the adapter stopped short of the end — it hit its
+  own paging cap, so the objects returned are valid but incomplete. It is
+  deliberately not `{:ok, objects}`: a provider→local scan that cannot tell the
+  two apart would report the orphans it happened to see and a clean tally for
+  everything past the cap, which reads as "nothing wrong" precisely when the
+  provider holds more than we can walk.
+  """
+  @type listing(object) :: {:ok, [object]} | {:truncated, [object]} | {:error, Error.t()}
+
   # Merchants
 
   @type merchant :: %{
@@ -40,8 +52,7 @@ defmodule Systems.Payment.Provider do
   it matters most, since the local row a restore rolls back is the very one that
   recorded the merchant uid.
   """
-  @callback list_recent_merchants(since :: DateTime.t()) ::
-              {:ok, [merchant()]} | {:error, Error.t()}
+  @callback list_recent_merchants(since :: DateTime.t()) :: listing(merchant())
 
   @doc """
   Set (or add) a phone number on an existing merchant's primary contact,
@@ -152,8 +163,7 @@ defmodule Systems.Payment.Provider do
   merchants — the provider-side half of the provider→local pay-in scan. See
   `list_recent_withdrawals/1` for why this is not anchored to local state.
   """
-  @callback list_recent_transactions(since :: DateTime.t()) ::
-              {:ok, [transaction()]} | {:error, Error.t()}
+  @callback list_recent_transactions(since :: DateTime.t()) :: listing(transaction())
 
   # Withdrawals
 
@@ -214,8 +224,7 @@ defmodule Systems.Payment.Provider do
   Implementations page internally and apply the `since` cutoff themselves —
   callers get a complete list, oldest-cutoff enforced, no pagination to thread.
   """
-  @callback list_recent_withdrawals(since :: DateTime.t()) ::
-              {:ok, [withdrawal()]} | {:error, Error.t()}
+  @callback list_recent_withdrawals(since :: DateTime.t()) :: listing(withdrawal())
 
   # Transfers
 
@@ -252,6 +261,5 @@ defmodule Systems.Payment.Provider do
   The transfer-leg counterpart of `list_recent_withdrawals/1`; see there for why
   this is not anchored to local state.
   """
-  @callback list_recent_transfers(since :: DateTime.t()) ::
-              {:ok, [transfer()]} | {:error, Error.t()}
+  @callback list_recent_transfers(since :: DateTime.t()) :: listing(transfer())
 end

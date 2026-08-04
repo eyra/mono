@@ -427,9 +427,13 @@ defmodule Systems.Payment.Provider.OPP do
   # only reliable window.
   defp list_since(path, since, parse, page \\ 1, acc \\ [])
 
+  # Returns {:truncated, acc}, not {:ok, acc}: the caller has to be able to tell
+  # a complete listing from one that stopped at the cap, or a sweep that never
+  # reached the older pages is indistinguishable from one that found nothing
+  # there.
   defp list_since(path, _since, _parse, page, acc) when page > @max_pages do
     Logger.warning("[OPP] list_since #{path}: hit #{@max_pages}-page cap, results truncated")
-    {:ok, acc}
+    {:truncated, acc}
   end
 
   defp list_since(path, since, parse, page, acc) do
