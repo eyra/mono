@@ -31,6 +31,7 @@ defmodule Systems.Budget.TransactionOrphanReconciliation do
   alias Core.Repo
   alias Systems.Budget
   alias Systems.Payment
+  alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
 
   @doc """
@@ -43,37 +44,15 @@ defmodule Systems.Budget.TransactionOrphanReconciliation do
     {transactions, state} = list_recent_transactions(state, oldest)
 
     transactions
-    |> Enum.filter(&settled?(&1, newest))
+    |> Enum.filter(&OrphanScan.settled?(&1, newest))
     |> check_against_local(state)
   end
 
   defp list_recent_transactions(state, oldest) do
     state
     |> Payment.Public.reconcile_list_recent_transactions(oldest)
-    |> handle_listing()
+    |> OrphanScan.take_listing(:transaction, :transaction)
   end
-
-  # A failed or skipped listing yields nothing to scan, and is tallied once so it
-  # cannot be mistaken for a clean run.
-  defp handle_listing({{:ok, transactions}, state}), do: {transactions, state}
-
-  defp handle_listing({:circuit_open, state}),
-    do: {[], record(state, :skipped, nil, %{reason: "circuit_open"})}
-
-  defp handle_listing({{:error, reason}, state}) do
-    Logger.warning("[Budget] orphan scan: listing transactions failed: #{inspect(reason)}")
-    {[], record(state, :errors, nil, %{error: inspect(reason)})}
-  end
-
-  defp handle_listing({:not_found, state}) do
-    Logger.warning("[Budget] orphan scan: transaction listing returned not_found")
-    {[], record(state, :errors, nil, %{error: "listing not_found"})}
-  end
-
-  # A transaction younger than the min-age guard is still in flight: the local
-  # row may be committing right now, and flagging it would flap.
-  defp settled?(%{created: nil}, _newest), do: true
-  defp settled?(%{created: created}, newest), do: DateTime.compare(created, newest) != :gt
 
   defp check_against_local(transactions, state) do
     known = known_idempotence_keys(transactions)
@@ -120,35 +99,6 @@ defmodule Systems.Budget.TransactionOrphanReconciliation do
     end
   end
 
-  defp record(state, outcome, transaction, details) do
-    finding = %{
-      subject_type: :transaction,
-      subject_id: nil,
-      provider_uid: provider_uid(transaction),
-      local_status_before: nil,
-      provider_status: provider_status(transaction),
-      outcome: outcome,
-      details: Map.merge(details, transaction_details(transaction))
-    }
-
-    state
-    |> State.tally(outcome)
-    |> State.add_finding(finding)
-  end
-
-  defp provider_uid(%{uid: uid}), do: uid
-  defp provider_uid(nil), do: nil
-
-  defp provider_status(%{raw_status: raw_status}), do: raw_status
-  defp provider_status(nil), do: nil
-
-  defp transaction_details(nil), do: %{}
-
-  defp transaction_details(%{reference: reference, amount: amount, created: created}) do
-    %{
-      reference: reference,
-      amount: amount,
-      created: created && DateTime.to_iso8601(created)
-    }
-  end
+  defp record(state, outcome, transaction, details),
+    do: OrphanScan.record(state, outcome, :transaction, transaction, details, :transaction)
 end

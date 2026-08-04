@@ -27,6 +27,7 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
+  alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
 
   @doc """
@@ -46,47 +47,21 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   defp list_recent_withdrawals(state, oldest) do
     state
     |> Payment.Public.reconcile_list_recent_withdrawals(oldest)
-    |> handle_listing(:withdrawal)
+    |> OrphanScan.take_listing(:payout, :withdrawal)
   end
 
   defp list_recent_transfers(state, oldest) do
     state
     |> Payment.Public.reconcile_list_recent_transfers(oldest)
-    |> handle_listing(:transfer)
-  end
-
-  # A failed or skipped listing yields no objects to scan. It is tallied once for
-  # the whole leg — there are no rows to attribute it to, and the alternative
-  # (silently scanning nothing) would read as "no orphans found".
-  defp handle_listing({{:ok, objects}, state}, _leg), do: {objects, state}
-
-  defp handle_listing({:circuit_open, state}, leg) do
-    {[], record(state, :skipped, leg, nil, %{reason: "circuit_open"})}
-  end
-
-  defp handle_listing({{:error, reason}, state}, leg) do
-    Logger.warning("[Fund] orphan scan: listing #{leg}s failed: #{inspect(reason)}")
-    {[], record(state, :errors, leg, nil, %{error: inspect(reason)})}
-  end
-
-  defp handle_listing({:not_found, state}, leg), do: {[], record_empty_listing(state, leg)}
-
-  defp record_empty_listing(state, leg) do
-    Logger.warning("[Fund] orphan scan: #{leg} listing returned not_found")
-    record(state, :errors, leg, nil, %{error: "listing not_found"})
+    |> OrphanScan.take_listing(:payout, :transfer)
   end
 
   defp reconcile_leg(objects, leg, newest, state) do
     objects
-    |> Enum.filter(&settled?(&1, newest))
+    |> Enum.filter(&OrphanScan.settled?(&1, newest))
     |> classify_references(leg)
     |> check_against_local(leg, state)
   end
-
-  # Objects younger than the min-age guard are still in flight: the local row may
-  # be committing right now, and flagging it would flap.
-  defp settled?(%{created: nil}, _newest), do: true
-  defp settled?(%{created: created}, newest), do: DateTime.compare(created, newest) != :gt
 
   defp classify_references(objects, leg) do
     Enum.map(objects, fn object -> {payout_uid(object, leg), object} end)
@@ -147,36 +122,6 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
     end
   end
 
-  defp record(state, outcome, leg, object, details) do
-    finding = %{
-      subject_type: :payout,
-      subject_id: nil,
-      provider_uid: provider_uid(object),
-      local_status_before: nil,
-      provider_status: provider_status(object),
-      outcome: outcome,
-      details: Map.merge(details, object_details(leg, object))
-    }
-
-    state
-    |> State.tally(outcome)
-    |> State.add_finding(finding)
-  end
-
-  defp provider_uid(%{uid: uid}), do: uid
-  defp provider_uid(nil), do: nil
-
-  defp provider_status(%{raw_status: raw_status}), do: raw_status
-  defp provider_status(nil), do: nil
-
-  defp object_details(leg, nil), do: %{leg: to_string(leg)}
-
-  defp object_details(leg, %{reference: reference, amount: amount, created: created}) do
-    %{
-      leg: to_string(leg),
-      reference: reference,
-      amount: amount,
-      created: created && DateTime.to_iso8601(created)
-    }
-  end
+  defp record(state, outcome, leg, object, details),
+    do: OrphanScan.record(state, outcome, :payout, object, details, leg)
 end

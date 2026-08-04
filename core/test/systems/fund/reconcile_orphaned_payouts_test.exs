@@ -83,7 +83,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
                  subject_type: :payout,
                  subject_id: nil,
                  provider_uid: "wtd_lost",
-                 details: %{payout_uid: ^orphan_uid, leg: "withdrawal"}
+                 details: %{payout_uid: ^orphan_uid, source: "withdrawal"}
                }
              ] = findings
     end
@@ -95,7 +95,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
         run([], [transfer("payout=#{orphan_uid},type=transfer", uid: "cha_lost")])
 
       assert summary.missing_locally == 1
-      assert [%{outcome: :missing_locally, details: %{leg: "transfer"}}] = findings
+      assert [%{outcome: :missing_locally, details: %{source: "transfer"}}] = findings
     end
 
     test "a payout that does exist locally is verified, not flagged" do
@@ -215,7 +215,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
         Fund.Public.reconcile_orphaned_payouts([], state())
 
       assert summary.errors == 1
-      assert [%{outcome: :errors, subject_id: nil, details: %{leg: "withdrawal"}}] = findings
+      assert [%{outcome: :errors, subject_id: nil, details: %{source: "withdrawal"}}] = findings
     end
 
     test "an open circuit skips the pass rather than reporting no orphans" do
