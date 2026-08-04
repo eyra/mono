@@ -58,6 +58,7 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
   end
 
   defp create_project(session) do

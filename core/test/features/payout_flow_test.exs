@@ -153,6 +153,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: participant_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
     |> visit("/assignment/#{assignment.id}")
     |> assert_has(Query.css("[data-testid^='chapter-list-item-']"))
     |> click(Query.css("[data-testid^='chapter-list-item-']"))
@@ -170,10 +171,11 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: researcher_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
     |> visit("/assignment/#{assignment.id}/content?tab=contributions")
-    |> assert_has(Query.css("[data-testid='payout-modal']"))
-    |> click(Query.css("[data-testid='pay-out-all-button']"))
-    |> assert_has(Query.css("[data-testid='payout-empty']"))
+    |> assert_has(Query.css("[data-testid='contributions-view']"))
+    |> click(Query.css("[data-testid='confirm-all-button']"))
+    |> assert_has(Query.css("[data-testid='contributions-pending-empty']"))
 
     # ========================================================================
     # Participant — sees approved balance on home, clicks "Pay out",
