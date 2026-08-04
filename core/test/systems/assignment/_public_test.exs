@@ -830,7 +830,7 @@ defmodule Systems.Assignment.PublicTest do
                Assignment.Public.accept_participation(id)
     end
 
-    test "reject after accept fails and leaves participation + reward untouched", %{
+    test "reject after accept is blocked — reward already paid out", %{
       participation: participation,
       idempotence_key: idempotence_key
     } do
@@ -841,16 +841,27 @@ defmodule Systems.Assignment.PublicTest do
 
       refute is_nil(payment_id)
 
-      assert {:error, :reject_guard, :reward_already_approved, _} =
+      assert {:error, :participation_already_accepted} =
                Assignment.Public.reject_participation(accepted, "too late")
 
-      # Multi rolled back: no rejected_at written, reward still :approved.
+      # Participation stays accepted: no rejected_at written, accept state intact.
       reloaded = Core.Repo.get!(Assignment.ParticipationModel, accepted.id)
+      assert %NaiveDateTime{} = reloaded.accepted_at
       assert reloaded.rejected_at == nil
       assert reloaded.rejected_message == nil
 
+      # And the Fund reward stays approved — the Multi never ran.
       assert %{status: :approved, payment_id: ^payment_id} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "reject after accept is blocked when called by id", %{
+      participation: %{id: id} = participation
+    } do
+      {:ok, _} = Assignment.Public.accept_participation(participation)
+
+      assert {:error, :participation_already_accepted} =
+               Assignment.Public.reject_participation(id, "too late")
     end
   end
 

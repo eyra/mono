@@ -1031,6 +1031,11 @@ defmodule Systems.Assignment.Public do
   (rolling the deposit back into the fund) if any, and dispatches
   `{:assignment_participation, :rejected}`. All in one transaction.
   Idempotent on `rejected_at`.
+
+  Returns `{:error, :participation_already_accepted}` when the
+  participation was previously accepted. Business rule: once accepted
+  the reward has been approved and paid out; reversing that requires
+  admin intervention at the Fund layer, not a routine reject.
   """
   def reject_participation(id, message) when is_integer(id) do
     case Repo.get(Assignment.ParticipationModel, id) do
@@ -1044,6 +1049,12 @@ defmodule Systems.Assignment.Public do
         _message
       ),
       do: {:ok, p}
+
+  def reject_participation(
+        %Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}},
+        _message
+      ),
+      do: {:error, :participation_already_accepted}
 
   def reject_participation(%Assignment.ParticipationModel{} = participation, message)
       when is_binary(message) or is_nil(message) do
