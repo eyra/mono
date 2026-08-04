@@ -28,6 +28,16 @@ defmodule Systems.Payment.Public do
     provider().find_merchant_by_email(email)
   end
 
+  @doc """
+  Every merchant the provider created at or after `since` — the provider-side
+  input to the provider→local merchant scan.
+  """
+  @spec list_recent_merchants(since :: DateTime.t()) ::
+          {:ok, [Provider.merchant()]} | {:error, Error.t()}
+  def list_recent_merchants(%DateTime{} = since) do
+    provider().list_recent_merchants(since)
+  end
+
   @spec ensure_merchant_for(Account.User.t(), String.t() | nil) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
   def ensure_merchant_for(%Account.User{} = user, phone \\ nil) do
@@ -273,6 +283,10 @@ defmodule Systems.Payment.Public do
   defdelegate reconcile_list_recent_transactions(state, since),
     to: Reconciliation,
     as: :list_recent_transactions
+
+  defdelegate reconcile_list_recent_merchants(state, since),
+    to: Reconciliation,
+    as: :list_recent_merchants
 
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run

@@ -13,8 +13,15 @@ defmodule Systems.Payment.Provider.Local do
       status: "live",
       kyc_level: 100,
       compliance_status: "verified",
-      overview_url: nil
+      overview_url: nil,
+      created: nil
     }
+  end
+
+  @impl true
+  def list_recent_merchants(%DateTime{} = since) do
+    Logger.info("[Payment.Local] list_recent_merchants since=#{DateTime.to_iso8601(since)} -> []")
+    {:ok, []}
   end
 
   @impl true

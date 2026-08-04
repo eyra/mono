@@ -14,7 +14,7 @@ defmodule Systems.Payment.ReconciliationFindingModel do
 
   alias Systems.Payment
 
-  @subject_types [:transaction, :payout]
+  @subject_types [:transaction, :payout, :merchant]
   @outcomes [
     :resolved_completed,
     :resolved_failed,

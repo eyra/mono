@@ -63,6 +63,10 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   @impl true
+  def list_recent_merchants(%DateTime{} = since),
+    do: list_since("/merchants", since, &parse_merchant(Map.get(&1, "uid"), &1))
+
+  @impl true
   def add_merchant_phone(merchant_uid, phone)
       when is_binary(merchant_uid) and is_binary(phone) do
     with {:ok, contact_uid} <- primary_contact_uid(merchant_uid),
@@ -315,7 +319,8 @@ defmodule Systems.Payment.Provider.OPP do
       status: Map.get(data, "status", "unknown"),
       kyc_level: Map.get(compliance, "level", 0),
       compliance_status: Map.get(compliance, "status", "unverified"),
-      overview_url: Map.get(compliance, "overview_url")
+      overview_url: Map.get(compliance, "overview_url"),
+      created: parse_timestamp(Map.get(data, "created"))
     }
   end
 

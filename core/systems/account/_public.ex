@@ -205,6 +205,13 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Flags provider merchants that no user carries.
+  See `Systems.Account.MerchantOrphanReconciliation`.
+  """
+  def reconcile_orphaned_merchants(opts, state),
+    do: Account.MerchantOrphanReconciliation.run(opts, state)
+
+  @doc """
   Gets a user by email and password.
 
   ## Examples

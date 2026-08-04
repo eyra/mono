@@ -69,6 +69,9 @@ defmodule Systems.Payment.Reconciliation do
   def list_recent_transactions(state, %DateTime{} = since),
     do: guarded(state, fn -> Payment.Public.list_recent_transactions(since) end)
 
+  def list_recent_merchants(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_merchants(since) end)
+
   defp guarded(%State{circuit_open: true} = state, _fun), do: {:circuit_open, state}
 
   defp guarded(%State{} = state, fun) do

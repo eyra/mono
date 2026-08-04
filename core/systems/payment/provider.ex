@@ -9,7 +9,8 @@ defmodule Systems.Payment.Provider do
           status: String.t(),
           kyc_level: integer(),
           compliance_status: String.t(),
-          overview_url: String.t() | nil
+          overview_url: String.t() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -32,6 +33,15 @@ defmodule Systems.Payment.Provider do
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+
+  @doc """
+  Every merchant the provider created at or after `since`. See
+  `list_recent_withdrawals/1` for why this is not anchored to local state — here
+  it matters most, since the local row a restore rolls back is the very one that
+  recorded the merchant uid.
+  """
+  @callback list_recent_merchants(since :: DateTime.t()) ::
+              {:ok, [merchant()]} | {:error, Error.t()}
 
   @doc """
   Set (or add) a phone number on an existing merchant's primary contact,

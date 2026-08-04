@@ -29,6 +29,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     expect(ProviderMock, :list_recent_withdrawals, fn _since -> {:ok, []} end)
     expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
     expect(ProviderMock, :list_recent_transactions, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_merchants, fn _since -> {:ok, []} end)
   end
 
   defp backdate(queryable, id, minutes_ago) do
@@ -197,6 +198,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
     end)
 
     expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_merchants, fn _since -> {:ok, []} end)
 
     expect(ProviderMock, :list_recent_transactions, fn _since ->
       {:ok,
