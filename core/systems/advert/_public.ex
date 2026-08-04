@@ -217,15 +217,9 @@ defmodule Systems.Advert.Public do
   defp list_excluded_assignment_ids(_), do: []
 
   def list_owners(%Advert.Model{} = advert, preload \\ []) do
-    owner_ids =
-      advert
-      |> auth_module().list_principals()
-      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
-      |> Enum.map(fn %{id: id} -> id end)
-
-    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
     # AUTH: needs to be marked save. Current user is normally not allowed to
     # access other users.
+    auth_module().users_with_role(advert, :owner, preload)
   end
 
   def assign_owners(advert, users) do

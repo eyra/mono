@@ -477,9 +477,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  # Only entities that carry an auth node: a Workflow.ItemModel has none, so it
+  # has no tree to resolve an owner from.
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
-  def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)
 
   def assign_tester_role(tool, user) do
     %{crew: crew} = get_by_tool(tool, [:crew])
@@ -489,17 +490,18 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  defp parent_owner!(entity) do
-    case parent_owner(entity) do
-      {:ok, user} -> user
-      _ -> nil
-    end
-  end
+  # Resolves the owner the way `can?/3` does: a role granted anywhere up the
+  # tree applies here. Asking only the top entity would miss an owner assigned
+  # on an intermediate node.
+  defp parent_owner!(%struct{auth_node_id: _auth_node_id, id: id} = entity) do
+    case auth_module().users_with_inherited_role(entity, :owner) do
+      [owner | _] ->
+        owner
 
-  defp parent_owner(%{auth_node_id: _auth_node_id} = entity) do
-    entity
-    |> auth_module().top_entity()
-    |> auth_module().first_user_with_role(:owner, [])
+      [] ->
+        Logger.error("No owner found for #{inspect(struct)} #{id}")
+        nil
+    end
   end
 
   def expiration_timestamp(%{info: info}) do
