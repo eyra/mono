@@ -176,7 +176,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
     end
   end
 
-  describe "handle_info :submit_decline" do
+  describe "consume_event :submit_decline" do
     test "rejects the reward for the given participation_id",
          %{
            conn: conn,
@@ -196,7 +196,11 @@ defmodule Systems.Assignment.ContributionsViewTest do
 
       send(
         view.pid,
-        {:submit_decline, %{participation_id: participation.id, reason: "bad data"}}
+        {:live_nest_event,
+         %LiveNest.Event{
+           name: :submit_decline,
+           payload: %{participation_id: participation.id, reason: "bad data"}
+         }}
       )
 
       _ = render(view)

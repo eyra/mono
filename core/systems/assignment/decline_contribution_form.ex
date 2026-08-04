@@ -63,7 +63,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
 
     {%{reason: "", confirm_input: ""}, types}
     |> Changeset.cast(attrs, [:reason, :confirm_input])
-    |> Changeset.update_change(:reason, &String.trim/1)
+    |> Changeset.update_change(:reason, &trim_or_nil/1)
     |> Changeset.validate_required(:reason, message: "please provide a reason")
     |> Changeset.validate_change(:confirm_input, fn :confirm_input, value ->
       if value == subject_label do
@@ -74,6 +74,9 @@ defmodule Systems.Assignment.DeclineContributionForm do
     end)
     |> ensure_confirm_error_when_blank(subject_label)
   end
+
+  defp trim_or_nil(nil), do: nil
+  defp trim_or_nil(value) when is_binary(value), do: String.trim(value)
 
   # `validate_change` skips blank/nil values, so an empty confirm input never
   # trips the check. Add the same error explicitly so the field warns instead

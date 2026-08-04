@@ -61,8 +61,8 @@ defmodule Systems.Assignment.ContributionsView do
   end
 
   @impl true
-  def handle_info(
-        {:submit_decline, %{participation_id: participation_id, reason: reason}},
+  def consume_event(
+        %{name: :submit_decline, payload: %{participation_id: participation_id, reason: reason}},
         socket
       )
       when is_integer(participation_id) do
@@ -82,12 +82,11 @@ defmodule Systems.Assignment.ContributionsView do
           )
       end
 
-    {:noreply, socket |> hide_decline_modal()}
+    {:stop, socket |> hide_decline_modal()}
   end
 
-  @impl true
-  def handle_info(:hide_decline_modal, socket) do
-    {:noreply, socket |> hide_decline_modal()}
+  def consume_event(%{name: :hide_decline_modal}, socket) do
+    {:stop, socket |> hide_decline_modal()}
   end
 
   defp hide_decline_modal(socket) do
