@@ -83,6 +83,7 @@ defmodule Systems.Assignment.Switch do
 
     if assignment.fund do
       clear_pending_payout_if_empty(assignment)
+      dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
     end
 
     update_content_page(assignment, from_pid)
@@ -103,6 +104,7 @@ defmodule Systems.Assignment.Switch do
 
     if assignment.fund do
       clear_pending_payout_if_empty(assignment)
+      dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
     end
 
     update_content_page(assignment, from_pid)
