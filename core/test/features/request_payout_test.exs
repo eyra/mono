@@ -51,7 +51,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+      {:ok, [%{uid: "ba_test", status: :new, verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     password = Factories.valid_user_password()

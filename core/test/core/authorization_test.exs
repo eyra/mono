@@ -65,6 +65,67 @@ defmodule AuthorizationTest do
     assert [] = Authorization.users_with_role(node, :participant)
   end
 
+  test "can get user for inherited role on the node itself" do
+    %{id: id} = user = Factories.insert!(:creator)
+    {:ok, node} = Authorization.create_node()
+    :ok = Authorization.assign_role(user, node, :owner)
+
+    assert [%{id: ^id}] = Authorization.users_with_inherited_role(node, :owner)
+  end
+
+  test "can get user for inherited role assigned on a parent node" do
+    %{id: id} = user = Factories.insert!(:creator)
+    {:ok, parent} = Authorization.create_node()
+    {:ok, child} = Authorization.create_node(parent)
+    {:ok, grand_child} = Authorization.create_node(child)
+    :ok = Authorization.assign_role(user, parent, :owner)
+
+    # users_with_role/3 only looks at the node itself
+    assert [] = Authorization.users_with_role(grand_child, :owner)
+    # users_with_inherited_role/3 walks up to the ancestors
+    assert [%{id: ^id}] = Authorization.users_with_inherited_role(grand_child, :owner)
+  end
+
+  test "inherited role does not leak from child to parent" do
+    user = Factories.insert!(:creator)
+    {:ok, parent} = Authorization.create_node()
+    {:ok, child} = Authorization.create_node(parent)
+    :ok = Authorization.assign_role(user, child, :owner)
+
+    assert [] = Authorization.users_with_inherited_role(parent, :owner)
+  end
+
+  test "inherited role does not leak between sibling trees" do
+    user = Factories.insert!(:creator)
+    {:ok, parent} = Authorization.create_node()
+    {:ok, child} = Authorization.create_node(parent)
+    {:ok, other_parent} = Authorization.create_node()
+    {:ok, other_child} = Authorization.create_node(other_parent)
+    :ok = Authorization.assign_role(user, parent, :owner)
+
+    assert [_] = Authorization.users_with_inherited_role(child, :owner)
+    assert [] = Authorization.users_with_inherited_role(other_child, :owner)
+  end
+
+  test "inherited role filters on the requested role" do
+    user = Factories.insert!(:creator)
+    {:ok, parent} = Authorization.create_node()
+    {:ok, child} = Authorization.create_node(parent)
+    :ok = Authorization.assign_role(user, parent, :owner)
+
+    assert [] = Authorization.users_with_inherited_role(child, :participant)
+  end
+
+  test "inherited role returns each user once when assigned at multiple levels" do
+    %{id: id} = user = Factories.insert!(:creator)
+    {:ok, parent} = Authorization.create_node()
+    {:ok, child} = Authorization.create_node(parent)
+    :ok = Authorization.assign_role(user, parent, :owner)
+    :ok = Authorization.assign_role(user, child, :owner)
+
+    assert [%{id: ^id}] = Authorization.users_with_inherited_role(child, :owner)
+  end
+
   test "role intersection on a node" do
     {:ok, node} = Authorization.create_node()
     # Nothing intersects when not assigned

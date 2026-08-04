@@ -357,6 +357,25 @@ defmodule Systems.Fund.Public do
     )
   end
 
+  def approve_pending_rewards(cutoff) do
+    query =
+      from(r in Fund.RewardModel,
+        where: r.status == :pending_approval and r.updated_at < ^cutoff
+      )
+
+    query
+    |> Repo.all()
+    |> Repo.preload(Fund.RewardModel.preload_graph(:full))
+    |> Enum.reduce([], fn reward, acc ->
+      result =
+        Multi.new()
+        |> approve_reward(reward)
+        |> Repo.commit()
+
+      [result | acc]
+    end)
+  end
+
   @doc """
   Approves a reward and pays it out, inside the caller's Multi. The status
   flip and payment Bookkeeping entry commit atomically with whatever else
@@ -379,15 +398,15 @@ defmodule Systems.Fund.Public do
       %{fund: fund, amount: amount} = Repo.preload(reward, fund: [:currency])
       check_available_balance(fund, amount)
     end)
-    |> cas_status_step(:reward, reward, [:rejected], status: :approved, rejected_at: nil)
     |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:rejected], rejected_at: nil)
   end
 
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status} = reward)
       when status in [:reserved, :pending_approval] do
     multi
-    |> cas_status_step(:reward, reward, [:reserved, :pending_approval], status: :approved)
     |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:reserved, :pending_approval], [])
   end
 
   defp check_available_balance(%Fund.Model{currency: %{type: :legal}} = fund, amount) do
@@ -400,37 +419,47 @@ defmodule Systems.Fund.Public do
 
   defp check_available_balance(%Fund.Model{}, _amount), do: {:ok, :ok}
 
-  # A reward must never be :approved with a nil payment_id.
-  defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{}} = reward) do
-    Multi.run(multi, :payment, fn _, _ -> {:ok, reward} end)
+  defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do
+    Multi.run(multi, :payment, fn _, _ -> {:ok, payment} end)
   end
 
   defp approve_payment_step(multi, %Fund.RewardModel{} = reward) do
     Multi.run(multi, :payment, fn _, _ ->
-      with {:ok, %{entry: payment}} <- create_payment_transaction(reward) do
-        link_payment_transaction(reward, payment)
-      end
+      with {:ok, %{entry: payment}} <- create_payment_transaction(reward), do: {:ok, payment}
     end)
+  end
+
+  defp cas_approve_step(multi, %Fund.RewardModel{} = reward, from_statuses, extra_set) do
+    Multi.run(multi, :reward, fn repo, %{payment: %Bookkeeping.EntryModel{id: payment_id}} ->
+      cas_update(
+        repo,
+        reward,
+        from_statuses,
+        [status: :approved, payment_id: payment_id] ++ extra_set
+      )
+    end)
+  end
+
+  defp cas_status_step(multi, name, %Fund.RewardModel{} = reward, from_statuses, set)
+       when is_list(from_statuses) and is_list(set) do
+    Multi.run(multi, name, fn repo, _ -> cas_update(repo, reward, from_statuses, set) end)
   end
 
   # Compare-and-swap: the status precondition serializes concurrent transitions
   # so a losing writer hits 0 rows and rolls back instead of double-applying.
-  defp cas_status_step(multi, name, %Fund.RewardModel{id: id}, from_statuses, set)
-       when is_list(from_statuses) and is_list(set) do
+  defp cas_update(repo, %Fund.RewardModel{id: id}, from_statuses, set) do
     set = Keyword.put_new(set, :updated_at, now())
 
-    Multi.run(multi, name, fn repo, _ ->
-      query =
-        from(r in Fund.RewardModel,
-          where: r.id == ^id and r.status in ^from_statuses,
-          select: r
-        )
+    query =
+      from(r in Fund.RewardModel,
+        where: r.id == ^id and r.status in ^from_statuses,
+        select: r
+      )
 
-      case repo.update_all(query, set: set) do
-        {1, [reward]} -> {:ok, reward}
-        {0, _} -> {:error, :stale_reward}
-      end
-    end)
+    case repo.update_all(query, set: set) do
+      {1, [reward]} -> {:ok, reward}
+      {0, _} -> {:error, :stale_reward}
+    end
   end
 
   defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
@@ -998,19 +1027,19 @@ defmodule Systems.Fund.Public do
   # A verified bank account (OPP Level 200) is sufficient for participant payouts;
   # merchant identity-KYC (Level 400) is never required. Ready iff the bank
   # account is approved, so a withdrawal never fires against an unapproved account.
-  defp payout_ready_for(%{status: "approved"}), do: :ok
+  defp payout_ready_for(%{status: :verified}), do: :ok
 
-  # "new" is the only status where the participant still has something to do —
-  # complete the provider's hosted iDEAL flow at the verification URL. Any
-  # other non-approved status ("pending", etc.) means the provider is reviewing
-  # and the participant just needs to wait, even if a stale verification_url is
-  # still returned — so match on status first, URL second.
-  defp payout_ready_for(%{status: "new", verification_url: verification_url})
+  # `:new` is the only status where the participant still has something to do —
+  # complete the provider's hosted iDEAL flow at the verification URL. Any other
+  # non-verified status (`:pending`, etc.) means the provider is reviewing and the
+  # participant just needs to wait, even if a stale verification_url is still
+  # returned — so match on status first, URL second.
+  defp payout_ready_for(%{status: :new, verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, :bank, verification_url}}
 
   defp payout_ready_for(%{status: status})
-       when is_binary(status) and status not in ["new", ""],
+       when is_atom(status) and not is_nil(status) and status != :new,
        do: {:error, :awaiting_verification}
 
   defp payout_ready_for(_bank_account), do: {:error, :kyc_unavailable}
@@ -1031,7 +1060,7 @@ defmodule Systems.Fund.Public do
     case Payment.Public.list_bank_accounts(merchant_uid) do
       {:ok, accounts} ->
         accounts
-        |> Enum.find(&(&1.status != "disapproved"))
+        |> Enum.find(&(&1.status != :rejected))
         |> bank_account_status()
 
       {:error, _} ->
@@ -1039,17 +1068,14 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  # OPP's `status` is authoritative for the display state. A bank account that is
-  # under review ("pending") can still carry a `verification_url`, so status must
+  # The normalized `status` is authoritative for the display state. A bank account
+  # under review (`:pending`) can still carry a `verification_url`, so status must
   # be matched before any URL fallback — otherwise a pending account is mislabeled
-  # "not verified". "new" means the participant still has to complete verification
-  # (the "Toevoegen" iDEAL flow); anything else non-approved is being reviewed.
-  defp bank_account_status(%{status: "approved"}), do: :verified
-  defp bank_account_status(%{status: "new"}), do: :not_verified
-
-  defp bank_account_status(%{status: status}) when is_binary(status) and status != "",
-    do: :pending
-
+  # "not verified". `:new` means the participant still has to complete verification
+  # (the "Toevoegen" iDEAL flow); anything else non-verified is being reviewed.
+  defp bank_account_status(%{status: :verified}), do: :verified
+  defp bank_account_status(%{status: :new}), do: :not_verified
+  defp bank_account_status(%{status: status}) when is_atom(status), do: :pending
   defp bank_account_status(_bank_account), do: :not_verified
 
   @doc """
@@ -1082,7 +1108,7 @@ defmodule Systems.Fund.Public do
 
   # A verified bank account is all we need; we never hand off to OPP's hosted
   # merchant-overview screen. Approved → done; otherwise drive the iDEAL flow.
-  defp bank_handoff(_merchant, %{status: "approved"}), do: :verified
+  defp bank_handoff(_merchant, %{status: :verified}), do: :verified
 
   defp bank_handoff(_merchant, %{verification_url: verification_url})
        when is_binary(verification_url) and verification_url != "",

@@ -179,7 +179,13 @@ defmodule Systems.Payment.PublicTest do
 
   describe "ensure_bank_account_for/1" do
     test "returns the existing bank account when one already exists (no create call)" do
-      existing = %{uid: "ba_existing", status: "approved", verification_url: nil}
+      existing = %{
+        uid: "ba_existing",
+        status: :verified,
+        raw_status: "approved",
+        verification_url: nil
+      }
+
       expect(ProviderMock, :list_bank_accounts, fn "m_x" -> {:ok, [existing]} end)
       # No :create_bank_account expectation -> Mox fails if invoked.
 
@@ -196,10 +202,16 @@ defmodule Systems.Payment.PublicTest do
         assert is_binary(attrs.return_url)
         assert attrs.is_default == true
 
-        {:ok, %{uid: "ba_new", status: "new", verification_url: "https://opp.test/ba/verify"}}
+        {:ok,
+         %{
+           uid: "ba_new",
+           status: :new,
+           raw_status: "new",
+           verification_url: "https://opp.test/ba/verify"
+         }}
       end)
 
-      assert {:ok, %{uid: "ba_new", status: "new"}} =
+      assert {:ok, %{uid: "ba_new", status: :new}} =
                Payment.Public.ensure_bank_account_for("m_y")
     end
 
@@ -214,8 +226,8 @@ defmodule Systems.Payment.PublicTest do
 
     test "reuses a usable (non-disapproved) account even when a disapproved one exists" do
       accounts = [
-        %{uid: "ba_bad", status: "disapproved", verification_url: nil},
-        %{uid: "ba_good", status: "new", verification_url: "https://opp.test/v"}
+        %{uid: "ba_bad", status: :rejected, raw_status: "disapproved", verification_url: nil},
+        %{uid: "ba_good", status: :new, raw_status: "new", verification_url: "https://opp.test/v"}
       ]
 
       expect(ProviderMock, :list_bank_accounts, fn "m_mix" -> {:ok, accounts} end)
@@ -227,10 +239,17 @@ defmodule Systems.Payment.PublicTest do
     test "creates a fresh account when the only existing one is disapproved" do
       ProviderMock
       |> expect(:list_bank_accounts, fn "m_dis" ->
-        {:ok, [%{uid: "ba_bad", status: "disapproved", verification_url: nil}]}
+        {:ok,
+         [%{uid: "ba_bad", status: :rejected, raw_status: "disapproved", verification_url: nil}]}
       end)
       |> expect(:create_bank_account, fn "m_dis", _attrs ->
-        {:ok, %{uid: "ba_fresh", status: "new", verification_url: "https://opp.test/v2"}}
+        {:ok,
+         %{
+           uid: "ba_fresh",
+           status: :new,
+           raw_status: "new",
+           verification_url: "https://opp.test/v2"
+         }}
       end)
 
       assert {:ok, %{uid: "ba_fresh"}} = Payment.Public.ensure_bank_account_for("m_dis")

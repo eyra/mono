@@ -6,7 +6,7 @@ defmodule Systems.Budget.TransactionModel do
   alias Systems.Account
   alias Systems.Fund
 
-  @statuses [:pending, :completed, :failed, :expired]
+  @statuses [:pending, :completed, :failed]
 
   schema "transactions" do
     field(:transaction_id, :string)

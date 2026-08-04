@@ -167,7 +167,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
     }
   end
 
-  def status_tag(status) when status in [:failed, :expired] do
+  def status_tag(:failed) do
     %{
       text: dgettext("eyra-assignment", "payment.status.failed"),
       bg_color: "bg-deletelight",

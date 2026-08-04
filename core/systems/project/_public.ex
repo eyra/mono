@@ -11,7 +11,6 @@ defmodule Systems.Project.Public do
 
   alias Frameworks.Signal
 
-  alias Systems.Account.User
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Graphite
@@ -351,13 +350,7 @@ defmodule Systems.Project.Public do
   end
 
   def list_owners(%Project.Model{} = project, preload \\ []) do
-    owner_ids =
-      project
-      |> auth_module().list_principals()
-      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
-      |> Enum.map(fn %{id: id} -> id end)
-
-    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
+    auth_module().users_with_role(project, :owner, preload)
   end
 end
 

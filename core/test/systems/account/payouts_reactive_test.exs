@@ -34,7 +34,8 @@ defmodule Systems.Account.PayoutsReactiveTest do
        [
          %{
            uid: "ba",
-           status: Agent.get(bank, & &1),
+           status: normalize_kyc(Agent.get(bank, & &1)),
+           raw_status: Agent.get(bank, & &1),
            verification_url: "https://opp.test/ba/verify"
          }
        ]}
@@ -42,6 +43,13 @@ defmodule Systems.Account.PayoutsReactiveTest do
 
     %{user: user, bank: bank}
   end
+
+  # Mirrors the provider's KYC normalization so the mock returns the same shape
+  # a real adapter would (normalized atom + preserved raw word).
+  defp normalize_kyc("approved"), do: :verified
+  defp normalize_kyc("disapproved"), do: :rejected
+  defp normalize_kyc("new"), do: :new
+  defp normalize_kyc(_), do: :pending
 
   test "bank badge flips pending -> verified when the KYC webhook fires", %{
     conn: conn,

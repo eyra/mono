@@ -44,9 +44,26 @@ defmodule Systems.Payment.Provider do
 
   # Bank accounts
 
+  @typedoc """
+  Provider-agnostic bank-account (KYC) verification status. Each adapter maps its
+  own vocabulary onto these atoms so domain code never matches on provider status
+  strings:
+
+    * `:verified`  — approved; payouts may fire against it
+    * `:rejected`  — permanently refused; never reused for a payout
+    * `:new`       — created but the participant has not submitted details yet
+    * `:pending`   — submitted and under review
+
+  An unrecognised provider status maps to `:pending`: an unknown state must never
+  be treated as verified (which would authorize a payout) nor as rejected. The
+  provider's own word is kept alongside it as `raw_status` for the audit trail.
+  """
+  @type kyc_status :: :verified | :rejected | :new | :pending
+
   @type bank_account :: %{
           uid: String.t(),
-          status: String.t(),
+          status: kyc_status(),
+          raw_status: String.t(),
           verification_url: String.t() | nil
         }
 
@@ -69,9 +86,22 @@ defmodule Systems.Payment.Provider do
 
   # Transactions
 
+  @typedoc """
+  Provider-agnostic lifecycle status shared by transactions, withdrawals and
+  transfers. Each adapter maps its own vocabulary onto these three atoms, so
+  domain code never matches on a provider's status strings. An unrecognised
+  provider status maps to `:pending`: an unknown state must never finalize money
+  movement.
+
+  The provider's own word is kept alongside it as `raw_status`, so an audit trail
+  can record that OPP said "disapproved" rather than the collapsed `:failed`.
+  """
+  @type lifecycle_status :: :pending | :completed | :failed
+
   @type transaction :: %{
           uid: String.t(),
-          status: String.t(),
+          status: lifecycle_status(),
+          raw_status: String.t(),
           payment_url: String.t() | nil,
           amount: integer()
         }
@@ -100,20 +130,6 @@ defmodule Systems.Payment.Provider do
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
 
   # Withdrawals
-
-  @typedoc """
-  Provider-agnostic lifecycle status. Each adapter maps its own vocabulary onto
-  these three atoms, so domain code never matches on a provider's status strings.
-  An unrecognised provider status maps to `:pending`: an unknown state must never
-  finalize money movement.
-
-  The provider's own word is kept alongside it as `raw_status`, so an audit trail
-  can record that OPP said "disapproved" rather than the collapsed `:failed`.
-
-  Transactions and transfers still carry raw provider strings — normalizing those
-  is the remaining scope of the "normalize provider statuses" tech-debt ticket.
-  """
-  @type lifecycle_status :: :pending | :completed | :failed
 
   @type withdrawal :: %{
           uid: String.t(),
@@ -163,7 +179,8 @@ defmodule Systems.Payment.Provider do
 
   @type transfer :: %{
           uid: String.t(),
-          status: String.t(),
+          status: lifecycle_status(),
+          raw_status: String.t(),
           amount: integer()
         }
 

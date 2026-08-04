@@ -41,7 +41,12 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:ok,
-              %{uid: "ba_1", status: "new", verification_url: "https://opp.test/verify/ba_1"}} =
+              %{
+                uid: "ba_1",
+                status: :new,
+                raw_status: "new",
+                verification_url: "https://opp.test/verify/ba_1"
+              }} =
                OPP.create_bank_account("m_1", %{notify_url: "x", return_url: "y"})
     end
 
@@ -51,7 +56,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "ba_2"}>)
       end)
 
-      assert {:ok, %{uid: "ba_2", status: "new", verification_url: nil}} =
+      assert {:ok, %{uid: "ba_2", status: :new, raw_status: "new", verification_url: nil}} =
                OPP.create_bank_account("m_1", %{})
     end
 
@@ -77,8 +82,8 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:ok,
               [
-                %{uid: "ba_a", status: "approved"},
-                %{uid: "ba_b", status: "disapproved"}
+                %{uid: "ba_a", status: :verified, raw_status: "approved"},
+                %{uid: "ba_b", status: :rejected, raw_status: "disapproved"}
               ]} = OPP.list_bank_accounts("m_1")
     end
 
@@ -309,6 +314,68 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
+  describe "get_transaction/1 status normalization" do
+    defp stub_transaction_status(bypass, opp_status) do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "#{opp_status}", "total_amount": 1000}>
+        )
+      end)
+    end
+
+    test ~s(normalizes "completed" to :completed), %{bypass: bypass} do
+      stub_transaction_status(bypass, "completed")
+
+      assert {:ok, %{status: :completed, raw_status: "completed"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "failed" to :failed), %{bypass: bypass} do
+      stub_transaction_status(bypass, "failed")
+
+      assert {:ok, %{status: :failed, raw_status: "failed"}} = OPP.get_transaction("t_1")
+    end
+
+    # OPP documents "cancelled" as terminal — "A new transaction needs to be
+    # created" — so a declined pay-in must not linger as :pending and keep
+    # offering the retry CTA on the same transaction.
+    test ~s(normalizes "cancelled" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_transaction_status(bypass, "cancelled")
+
+      assert {:ok, %{status: :failed, raw_status: "cancelled"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "expired" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_transaction_status(bypass, "expired")
+
+      assert {:ok, %{status: :failed, raw_status: "expired"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "pending" to :pending), %{bypass: bypass} do
+      stub_transaction_status(bypass, "pending")
+
+      assert {:ok, %{status: :pending, raw_status: "pending"}} = OPP.get_transaction("t_1")
+    end
+
+    # "planned" means the issuer reserved the money but OPP has not claimed it
+    # yet — still in flight, so not terminal.
+    test ~s(normalizes "planned" to :pending), %{bypass: bypass} do
+      stub_transaction_status(bypass, "planned")
+
+      assert {:ok, %{status: :pending, raw_status: "planned"}} = OPP.get_transaction("t_1")
+    end
+
+    # The safety property: a status OPP adds later must never finalize or fail a
+    # pay-in, so anything unrecognised is :pending.
+    test "normalizes an unrecognised status to :pending", %{bypass: bypass} do
+      stub_transaction_status(bypass, "some_future_status")
+
+      assert {:ok, %{status: :pending, raw_status: "some_future_status"}} =
+               OPP.get_transaction("t_1")
+    end
+  end
+
   describe "transfer_to_merchant/4" do
     test "POSTs a balance charge from->to with idempotency key and parses the response",
          %{bypass: bypass} do
@@ -329,7 +396,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
       end)
 
-      assert {:ok, %{uid: "chg_1", status: "created", amount: 1000}} =
+      assert {:ok, %{uid: "chg_1", status: :pending, raw_status: "created", amount: 1000}} =
                OPP.transfer_to_merchant(
                  "mer_platform",
                  "mer_participant",

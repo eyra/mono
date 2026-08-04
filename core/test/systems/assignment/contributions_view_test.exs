@@ -149,9 +149,8 @@ defmodule Systems.Assignment.ContributionsViewTest do
            participant: participant_a,
            member: member_a
          } do
-      # Signed-in user is the assignment's owner (via top of the auth tree).
-      :ok =
-        Core.Authorization.assign_role(user, Core.Authorization.top_entity(assignment), :owner)
+      # Signed-in user is the assignment's owner (inherited from auth tree).
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
 
       {_, _} = create_pending_contribution(assignment, participant_a, crew, member_a)
 

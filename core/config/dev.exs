@@ -122,7 +122,9 @@ config :core, Oban,
        # Reconcile pay-in/payout state against the payment provider daily
        {"0 3 * * *", Systems.Payment.ReconciliationWorker},
        # Prune auth codes past their validity window every hour
-       {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}
+       {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+       # Approve pending rewards every hour
+       {"0 * * * *", Systems.Fund.AutoApproveWorker}
      ]}
   ]
 

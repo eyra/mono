@@ -225,7 +225,7 @@ defmodule Systems.Assignment.SwitchTest do
       owner = Factories.insert!(:member)
 
       :ok =
-        Core.Authorization.assign_role(owner, Core.Authorization.top_entity(assignment), :owner)
+        Core.Authorization.assign_role(owner, assignment, :owner)
 
       participant = Factories.insert!(:member)
 
@@ -262,7 +262,7 @@ defmodule Systems.Assignment.SwitchTest do
 
     test ":completed on an unfunded assignment skips NA creation", %{owner: owner} do
       unfunded = Factories.insert!(:assignment, %{fund: nil})
-      :ok = Core.Authorization.assign_role(owner, Core.Authorization.top_entity(unfunded), :owner)
+      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
       participant = Factories.insert!(:member)
       {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
 
@@ -327,7 +327,7 @@ defmodule Systems.Assignment.SwitchTest do
 
     test ":accepted on an unfunded assignment leaves the NA untouched", %{owner: owner} do
       unfunded = Factories.insert!(:assignment, %{fund: nil})
-      :ok = Core.Authorization.assign_role(owner, Core.Authorization.top_entity(unfunded), :owner)
+      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
       participant = Factories.insert!(:member)
       {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
 

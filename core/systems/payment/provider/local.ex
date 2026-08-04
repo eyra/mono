@@ -47,7 +47,7 @@ defmodule Systems.Payment.Provider.Local do
   # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
 
   defp stub_bank_account(uid) do
-    %{uid: uid, status: "approved", verification_url: nil}
+    %{uid: uid, status: :verified, raw_status: "approved", verification_url: nil}
   end
 
   @impl true
@@ -87,7 +87,8 @@ defmodule Systems.Payment.Provider.Local do
     {:ok,
      %{
        uid: uid,
-       status: "created",
+       status: :pending,
+       raw_status: "created",
        payment_url: "#{CoreWeb.Endpoint.url()}/payment/local/#{uid}",
        amount: total_amount
      }}
@@ -96,7 +97,7 @@ defmodule Systems.Payment.Provider.Local do
   @impl true
   def get_transaction(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_transaction uid=#{uid}")
-    {:ok, %{uid: uid, status: "created", payment_url: nil, amount: 0}}
+    {:ok, %{uid: uid, status: :pending, raw_status: "created", payment_url: nil, amount: 0}}
   end
 
   # Withdrawals
@@ -143,7 +144,7 @@ defmodule Systems.Payment.Provider.Local do
       "[Payment.Local] transfer_to_merchant from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
     )
 
-    {:ok, %{uid: uid, status: "created", amount: amount}}
+    {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: amount}}
   end
 
   defp generate_uid do

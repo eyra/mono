@@ -28,7 +28,7 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_v"})
 
       expect(ProviderMock, :list_bank_accounts, fn "m_v" ->
-        {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       vm = Account.PayoutsViewBuilder.view_model(user, %{})
@@ -43,7 +43,15 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
 
       # A pending account can still carry a verification_url; status must win.
       expect(ProviderMock, :list_bank_accounts, fn "m_p" ->
-        {:ok, [%{uid: "ba", status: "pending", verification_url: "https://opp.test/ba/verify"}]}
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :pending,
+             raw_status: "pending",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       vm = Account.PayoutsViewBuilder.view_model(user, %{})
@@ -58,7 +66,15 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_nv"})
 
       expect(ProviderMock, :list_bank_accounts, fn "m_nv" ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :new,
+             raw_status: "new",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       vm = Account.PayoutsViewBuilder.view_model(user, %{})
@@ -72,7 +88,7 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       # No get_merchant expectation: the badge is derived from the bank account
       # only, so a lingering merchant overview_url (Level 400) is irrelevant.
       expect(ProviderMock, :list_bank_accounts, fn "m_b" ->
-        {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       vm = Account.PayoutsViewBuilder.view_model(user, %{})
@@ -100,7 +116,15 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       end)
 
       expect(ProviderMock, :list_bank_accounts, fn "m_b" ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :new,
+             raw_status: "new",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
       end)
 
       assert {:bank, "https://opp.test/ba/verify"} = Fund.Public.start_bank_verification(user)
@@ -121,7 +145,7 @@ defmodule Systems.Account.PayoutsViewBuilderTest do
       end)
 
       expect(ProviderMock, :list_bank_accounts, fn "m_b" ->
-        {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       assert :verified = Fund.Public.start_bank_verification(user)
