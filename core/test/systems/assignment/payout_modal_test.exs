@@ -7,7 +7,7 @@ defmodule Systems.Assignment.PayoutModalTest.Host do
   test asked for, which is exactly the contract the real parent has with the
   modal: the modal bubbles up, the parent mutates, the parent signals back.
   """
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   alias Systems.Assignment
 

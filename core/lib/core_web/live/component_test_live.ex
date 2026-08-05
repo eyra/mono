@@ -1,5 +1,5 @@
 defmodule CoreWeb.ComponentTestLive do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   @impl true
   def mount(_params, session, socket) do

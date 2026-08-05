@@ -1,5 +1,5 @@
 defmodule Systems.Document.PDFView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def update(%{key: key, url: url} = params, socket) do

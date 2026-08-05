@@ -1,5 +1,5 @@
 defmodule Systems.Lab.DayView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 

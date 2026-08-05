@@ -9,7 +9,7 @@ defmodule Systems.Content.Composer do
 
   def __using_live_website__ do
     quote do
-      use CoreWeb, :live_view
+      use CoreWeb, :live_view_fabric
 
       use CoreWeb.Layouts.Website.Composer
       use CoreWeb.LiveDefaults
@@ -21,7 +21,7 @@ defmodule Systems.Content.Composer do
 
   def __using_live_workspace__ do
     quote do
-      use CoreWeb, :live_view
+      use CoreWeb, :live_view_fabric
 
       use CoreWeb.Layouts.Workspace.Composer
       use CoreWeb.LiveDefaults

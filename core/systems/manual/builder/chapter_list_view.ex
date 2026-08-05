@@ -1,5 +1,5 @@
 defmodule Systems.Manual.Builder.ChapterListView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Systems.Manual.Builder.Html, only: [chapter_list: 1]
 

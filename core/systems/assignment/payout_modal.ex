@@ -24,7 +24,7 @@ defmodule Systems.Assignment.PayoutModal do
   per-row Decline expansion + bulk "Pay out all"; `:overview` shows historical
   approvals + rejections (UI lands in commit C).
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 
