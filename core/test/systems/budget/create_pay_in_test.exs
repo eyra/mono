@@ -76,7 +76,7 @@ defmodule Systems.Budget.CreatePayInTest do
 
       {:ok, _} = Budget.Public.fail_transaction(failed.transaction_id)
 
-      # Retry — the researcher clicks "Confirm" again on a fresh BudgetForm.
+      # Retry — the researcher clicks "Confirm" again on a fresh PayInRequestForm.
       {:ok, %{transaction: retry}} =
         Budget.Public.create_pay_in(assignment, user, %{
           "subject_count" => 10,

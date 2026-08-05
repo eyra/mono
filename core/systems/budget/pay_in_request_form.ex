@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.BudgetForm do
+defmodule Systems.Budget.PayInRequestForm do
   use CoreWeb.LiveForm
 
   require Logger
@@ -67,7 +67,7 @@ defmodule Systems.Assignment.BudgetForm do
   def handle_event("confirm", %{"pay_in_request" => attrs}, socket) do
     case Budget.Public.create_pay_in(socket.assigns.assignment, socket.assigns.user, attrs) do
       {:ok, %{payment_url: nil}} ->
-        {:noreply, socket |> send_event(:parent, "budget_form_submit")}
+        {:noreply, socket |> send_event(:parent, "pay_in_request_form_submit")}
 
       {:ok, %{payment_url: payment_url}} ->
         {:noreply, redirect(socket, external: payment_url)}
@@ -76,14 +76,14 @@ defmodule Systems.Assignment.BudgetForm do
         {:noreply, assign(socket, changeset: changeset, validate?: true)}
 
       {:error, reason} ->
-        Logger.warning("[BudgetForm] Payment creation failed: #{inspect(reason)}")
+        Logger.warning("[PayInRequestForm] Payment creation failed: #{inspect(reason)}")
         {:noreply, socket |> flash_error()}
     end
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "budget_form_cancelled")}
+    {:noreply, socket |> send_event(:parent, "pay_in_request_form_cancelled")}
   end
 
   defp build_changeset(request, attrs, false) do
@@ -118,10 +118,10 @@ defmodule Systems.Assignment.BudgetForm do
     ~H"""
     <div id={"#{@id}_content"} phx-hook="LiveContent" data-show-errors={true}>
       <Text.title3>
-        <%= dgettext("eyra-assignment", "budget_form.title") %>
+        <%= dgettext("eyra-assignment", "pay_in_request_form.title") %>
       </Text.title3>
       <Text.body>
-        <%= dgettext("eyra-assignment", "budget_form.description") %>
+        <%= dgettext("eyra-assignment", "pay_in_request_form.description") %>
       </Text.body>
       <.spacing value="M" />
 
@@ -138,22 +138,22 @@ defmodule Systems.Assignment.BudgetForm do
           <.text_input
             form={form}
             field={:aim_of_study}
-            label_text={dgettext("eyra-assignment", "budget_form.aim.label")}
-            placeholder={dgettext("eyra-assignment", "budget_form.aim.placeholder")}
+            label_text={dgettext("eyra-assignment", "pay_in_request_form.aim.label")}
+            placeholder={dgettext("eyra-assignment", "pay_in_request_form.aim.placeholder")}
             maxlength="250"
             reserve_error_space={false}
-            testid="budget-form-aim-input"
+            testid="pay-in-request-form-aim-input"
           />
           <.spacing value="S" />
           <.currency_input
             form={form}
             field={:subject_reward}
-            label_text={dgettext("eyra-assignment", "budget_form.fee.label")}
+            label_text={dgettext("eyra-assignment", "pay_in_request_form.fee.label")}
             value={@reward_input}
             active_currency={@active_currency}
             currencies={[@active_currency]}
             reserve_error_space={false}
-            testid="budget-form-reward-input"
+            testid="pay-in-request-form-reward-input"
           />
           <.spacing value="S" />
         <% end %>
@@ -161,23 +161,23 @@ defmodule Systems.Assignment.BudgetForm do
         <.number_input
           form={form}
           field={:subject_count}
-          label_text={dgettext("eyra-assignment", "budget_form.slots.label")}
+          label_text={dgettext("eyra-assignment", "pay_in_request_form.slots.label")}
           debounce="300"
           reserve_error_space={false}
-          testid="budget-form-slots-input"
+          testid="pay-in-request-form-slots-input"
         />
 
         <.spacing value="M" />
 
         <div class="mb-3">
           <div class="text-title6 font-title6 text-grey1">
-            <%= dgettext("eyra-assignment", "budget_form.costs.label") %>
+            <%= dgettext("eyra-assignment", "pay_in_request_form.costs.label") %>
           </div>
         </div>
         <div class="flex flex-col gap-1">
           <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
             <div>
-              <%= dgettext("eyra-assignment", "budget_form.subtotal.label",
+              <%= dgettext("eyra-assignment", "pay_in_request_form.subtotal.label",
                 count: display_count(@subject_count),
                 reward: format_cents(@reward_cents)
               ) %>
@@ -186,7 +186,7 @@ defmodule Systems.Assignment.BudgetForm do
           </div>
           <div class="flex flex-row justify-between text-bodymedium font-body text-grey1">
             <div>
-              <%= dgettext("eyra-assignment", "budget_form.partner_fee.label",
+              <%= dgettext("eyra-assignment", "pay_in_request_form.partner_fee.label",
                 percentage: @partner_fee_percentage
               ) %>
             </div>
@@ -194,7 +194,7 @@ defmodule Systems.Assignment.BudgetForm do
           </div>
           <div class="border-t border-grey4 my-2"></div>
           <div class="flex flex-row justify-between text-title6 font-title6 text-grey1">
-            <div><%= dgettext("eyra-assignment", "budget_form.total.label") %></div>
+            <div><%= dgettext("eyra-assignment", "pay_in_request_form.total.label") %></div>
             <div><%= format_cents(@total_cents) %></div>
           </div>
         </div>
@@ -204,13 +204,13 @@ defmodule Systems.Assignment.BudgetForm do
         <div class="flex flex-row gap-4 items-center">
           <Button.dynamic
             action={%{type: :submit}}
-            face={%{type: :primary, label: dgettext("eyra-assignment", "budget_form.confirm.button")}}
-            testid="budget-form-confirm-button"
+            face={%{type: :primary, label: dgettext("eyra-assignment", "pay_in_request_form.confirm.button")}}
+            testid="pay-in-request-form-confirm-button"
           />
           <Button.dynamic
             action={%{type: :send, event: "cancel", target: @myself}}
-            face={%{type: :label, label: dgettext("eyra-assignment", "budget_form.cancel.button"), text_color: "text-primary"}}
-            testid="budget-form-cancel-button"
+            face={%{type: :label, label: dgettext("eyra-assignment", "pay_in_request_form.cancel.button"), text_color: "text-primary"}}
+            testid="pay-in-request-form-cancel-button"
           />
         </div>
       </.form>

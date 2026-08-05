@@ -48,8 +48,9 @@ defmodule Systems.Assignment.InfoModelTest do
 
     test "accepts a short description on auto_save" do
       # Short aims are allowed at auto-save time — we only guard against
-      # overflow, not against low-effort descriptions. See BudgetForm's
-      # PayInRequestModel for the not-empty guard at Confirm time.
+      # overflow, not against low-effort descriptions. See
+      # Systems.Budget.PayInRequestModel for the not-empty guard at
+      # Confirm time.
       changeset = changeset(%{aim_of_study: "hi"})
 
       assert changeset.valid?

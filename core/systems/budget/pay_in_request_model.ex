@@ -36,13 +36,13 @@ defmodule Systems.Budget.PayInRequestModel do
     changeset
     |> validate_positive(
       :subject_count,
-      dgettext("eyra-assignment", "budget_form.slots.required")
+      dgettext("eyra-assignment", "pay_in_request_form.slots.required")
     )
     |> validate_required([:subject_reward],
-      message: dgettext("eyra-assignment", "budget_form.fee.required")
+      message: dgettext("eyra-assignment", "pay_in_request_form.fee.required")
     )
     |> validate_required([:aim_of_study],
-      message: dgettext("eyra-assignment", "budget_form.aim.required")
+      message: dgettext("eyra-assignment", "pay_in_request_form.aim.required")
     )
     |> validate_length(:aim_of_study, max: 250)
   end
