@@ -1,6 +1,7 @@
 defmodule Frameworks.Pixel.Selector do
   @moduledoc false
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   import CoreWeb.LiveDefaults
   alias Phoenix.LiveView.JS
@@ -84,32 +85,25 @@ defmodule Frameworks.Pixel.Selector do
          active_item_ids
        ) do
     if multiselect?(type) do
-      send_parent_event(socket, "active_item_ids", %{
-        active_item_ids: active_item_ids,
-        current_items: current_items
-      })
+      emit_to_parent(
+        socket,
+        {"active_item_ids",
+         %{
+           active_item_ids: active_item_ids,
+           current_items: current_items
+         }}
+      )
     else
       active_item_id = List.first(active_item_ids)
 
-      send_parent_event(socket, "active_item_id", %{
-        active_item_id: active_item_id,
-        current_items: current_items
-      })
-    end
-  end
-
-  # Helper to send events to parent, with fallback for non-Fabric contexts
-  defp send_parent_event(socket, event_name, payload) do
-    # Check if Fabric is available (fabric key exists in assigns)
-    if Map.has_key?(socket.assigns, :fabric) do
-      # Use Fabric's send_event
-      socket |> send_event(:parent, event_name, payload)
-    else
-      # Fallback to standard Phoenix LiveView messaging
-      # LiveComponents run in the same process as their parent LiveView,
-      # so self() is the correct target (the hosting LiveView process)
-      send(self(), {event_name, payload})
-      socket
+      emit_to_parent(
+        socket,
+        {"active_item_id",
+         %{
+           active_item_id: active_item_id,
+           current_items: current_items
+         }}
+      )
     end
   end
 

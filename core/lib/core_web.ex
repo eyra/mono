@@ -85,6 +85,18 @@ defmodule CoreWeb do
     end
   end
 
+  def live_component do
+    quote do
+      use Phoenix.LiveComponent
+      use LiveNest, :live_component
+
+      unquote(pixel())
+      use Frameworks.Pixel
+
+      unquote(component_helpers())
+    end
+  end
+
   def live_component_fabric do
     quote do
       use Fabric.LiveComponent

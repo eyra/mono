@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.NotificationView do
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
 
   alias Frameworks.Pixel.Text
 

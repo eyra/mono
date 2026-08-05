@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Breadcrumbs do
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
 
   @impl true
   def update(%{elements: elements}, %{assigns: %{}} = socket) do

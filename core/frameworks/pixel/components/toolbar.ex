@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.Toolbar do
   Toolbar LiveComponent that centralizes button event handling and forwards events
   to the parent via LiveNest events.
   """
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
 
   import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Button
