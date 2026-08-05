@@ -46,11 +46,13 @@ defmodule Systems.Assignment.InfoModelTest do
       assert changeset.valid?
     end
 
-    test "rejects a description shorter than 10 characters" do
-      changeset = changeset(%{aim_of_study: "too short"})
+    test "accepts a short description on auto_save" do
+      # Short aims are allowed at auto-save time — we only guard against
+      # overflow, not against low-effort descriptions. See BudgetForm's
+      # PayInRequestModel for the not-empty guard at Confirm time.
+      changeset = changeset(%{aim_of_study: "hi"})
 
-      refute changeset.valid?
-      assert "should be at least 10 character(s)" in errors_on(changeset).aim_of_study
+      assert changeset.valid?
     end
 
     test "rejects a description longer than 250 characters" do

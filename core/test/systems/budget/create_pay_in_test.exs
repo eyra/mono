@@ -33,8 +33,19 @@ defmodule Systems.Budget.CreatePayInTest do
 
       stub_provider_create_transaction()
 
-      {:ok, %{transaction: t1}} = Budget.Public.create_pay_in(assignment, user, 10)
-      {:ok, %{transaction: t2}} = Budget.Public.create_pay_in(assignment, user, 10)
+      {:ok, %{transaction: t1}} =
+        Budget.Public.create_pay_in(assignment, user, %{
+          "subject_count" => 10,
+          "subject_reward" => 500,
+          "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
+        })
+
+      {:ok, %{transaction: t2}} =
+        Budget.Public.create_pay_in(assignment, user, %{
+          "subject_count" => 10,
+          "subject_reward" => 500,
+          "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
+        })
 
       # Two distinct rows
       assert t1.id != t2.id
@@ -56,11 +67,22 @@ defmodule Systems.Budget.CreatePayInTest do
       stub_provider_create_transaction()
 
       # First transaction → fail it (simulates the payment-failed webhook).
-      {:ok, %{transaction: failed}} = Budget.Public.create_pay_in(assignment, user, 10)
+      {:ok, %{transaction: failed}} =
+        Budget.Public.create_pay_in(assignment, user, %{
+          "subject_count" => 10,
+          "subject_reward" => 500,
+          "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
+        })
+
       {:ok, _} = Budget.Public.fail_transaction(failed.transaction_id)
 
       # Retry — the researcher clicks "Confirm" again on a fresh BudgetForm.
-      {:ok, %{transaction: retry}} = Budget.Public.create_pay_in(assignment, user, 10)
+      {:ok, %{transaction: retry}} =
+        Budget.Public.create_pay_in(assignment, user, %{
+          "subject_count" => 10,
+          "subject_reward" => 500,
+          "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
+        })
 
       assert retry.id != failed.id
       assert retry.status == :pending

@@ -742,9 +742,17 @@ msgid "assignment_full.title"
 msgstr "Questo studio è al completo"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Inserisci un importo, es. 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.aim.placeholder"
 msgstr "Una breve descrizione del tuo studio"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.slots.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.aim.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "budget_form.fee.required"
+msgstr ""

@@ -741,9 +741,17 @@ msgid "assignment_full.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
+msgid "budget_form.aim.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.placeholder"
+msgid "budget_form.slots.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.required"
 msgstr ""

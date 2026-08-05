@@ -741,9 +741,17 @@ msgid "assignment_full.title"
 msgstr "This study is full"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Please enter a plain amount, like 3.75"
-
-#, elixir-autogen, elixir-format
 msgid "budget_form.aim.placeholder"
 msgstr "A short description of your study"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.slots.required"
+msgstr "Please enter at least 1 participant"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.aim.required"
+msgstr "Please describe the aim of your study"
+
+#, elixir-autogen, elixir-format
+msgid "budget_form.fee.required"
+msgstr "Please enter a participant fee"
