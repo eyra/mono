@@ -61,6 +61,18 @@ defmodule Systems.Budget.PayInRequestModelTest do
       assert changeset.valid?
     end
 
+    test "flags an unparseable reward string" do
+      changeset =
+        validate(%{
+          "subject_count" => 5,
+          "subject_reward" => "abc",
+          "aim_of_study" => valid_aim()
+        })
+
+      refute changeset.valid?
+      assert changeset.errors[:subject_reward]
+    end
+
     test "accepts a decimal reward string with dot separator" do
       changeset =
         validate(%{
