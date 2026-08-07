@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.DropdownSelector do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.FormHelpers, only: [get_border_color: 1]
 

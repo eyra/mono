@@ -1,5 +1,5 @@
 defmodule Systems.Fund.BankAccountForm do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Ecto.Changeset
 

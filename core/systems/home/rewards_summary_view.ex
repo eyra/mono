@@ -18,7 +18,7 @@ defmodule Systems.Home.RewardsSummaryView do
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel
   alias Frameworks.Pixel.Button

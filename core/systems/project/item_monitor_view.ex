@@ -1,5 +1,5 @@
 defmodule Systems.Project.ItemMonitorView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def render(assigns) do

@@ -1,5 +1,5 @@
 defmodule Systems.Workflow.WorkListView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Workflow.HTML, only: [work_list_item: 1]

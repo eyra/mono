@@ -10,7 +10,7 @@ defmodule Systems.Account.PhoneForm do
   form, so the participant fills in their number and continues straight to their
   bank. Cancelling is handled by the modal chrome's close control.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 

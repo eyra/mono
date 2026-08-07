@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.RadioGroup do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def update(%{items: items}, socket) do

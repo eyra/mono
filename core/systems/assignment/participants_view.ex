@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ParticipantsView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic

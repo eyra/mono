@@ -1,5 +1,5 @@
 defmodule Systems.Home.ParticipatedView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Image
   alias Frameworks.Pixel.Text

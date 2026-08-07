@@ -1,5 +1,5 @@
 defmodule Systems.Desktop.View do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Content
   alias Frameworks.Pixel.Text

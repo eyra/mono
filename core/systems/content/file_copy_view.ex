@@ -1,5 +1,5 @@
 defmodule Systems.Content.FileCopyView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation

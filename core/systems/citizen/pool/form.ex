@@ -1,5 +1,5 @@
 defmodule Systems.Citizen.Pool.Form do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 

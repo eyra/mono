@@ -1,5 +1,5 @@
 defmodule Systems.Home.LoggedInView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def update(%{blocks: blocks}, socket) do
