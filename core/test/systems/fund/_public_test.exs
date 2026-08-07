@@ -593,6 +593,12 @@ defmodule Systems.Fund.PublicTest do
       assert {:ok, %{status: :approved}} = approve_reward(key)
     end
 
+    test "is idempotent on :pending_payout (payout already in flight)", %{key: key} do
+      {:ok, _} = approve_reward(key)
+      force_status(key, :pending_payout)
+      assert {:ok, %{status: :pending_payout}} = approve_reward(key)
+    end
+
     test "overrides a :rejected reward (pay out anyway)", %{key: key} do
       {:ok, _} = reject_reward(key)
       assert {:ok, _} = approve_reward(key)
@@ -642,6 +648,13 @@ defmodule Systems.Fund.PublicTest do
     test "errors on :approved", %{key: key} do
       {:ok, _} = approve_reward(key)
       assert {:error, :reward_already_approved} = reject_reward(key)
+    end
+
+    test "errors on :pending_payout (payout in flight, too late to reject)", %{key: key} do
+      {:ok, _} = approve_reward(key)
+      force_status(key, :pending_payout)
+      assert {:error, :reward_already_approved} = reject_reward(key)
+      assert %{status: :pending_payout} = Fund.Public.get_reward(key, [])
     end
 
     test "returns error when reward not found" do
@@ -2009,5 +2022,16 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :pending_payout} = Core.Repo.reload!(r1)
       assert %{status: :failed} = Core.Repo.reload!(payout)
     end
+  end
+
+  # :pending_payout is normally set by `lock_approved_rewards/2` during
+  # payout initiation. In unit tests we shortcut via a direct update so
+  # the reward is in that state without running the whole payout flow.
+  defp force_status(key, status) do
+    import Ecto.Query
+
+    {1, _} =
+      from(r in Fund.RewardModel, where: r.idempotence_key == ^key)
+      |> Core.Repo.update_all(set: [status: status, updated_at: DateTime.utc_now(:second)])
   end
 end

@@ -389,7 +389,7 @@ defmodule Systems.Fund.Public do
   balance; `:virtual` currencies have no such constraint.
   """
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in [:approved, :paid],
+      when status in [:approved, :pending_payout, :paid],
       do: multi
 
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected} = reward) do
@@ -481,7 +481,7 @@ defmodule Systems.Fund.Public do
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}), do: multi
 
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in [:approved, :paid] do
+      when status in [:approved, :pending_payout, :paid] do
     Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
   end
 
