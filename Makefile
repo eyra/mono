@@ -39,7 +39,7 @@ credo/%: FORCE
 .PHONY: compile
 compile: ${MIX_PROJECTS:%=%/_build}
 %/_build: FORCE
-	cd $* && mix compile --force --warnings-as-errors
+	cd $* && mix compile --warnings-as-errors
 
 .PHONY: deps
 deps: ${MIX_PROJECTS:%=%/deps}

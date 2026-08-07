@@ -5,6 +5,11 @@ on:
     branches-ignore:
       - master
 
+# Cancel superseded runs on the same ref so a new push stops the old job.
+concurrency:
+  group: test-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     runs-on: ubuntu-24.04
@@ -35,15 +40,38 @@ jobs:
           otp-version: "27.3.4"
           elixir-version: "1.17.0-otp-27"
 
-      - name: Setup the Elixir project
-        run: make deps
+      # Cache Mix deps + build artifacts. Key is scoped to OTP/Elixir + mix.lock;
+      # restore-keys let us reuse a stale-lock build as a warm start.
+      - name: Cache mix deps + build
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            core/deps
+            core/_build
+            banking_proxy/deps
+            banking_proxy/_build
+          key: mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock', 'banking_proxy/mix.lock') }}
+          restore-keys: |
+            mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-
 
-      # Setup caching (mostly for Dialyzer)
-      - uses: actions/cache@v6.1.0
-        id: cache
+      - name: Cache Dialyzer PLTs
+        uses: actions/cache@v6.1.0
         with:
           path: core/priv/plts
-          key: "mix-${{ runner.os }}-${{ steps.setup-elixir.outputs.otp-version }}-Elixir-${{ steps.setup-elixir.outputs.elixir-version }}"
+          key: plts-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock') }}
+          restore-keys: |
+            plts-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-
+
+      - name: Cache npm node_modules
+        uses: actions/cache@v6.1.0
+        with:
+          path: core/assets/node_modules
+          key: npm-${{ runner.os }}-${{ hashFiles('core/assets/package-lock.json') }}
+          restore-keys: |
+            npm-${{ runner.os }}-
+
+      - name: Setup the Elixir project
+        run: make deps
 
       - name: Format
         run: make format
