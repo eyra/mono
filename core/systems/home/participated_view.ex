@@ -1,7 +1,6 @@
 defmodule Systems.Home.ParticipatedView do
   use CoreWeb, :live_component_fabric
 
-  alias Frameworks.Pixel.Image
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
 
@@ -16,7 +15,7 @@ defmodule Systems.Home.ParticipatedView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="border-2 border-grey4 rounded p-6" data-testid="participated">
+    <div class="border-2 border-grey4 rounded p-4 md:p-6" data-testid="participated">
       <Text.title2 margin="">
         <%= @labels.title %>
         <span class="text-primary"> <%= Enum.count(@content_items) %></span>
@@ -39,36 +38,43 @@ defmodule Systems.Home.ParticipatedView do
     ~H"""
     <a
       href={@item.path}
-      class="flex flex-row items-center gap-4 py-4 first:pt-0 last:pb-0 hover:bg-grey6 -mx-2 px-2 rounded"
+      class="flex flex-row items-start gap-3 md:gap-4 py-4 first:pt-0 last:pb-0 hover:bg-grey6 -mx-2 px-2 rounded"
       data-testid="participated-row"
     >
       <div class="flex-1 min-w-0">
-        <div class="text-title5 font-title5 text-grey1 truncate">
+        <div class="text-title5 font-title5 text-grey1 break-words line-clamp-2">
           <%= @item.title %>
         </div>
         <%= if @item.subtitle do %>
-          <div class="text-bodysmall font-body text-grey2 truncate">
+          <div class="mt-2 text-bodysmall font-body text-grey2 break-words line-clamp-2">
             <%= @item.subtitle %>
           </div>
         <% end %>
-      </div>
-
-      <div class="flex flex-col items-end gap-1 shrink-0">
-        <div class="text-bodymedium font-body text-grey1">
-          <%= @labels.reward_label %>
-          <span class="text-title6 font-title6">
-            <%= CurrencyHelpers.format_cents(@item.reward_cents) %>
-          </span>
+        <div class="mt-1 lg:hidden flex flex-wrap items-center gap-x-2 gap-y-1">
+          <.status_pill status={@item.reward_status} labels={@labels} />
+          <.reward_label labels={@labels} reward_cents={@item.reward_cents} />
         </div>
-        <.status_pill status={@item.reward_status} labels={@labels} />
       </div>
 
-      <div class="w-24 h-16 rounded overflow-hidden bg-grey4 shrink-0">
-        <%= if @item.image_info do %>
-          <Image.blurhash id={"participated-#{:erlang.phash2(@item.path)}"} image={@item.image_info} />
-        <% end %>
+      <div class="hidden lg:flex flex-col items-end gap-1 shrink-0">
+        <.status_pill status={@item.reward_status} labels={@labels} />
+        <.reward_label labels={@labels} reward_cents={@item.reward_cents} />
       </div>
     </a>
+    """
+  end
+
+  attr(:labels, :map, required: true)
+  attr(:reward_cents, :integer, required: true)
+
+  defp reward_label(assigns) do
+    ~H"""
+    <span class="text-bodymedium font-body text-grey1 whitespace-nowrap">
+      <%= @labels.reward_label %>
+      <span class="text-title6 font-title6">
+        <%= CurrencyHelpers.format_cents(@reward_cents) %>
+      </span>
+    </span>
     """
   end
 
@@ -77,7 +83,7 @@ defmodule Systems.Home.ParticipatedView do
 
   defp status_pill(%{status: :awaiting} = assigns) do
     ~H"""
-    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-white text-label font-label bg-warning">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-white text-label font-label bg-warning">
       <%= @labels.status.awaiting %>
     </span>
     """
@@ -85,7 +91,7 @@ defmodule Systems.Home.ParticipatedView do
 
   defp status_pill(%{status: :approved} = assigns) do
     ~H"""
-    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-white text-label font-label bg-success">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-white text-label font-label bg-success">
       <%= @labels.status.approved %>
     </span>
     """
@@ -93,7 +99,7 @@ defmodule Systems.Home.ParticipatedView do
 
   defp status_pill(%{status: :rejected} = assigns) do
     ~H"""
-    <span class="inline-flex items-center px-3 py-0.5 rounded-full text-white text-label font-label bg-delete">
+    <span class="inline-flex items-center px-3 py-1 rounded-full text-white text-label font-label bg-delete">
       <%= @labels.status.rejected %>
     </span>
     """
