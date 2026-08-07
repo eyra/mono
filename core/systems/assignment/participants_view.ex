@@ -8,7 +8,6 @@ defmodule Systems.Assignment.ParticipantsView do
   alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
-  alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Assignment
   alias Systems.Assignment.PaidSlotsLogic
@@ -55,7 +54,6 @@ defmodule Systems.Assignment.ParticipantsView do
       |> update_invite_title()
       |> update_invite_url()
       |> update_invite_annotation()
-      |> assign_pending_approvals()
       |> PaidSlotsLogic.assign_paid_slots_state()
     }
   end
@@ -79,14 +77,6 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   @impl true
-  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
-    %{
-      module: Assignment.PayoutModal,
-      params: %{assignment_id: assignment_id}
-    }
-  end
-
-  @impl true
   def handle_event(
         "create_advert",
         _payload,
@@ -94,86 +84,6 @@ defmodule Systems.Assignment.ParticipantsView do
       ) do
     Advert.Assembly.create(assignment, user, pool)
     {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("open_payout_modal", _, socket) do
-    {
-      :noreply,
-      socket
-      |> compose_child(:payout_modal)
-      |> show_modal(:payout_modal, :compact)
-    }
-  end
-
-  @impl true
-  def handle_event("payout_modal_close", _, socket) do
-    {
-      :noreply,
-      socket
-      |> hide_modal(:payout_modal)
-      |> PaidSlotsLogic.refresh_assignment()
-      |> assign_pending_approvals()
-    }
-  end
-
-  # Auth-gated mutation. Reaching this handler means the request went through
-  # a routed page whose live_view guarantees the researcher can only see their
-  # own assignment. PayoutModal has no such guarantee, so it bubbles the click
-  # to us via `send_event(:parent, "pay_out_all")` instead of running the
-  # mutation itself. Result flows back to the modal via `send_event(:payout_modal,
-  # "post_pay_out_all", …)`, which the modal handles to clear its decline UI
-  # / set the error banner and re-fetch its view model.
-  @impl true
-  def handle_event(
-        "pay_out_all",
-        _,
-        %{assigns: %{assignment: assignment}} = socket
-      ) do
-    result = Assignment.Public.bulk_approve_pending_payouts(assignment)
-
-    if match?({:error, _}, result) do
-      Logger.warning("[ParticipantsView] bulk approve failed: #{inspect(result)}")
-    end
-
-    {
-      :noreply,
-      socket
-      |> send_event(:payout_modal, "post_pay_out_all", %{result: result})
-      |> assign_pending_approvals()
-    }
-  end
-
-  # Auth-gated mutation. task_id + reason come up in the payload from
-  # PayoutModal's shim `send_event(:parent, "submit_decline", %{...})`; the
-  # modal's expand_decline / update_reason UI state is what supplied them.
-  @impl true
-  def handle_event(
-        "submit_decline",
-        %{task_id: task_id, reason: reason},
-        %{assigns: %{assignment: assignment}} = socket
-      )
-      when is_integer(task_id) do
-    result =
-      Assignment.Public.reject_task_by_id(assignment, task_id, %{
-        category: :other,
-        message: reason
-      })
-
-    if match?({:error, _}, result) do
-      Logger.warning("[ParticipantsView] reject_task #{task_id} failed: #{inspect(result)}")
-    end
-
-    {
-      :noreply,
-      socket
-      |> send_event(:payout_modal, "post_submit_decline", %{result: result})
-      |> assign_pending_approvals()
-    }
-  end
-
-  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
-    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
@@ -292,8 +202,6 @@ defmodule Systems.Assignment.ParticipantsView do
 
           <.spacing value="L" />
 
-          <.pending_approvals_banner pending_approvals={@pending_approvals} target={@myself} />
-
           <%= if @content_flags[:paid_slots] do %>
             <.paid_slots
               entity={@entity}
@@ -328,25 +236,6 @@ defmodule Systems.Assignment.ParticipantsView do
           </div>
         </Area.content>
       </div>
-    """
-  end
-
-  attr(:pending_approvals, :list, required: true)
-  attr(:target, :any, required: true)
-
-  def pending_approvals_banner(assigns) do
-    ~H"""
-    <%= if Enum.any?(@pending_approvals) do %>
-      <div data-testid="pending-approvals-cta">
-        <NextAction.View.highlight
-          title={dgettext("eyra-assignment", "pending_approvals.title")}
-          description={dgettext("eyra-assignment", "pending_approvals.description")}
-          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
-          cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
-        />
-      </div>
-      <.spacing value="L" />
-    <% end %>
     """
   end
 end

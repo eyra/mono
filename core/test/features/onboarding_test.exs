@@ -12,8 +12,8 @@ defmodule CoreWeb.Features.OnboardingTest do
   alias Systems.Pool
 
   @tag :feature
-  feature "PANL participant sees profile step first on onboarding page", %{session: session} do
-    # Create a confirmed PANL participant
+  feature "PANL participant walks account → pool onboarding via return_to chain",
+          %{session: session} do
     password = Factories.valid_user_password()
 
     user =
@@ -22,47 +22,19 @@ defmodule CoreWeb.Features.OnboardingTest do
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       })
 
-    # Add user to PANL pool
-    panl_pool =
+    _panl_pool =
       Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
-
-    Pool.Public.add_participant!(panl_pool, user)
 
     session
     |> sign_in(user, password)
-    |> visit("/user/onboarding")
+    |> visit("/user/onboarding?return_to=/pool/panl/join")
     |> assert_has(Query.css("[data-testid='profile-view']"))
-  end
-
-  @tag :feature
-  feature "PANL participant can complete onboarding with continue button", %{session: session} do
-    # Create a confirmed PANL participant
-    password = Factories.valid_user_password()
-
-    user =
-      Factories.insert!(:member, %{
-        password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-      })
-
-    # Add user to PANL pool
-    panl_pool =
-      Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
-
-    Pool.Public.add_participant!(panl_pool, user)
-
-    session
-    |> sign_in(user, password)
-    |> visit("/user/onboarding")
-    # First step: profile
-    |> assert_has(Query.css("[data-testid='profile-view']"))
-    # Click continue to go to features step
     |> click(Query.css("[phx-click='continue']"))
+    |> assert_has(Query.css("[data-testid='pool-join-consent-view']"))
+    |> click(Query.css("[data-testid='pool-join-consent-accept-button']"))
     |> assert_has(Query.css("[data-testid='features-view']"))
-    # Click continue to finish onboarding
-    |> click(Query.css("[phx-click='continue']"))
-    # Should navigate away from onboarding — `body` polls.
-    |> assert_has(Query.css("body"))
+    |> click(Query.css("[data-testid='pool-onboarding-continue']"))
+    |> assert_path_changed_from("/pool/panl/onboarding")
   end
 
   @tag :feature
@@ -79,9 +51,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
-    # Non-PANL user should see profile view but not features view
     |> assert_has(Query.css("[data-testid='profile-view']"))
-    |> refute_has(Query.css("[data-testid='features-view']"))
   end
 
   @tag :feature

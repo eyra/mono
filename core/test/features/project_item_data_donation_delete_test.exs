@@ -32,6 +32,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher_user.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
 
     # Step 2: Create project
     researcher

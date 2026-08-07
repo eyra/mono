@@ -150,7 +150,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        rejected_at: ~N[2024-09-30 19:36:39],
         status: :rejected
       })
 
@@ -168,7 +167,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        accepted_at: ~N[2024-09-30 19:36:39],
         status: :accepted
       })
 
@@ -264,7 +262,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        rejected_at: ~N[2024-09-30 19:36:39],
         status: :rejected
       })
 
@@ -282,7 +279,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        accepted_at: ~N[2024-09-30 19:36:39],
         status: :accepted
       })
 
@@ -365,7 +361,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        rejected_at: ~N[2024-09-30 19:36:39],
         status: :rejected
       })
 
@@ -383,7 +378,6 @@ defmodule Systems.Assignment.ControllerTest do
         auth_node: %Core.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
-        accepted_at: ~N[2024-09-30 19:36:39],
         status: :accepted
       })
 
