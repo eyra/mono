@@ -565,35 +565,35 @@ msgid "panl.cta.home.button"
 msgstr "Go to home"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.label"
+msgid "pay_in_request_form.aim.label"
 msgstr "Aim of the study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.cancel.button"
+msgid "pay_in_request_form.cancel.button"
 msgstr "Cancel"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.confirm.button"
+msgid "pay_in_request_form.confirm.button"
 msgstr "Confirm"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.costs.label"
+msgid "pay_in_request_form.costs.label"
 msgstr "Costs"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.description"
+msgid "pay_in_request_form.description"
 msgstr "Proceed to pay the fee and recruit Panl participants."
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.label"
+msgid "pay_in_request_form.fee.label"
 msgstr "Participant fee"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.slots.label"
+msgid "pay_in_request_form.slots.label"
 msgstr "Number of participants"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.title"
+msgid "pay_in_request_form.title"
 msgstr "Add participants"
 
 #, elixir-autogen, elixir-format
@@ -641,15 +641,15 @@ msgid "recruit.panel.title"
 msgstr "Recruit participants"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
+msgid "pay_in_request_form.partner_fee.label"
 msgstr "Service fee (%{percentage}%)"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
+msgid "pay_in_request_form.subtotal.label"
 msgstr "%{count} x participant fee of %{reward}"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.total.label"
+msgid "pay_in_request_form.total.label"
 msgstr "Total"
 
 #, elixir-autogen, elixir-format
@@ -741,9 +741,17 @@ msgid "assignment_full.title"
 msgstr "This study is full"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
-msgstr "Please enter a plain amount, like 3.75"
+msgid "pay_in_request_form.aim.placeholder"
+msgstr "A short description of your study"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.placeholder"
-msgstr "A short description of your study"
+msgid "pay_in_request_form.slots.required"
+msgstr "Please enter at least 1 participant"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.aim.required"
+msgstr "Please describe the aim of your study"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.fee.required"
+msgstr "Please enter a participant fee"

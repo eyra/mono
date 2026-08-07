@@ -35,11 +35,50 @@ defmodule Systems.Budget.Public do
   Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.
   """
   def create_pay_in(
-        %Assignment.Model{info: %{subject_reward: subject_reward}, fund: fund} = assignment,
-        %Account.User{id: user_id} = user,
-        subject_count
+        %Assignment.Model{info: info} = assignment,
+        %Account.User{} = user,
+        attrs
       )
-      when is_integer(subject_count) and subject_count > 0 do
+      when is_map(attrs) do
+    changeset =
+      %Budget.PayInRequestModel{}
+      |> Budget.PayInRequestModel.changeset(with_info_defaults(info, attrs))
+      |> Budget.PayInRequestModel.validate()
+
+    with {:ok, request} <- Ecto.Changeset.apply_action(changeset, :insert),
+         {:ok, updated_info} <- persist_pay_in_info(info, request) do
+      do_create_pay_in(%{assignment | info: updated_info}, user, request.subject_count)
+    end
+  end
+
+  # Fields the researcher can't edit (e.g. reward when locked because
+  # transactions already exist) fall back to the persisted assignment info.
+  defp with_info_defaults(
+         %Assignment.InfoModel{subject_reward: reward, aim_of_study: aim},
+         attrs
+       ) do
+    attrs
+    |> Map.put_new("subject_reward", reward)
+    |> Map.put_new("aim_of_study", aim)
+  end
+
+  defp persist_pay_in_info(%Assignment.InfoModel{} = info, %Budget.PayInRequestModel{
+         subject_reward: reward,
+         aim_of_study: aim
+       }) do
+    info
+    |> Assignment.InfoModel.changeset(:auto_save, %{
+      "subject_reward" => reward,
+      "aim_of_study" => aim
+    })
+    |> then(&Core.Persister.save(&1.data, &1))
+  end
+
+  defp do_create_pay_in(
+         %Assignment.Model{info: %{subject_reward: subject_reward}, fund: fund} = assignment,
+         %Account.User{id: user_id} = user,
+         subject_count
+       ) do
     reward_per_participant = subject_reward || 0
     base_amount = subject_count * reward_per_participant
     partner_fee = Payment.Public.partner_fee_amount(base_amount)

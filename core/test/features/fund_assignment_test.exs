@@ -3,7 +3,7 @@ defmodule CoreWeb.Features.FundAssignmentTest do
   Wallaby version of the Playwright `fund_assignment.spec.ts` (UC-OPP-01).
 
   Researcher signs in → creates project + questionnaire item → navigates to
-  the Participants tab → opens BudgetForm → fills aim / reward / slots →
+  the Participants tab → opens PayInRequestForm → fills aim / reward / slots →
   confirms → clicks through the local payment simulator → sees the
   `:completed` transaction card.
 
@@ -87,20 +87,12 @@ defmodule CoreWeb.Features.FundAssignmentTest do
     |> click(Query.css("[data-testid='assignment-tab-participants']"))
     |> assert_has(Query.css("[data-testid='pay-add-participants-button']"))
     |> click(Query.css("[data-testid='pay-add-participants-button']"))
-    |> fill_in(Query.css("[data-testid='budget-form-aim-input']"),
+    |> fill_in(Query.css("[data-testid='pay-in-request-form-aim-input']"),
       with: "Wallaby fund test"
     )
-    |> fill_in(Query.css("[data-testid='budget-form-reward-input']"), with: "5.00")
-    |> fill_in(Query.css("[data-testid='budget-form-slots-input']"), with: "10")
-    # The slots field has phx-debounce="300"; the confirm button stays
-    # disabled (cursor-not-allowed) until the LV processes update_slots.
-    # Wait on the button-state transition before clicking — same pattern
-    # the Playwright spec used. Without this we'd race the debounce and
-    # confirm would no-op on subject_count=0.
-    |> assert_has(
-      Query.css("[data-testid='budget-form-confirm-button']:not(.cursor-not-allowed)")
-    )
-    |> click(Query.css("[data-testid='budget-form-confirm-button']"))
+    |> fill_in(Query.css("[data-testid='pay-in-request-form-reward-input']"), with: "5.00")
+    |> fill_in(Query.css("[data-testid='pay-in-request-form-slots-input']"), with: "10")
+    |> click(Query.css("[data-testid='pay-in-request-form-confirm-button']"))
     |> assert_has(Query.css("[data-testid='local-payment-complete-button']"))
     |> click(Query.css("[data-testid='local-payment-complete-button']"))
     |> assert_has(Query.css("[data-testid='transaction-card-completed']"))
