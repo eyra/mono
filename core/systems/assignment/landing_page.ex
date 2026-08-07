@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.LandingPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
   use CoreWeb.Layouts.Stripped.Composer
 
   alias Systems.Assignment

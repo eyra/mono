@@ -15,7 +15,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
   On submit the form sends `{:submit_decline, %{participation_id, reason}}` to the
   parent LV process (`ContributionsView`) which runs the actual mutation.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Form
   import LiveNest.Event.Publisher, only: [publish_event: 3]

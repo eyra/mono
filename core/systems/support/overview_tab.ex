@@ -1,5 +1,5 @@
 defmodule Systems.Support.OverviewTab do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Core.ImageHelpers
   import Frameworks.Pixel.Content

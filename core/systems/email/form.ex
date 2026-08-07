@@ -1,5 +1,5 @@
 defmodule Systems.Email.Form do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias CoreWeb.UI.Timestamp
   import Frameworks.Pixel.Tag

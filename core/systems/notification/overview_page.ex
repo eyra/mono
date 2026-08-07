@@ -1,5 +1,5 @@
 defmodule Systems.Notification.OverviewPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
   alias Systems.Notification
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})

@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.UserListItem do
   @moduledoc """
     User list item
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text

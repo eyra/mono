@@ -1,5 +1,5 @@
 defmodule Systems.Instruction.DownloadForm do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use CoreWeb.FileUploader, accept: ~w(.zip)
 
   use Gettext, backend: CoreWeb.Gettext

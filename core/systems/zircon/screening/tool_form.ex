@@ -1,5 +1,5 @@
 defmodule Systems.Zircon.Screening.ToolForm do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def update(_params, socket) do

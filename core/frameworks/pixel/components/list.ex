@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.List do
   context — so an "action" button in a row fires against the consumer,
   not this wrapper.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
 
