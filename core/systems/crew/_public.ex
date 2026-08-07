@@ -135,26 +135,10 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def rejected_tasks(crew) do
-    task_query(crew, [:rejected])
-    |> order_by([task: t], desc: t.updated_at)
-    |> Repo.all()
-  end
-
-  def accepted_tasks(crew) do
-    task_query(crew, [:accepted])
-    |> order_by([task: t], desc: t.updated_at)
-    |> Repo.all()
-  end
-
   def count_pending_tasks(crew) do
     task_query(crew, [:pending], false)
     |> select([task: t], count(t.id, :distinct))
     |> Repo.one()
-  end
-
-  def count_participated_tasks(crew) do
-    count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
