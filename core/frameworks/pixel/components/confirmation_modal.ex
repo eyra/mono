@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.ConfirmationModal do
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   @impl true
   def update(%{assigns: assigns}, socket) do
@@ -59,12 +60,14 @@ defmodule Frameworks.Pixel.ConfirmationModal do
     assign(socket, buttons: buttons)
   end
 
+  @impl true
   def handle_event("confirm", _, socket) do
-    {:noreply, socket |> send_event(:parent, "confirmed")}
+    {:noreply, emit_to_parent(socket, {"confirmed", %{}})}
   end
 
+  @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
+    {:noreply, emit_to_parent(socket, {"cancelled", %{}})}
   end
 
   @impl true

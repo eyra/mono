@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.DropdownSelector do
-  use CoreWeb, :live_component_fabric
+  use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   import Frameworks.Pixel.FormHelpers, only: [get_border_color: 1]
 
@@ -105,7 +106,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
         warning = dgettext("link-lab", "update.warning.time.slot.no.longer.available")
 
         socket
-        |> send_event(:parent, "dropdown_reset")
+        |> emit_to_parent({"dropdown_reset", %{}})
         |> assign(selected_option_index: nil, selected_option: nil, warning: warning)
 
       index ->
@@ -141,7 +142,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
         show_options?: !show_options?,
         warning: nil
       )
-      |> send_event(:parent, "dropdown_toggle", %{show_options?: !show_options?})
+      |> emit_to_parent({"dropdown_toggle", %{show_options?: !show_options?}})
     }
   end
 
@@ -166,7 +167,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
         show_options?: false
       )
       |> update_selector_text()
-      |> send_event(:parent, "dropdown_selected", %{option: selected_option})
+      |> emit_to_parent({"dropdown_selected", %{option: selected_option}})
     }
   end
 
