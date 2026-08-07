@@ -206,7 +206,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc_unavailable -> no modal (B1: no fall-through to a payout)" do
+    test "kyc_unavailable -> verify modal (B1: no fall-through to a payout)" do
       user = user_with_reward(1000, "m_unavail")
 
       stub(ProviderMock, :get_merchant, fn _ ->
@@ -226,7 +226,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      # The verify variant confirms via an external link, so it can never
+      # fall through to a withdrawal — the reward stays :approved.
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
       assert reward_status(user) == :approved
     end
 

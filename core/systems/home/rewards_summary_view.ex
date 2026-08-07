@@ -13,7 +13,9 @@ defmodule Systems.Home.RewardsSummaryView do
     * `{:kyc_required, _, _}` — `:verify` variant; the bank account isn't
       verified yet, so an info modal lets the participant close it or continue to
       the account page (`/user/account?tab=payouts`), where verification lives.
-    * `{:below_threshold, _}` / other errors — a flash, no modal.
+    * `{:below_threshold, _}` — a flash, no modal.
+    * any other error — `:verify` variant too: the payouts tab is the only
+      actionable next step, so never dead-end on "try again later".
 
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
@@ -71,8 +73,6 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
-  # Bank account not verified yet: an info modal that lets the participant close
-  # it or continue to the account page (`/user/account?tab=payouts`) to verify.
   def compose(:handoff_modal, %{handoff_mode: :verify, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -88,9 +88,6 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
-  # Bank account submitted to the payment provider and awaiting review: nothing
-  # for the participant to do but wait, so an info-only modal (no redirect) —
-  # clearer than the verify modal which nags them to redo completed steps.
   def compose(:handoff_modal, %{handoff_mode: :awaiting, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -116,21 +113,16 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply, present_handoff(socket, :payout)}
 
       {:error, {:kyc_required, _source, _url}} ->
-        # Bank account not verified yet: show an info modal offering to continue
-        # to the account page, where the "Uitbetalingen" tab handles verification.
         {:noreply, present_handoff(socket, :verify)}
 
       {:error, :awaiting_verification} ->
-        # Bank account is submitted and the provider is reviewing: nothing for
-        # the participant to do, so show a "please wait" info modal instead of
-        # the redirect-to-KYC one.
         {:noreply, present_handoff(socket, :awaiting)}
 
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
 
       {:error, _reason} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_failed)}
+        {:noreply, present_handoff(socket, :verify)}
     end
   end
 
