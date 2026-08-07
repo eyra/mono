@@ -1,5 +1,5 @@
 defmodule Systems.Storage.EndpointFilesView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias CoreWeb.UI.Timestamp
   alias Systems.Storage

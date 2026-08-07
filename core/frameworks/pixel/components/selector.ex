@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Selector do
   @moduledoc false
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import CoreWeb.LiveDefaults
   alias Phoenix.LiveView.JS

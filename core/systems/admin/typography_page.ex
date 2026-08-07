@@ -1,5 +1,5 @@
 defmodule Systems.Admin.TypographyPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.User, __MODULE__})

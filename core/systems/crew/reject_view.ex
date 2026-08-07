@@ -1,5 +1,5 @@
 defmodule Systems.Crew.RejectView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 

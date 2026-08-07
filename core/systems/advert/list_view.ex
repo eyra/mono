@@ -1,5 +1,5 @@
 defmodule Systems.Advert.ListView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Empty
   import Frameworks.Pixel.Content

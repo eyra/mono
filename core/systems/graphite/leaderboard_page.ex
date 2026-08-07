@@ -1,5 +1,5 @@
 defmodule Systems.Graphite.LeaderboardPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
   use CoreWeb.Layouts.Stripped.Composer
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})

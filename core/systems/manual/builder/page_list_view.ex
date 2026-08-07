@@ -1,5 +1,5 @@
 defmodule Systems.Manual.Builder.PageListView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import Systems.Manual.Builder.Html, only: [page_list_item: 1]
 

@@ -2,7 +2,7 @@ defmodule CoreWeb.FakeQualtrics do
   @moduledoc """
   The home screen.
   """
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
 

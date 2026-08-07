@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.ImageCatalogPicker do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   import CoreWeb.UI.Dialog
   import CoreWeb.LiveDefaults

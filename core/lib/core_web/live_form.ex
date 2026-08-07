@@ -11,7 +11,7 @@ defmodule CoreWeb.LiveForm do
 
   This is equivalent to:
 
-      use CoreWeb, :live_component
+      use CoreWeb, :live_component_fabric
       use CoreWeb.Live.FlashHelpers
       use CoreWeb.Live.FormHelpers
 
@@ -20,7 +20,7 @@ defmodule CoreWeb.LiveForm do
 
   defmacro __using__(_) do
     quote do
-      use CoreWeb, :live_component
+      use CoreWeb, :live_component_fabric
       use CoreWeb.Live.FlashHelpers
 
       import Frameworks.Pixel.Form
