@@ -410,12 +410,8 @@ defmodule Systems.Crew.PublicTest do
                  status: :pending,
                  started_at: nil,
                  completed_at: nil,
-                 accepted_at: nil,
-                 rejected_at: nil,
                  expire_at: nil,
                  expired: false,
-                 rejected_category: nil,
-                 rejected_message: nil,
                  crew_id: ^crew_id,
                  auth_node_id: ^auth_node_id
                }
@@ -664,7 +660,7 @@ defmodule Systems.Crew.PublicTest do
               }} = Crew.Public.create_task(crew, user2, ["task1"], nil)
     end
 
-    test "activate_task/1 marks pending task completed" do
+    test "complete_task!/1 marks a pending task completed" do
       user = Factories.insert!(:member)
       auth_node = auth_node_with_owner(user)
 
@@ -684,124 +680,6 @@ defmodule Systems.Crew.PublicTest do
       assert Crew.Public.count_tasks(crew, [:completed]) == 0
       assert %{status: :completed} = Crew.Public.complete_task!(task)
       assert Crew.Public.count_tasks(crew, [:completed]) == 1
-    end
-
-    test "activate_task/1 does not mark accepted task completed" do
-      user = Factories.insert!(:member)
-      auth_node = auth_node_with_owner(user)
-
-      crew = Factories.insert!(:crew)
-      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-
-      task =
-        Factories.insert!(:crew_task, %{
-          identifier: ["task1"],
-          crew: crew,
-          auth_node: auth_node,
-          status: :pending
-        })
-
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-      {:ok, %{crew_task: task}} = Crew.Public.accept_task(task)
-      assert %{status: :accepted} = Crew.Public.complete_task!(task)
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-    end
-
-    test "activate_task/1 does not mark rejected task completed" do
-      user = Factories.insert!(:member)
-      auth_node = auth_node_with_owner(user)
-
-      crew = Factories.insert!(:crew)
-      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-
-      task =
-        Factories.insert!(:crew_task, %{
-          identifier: ["task1"],
-          crew: crew,
-          auth_node: auth_node,
-          status: :pending
-        })
-
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-
-      {:ok, %{crew_task: task}} =
-        Crew.Public.reject_task(task, %{
-          category: :attention_checks_failed,
-          message: "rejection message"
-        })
-
-      assert %{status: :rejected} = Crew.Public.complete_task!(task)
-      assert Crew.Public.count_tasks(crew, [:completed]) == 0
-    end
-
-    test "accept_task/1 marks task accepted" do
-      user = Factories.insert!(:member)
-      auth_node = auth_node_with_owner(user)
-
-      crew = Factories.insert!(:crew)
-      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-
-      assert Crew.Public.count_tasks(crew, [:accepted]) == 0
-
-      task =
-        Factories.insert!(:crew_task, %{
-          identifier: ["task1"],
-          crew: crew,
-          auth_node: auth_node,
-          status: :pending
-        })
-
-      assert Crew.Public.count_tasks(crew, [:accepted]) == 0
-
-      assert {:ok,
-              %{
-                crew_task: %{
-                  status: :accepted,
-                  accepted_at: accepted_at
-                }
-              }} = Crew.Public.accept_task(task)
-
-      assert accepted_at != nil
-      assert Crew.Public.count_tasks(crew, [:accepted]) == 1
-    end
-
-    test "reject_task/1 marks task rejected" do
-      user = Factories.insert!(:member)
-      auth_node = auth_node_with_owner(user)
-
-      crew = Factories.insert!(:crew)
-      _member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-
-      assert Crew.Public.count_tasks(crew, [:rejected]) == 0
-
-      task =
-        Factories.insert!(:crew_task, %{
-          identifier: ["task1"],
-          crew: crew,
-          auth_node: auth_node,
-          status: :pending
-        })
-
-      assert Crew.Public.count_tasks(crew, [:rejected]) == 0
-
-      rejection = %{category: :attention_checks_failed, message: "rejection message"}
-
-      assert {:ok,
-              %{
-                crew_task: %{
-                  status: :rejected,
-                  rejected_at: rejected_at,
-                  rejected_category: :attention_checks_failed,
-                  rejected_message: "rejection message"
-                }
-              }} = Crew.Public.reject_task(task, rejection)
-
-      assert rejected_at != nil
-      assert Crew.Public.count_tasks(crew, [:rejected]) == 1
     end
 
     test "delete_task/1 " do

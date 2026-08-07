@@ -85,6 +85,15 @@ defmodule Fabric.ModalPresenter do
         socket
       end
 
+      # TEMP: allow Fabric-composed pages to override this while they still host
+      # LiveNest embedded LVs that open LiveNest modals. The Fabric clause
+      # above only matches when a `fabric_modal` is in assigns; without an
+      # override, the [X] chrome button on a LiveNest modal would crash with
+      # a FunctionClauseError here. Remove once every consumer of this
+      # presenter has migrated its embedded LVs to Fabric — or once the whole
+      # page has migrated off Fabric onto LiveNest.
+      defoverridable notify_modal_controller: 2
+
       def map_live_nest_modal(
             %{live_component: %{ref: %{id: id, module: module}, params: params}, style: style} =
               _modal,

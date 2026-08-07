@@ -41,6 +41,31 @@ defmodule Systems.Assignment.ContentPage do
     update_view_model(socket)
   end
 
+  # TEMP: bridge Fabric ↔ LiveNest modal closes.
+  #
+  # This page is still Fabric-composed (`:management_page`), but one tab —
+  # Contributions — uses a LiveNest embedded LV that opens a LiveNest modal
+  # (see `Assignment.ContributionsView`). When the modal is dismissed via the
+  # chrome [X], the resulting `close_modal` event lands here at the Fabric
+  # ModalPresenter, whose default `notify_modal_controller/2` clause only
+  # matches when a `fabric_modal` is present in assigns. Without this
+  # override the [X] crashes the page with a FunctionClauseError.
+  #
+  # Delete this whole block once one of the following is true:
+  #   * `Assignment.ContentPage` (and every tab it hosts) has migrated off
+  #     Fabric onto a LiveNest composer, OR
+  #   * `Assignment.ContributionsView` has been rewritten as a Fabric
+  #     LiveComponent that plays nicely with Fabric's own modal presenter.
+  def notify_modal_controller(%{assigns: %{fabric_modal: nil}} = socket, _modal_id), do: socket
+
+  def notify_modal_controller(%{assigns: assigns} = socket, modal_id) do
+    if Map.has_key?(assigns, :fabric_modal) do
+      super(socket, modal_id)
+    else
+      socket
+    end
+  end
+
   @impl true
   def render(assigns) do
     ~H"""

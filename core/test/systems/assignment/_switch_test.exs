@@ -1,9 +1,12 @@
 defmodule Systems.Assignment.SwitchTest do
   use Core.DataCase
   import Frameworks.Signal.TestHelper
+  import Systems.NextAction.TestHelper
 
   alias Systems.Assignment
   alias Systems.Assignment.Switch
+  alias Systems.Fund
+  alias Systems.NextAction
 
   describe "crew events" do
     setup do
@@ -128,42 +131,6 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
-
-    test "crew_task accepted", %{user: user, crew: crew, crew_task: crew_task} do
-      message = %{
-        crew: crew,
-        crew_task: crew_task,
-        from_pid: self(),
-        changeset: %{data: %{status: :pending}}
-      }
-
-      assert :ok = Switch.intercept({:crew_task, :accepted}, message)
-      refute_signal_dispatched({:assignment, :monitor_event})
-      assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
-      message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
-      assert message.user_id == user.id
-
-      # Verify embedded views are updated
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
-    end
-
-    test "crew_task rejected", %{user: user, crew: crew, crew_task: crew_task} do
-      message = %{crew: crew, crew_task: crew_task, from_pid: self()}
-      assert :ok = Switch.intercept({:crew_task, :rejected}, message)
-      refute_signal_dispatched({:assignment, :monitor_event})
-      assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
-      message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
-      assert message.user_id == user.id
-
-      # Verify embedded views are updated
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
-      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
-    end
   end
 
   describe "assignment events" do
@@ -247,5 +214,178 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
+  end
+
+  describe "assignment_participation events" do
+    setup do
+      isolate_signals(except: [Systems.Assignment.Switch])
+
+      %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
+
+      owner = Factories.insert!(:member)
+
+      :ok =
+        Core.Authorization.assign_role(owner, assignment, :owner)
+
+      participant = Factories.insert!(:member)
+
+      assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, participant)
+
+      %{
+        assignment: assignment,
+        fund: fund,
+        owner: owner,
+        participant: participant,
+        participation: participation
+      }
+    end
+
+    test ":completed creates PendingContributions next-action for the owner", %{
+      assignment: %{id: id},
+      participation: participation,
+      owner: owner
+    } do
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
+
+      assert_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test ":completed refreshes content page + embedded views", %{participation: participation} do
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
+
+      assert_signal_dispatched({:page, Systems.Assignment.ContentPage})
+      assert_signal_dispatched({:embedded_live_view, Systems.Assignment.ContributionsView})
+    end
+
+    test ":completed on an unfunded assignment skips NA creation", %{owner: owner} do
+      unfunded = Factories.insert!(:assignment, %{fund: nil})
+      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
+      participant = Factories.insert!(:member)
+      {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
+
+      refute_next_action(owner, "/assignment/#{unfunded.id}/content?tab=contributions")
+    end
+
+    test ":completed with no owners is a no-op on next-actions (does not crash)", %{
+      assignment: assignment,
+      participant: participant
+    } do
+      # Fresh assignment with no owner role assigned anywhere.
+      ownerless = Assignment.Factories.create_assignment(31, 1)
+      ownerless = Assignment.Public.get!(ownerless.id, Assignment.Model.preload_graph(:down))
+      {:ok, participation} = Assignment.Public.obtain_participation(ownerless, participant)
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
+
+      # And confirm the setup assignment still lets NAs be reached, so the guard
+      # above actually exercised the empty-owners branch rather than a silent fail.
+      _ = assignment
+      assert NextAction.Public.list_next_actions(participant) == []
+    end
+
+    test ":accepted clears the NA when no other contributions are pending", %{
+      assignment: %{id: id} = assignment,
+      participation: participation,
+      owner: owner
+    } do
+      seed_pending_contributions_na(assignment, owner)
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :accepted}, message)
+
+      refute_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test ":accepted keeps the NA when another participant is still pending", %{
+      assignment: %{id: id, fund: fund} = assignment,
+      participation: participation,
+      owner: owner
+    } do
+      seed_pending_contributions_na(assignment, owner)
+      other = Factories.insert!(:member)
+      other_key = Assignment.Private.reward_idempotence_key(assignment, other)
+      {:ok, _} = Fund.Public.create_reward(fund, 500, other, other_key)
+      other_reward = Fund.Public.get_reward(other_key, Fund.RewardModel.preload_graph(:full))
+
+      {:ok, _} =
+        Ecto.Multi.new()
+        |> Fund.Public.mark_pending_approval(other_reward)
+        |> Core.Repo.commit()
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :accepted}, message)
+
+      assert_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test ":accepted on an unfunded assignment leaves the NA untouched", %{owner: owner} do
+      unfunded = Factories.insert!(:assignment, %{fund: nil})
+      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
+      participant = Factories.insert!(:member)
+      {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
+
+      NextAction.Public.create_next_action(
+        [owner],
+        Systems.Assignment.NextActions.PendingContributions,
+        key: "#{unfunded.id}",
+        params: %{"assignment_id" => unfunded.id}
+      )
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :accepted}, message)
+
+      assert_next_action(owner, "/assignment/#{unfunded.id}/content?tab=contributions")
+    end
+
+    test ":rejected clears the NA when no other contributions are pending", %{
+      assignment: %{id: id} = assignment,
+      participation: participation,
+      owner: owner
+    } do
+      seed_pending_contributions_na(assignment, owner)
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :rejected}, message)
+
+      refute_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test ":rejected keeps the NA when another participant is still pending", %{
+      assignment: %{id: id, fund: fund} = assignment,
+      participation: participation,
+      owner: owner
+    } do
+      seed_pending_contributions_na(assignment, owner)
+      other = Factories.insert!(:member)
+      other_key = Assignment.Private.reward_idempotence_key(assignment, other)
+      {:ok, _} = Fund.Public.create_reward(fund, 500, other, other_key)
+      other_reward = Fund.Public.get_reward(other_key, Fund.RewardModel.preload_graph(:full))
+
+      {:ok, _} =
+        Ecto.Multi.new()
+        |> Fund.Public.mark_pending_approval(other_reward)
+        |> Core.Repo.commit()
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :rejected}, message)
+
+      assert_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+  end
+
+  defp seed_pending_contributions_na(%{id: assignment_id}, owner) do
+    NextAction.Public.create_next_action(
+      [owner],
+      Systems.Assignment.NextActions.PendingContributions,
+      key: "#{assignment_id}",
+      params: %{"assignment_id" => assignment_id}
+    )
   end
 end

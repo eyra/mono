@@ -13,6 +13,7 @@ defmodule Systems.Assignment.Private do
   alias Frameworks.Utility.Identifier
 
   alias Systems.Account
+  alias Systems.Account.User
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Consent
@@ -130,6 +131,21 @@ defmodule Systems.Assignment.Private do
 
   def storage_endpoint_key(%Assignment.Model{id: id}) do
     "assignment=#{id}"
+  end
+
+  def reward_idempotence_key(%Assignment.ParticipationModel{
+        assignment_id: assignment_id,
+        user_id: user_id
+      }),
+      do: reward_idempotence_key(assignment_id, user_id)
+
+  def reward_idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
+    reward_idempotence_key(assignment_id, user_id)
+  end
+
+  def reward_idempotence_key(assignment_id, user_id)
+      when is_integer(assignment_id) and is_integer(user_id) do
+    "assignment=#{assignment_id},user=#{user_id}"
   end
 
   def get_preview_url(%Assignment.Model{} = assignment) do

@@ -112,6 +112,18 @@ defmodule Systems.Crew.Public do
     |> Repo.one()
   end
 
+  @doc """
+  Returns a `%{user_id => count}` map of tasks in `status_list` on the
+  given crew, grouped by the task's owner. Non-expired tasks only.
+  Missing keys mean zero.
+  """
+  def task_status_counts_by_user(%Crew.Model{} = crew, status_list) when is_list(status_list) do
+    crew
+    |> task_counts_by_user_query(status_list)
+    |> Repo.all()
+    |> Map.new()
+  end
+
   def expired_pending_started_tasks(crew) do
     tasks_expired_pending_started_query(crew)
     |> Repo.all()
@@ -123,26 +135,10 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def rejected_tasks(crew) do
-    task_query(crew, [:rejected])
-    |> order_by([task: t], desc: t.rejected_at)
-    |> Repo.all()
-  end
-
-  def accepted_tasks(crew) do
-    task_query(crew, [:accepted])
-    |> order_by([task: t], desc: t.accepted_at)
-    |> Repo.all()
-  end
-
   def count_pending_tasks(crew) do
     task_query(crew, [:pending], false)
     |> select([task: t], count(t.id, :distinct))
     |> Repo.one()
-  end
-
-  def count_participated_tasks(crew) do
-    count_tasks(crew, [:completed, :rejected, :accepted])
   end
 
   def cancel_task(%Crew.TaskModel{} = task) do
@@ -185,54 +181,6 @@ defmodule Systems.Crew.Public do
       {:ok, %{crew_task: task}} -> task
       _ -> nil
     end
-  end
-
-  def reject_task(multi, %Crew.TaskModel{} = task, %{category: category, message: message}) do
-    multi_update(
-      multi,
-      :task,
-      task,
-      %{
-        status: :rejected,
-        rejected_at: Timestamp.naive_now(),
-        rejected_category: category,
-        rejected_message: message
-      },
-      :rejected
-    )
-  end
-
-  def reject_task(multi, id, rejection) do
-    task = get_task!(id)
-    reject_task(multi, task, rejection)
-  end
-
-  def reject_task(%Crew.TaskModel{} = task, rejection) do
-    Multi.new()
-    |> reject_task(task, rejection)
-    |> Repo.commit()
-  end
-
-  def reject_task(id, rejection) do
-    Multi.new()
-    |> reject_task(id, rejection)
-    |> Repo.commit()
-  end
-
-  def accept_task(%Crew.TaskModel{} = task) do
-    update_task(
-      task,
-      %{
-        status: :accepted,
-        accepted_at: Timestamp.naive_now()
-      },
-      :accepted
-    )
-  end
-
-  def accept_task(id) do
-    get_task!(id)
-    |> accept_task()
   end
 
   def update_task(%Crew.TaskModel{} = task, attrs, event) do
