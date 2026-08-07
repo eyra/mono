@@ -5,12 +5,21 @@ MIX_PROJECTS=core banking_proxy
 all: test format compile credo deps
 
 .PHONY: setup
-setup: install_assets
+setup: install_assets install_hooks
 
 .PHONY: install_assets
 install_assets:
 	@echo "Installing assets"
 	@cd ./core/assets && npm install
+
+.PHONY: install_hooks
+install_hooks:
+	@if command -v pre-commit >/dev/null 2>&1; then \
+		echo "Installing git hooks (pre-commit + pre-push)"; \
+		pre-commit install --hook-type pre-commit --hook-type pre-push; \
+	else \
+		echo "pre-commit not found — skipping git hook install. See https://pre-commit.com/#install"; \
+	fi
 
 .PHONY: prepare
 prepare: test format compile credo
