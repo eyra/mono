@@ -191,7 +191,7 @@ defmodule Systems.Assignment.BudgetForm do
     assigns = assign(assigns, :confirm_enabled?, confirm_enabled?(assigns))
 
     ~H"""
-    <div>
+    <div id={"#{@id}_content"} phx-hook="LiveContent" data-show-errors={true}>
       <Text.title3>
         <%= dgettext("eyra-assignment", "budget_form.title") %>
       </Text.title3>
