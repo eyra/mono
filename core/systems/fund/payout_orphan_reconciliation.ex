@@ -30,6 +30,10 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
 
+  # Anchored to a field boundary, not to the start of the reference: the
+  # `payout=` pair is not guaranteed to be the first one in the key.
+  @payout_uid ~r/(?:^|,)payout=(?<uid>[^,]+)/
+
   @doc """
   Scans provider withdrawals and transfers created in the
   `[max_age_days, min_age_minutes]` window, returning the updated state.
@@ -71,7 +75,7 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   # id, which a restore rewinds — matching on one could pair a provider object
   # with an unrelated local payout, so it is reported rather than guessed at.
   defp payout_uid(%{reference: reference}, leg) when is_binary(reference) do
-    with %{"uid" => uid} <- Regex.named_captures(~r/(?:^|,)payout=(?<uid>[^,]+)/, reference),
+    with %{"uid" => uid} <- Regex.named_captures(@payout_uid, reference),
          {:ok, uid} <- Ecto.UUID.cast(uid) do
       {:ok, uid}
     else

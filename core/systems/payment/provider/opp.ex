@@ -444,7 +444,7 @@ defmodule Systems.Payment.Provider.OPP do
         parsed = Enum.map(items, parse)
         acc = acc ++ Enum.filter(parsed, &within?(&1, since))
 
-        if more_pages?(body, page) and Enum.all?(parsed, &within?(&1, since)) do
+        if more_pages?(body, page) and keep_paging?(parsed, since) do
           list_since(path, since, parse, page + 1, acc)
         else
           {:ok, acc}
@@ -459,6 +459,14 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   defp more_pages?(body, page), do: page < Map.get(body, "last_page", page)
+
+  # Paging continues only while the whole page is in-window *and* at least one
+  # object dated it so. A page of undated objects says nothing about where the
+  # window ends, and treating it as in-window would page on to the cap.
+  defp keep_paging?(parsed, since) do
+    Enum.all?(parsed, &within?(&1, since)) and
+      Enum.any?(parsed, &match?(%{created: %DateTime{}}, &1))
+  end
 
   # An object with no parseable creation timestamp is kept rather than dropped:
   # the pass exists to surface unknown objects, so an unreadable date must not

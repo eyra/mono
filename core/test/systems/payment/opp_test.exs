@@ -616,6 +616,25 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert Agent.get(:opp_page_count, & &1) == 1
     end
 
+    test "stops paging at a page whose objects carry no creation timestamp",
+         %{bypass: bypass} do
+      # An undated page says nothing about where the window ends. It is still
+      # kept (an unreadable date must not hide an orphan), but paging on it
+      # would run to the cap on every sweep.
+      Agent.start_link(fn -> 0 end, name: :opp_undated_pages)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        Agent.update(:opp_undated_pages, &(&1 + 1))
+        item = withdrawal_json("wtd_undated", "payout=a", "null")
+        Plug.Conn.resp(conn, 200, page_json([item], 10))
+      end)
+
+      assert {:ok, [%{uid: "wtd_undated"}]} =
+               OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert Agent.get(:opp_undated_pages, & &1) == 1
+    end
+
     test "requests newest-first ordering", %{bypass: bypass} do
       Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
         assert conn.query_string =~ "order[]=-date_created"

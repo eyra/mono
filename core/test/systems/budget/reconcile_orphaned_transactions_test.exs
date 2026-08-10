@@ -18,7 +18,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
 
   defp state, do: Payment.Public.new_reconciliation_state()
 
-  defp local_transaction(idempotence_key) do
+  defp local_transaction(idempotence_key, opts \\ []) do
     currency_ledger =
       case Budget.CurrencyLedgerModel.get_by_currency(:EUR) do
         nil -> Budget.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
@@ -45,7 +45,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
       transaction_id: "tra_#{System.unique_integer([:positive])}",
       status: :pending,
       idempotence_key: idempotence_key,
-      invoice_id: "NEXT-O-#{System.unique_integer([:positive])}",
+      invoice_id: Keyword.get(opts, :invoice_id, "NEXT-O-#{System.unique_integer([:positive])}"),
       subject_count: 10
     })
     |> Ecto.Changeset.put_change(:user_id, Factories.insert!(:member).id)
@@ -111,13 +111,16 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
     test "matches on idempotence_key, not invoice_id" do
       # A restore rewinds the invoice sequence, so a local row sharing the
       # orphan's invoice_id must not make the orphan look present.
-      local = local_transaction("pay_in:fund=1:#{Ecto.UUID.generate()}")
       orphan = provider_transaction("pay_in:fund=1:#{Ecto.UUID.generate()}")
+
+      local =
+        local_transaction("pay_in:fund=1:#{Ecto.UUID.generate()}", invoice_id: orphan.reference)
 
       %{summary: summary} = run([orphan])
 
+      assert local.invoice_id == orphan.reference
       assert summary.missing_locally == 1
-      assert Repo.reload!(local).idempotence_key != orphan.reference
+      assert summary.verified == 0
     end
   end
 
