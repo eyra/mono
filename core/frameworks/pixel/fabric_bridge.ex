@@ -44,13 +44,19 @@ defmodule Frameworks.Pixel.FabricBridge do
 
       # Capture the :fabric assign when a Fabric parent renders this
       # component via compose_child, so emit_to_parent/2 can route parent
-      # events correctly. Mirrors the capture Fabric.LiveComponent used to
-      # do implicitly. Removed together with the surrounding module once no
-      # Fabric parents remain.
+      # events correctly. Mirrors what Fabric.LiveComponent's __using__ used
+      # to do implicitly — including assigning :id, which several Pixel
+      # renders reference as `@id`. Removed together with the surrounding
+      # module once no Fabric parents remain.
       @impl true
-      def update(%{fabric: fabric} = params, socket) do
+      def update(%{id: id, fabric: fabric} = params, socket) do
         params = Map.drop(params, [:fabric])
-        socket = Phoenix.Component.assign(socket, :fabric, fabric)
+
+        socket =
+          socket
+          |> Phoenix.Component.assign(:id, id)
+          |> Phoenix.Component.assign(:fabric, fabric)
+
         update(params, socket)
       end
     end
