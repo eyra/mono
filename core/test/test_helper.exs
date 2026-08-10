@@ -10,7 +10,7 @@ Code.ensure_loaded!(Frameworks.Signal.TestRecorder)
 Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
 Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
 
-ExUnit.start(exclude: [:slow])
+ExUnit.start(exclude: [:slow], capture_log: true)
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
