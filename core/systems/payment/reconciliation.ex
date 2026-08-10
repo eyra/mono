@@ -21,7 +21,29 @@ defmodule Systems.Payment.Reconciliation do
   @max_throttle_waits 5
   @retryable_statuses [429, 500, 502, 503, 504]
 
+  @min_age_minutes 60
+  @max_age_days 7
+
   def new_state, do: State.new()
+
+  @doc """
+  Creation window a provider→local scan considers, as `{oldest, newest}`.
+
+  `oldest` bounds how far back the provider listing reaches. `newest` is a
+  min-age guard: an object created moments ago may have a local row committing
+  right now, and flagging it would flap.
+
+  Overridable per run via `:min_age_minutes` and `:max_age_days`, matching the
+  options the local-first reconcilers take.
+  """
+  def scan_window(opts) do
+    min_age = Keyword.get(opts, :min_age_minutes, @min_age_minutes)
+    max_age = Keyword.get(opts, :max_age_days, @max_age_days)
+    now = DateTime.utc_now()
+
+    {DateTime.add(now, -max_age * 24 * 60 * 60, :second),
+     DateTime.add(now, -min_age * 60, :second)}
+  end
 
   @doc """
   Provider withdrawal lookup guarded by the circuit breaker, throttle and
@@ -33,6 +55,23 @@ defmodule Systems.Payment.Reconciliation do
   def get_transaction(state, uid),
     do: guarded(state, fn -> Payment.Public.get_transaction(uid) end)
 
+  @doc """
+  Provider-side listings for the provider→local pass, under the same breaker and
+  throttle as the per-row lookups. One call covers a whole sweep, so a tripped
+  breaker here skips the entire pass rather than a single row.
+  """
+  def list_recent_withdrawals(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_withdrawals(since) end)
+
+  def list_recent_transfers(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_transfers(since) end)
+
+  def list_recent_transactions(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_transactions(since) end)
+
+  def list_recent_merchants(state, %DateTime{} = since),
+    do: guarded(state, fn -> Payment.Public.list_recent_merchants(since) end)
+
   defp guarded(%State{circuit_open: true} = state, _fun), do: {:circuit_open, state}
 
   defp guarded(%State{} = state, fun) do
@@ -40,12 +79,16 @@ defmodule Systems.Payment.Reconciliation do
 
     case classify(with_backoff(fun, @max_retries)) do
       {:ok, _} = ok -> {ok, State.record_success(state)}
+      # Truncation is a provider call that succeeded and returned partial data,
+      # not a provider fault — it must not push the circuit breaker toward open.
+      {:truncated, _} = truncated -> {truncated, State.record_success(state)}
       :not_found -> {:not_found, State.record_success(state)}
       {:error, _} = error -> {error, State.record_failure(state)}
     end
   end
 
   defp classify({:ok, _} = ok), do: ok
+  defp classify({:truncated, _} = truncated), do: truncated
   defp classify({:error, %Payment.Error{code: :not_found}}), do: :not_found
   defp classify({:error, %Payment.Error{details: %{status: 404}}}), do: :not_found
   defp classify({:error, _} = error), do: error
