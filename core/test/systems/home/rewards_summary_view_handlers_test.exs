@@ -15,6 +15,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
   alias Core.Factories
   alias Systems.Fund
+  alias Systems.Payment
   alias Systems.Payment.ProviderMock
   alias Systems.Home.RewardsSummaryView
 
@@ -29,7 +30,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     rejected_pill: "R",
     payout_button: "Uitbetalen",
     payout_below_threshold: "Minimum €5 required",
-    payout_failed: "Could not start payout",
     payout_handoff_title: "Start payout",
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
@@ -320,6 +320,28 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert socket.assigns.approved_cents == 0
+    end
+
+    # FX#10186097421. An unknown post-confirm error used to dead-end on the
+    # generic "try again later" flash; it must point at the payouts tab instead,
+    # the same as the pre-confirm path.
+    test "a provider failure at confirm time presents the verify modal" do
+      user = user_with_reward(1000, "m_c_down")
+
+      stub(ProviderMock, :list_bank_accounts, fn "m_c_down" ->
+        {:error, %Payment.Error{code: :service_unavailable, message: "OPP down"}}
+      end)
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :payout})
+        )
+
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      assert reward_status(user) == :approved
     end
 
     # FX#10005449329. The awaiting modal is info-only — its single "OK" button
