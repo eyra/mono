@@ -1,5 +1,12 @@
 # See https://pre-commit.com for more information
 # See https://pre-commit.com/hooks.html for more hooks
+#
+# Two stages are wired up:
+#   pre-commit — fast checks (< 30s): format, credo, incremental compile
+#   pre-push   — heavy checks (test suite + dialyzer)
+#
+# One-time setup after cloning:
+#   pre-commit install --hook-type pre-commit --hook-type pre-push
 fail_fast: true
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
@@ -30,13 +37,6 @@ repos:
         pass_filenames: false
         files: \.ex$
 
-      - id: mix-test
-        name: "elixir: mix test"
-        entry: make test
-        language: system
-        pass_filenames: false
-        files: \.exs?$
-
       - id: mix-credo
         name: "elixir: mix credo"
         entry: make credo
@@ -44,10 +44,18 @@ repos:
         pass_filenames: false
         files: \.exs*$
 
+      - id: mix-test
+        name: "elixir: mix test (pre-push)"
+        entry: make test
+        language: system
+        pass_filenames: false
+        files: \.exs?$
+        stages: [pre-push]
+
       - id: mix-dialyzer
-        name: "elixir: mix dialyzer"
+        name: "elixir: mix dialyzer (pre-push)"
         entry: make dialyzer
         language: system
         pass_filenames: false
         files: \.exs?$
-
+        stages: [pre-push]
