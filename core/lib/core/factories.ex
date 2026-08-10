@@ -971,11 +971,6 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  # `type` is required on the real changeset, so leaving it nil built a currency
-  # that cannot exist in production — and one the fund balance guard now refuses
-  # to classify. `:virtual` matches what these fixtures are: unbacked funds whose
-  # accounts start at zero. Tests that need a backed fund pass `:legal` explicitly
-  # (see `Systems.Fund.Factories.create_currency/4`).
   def build(:currency, %{} = attributes) do
     {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
 

@@ -101,11 +101,6 @@ defmodule Systems.Fund.PayoutWithdrawal do
 
   defp resume_by_phase(:awaiting_transfer, payout), do: resume_transfer(payout)
 
-  # The transfer response was lost, so we ask whether the charge exists rather
-  # than re-sending it. Found means the money did land: record it and carry on to
-  # the withdrawal leg. Absence is not proof it never landed — a listing can fail
-  # or come back short — and re-issuing on a wrong "no" would charge the platform
-  # twice, so that half stays with a human.
   defp resume_transfer(%Fund.PayoutModel{id: id} = payout) do
     merchant_uid = merchant_uid_for(payout)
 
@@ -143,8 +138,6 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  # Mirrors Fund.Public.commit_funds: the charge uid is the only handle on the
-  # transfer, so persist it before anything downstream can fail.
   defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
     payout
     |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})

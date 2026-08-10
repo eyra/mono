@@ -83,9 +83,6 @@ defmodule Systems.Fund.PublicTest do
     assert Repo.all(Fund.RewardModel) == []
   end
 
-  # The guard classifies on the currency type, so a fund whose currency was never
-  # preloaded has no answer. It must raise rather than fall through unguarded —
-  # silently skipping the check on a legal fund is how a fund gets overdrawn.
   test "create_reward/4 refuses a fund whose currency is not preloaded", %{fund: fund} do
     participant = Factories.insert!(:member, %{creator: false})
     unloaded = %{fund | currency: %Ecto.Association.NotLoaded{}}
@@ -1256,10 +1253,6 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
     end
 
-    # The unconfirmed-transfer case where the provider has no matching charge: the
-    # money may or may not have moved, so request_payout must surface it for manual
-    # review — never start a fresh payout over the approved rewards (risking a
-    # double charge) nor touch them.
     test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
          %{user: user, fund: fund} do
       stranded =
@@ -1275,8 +1268,6 @@ defmodule Systems.Fund.PublicTest do
       # A newly-earned reward that must not be swept into a fresh payout.
       fresh = insert_reward(user, fund, 500, :approved)
 
-      # The charge lookup is the only provider call: nothing is issued and no bank
-      # recheck happens once the transfer turns out to be unfindable.
       expect(ProviderMock, :list_charges_to_merchant, fn "m_test_123" -> {:ok, []} end)
 
       assert {:error, :manual_review} = Fund.Public.request_payout(user, "euro")
@@ -1486,8 +1477,6 @@ defmodule Systems.Fund.PublicTest do
                Core.Repo.reload!(payout)
     end
 
-    # :awaiting_transfer with no charge at the provider — absence is not proof the
-    # money never moved, so resume must not re-issue. Hands it to a human.
     test "leaves an unconfirmed transfer with no charge for manual review", %{
       user: user,
       fund: fund
@@ -1501,8 +1490,6 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
     end
 
-    # The lost-response case: the charge is there, so the money did move. Adopt it
-    # and carry on to the withdrawal leg instead of stranding the participant.
     test "adopts a transfer found at the provider and issues the withdrawal", %{
       user: user,
       fund: fund

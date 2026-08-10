@@ -252,11 +252,6 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-  # `/merchants/{uid}/charges` looks like the obvious mirror of the withdrawals
-  # subresource, but it lists charges *from* that merchant: for a participant it
-  # returns an empty list while the money is sitting right there. Verified
-  # against the sandbox — the incoming direction is only reachable through the
-  # top-level collection with `filter[to_merchant_uid]`.
   @impl true
   def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
     case HTTP.get("/charges?filter[to_merchant_uid]=#{merchant_uid}&perpage=100") do
@@ -351,7 +346,6 @@ defmodule Systems.Payment.Provider.OPP do
     }
   end
 
-  # Metadata goes out as an object but comes back as a `{key, value}` list.
   defp metadata_reference(items) when is_list(items) do
     Enum.find_value(items, fn
       %{"key" => "reference", "value" => value} -> value

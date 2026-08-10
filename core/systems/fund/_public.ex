@@ -322,10 +322,6 @@ defmodule Systems.Fund.Public do
     Multi.run(multi, :fund_balance, fn repo, _ -> verify_fund_balance(repo, fund, amount) end)
   end
 
-  # Virtual funds are minted rather than backed: their `available` only ever
-  # debits, so an overdraw check would reject every point award. Only `:virtual`
-  # skips — a legal fund whose `currency` was never preloaded raises here instead
-  # of silently passing unguarded.
   defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :virtual}}, amount)
        when is_integer(amount),
        do: multi
@@ -415,9 +411,6 @@ defmodule Systems.Fund.Public do
     |> cas_approve_step(reward, [:reserved, :pending_approval], [])
   end
 
-  # The override pays straight out of `fund.available`, so it can overdraw the
-  # fund and needs the same locked read as a fresh reservation — deciding on an
-  # in-memory balance lets two concurrent approvals both pass.
   defp check_available_balance(repo, %Fund.Model{currency: %{type: :legal}} = fund, amount) do
     case verify_fund_balance(repo, fund, amount) do
       {:ok, _} -> {:ok, :ok}
@@ -425,9 +418,6 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  # Only `:virtual` skips, for the same reason as `guard_fund_balance` — and so
-  # that a fund whose currency was never preloaded raises rather than approving
-  # unguarded.
   defp check_available_balance(_repo, %Fund.Model{currency: %{type: :virtual}}, _amount),
     do: {:ok, :ok}
 
