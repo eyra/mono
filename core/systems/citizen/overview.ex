@@ -1,5 +1,5 @@
 defmodule Systems.Citizen.Overview do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text

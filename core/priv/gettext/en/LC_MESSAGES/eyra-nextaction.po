@@ -83,13 +83,13 @@ msgid "fillin.characteristics.title"
 msgstr "Complete Your Characteristics"
 
 #, elixir-autogen, elixir-format
-msgid "fund.pending_payout.cta"
+msgid "assignment.pending_contributions.cta"
 msgstr "Review"
 
 #, elixir-autogen, elixir-format
-msgid "fund.pending_payout.description"
-msgstr "Participants are waiting for payment approval."
+msgid "assignment.pending_contributions.description"
+msgstr "Review completed contributions on %{name}."
 
 #, elixir-autogen, elixir-format
-msgid "fund.pending_payout.title"
-msgstr "Pay out"
+msgid "assignment.pending_contributions.title"
+msgstr "New contributions"

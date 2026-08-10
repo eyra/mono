@@ -3,7 +3,7 @@ defmodule Systems.Manual.ChapterView do
     Chapter View divided into Desktop and Mobile views.
   """
 
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]

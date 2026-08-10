@@ -2,7 +2,7 @@ defmodule Systems.Account.SignupPage do
   @moduledoc """
   The home screen.
   """
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
@@ -101,8 +101,8 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_info(
-        {"active_item_ids", %{active_item_ids: active_item_ids} = payload},
+  def consume_event(
+        %{name: :active_item_ids, payload: %{active_item_ids: active_item_ids} = payload},
         socket
       ) do
     normalized_ids = normalize_ids(active_item_ids)
@@ -110,7 +110,7 @@ defmodule Systems.Account.SignupPage do
 
     socket = maybe_assign_privacy_component(socket, component_id, normalized_ids)
 
-    {:noreply, socket}
+    {:stop, socket}
   end
 
   defp normalize_ids(ids) do

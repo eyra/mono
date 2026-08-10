@@ -653,84 +653,90 @@ msgid "budget_form.total.label"
 msgstr "Total"
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.error"
-msgstr "Could not decline this pay-out. Please try again."
+msgid "contributions.decline.error"
+msgstr "Could not decline this contribution. Please try again."
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.link"
+msgid "contributions.decline.link"
 msgstr "Decline"
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.reason.label"
-msgstr "Reason for pay out refusal"
+msgid "contributions.decline.reason.label"
+msgstr "Reason for declining"
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.submit.button"
-msgstr "Decline pay out"
+msgid "contributions.decline.submit.button"
+msgstr "Decline"
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.heading"
-msgstr "Pay out overview"
+msgid "contributions.decline.modal.title"
+msgstr "Decline contribution"
 
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
+msgid "contributions.decline.confirm.title"
+msgstr "Confirm decline"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.confirm.body"
+msgstr "You are about to decline the contribution from <strong class=\"text-delete\">%{subject}</strong>. This action cannot be undone."
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.confirm.placeholder"
+msgstr "Type \"%{subject}\" to confirm"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.declined.heading"
+msgstr "Declined"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.overview.heading"
+msgstr "Confirmed"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.pagination.single_page"
 msgstr "1 page"
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.button"
-msgstr "Pay out all"
-
-#, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.error"
-msgstr "Some pay-outs could not be processed. Check and try again."
-
-#, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
+msgid "contributions.search.placeholder"
 msgstr "Search"
 
 #, elixir-autogen, elixir-format
-msgid "payout.subject_label"
-msgstr "Subject"
+msgid "contributions.search.no_match"
+msgstr "No matches."
 
 #, elixir-autogen, elixir-format
-msgid "payout.tab.overview"
-msgstr "Pay out overview"
+msgid "contributions.subject_label"
+msgstr "Participant"
 
 #, elixir-autogen, elixir-format
-msgid "payout.tab.waiting"
-msgstr "Waiting for pay out"
+msgid "contributions.tasks_finished.one"
+msgid_plural "contributions.tasks_finished.other"
+msgstr[0] "%{count} of %{total} tasks finished"
+msgstr[1] "%{count} of %{total} tasks finished"
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.empty"
-msgstr "No participants are waiting for pay out."
+msgid "contributions.all_tasks_finished"
+msgstr "All tasks finished"
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.heading"
-msgstr "Waiting for pay out"
+msgid "contributions.waiting.empty"
+msgstr "No pending contributions."
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.amount_label"
+msgid "contributions.waiting.heading"
+msgstr "Pending"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.overview.amount_label"
 msgstr "Amount"
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.date_label"
+msgid "contributions.overview.date_label"
 msgstr "Date"
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.empty"
-msgstr "No payouts yet."
-
-#, elixir-autogen, elixir-format
-msgid "pending_approvals.description"
-msgstr "There are participants waiting to get paid"
-
-#, elixir-autogen, elixir-format
-msgid "pending_approvals.open.button"
-msgstr "Check pay outs"
-
-#, elixir-autogen, elixir-format
-msgid "pending_approvals.title"
-msgstr "Participants waiting for pay out"
+msgid "contributions.overview.empty"
+msgstr "No confirmed contributions yet."
 
 #, elixir-autogen, elixir-format
 msgid "assignment_full.body"
@@ -747,3 +753,21 @@ msgstr "Please enter a plain amount, like 3.75"
 #, elixir-autogen, elixir-format
 msgid "budget_form.aim.placeholder"
 msgstr "A short description of your study"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.contributions"
+msgstr "Contributions"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.button"
+msgstr "Confirm all"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.partial_error.one"
+msgid_plural "contributions.confirm_all.partial_error.other"
+msgstr[0] "Could not confirm 1 contribution. Please try again."
+msgstr[1] "Could not confirm %{count} contributions. Please try again."
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.error"
+msgstr ""

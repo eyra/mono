@@ -129,7 +129,13 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def consume_event(%{name: :work_done}, socket) do
+  def consume_event(
+        %{name: :work_done},
+        %{assigns: %{model: assignment, current_user: user}} = socket
+      ) do
+    {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
+    Assignment.Public.complete_participation(participation)
+
     {:stop, socket |> handle_action(:work_done)}
   end
 

@@ -54,6 +54,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: researcher_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
 
     # Create project
     researcher_session
@@ -137,6 +138,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: participant_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
 
     # Verify participant is on home page and sees the advert
     participant_session

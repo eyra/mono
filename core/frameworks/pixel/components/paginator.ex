@@ -4,39 +4,55 @@ defmodule Frameworks.Pixel.Paginator do
 
   attr(:active_page, :integer, required: true)
   attr(:page_count, :integer, required: true)
-  attr(:window_size, :integer, default: 7)
   attr(:target, :any, default: "")
+  attr(:justify, :atom, default: :center, values: [:start, :center, :end])
 
   def paginator(%{page_count: page_count} = assigns) when page_count < 2 do
     ~H"""
-      <div class="flex flex-row justify-center gap-2">
+      <div class={"flex flex-row #{justify_class(@justify)} gap-2"}>
         <.previous_page_button active_page={@active_page} target={@target} />
         <.next_page_button active_page={@active_page} page_count={@page_count} target={@target} />
       </div>
     """
   end
 
-  def paginator(
-        %{active_page: active_page, page_count: page_count, window_size: window_size} = assigns
-      ) do
-    window_start = max(0, active_page - div(window_size, 2))
-    window_end = min(page_count - 1, window_start + window_size - 1)
-
-    assigns =
-      assign(assigns, %{
-        window_start: window_start,
-        window_end: window_end
-      })
+  def paginator(assigns) do
+    assigns = assign(assigns, items: build_items(assigns.page_count, assigns.active_page))
 
     ~H"""
-      <div class="flex flex-row justify-center gap-2">
+      <div class={"flex flex-row #{justify_class(@justify)} gap-2"}>
         <.previous_page_button active_page={@active_page} target={@target} />
-        <%= for page_index <- @window_start..@window_end do %>
-          <.page_button index={page_index} active?={page_index == @active_page} target={@target} />
+        <%= for item <- @items do %>
+          <%= case item do %>
+            <% {:page, index} -> %>
+              <.page_button index={index} active?={index == @active_page} target={@target} />
+            <% :ellipsis -> %>
+              <.ellipsis />
+          <% end %>
         <% end %>
         <.next_page_button active_page={@active_page} page_count={@page_count} target={@target} />
       </div>
     """
+  end
+
+  # Total slots = 7 (5 page buttons + up to 2 ellipsis). First and last page
+  # are always visible so the researcher never loses the range endpoints.
+  defp build_items(page_count, _active) when page_count <= 7 do
+    for i <- 0..(page_count - 1), do: {:page, i}
+  end
+
+  defp build_items(page_count, active) when active <= 3 do
+    for(i <- 0..4, do: {:page, i}) ++ [:ellipsis, {:page, page_count - 1}]
+  end
+
+  defp build_items(page_count, active) when active >= page_count - 4 do
+    [{:page, 0}, :ellipsis] ++ for(i <- (page_count - 5)..(page_count - 1), do: {:page, i})
+  end
+
+  defp build_items(page_count, active) do
+    [{:page, 0}, :ellipsis] ++
+      for(i <- (active - 1)..(active + 1), do: {:page, i}) ++
+      [:ellipsis, {:page, page_count - 1}]
   end
 
   attr(:active_page, :integer, required: true)
@@ -96,4 +112,16 @@ defmodule Frameworks.Pixel.Paginator do
       </div>
     """
   end
+
+  def ellipsis(assigns) do
+    ~H"""
+      <div class="w-8 h-8 flex items-center justify-center font-label text-label text-grey3">
+        ⋯
+      </div>
+    """
+  end
+
+  defp justify_class(:start), do: "justify-start"
+  defp justify_class(:end), do: "justify-end"
+  defp justify_class(_), do: "justify-center"
 end

@@ -51,7 +51,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "new", verification_url: "https://opp.test/ba/verify"}]}
+      {:ok, [%{uid: "ba_test", status: :new, verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     password = Factories.valid_user_password()
@@ -79,12 +79,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
     })
 
     session
-    |> visit("/user/signin")
-    |> fill_in(Query.css("[data-testid='signin-email-input']"),
-      with: participant.email
-    )
-    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
-    |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> sign_in(participant, password)
     |> visit("/")
     |> assert_has(Query.css("[data-testid='payout-button']"))
     |> click(Query.css("[data-testid='payout-button']"))

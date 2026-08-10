@@ -8,6 +8,7 @@ defmodule Systems.Project.OverviewPage do
   alias Frameworks.Pixel.Text
 
   alias Systems.Account
+  alias Systems.NextAction
   alias Systems.Project
 
   @impl true
@@ -205,6 +206,12 @@ defmodule Systems.Project.OverviewPage do
     <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
       <Area.content>
         <Margin.y id={:page_top} />
+        <%= if @vm.next_best_action do %>
+          <div>
+            <NextAction.View.highlight {@vm.next_best_action} />
+            <.spacing value="XL" />
+          </div>
+        <% end %>
         <%= if Enum.count(@vm.cards) > 0 do %>
           <div class="flex flex-row items-center justify-center">
             <div class="h-full">

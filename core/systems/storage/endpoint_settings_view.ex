@@ -1,5 +1,5 @@
 defmodule Systems.Storage.EndpointSettingsView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Concept
   alias Systems.Storage

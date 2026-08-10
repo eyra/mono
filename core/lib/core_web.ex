@@ -87,6 +87,18 @@ defmodule CoreWeb do
 
   def live_component do
     quote do
+      use Phoenix.LiveComponent
+      use LiveNest, :live_component
+
+      unquote(pixel())
+      use Frameworks.Pixel
+
+      unquote(component_helpers())
+    end
+  end
+
+  def live_component_fabric do
+    quote do
       use Fabric.LiveComponent
       use LiveNest, :live_component
 
@@ -99,7 +111,7 @@ defmodule CoreWeb do
 
   # DEPRECATED: Use routed_live_view for LiveNest-based views.
   # This version includes Fabric.ModalPresenter which is only needed for Fabric sub-components.
-  def live_view do
+  def live_view_fabric do
     quote do
       use Phoenix.LiveView, layout: {unquote(CoreWeb.Layouts), :live}
       use LiveNest, :routed_live_view

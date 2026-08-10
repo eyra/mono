@@ -1,6 +1,7 @@
 defmodule Frameworks.Pixel.SearchBar do
   @moduledoc false
   use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   @impl true
   def update(
@@ -65,18 +66,13 @@ defmodule Frameworks.Pixel.SearchBar do
     })
   end
 
-  defp send_to_parent(%{assigns: %{fabric: %{}}} = socket, %{} = message) do
-    socket
-    |> send_event(:parent, "search_query", message)
-  end
-
   defp send_to_parent(%{assigns: %{target: {module, id}}} = socket, %{} = message) do
     send_update(module, id: id, search_query: message)
     socket
   end
 
   defp send_to_parent(socket, %{} = message) do
-    socket |> publish_event({:search_query, message})
+    emit_to_parent(socket, {"search_query", message})
   end
 
   @impl true

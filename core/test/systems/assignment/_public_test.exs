@@ -1,10 +1,9 @@
 defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
-  import Ecto.Query
   import Systems.NextAction.TestHelper
+  import Systems.Fund.TestHelper
 
   alias Systems.Assignment
-  alias Systems.Bookkeeping
   alias Systems.Crew
   alias Systems.Fund
   alias Systems.Monitor
@@ -12,57 +11,58 @@ defmodule Systems.Assignment.PublicTest do
 
   alias Core.Factories
 
-  describe "assignment instances" do
-    test "obtain_instance!/3 inserts an instance and inserts external panel info" do
+  describe "assignment participations" do
+    test "obtain_participation!/2 inserts a participation" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      Assignment.Public.obtain_instance!(assignment, user)
+      Assignment.Public.obtain_participation!(assignment, user)
 
-      assert Assignment.Public.get_instance(assignment, user) != nil
+      assert Assignment.Public.get_participation(assignment, user) != nil
     end
 
-    test "obtain_instance!/3 updates instance" do
+    test "obtain_participation!/2 is idempotent per (assignment, user)" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      instance = Assignment.Public.obtain_instance!(assignment, user)
-      instance_2 = Assignment.Public.obtain_instance!(assignment, user)
+      participation = Assignment.Public.obtain_participation!(assignment, user)
+      participation_2 = Assignment.Public.obtain_participation!(assignment, user)
 
-      assert instance.id == instance_2.id
+      assert participation.id == participation_2.id
     end
 
-    test "get_instance/2 returns nil if no instance exists" do
+    test "get_participation/2 returns nil if no participation exists" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      assert Assignment.Public.get_instance(assignment, user) == nil
+      assert Assignment.Public.get_participation(assignment, user) == nil
     end
 
-    test "get_instance/2 returns instance if it exists" do
+    test "get_participation/2 returns the participation if it exists" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
+      %{id: participation_id} = Assignment.Public.obtain_participation!(assignment, user)
 
-      assert %{id: ^instance_id} = Assignment.Public.get_instance(assignment, user)
+      assert %{id: ^participation_id} =
+               Assignment.Public.get_participation(assignment, user)
     end
 
-    test "list_instances/1 returns all instances" do
+    test "list_participations/1 returns all participations" do
       assignment = Factories.insert!(:assignment)
       %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
       %{user: user_2} = Factories.build(:affiliate_user) |> Repo.insert!()
       %{user: user_3} = Factories.build(:affiliate_user) |> Repo.insert!()
 
-      %{id: instance_id} = Assignment.Public.obtain_instance!(assignment, user)
-      %{id: instance_id_2} = Assignment.Public.obtain_instance!(assignment, user_2)
-      %{id: instance_id_3} = Assignment.Public.obtain_instance!(assignment, user_3)
+      %{id: id_1} = Assignment.Public.obtain_participation!(assignment, user)
+      %{id: id_2} = Assignment.Public.obtain_participation!(assignment, user_2)
+      %{id: id_3} = Assignment.Public.obtain_participation!(assignment, user_3)
 
       assert [
-               %{id: ^instance_id},
-               %{id: ^instance_id_2},
-               %{id: ^instance_id_3}
-             ] = Assignment.Public.list_instances(assignment)
+               %{id: ^id_1},
+               %{id: ^id_2},
+               %{id: ^id_3}
+             ] = Assignment.Public.list_participations(assignment)
     end
   end
 
@@ -411,14 +411,14 @@ defmodule Systems.Assignment.PublicTest do
              } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 creates transaction from fund reserve to user wallet" do
+    test "approve_reward creates transaction from fund reserve to user wallet" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      Assignment.Public.payout_participant(assignment, user)
+      {:ok, _} = approve_reward(Assignment.Private.reward_idempotence_key(assignment, user))
 
       deposit_idempotence_key =
         "assignment=#{assignment.id},user=#{user.id},type=deposit,attempt=1"
@@ -440,27 +440,27 @@ defmodule Systems.Assignment.PublicTest do
              } = Fund.Public.get!(assignment.fund_id)
     end
 
-    test "payout_participant/2 is idempotent" do
+    test "approve_reward is idempotent" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      assert {:ok, _} = Assignment.Public.payout_participant(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
-      assert {:ok, %Systems.Fund.RewardModel{status: :approved}} =
-               Assignment.Public.payout_participant(assignment, user)
+      assert {:ok, %Fund.RewardModel{status: :approved}} = approve_reward(idempotence_key)
+      assert {:ok, %Fund.RewardModel{status: :approved}} = approve_reward(idempotence_key)
     end
 
-    test "rewarded_amount/2 after payout" do
+    test "rewarded_amount/2 after approve_reward" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
       Assignment.Public.apply_member(assignment, user, ["task1"], 1000)
       Assignment.Public.mark_expired_debug(assignment, true)
       Assignment.Public.rollback_expired_deposits()
       Assignment.Public.apply_member(assignment, user, ["task1"], 2000)
-      Assignment.Public.payout_participant(assignment, user)
+      {:ok, _} = approve_reward(Assignment.Private.reward_idempotence_key(assignment, user))
 
       assert Assignment.Public.rewarded_amount(assignment, user) == 2000
     end
@@ -511,37 +511,6 @@ defmodule Systems.Assignment.PublicTest do
       Assignment.Public.add_participant!(assignment, participant)
 
       assert Assignment.Public.open_spot_count(assignment) == 1
-    end
-
-    test "next_action (Assignment.CheckRejection) after rejection of task" do
-      %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-
-      %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
-
-      Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
-
-      assert_next_action(user, "/assignment/#{id}/landing")
-    end
-
-    test "next_action cleared after acceptence of task" do
-      %{id: id, crew: crew} = Assignment.Factories.create_assignment(31, 3)
-      user = Factories.insert!(:member)
-      member = Crew.Factories.create_member(crew, user)
-
-      %{id: task_id} =
-        Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-          minutes_ago: 10
-        )
-
-      Crew.Public.reject_task(task_id, %{category: :other, message: "rejected"})
-      Crew.Public.accept_task(task_id)
-
-      refute_next_action(user, "/assignment/#{id}/landing")
     end
 
     test "exclude/2" do
@@ -653,37 +622,111 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
-  describe "approval flow (researcher UI wiring)" do
+  describe "complete_participation/1" do
     setup do
       user = Factories.insert!(:member)
-      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
-      member = Crew.Factories.create_member(crew, user)
+      %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
 
-      task =
-        Crew.Factories.create_task(
-          crew,
-          member,
-          ["task1", "member=#{member.id}"],
-          status: :completed
-        )
+      project_owner = Factories.insert!(:member)
+      :ok = Core.Authorization.assign_role(project_owner, assignment, :owner)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      assignment =
+        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
-      {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+      {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
 
       {:ok,
        user: user,
        assignment: assignment,
-       member: member,
-       task: task,
+       participation: participation,
+       project_owner: project_owner,
        idempotence_key: idempotence_key}
     end
 
-    test "Crew.Public.accept_task triggers reward approval via switch", %{
-      task: task,
+    test "sets completed_at on the participation", %{participation: participation} do
+      {:ok, updated} = Assignment.Public.complete_participation(participation)
+      assert %NaiveDateTime{} = updated.completed_at
+    end
+
+    test "flips the reserved reward to :pending_approval via signal chain", %{
+      participation: participation,
       idempotence_key: idempotence_key
     } do
-      {:ok, _} = Crew.Public.accept_task(task.id)
+      {:ok, _} = Assignment.Public.complete_participation(participation)
+
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "creates a PendingContributions next-action for the owner", %{
+      assignment: %{id: id},
+      participation: participation,
+      project_owner: project_owner
+    } do
+      {:ok, _} = Assignment.Public.complete_participation(participation)
+
+      assert_next_action(
+        project_owner,
+        "/assignment/#{id}/content?tab=contributions"
+      )
+    end
+
+    test "is idempotent — second call is a no-op", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, once} = Assignment.Public.complete_participation(participation)
+      {:ok, twice} = Assignment.Public.complete_participation(once)
+
+      assert once.completed_at == twice.completed_at
+
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "does not flip reward when the assignment has no fund" do
+      unfunded = Factories.insert!(:assignment, %{fund: nil})
+      user = Factories.insert!(:member)
+      {:ok, participation} = Assignment.Public.obtain_participation(unfunded, user)
+
+      assert {:ok, %{completed_at: %NaiveDateTime{}}} =
+               Assignment.Public.complete_participation(participation)
+    end
+  end
+
+  defp completed_participation_with_reward do
+    user = Factories.insert!(:member)
+    %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
+
+    assignment =
+      Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+
+    idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
+    {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+    {:ok, _} = mark_pending_approval(idempotence_key)
+    {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
+    {:ok, participation} = Assignment.Public.complete_participation(participation)
+
+    {:ok, participation: participation, idempotence_key: idempotence_key}
+  end
+
+  describe "accept_participation/1" do
+    setup do
+      completed_participation_with_reward()
+    end
+
+    test "sets accepted_at on the participation", %{participation: participation} do
+      {:ok, updated} = Assignment.Public.accept_participation(participation)
+      assert %NaiveDateTime{} = updated.accepted_at
+    end
+
+    test "flips reward to :approved and pays out via signal chain", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.accept_participation(participation)
 
       assert %{status: :approved, payment_id: payment_id} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
@@ -691,63 +734,203 @@ defmodule Systems.Assignment.PublicTest do
       refute is_nil(payment_id)
     end
 
-    test "Assignment.Public.reject_task flips reward to :rejected and rolls back deposit", %{
-      assignment: assignment,
-      task: task,
+    test "is idempotent — second call is a no-op", %{participation: participation} do
+      {:ok, once} = Assignment.Public.accept_participation(participation)
+      {:ok, twice} = Assignment.Public.accept_participation(once)
+
+      assert once.accepted_at == twice.accepted_at
+    end
+
+    test "also accepts by id", %{
+      participation: %{id: id},
       idempotence_key: idempotence_key
     } do
-      [first_category | _] = Crew.RejectCategories.values()
-      rejection = %{category: first_category, message: "test"}
+      {:ok, _} = Assignment.Public.accept_participation(id)
 
-      assert {:ok, _} = Assignment.Public.reject_task(assignment, task, rejection)
-
-      assert %{status: :rejected, deposit_id: nil} =
+      assert %{status: :approved} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
     end
   end
 
-  describe "list_pending_payouts/1" do
+  describe "reject_participation/2" do
     setup do
+      completed_participation_with_reward()
+    end
+
+    test "sets rejected_at and rejected_message on the participation", %{
+      participation: participation
+    } do
+      {:ok, updated} = Assignment.Public.reject_participation(participation, "bad data")
+
+      assert %NaiveDateTime{} = updated.rejected_at
+      assert updated.rejected_message == "bad data"
+    end
+
+    test "flips reward to :rejected and rolls back the deposit via signal chain", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(participation, "bad data")
+
+      assert %{status: :rejected, deposit_id: nil} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "is idempotent — second call is a no-op", %{participation: participation} do
+      {:ok, once} = Assignment.Public.reject_participation(participation, "first reason")
+      {:ok, twice} = Assignment.Public.reject_participation(once, "second reason (ignored)")
+
+      assert once.rejected_at == twice.rejected_at
+      assert once.rejected_message == twice.rejected_message
+    end
+
+    test "also rejects by id", %{
+      participation: %{id: id},
+      idempotence_key: idempotence_key
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(id, "bad data")
+
+      assert %{status: :rejected} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+  end
+
+  describe "state transitions across accept/reject" do
+    setup do
+      completed_participation_with_reward()
+    end
+
+    test "accept after reject is blocked — spot has already reopened", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, rejected} = Assignment.Public.reject_participation(participation, "changed my mind")
+
+      assert %{status: :rejected, deposit_id: nil} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      assert {:error, :participation_already_rejected} =
+               Assignment.Public.accept_participation(rejected)
+
+      # Participation stays rejected: no accepted_at written, reject state intact.
+      reloaded = Core.Repo.get!(Assignment.ParticipationModel, rejected.id)
+      assert reloaded.accepted_at == nil
+      assert %NaiveDateTime{} = reloaded.rejected_at
+
+      # And the Fund reward stays rejected too — the Multi never ran.
+      assert %{status: :rejected} = Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "accept after reject is blocked when called by id", %{
+      participation: %{id: id} = participation
+    } do
+      {:ok, _} = Assignment.Public.reject_participation(participation, "no")
+
+      assert {:error, :participation_already_rejected} =
+               Assignment.Public.accept_participation(id)
+    end
+
+    test "reject after accept is blocked — reward already paid out", %{
+      participation: participation,
+      idempotence_key: idempotence_key
+    } do
+      {:ok, accepted} = Assignment.Public.accept_participation(participation)
+
+      assert %{status: :approved, payment_id: payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+
+      refute is_nil(payment_id)
+
+      assert {:error, :participation_already_accepted} =
+               Assignment.Public.reject_participation(accepted, "too late")
+
+      # Participation stays accepted: no rejected_at written, accept state intact.
+      reloaded = Core.Repo.get!(Assignment.ParticipationModel, accepted.id)
+      assert %NaiveDateTime{} = reloaded.accepted_at
+      assert reloaded.rejected_at == nil
+      assert reloaded.rejected_message == nil
+
+      # And the Fund reward stays approved — the Multi never ran.
+      assert %{status: :approved, payment_id: ^payment_id} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "reject after accept is blocked when called by id", %{
+      participation: %{id: id} = participation
+    } do
+      {:ok, _} = Assignment.Public.accept_participation(participation)
+
+      assert {:error, :participation_already_accepted} =
+               Assignment.Public.reject_participation(id, "too late")
+    end
+  end
+
+  describe "owners/1" do
+    test "returns owners inherited from the top of the auth tree" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
-      %{fund: fund, crew: crew} = assignment
-      member = Crew.Factories.create_member(crew, user)
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
-      {:ok, _} = Systems.Fund.Public.mark_pending_approval(idempotence_key)
+      assert [%{id: user_id}] = Assignment.Public.owners(assignment)
+      assert user_id == user.id
+    end
+
+    test "returns [] when no one has :owner at any level" do
+      assignment = Assignment.Factories.create_assignment(31, 1)
+      assert [] = Assignment.Public.owners(assignment)
+    end
+  end
+
+  describe "auto reward transition on task completion (guarded by finished?)" do
+    setup do
+      user = Factories.insert!(:member)
+      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+      [%{id: workflow_item_id} | _] = assignment.workflow.items
 
-      {:ok, assignment: assignment, crew: crew, member: member}
+      member = Crew.Factories.create_member(crew, user)
+
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
+      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+
+      task_a =
+        Crew.Factories.create_task(
+          crew,
+          member,
+          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=a"]
+        )
+
+      task_b =
+        Crew.Factories.create_task(
+          crew,
+          member,
+          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=b"]
+        )
+
+      {:ok, task_a: task_a, task_b: task_b, idempotence_key: idempotence_key}
     end
 
-    test "lists a pending-approval reward backed by a completed task", %{
-      assignment: assignment,
-      crew: crew,
-      member: member
+    test "reward stays :reserved after completing only one of two tasks", %{
+      task_a: task_a,
+      idempotence_key: idempotence_key
     } do
-      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-        status: :completed
-      )
+      {:ok, _} = Crew.Public.complete_task(task_a)
 
-      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+      assert %{status: :reserved} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
     end
 
-    test "lists the reward even when the participant's newest task is not the completed one", %{
-      assignment: assignment,
-      crew: crew,
-      member: member
+    test "reward flips to :pending_approval after completing the last task", %{
+      task_a: task_a,
+      task_b: task_b,
+      idempotence_key: idempotence_key
     } do
-      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-        status: :completed,
-        minutes_ago: 60
-      )
+      {:ok, _} = Crew.Public.complete_task(task_a)
+      {:ok, _} = Crew.Public.complete_task(task_b)
 
-      # A newer (higher-id) non-completed task must not hide the payout.
-      Crew.Factories.create_task(crew, member, ["task2", "member=#{member.id}"], minutes_ago: 1)
-
-      assert [%{amount: 1000}] = Assignment.Public.list_pending_payouts(assignment)
+      assert %{status: :pending_approval} =
+               Systems.Fund.Public.get_reward(idempotence_key, [])
     end
   end
 
@@ -769,7 +952,7 @@ defmodule Systems.Assignment.PublicTest do
     test "creates a :reserved reward with deposit", %{user: user, assignment: assignment} do
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
                Fund.Public.get_reward(idempotence_key, [])
@@ -782,7 +965,7 @@ defmodule Systems.Assignment.PublicTest do
       assignment: %{fund_id: fund_id, crew: crew} = assignment
     } do
       Assignment.Public.add_participant!(assignment, user)
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       original_available_after_join = Fund.Model.amount_available(Fund.Public.get!(fund_id))
 
       member = Crew.Public.get_member(crew, user)
@@ -812,7 +995,7 @@ defmodule Systems.Assignment.PublicTest do
 
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       assert nil == Fund.Public.get_reward(idempotence_key, [])
     end
 
@@ -838,109 +1021,12 @@ defmodule Systems.Assignment.PublicTest do
 
       Assignment.Public.add_participant!(assignment, user)
 
-      idempotence_key = Assignment.Public.idempotence_key(assignment, user)
+      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
                Fund.Public.get_reward(idempotence_key, [])
 
       refute is_nil(deposit_id)
-    end
-  end
-
-  describe "list_completed_payouts/1" do
-    setup do
-      user = Factories.insert!(:member)
-      %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
-      # Reload to pick up public_id assigned by the crew_members trigger.
-      member = Crew.Factories.create_member(crew, user) |> Repo.reload!()
-
-      {:ok, user: user, fund: fund, crew: crew, member: member, assignment: assignment}
-    end
-
-    defp insert_paid_reward(user, fund, opts \\ []) do
-      amount = Keyword.get(opts, :amount, 500)
-      paid_at = Keyword.get(opts, :paid_at)
-      with_payment? = Keyword.get(opts, :with_payment, true)
-
-      payment =
-        if with_payment? do
-          entry =
-            Factories.insert!(:book_entry, %{
-              idempotence_key: "pay-#{System.unique_integer([:positive])}",
-              journal_message: "test_list_completed_payouts"
-            })
-
-          if paid_at do
-            from(e in Bookkeeping.EntryModel, where: e.id == ^entry.id)
-            |> Repo.update_all(set: [inserted_at: paid_at])
-          end
-
-          Repo.get!(Bookkeeping.EntryModel, entry.id)
-        end
-
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-#{System.unique_integer([:positive])}",
-        amount: amount,
-        status: :paid,
-        user: user,
-        fund: fund,
-        payment: payment
-      })
-    end
-
-    test "returns paid rewards as rows joined to crew members",
-         %{user: user, fund: fund, member: member, assignment: assignment} do
-      reward = insert_paid_reward(user, fund, amount: 750)
-
-      assert [
-               %{
-                 reward_id: reward_id,
-                 member_public_id: member_public_id,
-                 amount: 750,
-                 currency: %Fund.CurrencyModel{},
-                 paid_at: %NaiveDateTime{}
-               }
-             ] = Assignment.Public.list_completed_payouts(assignment)
-
-      assert reward_id == reward.id
-      assert member_public_id == member.public_id
-    end
-
-    test "excludes rewards that are not yet paid",
-         %{user: user, fund: fund, assignment: assignment} do
-      insert_paid_reward(user, fund)
-
-      Factories.insert!(:reward, %{
-        idempotence_key: "rw-approved-#{System.unique_integer([:positive])}",
-        amount: 100,
-        status: :approved,
-        user: user,
-        fund: fund
-      })
-
-      assert [%{amount: 500}] = Assignment.Public.list_completed_payouts(assignment)
-    end
-
-    test "returns [] when the assignment has no fund" do
-      assignment = Factories.insert!(:assignment, %{fund: nil})
-
-      assert [] = Assignment.Public.list_completed_payouts(assignment)
-    end
-
-    test "sorts rows by paid_at descending (most recent first)",
-         %{user: user, fund: fund, assignment: assignment} do
-      %{id: older_id} = insert_paid_reward(user, fund, paid_at: ~N[2024-01-01 00:00:00])
-      %{id: newer_id} = insert_paid_reward(user, fund, paid_at: ~N[2025-06-01 00:00:00])
-
-      assert [%{reward_id: ^newer_id}, %{reward_id: ^older_id}] =
-               Assignment.Public.list_completed_payouts(assignment)
-    end
-
-    test "falls back to reward.updated_at when the reward has no payment",
-         %{user: user, fund: fund, assignment: assignment} do
-      %{updated_at: updated_at} = insert_paid_reward(user, fund, with_payment: false)
-
-      assert [%{paid_at: ^updated_at}] = Assignment.Public.list_completed_payouts(assignment)
     end
   end
 

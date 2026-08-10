@@ -57,9 +57,12 @@ defmodule Systems.Org.MemberView do
   end
 
   @impl true
-  def handle_info({"active_item_ids", %{active_item_ids: active_filters}}, socket) do
+  def consume_event(
+        %{name: :active_item_ids, payload: %{active_item_ids: active_filters}},
+        socket
+      ) do
     {
-      :noreply,
+      :stop,
       socket
       |> assign(active_filters: active_filters)
       |> update_view_model()

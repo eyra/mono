@@ -286,8 +286,8 @@ defmodule Core.Factories do
     build(:assignment, %{})
   end
 
-  def build(:assignment_instance) do
-    build(:assignment_instance, %{})
+  def build(:assignment_participation) do
+    build(:assignment_participation, %{})
   end
 
   def build(:affiliate) do
@@ -659,8 +659,8 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:assignment_instance, %{} = attributes) do
-    %Assignment.InstanceModel{}
+  def build(:assignment_participation, %{} = attributes) do
+    %Assignment.ParticipationModel{}
     |> struct!(attributes)
   end
 
