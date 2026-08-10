@@ -975,7 +975,8 @@ defmodule Core.Factories do
     {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
 
     %Fund.CurrencyModel{
-      label_bundle: label_bundle
+      label_bundle: label_bundle,
+      type: :virtual
     }
     |> struct!(attributes)
   end

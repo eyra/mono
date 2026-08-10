@@ -301,6 +301,12 @@ defmodule Systems.Payment.Public do
     provider().transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
   end
 
+  @spec list_charges_to_merchant(merchant_uid :: String.t()) ::
+          {:ok, [Provider.transfer()]} | {:error, Error.t()}
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    provider().list_charges_to_merchant(merchant_uid)
+  end
+
   @doc """
   Every transfer the provider created at or after `since`, across all merchants.
   """

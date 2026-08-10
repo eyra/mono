@@ -200,8 +200,15 @@ defmodule Systems.Payment.Provider.Local do
        raw_status: "created",
        amount: amount,
        reference: idempotence_key,
+       settled: System.os_time(:second),
        created: nil
      }}
+  end
+
+  @impl true
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_charges_to_merchant merchant=#{merchant_uid} -> []")
+    {:ok, []}
   end
 
   @impl true

@@ -234,6 +234,7 @@ defmodule Systems.Payment.Provider do
           raw_status: String.t(),
           amount: integer(),
           reference: String.t() | nil,
+          settled: integer() | nil,
           created: DateTime.t() | nil
         }
 
@@ -255,6 +256,29 @@ defmodule Systems.Payment.Provider do
               amount :: non_neg_integer(),
               idempotence_key :: String.t()
             ) :: {:ok, transfer()} | {:error, Error.t()}
+
+  @doc """
+  Every transfer the provider holds *into* a merchant's balance.
+
+  The incoming direction is the one that matters: it answers "did the money we
+  tried to send this participant actually land?" when the response to
+  `transfer_to_merchant/4` was lost. The caller matches on `reference`, which
+  carries the caller's own idempotence key.
+
+  Unfiltered beyond the merchant, for the same reason as `list_withdrawals/1`:
+  a participant merchant receives a handful of transfers in its lifetime.
+
+  Note the direction. OPP's `/merchants/{uid}/charges` subresource — the apparent
+  mirror of `list_withdrawals/1` — lists charges *from* the merchant and returns
+  an empty list for a participant, so incoming transfers are only reachable
+  through the top-level collection filtered on the receiving merchant.
+
+  Only settled transfers are evidence money moved: a transfer has no lifecycle
+  status at OPP, so `status` is always `:pending` and `settled` is nil until the
+  balances actually change.
+  """
+  @callback list_charges_to_merchant(merchant_uid :: String.t()) ::
+              {:ok, [transfer()]} | {:error, Error.t()}
 
   @doc """
   Every transfer the provider created at or after `since`, across all merchants.

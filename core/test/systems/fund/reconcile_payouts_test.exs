@@ -111,10 +111,13 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     assert %{status: :pending} = Repo.reload!(payout)
   end
 
-  test "reports a pending payout with no provider_uid as unresolvable, without calling OPP",
+  test "reports a pending payout with no provider_uid as unresolvable, without polling OPP",
        %{user: user, fund: fund} do
     {payout, _reward} = insert_payout(user, fund, 1000, nil)
-    # No ProviderMock stub: Mox would raise if get_withdrawal were called.
+
+    # The charge lookup is the only call: with no provider_uid there is no
+    # withdrawal to poll, and Mox would raise if get_withdrawal were reached.
+    expect(ProviderMock, :list_charges_to_merchant, fn _merchant -> {:ok, []} end)
 
     assert %{scanned: 1, unresolvable: 1} = reconcile()
     assert %{status: :pending} = Repo.reload!(payout)
@@ -231,11 +234,51 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
              Repo.reload!(payout)
   end
 
-  # An unconfirmed transfer with no findable charge stays manual: no provider calls.
-  test "flags an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+  # An unconfirmed transfer the provider has no charge for stays manual: absence
+  # is not proof the money never moved, so the sweep must not re-issue it.
+  test "flags an unconfirmed transfer with no charge for manual review", %{
+    user: user,
+    fund: fund
+  } do
     {payout, _reward} = insert_payout(user, fund, 1000, nil, funds_committed_at: nil)
 
+    expect(ProviderMock, :list_charges_to_merchant, fn _merchant -> {:ok, []} end)
+
     assert %{scanned: 1, unresolvable: 1} = reconcile()
-    assert %{status: :pending} = Repo.reload!(payout)
+    assert %{status: :pending, funds_committed_at: nil} = Repo.reload!(payout)
+  end
+
+  # The sweep now recovers the lost-response case rather than parking it: the
+  # charge is found by its reference, adopted, and the withdrawal leg proceeds.
+  test "heals an unconfirmed transfer that did land at the provider", %{user: user, fund: fund} do
+    {payout, _reward} = insert_payout(user, fund, 1000, nil, funds_committed_at: nil)
+
+    transfer_key = Fund.PayoutModel.transfer_key(Repo.reload!(payout))
+
+    expect(ProviderMock, :list_charges_to_merchant, fn _merchant ->
+      {:ok,
+       [
+         %{
+           uid: "trf_landed",
+           status: :pending,
+           raw_status: "unknown",
+           reference: transfer_key,
+           amount: 1000,
+           settled: 1_785_329_635
+         }
+       ]}
+    end)
+
+    expect(ProviderMock, :list_withdrawals, fn _merchant -> {:ok, []} end)
+
+    expect(ProviderMock, :create_withdrawal, fn _merchant, :EUR, %{amount: 1000}, _key ->
+      {:ok,
+       %{uid: "w_healed", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+    end)
+
+    assert %{scanned: 1, still_pending: 1} = reconcile()
+
+    assert %{status: :pending, transfer_uid: "trf_landed", provider_uid: "w_healed"} =
+             Repo.reload!(payout)
   end
 end

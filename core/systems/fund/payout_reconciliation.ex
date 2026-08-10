@@ -55,13 +55,8 @@ defmodule Systems.Fund.PayoutReconciliation do
     do: poll_provider(payout, state)
 
   defp reconcile_phase(phase, payout, state)
-       when phase in [:awaiting_withdrawal, :withdrawal_retryable],
+       when phase in [:awaiting_transfer, :awaiting_withdrawal, :withdrawal_retryable],
        do: heal(payout, state)
-
-  defp reconcile_phase(:awaiting_transfer, %Fund.PayoutModel{id: id, status: status}, state) do
-    Logger.error("[Fund] reconcile: payout ##{id} has an unconfirmed transfer — manual review")
-    record(state, :unresolvable, id, nil, status, nil, %{reason: "unconfirmed transfer"})
-  end
 
   defp poll_provider(%Fund.PayoutModel{id: id, status: status, provider_uid: uid}, state) do
     case Payment.Public.reconcile_get_withdrawal(state, uid) do

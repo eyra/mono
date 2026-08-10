@@ -276,6 +276,27 @@ defmodule Systems.Payment.Provider.OPP do
   end
 
   @impl true
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    query =
+      URI.encode_query(%{
+        "filter[to_merchant_uid]" => merchant_uid,
+        "order[]" => "-date_created",
+        "perpage" => "100"
+      })
+
+    case HTTP.get("/charges?#{query}") do
+      {:ok, %{"data" => items}} when is_list(items) ->
+        {:ok, Enum.map(items, &parse_transfer(Map.get(&1, "uid"), &1))}
+
+      {:ok, _data} ->
+        {:ok, []}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
+  @impl true
   def list_recent_transfers(%DateTime{} = since),
     do: list_since("/charges", since, &parse_transfer(Map.get(&1, "uid"), &1))
 
@@ -380,6 +401,7 @@ defmodule Systems.Payment.Provider.OPP do
       raw_status: raw_status,
       amount: Map.get(data, "amount", 0),
       reference: metadata_value(Map.get(data, "metadata"), "reference"),
+      settled: Map.get(data, "settled"),
       created: parse_timestamp(Map.get(data, "created"))
     }
   end
