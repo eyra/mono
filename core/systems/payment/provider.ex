@@ -182,7 +182,8 @@ defmodule Systems.Payment.Provider do
           status: lifecycle_status(),
           raw_status: String.t(),
           amount: integer(),
-          reference: String.t() | nil
+          reference: String.t() | nil,
+          settled: integer() | nil
         }
 
   @doc """
@@ -214,6 +215,15 @@ defmodule Systems.Payment.Provider do
 
   Unfiltered beyond the merchant, for the same reason as `list_withdrawals/1`:
   a participant merchant receives a handful of transfers in its lifetime.
+
+  Note the direction. OPP's `/merchants/{uid}/charges` subresource — the apparent
+  mirror of `list_withdrawals/1` — lists charges *from* the merchant and returns
+  an empty list for a participant, so incoming transfers are only reachable
+  through the top-level collection filtered on the receiving merchant.
+
+  Only settled transfers are evidence money moved: a transfer has no lifecycle
+  status at OPP, so `status` is always `:pending` and `settled` is nil until the
+  balances actually change.
   """
   @callback list_charges_to_merchant(merchant_uid :: String.t()) ::
               {:ok, [transfer()]} | {:error, Error.t()}

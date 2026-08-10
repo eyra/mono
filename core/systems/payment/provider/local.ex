@@ -150,7 +150,8 @@ defmodule Systems.Payment.Provider.Local do
        status: :pending,
        raw_status: "created",
        amount: amount,
-       reference: idempotence_key
+       reference: idempotence_key,
+       settled: System.os_time(:second)
      }}
   end
 

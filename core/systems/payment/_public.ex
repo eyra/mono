@@ -257,7 +257,7 @@ defmodule Systems.Payment.Public do
 
   @spec list_charges_to_merchant(merchant_uid :: String.t()) ::
           {:ok, [Provider.transfer()]} | {:error, Error.t()}
-  def list_charges_to_merchant(merchant_uid) do
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
     provider().list_charges_to_merchant(merchant_uid)
   end
 

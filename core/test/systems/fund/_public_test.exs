@@ -87,9 +87,15 @@ defmodule Systems.Fund.PublicTest do
     participant = Factories.insert!(:member, %{creator: false})
     unloaded = %{fund | currency: %Ecto.Association.NotLoaded{}}
 
-    assert_raise FunctionClauseError, fn ->
-      Fund.Public.create_reward(unloaded, 500, participant, "unloaded-key")
-    end
+    assert {:error, :fund_balance, :unknown_currency, _changes} =
+             Fund.Public.create_reward(unloaded, 500, participant, "unloaded-key")
+  end
+
+  test "create_reward/4 refuses a fund whose currency is nil", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+
+    assert {:error, :fund_balance, :unknown_currency, _changes} =
+             Fund.Public.create_reward(%{fund | currency: nil}, 500, participant, "nil-cur-key")
   end
 
   test "create_reward/5 injects a clean failure for a non-positive amount", %{fund: fund} do
@@ -1490,6 +1496,48 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
     end
 
+    test "leaves an unconfirmed transfer whose charge never settled for manual review", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      transfer_key = Fund.PayoutModel.transfer_key(payout)
+
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" ->
+        {:ok,
+         [
+           %{
+             uid: "trf_unsettled",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000,
+             settled: nil
+           }
+         ]}
+      end)
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+
+      assert %{status: :pending, funds_committed_at: nil, transfer_uid: nil} =
+               Core.Repo.reload!(payout)
+    end
+
+    test "leaves a payout whose participant has no merchant for manual review", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      user |> Ecto.Changeset.change(%{merchant_uid: nil}) |> Core.Repo.update!()
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+    end
+
     test "adopts a transfer found at the provider and issues the withdrawal", %{
       user: user,
       fund: fund
@@ -1508,14 +1556,24 @@ defmodule Systems.Fund.PublicTest do
              status: :pending,
              raw_status: "unknown",
              reference: "payout=00000000-0000-0000-0000-000000000000,type=transfer",
-             amount: 1000
+             amount: 1000,
+             settled: 1_785_329_635
+           },
+           %{
+             uid: "trf_unsettled",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000,
+             settled: nil
            },
            %{
              uid: "trf_found",
              status: :pending,
              raw_status: "unknown",
              reference: transfer_key,
-             amount: 1000
+             amount: 1000,
+             settled: 1_785_329_635
            }
          ]}
       end)

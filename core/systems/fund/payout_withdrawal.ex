@@ -67,9 +67,11 @@ defmodule Systems.Fund.PayoutWithdrawal do
     Issue a fresh one under a new attempt (a rejected withdrawal keeps its key).
   * `:awaiting_provider` — issued and in flight; nothing to do.
   * `:completed` / `:failed` — terminal; nothing to do.
-  * `:awaiting_transfer` — the transfer was never confirmed and a charge cannot
-    be looked up at the provider, so we cannot tell whether the money moved.
-    Re-driving risks a double charge; this is the one case left for a human.
+  * `:awaiting_transfer` — the transfer was never confirmed. Look for a charge
+    already at the provider (its `reference` carries the payout's transfer key);
+    adopt it if found and continue to the withdrawal leg. If none is found the
+    payout is left for a human: absence is not proof the money never moved, and
+    re-issuing on a wrong "no" would charge the platform twice.
   """
   def resume(%Fund.PayoutModel{id: id}) do
     Multi.new()
@@ -102,18 +104,15 @@ defmodule Systems.Fund.PayoutWithdrawal do
   defp resume_by_phase(:awaiting_transfer, payout), do: resume_transfer(payout)
 
   defp resume_transfer(%Fund.PayoutModel{id: id} = payout) do
-    merchant_uid = merchant_uid_for(payout)
-
-    case find_existing_transfer(payout, merchant_uid) do
-      {:ok, transfer} ->
-        payout
-        |> commit_funds(transfer)
-        |> resume_withdrawal()
-
+    with {:ok, merchant_uid} <- merchant_uid_for(payout),
+         {:ok, transfer} <- find_existing_transfer(payout, merchant_uid),
+         {:ok, payout} <- commit_funds(payout, transfer) do
+      resume_withdrawal(payout, merchant_uid)
+    else
       :none ->
         Logger.error(
-          "[Fund] payout ##{id} has an unconfirmed transfer and no charge at the provider — " <>
-            "manual review"
+          "[Fund] payout ##{id} has an unconfirmed transfer and no settled charge at the " <>
+            "provider — manual review"
         )
 
         {:error, :manual_review}
@@ -128,7 +127,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
 
     case Payment.Public.list_charges_to_merchant(merchant_uid) do
       {:ok, transfers} ->
-        case Enum.find(transfers, &(&1.reference == key)) do
+        case Enum.find(transfers, &settled_match?(&1, key)) do
           nil -> :none
           transfer -> {:ok, transfer}
         end
@@ -138,28 +137,38 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
+  defp settled_match?(%{reference: reference, settled: settled}, key)
+       when is_binary(reference) and not is_nil(settled),
+       do: reference == key
+
+  defp settled_match?(_transfer, _key), do: false
+
   defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
     payout
     |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
     |> Repo.update()
     |> case do
       {:ok, payout} ->
-        payout
+        {:ok, payout}
 
       {:error, _changeset} ->
         Logger.error(
           "[Fund] adopted transfer #{transfer_uid} for payout ##{payout.id} but could not " <>
-            "persist it; the funds are committed and the uid is lost"
+            "persist it; leaving the payout for the next pass"
         )
 
-        payout
+        {:error, :transfer_not_persisted}
+    end
+  end
+
+  defp resume_withdrawal(%Fund.PayoutModel{} = payout) do
+    with {:ok, merchant_uid} <- merchant_uid_for(payout) do
+      resume_withdrawal(payout, merchant_uid)
     end
   end
 
   # List first: issuing blind would double-withdraw if one was already created.
-  defp resume_withdrawal(%Fund.PayoutModel{amount_cents: total} = payout) do
-    merchant_uid = merchant_uid_for(payout)
-
+  defp resume_withdrawal(%Fund.PayoutModel{amount_cents: total} = payout, merchant_uid) do
     case find_existing_withdrawal(payout, merchant_uid) do
       {:ok, withdrawal} -> adopt_withdrawal(payout, withdrawal, total)
       :none -> issue(payout, merchant_uid, total)
@@ -169,9 +178,8 @@ defmodule Systems.Fund.PayoutWithdrawal do
 
   # A rejected withdrawal keeps its idempotency key, so the retry needs a fresh attempt.
   defp retry_withdrawal(%Fund.PayoutModel{amount_cents: total} = payout) do
-    merchant_uid = merchant_uid_for(payout)
-
-    with {:ok, payout} <- next_withdrawal_attempt(payout) do
+    with {:ok, merchant_uid} <- merchant_uid_for(payout),
+         {:ok, payout} <- next_withdrawal_attempt(payout) do
       issue(payout, merchant_uid, total)
     end
   end
@@ -232,9 +240,15 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  defp merchant_uid_for(%Fund.PayoutModel{user_id: user_id}) do
-    %Account.User{merchant_uid: merchant_uid} = Account.Public.get_user!(user_id)
-    merchant_uid
+  defp merchant_uid_for(%Fund.PayoutModel{id: id, user_id: user_id}) do
+    case Account.Public.get_user!(user_id) do
+      %Account.User{merchant_uid: merchant_uid} when is_binary(merchant_uid) ->
+        {:ok, merchant_uid}
+
+      %Account.User{} ->
+        Logger.error("[Fund] payout ##{id} has no merchant for user ##{user_id} — manual review")
+        {:error, :manual_review}
+    end
   end
 
   defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)

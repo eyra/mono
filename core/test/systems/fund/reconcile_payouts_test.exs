@@ -263,7 +263,8 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
            status: :pending,
            raw_status: "unknown",
            reference: transfer_key,
-           amount: 1000
+           amount: 1000,
+           settled: 1_785_329_635
          }
        ]}
     end)

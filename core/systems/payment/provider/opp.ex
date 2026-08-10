@@ -254,7 +254,14 @@ defmodule Systems.Payment.Provider.OPP do
 
   @impl true
   def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
-    case HTTP.get("/charges?filter[to_merchant_uid]=#{merchant_uid}&perpage=100") do
+    query =
+      URI.encode_query(%{
+        "filter[to_merchant_uid]" => merchant_uid,
+        "order[]" => "-date_created",
+        "perpage" => "100"
+      })
+
+    case HTTP.get("/charges?#{query}") do
       {:ok, %{"data" => items}} when is_list(items) ->
         {:ok, Enum.map(items, &parse_transfer(Map.get(&1, "uid"), &1))}
 
@@ -342,7 +349,8 @@ defmodule Systems.Payment.Provider.OPP do
       status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
       amount: Map.get(data, "amount", 0),
-      reference: metadata_reference(Map.get(data, "metadata"))
+      reference: metadata_reference(Map.get(data, "metadata")),
+      settled: Map.get(data, "settled")
     }
   end
 

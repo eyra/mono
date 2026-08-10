@@ -326,6 +326,11 @@ defmodule Systems.Fund.Public do
        when is_integer(amount),
        do: multi
 
+  defp guard_fund_balance(multi, %Fund.Model{id: fund_id}, amount) when is_integer(amount) do
+    Logger.error("[Fund] refusing reservation on fund ##{fund_id} with an unresolvable currency")
+    Multi.error(multi, :fund_balance, :unknown_currency)
+  end
+
   defp verify_fund_balance(repo, %Fund.Model{available: %{id: account_id}}, amount) do
     query = from(a in Bookkeeping.AccountModel, where: a.id == ^account_id, lock: "FOR UPDATE")
     account = repo.one!(query)
@@ -333,7 +338,7 @@ defmodule Systems.Fund.Public do
     if Bookkeeping.AccountModel.balance(account) >= amount do
       {:ok, true}
     else
-      Logger.warning("Fund has not enough funds to make reward reservation")
+      Logger.warning("[Fund] fund ##{account_id} has insufficient available balance")
       {:error, :no_funding}
     end
   end
@@ -420,6 +425,11 @@ defmodule Systems.Fund.Public do
 
   defp check_available_balance(_repo, %Fund.Model{currency: %{type: :virtual}}, _amount),
     do: {:ok, :ok}
+
+  defp check_available_balance(_repo, %Fund.Model{id: fund_id}, _amount) do
+    Logger.error("[Fund] refusing approval on fund ##{fund_id} with an unresolvable currency")
+    {:error, :unknown_currency}
+  end
 
   defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do
     Multi.run(multi, :payment, fn _, _ -> {:ok, payment} end)
@@ -1186,8 +1196,6 @@ defmodule Systems.Fund.Public do
 
   defp transfer_rejected?(%Payment.Error{}), do: false
 
-  # A charge cannot be listed at OPP, so this uid is the only handle on the
-  # transfer — persist it before anything downstream can fail.
   defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
     payout
     |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
