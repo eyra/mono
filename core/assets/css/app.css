@@ -110,6 +110,17 @@ trix-toolbar .trix-button--icon:disabled::before {
   border: 0 !important;
 }
 
+/* Firefox on macOS draws a default :focus-visible outline INSIDE
+ * <trix-editor> even though the wrapping .field-input div already carries
+ * `focus:outline-none` — the rich-text editor is a separate focusable
+ * element, so Tailwind's rule on the outer div doesn't reach it. Chrome
+ * and Safari suppress this by default; Firefox doesn't. See Flux 8467829033.
+ */
+trix-editor:focus,
+trix-editor:focus-visible {
+  outline: none;
+}
+
 .trix-button--icon-attach,
 .trix-button--icon-decrease-nesting-level,
 .trix-button--icon-increase-nesting-level {
