@@ -35,6 +35,7 @@ defmodule Systems.Payment.ReconciliationSummaryTest do
                :still_pending,
                :verified,
                :missing_at_provider,
+               :missing_locally,
                :unresolvable,
                :errors,
                :skipped
