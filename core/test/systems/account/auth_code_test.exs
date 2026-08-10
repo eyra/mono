@@ -94,13 +94,18 @@ defmodule Systems.Account.AuthCodeTest do
       assert result == nil
     end
 
-    test "returns nil when max attempts reached" do
+    test "still returns the row after max attempts so verify/2 can flag the rate-limit" do
+      # If active_query filtered rate-limited rows out, verify_otp would map
+      # them to :not_found — and the verify page would show "code expired"
+      # instead of the rate-limit message. Keep the row visible so verify/2
+      # gets a chance to return :max_attempts.
       {_code, auth_code} = AuthCodeModel.build("user@example.com", nil)
 
       Repo.insert!(%{auth_code | attempts: 5})
 
       result = AuthCodeModel.active_query("user@example.com") |> Repo.one()
-      assert result == nil
+      assert result != nil
+      assert result.attempts == 5
     end
 
     test "returns most recent code when multiple exist" do
@@ -235,12 +240,16 @@ defmodule Systems.Account.AuthCodeTest do
       assert Repo.one(AuthCodeModel.active_query(email)) == nil
     end
 
-    test "returns {:error, :max_attempts} after 5 wrong attempts" do
+    test "returns {:error, :max_attempts} after the attempts limit, not :not_found" do
+      # Regression: the auth_code_verify_page maps :not_found → "This code has
+      # expired" and :max_attempts → the correct rate-limit message. Once the
+      # attempts counter hits @max_attempts the user is rate-limited, not
+      # holding an expired code — verify_otp must surface that distinction.
       email = "user@example.com"
       {code, auth_code} = AuthCodeModel.build(email, nil)
       Repo.insert!(%{auth_code | attempts: 5})
 
-      assert {:error, :not_found} = Account.Public.verify_otp(email, code)
+      assert {:error, :max_attempts} = Account.Public.verify_otp(email, code)
     end
   end
 end
