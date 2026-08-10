@@ -24,6 +24,7 @@ defmodule Systems.Payment.ReconciliationFindingModelTest do
                :resolved_completed,
                :resolved_failed,
                :missing_at_provider,
+               :missing_locally,
                :unresolvable,
                :errors,
                :skipped
@@ -55,11 +56,14 @@ defmodule Systems.Payment.ReconciliationFindingModelTest do
       assert "can't be blank" in errors_on(changeset).subject_type
     end
 
-    test "rejects a finding without a subject_id" do
-      changeset = Finding.changeset(%Finding{}, Map.delete(@valid, :subject_id))
+    test "accepts a finding without a subject_id, which :missing_locally has none of" do
+      changeset =
+        Finding.changeset(
+          %Finding{},
+          @valid |> Map.delete(:subject_id) |> Map.put(:outcome, :missing_locally)
+        )
 
-      refute changeset.valid?
-      assert "can't be blank" in errors_on(changeset).subject_id
+      assert changeset.valid?
     end
 
     test "rejects a finding without an outcome" do
@@ -75,8 +79,12 @@ defmodule Systems.Payment.ReconciliationFindingModelTest do
       assert changeset(%{subject_type: :transaction}).valid?
     end
 
+    test "accepts a merchant subject" do
+      assert changeset(%{subject_type: :merchant}).valid?
+    end
+
     test "rejects a subject_type outside the enum" do
-      changeset = changeset(%{subject_type: :merchant})
+      changeset = changeset(%{subject_type: :assignment})
 
       refute changeset.valid?
       assert "is invalid" in errors_on(changeset).subject_type
