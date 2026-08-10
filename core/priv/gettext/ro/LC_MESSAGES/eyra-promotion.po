@@ -45,7 +45,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "duration.title"
-msgstr ""
+msgstr "Durată"
 
 #, elixir-autogen, elixir-format
 msgid "expectations.public.label"
