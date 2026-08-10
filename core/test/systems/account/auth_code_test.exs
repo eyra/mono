@@ -251,5 +251,19 @@ defmodule Systems.Account.AuthCodeTest do
 
       assert {:error, :max_attempts} = Account.Public.verify_otp(email, code)
     end
+
+    test "with attempts: 4 (one below the limit), a wrong code still returns :invalid" do
+      # Pins the boundary: the rate-limit engages AT the limit, not before.
+      # The user still has their 5th attempt to get it right.
+      email = "boundary@example.com"
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 4})
+      wrong_code = if code == "000000", do: "000001", else: "000000"
+
+      assert {:error, :invalid} = Account.Public.verify_otp(email, wrong_code)
+
+      updated = Repo.one(AuthCodeModel.active_query(email))
+      assert updated.attempts == 5
+    end
   end
 end
