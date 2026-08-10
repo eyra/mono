@@ -42,4 +42,17 @@ defmodule Systems.Payment.Provider.LocalTest do
       assert_raise FunctionClauseError, fn -> Local.list_bank_accounts(nil) end
     end
   end
+
+  describe "charge_to_partner/3" do
+    test "returns a pending charge" do
+      assert {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: 1000}} =
+               Local.charge_to_partner("m_1", 1000, "donation=abc,type=charge")
+
+      assert is_binary(uid)
+    end
+
+    test "crashes on a non-positive amount (guard)" do
+      assert_raise FunctionClauseError, fn -> Local.charge_to_partner("m_1", 0, "k") end
+    end
+  end
 end

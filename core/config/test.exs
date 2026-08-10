@@ -120,6 +120,7 @@ config :core, :features,
   debug_expire_force: true,
   panl: true,
   panl_post_launch: true,
+  opp_phase_3: true,
   e2e: true,
   otp: true
 

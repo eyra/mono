@@ -91,6 +91,23 @@ defmodule Systems.Home.PageBuilderTest do
       assert :rewards_summary in block_keys(vm)
     end
 
+    # The builder is the only producer of these params and RewardsSummaryView's
+    # update/2 destructures them all, so a key added on one side and missed on
+    # the other is a runtime FunctionClauseError on a page nothing else covers.
+    test "rewards_summary params satisfy the view's update/2" do
+      user = Factories.insert!(:member, %{creator: false})
+      give_reward(user)
+
+      params =
+        Home.PageBuilder.view_model(nil, %{current_user: user})
+        |> block_params(:rewards_summary)
+
+      socket = %Phoenix.LiveView.Socket{assigns: %{__changed__: %{}}}
+
+      assert {:ok, %{assigns: assigns}} = Home.RewardsSummaryView.update(params, socket)
+      assert assigns.donate_enabled?
+    end
+
     test "panl member WITHOUT rewards does not see rewards_summary" do
       user = Factories.insert!(:member, %{creator: false})
       make_panl_participant(user)

@@ -255,6 +255,15 @@ defmodule Systems.Payment.Public do
     provider().transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
   end
 
+  @spec charge_to_partner(
+          from_owner_uid :: String.t(),
+          amount :: non_neg_integer(),
+          idempotence_key :: String.t()
+        ) :: {:ok, Provider.transfer()} | {:error, Error.t()}
+  def charge_to_partner(from_owner_uid, amount, idempotence_key) do
+    provider().charge_to_partner(from_owner_uid, amount, idempotence_key)
+  end
+
   @doc """
   The platform (eyra) merchant UID that holds the float — the `from_owner` of
   participant payout transfers. Sourced from the OPP `merchant_uid` config

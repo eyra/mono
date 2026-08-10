@@ -24,6 +24,7 @@ config :core, :features,
   leaderboard: true,
   panl: true,
   panl_post_launch: false,
+  opp_phase_3: false,
   onyx: false,
   otp: false,
   e2e: false

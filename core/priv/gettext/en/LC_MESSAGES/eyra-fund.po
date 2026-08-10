@@ -213,3 +213,35 @@ msgstr "OK"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
 msgstr "Verification in progress"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr "Donation failed. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr "You are donating %{amount} to Eyra. By doing so you waive your right to have this amount paid out. This cannot be undone."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr "Yes, donate"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr "Donate to Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr "Your donation is being processed."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr "Thank you for your donation!"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr "Donated to Eyra"

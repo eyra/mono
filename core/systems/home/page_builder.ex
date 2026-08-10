@@ -76,7 +76,13 @@ defmodule Systems.Home.PageBuilder do
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
     case {Fund.Public.summarize_rewards(user, @payout_currency), Fund.Public.payout_status(user)} do
       # No rewards and no unresolved payout — nothing to show.
-      {%{pending_cents: 0, approved_cents: 0, rejected_cents: 0}, :none} ->
+      {%{
+         pending_cents: 0,
+         approved_cents: 0,
+         rejected_cents: 0,
+         donating_cents: 0,
+         donated_cents: 0
+       }, :none} ->
         nil
 
       {%{approved_cents: approved_cents} = totals, payout_status} ->
@@ -88,6 +94,7 @@ defmodule Systems.Home.PageBuilder do
             |> Map.put(:payout_status, payout_status)
             |> Map.put(:user, user)
             |> Map.put(:payout_currency, @payout_currency)
+            |> Map.put(:donate_enabled?, feature_enabled?(:opp_phase_3))
         }
     end
   end
@@ -177,7 +184,18 @@ defmodule Systems.Home.PageBuilder do
       payout_awaiting_confirm: dgettext("eyra-fund", "rewards_summary.payout.awaiting.confirm"),
       payout_in_progress: dgettext("eyra-fund", "rewards_summary.payout.in_progress"),
       payout_retry_button: dgettext("eyra-fund", "rewards_summary.payout.retry"),
-      payout_manual: dgettext("eyra-fund", "rewards_summary.payout.manual")
+      payout_manual: dgettext("eyra-fund", "rewards_summary.payout.manual"),
+      donate_button: dgettext("eyra-fund", "rewards_summary.donate.button"),
+      donate_handoff_title: dgettext("eyra-fund", "rewards_summary.donate.handoff.title"),
+      donate_handoff_body:
+        dgettext("eyra-fund", "rewards_summary.donate.handoff.body",
+          amount: Assignment.CurrencyHelpers.format_cents(approved_cents)
+        ),
+      donate_handoff_confirm: dgettext("eyra-fund", "rewards_summary.donate.handoff.confirm"),
+      donate_thanks: dgettext("eyra-fund", "rewards_summary.donate.thanks"),
+      donate_failed: dgettext("eyra-fund", "rewards_summary.donate.failed"),
+      donate_in_progress: dgettext("eyra-fund", "rewards_summary.donate.in_progress"),
+      donated_total: dgettext("eyra-fund", "rewards_summary.donate.total")
     }
   end
 
@@ -236,8 +254,13 @@ defmodule Systems.Home.PageBuilder do
        when status in [:reserved, :pending_approval],
        do: :awaiting
 
-  defp reward_status(%{status: :approved}), do: :approved
-  defp reward_status(%{status: :paid}), do: :approved
+  # Everything from approval onwards reads the same to the participant: the
+  # money is theirs. Whether it is still approved, locked on a payout, paid, or
+  # donated is the rewards-summary card's business, not this card's.
+  defp reward_status(%{status: status})
+       when status in [:approved, :paid, :pending_payout, :donating, :donated],
+       do: :approved
+
   defp reward_status(%{status: :rejected}), do: :rejected
   defp reward_status(_), do: nil
 

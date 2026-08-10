@@ -202,4 +202,23 @@ defmodule Systems.Payment.Provider do
               amount :: non_neg_integer(),
               idempotence_key :: String.t()
             ) :: {:ok, transfer()} | {:error, Error.t()}
+
+  @doc """
+  Move funds out of a merchant balance to the platform operator's own balance.
+  Debits `from_owner_uid`; the destination is the operator itself, so there is
+  no `to_owner_uid`.
+
+  Used when a participant donates their reward: the money already sits on the
+  platform (eyra) merchant, and this settles it as the operator's own rather
+  than leaving it earmarked for a participant. Providers name this differently
+  (OPP: a partner charge); that vocabulary stays inside the adapter.
+
+  The `idempotence_key` is a stable, caller-owned unique id so retrying the same
+  logical charge never takes the money twice.
+  """
+  @callback charge_to_partner(
+              from_owner_uid :: String.t(),
+              amount :: non_neg_integer(),
+              idempotence_key :: String.t()
+            ) :: {:ok, transfer()} | {:error, Error.t()}
 end

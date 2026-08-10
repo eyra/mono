@@ -39,7 +39,15 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     payout_verify_confirm: "Go to verification",
     payout_awaiting_title: "Verification in progress",
     payout_awaiting_body: "Your bank is being reviewed by the payment provider",
-    payout_awaiting_confirm: "OK"
+    payout_awaiting_confirm: "OK",
+    donate_button: "Donate",
+    donate_handoff_title: "Donate to Eyra",
+    donate_handoff_body: "DONATE body",
+    donate_handoff_confirm: "Yes, donate",
+    donate_thanks: "Thank you for your donation!",
+    donate_failed: "Donation failed",
+    donate_in_progress: "Your donation is being processed",
+    donated_total: "Donated to Eyra"
   }
 
   defp socket(user, extra \\ %{}) do
@@ -55,7 +63,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           payout_currency: "euro",
           pending_cents: 0,
           approved_cents: 1000,
-          rejected_cents: 0
+          rejected_cents: 0,
+          donating_cents: 0,
+          donated_cents: 0,
+          donate_enabled?: true
         },
         extra
       )
@@ -408,5 +419,78 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     })
 
     {user, payout}
+  end
+
+  describe "donate" do
+    # No ProviderMock stub: a donation needs no merchant, bank account or KYC,
+    # so nothing may reach OPP before the participant has waived anything.
+    test "presents the waiver modal without touching the provider" do
+      user = user_with_reward(1000, "m_donate")
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("donate", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :donate
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    # The donate "confirmed" clause must sit above the unguarded payout one.
+    # If it doesn't, this fires a payout instead — which the reward status and
+    # the absent :payout_completed message both catch.
+    test "confirming the waiver donates instead of paying out" do
+      user = user_with_reward(1000, "m_donate_confirm")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, 1000, _key ->
+        {:ok, %{uid: "chg_ui", status: :pending, raw_status: "created", amount: 1000}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :donated
+      refute_received :payout_completed
+    end
+
+    # Hiding the button doesn't stop the event; :opp_phase_3 has to hold the
+    # server side too. No ProviderMock stub, so any OPP call fails the test.
+    test "does nothing when the opp_phase_3 feature is off" do
+      user = user_with_reward(1000, "m_donate_off")
+      socket = socket(user, %{donate_enabled?: false})
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("donate", %{}, socket)
+
+      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+
+      # And a forged confirm must not donate — nor fall through to a payout.
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate, donate_enabled?: false})
+        )
+
+      assert reward_status(user) == :approved
+      refute_received :payout_completed
+    end
+
+    test "a failed donation leaves the reward approved" do
+      user = user_with_reward(1000, "m_donate_fail")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :approved
+    end
   end
 end
