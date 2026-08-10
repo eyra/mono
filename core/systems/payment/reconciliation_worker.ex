@@ -7,6 +7,12 @@ defmodule Systems.Payment.ReconciliationWorker do
   also flags the critical case the synchronous path can't: local terminal state
   the provider has no record of.
 
+  Three final provider→local passes run the comparison in the opposite
+  direction, flagging provider-side payout legs, pay-ins and merchants with no
+  local row at all — the restore-orphan case, which a local-first scan cannot
+  see. They run last so a breaker tripped by their whole-listing calls cannot
+  starve the per-row passes.
+
   Each run is recorded in `reconciliation_runs` (with per-row
   `reconciliation_findings`) and emits a `[:payment, :reconciliation, :stop]`
   telemetry event so AppSignal tracks discrepancy and resolution counts. Provider
@@ -23,6 +29,7 @@ defmodule Systems.Payment.ReconciliationWorker do
 
   require Logger
 
+  alias Systems.Account
   alias Systems.Budget
   alias Systems.Fund
   alias Systems.Payment
@@ -43,6 +50,9 @@ defmodule Systems.Payment.ReconciliationWorker do
     state = Payment.Public.new_reconciliation_state()
     state = Fund.Public.reconcile_pending_payouts(opts, state)
     state = Budget.Public.reconcile_transactions(opts, state)
+    state = Fund.Public.reconcile_orphaned_payouts(opts, state)
+    state = Budget.Public.reconcile_orphaned_transactions(opts, state)
+    state = Account.Public.reconcile_orphaned_merchants(opts, state)
 
     Payment.Public.finish_reconciliation_run(run_record, state)
 

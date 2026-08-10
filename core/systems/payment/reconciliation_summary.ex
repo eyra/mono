@@ -10,6 +10,7 @@ defmodule Systems.Payment.ReconciliationSummary do
     * `:still_pending`       — provider still in flight; left untouched.
     * `:verified`            — local terminal state confirmed present at the provider.
     * `:missing_at_provider` — local terminal/in-flight state with no provider record — critical, needs manual review.
+    * `:missing_locally`     — provider object with no local row at all (the restore-orphan case) — critical, needs manual review.
     * `:unresolvable`        — can't be queried (e.g. no provider uid) — needs manual review.
     * `:errors`              — the provider query itself failed.
     * `:skipped`             — not queried because the provider circuit breaker was open.
@@ -20,6 +21,7 @@ defmodule Systems.Payment.ReconciliationSummary do
     :still_pending,
     :verified,
     :missing_at_provider,
+    :missing_locally,
     :unresolvable,
     :errors,
     :skipped
