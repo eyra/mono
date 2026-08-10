@@ -99,12 +99,68 @@ defmodule Systems.Fund.PayoutWithdrawal do
   defp resume_by_phase(:completed, payout), do: {:ok, {:resolved, payout}}
   defp resume_by_phase(:failed, payout), do: {:ok, {:resolved, payout}}
 
-  defp resume_by_phase(:awaiting_transfer, %Fund.PayoutModel{id: id}) do
-    Logger.error(
-      "[Fund] payout ##{id} has an unconfirmed transfer and no findable charge — manual review"
-    )
+  defp resume_by_phase(:awaiting_transfer, payout), do: resume_transfer(payout)
 
-    {:error, :manual_review}
+  # The transfer response was lost, so we ask whether the charge exists rather
+  # than re-sending it. Found means the money did land: record it and carry on to
+  # the withdrawal leg. Absence is not proof it never landed — a listing can fail
+  # or come back short — and re-issuing on a wrong "no" would charge the platform
+  # twice, so that half stays with a human.
+  defp resume_transfer(%Fund.PayoutModel{id: id} = payout) do
+    merchant_uid = merchant_uid_for(payout)
+
+    case find_existing_transfer(payout, merchant_uid) do
+      {:ok, transfer} ->
+        payout
+        |> commit_funds(transfer)
+        |> resume_withdrawal()
+
+      :none ->
+        Logger.error(
+          "[Fund] payout ##{id} has an unconfirmed transfer and no charge at the provider — " <>
+            "manual review"
+        )
+
+        {:error, :manual_review}
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
+  defp find_existing_transfer(%Fund.PayoutModel{} = payout, merchant_uid) do
+    key = Fund.PayoutModel.transfer_key(payout)
+
+    case Payment.Public.list_charges_to_merchant(merchant_uid) do
+      {:ok, transfers} ->
+        case Enum.find(transfers, &(&1.reference == key)) do
+          nil -> :none
+          transfer -> {:ok, transfer}
+        end
+
+      {:error, _} = error ->
+        error
+    end
+  end
+
+  # Mirrors Fund.Public.commit_funds: the charge uid is the only handle on the
+  # transfer, so persist it before anything downstream can fail.
+  defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
+    payout
+    |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
+    |> Repo.update()
+    |> case do
+      {:ok, payout} ->
+        payout
+
+      {:error, _changeset} ->
+        Logger.error(
+          "[Fund] adopted transfer #{transfer_uid} for payout ##{payout.id} but could not " <>
+            "persist it; the funds are committed and the uid is lost"
+        )
+
+        payout
+    end
   end
 
   # List first: issuing blind would double-withdraw if one was already created.
@@ -187,4 +243,6 @@ defmodule Systems.Fund.PayoutWithdrawal do
     %Account.User{merchant_uid: merchant_uid} = Account.Public.get_user!(user_id)
     merchant_uid
   end
+
+  defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 end

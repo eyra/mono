@@ -54,14 +54,12 @@ defmodule Systems.Fund.PayoutReconciliation do
   defp reconcile_phase(phase, payout, state) when phase in [:awaiting_provider, :completed],
     do: poll_provider(payout, state)
 
+  # `:awaiting_transfer` heals too: the charge is findable at the provider by its
+  # reference. Only a payout whose charge is genuinely absent still falls through
+  # to `:unresolvable`, via `resume_payout`'s `:manual_review`.
   defp reconcile_phase(phase, payout, state)
-       when phase in [:awaiting_withdrawal, :withdrawal_retryable],
+       when phase in [:awaiting_transfer, :awaiting_withdrawal, :withdrawal_retryable],
        do: heal(payout, state)
-
-  defp reconcile_phase(:awaiting_transfer, %Fund.PayoutModel{id: id, status: status}, state) do
-    Logger.error("[Fund] reconcile: payout ##{id} has an unconfirmed transfer — manual review")
-    record(state, :unresolvable, id, nil, status, nil, %{reason: "unconfirmed transfer"})
-  end
 
   defp poll_provider(%Fund.PayoutModel{id: id, status: status, provider_uid: uid}, state) do
     case Payment.Public.reconcile_get_withdrawal(state, uid) do

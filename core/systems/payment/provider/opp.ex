@@ -252,6 +252,25 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
+  # `/merchants/{uid}/charges` looks like the obvious mirror of the withdrawals
+  # subresource, but it lists charges *from* that merchant: for a participant it
+  # returns an empty list while the money is sitting right there. Verified
+  # against the sandbox — the incoming direction is only reachable through the
+  # top-level collection with `filter[to_merchant_uid]`.
+  @impl true
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    case HTTP.get("/charges?filter[to_merchant_uid]=#{merchant_uid}&perpage=100") do
+      {:ok, %{"data" => items}} when is_list(items) ->
+        {:ok, Enum.map(items, &parse_transfer(Map.get(&1, "uid"), &1))}
+
+      {:ok, _data} ->
+        {:ok, []}
+
+      {:error, %Error{}} = error ->
+        error
+    end
+  end
+
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
     case HTTP.get("/withdrawals/#{uid}") do
@@ -327,9 +346,21 @@ defmodule Systems.Payment.Provider.OPP do
       uid: uid,
       status: normalize_lifecycle_status(raw_status),
       raw_status: raw_status,
-      amount: Map.get(data, "amount", 0)
+      amount: Map.get(data, "amount", 0),
+      reference: metadata_reference(Map.get(data, "metadata"))
     }
   end
+
+  # Metadata goes out as an object but comes back as a `{key, value}` list.
+  defp metadata_reference(items) when is_list(items) do
+    Enum.find_value(items, fn
+      %{"key" => "reference", "value" => value} -> value
+      _item -> nil
+    end)
+  end
+
+  defp metadata_reference(%{"reference" => reference}), do: reference
+  defp metadata_reference(_metadata), do: nil
 
   # Only OPP's terminal words are recognised. Everything else — including a status
   # OPP adds later — stays :pending, so an unknown state can never finalize or

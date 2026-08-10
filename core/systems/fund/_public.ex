@@ -304,7 +304,13 @@ defmodule Systems.Fund.Public do
     Multi.run(multi, :fund_balance, fn repo, _ -> verify_fund_balance(repo, fund, amount) end)
   end
 
-  defp guard_fund_balance(multi, _, _), do: multi
+  # Virtual funds are minted rather than backed: their `available` only ever
+  # debits, so an overdraw check would reject every point award. Only `:virtual`
+  # skips — a legal fund whose `currency` was never preloaded raises here instead
+  # of silently passing unguarded.
+  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :virtual}}, amount)
+       when is_integer(amount),
+       do: multi
 
   defp verify_fund_balance(repo, %Fund.Model{available: %{id: account_id}}, amount) do
     query = from(a in Bookkeeping.AccountModel, where: a.id == ^account_id, lock: "FOR UPDATE")
@@ -396,13 +402,8 @@ defmodule Systems.Fund.Public do
       %Fund.RewardModel{status: status} = reward when status in [:approved, :paid] ->
         {:ok, reward}
 
-      %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
-        if Fund.Model.amount_available(fund) < amount do
-          Logger.warning("Tried to approve reward #{idempotence_key} with insufficient funds")
-          {:error, :insufficient_fund}
-        else
-          do_override_rejected(reward)
-        end
+      %Fund.RewardModel{status: :rejected} = reward ->
+        do_override_rejected(reward)
 
       %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
         do_approve_reward(reward)
@@ -417,12 +418,19 @@ defmodule Systems.Fund.Public do
   end
 
   # Reject already rolled the deposit back to Fund.available, so payment comes
-  # from there (the `deposit: nil` branch of create_payment_transaction).
-  defp do_override_rejected(%Fund.RewardModel{} = reward) do
+  # from there (the `deposit: nil` branch of create_payment_transaction) — which
+  # means this path can overdraw the fund and needs the same locked balance
+  # guard as a fresh reservation, not a read of the in-memory struct.
+  defp do_override_rejected(%Fund.RewardModel{fund: fund, amount: amount} = reward) do
     Multi.new()
+    |> guard_fund_balance(fund, amount)
     |> approve_payment_step(reward)
     |> cas_approve_step(reward, [:rejected], rejection_reason: nil, rejected_at: nil)
     |> Repo.commit()
+    |> case do
+      {:error, :fund_balance, :no_funding, _changes} -> {:error, :insufficient_fund}
+      result -> result
+    end
   end
 
   defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do

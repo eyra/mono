@@ -144,7 +144,20 @@ defmodule Systems.Payment.Provider.Local do
       "[Payment.Local] transfer_to_merchant from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
     )
 
-    {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: amount}}
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       amount: amount,
+       reference: idempotence_key
+     }}
+  end
+
+  @impl true
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_charges_to_merchant merchant=#{merchant_uid} -> []")
+    {:ok, []}
   end
 
   defp generate_uid do

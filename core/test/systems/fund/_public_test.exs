@@ -82,6 +82,18 @@ defmodule Systems.Fund.PublicTest do
     assert Repo.all(Fund.RewardModel) == []
   end
 
+  # The guard classifies on the currency type, so a fund whose currency was never
+  # preloaded has no answer. It must raise rather than fall through unguarded —
+  # silently skipping the check on a legal fund is how a fund gets overdrawn.
+  test "create_reward/4 refuses a fund whose currency is not preloaded", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+    unloaded = %{fund | currency: %Ecto.Association.NotLoaded{}}
+
+    assert_raise FunctionClauseError, fn ->
+      Fund.Public.create_reward(unloaded, 500, participant, "unloaded-key")
+    end
+  end
+
   test "create_reward/5 injects a clean failure for a non-positive amount", %{fund: fund} do
     participant = Factories.insert!(:member, %{creator: false})
 
@@ -1199,10 +1211,10 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
     end
 
-    # The unconfirmed-transfer case: the money may or may not have moved and no
-    # charge can be looked up, so request_payout must surface it for manual review
-    # — never start a fresh payout over the approved rewards (risking a double
-    # charge) nor touch them.
+    # The unconfirmed-transfer case where the provider has no matching charge: the
+    # money may or may not have moved, so request_payout must surface it for manual
+    # review — never start a fresh payout over the approved rewards (risking a
+    # double charge) nor touch them.
     test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
          %{user: user, fund: fund} do
       stranded =
@@ -1218,8 +1230,10 @@ defmodule Systems.Fund.PublicTest do
       # A newly-earned reward that must not be swept into a fresh payout.
       fresh = insert_reward(user, fund, 500, :approved)
 
-      # No provider calls at all: an unconfirmed transfer with no findable charge
-      # is left for a human — nothing is issued and no bank recheck happens.
+      # The charge lookup is the only provider call: nothing is issued and no bank
+      # recheck happens once the transfer turns out to be unfindable.
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_test_123" -> {:ok, []} end)
+
       assert {:error, :manual_review} = Fund.Public.request_payout(user, "euro")
 
       # Still exactly one payout (the stranded one); the fresh reward is untouched.
@@ -1427,14 +1441,74 @@ defmodule Systems.Fund.PublicTest do
                Core.Repo.reload!(payout)
     end
 
-    # :awaiting_transfer — the transfer was never confirmed and a charge cannot be
-    # looked up, so resume must not guess. No provider calls at all.
-    test "leaves an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+    # :awaiting_transfer with no charge at the provider — absence is not proof the
+    # money never moved, so resume must not re-issue. Hands it to a human.
+    test "leaves an unconfirmed transfer with no charge for manual review", %{
+      user: user,
+      fund: fund
+    } do
       {payout, _reward} =
         stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
 
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" -> {:ok, []} end)
+
       assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
-      assert %{status: :pending} = Core.Repo.reload!(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+    end
+
+    # The lost-response case: the charge is there, so the money did move. Adopt it
+    # and carry on to the withdrawal leg instead of stranding the participant.
+    test "adopts a transfer found at the provider and issues the withdrawal", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      transfer_key = Fund.PayoutModel.transfer_key(payout)
+
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" ->
+        {:ok,
+         [
+           # A transfer to the same merchant for a different payout — must not match.
+           %{
+             uid: "trf_other",
+             status: :pending,
+             raw_status: "unknown",
+             reference: "payout=00000000-0000-0000-0000-000000000000,type=transfer",
+             amount: 1000
+           },
+           %{
+             uid: "trf_found",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000
+           }
+         ]}
+      end)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{
+           uid: "w_after_adopt",
+           status: :pending,
+           raw_status: "created",
+           reference: nil,
+           amount: 1000
+         }}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{
+               status: :pending,
+               transfer_uid: "trf_found",
+               provider_uid: "w_after_adopt",
+               funds_committed_at: %NaiveDateTime{}
+             } = Core.Repo.reload!(payout)
     end
 
     test "is a no-op for a healthy in-flight payout", %{user: user, fund: fund} do
