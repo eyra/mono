@@ -193,8 +193,6 @@ defmodule Systems.Payment.Public do
     |> log_error("ensure_bank_account_for merchant #{merchant_uid}")
   end
 
-  # The UI turns any provider failure here into a generic "try again later",
-  # so log the reason — it is the only trace of what OPP actually said.
   defp log_error({:error, reason} = result, context) do
     Logger.warning("[Payment] #{context} failed: #{inspect(reason)}")
     result

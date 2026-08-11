@@ -322,9 +322,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert socket.assigns.approved_cents == 0
     end
 
-    # FX#10186097421. An unknown post-confirm error used to dead-end on the
-    # generic "try again later" flash; it must point at the payouts tab instead,
-    # the same as the pre-confirm path.
     test "a provider failure at confirm time presents the verify modal" do
       user = user_with_reward(1000, "m_c_down")
 
