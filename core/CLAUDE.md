@@ -502,6 +502,92 @@ def process_data(list) when is_list(list), do: {:list, list}  # Wrong: same arit
 
 - **Pattern matching enforcement** - This rule is so critical it's been moved to the top as CRITICAL RULE #1. Always pattern match in function heads. Never use dot notation to access nested data.
 
+### 🚨 CRITICAL ELIXIR RULE #2: MINIMIZE INDENTING 🚨
+
+**Indentation is the thing to minimize. Never nest deeper than two levels inside a function body. Pipe wherever you can, and keep every step of the pipe a single named call.**
+
+A pipe should read as a flat list of names. The moment a step opens a block, the reader has to hold the pipe in their head while descending into something else — that's the cost this rule exists to avoid.
+
+**Every step of a pipe is a named function.** Extract anonymous functions, always. This applies to `Enum.*` callbacks, `Multi.run/3`, `Multi.update/3`, `then/2` — anything taking a `fn`.
+
+```elixir
+# ✅ Named steps, nothing to descend into
+def archive_import(session) do
+  Multi.new()
+  |> Multi.run(:session, &abort_session(&1, &2, session))
+  |> Multi.run(:file, &archive_file/2)
+  |> Repo.transaction()
+end
+
+# ❌ Inline fn forces the reader into the middle of the pipe
+def archive_import(session) do
+  Multi.new()
+  |> Multi.run(:session, fn _repo, _changes ->
+    {:ok, do_abort(session)}
+  end)
+  |> Repo.transaction()
+end
+```
+
+**A pipe needs at least two `|>`.** One `|>` is a function call wearing a costume — write it as one.
+
+```elixir
+# ✅
+Enum.map(fetch_entries(), &entry_name/1)
+
+# ❌ Single pipe
+fetch_entries()
+|> Enum.map(&entry_name/1)
+```
+
+**`case` is welcome on anything returning a tuple** — it is usually cleaner than splitting into extra function clauses, and it may close a pipe. What matters is that each branch stays a single expression: the moment a branch grows into a whole function's worth of logic, extract it and call it by name.
+
+```elixir
+# ✅ Branches are one call each
+def ensure_bank_account_for(merchant_uid) do
+  case list_bank_accounts(merchant_uid) do
+    {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+    {:error, _} = error -> error
+  end
+end
+
+# ✅ Closing a pipe
+def status(user) do
+  user
+  |> load_merchant()
+  |> fetch_bank_account()
+  |> case do
+    {:ok, account} -> account.status
+    {:error, _} -> :unknown
+  end
+end
+
+# ❌ A function hiding inside a branch
+def ensure_bank_account_for(merchant_uid) do
+  case list_bank_accounts(merchant_uid) do
+    {:ok, accounts} ->
+      case Enum.find(accounts, &(&1.status != :rejected)) do
+        nil -> create_bank_account(merchant_uid, bank_account_attrs())
+        usable -> {:ok, usable}
+      end
+
+    {:error, _} = error ->
+      error
+  end
+end
+```
+
+**An inline `fn` is fine when it is the only indenting in the body.** Outside a pipe, with nothing else nested, there is no chain for it to interrupt.
+
+```elixir
+# ✅ Only indenting in the function
+def print_names(entries) do
+  Enum.each(entries, fn entry ->
+    IO.puts(entry.name)
+  end)
+end
+```
+
 ### Testing Patterns
 - Use associations over foreign keys in tests
 - Always preload associations before asserting
