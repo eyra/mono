@@ -4,9 +4,8 @@ defmodule Systems.Account.PhoneFormHandlersTest do
   modal, so instead of a LiveView render cycle we call handle_event/3 directly
   and assert the error the participant is left with.
 
-  FX#10186101663: a provider failure used to collapse into one generic "try
-  again later", hiding the case the participant can actually fix — a number OPP
-  rejected.
+  A provider failure used to collapse into one generic "try again later", hiding
+  the case the participant can actually fix — a number OPP rejected.
   """
   use Core.DataCase
   import Mox
