@@ -755,6 +755,18 @@ msgid "pay_in_request_form.aim.placeholder"
 msgstr "A short description of your study"
 
 #, elixir-autogen, elixir-format
+msgid "pay_in_request_form.aim.required"
+msgstr "Please enter the aim of the study"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.fee.required"
+msgstr "Please enter the participant fee"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.slots.required"
+msgstr "Please enter the number of participants"
+
+#, elixir-autogen, elixir-format
 msgid "tabbar.item.contributions"
 msgstr "Contributions"
 
