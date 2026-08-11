@@ -186,11 +186,13 @@ defmodule Systems.Payment.Public do
   @spec ensure_bank_account_for(merchant_uid :: String.t()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def ensure_bank_account_for(merchant_uid) when is_binary(merchant_uid) do
-    case list_bank_accounts(merchant_uid) do
-      {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
-      {:error, _} = error -> error
-    end
-    |> log_error("ensure_bank_account_for merchant #{merchant_uid}")
+    result =
+      case list_bank_accounts(merchant_uid) do
+        {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+        {:error, _} = error -> error
+      end
+
+    log_error(result, "ensure_bank_account_for merchant #{merchant_uid}")
   end
 
   defp log_error({:error, reason} = result, context) do
