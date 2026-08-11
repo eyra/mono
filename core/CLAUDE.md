@@ -589,23 +589,33 @@ end
 
 ### 🚨 CRITICAL ELIXIR RULE #3: NO COMMENTS OUTSIDE DOCS 🚨
 
-**Never write a `#` comment in lib, systems, or test code. `@moduledoc` and `@doc` are the place for prose, and they are welcome there.**
+**Never write a comment explaining *what* code does.** The function name is that explanation. A comment describing behaviour means the code needs a better name or a smaller function, not a sentence.
 
-This includes rationale comments — the "why we do it this way" note above a clause. If the reasoning matters, it goes in the moduledoc. If it doesn't fit there, it usually means the code needs a named function, not a sentence.
+Moduledocs describe the module. Don't push per-function prose into them to dodge this rule.
 
 ```elixir
-# ✅ The name carries the explanation
+# ✅ The name carries the what
 defp transfer_rejected?(%Payment.Error{code: :rejected}), do: true
 defp transfer_rejected?(_error), do: false
 
 # ❌ A comment doing a function name's job
-# Only revert on a definitive rejection; an uncertain outcome is left to
-# reconciliation, since reverting after the money moved lets a later payout
-# re-lock and re-charge.
+# Check whether the transfer was definitively rejected by the provider
 if error.code == :rejected do
 ```
 
-**Never name an issue or ticket number in code** — not in a comment, not in a moduledoc, not in a test name. It couples the code to an external ticketing system that outlives neither the code nor the reader's access to it. Describe the behaviour on its own terms; the issue number belongs in the commit message or the PR.
+**The one exception: *why*, when the code cannot show it.** An external constraint, a provider quirk, an ordering that looks arbitrary but isn't — something a reader would otherwise "fix". Keep it to a line. If the why is already apparent from the code, skip the comment.
+
+```elixir
+# ✅ A constraint that lives outside this repo
+# OPP rejects a merchant without a phone on the primary contact.
+defp ensure_merchant_phone(user, merchant, phone) do
+
+# ❌ The why is right there in the guard
+# Skip when no phone was supplied
+defp ensure_merchant_phone(user, merchant, nil), do: {:ok, {user, merchant}}
+```
+
+**Never name an issue or ticket number in code** — not in a comment, not in a doc, not in a test name. It couples the code to an external ticketing system that outlives neither the code nor the reader's access to it. Describe the behaviour on its own terms; the issue number belongs in the commit message or the PR.
 
 ```elixir
 # ✅
