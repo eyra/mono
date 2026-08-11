@@ -566,35 +566,35 @@ msgid "panl.cta.home.button"
 msgstr "Ir al inicio"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.label"
+msgid "pay_in_request_form.aim.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.cancel.button"
+msgid "pay_in_request_form.cancel.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.confirm.button"
+msgid "pay_in_request_form.confirm.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.costs.label"
+msgid "pay_in_request_form.costs.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.description"
+msgid "pay_in_request_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.label"
+msgid "pay_in_request_form.fee.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.slots.label"
+msgid "pay_in_request_form.slots.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.title"
+msgid "pay_in_request_form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -642,15 +642,15 @@ msgid "recruit.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
+msgid "pay_in_request_form.partner_fee.label"
 msgstr "Tarifa de servicio (%{percentage}%)"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
+msgid "pay_in_request_form.subtotal.label"
 msgstr "%{count} x tarifa por participante de %{reward}"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.total.label"
+msgid "pay_in_request_form.total.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -718,11 +718,11 @@ msgid "assignment_full.title"
 msgstr "Este estudio está completo"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.invalid"
+msgid "pay_in_request_form.fee.invalid"
 msgstr "Introduce un importe, p. ej., 3,75"
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.placeholder"
+msgid "pay_in_request_form.aim.placeholder"
 msgstr "Una breve descripción de tu estudio"
 
 #, elixir-autogen, elixir-format
