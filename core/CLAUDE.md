@@ -485,7 +485,7 @@ end
 - **Always alias Systems modules** - Use `alias Systems.Paper` then `Paper.Model`, never `Systems.Paper.Model` directly in code
 - Prefer single system alias: `alias Systems.Account` then use `Account.Model`
 - Follow existing naming patterns and file structures
-- **Prefer subfunctions over comments** - When a function is long or needs extensive comments, split it into smaller, well-named functions instead. Function names should be self-documenting and eliminate the need for comments explaining what the code does.
+- **Prefer subfunctions over comments** - See CRITICAL RULE #3 below. When a function is long or needs explaining, split it into smaller, well-named functions instead. Function names should be self-documenting and eliminate the need for comments explaining what the code does.
 - **Function clause grouping** - All function clauses with the same name and arity must be grouped together. Elixir requires this for pattern matching to work correctly.
 
 ```elixir
@@ -580,13 +580,43 @@ end
 **An inline `fn` is fine when it is the only indenting in the body.** Outside a pipe, with nothing else nested, there is no chain for it to interrupt.
 
 ```elixir
-# ✅ Only indenting in the function
 def print_names(entries) do
   Enum.each(entries, fn entry ->
     IO.puts(entry.name)
   end)
 end
 ```
+
+### 🚨 CRITICAL ELIXIR RULE #3: NO COMMENTS OUTSIDE DOCS 🚨
+
+**Never write a `#` comment in lib, systems, or test code. `@moduledoc` and `@doc` are the place for prose, and they are welcome there.**
+
+This includes rationale comments — the "why we do it this way" note above a clause. If the reasoning matters, it goes in the moduledoc. If it doesn't fit there, it usually means the code needs a named function, not a sentence.
+
+```elixir
+# ✅ The name carries the explanation
+defp transfer_rejected?(%Payment.Error{code: :rejected}), do: true
+defp transfer_rejected?(_error), do: false
+
+# ❌ A comment doing a function name's job
+# Only revert on a definitive rejection; an uncertain outcome is left to
+# reconciliation, since reverting after the money moved lets a later payout
+# re-lock and re-charge.
+if error.code == :rejected do
+```
+
+**Never name an issue or ticket number in code** — not in a comment, not in a moduledoc, not in a test name. It couples the code to an external ticketing system that outlives neither the code nor the reader's access to it. Describe the behaviour on its own terms; the issue number belongs in the commit message or the PR.
+
+```elixir
+# ✅
+test "a provider failure at confirm time presents the verify modal" do
+
+# ❌
+# FX#10186097421 — regression guard
+test "FX#10186097421: provider failure presents verify modal" do
+```
+
+Pre-existing comments and `FX#…` references are not a cleanup task — leave them where they are. This rule governs new code.
 
 ### Testing Patterns
 - Use associations over foreign keys in tests
