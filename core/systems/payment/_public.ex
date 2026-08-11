@@ -39,8 +39,11 @@ defmodule Systems.Payment.Public do
 
   @spec ensure_merchant_for(Account.User.t(), String.t() | nil) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
-  def ensure_merchant_for(%Account.User{} = user, phone \\ nil) do
-    do_ensure_merchant_for(Repo.reload!(user), phone)
+  def ensure_merchant_for(%Account.User{id: user_id} = user, phone \\ nil) do
+    user
+    |> Repo.reload!()
+    |> do_ensure_merchant_for(phone)
+    |> log_error("ensure_merchant_for user ##{user_id}")
   end
 
   @doc """
@@ -183,11 +186,21 @@ defmodule Systems.Payment.Public do
   @spec ensure_bank_account_for(merchant_uid :: String.t()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def ensure_bank_account_for(merchant_uid) when is_binary(merchant_uid) do
-    case list_bank_accounts(merchant_uid) do
-      {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
-      {:error, _} = error -> error
-    end
+    result =
+      case list_bank_accounts(merchant_uid) do
+        {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+        {:error, _} = error -> error
+      end
+
+    log_error(result, "ensure_bank_account_for merchant #{merchant_uid}")
   end
+
+  defp log_error({:error, reason} = result, context) do
+    Logger.warning("[Payment] #{context} failed: #{inspect(reason)}")
+    result
+  end
+
+  defp log_error(result, _context), do: result
 
   defp usable_or_new_bank_account(merchant_uid, accounts) do
     case Enum.find(accounts, &(&1.status != :rejected)) do

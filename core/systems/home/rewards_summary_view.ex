@@ -17,6 +17,10 @@ defmodule Systems.Home.RewardsSummaryView do
     * any other error — `:verify` variant too: the payouts tab is the only
       actionable next step, so never dead-end on "try again later".
 
+  Errors from `Fund.Public.request_payout/2` — after confirming, and on retry —
+  are routed the same way: threshold misses flash, anything else swaps the modal
+  to the `:verify` variant rather than a generic "try again later".
+
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
   """
@@ -141,7 +145,7 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply, socket}
 
       error ->
-        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+        {:noreply, socket |> handle_payout_error(error) |> refresh_totals(user)}
     end
   end
 
@@ -174,7 +178,7 @@ defmodule Systems.Home.RewardsSummaryView do
 
       error ->
         # Refresh: a lost lock-race hides the now-stale payout button.
-        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+        {:noreply, socket |> handle_payout_error(error) |> refresh_totals(user)}
     end
   end
 
@@ -186,14 +190,13 @@ defmodule Systems.Home.RewardsSummaryView do
   @impl true
   def handle_modal_closed(socket, :handoff_modal), do: socket
 
-  defp flash_payout_result(
+  defp handle_payout_error(
          %{assigns: %{labels: labels}} = socket,
          {:error, {:below_threshold, _cents}}
        ),
        do: Flash.push_error(socket, labels.payout_below_threshold)
 
-  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:error, _reason}),
-    do: Flash.push_error(socket, labels.payout_failed)
+  defp handle_payout_error(socket, {:error, _reason}), do: present_handoff(socket, :verify)
 
   defp present_handoff(socket, mode) do
     socket
