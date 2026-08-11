@@ -393,3 +393,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr ""

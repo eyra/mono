@@ -20,6 +20,7 @@ defmodule Systems.Account.PhoneForm do
   alias Frameworks.Pixel.Text
   alias Systems.Account
   alias Systems.Fund
+  alias Systems.Payment
 
   @payouts_path "/user/account?tab=payouts"
 
@@ -80,6 +81,13 @@ defmodule Systems.Account.PhoneForm do
       :verified ->
         persist_phone(user, phone)
         redirect(socket, to: @payouts_path)
+
+      # The number is the only thing we just supplied, so a 4xx from the provider
+      # means it rejected it — the form stays open on an error the participant
+      # can actually act on. Anything else (5xx, connection) is ours, not theirs.
+      {:error, %Payment.Error{code: :api_error, details: %{status: status}}}
+      when is_integer(status) and status < 500 ->
+        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.rejected"))
 
       {:error, _reason} ->
         assign(socket, error: dgettext("eyra-account", "payouts.phone.error.flash"))

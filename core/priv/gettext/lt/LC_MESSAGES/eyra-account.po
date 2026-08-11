@@ -403,3 +403,7 @@ msgstr "Patvirtinti banko sąskaitą"
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
 msgstr "Išsiuntėme tau kodą"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr "Mokėjimų paslaugų teikėjas nepriėmė šio telefono numerio. Patikrink jį ir bandyk dar kartą."

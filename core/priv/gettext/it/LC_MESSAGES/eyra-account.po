@@ -394,3 +394,7 @@ msgstr "Verifica conto bancario"
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
 msgstr "Ti abbiamo inviato un codice"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr "Il fornitore di pagamenti non ha accettato questo numero di telefono. Controllalo e riprova."
