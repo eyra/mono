@@ -3,7 +3,6 @@ defmodule Frameworks.Pixel.Tabbed do
   use CoreWeb, :pixel
 
   import CoreWeb.UI.FunctionComponent
-  import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Button
 
   defp get_tab(:seperated, tab, index), do: Map.merge(tab, %{type: :seperated, index: index})
@@ -11,6 +10,9 @@ defmodule Frameworks.Pixel.Tabbed do
 
   defp gap(:seperated), do: "gap-6"
   defp gap(:segmented), do: "gap-0"
+
+  defp wide_layout(:seperated), do: ""
+  defp wide_layout(:segmented), do: "h-full"
 
   defp shape(%{size: :wide, type: :segmented}), do: "rounded-full overflow-hidden h-10 bg-grey5"
 
@@ -40,7 +42,17 @@ defmodule Frameworks.Pixel.Tabbed do
         <%= if @size == :full do %>
           <.bar_full id={@id} type={@type} tabs={@tabs} />
         <% end %>
-        <%= if @size == :wide do %>
+        <%= if @size == :wide and @type == :seperated do %>
+          <div id={"#{@id}-fit"} class="w-full h-full" phx-hook="TabBarFit">
+            <div data-tab-view="wide" class="h-full">
+              <.bar_wide id={@id} type={@type} tabs={@tabs} />
+            </div>
+            <div data-tab-view="narrow" class="h-full hidden">
+              <.bar_narrow id={@id} tabs={@tabs} />
+            </div>
+          </div>
+        <% end %>
+        <%= if @size == :wide and @type != :seperated do %>
           <.bar_wide id={@id} type={@type} tabs={@tabs} />
         <% end %>
         <%= if @size == :narrow do %>
@@ -56,7 +68,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def bar_wide(assigns) do
     ~H"""
-    <div id={"#{@id}-wide"} class={"flex flex-row items-center h-full #{gap(@type)}"}>
+    <div id={"#{@id}-wide"} class={"flex flex-row items-center #{gap(@type)} #{wide_layout(@type)}"}>
       <%= for {tab, index} <- Enum.with_index(@tabs) do %>
         <div class="flex-shrink-0 h-full">
           <.tab bar_id={@id} size="wide" opts="" {get_tab(@type, tab, index)} />
@@ -90,14 +102,14 @@ defmodule Frameworks.Pixel.Tabbed do
   def bar_narrow(assigns) do
     ~H"""
     <div id={"#{@id}-narrow"}>
-      <div id="tab_bar_dropdown" class="absolute z-50 left-0 top-navbar-height w-full h-full hidden">
+      <div id="tab_bar_dropdown" class="absolute z-50 left-0 top-[72px] hidden">
         <.dropdown bar_id={@id} tabs={@tabs} />
       </div>
       <div
         id="tabbar_narrow"
         phx-hook="Toggle"
         target="tab_bar_dropdown"
-        class="flex flex-row cursor-pointer items-center h-full w-full"
+        class="flex flex-row cursor-pointer items-center gap-3 h-full w-full"
       >
         <div class="flex-shrink-0 pointer-events-none">
           <%= for {tab, index} <- Enum.with_index(@tabs) do %>
@@ -105,8 +117,6 @@ defmodule Frameworks.Pixel.Tabbed do
               <.tab bar_id={@id} size="narrow" opts="hide-when-idle" {Map.merge(tab, %{index: index})} />
             </div>
           <% end %>
-        </div>
-        <div class="flex-grow pointer-events-none">
         </div>
         <div class="pointer-events-none">
           <img src={~p"/images/icons/dropdown.svg"} alt="Show tabbar dropdown">
@@ -160,18 +170,12 @@ defmodule Frameworks.Pixel.Tabbed do
 
   def dropdown(assigns) do
     ~H"""
-    <div>
-      <.line />
-      <div class="flex flex-col items-left p-6 gap-6 w-full bg-white drop-shadow-2xl">
-        <%= for {tab, index} <- Enum.with_index(@tabs) do %>
-          <div class="flex-shrink-0">
-            <.tab bar_id={@bar_id} size="dropdown" index={index} {tab} />
-          </div>
-        <% end %>
-      </div>
-      <.line />
-      <div class="h-5 bg-gradient-to-b from-black opacity-shadow">
-      </div>
+    <div class="flex flex-col items-left p-6 gap-6 bg-white rounded-lg shadow-2xl">
+      <%= for {tab, index} <- Enum.with_index(@tabs) do %>
+        <div class="flex-shrink-0">
+          <.tab bar_id={@bar_id} size="dropdown" index={index} {tab} />
+        </div>
+      <% end %>
     </div>
     """
   end

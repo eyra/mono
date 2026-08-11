@@ -37,7 +37,7 @@ defmodule CoreWeb.UI.Area do
   def content(assigns) do
     ~H"""
     <div class={"flex w-full #{@class}"}>
-      <div class="flex-grow mx-6 lg:mx-14">
+      <div class="flex-grow min-w-0 mx-6 lg:mx-14">
         <div class="w-full">
           <%= render_slot(@inner_block) %>
         </div>

@@ -222,7 +222,6 @@ defmodule CoreWeb do
       use CoreWeb.Live.Feature.Uri
       use CoreWeb.Live.Feature.Model
       use CoreWeb.Live.Feature.Menus
-      use CoreWeb.Live.Feature.Tabbed
       use CoreWeb.Live.Feature.Actions
       use CoreWeb.Live.Feature.Stack
     end
