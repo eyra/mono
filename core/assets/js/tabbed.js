@@ -178,6 +178,48 @@ export const TabBar = {
 };
 
 /**
+ * TabBarFit component
+ *
+ * Renders the wide tab bar by default and falls back to the narrow (dropdown) variant
+ * when the wide bar would overflow the available horizontal space. Re-measures on
+ * container resize and on LiveView updates.
+ */
+export const TabBarFit = {
+  mounted() {
+    this._check();
+    this._observer = new ResizeObserver(() => this._check());
+    this._observer.observe(this.el);
+  },
+  updated() {
+    this._check();
+  },
+  destroyed() {
+    if (this._observer) this._observer.disconnect();
+  },
+  _check() {
+    const wide = this.el.querySelector("[data-tab-view='wide']");
+    const narrow = this.el.querySelector("[data-tab-view='narrow']");
+    if (!wide || !narrow) return;
+
+    // Show wide so we can measure where its tabs actually land.
+    wide.classList.remove("hidden");
+    narrow.classList.add("hidden");
+
+    const wideBar = wide.firstElementChild;
+    if (!wideBar || wideBar.children.length === 0) return;
+
+    const lastTab = wideBar.children[wideBar.children.length - 1];
+    const barRight = wideBar.getBoundingClientRect().right;
+    const lastRight = lastTab.getBoundingClientRect().right;
+
+    if (lastRight > barRight + 1) {
+      wide.classList.add("hidden");
+      narrow.classList.remove("hidden");
+    }
+  },
+};
+
+/**
  * Tab component
  *
  * Tabs are clickable elements that can be used to switch between different views.
