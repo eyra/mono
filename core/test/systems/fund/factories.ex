@@ -1,8 +1,5 @@
 defmodule Systems.Fund.Factories do
-  alias Systems.{
-    Budget,
-    Fund
-  }
+  alias Systems.Fund
 
   def create_currency(name, type, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
