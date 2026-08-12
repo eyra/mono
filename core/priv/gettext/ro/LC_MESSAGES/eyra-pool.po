@@ -49,7 +49,7 @@ msgstr "Piața este momentan goală."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Toate"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
@@ -57,7 +57,7 @@ msgstr "Filtru:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
+msgstr "Căutare"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"

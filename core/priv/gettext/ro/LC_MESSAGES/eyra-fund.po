@@ -129,27 +129,27 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.pill"
-msgstr ""
+msgstr "Aprobate"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.threshold"
-msgstr ""
+msgstr "Retragere sau donație posibilă începând cu € 5"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.caption"
-msgstr ""
+msgstr "În așteptarea aprobării"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.pill"
-msgstr ""
+msgstr "În așteptare"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.rejected.pill"
-msgstr ""
+msgstr "Respinse"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
-msgstr ""
+msgstr "Recompense"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.below_threshold"
