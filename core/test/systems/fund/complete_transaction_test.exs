@@ -1,10 +1,10 @@
-defmodule Systems.Budget.CompleteTransactionTest do
+defmodule Systems.Fund.CompleteTransactionTest do
   use Core.DataCase, async: true
 
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
 
   describe "complete_transaction/1" do
@@ -12,24 +12,24 @@ defmodule Systems.Budget.CompleteTransactionTest do
       %{transaction: transaction} = setup_transaction(status: :failed)
 
       assert {:ok, %{transaction: %{status: :completed}}} =
-               Budget.Public.complete_transaction(transaction.transaction_id)
+               Fund.Public.complete_transaction(transaction.transaction_id)
 
       assert %{status: :completed} =
-               Repo.get!(Budget.TransactionModel, transaction.id)
+               Repo.get!(Fund.TransactionModel, transaction.id)
     end
 
     test "still completes a :pending transaction via the normal path" do
       %{transaction: transaction} = setup_transaction(status: :pending)
 
       assert {:ok, %{transaction: %{status: :completed}}} =
-               Budget.Public.complete_transaction(transaction.transaction_id)
+               Fund.Public.complete_transaction(transaction.transaction_id)
     end
 
     test "refuses a transaction that is already :completed" do
       %{transaction: transaction} = setup_transaction(status: :completed)
 
       assert {:error, :already_completed} =
-               Budget.Public.complete_transaction(transaction.transaction_id)
+               Fund.Public.complete_transaction(transaction.transaction_id)
     end
   end
 
@@ -53,8 +53,8 @@ defmodule Systems.Budget.CompleteTransactionTest do
       |> Repo.insert!()
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: "provider-" <> Ecto.UUID.generate(),
         status: status,
         idempotence_key: Ecto.UUID.generate(),
@@ -69,9 +69,9 @@ defmodule Systems.Budget.CompleteTransactionTest do
   end
 
   defp ensure_currency_ledger(currency) do
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
+    case Fund.CurrencyLedgerModel.get_by_currency(currency) do
       nil ->
-        Budget.CurrencyLedgerModel.create(currency) |> Repo.insert!()
+        Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
 
       existing ->
         existing |> Repo.preload([:inbound, :outbound])

@@ -1,34 +1,34 @@
-defmodule Systems.Budget.PayInExpirationTest do
+defmodule Systems.Fund.PayInExpirationTest do
   use Core.DataCase, async: true
 
   alias Core.Factories
   alias Core.Repo
-  alias Systems.Budget
+  alias Systems.Fund
 
   describe "expire_stale_pay_ins/1" do
     test "marks pending transactions older than the cutoff as failed" do
       fresh = insert_transaction!(:pending, minutes_ago: 5)
       stale = insert_transaction!(:pending, minutes_ago: 20)
 
-      assert 1 = Budget.Public.expire_stale_pay_ins(15)
+      assert 1 = Fund.Public.expire_stale_pay_ins(15)
 
-      assert %{status: :pending} = Repo.get!(Budget.TransactionModel, fresh.id)
-      assert %{status: :failed} = Repo.get!(Budget.TransactionModel, stale.id)
+      assert %{status: :pending} = Repo.get!(Fund.TransactionModel, fresh.id)
+      assert %{status: :failed} = Repo.get!(Fund.TransactionModel, stale.id)
     end
 
     test "leaves non-pending transactions alone" do
       completed = insert_transaction!(:completed, minutes_ago: 60)
       failed = insert_transaction!(:failed, minutes_ago: 60)
 
-      assert 0 = Budget.Public.expire_stale_pay_ins(15)
+      assert 0 = Fund.Public.expire_stale_pay_ins(15)
 
-      assert %{status: :completed} = Repo.get!(Budget.TransactionModel, completed.id)
-      assert %{status: :failed} = Repo.get!(Budget.TransactionModel, failed.id)
+      assert %{status: :completed} = Repo.get!(Fund.TransactionModel, completed.id)
+      assert %{status: :failed} = Repo.get!(Fund.TransactionModel, failed.id)
     end
 
     test "returns 0 when there is nothing to expire" do
       insert_transaction!(:pending, minutes_ago: 5)
-      assert 0 = Budget.Public.expire_stale_pay_ins(15)
+      assert 0 = Fund.Public.expire_stale_pay_ins(15)
     end
   end
 
@@ -42,8 +42,8 @@ defmodule Systems.Budget.PayInExpirationTest do
       |> NaiveDateTime.truncate(:second)
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: Ecto.UUID.generate(),
         status: status,
         idempotence_key: Ecto.UUID.generate(),

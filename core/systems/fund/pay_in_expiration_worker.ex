@@ -1,4 +1,4 @@
-defmodule Systems.Budget.PayInExpirationWorker do
+defmodule Systems.Fund.PayInExpirationWorker do
   @moduledoc """
   Sweeper that marks pending pay-in transactions older than 15 minutes as `:failed`.
 
@@ -8,18 +8,18 @@ defmodule Systems.Budget.PayInExpirationWorker do
 
   A `:failed` transaction is still upgradable: if a late `completed` webhook
   arrives from OPP after the sweep marked it failed (the researcher really did
-  pay, the webhook was just slow), `Budget.Public.complete_transaction/1` will
+  pay, the webhook was just slow), `Fund.Public.complete_transaction/1` will
   promote `:failed → :completed` and book the funds. Only `:completed`
   transactions are refused (idempotency).
   """
   use Oban.Worker, max_attempts: 1
 
-  alias Systems.Budget
+  alias Systems.Fund
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do
     max_age_minutes = Map.get(args, "max_age_minutes", 15)
-    _ = Budget.Public.expire_stale_pay_ins(max_age_minutes)
+    _ = Fund.Public.expire_stale_pay_ins(max_age_minutes)
     :ok
   end
 end

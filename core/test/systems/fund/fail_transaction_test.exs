@@ -1,11 +1,11 @@
-defmodule Systems.Budget.FailTransactionTest do
+defmodule Systems.Fund.FailTransactionTest do
   use Core.DataCase, async: true
 
   import ExUnit.CaptureLog
 
   alias Core.Factories
   alias Core.Repo
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
 
   describe "fail_transaction/1" do
@@ -13,7 +13,7 @@ defmodule Systems.Budget.FailTransactionTest do
       transaction = insert_transaction(:pending)
 
       assert {:ok, %{status: :failed}} =
-               Budget.Public.fail_transaction(transaction.transaction_id)
+               Fund.Public.fail_transaction(transaction.transaction_id)
     end
 
     test "refuses a late 'failed' webhook on an already-:completed transaction" do
@@ -22,13 +22,13 @@ defmodule Systems.Budget.FailTransactionTest do
       log =
         capture_log(fn ->
           assert {:error, :already_completed} =
-                   Budget.Public.fail_transaction(transaction.transaction_id)
+                   Fund.Public.fail_transaction(transaction.transaction_id)
         end)
 
       assert log =~ "refusing late 'failed' for already-completed transaction"
 
       # The fund stays credited, so the status must not contradict it by flipping to :failed.
-      assert %{status: :completed} = Repo.get!(Budget.TransactionModel, transaction.id)
+      assert %{status: :completed} = Repo.get!(Fund.TransactionModel, transaction.id)
     end
   end
 
@@ -39,8 +39,8 @@ defmodule Systems.Budget.FailTransactionTest do
     fund = Fund.Factories.create_fund("fail_tx_fund_#{unique}", currency)
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: "provider-" <> Ecto.UUID.generate(),
         status: status,
         idempotence_key: Ecto.UUID.generate(),

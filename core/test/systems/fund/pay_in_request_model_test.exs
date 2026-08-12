@@ -1,4 +1,4 @@
-defmodule Systems.Budget.PayInRequestModelTest do
+defmodule Systems.Fund.PayInRequestModelTest do
   @moduledoc """
   Validation coverage for the pay-in request form-object.
 
@@ -8,7 +8,7 @@ defmodule Systems.Budget.PayInRequestModelTest do
 
   use ExUnit.Case, async: true
 
-  alias Systems.Budget.PayInRequestModel
+  alias Systems.Fund.PayInRequestModel
 
   defp validate(attrs) do
     %PayInRequestModel{}

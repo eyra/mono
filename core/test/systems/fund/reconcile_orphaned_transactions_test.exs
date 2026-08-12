@@ -1,4 +1,4 @@
-defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
+defmodule Systems.Fund.ReconcileOrphanedTransactionsTest do
   @moduledoc """
   Provider→local pass for pay-ins: given the transactions the provider holds,
   flag the ones with no local row — the restore-orphan case.
@@ -9,7 +9,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -20,8 +20,8 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
 
   defp local_transaction(idempotence_key, opts \\ []) do
     currency_ledger =
-      case Budget.CurrencyLedgerModel.get_by_currency(:EUR) do
-        nil -> Budget.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
+      case Fund.CurrencyLedgerModel.get_by_currency(:EUR) do
+        nil -> Fund.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
         existing -> Repo.preload(existing, [:inbound, :outbound])
       end
 
@@ -40,8 +40,8 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
       |> Ecto.Changeset.put_change(:currency_ledger_id, currency_ledger.id)
       |> Repo.insert!()
 
-    %Budget.TransactionModel{}
-    |> Budget.TransactionModel.changeset(%{
+    %Fund.TransactionModel{}
+    |> Fund.TransactionModel.changeset(%{
       transaction_id: "tra_#{System.unique_integer([:positive])}",
       status: :pending,
       idempotence_key: idempotence_key,
@@ -69,7 +69,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
 
   defp run(transactions, opts \\ []) do
     expect(ProviderMock, :list_recent_transactions, fn _since -> {:ok, transactions} end)
-    Budget.Public.reconcile_orphaned_transactions(opts, state())
+    Fund.Public.reconcile_orphaned_transactions(opts, state())
   end
 
   describe "orphan detection" do
@@ -186,7 +186,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
       end)
 
       %{summary: summary, findings: findings} =
-        Budget.Public.reconcile_orphaned_transactions([], state())
+        Fund.Public.reconcile_orphaned_transactions([], state())
 
       assert summary.errors == 1
       assert [%{outcome: :errors, subject_type: :transaction, subject_id: nil}] = findings
@@ -198,7 +198,7 @@ defmodule Systems.Budget.ReconcileOrphanedTransactionsTest do
           Payment.ReconciliationState.record_failure(acc)
         end)
 
-      %{summary: summary} = Budget.Public.reconcile_orphaned_transactions([], open_circuit)
+      %{summary: summary} = Fund.Public.reconcile_orphaned_transactions([], open_circuit)
 
       assert summary.skipped == 1
       assert summary.missing_locally == 0

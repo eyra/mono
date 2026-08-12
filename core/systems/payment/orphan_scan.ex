@@ -1,7 +1,7 @@
 defmodule Systems.Payment.OrphanScan do
   @moduledoc """
   Shared scaffolding for the provider→local passes (`Fund.PayoutOrphanReconciliation`,
-  `Budget.TransactionOrphanReconciliation`, `Account.MerchantOrphanReconciliation`).
+  `Fund.TransactionOrphanReconciliation`, `Account.MerchantOrphanReconciliation`).
 
   Those passes differ only in which provider listing they read, which local
   column they diff against, and how they derive a match key. Everything around

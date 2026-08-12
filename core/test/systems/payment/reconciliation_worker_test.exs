@@ -14,7 +14,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
   alias Systems.Payment.ReconciliationFindingModel
@@ -78,8 +78,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
 
   defp stuck_transaction do
     currency_ledger =
-      case Budget.CurrencyLedgerModel.get_by_currency(:EUR) do
-        nil -> Budget.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
+      case Fund.CurrencyLedgerModel.get_by_currency(:EUR) do
+        nil -> Fund.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
         existing -> Repo.preload(existing, [:inbound, :outbound])
       end
 
@@ -101,8 +101,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       |> Repo.insert!()
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: "tx_payin",
         status: :pending,
         idempotence_key: Ecto.UUID.generate(),
@@ -113,7 +113,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
       |> Repo.insert()
 
-    backdate(Budget.TransactionModel, transaction.id, 120)
+    backdate(Fund.TransactionModel, transaction.id, 120)
     transaction
   end
 

@@ -1,4 +1,4 @@
-defmodule Systems.Budget.CurrencyLedgerModel do
+defmodule Systems.Fund.CurrencyLedgerModel do
   use Ecto.Schema
 
   import Ecto.Changeset

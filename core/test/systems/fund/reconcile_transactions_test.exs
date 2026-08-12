@@ -1,4 +1,4 @@
-defmodule Systems.Budget.ReconcileTransactionsTest do
+defmodule Systems.Fund.ReconcileTransactionsTest do
   use Core.DataCase, async: true
   import Mox
   import Ecto.Query
@@ -6,7 +6,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -15,7 +15,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
 
   defp reconcile(opts \\ []) do
     Payment.Public.new_reconciliation_state()
-    |> then(&Budget.Public.reconcile_transactions(opts, &1))
+    |> then(&Fund.Public.reconcile_transactions(opts, &1))
     |> Map.fetch!(:summary)
   end
 
@@ -42,8 +42,8 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     uid = "provider-" <> Ecto.UUID.generate()
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: uid,
         status: status,
         idempotence_key: Ecto.UUID.generate(),
@@ -64,13 +64,13 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
       |> NaiveDateTime.add(-minutes_ago * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(t in Budget.TransactionModel, where: t.id == ^transaction.id)
+    from(t in Fund.TransactionModel, where: t.id == ^transaction.id)
     |> Repo.update_all(set: [inserted_at: ts])
   end
 
   defp ensure_currency_ledger(currency) do
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
-      nil -> Budget.CurrencyLedgerModel.create(currency) |> Repo.insert!()
+    case Fund.CurrencyLedgerModel.get_by_currency(currency) do
+      nil -> Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
       existing -> Repo.preload(existing, [:inbound, :outbound])
     end
   end
@@ -158,7 +158,7 @@ defmodule Systems.Budget.ReconcileTransactionsTest do
     # transaction completes (a winning "completed" webhook). The guard refuses the
     # stale "failed"; that benign race must be tallied as verified, not as an error.
     expect(ProviderMock, :get_transaction, fn uid ->
-      from(t in Budget.TransactionModel, where: t.transaction_id == ^uid)
+      from(t in Fund.TransactionModel, where: t.transaction_id == ^uid)
       |> Repo.update_all(set: [status: :completed])
 
       {:ok, %{uid: uid, status: :failed, raw_status: "failed", payment_url: nil, amount: 0}}
