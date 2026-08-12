@@ -49,7 +49,7 @@ msgstr "Il marketplace è attualmente vuoto."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Tutti"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
@@ -57,7 +57,7 @@ msgstr "Filtro:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
+msgstr "Cerca"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"

@@ -635,6 +635,7 @@ defmodule Systems.Assignment.PublicTest do
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      Systems.Fund.Factories.insert_pay_in!(fund, project_owner)
       {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
 
       {:ok,

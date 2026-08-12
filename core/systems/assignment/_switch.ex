@@ -61,7 +61,7 @@ defmodule Systems.Assignment.Switch do
     assignment =
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
-    if assignment.fund do
+    if Assignment.Public.funded?(assignment) do
       create_pending_contributions_next_action(assignment)
     end
 

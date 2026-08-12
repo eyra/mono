@@ -241,7 +241,21 @@ defmodule Systems.Assignment.SwitchTest do
       }
     end
 
-    test ":completed creates PendingContributions next-action for the owner", %{
+    test ":completed creates PendingContributions next-action when the fund has pay-ins", %{
+      assignment: %{id: id},
+      fund: fund,
+      participation: participation,
+      owner: owner
+    } do
+      Fund.Factories.insert_pay_in!(fund, owner)
+
+      message = %{assignment_participation: participation, from_pid: self()}
+      assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
+
+      assert_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test ":completed on a fund without pay-ins skips NA creation", %{
       assignment: %{id: id},
       participation: participation,
       owner: owner
@@ -249,7 +263,7 @@ defmodule Systems.Assignment.SwitchTest do
       message = %{assignment_participation: participation, from_pid: self()}
       assert :ok = Switch.intercept({:assignment_participation, :completed}, message)
 
-      assert_next_action(owner, "/assignment/#{id}/content?tab=contributions")
+      refute_next_action(owner, "/assignment/#{id}/content?tab=contributions")
     end
 
     test ":completed refreshes content page + embedded views", %{participation: participation} do

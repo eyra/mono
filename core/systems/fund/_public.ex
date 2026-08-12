@@ -16,6 +16,7 @@ defmodule Systems.Fund.Public do
   alias Systems.Account
 
   alias Systems.Fund
+  alias Systems.Budget
   alias Systems.Bookkeeping
   alias Systems.Banking
   alias Systems.Payment
@@ -112,6 +113,11 @@ defmodule Systems.Fund.Public do
     reward_query(fund, :pending_approval)
     |> preload(^preload)
     |> Repo.all()
+  end
+
+  def has_pay_ins?(%Fund.Model{id: fund_id}) do
+    from(t in Budget.TransactionModel, where: t.target_fund_id == ^fund_id)
+    |> Repo.exists?()
   end
 
   def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do

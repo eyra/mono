@@ -49,7 +49,7 @@ msgstr "Prekyvietė šiuo metu yra tuščia."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Visi"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
@@ -57,7 +57,7 @@ msgstr "Filtras:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
+msgstr "Ieškoti"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
