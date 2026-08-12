@@ -46,10 +46,11 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
     end
 
     defp participants_opt_in do
-      [:recruit_participants] ++
-        if feature_enabled?(:panl_post_launch),
-          do: [:advert_in_pool, :paid_slots],
-          else: []
+      if feature_enabled?(:panl_post_launch) do
+        [:advert_in_pool, :paid_slots]
+      else
+        [:recruit_participants]
+      end
     end
 
     # Contributions is only meaningful when paid_slots is on — otherwise
