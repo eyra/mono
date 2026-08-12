@@ -735,3 +735,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr "Bedankt!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Je bijdrage is afgewezen"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Jouw tijd en moeite helpen dit onderzoek verder.<br>Graag tot de volgende keer."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Je bijdrage is afgewezen."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Je bijdrage is afgewezen om de volgende reden:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Terug naar startpagina"

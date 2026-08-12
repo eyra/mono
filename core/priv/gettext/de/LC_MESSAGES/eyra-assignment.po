@@ -736,3 +736,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr "Vielen Dank!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Ihr Beitrag wurde abgelehnt"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Ihre Zeit und Mühe bringen diese Forschung voran.<br>Bis zum nächsten Mal."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Ihr Beitrag wurde abgelehnt."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Ihr Beitrag wurde aus folgendem Grund abgelehnt:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Zurück zur Startseite"

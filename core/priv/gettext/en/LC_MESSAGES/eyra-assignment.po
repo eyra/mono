@@ -783,3 +783,27 @@ msgstr[1] "Could not confirm %{count} contributions. Please try again."
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr "Thank you!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Your contribution was declined"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Your time and effort help this research move forward.<br>See you next time."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Your contribution was declined."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Your contribution was declined for the following reason:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Back to home"

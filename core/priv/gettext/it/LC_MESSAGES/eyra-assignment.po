@@ -736,3 +736,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr "Grazie!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Il tuo contributo è stato rifiutato"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Il tuo tempo e impegno aiutano questa ricerca ad andare avanti.<br>Alla prossima."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Il tuo contributo è stato rifiutato."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Il tuo contributo è stato rifiutato per il seguente motivo:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Torna alla home"
