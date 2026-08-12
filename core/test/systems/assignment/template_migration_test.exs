@@ -51,7 +51,9 @@ defmodule Systems.Assignment.TemplateMigrationTest do
       {_title, participants_flags} = tabs[:participants]
       assert participants_flags.advert_in_pool == true
       assert participants_flags.invite_participants == false
-      assert participants_flags.recruit_participants == true
+      # Recruit link is only opt-in pre-launch (panl_post_launch off); this
+      # test suite runs with panl_post_launch on, so it must be off here.
+      assert participants_flags.recruit_participants == false
     end
 
     test "PaperScreening template has correct opt-in flags" do
