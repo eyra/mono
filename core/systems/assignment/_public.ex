@@ -45,6 +45,15 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  A "funded" assignment has a fund AND at least one pay-in on that fund.
+  The fund alone doesn't qualify — every assignment gets an empty fund
+  at assembly time (`_assembly.ex`), so fund-existence is not a signal
+  that money is actually involved.
+  """
+  def funded?(%Assignment.Model{fund: %Fund.Model{} = fund}), do: Fund.Public.has_pay_ins?(fund)
+  def funded?(%Assignment.Model{}), do: false
+
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
     |> Repo.get!(id)
