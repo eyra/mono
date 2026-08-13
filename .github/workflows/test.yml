@@ -78,7 +78,7 @@ jobs:
         continue-on-error: true
 
       - name: Commit formatted code
-        uses: EndBug/add-and-commit@v10.0.0
+        uses: EndBug/add-and-commit@v11.0.0
         with:
           add: "."
           message: "Formatted code"
