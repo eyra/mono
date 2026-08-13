@@ -36,7 +36,7 @@ defmodule CoreWeb.Features.FundAssignmentTest do
     # Provider mock: payment_url points to the in-app local simulator
     # (`/payment/local/<uid>`), available in test env via
     # `enable_e2e_support: true`. The simulator's `Complete` button
-    # synchronously calls `Budget.Public.complete_transaction/1` and
+    # synchronously calls `Fund.Public.complete_transaction/1` and
     # redirects back to the assignment.
     ProviderMock
     |> stub(:get_merchant, fn _uid ->

@@ -7,7 +7,7 @@ defmodule Systems.Assignment.PublicTest do
   alias Systems.Crew
   alias Systems.Fund
   alias Systems.Monitor
-  alias Systems.Budget
+  alias Systems.Fund
 
   alias Core.Factories
 
@@ -1004,7 +1004,7 @@ defmodule Systems.Assignment.PublicTest do
       user: user,
       assignment: %{fund_id: fund_id} = assignment
     } do
-      eur_ledger = Core.Repo.insert!(Budget.CurrencyLedgerModel.create(:EUR))
+      eur_ledger = Core.Repo.insert!(Fund.CurrencyLedgerModel.create(:EUR))
       fund = Fund.Public.get!(fund_id)
 
       fund

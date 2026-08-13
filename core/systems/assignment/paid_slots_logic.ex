@@ -19,7 +19,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
 
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
-  alias Systems.Budget
+  alias Systems.Fund
 
   defmacro __using__(_opts) do
     quote do
@@ -34,7 +34,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
             transactions: transactions
           }) do
         %{
-          module: Systems.Budget.PayInRequestForm,
+          module: Systems.Fund.PayInRequestForm,
           params: %{
             assignment: assignment,
             user: user,
@@ -137,7 +137,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
   def list_transactions(%{fund: nil}), do: []
 
   def list_transactions(%{fund: fund}) do
-    Budget.Public.list_transactions_by_fund(fund)
+    Fund.Public.list_transactions_by_fund(fund)
   end
 
   def active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency

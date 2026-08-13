@@ -1,4 +1,4 @@
-defmodule Systems.Budget.TransactionModel do
+defmodule Systems.Fund.TransactionModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset

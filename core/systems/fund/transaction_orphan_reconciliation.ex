@@ -1,9 +1,9 @@
-defmodule Systems.Budget.TransactionOrphanReconciliation do
+defmodule Systems.Fund.TransactionOrphanReconciliation do
   @moduledoc """
   Provider→local reconciliation for pay-ins: lists the transactions the provider
   created inside the window and flags any with no local row.
 
-  The inverse of `Budget.TransactionReconciliation`, which starts from local rows
+  The inverse of `Fund.TransactionReconciliation`, which starts from local rows
   and so can only check pay-ins we already know about. A backup restore that
   rolls back the window in which a transaction row was created leaves a payment
   taken at the provider with no local record — invisible to a local-first scan.
@@ -29,7 +29,7 @@ defmodule Systems.Budget.TransactionOrphanReconciliation do
   require Logger
 
   alias Core.Repo
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
@@ -69,7 +69,7 @@ defmodule Systems.Budget.TransactionOrphanReconciliation do
   end
 
   defp query_idempotence_keys(keys) do
-    from(t in Budget.TransactionModel,
+    from(t in Fund.TransactionModel,
       where: t.idempotence_key in ^keys,
       select: t.idempotence_key
     )

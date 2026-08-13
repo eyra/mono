@@ -6,7 +6,7 @@ defmodule Systems.Payment.Controller do
   alias Frameworks.Signal
   alias Systems.Account
   alias Systems.Payment.Webhook
-  alias Systems.Budget
+  alias Systems.Fund
 
   def webhook(conn, %{"provider" => provider}) do
     case Webhook.handler(provider) do
@@ -83,12 +83,12 @@ defmodule Systems.Payment.Controller do
   end
 
   defp apply_transaction_status(:completed, uid) do
-    result = Budget.Public.complete_transaction(uid)
+    result = Fund.Public.complete_transaction(uid)
     Logger.info("[Payment.Webhook] Complete result: #{inspect(result)}")
   end
 
   defp apply_transaction_status(:failed, uid) do
-    result = Budget.Public.fail_transaction(uid)
+    result = Fund.Public.fail_transaction(uid)
     Logger.info("[Payment.Webhook] Fail result: #{inspect(result)}")
   end
 

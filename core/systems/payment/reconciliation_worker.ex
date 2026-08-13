@@ -30,7 +30,7 @@ defmodule Systems.Payment.ReconciliationWorker do
   require Logger
 
   alias Systems.Account
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment
 
@@ -49,9 +49,9 @@ defmodule Systems.Payment.ReconciliationWorker do
 
     state = Payment.Public.new_reconciliation_state()
     state = Fund.Public.reconcile_pending_payouts(opts, state)
-    state = Budget.Public.reconcile_transactions(opts, state)
+    state = Fund.Public.reconcile_transactions(opts, state)
     state = Fund.Public.reconcile_orphaned_payouts(opts, state)
-    state = Budget.Public.reconcile_orphaned_transactions(opts, state)
+    state = Fund.Public.reconcile_orphaned_transactions(opts, state)
     state = Account.Public.reconcile_orphaned_merchants(opts, state)
 
     Payment.Public.finish_reconciliation_run(run_record, state)

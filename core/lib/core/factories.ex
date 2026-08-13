@@ -17,7 +17,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
@@ -931,7 +931,7 @@ defmodule Core.Factories do
     {currency, attributes} = Map.pop(attributes, :currency, :EUR)
     id = currency |> Atom.to_string() |> String.downcase()
 
-    %Budget.CurrencyLedgerModel{
+    %Fund.CurrencyLedgerModel{
       currency: currency,
       inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
       outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])

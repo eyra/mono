@@ -1,8 +1,5 @@
 defmodule Systems.Fund.Factories do
-  alias Systems.{
-    Budget,
-    Fund
-  }
+  alias Systems.Fund
 
   def create_currency(name, type, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
@@ -73,8 +70,8 @@ defmodule Systems.Fund.Factories do
   end
 
   def insert_pay_in!(%Fund.Model{id: fund_id}, %Systems.Account.User{id: user_id}) do
-    %Budget.TransactionModel{}
-    |> Budget.TransactionModel.changeset(%{
+    %Fund.TransactionModel{}
+    |> Fund.TransactionModel.changeset(%{
       transaction_id: "tx_#{System.unique_integer([:positive])}",
       status: :completed,
       idempotence_key: Ecto.UUID.generate(),

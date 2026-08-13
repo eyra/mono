@@ -1,6 +1,6 @@
-defmodule Systems.Budget.CreatePayInTest do
+defmodule Systems.Fund.CreatePayInTest do
   @moduledoc """
-  Unit coverage for `Budget.Public.create_pay_in/3`.
+  Unit coverage for `Fund.Public.create_pay_in/3`.
 
   Mirrors two scenarios that previously lived in
   `test/e2e/fund_assignment.spec.ts` as Playwright E2E tests:
@@ -20,7 +20,7 @@ defmodule Systems.Budget.CreatePayInTest do
 
   alias Core.Factories
   alias Core.Repo
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
 
@@ -34,14 +34,14 @@ defmodule Systems.Budget.CreatePayInTest do
       stub_provider_create_transaction()
 
       {:ok, %{transaction: t1}} =
-        Budget.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(assignment, user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
         })
 
       {:ok, %{transaction: t2}} =
-        Budget.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(assignment, user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
@@ -58,7 +58,7 @@ defmodule Systems.Budget.CreatePayInTest do
 
       # Both rows persisted, both `:pending`.
       assert [%{status: :pending}, %{status: :pending}] =
-               Repo.all(Budget.TransactionModel) |> Enum.sort_by(& &1.id)
+               Repo.all(Fund.TransactionModel) |> Enum.sort_by(& &1.id)
     end
 
     test "can create a fresh transaction after a previous one was marked :failed (UC-OPP-01.A1: retry)" do
@@ -68,17 +68,17 @@ defmodule Systems.Budget.CreatePayInTest do
 
       # First transaction → fail it (simulates the payment-failed webhook).
       {:ok, %{transaction: failed}} =
-        Budget.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(assignment, user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
         })
 
-      {:ok, _} = Budget.Public.fail_transaction(failed.transaction_id)
+      {:ok, _} = Fund.Public.fail_transaction(failed.transaction_id)
 
       # Retry — the researcher clicks "Confirm" again on a fresh PayInRequestForm.
       {:ok, %{transaction: retry}} =
-        Budget.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(assignment, user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
@@ -88,8 +88,8 @@ defmodule Systems.Budget.CreatePayInTest do
       assert retry.status == :pending
       assert retry.transaction_id != failed.transaction_id
 
-      assert %{status: :failed} = Repo.get!(Budget.TransactionModel, failed.id)
-      assert %{status: :pending} = Repo.get!(Budget.TransactionModel, retry.id)
+      assert %{status: :failed} = Repo.get!(Fund.TransactionModel, failed.id)
+      assert %{status: :pending} = Repo.get!(Fund.TransactionModel, retry.id)
     end
   end
 
@@ -122,7 +122,7 @@ defmodule Systems.Budget.CreatePayInTest do
   end
 
   defp ensure_currency_ledger(currency) do
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
+    case Fund.CurrencyLedgerModel.get_by_currency(currency) do
       nil ->
         Factories.insert!(:currency_ledger, %{currency: currency})
 

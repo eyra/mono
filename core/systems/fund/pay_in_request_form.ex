@@ -1,4 +1,4 @@
-defmodule Systems.Budget.PayInRequestForm do
+defmodule Systems.Fund.PayInRequestForm do
   use CoreWeb.LiveForm
 
   require Logger
@@ -9,7 +9,7 @@ defmodule Systems.Budget.PayInRequestForm do
   alias Frameworks.Pixel.Button
 
   alias Systems.Assignment.CurrencyHelpers
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Payment
 
   @impl true
@@ -26,13 +26,13 @@ defmodule Systems.Budget.PayInRequestForm do
       ) do
     reward_cents = subject_reward || 0
 
-    request = %Budget.PayInRequestModel{
+    request = %Fund.PayInRequestModel{
       subject_count: 0,
       subject_reward: reward_cents,
       aim_of_study: aim_of_study
     }
 
-    changeset = Budget.PayInRequestModel.changeset(request)
+    changeset = Fund.PayInRequestModel.changeset(request)
 
     {
       :ok,
@@ -65,7 +65,7 @@ defmodule Systems.Budget.PayInRequestForm do
 
   @impl true
   def handle_event("confirm", %{"pay_in_request" => attrs}, socket) do
-    case Budget.Public.create_pay_in(socket.assigns.assignment, socket.assigns.user, attrs) do
+    case Fund.Public.create_pay_in(socket.assigns.assignment, socket.assigns.user, attrs) do
       {:ok, %{payment_url: nil}} ->
         {:noreply, socket |> send_event(:parent, "pay_in_request_form_submit")}
 
@@ -87,12 +87,12 @@ defmodule Systems.Budget.PayInRequestForm do
   end
 
   defp build_changeset(request, attrs, false) do
-    Budget.PayInRequestModel.changeset(request, attrs)
+    Fund.PayInRequestModel.changeset(request, attrs)
   end
 
   defp build_changeset(request, attrs, true) do
-    Budget.PayInRequestModel.changeset(request, attrs)
-    |> Budget.PayInRequestModel.validate()
+    Fund.PayInRequestModel.changeset(request, attrs)
+    |> Fund.PayInRequestModel.validate()
     |> Map.put(:action, :validate)
   end
 

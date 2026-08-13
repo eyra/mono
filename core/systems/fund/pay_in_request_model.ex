@@ -1,6 +1,6 @@
-defmodule Systems.Budget.PayInRequestModel do
+defmodule Systems.Fund.PayInRequestModel do
   @moduledoc """
-  Form-object for `Budget.Public.create_pay_in/3`. Holds the researcher's
+  Form-object for `Fund.Public.create_pay_in/3`. Holds the researcher's
   input in the "Add participants" modal: how many participants they want
   to fund, at what fee, plus the (persisted) study aim.
 

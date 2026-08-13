@@ -4,7 +4,7 @@ defmodule Systems.Payment.Reconciliation do
   back-off and a circuit breaker, plus the run/finding persistence lifecycle.
 
   The per-type reconcilers (`Fund.PayoutReconciliation`,
-  `Budget.TransactionReconciliation`) thread a `ReconciliationState` through their
+  `Fund.TransactionReconciliation`) thread a `ReconciliationState` through their
   rows and reach the provider only via `get_withdrawal/2` and `get_transaction/2`
   here, so rate-limit and outage handling lives in one place.
   """
