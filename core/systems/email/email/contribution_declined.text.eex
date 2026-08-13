@@ -1,0 +1,12 @@
+Your contribution was declined
+
+<%= if @metadata["rejected_message"] && @metadata["rejected_message"] != "" do %>Your contribution was declined for the following reason:
+
+"<%= @metadata["rejected_message"] %>"
+<% else %>Your contribution was declined.<% end %>
+
+<%= if @metadata["assignment_title"] do %>Assignment: <%= @metadata["assignment_title"] %><% end %>
+
+Kind regards,
+
+The Eyra team

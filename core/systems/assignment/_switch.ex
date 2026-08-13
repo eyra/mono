@@ -9,6 +9,7 @@ defmodule Systems.Assignment.Switch do
   alias Systems.Project
   alias Systems.Account
   alias Systems.Assignment
+  alias Systems.Notify
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.NextAction
@@ -82,9 +83,10 @@ defmodule Systems.Assignment.Switch do
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     if assignment.fund do
-      clear_pending_payout_if_empty(assignment)
       dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
     end
+
+    notify_participant(:contribution_accepted, %{participation | assignment: assignment})
 
     update_content_page(assignment, from_pid)
     update_assignment_embedded_views(assignment, from_pid)
@@ -103,9 +105,10 @@ defmodule Systems.Assignment.Switch do
       Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     if assignment.fund do
-      clear_pending_payout_if_empty(assignment)
       dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
     end
+
+    notify_participant(:contribution_declined, %{participation | assignment: assignment})
 
     update_content_page(assignment, from_pid)
     update_assignment_embedded_views(assignment, from_pid)
@@ -507,7 +510,13 @@ defmodule Systems.Assignment.Switch do
        }) do
     users = auth_module().users_with_role(auth_node_id, :owner)
 
-    opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
+    opts = [
+      key: "#{assignment_id}",
+      params: %{
+        "id" => assignment_id,
+        "node_id" => Systems.Project.Public.get_node_id_by(assignment_id)
+      }
+    ]
 
     case {old_status, new_status} do
       {_, :rejected} ->
@@ -527,33 +536,31 @@ defmodule Systems.Assignment.Switch do
     member = Assignment.Public.get_member_by_task(crew_task, [:user])
 
     if member && Crew.Public.finished?(member) do
-      {:ok, participation} = Assignment.Public.obtain_participation(assignment, member.user)
-      Assignment.Public.complete_participation(participation)
+      Assignment.Public.complete_participation(assignment, member.user)
     end
   end
 
-  defp clear_pending_payout_if_empty(%Assignment.Model{fund: nil} = assignment) do
-    clear_pending_payout(assignment)
-  end
-
-  defp clear_pending_payout_if_empty(%Assignment.Model{fund: fund} = assignment) do
-    if Systems.Fund.Public.list_pending_approvals(fund) == [] do
-      clear_pending_payout(assignment)
-    end
-  end
-
-  defp clear_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
-    case Assignment.Public.owners(assignment) do
-      [] ->
-        :ok
-
-      owners ->
-        NextAction.Public.clear_next_action(
-          owners,
-          Systems.Assignment.NextActions.PendingContributions,
-          key: "#{assignment_id}"
-        )
-    end
+  defp notify_participant(
+         type,
+         %Assignment.ParticipationModel{
+           id: participation_id,
+           user_id: user_id,
+           rejected_message: rejected_message,
+           assignment: %Assignment.Model{id: assignment_id, info: info} = assignment
+         }
+       ) do
+    Notify.Public.record_event(%{
+      type: type,
+      subject_user: %{id: user_id},
+      metadata: %{
+        "assignment_id" => assignment_id,
+        "assignment_title" => info && info.title,
+        "node_id" => Systems.Project.Public.get_node_id_by(assignment),
+        "rejected_message" => rejected_message
+      },
+      correlation_id: "participation:#{participation_id}",
+      source: __MODULE__
+    })
   end
 
   defp create_pending_contributions_next_action(%Assignment.Model{id: assignment_id} = assignment) do
@@ -566,7 +573,10 @@ defmodule Systems.Assignment.Switch do
           owners,
           Systems.Assignment.NextActions.PendingContributions,
           key: "#{assignment_id}",
-          params: %{"assignment_id" => assignment_id}
+          params: %{
+            "assignment_id" => assignment_id,
+            "node_id" => Systems.Project.Public.get_node_id_by(assignment)
+          }
         )
     end
   end

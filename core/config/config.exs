@@ -18,6 +18,15 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :core, :deploy_env, :local
 
+# Notify system — list of per-system notifier modules that declare their
+# events via `use Systems.Notify.EventDeclaration`. Add a system to this list
+# when it drops a `_notify.ex`; envs can override to short-circuit notifiers
+# (e.g. omit an integration-only notifier in dev).
+config :core, Systems.Notify,
+  notifiers: [
+    Systems.Assignment.Notify
+  ]
+
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
 config :core, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,

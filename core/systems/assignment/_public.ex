@@ -968,6 +968,17 @@ defmodule Systems.Assignment.Public do
   Downstream housekeeping (owner next-action, view refreshes) lives in
   `Assignment.Switch` and runs after the transaction commits.
   """
+  def complete_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    case get_participation(assignment, user) do
+      %Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p ->
+        {:ok, p}
+
+      _ ->
+        {:ok, participation} = obtain_participation(assignment, user)
+        complete_participation(participation)
+    end
+  end
+
   def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p),
     do: {:ok, p}
 

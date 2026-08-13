@@ -81,4 +81,20 @@ defmodule Systems.Email.EmailHTML do
   def update_email_instructions("text", assigns) do
     update_email_instructions_text(assigns)
   end
+
+  def contribution_accepted("html", assigns) do
+    contribution_accepted_html(assigns)
+  end
+
+  def contribution_accepted("text", assigns) do
+    contribution_accepted_text(assigns)
+  end
+
+  def contribution_declined("html", assigns) do
+    contribution_declined_html(assigns)
+  end
+
+  def contribution_declined("text", assigns) do
+    contribution_declined_text(assigns)
+  end
 end

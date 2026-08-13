@@ -64,6 +64,38 @@ defmodule Systems.Assignment.PublicTest do
                %{id: ^id_3}
              ] = Assignment.Public.list_participations(assignment)
     end
+
+    test "complete_participation/2 creates and completes when no participation exists" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      assert {:ok, %{completed_at: %NaiveDateTime{}}} =
+               Assignment.Public.complete_participation(assignment, user)
+    end
+
+    test "complete_participation/2 completes an existing incomplete participation" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      %{id: participation_id, completed_at: nil} =
+        Assignment.Public.obtain_participation!(assignment, user)
+
+      assert {:ok, %{id: ^participation_id, completed_at: %NaiveDateTime{}}} =
+               Assignment.Public.complete_participation(assignment, user)
+    end
+
+    test "complete_participation/2 is a no-op when participation is already completed" do
+      assignment = Factories.insert!(:assignment)
+      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+
+      {:ok, %{id: participation_id, completed_at: first_completed_at}} =
+        Assignment.Public.complete_participation(assignment, user)
+
+      {:ok, %{id: ^participation_id, completed_at: second_completed_at}} =
+        Assignment.Public.complete_participation(assignment, user)
+
+      assert first_completed_at == second_completed_at
+    end
   end
 
   describe "assignments" do

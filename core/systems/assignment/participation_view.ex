@@ -11,6 +11,7 @@ defmodule Systems.Assignment.ParticipationView do
   alias Frameworks.Pixel.Text
 
   alias Systems.Assignment
+  alias Systems.Notify
 
   def dependencies(), do: [:assignment_id, :current_user]
 
@@ -19,8 +20,26 @@ defmodule Systems.Assignment.ParticipationView do
   end
 
   @impl true
-  def mount(:not_mounted_at_router, _session, socket) do
+  def mount(
+        :not_mounted_at_router,
+        _session,
+        %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket
+      ) do
+    # Participant has landed on their outcome page → tell Notify the outcome
+    # messages for this participation have been seen.
+    mark_outcome_seen(assignment_id, user)
+
     {:ok, socket}
+  end
+
+  defp mark_outcome_seen(assignment_id, user) do
+    case Assignment.Public.get_participation(%Assignment.Model{id: assignment_id}, user) do
+      %Assignment.ParticipationModel{id: participation_id} ->
+        Notify.Public.mark_seen(user, correlation_id: "participation:#{participation_id}")
+
+      _ ->
+        :ok
+    end
   end
 
   @impl true
