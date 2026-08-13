@@ -97,7 +97,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
         email_or_work_view(assignment, assigns, tester?)
 
       :decline ->
-        finished_view(assignment, assigns)
+        participation_or_finished_view(assignment, assigns)
 
       :retry ->
         consent_or_work_view(assignment, assigns, tester?)
@@ -106,7 +106,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
         work_view(assignment, assigns)
 
       :work_done ->
-        finished_view(assignment, assigns)
+        participation_or_finished_view(assignment, assigns)
     end
   end
 
@@ -124,7 +124,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
         activate_account_view(assignment, assigns)
 
       tasks_finished?(assignment, assigns) ->
-        finished_view(assignment, assigns)
+        participation_or_finished_view(assignment, assigns)
 
       not is_nil(user_state) ->
         work_view(assignment, assigns)
@@ -233,6 +233,26 @@ defmodule Systems.Assignment.CrewPageBuilder do
     CoreWeb.Live.Element.prepare_live_view(
       "finished_view_#{assignment_id}",
       Assignment.FinishedView,
+      live_context: context
+    )
+  end
+
+  # After the owner has accepted or rejected the participant's contribution the
+  # outcome is terminal — no retry, no email capture, just a short outcome
+  # message + navigate-home. Falls through to the finished_view for the still-
+  # pending / no-review-yet state.
+  defp participation_or_finished_view(assignment, %{current_user: user} = assigns) do
+    case Assignment.Public.get_participation(assignment, user) do
+      %{rejected_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
+      %{accepted_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
+      _ -> finished_view(assignment, assigns)
+    end
+  end
+
+  defp participation_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
+    CoreWeb.Live.Element.prepare_live_view(
+      "participation_view_#{assignment_id}",
+      Assignment.ParticipationView,
       live_context: context
     )
   end

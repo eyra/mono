@@ -746,3 +746,27 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr "Îți mulțumim!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Contribuția ta a fost respinsă"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Timpul și efortul tău ajută această cercetare să avanseze.<br>Pe curând."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Contribuția ta a fost respinsă."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Contribuția ta a fost respinsă din următorul motiv:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Înapoi la pagina principală"
