@@ -1423,7 +1423,7 @@ defmodule Systems.Fund.Public do
     if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
   end
 
-  defp finalize_donation(%Fund.DonationModel{id: donation_id} = donation, charge_uid) do
+  defp finalize_donation(%Fund.DonationModel{id: donation_id, uid: uid} = donation, charge_uid) do
     Multi.new()
     |> Multi.update(
       :donation,
@@ -1439,8 +1439,20 @@ defmodule Systems.Fund.Public do
     |> Repo.commit()
     |> case do
       {:ok, %{donation: donation}} -> notify_rewards_summary(donation)
-      {:error, _step, reason, _changes} -> {:error, reason}
+      {:error, _step, reason, _changes} -> unfinalized_donation(uid, charge_uid, reason)
     end
+  end
+
+  # The provider already took the money, so this is not a failure the participant
+  # can retry: the rewards stay :donating and the charge uid is lost unless the
+  # log carries it. Same end state as an uncertain charge, reported as one.
+  defp unfinalized_donation(uid, charge_uid, reason) do
+    Logger.error(
+      "[Fund] charge #{charge_uid} accepted but donation=#{uid} was not finalized: " <>
+        "#{inspect(reason)}; rewards stay :donating for manual review"
+    )
+
+    {:error, {:opp_uncertain, reason}}
   end
 
   defp revert_donation_lock(%Fund.DonationModel{} = donation, reward_ids, failure_reason) do

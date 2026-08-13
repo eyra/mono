@@ -61,6 +61,7 @@ defmodule Systems.Fund.DonationModel do
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
     |> validate_inclusion(:status, @statuses)
+    |> unique_constraint(:charge_uid)
   end
 
   def preload_graph(:full), do: [:user, :rewards]

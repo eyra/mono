@@ -46,6 +46,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     donate_handoff_confirm: "Yes, donate",
     donate_thanks: "Thank you for your donation!",
     donate_failed: "Donation failed",
+    donate_pending: "Still confirming your donation",
     donate_in_progress: "Your donation is being processed",
     donated_total: "Donated to Eyra"
   }
@@ -513,6 +514,27 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert reward_status(user) == :approved
+    end
+
+    # The money may well have moved, and the card already says the donation is
+    # being processed — a red "try again later" next to it would contradict it
+    # and invite a retry the zeroed approved balance makes impossible.
+    test "an uncertain charge is not reported to the participant as a failure" do
+      user = user_with_reward(1000, "m_donate_uncertain")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :donating
+      assert_received {:show_flash, %{type: :info, message: "Still confirming your donation"}}
     end
   end
 end

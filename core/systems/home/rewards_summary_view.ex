@@ -197,22 +197,13 @@ defmodule Systems.Home.RewardsSummaryView do
             handoff_mode: :donate,
             donate_enabled?: true,
             user: user,
-            payout_currency: payout_currency,
-            labels: labels
+            payout_currency: payout_currency
           }
         } = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
-    socket =
-      case Fund.Public.request_donation(user, payout_currency) do
-        {:ok, _donation} ->
-          Flash.push_info(socket, labels.donate_thanks)
-
-        error ->
-          Logger.warning("[RewardsSummaryView] donation failed: #{inspect(error)}")
-          Flash.push_error(socket, labels.donate_failed)
-      end
+    socket = flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))
 
     # MS.8: the refreshed card — approved at zero, the donated total shown — is
     # the confirmation. Nothing to navigate to.
@@ -278,6 +269,23 @@ defmodule Systems.Home.RewardsSummaryView do
        do: Flash.push_error(socket, labels.payout_below_threshold)
 
   defp handle_payout_error(socket, {:error, _reason}), do: present_handoff(socket, :verify)
+
+  defp flash_donation_result(%{assigns: %{labels: labels}} = socket, {:ok, _donation}),
+    do: Flash.push_info(socket, labels.donate_thanks)
+
+  # The charge may well have gone through: the rewards stay :donating and the
+  # card already says so, so telling the participant to try again would be both
+  # wrong and impossible (their approved balance is now zero).
+  defp flash_donation_result(
+         %{assigns: %{labels: labels}} = socket,
+         {:error, {:opp_uncertain, _}}
+       ),
+       do: Flash.push_info(socket, labels.donate_pending)
+
+  defp flash_donation_result(%{assigns: %{labels: labels}} = socket, error) do
+    Logger.warning("[RewardsSummaryView] donation failed: #{inspect(error)}")
+    Flash.push_error(socket, labels.donate_failed)
+  end
 
   defp present_handoff(socket, mode) do
     socket

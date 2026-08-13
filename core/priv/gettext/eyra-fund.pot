@@ -241,3 +241,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
+msgstr ""

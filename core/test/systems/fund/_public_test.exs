@@ -2240,6 +2240,36 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
       assert %{status: :pending, charge_uid: nil} = donation_of(donor)
     end
+
+    # The charge went through, so this is not a "failed" donation the participant
+    # can retry — it must land on the same uncertain outcome as a lost response,
+    # with the charge uid recoverable from the log.
+    test "reports uncertain when the charge is accepted but finalize fails", %{
+      donor: donor,
+      euro: euro
+    } do
+      Core.Repo.insert!(%Fund.DonationModel{
+        user_id: donor.id,
+        amount_cents: 1,
+        currency: "eur",
+        status: :completed,
+        charge_uid: "chg_taken"
+      })
+
+      %{id: id} = insert_reward(donor, euro, 600, :approved)
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:ok, %{uid: "chg_taken", status: :pending, raw_status: "created", amount: 600}}
+      end)
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          assert {:error, {:opp_uncertain, _}} = Fund.Public.request_donation(donor, "euro")
+        end)
+
+      assert log =~ "chg_taken"
+      assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
+    end
   end
 
   # :pending_payout is normally set by `lock_approved_rewards/2` during

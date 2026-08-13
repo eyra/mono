@@ -241,3 +241,7 @@ msgstr "Thank you for your donation!"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
 msgstr "Donated to Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
+msgstr "We're still confirming your donation. No need to try again."

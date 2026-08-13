@@ -193,6 +193,7 @@ defmodule Systems.Home.PageBuilder do
       donate_handoff_confirm: dgettext("eyra-fund", "rewards_summary.donate.handoff.confirm"),
       donate_thanks: dgettext("eyra-fund", "rewards_summary.donate.thanks"),
       donate_failed: dgettext("eyra-fund", "rewards_summary.donate.failed"),
+      donate_pending: dgettext("eyra-fund", "rewards_summary.donate.pending"),
       donate_in_progress: dgettext("eyra-fund", "rewards_summary.donate.in_progress"),
       donated_total: dgettext("eyra-fund", "rewards_summary.donate.total")
     }
