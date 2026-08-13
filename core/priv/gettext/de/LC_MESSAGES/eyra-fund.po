@@ -155,9 +155,9 @@ msgstr "Vergütungen"
 msgid "rewards_summary.payout.below_threshold"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
-msgstr ""
+msgstr "Auszahlen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.body"
@@ -195,9 +195,9 @@ msgstr ""
 msgid "rewards_summary.payout.manual"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
-msgstr ""
+msgstr "Auszahlung wiederholen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.awaiting.body"
