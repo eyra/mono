@@ -1,6 +1,7 @@
 defmodule Systems.Fund.PublicTest do
   use Core.DataCase
   import Mox
+  import Systems.Fund.TestHelper
 
   alias Systems.{
     Fund,
@@ -80,6 +81,21 @@ defmodule Systems.Fund.PublicTest do
              Fund.Public.create_reward(fund, 0, participant, "zero-key")
 
     assert Repo.all(Fund.RewardModel) == []
+  end
+
+  test "create_reward/4 refuses a fund whose currency is not preloaded", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+    unloaded = %{fund | currency: %Ecto.Association.NotLoaded{}}
+
+    assert {:error, :fund_balance, :unknown_currency, _changes} =
+             Fund.Public.create_reward(unloaded, 500, participant, "unloaded-key")
+  end
+
+  test "create_reward/4 refuses a fund whose currency is nil", %{fund: fund} do
+    participant = Factories.insert!(:member, %{creator: false})
+
+    assert {:error, :fund_balance, :unknown_currency, _changes} =
+             Fund.Public.create_reward(%{fund | currency: nil}, 500, participant, "nil-cur-key")
   end
 
   test "create_reward/5 injects a clean failure for a non-positive amount", %{fund: fund} do
@@ -550,21 +566,21 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "transitions :reserved → :pending_approval", %{key: key} do
-      assert {:ok, %{status: :pending_approval}} = Fund.Public.mark_pending_approval(key)
+      assert {:ok, %{status: :pending_approval}} = mark_pending_approval(key)
     end
 
     test "is idempotent on :pending_approval", %{key: key} do
-      {:ok, _} = Fund.Public.mark_pending_approval(key)
-      assert {:ok, %{status: :pending_approval}} = Fund.Public.mark_pending_approval(key)
+      {:ok, _} = mark_pending_approval(key)
+      assert {:ok, %{status: :pending_approval}} = mark_pending_approval(key)
     end
 
     test "is a no-op on :approved", %{key: key} do
-      {:ok, _} = Fund.Public.approve_reward(key)
-      assert {:ok, %{status: :approved}} = Fund.Public.mark_pending_approval(key)
+      {:ok, _} = approve_reward(key)
+      assert {:ok, %{status: :approved}} = mark_pending_approval(key)
     end
 
-    test "returns error when reward not found" do
-      assert {:error, :reward_not_found} = Fund.Public.mark_pending_approval("nope")
+    test "is a no-op when the reward doesn't exist" do
+      assert {:ok, nil} = mark_pending_approval("nope")
     end
   end
 
@@ -577,30 +593,35 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "transitions :reserved → :approved and creates wallet payment", %{key: key} do
-      assert {:ok, %{reward: %{status: :approved, payment_id: payment_id}}} =
-               Fund.Public.approve_reward(key)
+      assert {:ok, %{status: :approved, payment_id: payment_id}} = approve_reward(key)
 
       refute is_nil(payment_id)
     end
 
     test "transitions :pending_approval → :approved", %{key: key} do
-      {:ok, _} = Fund.Public.mark_pending_approval(key)
-      assert {:ok, %{reward: %{status: :approved}}} = Fund.Public.approve_reward(key)
+      {:ok, _} = mark_pending_approval(key)
+      assert {:ok, %{status: :approved}} = approve_reward(key)
     end
 
     test "is idempotent on :approved", %{key: key} do
-      {:ok, _} = Fund.Public.approve_reward(key)
-      assert {:ok, %{status: :approved}} = Fund.Public.approve_reward(key)
+      {:ok, _} = approve_reward(key)
+      assert {:ok, %{status: :approved}} = approve_reward(key)
+    end
+
+    test "is idempotent on :pending_payout (payout already in flight)", %{key: key} do
+      {:ok, _} = approve_reward(key)
+      force_status(key, :pending_payout)
+      assert {:ok, %{status: :pending_payout}} = approve_reward(key)
     end
 
     test "overrides a :rejected reward (pay out anyway)", %{key: key} do
-      {:ok, _} = Fund.Public.reject_reward(key)
-      assert {:ok, _} = Fund.Public.approve_reward(key)
+      {:ok, _} = reject_reward(key)
+      assert {:ok, _} = approve_reward(key)
       assert %{status: :approved} = Fund.Public.get_reward(key, [])
     end
 
     test "returns error when reward not found" do
-      assert {:error, :reward_not_found} = Fund.Public.approve_reward("nope")
+      assert {:error, :reward_not_found} = approve_reward("nope")
     end
   end
 
@@ -619,7 +640,7 @@ defmodule Systems.Fund.PublicTest do
       original_available = Bookkeeping.AccountModel.balance(fund_account)
       original_reserve = Bookkeeping.AccountModel.balance(reserve)
 
-      assert {:ok, _} = Fund.Public.reject_reward(key)
+      assert {:ok, _} = reject_reward(key)
 
       reloaded = Fund.Public.get!(fund_id)
 
@@ -629,23 +650,30 @@ defmodule Systems.Fund.PublicTest do
     end
 
     test "transitions :pending_approval → :rejected", %{key: key} do
-      {:ok, _} = Fund.Public.mark_pending_approval(key)
-      assert {:ok, _} = Fund.Public.reject_reward(key)
+      {:ok, _} = mark_pending_approval(key)
+      assert {:ok, _} = reject_reward(key)
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
     end
 
     test "is idempotent on :rejected", %{key: key} do
-      {:ok, _} = Fund.Public.reject_reward(key)
-      assert {:ok, %{status: :rejected}} = Fund.Public.reject_reward(key)
+      {:ok, _} = reject_reward(key)
+      assert {:ok, %{status: :rejected}} = reject_reward(key)
     end
 
     test "errors on :approved", %{key: key} do
-      {:ok, _} = Fund.Public.approve_reward(key)
-      assert {:error, :reward_already_approved} = Fund.Public.reject_reward(key)
+      {:ok, _} = approve_reward(key)
+      assert {:error, :reward_already_approved} = reject_reward(key)
+    end
+
+    test "errors on :pending_payout (payout in flight, too late to reject)", %{key: key} do
+      {:ok, _} = approve_reward(key)
+      force_status(key, :pending_payout)
+      assert {:error, :reward_already_approved} = reject_reward(key)
+      assert %{status: :pending_payout} = Fund.Public.get_reward(key, [])
     end
 
     test "returns error when reward not found" do
-      assert {:error, :reward_not_found} = Fund.Public.reject_reward("nope")
+      assert {:error, :reward_not_found} = reject_reward("nope")
     end
   end
 
@@ -660,8 +688,8 @@ defmodule Systems.Fund.PublicTest do
       {:ok, _} = Fund.Public.create_reward(fund, 2000, u2, "k2")
       {:ok, _} = Fund.Public.create_reward(fund, 1500, u3, "k3")
 
-      {:ok, _} = Fund.Public.mark_pending_approval("k1")
-      {:ok, _} = Fund.Public.approve_reward("k2")
+      {:ok, _} = mark_pending_approval("k1")
+      {:ok, _} = approve_reward("k2")
 
       {:ok, fund: fund, u1: u1}
     end
@@ -685,43 +713,82 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "list_rejected_rewards/2" do
+    setup %{fund: fund} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      rejected =
+        Factories.insert!(:reward, %{
+          idempotence_key: "rejected-1",
+          amount: 500,
+          status: :rejected,
+          user: user,
+          fund: fund
+        })
+
+      {:ok, fund: fund, user: user, rejected: rejected}
+    end
+
+    test "returns only :rejected rewards for the fund",
+         %{fund: fund, user: %{id: user_id}, rejected: %{id: rejected_id}} do
+      assert [%{id: ^rejected_id, status: :rejected, user: %{id: ^user_id}}] =
+               Fund.Public.list_rejected_rewards(fund)
+    end
+
+    test "excludes rewards in other statuses", %{fund: fund, user: user} do
+      Factories.insert!(:reward, %{
+        idempotence_key: "pending-1",
+        amount: 500,
+        status: :pending_approval,
+        user: user,
+        fund: fund
+      })
+
+      Factories.insert!(:reward, %{
+        idempotence_key: "paid-1",
+        amount: 500,
+        status: :paid,
+        user: user,
+        fund: fund
+      })
+
+      assert [%{status: :rejected}] = Fund.Public.list_rejected_rewards(fund)
+    end
+
+    test "returns empty list for an unrelated fund" do
+      currency = Fund.Factories.create_currency("iso-rejected", :legal, "Ω", 2)
+      other_fund = Fund.Factories.create_fund("other-rejected", currency)
+      assert [] = Fund.Public.list_rejected_rewards(other_fund)
+    end
+  end
+
   describe "reject_reward/2 reason + override" do
     setup %{fund: fund} do
       participant = Factories.insert!(:member, %{creator: false})
       key = "user:#{participant.id},fund:#{fund.id},override"
       {:ok, _} = Fund.Public.create_reward(fund, 1000, participant, key)
-      {:ok, _} = Fund.Public.mark_pending_approval(key)
+      {:ok, _} = mark_pending_approval(key)
 
       {:ok, fund: fund, key: key}
     end
 
-    test "stores rejection_reason and rejected_at when reason given", %{key: key} do
-      assert {:ok, _} = Fund.Public.reject_reward(key, "No valid answers given")
+    test "flips reward to :rejected with a rejected_at timestamp", %{key: key} do
+      assert {:ok, _} = reject_reward(key)
 
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :rejected
-      assert reward.rejection_reason == "No valid answers given"
       refute is_nil(reward.rejected_at)
-    end
-
-    test "leaves rejection_reason nil when no reason given", %{key: key} do
-      assert {:ok, _} = Fund.Public.reject_reward(key)
-
-      reward = Fund.Public.get_reward(key, [])
-      assert reward.status == :rejected
-      assert is_nil(reward.rejection_reason)
     end
 
     test "approve_reward overrides a rejected reward, paying from fund.available",
          %{key: key, fund: %{id: fund_id}} do
-      {:ok, _} = Fund.Public.reject_reward(key, "initial decline")
+      {:ok, _} = reject_reward(key)
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
 
-      assert {:ok, _} = Fund.Public.approve_reward(key)
+      assert {:ok, _} = approve_reward(key)
 
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :approved
-      assert is_nil(reward.rejection_reason)
       assert is_nil(reward.rejected_at)
       refute is_nil(reward.payment_id)
 
@@ -730,7 +797,7 @@ defmodule Systems.Fund.PublicTest do
 
     test "approve_reward of a rejected reward errors when fund.available is insufficient",
          %{key: key, fund: %{id: fund_id}} do
-      {:ok, _} = Fund.Public.reject_reward(key, "decline")
+      {:ok, _} = reject_reward(key)
 
       drain_amount = Fund.Model.amount_available(Fund.Public.get!(fund_id))
 
@@ -738,7 +805,7 @@ defmodule Systems.Fund.PublicTest do
       |> Ecto.Changeset.change(%{balance_debit: drain_amount + 100_000})
       |> Core.Repo.update!()
 
-      assert {:error, :insufficient_fund} = Fund.Public.approve_reward(key)
+      assert {:error, :insufficient_fund} = approve_reward(key)
     end
   end
 
@@ -838,23 +905,16 @@ defmodule Systems.Fund.PublicTest do
       participant = Factories.insert!(:member, %{creator: false})
       key = "user:#{participant.id},fund:#{fund.id},multi-reject"
       {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
+      reward = Fund.Public.get_reward(key, Fund.RewardModel.preload_graph(:full))
 
       result =
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
-        |> Fund.Public.reject_reward(key)
+        |> Fund.Public.reject_reward(reward)
         |> Core.Repo.commit()
 
       assert {:ok, %{noop: :pre, reject_status: %{status: :rejected}}} = result
       assert %{status: :rejected, deposit_id: nil} = Fund.Public.get_reward(key, [])
-    end
-
-    test "raises when reward not found" do
-      assert_raise Fund.Public.FundError, fn ->
-        Ecto.Multi.new()
-        |> Fund.Public.reject_reward("nonexistent-key")
-        |> Core.Repo.commit()
-      end
     end
 
     test "fails the transaction with :reward_already_approved on an approved reward", %{
@@ -863,13 +923,13 @@ defmodule Systems.Fund.PublicTest do
       participant = Factories.insert!(:member, %{creator: false})
       key = "user:#{participant.id},fund:#{fund.id},multi-reject-approved"
       {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
-      {:ok, _} = Fund.Public.mark_pending_approval(key)
-      {:ok, _} = Fund.Public.approve_reward(key)
+      {:ok, _} = mark_pending_approval(key)
+      {:ok, reward} = approve_reward(key)
 
       result =
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
-        |> Fund.Public.reject_reward(key)
+        |> Fund.Public.reject_reward(reward)
         |> Core.Repo.commit()
 
       assert {:error, :reject_guard, :reward_already_approved, _} = result
@@ -880,12 +940,12 @@ defmodule Systems.Fund.PublicTest do
       participant = Factories.insert!(:member, %{creator: false})
       key = "user:#{participant.id},fund:#{fund.id},multi-reject-rejected"
       {:ok, _} = Fund.Public.create_reward(fund, 1500, participant, key)
-      {:ok, _} = Fund.Public.reject_reward(key)
+      {:ok, reward} = reject_reward(key)
 
       result =
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
-        |> Fund.Public.reject_reward(key)
+        |> Fund.Public.reject_reward(reward)
         |> Core.Repo.commit()
 
       assert {:ok, %{noop: :pre}} = result
@@ -1199,10 +1259,6 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
     end
 
-    # The unconfirmed-transfer case: the money may or may not have moved and no
-    # charge can be looked up, so request_payout must surface it for manual review
-    # — never start a fresh payout over the approved rewards (risking a double
-    # charge) nor touch them.
     test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
          %{user: user, fund: fund} do
       stranded =
@@ -1218,8 +1274,8 @@ defmodule Systems.Fund.PublicTest do
       # A newly-earned reward that must not be swept into a fresh payout.
       fresh = insert_reward(user, fund, 500, :approved)
 
-      # No provider calls at all: an unconfirmed transfer with no findable charge
-      # is left for a human — nothing is issued and no bank recheck happens.
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_test_123" -> {:ok, []} end)
+
       assert {:error, :manual_review} = Fund.Public.request_payout(user, "euro")
 
       # Still exactly one payout (the stranded one); the fresh reward is untouched.
@@ -1427,14 +1483,122 @@ defmodule Systems.Fund.PublicTest do
                Core.Repo.reload!(payout)
     end
 
-    # :awaiting_transfer — the transfer was never confirmed and a charge cannot be
-    # looked up, so resume must not guess. No provider calls at all.
-    test "leaves an unconfirmed transfer for manual review", %{user: user, fund: fund} do
+    test "leaves an unconfirmed transfer with no charge for manual review", %{
+      user: user,
+      fund: fund
+    } do
       {payout, _reward} =
         stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
 
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" -> {:ok, []} end)
+
       assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
-      assert %{status: :pending} = Core.Repo.reload!(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+    end
+
+    test "leaves an unconfirmed transfer whose charge never settled for manual review", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      transfer_key = Fund.PayoutModel.transfer_key(payout)
+
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" ->
+        {:ok,
+         [
+           %{
+             uid: "trf_unsettled",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000,
+             settled: nil
+           }
+         ]}
+      end)
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+
+      assert %{status: :pending, funds_committed_at: nil, transfer_uid: nil} =
+               Core.Repo.reload!(payout)
+    end
+
+    test "leaves a payout whose participant has no merchant for manual review", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      user |> Ecto.Changeset.change(%{merchant_uid: nil}) |> Core.Repo.update!()
+
+      assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+    end
+
+    test "adopts a transfer found at the provider and issues the withdrawal", %{
+      user: user,
+      fund: fund
+    } do
+      {payout, _reward} =
+        stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
+
+      transfer_key = Fund.PayoutModel.transfer_key(payout)
+
+      expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" ->
+        {:ok,
+         [
+           # A transfer to the same merchant for a different payout — must not match.
+           %{
+             uid: "trf_other",
+             status: :pending,
+             raw_status: "unknown",
+             reference: "payout=00000000-0000-0000-0000-000000000000,type=transfer",
+             amount: 1000,
+             settled: 1_785_329_635
+           },
+           %{
+             uid: "trf_unsettled",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000,
+             settled: nil
+           },
+           %{
+             uid: "trf_found",
+             status: :pending,
+             raw_status: "unknown",
+             reference: transfer_key,
+             amount: 1000,
+             settled: 1_785_329_635
+           }
+         ]}
+      end)
+
+      expect(ProviderMock, :list_withdrawals, fn "m_resume_1" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{
+           uid: "w_after_adopt",
+           status: :pending,
+           raw_status: "created",
+           reference: nil,
+           amount: 1000
+         }}
+      end)
+
+      assert {:ok, _} = Fund.Public.resume_payout(payout)
+
+      assert %{
+               status: :pending,
+               transfer_uid: "trf_found",
+               provider_uid: "w_after_adopt",
+               funds_committed_at: %NaiveDateTime{}
+             } = Core.Repo.reload!(payout)
     end
 
     test "is a no-op for a healthy in-flight payout", %{user: user, fund: fund} do
@@ -2076,5 +2240,16 @@ defmodule Systems.Fund.PublicTest do
       assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
       assert %{status: :pending, charge_uid: nil} = donation_of(donor)
     end
+  end
+
+  # :pending_payout is normally set by `lock_approved_rewards/2` during
+  # payout initiation. In unit tests we shortcut via a direct update so
+  # the reward is in that state without running the whole payout flow.
+  defp force_status(key, status) do
+    import Ecto.Query
+
+    {1, _} =
+      from(r in Fund.RewardModel, where: r.idempotence_key == ^key)
+      |> Core.Repo.update_all(set: [status: status, updated_at: DateTime.utc_now(:second)])
   end
 end

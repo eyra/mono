@@ -97,7 +97,7 @@ if config_env() == :prod do
              ]}
 
           "pay_in_expiration" ->
-            {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Budget.PayInExpirationWorker}]}
+            {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Fund.PayInExpirationWorker}]}
 
           "payment_reconciliation" ->
             {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}

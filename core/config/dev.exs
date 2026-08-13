@@ -119,7 +119,7 @@ config :core, Oban,
        # Clean up old data donation files every hour
        {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
        # Fail pending pay-in transactions older than 15 minutes
-       {"* * * * *", Systems.Budget.PayInExpirationWorker},
+       {"* * * * *", Systems.Fund.PayInExpirationWorker},
        # Reconcile pay-in/payout state against the payment provider daily
        {"0 3 * * *", Systems.Payment.ReconciliationWorker},
        # Prune auth codes past their validity window every hour

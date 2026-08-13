@@ -12,7 +12,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
 
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
 
   describe "GET /payment/local/:uid" do
@@ -36,7 +36,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
       conn = simulate(conn, transaction, "complete")
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}/content"
-      assert %{status: :completed} = Repo.get!(Budget.TransactionModel, transaction.id)
+      assert %{status: :completed} = Repo.get!(Fund.TransactionModel, transaction.id)
     end
 
     test "still returns to the assignment when the transaction is already completed", %{
@@ -47,7 +47,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
       conn = simulate(conn, transaction, "complete")
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}/content"
-      assert %{status: :completed} = Repo.get!(Budget.TransactionModel, transaction.id)
+      assert %{status: :completed} = Repo.get!(Fund.TransactionModel, transaction.id)
     end
 
     test "falls back to the home page when the fund has no assignment", %{conn: conn} do
@@ -77,7 +77,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
       conn = simulate(conn, transaction, "fail")
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}/content"
-      assert %{status: :failed} = Repo.get!(Budget.TransactionModel, transaction.id)
+      assert %{status: :failed} = Repo.get!(Fund.TransactionModel, transaction.id)
     end
 
     test "leaves an already-completed transaction credited", %{conn: conn} do
@@ -86,7 +86,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
       conn = simulate(conn, transaction, "fail")
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}/content"
-      assert %{status: :completed} = Repo.get!(Budget.TransactionModel, transaction.id)
+      assert %{status: :completed} = Repo.get!(Fund.TransactionModel, transaction.id)
     end
   end
 
@@ -129,8 +129,8 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
     assignment = if with_assignment?, do: insert_assignment(fund)
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: "provider-" <> Ecto.UUID.generate(),
         status: status,
         idempotence_key: Ecto.UUID.generate(),
@@ -156,8 +156,8 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   end
 
   defp ensure_currency_ledger(currency) do
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
-      nil -> Budget.CurrencyLedgerModel.create(currency) |> Repo.insert!()
+    case Fund.CurrencyLedgerModel.get_by_currency(currency) do
+      nil -> Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
       existing -> existing |> Repo.preload([:inbound, :outbound])
     end
   end

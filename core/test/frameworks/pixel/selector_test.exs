@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.SelectorTest.View do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   alias Frameworks.Pixel.Selector
 

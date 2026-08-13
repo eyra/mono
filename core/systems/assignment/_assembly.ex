@@ -4,7 +4,7 @@ defmodule Systems.Assignment.Assembly do
 
   alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Consent
   alias Systems.Crew
   alias Systems.Fund
@@ -88,7 +88,7 @@ defmodule Systems.Assignment.Assembly do
   end
 
   defp prepare_fund(user, currency) do
-    currency_ledger = Budget.CurrencyLedgerModel.get_by_currency(currency)
+    currency_ledger = Fund.CurrencyLedgerModel.get_by_currency(currency)
     fund_currency = resolve_fund_currency(currency)
     uuid = Ecto.UUID.generate()
 

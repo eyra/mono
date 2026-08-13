@@ -17,7 +17,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
@@ -286,8 +286,8 @@ defmodule Core.Factories do
     build(:assignment, %{})
   end
 
-  def build(:assignment_instance) do
-    build(:assignment_instance, %{})
+  def build(:assignment_participation) do
+    build(:assignment_participation, %{})
   end
 
   def build(:affiliate) do
@@ -659,8 +659,8 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:assignment_instance, %{} = attributes) do
-    %Assignment.InstanceModel{}
+  def build(:assignment_participation, %{} = attributes) do
+    %Assignment.ParticipationModel{}
     |> struct!(attributes)
   end
 
@@ -931,7 +931,7 @@ defmodule Core.Factories do
     {currency, attributes} = Map.pop(attributes, :currency, :EUR)
     id = currency |> Atom.to_string() |> String.downcase()
 
-    %Budget.CurrencyLedgerModel{
+    %Fund.CurrencyLedgerModel{
       currency: currency,
       inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
       outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
@@ -975,7 +975,8 @@ defmodule Core.Factories do
     {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
 
     %Fund.CurrencyModel{
-      label_bundle: label_bundle
+      label_bundle: label_bundle,
+      type: :virtual
     }
     |> struct!(attributes)
   end

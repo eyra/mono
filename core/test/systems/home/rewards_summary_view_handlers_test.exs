@@ -15,6 +15,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
   alias Core.Factories
   alias Systems.Fund
+  alias Systems.Payment
   alias Systems.Payment.ProviderMock
   alias Systems.Home.RewardsSummaryView
 
@@ -29,7 +30,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     rejected_pill: "R",
     payout_button: "Uitbetalen",
     payout_below_threshold: "Minimum €5 required",
-    payout_failed: "Could not start payout",
     payout_handoff_title: "Start payout",
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
@@ -217,7 +217,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc_unavailable -> no modal (B1: no fall-through to a payout)" do
+    test "kyc_unavailable -> verify modal (B1: no fall-through to a payout)" do
       user = user_with_reward(1000, "m_unavail")
 
       stub(ProviderMock, :get_merchant, fn _ ->
@@ -237,7 +237,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      # The verify variant confirms via an external link, so it can never
+      # fall through to a withdrawal — the reward stays :approved.
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
       assert reward_status(user) == :approved
     end
 
@@ -328,6 +331,25 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert socket.assigns.approved_cents == 0
+    end
+
+    test "a provider failure at confirm time presents the verify modal" do
+      user = user_with_reward(1000, "m_c_down")
+
+      stub(ProviderMock, :list_bank_accounts, fn "m_c_down" ->
+        {:error, %Payment.Error{code: :service_unavailable, message: "OPP down"}}
+      end)
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :payout})
+        )
+
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      assert reward_status(user) == :approved
     end
 
     # FX#10005449329. The awaiting modal is info-only — its single "OK" button

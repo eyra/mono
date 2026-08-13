@@ -28,10 +28,22 @@ defmodule Systems.Payment.Public do
     provider().find_merchant_by_email(email)
   end
 
+  @doc """
+  Every merchant the provider created at or after `since` — the provider-side
+  input to the provider→local merchant scan.
+  """
+  @spec list_recent_merchants(since :: DateTime.t()) :: Provider.listing(Provider.merchant())
+  def list_recent_merchants(%DateTime{} = since) do
+    provider().list_recent_merchants(since)
+  end
+
   @spec ensure_merchant_for(Account.User.t(), String.t() | nil) ::
           {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
-  def ensure_merchant_for(%Account.User{} = user, phone \\ nil) do
-    do_ensure_merchant_for(Repo.reload!(user), phone)
+  def ensure_merchant_for(%Account.User{id: user_id} = user, phone \\ nil) do
+    user
+    |> Repo.reload!()
+    |> do_ensure_merchant_for(phone)
+    |> log_error("ensure_merchant_for user ##{user_id}")
   end
 
   @doc """
@@ -174,11 +186,21 @@ defmodule Systems.Payment.Public do
   @spec ensure_bank_account_for(merchant_uid :: String.t()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def ensure_bank_account_for(merchant_uid) when is_binary(merchant_uid) do
-    case list_bank_accounts(merchant_uid) do
-      {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
-      {:error, _} = error -> error
-    end
+    result =
+      case list_bank_accounts(merchant_uid) do
+        {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+        {:error, _} = error -> error
+      end
+
+    log_error(result, "ensure_bank_account_for merchant #{merchant_uid}")
   end
+
+  defp log_error({:error, reason} = result, context) do
+    Logger.warning("[Payment] #{context} failed: #{inspect(reason)}")
+    result
+  end
+
+  defp log_error(result, _context), do: result
 
   defp usable_or_new_bank_account(merchant_uid, accounts) do
     case Enum.find(accounts, &(&1.status != :rejected)) do
@@ -208,6 +230,16 @@ defmodule Systems.Payment.Public do
     provider().get_transaction(uid)
   end
 
+  @doc """
+  Every transaction the provider created at or after `since`, across all
+  merchants — the provider-side input to the provider→local pay-in scan.
+  """
+  @spec list_recent_transactions(since :: DateTime.t()) ::
+          Provider.listing(Provider.transaction())
+  def list_recent_transactions(%DateTime{} = since) do
+    provider().list_recent_transactions(since)
+  end
+
   # Withdrawals
 
   @spec create_withdrawal(
@@ -235,11 +267,38 @@ defmodule Systems.Payment.Public do
     provider().list_withdrawals(merchant_uid)
   end
 
+  @doc """
+  Every withdrawal the provider created at or after `since`, across all
+  merchants — the provider-side input to the provider→local pass.
+  """
+  @spec list_recent_withdrawals(since :: DateTime.t()) :: Provider.listing(Provider.withdrawal())
+  def list_recent_withdrawals(%DateTime{} = since) do
+    provider().list_recent_withdrawals(since)
+  end
+
   # Reconciliation
 
   defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state
+  defdelegate reconciliation_scan_window(opts), to: Reconciliation, as: :scan_window
   defdelegate reconcile_get_withdrawal(state, uid), to: Reconciliation, as: :get_withdrawal
   defdelegate reconcile_get_transaction(state, uid), to: Reconciliation, as: :get_transaction
+
+  defdelegate reconcile_list_recent_withdrawals(state, since),
+    to: Reconciliation,
+    as: :list_recent_withdrawals
+
+  defdelegate reconcile_list_recent_transfers(state, since),
+    to: Reconciliation,
+    as: :list_recent_transfers
+
+  defdelegate reconcile_list_recent_transactions(state, since),
+    to: Reconciliation,
+    as: :list_recent_transactions
+
+  defdelegate reconcile_list_recent_merchants(state, since),
+    to: Reconciliation,
+    as: :list_recent_merchants
+
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run
 
@@ -262,6 +321,20 @@ defmodule Systems.Payment.Public do
         ) :: {:ok, Provider.transfer()} | {:error, Error.t()}
   def charge_to_partner(from_owner_uid, amount, idempotence_key) do
     provider().charge_to_partner(from_owner_uid, amount, idempotence_key)
+  end
+
+  @spec list_charges_to_merchant(merchant_uid :: String.t()) ::
+          {:ok, [Provider.transfer()]} | {:error, Error.t()}
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    provider().list_charges_to_merchant(merchant_uid)
+  end
+
+  @doc """
+  Every transfer the provider created at or after `since`, across all merchants.
+  """
+  @spec list_recent_transfers(since :: DateTime.t()) :: Provider.listing(Provider.transfer())
+  def list_recent_transfers(%DateTime{} = since) do
+    provider().list_recent_transfers(since)
   end
 
   @doc """

@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.ImageCatalogPicker do
   use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   import CoreWeb.UI.Dialog
   import CoreWeb.LiveDefaults
@@ -172,16 +173,19 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
           socket
       ) do
     {:noreply,
-     socket
-     |> send_event(:parent, "finish", %{
-       image_id: selected_image,
-       state: %{query: query, selected_page: selected_page, selected_image: selected_image}
-     })}
+     emit_to_parent(
+       socket,
+       {"finish",
+        %{
+          image_id: selected_image,
+          state: %{query: query, selected_page: selected_page, selected_image: selected_image}
+        }}
+     )}
   end
 
   @impl true
   def handle_event("cancel", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "finish")}
+    {:noreply, emit_to_parent(socket, {"finish", %{}})}
   end
 
   @impl true

@@ -10,7 +10,7 @@ defmodule Systems.Account.PhoneForm do
   form, so the participant fills in their number and continues straight to their
   bank. Cancelling is handled by the modal chrome's close control.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   require Logger
 
@@ -20,6 +20,7 @@ defmodule Systems.Account.PhoneForm do
   alias Frameworks.Pixel.Text
   alias Systems.Account
   alias Systems.Fund
+  alias Systems.Payment
 
   @payouts_path "/user/account?tab=payouts"
 
@@ -80,6 +81,10 @@ defmodule Systems.Account.PhoneForm do
       :verified ->
         persist_phone(user, phone)
         redirect(socket, to: @payouts_path)
+
+      {:error, %Payment.Error{code: :api_error, details: %{status: status}}}
+      when is_integer(status) and status < 500 ->
+        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.rejected"))
 
       {:error, _reason} ->
         assign(socket, error: dgettext("eyra-account", "payouts.phone.error.flash"))

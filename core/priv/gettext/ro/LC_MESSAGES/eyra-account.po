@@ -403,3 +403,7 @@ msgstr "Verifică contul bancar"
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
 msgstr "Ți-am trimis un cod"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr "Furnizorul de plăți nu a acceptat acest număr de telefon. Verifică-l și încearcă din nou."

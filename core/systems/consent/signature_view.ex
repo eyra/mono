@@ -1,5 +1,5 @@
 defmodule Systems.Consent.SignatureView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   @impl true
   def update(%{title: title, signature: signature}, %{assigns: %{}} = socket) do

@@ -1,5 +1,5 @@
 defmodule Systems.Graphite.LeaderboardTableView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align

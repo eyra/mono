@@ -51,6 +51,24 @@ defmodule Systems.NextAction.Public do
   end
 
   @doc """
+  Returns the top next action for a user, scoped to a specific action module
+  and a set of key values (typically ids of the scoping object — assignments
+  in a project, pools in an org, etc.). Returns `nil` when nothing matches.
+  """
+  def next_best_action_for_scope(%User{id: user_id}, action, scope_ids)
+      when is_atom(action) and is_list(scope_ids) do
+    action_string = to_string(action)
+    keys = Enum.map(scope_ids, &to_string/1)
+
+    from(na in NextAction.Model,
+      where: na.user_id == ^user_id and na.action == ^action_string and na.key in ^keys,
+      limit: 1
+    )
+    |> Repo.one()
+    |> to_view_model()
+  end
+
+  @doc """
   Lists all next actions of a specific type for a user.
   """
   def list_next_actions_by_type(%User{id: user_id}, action_type) when is_atom(action_type) do

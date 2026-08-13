@@ -543,10 +543,6 @@ defmodule Systems.Advert.Public do
     Assignment.Public.mark_expired_debug(assignment, force)
   end
 
-  def payout_participant(%Assignment.Model{} = assignment, %User{} = user) do
-    Assignment.Public.payout_participant(assignment, user)
-  end
-
   def rewarded_amount(%Assignment.Model{} = assignment, %User{} = user) do
     Assignment.Public.rewarded_amount(assignment, user)
   end

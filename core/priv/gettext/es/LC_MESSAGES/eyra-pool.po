@@ -45,23 +45,23 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.empty.message"
-msgstr ""
+msgstr "El mercado está vacío por el momento."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Todos"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
-msgstr ""
+msgstr "Filtro:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
+msgstr "Buscar"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
-msgstr ""
+msgstr "Mercado"
 
 #, elixir-autogen, elixir-format
 msgid "content.title"

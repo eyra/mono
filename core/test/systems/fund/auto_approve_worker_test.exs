@@ -3,6 +3,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
   use Oban.Testing, repo: Core.Repo
 
   import Ecto.Query
+  import Systems.Fund.TestHelper
 
   alias Core.Factories
   alias Core.Repo
@@ -26,7 +27,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
 
   defp create_pending_reward(fund, suffix) do
     key = create_reward(fund, suffix)
-    {:ok, _} = Fund.Public.mark_pending_approval(key)
+    {:ok, _} = mark_pending_approval(key)
     key
   end
 
@@ -92,7 +93,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
 
     test "leaves an already approved reward untouched", %{fund: fund} do
       key = create_pending_reward(fund, "approved")
-      {:ok, _} = Fund.Public.approve_reward(key)
+      {:ok, _} = approve_reward(key)
       %{payment_id: payment_id} = Fund.Public.get_reward(key, [])
       backdate(key, @approve_timeout + 1)
 
@@ -104,7 +105,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
 
     test "leaves a rejected reward untouched", %{fund: fund} do
       key = create_pending_reward(fund, "rejected")
-      {:ok, _} = Fund.Public.reject_reward(key)
+      {:ok, _} = reject_reward(key)
       backdate(key, @approve_timeout + 1)
 
       assert :ok = perform_job(AutoApproveWorker, %{})
@@ -140,20 +141,6 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
 
     test "is a no-op when nothing is pending", %{fund: _fund} do
       assert :ok = perform_job(AutoApproveWorker, %{})
-    end
-  end
-
-  describe "approved-count discrimination" do
-    test "a completed approval and an already-approved no-op have different shapes", %{fund: fund} do
-      key = create_pending_reward(fund, "shape")
-
-      assert {:ok, %{reward: _, payment: _}} = Fund.Public.approve_reward(key)
-      assert {:ok, %Fund.RewardModel{} = no_op} = Fund.Public.approve_reward(key)
-
-      # The no-op is a bare RewardModel, which still carries a :payment field —
-      # matching on :payment alone would over-report. :reward is the discriminator.
-      assert Map.has_key?(no_op, :payment)
-      refute Map.has_key?(no_op, :reward)
     end
   end
 

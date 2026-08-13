@@ -14,6 +14,7 @@ defmodule Systems.Fund.Public do
   alias Frameworks.Utility.Identifier
 
   alias Systems.Account
+  alias Systems.Assignment
 
   alias Systems.Fund
   alias Systems.Bookkeeping
@@ -29,7 +30,7 @@ defmodule Systems.Fund.Public do
   # made and the money is committed, locked on a payout, or donated. Approving
   # one again is a no-op; rejecting one is an error. Kept in one place so a new
   # terminal status can't be added to `RewardModel` and missed at one of the
-  # three guards below.
+  # approve/reject guards below.
   @past_approval [:approved, :paid, :pending_payout, :donating, :donated]
 
   def list(preload \\ []) do
@@ -121,8 +122,31 @@ defmodule Systems.Fund.Public do
     |> Repo.all()
   end
 
+  def has_pay_ins?(%Fund.Model{id: fund_id}) do
+    from(t in Fund.TransactionModel, where: t.target_fund_id == ^fund_id)
+    |> Repo.exists?()
+  end
+
   def list_paid_rewards(%Fund.Model{} = fund, preload \\ [:user, :payment]) do
     reward_query(fund, :paid)
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
+  @doc """
+  Rewards from `:approved` onwards — the owner has confirmed the
+  contribution and everything downstream (pending payout, paid).
+  """
+  def list_confirmed_rewards(%Fund.Model{id: fund_id}, preload \\ [:user, :payment]) do
+    from(r in Fund.RewardModel,
+      where: r.fund_id == ^fund_id and r.status in [:approved, :pending_payout, :paid]
+    )
+    |> preload(^preload)
+    |> Repo.all()
+  end
+
+  def list_rejected_rewards(%Fund.Model{} = fund, preload \\ [:user]) do
+    reward_query(fund, :rejected)
     |> preload(^preload)
     |> Repo.all()
   end
@@ -311,7 +335,14 @@ defmodule Systems.Fund.Public do
     Multi.run(multi, :fund_balance, fn repo, _ -> verify_fund_balance(repo, fund, amount) end)
   end
 
-  defp guard_fund_balance(multi, _, _), do: multi
+  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :virtual}}, amount)
+       when is_integer(amount),
+       do: multi
+
+  defp guard_fund_balance(multi, %Fund.Model{id: fund_id}, amount) when is_integer(amount) do
+    Logger.error("[Fund] refusing reservation on fund ##{fund_id} with an unresolvable currency")
+    Multi.error(multi, :fund_balance, :unknown_currency)
+  end
 
   defp verify_fund_balance(repo, %Fund.Model{available: %{id: account_id}}, amount) do
     query = from(a in Bookkeeping.AccountModel, where: a.id == ^account_id, lock: "FOR UPDATE")
@@ -320,7 +351,7 @@ defmodule Systems.Fund.Public do
     if Bookkeeping.AccountModel.balance(account) >= amount do
       {:ok, true}
     else
-      Logger.warning("Fund has not enough funds to make reward reservation")
+      Logger.warning("[Fund] fund ##{account_id} has insufficient available balance")
       {:error, :no_funding}
     end
   end
@@ -333,45 +364,17 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
-  Marks a reserved reward as awaiting researcher approval.
-
-  Called when the participant completes the assignment task. The deposit was
-  already made at apply time (see `create_reward/4`); this only flips the
-  status so the researcher can act on it.
-
-  Idempotent: calling on a reward that is already past `:reserved` is a no-op.
+  Marks a reserved reward as awaiting owner approval, inside the caller's
+  Multi. Single guarded UPDATE — matches only if the reward's current status
+  is `:reserved`, so it's idempotent (no-op if already past `:reserved`).
   """
-  def mark_pending_approval(idempotence_key) when is_binary(idempotence_key) do
-    case get_reward(idempotence_key, []) do
-      nil ->
-        Logger.warning("No reward to mark pending approval for #{idempotence_key}")
-        {:error, :reward_not_found}
-
-      %Fund.RewardModel{status: :reserved} = reward ->
-        cas_to_pending_approval(reward, idempotence_key)
-
-      %Fund.RewardModel{} = reward ->
-        {:ok, reward}
-    end
-  end
-
-  defp cas_to_pending_approval(%Fund.RewardModel{id: id}, idempotence_key) do
+  def mark_pending_approval(%Multi{} = multi, %Fund.RewardModel{id: id}) do
     query =
-      from(r in Fund.RewardModel,
-        where: r.id == ^id and r.status == ^:reserved,
-        select: r
-      )
+      from(r in Fund.RewardModel, where: r.id == ^id and r.status == ^:reserved)
 
-    case Repo.update_all(query, set: [status: :pending_approval, updated_at: now()]) do
-      {1, [reward]} ->
-        {:ok, reward}
-
-      {0, _} ->
-        case get_reward(idempotence_key, []) do
-          nil -> {:error, :reward_not_found}
-          %Fund.RewardModel{} = reward -> {:ok, reward}
-        end
-    end
+    Multi.update_all(multi, :mark_pending_approval, query,
+      set: [status: :pending_approval, updated_at: now()]
+    )
   end
 
   def approve_pending_rewards(cutoff) do
@@ -382,54 +385,63 @@ defmodule Systems.Fund.Public do
 
     query
     |> Repo.all()
-    |> Enum.reduce([], fn %{idempotence_key: idempotence_key}, acc ->
-      result = approve_reward(idempotence_key)
+    |> Repo.preload(Fund.RewardModel.preload_graph(:full))
+    |> Enum.reduce([], fn reward, acc ->
+      result =
+        Multi.new()
+        |> approve_reward(reward)
+        |> Repo.commit()
+
       [result | acc]
     end)
   end
 
   @doc """
-  Approves a reward and pays it out to the participant's wallet.
+  Approves a reward and pays it out, inside the caller's Multi. The status
+  flip and payment Bookkeeping entry commit atomically with whatever else
+  the caller is doing.
 
-  Atomic: the status flip and the payment Bookkeeping entry happen in one
-  transaction. Idempotent on `:approved`/`:paid`.
+  Idempotent on `:approved`/`:paid`. Overrides a `:rejected` reward by
+  flipping it back to `:approved` and paying from `fund.available` (the
+  deposit was already rolled back when the reward was rejected). The
+  balance guard on the override path mirrors `guard_fund_balance` on
+  reserve: only `:legal` currencies are constrained by real available
+  balance; `:virtual` currencies have no such constraint.
   """
-  def approve_reward(idempotence_key) when is_binary(idempotence_key) do
-    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
-      nil ->
-        Logger.warning("No reward to approve for #{idempotence_key}")
-        {:error, :reward_not_found}
+  def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
+      when status in @past_approval,
+      do: multi
 
-      %Fund.RewardModel{status: status} = reward when status in @past_approval ->
-        {:ok, reward}
+  def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected} = reward) do
+    multi
+    |> Multi.run(:approve_guard, fn repo, _ ->
+      %{fund: fund, amount: amount} = Repo.preload(reward, fund: [:currency, :available])
+      check_available_balance(repo, fund, amount)
+    end)
+    |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:rejected], rejected_at: nil)
+  end
 
-      %Fund.RewardModel{status: :rejected, fund: fund, amount: amount} = reward ->
-        if Fund.Model.amount_available(fund) < amount do
-          Logger.warning("Tried to approve reward #{idempotence_key} with insufficient funds")
-          {:error, :insufficient_fund}
-        else
-          do_override_rejected(reward)
-        end
+  def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status} = reward)
+      when status in [:reserved, :pending_approval] do
+    multi
+    |> approve_payment_step(reward)
+    |> cas_approve_step(reward, [:reserved, :pending_approval], [])
+  end
 
-      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
-        do_approve_reward(reward)
+  defp check_available_balance(repo, %Fund.Model{currency: %{type: :legal}} = fund, amount) do
+    case verify_fund_balance(repo, fund, amount) do
+      {:ok, _} -> {:ok, :ok}
+      {:error, :no_funding} -> {:error, :insufficient_fund}
     end
   end
 
-  defp do_approve_reward(%Fund.RewardModel{} = reward) do
-    Multi.new()
-    |> approve_payment_step(reward)
-    |> cas_approve_step(reward, [:reserved, :pending_approval], [])
-    |> Repo.commit()
-  end
+  defp check_available_balance(_repo, %Fund.Model{currency: %{type: :virtual}}, _amount),
+    do: {:ok, :ok}
 
-  # Reject already rolled the deposit back to Fund.available, so payment comes
-  # from there (the `deposit: nil` branch of create_payment_transaction).
-  defp do_override_rejected(%Fund.RewardModel{} = reward) do
-    Multi.new()
-    |> approve_payment_step(reward)
-    |> cas_approve_step(reward, [:rejected], rejection_reason: nil, rejected_at: nil)
-    |> Repo.commit()
+  defp check_available_balance(_repo, %Fund.Model{id: fund_id}, _amount) do
+    Logger.error("[Fund] refusing approval on fund ##{fund_id} with an unresolvable currency")
+    {:error, :unknown_currency}
   end
 
   defp approve_payment_step(multi, %Fund.RewardModel{payment: %Bookkeeping.EntryModel{} = payment}) do
@@ -478,80 +490,33 @@ defmodule Systems.Fund.Public do
   defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
   @doc """
-  Rejects a reward and returns the reserved money to the assignment fund.
+  Rejects a reward and returns the reserved money to the assignment fund,
+  inside the caller's Multi. The status flip and deposit reversal commit
+  atomically with whatever else the caller is doing.
 
-  Atomic: the status flip and the deposit reversal happen in one transaction.
-  Idempotent on `:rejected`.
+  On a `:rejected` reward this is a no-op; on `:approved`/`:paid` it fails
+  the surrounding transaction with `{:error, :reward_already_approved}`
+  (rather than raising deep in `rollback_deposit/2`). The status flip is
+  a guarded compare-and-swap, so a concurrent transition makes this a
+  safe rollback.
+
+  The reviewer's rejection reason lives on `Assignment.Participation`;
+  Fund only records the outcome.
   """
-  def reject_reward(idempotence_key) when is_binary(idempotence_key) do
-    reject_reward(idempotence_key, nil)
-  end
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}), do: multi
 
-  def reject_reward(idempotence_key, reason) when is_binary(idempotence_key) do
-    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
-      nil ->
-        Logger.warning("No reward to reject for #{idempotence_key}")
-        {:error, :reward_not_found}
-
-      %Fund.RewardModel{status: :rejected} = reward ->
-        {:ok, reward}
-
-      %Fund.RewardModel{status: status} when status in @past_approval ->
-        {:error, :reward_already_approved}
-
-      %Fund.RewardModel{status: status} = reward when status in [:reserved, :pending_approval] ->
-        do_reject_reward(reward, reason)
-    end
-  end
-
-  @doc """
-  Multi-aware variant of `reject_reward/1`. Use when the rejection must commit
-  atomically alongside other operations (e.g. flipping a `Crew.TaskModel` to
-  `:rejected` in `Assignment.Public.reject_task/3`).
-
-  On a `:rejected` reward this is a no-op; on `:approved`/`:paid` it fails the
-  surrounding transaction with `{:error, :reward_already_approved}` (rather
-  than raising deep in `rollback_deposit/2`). The status flip is a guarded
-  compare-and-swap, so a concurrent transition makes this a safe rollback.
-
-  The third argument is the optional rejection reason; nil leaves it unset.
-  """
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
-    reject_reward(multi, reward, nil)
-  end
-
-  def reject_reward(%Multi{} = multi, idempotence_key) when is_binary(idempotence_key) do
-    reject_reward(multi, idempotence_key, nil)
-  end
-
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}, _reason), do: multi
-
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status}, _reason)
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
       when status in @past_approval do
     Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
   end
 
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward, reason) do
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{} = reward) do
     multi
     |> rollback_deposit(reward)
     |> cas_status_step(:reject_status, reward, [:reserved, :pending_approval],
       status: :rejected,
-      rejection_reason: reason,
       rejected_at: now()
     )
-  end
-
-  def reject_reward(%Multi{} = multi, idempotence_key, reason) when is_binary(idempotence_key) do
-    case get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
-      nil -> raise FundError, message: "No reward available to reject"
-      reward -> reject_reward(multi, reward, reason)
-    end
-  end
-
-  defp do_reject_reward(reward, reason) do
-    Multi.new()
-    |> reject_reward(reward, reason)
-    |> Repo.commit()
   end
 
   def multiply_rewards(currency_name, multiplier) when is_binary(currency_name) do
@@ -1246,8 +1211,6 @@ defmodule Systems.Fund.Public do
 
   defp transfer_rejected?(%Payment.Error{}), do: false
 
-  # A charge cannot be listed at OPP, so this uid is the only handle on the
-  # transfer — persist it before anything downstream can fail.
   defp commit_funds(%Fund.PayoutModel{} = payout, %{uid: transfer_uid}) do
     payout
     |> Fund.PayoutModel.changeset(%{transfer_uid: transfer_uid, funds_committed_at: now()})
@@ -1600,6 +1563,13 @@ defmodule Systems.Fund.Public do
   """
   def reconcile_pending_payouts(opts, state), do: Fund.PayoutReconciliation.run(opts, state)
 
+  @doc """
+  Flags provider withdrawals and transfers that have no local payout row.
+  See `Systems.Fund.PayoutOrphanReconciliation`.
+  """
+  def reconcile_orphaned_payouts(opts, state),
+    do: Fund.PayoutOrphanReconciliation.run(opts, state)
+
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)
 
@@ -1617,4 +1587,349 @@ defmodule Systems.Fund.Public do
 
   defp guard_number_nil(nil), do: 0
   defp guard_number_nil(number), do: number
+
+  # --- Pay-in mechanics (merged from Systems.Budget.Public) ---
+
+  def list_transactions_by_fund(%Fund.Model{id: fund_id}) do
+    from(t in Fund.TransactionModel,
+      where: t.target_fund_id == ^fund_id,
+      order_by: [desc: t.inserted_at]
+    )
+    |> Repo.all()
+  end
+
+  def get_transaction_by_provider_uid!(provider_uid) do
+    Repo.get_by!(Fund.TransactionModel, transaction_id: provider_uid)
+  end
+
+  # --- Pay-in creation ---
+
+  @doc """
+  Creates a pending transaction and initiates payment with the payment provider.
+  Lazily creates an OPP merchant for the user if needed.
+  Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.
+  """
+  def create_pay_in(
+        %Assignment.Model{info: info} = assignment,
+        %Account.User{} = user,
+        attrs
+      )
+      when is_map(attrs) do
+    changeset =
+      %Fund.PayInRequestModel{}
+      |> Fund.PayInRequestModel.changeset(with_info_defaults(info, attrs))
+      |> Fund.PayInRequestModel.validate()
+
+    with {:ok, request} <- Ecto.Changeset.apply_action(changeset, :insert),
+         {:ok, updated_info} <- persist_pay_in_info(info, request) do
+      do_create_pay_in(%{assignment | info: updated_info}, user, request.subject_count)
+    end
+  end
+
+  # Fields the researcher can't edit (e.g. reward when locked because
+  # transactions already exist) fall back to the persisted assignment info.
+  defp with_info_defaults(
+         %Assignment.InfoModel{subject_reward: reward, aim_of_study: aim},
+         attrs
+       ) do
+    attrs
+    |> Map.put_new("subject_reward", reward)
+    |> Map.put_new("aim_of_study", aim)
+  end
+
+  defp persist_pay_in_info(%Assignment.InfoModel{} = info, %Fund.PayInRequestModel{
+         subject_reward: reward,
+         aim_of_study: aim
+       }) do
+    info
+    |> Assignment.InfoModel.changeset(:auto_save, %{
+      "subject_reward" => reward,
+      "aim_of_study" => aim
+    })
+    |> then(&Core.Persister.save(&1.data, &1))
+  end
+
+  defp do_create_pay_in(
+         %Assignment.Model{info: %{subject_reward: subject_reward}, fund: fund} = assignment,
+         %Account.User{id: user_id} = user,
+         subject_count
+       ) do
+    reward_per_participant = subject_reward || 0
+    base_amount = subject_count * reward_per_participant
+    partner_fee = Payment.Public.partner_fee_amount(base_amount)
+    total_amount = base_amount + partner_fee
+
+    if total_amount > 0 do
+      create_paid_pay_in(assignment, user, subject_count, total_amount, partner_fee)
+    else
+      create_free_pay_in(fund, user_id, subject_count)
+    end
+  end
+
+  defp create_paid_pay_in(
+         %Assignment.Model{
+           info: %{
+             subject_reward: subject_reward,
+             title: title,
+             subtitle: subtitle,
+             aim_of_study: aim_of_study
+           },
+           fund: fund
+         } = assignment,
+         %Account.User{id: user_id} = user,
+         subject_count,
+         total_amount,
+         partner_fee
+       ) do
+    merchant_uid = pay_in_merchant_uid(user)
+    reward_per_participant = subject_reward || 0
+    currency = get_currency(fund)
+    idempotence_key = "pay_in:fund=#{fund.id}:#{Ecto.UUID.generate()}"
+    invoice_id = generate_invoice_id()
+
+    description = %Payment.Transaction.Description{
+      platform: "Next",
+      assignment: title || "Untitled",
+      participant_count: subject_count,
+      amount_per_participant: reward_per_participant
+    }
+
+    metadata = %Payment.Transaction.Metadata{
+      contact_person: "Researcher ##{user_id}",
+      study_title: title || "Untitled",
+      study_goal: subtitle || "",
+      aim_of_study: aim_of_study,
+      participant_count: subject_count,
+      amount_per_participant: reward_per_participant
+    }
+
+    return_url = return_url(assignment)
+
+    opts = [return_url: return_url]
+    opts = if partner_fee > 0, do: Keyword.put(opts, :partner_fee, partner_fee), else: opts
+
+    request = %Payment.Transaction.Request{
+      merchant_uid: merchant_uid,
+      total_amount: total_amount,
+      currency: currency,
+      invoice_id: invoice_id,
+      idempotence_key: idempotence_key,
+      description: description,
+      metadata: metadata,
+      opts: opts
+    }
+
+    with {:ok, provider_result} <- Payment.Public.create_transaction(request),
+         {:ok, transaction} <-
+           %Fund.TransactionModel{}
+           |> Fund.TransactionModel.changeset(%{
+             transaction_id: provider_result.uid,
+             status: :pending,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count,
+             total_amount: total_amount
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
+           |> Repo.insert() do
+      {:ok, %{transaction: transaction, payment_url: provider_result.payment_url}}
+    end
+  end
+
+  # Pay-ins fund the platform merchant (the float for payout charges); fall back
+  # to the user's own merchant only when no platform merchant is configured.
+  defp pay_in_merchant_uid(user) do
+    case Payment.Public.platform_merchant_uid() do
+      nil ->
+        {:ok, {_user, %{uid: uid}}} = Payment.Public.ensure_merchant_for(user)
+        uid
+
+      uid ->
+        uid
+    end
+  end
+
+  defp create_free_pay_in(%Fund.Model{id: fund_id}, user_id, subject_count) do
+    idempotence_key = "pay_in:fund=#{fund_id}:#{Ecto.UUID.generate()}"
+    invoice_id = generate_invoice_id()
+
+    with {:ok, transaction} <-
+           %Fund.TransactionModel{}
+           |> Fund.TransactionModel.changeset(%{
+             transaction_id: "free_#{Ecto.UUID.generate()}",
+             status: :completed,
+             idempotence_key: idempotence_key,
+             invoice_id: invoice_id,
+             subject_count: subject_count,
+             total_amount: 0
+           })
+           |> Ecto.Changeset.put_change(:user_id, user_id)
+           |> Ecto.Changeset.put_change(:target_fund_id, fund_id)
+           |> Repo.insert() do
+      increment_subject_count(fund_id, subject_count)
+      {:ok, %{transaction: transaction, payment_url: nil}}
+    end
+  end
+
+  # --- Transaction completion ---
+
+  @doc """
+  Completes a transaction after successful payment.
+  In one atomic Multi:
+  1. Update transaction status to :completed
+  2. Create bookkeeping entry (debit CurrencyLedger.inbound, credit Fund.available)
+  3. Increment assignment subject_count
+
+  Money stays on the user's OPP merchant. Our bookkeeping is the source of truth
+  for fund allocation. OPP withdrawals happen at payout time (UC-OPP-06).
+
+  Status handling: `:pending` and `:failed` transactions are both completed by
+  this function. The `:failed → :completed` upgrade resolves the race where the
+  expiration worker marks a transaction failed before a late webhook arrives —
+  the researcher's payment did succeed at OPP and we credit it. Only
+  `:completed` transactions are refused (idempotency on duplicate webhooks).
+  """
+  def complete_transaction(provider_uid) when is_binary(provider_uid) do
+    transaction =
+      get_transaction_by_provider_uid!(provider_uid)
+      |> Repo.preload(target_fund: [:available, :pending, currency_ledger: [:inbound, :outbound]])
+
+    case transaction.status do
+      :completed ->
+        {:error, :already_completed}
+
+      _ ->
+        do_complete_transaction(transaction)
+    end
+  end
+
+  defp do_complete_transaction(
+         %Fund.TransactionModel{
+           subject_count: subject_count,
+           target_fund: %{
+             available: %{identifier: fund_account_id},
+             currency_ledger: %{inbound: %{identifier: inbound_account_id}}
+           }
+         } = transaction
+       ) do
+    reward_per_participant = get_reward_per_participant(transaction)
+    total_amount = subject_count * reward_per_participant
+
+    Multi.new()
+    |> Multi.update(
+      :transaction,
+      Fund.TransactionModel.changeset(transaction, %{status: :completed})
+    )
+    |> Multi.run(:bookkeeping, fn _, _ ->
+      Bookkeeping.Public.enter(%{
+        idempotence_key: "complete:#{transaction.idempotence_key}",
+        journal_message:
+          "Pay-in #{total_amount} cents for #{subject_count} participants on fund ##{transaction.target_fund_id}",
+        lines: [
+          %{account: inbound_account_id, debit: total_amount},
+          %{account: fund_account_id, credit: total_amount}
+        ]
+      })
+    end)
+    |> Multi.run(:update_subject_count, fn _, _ ->
+      increment_subject_count(transaction.target_fund_id, subject_count)
+    end)
+    |> Repo.commit()
+  end
+
+  def fail_transaction(provider_uid) when is_binary(provider_uid) do
+    transaction = get_transaction_by_provider_uid!(provider_uid)
+
+    case transaction.status do
+      :completed ->
+        Logger.error(
+          "[Budget] refusing late 'failed' for already-completed transaction #{provider_uid}; " <>
+            "fund stays credited"
+        )
+
+        {:error, :already_completed}
+
+      _ ->
+        transaction
+        |> Fund.TransactionModel.changeset(%{status: :failed})
+        |> Repo.update()
+    end
+  end
+
+  @pay_in_expiration_minutes 15
+
+  @doc """
+  Marks pending pay-in transactions older than `max_age_minutes` as `:failed`.
+
+  Returns the number of transactions that were expired.
+  """
+  def expire_stale_pay_ins(max_age_minutes \\ @pay_in_expiration_minutes)
+      when is_integer(max_age_minutes) and max_age_minutes > 0 do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    cutoff = NaiveDateTime.add(now, -max_age_minutes * 60, :second)
+
+    {count, _} =
+      from(t in Fund.TransactionModel,
+        where: t.status == :pending and t.inserted_at < ^cutoff,
+        update: [set: [status: :failed, updated_at: ^now]]
+      )
+      |> Repo.update_all([])
+
+    if count > 0 do
+      Logger.info("[Budget] Expired #{count} stale pending pay-in(s)")
+    end
+
+    count
+  end
+
+  def reconcile_transactions(opts, state), do: Fund.TransactionReconciliation.run(opts, state)
+
+  @doc """
+  Flags provider transactions that have no local pay-in row.
+  See `Systems.Fund.TransactionOrphanReconciliation`.
+  """
+  def reconcile_orphaned_transactions(opts, state),
+    do: Fund.TransactionOrphanReconciliation.run(opts, state)
+
+  # --- Helpers ---
+
+  defp get_reward_per_participant(%Fund.TransactionModel{target_fund_id: fund_id}) do
+    from(a in Assignment.Model,
+      join: i in assoc(a, :info),
+      where: a.fund_id == ^fund_id,
+      select: i.subject_reward
+    )
+    |> Repo.one() || 0
+  end
+
+  defp increment_subject_count(fund_id, additional_count) do
+    from(i in Assignment.InfoModel,
+      join: a in Assignment.Model,
+      on: a.info_id == i.id,
+      where: a.fund_id == ^fund_id,
+      update: [inc: [subject_count: ^additional_count]]
+    )
+    |> Repo.update_all([])
+
+    {:ok, :updated}
+  end
+
+  defp generate_invoice_id do
+    env_id = Application.get_env(:core, :invoice_environment, "DEV")
+    %{rows: [[number]]} = Repo.query!("SELECT nextval('invoice_number_seq')")
+    padded = number |> Integer.to_string() |> String.pad_leading(4, "0")
+    "NEXT-#{env_id}-#{padded}"
+  end
+
+  defp return_url(%Assignment.Model{id: assignment_id}) do
+    base_url =
+      Application.get_env(:core, :payment_webhook_base_url) ||
+        Application.fetch_env!(:core, :base_url)
+
+    "#{base_url}/assignment/#{assignment_id}/content"
+  end
+
+  defp get_currency(%{currency_ledger: %{currency: currency}}), do: currency
+  defp get_currency(_), do: :EUR
 end

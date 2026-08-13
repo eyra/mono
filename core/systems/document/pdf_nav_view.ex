@@ -1,5 +1,5 @@
 defmodule Systems.Document.PDFNavView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   import Frameworks.Pixel.Line
 
   alias Systems.Document

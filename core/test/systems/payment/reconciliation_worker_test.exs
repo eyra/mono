@@ -1,9 +1,11 @@
 defmodule Systems.Payment.ReconciliationWorkerTest do
   @moduledoc """
   Integration: one worker run reconciles both a stuck pay-in (Budget) and a
-  stuck payout (Fund) against OPP. The per-type resolution rules are covered by
-  ReconcileTransactionsTest / ReconcilePayoutsTest; here we assert the worker
-  delegates to both and returns :ok.
+  stuck payout (Fund) against OPP, then runs the two provider→local orphan
+  passes. The per-type rules are covered by ReconcileTransactionsTest /
+  ReconcilePayoutsTest / ReconcileOrphanedPayoutsTest /
+  ReconcileOrphanedTransactionsTest; here we assert the worker delegates to all
+  four and returns :ok.
   """
   use Core.DataCase, async: true
   import Mox
@@ -12,7 +14,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
   alias Systems.Payment.ReconciliationFindingModel
@@ -20,6 +22,15 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   alias Systems.Payment.ReconciliationWorker
 
   setup :verify_on_exit!
+
+  # The orphan pass lists the provider side on every run. Tests that are about
+  # the local-first passes stub it empty so it contributes nothing to the tally.
+  defp expect_no_orphans do
+    expect(ProviderMock, :list_recent_withdrawals, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_transactions, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_merchants, fn _since -> {:ok, []} end)
+  end
 
   defp backdate(queryable, id, minutes_ago) do
     ts =
@@ -67,8 +78,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
 
   defp stuck_transaction do
     currency_ledger =
-      case Budget.CurrencyLedgerModel.get_by_currency(:EUR) do
-        nil -> Budget.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
+      case Fund.CurrencyLedgerModel.get_by_currency(:EUR) do
+        nil -> Fund.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
         existing -> Repo.preload(existing, [:inbound, :outbound])
       end
 
@@ -90,8 +101,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       |> Repo.insert!()
 
     {:ok, transaction} =
-      %Budget.TransactionModel{}
-      |> Budget.TransactionModel.changeset(%{
+      %Fund.TransactionModel{}
+      |> Fund.TransactionModel.changeset(%{
         transaction_id: "tx_payin",
         status: :pending,
         idempotence_key: Ecto.UUID.generate(),
@@ -102,7 +113,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       |> Ecto.Changeset.put_change(:target_fund_id, fund.id)
       |> Repo.insert()
 
-    backdate(Budget.TransactionModel, transaction.id, 120)
+    backdate(Fund.TransactionModel, transaction.id, 120)
     transaction
   end
 
@@ -124,6 +135,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
          amount: 0
        }}
     end)
+
+    expect_no_orphans()
 
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
 
@@ -150,6 +163,8 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
        }}
     end)
 
+    expect_no_orphans()
+
     assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
 
     run = Repo.one!(ReconciliationRunModel)
@@ -165,5 +180,49 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
 
     assert MapSet.new(findings, & &1.subject_type) == MapSet.new([:payout, :transaction])
     assert MapSet.new(findings, & &1.subject_id) == MapSet.new([payout.id, transaction.id])
+  end
+
+  test "records orphans found by the provider→local passes on the same run" do
+    expect(ProviderMock, :list_recent_withdrawals, fn _since ->
+      {:ok,
+       [
+         %{
+           uid: "wdr_orphan",
+           status: :completed,
+           raw_status: "completed",
+           reference: "payout=#{Ecto.UUID.generate()},type=withdrawal,attempt=0",
+           amount: 1000,
+           created: DateTime.add(DateTime.utc_now(), -24 * 60 * 60, :second)
+         }
+       ]}
+    end)
+
+    expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
+    expect(ProviderMock, :list_recent_merchants, fn _since -> {:ok, []} end)
+
+    expect(ProviderMock, :list_recent_transactions, fn _since ->
+      {:ok,
+       [
+         %{
+           uid: "tra_orphan",
+           status: :completed,
+           raw_status: "completed",
+           payment_url: nil,
+           amount: 1440,
+           reference: "pay_in:fund=1:#{Ecto.UUID.generate()}",
+           created: DateTime.add(DateTime.utc_now(), -24 * 60 * 60, :second)
+         }
+       ]}
+    end)
+
+    assert :ok = ReconciliationWorker.perform(%Oban.Job{args: %{}})
+
+    run = Repo.one!(ReconciliationRunModel)
+    assert run.missing_locally == 2
+
+    findings = Repo.all(ReconciliationFindingModel)
+    assert MapSet.new(findings, & &1.provider_uid) == MapSet.new(["wdr_orphan", "tra_orphan"])
+    assert Enum.all?(findings, &(&1.outcome == :missing_locally))
+    assert Enum.all?(findings, &is_nil(&1.subject_id))
   end
 end

@@ -33,7 +33,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "reward.title"
-msgstr ""
+msgstr "Compenso"
 
 #, elixir-autogen, elixir-format
 msgid "byline"

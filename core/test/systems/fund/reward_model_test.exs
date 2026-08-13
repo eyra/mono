@@ -48,13 +48,12 @@ defmodule Systems.Fund.RewardModelTest do
     end
   end
 
-  describe "rejection fields" do
-    test "are nil on a fresh struct" do
-      assert %Fund.RewardModel{}.rejection_reason == nil
+  describe "rejected_at" do
+    test "is nil on a fresh struct" do
       assert %Fund.RewardModel{}.rejected_at == nil
     end
 
-    test "changeset is valid without them: a reward only carries them once rejected" do
+    test "changeset is valid without it: a reward only carries it once rejected" do
       changeset =
         Fund.RewardModel.changeset(%Fund.RewardModel{}, %{
           idempotence_key: "key",
@@ -63,11 +62,10 @@ defmodule Systems.Fund.RewardModelTest do
         })
 
       assert changeset.valid?
-      refute Map.has_key?(changeset.changes, :rejection_reason)
       refute Map.has_key?(changeset.changes, :rejected_at)
     end
 
-    test "changeset casts both when a reward is rejected" do
+    test "changeset casts it when a reward is rejected" do
       rejected_at = ~N[2026-07-29 10:00:00]
 
       changeset =
@@ -75,20 +73,17 @@ defmodule Systems.Fund.RewardModelTest do
           idempotence_key: "key",
           amount: 100,
           status: :rejected,
-          rejection_reason: "Task not completed",
           rejected_at: rejected_at
         })
 
       assert changeset.valid?
-      assert Ecto.Changeset.get_change(changeset, :rejection_reason) == "Task not completed"
       assert Ecto.Changeset.get_change(changeset, :rejected_at) == rejected_at
     end
 
-    test "changeset clears both when a rejection is overridden" do
+    test "changeset clears it when a rejection is overridden" do
       rejected =
         %Fund.RewardModel{
           status: :rejected,
-          rejection_reason: "Task not completed",
           rejected_at: ~N[2026-07-29 10:00:00]
         }
 
@@ -97,12 +92,10 @@ defmodule Systems.Fund.RewardModelTest do
           idempotence_key: "key",
           amount: 100,
           status: :approved,
-          rejection_reason: nil,
           rejected_at: nil
         })
 
       assert changeset.valid?
-      assert Ecto.Changeset.get_field(changeset, :rejection_reason) == nil
       assert Ecto.Changeset.get_field(changeset, :rejected_at) == nil
     end
   end

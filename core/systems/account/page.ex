@@ -29,7 +29,6 @@ defmodule Systems.Account.Page do
   on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Tabbed, __MODULE__})
 
   # Defer menus_config to the page builder so it can pick the menu set that
   # matches the layout (website for participants, workspace for creators).

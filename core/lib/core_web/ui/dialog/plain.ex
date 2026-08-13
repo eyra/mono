@@ -1,5 +1,5 @@
 defmodule CoreWeb.UI.Dialog.Plain do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use Gettext, backend: CoreWeb.Gettext
 
   import CoreWeb.UI.Dialog

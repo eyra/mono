@@ -395,3 +395,7 @@ msgstr "Bankrekening verifiëren"
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
 msgstr "We hebben je een code gestuurd"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr "De betaaldienst accepteert dit telefoonnummer niet. Controleer het nummer en probeer het opnieuw."

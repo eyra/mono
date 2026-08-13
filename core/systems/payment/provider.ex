@@ -2,6 +2,18 @@ defmodule Systems.Payment.Provider do
   alias Systems.Payment.Error
   alias Systems.Payment.Transaction
 
+  @typedoc """
+  Result of a bulk listing.
+
+  `{:truncated, objects}` means the adapter stopped short of the end — it hit its
+  own paging cap, so the objects returned are valid but incomplete. It is
+  deliberately not `{:ok, objects}`: a provider→local scan that cannot tell the
+  two apart would report the orphans it happened to see and a clean tally for
+  everything past the cap, which reads as "nothing wrong" precisely when the
+  provider holds more than we can walk.
+  """
+  @type listing(object) :: {:ok, [object]} | {:truncated, [object]} | {:error, Error.t()}
+
   # Merchants
 
   @type merchant :: %{
@@ -9,7 +21,8 @@ defmodule Systems.Payment.Provider do
           status: String.t(),
           kyc_level: integer(),
           compliance_status: String.t(),
-          overview_url: String.t() | nil
+          overview_url: String.t() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -32,6 +45,14 @@ defmodule Systems.Payment.Provider do
   @callback create_merchant(attrs :: map()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback get_merchant(uid :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
   @callback find_merchant_by_email(email :: String.t()) :: {:ok, merchant()} | {:error, Error.t()}
+
+  @doc """
+  Every merchant the provider created at or after `since`. See
+  `list_recent_withdrawals/1` for why this is not anchored to local state — here
+  it matters most, since the local row a restore rolls back is the very one that
+  recorded the merchant uid.
+  """
+  @callback list_recent_merchants(since :: DateTime.t()) :: listing(merchant())
 
   @doc """
   Set (or add) a phone number on an existing merchant's primary contact,
@@ -98,12 +119,20 @@ defmodule Systems.Payment.Provider do
   """
   @type lifecycle_status :: :pending | :completed | :failed
 
+  @typedoc """
+  `reference` carries back the caller's own `idempotence_key`, which each adapter
+  stores alongside the transaction. It is the only identifier on a pay-in that
+  survives a database restore — `invoice_id` comes from a sequence a restore
+  rewinds — so it is what a provider→local scan matches on.
+  """
   @type transaction :: %{
           uid: String.t(),
           status: lifecycle_status(),
           raw_status: String.t(),
           payment_url: String.t() | nil,
-          amount: integer()
+          amount: integer(),
+          reference: String.t() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -129,6 +158,13 @@ defmodule Systems.Payment.Provider do
               {:ok, transaction()} | {:error, Error.t()}
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
 
+  @doc """
+  Every transaction the provider created at or after `since`, across all
+  merchants — the provider-side half of the provider→local pay-in scan. See
+  `list_recent_withdrawals/1` for why this is not anchored to local state.
+  """
+  @callback list_recent_transactions(since :: DateTime.t()) :: listing(transaction())
+
   # Withdrawals
 
   @type withdrawal :: %{
@@ -136,7 +172,8 @@ defmodule Systems.Payment.Provider do
           status: lifecycle_status(),
           raw_status: String.t(),
           reference: String.t() | nil,
-          amount: integer()
+          amount: integer(),
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -175,13 +212,30 @@ defmodule Systems.Payment.Provider do
   @callback list_withdrawals(merchant_uid :: String.t()) ::
               {:ok, [withdrawal()]} | {:error, Error.t()}
 
+  @doc """
+  Every withdrawal the provider created at or after `since`, across all
+  merchants — the provider-side half of the provider→local reconciliation pass.
+
+  Unlike `list_withdrawals/1` this is not anchored to a merchant we already know
+  about, which is the point: a restore can roll back the local row that recorded
+  the merchant, so anchoring on local state would skip exactly the objects this
+  is meant to find.
+
+  Implementations page internally and apply the `since` cutoff themselves —
+  callers get a complete list, oldest-cutoff enforced, no pagination to thread.
+  """
+  @callback list_recent_withdrawals(since :: DateTime.t()) :: listing(withdrawal())
+
   # Transfers
 
   @type transfer :: %{
           uid: String.t(),
           status: lifecycle_status(),
           raw_status: String.t(),
-          amount: integer()
+          amount: integer(),
+          reference: String.t() | nil,
+          settled: integer() | nil,
+          created: DateTime.t() | nil
         }
 
   @doc """
@@ -221,4 +275,34 @@ defmodule Systems.Payment.Provider do
               amount :: non_neg_integer(),
               idempotence_key :: String.t()
             ) :: {:ok, transfer()} | {:error, Error.t()}
+
+  @doc """
+  Every transfer the provider holds *into* a merchant's balance.
+
+  The incoming direction is the one that matters: it answers "did the money we
+  tried to send this participant actually land?" when the response to
+  `transfer_to_merchant/4` was lost. The caller matches on `reference`, which
+  carries the caller's own idempotence key.
+
+  Unfiltered beyond the merchant, for the same reason as `list_withdrawals/1`:
+  a participant merchant receives a handful of transfers in its lifetime.
+
+  Note the direction. OPP's `/merchants/{uid}/charges` subresource — the apparent
+  mirror of `list_withdrawals/1` — lists charges *from* the merchant and returns
+  an empty list for a participant, so incoming transfers are only reachable
+  through the top-level collection filtered on the receiving merchant.
+
+  Only settled transfers are evidence money moved: a transfer has no lifecycle
+  status at OPP, so `status` is always `:pending` and `settled` is nil until the
+  balances actually change.
+  """
+  @callback list_charges_to_merchant(merchant_uid :: String.t()) ::
+              {:ok, [transfer()]} | {:error, Error.t()}
+
+  @doc """
+  Every transfer the provider created at or after `since`, across all merchants.
+  The transfer-leg counterpart of `list_recent_withdrawals/1`; see there for why
+  this is not anchored to local state.
+  """
+  @callback list_recent_transfers(since :: DateTime.t()) :: listing(transfer())
 end

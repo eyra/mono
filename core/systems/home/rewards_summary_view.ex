@@ -13,12 +13,18 @@ defmodule Systems.Home.RewardsSummaryView do
     * `{:kyc_required, _, _}` — `:verify` variant; the bank account isn't
       verified yet, so an info modal lets the participant close it or continue to
       the account page (`/user/account?tab=payouts`), where verification lives.
-    * `{:below_threshold, _}` / other errors — a flash, no modal.
+    * `{:below_threshold, _}` — a flash, no modal.
+    * any other error — `:verify` variant too: the payouts tab is the only
+      actionable next step, so never dead-end on "try again later".
+
+  Errors from `Fund.Public.request_payout/2` — after confirming, and on retry —
+  are routed the same way: threshold misses flash, anything else swaps the modal
+  to the `:verify` variant rather than a generic "try again later".
 
   All i18n is resolved by `Systems.Home.PageBuilder`; this view only renders
   the supplied `labels`.
   """
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel
   alias Frameworks.Pixel.Button
@@ -79,8 +85,6 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
-  # Bank account not verified yet: an info modal that lets the participant close
-  # it or continue to the account page (`/user/account?tab=payouts`) to verify.
   def compose(:handoff_modal, %{handoff_mode: :verify, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -96,9 +100,6 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
-  # Bank account submitted to the payment provider and awaiting review: nothing
-  # for the participant to do but wait, so an info-only modal (no redirect) —
-  # clearer than the verify modal which nags them to redo completed steps.
   def compose(:handoff_modal, %{handoff_mode: :awaiting, labels: labels}) do
     %{
       module: Pixel.ConfirmationModal,
@@ -140,21 +141,16 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply, present_handoff(socket, :payout)}
 
       {:error, {:kyc_required, _source, _url}} ->
-        # Bank account not verified yet: show an info modal offering to continue
-        # to the account page, where the "Uitbetalingen" tab handles verification.
         {:noreply, present_handoff(socket, :verify)}
 
       {:error, :awaiting_verification} ->
-        # Bank account is submitted and the provider is reviewing: nothing for
-        # the participant to do, so show a "please wait" info modal instead of
-        # the redirect-to-KYC one.
         {:noreply, present_handoff(socket, :awaiting)}
 
       {:error, {:below_threshold, _cents}} ->
         {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
 
       {:error, _reason} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_failed)}
+        {:noreply, present_handoff(socket, :verify)}
     end
   end
 
@@ -173,7 +169,7 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply, socket}
 
       error ->
-        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+        {:noreply, socket |> handle_payout_error(error) |> refresh_totals(user)}
     end
   end
 
@@ -256,7 +252,7 @@ defmodule Systems.Home.RewardsSummaryView do
 
       error ->
         # Refresh: a lost lock-race hides the now-stale payout button.
-        {:noreply, socket |> flash_payout_result(error) |> refresh_totals(user)}
+        {:noreply, socket |> handle_payout_error(error) |> refresh_totals(user)}
     end
   end
 
@@ -275,14 +271,13 @@ defmodule Systems.Home.RewardsSummaryView do
   @impl true
   def handle_modal_closed(socket, :handoff_modal), do: socket
 
-  defp flash_payout_result(
+  defp handle_payout_error(
          %{assigns: %{labels: labels}} = socket,
          {:error, {:below_threshold, _cents}}
        ),
        do: Flash.push_error(socket, labels.payout_below_threshold)
 
-  defp flash_payout_result(%{assigns: %{labels: labels}} = socket, {:error, _reason}),
-    do: Flash.push_error(socket, labels.payout_failed)
+  defp handle_payout_error(socket, {:error, _reason}), do: present_handoff(socket, :verify)
 
   defp present_handoff(socket, mode) do
     socket
@@ -319,7 +314,7 @@ defmodule Systems.Home.RewardsSummaryView do
       </Text.title2>
       <.spacing value="M" />
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="flex flex-col md:flex-row gap-16">
         <.column
           pill_label={@labels.pending_pill}
           pill_color="bg-warning"
@@ -332,17 +327,17 @@ defmodule Systems.Home.RewardsSummaryView do
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
           donate_button_label={@labels.donate_button}
-          payout_enabled?={@payout_status == :none and @approved_cents > 0}
-          donate_enabled?={
-            @donate_enabled? and @payout_status == :none and @approved_cents > 0
-          }
+          payout_enabled?={@approved_cents >= Fund.Public.payout_threshold_cents()}
+          donate_enabled?={@donate_enabled? and @approved_cents > 0}
           target={@myself}
         />
-        <.column
-          pill_label={@labels.rejected_pill}
-          pill_color="bg-delete"
-          amount_cents={@rejected_cents}
-        />
+        <%= if @rejected_cents > 0 do %>
+          <.column
+            pill_label={@labels.rejected_pill}
+            pill_color="bg-delete"
+            amount_cents={@rejected_cents}
+          />
+        <% end %>
       </div>
       <.payout_status_section status={@payout_status} labels={@labels} target={@myself} />
       <.donation_section
@@ -473,10 +468,11 @@ defmodule Systems.Home.RewardsSummaryView do
             />
           <% end %>
         </div>
+      <% else %>
+        <div class="text-bodysmall font-body text-grey2">
+          <%= @caption %>
+        </div>
       <% end %>
-      <div class="text-bodysmall font-body text-grey2">
-        <%= @caption %>
-      </div>
     </div>
     """
   end

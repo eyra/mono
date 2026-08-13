@@ -34,7 +34,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"
-msgstr ""
+msgstr "Recompensă:"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.approved"
@@ -42,7 +42,7 @@ msgstr "Contribuții"
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
-msgstr ""
+msgstr "În așteptare"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
