@@ -10,7 +10,7 @@ defmodule Systems.Notify.DispatcherTest do
       user = Factories.insert!(:member)
 
       {:ok, event} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_accepted,
           subject_user: user,
           metadata: %{"assignment_id" => 42, "assignment_title" => "Test study"}

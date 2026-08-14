@@ -12,7 +12,7 @@ defmodule Systems.Notify.MarkSeenTest do
       user = Factories.insert!(:member)
 
       {:ok, event} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_accepted,
           subject_user: user,
           metadata: %{"assignment_id" => 42},
@@ -50,7 +50,7 @@ defmodule Systems.Notify.MarkSeenTest do
 
     test "leaves messages for other correlations alone", %{user: user, event: event} do
       {:ok, _other_event} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_accepted,
           subject_user: user,
           metadata: %{"assignment_id" => 99},
@@ -77,7 +77,7 @@ defmodule Systems.Notify.MarkSeenTest do
       user = Factories.insert!(:member)
 
       {:ok, _accepted} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_accepted,
           subject_user: user,
           metadata: %{"assignment_id" => 1},
@@ -85,7 +85,7 @@ defmodule Systems.Notify.MarkSeenTest do
         })
 
       {:ok, _declined} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_declined,
           subject_user: user,
           metadata: %{"assignment_id" => 2},
@@ -115,7 +115,7 @@ defmodule Systems.Notify.MarkSeenTest do
       user = Factories.insert!(:member)
 
       {:ok, _event} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_declined,
           subject_user: user,
           metadata: %{"assignment_id" => 42},

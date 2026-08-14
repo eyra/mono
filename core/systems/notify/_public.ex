@@ -15,26 +15,16 @@ defmodule Systems.Notify.Public do
   alias Systems.Notify.EventModel
   alias Systems.Notify.EventType
   alias Systems.Notify.MessageModel
+  alias Systems.Notify.EventAttrs
   alias Systems.Notify.Scheduler
 
   @doc """
   Record a domain event and hand it to the scheduler.
 
-  Attrs shape:
-
-      %{
-        type: :contribution_accepted,           # required
-        subject_user: %User{},                  # required — the recipient
-        actor_user: %User{} | nil,              # optional — who caused it
-        metadata: %{...},                       # required — event-type-specific
-        correlation_id: "participation:42",     # optional — future batching
-        source: "Systems.Assignment.Switch"     # optional — for debugging
-      }
-
   Also increments a `Systems.Monitor` counter for aggregate observability;
   Monitor failures don't fail the event persistence.
   """
-  def record_event(attrs) do
+  def record_event(%EventAttrs{} = attrs) do
     normalized = normalize(attrs)
 
     with :ok <- validate_type(normalized.type),
@@ -45,14 +35,14 @@ defmodule Systems.Notify.Public do
     end
   end
 
-  defp normalize(%{} = attrs) do
+  defp normalize(%EventAttrs{} = attrs) do
     %{
-      type: to_string(attrs[:type] || attrs["type"]),
-      subject_user_id: user_id(attrs[:subject_user] || attrs["subject_user"]),
-      actor_user_id: user_id(attrs[:actor_user] || attrs["actor_user"]),
-      metadata: attrs[:metadata] || attrs["metadata"] || %{},
-      correlation_id: attrs[:correlation_id] || attrs["correlation_id"],
-      source: source(attrs[:source] || attrs["source"])
+      type: to_string(attrs.type),
+      subject_user_id: user_id(attrs.subject_user),
+      actor_user_id: user_id(attrs.actor_user),
+      metadata: attrs.metadata,
+      correlation_id: attrs.correlation_id,
+      source: source(attrs.source)
     }
   end
 

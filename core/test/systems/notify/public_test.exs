@@ -13,7 +13,7 @@ defmodule Systems.Notify.PublicTest do
 
     test "persists the event with the supplied attrs", %{user: user} do
       assert {:ok, event} =
-               Notify.Public.record_event(%{
+               Notify.Public.record_event(%Notify.EventAttrs{
                  type: :contribution_accepted,
                  subject_user: user,
                  metadata: %{"assignment_id" => 42},
@@ -31,10 +31,9 @@ defmodule Systems.Notify.PublicTest do
 
     test "hands the event to the scheduler — dispatched_at is stamped", %{user: user} do
       {:ok, event} =
-        Notify.Public.record_event(%{
+        Notify.Public.record_event(%Notify.EventAttrs{
           type: :contribution_accepted,
-          subject_user: user,
-          metadata: %{}
+          subject_user: user
         })
 
       # Re-read: record_event returns the pre-dispatch struct
@@ -44,20 +43,16 @@ defmodule Systems.Notify.PublicTest do
 
     test "rejects unknown event types", %{user: user} do
       assert {:error, {:unknown_event_type, "totally_made_up"}} =
-               Notify.Public.record_event(%{
+               Notify.Public.record_event(%Notify.EventAttrs{
                  type: :totally_made_up,
                  subject_user: user
                })
     end
 
-    test "requires subject_user", %{user: _user} do
-      assert {:error, changeset} =
-               Notify.Public.record_event(%{
-                 type: :contribution_accepted,
-                 metadata: %{}
-               })
-
-      assert %{subject_user_id: ["can't be blank"]} = errors_on(changeset)
+    test "requires subject_user at struct construction time" do
+      assert_raise ArgumentError, fn ->
+        struct!(Notify.EventAttrs, type: :contribution_accepted)
+      end
     end
   end
 end

@@ -549,7 +549,7 @@ defmodule Systems.Assignment.Switch do
            assignment: %Assignment.Model{id: assignment_id, info: info} = assignment
          }
        ) do
-    Notify.Public.record_event(%{
+    Notify.Public.record_event(%Notify.EventAttrs{
       type: type,
       subject_user: %{id: user_id},
       metadata: %{
