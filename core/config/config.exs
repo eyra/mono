@@ -79,9 +79,6 @@ config :plug, :statuses, %{
 
 config :core, :signal,
   handlers: [
-    "Core.APNS.SignalHandlers",
-    "Core.Mailer.SignalHandlers",
-    "Core.WebPush.SignalHandlers",
     "Systems.Account.Switch",
     "Systems.Admin.Switch",
     "Systems.Advert.Switch",

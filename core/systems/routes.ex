@@ -16,7 +16,6 @@ defmodule Systems.Routes do
         :lab,
         :manual,
         :next_action,
-        :notification,
         :onyx,
         :payment,
         :org,
