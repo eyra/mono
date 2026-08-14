@@ -39,6 +39,24 @@ defmodule Systems.Project.Switch do
     :ok
   end
 
+  @impl true
+  def intercept({:next_action, _}, %{user: user} = message) do
+    from_pid = Map.get(message, :from_pid, self())
+    update_page(Project.OverviewPage, user, from_pid)
+
+    with node_id when is_integer(node_id) <- node_id_from(message),
+         %Project.NodeModel{} = node <- Project.Public.get_node!(node_id) do
+      update_page(Project.NodePage, node, from_pid)
+    end
+
+    :ok
+  end
+
+  defp node_id_from(%{action: %{params: %{"node_id" => node_id}}}) when is_integer(node_id),
+    do: node_id
+
+  defp node_id_from(_), do: nil
+
   defp update_pages(%Project.NodeModel{} = node, from_pid) do
     [Project.NodePage]
     |> Enum.each(&update_page(&1, node, from_pid))

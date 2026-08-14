@@ -5,6 +5,7 @@ defmodule Systems.Assignment.ContributionsView do
 
   alias Frameworks.Pixel.Text
   alias Systems.Assignment
+  alias Systems.NextAction
 
   @decline_modal_id "decline-contribution-modal"
 
@@ -15,7 +16,17 @@ defmodule Systems.Assignment.ContributionsView do
   end
 
   @impl true
-  def mount(:not_mounted_at_router, _session, socket) do
+  def mount(
+        :not_mounted_at_router,
+        _session,
+        %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket
+      ) do
+    NextAction.Public.clear_next_action(
+      user,
+      Systems.Assignment.NextActions.PendingContributions,
+      key: "#{assignment_id}"
+    )
+
     {:ok, socket}
   end
 

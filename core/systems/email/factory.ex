@@ -61,6 +61,18 @@ defmodule Systems.Email.Factory do
     |> render(:debug_message, body: message, from_user: from_user, to_user: to_user)
   end
 
+  def contribution_accepted(user, metadata) do
+    mail_user(user)
+    |> subject("Your contribution was accepted")
+    |> render(:contribution_accepted, metadata: metadata)
+  end
+
+  def contribution_declined(user, metadata) do
+    mail_user(user)
+    |> subject("Your contribution was declined")
+    |> render(:contribution_declined, metadata: metadata)
+  end
+
   def notification(title, byline, message, to) do
     text_message = message
     html_message = message |> to_html()

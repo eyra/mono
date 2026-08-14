@@ -1,0 +1,17 @@
+<h1>Your contribution was declined</h1>
+
+<%= if @metadata["rejected_message"] && @metadata["rejected_message"] != "" do %>
+<p>Your contribution was declined for the following reason:</p>
+<p><em>&ldquo;<%= @metadata["rejected_message"] %>&rdquo;</em></p>
+<% else %>
+<p>Your contribution was declined.</p>
+<% end %>
+
+<%= if @metadata["assignment_title"] do %>
+<p><strong>Assignment:</strong> <%= @metadata["assignment_title"] %></p>
+<% end %>
+
+<br />
+Kind regards,
+<br /><br />
+The Eyra team

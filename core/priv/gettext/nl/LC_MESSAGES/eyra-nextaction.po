@@ -93,3 +93,23 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.title"
+msgstr "Bijdrage geaccepteerd"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.title"
+msgstr "Bijdrage afgewezen"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.description"
+msgstr "De onderzoeker heeft je bijdrage geaccepteerd."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.description"
+msgstr "De onderzoeker heeft je bijdrage afgewezen."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.cta"
+msgstr "Bekijk resultaat"
