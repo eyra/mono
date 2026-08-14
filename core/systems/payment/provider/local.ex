@@ -218,7 +218,9 @@ defmodule Systems.Payment.Provider.Local do
   end
 
   @impl true
-  def charge_to_partner(from_owner_uid, amount, idempotence_key) do
+  def charge_to_partner(from_owner_uid, amount, idempotence_key)
+      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and
+             is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
