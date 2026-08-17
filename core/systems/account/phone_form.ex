@@ -82,14 +82,30 @@ defmodule Systems.Account.PhoneForm do
         persist_phone(user, phone)
         redirect(socket, to: @payouts_path)
 
-      {:error, %Payment.Error{code: :api_error, details: %{status: status}}}
-      when is_integer(status) and status < 500 ->
-        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.rejected"))
-
-      {:error, _reason} ->
-        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.flash"))
+      {:error, reason} ->
+        assign(socket, error: verification_error(reason))
     end
   end
+
+  # Only blame the phone number when the provider actually named it. Every other
+  # failure — a merchant that 404s, a rejected bank account — is ours, and saying
+  # "we don't accept this number" sends the participant hunting a typo that isn't
+  # there. OPP names the offending field in `parameters` on a validation error.
+  defp verification_error(%Payment.Error{
+         details: %{body: %{"error" => %{"parameters" => parameters}}}
+       })
+       when is_map(parameters) do
+    if Enum.any?(Map.keys(parameters), &phone_parameter?/1) do
+      dgettext("eyra-account", "payouts.phone.error.rejected")
+    else
+      dgettext("eyra-account", "payouts.phone.error.flash")
+    end
+  end
+
+  defp verification_error(_reason), do: dgettext("eyra-account", "payouts.phone.error.flash")
+
+  defp phone_parameter?(key) when is_binary(key), do: String.contains?(key, "phone")
+  defp phone_parameter?(_key), do: false
 
   # A local persist failure after OPP accepted the phone leaves user.phone nil,
   # so the next payouts visit re-collects and re-pushes to OPP (idempotent).

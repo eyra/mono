@@ -42,6 +42,28 @@ defmodule Systems.Payment.PublicTest do
       assert m.overview_url == "https://opp.test/overview/existing"
     end
 
+    test "replaces a merchant_uid the provider 404s on, rather than failing forever" do
+      user = fresh_user(%{merchant_uid: "m_gone"})
+
+      expect(ProviderMock, :get_merchant, fn "m_gone" ->
+        {:error,
+         %Systems.Payment.Error{
+           code: :api_error,
+           message: "OPP API returned 404 on /merchants/m_gone",
+           details: %{status: 404, path: "/merchants/m_gone", body: %{}}
+         }}
+      end)
+
+      expect(ProviderMock, :create_merchant, fn _attrs ->
+        {:ok, merchant(%{uid: "m_replacement"})}
+      end)
+
+      assert {:ok, {_user, %{uid: "m_replacement"}}} =
+               Payment.Public.ensure_merchant_for(user)
+
+      assert %{merchant_uid: "m_replacement"} = Core.Repo.reload!(user)
+    end
+
     test "bubbles up an OPP error from get_merchant" do
       user = fresh_user(%{merchant_uid: "m_unreachable"})
 
