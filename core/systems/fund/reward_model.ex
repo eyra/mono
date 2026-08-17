@@ -12,7 +12,16 @@ defmodule Systems.Fund.RewardModel do
     Bookkeeping
   }
 
-  @statuses [:reserved, :pending_approval, :approved, :pending_payout, :rejected, :paid]
+  @statuses [
+    :reserved,
+    :pending_approval,
+    :approved,
+    :pending_payout,
+    :rejected,
+    :paid,
+    :donating,
+    :donated
+  ]
 
   schema "fund_rewards" do
     field(:idempotence_key, :string)
@@ -23,6 +32,7 @@ defmodule Systems.Fund.RewardModel do
     belongs_to(:fund, Fund.Model)
     belongs_to(:user, Account.User)
     belongs_to(:payout, Fund.PayoutModel)
+    belongs_to(:donation, Fund.DonationModel)
 
     belongs_to(:deposit, Bookkeeping.EntryModel)
     belongs_to(:payment, Bookkeeping.EntryModel)
@@ -33,7 +43,7 @@ defmodule Systems.Fund.RewardModel do
   def statuses, do: @statuses
 
   @required_fields ~w(idempotence_key amount)a
-  @optional_fields ~w(attempt status rejected_at payout_id)a
+  @optional_fields ~w(attempt status rejected_at payout_id donation_id)a
   @fields @required_fields ++ @optional_fields
 
   @doc false

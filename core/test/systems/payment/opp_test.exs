@@ -525,6 +525,48 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
+  # UNVERIFIED CONTRACT. Unlike the balance charge above, nothing has exercised
+  # a merchant -> partner charge against OPP. This block pins the shape the
+  # adapter currently sends so the assumption is visible and reviewable; edit it
+  # and `OPP.charge_to_partner/3` together once OPP's partner-charge docs (or a
+  # sandbox call) confirm the endpoint, the `type` value, and whether a partner
+  # uid must be sent as `to_owner_uid`.
+  describe "charge_to_partner/3" do
+    test "POSTs a partner charge with idempotency key and parses the response",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        assert ["donation=abc,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert body["type"] == "partner_fee"
+        assert body["currency"] == "EUR"
+        assert body["from_owner_uid"] == "mer_platform"
+        assert body["amount"] == 1000
+
+        # The destination is the platform operator itself, so no to_owner_uid.
+        refute Map.has_key?(body, "to_owner_uid")
+
+        # Same as the balance charge: a charge cannot be listed, so metadata is
+        # the only thing tying it back to its donation for a manual check.
+        assert body["metadata"]["reference"] == "donation=abc,type=charge"
+
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_d", "status": "created", "amount": 1000}>)
+      end)
+
+      assert {:ok, %{uid: "chg_d", status: :pending, raw_status: "created", amount: 1000}} =
+               OPP.charge_to_partner("mer_platform", 1000, "donation=abc,type=charge")
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        Plug.Conn.resp(conn, 400, ~s<{"error": {"message": "nope"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} =
+               OPP.charge_to_partner("mer_platform", 1000, "donation=abc,type=charge")
+    end
+  end
+
   # OPP's `date` filter on /withdrawals is silently ignored and /charges has no
   # date filter at all, so the creation cutoff is enforced client-side. These
   # cover that windowing, since a server that ignores the filter cannot.

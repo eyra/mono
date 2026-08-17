@@ -2143,6 +2143,135 @@ defmodule Systems.Fund.PublicTest do
     end
   end
 
+  describe "request_donation/2" do
+    setup do
+      # No merchant_uid: a donation needs neither a merchant nor KYC.
+      {:ok, euro: euro_fund(), donor: Factories.insert!(:member, %{creator: false})}
+    end
+
+    defp stub_partner_charge_ok(uid \\ "chg_donation") do
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: 0}}
+      end)
+    end
+
+    defp donation_of(user), do: Core.Repo.get_by!(Fund.DonationModel, user_id: user.id)
+
+    test "donates every approved reward and records the charge", %{donor: donor, euro: euro} do
+      %{id: id1} = insert_reward(donor, euro, 600, :approved)
+      %{id: id2} = insert_reward(donor, euro, 400, :approved)
+
+      # Pins the charge source (platform merchant, not the participant) and the
+      # restore-stable idempotency key derived from DonationModel.uid.
+      expect(ProviderMock, :charge_to_partner, fn "mer_platform_test", 1000, key ->
+        assert "donation=" <> _ = key
+        {:ok, %{uid: "chg_1", status: :pending, raw_status: "created", amount: 1000}}
+      end)
+
+      assert {:ok, _donation} = Fund.Public.request_donation(donor, "euro")
+
+      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id1)
+      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id2)
+
+      assert %{status: :completed, amount_cents: 1000, charge_uid: "chg_1"} = donation_of(donor)
+    end
+
+    test "only donates rewards in the given currency", %{donor: donor, euro: euro, fund: other} do
+      %{id: euro_id} = insert_reward(donor, euro, 600, :approved)
+      %{id: other_id} = insert_reward(donor, other, 900, :approved)
+
+      expect(ProviderMock, :charge_to_partner, fn _from, 600, _key ->
+        {:ok, %{uid: "chg_2", status: :pending, raw_status: "created", amount: 600}}
+      end)
+
+      assert {:ok, _} = Fund.Public.request_donation(donor, "euro")
+
+      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, euro_id)
+      assert %{status: :approved} = Core.Repo.get!(Fund.RewardModel, other_id)
+    end
+
+    # A donation has no floor: @payout_threshold_cents exists because
+    # withdrawals cost money, and a donation never withdraws.
+    test "donates an amount below the payout threshold", %{donor: donor, euro: euro} do
+      %{id: id} = insert_reward(donor, euro, 100, :approved)
+      stub_partner_charge_ok()
+
+      assert {:ok, _} = Fund.Public.request_donation(donor, "euro")
+      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id)
+    end
+
+    # No ProviderMock stub at all, so Mox raises if anything reaches OPP.
+    test "returns :nothing_to_donate with no approved rewards", %{donor: donor} do
+      assert {:error, :nothing_to_donate} = Fund.Public.request_donation(donor, "euro")
+    end
+
+    test "ignores rewards already locked on a payout", %{donor: donor, euro: euro} do
+      insert_reward(donor, euro, 600, :pending_payout)
+
+      assert {:error, :nothing_to_donate} = Fund.Public.request_donation(donor, "euro")
+    end
+
+    test "releases the lock when the provider rejects the charge", %{donor: donor, euro: euro} do
+      %{id: id} = insert_reward(donor, euro, 600, :approved)
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+      end)
+
+      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
+               Fund.Public.request_donation(donor, "euro")
+
+      assert %{status: :approved, donation_id: nil} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :failed} = donation_of(donor)
+    end
+
+    # The money-safety invariant: an uncertain outcome must never release the
+    # lock, or a later donation would charge for the same money twice.
+    test "keeps the lock when the charge outcome is uncertain", %{donor: donor, euro: euro} do
+      %{id: id} = insert_reward(donor, euro, 600, :approved)
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+      end)
+
+      assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
+               Fund.Public.request_donation(donor, "euro")
+
+      assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :pending, charge_uid: nil} = donation_of(donor)
+    end
+
+    # The charge went through, so this is not a "failed" donation the participant
+    # can retry — it must land on the same uncertain outcome as a lost response,
+    # with the charge uid recoverable from the log.
+    test "reports uncertain when the charge is accepted but finalize fails", %{
+      donor: donor,
+      euro: euro
+    } do
+      Core.Repo.insert!(%Fund.DonationModel{
+        user_id: donor.id,
+        amount_cents: 1,
+        currency: "eur",
+        status: :completed,
+        charge_uid: "chg_taken"
+      })
+
+      %{id: id} = insert_reward(donor, euro, 600, :approved)
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:ok, %{uid: "chg_taken", status: :pending, raw_status: "created", amount: 600}}
+      end)
+
+      log =
+        ExUnit.CaptureLog.capture_log(fn ->
+          assert {:error, {:opp_uncertain, _}} = Fund.Public.request_donation(donor, "euro")
+        end)
+
+      assert log =~ "chg_taken"
+      assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
+    end
+  end
+
   # :pending_payout is normally set by `lock_approved_rewards/2` during
   # payout initiation. In unit tests we shortcut via a direct update so
   # the reward is in that state without running the whole payout flow.

@@ -28,6 +28,8 @@ defmodule Systems.Home.RewardsSummaryView do
 
   alias Frameworks.Pixel
   alias Frameworks.Pixel.Button
+  require Logger
+
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
@@ -39,7 +41,10 @@ defmodule Systems.Home.RewardsSummaryView do
           pending_cents: pending_cents,
           approved_cents: approved_cents,
           rejected_cents: rejected_cents,
+          donating_cents: donating_cents,
+          donated_cents: donated_cents,
           payout_status: payout_status,
+          donate_enabled?: donate_enabled?,
           labels: labels,
           user: user,
           payout_currency: payout_currency
@@ -53,7 +58,10 @@ defmodule Systems.Home.RewardsSummaryView do
         pending_cents: pending_cents,
         approved_cents: approved_cents,
         rejected_cents: rejected_cents,
+        donating_cents: donating_cents,
+        donated_cents: donated_cents,
         payout_status: payout_status,
+        donate_enabled?: donate_enabled?,
         labels: labels,
         user: user,
         payout_currency: payout_currency
@@ -106,6 +114,22 @@ defmodule Systems.Home.RewardsSummaryView do
     }
   end
 
+  # The waiver (MS.4): confirming here gives up the right to a payout, so the
+  # body must say so and the confirm label must not read like a plain "OK".
+  def compose(:handoff_modal, %{handoff_mode: :donate, labels: labels}) do
+    %{
+      module: Pixel.ConfirmationModal,
+      params: %{
+        assigns: %{
+          title: labels.donate_handoff_title,
+          body: labels.donate_handoff_body,
+          confirm_label: labels.donate_handoff_confirm,
+          cancel_label: labels.payout_handoff_cancel
+        }
+      }
+    }
+  end
+
   @impl true
   def handle_event(
         "request_payout",
@@ -149,6 +173,43 @@ defmodule Systems.Home.RewardsSummaryView do
     end
   end
 
+  # No provider call before the modal: a donation needs no merchant, no bank
+  # account and no KYC, so there is nothing to prepare.
+  #
+  # Guarded on the server-set :opp_phase_3 assign, not just the hidden button —
+  # a client can send the event either way, and confirming it waives a right.
+  @impl true
+  def handle_event("donate", _params, %{assigns: %{donate_enabled?: true}} = socket) do
+    {:noreply, present_handoff(socket, :donate)}
+  end
+
+  @impl true
+  def handle_event("donate", _params, socket), do: {:noreply, socket}
+
+  # MUST stay above the unguarded payout "confirmed" clause below, which would
+  # otherwise swallow this and fire a payout instead of a donation.
+  @impl true
+  def handle_event(
+        "confirmed",
+        %{source: %{name: :handoff_modal}},
+        %{
+          assigns: %{
+            handoff_mode: :donate,
+            donate_enabled?: true,
+            user: user,
+            payout_currency: payout_currency
+          }
+        } = socket
+      ) do
+    socket = hide_modal(socket, :handoff_modal)
+
+    # MS.8: the refreshed card — approved at zero, the donated total shown — is
+    # the confirmation. Nothing to navigate to, and nothing to refresh here
+    # either: request_donation dispatches {:fund_rewards_summary, :updated}, so
+    # Observatory pushes the new totals into this card by itself.
+    {:noreply, flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))}
+  end
+
   @impl true
   def handle_event(
         "confirmed",
@@ -160,11 +221,15 @@ defmodule Systems.Home.RewardsSummaryView do
     {:noreply, hide_modal(socket, :handoff_modal)}
   end
 
+  # Guarded on :payout, not a catch-all: two modes now trigger a money movement
+  # from this same event, so an unmatched one must never fall through into the
+  # wrong one. Anything not handled above lands on the no-op clause below.
   @impl true
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
-        %{assigns: %{user: user, payout_currency: payout_currency}} = socket
+        %{assigns: %{handoff_mode: :payout, user: user, payout_currency: payout_currency}} =
+          socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
@@ -180,6 +245,13 @@ defmodule Systems.Home.RewardsSummaryView do
         # Refresh: a lost lock-race hides the now-stale payout button.
         {:noreply, socket |> handle_payout_error(error) |> refresh_totals(user)}
     end
+  end
+
+  # :verify confirms via an external link and never reaches the server; a
+  # :donate confirm with the feature off lands here too. Dismiss, do nothing.
+  @impl true
+  def handle_event("confirmed", %{source: %{name: :handoff_modal}}, socket) do
+    {:noreply, hide_modal(socket, :handoff_modal)}
   end
 
   @impl true
@@ -198,6 +270,23 @@ defmodule Systems.Home.RewardsSummaryView do
 
   defp handle_payout_error(socket, {:error, _reason}), do: present_handoff(socket, :verify)
 
+  defp flash_donation_result(%{assigns: %{labels: labels}} = socket, {:ok, _donation}),
+    do: Flash.push_info(socket, labels.donate_thanks)
+
+  # The charge may well have gone through: the rewards stay :donating and the
+  # card already says so, so telling the participant to try again would be both
+  # wrong and impossible (their approved balance is now zero).
+  defp flash_donation_result(
+         %{assigns: %{labels: labels}} = socket,
+         {:error, {:opp_uncertain, _}}
+       ),
+       do: Flash.push_info(socket, labels.donate_pending)
+
+  defp flash_donation_result(%{assigns: %{labels: labels}} = socket, error) do
+    Logger.warning("[RewardsSummaryView] donation failed: #{inspect(error)}")
+    Flash.push_error(socket, labels.donate_failed)
+  end
+
   defp present_handoff(socket, mode) do
     socket
     |> assign(handoff_mode: mode)
@@ -209,13 +298,17 @@ defmodule Systems.Home.RewardsSummaryView do
     %{
       pending_cents: pending_cents,
       approved_cents: approved_cents,
-      rejected_cents: rejected_cents
+      rejected_cents: rejected_cents,
+      donating_cents: donating_cents,
+      donated_cents: donated_cents
     } = Fund.Public.summarize_rewards(user, payout_currency)
 
     assign(socket,
       pending_cents: pending_cents,
       approved_cents: approved_cents,
       rejected_cents: rejected_cents,
+      donating_cents: donating_cents,
+      donated_cents: donated_cents,
       payout_status: Fund.Public.payout_status(user)
     )
   end
@@ -241,7 +334,9 @@ defmodule Systems.Home.RewardsSummaryView do
           amount_cents={@approved_cents}
           caption={@labels.approved_caption}
           payout_button_label={@labels.payout_button}
+          donate_button_label={@labels.donate_button}
           payout_enabled?={@approved_cents >= Fund.Public.payout_threshold_cents()}
+          donate_enabled?={@donate_enabled? and @approved_cents > 0}
           target={@myself}
         />
         <%= if @rejected_cents > 0 do %>
@@ -253,9 +348,39 @@ defmodule Systems.Home.RewardsSummaryView do
         <% end %>
       </div>
       <.payout_status_section status={@payout_status} labels={@labels} target={@myself} />
+      <.donation_section
+        donating_cents={@donating_cents}
+        donated_cents={@donated_cents}
+        labels={@labels}
+      />
     </div>
     """
   end
+
+  attr(:donating_cents, :integer, required: true)
+  attr(:donated_cents, :integer, required: true)
+  attr(:labels, :map, required: true)
+
+  # Donated rewards, like locked ones, show in no column. Deliberately not gated
+  # on donating_cents == 0 in the Donate button above: a donation stuck awaiting
+  # manual resolution must not lock the participant out of donating later.
+  defp donation_section(%{donating_cents: cents} = assigns) when cents > 0 do
+    ~H"""
+    <div class="mt-6 text-bodysmall font-body text-grey2" data-testid="donation-in-progress">
+      <%= @labels.donate_in_progress %>
+    </div>
+    """
+  end
+
+  defp donation_section(%{donated_cents: cents} = assigns) when cents > 0 do
+    ~H"""
+    <div class="mt-6 text-bodysmall font-body text-grey2" data-testid="donation-total">
+      <%= @labels.donated_total %> <%= CurrencyHelpers.format_cents(@donated_cents) %>
+    </div>
+    """
+  end
+
+  defp donation_section(assigns), do: ~H""
 
   attr(:status, :atom, required: true)
   attr(:labels, :map, required: true)
@@ -320,7 +445,9 @@ defmodule Systems.Home.RewardsSummaryView do
   attr(:amount_cents, :integer, required: true)
   attr(:caption, :string, required: true)
   attr(:payout_button_label, :string, required: true)
+  attr(:donate_button_label, :string, required: true)
   attr(:payout_enabled?, :boolean, required: true)
+  attr(:donate_enabled?, :boolean, required: true)
   attr(:target, :any, required: true)
 
   defp approved_column(assigns) do
@@ -332,13 +459,22 @@ defmodule Systems.Home.RewardsSummaryView do
       <div class="text-title3 font-title3 text-grey1">
         <%= CurrencyHelpers.format_cents(@amount_cents) %>
       </div>
-      <%= if @payout_enabled? do %>
-        <div class="self-start">
-          <Button.dynamic
-            action={%{type: :send, event: "request_payout", target: @target}}
-            face={%{type: :link, text: @payout_button_label}}
-            testid="payout-button"
-          />
+      <%= if @payout_enabled? or @donate_enabled? do %>
+        <div class="self-start flex flex-col gap-1">
+          <%= if @payout_enabled? do %>
+            <Button.dynamic
+              action={%{type: :send, event: "request_payout", target: @target}}
+              face={%{type: :link, text: @payout_button_label}}
+              testid="payout-button"
+            />
+          <% end %>
+          <%= if @donate_enabled? do %>
+            <Button.dynamic
+              action={%{type: :send, event: "donate", target: @target}}
+              face={%{type: :link, text: @donate_button_label}}
+              testid="donate-button"
+            />
+          <% end %>
         </div>
       <% else %>
         <div class="text-bodysmall font-body text-grey2">

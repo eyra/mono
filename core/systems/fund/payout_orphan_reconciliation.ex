@@ -15,6 +15,11 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   `transfer_key/1`), which is what makes the reverse match possible at all: the
   serial id a restore rewinds never appears in it.
 
+  Donation charges are scanned here too, against `Fund.DonationModel`. They are
+  not a payout, but they land in the very same provider transfer listing (both
+  are charges at OPP), so a pass that only understood `payout=` references would
+  report every donation as unresolvable and bury the real findings.
+
   Detection only. An orphan means real money moved with no ledger entry, so it is
   recorded as a `:missing_locally` finding for manual resolution — recreating the
   local row from provider data would fabricate bookkeeping and risk paying twice.
@@ -32,7 +37,7 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
 
   # Anchored to a field boundary, not to the start of the reference: the
   # `payout=` pair is not guaranteed to be the first one in the key.
-  @payout_uid ~r/(?:^|,)payout=(?<uid>[^,]+)/
+  @subject_uid ~r/(?:^|,)(?<kind>payout|donation)=(?<uid>[^,]+)/
 
   @doc """
   Scans provider withdrawals and transfers created in the
@@ -68,64 +73,74 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   end
 
   defp classify_references(objects, leg) do
-    Enum.map(objects, fn object -> {payout_uid(object, leg), object} end)
+    Enum.map(objects, fn object -> {subject_uid(object, leg), object} end)
   end
 
   # Only a UUID is accepted. Pre-`e4dbe4b6a` references carry the serial payout
   # id, which a restore rewinds — matching on one could pair a provider object
   # with an unrelated local payout, so it is reported rather than guessed at.
-  defp payout_uid(%{reference: reference}, leg) when is_binary(reference) do
-    with %{"uid" => uid} <- Regex.named_captures(@payout_uid, reference),
+  defp subject_uid(%{reference: reference}, leg) when is_binary(reference) do
+    with %{"kind" => kind, "uid" => uid} <- Regex.named_captures(@subject_uid, reference),
          {:ok, uid} <- Ecto.UUID.cast(uid) do
-      {:ok, uid}
+      {:ok, {kind_of(kind), uid}}
     else
       _ -> {:error, unparseable_reason(reference, leg)}
     end
   end
 
-  defp payout_uid(_object, _leg), do: {:error, "no reference"}
+  defp subject_uid(_object, _leg), do: {:error, "no reference"}
+
+  defp kind_of("payout"), do: :payout
+  defp kind_of("donation"), do: :donation
 
   defp unparseable_reason(reference, leg) do
     "unrecognised #{leg} reference format: #{reference}"
   end
 
   defp check_against_local(pairs, leg, state) do
-    known = known_payout_uids(pairs)
+    known = known_subjects(pairs)
     Enum.reduce(pairs, state, &check_one(&1, leg, known, &2))
   end
 
-  defp known_payout_uids(pairs) do
-    uids = for {{:ok, uid}, _object} <- pairs, do: uid
-
-    case uids do
-      [] -> MapSet.new()
-      uids -> uids |> query_payout_uids() |> MapSet.new()
-    end
+  # One query per kind, not per object: a scan window holds at most a few
+  # hundred references and both kinds key on a `uid` column.
+  defp known_subjects(pairs) do
+    for({{:ok, subject}, _object} <- pairs, do: subject)
+    |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
+    |> Enum.flat_map(&query_subject_uids/1)
+    |> MapSet.new()
   end
 
-  defp query_payout_uids(uids) do
-    from(p in Fund.PayoutModel, where: p.uid in ^uids, select: p.uid)
+  defp query_subject_uids({kind, uids}) do
+    from(r in schema(kind), where: r.uid in ^uids, select: r.uid)
     |> Repo.all()
+    |> Enum.map(&{kind, &1})
   end
+
+  defp schema(:payout), do: Fund.PayoutModel
+  defp schema(:donation), do: Fund.DonationModel
 
   defp check_one({{:error, reason}, %{uid: uid} = object}, leg, _known, state) do
     Logger.error("[Fund] orphan scan: #{leg} #{uid} — #{reason}")
-    record(state, :unresolvable, leg, object, %{reason: reason})
+    record(state, :unresolvable, :payout, leg, object, %{reason: reason})
   end
 
-  defp check_one({{:ok, payout_uid}, %{uid: uid} = object}, leg, known, state) do
-    if MapSet.member?(known, payout_uid) do
+  defp check_one({{:ok, {kind, subject_uid} = subject}, %{uid: uid} = object}, leg, known, state) do
+    if MapSet.member?(known, subject) do
       State.tally(state, :verified)
     else
       Logger.error(
-        "[Fund] orphan scan: #{leg} #{uid} references payout #{payout_uid} " <>
+        "[Fund] orphan scan: #{leg} #{uid} references #{kind} #{subject_uid} " <>
           "which has no local row — money moved with no ledger entry, manual review"
       )
 
-      record(state, :missing_locally, leg, object, %{payout_uid: payout_uid})
+      record(state, :missing_locally, kind, leg, object, subject_details(kind, subject_uid))
     end
   end
 
-  defp record(state, outcome, leg, object, details),
-    do: OrphanScan.record(state, outcome, :payout, object, details, leg)
+  defp subject_details(:payout, uid), do: %{payout_uid: uid}
+  defp subject_details(:donation, uid), do: %{donation_uid: uid}
+
+  defp record(state, outcome, subject_type, leg, object, details),
+    do: OrphanScan.record(state, outcome, subject_type, object, details, leg)
 end

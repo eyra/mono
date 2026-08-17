@@ -17,7 +17,9 @@ defmodule Systems.Fund.RewardModelTest do
                :approved,
                :pending_payout,
                :rejected,
-               :paid
+               :paid,
+               :donating,
+               :donated
              ]
     end
 

@@ -32,6 +32,22 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
     )
   end
 
+  defp donation(attrs \\ %{}) do
+    user = Factories.insert!(:member, %{creator: false})
+
+    Repo.insert!(
+      struct(
+        %Fund.DonationModel{
+          user_id: user.id,
+          amount_cents: 1000,
+          currency: "eur",
+          status: :pending
+        },
+        attrs
+      )
+    )
+  end
+
   defp withdrawal(reference, opts \\ []) do
     %{
       uid: Keyword.get(opts, :uid, "wtd_#{System.unique_integer([:positive])}"),
@@ -137,6 +153,64 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
         )
 
       assert summary.missing_locally == 2
+    end
+  end
+
+  # Donation charges share the provider's transfer listing with payout transfers,
+  # so a scan that only knew `payout=` would report every donation as
+  # unresolvable and bury the findings that mean something.
+  describe "donation charges" do
+    test "a donation that exists locally is verified, not flagged" do
+      %{uid: uid} = donation()
+
+      %{summary: summary, findings: findings} =
+        run([], [transfer("donation=#{uid},type=charge")])
+
+      assert summary.verified == 1
+      assert summary.unresolvable == 0
+      assert findings == []
+    end
+
+    test "flags a donation charge whose donation has no local row" do
+      orphan_uid = Ecto.UUID.generate()
+
+      %{summary: summary, findings: findings} =
+        run([], [transfer("donation=#{orphan_uid},type=charge", uid: "cha_donation")])
+
+      assert summary.missing_locally == 1
+
+      assert [
+               %{
+                 outcome: :missing_locally,
+                 subject_type: :donation,
+                 provider_uid: "cha_donation",
+                 details: %{donation_uid: ^orphan_uid}
+               }
+             ] = findings
+    end
+
+    # A donation uid and a payout uid must never satisfy each other's lookup.
+    test "a donation uid is not matched against a payout row" do
+      %{uid: uid} = payout()
+
+      %{summary: summary} = run([], [transfer("donation=#{uid},type=charge")])
+
+      assert summary.missing_locally == 1
+      assert summary.verified == 0
+    end
+
+    test "both kinds are resolved in one listing" do
+      %{uid: payout_uid} = payout()
+      %{uid: donation_uid} = donation()
+
+      %{summary: summary} =
+        run([], [
+          transfer("payout=#{payout_uid},type=transfer"),
+          transfer("donation=#{donation_uid},type=charge")
+        ])
+
+      assert summary.verified == 2
+      assert summary.missing_locally == 0
     end
   end
 

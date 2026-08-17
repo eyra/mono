@@ -26,6 +26,13 @@ defmodule Systems.Fund.Public do
     defexception [:message]
   end
 
+  # Reward statuses at or past approval: the researcher's decision is already
+  # made and the money is committed, locked on a payout, or donated. Approving
+  # one again is a no-op; rejecting one is an error. Kept in one place so a new
+  # terminal status can't be added to `RewardModel` and missed at one of the
+  # approve/reject guards below.
+  @past_approval [:approved, :paid, :pending_payout, :donating, :donated]
+
   def list(preload \\ []) do
     Repo.all(Fund.Model) |> Repo.preload(preload)
   end
@@ -402,7 +409,7 @@ defmodule Systems.Fund.Public do
   balance; `:virtual` currencies have no such constraint.
   """
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in [:approved, :pending_payout, :paid],
+      when status in @past_approval,
       do: multi
 
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected} = reward) do
@@ -499,7 +506,7 @@ defmodule Systems.Fund.Public do
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}), do: multi
 
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in [:approved, :pending_payout, :paid] do
+      when status in @past_approval do
     Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
   end
 
@@ -935,7 +942,9 @@ defmodule Systems.Fund.Public do
       approved_cents: amount.(:approved),
       pending_payout_cents: amount.(:pending_payout),
       paid_out_cents: amount.(:paid),
-      rejected_cents: amount.(:rejected)
+      rejected_cents: amount.(:rejected),
+      donating_cents: amount.(:donating),
+      donated_cents: amount.(:donated)
     }
   end
 
@@ -1158,8 +1167,16 @@ defmodule Systems.Fund.Public do
       withdraw_for_payout(payout, platform_uid, merchant_uid, total, reward_ids)
     else
       nil -> {:error, :no_platform_merchant}
-      {:error, _reason} -> {:error, :lock_failed}
+      {:error, reason} -> lock_failed(user_id, reward_ids, reason)
     end
+  end
+
+  defp lock_failed(user_id, reward_ids, reason) do
+    Logger.warning(
+      "[Fund] lock failed for user=#{user_id} rewards=#{inspect(reward_ids)}: #{inspect(reason)}"
+    )
+
+    {:error, :lock_failed}
   end
 
   # Per-leg idempotence keys so retries never double-move money.
@@ -1304,6 +1321,201 @@ defmodule Systems.Fund.Public do
   end
 
   @doc """
+  Donates every `:approved` reward the participant holds in `currency` to Eyra,
+  waiving the right to have them paid out (UC-OPP-07).
+
+  The money already sits on the platform merchant, so unlike a payout there is
+  nothing to transfer to the participant and nothing to withdraw: a single
+  provider charge settles it as the operator's own. Rewards go
+  `:approved -> :donating -> :donated`, locked the same way a payout locks them.
+
+  The lock is what prevents a double charge; the idempotency key only prevents a
+  replay of the same donation. Changing either mechanism means checking the other.
+
+  No threshold and no KYC. `@payout_threshold_cents` exists because withdrawals
+  cost money; a donation has no such floor, so donating €0.50 is fine.
+
+  Returns `{:ok, donation}`, or:
+    * `{:error, :nothing_to_donate}` — no approved rewards in this currency
+    * `{:error, :no_platform_merchant}` — `OPP_MERCHANT_UID` unset
+    * `{:error, :lock_failed}` — a concurrent payout or donation took the rewards
+    * `{:error, {:opp_failed, error}}` — definitively rejected, lock released
+    * `{:error, {:opp_uncertain, error}}` — outcome unknown; the rewards stay
+      `:donating` for manual resolution (see `Fund.DonationModel`)
+  """
+  def request_donation(%Account.User{id: user_id}, currency) do
+    approved = list_approved_rewards(user_id, currency)
+    total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+
+    if total > 0 do
+      do_request_donation(user_id, Enum.map(approved, fn %{id: id} -> id end), total)
+    else
+      {:error, :nothing_to_donate}
+    end
+  end
+
+  # Read the platform merchant before locking, so a misconfigured env never
+  # strands rewards in :donating.
+  defp do_request_donation(user_id, reward_ids, total) do
+    with platform_uid when not is_nil(platform_uid) <- Payment.Public.platform_merchant_uid(),
+         {:ok, donation} <- lock_for_donation(user_id, reward_ids, total) do
+      charge_donation(donation, platform_uid, total, reward_ids)
+    else
+      nil -> {:error, :no_platform_merchant}
+      {:error, reason} -> lock_failed(user_id, reward_ids, reason)
+    end
+  end
+
+  defp charge_donation(%Fund.DonationModel{} = donation, platform_uid, total, reward_ids) do
+    case Payment.Public.charge_to_partner(
+           platform_uid,
+           total,
+           Fund.DonationModel.charge_key(donation)
+         ) do
+      {:ok, %{uid: charge_uid}} ->
+        finalize_donation(donation, charge_uid)
+
+      {:error, %Payment.Error{} = error} ->
+        handle_charge_error(error, donation, reward_ids)
+    end
+  end
+
+  # Same policy as the payout's transfer leg: only a definitive rejection
+  # releases the lock. An uncertain outcome leaves the rewards :donating —
+  # charges cannot be listed at OPP and there is no charge webhook, so a stuck
+  # donation is resolved by hand.
+  defp handle_charge_error(
+         %Payment.Error{} = error,
+         %Fund.DonationModel{} = donation,
+         reward_ids
+       ) do
+    if transfer_rejected?(error) do
+      revert_donation_lock(donation, reward_ids, "charge_rejected: #{inspect(error)}")
+      {:error, {:opp_failed, error}}
+    else
+      uncertain_donation(donation, error)
+    end
+  end
+
+  defp uncertain_donation(%Fund.DonationModel{uid: uid} = donation, error) do
+    Logger.error(
+      "[Fund] donation charge outcome uncertain, leaving donation=#{uid} :pending " <>
+        "for manual review: #{inspect(error)}"
+    )
+
+    notify_rewards_summary(donation)
+    {:error, {:opp_uncertain, error}}
+  end
+
+  defp lock_for_donation(user_id, reward_ids, total) do
+    Multi.new()
+    |> Multi.insert(:donation, new_donation_changeset(user_id, total))
+    |> Multi.run(:lock_rewards, fn _repo, %{donation: %{id: donation_id}} ->
+      lock_approved_rewards_for_donation(reward_ids, donation_id)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{donation: donation}} -> {:ok, donation}
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp new_donation_changeset(user_id, total) do
+    Fund.DonationModel.changeset(%Fund.DonationModel{}, %{
+      user_id: user_id,
+      amount_cents: total,
+      status: :pending
+    })
+  end
+
+  # CAS on :approved — a concurrent payout or donation leaves us short of the
+  # count, so we roll back rather than charge for money we never locked.
+  defp lock_approved_rewards_for_donation(reward_ids, donation_id) do
+    {count, _} =
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :approved)
+      |> Repo.update_all(set: [status: :donating, donation_id: donation_id, updated_at: now()])
+
+    if count == length(reward_ids), do: {:ok, count}, else: {:error, :stale_rewards}
+  end
+
+  defp finalize_donation(%Fund.DonationModel{uid: uid} = donation, charge_uid) do
+    case finalize(donation, %{status: :completed, charge_uid: charge_uid}, :donated) do
+      {:ok, %Fund.DonationModel{}} = success -> success
+      {:error, reason} -> unfinalized_donation(uid, charge_uid, reason)
+    end
+  end
+
+  defp finalize(subject, attrs, reward_status) do
+    Multi.new()
+    |> Multi.update(:subject, finalize_changeset(subject, attrs))
+    |> Multi.update_all(:rewards, locked_rewards(subject),
+      set: [status: reward_status, updated_at: now()]
+    )
+    |> Multi.run(:notify_rewards_summary, &notify_finalized/2)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{subject: subject}} -> {:ok, subject}
+      {:error, _step, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp finalize_changeset(%Fund.DonationModel{} = donation, attrs),
+    do: Fund.DonationModel.changeset(donation, attrs)
+
+  defp finalize_changeset(%Fund.PayoutModel{} = payout, attrs),
+    do: Fund.PayoutModel.changeset(payout, attrs)
+
+  defp locked_rewards(%Fund.DonationModel{id: donation_id}),
+    do:
+      from(r in Fund.RewardModel, where: r.donation_id == ^donation_id and r.status == :donating)
+
+  defp locked_rewards(%Fund.PayoutModel{id: payout_id}),
+    do:
+      from(r in Fund.RewardModel,
+        where: r.payout_id == ^payout_id and r.status == :pending_payout
+      )
+
+  defp notify_finalized(_repo, %{subject: subject}), do: notify_rewards_summary(subject)
+
+  # The provider already took the money, so this is not a failure the participant
+  # can retry: the rewards stay :donating and the charge uid is lost unless the
+  # log carries it. Same end state as an uncertain charge, reported as one.
+  defp unfinalized_donation(uid, charge_uid, reason) do
+    Logger.error(
+      "[Fund] charge #{charge_uid} accepted but donation=#{uid} was not finalized: " <>
+        "#{inspect(reason)}; rewards stay :donating for manual review"
+    )
+
+    {:error, {:opp_uncertain, reason}}
+  end
+
+  defp revert_donation_lock(%Fund.DonationModel{} = donation, reward_ids, failure_reason) do
+    Multi.new()
+    |> Multi.update(
+      :donation,
+      Fund.DonationModel.changeset(donation, %{status: :failed, failure_reason: failure_reason})
+    )
+    |> Multi.update_all(
+      :rewards,
+      from(r in Fund.RewardModel, where: r.id in ^reward_ids and r.status == :donating),
+      set: [status: :approved, donation_id: nil, updated_at: now()]
+    )
+    |> Repo.commit()
+    |> case do
+      {:ok, _changes} ->
+        :ok
+
+      {:error, step, reason, _changes} ->
+        Logger.error(
+          "[Fund] failed to revert donation lock for rewards #{inspect(reward_ids)} at " <>
+            "#{step} (#{failure_reason}); they remain :donating: #{inspect(reason)}"
+        )
+
+        {:error, reason}
+    end
+  end
+
+  @doc """
   Applies a provider withdrawal status change to the linked payout and its rewards.
   Idempotent: terminal payouts short-circuit. Returns `{:ok, payout}` when a
   payout was found, `{:ok, nil}` when none matched the uid, or `{:error, reason}`.
@@ -1342,28 +1554,12 @@ defmodule Systems.Fund.Public do
   end
 
   defp finalize_payout(
-         %Fund.PayoutModel{id: payout_id} = payout,
+         %Fund.PayoutModel{} = payout,
          payout_status,
          reward_status,
          failure_reason
        ) do
-    Multi.new()
-    |> Multi.update(
-      :payout,
-      Fund.PayoutModel.changeset(payout, %{status: payout_status, failure_reason: failure_reason})
-    )
-    |> Multi.update_all(
-      :rewards,
-      from(r in Fund.RewardModel,
-        where: r.payout_id == ^payout_id and r.status == :pending_payout
-      ),
-      set: [status: reward_status, updated_at: now()]
-    )
-    |> Repo.commit()
-    |> case do
-      {:ok, %{payout: payout}} -> notify_rewards_summary(payout)
-      {:error, _step, reason, _changes} -> {:error, reason}
-    end
+    finalize(payout, %{status: payout_status, failure_reason: failure_reason}, reward_status)
   end
 
   defp fail_payout(%Fund.PayoutModel{} = payout, failure_reason) do
@@ -1378,6 +1574,11 @@ defmodule Systems.Fund.Public do
   defp notify_rewards_summary(%Fund.PayoutModel{user_id: user_id} = payout) do
     Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
     {:ok, payout}
+  end
+
+  defp notify_rewards_summary(%Fund.DonationModel{user_id: user_id} = donation) do
+    Signal.Public.dispatch({:fund_rewards_summary, :updated}, %{user_id: user_id})
+    {:ok, donation}
   end
 
   @doc """

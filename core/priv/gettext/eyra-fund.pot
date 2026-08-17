@@ -209,3 +209,39 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
+msgstr ""
