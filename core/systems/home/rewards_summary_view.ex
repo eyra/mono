@@ -203,11 +203,11 @@ defmodule Systems.Home.RewardsSummaryView do
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
-    socket = flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))
-
     # MS.8: the refreshed card — approved at zero, the donated total shown — is
-    # the confirmation. Nothing to navigate to.
-    {:noreply, refresh_totals(socket, user)}
+    # the confirmation. Nothing to navigate to, and nothing to refresh here
+    # either: request_donation dispatches {:fund_rewards_summary, :updated}, so
+    # Observatory pushes the new totals into this card by itself.
+    {:noreply, flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))}
   end
 
   @impl true
