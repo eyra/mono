@@ -124,7 +124,7 @@ defmodule Systems.Payment.ProviderTest do
            uid: "w1",
            status: :completed,
            raw_status: "completed",
-           reference: "payout=abc,type=withdrawal,attempt=0",
+           reference: "payout=abc,wd=0",
            amount: 500
          }}
       end)
@@ -143,13 +143,13 @@ defmodule Systems.Payment.ProviderTest do
              uid: "w1",
              status: :pending,
              raw_status: "pending",
-             reference: "payout=abc,type=withdrawal,attempt=0",
+             reference: "payout=abc,wd=0",
              amount: 500
            }
          ]}
       end)
 
-      assert {:ok, [%{uid: "w1", reference: "payout=abc,type=withdrawal,attempt=0"}]} =
+      assert {:ok, [%{uid: "w1", reference: "payout=abc,wd=0"}]} =
                ProviderMock.list_withdrawals("m1")
     end
   end

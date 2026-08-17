@@ -239,8 +239,8 @@ defmodule Systems.Payment.Provider.OPPTest do
     test "lists a merchant's withdrawals with their reference", %{bypass: bypass} do
       Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
         Plug.Conn.resp(conn, 200, ~s<{"data": [
-          {"uid": "w_1", "status": "completed", "reference": "payout=abc,type=withdrawal,attempt=0", "amount": 1000},
-          {"uid": "w_2", "status": "failed", "reference": "payout=def,type=withdrawal,attempt=0", "amount": 500}
+          {"uid": "w_1", "status": "completed", "reference": "payout=abc,wd=0", "amount": 1000},
+          {"uid": "w_2", "status": "failed", "reference": "payout=def,wd=0", "amount": 500}
         ]}>)
       end)
 
@@ -249,11 +249,11 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert %{
                uid: "w_1",
                status: :completed,
-               reference: "payout=abc,type=withdrawal,attempt=0",
+               reference: "payout=abc,wd=0",
                amount: 1000
              } = first
 
-      assert %{uid: "w_2", status: :failed, reference: "payout=def,type=withdrawal,attempt=0"} =
+      assert %{uid: "w_2", status: :failed, reference: "payout=def,wd=0"} =
                second
     end
 
@@ -590,7 +590,7 @@ defmodule Systems.Payment.Provider.OPPTest do
           conn,
           200,
           page_json(
-            [withdrawal_json("wtd_1", "payout=abc,type=withdrawal,attempt=0", created)],
+            [withdrawal_json("wtd_1", "payout=abc,wd=0", created)],
             1
           )
         )
@@ -601,7 +601,7 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert %{
                uid: "wtd_1",
                status: :completed,
-               reference: "payout=abc,type=withdrawal,attempt=0",
+               reference: "payout=abc,wd=0",
                amount: 1000
              } = withdrawal
 

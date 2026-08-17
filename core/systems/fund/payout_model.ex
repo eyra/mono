@@ -91,17 +91,21 @@ defmodule Systems.Fund.PayoutModel do
   A withdrawal the provider created and then rejected keeps its key, so a retry
   must present a fresh one — hence the attempt counter. The `payout=<uid>` prefix
   is what a stranded withdrawal is later found by, via its `reference`.
+
+  OPP caps a withdrawal's `reference` at 50 characters — the transfer leg carries
+  its key in `metadata` instead and is not bound by it, hence the terser shape
+  here. A uuid plus `payout=` already spends 43 of those 50.
   """
   def withdrawal_key(%__MODULE__{uid: uid, withdrawal_attempt: attempt})
       when is_binary(uid) and is_integer(attempt),
-      do: "payout=#{uid},type=withdrawal,attempt=#{attempt}"
+      do: "payout=#{uid},wd=#{attempt}"
 
   @doc """
   Prefix shared by every withdrawal attempt of this payout — used to match a
   withdrawal back to its payout when only the provider's `reference` is known.
   """
   def withdrawal_key_prefix(%__MODULE__{uid: uid}) when is_binary(uid),
-    do: "payout=#{uid},type=withdrawal"
+    do: "payout=#{uid},wd="
 
   @required_fields ~w(user_id amount_cents)a
   @optional_fields ~w(currency status provider_uid transfer_uid funds_committed_at withdrawal_attempt failure_reason)a
