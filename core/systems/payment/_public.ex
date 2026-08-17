@@ -61,9 +61,6 @@ defmodule Systems.Payment.Public do
        when is_binary(merchant_uid) do
     case get_merchant(merchant_uid) do
       {:ok, merchant} -> ensure_merchant_phone(user, merchant, phone)
-      # A merchant_uid the provider 404s on is gone for good (a sandbox reset, a
-      # deleted merchant). Every later call would 404 too, so mint a replacement
-      # rather than fail every payout this user attempts from here on.
       {:error, %Error{details: %{status: 404}}} -> create_merchant_for(user, phone)
       {:error, _} = error -> error
     end
