@@ -43,7 +43,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
       status: extract_status(result)
     )
 
-    handle_response(result)
+    handle_response(result, path)
   end
 
   defp build_headers do
@@ -57,7 +57,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   defp extract_status({:ok, %HTTPoison.Response{status_code: status}}), do: status
   defp extract_status({:error, %HTTPoison.Error{reason: reason}}), do: inspect(reason)
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}})
+  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}, _path)
        when status in 200..299 do
     case Jason.decode(body) do
       {:ok, parsed} ->
@@ -68,24 +68,24 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
     end
   end
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}) do
+  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}, path) do
     details =
       case Jason.decode(body) do
         {:ok, parsed} -> parsed
         {:error, _} -> %{"raw" => body}
       end
 
-    Logger.warning("[OPP] API error #{status}: #{inspect(details)}")
+    Logger.warning("[OPP] API error #{status} on #{path}: #{inspect(details)}")
 
     {:error,
      %Error{
        code: :api_error,
-       message: "OPP API returned #{status}",
-       details: %{status: status, body: details}
+       message: "OPP API returned #{status} on #{path}",
+       details: %{status: status, path: path, body: details}
      }}
   end
 
-  defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
+  defp handle_response({:error, %HTTPoison.Error{reason: reason}}, _path) do
     {:error,
      %Error{
        code: :connection_error,
