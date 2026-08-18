@@ -87,11 +87,8 @@ defmodule Systems.Account.PhoneForm do
     end
   end
 
-  defp verification_error(%Payment.Error{
-         details: %{body: %{"error" => %{"parameters" => parameters}}}
-       })
-       when is_map(parameters) do
-    if Enum.any?(Map.keys(parameters), &phone_parameter?/1) do
+  defp verification_error(%Payment.Error{code: :validation_error, details: %{fields: fields}}) do
+    if Enum.any?(fields, &phone_field?/1) do
       dgettext("eyra-account", "payouts.phone.error.rejected")
     else
       dgettext("eyra-account", "payouts.phone.error.flash")
@@ -100,8 +97,8 @@ defmodule Systems.Account.PhoneForm do
 
   defp verification_error(_reason), do: dgettext("eyra-account", "payouts.phone.error.flash")
 
-  defp phone_parameter?(key) when is_binary(key), do: String.contains?(key, "phone")
-  defp phone_parameter?(_key), do: false
+  defp phone_field?(field) when is_binary(field), do: String.contains?(field, "phone")
+  defp phone_field?(_field), do: false
 
   # A local persist failure after OPP accepted the phone leaves user.phone nil,
   # so the next payouts visit re-collects and re-pushes to OPP (idempotent).

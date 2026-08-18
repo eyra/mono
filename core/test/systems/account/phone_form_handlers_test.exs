@@ -61,13 +61,30 @@ defmodule Systems.Account.PhoneFormHandlersTest do
     stub(ProviderMock, :add_merchant_phone, fn "m_reject", _phone ->
       {:error,
        %Systems.Payment.Error{
-         code: :api_error,
+         code: :validation_error,
          message: "OPP API returned 400",
-         details: %{status: 400, body: %{"error" => %{"parameters" => %{"phone" => "invalid"}}}}
+         details: %{status: 400, fields: ["phone"]}
        }}
     end)
 
     assert submit(user).assigns.error == t("payouts.phone.error.rejected")
+  end
+
+  test "a validation error on another field yields the generic try-again error" do
+    user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_other"})
+
+    stub(ProviderMock, :get_merchant, fn "m_other" -> {:ok, merchant("m_other")} end)
+
+    stub(ProviderMock, :add_merchant_phone, fn "m_other", _phone ->
+      {:error,
+       %Systems.Payment.Error{
+         code: :validation_error,
+         message: "OPP API returned 400",
+         details: %{status: 400, fields: ["emailaddress"]}
+       }}
+    end)
+
+    assert submit(user).assigns.error == t("payouts.phone.error.flash")
   end
 
   test "a 404 yields the generic try-again error, never one blaming the phone number" do

@@ -100,9 +100,9 @@ defmodule Systems.Payment.PublicTest do
       |> expect(:create_merchant, fn _ ->
         {:error,
          %Systems.Payment.Error{
-           code: :validation,
+           code: :validation_error,
            message: "email taken",
-           details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => ["taken"]}}}}
+           details: %{fields: ["emailaddress"]}
          }}
       end)
       |> expect(:find_merchant_by_email, fn email ->
@@ -114,6 +114,24 @@ defmodule Systems.Payment.PublicTest do
                Payment.Public.ensure_merchant_for(user)
 
       assert %{merchant_uid: "m_recovered"} = Core.Repo.reload!(user)
+    end
+
+    test "bubbles up a validation error on a field other than the email" do
+      user = fresh_user(%{merchant_uid: nil})
+
+      expect(ProviderMock, :create_merchant, fn _ ->
+        {:error,
+         %Systems.Payment.Error{
+           code: :validation_error,
+           message: "phone rejected",
+           details: %{fields: ["phonenumber"]}
+         }}
+      end)
+
+      assert {:error, %Systems.Payment.Error{code: :validation_error}} =
+               Payment.Public.ensure_merchant_for(user)
+
+      assert %{merchant_uid: nil} = Core.Repo.reload!(user)
     end
 
     test "bubbles up a non-collision create_merchant error without persisting anything" do

@@ -781,4 +781,27 @@ defmodule Systems.Payment.Provider.OPPTest do
                OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
     end
   end
+
+  describe "error classification" do
+    test "names the rejected fields as a provider-neutral validation error",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/merchants", fn conn ->
+        Plug.Conn.resp(conn, 400, ~s<{"error": {"parameters": {"phonenumber": ["invalid"]}}}>)
+      end)
+
+      assert {:error, %Error{code: :validation_error, details: %{fields: ["phonenumber"]}}} =
+               OPP.create_merchant(%{emailaddress: "someone@example.org"})
+    end
+
+    test "keeps the query string out of the error path", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "boom"}}>)
+      end)
+
+      assert {:error, %Error{details: %{path: "/merchants"}, message: message}} =
+               OPP.find_merchant_by_email("someone@example.org")
+
+      refute message =~ "emailaddress"
+    end
+  end
 end
