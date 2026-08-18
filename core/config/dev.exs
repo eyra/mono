@@ -164,8 +164,6 @@ config :core, Systems.Email.Mailer,
   open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
-config :core, :apns_backend, Core.APNS.LoggingBackend
-
 # Service login for load testing
 config :core, :service_login, key: "dev-test-key"
 

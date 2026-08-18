@@ -57,6 +57,17 @@ Remove the entry once the drop-migration lands on `develop`.
 | `crew_tasks.rejected_message` | `40dfa20a3` (2026-08-03) | 1 production release with Participation-driven review live | Same as above; free-text reason now on `assignment_participation.rejected_message` | — |
 | `fund_rewards.rejection_reason` | `40dfa20a3` (2026-08-03) | 1 production release with Participation-driven review live | Rejection reason moved to `assignment_participation.rejected_message` — Fund only records the outcome | — |
 
+## Deprecated tables
+
+Same deferred-drop discipline as columns: schema first, `DROP TABLE`
+later once the risk of any lingering reader has passed.
+
+| Table | Deprecated at | Safe to drop after | Reason | Ticket |
+|---|---|---|---|---|
+| `notifications` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | `Systems.Notification` retired in favour of `Systems.Notify` — no producer of `:new_notification` remained | FX#10204507827 |
+| `notification_boxes` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | Same as above — box was the per-user inbox for the retired system | FX#10204507827 |
+| `notification_center_logs` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | Same as above — dedup log for the retired system | FX#10204507827 |
+
 ## Deprecated enum values
 
 | Enum + value | Deprecated at | Backfill required | Reason | Ticket |

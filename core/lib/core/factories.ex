@@ -4,7 +4,6 @@ defmodule Core.Factories do
   """
   alias Core.Authentication
   alias Core.Authorization
-  alias Core.WebPush
   alias Core.Repo
 
   alias Frameworks.GreenLight
@@ -28,7 +27,6 @@ defmodule Core.Factories do
   alias Systems.Lab
   alias Systems.Manual
   alias Systems.Monitor
-  alias Systems.Notification
   alias Systems.Ontology
   alias Systems.Org
   alias Systems.Paper
@@ -114,16 +112,6 @@ defmodule Core.Factories do
 
   def build(:monitor_event) do
     build(:monitor_event, %{})
-  end
-
-  def build(:web_push_subscription) do
-    %WebPush.PushSubscription{
-      user: build(:member),
-      endpoint: Faker.Internet.url(),
-      expiration_time: 0,
-      auth: Faker.String.base64(22),
-      p256dh: Faker.String.base64(87)
-    }
   end
 
   def build(:advert) do
@@ -495,24 +483,6 @@ defmodule Core.Factories do
       to: to
     }
     |> struct!(attributes)
-  end
-
-  def build(:notification_box, %{user: user} = attributes) do
-    auth_node =
-      build(:auth_node, %{
-        role_assignments: [
-          %{
-            role: :owner,
-            principal_id: GreenLight.Principal.id(user)
-          }
-        ]
-      })
-
-    %Notification.Box{}
-    |> struct!(
-      Map.delete(attributes, :user)
-      |> Map.put(:auth_node, auth_node)
-    )
   end
 
   def build(:advert, %{} = attributes) do

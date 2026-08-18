@@ -39,9 +39,6 @@ defmodule Systems.Email.EmailHTML do
   def notification("html", assigns), do: notification_html(assigns) |> to_binary()
   def notification("text", assigns), do: notification_text(assigns) |> to_binary()
 
-  def new_notification("html", assigns), do: new_notification_html(assigns) |> to_binary()
-  def new_notification("text", assigns), do: new_notification_text(assigns) |> to_binary()
-
   def reset_password_instructions("html", assigns),
     do: reset_password_instructions_html(assigns) |> to_binary()
 
