@@ -1,5 +1,6 @@
 defmodule Systems.Account.PageBuilderTest do
   use Core.DataCase
+  use Core.FeatureFlags.Test
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
@@ -93,6 +94,15 @@ defmodule Systems.Account.PageBuilderTest do
       result = Account.PageBuilder.tab_keys(user)
 
       assert result == [:profile, :payouts]
+    end
+
+    test "excludes payouts key when post-launch is disabled" do
+      user = Factories.insert!(:member)
+      set_feature_flag(:panl_post_launch, false)
+
+      result = Account.PageBuilder.tab_keys(user)
+
+      refute :payouts in result
     end
 
     test "excludes features key when PANL pool does not exist" do
