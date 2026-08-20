@@ -82,14 +82,23 @@ defmodule Systems.Account.PhoneForm do
         persist_phone(user, phone)
         redirect(socket, to: @payouts_path)
 
-      {:error, %Payment.Error{code: :api_error, details: %{status: status}}}
-      when is_integer(status) and status < 500 ->
-        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.rejected"))
-
-      {:error, _reason} ->
-        assign(socket, error: dgettext("eyra-account", "payouts.phone.error.flash"))
+      {:error, reason} ->
+        assign(socket, error: verification_error(reason))
     end
   end
+
+  defp verification_error(%Payment.Error{code: :validation_error, details: %{fields: fields}}) do
+    if Enum.any?(fields, &phone_field?/1) do
+      dgettext("eyra-account", "payouts.phone.error.rejected")
+    else
+      dgettext("eyra-account", "payouts.phone.error.flash")
+    end
+  end
+
+  defp verification_error(_reason), do: dgettext("eyra-account", "payouts.phone.error.flash")
+
+  defp phone_field?(field) when is_binary(field), do: String.contains?(field, "phone")
+  defp phone_field?(_field), do: false
 
   # A local persist failure after OPP accepted the phone leaves user.phone nil,
   # so the next payouts visit re-collects and re-pushes to OPP (idempotent).

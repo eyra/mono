@@ -57,32 +57,58 @@ defmodule Systems.Payment.Public do
     provider().add_merchant_phone(merchant_uid, phone)
   end
 
-  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user, phone)
+  defp do_ensure_merchant_for(
+         %Account.User{id: user_id, merchant_uid: merchant_uid} = user,
+         phone
+       )
        when is_binary(merchant_uid) do
     case get_merchant(merchant_uid) do
-      {:ok, merchant} -> ensure_merchant_phone(user, merchant, phone)
-      {:error, _} = error -> error
+      {:ok, merchant} ->
+        ensure_merchant_phone(user, merchant, phone)
+
+      {:error, %Error{details: %{status: 404}}} ->
+        Logger.warning(
+          "[Payment] Merchant #{merchant_uid} unknown at provider, abandoning it for user ##{user_id}"
+        )
+
+        create_merchant_for(user, phone)
+
+      {:error, _} = error ->
+        error
     end
   end
 
-  defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user, phone) do
+  defp do_ensure_merchant_for(%Account.User{} = user, phone), do: create_merchant_for(user, phone)
+
+  defp create_merchant_for(%Account.User{id: user_id, email: email} = user, phone) do
     Logger.info("[Payment] Creating merchant for user ##{user_id} (#{email})")
 
     case create_merchant(merchant_attrs(user, phone)) do
       {:ok, %{uid: merchant_uid} = merchant} ->
         register_merchant(user, merchant_uid, merchant)
 
-      {:error, %{details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => _}}}}}} ->
-        Logger.info("[Payment] Merchant already exists for #{email}, looking up...")
-        lookup_merchant_by_email(user)
+      {:error, %Error{code: :validation_error, details: %{fields: fields}} = error} ->
+        recover_from_rejected_fields(user, fields, error)
 
       {:error, error} ->
-        Logger.warning(
-          "[Payment] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
-        )
-
-        {:error, error}
+        create_merchant_failed(user_id, error)
     end
+  end
+
+  # An email the provider already knows means the merchant exists on their side
+  # but not on ours; every other rejected field is a genuine failure.
+  defp recover_from_rejected_fields(%Account.User{email: email} = user, fields, error) do
+    if "emailaddress" in fields do
+      Logger.info("[Payment] Merchant already exists for #{email}, looking up...")
+      lookup_merchant_by_email(user)
+    else
+      create_merchant_failed(user.id, error)
+    end
+  end
+
+  defp create_merchant_failed(user_id, error) do
+    Logger.warning("[Payment] Merchant creation failed for user ##{user_id}: #{inspect(error)}")
+    {:error, error}
   end
 
   # Push the phone to an already-existing merchant so a merchant created before
