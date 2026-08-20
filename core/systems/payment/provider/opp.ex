@@ -275,30 +275,25 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-  # OPP models "merchant balance -> platform operator" as a partner charge.
-  #
-  # UNVERIFIED — the request shape below is an assumption, not something this
-  # codebase has ever exercised. Only `type: "balance"` is proven. Before this
-  # ships, confirm against OPP's partner-charge docs or a sandbox call:
-  #   * that `/charges` is the right endpoint,
-  #   * the `type` value ("partner_fee" is a guess),
-  #   * whether a partner uid must be sent as `to_owner_uid` — if so it needs a
-  #     new OPP_PARTNER_UID entry in every config/runtime*.exs,
-  #   * that the response carries uid/status/amount so parse_transfer/2 fits.
-  # `test/systems/payment/opp_test.exs` pins this shape; edit both together.
+  # OPP models "merchant balance -> platform operator" as a partner charge: a
+  # charge the partner levies on one merchant, posted to the merchant's own
+  # charges subresource. The destination is the partner implicitly, so there is
+  # no to_owner_uid and no OPP_PARTNER_UID to configure. `type` is "balance"
+  # here too — the merchant/partner distinction lives in the path, not the type.
   @impl true
   def charge_to_partner(from_owner_uid, amount, idempotence_key)
       when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and
              is_binary(idempotence_key) do
     body = %{
-      type: "partner_fee",
+      type: "balance",
       amount: amount,
       currency: "EUR",
-      from_owner_uid: from_owner_uid,
       metadata: %{reference: idempotence_key}
     }
 
-    case HTTP.post("/charges", body, [{"Idempotency-Key", idempotence_key}]) do
+    case HTTP.post("/merchants/#{from_owner_uid}/charges", body, [
+           {"Idempotency-Key", idempotence_key}
+         ]) do
       {:ok, %{"uid" => uid} = data} ->
         {:ok, parse_transfer(uid, data)}
 

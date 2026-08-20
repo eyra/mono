@@ -525,25 +525,23 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
-  # UNVERIFIED CONTRACT. Unlike the balance charge above, nothing has exercised
-  # a merchant -> partner charge against OPP. This block pins the shape the
-  # adapter currently sends so the assumption is visible and reviewable; edit it
-  # and `OPP.charge_to_partner/3` together once OPP's partner-charge docs (or a
-  # sandbox call) confirm the endpoint, the `type` value, and whether a partner
-  # uid must be sent as `to_owner_uid`.
+  # Shape confirmed against OPP's Charges API collection: a partner charge is
+  # POST /merchants/{merchant_uid}/charges with type "balance" and no
+  # to_owner_uid — the partner is the implicit destination.
   describe "charge_to_partner/3" do
     test "POSTs a partner charge with idempotency key and parses the response",
          %{bypass: bypass} do
-      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+      Bypass.expect_once(bypass, "POST", "/merchants/mer_platform/charges", fn conn ->
         assert ["donation=abc,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
         {:ok, raw, conn} = Plug.Conn.read_body(conn)
         body = Jason.decode!(raw)
-        assert body["type"] == "partner_fee"
+        assert body["type"] == "balance"
         assert body["currency"] == "EUR"
-        assert body["from_owner_uid"] == "mer_platform"
         assert body["amount"] == 1000
 
-        # The destination is the platform operator itself, so no to_owner_uid.
+        # The merchant being charged is in the path, and the destination is the
+        # platform operator itself, so neither owner uid belongs in the body.
+        refute Map.has_key?(body, "from_owner_uid")
         refute Map.has_key?(body, "to_owner_uid")
 
         # Same as the balance charge: a charge cannot be listed, so metadata is
@@ -558,7 +556,7 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
 
     test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
-      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+      Bypass.expect_once(bypass, "POST", "/merchants/mer_platform/charges", fn conn ->
         Plug.Conn.resp(conn, 400, ~s<{"error": {"message": "nope"}}>)
       end)
 
