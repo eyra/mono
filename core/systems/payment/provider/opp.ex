@@ -275,11 +275,6 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-  # OPP models "merchant balance -> platform operator" as a partner charge: a
-  # charge the partner levies on one merchant, posted to the merchant's own
-  # charges subresource. The destination is the partner implicitly, so there is
-  # no to_owner_uid and no OPP_PARTNER_UID to configure. `type` is "balance"
-  # here too — the merchant/partner distinction lives in the path, not the type.
   @impl true
   def charge_to_partner(from_owner_uid, amount, idempotence_key)
       when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and

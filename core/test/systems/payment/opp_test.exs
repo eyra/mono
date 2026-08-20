@@ -525,9 +525,6 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
-  # Shape confirmed against OPP's Charges API collection: a partner charge is
-  # POST /merchants/{merchant_uid}/charges with type "balance" and no
-  # to_owner_uid — the partner is the implicit destination.
   describe "charge_to_partner/3" do
     test "POSTs a partner charge with idempotency key and parses the response",
          %{bypass: bypass} do
@@ -539,13 +536,9 @@ defmodule Systems.Payment.Provider.OPPTest do
         assert body["currency"] == "EUR"
         assert body["amount"] == 1000
 
-        # The merchant being charged is in the path, and the destination is the
-        # platform operator itself, so neither owner uid belongs in the body.
         refute Map.has_key?(body, "from_owner_uid")
         refute Map.has_key?(body, "to_owner_uid")
 
-        # Same as the balance charge: a charge cannot be listed, so metadata is
-        # the only thing tying it back to its donation for a manual check.
         assert body["metadata"]["reference"] == "donation=abc,type=charge"
 
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_d", "status": "created", "amount": 1000}>)
