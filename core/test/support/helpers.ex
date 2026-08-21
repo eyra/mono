@@ -24,6 +24,20 @@ defmodule Core.TestHelpers do
   Helper functions to make testing convenient.
   """
 
+  def eventually_has_element?(view, selector, text_filter \\ nil, retries \\ 20)
+
+  def eventually_has_element?(view, selector, text_filter, 0),
+    do: Phoenix.LiveViewTest.has_element?(view, selector, text_filter)
+
+  def eventually_has_element?(view, selector, text_filter, retries) do
+    if Phoenix.LiveViewTest.has_element?(view, selector, text_filter) do
+      true
+    else
+      Process.sleep(25)
+      eventually_has_element?(view, selector, text_filter, retries - 1)
+    end
+  end
+
   def eventually_render(view, expected, retries \\ 20)
 
   def eventually_render(view, _expected, 0), do: Phoenix.LiveViewTest.render(view)

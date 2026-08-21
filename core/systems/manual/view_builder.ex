@@ -14,6 +14,7 @@ defmodule Systems.Manual.ViewBuilder do
         presentation: presentation,
         user_state: user_state
       }) do
+    manual = ensure_chapter_list(manual)
     chapter_id = user_state[:chapter]
     page_id = user_state[:page]
     chapters = get_chapters(manual)
@@ -34,6 +35,12 @@ defmodule Systems.Manual.ViewBuilder do
       buttons: buttons
     }
   end
+
+  defp ensure_chapter_list(%Manual.Model{chapters: %Ecto.Association.NotLoaded{}, id: id}) do
+    Manual.Public.get_manual!(id, Manual.Model.preload_graph(:chapter_list))
+  end
+
+  defp ensure_chapter_list(manual), do: manual
 
   defp get_chapters(%{chapters: [_ | _] = chapters}) do
     chapters |> Enum.sort_by(& &1.userflow_step.order)
