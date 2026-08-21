@@ -269,3 +269,11 @@ msgstr "You earned %{amount} for taking part in research, and it has been waitin
 #, elixir-autogen, elixir-format
 msgid "dormancy.warning.title"
 msgstr "You still have an unclaimed reward"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.subject"
+msgstr "Your reward has been donated"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.subject"
+msgstr "Your unclaimed reward expires soon"

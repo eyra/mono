@@ -30,19 +30,17 @@ defmodule Systems.Fund.Dormancy do
   denominated in.
   """
   use Core, :public
-  use Gettext, backend: CoreWeb.Gettext
 
   require Logger
 
   alias Core.Repo
   alias Systems.Account
-  alias Systems.Assignment.CurrencyHelpers
-  alias Systems.Email
   alias Systems.Fund
-  alias Systems.Notification
+  alias Systems.Notify
 
   @currency "euro"
-  @signal :fund_dormancy_warning
+  @warning :reward_dormancy_warning
+  @donated :reward_auto_donated
 
   @doc """
   Warns every participant holding rewards untouched since before `cutoff`, and
@@ -52,9 +50,11 @@ defmodule Systems.Fund.Dormancy do
   Returns the rewards that were warned about.
   """
   def remind(%NaiveDateTime{} = cutoff, %Date{} = deadline) do
+    warned = warned_reward_ids()
+
     cutoff
     |> dormant_rewards()
-    |> Enum.reject(&warned?/1)
+    |> Enum.reject(&warned?(&1, warned))
     |> Enum.group_by(&participant/1)
     |> Enum.flat_map(&warn_participant(&1, deadline))
   end
@@ -81,41 +81,48 @@ defmodule Systems.Fund.Dormancy do
   # No age filter here on purpose: how long a reward has been approved is the
   # warning pass's business, and re-applying it would let a reward that was
   # warned about slip back out of reach.
-  #
-  # ponytail: the warned set is filtered in Elixir rather than joined against
-  # the notification log, which belongs to another system. Fine for a daily
-  # sweep over the approved balance; push it into the query if that grows.
   defp warned_rewards(cutoff) do
+    warned = warned_reward_ids(recorded_before: cutoff)
+
     @currency
     |> Fund.Queries.approved_rewards()
     |> Repo.all()
     |> Repo.preload(:user)
-    |> Enum.filter(&warned_before?(&1, cutoff))
+    |> Enum.filter(&warned?(&1, warned))
   end
+
+  # The warning event *is* the durable mark: it names the rewards it covered,
+  # so one event per participant carries one mail and however many marks.
+  defp warned_reward_ids(opts \\ []) do
+    @warning
+    |> Notify.Public.list_events(opts)
+    |> Enum.flat_map(&covered_reward_ids/1)
+    |> MapSet.new()
+  end
+
+  defp covered_reward_ids(%Notify.EventModel{metadata: %{"reward_ids" => ids}}), do: ids
+  defp covered_reward_ids(%Notify.EventModel{}), do: []
 
   defp participant(%Fund.RewardModel{user: user}), do: user
 
-  defp warned?(%Fund.RewardModel{} = reward),
-    do: Notification.Public.marked_as_notified?(reward, @signal)
+  defp warned?(%Fund.RewardModel{id: id}, warned), do: MapSet.member?(warned, id)
 
-  defp warned_before?(%Fund.RewardModel{} = reward, cutoff),
-    do: Notification.Public.notified_before?(reward, @signal, cutoff)
-
-  # Mail first, mark second: a lost mark costs a duplicate reminder, while a
-  # mark without a mail would start the donation clock on a silent warning.
   defp warn_participant({user, rewards}, deadline) do
-    rewards
-    |> total_amount()
-    |> warning_mail(user, deadline)
-    |> Email.Public.deliver_later!()
+    Notify.Public.record_event(%Notify.EventAttrs{
+      type: @warning,
+      subject_user: user,
+      correlation_id: "fund_dormancy:user:#{user.id}",
+      source: __MODULE__,
+      metadata: %{
+        "reward_ids" => Enum.map(rewards, & &1.id),
+        "amount_cents" => total_amount(rewards),
+        "deadline" => Date.to_string(deadline)
+      }
+    })
 
-    Enum.each(rewards, &mark_warned/1)
     log_warning(user, rewards, deadline)
     rewards
   end
-
-  defp mark_warned(%Fund.RewardModel{} = reward),
-    do: Notification.Public.mark_as_notified(reward, @signal)
 
   defp donate_balance({user, rewards}) do
     case Fund.Public.donate_rewards(user, rewards) do
@@ -124,10 +131,14 @@ defmodule Systems.Fund.Dormancy do
     end
   end
 
-  defp donated(user, rewards, %Fund.DonationModel{} = donation) do
-    donation
-    |> donated_mail(user)
-    |> Email.Public.deliver_later!()
+  defp donated(user, rewards, %Fund.DonationModel{uid: uid, amount_cents: amount} = donation) do
+    Notify.Public.record_event(%Notify.EventAttrs{
+      type: @donated,
+      subject_user: user,
+      correlation_id: "fund_dormancy:donation:#{uid}",
+      source: __MODULE__,
+      metadata: %{"amount_cents" => amount}
+    })
 
     log_donation(user, rewards, donation)
     {:ok, donation}
@@ -143,29 +154,6 @@ defmodule Systems.Fund.Dormancy do
 
   defp total_amount(rewards),
     do: Enum.reduce(rewards, 0, fn %{amount: amount}, acc -> acc + amount end)
-
-  defp warning_mail(amount, user, deadline) do
-    Email.Factory.notification(
-      dgettext("eyra-fund", "dormancy.warning.title"),
-      dgettext("eyra-fund", "dormancy.warning.byline", amount: format(amount)),
-      dgettext("eyra-fund", "dormancy.warning.message",
-        amount: format(amount),
-        date: Date.to_string(deadline)
-      ),
-      user
-    )
-  end
-
-  defp donated_mail(%Fund.DonationModel{amount_cents: amount}, user) do
-    Email.Factory.notification(
-      dgettext("eyra-fund", "dormancy.donated.title"),
-      dgettext("eyra-fund", "dormancy.donated.byline", amount: format(amount)),
-      dgettext("eyra-fund", "dormancy.donated.message", amount: format(amount)),
-      user
-    )
-  end
-
-  defp format(amount), do: CurrencyHelpers.format_cents(amount)
 
   defp log_warning(%Account.User{id: user_id}, rewards, deadline) do
     Logger.info(

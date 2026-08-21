@@ -151,18 +151,6 @@ msgid "themes.operations_analytics"
 msgstr "Operations analytics"
 
 #, elixir-autogen, elixir-format
-msgid "reject_catagories.attention_checks_failed"
-msgstr "Attention checks failed"
-
-#, elixir-autogen, elixir-format
-msgid "reject_catagories.not_completed"
-msgstr "Questionnaire not completed"
-
-#, elixir-autogen, elixir-format
-msgid "reject_catagories.other"
-msgstr "Other"
-
-#, elixir-autogen, elixir-format
 msgid "criteria_filters.bk"
 msgstr "BK"
 

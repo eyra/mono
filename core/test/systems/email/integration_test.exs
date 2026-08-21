@@ -78,6 +78,23 @@ defmodule Systems.Email.IntegrationTest do
       assert email.text_body =~ message
     end
 
+    # Regression: bamboo_phoenix 2.0's flatten_safe_iodata uses Enum.map,
+    # which crashes on the improper lists Phoenix.HTML.Safe emits when
+    # escaping apostrophes. Guard against that with a name that will HTML-
+    # escape to `&#39;`.
+    test "renders emails whose assigns contain an apostrophe" do
+      from_user = %{email: "obrien@example.com", displayname: "O'Brien"}
+      to_user = %{email: "dangelo@example.com", displayname: "D'Angelo"}
+
+      email = Factory.debug("Debug", "Body", from_user, to_user)
+
+      assert email.html_body =~ "O&#39;Brien"
+      assert email.html_body =~ "D&#39;Angelo"
+      # Inner template HTML must survive the layout wrap — not double-escaped
+      assert email.html_body =~ "<h1>Hi D&#39;Angelo"
+      refute email.html_body =~ "&lt;h1&gt;"
+    end
+
     test "email with header image assignment renders correctly" do
       user = Factories.build(:member)
       email = Factory.account_created(user)

@@ -1369,7 +1369,7 @@ defmodule Systems.Fund.PublicTest do
              uid: "w_found",
              status: :completed,
              raw_status: "completed",
-             reference: prefix <> ",attempt=0",
+             reference: prefix <> "0",
              amount: 1000
            }
          ]}
@@ -1406,7 +1406,7 @@ defmodule Systems.Fund.PublicTest do
              uid: "w_failed_0",
              status: :failed,
              raw_status: "disapproved",
-             reference: prefix <> ",attempt=0",
+             reference: prefix <> "0",
              amount: 1000
            },
            # The current attempt, still pending after the lost response.
@@ -1414,7 +1414,7 @@ defmodule Systems.Fund.PublicTest do
              uid: "w_live_1",
              status: :pending,
              raw_status: "pending",
-             reference: prefix <> ",attempt=1",
+             reference: prefix <> "1",
              amount: 1000
            }
          ]}
@@ -1442,7 +1442,7 @@ defmodule Systems.Fund.PublicTest do
       expect(ProviderMock, :list_withdrawals, fn "m_resume_1" -> {:ok, []} end)
 
       expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
-        assert key =~ "type=withdrawal,attempt=0"
+        assert key =~ ",wd=0"
 
         {:ok,
          %{uid: "w_new", status: :pending, raw_status: "created", reference: key, amount: 1000}}
@@ -1466,7 +1466,7 @@ defmodule Systems.Fund.PublicTest do
 
       expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
         # A fresh key, distinct from the failed attempt=0 withdrawal.
-        assert key =~ "type=withdrawal,attempt=1"
+        assert key =~ ",wd=1"
 
         {:ok,
          %{uid: "w_retry", status: :pending, raw_status: "created", reference: key, amount: 1000}}

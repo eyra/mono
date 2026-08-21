@@ -48,7 +48,10 @@ defmodule Systems.Fund.DormancyTest do
 
       assert [_, _] = Fund.Dormancy.remind(future(), deadline())
 
-      assert_email_delivered_with(to: [{nil, donor.email}])
+      assert_email_delivered_with(
+        to: [{nil, donor.email}],
+        subject: "Your unclaimed reward expires soon"
+      )
 
       # Re-running finds nothing left to warn about.
       assert [] = Fund.Dormancy.remind(future(), deadline())
@@ -95,13 +98,18 @@ defmodule Systems.Fund.DormancyTest do
       r1 = insert_reward(donor, fund, 600)
       r2 = insert_reward(donor, fund, 400)
       Fund.Dormancy.remind(future(), deadline())
+      assert_email_delivered_with(subject: "Your unclaimed reward expires soon")
       stub_partner_charge_ok(1000)
 
       assert [{:ok, %Fund.DonationModel{amount_cents: 1000}}] = Fund.Dormancy.donate(future())
 
       assert %{status: :donated} = Repo.reload!(r1)
       assert %{status: :donated} = Repo.reload!(r2)
-      assert_email_delivered_with(to: [{nil, donor.email}])
+
+      assert_email_delivered_with(
+        to: [{nil, donor.email}],
+        subject: "Your reward has been donated"
+      )
     end
 
     test "is idempotent: a second sweep finds nothing to donate",

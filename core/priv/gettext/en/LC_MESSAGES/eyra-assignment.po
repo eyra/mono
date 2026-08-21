@@ -669,54 +669,16 @@ msgid "contributions.decline.submit.button"
 msgstr "Decline"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.decline.modal.title"
-msgstr "Decline contribution"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.decline.confirm.title"
-msgstr "Confirm decline"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.decline.confirm.body"
-msgstr "You are about to decline the contribution from <strong class=\"text-delete\">%{subject}</strong>. This action cannot be undone."
-
-#, elixir-autogen, elixir-format
-msgid "contributions.decline.confirm.placeholder"
-msgstr "Type \"%{subject}\" to confirm"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.declined.heading"
-msgstr "Declined"
-
-#, elixir-autogen, elixir-format
 msgid "contributions.overview.heading"
 msgstr "Confirmed"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.pagination.single_page"
-msgstr "1 page"
 
 #, elixir-autogen, elixir-format
 msgid "contributions.search.placeholder"
 msgstr "Search"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.search.no_match"
-msgstr "No matches."
-
-#, elixir-autogen, elixir-format
 msgid "contributions.subject_label"
 msgstr "Participant"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.tasks_finished.one"
-msgid_plural "contributions.tasks_finished.other"
-msgstr[0] "%{count} of %{total} tasks finished"
-msgstr[1] "%{count} of %{total} tasks finished"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.all_tasks_finished"
-msgstr "All tasks finished"
 
 #, elixir-autogen, elixir-format
 msgid "contributions.waiting.empty"
@@ -725,14 +687,6 @@ msgstr "No pending contributions."
 #, elixir-autogen, elixir-format
 msgid "contributions.waiting.heading"
 msgstr "Pending"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.overview.amount_label"
-msgstr "Amount"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.overview.date_label"
-msgstr "Date"
 
 #, elixir-autogen, elixir-format
 msgid "contributions.overview.empty"
@@ -747,12 +701,12 @@ msgid "assignment_full.title"
 msgstr "This study is full"
 
 #, elixir-autogen, elixir-format
-msgid "pay_in_request_form.fee.invalid"
-msgstr "Please enter a plain amount, like 3.75"
-
-#, elixir-autogen, elixir-format
 msgid "pay_in_request_form.aim.placeholder"
 msgstr "A short description of your study"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.slots.required"
+msgstr "Please enter the number of participants"
 
 #, elixir-autogen, elixir-format
 msgid "pay_in_request_form.aim.required"
@@ -763,10 +717,6 @@ msgid "pay_in_request_form.fee.required"
 msgstr "Please enter the participant fee"
 
 #, elixir-autogen, elixir-format
-msgid "pay_in_request_form.slots.required"
-msgstr "Please enter the number of participants"
-
-#, elixir-autogen, elixir-format
 msgid "tabbar.item.contributions"
 msgstr "Contributions"
 
@@ -775,22 +725,42 @@ msgid "contributions.confirm_all.button"
 msgstr "Confirm all"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.confirm_all.partial_error.one"
-msgid_plural "contributions.confirm_all.partial_error.other"
-msgstr[0] "Could not confirm 1 contribution. Please try again."
-msgstr[1] "Could not confirm %{count} contributions. Please try again."
+msgid "contributions.all_tasks_finished"
+msgstr "All tasks finished"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.confirm_all.error"
-msgstr ""
+msgid "contributions.decline.confirm.body"
+msgstr "You are about to decline the contribution from <strong class=\"text-delete\">%{subject}</strong>. This action cannot be undone."
 
 #, elixir-autogen, elixir-format
-msgid "participation.title.accepted"
-msgstr "Thank you!"
+msgid "contributions.decline.confirm.placeholder"
+msgstr "Type \"%{subject}\" to confirm"
 
 #, elixir-autogen, elixir-format
-msgid "participation.title.rejected"
-msgstr "Your contribution was declined"
+msgid "contributions.decline.confirm.title"
+msgstr "Confirm decline"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.modal.title"
+msgstr "Decline contribution"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.declined.heading"
+msgstr "Declined"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.search.no_match"
+msgstr "No matches."
+
+#, elixir-autogen, elixir-format
+msgid "contributions.tasks_finished.one"
+msgid_plural "contributions.tasks_finished.other"
+msgstr[0] "%{count} of %{total} tasks finished"
+msgstr[1] "%{count} of %{total} tasks finished"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Back to home"
 
 #, elixir-autogen, elixir-format
 msgid "participation.body.accepted"
@@ -805,5 +775,9 @@ msgid "participation.body.rejected.with_reason"
 msgstr "Your contribution was declined for the following reason:"
 
 #, elixir-autogen, elixir-format
-msgid "participation.back_home.button"
-msgstr "Back to home"
+msgid "participation.title.accepted"
+msgstr "Thank you!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Your contribution was declined"

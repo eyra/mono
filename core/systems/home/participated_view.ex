@@ -22,7 +22,7 @@ defmodule Systems.Home.ParticipatedView do
       </Text.title2>
       <.spacing value="M" />
 
-      <div class="flex flex-col divide-y divide-grey4">
+      <div class="flex flex-col divide-y divide-grey4 -mb-2">
         <%= for item <- @content_items do %>
           <.row item={item} labels={@labels} />
         <% end %>
@@ -38,7 +38,7 @@ defmodule Systems.Home.ParticipatedView do
     ~H"""
     <a
       href={@item.path}
-      class="flex flex-row items-start gap-3 md:gap-4 py-4 first:pt-0 last:pb-0 hover:bg-grey6 -mx-2 px-2 rounded"
+      class="flex flex-row items-start gap-3 md:gap-4 py-4 hover:bg-grey6 -mx-2 px-2"
       data-testid="participated-row"
     >
       <div class="flex-1 min-w-0">

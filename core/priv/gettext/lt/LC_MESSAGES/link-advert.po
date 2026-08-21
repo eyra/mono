@@ -11,26 +11,6 @@ msgstr ""
 "Language: lt\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100 != 11 ? 0 : n%10>=2 && (n%100<10||n%100>=20) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
-msgid "reject.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.message.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.note"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr ""

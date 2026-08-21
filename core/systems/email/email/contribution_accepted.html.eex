@@ -1,0 +1,12 @@
+<h1>Your contribution was accepted</h1>
+
+<p>Thank you! Your time and effort help this research move forward. See you next time.</p>
+
+<%= if @metadata["assignment_title"] do %>
+<p><strong>Assignment:</strong> <%= @metadata["assignment_title"] %></p>
+<% end %>
+
+<br />
+Kind regards,
+<br /><br />
+The Eyra team

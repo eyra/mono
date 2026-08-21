@@ -11,26 +11,6 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
-msgid "reject.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.message.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.text"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "reject.note"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "exclusion.description"
 msgstr ""

@@ -269,3 +269,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "dormancy.warning.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.subject"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.subject"
+msgstr ""

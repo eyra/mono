@@ -98,7 +98,6 @@ defmodule Core.MixProject do
       {:httpoison, "2.2.3"},
       {:image, "0.62.0"},
       {:jason, "1.4.4"},
-      {:kadabra, "0.6.1"},
       {:libcluster, "3.5.0"},
       {:logger_json, "7.0.4"},
       {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},

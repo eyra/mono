@@ -1,5 +1,8 @@
 defmodule Systems.Email.Factory do
   use Bamboo.Phoenix, template: Systems.Email.EmailHTML
+  use Gettext, backend: CoreWeb.Gettext
+
+  alias Systems.Assignment.CurrencyHelpers
 
   alias Systems.{
     Email
@@ -61,6 +64,18 @@ defmodule Systems.Email.Factory do
     |> render(:debug_message, body: message, from_user: from_user, to_user: to_user)
   end
 
+  def contribution_accepted(user, metadata) do
+    mail_user(user)
+    |> subject("Your contribution was accepted")
+    |> render(:contribution_accepted, metadata: metadata)
+  end
+
+  def contribution_declined(user, metadata) do
+    mail_user(user)
+    |> subject("Your contribution was declined")
+    |> render(:contribution_declined, metadata: metadata)
+  end
+
   def notification(title, byline, message, to) do
     text_message = message
     html_message = message |> to_html()
@@ -72,6 +87,39 @@ defmodule Systems.Email.Factory do
       byline: byline,
       text_message: text_message,
       html_message: html_message
+    )
+  end
+
+  def reward_dormancy_warning(user, %{"amount_cents" => amount, "deadline" => deadline}) do
+    amount = CurrencyHelpers.format_cents(amount)
+
+    mail_user(user)
+    |> subject(dgettext("eyra-fund", "dormancy.warning.subject"))
+    |> notification_body(
+      dgettext("eyra-fund", "dormancy.warning.title"),
+      dgettext("eyra-fund", "dormancy.warning.byline", amount: amount),
+      dgettext("eyra-fund", "dormancy.warning.message", amount: amount, date: deadline)
+    )
+  end
+
+  def reward_auto_donated(user, %{"amount_cents" => amount}) do
+    amount = CurrencyHelpers.format_cents(amount)
+
+    mail_user(user)
+    |> subject(dgettext("eyra-fund", "dormancy.donated.subject"))
+    |> notification_body(
+      dgettext("eyra-fund", "dormancy.donated.title"),
+      dgettext("eyra-fund", "dormancy.donated.byline", amount: amount),
+      dgettext("eyra-fund", "dormancy.donated.message", amount: amount)
+    )
+  end
+
+  defp notification_body(email, title, byline, message) do
+    render(email, :notification,
+      title: title,
+      byline: byline,
+      text_message: message,
+      html_message: to_html(message)
     )
   end
 

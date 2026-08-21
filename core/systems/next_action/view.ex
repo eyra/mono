@@ -38,8 +38,8 @@ defmodule Systems.NextAction.View do
 
     ~H"""
     <Button.action {@cta_action}>
-      <div class={"p-4 md:p-6 flex flex-col lg:flex-row lg:items-center gap-4 lg:gap-0 lg:space-x-4 rounded-md #{@colors.bg}"}>
-        <div class="flex-grow min-w-0">
+      <div class={"p-4 md:p-6 flex flex-wrap items-center gap-4 rounded-md #{@colors.bg}"}>
+        <div class="flex-1 min-w-[16rem]">
           <div class={"#{@title_css} mb-2 break-words"}>
             <%= @title %>
           </div>
@@ -47,7 +47,7 @@ defmodule Systems.NextAction.View do
             <%= @description %>
           </div>
         </div>
-        <div class={"w-full lg:w-auto font-button text-button text-center p-3 rounded-md whitespace-nowrap #{@colors.button}"}>
+        <div class={"font-button text-button text-center p-3 rounded-md whitespace-nowrap #{@colors.button}"}>
           <%= @cta_label %>
         </div>
       </div>

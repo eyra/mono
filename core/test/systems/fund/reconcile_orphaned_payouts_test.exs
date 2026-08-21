@@ -87,7 +87,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       orphan_uid = Ecto.UUID.generate()
 
       %{summary: summary, findings: findings} =
-        run([withdrawal("payout=#{orphan_uid},type=withdrawal,attempt=0", uid: "wtd_lost")])
+        run([withdrawal("payout=#{orphan_uid},wd=0", uid: "wtd_lost")])
 
       assert summary.missing_locally == 1
       assert summary.verified == 0
@@ -119,7 +119,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
 
       %{summary: summary, findings: findings} =
         run(
-          [withdrawal("payout=#{uid},type=withdrawal,attempt=0")],
+          [withdrawal("payout=#{uid},wd=0")],
           [transfer("payout=#{uid},type=transfer")]
         )
 
@@ -134,7 +134,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
 
       %{summary: summary} =
         run(
-          [withdrawal("payout=#{known},type=withdrawal,attempt=0")],
+          [withdrawal("payout=#{known},wd=0")],
           [transfer("payout=#{orphan},type=transfer")]
         )
 
@@ -148,7 +148,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
 
       %{summary: summary} =
         run(
-          [withdrawal("payout=#{orphan},type=withdrawal,attempt=0")],
+          [withdrawal("payout=#{orphan},wd=0")],
           [transfer("payout=#{orphan},type=transfer")]
         )
 
@@ -221,7 +221,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       %{id: id} = payout()
 
       %{summary: summary, findings: findings} =
-        run([withdrawal("payout=#{id},type=withdrawal")])
+        run([withdrawal("payout=#{id},wd=0")])
 
       assert summary.unresolvable == 1
       assert summary.verified == 0
@@ -248,7 +248,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
   describe "windowing" do
     test "an object younger than min_age is left alone" do
       orphan = Ecto.UUID.generate()
-      recent = withdrawal("payout=#{orphan},type=withdrawal,attempt=0", created: hours_ago(0))
+      recent = withdrawal("payout=#{orphan},wd=0", created: hours_ago(0))
 
       expect_listings([recent], [])
       %{summary: summary} = Fund.Public.reconcile_orphaned_payouts([], state())
@@ -261,14 +261,14 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       orphan = Ecto.UUID.generate()
 
       %{summary: summary} =
-        run([withdrawal("payout=#{orphan},type=withdrawal,attempt=0", created: nil)])
+        run([withdrawal("payout=#{orphan},wd=0", created: nil)])
 
       assert summary.missing_locally == 1
     end
 
     test "min_age_minutes is overridable" do
       orphan = Ecto.UUID.generate()
-      recent = withdrawal("payout=#{orphan},type=withdrawal,attempt=0", created: hours_ago(1))
+      recent = withdrawal("payout=#{orphan},wd=0", created: hours_ago(1))
 
       expect_listings([recent], [])
       %{summary: summary} = Fund.Public.reconcile_orphaned_payouts([min_age_minutes: 0], state())
@@ -296,7 +296,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       orphan = Ecto.UUID.generate()
 
       expect(ProviderMock, :list_recent_withdrawals, fn _since ->
-        {:truncated, [withdrawal("payout=#{orphan},type=withdrawal,attempt=0")]}
+        {:truncated, [withdrawal("payout=#{orphan},wd=0")]}
       end)
 
       expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)
@@ -316,7 +316,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
       orphan = Ecto.UUID.generate()
 
       expect(ProviderMock, :list_recent_withdrawals, fn _since ->
-        {:truncated, [withdrawal("payout=#{orphan},type=withdrawal,attempt=0", uid: "wtd_lost")]}
+        {:truncated, [withdrawal("payout=#{orphan},wd=0", uid: "wtd_lost")]}
       end)
 
       expect(ProviderMock, :list_recent_transfers, fn _since -> {:ok, []} end)

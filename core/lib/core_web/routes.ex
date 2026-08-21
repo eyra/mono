@@ -91,7 +91,6 @@ defmodule CoreWeb.Routes do
       scope "/", CoreWeb do
         pipe_through(:api)
 
-        post("/api/apns-token", APNSDeviceTokenController, :create)
         post("/api/viewport", ViewportController, :put_session)
       end
     end

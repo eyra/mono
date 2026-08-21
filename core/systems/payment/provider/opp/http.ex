@@ -26,7 +26,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
     Logger.info("[OPP] Request",
       request_id: request_id,
       method: method |> to_string() |> String.upcase(),
-      path: path
+      path: strip_query(path)
     )
 
     result =
@@ -43,7 +43,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
       status: extract_status(result)
     )
 
-    handle_response(result)
+    handle_response(result, path)
   end
 
   defp build_headers do
@@ -57,7 +57,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   defp extract_status({:ok, %HTTPoison.Response{status_code: status}}), do: status
   defp extract_status({:error, %HTTPoison.Error{reason: reason}}), do: inspect(reason)
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}})
+  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}, _path)
        when status in 200..299 do
     case Jason.decode(body) do
       {:ok, parsed} ->
@@ -68,30 +68,50 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
     end
   end
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}) do
-    details =
-      case Jason.decode(body) do
-        {:ok, parsed} -> parsed
-        {:error, _} -> %{"raw" => body}
-      end
+  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}, path) do
+    details = decode_body(body)
+    path = strip_query(path)
 
-    Logger.warning("[OPP] API error #{status}: #{inspect(details)}")
+    Logger.warning("[OPP] API error #{status} on #{path}: #{inspect(details)}")
 
-    {:error,
-     %Error{
-       code: :api_error,
-       message: "OPP API returned #{status}",
-       details: %{status: status, body: details}
-     }}
+    {:error, error(status, path, details)}
   end
 
-  defp handle_response({:error, %HTTPoison.Error{reason: reason}}) do
+  defp handle_response({:error, %HTTPoison.Error{reason: reason}}, _path) do
     {:error,
      %Error{
        code: :connection_error,
        message: "Failed to connect to OPP: #{inspect(reason)}"
      }}
   end
+
+  # OPP names the fields it rejected under `error.parameters`; lifting them into
+  # a provider-neutral :validation_error keeps that shape from leaking to callers.
+  defp error(status, path, %{"error" => %{"parameters" => parameters}} = details)
+       when is_map(parameters) do
+    %Error{
+      code: :validation_error,
+      message: "OPP API returned #{status} on #{path}",
+      details: %{status: status, path: path, fields: Map.keys(parameters), body: details}
+    }
+  end
+
+  defp error(status, path, details) do
+    %Error{
+      code: :api_error,
+      message: "OPP API returned #{status} on #{path}",
+      details: %{status: status, path: path, fields: [], body: details}
+    }
+  end
+
+  defp decode_body(body) do
+    case Jason.decode(body) do
+      {:ok, parsed} -> parsed
+      {:error, _} -> %{"raw" => body}
+    end
+  end
+
+  defp strip_query(path), do: hd(String.split(path, "?"))
 
   defp base_url do
     Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:base_url)

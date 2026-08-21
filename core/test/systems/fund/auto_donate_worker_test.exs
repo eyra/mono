@@ -47,15 +47,15 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
     reward
   end
 
-  # The warning is recorded with a real `inserted_at`, so ageing it is the only
-  # way to reach the donation pass through the worker.
+  # The warning event is recorded with a real `inserted_at`, so ageing it is the
+  # only way to reach the donation pass through the worker.
   defp age_warnings(days_ago) do
     timestamp =
       NaiveDateTime.utc_now()
       |> NaiveDateTime.add(-days_ago * 24 * 60 * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    Repo.update_all(Systems.Notification.Log, set: [inserted_at: timestamp])
+    Repo.update_all(Systems.Notify.EventModel, set: [inserted_at: timestamp])
   end
 
   defp run, do: perform_job(AutoDonateWorker, %{})

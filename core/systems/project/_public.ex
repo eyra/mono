@@ -106,6 +106,17 @@ defmodule Systems.Project.Public do
     get_item_by_special(:storage_endpoint, storage_endpoint_id)
   end
 
+  def get_node_id_by(%Assignment.Model{} = assignment) do
+    case get_item_by(assignment) do
+      %Project.ItemModel{node_id: node_id} -> node_id
+      _ -> nil
+    end
+  end
+
+  def get_node_id_by(assignment_id) when is_integer(assignment_id) do
+    get_node_id_by(%Assignment.Model{id: assignment_id})
+  end
+
   defp get_item_by_special(special_name, special_id) do
     item_query_by_special(special_name, special_id)
     |> Repo.one()

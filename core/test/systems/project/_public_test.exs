@@ -79,4 +79,37 @@ defmodule Systems.Project.PublicTest do
       assert [] = Project.Public.list_items(node, {:assignment, :benchmark_challenge})
     end
   end
+
+  describe "get_node_id_by/1" do
+    setup do
+      assignment = Core.Factories.build(:assignment)
+      item = Project.Factories.build_item(assignment)
+
+      %{root: %{id: node_id, items: [%{assignment: %{id: assignment_id}}]}} =
+        Project.Factories.build_node(items: [item])
+        |> Project.Factories.build_project()
+        |> Repo.insert!()
+
+      %{assignment_id: assignment_id, node_id: node_id}
+    end
+
+    test "returns node_id for an assignment struct", %{
+      assignment_id: assignment_id,
+      node_id: node_id
+    } do
+      assert ^node_id =
+               Project.Public.get_node_id_by(%Systems.Assignment.Model{id: assignment_id})
+    end
+
+    test "returns node_id for an integer assignment_id", %{
+      assignment_id: assignment_id,
+      node_id: node_id
+    } do
+      assert ^node_id = Project.Public.get_node_id_by(assignment_id)
+    end
+
+    test "returns nil when no project item exists for the assignment" do
+      assert nil == Project.Public.get_node_id_by(-1)
+    end
+  end
 end
