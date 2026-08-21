@@ -1343,16 +1343,38 @@ defmodule Systems.Fund.Public do
     * `{:error, {:opp_uncertain, error}}` — outcome unknown; the rewards stay
       `:donating` for manual resolution (see `Fund.DonationModel`)
   """
-  def request_donation(%Account.User{id: user_id}, currency) do
-    approved = list_approved_rewards(user_id, currency)
-    total = Enum.reduce(approved, 0, fn %{amount: amount}, acc -> acc + amount end)
+  def request_donation(%Account.User{id: user_id} = user, currency) do
+    donate_rewards(user, list_approved_rewards(user_id, currency))
+  end
+
+  @doc """
+  Donates an explicit set of `:approved` rewards, for callers that pick their
+  own instead of taking the whole balance — see `Systems.Fund.Dormancy`.
+
+  Same saga, same locking and the same return values as `request_donation/2`.
+  """
+  def donate_rewards(%Account.User{id: user_id}, rewards) when is_list(rewards) do
+    total = Enum.reduce(rewards, 0, fn %{amount: amount}, acc -> acc + amount end)
 
     if total > 0 do
-      do_request_donation(user_id, Enum.map(approved, fn %{id: id} -> id end), total)
+      do_request_donation(user_id, Enum.map(rewards, fn %{id: id} -> id end), total)
     else
       {:error, :nothing_to_donate}
     end
   end
+
+  @doc """
+  Warns participants about reward balances that have sat `:approved` since
+  before `cutoff`. See `Systems.Fund.Dormancy`.
+  """
+  def remind_dormant_rewards(cutoff, deadline),
+    do: Fund.Dormancy.remind(cutoff, deadline)
+
+  @doc """
+  Donates reward balances whose dormancy warning predates `cutoff`.
+  See `Systems.Fund.Dormancy`.
+  """
+  def donate_dormant_rewards(cutoff), do: Fund.Dormancy.donate(cutoff)
 
   # Read the platform merchant before locking, so a misconfigured env never
   # strands rewards in :donating.

@@ -102,6 +102,9 @@ if config_env() == :prod do
           "auto_approve" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
 
+          "auto_donate" ->
+            {Oban.Plugins.Cron, crontab: [{"0 4 * * *", Systems.Fund.AutoDonateWorker}]}
+
           _ ->
             nil
         end

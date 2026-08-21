@@ -85,6 +85,15 @@ defmodule Systems.Notification.Public do
     |> Repo.exists?()
   end
 
+  def notified_before?(%{__struct__: type, id: id}, signal, %NaiveDateTime{} = cutoff) do
+    from(l in Log,
+      where:
+        l.item_type == ^to_string(type) and l.item_id == ^id and
+          l.signal == ^to_string(signal) and l.inserted_at < ^cutoff
+    )
+    |> Repo.exists?()
+  end
+
   def get_or_create_box(user) do
     node_ids = auth_nodes_for_user(user)
 
