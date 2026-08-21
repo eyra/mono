@@ -69,19 +69,4 @@ defmodule Systems.Account.PayoutsReactiveTest do
 
     assert eventually_render(view, "Verified") =~ "Verified"
   end
-
-  defp eventually_render(view, _expected, 0), do: render(view)
-
-  defp eventually_render(view, expected, retries) do
-    html = render(view)
-
-    if html =~ expected do
-      html
-    else
-      Process.sleep(25)
-      eventually_render(view, expected, retries - 1)
-    end
-  end
-
-  defp eventually_render(view, expected), do: eventually_render(view, expected, 20)
 end

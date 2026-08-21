@@ -66,6 +66,83 @@ defmodule Systems.Manual.ViewBuilderTest do
       assert %LiveNest.Element{} = vm.chapter_list_view
     end
 
+    test "loads selected chapter from a chapter-list preload", %{
+      user: user,
+      manual: manual,
+      chapter1: chapter1
+    } do
+      manual =
+        Manual.Public.get_manual!(manual.id, Manual.Model.preload_graph(:chapter_list))
+
+      [chapter | _] = manual.chapters
+      assert %Ecto.Association.NotLoaded{} = chapter.pages
+
+      assigns = %{
+        title: "Test Manual",
+        current_user: user,
+        presentation: :modal,
+        user_state: %{chapter: chapter1.id, page: nil}
+      }
+
+      vm = Manual.ViewBuilder.view_model(manual, assigns)
+
+      assert vm.selected_chapter.id == chapter1.id
+      assert [_page] = vm.selected_chapter.pages
+    end
+
+    test "loads pages for a newly selected chapter", %{
+      user: user,
+      manual: manual,
+      chapter1: chapter1,
+      chapter2: chapter2
+    } do
+      manual =
+        Manual.Public.get_manual!(manual.id, Manual.Model.preload_graph(:chapter_list))
+
+      assigns = %{
+        title: "Test Manual",
+        current_user: user,
+        presentation: :modal,
+        user_state: %{chapter: chapter1.id, page: nil}
+      }
+
+      vm = Manual.ViewBuilder.view_model(manual, assigns)
+      assert vm.selected_chapter.id == chapter1.id
+      assert [%{chapter_id: chapter1_id}] = vm.selected_chapter.pages
+      assert chapter1_id == chapter1.id
+
+      vm =
+        Manual.ViewBuilder.view_model(vm.manual, %{
+          assigns
+          | user_state: %{chapter: chapter2.id, page: nil}
+        })
+
+      assert vm.selected_chapter.id == chapter2.id
+      assert [%{chapter_id: chapter2_id}] = vm.selected_chapter.pages
+      assert chapter2_id == chapter2.id
+    end
+
+    test "loads every page of a selected chapter", %{user: user} do
+      manual = Manual.Factories.create_manual(1, 3)
+      [chapter] = manual.chapters
+
+      manual =
+        Manual.Public.get_manual!(manual.id, Manual.Model.preload_graph(:chapter_list))
+
+      vm =
+        Manual.ViewBuilder.view_model(manual, %{
+          title: "Test Manual",
+          current_user: user,
+          presentation: :modal,
+          user_state: %{chapter: chapter.id, page: nil}
+        })
+
+      assert Enum.map(vm.selected_chapter.pages, & &1.id) ==
+               chapter.pages
+               |> Enum.sort_by(& &1.userflow_step.order)
+               |> Enum.map(& &1.id)
+    end
+
     test "selects correct chapter from multiple chapters", %{
       user: user,
       manual: manual,
