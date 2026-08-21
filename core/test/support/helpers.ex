@@ -23,6 +23,21 @@ defmodule Core.TestHelpers do
   @moduledoc """
   Helper functions to make testing convenient.
   """
+
+  def eventually_render(view, expected, retries \\ 20)
+
+  def eventually_render(view, _expected, 0), do: Phoenix.LiveViewTest.render(view)
+
+  def eventually_render(view, expected, retries) do
+    html = Phoenix.LiveViewTest.render(view)
+
+    if html =~ expected do
+      html
+    else
+      Process.sleep(25)
+      eventually_render(view, expected, retries - 1)
+    end
+  end
 end
 
 defmodule Core.AuthTestHelpers do

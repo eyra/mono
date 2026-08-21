@@ -66,6 +66,30 @@ defmodule Systems.Manual.ViewBuilderTest do
       assert %LiveNest.Element{} = vm.chapter_list_view
     end
 
+    test "loads selected chapter from a chapter-list preload", %{
+      user: user,
+      manual: manual,
+      chapter1: chapter1
+    } do
+      manual =
+        Manual.Public.get_manual!(manual.id, Manual.Model.preload_graph(:chapter_list))
+
+      [chapter | _] = manual.chapters
+      assert %Ecto.Association.NotLoaded{} = chapter.pages
+
+      assigns = %{
+        title: "Test Manual",
+        current_user: user,
+        presentation: :modal,
+        user_state: %{chapter: chapter1.id, page: nil}
+      }
+
+      vm = Manual.ViewBuilder.view_model(manual, assigns)
+
+      assert vm.selected_chapter.id == chapter1.id
+      assert [_page] = vm.selected_chapter.pages
+    end
+
     test "selects correct chapter from multiple chapters", %{
       user: user,
       manual: manual,

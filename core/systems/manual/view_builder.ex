@@ -45,10 +45,9 @@ defmodule Systems.Manual.ViewBuilder do
   defp find_selected_chapter(_chapters, nil), do: nil
 
   defp find_selected_chapter(chapters, selected_chapter_id) do
-    case Enum.find(chapters, &(&1.id == selected_chapter_id)) do
-      nil -> List.first(chapters)
-      chapter -> chapter
-    end
+    chapter = Enum.find(chapters, &(&1.id == selected_chapter_id)) || List.first(chapters)
+
+    Manual.Public.get_chapter!(chapter.id, Manual.ChapterModel.preload_graph(:down))
   end
 
   defp build_chapter_list_view(manual, title, selected_chapter_id) do
