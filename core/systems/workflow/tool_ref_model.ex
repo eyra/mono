@@ -57,8 +57,11 @@ defmodule Systems.Workflow.ToolRefModel do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do: preload_graph(@tools)
+  def preload_graph(:down), do: preload_graph(@tools)
+
+  # Task lists only need the tool record to choose and launch its view.
+  # Loading each tool's full graph makes that context part of the LiveView session.
+  def preload_graph(:tool), do: @tools
 
   def preload_graph(tool_id_field) when is_atom(tool_id_field) do
     if Enum.member?(@tools, tool_id_field) do
