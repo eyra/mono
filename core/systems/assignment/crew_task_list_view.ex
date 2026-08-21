@@ -13,7 +13,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, [
       :crew,
-      workflow: [items: [tool_ref: Systems.Workflow.ToolRefModel.preload_graph(:down)]]
+      workflow: [items: [tool_ref: Systems.Workflow.ToolRefModel.preload_graph(:tool)]]
     ])
   end
 
