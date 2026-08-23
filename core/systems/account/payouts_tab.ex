@@ -1,12 +1,15 @@
 defmodule Systems.Account.PayoutsTab do
   @moduledoc """
-  Payouts (Uitbetalingen) tab implementation.
-  Visible for all participants: shows the bank-account verification status and
-  the payout history.
+  Payouts (Uitbetalingen) tab implementation: shows the bank-account
+  verification status and the payout history.
+
+  Part of the post-launch money surface, so it follows `:panl_post_launch`
+  along with the rewards summary and the participation history.
   """
   @behaviour Systems.Account.Page.Tab
 
   use Gettext, backend: CoreWeb.Gettext
+  use Core.FeatureFlags
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -15,7 +18,7 @@ defmodule Systems.Account.PayoutsTab do
   def key, do: :payouts
 
   @impl true
-  def visible?(_user), do: true
+  def visible?(_user), do: feature_enabled?(:panl_post_launch)
 
   @impl true
   def build(_user, live_context) do

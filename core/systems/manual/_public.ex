@@ -27,13 +27,13 @@ defmodule Systems.Manual.Public do
   Gets a manual by its id.
   """
   def get_manual!(id, preload \\ []) do
-    Manual.Queries.get_by_id(id)
-    |> Repo.one!()
+    Repo.get!(Manual.Model, id)
     |> Repo.preload(preload)
   end
 
-  def get_chapter!(chapter_id) do
+  def get_chapter!(chapter_id, preload \\ []) do
     Repo.get!(Manual.ChapterModel, chapter_id)
+    |> Repo.preload(preload)
   end
 
   def get_chapter_by_step(%Userflow.StepModel{id: step_id}) do

@@ -44,6 +44,54 @@ defmodule Systems.Manual.ViewTest do
       refute view |> has_element?("[data-testid='chapter-view']")
     end
 
+    test "loads every page after selecting a chapter", %{conn: conn, user: user} do
+      manual = Manual.Factories.create_manual(1, 3)
+      [chapter] = manual.chapters
+
+      [_first_page, _second_page, third_page] =
+        Enum.sort_by(chapter.pages, & &1.userflow_step.order)
+
+      third_page =
+        third_page
+        |> Ecto.Changeset.change(title: "Third page")
+        |> Core.Repo.update!()
+
+      context =
+        LiveContext.new(%{
+          manual_id: manual.id,
+          title: "Test Manual",
+          current_user: user,
+          presentation: :modal,
+          user_state: %{},
+          user_state_namespace: [:manual, manual.id]
+        })
+
+      conn = Map.put(conn, :request_path, "/manual/view")
+
+      {:ok, view, _html} =
+        live_isolated(conn, Manual.View, session: %{"live_context" => context})
+
+      view
+      |> element("[data-testid='chapter-list-item-#{chapter.id}']")
+      |> render_click()
+
+      assert eventually_has_element?(
+               view,
+               "[data-testid='chapter-view']",
+               chapter.title
+             )
+
+      view
+      |> element("[phx-click='select_page'][phx-value-item='#{third_page.id}']")
+      |> render_click()
+
+      assert eventually_has_element?(
+               view,
+               "[data-testid='chapter-view']",
+               third_page.title
+             )
+    end
+
     test "renders chapter view when chapter is selected", %{
       conn: conn,
       user: user,
@@ -157,13 +205,7 @@ defmodule Systems.Manual.ViewTest do
       # Send :next_page toolbar event
       send(view.pid, {:toolbar_action, :next_page})
 
-      # Force a render to process the send_update
-      _ = render(view)
-      # Render again to see the updated component
-      html = render(view)
-
-      # Should now show second page
-      assert html =~ "2/3"
+      assert eventually_render(view, "2/3") =~ "2/3"
     end
 
     test "previous_page event navigates to previous page", %{
@@ -201,13 +243,7 @@ defmodule Systems.Manual.ViewTest do
       # Send :previous_page toolbar event
       send(view.pid, {:toolbar_action, :previous_page})
 
-      # Force a render to process the send_update
-      _ = render(view)
-      # Render again to see the updated component
-      html = render(view)
-
-      # Should now show first page
-      assert html =~ "1/3"
+      assert eventually_render(view, "1/3") =~ "1/3"
     end
 
     test "previous_page on first page triggers back to chapter list", %{
@@ -358,12 +394,7 @@ defmodule Systems.Manual.ViewTest do
 
       send(view.pid, {:live_nest_event, event})
 
-      # Force renders to process the update
-      _ = render(view)
-      html = render(view)
-
-      # Should now show second page
-      assert html =~ "2/3"
+      assert eventually_render(view, "2/3") =~ "2/3"
     end
 
     test "toolbar previous_page action navigates to previous page", %{
@@ -405,12 +436,7 @@ defmodule Systems.Manual.ViewTest do
 
       send(view.pid, {:live_nest_event, event})
 
-      # Force renders to process the update
-      _ = render(view)
-      html = render(view)
-
-      # Should now show first page
-      assert html =~ "1/3"
+      assert eventually_render(view, "1/3") =~ "1/3"
     end
 
     test "toolbar back action on first page clears chapter selection", %{

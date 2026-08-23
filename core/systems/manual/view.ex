@@ -10,7 +10,7 @@ defmodule Systems.Manual.View do
     do: [:manual_id, :title, :current_user, :presentation, {:user_state, [:chapter, :page]}]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{manual_id: manual_id}}) do
-    Manual.Public.get_manual!(manual_id, Manual.Model.preload_graph(:down))
+    Manual.Public.get_manual!(manual_id, Manual.Model.preload_graph(:chapter_list))
   end
 
   @impl true
