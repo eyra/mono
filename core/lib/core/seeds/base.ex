@@ -7,7 +7,7 @@ defmodule Core.Seeds.Base do
 
   require Logger
 
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Pool
 
   @doc """
@@ -31,10 +31,10 @@ defmodule Core.Seeds.Base do
   end
 
   defp get_or_create_currency_ledger(currency) do
-    case Budget.CurrencyLedgerModel.get_by_currency(currency) do
+    case Fund.CurrencyLedgerModel.get_by_currency(currency) do
       nil ->
         Logger.info("[Seeds.Base] Creating #{currency} currency ledger")
-        Budget.CurrencyLedgerModel.create(currency) |> Core.Repo.insert!()
+        Fund.CurrencyLedgerModel.create(currency) |> Core.Repo.insert!()
 
       _existing ->
         Logger.info("[Seeds.Base] #{currency} currency ledger already exists")

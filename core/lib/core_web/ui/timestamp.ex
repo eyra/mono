@@ -255,39 +255,51 @@ defmodule CoreWeb.UI.Timestamp do
 
     days = days_until(date)
 
-    cond do
-      days > 1 and days < 7 ->
-        dgettext("eyra-ui", "timestamp.nextweek", weekday: weekday, time: time)
+    result =
+      cond do
+        days > 1 and days < 7 ->
+          dgettext("eyra-ui", "timestamp.nextweek", weekday: weekday, time: time)
 
-      days == 1 ->
-        dgettext("eyra-ui", "timestamp.tomorrow", time: time)
+        days == 1 ->
+          dgettext("eyra-ui", "timestamp.tomorrow", time: time)
 
-      days == 0 ->
-        dgettext("eyra-ui", "timestamp.today", time: time)
+        days == 0 ->
+          dgettext("eyra-ui", "timestamp.today", time: time)
 
-      days == -1 ->
-        dgettext("eyra-ui", "timestamp.yesterday", time: time)
+        days == -1 ->
+          dgettext("eyra-ui", "timestamp.yesterday", time: time)
 
-      days < -1 and days > -7 ->
-        dgettext("eyra-ui", "timestamp.yesterweek", weekday: weekday, time: time)
+        days < -1 and days > -7 ->
+          dgettext("eyra-ui", "timestamp.yesterweek", weekday: weekday, time: time)
 
-      true ->
-        if always_include_time do
-          dgettext("eyra-ui", "timestamp.datetime",
-            weekday: weekday,
-            day_of_month: day_of_month,
-            month: month,
-            time: time
-          )
-        else
-          dgettext("eyra-ui", "timestamp.date",
-            weekday: weekday,
-            day_of_month: day_of_month,
-            month: month
-          )
-        end
-    end
+        true ->
+          if always_include_time do
+            dgettext("eyra-ui", "timestamp.datetime",
+              weekday: weekday,
+              day_of_month: day_of_month,
+              month: month,
+              time: time
+            )
+          else
+            dgettext("eyra-ui", "timestamp.date",
+              weekday: weekday,
+              day_of_month: day_of_month,
+              month: month
+            )
+          end
+      end
+
+    maybe_capitalize(result, opts)
   end
+
+  defp maybe_capitalize(str, opts) do
+    if Keyword.get(opts, :capitalize, false), do: capitalize_first(str), else: str
+  end
+
+  defp capitalize_first(""), do: ""
+
+  defp capitalize_first(<<first::utf8, rest::binary>>),
+    do: String.upcase(<<first::utf8>>) <> rest
 
   def humanize_en(%NaiveDateTime{} = timestamp) do
     time = Timex.format!(timestamp, "%H:%M", :strftime)

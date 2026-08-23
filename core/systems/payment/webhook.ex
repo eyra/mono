@@ -1,14 +1,28 @@
 defmodule Systems.Payment.Webhook do
   alias Systems.Payment.Error
 
+  @typedoc """
+  Provider-agnostic event category. The adapter's `verify_and_parse/1` classifies
+  its own wire vocabulary into one of these, so `Payment.Controller` routes without
+  knowing any provider's event-type or object-type strings:
+
+    * `:transaction` / `:withdrawal` — a lifecycle status change; act on `object_uid`
+    * `:kyc` — a merchant/bank-account verification change; refresh `merchant_uid`
+    * `:ignored` — an event the domain does not act on
+  """
+  @type category :: :transaction | :withdrawal | :kyc | :ignored
+
+  @typedoc """
+  Provider-agnostic webhook event. Adapters resolve the identifiers the domain
+  needs (the owning `merchant_uid` for `:kyc`) so no provider wire-format detail
+  reaches the controller. `raw_type` is the provider's own event-type string,
+  retained for logging only.
+  """
   @type event :: %{
-          uid: String.t(),
-          type: String.t(),
-          object_uid: String.t(),
-          object_type: String.t(),
-          object_url: String.t(),
-          parent_uid: String.t() | nil,
-          parent_type: String.t() | nil
+          category: category(),
+          object_uid: String.t() | nil,
+          merchant_uid: String.t() | nil,
+          raw_type: String.t()
         }
 
   @callback verify_and_parse(Plug.Conn.t()) :: {:ok, event()} | {:error, Error.t()}

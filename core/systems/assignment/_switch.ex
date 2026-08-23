@@ -9,6 +9,7 @@ defmodule Systems.Assignment.Switch do
   alias Systems.Project
   alias Systems.Account
   alias Systems.Assignment
+  alias Systems.Notify
   alias Systems.Workflow
   alias Systems.Crew
   alias Systems.NextAction
@@ -35,15 +36,81 @@ defmodule Systems.Assignment.Switch do
 
   @impl true
   def intercept(
-        {:assignment_instance, :obtained} = _signal,
-        %{assignment_instance: instance, user: user, from_pid: from_pid} = _message
+        {:assignment_participation, :obtained} = _signal,
+        %{assignment_participation: participation, user: user, from_pid: from_pid} = _message
       ) do
     assignment =
-      Assignment.Public.get!(instance.assignment_id, Assignment.Model.preload_graph(:down))
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
 
     update_content_page(assignment, from_pid)
     # update only the page for the user that changed
     update_crew_page(assignment, from_pid, user)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
+  # Contribution submitted — the reward flip already happened inside the
+  # Multi that fired this signal (see Assignment.Public.complete_participation).
+  # We only do the post-commit housekeeping here: create the owner's
+  # next-action and refresh the affected views.
+  @impl true
+  def intercept(
+        {:assignment_participation, :completed} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if Assignment.Public.funded?(assignment) do
+      create_pending_contributions_next_action(assignment)
+    end
+
+    update_content_page(assignment, from_pid)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
+  # Contribution accepted — reward already approved inside the Multi. Clear
+  # the owner's next-action if this was the last one and refresh views.
+  @impl true
+  def intercept(
+        {:assignment_participation, :accepted} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if assignment.fund do
+      dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
+    end
+
+    notify_participant(:contribution_accepted, %{participation | assignment: assignment})
+
+    update_content_page(assignment, from_pid)
+    update_assignment_embedded_views(assignment, from_pid)
+
+    :ok
+  end
+
+  # Contribution rejected — reward already rejected inside the Multi. Same
+  # housekeeping as :accepted.
+  @impl true
+  def intercept(
+        {:assignment_participation, :rejected} = _signal,
+        %{assignment_participation: participation, from_pid: from_pid} = _message
+      ) do
+    assignment =
+      Assignment.Public.get!(participation.assignment_id, Assignment.Model.preload_graph(:down))
+
+    if assignment.fund do
+      dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
+    end
+
+    notify_participant(:contribution_declined, %{participation | assignment: assignment})
+
+    update_content_page(assignment, from_pid)
     update_assignment_embedded_views(assignment, from_pid)
 
     :ok
@@ -253,17 +320,13 @@ defmodule Systems.Assignment.Switch do
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
           Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
 
-          mark_rewards_pending_approval(assignment, crew_task)
+          mark_participation_completed_if_finished(assignment, crew_task)
 
           Assignment.Public.get_member_by_task(crew_task)
           |> dispatch_finished_assignment()
 
-        :accepted ->
-          payout_participants(assignment, crew_task, message)
-          clear_pending_payout_if_empty(assignment)
-
-        :rejected ->
-          clear_pending_payout_if_empty(assignment)
+        _ ->
+          :ok
       end
 
       update_crew_task_next_action(assignment, message)
@@ -431,6 +494,12 @@ defmodule Systems.Assignment.Switch do
       model: assignment,
       from_pid: from_pid
     })
+
+    dispatch!({:embedded_live_view, Assignment.ContributionsView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
   end
 
   defp update_crew_task_next_action(%{id: assignment_id}, %{
@@ -441,7 +510,13 @@ defmodule Systems.Assignment.Switch do
        }) do
     users = auth_module().users_with_role(auth_node_id, :owner)
 
-    opts = [key: "#{assignment_id}", params: %{id: assignment_id}]
+    opts = [
+      key: "#{assignment_id}",
+      params: %{
+        "id" => assignment_id,
+        "node_id" => Systems.Project.Public.get_node_id_by(assignment_id)
+      }
+    ]
 
     case {old_status, new_status} do
       {_, :rejected} ->
@@ -457,58 +532,51 @@ defmodule Systems.Assignment.Switch do
 
   defp update_crew_task_next_action(_, _), do: nil
 
-  defp payout_participants(assignment, crew_task, %{changeset: %{data: %{status: old_status}}}) do
-    if old_status != :accepted do
-      participants = auth_module().users_with_role(crew_task, :owner)
-      Enum.each(participants, &Assignment.Public.payout_participant(assignment, &1))
+  defp mark_participation_completed_if_finished(assignment, crew_task) do
+    member = Assignment.Public.get_member_by_task(crew_task, [:user])
+
+    if member && Crew.Public.finished?(member) do
+      Assignment.Public.complete_participation(assignment, member.user)
     end
   end
 
-  defp mark_rewards_pending_approval(assignment, crew_task) do
-    auth_module().users_with_role(crew_task, :owner)
-    |> Enum.each(fn participant ->
-      idempotence_key = Assignment.Public.idempotence_key(assignment, participant)
-      Systems.Fund.Public.mark_pending_approval(idempotence_key)
-    end)
-
-    notify_pending_payout(assignment)
+  defp notify_participant(
+         type,
+         %Assignment.ParticipationModel{
+           id: participation_id,
+           user_id: user_id,
+           rejected_message: rejected_message,
+           assignment: %Assignment.Model{id: assignment_id, info: info} = assignment
+         }
+       ) do
+    Notify.Public.record_event(%Notify.EventAttrs{
+      type: type,
+      subject_user: %{id: user_id},
+      metadata: %{
+        "assignment_id" => assignment_id,
+        "assignment_title" => info && info.title,
+        "node_id" => Systems.Project.Public.get_node_id_by(assignment),
+        "rejected_message" => rejected_message
+      },
+      correlation_id: "participation:#{participation_id}",
+      source: __MODULE__
+    })
   end
 
-  defp notify_pending_payout(%Assignment.Model{id: assignment_id} = assignment) do
-    case auth_module().users_with_role(assignment, :owner) do
+  defp create_pending_contributions_next_action(%Assignment.Model{id: assignment_id} = assignment) do
+    case Assignment.Public.owners(assignment) do
       [] ->
         :ok
 
-      researchers ->
+      owners ->
         NextAction.Public.create_next_action(
-          researchers,
-          Systems.Fund.NextActions.PendingPayout,
-          key: "assignment=#{assignment_id}",
-          params: %{"assignment_id" => assignment_id}
-        )
-    end
-  end
-
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: nil}) do
-    clear_pending_payout(assignment_id)
-  end
-
-  defp clear_pending_payout_if_empty(%Assignment.Model{id: assignment_id, fund: fund}) do
-    if Systems.Fund.Public.list_pending_approvals(fund) == [] do
-      clear_pending_payout(assignment_id)
-    end
-  end
-
-  defp clear_pending_payout(assignment_id) do
-    case auth_module().users_with_role(assignment_id, :owner) do
-      [] ->
-        :ok
-
-      researchers ->
-        NextAction.Public.clear_next_action(
-          researchers,
-          Systems.Fund.NextActions.PendingPayout,
-          key: "assignment=#{assignment_id}"
+          owners,
+          Systems.Assignment.NextActions.PendingContributions,
+          key: "#{assignment_id}",
+          params: %{
+            "assignment_id" => assignment_id,
+            "node_id" => Systems.Project.Public.get_node_id_by(assignment)
+          }
         )
     end
   end

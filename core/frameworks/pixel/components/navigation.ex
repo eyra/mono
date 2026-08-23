@@ -76,7 +76,8 @@ defmodule Frameworks.Pixel.Navigation do
       assign(assigns, %{
         has_right_bar_buttons: not Enum.empty?(right_bar_buttons),
         has_breadcrumbs: not Enum.empty?(breadcrumbs),
-        justify: action_bar_justify(align)
+        justify: action_bar_justify(align),
+        tabs_slot_class: tabs_slot_class(align)
       })
 
     ~H"""
@@ -97,17 +98,26 @@ defmodule Frameworks.Pixel.Navigation do
         </div>
       <% end %>
       <Area.content>
-        <div class="overflow-scroll scrollbar-hidden w-full">
-          <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height"}>
-            <div class="flex-shrink-0">
-              <%= render_slot(@inner_block) %>
-            </div>
-            <%= if @has_right_bar_buttons do %>
-              <div class="absolute right-0 top-0 h-full flex items-center">
-                <Button.dynamic_bar buttons={@right_bar_buttons} />
-              </div>
-            <% end %>
+        <div class={"relative flex flex-row items-center #{@justify} w-full h-navbar-height gap-6"}>
+          <div class={@tabs_slot_class}>
+            <%= render_slot(@inner_block) %>
           </div>
+          <%= if @has_right_bar_buttons do %>
+            <div class="flex-shrink-0 flex flex-row items-center gap-4">
+              <%= for button <- @right_bar_buttons do %>
+                <%= if Map.has_key?(button, :icon) and Map.has_key?(button, :label) do %>
+                  <div class="md:hidden">
+                    <Button.dynamic {button.icon} />
+                  </div>
+                  <div class="hidden md:block">
+                    <Button.dynamic {button.label} />
+                  </div>
+                <% else %>
+                  <Button.dynamic {button} />
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
         </div>
       </Area.content>
       <.line />
@@ -117,6 +127,9 @@ defmodule Frameworks.Pixel.Navigation do
 
   defp action_bar_justify(:center), do: "justify-center"
   defp action_bar_justify(_), do: "justify-start"
+
+  defp tabs_slot_class(:center), do: "flex-shrink-0"
+  defp tabs_slot_class(_), do: "flex-1 min-w-0 py-2"
 
   attr(:buttons, :list, required: true)
 
@@ -184,7 +197,7 @@ defmodule Frameworks.Pixel.Navigation do
 
   def desktop_navbar(assigns) do
     ~H"""
-    <div class="bg-grey5 w-full pl-6 pr-6">
+    <div class="bg-grey5 w-full">
       <.navbar {assigns} />
     </div>
     """

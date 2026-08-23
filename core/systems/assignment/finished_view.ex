@@ -34,7 +34,7 @@ defmodule Systems.Assignment.FinishedView do
   def handle_event(
         "submit_email",
         %{"email" => email},
-        %{assigns: %{vm: %{email_capture: %{action: {:add_to_pool, _}}}}} = socket
+        %{assigns: %{vm: %{email_capture: %{pool_slug: _}}}} = socket
       ) do
     send(self(), {:do_submit_email, email})
 
@@ -50,7 +50,7 @@ defmodule Systems.Assignment.FinishedView do
         %{
           assigns: %{
             current_user: user,
-            vm: %{email_capture: %{action: {:add_to_pool, pool_slug}}}
+            vm: %{email_capture: %{pool_slug: pool_slug}}
           }
         } =
           socket
@@ -88,7 +88,9 @@ defmodule Systems.Assignment.FinishedView do
               <%= @vm.body %>
             </Text.body_large>
             <%= if @vm.email_capture do %>
-              <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} email_value={@email_value} />
+              <Area.sheet>
+                <.email_capture_block email_capture={@vm.email_capture} email_error={@email_error} email_value={@email_value} />
+              </Area.sheet>
             <% else %>
               <div :if={@vm.illustration} class="flex flex-col items-center w-full pt-4" data-testid="finished-illustration">
                 <img class="block w-[220px] h-[220px] object-cover" src={@vm.illustration} id="zero-todos" alt="All tasks done">
@@ -116,7 +118,7 @@ defmodule Systems.Assignment.FinishedView do
       <InlineBlock.inline_block
         title={@email_capture.title}
         description={@email_capture.body}
-        icon={Logo.path(:panl, {:product, :standing})}
+        icon={Logo.path(@email_capture.pool_slug, :pool)}
       >
         <%= if Map.has_key?(@email_capture, :submit_button) do %>
           <form phx-submit="submit_email" phx-change="change_email" class="flex flex-col gap-4 w-full">
@@ -136,6 +138,9 @@ defmodule Systems.Assignment.FinishedView do
             </div>
             <Button.dynamic {@email_capture.submit_button} testid="email-capture-submit" />
           </form>
+        <% end %>
+        <%= if Map.has_key?(@email_capture, :cta_button) do %>
+          <Button.dynamic {@email_capture.cta_button} testid="panl-cta-button" />
         <% end %>
       </InlineBlock.inline_block>
     </div>

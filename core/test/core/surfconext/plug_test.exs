@@ -122,42 +122,48 @@ defmodule Core.SurfConext.CallbackController.Test do
       assert user.creator == true
     end
 
-    test "authenticates an existing user", %{conn: conn} do
+    test "authenticates an existing user", %{conn: conn, conf: conf} do
       email = Faker.Internet.email()
 
-      Core.SurfConext.register_user(%{
+      Core.Identity.authenticate(Core.SurfConext, %{
         "sub" => "test",
         "email" => email,
         "preferred_username" => Faker.Person.name()
       })
 
+      Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
+
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
-    test "authenticates an existing researcher", %{conn: conn} do
+    test "authenticates an existing researcher", %{conn: conn, conf: conf} do
       email = Faker.Internet.email()
 
-      Core.SurfConext.register_user(%{
+      Core.Identity.authenticate(Core.SurfConext, %{
         "sub" => "test",
         "email" => email,
         "preferred_username" => Faker.Person.name(),
         "eduperson_affiliation" => ["employee"]
       })
 
+      Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
+
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
-    test "authenticates an existing student", %{conn: conn} do
+    test "authenticates an existing student", %{conn: conn, conf: conf} do
       email = Faker.Internet.email()
 
-      Core.SurfConext.register_user(%{
+      Core.Identity.authenticate(Core.SurfConext, %{
         "sub" => "test",
         "email" => email,
         "preferred_username" => Faker.Person.name(),
         "eduperson_affiliation" => ["student"]
       })
+
+      Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
 
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
@@ -190,7 +196,7 @@ defmodule Core.SurfConext.CallbackController.Test do
     test "updates an existing student", %{conn: conn, conf: conf} do
       email = Faker.Internet.email()
 
-      Core.SurfConext.register_user(%{
+      Core.Identity.authenticate(Core.SurfConext, %{
         "sub" => "student",
         "email" => email,
         "preferred_username" => Faker.Person.name(),
@@ -201,24 +207,26 @@ defmodule Core.SurfConext.CallbackController.Test do
         conf
         |> Keyword.put(:sub, "student")
         |> Keyword.put(:token, "student-token")
+        |> Keyword.put(:email, email)
 
       Application.put_env(:core, Core.SurfConext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
 
-      user = Core.SurfConext.get_user_by_sub("student")
-      surfconext_user = Core.SurfConext.get_surfconext_user_by_user(user)
+      user = Systems.Account.Public.get_user_by_email(email)
+      surfconext_user = Core.SurfConext.get(user)
 
       assert redirected_to(conn) == "/project"
       assert surfconext_user.userinfo["eduperson_affiliation"] == ["student"]
     end
 
-    test "handles duplicate email gracefully", %{conn: conn, conf: conf} do
-      # Create an existing user with a specific email
+    test "links a SURFconext satellite onto an existing email/password account", %{
+      conn: conn,
+      conf: conf
+    } do
       existing_email = "duplicate@example.com"
-      Core.Factories.insert!(:member, %{email: existing_email})
+      existing = Core.Factories.insert!(:member, %{email: existing_email, creator: true})
 
-      # Configure FakeOIDC to return a new SUB but with the same email
       conf =
         conf
         |> Keyword.put(:sub, "new-sso-user-different-sub")
@@ -226,11 +234,14 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      # Attempt SSO login - should redirect to signin with error, not crash
       conn = conn |> get("/auth/surfconext/callback")
 
-      assert redirected_to(conn) == "/user/signin"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "already been taken"
+      assert redirected_to(conn) == "/project"
+
+      # Satellite is now attached to the existing user; identity is unchanged.
+      reloaded = Systems.Account.Public.get_user!(existing.id)
+      assert reloaded.email == existing_email
+      assert Core.SurfConext.get(reloaded) != nil
     end
 
     test "redirects to signin and logs error when session is missing" do

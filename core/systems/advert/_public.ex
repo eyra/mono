@@ -174,6 +174,18 @@ defmodule Systems.Advert.Public do
     |> Repo.preload(preload)
   end
 
+  def list_by_pool_and_status(%Pool.Model{id: pool_id}, status, opts \\ []) do
+    preload = Keyword.get(opts, :preload, [])
+
+    from(a in Advert.Model,
+      inner_join: ps in Pool.SubmissionModel,
+      on: ps.id == a.submission_id,
+      where: a.status == ^status and ps.pool_id == ^pool_id,
+      preload: ^preload
+    )
+    |> Repo.all()
+  end
+
   def list_excluded_user_ids(advert_ids) when is_list(advert_ids) do
     from(u in User,
       join: m in Crew.MemberModel,
@@ -205,15 +217,9 @@ defmodule Systems.Advert.Public do
   defp list_excluded_assignment_ids(_), do: []
 
   def list_owners(%Advert.Model{} = advert, preload \\ []) do
-    owner_ids =
-      advert
-      |> auth_module().list_principals()
-      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
-      |> Enum.map(fn %{id: id} -> id end)
-
-    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
     # AUTH: needs to be marked save. Current user is normally not allowed to
     # access other users.
+    auth_module().users_with_role(advert, :owner, preload)
   end
 
   def assign_owners(advert, users) do
@@ -535,10 +541,6 @@ defmodule Systems.Advert.Public do
   """
   def mark_expired_debug(%{assignment: assignment}, force) do
     Assignment.Public.mark_expired_debug(assignment, force)
-  end
-
-  def payout_participant(%Assignment.Model{} = assignment, %User{} = user) do
-    Assignment.Public.payout_participant(assignment, user)
   end
 
   def rewarded_amount(%Assignment.Model{} = assignment, %User{} = user) do

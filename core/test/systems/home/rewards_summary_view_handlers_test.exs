@@ -15,6 +15,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
   alias Core.Factories
   alias Systems.Fund
+  alias Systems.Payment
   alias Systems.Payment.ProviderMock
   alias Systems.Home.RewardsSummaryView
 
@@ -28,16 +29,26 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     approved_caption: "min €5",
     rejected_pill: "R",
     payout_button: "Uitbetalen",
-    payout_success: "Payout started",
     payout_below_threshold: "Minimum €5 required",
-    payout_failed: "Could not start payout",
     payout_handoff_title: "Start payout",
     payout_handoff_body: "PAYOUT body",
     payout_handoff_confirm: "Go to payout",
     payout_handoff_cancel: "Cancel",
-    payout_kyc_title: "Verification required",
-    payout_kyc_body: "KYC body",
-    payout_kyc_confirm: "Continue to verification"
+    payout_verify_title: "Bank account not verified",
+    payout_verify_body: "Verify your bank account first",
+    payout_verify_confirm: "Go to verification",
+    payout_awaiting_title: "Verification in progress",
+    payout_awaiting_body: "Your bank is being reviewed by the payment provider",
+    payout_awaiting_confirm: "OK",
+    donate_button: "Donate",
+    donate_handoff_title: "Donate to Eyra",
+    donate_handoff_body: "DONATE body",
+    donate_handoff_confirm: "Yes, donate",
+    donate_thanks: "Thank you for your donation!",
+    donate_failed: "Donation failed",
+    donate_pending: "Still confirming your donation",
+    donate_in_progress: "Your donation is being processed",
+    donated_total: "Donated to Eyra"
   }
 
   defp socket(user, extra \\ %{}) do
@@ -50,10 +61,13 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
           user: user,
           labels: @labels,
           handoff_mode: :payout,
-          kyc_overview_url: nil,
+          payout_currency: "euro",
           pending_cents: 0,
           approved_cents: 1000,
-          rejected_cents: 0
+          rejected_cents: 0,
+          donating_cents: 0,
+          donated_cents: 0,
+          donate_enabled?: true
         },
         extra
       )
@@ -62,13 +76,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   end
 
   defp user_with_reward(amount, merchant_uid) do
-    currency =
-      Fund.Factories.create_currency(
-        "h_cur_#{System.unique_integer([:positive])}",
-        :legal,
-        "ƒ",
-        2
-      )
+    currency = Fund.Factories.create_currency("euro", :legal, "€", 2)
 
     fund = Fund.Factories.create_fund("h_fund_#{System.unique_integer([:positive])}", currency)
     user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
@@ -99,7 +107,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     end)
 
     stub(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_ok", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_ok", status: :verified, raw_status: "approved", verification_url: nil}]}
     end)
   end
 
@@ -114,9 +122,11 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc -> composes the kyc handoff modal with the overview url" do
+    test "approved bank with a lingering merchant overview_url -> payout (not verify)" do
       user = user_with_reward(1000, "m_kyc")
 
+      # Merchant identity-KYC (overview_url) is no longer required: a verified
+      # bank account is enough, so this proceeds straight to the payout handoff.
       stub(ProviderMock, :get_merchant, fn _ ->
         {:ok,
          %{
@@ -129,17 +139,86 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       end)
 
       stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      assert socket.assigns.handoff_mode == :kyc
-      assert socket.assigns.kyc_overview_url == "https://opp.test/kyc"
+      assert socket.assigns.handoff_mode == :payout
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "kyc_unavailable -> no modal (B1: no fall-through to a payout)" do
+    test "bank kyc -> presents the verify modal" do
+      user = user_with_reward(1000, "m_bank")
+
+      # Merchant verified, but the bank account still needs verification.
+      stub(ProviderMock, :get_merchant, fn _ ->
+        {:ok,
+         %{
+           uid: "m_bank",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub(ProviderMock, :list_bank_accounts, fn _ ->
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :new,
+             raw_status: "new",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
+      end)
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    # Regression: FX#10005449329. After the participant finishes iDEAL, the
+    # payment provider puts the bank in a review state ("pending") but may keep
+    # returning a verification_url. Instead of nagging them with "please verify
+    # your bank account", show a clear "verification in progress, please wait"
+    # modal.
+    test "awaiting_verification -> presents the awaiting modal, not the verify one" do
+      user = user_with_reward(1000, "m_awaiting")
+
+      stub(ProviderMock, :get_merchant, fn _ ->
+        {:ok,
+         %{
+           uid: "m_awaiting",
+           status: "live",
+           kyc_level: 100,
+           compliance_status: "verified",
+           overview_url: nil
+         }}
+      end)
+
+      stub(ProviderMock, :list_bank_accounts, fn _ ->
+        {:ok,
+         [
+           %{
+             uid: "ba",
+             status: :pending,
+             raw_status: "pending",
+             verification_url: "https://opp.test/ba/verify"
+           }
+         ]}
+      end)
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :awaiting
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    test "kyc_unavailable -> verify modal (B1: no fall-through to a payout)" do
       user = user_with_reward(1000, "m_unavail")
 
       stub(ProviderMock, :get_merchant, fn _ ->
@@ -154,12 +233,15 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       end)
 
       stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: "new", verification_url: nil}]}
+        {:ok, [%{uid: "ba", status: :new, raw_status: "new", verification_url: nil}]}
       end)
 
       {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
 
-      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      # The verify variant confirms via an external link, so it can never
+      # fall through to a withdrawal — the reward stays :approved.
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
       assert reward_status(user) == :approved
     end
 
@@ -183,7 +265,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_c_pay")
       stub_ready("m_c_pay")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 
@@ -199,6 +281,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert reward_status(user) == :pending_payout
+      # On success the view bubbles to Home.Page, which redirects to the
+      # payouts overview from handle_info (redirecting here would crash —
+      # this handler runs in the component's update/2 lifecycle).
+      assert_received :payout_completed
     end
 
     test "stale-user regression: confirm reloads merchant_uid provisioned this session" do
@@ -207,7 +293,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_provisioned")
       stub_ready("m_provisioned")
 
-      stub(ProviderMock, :create_charge, fn _, _, _, _ ->
+      stub(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
         {:ok, %{uid: "chg", status: "created", amount: 0}}
       end)
 
@@ -247,6 +333,43 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       assert socket.assigns.approved_cents == 0
     end
+
+    test "a provider failure at confirm time presents the verify modal" do
+      user = user_with_reward(1000, "m_c_down")
+
+      stub(ProviderMock, :list_bank_accounts, fn "m_c_down" ->
+        {:error, %Payment.Error{code: :service_unavailable, message: "OPP down"}}
+      end)
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :payout})
+        )
+
+      assert socket.assigns.handoff_mode == :verify
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      assert reward_status(user) == :approved
+    end
+
+    # FX#10005449329. The awaiting modal is info-only — its single "OK" button
+    # must not trigger a payout, only dismiss.
+    test "awaiting variant only dismisses; no provider call, no payout completion" do
+      user = user_with_reward(1000, "m_awaiting_confirm")
+      # No ProviderMock stubs -> Mox raises if any provider call is made.
+
+      {:noreply, socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :awaiting})
+        )
+
+      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+      refute_received :payout_completed
+      assert reward_status(user) == :approved
+    end
   end
 
   describe "cancelled (from the handoff modal)" do
@@ -263,6 +386,155 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       refute Fabric.get_child(closed.assigns.fabric, :handoff_modal)
       assert reward_status(user) == :approved
+    end
+  end
+
+  describe "retry_payout (stranded-payout recovery)" do
+    # A stranded payout is past the bank-verification handoff, so retry resumes
+    # it directly — no modal — and completes like a confirmed payout.
+    test "resumes the stranded payout and bubbles completion" do
+      {user, payout} = user_with_stranded_payout("m_retry")
+
+      # :awaiting_withdrawal: the provider holds no withdrawal, so resume issues one.
+      expect(ProviderMock, :list_withdrawals, fn "m_retry" -> {:ok, []} end)
+
+      expect(ProviderMock, :create_withdrawal, fn "m_retry", :EUR, %{amount: 1000}, _key ->
+        {:ok,
+         %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      end)
+
+      {:noreply, _socket} = RewardsSummaryView.handle_event("retry_payout", %{}, socket(user))
+
+      assert %{provider_uid: "w_retry"} = Core.Repo.reload!(payout)
+      assert_received :payout_completed
+    end
+  end
+
+  defp user_with_stranded_payout(merchant_uid) do
+    currency =
+      Fund.Factories.create_currency(
+        "s_cur_#{System.unique_integer([:positive])}",
+        :legal,
+        "ƒ",
+        2
+      )
+
+    fund = Fund.Factories.create_fund("s_fund_#{System.unique_integer([:positive])}", currency)
+    user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
+
+    payout =
+      Core.Repo.insert!(%Fund.PayoutModel{
+        user_id: user.id,
+        amount_cents: 1000,
+        currency: "eur",
+        status: :pending,
+        funds_committed_at: ~N[2026-07-15 08:00:00],
+        provider_uid: nil
+      })
+
+    Factories.insert!(:reward, %{
+      user: user,
+      fund: fund,
+      amount: 1000,
+      status: :pending_payout,
+      payout_id: payout.id,
+      idempotence_key: "s-#{System.unique_integer([:positive])}"
+    })
+
+    {user, payout}
+  end
+
+  describe "donate" do
+    # No ProviderMock stub: a donation needs no merchant, bank account or KYC,
+    # so nothing may reach OPP before the participant has waived anything.
+    test "presents the waiver modal without touching the provider" do
+      user = user_with_reward(1000, "m_donate")
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("donate", %{}, socket(user))
+
+      assert socket.assigns.handoff_mode == :donate
+      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+    end
+
+    # The donate "confirmed" clause must sit above the unguarded payout one.
+    # If it doesn't, this fires a payout instead — which the reward status and
+    # the absent :payout_completed message both catch.
+    test "confirming the waiver donates instead of paying out" do
+      user = user_with_reward(1000, "m_donate_confirm")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, 1000, _key ->
+        {:ok, %{uid: "chg_ui", status: :pending, raw_status: "created", amount: 1000}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :donated
+      refute_received :payout_completed
+    end
+
+    # Hiding the button doesn't stop the event; :opp_phase_3 has to hold the
+    # server side too. No ProviderMock stub, so any OPP call fails the test.
+    test "does nothing when the opp_phase_3 feature is off" do
+      user = user_with_reward(1000, "m_donate_off")
+      socket = socket(user, %{donate_enabled?: false})
+
+      {:noreply, socket} = RewardsSummaryView.handle_event("donate", %{}, socket)
+
+      refute Fabric.get_child(socket.assigns.fabric, :handoff_modal)
+
+      # And a forged confirm must not donate — nor fall through to a payout.
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate, donate_enabled?: false})
+        )
+
+      assert reward_status(user) == :approved
+      refute_received :payout_completed
+    end
+
+    test "a failed donation leaves the reward approved" do
+      user = user_with_reward(1000, "m_donate_fail")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :approved
+    end
+
+    # The money may well have moved, and the card already says the donation is
+    # being processed — a red "try again later" next to it would contradict it
+    # and invite a retry the zeroed approved balance makes impossible.
+    test "an uncertain charge is not reported to the participant as a failure" do
+      user = user_with_reward(1000, "m_donate_uncertain")
+
+      expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
+        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+      end)
+
+      {:noreply, _socket} =
+        RewardsSummaryView.handle_event(
+          "confirmed",
+          %{source: %{name: :handoff_modal}},
+          socket(user, %{handoff_mode: :donate})
+        )
+
+      assert reward_status(user) == :donating
+      assert_received {:show_flash, %{type: :info, message: "Still confirming your donation"}}
     end
   end
 end

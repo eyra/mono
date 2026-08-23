@@ -33,6 +33,7 @@ defmodule Systems.Manual.Model do
   def preload_graph(:down), do: preload_graph([:userflow, :chapters])
   def preload_graph(:up), do: []
 
+  def preload_graph(:chapter_list), do: [chapters: [:userflow_step]]
   def preload_graph(:userflow), do: [userflow: Userflow.Model.preload_graph(:down)]
   def preload_graph(:chapters), do: [chapters: Manual.ChapterModel.preload_graph(:down)]
 end

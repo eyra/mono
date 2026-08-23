@@ -7,15 +7,21 @@ defmodule Systems.Payment.Provider.Local do
 
   # Merchants
 
-  # Always "fully verified" so the dev/test pay-out path skips OPP's KYC funnel.
   defp stub_merchant(uid) do
     %{
       uid: uid,
       status: "live",
       kyc_level: 100,
       compliance_status: "verified",
-      overview_url: nil
+      overview_url: nil,
+      created: nil
     }
+  end
+
+  @impl true
+  def list_recent_merchants(%DateTime{} = since) do
+    Logger.info("[Payment.Local] list_recent_merchants since=#{DateTime.to_iso8601(since)} -> []")
+    {:ok, []}
   end
 
   @impl true
@@ -38,10 +44,17 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, stub_merchant(uid)}
   end
 
+  @impl true
+  def add_merchant_phone(merchant_uid, phone)
+      when is_binary(merchant_uid) and is_binary(phone) do
+    Logger.info("[Payment.Local] add_merchant_phone merchant=#{merchant_uid} phone=#{phone}")
+    {:ok, stub_merchant(merchant_uid)}
+  end
+
   # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
 
   defp stub_bank_account(uid) do
-    %{uid: uid, status: "approved", verification_url: nil}
+    %{uid: uid, status: :verified, raw_status: "approved", verification_url: nil}
   end
 
   @impl true
@@ -81,16 +94,38 @@ defmodule Systems.Payment.Provider.Local do
     {:ok,
      %{
        uid: uid,
-       status: "created",
+       status: :pending,
+       raw_status: "created",
        payment_url: "#{CoreWeb.Endpoint.url()}/payment/local/#{uid}",
-       amount: total_amount
+       amount: total_amount,
+       reference: idempotence_key,
+       created: nil
      }}
   end
 
   @impl true
   def get_transaction(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_transaction uid=#{uid}")
-    {:ok, %{uid: uid, status: "created", payment_url: nil, amount: 0}}
+
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       payment_url: nil,
+       amount: 0,
+       reference: nil,
+       created: nil
+     }}
+  end
+
+  @impl true
+  def list_recent_transactions(%DateTime{} = since) do
+    Logger.info(
+      "[Payment.Local] list_recent_transactions since=#{DateTime.to_iso8601(since)} -> []"
+    )
+
+    {:ok, []}
   end
 
   # Withdrawals
@@ -105,26 +140,103 @@ defmodule Systems.Payment.Provider.Local do
       "[Payment.Local] create_withdrawal merchant=#{merchant_uid} currency=#{currency} uid=#{uid} idempotence_key=#{idempotence_key} attrs=#{inspect(attrs)}"
     )
 
-    {:ok, %{uid: uid, status: "created", amount: Map.get(attrs, :amount, 0)}}
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       reference: idempotence_key,
+       amount: Map.get(attrs, :amount, 0),
+       created: nil
+     }}
   end
 
   @impl true
   def get_withdrawal(uid) when is_binary(uid) do
     Logger.info("[Payment.Local] get_withdrawal uid=#{uid}")
-    {:ok, %{uid: uid, status: "created", amount: 0}}
+
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       reference: nil,
+       amount: 0,
+       created: nil
+     }}
   end
 
   @impl true
-  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+  def list_withdrawals(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_withdrawals merchant=#{merchant_uid} -> []")
+    {:ok, []}
+  end
+
+  # The local simulator holds no provider-side history, so it can never orphan a
+  # payout: an empty list is the honest answer, not a stub.
+  @impl true
+  def list_recent_withdrawals(%DateTime{} = since) do
+    Logger.info(
+      "[Payment.Local] list_recent_withdrawals since=#{DateTime.to_iso8601(since)} -> []"
+    )
+
+    {:ok, []}
+  end
+
+  @impl true
+  def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
       when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
              is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
-      "[Payment.Local] create_charge from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
+      "[Payment.Local] transfer_to_merchant from=#{from_owner_uid} to=#{to_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
     )
 
-    {:ok, %{uid: uid, status: "created", amount: amount}}
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       amount: amount,
+       reference: idempotence_key,
+       settled: System.os_time(:second),
+       created: nil
+     }}
+  end
+
+  @impl true
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    Logger.info("[Payment.Local] list_charges_to_merchant merchant=#{merchant_uid} -> []")
+    {:ok, []}
+  end
+
+  @impl true
+  def list_recent_transfers(%DateTime{} = since) do
+    Logger.info("[Payment.Local] list_recent_transfers since=#{DateTime.to_iso8601(since)} -> []")
+    {:ok, []}
+  end
+
+  @impl true
+  def charge_to_partner(from_owner_uid, amount, idempotence_key)
+      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and
+             is_binary(idempotence_key) do
+    uid = generate_uid()
+
+    Logger.info(
+      "[Payment.Local] charge_to_partner from=#{from_owner_uid} amount=#{amount} uid=#{uid} idempotence_key=#{idempotence_key}"
+    )
+
+    {:ok,
+     %{
+       uid: uid,
+       status: :pending,
+       raw_status: "created",
+       amount: amount,
+       reference: idempotence_key,
+       settled: System.os_time(:second),
+       created: nil
+     }}
   end
 
   defp generate_uid do

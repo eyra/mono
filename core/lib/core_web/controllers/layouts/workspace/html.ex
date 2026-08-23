@@ -38,7 +38,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
           <Navigation.tablet_menu {@menus.tablet_menu} />
           <Navigation.desktop_menu {@menus.desktop_menu} />
         </div>
-        <div class="w-full h-full">
+        <div class="w-full h-full min-w-0">
           <div class="h-full w-full overflow-hidden">
             <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll">
               <div class="flex-wrap">

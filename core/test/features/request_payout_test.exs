@@ -37,9 +37,8 @@ defmodule CoreWeb.Features.RequestPayoutTest do
           %{session: session} do
     merchant_uid = "m_kyc_test"
 
-    # Merchant exists at the provider but isn't verified — drives the
-    # `{:error, {:kyc_required, overview_url}}` branch of
-    # Fund.Public.prepare_payout/1.
+    # Bank account isn't verified yet — drives the
+    # `{:error, {:kyc_required, :bank, _}}` branch of Fund.Public.prepare_payout/1.
     ProviderMock
     |> stub(:get_merchant, fn ^merchant_uid ->
       {:ok,
@@ -48,11 +47,11 @@ defmodule CoreWeb.Features.RequestPayoutTest do
          status: "pending",
          kyc_level: 0,
          compliance_status: "unverified",
-         overview_url: "https://opp.test/kyc-onboarding"
+         overview_url: nil
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_test", status: :new, verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     password = Factories.valid_user_password()
@@ -66,7 +65,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
         merchant_uid: merchant_uid
       })
 
-    currency = Factories.insert!(:currency, %{name: "eur_test"})
+    currency = Factories.insert!(:currency, %{name: "euro"})
     fund = Fund.Factories.create_fund("payout_fund_#{participant.id}", currency)
 
     # Approved reward — what makes `payout-button` visible on the home page.
@@ -80,12 +79,7 @@ defmodule CoreWeb.Features.RequestPayoutTest do
     })
 
     session
-    |> visit("/user/signin")
-    |> fill_in(Query.css("[data-testid='signin-email-input']"),
-      with: participant.email
-    )
-    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
-    |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> sign_in(participant, password)
     |> visit("/")
     |> assert_has(Query.css("[data-testid='payout-button']"))
     |> click(Query.css("[data-testid='payout-button']"))

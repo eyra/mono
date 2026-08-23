@@ -22,19 +22,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Servicii software"
+msgstr "Activități"
 
 #, elixir-autogen, elixir-format
 msgid "participated.title"
-msgstr "Contribuții"
-
-#, elixir-autogen, elixir-format
-msgid "available.visitor.title"
-msgstr "Studii Panl"
-
-#, elixir-autogen, elixir-format
-msgid "member.caption"
-msgstr "Dezvoltat pentru și împreună cu cercetătorii"
+msgstr "Istoric"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
@@ -42,7 +34,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"
-msgstr ""
+msgstr "Recompensă:"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.approved"
@@ -50,8 +42,16 @@ msgstr "Contribuții"
 
 #, elixir-autogen, elixir-format
 msgid "participated.status.awaiting"
-msgstr ""
+msgstr "În așteptare"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "participated.status.rejected"
 msgstr "Contribuții"
+
+#, elixir-autogen, elixir-format
+msgid "guest.caption"
+msgstr "Dezvoltat pentru și împreună cu cercetătorii"
+
+#, elixir-autogen, elixir-format
+msgid "guest.title"
+msgstr "Servicii software"

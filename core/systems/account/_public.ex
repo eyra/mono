@@ -97,6 +97,16 @@ defmodule Systems.Account.Public do
     |> Repo.commit()
   end
 
+  @doc """
+  Persists the participant's phone number (payouts flow). Returns
+  `{:ok, user}` or `{:error, changeset}`.
+  """
+  def update_phone(%User{} = user, phone) when is_binary(phone) do
+    user
+    |> User.phone_changeset(%{phone: phone})
+    |> Repo.update()
+  end
+
   def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
@@ -187,6 +197,21 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Gets the user linked to an OPP merchant, or nil. Used by the payment webhook to
+  route a bank-account/merchant KYC change back to the owning participant.
+  """
+  def get_user_by_merchant_uid(merchant_uid) when is_binary(merchant_uid) do
+    Repo.get_by(User, merchant_uid: merchant_uid)
+  end
+
+  @doc """
+  Flags provider merchants that no user carries.
+  See `Systems.Account.MerchantOrphanReconciliation`.
+  """
+  def reconcile_orphaned_merchants(opts, state),
+    do: Account.MerchantOrphanReconciliation.run(opts, state)
+
+  @doc """
   Gets a user by email and password.
 
   ## Examples
@@ -243,6 +268,34 @@ defmodule Systems.Account.Public do
     %User{}
     |> User.registration_changeset(attrs)
     |> Repo.insert()
+  end
+
+  @doc """
+  Registers a new user from an SSO-provided attrs map. The IdP (SURFconext,
+  Google, …) has already proven email ownership, so the account is created
+  with `confirmed_at`/`verified_at` set by the caller's attrs and is
+  immediately usable. Dispatches `{:user, :created}`.
+
+  `attrs` is the flat normalized map produced by a `Core.Identity.Provider`'s
+  `user_attrs/1` callback — the User vs Profile schema split is an internal
+  concern handled here, not something the IdP has to know about. See
+  `Core.Identity.Provider.user_attrs/0` for the allowed keys.
+  """
+  def register_via_sso(%{email: _} = attrs) do
+    with {:ok, user} <-
+           %User{}
+           |> User.sso_changeset(nest_profile_attrs(attrs))
+           |> Repo.insert() do
+      Frameworks.Signal.Public.dispatch!({:user, :created}, %{user: user})
+      {:ok, user}
+    end
+  end
+
+  @profile_keys [:fullname, :title, :photo_url]
+
+  defp nest_profile_attrs(attrs) do
+    {profile_attrs, user_attrs} = Map.split(attrs, @profile_keys)
+    Map.put(user_attrs, :profile, profile_attrs)
   end
 
   @doc """

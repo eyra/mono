@@ -187,6 +187,7 @@ defmodule Systems.Admin.OrgViewBuilder do
   """
   def build_organisation_item(%Org.NodeModel{id: id} = org, locale, is_admin?) do
     members = Org.Public.list_members(org)
+    pools = Systems.Pool.Public.list_by_orgs([org])
 
     # Admin-only actions
     left_actions =
@@ -217,7 +218,7 @@ defmodule Systems.Admin.OrgViewBuilder do
       item: id,
       title: build_item_title(org, locale),
       description: build_description(members),
-      tags: build_tags(org),
+      tags: build_tags(org, pools),
       left_actions: left_actions,
       right_actions: right_actions
     }
@@ -232,8 +233,13 @@ defmodule Systems.Admin.OrgViewBuilder do
     "#{dgettext("eyra-org", "org.members.label")}: #{member_count}"
   end
 
-  defp build_tags(%{domains: nil}), do: []
-  defp build_tags(%{domains: domains}), do: domains
+  defp build_tags(org, pools) do
+    panel_tag = if Enum.any?(pools), do: [dgettext("eyra-admin", "org.panel.tag")], else: []
+    panel_tag ++ domain_tags(org)
+  end
+
+  defp domain_tags(%{domains: nil}), do: []
+  defp domain_tags(%{domains: domains}), do: domains
 
   defp filter_by_query(organisations, nil), do: organisations
   defp filter_by_query(organisations, []), do: organisations

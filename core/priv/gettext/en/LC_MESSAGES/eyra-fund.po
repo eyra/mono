@@ -159,14 +159,6 @@ msgid "rewards_summary.payout.button"
 msgstr "Pay out"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.failed"
-msgstr "Payout could not be processed right now. Please try again later."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr "Payout requested. Your reward is on its way to your bank account."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr "🔒 Pay out %{amount} to your bank account. Payments are processed securely by our payment provider."
 
@@ -179,17 +171,77 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Pay out now"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.body"
-msgstr "🔒 You first need to verify your identity with our payment provider. You will be redirected to complete this step, then come back to start your payout."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr "Continue to verification"
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
 msgstr "Start payout"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.title"
-msgstr "Verification required"
+msgid "rewards_summary.payout.verify.body"
+msgstr "Please verify your bank account first before you can request a payout."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Go to verification"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bank account not yet verified"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.in_progress"
+msgstr "Your payout is being processed."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.manual"
+msgstr "Your payout is being processed. Please contact support if this takes a while."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Retry payout"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.body"
+msgstr "Your bank account is being reviewed by our payment provider. This usually takes a few minutes — please try again shortly."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr "OK"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.title"
+msgstr "Verification in progress"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr "Donate"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr "Donation failed. Please try again later."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr "You are donating %{amount} to Eyra. By doing so you waive your right to have this amount paid out. This cannot be undone."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr "Yes, donate"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr "Donate to Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr "Your donation is being processed."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr "Thank you for your donation!"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr "Donated to Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
+msgstr "We're still confirming your donation. No need to try again."

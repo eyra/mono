@@ -129,43 +129,35 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.pill"
-msgstr ""
+msgstr "Genehmigt"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.threshold"
-msgstr ""
+msgstr "Auszahlung oder Spende ab € 5 möglich"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.caption"
-msgstr ""
+msgstr "Warten auf Genehmigung"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.pill"
-msgstr ""
+msgstr "Ausstehend"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.rejected.pill"
-msgstr ""
+msgstr "Abgelehnt"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
-msgstr ""
+msgstr "Vergütungen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.below_threshold"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.failed"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.success"
-msgstr ""
+msgstr "Auszahlen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.body"
@@ -180,17 +172,77 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.title"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.body"
+msgstr "Bitte verifizieren Sie zuerst Ihr Bankkonto, bevor Sie eine Auszahlung beantragen können."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Zur Verifizierung"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bankkonto noch nicht verifiziert"
+
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.title"
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Auszahlung wiederholen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
 msgstr ""

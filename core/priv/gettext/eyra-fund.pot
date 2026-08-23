@@ -159,14 +159,6 @@ msgid "rewards_summary.payout.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.failed"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr ""
 
@@ -179,17 +171,77 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.title"
+msgid "rewards_summary.payout.verify.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
 msgstr ""

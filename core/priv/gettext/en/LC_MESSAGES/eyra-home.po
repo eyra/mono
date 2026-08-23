@@ -12,19 +12,11 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "member.title"
-msgstr "Software Services"
-
-#, elixir-autogen, elixir-format
-msgid "participated.title"
 msgstr "Activities"
 
 #, elixir-autogen, elixir-format
-msgid "available.visitor.title"
-msgstr "Panl studies"
-
-#, elixir-autogen, elixir-format
-msgid "member.caption"
-msgstr "Developed for and with researchers"
+msgid "participated.title"
+msgstr "History"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
@@ -45,3 +37,11 @@ msgstr "Awaiting"
 #, elixir-autogen, elixir-format
 msgid "participated.status.rejected"
 msgstr "Rejected"
+
+#, elixir-autogen, elixir-format
+msgid "guest.caption"
+msgstr "Developed for and with researchers"
+
+#, elixir-autogen, elixir-format
+msgid "guest.title"
+msgstr "Software Services"

@@ -116,10 +116,10 @@ config :core, :features,
   sign_in_with_apple: true,
   member_google_sign_in: true,
   password_sign_in: true,
-  notification_mails: true,
   debug_expire_force: true,
   panl: true,
   panl_post_launch: true,
+  opp_phase_3: true,
   e2e: true,
   otp: true
 

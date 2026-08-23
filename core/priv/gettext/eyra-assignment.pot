@@ -541,39 +541,59 @@ msgid "email_capture.error.role_account"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.label"
+msgid "panl.cta.join.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.cancel.button"
+msgid "panl.cta.join.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.confirm.button"
+msgid "panl.cta.join.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.costs.label"
+msgid "panl.cta.home.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.description"
+msgid "panl.cta.home.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
+msgid "panl.cta.home.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.label"
+msgid "pay_in_request_form.aim.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.slots.label"
+msgid "pay_in_request_form.cancel.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.title"
+msgid "pay_in_request_form.confirm.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.costs.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.fee.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.slots.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -613,10 +633,6 @@ msgid "payment.transactions.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.hint"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
 
@@ -625,93 +641,101 @@ msgid "recruit.panel.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.partner_fee.label"
+msgid "pay_in_request_form.partner_fee.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.subtotal.label"
+msgid "pay_in_request_form.subtotal.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.total.label"
+msgid "pay_in_request_form.total.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.error"
+msgid "contributions.decline.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.link"
+msgid "contributions.decline.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.reason.label"
+msgid "contributions.decline.reason.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.submit.button"
+msgid "contributions.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.heading"
+msgid "contributions.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
+msgid "contributions.pagination.single_page"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.button"
+msgid "contributions.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.error"
+msgid "contributions.subject_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
+msgid "contributions.waiting.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.subject_label"
+msgid "contributions.waiting.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.tab.overview"
+msgid "contributions.overview.amount_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.tab.waiting"
+msgid "contributions.overview.date_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.empty"
+msgid "contributions.overview.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.waiting.heading"
+msgid "assignment_full.body"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.amount_label"
+msgid "assignment_full.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.date_label"
+msgid "pay_in_request_form.aim.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.empty"
+msgid "pay_in_request_form.slots.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.description"
+msgid "pay_in_request_form.aim.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.open.button"
+msgid "pay_in_request_form.fee.required"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.title"
+msgid "tabbar.item.contributions"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.error"
 msgstr ""

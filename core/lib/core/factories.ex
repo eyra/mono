@@ -4,7 +4,6 @@ defmodule Core.Factories do
   """
   alias Core.Authentication
   alias Core.Authorization
-  alias Core.WebPush
   alias Core.Repo
 
   alias Frameworks.GreenLight
@@ -17,7 +16,7 @@ defmodule Core.Factories do
   alias Systems.Annotation
   alias Systems.Assignment
   alias Systems.Bookkeeping
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Consent
   alias Systems.Content
@@ -28,7 +27,6 @@ defmodule Core.Factories do
   alias Systems.Lab
   alias Systems.Manual
   alias Systems.Monitor
-  alias Systems.Notification
   alias Systems.Ontology
   alias Systems.Org
   alias Systems.Paper
@@ -114,16 +112,6 @@ defmodule Core.Factories do
 
   def build(:monitor_event) do
     build(:monitor_event, %{})
-  end
-
-  def build(:web_push_subscription) do
-    %WebPush.PushSubscription{
-      user: build(:member),
-      endpoint: Faker.Internet.url(),
-      expiration_time: 0,
-      auth: Faker.String.base64(22),
-      p256dh: Faker.String.base64(87)
-    }
   end
 
   def build(:advert) do
@@ -286,8 +274,8 @@ defmodule Core.Factories do
     build(:assignment, %{})
   end
 
-  def build(:assignment_instance) do
-    build(:assignment_instance, %{})
+  def build(:assignment_participation) do
+    build(:assignment_participation, %{})
   end
 
   def build(:affiliate) do
@@ -497,24 +485,6 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:notification_box, %{user: user} = attributes) do
-    auth_node =
-      build(:auth_node, %{
-        role_assignments: [
-          %{
-            role: :owner,
-            principal_id: GreenLight.Principal.id(user)
-          }
-        ]
-      })
-
-    %Notification.Box{}
-    |> struct!(
-      Map.delete(attributes, :user)
-      |> Map.put(:auth_node, auth_node)
-    )
-  end
-
   def build(:advert, %{} = attributes) do
     {advert_auth_node, attributes} = Map.pop(attributes, :auth_node, build(:auth_node))
     {submission, attributes} = Map.pop(attributes, :submission, build(:pool_submission))
@@ -659,8 +629,8 @@ defmodule Core.Factories do
     |> struct!(attributes)
   end
 
-  def build(:assignment_instance, %{} = attributes) do
-    %Assignment.InstanceModel{}
+  def build(:assignment_participation, %{} = attributes) do
+    %Assignment.ParticipationModel{}
     |> struct!(attributes)
   end
 
@@ -931,7 +901,7 @@ defmodule Core.Factories do
     {currency, attributes} = Map.pop(attributes, :currency, :EUR)
     id = currency |> Atom.to_string() |> String.downcase()
 
-    %Budget.CurrencyLedgerModel{
+    %Fund.CurrencyLedgerModel{
       currency: currency,
       inbound: Bookkeeping.AccountModel.create(["ledger", id, "inbound"]),
       outbound: Bookkeeping.AccountModel.create(["ledger", id, "outbound"])
@@ -975,7 +945,8 @@ defmodule Core.Factories do
     {label_bundle, attributes} = Map.pop(attributes, :label_bundle, build(:text_bundle))
 
     %Fund.CurrencyModel{
-      label_bundle: label_bundle
+      label_bundle: label_bundle,
+      type: :virtual
     }
     |> struct!(attributes)
   end
@@ -985,6 +956,20 @@ defmodule Core.Factories do
     {user, attributes} = Map.pop(attributes, :user, build(:member))
     {deposit, attributes} = Map.pop(attributes, :deposit, nil)
     {payment, attributes} = Map.pop(attributes, :payment, nil)
+
+    attributes =
+      if payment == nil and attributes[:status] == :approved and
+           not Map.has_key?(attributes, :payment_id) do
+        entry =
+          insert!(:book_entry, %{
+            idempotence_key: "reward-payment-#{System.unique_integer([:positive])}",
+            journal_message: "reward payment"
+          })
+
+        Map.put(attributes, :payment_id, entry.id)
+      else
+        attributes
+      end
 
     %Fund.RewardModel{
       fund: fund,

@@ -37,6 +37,8 @@ defmodule CoreWeb.Live.Feature.Menus do
         menus = CoreWeb.Menus.build_menus(menu_builder, menus, active_menu_item, user, uri)
         socket |> assign(menus: menus)
       end
+
+      defoverridable update_menus: 1
     end
   end
 end

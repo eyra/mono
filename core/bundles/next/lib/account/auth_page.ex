@@ -1,5 +1,5 @@
 defmodule Next.Account.AuthPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
@@ -10,16 +10,22 @@ defmodule Next.Account.AuthPage do
   import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     if feature_enabled?(:otp) do
       {
         :ok,
         socket
-        |> assign(form: to_form(%{"email" => ""}), error: nil, loading: false)
+        |> assign(
+          form: to_form(%{"email" => ""}),
+          error: nil,
+          loading: false,
+          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
+        )
         |> update_menus()
       }
     else
@@ -59,17 +65,19 @@ defmodule Next.Account.AuthPage do
 
   @impl true
   def handle_info({:route_email, email}, socket) do
+    return_to = socket.assigns[:return_to]
+
     case Account.EmailRouter.route(email) do
       :google ->
-        {:noreply, redirect(socket, to: "/auth/google?login_hint=#{URI.encode_www_form(email)}")}
+        {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}
 
       :surfconext ->
-        {:noreply, redirect(socket, to: "/auth/surfconext")}
+        {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email) do
           :ok ->
-            {:noreply, push_navigate(socket, to: ~p"/user/auth/verify?email=#{email}")}
+            {:noreply, push_navigate(socket, to: verify_url(email, return_to))}
 
           {:error, :rate_limited} ->
             {:noreply,
@@ -81,15 +89,22 @@ defmodule Next.Account.AuthPage do
     end
   end
 
+  defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
+
+  defp verify_url(email, nil), do: ~p"/user/auth/verify?email=#{email}"
+
+  defp verify_url(email, return_to),
+    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
+
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped menus={@menus}>
+    <.stripped menus={@menus} centered?>
+      <div class="h-full flex flex-col justify-center pb-16">
       <Area.content>
         <Area.form>
-          <Margin.y id={:page_top} />
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
           <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change">
@@ -114,6 +129,7 @@ defmodule Next.Account.AuthPage do
           </.form>
         </Area.form>
       </Area.content>
+      </div>
     </.stripped>
     """
   end

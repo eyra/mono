@@ -11,7 +11,6 @@ defmodule Systems.Project.Public do
 
   alias Frameworks.Signal
 
-  alias Systems.Account.User
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Graphite
@@ -105,6 +104,17 @@ defmodule Systems.Project.Public do
 
   def get_item_by(%Storage.EndpointModel{id: storage_endpoint_id}) do
     get_item_by_special(:storage_endpoint, storage_endpoint_id)
+  end
+
+  def get_node_id_by(%Assignment.Model{} = assignment) do
+    case get_item_by(assignment) do
+      %Project.ItemModel{node_id: node_id} -> node_id
+      _ -> nil
+    end
+  end
+
+  def get_node_id_by(assignment_id) when is_integer(assignment_id) do
+    get_node_id_by(%Assignment.Model{id: assignment_id})
   end
 
   defp get_item_by_special(special_name, special_id) do
@@ -351,13 +361,7 @@ defmodule Systems.Project.Public do
   end
 
   def list_owners(%Project.Model{} = project, preload \\ []) do
-    owner_ids =
-      project
-      |> auth_module().list_principals()
-      |> Enum.filter(fn %{roles: roles} -> MapSet.member?(roles, :owner) end)
-      |> Enum.map(fn %{id: id} -> id end)
-
-    from(u in User, where: u.id in ^owner_ids, preload: ^preload, order_by: u.id) |> Repo.all()
+    auth_module().users_with_role(project, :owner, preload)
   end
 end
 

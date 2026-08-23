@@ -19,7 +19,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
 
   defp policy_url(key), do: @policy_urls[key]
 
-  def dependencies(), do: [:user_id]
+  def dependencies(), do: [:user_id, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     Account.Public.get_user!(user_id)
@@ -66,9 +66,11 @@ defmodule Systems.Account.TermsAndPrivacyView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-8 items-center" data-testid="terms-and-privacy-view">
-      <Text.title2 align="text-center"><%= dgettext("eyra-account", "terms_and_privacy.onboarding.title") %></Text.title2>
-      <Text.body align="text-center"><%= dgettext("eyra-account", "terms_and_privacy.onboarding.body") %></Text.body>
+    <div class="flex flex-col gap-8" data-testid="terms-and-privacy-view">
+      <%= if @show_title do %>
+        <Text.title2><%= dgettext("eyra-account", "terms_and_privacy.onboarding.title") %></Text.title2>
+      <% end %>
+      <Text.body><%= dgettext("eyra-account", "terms_and_privacy.onboarding.body") %></Text.body>
       <div class="cursor-pointer" phx-click="toggle_terms" data-testid="terms-and-privacy-onboarding-terms">
         <SelectorItem.checkbox raw?={true} item={%{
           value: dgettext("eyra-account", "terms_and_privacy.onboarding.terms",

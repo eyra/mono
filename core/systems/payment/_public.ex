@@ -28,24 +28,47 @@ defmodule Systems.Payment.Public do
     provider().find_merchant_by_email(email)
   end
 
-  @spec ensure_merchant_for(Account.User.t()) ::
-          {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
-  def ensure_merchant_for(%Account.User{} = user) do
-    do_ensure_merchant_for(Repo.reload!(user))
+  @doc """
+  Every merchant the provider created at or after `since` — the provider-side
+  input to the provider→local merchant scan.
+  """
+  @spec list_recent_merchants(since :: DateTime.t()) :: Provider.listing(Provider.merchant())
+  def list_recent_merchants(%DateTime{} = since) do
+    provider().list_recent_merchants(since)
   end
 
-  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user)
+  @spec ensure_merchant_for(Account.User.t(), String.t() | nil) ::
+          {:ok, {Account.User.t(), Provider.merchant()}} | {:error, Error.t()}
+  def ensure_merchant_for(%Account.User{id: user_id} = user, phone \\ nil) do
+    user
+    |> Repo.reload!()
+    |> do_ensure_merchant_for(phone)
+    |> log_error("ensure_merchant_for user ##{user_id}")
+  end
+
+  @doc """
+  Sets the phone number on an existing merchant's primary contact so OPP's
+  `contact.phonenumber.required` requirement is satisfied via the API.
+  """
+  @spec set_merchant_phone(String.t(), String.t()) ::
+          {:ok, Provider.merchant()} | {:error, Error.t()}
+  def set_merchant_phone(merchant_uid, phone)
+      when is_binary(merchant_uid) and is_binary(phone) do
+    provider().add_merchant_phone(merchant_uid, phone)
+  end
+
+  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user, phone)
        when is_binary(merchant_uid) do
     case get_merchant(merchant_uid) do
-      {:ok, merchant} -> {:ok, {user, merchant}}
+      {:ok, merchant} -> ensure_merchant_phone(user, merchant, phone)
       {:error, _} = error -> error
     end
   end
 
-  defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user) do
+  defp do_ensure_merchant_for(%Account.User{id: user_id, email: email} = user, phone) do
     Logger.info("[Payment] Creating merchant for user ##{user_id} (#{email})")
 
-    case create_merchant(merchant_attrs(user)) do
+    case create_merchant(merchant_attrs(user, phone)) do
       {:ok, %{uid: merchant_uid} = merchant} ->
         register_merchant(user, merchant_uid, merchant)
 
@@ -62,6 +85,18 @@ defmodule Systems.Payment.Public do
     end
   end
 
+  # Push the phone to an already-existing merchant so a merchant created before
+  # we collected the phone still satisfies OPP's phone requirement via the API
+  # (idempotent at OPP). No phone supplied → leave the merchant untouched.
+  defp ensure_merchant_phone(user, merchant, phone) when is_binary(phone) and phone != "" do
+    case set_merchant_phone(merchant.uid, phone) do
+      {:ok, merchant} -> {:ok, {user, merchant}}
+      {:error, _} = error -> error
+    end
+  end
+
+  defp ensure_merchant_phone(user, merchant, _phone), do: {:ok, {user, merchant}}
+
   defp register_merchant(%Account.User{id: user_id} = user, merchant_uid, merchant) do
     Logger.info("[Payment] Merchant created: #{merchant_uid} for user ##{user_id}")
     persist_merchant(user, merchant_uid, merchant)
@@ -72,7 +107,7 @@ defmodule Systems.Payment.Public do
     {:ok, {user, merchant}}
   end
 
-  defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}) do
+  defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}, phone) do
     {first, last} = split_name(displayname)
 
     %{
@@ -86,7 +121,13 @@ defmodule Systems.Payment.Public do
       return_url: return_url(),
       metadata: %{user_id: "#{user_id}"}
     }
+    |> maybe_put_phone(phone)
   end
+
+  defp maybe_put_phone(attrs, phone) when is_binary(phone) and phone != "",
+    do: Map.put(attrs, :phone, phone)
+
+  defp maybe_put_phone(attrs, _phone), do: attrs
 
   defp split_name(nil), do: {"", ""}
   defp split_name(""), do: {"", ""}
@@ -100,7 +141,7 @@ defmodule Systems.Payment.Public do
 
   defp return_url do
     base_url = Application.fetch_env!(:core, :base_url)
-    "#{base_url}/"
+    "#{base_url}/user/account?tab=payouts"
   end
 
   defp lookup_merchant_by_email(%Account.User{email: email} = user) do
@@ -145,14 +186,24 @@ defmodule Systems.Payment.Public do
   @spec ensure_bank_account_for(merchant_uid :: String.t()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def ensure_bank_account_for(merchant_uid) when is_binary(merchant_uid) do
-    case list_bank_accounts(merchant_uid) do
-      {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
-      {:error, _} = error -> error
-    end
+    result =
+      case list_bank_accounts(merchant_uid) do
+        {:ok, accounts} -> usable_or_new_bank_account(merchant_uid, accounts)
+        {:error, _} = error -> error
+      end
+
+    log_error(result, "ensure_bank_account_for merchant #{merchant_uid}")
   end
 
+  defp log_error({:error, reason} = result, context) do
+    Logger.warning("[Payment] #{context} failed: #{inspect(reason)}")
+    result
+  end
+
+  defp log_error(result, _context), do: result
+
   defp usable_or_new_bank_account(merchant_uid, accounts) do
-    case Enum.find(accounts, &(&1.status != "disapproved")) do
+    case Enum.find(accounts, &(&1.status != :rejected)) do
       nil -> create_bank_account(merchant_uid, bank_account_attrs())
       usable -> {:ok, usable}
     end
@@ -179,6 +230,16 @@ defmodule Systems.Payment.Public do
     provider().get_transaction(uid)
   end
 
+  @doc """
+  Every transaction the provider created at or after `since`, across all
+  merchants — the provider-side input to the provider→local pay-in scan.
+  """
+  @spec list_recent_transactions(since :: DateTime.t()) ::
+          Provider.listing(Provider.transaction())
+  def list_recent_transactions(%DateTime{} = since) do
+    provider().list_recent_transactions(since)
+  end
+
   # Withdrawals
 
   @spec create_withdrawal(
@@ -196,29 +257,89 @@ defmodule Systems.Payment.Public do
     provider().get_withdrawal(uid)
   end
 
+  @doc """
+  Every withdrawal the provider holds for a merchant, so one whose uid was never
+  recorded can still be found by its `reference`.
+  """
+  @spec list_withdrawals(merchant_uid :: String.t()) ::
+          {:ok, [Provider.withdrawal()]} | {:error, Error.t()}
+  def list_withdrawals(merchant_uid) do
+    provider().list_withdrawals(merchant_uid)
+  end
+
+  @doc """
+  Every withdrawal the provider created at or after `since`, across all
+  merchants — the provider-side input to the provider→local pass.
+  """
+  @spec list_recent_withdrawals(since :: DateTime.t()) :: Provider.listing(Provider.withdrawal())
+  def list_recent_withdrawals(%DateTime{} = since) do
+    provider().list_recent_withdrawals(since)
+  end
+
   # Reconciliation
 
   defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state
+  defdelegate reconciliation_scan_window(opts), to: Reconciliation, as: :scan_window
   defdelegate reconcile_get_withdrawal(state, uid), to: Reconciliation, as: :get_withdrawal
   defdelegate reconcile_get_transaction(state, uid), to: Reconciliation, as: :get_transaction
+
+  defdelegate reconcile_list_recent_withdrawals(state, since),
+    to: Reconciliation,
+    as: :list_recent_withdrawals
+
+  defdelegate reconcile_list_recent_transfers(state, since),
+    to: Reconciliation,
+    as: :list_recent_transfers
+
+  defdelegate reconcile_list_recent_transactions(state, since),
+    to: Reconciliation,
+    as: :list_recent_transactions
+
+  defdelegate reconcile_list_recent_merchants(state, since),
+    to: Reconciliation,
+    as: :list_recent_merchants
+
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run
 
-  # Charges
+  # Transfers
 
-  @spec create_charge(
+  @spec transfer_to_merchant(
           from_owner_uid :: String.t(),
           to_owner_uid :: String.t(),
           amount :: non_neg_integer(),
           idempotence_key :: String.t()
-        ) :: {:ok, Provider.charge()} | {:error, Error.t()}
-  def create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key) do
-    provider().create_charge(from_owner_uid, to_owner_uid, amount, idempotence_key)
+        ) :: {:ok, Provider.transfer()} | {:error, Error.t()}
+  def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key) do
+    provider().transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
+  end
+
+  @spec charge_to_partner(
+          from_owner_uid :: String.t(),
+          amount :: non_neg_integer(),
+          idempotence_key :: String.t()
+        ) :: {:ok, Provider.transfer()} | {:error, Error.t()}
+  def charge_to_partner(from_owner_uid, amount, idempotence_key) do
+    provider().charge_to_partner(from_owner_uid, amount, idempotence_key)
+  end
+
+  @spec list_charges_to_merchant(merchant_uid :: String.t()) ::
+          {:ok, [Provider.transfer()]} | {:error, Error.t()}
+  def list_charges_to_merchant(merchant_uid) when is_binary(merchant_uid) do
+    provider().list_charges_to_merchant(merchant_uid)
+  end
+
+  @doc """
+  Every transfer the provider created at or after `since`, across all merchants.
+  """
+  @spec list_recent_transfers(since :: DateTime.t()) :: Provider.listing(Provider.transfer())
+  def list_recent_transfers(%DateTime{} = since) do
+    provider().list_recent_transfers(since)
   end
 
   @doc """
   The platform (eyra) merchant UID that holds the float — the `from_owner` of
-  participant payout charges. Sourced from the OPP `merchant_uid` config
+  participant payout transfers. Sourced from the OPP `merchant_uid` config
   (`OPP_MERCHANT_UID`).
   """
   @spec platform_merchant_uid() :: String.t() | nil

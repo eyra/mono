@@ -1,7 +1,5 @@
 defmodule Systems.Fund.Factories do
-  alias Systems.{
-    Fund
-  }
+  alias Systems.Fund
 
   def create_currency(name, type, sign, decimal_scale) do
     label_bundle = Core.Factories.insert!(:text_bundle, %{})
@@ -69,6 +67,21 @@ defmodule Systems.Fund.Factories do
       currency: currency,
       account: account
     })
+  end
+
+  def insert_pay_in!(%Fund.Model{id: fund_id}, %Systems.Account.User{id: user_id}) do
+    %Fund.TransactionModel{}
+    |> Fund.TransactionModel.changeset(%{
+      transaction_id: "tx_#{System.unique_integer([:positive])}",
+      status: :completed,
+      idempotence_key: Ecto.UUID.generate(),
+      invoice_id: "INV-#{System.unique_integer([:positive])}",
+      subject_count: 1,
+      total_amount: 100
+    })
+    |> Ecto.Changeset.put_change(:user_id, user_id)
+    |> Ecto.Changeset.put_change(:target_fund_id, fund_id)
+    |> Core.Repo.insert!()
   end
 
   def create_reward(assignment, user, fund, amount \\ 2) do

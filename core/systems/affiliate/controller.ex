@@ -170,7 +170,7 @@ defmodule Systems.Affiliate.Controller do
     redirect_url = Affiliate.Public.get_redirect_url(affiliate)
 
     conn
-    |> obtain_instance(assignment)
+    |> obtain_participation(assignment)
     |> add_panel_info(get_participant(params), redirect_url)
     |> redirect(to: path(assignment))
   end
@@ -179,14 +179,21 @@ defmodule Systems.Affiliate.Controller do
     participant_id = get_participant(params)
     %{user: user} = affiliate_user = Affiliate.Public.obtain_user!(participant_id, affiliate)
 
-    conn
-    |> assign(:current_user, user)
-    |> log_in_user_without_redirect(user)
-    |> authorize_user(assignment)
-    |> ensure_user_info(params, affiliate_user)
-    |> obtain_instance(assignment)
-    |> add_panel_info_for_participant(params, affiliate, affiliate_user)
-    |> redirect(to: path(assignment))
+    conn =
+      conn
+      |> assign(:current_user, user)
+      |> log_in_user_without_redirect(user)
+
+    if full?(assignment) and not returning_participant?(conn, assignment) do
+      assignment_full(conn)
+    else
+      conn
+      |> authorize_user(assignment)
+      |> ensure_user_info(params, affiliate_user)
+      |> obtain_participation(assignment)
+      |> add_panel_info_for_participant(params, affiliate, affiliate_user)
+      |> redirect(to: path(assignment))
+    end
   end
 
   defp path(%{id: id}), do: "/assignment/#{id}"
@@ -212,6 +219,20 @@ defmodule Systems.Affiliate.Controller do
     |> render(:"503")
   end
 
+  defp assignment_full(conn) do
+    conn
+    |> put_view(html: Assignment.ErrorHTML)
+    |> render(:assignment_full)
+  end
+
+  defp full?(%Assignment.Model{} = assignment) do
+    not Assignment.Public.has_budget_capacity?(assignment)
+  end
+
+  defp returning_participant?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment) do
+    Assignment.Public.member?(assignment, user)
+  end
+
   defp authorize_user(%{assigns: %{current_user: user}} = conn, assignment) do
     Assignment.Public.add_participant!(assignment, user)
     conn
@@ -228,9 +249,13 @@ defmodule Systems.Affiliate.Controller do
     conn
   end
 
-  defp obtain_instance(%{assigns: %{current_user: user}} = conn, assignment) do
-    instance = Assignment.Public.obtain_instance!(assignment, user)
-    Logger.debug("Starting session for assignment #{assignment.id} with instance #{instance.id}")
+  defp obtain_participation(%{assigns: %{current_user: user}} = conn, assignment) do
+    participation = Assignment.Public.obtain_participation!(assignment, user)
+
+    Logger.debug(
+      "Starting session for assignment #{assignment.id} with participation #{participation.id}"
+    )
+
     conn
   end
 

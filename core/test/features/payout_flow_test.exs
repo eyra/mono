@@ -10,7 +10,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
 
     * task-complete signal → Fund.Public.mark_pending_approval/1 →
       reward `:reserved` → `:pending_approval`
-    * approve-task signal (from PayoutModal "Pay out all") →
+    * approve-task signal (from Contributions "Pay out all") →
       Fund.Public.approve_reward/1 → reward `:pending_approval` →
       `:approved`
 
@@ -47,7 +47,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
           %{sessions: [researcher_session, participant_session]} do
     merchant_uid = "m_journey_test"
 
-    # KYC-not-verified merchant — drives the `{:error, {:kyc_required, _}}`
+    # Bank-not-verified — drives the `{:error, {:kyc_required, :bank, _}}`
     # branch of Fund.Public.prepare_payout/1 at the end of the journey.
     ProviderMock
     |> stub(:get_merchant, fn ^merchant_uid ->
@@ -57,11 +57,11 @@ defmodule CoreWeb.Features.PayoutFlowTest do
          status: "pending",
          kyc_level: 0,
          compliance_status: "unverified",
-         overview_url: "https://opp.test/kyc-onboarding"
+         overview_url: nil
        }}
     end)
     |> stub(:list_bank_accounts, fn ^merchant_uid ->
-      {:ok, [%{uid: "ba_test", status: "approved", verification_url: nil}]}
+      {:ok, [%{uid: "ba_test", status: :new, verification_url: "https://opp.test/ba/verify"}]}
     end)
 
     researcher_password = Factories.valid_user_password()
@@ -105,7 +105,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     auth_node = Factories.insert!(:auth_node)
     info = Factories.insert!(:assignment_info, %{subject_count: 10, subject_reward: 500})
 
-    currency = Factories.insert!(:currency, %{name: "eur_journey"})
+    currency = Factories.insert!(:currency, %{name: "euro"})
     fund = Fund.Factories.create_fund("journey_fund", currency)
 
     assignment =
@@ -129,7 +129,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> Core.Repo.insert!()
 
     # Researcher is owner of the assignment so they can navigate to the
-    # participants tab + open PayoutModal.
+    # Contributions tab and approve.
     Factories.insert!(:role_assignment, %{
       node: auth_node,
       role: :owner,
@@ -140,7 +140,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     # flow. Creates a crew member with :participant role AND a reward in
     # :reserved state. The state transitions we want to verify:
     #   :reserved -> :pending_approval  (participant completes task)
-    #   :pending_approval -> :approved  (researcher approves via PayoutModal)
+    #   :pending_approval -> :approved  (researcher approves via Contributions tab)
     {:ok, _} = Assignment.Public.add_participant!(assignment, participant)
 
     # ========================================================================
@@ -153,6 +153,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: participant_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
+    |> assert_path_changed_from("/user/signin")
     |> visit("/assignment/#{assignment.id}")
     |> assert_has(Query.css("[data-testid^='chapter-list-item-']"))
     |> click(Query.css("[data-testid^='chapter-list-item-']"))
@@ -161,8 +162,8 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> assert_has(Query.css("[data-testid='finished-view']"))
 
     # ========================================================================
-    # Researcher — sees pending-approvals banner, opens PayoutModal,
-    #              clicks "Pay out all" → reward :pending_approval -> :approved
+    # Researcher — lands on the Contributions tab, clicks "Pay out all"
+    #              → reward :pending_approval -> :approved
     # ========================================================================
 
     researcher_session
@@ -170,12 +171,11 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: researcher_password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> visit("/assignment/#{assignment.id}/content?tab=participants")
-    |> assert_has(Query.css("[data-testid='pending-approvals-cta']"))
-    |> click(Query.css("[data-testid='pending-approvals-cta']"))
-    |> assert_has(Query.css("[data-testid='payout-modal']"))
-    |> click(Query.css("[data-testid='pay-out-all-button']"))
-    |> assert_has(Query.css("[data-testid='payout-empty']"))
+    |> assert_path_changed_from("/user/signin")
+    |> visit("/assignment/#{assignment.id}/content?tab=contributions")
+    |> assert_has(Query.css("[data-testid='contributions-view']"))
+    |> click(Query.css("[data-testid='confirm-all-button']"))
+    |> assert_has(Query.css("[data-testid='contributions-pending-empty']"))
 
     # ========================================================================
     # Participant — sees approved balance on home, clicks "Pay out",

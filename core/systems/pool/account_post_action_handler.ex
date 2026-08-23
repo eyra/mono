@@ -12,11 +12,22 @@ defmodule Systems.Pool.AccountPostActionHandler do
 
   def handle(%Account.User{creator: true}, _action), do: :ok
 
+  # Legacy value from the pre-OTP signup flow; treat as a Panl-scoped join.
   def handle(%Account.User{} = user, "add_to_panl") do
-    if feature_enabled?(:panl) do
-      Pool.Public.add_user_to_panl_pool(user)
+    handle(user, "join_pool:panl")
+  end
+
+  def handle(%Account.User{} = user, "join_pool:" <> slug) do
+    with {:ok, slug_atom} <- safe_to_existing_atom(slug),
+         %Pool.Model{} = pool <- Pool.Public.get_by_slug(slug_atom) do
+      if pool.name == "Panl" and not feature_enabled?(:panl) do
+        Logger.info("Ignoring join_pool:#{slug} action: panl feature is disabled")
+      else
+        Pool.Public.add_participant!(pool, user)
+      end
     else
-      Logger.info("Ignoring add_to_panl action: panl feature is disabled")
+      _ ->
+        Logger.warning("Ignoring join_pool:#{slug} action: unknown pool slug")
     end
 
     :ok
@@ -28,5 +39,11 @@ defmodule Systems.Pool.AccountPostActionHandler do
     )
 
     :ok
+  end
+
+  defp safe_to_existing_atom(str) when is_binary(str) do
+    {:ok, String.to_existing_atom(str)}
+  rescue
+    ArgumentError -> :error
   end
 end

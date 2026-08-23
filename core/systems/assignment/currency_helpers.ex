@@ -15,9 +15,12 @@ defmodule Systems.Assignment.CurrencyHelpers do
   def cents_to_display(0), do: ""
 
   def cents_to_display(cents) when is_integer(cents) do
-    cents
-    |> cents_to_decimal()
-    |> Decimal.to_string(:normal)
+    decimal = cents_to_decimal(cents)
+
+    case CoreWeb.Cldr.Number.to_string(decimal, locale: locale()) do
+      {:ok, formatted} -> formatted
+      _ -> Decimal.to_string(decimal, :normal)
+    end
   end
 
   def cents_to_display(value) when is_binary(value) do
@@ -27,16 +30,36 @@ defmodule Systems.Assignment.CurrencyHelpers do
     end
   end
 
-  def display_to_cents(value) when is_binary(value) do
-    case Decimal.parse(value) do
-      {decimal, _} ->
-        decimal
-        |> Decimal.mult(100)
-        |> Decimal.round(0)
-        |> Decimal.to_integer()
+  # Accepts a plain decimal amount with either `.`, `,`, or `٫` as decimal
+  # separator (auto-fix of the wrong locale separator). Rejects anything that
+  # looks like a thousands grouping — the field is never asked to include one.
+  @amount_regex ~r/^\d+([.,\x{066B}]\d+)?$/u
 
-      :error ->
-        0
+  def display_to_cents(""), do: {:ok, 0}
+
+  def display_to_cents(value) when is_binary(value) do
+    if Regex.match?(@amount_regex, value) do
+      value
+      |> String.replace(["٫", ","], ".")
+      |> parse_decimal_to_cents()
+    else
+      :error
+    end
+  end
+
+  defp parse_decimal_to_cents(string) do
+    case Decimal.parse(string) do
+      {decimal, ""} ->
+        cents =
+          decimal
+          |> Decimal.mult(100)
+          |> Decimal.round(0)
+          |> Decimal.to_integer()
+
+        {:ok, cents}
+
+      _ ->
+        :error
     end
   end
 

@@ -5,7 +5,7 @@ defmodule Systems.Payment.Provider.LocalController do
 
   import Ecto.Query
 
-  alias Systems.Budget
+  alias Systems.Fund
 
   def pay(conn, %{"uid" => uid}) do
     html(conn, """
@@ -34,10 +34,10 @@ defmodule Systems.Payment.Provider.LocalController do
   end
 
   def complete(conn, %{"uid" => uid}) do
-    transaction = Budget.Public.get_transaction_by_provider_uid!(uid)
+    transaction = Fund.Public.get_transaction_by_provider_uid!(uid)
     return_path = return_path(transaction)
 
-    case Budget.Public.complete_transaction(uid) do
+    case Fund.Public.complete_transaction(uid) do
       {:ok, _} ->
         redirect(conn, to: return_path)
 
@@ -48,8 +48,8 @@ defmodule Systems.Payment.Provider.LocalController do
   end
 
   def fail(conn, %{"uid" => uid}) do
-    transaction = Budget.Public.get_transaction_by_provider_uid!(uid)
-    Budget.Public.fail_transaction(uid)
+    transaction = Fund.Public.get_transaction_by_provider_uid!(uid)
+    Fund.Public.fail_transaction(uid)
     redirect(conn, to: return_path(transaction))
   end
 

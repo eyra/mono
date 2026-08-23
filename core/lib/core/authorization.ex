@@ -35,7 +35,7 @@ defmodule Core.Authorization do
   grant_access(Systems.Account.ResetPassword, [:visitor])
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.SignupPage, [:visitor])
-  grant_access(Systems.Account.UserProfilePage, [:member])
+  grant_access(Systems.Account.Page, [:member])
   grant_access(Systems.Account.OnboardingPage, [:member])
   grant_access(Systems.Account.UserSecuritySettings, [:member])
   grant_access(Systems.Account.UserSettings, [:member])
@@ -58,12 +58,13 @@ defmodule Core.Authorization do
   grant_access(Systems.Lab.PublicPage, [:member])
   grant_access(Systems.Manual.Builder.PublicPage, [:creator])
   grant_access(Systems.NextAction.OverviewPage, [:member])
-  grant_access(Systems.Notification.OverviewPage, [:member])
   grant_access(Systems.Onyx.LandingPage, [:admin])
   grant_access(Systems.Org.ContentPage, [:admin])
+  grant_access(Systems.Pool.ContentPage, [:admin])
   grant_access(Systems.Pool.DetailPage, [:creator])
   grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
   grant_access(Systems.Pool.MarketplacePage, [:visitor, :member, :owner])
+  grant_access(Systems.Pool.OnboardingPage, [:member])
   grant_access(Systems.Pool.ParticipantPage, [:creator])
   grant_access(Systems.Pool.SubmissionPage, [:creator])
   grant_access(Systems.Project.NodePage, [:owner])
@@ -249,6 +250,15 @@ defmodule Core.Authorization do
       has_required_roles_in_context?(principal, entity, permission)
   end
 
+  @doc """
+  Users with `role` assigned directly on the auth node of `entity`.
+
+  Role assignments on ancestor nodes are ignored. Use `users_with_inherited_role/3`
+  when the role is expected to be inherited from higher up the tree, the way
+  `can?/3` resolves it.
+
+  An integer argument is interpreted as an auth node id, not as an entity id.
+  """
   def users_with_role(_, _, preload \\ [])
 
   def users_with_role(node_id, role, preload) when is_number(node_id) do
@@ -256,7 +266,8 @@ defmodule Core.Authorization do
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: u.id
     )
     |> Core.Repo.all()
   end
@@ -266,7 +277,34 @@ defmodule Core.Authorization do
 
     Ecto.Query.from(u in Systems.Account.User,
       where: u.id in subquery(principal_ids),
-      preload: ^preload
+      preload: ^preload,
+      order_by: u.id
+    )
+    |> Core.Repo.all()
+  end
+
+  @doc """
+  Users with `role` assigned on the auth node of `entity` or on any of its ancestors.
+
+  This mirrors the inheritance applied by `can?/3` and `roles_intersect?/3`: a role
+  granted on a parent node applies to everything below it. Prefer this over
+  `users_with_role/3` whenever the role lives higher up the tree than the entity
+  being asked about, e.g. the `:owner` of an assignment, which is assigned on the
+  project node.
+
+  An integer argument is interpreted as an auth node id, not as an entity id.
+  """
+  def users_with_inherited_role(entity, role, preload \\ []) do
+    principal_ids =
+      from(ra in Core.Authorization.RoleAssignment,
+        where: ra.node_id in subquery(parent_node_query(entity)) and ra.role == ^role,
+        select: ra.principal_id
+      )
+
+    from(u in Systems.Account.User,
+      where: u.id in subquery(principal_ids),
+      preload: ^preload,
+      order_by: u.id
     )
     |> Core.Repo.all()
   end
@@ -278,28 +316,6 @@ defmodule Core.Authorization do
   def user_has_role?(user_id, entity, role) do
     users_with_role(entity, role)
     |> Enum.any?(&(&1.id == user_id))
-  end
-
-  def first_user_with_role(entity, role, preload) do
-    user =
-      entity
-      |> users_with_role(role, preload)
-      |> List.first()
-
-    case user do
-      nil ->
-        Logger.error("No user found with role #{role} for #{entity}")
-        {:error}
-
-      user ->
-        {:ok, user}
-    end
-  end
-
-  def top_entity(%{auth_node_id: _auth_node_id} = entity) do
-    entity
-    |> get_parent_nodes()
-    |> List.last()
   end
 
   def link(auth_tree) do

@@ -161,7 +161,7 @@ msgstr "Panl"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "profile.tab.profile.title"
-msgstr "Mein Konto"
+msgstr "Konto"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
@@ -169,7 +169,7 @@ msgstr "Weiter"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.hero.title"
-msgstr "Onboarding"
+msgstr "Willkommen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
@@ -245,31 +245,31 @@ msgstr "Willkommen"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
-msgstr ""
+msgstr "Dieser Code ist abgelaufen. Bitte fordere einen neuen an."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.invalid"
-msgstr ""
+msgstr "Falscher Code. Bitte versuche es erneut."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr ""
+msgstr "Zu viele falsche Versuche. Bitte fordere einen neuen Code an."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr ""
+msgstr "E-Mail bestätigen"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr ""
+msgstr "Weiter"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr ""
+msgstr "Bitte gib eine gültige E-Mail-Adresse ein."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Wie lautet deine E-Mail-Adresse?"
+msgstr "Los geht's"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
@@ -278,3 +278,123 @@ msgstr "du@example.com"
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
 msgstr "Zu viele Anfragen. Bitte versuche es gleich erneut."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.button.add"
+msgstr "Hinzufügen"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.error.flash"
+msgstr "Bei der Verifizierung deines Bankkontos ist etwas schiefgelaufen. Bitte versuche es später erneut."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.intro"
+msgstr "Auszahlungen werden über unseren Zahlungspartner Online Payment Platform abgewickelt"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.not_verified"
+msgstr "Nicht verifiziert"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.pending"
+msgstr "Wird verifiziert"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.status.verified"
+msgstr "Verifiziert"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.title"
+msgstr "Bankkonto"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.verified.flash"
+msgstr "Dein Bankkonto wurde verifiziert."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.empty"
+msgstr "Es wurden noch keine Auszahlungen vorgenommen. Sobald Auszahlungen erfolgt sind, findest du hier eine Übersicht."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.intro"
+msgstr "Unten findest du eine Übersicht aller deiner Auszahlungen."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.title"
+msgstr "Übersicht"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.overview.total"
+msgstr "Gesamt"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.completed"
+msgstr "Ausgezahlt"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.failed"
+msgstr "Fehlgeschlagen"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.status.pending"
+msgstr "Ausstehend"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.amount"
+msgstr "Betrag"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.date"
+msgstr "Datum"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.table.status"
+msgstr "Status"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.title"
+msgstr "Auszahlungen"
+
+#, elixir-autogen, elixir-format
+msgid "profile.tab.payouts.title"
+msgstr "Auszahlungen"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.body"
+msgstr "Sie werden zu unserem Zahlungspartner Online Payment Platform weitergeleitet, um Ihr Bankkonto per iDEAL zu verifizieren."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.confirm"
+msgstr "Weiter"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.bank.modal.title"
+msgstr "Bankkonto verifizieren"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.error.flash"
+msgstr "Bei der Verifizierung deines Bankkontos ist etwas schiefgelaufen. Bitte versuche es später erneut."
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.label"
+msgstr "Mobiltelefonnummer"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.body"
+msgstr "Sie werden zu unserem Zahlungspartner Online Payment Platform weitergeleitet, um Ihr Bankkonto per iDEAL zu verifizieren."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.confirm"
+msgstr "Weiter"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "payouts.phone.modal.title"
+msgstr "Bankkonto verifizieren"
+
+#, elixir-autogen, elixir-format
+msgid "auth.code.body"
+msgstr "Wir haben dir einen Code geschickt"
+
+#, elixir-autogen, elixir-format
+msgid "payouts.phone.error.rejected"
+msgstr "Der Zahlungsdienstleister hat diese Telefonnummer nicht akzeptiert. Bitte überprüfe sie und versuche es erneut."

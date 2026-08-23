@@ -524,3 +524,12 @@ defmodule Systems.Org.Public do
     Enum.filter(orgs, fn org -> user in list_owners(org) end)
   end
 end
+
+defimpl Core.Persister, for: Systems.Org.NodeModel do
+  def save(_node, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :org_node) do
+      {:ok, %{org_node: org_node}} -> {:ok, org_node}
+      _ -> {:error, changeset}
+    end
+  end
+end

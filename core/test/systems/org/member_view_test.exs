@@ -7,6 +7,7 @@ defmodule Systems.Org.MemberViewTest do
   use CoreWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
+  require LiveNest.Constants
 
   alias Core.Factories
   alias Frameworks.Concept.LiveContext
@@ -87,8 +88,9 @@ defmodule Systems.Org.MemberViewTest do
 
   # Coverage for FX#9905891585 — the Members tab now has a search bar and
   # filter chips driven by Pixel.SearchBar + Pixel.Selector, which talk
-  # to the LiveView via consume_event(:search_query) and
-  # handle_info({"active_item_ids", ...}) respectively.
+  # to the LiveView via consume_event/2. Both emit through
+  # Frameworks.Pixel.FabricBridge; without a Fabric parent they publish
+  # LiveNest events.
   describe "MemberView search and filter" do
     setup ctx do
       owner = Factories.insert!(:creator)
@@ -113,7 +115,7 @@ defmodule Systems.Org.MemberViewTest do
       {:ok, conn: conn, org: org, context: context}
     end
 
-    test ":external filter via Selector handle_info narrows the rendered list",
+    test ":external filter via Selector consume_event narrows the rendered list",
          %{conn: conn, org: org, context: context} do
       internal = Factories.insert!(:creator, %{email: "alice@filter-test.org"})
       external = Factories.insert!(:creator, %{email: "alice@elsewhere.example"})
@@ -126,7 +128,10 @@ defmodule Systems.Org.MemberViewTest do
       assert html =~ internal.email
       assert html =~ external.email
 
-      send(view.pid, {"active_item_ids", %{active_item_ids: [:external]}})
+      send(view.pid, {
+        LiveNest.Constants.event(),
+        %LiveNest.Event{name: :active_item_ids, payload: %{active_item_ids: [:external]}}
+      })
 
       rendered = render(view)
       assert rendered =~ external.email

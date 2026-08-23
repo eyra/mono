@@ -44,29 +44,89 @@ msgid "landing.description.visitor"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.breadcrumb.overview"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "marketplace.empty.message"
-msgstr ""
+msgstr "El mercado está vacío por el momento."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Todos"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
-msgstr ""
+msgstr "Filtro:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.show_more"
-msgstr ""
+msgstr "Buscar"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
+msgstr "Mercado"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.added.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.email.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.icon.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.accept.button"
+msgstr "Continuar"
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.body"
+msgstr "Estás a punto de unirte al grupo %{pool_name}. Como miembro, podrás postularte a estudios de investigación y ganar recompensas."
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Unirse al pool"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.see_all"
+msgstr "Ver todo"

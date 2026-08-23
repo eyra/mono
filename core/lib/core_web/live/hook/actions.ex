@@ -10,7 +10,6 @@ defmodule CoreWeb.Live.Hook.Actions do
       |> handle_action_click(live_view_module)
       |> handle_uri(live_view_module)
       |> handle_view_model_updated(live_view_module)
-      |> handle_viewport_updated(live_view_module)
     }
   end
 
@@ -33,16 +32,6 @@ defmodule CoreWeb.Live.Hook.Actions do
   defp handle_view_model_updated(socket, live_view_module) do
     attach_hook(socket, :actions_handle_view_model_updated, :handle_info, fn
       :view_model_updated, socket ->
-        {:cont, socket |> update_actions(live_view_module)}
-
-      _, socket ->
-        {:cont, socket}
-    end)
-  end
-
-  defp handle_viewport_updated(socket, live_view_module) do
-    attach_hook(socket, :actions_viewport_updated, :handle_info, fn
-      :viewport_updated, socket ->
         {:cont, socket |> update_actions(live_view_module)}
 
       _, socket ->

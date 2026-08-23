@@ -18,6 +18,15 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :core, :deploy_env, :local
 
+# Notify system — list of per-system notifier modules that declare their
+# events via `use Systems.Notify.EventDeclaration`. Add a system to this list
+# when it drops a `_notify.ex`; envs can override to short-circuit notifiers
+# (e.g. omit an integration-only notifier in dev).
+config :core, Systems.Notify,
+  notifiers: [
+    Systems.Assignment.Notify
+  ]
+
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
 config :core, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,
@@ -70,9 +79,6 @@ config :plug, :statuses, %{
 
 config :core, :signal,
   handlers: [
-    "Core.APNS.SignalHandlers",
-    "Core.Mailer.SignalHandlers",
-    "Core.WebPush.SignalHandlers",
     "Systems.Account.Switch",
     "Systems.Admin.Switch",
     "Systems.Advert.Switch",
@@ -88,6 +94,7 @@ config :core, :signal,
     "Systems.Manual.Switch",
     "Systems.NextAction.Switch",
     "Systems.Observatory.Switch",
+    "Systems.Org.Switch",
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
@@ -111,12 +118,16 @@ config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
   banking_backend: Systems.Banking.Dummy,
-  payment_provider: Systems.Payment.Provider.Local,
   payment_providers: %{
     "opp" => Systems.Payment.Provider.OPP,
     "local" => Systems.Payment.Provider.Local
   },
   tool_directors: [:assignment]
+
+# Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
+# Compile-time list so Logo.pool doesn't stat the filesystem on every render.
+# Override per bundle (see bundles/*/config/config.exs).
+config :core, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
 # (e.g. the local payment simulator routes /payment/local/...). Off by default
@@ -128,7 +139,7 @@ config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false")
 # Feature flag defaults. Override per environment in dev.secret.exs, test.exs,
 # or via ENABLED_APP_FEATURES at runtime. Use safe-by-default (false) for any
 # feature that exposes routes or UI to users until the epic is fully shipped.
-config :core, :features, otp: false
+config :core, :features, otp: false, opp_phase_3: false
 
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",

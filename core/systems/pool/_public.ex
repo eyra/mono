@@ -115,9 +115,53 @@ defmodule Systems.Pool.Public do
     |> Enum.map(&Directable.director/1)
   end
 
-  def list_participants(%Pool.Model{} = pool) do
-    auth_module().users_with_role(pool, :participant)
+  def list_participants(%Pool.Model{} = pool, preload \\ []) do
+    auth_module().users_with_role(pool, :participant, preload)
   end
+
+  @doc """
+  Like `list_participants/2` but returns `{user, added_at}` tuples where
+  `added_at` is the timestamp at which the `:participant` role was granted
+  on the pool's auth_node.
+  """
+  def list_participants_with_added_at(%Pool.Model{auth_node_id: auth_node_id}) do
+    rows =
+      from(ra in Core.Authorization.RoleAssignment,
+        join: u in Account.User,
+        on: u.id == ra.principal_id,
+        where: ra.node_id == ^auth_node_id and ra.role == :participant,
+        select: {u, ra.inserted_at}
+      )
+      |> Repo.all()
+
+    profiles_by_id =
+      rows
+      |> Enum.map(&elem(&1, 0))
+      |> Repo.preload(:profile)
+      |> Map.new(&{&1.id, &1.profile})
+
+    Enum.map(rows, fn {user, added_at} ->
+      {%{user | profile: Map.get(profiles_by_id, user.id)}, added_at}
+    end)
+  end
+
+  @doc """
+  Whether `user` can manage `pool` from the Pool Admin page.
+
+  System admins can manage any pool. Otherwise the user must be an owner
+  of the org that the pool belongs to.
+  """
+  def can_manage?(%Pool.Model{org: nil}, _), do: false
+
+  def can_manage?(%Pool.Model{org: %Org.NodeModel{} = org}, %Account.User{} = user) do
+    Org.Public.can_manage?(org, user)
+  end
+
+  def can_manage?(%Pool.Model{} = pool, %Account.User{} = user) do
+    pool |> Repo.preload(:org) |> can_manage?(user)
+  end
+
+  def can_manage?(_, _), do: false
 
   def list_participant_ids do
     pool_ids =
@@ -491,4 +535,13 @@ defmodule Systems.Pool.Public do
 
   defp update_pool(pool, user, :add), do: add_participant!(pool, user)
   defp update_pool(pool, user, :delete), do: remove_participant(pool, user)
+end
+
+defimpl Core.Persister, for: Systems.Pool.Model do
+  def save(_pool, changeset) do
+    case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :pool) do
+      {:ok, %{pool: pool}} -> {:ok, pool}
+      _ -> {:error, changeset}
+    end
+  end
 end

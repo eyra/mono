@@ -3,9 +3,10 @@ defmodule Systems.Assignment.PaidSlotsLogic do
   Paid-slots concerns mixed into the parent LiveComponent (typically
   ParticipantsView):
 
-    * `use` injects the LiveComponent callbacks (`compose(:budget_form, …)`
-      and the paid-slots `handle_event/3` clauses) so the parent gets
-      the modal lifecycle and payment-resume flow for free.
+    * `use` injects the LiveComponent callbacks
+      (`compose(:pay_in_request_form, …)` and the paid-slots
+      `handle_event/3` clauses) so the parent gets the modal lifecycle
+      and payment-resume flow for free.
     * Public helpers (`assign_paid_slots_state/1`, `list_transactions/1`,
       `format_cents/1`, etc.) are called directly from the parent's
       `update/2` and render.
@@ -18,7 +19,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
 
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers
-  alias Systems.Budget
+  alias Systems.Fund
 
   defmacro __using__(_opts) do
     quote do
@@ -26,14 +27,14 @@ defmodule Systems.Assignment.PaidSlotsLogic do
       import Systems.Assignment.PaidSlotsHtml
 
       @impl true
-      def compose(:budget_form, %{
+      def compose(:pay_in_request_form, %{
             assignment: assignment,
             user: user,
             active_currency: active_currency,
             transactions: transactions
           }) do
         %{
-          module: Systems.Assignment.BudgetForm,
+          module: Systems.Fund.PayInRequestForm,
           params: %{
             assignment: assignment,
             user: user,
@@ -47,27 +48,27 @@ defmodule Systems.Assignment.PaidSlotsLogic do
       def handle_event("add_budget", _, socket) do
         {:noreply,
          socket
-         |> compose_child(:budget_form)
-         |> show_modal(:budget_form, :compact)}
+         |> compose_child(:pay_in_request_form)
+         |> show_modal(:pay_in_request_form, :compact)}
       end
 
       @impl true
-      def handle_event("budget_form_hide", _, socket) do
-        {:noreply, socket |> hide_modal(:budget_form)}
+      def handle_event("pay_in_request_form_hide", _, socket) do
+        {:noreply, socket |> hide_modal(:pay_in_request_form)}
       end
 
       @impl true
-      def handle_event("budget_form_cancelled", _, socket) do
-        {:noreply, socket |> hide_modal(:budget_form)}
+      def handle_event("pay_in_request_form_cancelled", _, socket) do
+        {:noreply, socket |> hide_modal(:pay_in_request_form)}
       end
 
       @impl true
-      def handle_event("budget_form_submit", _, socket) do
+      def handle_event("pay_in_request_form_submit", _, socket) do
         {:noreply,
          socket
          |> Systems.Assignment.PaidSlotsLogic.refresh_assignment()
          |> Systems.Assignment.PaidSlotsLogic.assign_transactions()
-         |> hide_modal(:budget_form)}
+         |> hide_modal(:pay_in_request_form)}
       end
 
       @impl true
@@ -136,7 +137,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
   def list_transactions(%{fund: nil}), do: []
 
   def list_transactions(%{fund: fund}) do
-    Budget.Public.list_transactions_by_fund(fund)
+    Fund.Public.list_transactions_by_fund(fund)
   end
 
   def active_currency(%{fund: %{currency_ledger: %{currency: currency}}}), do: currency
@@ -167,7 +168,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
     }
   end
 
-  def status_tag(status) when status in [:failed, :expired] do
+  def status_tag(:failed) do
     %{
       text: dgettext("eyra-assignment", "payment.status.failed"),
       bg_color: "bg-deletelight",

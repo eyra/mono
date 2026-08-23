@@ -44,29 +44,89 @@ msgid "landing.description.visitor"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "marketplace.breadcrumb.overview"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "marketplace.empty.message"
-msgstr ""
+msgstr "Piața este momentan goală."
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.all"
-msgstr ""
+msgstr "Toate"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.filter.label"
-msgstr ""
+msgstr "Filtru:"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.search.placeholder"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "marketplace.show_more"
-msgstr ""
+msgstr "Căutare"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.title"
+msgstr "Piață"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "director.citizen"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "director.student"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.added.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.email.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "participants.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "settings.icon.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.name.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.accept.button"
+msgstr "Continuă"
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.body"
+msgstr "Ești pe cale să te alături grupului %{pool_name}. Ca membru, vei putea aplica la studii de cercetare și vei putea câștiga recompense."
+
+#, elixir-autogen, elixir-format
+msgid "join_consent.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "already_member.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Alătură-te grupului"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.see_all"
+msgstr "Vezi toate"

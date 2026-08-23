@@ -17,14 +17,15 @@ defmodule Systems.Account.ProfileViewTest do
 
   describe "rendering" do
     test "renders profile view with title and form", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -32,7 +33,7 @@ defmodule Systems.Account.ProfileViewTest do
       {:ok, view, html} = live_isolated(conn, Account.ProfileView, session: session)
 
       # Should render title
-      assert html =~ "My profile"
+      assert html =~ "Profile"
 
       # Should render form elements
       assert view |> has_element?("[data-testid='profile-view']")
@@ -46,14 +47,15 @@ defmodule Systems.Account.ProfileViewTest do
     end
 
     test "renders signout button", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -67,14 +69,15 @@ defmodule Systems.Account.ProfileViewTest do
 
   describe "form interactions" do
     test "saves fullname on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -90,14 +93,15 @@ defmodule Systems.Account.ProfileViewTest do
     end
 
     test "saves displayname on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -118,14 +122,15 @@ defmodule Systems.Account.ProfileViewTest do
     test "shows title field for creator users", %{conn: conn} do
       creator = Factories.insert!(:member, %{creator: true})
 
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: creator.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}
@@ -137,14 +142,15 @@ defmodule Systems.Account.ProfileViewTest do
     end
 
     test "hides title field for non-creator users", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/profile")
+      conn = conn |> Map.put(:request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
           user_id: user.id,
           show_signout_button: true,
           show_email: true,
-          show_top_margin: false
+          show_top_margin: false,
+          show_title: true
         })
 
       session = %{"live_context" => live_context}

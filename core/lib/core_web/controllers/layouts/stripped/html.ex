@@ -12,6 +12,12 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
   attr(:footer?, :boolean, default: true)
+  # When true, `#main-content` is locked to viewport height on all breakpoints
+  # so pages with short, vertically centered content (e.g. the auth flow) get
+  # a resolved height for `h-full` chains. Default keeps `min-h-viewport
+  # md:h-viewport` to protect pages whose content grows past viewport on
+  # mobile and relies on natural browser scroll.
+  attr(:centered?, :boolean, default: false)
 
   attr(:privacy_text, :string, default: dgettext("eyra-ui", "privacy.link"))
   attr(:terms_text, :string, default: dgettext("eyra-ui", "terms.link"))
@@ -20,41 +26,42 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   slot(:inner_block, required: true)
 
   def stripped(assigns) do
+    assigns =
+      assign_new(assigns, :main_height_class, fn ->
+        if assigns.centered?, do: "h-viewport", else: "min-h-viewport md:h-viewport"
+      end)
+
     ~H"""
     <div class="flex flex-row">
       <div class="flex-1">
-        <div id="main-content" class="flex flex-col w-full min-h-viewport md:h-viewport">
-            <div class="flex-wrap lg:hidden">
-              <Navigation.mobile_navbar {@menus.mobile_navbar} />
-            </div>
-            <div class="flex-wrap hidden lg:flex">
-              <Navigation.desktop_navbar {@menus.desktop_navbar} />
-            </div>
-          <div class="flex-1 flex flex-col">
-            <div class="flex-1 flex flex-col border-t border-b border-grey4">
-              <%= render_slot(@header) %>
-              <%= if @title do %>
-                <div class="flex-none">
-                  <Hero.illustration2 title={@title} />
-                </div>
-              <% end %>
-              <div class="flex-1 min-h-0 bg-white">
-                <div class="flex flex-row w-full h-full min-h-0">
-                  <div id="layout-inner-block" class="flex-1 h-full min-h-0">
-                    <%= render_slot(@inner_block) %>
-                    <Margin.y id={:page_footer_top} />
-                  </div>
-                </div>
+        <div class="bg-grey5 lg:px-16">
+          <div id="main-content" class={"flex flex-col w-full #{@main_height_class} lg:max-w-[1536px] lg:mx-auto"}>
+              <div class="flex-wrap lg:hidden">
+                <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <%= if @footer? do %>
-                <div class="bg-white">
-                  <.content_footer />
+              <div class="flex-wrap hidden lg:flex">
+                <Navigation.desktop_navbar {@menus.desktop_navbar} />
+              </div>
+            <div class="flex-1 flex flex-col lg:relative lg:z-10">
+              <div class="flex-1 flex flex-col min-h-0 bg-white lg:shadow-prism-container">
+                <%= render_slot(@header) %>
+                <%= if @title do %>
+                  <div class="flex-none">
+                    <Hero.illustration2 title={@title} />
+                  </div>
+                <% end %>
+                <div id="layout-inner-block" class="flex-1 h-full min-h-0">
+                  <%= render_slot(@inner_block) %>
+                  <Margin.y id={:page_footer_top} />
                 </div>
-              <% end %>
+                <%= if @footer? do %>
+                  <.content_footer />
+                <% end %>
+              </div>
             </div>
-          </div>
-          <div class="bg-grey5">
-            <.platform_footer privacy_text={@privacy_text} terms_text={@terms_text} />
+            <div class="bg-grey5">
+              <.platform_footer privacy_text={@privacy_text} terms_text={@terms_text} />
+            </div>
           </div>
         </div>
       </div>

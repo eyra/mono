@@ -9,6 +9,7 @@ defmodule Systems.Payment.Provider.OPPTest do
 
   alias Systems.Payment.Provider.OPP
   alias Systems.Payment.Error
+  alias Systems.Payment.Transaction
 
   setup do
     bypass = Bypass.open()
@@ -41,7 +42,12 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:ok,
-              %{uid: "ba_1", status: "new", verification_url: "https://opp.test/verify/ba_1"}} =
+              %{
+                uid: "ba_1",
+                status: :new,
+                raw_status: "new",
+                verification_url: "https://opp.test/verify/ba_1"
+              }} =
                OPP.create_bank_account("m_1", %{notify_url: "x", return_url: "y"})
     end
 
@@ -51,7 +57,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "ba_2"}>)
       end)
 
-      assert {:ok, %{uid: "ba_2", status: "new", verification_url: nil}} =
+      assert {:ok, %{uid: "ba_2", status: :new, raw_status: "new", verification_url: nil}} =
                OPP.create_bank_account("m_1", %{})
     end
 
@@ -77,8 +83,8 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:ok,
               [
-                %{uid: "ba_a", status: "approved"},
-                %{uid: "ba_b", status: "disapproved"}
+                %{uid: "ba_a", status: :verified, raw_status: "approved"},
+                %{uid: "ba_b", status: :rejected, raw_status: "disapproved"}
               ]} = OPP.list_bank_accounts("m_1")
     end
 
@@ -142,6 +148,57 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
+  describe "add_merchant_phone/2" do
+    test "fetches the primary contact, posts the phone, returns the refreshed merchant",
+         %{bypass: bypass} do
+      # Called twice: once to read the contact uid, once to re-fetch the merchant.
+      Bypass.expect(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "m_1", "contacts": {"data": [{"uid": "c_1"}]}, "compliance": {"level": 200, "status": "verified"}}>
+        )
+      end)
+
+      Bypass.expect_once(bypass, "POST", "/merchants/m_1/contacts/c_1", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert [%{"phonenumber" => "+31612345678"}] = body["phonenumbers"]
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "c_1"}>)
+      end)
+
+      assert {:ok, %{uid: "m_1", compliance_status: "verified", kyc_level: 200}} =
+               OPP.add_merchant_phone("m_1", "+31612345678")
+    end
+
+    test "returns a not_found error when the merchant has no contact", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "m_1"}>)
+      end)
+
+      assert {:error, %Error{code: :not_found}} = OPP.add_merchant_phone("m_1", "+31612345678")
+    end
+
+    test "accepts a bare-list contacts shape (no data wrapper)", %{bypass: bypass} do
+      # OPP has been observed returning both shapes; the code handles either.
+      # Pin the bare-list variant so a future refactor can't silently drop it.
+      Bypass.expect(bypass, "GET", "/merchants/m_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "m_1", "contacts": [{"uid": "c_1"}], "compliance": {"level": 200, "status": "verified"}}>
+        )
+      end)
+
+      Bypass.expect_once(bypass, "POST", "/merchants/m_1/contacts/c_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "c_1"}>)
+      end)
+
+      assert {:ok, %{uid: "m_1", compliance_status: "verified", kyc_level: 200}} =
+               OPP.add_merchant_phone("m_1", "+31612345678")
+    end
+  end
+
   describe "create_withdrawal/4" do
     test "maps the currency, sends the idempotency key + reference, and parses the response",
          %{bypass: bypass} do
@@ -159,7 +216,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 200, ~s<{"uid": "w_1", "status": "pending", "amount": 1000}>)
       end)
 
-      assert {:ok, %{uid: "w_1", status: "pending", amount: 1000}} =
+      assert {:ok, %{uid: "w_1", status: :pending, raw_status: "pending", amount: 1000}} =
                OPP.create_withdrawal("m_1", :EUR, %{amount: 1000}, "payout=7")
     end
 
@@ -173,11 +230,262 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
-  describe "create_charge/4" do
+  # The adapter owns the vocabulary: OPP's status strings are normalized here so
+  # that no domain code ever matches on them. `raw_status` keeps OPP's own word
+  # for the audit trail.
+  # How a stranded withdrawal is found again: its uid was never recorded, so the
+  # only handle left is the `reference` we set when creating it.
+  describe "list_withdrawals/1" do
+    test "lists a merchant's withdrawals with their reference", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"data": [
+          {"uid": "w_1", "status": "completed", "reference": "payout=abc,type=withdrawal,attempt=0", "amount": 1000},
+          {"uid": "w_2", "status": "failed", "reference": "payout=def,type=withdrawal,attempt=0", "amount": 500}
+        ]}>)
+      end)
+
+      assert {:ok, [first, second]} = OPP.list_withdrawals("m_1")
+
+      assert %{
+               uid: "w_1",
+               status: :completed,
+               reference: "payout=abc,type=withdrawal,attempt=0",
+               amount: 1000
+             } = first
+
+      assert %{uid: "w_2", status: :failed, reference: "payout=def,type=withdrawal,attempt=0"} =
+               second
+    end
+
+    test "a merchant with no withdrawals returns an empty list, not an error", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"data": []}>)
+      end)
+
+      assert {:ok, []} = OPP.list_withdrawals("m_1")
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "boom"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} = OPP.list_withdrawals("m_1")
+    end
+  end
+
+  describe "get_withdrawal/1 status normalization" do
+    defp stub_withdrawal_status(bypass, opp_status) do
+      Bypass.expect_once(bypass, "GET", "/withdrawals/w_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "w_1", "status": "#{opp_status}", "amount": 1000}>)
+      end)
+    end
+
+    test ~s(normalizes "completed" to :completed), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "completed")
+
+      assert {:ok, %{status: :completed, raw_status: "completed"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "failed" to :failed), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "failed")
+
+      assert {:ok, %{status: :failed, raw_status: "failed"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "disapproved" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "disapproved")
+
+      assert {:ok, %{status: :failed, raw_status: "disapproved"}} = OPP.get_withdrawal("w_1")
+    end
+
+    test ~s(normalizes "pending" to :pending), %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "pending")
+
+      assert {:ok, %{status: :pending, raw_status: "pending"}} = OPP.get_withdrawal("w_1")
+    end
+
+    # The safety property: a status OPP adds later must never finalize or fail a
+    # payout, so anything unrecognised is :pending.
+    test "normalizes an unrecognised status to :pending", %{bypass: bypass} do
+      stub_withdrawal_status(bypass, "some_future_status")
+
+      assert {:ok, %{status: :pending, raw_status: "some_future_status"}} =
+               OPP.get_withdrawal("w_1")
+    end
+  end
+
+  # invoice_id comes from a Postgres sequence a restore rewinds, so it cannot
+  # identify a pay-in across one. The idempotence key embeds a UUID and can, but
+  # it only travels as an HTTP header — these pin it into metadata instead, which
+  # is what a provider-side listing can actually read back.
+  describe "create_transaction/1 reference metadata" do
+    defp transaction_request(idempotence_key) do
+      %Transaction.Request{
+        merchant_uid: "m_1",
+        total_amount: 1000,
+        currency: :EUR,
+        invoice_id: "NEXT-NL-0128",
+        idempotence_key: idempotence_key,
+        description: %Transaction.Description{
+          platform: "Next",
+          assignment: "Study",
+          participant_count: 2,
+          amount_per_participant: 500
+        },
+        metadata: %Transaction.Metadata{
+          contact_person: "Researcher #1",
+          study_title: "Study",
+          study_goal: "Goal",
+          participant_count: 2,
+          amount_per_participant: 500
+        }
+      }
+    end
+
+    test "sends the idempotence key as metadata.reference", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/transactions", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        assert %{"metadata" => metadata} = Jason.decode!(raw)
+        assert metadata["reference"] == "pay_in:fund=1:abc-uuid"
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "created"}>)
+      end)
+
+      assert {:ok, _} = OPP.create_transaction(transaction_request("pay_in:fund=1:abc-uuid"))
+    end
+
+    test "keeps sending invoice_id alongside it", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/transactions", fn conn ->
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        assert %{"metadata" => metadata} = Jason.decode!(raw)
+        assert metadata["invoice_id"] == "NEXT-NL-0128"
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "created"}>)
+      end)
+
+      assert {:ok, _} = OPP.create_transaction(transaction_request("pay_in:fund=1:abc-uuid"))
+    end
+
+    test "reads the reference back off a retrieved transaction", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "total_amount": 1000, "created": 1785329635, > <>
+            ~s<"metadata": [{"key": "reference", "value": "pay_in:fund=1:abc-uuid"}]}>
+        )
+      end)
+
+      assert {:ok, %{reference: "pay_in:fund=1:abc-uuid", created: created}} =
+               OPP.get_transaction("t_1")
+
+      assert DateTime.to_unix(created) == 1_785_329_635
+    end
+
+    test "reads the amount OPP echoes back as `amount`, not the posted `total_amount`",
+         %{bypass: bypass} do
+      # OPP returns the value under `amount` and leaves `total_amount` null on
+      # reads, so reading only total_amount reported 0 for every transaction.
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "amount": 1440, "total_amount": null}>
+        )
+      end)
+
+      assert {:ok, %{amount: 1440}} = OPP.get_transaction("t_1")
+    end
+
+    test "still reads total_amount when that is the field present", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "t_1", "status": "completed", "total_amount": 999}>)
+      end)
+
+      assert {:ok, %{amount: 999}} = OPP.get_transaction("t_1")
+    end
+
+    test "leaves the reference nil for a transaction created before it was sent",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "completed", "total_amount": 1000, > <>
+            ~s<"metadata": [{"key": "invoice_id", "value": "NEXT-NL-0128"}]}>
+        )
+      end)
+
+      assert {:ok, %{reference: nil}} = OPP.get_transaction("t_1")
+    end
+  end
+
+  describe "get_transaction/1 status normalization" do
+    defp stub_transaction_status(bypass, opp_status) do
+      Bypass.expect_once(bypass, "GET", "/transactions/t_1", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          ~s<{"uid": "t_1", "status": "#{opp_status}", "total_amount": 1000}>
+        )
+      end)
+    end
+
+    test ~s(normalizes "completed" to :completed), %{bypass: bypass} do
+      stub_transaction_status(bypass, "completed")
+
+      assert {:ok, %{status: :completed, raw_status: "completed"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "failed" to :failed), %{bypass: bypass} do
+      stub_transaction_status(bypass, "failed")
+
+      assert {:ok, %{status: :failed, raw_status: "failed"}} = OPP.get_transaction("t_1")
+    end
+
+    # OPP documents "cancelled" as terminal — "A new transaction needs to be
+    # created" — so a declined pay-in must not linger as :pending and keep
+    # offering the retry CTA on the same transaction.
+    test ~s(normalizes "cancelled" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_transaction_status(bypass, "cancelled")
+
+      assert {:ok, %{status: :failed, raw_status: "cancelled"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "expired" to :failed, keeping the raw word), %{bypass: bypass} do
+      stub_transaction_status(bypass, "expired")
+
+      assert {:ok, %{status: :failed, raw_status: "expired"}} = OPP.get_transaction("t_1")
+    end
+
+    test ~s(normalizes "pending" to :pending), %{bypass: bypass} do
+      stub_transaction_status(bypass, "pending")
+
+      assert {:ok, %{status: :pending, raw_status: "pending"}} = OPP.get_transaction("t_1")
+    end
+
+    # "planned" means the issuer reserved the money but OPP has not claimed it
+    # yet — still in flight, so not terminal.
+    test ~s(normalizes "planned" to :pending), %{bypass: bypass} do
+      stub_transaction_status(bypass, "planned")
+
+      assert {:ok, %{status: :pending, raw_status: "planned"}} = OPP.get_transaction("t_1")
+    end
+
+    # The safety property: a status OPP adds later must never finalize or fail a
+    # pay-in, so anything unrecognised is :pending.
+    test "normalizes an unrecognised status to :pending", %{bypass: bypass} do
+      stub_transaction_status(bypass, "some_future_status")
+
+      assert {:ok, %{status: :pending, raw_status: "some_future_status"}} =
+               OPP.get_transaction("t_1")
+    end
+  end
+
+  describe "transfer_to_merchant/4" do
     test "POSTs a balance charge from->to with idempotency key and parses the response",
          %{bypass: bypass} do
       Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
-        assert ["payout=7,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        assert ["payout=7,type=transfer"] = Plug.Conn.get_req_header(conn, "idempotency-key")
         {:ok, raw, conn} = Plug.Conn.read_body(conn)
         body = Jason.decode!(raw)
         assert body["type"] == "balance"
@@ -186,11 +494,20 @@ defmodule Systems.Payment.Provider.OPPTest do
         assert body["to_owner_uid"] == "mer_participant"
         assert body["amount"] == 1000
 
+        # A charge has no `reference` field and cannot be listed, so metadata is
+        # the only thing tying it back to its payout for a manual investigation.
+        assert body["metadata"]["reference"] == "payout=7,type=transfer"
+
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_1", "status": "created", "amount": 1000}>)
       end)
 
-      assert {:ok, %{uid: "chg_1", status: "created", amount: 1000}} =
-               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
+      assert {:ok, %{uid: "chg_1", status: :pending, raw_status: "created", amount: 1000}} =
+               OPP.transfer_to_merchant(
+                 "mer_platform",
+                 "mer_participant",
+                 1000,
+                 "payout=7,type=transfer"
+               )
     end
 
     test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
@@ -199,7 +516,269 @@ defmodule Systems.Payment.Provider.OPPTest do
       end)
 
       assert {:error, %Error{code: :api_error}} =
-               OPP.create_charge("mer_platform", "mer_participant", 1000, "payout=7,type=charge")
+               OPP.transfer_to_merchant(
+                 "mer_platform",
+                 "mer_participant",
+                 1000,
+                 "payout=7,type=transfer"
+               )
+    end
+  end
+
+  # UNVERIFIED CONTRACT. Unlike the balance charge above, nothing has exercised
+  # a merchant -> partner charge against OPP. This block pins the shape the
+  # adapter currently sends so the assumption is visible and reviewable; edit it
+  # and `OPP.charge_to_partner/3` together once OPP's partner-charge docs (or a
+  # sandbox call) confirm the endpoint, the `type` value, and whether a partner
+  # uid must be sent as `to_owner_uid`.
+  describe "charge_to_partner/3" do
+    test "POSTs a partner charge with idempotency key and parses the response",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        assert ["donation=abc,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
+        {:ok, raw, conn} = Plug.Conn.read_body(conn)
+        body = Jason.decode!(raw)
+        assert body["type"] == "partner_fee"
+        assert body["currency"] == "EUR"
+        assert body["from_owner_uid"] == "mer_platform"
+        assert body["amount"] == 1000
+
+        # The destination is the platform operator itself, so no to_owner_uid.
+        refute Map.has_key?(body, "to_owner_uid")
+
+        # Same as the balance charge: a charge cannot be listed, so metadata is
+        # the only thing tying it back to its donation for a manual check.
+        assert body["metadata"]["reference"] == "donation=abc,type=charge"
+
+        Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_d", "status": "created", "amount": 1000}>)
+      end)
+
+      assert {:ok, %{uid: "chg_d", status: :pending, raw_status: "created", amount: 1000}} =
+               OPP.charge_to_partner("mer_platform", 1000, "donation=abc,type=charge")
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+        Plug.Conn.resp(conn, 400, ~s<{"error": {"message": "nope"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} =
+               OPP.charge_to_partner("mer_platform", 1000, "donation=abc,type=charge")
+    end
+  end
+
+  # OPP's `date` filter on /withdrawals is silently ignored and /charges has no
+  # date filter at all, so the creation cutoff is enforced client-side. These
+  # cover that windowing, since a server that ignores the filter cannot.
+  describe "list_recent_withdrawals/1" do
+    defp unix(iso), do: iso |> DateTime.from_iso8601() |> elem(1) |> DateTime.to_unix()
+
+    defp withdrawal_json(uid, reference, created) do
+      ~s<{"uid": "#{uid}", "object": "withdrawal", "status": "completed", > <>
+        ~s<"reference": "#{reference}", "amount": 1000, "created": #{created}}>
+    end
+
+    defp page_json(items, last_page) do
+      ~s<{"object": "list", "last_page": #{last_page}, "data": [#{Enum.join(items, ",")}]}>
+    end
+
+    test "parses reference and created into the withdrawal", %{bypass: bypass} do
+      created = unix("2026-07-20T12:00:00Z")
+
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        Plug.Conn.resp(
+          conn,
+          200,
+          page_json(
+            [withdrawal_json("wtd_1", "payout=abc,type=withdrawal,attempt=0", created)],
+            1
+          )
+        )
+      end)
+
+      assert {:ok, [withdrawal]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert %{
+               uid: "wtd_1",
+               status: :completed,
+               reference: "payout=abc,type=withdrawal,attempt=0",
+               amount: 1000
+             } = withdrawal
+
+      assert DateTime.to_unix(withdrawal.created) == created
+    end
+
+    test "drops objects created before the cutoff", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        items = [
+          withdrawal_json("wtd_new", "payout=a", unix("2026-07-20T12:00:00Z")),
+          withdrawal_json("wtd_old", "payout=b", unix("2026-01-01T12:00:00Z"))
+        ]
+
+        Plug.Conn.resp(conn, 200, page_json(items, 1))
+      end)
+
+      assert {:ok, [%{uid: "wtd_new"}]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "keeps paging while every object on the page is within the window",
+         %{bypass: bypass} do
+      Agent.start_link(fn -> [] end, name: :opp_pages)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        %{"page" => page} = URI.decode_query(conn.query_string)
+        Agent.update(:opp_pages, &[page | &1])
+
+        item = withdrawal_json("wtd_#{page}", "payout=#{page}", unix("2026-07-20T12:00:00Z"))
+        Plug.Conn.resp(conn, 200, page_json([item], 3))
+      end)
+
+      assert {:ok, withdrawals} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert Enum.map(withdrawals, & &1.uid) == ["wtd_1", "wtd_2", "wtd_3"]
+      assert Agent.get(:opp_pages, &Enum.reverse/1) == ["1", "2", "3"]
+    end
+
+    test "stops paging at the first page containing an object past the cutoff",
+         %{bypass: bypass} do
+      Agent.start_link(fn -> 0 end, name: :opp_page_count)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        Agent.update(:opp_page_count, &(&1 + 1))
+
+        items = [
+          withdrawal_json("wtd_new", "payout=a", unix("2026-07-20T12:00:00Z")),
+          withdrawal_json("wtd_old", "payout=b", unix("2026-01-01T12:00:00Z"))
+        ]
+
+        Plug.Conn.resp(conn, 200, page_json(items, 10))
+      end)
+
+      assert {:ok, [%{uid: "wtd_new"}]} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+      assert Agent.get(:opp_page_count, & &1) == 1
+    end
+
+    test "stops paging at a page whose objects carry no creation timestamp",
+         %{bypass: bypass} do
+      # An undated page says nothing about where the window ends. It is still
+      # kept (an unreadable date must not hide an orphan), but paging on it
+      # would run to the cap on every sweep.
+      Agent.start_link(fn -> 0 end, name: :opp_undated_pages)
+
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        Agent.update(:opp_undated_pages, &(&1 + 1))
+        item = withdrawal_json("wtd_undated", "payout=a", "null")
+        Plug.Conn.resp(conn, 200, page_json([item], 10))
+      end)
+
+      assert {:ok, [%{uid: "wtd_undated"}]} =
+               OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      assert Agent.get(:opp_undated_pages, & &1) == 1
+    end
+
+    test "requests newest-first ordering", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        assert conn.query_string =~ "order[]=-date_created"
+        Plug.Conn.resp(conn, 200, page_json([], 1))
+      end)
+
+      assert {:ok, []} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/withdrawals", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "nope"}}>)
+      end)
+
+      assert {:error, %Error{code: :api_error}} =
+               OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "reports hitting the paging cap as :truncated, never as a complete listing",
+         %{bypass: bypass} do
+      # A listing that stops at the cap must not look like one that reached the
+      # end, or a sweep that never saw the older pages reads as finding nothing
+      # there. Every page is in-window and claims more follow, so paging only
+      # ends at the cap.
+      Bypass.expect(bypass, "GET", "/withdrawals", fn conn ->
+        %{"page" => page} = URI.decode_query(conn.query_string)
+        item = withdrawal_json("wtd_#{page}", "payout=#{page}", unix("2026-07-20T12:00:00Z"))
+        Plug.Conn.resp(conn, 200, page_json([item], 9999))
+      end)
+
+      assert {:truncated, withdrawals} = OPP.list_recent_withdrawals(~U[2026-07-01 00:00:00Z])
+
+      # Partial results are still returned — they may hold orphans.
+      assert length(withdrawals) == 50
+    end
+  end
+
+  describe "list_recent_transactions/1" do
+    test "reads the payout reference and created stamp off each list item",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/transactions", fn conn ->
+        item =
+          ~s<{"uid": "tra_1", "object": "transaction", "status": "completed", > <>
+            ~s<"amount": 1440, "created": 1785329635, > <>
+            ~s<"metadata": [{"key": "invoice_id", "value": "NEXT-NL-0128"}, > <>
+            ~s<{"key": "reference", "value": "pay_in:fund=1:abc"}]}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "tra_1", reference: "pay_in:fund=1:abc", amount: 1440}]} =
+               OPP.list_recent_transactions(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "includes a never-completed transaction, which a date_completed filter would drop",
+         %{bypass: bypass} do
+      # An orphaned pay-in is precisely one that never completed, so the server-
+      # side filter OPP does offer here cannot be used.
+      Bypass.expect_once(bypass, "GET", "/transactions", fn conn ->
+        refute conn.query_string =~ "date_completed"
+
+        item =
+          ~s<{"uid": "tra_2", "object": "transaction", "status": "created", > <>
+            ~s<"completed": null, "amount": 500, "created": 1785329635, "metadata": []}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "tra_2", status: :pending, reference: nil}]} =
+               OPP.list_recent_transactions(~U[2026-07-01 00:00:00Z])
+    end
+  end
+
+  describe "list_recent_transfers/1" do
+    test "reads the payout reference back out of charge metadata", %{bypass: bypass} do
+      # A charge has no `reference` field of its own — transfer_to_merchant/4
+      # writes the idempotence key into metadata, and OPP returns metadata as a
+      # list of key/value pairs rather than the object it was written as.
+      Bypass.expect_once(bypass, "GET", "/charges", fn conn ->
+        item =
+          ~s<{"uid": "chg_1", "object": "charge", "status": "completed", "amount": 500, > <>
+            ~s<"created": 1785329635, > <>
+            ~s<"metadata": [{"key": "reference", "value": "payout=abc,type=transfer"}]}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "chg_1", reference: "payout=abc,type=transfer", amount: 500}]} =
+               OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
+    end
+
+    test "leaves the reference nil when the charge carries no metadata", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/charges", fn conn ->
+        item =
+          ~s<{"uid": "chg_2", "object": "charge", "status": "completed", "amount": 500, > <>
+            ~s<"created": 1785329635, "metadata": []}>
+
+        Plug.Conn.resp(conn, 200, ~s<{"object": "list", "last_page": 1, "data": [#{item}]}>)
+      end)
+
+      assert {:ok, [%{uid: "chg_2", reference: nil}]} =
+               OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
     end
   end
 end

@@ -1,5 +1,5 @@
 defmodule Next.Account.AuthCodeVerifyPage do
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
@@ -10,6 +10,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
   import CoreWeb.Menus
 
   alias CoreWeb.Endpoint
+  alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
 
@@ -17,12 +18,17 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @token_max_age 120
 
   @impl true
-  def mount(%{"email" => email}, _session, socket) do
+  def mount(%{"email" => email} = params, _session, socket) do
     if feature_enabled?(:otp) do
       {
         :ok,
         socket
-        |> assign(email: email, form: to_form(%{"code" => ""}), error: nil)
+        |> assign(
+          email: email,
+          form: to_form(%{"code" => ""}),
+          error: nil,
+          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
+        )
         |> update_menus()
       }
     else
@@ -38,10 +44,11 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @impl true
   def handle_event("verify", %{"code" => code}, %{assigns: %{email: email}} = socket) do
     code = String.trim(code)
+    return_to = socket.assigns[:return_to]
 
     case Account.Public.verify_otp(email, code) do
       {:ok, user} ->
-        payload = %{user_id: user && user.id, email: email}
+        payload = %{user_id: user && user.id, email: email, return_to: return_to}
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
         {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
 
@@ -72,10 +79,10 @@ defmodule Next.Account.AuthCodeVerifyPage do
   @impl true
   def render(assigns) do
     ~H"""
-    <.stripped menus={@menus}>
+    <.stripped menus={@menus} centered?>
+      <div class="h-full flex flex-col justify-center pt-14 pb-16">
       <Area.content>
         <Area.form>
-          <Margin.y id={:page_top} />
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
           <.spacing value="L" />
           <.form id="auth_code_form" for={@form} phx-submit="verify">
@@ -95,7 +102,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
                   pattern="[0-9]*"
                   autocomplete={if i == 0, do: "one-time-code", else: "off"}
                   data-testid={"auth-code-cell-#{i}"}
-                  class="text-center text-title4 font-title4 text-grey1 w-12 h-14 rounded border-2 border-grey3 focus:border-primary focus:outline-none bg-white"
+                  class="text-center text-title4 font-title4 text-grey1 w-12 h-11 rounded border-2 border-grey3 focus:border-primary focus:outline-none bg-white"
                 />
               <% end %>
               <input type="hidden" name="code" data-otp-value />
@@ -110,9 +117,14 @@ defmodule Next.Account.AuthCodeVerifyPage do
               bg_color="bg-grey1"
               testid="auth-code-verify-button"
             />
+            <.spacing value="S" />
+            <div class="text-center">
+              <Text.footnote color="text-grey3"><%= dgettext("eyra-account", "auth.code.body") %></Text.footnote>
+            </div>
           </.form>
         </Area.form>
       </Area.content>
+      </div>
     </.stripped>
     """
   end

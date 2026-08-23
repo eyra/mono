@@ -43,7 +43,7 @@ defmodule Systems.Pool.MarketplacePage do
       <:hero>
         <Hero.dynamic {@vm.hero} />
       </:hero>
-      <div class="bg-grey6 min-h-full">
+      <div class="min-h-full">
         <div class="py-4 border-b border-grey4">
           <Area.content>
             <.live_component module={Breadcrumbs} id={:marketplace_breadcrumbs} elements={@vm.breadcrumbs} />

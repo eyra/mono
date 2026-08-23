@@ -1,7 +1,5 @@
 defmodule Systems.Assignment.ParticipantsView do
-  use CoreWeb, :live_component
-
-  require Logger
+  use CoreWeb, :live_component_fabric
 
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic
@@ -10,7 +8,6 @@ defmodule Systems.Assignment.ParticipantsView do
   alias Frameworks.Pixel.Logo
   alias Systems.Affiliate
   alias Systems.Advert
-  alias Systems.NextAction
   alias Systems.Pool
   alias Systems.Assignment
   alias Systems.Assignment.PaidSlotsLogic
@@ -24,7 +21,8 @@ defmodule Systems.Assignment.ParticipantsView do
           content_flags: content_flags,
           user: user,
           viewport: viewport,
-          breakpoint: breakpoint
+          breakpoint: breakpoint,
+          pool: pool
         },
         socket
       ) do
@@ -40,6 +38,7 @@ defmodule Systems.Assignment.ParticipantsView do
         title: title,
         content_flags: content_flags,
         user: user,
+        pool: pool,
         external_panel_link?: external_panel_link?,
         viewport: viewport,
         breakpoint: breakpoint
@@ -55,7 +54,6 @@ defmodule Systems.Assignment.ParticipantsView do
       |> update_invite_title()
       |> update_invite_url()
       |> update_invite_annotation()
-      |> assign_pending_approvals()
       |> PaidSlotsLogic.assign_paid_slots_state()
     }
   end
@@ -79,52 +77,13 @@ defmodule Systems.Assignment.ParticipantsView do
   end
 
   @impl true
-  def compose(:payout_modal, %{assignment: %{id: assignment_id}}) do
-    %{
-      module: Assignment.PayoutModal,
-      params: %{assignment_id: assignment_id}
-    }
-  end
-
-  @impl true
   def handle_event(
         "create_advert",
         _payload,
-        %{assigns: %{assignment: assignment, user: user}} = socket
+        %{assigns: %{assignment: assignment, user: user, pool: %Pool.Model{} = pool}} = socket
       ) do
-    if pool = Pool.Public.get_panl() do
-      Advert.Assembly.create(assignment, user, pool)
-    else
-      Logger.error("Panl pool not found")
-      Frameworks.Pixel.Flash.push_error(socket, "Panl pool not found")
-    end
-
+    Advert.Assembly.create(assignment, user, pool)
     {:noreply, socket}
-  end
-
-  @impl true
-  def handle_event("open_payout_modal", _, socket) do
-    {
-      :noreply,
-      socket
-      |> compose_child(:payout_modal)
-      |> show_modal(:payout_modal, :compact)
-    }
-  end
-
-  @impl true
-  def handle_event("payout_modal_close", _, socket) do
-    {
-      :noreply,
-      socket
-      |> hide_modal(:payout_modal)
-      |> PaidSlotsLogic.refresh_assignment()
-      |> assign_pending_approvals()
-    }
-  end
-
-  defp assign_pending_approvals(%{assigns: %{assignment: assignment}} = socket) do
-    assign(socket, pending_approvals: Assignment.Public.list_pending_payouts(assignment))
   end
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: []}}} = socket) do
@@ -243,8 +202,6 @@ defmodule Systems.Assignment.ParticipantsView do
 
           <.spacing value="L" />
 
-          <.pending_approvals_banner pending_approvals={@pending_approvals} target={@myself} />
-
           <%= if @content_flags[:paid_slots] do %>
             <.paid_slots
               entity={@entity}
@@ -256,12 +213,12 @@ defmodule Systems.Assignment.ParticipantsView do
           <% end %>
 
           <div class="flex flex-col gap-8">
-            <%= if @content_flags[:advert_in_pool] do %>
+            <%= if @content_flags[:advert_in_pool] and @pool do %>
               <InlineBlock.inline_block
                 title={dgettext("eyra-assignment", "advert.title")}
                 description={dgettext("eyra-assignment", "advert.body")}
                 button={@advert_button}
-                icon={Logo.path(:panl, {:product, :standing})}
+                icon={Logo.path(Pool.Model.slug(@pool), :pool)}
               />
             <% end %>
 
@@ -279,25 +236,6 @@ defmodule Systems.Assignment.ParticipantsView do
           </div>
         </Area.content>
       </div>
-    """
-  end
-
-  attr(:pending_approvals, :list, required: true)
-  attr(:target, :any, required: true)
-
-  def pending_approvals_banner(assigns) do
-    ~H"""
-    <%= if Enum.any?(@pending_approvals) do %>
-      <div data-testid="pending-approvals-cta">
-        <NextAction.View.highlight
-          title={dgettext("eyra-assignment", "pending_approvals.title")}
-          description={dgettext("eyra-assignment", "pending_approvals.description")}
-          cta_label={dgettext("eyra-assignment", "pending_approvals.open.button")}
-          cta_action={%{type: :send, event: "open_payout_modal", target: @target}}
-        />
-      </div>
-      <.spacing value="L" />
-    <% end %>
     """
   end
 end

@@ -20,7 +20,7 @@ defmodule Systems.Payment.Provider.LocalTest do
 
   describe "create_bank_account/2" do
     test "returns an approved bank account" do
-      assert {:ok, %{status: "approved"} = ba} = Local.create_bank_account("m_1", %{})
+      assert {:ok, %{status: :verified} = ba} = Local.create_bank_account("m_1", %{})
       assert is_binary(ba.uid)
     end
 
@@ -35,11 +35,24 @@ defmodule Systems.Payment.Provider.LocalTest do
 
   describe "list_bank_accounts/1" do
     test "returns a non-empty list with an approved account" do
-      assert {:ok, [%{status: "approved"} | _]} = Local.list_bank_accounts("m_1")
+      assert {:ok, [%{status: :verified} | _]} = Local.list_bank_accounts("m_1")
     end
 
     test "crashes on a non-binary merchant_uid (guard)" do
       assert_raise FunctionClauseError, fn -> Local.list_bank_accounts(nil) end
+    end
+  end
+
+  describe "charge_to_partner/3" do
+    test "returns a pending charge" do
+      assert {:ok, %{uid: uid, status: :pending, raw_status: "created", amount: 1000}} =
+               Local.charge_to_partner("m_1", 1000, "donation=abc,type=charge")
+
+      assert is_binary(uid)
+    end
+
+    test "crashes on a non-positive amount (guard)" do
+      assert_raise FunctionClauseError, fn -> Local.charge_to_partner("m_1", 0, "k") end
     end
   end
 end

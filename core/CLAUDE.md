@@ -425,6 +425,7 @@ Uses **GreenLight** framework with hierarchical permissions:
 - PostgreSQL with Ecto ORM
 - Migrations in `/priv/repo/migrations/`
 - Models use `use Core, :model` for common functionality
+- **Deferred-drop pattern**: when removing a `field(...)` from a schema, the DB column can stay behind and be dropped in a follow-up migration once the risk of any lingering reader has passed. Append a row to `core/docs/schema-deprecations.md` in the same PR so the debt is tracked.
 
 ### Frontend
 - Phoenix LiveView for reactive UI

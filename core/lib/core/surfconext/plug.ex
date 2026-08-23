@@ -72,45 +72,18 @@ defmodule Core.SurfConext.CallbackController do
   defp do_authenticate(conn, params, session_params) do
     config = config(:core) |> Keyword.put(:session_params, session_params)
 
-    {:ok, %{user: surf_user, token: token}} = oidc_module(config).callback(config, params)
-    Logger.debug("SURFconext user: #{inspect(surf_user)}")
+    {:ok, %{token: token}} = oidc_module(config).callback(config, params)
 
-    Logger.debug(
-      "SURFconext oidc info: #{inspect(oidc_module(config).fetch_userinfo(config, token))}"
-    )
+    with {:ok, userinfo} <- oidc_module(config).fetch_userinfo(config, token) do
+      Logger.debug("SURFconext userinfo: #{inspect(userinfo)}")
 
-    authenticate_user(config, conn, token, surf_user)
-  end
-
-  defp authenticate_user(config, conn, token, surf_user) do
-    if user = Core.SurfConext.get_user_by_sub(surf_user["sub"]) do
-      update_user(config, conn, user, token)
-    else
-      register_user(config, conn, token)
-    end
-  end
-
-  defp update_user(config, conn, user, token) do
-    with {:ok, userinfo} <- fetch_userinfo(config, token) do
-      Core.SurfConext.update_user(user, userinfo)
-    end
-
-    log_in_user(config, conn, user, false)
-  end
-
-  defp register_user(config, conn, token) do
-    with {:ok, userinfo} <- fetch_userinfo(config, token) do
-      case(Core.SurfConext.register_user(userinfo)) do
-        {:ok, surfconext_user} ->
-          log_in_user(config, conn, surfconext_user.user, true)
+      case Core.Identity.authenticate(Core.SurfConext, userinfo) do
+        {:ok, %{user: user, first_time?: first_time?}} ->
+          log_in_user(config, conn, user, first_time?)
 
         {:error, changeset} ->
           Core.SSOHelpers.handle_registration_error(conn, changeset)
       end
     end
-  end
-
-  defp fetch_userinfo(config, token) do
-    oidc_module(config).fetch_userinfo(config, token)
   end
 end

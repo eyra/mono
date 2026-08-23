@@ -47,6 +47,15 @@ defmodule Systems.Pool.Model do
   @fields ~w(name virtual_icon target director archived)a
   @required_fields @fields
 
+  @doc """
+  URL-safe slug derived from the pool's name — mirrors the DB fragment
+  used by `Pool.Public.get_by_slug/1`. Kept in one place so the two
+  never drift: `Panl` → `"panl"`, `LISS Panel` → `"liss_panel"`.
+  """
+  def slug(%__MODULE__{name: name}) when is_binary(name) do
+    name |> String.downcase() |> String.replace(" ", "_")
+  end
+
   def prepare(pool) do
     pool
     |> prepare_virtual_icon()

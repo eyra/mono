@@ -59,7 +59,7 @@ defmodule Systems.Assignment.InfoModel do
     info
     |> cast(params, @fields)
     |> validate_required(@required_fields)
-    |> validate_length(:aim_of_study, min: 10, max: 250)
+    |> validate_length(:aim_of_study, max: 250)
   end
 
   def changeset(info, _, params) do

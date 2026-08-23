@@ -43,13 +43,13 @@ defmodule Systems.Pool.MarketplacePageBuilderTest do
     do: %{current_user: user, uri_path: "/pool/#{pool.id}/marketplace"}
 
   describe "view_model/2" do
-    test "returns Overview > Marketplace breadcrumbs" do
+    test "returns Activities > Marketplace breadcrumbs" do
       pool = test_pool()
       user = pool_member(pool)
       vm = Pool.MarketplacePageBuilder.view_model(pool, build_assigns(user, pool))
 
       assert [
-               %{label: "Overview", path: "/"},
+               %{label: "Activities", path: "/"},
                %{label: "Marketplace", path: path}
              ] = vm.breadcrumbs
 

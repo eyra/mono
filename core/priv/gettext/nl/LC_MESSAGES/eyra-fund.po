@@ -159,14 +159,6 @@ msgid "rewards_summary.payout.button"
 msgstr "Uitbetalen"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.failed"
-msgstr "Uitbetaling kan op dit moment niet worden verwerkt. Probeer het later opnieuw."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.success"
-msgstr "Uitbetaling aangevraagd. Je beloning is onderweg naar je bankrekening."
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
 msgstr "🔒 %{amount} wordt uitbetaald naar uw bankrekening. Betalingen worden veilig verwerkt door onze betaalprovider."
 
@@ -179,17 +171,77 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr "Nu uitbetalen"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.body"
-msgstr "🔒 U moet eerst uw identiteit verifiëren bij onze betaalprovider. U wordt doorgestuurd om dit te regelen, daarna kunt u uw uitbetaling starten."
-
-#, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr "Doorgaan naar verificatie"
-
-#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
 msgstr "Uitbetaling starten"
 
 #, elixir-autogen, elixir-format
-msgid "rewards_summary.payout.kyc.title"
-msgstr "Verificatie nodig"
+msgid "rewards_summary.payout.verify.body"
+msgstr "Verifieer eerst je bankrekening voordat je een uitbetaling kunt aanvragen."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Naar verificatie"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Bankrekening nog niet geverifieerd"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.in_progress"
+msgstr "Je uitbetaling wordt verwerkt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.manual"
+msgstr "Je uitbetaling wordt verwerkt. Neem contact op als dit lang duurt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Opnieuw uitbetalen"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.body"
+msgstr "Je bankrekening wordt gecontroleerd door onze betaalprovider. Dit duurt meestal een paar minuten — probeer het zo dadelijk opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr "OK"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.awaiting.title"
+msgstr "Verificatie loopt"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr "Doneren"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr "Doneren is niet gelukt. Probeer het later opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr "Je doneert %{amount} aan Eyra. Hiermee doe je afstand van je recht op uitbetaling van dit bedrag. Dit kan niet ongedaan worden gemaakt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr "Ja, doneren"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr "Doneren aan Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr "Je donatie wordt verwerkt."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr "Bedankt voor je donatie!"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr "Gedoneerd aan Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
+msgstr "We bevestigen je donatie nog. Je hoeft het niet opnieuw te proberen."

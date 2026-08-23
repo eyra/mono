@@ -4,6 +4,8 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
 
   alias Phoenix.LiveView
 
+  alias CoreWeb.ReturnTo
+  alias Frameworks.Pixel.Logo
   alias Systems.Advert
   alias Systems.Pool
   alias Systems.Promotion
@@ -29,7 +31,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     |> CoreWeb.Live.Hook.Locale.put_locale()
 
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
-    icon_url = "/images/logos/products/#{String.downcase(pool_name)}_wide.svg"
+    icon_url = Logo.path(pool_name, {:pool, {:wide, :dark}})
 
     %{
       id: id,
@@ -60,25 +62,24 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     ]
   end
 
-  defp apply_call_to_action(%Advert.Model{assignment: assignment} = advert) do
-    active? = Assignment.Public.has_budget_capacity?(assignment)
-
+  defp apply_call_to_action(%Advert.Model{} = advert) do
     %{
-      label: cta_label(active?),
-      active?: active?,
+      label: dgettext("eyra-advert", "promotion.apply.button"),
       target: %{type: :event, value: "apply"},
       advert: advert,
       handle: &handle_apply/1
     }
   end
 
-  defp cta_label(true), do: dgettext("eyra-advert", "promotion.apply.button")
-  defp cta_label(false), do: dgettext("eyra-advert", "promotion.full.button")
-
+  # Three cases:
+  #   * anonymous visitor  → auth identify → pool join → assignment
+  #     (nested return_to's carry the destination through the whole flow)
+  #   * existing member    → straight to the assignment
+  #   * signed-in non-member → pool join gate → assignment
   def handle_apply(
         %{
           assigns: %{
-            current_user: user,
+            current_user: current_user,
             vm: %{
               call_to_action: %{
                 advert: %{assignment: %{id: id}, promotion: promotion, submission: %{pool: pool}}
@@ -87,8 +88,20 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
           }
         } = socket
       ) do
-    Pool.Public.add_participant!(pool, user)
     Promotion.Private.log_performance_event(promotion, :clicks)
-    LiveView.push_navigate(socket, to: ~p"/assignment/#{id}/apply")
+    apply_path = ~p"/assignment/#{id}/apply"
+    slug = Pool.Model.slug(pool)
+
+    cond do
+      is_nil(current_user) ->
+        join_path = ReturnTo.append(~p"/pool/#{slug}/join", apply_path)
+        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/user/auth/identify", join_path))
+
+      Pool.Public.participant?(pool, current_user) ->
+        LiveView.push_navigate(socket, to: apply_path)
+
+      true ->
+        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/pool/#{slug}/join", apply_path))
+    end
   end
 end

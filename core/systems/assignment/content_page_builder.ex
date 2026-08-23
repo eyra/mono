@@ -11,6 +11,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
+  alias Systems.Pool
   alias Systems.Project
   alias Systems.Workflow
   alias Systems.Zircon
@@ -86,7 +87,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
         },
         icon: %{
           action: publish_action,
-          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-assignment", "preview.button")}
+          face: %{type: :icon, icon: :publish, alt: dgettext("eyra-assignment", "preview.button")},
+          testid: "publish-button"
         },
         handle_click: &handle_publish/1
       },
@@ -384,7 +386,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
         title: title,
         viewport: viewport,
         breakpoint: breakpoint,
-        content_flags: content_flags
+        content_flags: content_flags,
+        pool: pool(assignment)
       })
 
     %{
@@ -396,6 +399,38 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       child: child,
       testid: "assignment-tab-participants"
+    }
+  end
+
+  defp create_tab(
+         :contributions,
+         assignment,
+         {title, content_flags},
+         _workflow_config,
+         show_errors,
+         _assigns
+       ) do
+    element =
+      CoreWeb.Live.Element.prepare_live_view(
+        "contributions",
+        Assignment.ContributionsView,
+        live_context:
+          Frameworks.Concept.LiveContext.new(%{
+            assignment_id: assignment.id,
+            title: title,
+            content_flags: content_flags
+          })
+      )
+
+    %{
+      id: :contributions,
+      ready: false,
+      show_errors: show_errors,
+      title: title,
+      forward_title: dgettext("eyra-ui", "tabbar.item.forward", to: title),
+      type: :fullpage,
+      element: element,
+      testid: "assignment-tab-contributions"
     }
   end
 
@@ -427,6 +462,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
       type: :fullpage,
       child: child
     }
+  end
+
+  defp pool(assignment) do
+    case Assignment.Template.runtime_config(Assignment.Private.get_template(assignment)) do
+      %{pool: pool_slug} when not is_nil(pool_slug) -> Pool.Public.get_by_slug(pool_slug)
+      _ -> nil
+    end
   end
 
   defp number_widgets(assignment) do

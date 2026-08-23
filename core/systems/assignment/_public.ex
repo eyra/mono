@@ -5,6 +5,7 @@ defmodule Systems.Assignment.Public do
   use Core, :public
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
+  import Systems.Assignment.Private, only: [reward_idempotence_key: 1, reward_idempotence_key: 2]
 
   require Logger
 
@@ -19,7 +20,6 @@ defmodule Systems.Assignment.Public do
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Account
-  alias Systems.Bookkeeping
   alias Systems.Content
   alias Systems.Consent
   alias Systems.Fund
@@ -44,6 +44,15 @@ defmodule Systems.Assignment.Public do
     |> Repo.one()
     |> Repo.preload(preload)
   end
+
+  @doc """
+  A "funded" assignment has a fund AND at least one pay-in on that fund.
+  The fund alone doesn't qualify — every assignment gets an empty fund
+  at assembly time (`_assembly.ex`), so fund-existence is not a signal
+  that money is actually involved.
+  """
+  def funded?(%Assignment.Model{fund: %Fund.Model{} = fund}), do: Fund.Public.has_pay_ins?(fund)
+  def funded?(%Assignment.Model{}), do: false
 
   def get_workflow!(id, preload \\ []) do
     from(a in Workflow.Model, preload: ^preload)
@@ -136,42 +145,86 @@ defmodule Systems.Assignment.Public do
     )
   end
 
-  def obtain_instance!(%Assignment.Model{} = assignment, %Account.User{} = user) do
-    {:ok, instance} = obtain_instance(assignment, user)
-    instance
+  def obtain_participation!(%Assignment.Model{} = assignment, %Account.User{} = user) do
+    {:ok, participation} = obtain_participation(assignment, user)
+    participation
   end
 
-  def obtain_instance(%Assignment.Model{} = assignment, %Account.User{} = user) do
+  def obtain_participation(%Assignment.Model{} = assignment, %Account.User{} = user) do
     Multi.new()
     |> Multi.insert(
-      :assignment_instance,
-      prepare_instance(assignment, user),
+      :assignment_participation,
+      prepare_participation(assignment, user),
       on_conflict: {:replace, [:updated_at]},
       conflict_target: [:assignment_id, :user_id]
     )
-    |> Signal.Public.multi_dispatch({:assignment_instance, :obtained}, message: %{user: user})
+    |> Signal.Public.multi_dispatch({:assignment_participation, :obtained},
+      message: %{user: user}
+    )
     |> Repo.commit()
     |> case do
-      {:ok, %{assignment_instance: instance}} ->
-        {:ok, instance}
+      {:ok, %{assignment_participation: participation}} ->
+        {:ok, participation}
 
       error ->
         error
     end
   end
 
-  def get_instance(%Assignment.Model{} = assignment, %User{} = user) do
-    from(i in Assignment.InstanceModel,
-      where: i.assignment_id == ^assignment.id,
-      where: i.user_id == ^user.id
+  def get_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id,
+      where: p.user_id == ^user.id
     )
     |> Repo.one()
   end
 
-  def list_instances(%Assignment.Model{} = assignment, preload \\ []) do
-    from(i in Assignment.InstanceModel,
-      where: i.assignment_id == ^assignment.id,
-      order_by: [asc: i.id]
+  def list_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id,
+      order_by: [asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Participations that have been submitted but not yet reviewed — the
+  "pending" section of the Contributions tab. Ordered oldest-first so the
+  reviewer works through them FIFO.
+  """
+  def list_pending_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where:
+        p.assignment_id == ^assignment.id and not is_nil(p.completed_at) and
+          is_nil(p.accepted_at) and is_nil(p.rejected_at),
+      order_by: [asc: p.completed_at, asc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Participations that have been accepted by the owner — the "confirmed"
+  section. Most-recently-accepted first.
+  """
+  def list_accepted_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id and not is_nil(p.accepted_at),
+      order_by: [desc: p.accepted_at, desc: p.id]
+    )
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  Participations that have been rejected by the owner — the "declined"
+  section. Most-recently-rejected first.
+  """
+  def list_rejected_participations(%Assignment.Model{} = assignment, preload \\ []) do
+    from(p in Assignment.ParticipationModel,
+      where: p.assignment_id == ^assignment.id and not is_nil(p.rejected_at),
+      order_by: [desc: p.rejected_at, desc: p.id]
     )
     |> Repo.all()
     |> Repo.preload(preload)
@@ -212,9 +265,9 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_instance(%Assignment.Model{} = assignment, %User{} = user) do
-    %Assignment.InstanceModel{}
-    |> Assignment.InstanceModel.changeset(%{})
+  def prepare_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    %Assignment.ParticipationModel{}
+    |> Assignment.ParticipationModel.changeset(%{})
     |> Ecto.Changeset.put_assoc(:assignment, assignment)
     |> Ecto.Changeset.put_assoc(:user, user)
   end
@@ -435,12 +488,17 @@ defmodule Systems.Assignment.Public do
          %User{} = user
        )
        when is_integer(amount) and amount > 0 do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
-    if Fund.Public.reward_has_outstanding_deposit?(idempotence_key) do
+    if Fund.Public.reward_has_outstanding_deposit?(reward_idempotence_key) do
       :ok
     else
-      case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
+      case Fund.Public.create_reward(
+             ensure_fund_currency(fund),
+             amount,
+             user,
+             reward_idempotence_key
+           ) do
         {:ok, _} ->
           :ok
 
@@ -477,9 +535,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  # Only entities that carry an auth node: a Workflow.ItemModel has none, so it
+  # has no tree to resolve an owner from.
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
   def owner!(%Workflow.Model{} = workflow), do: parent_owner!(workflow)
-  def owner!(%Workflow.ItemModel{} = item), do: parent_owner!(item)
 
   def assign_tester_role(tool, user) do
     %{crew: crew} = get_by_tool(tool, [:crew])
@@ -489,17 +548,18 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  defp parent_owner!(entity) do
-    case parent_owner(entity) do
-      {:ok, user} -> user
-      _ -> nil
-    end
-  end
+  # Resolves the owner the way `can?/3` does: a role granted anywhere up the
+  # tree applies here. Asking only the top entity would miss an owner assigned
+  # on an intermediate node.
+  defp parent_owner!(%struct{auth_node_id: _auth_node_id, id: id} = entity) do
+    case auth_module().users_with_inherited_role(entity, :owner) do
+      [owner | _] ->
+        owner
 
-  defp parent_owner(%{auth_node_id: _auth_node_id} = entity) do
-    entity
-    |> auth_module().top_entity()
-    |> auth_module().first_user_with_role(:owner, [])
+      [] ->
+        Logger.error("No owner found for #{inspect(struct)} #{id}")
+        nil
+    end
   end
 
   def expiration_timestamp(%{info: info}) do
@@ -591,9 +651,14 @@ defmodule Systems.Assignment.Public do
   end
 
   defp run_create_reward(%Assignment.Model{fund: fund} = assignment, %User{} = user, amount) do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
-    case Fund.Public.create_reward(ensure_fund_currency(fund), amount, user, idempotence_key) do
+    case Fund.Public.create_reward(
+           ensure_fund_currency(fund),
+           amount,
+           user,
+           reward_idempotence_key
+         ) do
       {:ok, %{reward: reward}} -> {:ok, reward}
       {:error, error} -> {:error, error}
     end
@@ -614,35 +679,6 @@ defmodule Systems.Assignment.Public do
     else
       Logger.warning("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
-  end
-
-  def reject_task(
-        %Assignment.Model{} = assignment,
-        %Crew.TaskModel{} = task,
-        rejection
-      ) do
-    case auth_module().users_with_role(task, :owner) do
-      [%User{} = user | _] ->
-        reason = Map.get(rejection, :message) || Map.get(rejection, "message")
-
-        Multi.new()
-        |> Crew.Public.reject_task(task, rejection)
-        |> reject_reward(assignment, user, reason)
-        |> Repo.commit()
-
-      [] ->
-        Logger.error("[Assignment] reject_task: task #{task.id} has no owner")
-        {:error, :no_task_owner}
-    end
-  end
-
-  @doc """
-  Rejects the pending task identified by `task_id`. Keeps the `Crew` lookup
-  inside the `Assignment` system so views never query `Crew` directly.
-  """
-  def reject_task_by_id(%Assignment.Model{} = assignment, task_id, rejection)
-      when is_integer(task_id) do
-    reject_task(assignment, Crew.Public.get_task!(task_id), rejection)
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do
@@ -756,143 +792,6 @@ defmodule Systems.Assignment.Public do
     Concept.ToolModel.task_labels(tool)
   end
 
-  @doc """
-  Returns one row per `:pending_approval` reward on the assignment, joined to
-  the crew member + completed task so the researcher's pay-out modal can
-  render them.
-
-  Each row: `%{reward_id, task_id, member_public_id, amount, currency,
-  completed_at}`.
-  """
-  def list_pending_payouts(%Assignment.Model{
-        crew: %Crew.Model{} = crew,
-        fund: %Fund.Model{} = fund
-      }) do
-    members_by_user_id =
-      crew
-      |> Crew.Public.list_members()
-      |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
-
-    fund
-    |> Fund.Public.list_pending_approvals(fund: [:currency])
-    |> Enum.flat_map(&pending_payout_row(&1, crew, members_by_user_id))
-  end
-
-  def list_pending_payouts(_), do: []
-
-  def list_completed_payouts(%Assignment.Model{
-        crew: %Crew.Model{} = crew,
-        fund: %Fund.Model{} = fund
-      }) do
-    members_by_user_id =
-      crew
-      |> Crew.Public.list_members()
-      |> Map.new(fn %Crew.MemberModel{user_id: user_id} = member -> {user_id, member} end)
-
-    fund
-    |> Fund.Public.list_paid_rewards(fund: [:currency], payment: [])
-    |> Enum.map(&completed_payout_row(&1, members_by_user_id))
-    |> Enum.sort_by(& &1.paid_at, {:desc, NaiveDateTime})
-  end
-
-  def list_completed_payouts(_), do: []
-
-  defp completed_payout_row(
-         %Fund.RewardModel{
-           id: reward_id,
-           user_id: user_id,
-           amount: amount,
-           updated_at: updated_at,
-           fund: %Fund.Model{currency: currency},
-           payment: payment
-         },
-         members_by_user_id
-       ) do
-    %{
-      reward_id: reward_id,
-      member_public_id: member_public_id(members_by_user_id, user_id),
-      amount: amount,
-      currency: currency,
-      paid_at: paid_at_for(payment, updated_at)
-    }
-  end
-
-  defp paid_at_for(%Bookkeeping.EntryModel{inserted_at: inserted_at}, _fallback), do: inserted_at
-  defp paid_at_for(_, fallback), do: fallback
-
-  # Per-row task lookup remains: the task↔owner link is role-based and lives in
-  # Crew, so full O(1) batching would need a dedicated Crew.Public query.
-  defp pending_payout_row(
-         %Fund.RewardModel{
-           id: reward_id,
-           user_id: user_id,
-           amount: amount,
-           fund: %Fund.Model{currency: currency}
-         },
-         %Crew.Model{} = crew,
-         members_by_user_id
-       ) do
-    crew
-    |> Crew.Public.list_tasks_for_user(user_id)
-    |> Enum.find(&match?(%Crew.TaskModel{status: :completed}, &1))
-    |> case do
-      %Crew.TaskModel{id: task_id, completed_at: completed_at} ->
-        [
-          %{
-            reward_id: reward_id,
-            task_id: task_id,
-            member_public_id: member_public_id(members_by_user_id, user_id),
-            amount: amount,
-            currency: currency,
-            completed_at: completed_at
-          }
-        ]
-
-      nil ->
-        []
-    end
-  end
-
-  defp member_public_id(members_by_user_id, user_id) do
-    case Map.get(members_by_user_id, user_id) do
-      %Crew.MemberModel{public_id: public_id} -> public_id
-      nil -> nil
-    end
-  end
-
-  @doc """
-  Bulk-approves every reward currently in `:pending_approval` on the assignment
-  by accepting the matching crew task. Each accept fires the existing assignment
-  switch which calls `Fund.Public.approve_reward/1`. A failing row is logged
-  and does not block subsequent rows, but the overall outcome is reported:
-  `{:ok, count}` when all succeeded, or
-  `{:error, {:partial, %{ok: n, failed: [task_id, ...]}}}` otherwise.
-  """
-  def bulk_approve_pending_payouts(%Assignment.Model{} = assignment) do
-    results =
-      list_pending_payouts(assignment)
-      |> Enum.map(fn %{task_id: task_id} ->
-        case Crew.Public.accept_task(task_id) do
-          {:ok, _} ->
-            {:ok, task_id}
-
-          error ->
-            Logger.warning(
-              "[Assignment] bulk approve failed for task #{task_id}: #{inspect(error)}"
-            )
-
-            {:error, task_id}
-        end
-      end)
-
-    failed = for {:error, task_id} <- results, do: task_id
-
-    case failed do
-      [] -> {:ok, length(results)}
-      _ -> {:error, {:partial, %{ok: length(results) - length(failed), failed: failed}}}
-    end
-  end
-
   def has_open_spots?(%{crew: _crew} = assignment) do
     open_spot_count(assignment) > 0
   end
@@ -910,8 +809,8 @@ defmodule Systems.Assignment.Public do
         0
       end
 
-    all_non_expired_members = Crew.Public.count_members(crew)
-    max(0, subject_count - all_non_expired_members)
+    participants = Crew.Public.count_participants(crew)
+    max(0, subject_count - participants)
   end
 
   @doc """
@@ -1025,7 +924,7 @@ defmodule Systems.Assignment.Public do
     |> Multi.run(:rollback, fn _, _ ->
       expired_user_assignments(from)
       |> Enum.map(fn {user_id, assignment_id} ->
-        idempotence_key(assignment_id, user_id)
+        reward_idempotence_key(assignment_id, user_id)
       end)
       |> Enum.filter(&Fund.Public.reward_has_outstanding_deposit?(&1))
       |> Enum.each(&Fund.Public.rollback_deposit(&1))
@@ -1036,41 +935,197 @@ defmodule Systems.Assignment.Public do
   end
 
   def rollback_deposit(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
-    idempotence_key = idempotence_key(assignment, user)
+    reward_idempotence_key = reward_idempotence_key(assignment, user)
 
     multi
-    |> Fund.Public.rollback_deposit(idempotence_key)
+    |> Fund.Public.rollback_deposit(reward_idempotence_key)
   end
 
-  defp reject_reward(
-         %Multi{} = multi,
-         %Assignment.Model{} = assignment,
-         %User{} = user,
-         reason \\ nil
-       ) do
-    idempotence_key = idempotence_key(assignment, user)
-
-    multi
-    |> Fund.Public.reject_reward(idempotence_key, reason)
+  defp reject_reward(%Multi{} = multi, %Assignment.Model{} = assignment, %User{} = user) do
+    case Fund.Public.get_reward(
+           reward_idempotence_key(assignment, user),
+           Fund.RewardModel.preload_graph(:full)
+         ) do
+      %Fund.RewardModel{} = reward -> Fund.Public.reject_reward(multi, reward)
+      nil -> multi
+    end
   end
 
-  def idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key(assignment_id, user_id)
+  def get_reward(%Assignment.Model{} = assignment, %User{} = user, preload \\ []) do
+    Fund.Public.get_reward(reward_idempotence_key(assignment, user), preload)
   end
 
-  def idempotence_key(assignment_id, user_id)
-      when is_integer(assignment_id) and is_integer(user_id) do
-    "assignment=#{assignment_id},user=#{user_id}"
+  @doc """
+  Marks a participation as complete — the participant has submitted their
+  work (either by finishing the last task, or by explicitly clicking "I'm
+  done"). Sets `completed_at`, flips the associated reward to
+  `:pending_approval` (if any), and dispatches
+  `{:assignment_participation, :completed}`. All three happen in one
+  transaction; a failure anywhere rolls the whole thing back.
+
+  Idempotent on `completed_at`: a second call is a no-op.
+
+  Downstream housekeeping (owner next-action, view refreshes) lives in
+  `Assignment.Switch` and runs after the transaction commits.
+  """
+  def complete_participation(%Assignment.Model{} = assignment, %User{} = user) do
+    case get_participation(assignment, user) do
+      %Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p ->
+        {:ok, p}
+
+      _ ->
+        {:ok, participation} = obtain_participation(assignment, user)
+        complete_participation(participation)
+    end
   end
 
-  def payout_participant(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.approve_reward(idempotence_key)
+  def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p),
+    do: {:ok, p}
+
+  def complete_participation(%Assignment.ParticipationModel{} = participation) do
+    participation = Repo.preload(participation, :assignment)
+
+    changeset =
+      Assignment.ParticipationModel.changeset(participation, %{
+        completed_at: Timestamp.naive_now()
+      })
+
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.mark_pending_approval/2)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
+    end
+  end
+
+  @doc """
+  Marks a participation as accepted — the owner confirmed the contribution.
+  Sets `accepted_at`, approves the associated reward (which triggers
+  payout) if any, and dispatches `{:assignment_participation, :accepted}`.
+  All in one transaction. Idempotent on `accepted_at`.
+
+  Returns `{:error, :participation_already_rejected}` when the
+  participation was previously rejected. Business rule: rejection
+  reopens the assignment spot for a new participant, so accepting
+  after a rejection would double-book. Any dispute resolution happens
+  outside the system.
+  """
+  def accept_participation(id) when is_integer(id) do
+    case Repo.get(Assignment.ParticipationModel, id) do
+      nil -> {:error, :participation_not_found}
+      participation -> accept_participation(participation)
+    end
+  end
+
+  def accept_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}} = p),
+    do: {:ok, p}
+
+  def accept_participation(%Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}}),
+    do: {:error, :participation_already_rejected}
+
+  def accept_participation(%Assignment.ParticipationModel{} = participation) do
+    participation = Repo.preload(participation, :assignment)
+
+    changeset =
+      Assignment.ParticipationModel.changeset(participation, %{
+        accepted_at: Timestamp.naive_now()
+      })
+
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.approve_reward/2)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :accepted})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
+    end
+  end
+
+  @doc """
+  Marks a participation as rejected — the owner declined the contribution.
+  Sets `rejected_at` + `rejected_message`, rejects the associated reward
+  (rolling the deposit back into the fund) if any, and dispatches
+  `{:assignment_participation, :rejected}`. All in one transaction.
+  Idempotent on `rejected_at`.
+
+  Returns `{:error, :participation_already_accepted}` when the
+  participation was previously accepted. Business rule: once accepted
+  the reward has been approved and paid out; reversing that requires
+  admin intervention at the Fund layer, not a routine reject.
+  """
+  def reject_participation(id, message) when is_integer(id) do
+    case Repo.get(Assignment.ParticipationModel, id) do
+      nil -> {:error, :participation_not_found}
+      participation -> reject_participation(participation, message)
+    end
+  end
+
+  def reject_participation(
+        %Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}} = p,
+        _message
+      ),
+      do: {:ok, p}
+
+  def reject_participation(
+        %Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}},
+        _message
+      ),
+      do: {:error, :participation_already_accepted}
+
+  def reject_participation(%Assignment.ParticipationModel{} = participation, message)
+      when is_binary(message) or is_nil(message) do
+    participation = Repo.preload(participation, :assignment)
+
+    changeset =
+      Assignment.ParticipationModel.changeset(participation, %{
+        rejected_at: Timestamp.naive_now(),
+        rejected_message: message
+      })
+
+    Multi.new()
+    |> Multi.update(:assignment_participation, changeset)
+    |> maybe_reward_step(participation, &Fund.Public.reject_reward/2)
+    |> Signal.Public.multi_dispatch({:assignment_participation, :rejected})
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment_participation: participation}} -> {:ok, participation}
+      error -> error
+    end
+  end
+
+  # Load the reward and add the Fund step, or skip if there's no reward
+  # (unpaid assignment, or the participation flow reached us before the
+  # reward was ever created).
+  defp maybe_reward_step(multi, %Assignment.ParticipationModel{} = participation, step) do
+    with %Assignment.Model{fund_id: fund_id} <- participation.assignment,
+         true <- not is_nil(fund_id),
+         %Fund.RewardModel{} = reward <-
+           Fund.Public.get_reward(
+             reward_idempotence_key(participation),
+             Fund.RewardModel.preload_graph(:full)
+           ) do
+      step.(multi, reward)
+    else
+      _ -> multi
+    end
+  end
+
+  @doc """
+  Users with `:owner` inherited on this assignment — typically the owner(s)
+  of the containing project. Assignment auth nodes rarely carry direct owner
+  assignments; inheritance is via the project node.
+  """
+  def owners(%Assignment.Model{} = assignment) do
+    auth_module().users_with_inherited_role(assignment, :owner)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
-    idempotence_key = idempotence_key(assignment_id, user_id)
-    Fund.Public.rewarded_amount(idempotence_key)
+    reward_idempotence_key = reward_idempotence_key(assignment_id, user_id)
+    Fund.Public.rewarded_amount(reward_idempotence_key)
   end
 end
 

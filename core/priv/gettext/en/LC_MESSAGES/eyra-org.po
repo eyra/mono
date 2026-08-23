@@ -91,3 +91,15 @@ msgstr "Would you like to add them to your organisation?"
 #, elixir-autogen, elixir-format
 msgid "domain.match.next_action.title"
 msgstr "New members available for %{org_name} (%{domains})"
+
+#, elixir-autogen, elixir-format
+msgid "pools.title"
+msgstr "Pools"
+
+#, elixir-autogen, elixir-format
+msgid "pools.participants.label"
+msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "content.title"
+msgstr "Organisation"

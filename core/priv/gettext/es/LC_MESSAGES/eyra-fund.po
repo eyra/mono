@@ -129,43 +129,35 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.pill"
-msgstr ""
+msgstr "Aprobadas"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.approved.threshold"
-msgstr ""
+msgstr "Retiro o donación disponible a partir de € 5"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.caption"
-msgstr ""
+msgstr "En espera de aprobación"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.pending.pill"
-msgstr ""
+msgstr "En espera"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.rejected.pill"
-msgstr ""
+msgstr "Rechazadas"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.title"
-msgstr ""
+msgstr "Recompensas"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.below_threshold"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.failed"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.success"
-msgstr ""
+msgstr "Cobrar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.body"
@@ -180,17 +172,77 @@ msgid "rewards_summary.payout.handoff.confirm"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.body"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.confirm"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "rewards_summary.payout.handoff.title"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.body"
+msgstr "Verifica primero tu cuenta bancaria antes de solicitar un pago."
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.confirm"
+msgstr "Ir a verificación"
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.verify.title"
+msgstr "Cuenta bancaria aún no verificada"
+
 #, elixir-autogen, elixir-format, fuzzy
-msgid "rewards_summary.payout.kyc.title"
+msgid "rewards_summary.payout.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.manual"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.payout.retry"
+msgstr "Reintentar cobro"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "rewards_summary.payout.awaiting.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.failed"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.handoff.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.in_progress"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.thanks"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.total"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "rewards_summary.donate.pending"
 msgstr ""

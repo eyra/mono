@@ -5,6 +5,7 @@ defmodule Systems.Home.PageBuilderTest do
   alias Systems.Pool
   alias Systems.Advert
   alias Systems.Assignment
+  alias Systems.Fund
 
   alias Core.Factories
 
@@ -15,22 +16,38 @@ defmodule Systems.Home.PageBuilderTest do
     params
   end
 
-  # Build an online + funded + open advert that passes validate_open/2 for any
-  # panl participant. reward_value 0 short-circuits the funding check so we
-  # don't need to wire up a Fund + currency.
+  # Build an online + funded + open advert placed inside the Panl pool so it
+  # surfaces on the home page's Panl marketplace block. reward_value 0
+  # short-circuits the funding check so we don't need to wire up a Fund +
+  # currency. The factory's own `test_pool` is discarded — we swap the
+  # submission's pool to Panl so the pool-scoped query sees it.
   defp create_open_online_advert(creator) do
+    panl_pool =
+      Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+
     advert = Advert.Factories.create_advert(creator, :accepted, 1)
     {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
-    {:ok, _} = advert.submission |> Ecto.Changeset.change(reward_value: 0) |> Repo.update()
+
+    {:ok, _} =
+      advert.submission
+      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl_pool.id)
+      |> Repo.update()
+
     advert
   end
 
   defp give_reward(user, amount \\ 1500) do
     Factories.insert!(:reward, %{
       user: user,
+      fund: euro_fund(),
       amount: amount,
       idempotence_key: "test=#{System.unique_integer([:positive])}"
     })
+  end
+
+  defp euro_fund do
+    euro = Fund.Factories.create_currency("euro", :legal, "€", 2)
+    Fund.Factories.create_fund("euro-fund-#{System.unique_integer([:positive])}", euro)
   end
 
   defp make_panl_participant(user) do
@@ -74,6 +91,23 @@ defmodule Systems.Home.PageBuilderTest do
       assert :rewards_summary in block_keys(vm)
     end
 
+    # The builder is the only producer of these params and RewardsSummaryView's
+    # update/2 destructures them all, so a key added on one side and missed on
+    # the other is a runtime FunctionClauseError on a page nothing else covers.
+    test "rewards_summary params satisfy the view's update/2" do
+      user = Factories.insert!(:member, %{creator: false})
+      give_reward(user)
+
+      params =
+        Home.PageBuilder.view_model(nil, %{current_user: user})
+        |> block_params(:rewards_summary)
+
+      socket = %Phoenix.LiveView.Socket{assigns: %{__changed__: %{}}}
+
+      assert {:ok, %{assigns: assigns}} = Home.RewardsSummaryView.update(params, socket)
+      assert assigns.donate_enabled?
+    end
+
     test "panl member WITHOUT rewards does not see rewards_summary" do
       user = Factories.insert!(:member, %{creator: false})
       make_panl_participant(user)
@@ -83,13 +117,13 @@ defmodule Systems.Home.PageBuilderTest do
       refute :rewards_summary in block_keys(vm)
     end
 
-    test "creator WITH rewards does not see rewards_summary" do
+    test "creator WITH rewards sees rewards_summary (creators can participate too)" do
       user = Factories.insert!(:member, %{creator: true})
       give_reward(user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      refute :rewards_summary in block_keys(vm)
+      assert :rewards_summary in block_keys(vm)
     end
 
     test "payout handoff body interpolates the approved amount (no stray placeholder)" do
@@ -97,6 +131,7 @@ defmodule Systems.Home.PageBuilderTest do
 
       Factories.insert!(:reward, %{
         user: user,
+        fund: euro_fund(),
         amount: 2000,
         status: :approved,
         idempotence_key: "approved=#{System.unique_integer([:positive])}"
@@ -110,28 +145,28 @@ defmodule Systems.Home.PageBuilderTest do
     end
   end
 
-  describe "view_model/2 available_adverts (future studies) visibility" do
-    test "non-panl member does not see available_adverts" do
+  describe "view_model/2 panl_marketplace (future studies) visibility" do
+    test "non-panl member does not see panl_marketplace" do
       user = Factories.insert!(:member, %{creator: false})
 
       refute Pool.Public.participant?(:panl, user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      refute :available_adverts in block_keys(vm)
+      refute :panl_marketplace in block_keys(vm)
     end
 
-    test "panl member sees available_adverts" do
+    test "panl member sees panl_marketplace" do
       user = Factories.insert!(:member, %{creator: false})
       make_panl_participant(user)
 
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert :available_adverts in block_keys(vm)
+      assert :panl_marketplace in block_keys(vm)
     end
   end
 
-  describe "view_model/2 available_adverts shape (home card limit / more link)" do
+  describe "view_model/2 panl_marketplace shape (home card limit / more link)" do
     setup do
       researcher = Factories.insert!(:creator)
       user = Factories.insert!(:member, %{creator: false})
@@ -145,21 +180,21 @@ defmodule Systems.Home.PageBuilderTest do
     test "caps displayed cards at the home page limit", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert %{cards: cards} = block_params(vm, :available_adverts)
+      assert %{cards: cards} = block_params(vm, :panl_marketplace)
       assert length(cards) == 3
     end
 
     test "reports the total advert count, not the capped card count", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
-      assert %{count: 5} = block_params(vm, :available_adverts)
+      assert %{count: 5} = block_params(vm, :panl_marketplace)
     end
 
     test "links to the panl pool marketplace via more_path", %{user: user} do
       vm = Home.PageBuilder.view_model(nil, %{current_user: user})
 
       %Pool.Model{id: panl_id} = Pool.Public.get_panl()
-      assert %{more_path: more_path} = block_params(vm, :available_adverts)
+      assert %{more_path: more_path} = block_params(vm, :panl_marketplace)
       assert more_path == "/pool/#{panl_id}/marketplace"
     end
   end

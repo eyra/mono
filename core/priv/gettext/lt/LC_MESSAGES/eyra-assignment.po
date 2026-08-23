@@ -552,39 +552,59 @@ msgid "email_capture.error.role_account"
 msgstr "Naudokite asmeninį el. pašto adresą, ne bendrinamą (pvz. info@, admin@)."
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.aim.label"
+msgid "panl.cta.join.title"
+msgstr "Norite dažniau dalyvauti tyrimuose?"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.body"
+msgstr "Prisijunkite prie Panl — dalyvių pulo, jungiančio piliečius su mokslu. Jūs sprendžiate, kada dalyvauti, ir gaunate atlygį už kiekvieną tyrimą."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.join.button"
+msgstr "Prisijungti prie Panl"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.title"
+msgstr "Peržiūrėkite, kiek uždirbote"
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.body"
+msgstr "Jūsų piniginė, ankstesni tyrimai ir prieinami tyrimai — viskas yra jūsų pradžios puslapyje."
+
+#, elixir-autogen, elixir-format
+msgid "panl.cta.home.button"
+msgstr "Į pradžios puslapį"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.aim.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.cancel.button"
+msgid "pay_in_request_form.cancel.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.confirm.button"
+msgid "pay_in_request_form.confirm.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.costs.label"
+msgid "pay_in_request_form.costs.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.description"
+msgid "pay_in_request_form.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.hint"
+msgid "pay_in_request_form.fee.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.fee.label"
+msgid "pay_in_request_form.slots.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "budget_form.slots.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "budget_form.title"
+msgid "pay_in_request_form.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -623,10 +643,6 @@ msgstr ""
 msgid "payment.transactions.empty"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.aim.hint"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "recruit.panel.annotation"
 msgstr ""
@@ -635,94 +651,122 @@ msgstr ""
 msgid "recruit.panel.title"
 msgstr ""
 
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.partner_fee.label"
+msgstr "Aptarnavimo mokestis (%{percentage}%)"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.subtotal.label"
+msgstr "%{count} x dalyvio mokestis po %{reward}"
+
 #, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.partner_fee.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.subtotal.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "budget_form.total.label"
+msgid "pay_in_request_form.total.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.error"
+msgid "contributions.decline.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.link"
+msgid "contributions.decline.link"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.reason.label"
+msgid "contributions.decline.reason.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.decline.submit.button"
+msgid "contributions.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.overview.heading"
+msgid "contributions.declined.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pagination.single_page"
+msgid "contributions.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.button"
+msgid "contributions.pagination.single_page"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.pay_out_all.error"
+msgid "contributions.search.placeholder"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.search.placeholder"
+msgid "contributions.subject_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.subject_label"
+msgid "contributions.waiting.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "payout.tab.overview"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.tab.waiting"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.waiting.empty"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "payout.waiting.heading"
+msgid "contributions.waiting.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.amount_label"
+msgid "contributions.overview.amount_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.date_label"
+msgid "contributions.overview.date_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "payout.overview.empty"
+msgid "contributions.overview.empty"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.description"
+msgid "assignment_full.body"
+msgstr "Deja, šis tyrimas yra pilnas ir nebepriima naujų dalyvių."
+
+#, elixir-autogen, elixir-format
+msgid "assignment_full.title"
+msgstr "Šis tyrimas yra pilnas"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.fee.invalid"
+msgstr "Įveskite sumą, pvz., 3,75"
+
+#, elixir-autogen, elixir-format
+msgid "pay_in_request_form.aim.placeholder"
+msgstr "Trumpas jūsų tyrimo aprašymas"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.contributions"
+msgstr "Įnašai"
+
+#, elixir-autogen, elixir-format
+msgid "contributions.confirm_all.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.open.button"
+msgid "contributions.confirm_all.error"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "pending_approvals.title"
-msgstr ""
+msgid "participation.title.accepted"
+msgstr "Ačiū!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Jūsų indėlis buvo atmestas"
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr "Jūsų laikas ir pastangos padeda šiam tyrimui judėti į priekį.<br>Iki kito karto."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr "Jūsų indėlis buvo atmestas."
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr "Jūsų indėlis buvo atmestas dėl šios priežasties:"
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr "Grįžti į pradžią"

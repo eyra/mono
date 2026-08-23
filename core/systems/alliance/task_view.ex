@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.TaskView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Utility.LiveCommand
   import Frameworks.Pixel.Navigation, only: [button_bar: 1]

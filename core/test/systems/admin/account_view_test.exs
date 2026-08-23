@@ -2,6 +2,8 @@ defmodule Systems.Admin.AccountViewTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
+  require LiveNest.Constants
+
   alias Systems.Admin
 
   describe "AccountView" do
@@ -149,11 +151,11 @@ defmodule Systems.Admin.AccountViewTest do
       assert view |> has_element?("[data-testid='account-view']")
     end
 
-    # Regression coverage for FX#9905883929 — Pixel.Selector falls back to
-    # `send(self(), {event_name, payload})` when :fabric is not in
-    # assigns, so the filter handler must accept the raw handle_info
-    # tuple rather than a Phoenix `handle_event` with a `source` key.
-    test "filter change updates the list via handle_info({\"active_item_ids\", ...})",
+    # Regression coverage for FX#9905883929 — Pixel.Selector emits parent
+    # events via Frameworks.Pixel.FabricBridge, which publishes a LiveNest
+    # event when no Fabric context is present. The view catches it via
+    # consume_event/2.
+    test "filter change updates the list via consume_event(:active_item_ids)",
          %{conn: conn} do
       non_creator =
         Factories.insert!(:member, %{
@@ -167,9 +169,12 @@ defmodule Systems.Admin.AccountViewTest do
       # Default filter is [:creator] — a non-creator should not be visible.
       refute html =~ non_creator.email
 
-      # Selector emulation: send the raw fallback message it would send
-      # when no Fabric context is present.
-      send(view.pid, {"active_item_ids", %{active_item_ids: []}})
+      # Selector emulation: publish the LiveNest event it would send when
+      # no Fabric context is present.
+      send(view.pid, {
+        LiveNest.Constants.event(),
+        %LiveNest.Event{name: :active_item_ids, payload: %{active_item_ids: []}}
+      })
 
       assert render(view) =~ non_creator.email
     end

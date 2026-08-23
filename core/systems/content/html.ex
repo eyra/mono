@@ -252,7 +252,6 @@ defmodule Systems.Content.Html do
   attr(:tabs, :list, required: true)
   attr(:tabbar_id, :atom, required: true)
   attr(:initial_tab, :string, required: true)
-  attr(:tabbar_size, :atom, required: true)
   attr(:show_errors, :string, required: true)
   attr(:actions, :list, required: true)
   attr(:more_actions, :list, default: [])
@@ -264,7 +263,7 @@ defmodule Systems.Content.Html do
         <.live_workspace title={@title} menus={@menus} modal={@modal} socket={@socket}>
           <:top_bar>
             <Navigation.action_bar breadcrumbs={@breadcrumbs} right_bar_buttons={@actions} more_buttons={@more_actions}>
-              <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={@tabbar_size} />
+              <Tabbed.bar id={@tabbar_id} tabs={@tabs} initial_tab={@initial_tab} size={:wide} />
             </Navigation.action_bar>
           </:top_bar>
 
@@ -289,6 +288,7 @@ defmodule Systems.Content.Html do
   attr(:initial_item, :any, default: nil)
   attr(:empty_state, :map, default: nil)
   attr(:toolbar_buttons, :list, default: [])
+  attr(:area_type, :atom, default: :content)
 
   def adaptable_layout(assigns) do
     Adaptable.layout(assigns)

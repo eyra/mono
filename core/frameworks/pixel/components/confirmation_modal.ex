@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.ConfirmationModal do
   use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   @impl true
   def update(%{assigns: assigns}, socket) do
@@ -41,21 +42,32 @@ defmodule Frameworks.Pixel.ConfirmationModal do
       testid: "confirmation-modal-confirm-button"
     }
 
-    cancel = %{
-      action: %{type: :send, target: myself, event: "cancel"},
-      face: %{type: :secondary, label: cancel_label},
-      testid: "confirmation-modal-cancel-button"
-    }
+    # Pass cancel_label: nil to render an info-only modal with just the confirm
+    # button (e.g. "OK — got it").
+    buttons =
+      if is_nil(cancel_label) do
+        [confirm]
+      else
+        cancel = %{
+          action: %{type: :send, target: myself, event: "cancel"},
+          face: %{type: :secondary, label: cancel_label},
+          testid: "confirmation-modal-cancel-button"
+        }
 
-    assign(socket, buttons: [confirm, cancel])
+        [confirm, cancel]
+      end
+
+    assign(socket, buttons: buttons)
   end
 
+  @impl true
   def handle_event("confirm", _, socket) do
-    {:noreply, socket |> send_event(:parent, "confirmed")}
+    {:noreply, emit_to_parent(socket, {"confirmed", %{}})}
   end
 
+  @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "cancelled")}
+    {:noreply, emit_to_parent(socket, {"cancelled", %{}})}
   end
 
   @impl true

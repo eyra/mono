@@ -14,6 +14,7 @@ defmodule Systems.Manual.ViewBuilder do
         presentation: presentation,
         user_state: user_state
       }) do
+    manual = ensure_chapter_list(manual)
     chapter_id = user_state[:chapter]
     page_id = user_state[:page]
     chapters = get_chapters(manual)
@@ -35,6 +36,12 @@ defmodule Systems.Manual.ViewBuilder do
     }
   end
 
+  defp ensure_chapter_list(%Manual.Model{chapters: %Ecto.Association.NotLoaded{}, id: id}) do
+    Manual.Public.get_manual!(id, Manual.Model.preload_graph(:chapter_list))
+  end
+
+  defp ensure_chapter_list(manual), do: manual
+
   defp get_chapters(%{chapters: [_ | _] = chapters}) do
     chapters |> Enum.sort_by(& &1.userflow_step.order)
   end
@@ -45,10 +52,9 @@ defmodule Systems.Manual.ViewBuilder do
   defp find_selected_chapter(_chapters, nil), do: nil
 
   defp find_selected_chapter(chapters, selected_chapter_id) do
-    case Enum.find(chapters, &(&1.id == selected_chapter_id)) do
-      nil -> List.first(chapters)
-      chapter -> chapter
-    end
+    chapter = Enum.find(chapters, &(&1.id == selected_chapter_id)) || List.first(chapters)
+
+    Manual.Public.get_chapter!(chapter.id, Manual.ChapterModel.preload_graph(:down))
   end
 
   defp build_chapter_list_view(manual, title, selected_chapter_id) do

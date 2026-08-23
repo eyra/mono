@@ -16,6 +16,10 @@ defmodule Systems.Org.Presenter do
     Org.MemberViewBuilder.view_model(model, assigns)
   end
 
+  def view_model(Org.PoolsView, model, assigns) do
+    Org.PoolsViewBuilder.view_model(model, assigns)
+  end
+
   def view_model(Org.OwnersView, model, assigns) do
     Org.OwnersViewBuilder.view_model(model, assigns)
   end

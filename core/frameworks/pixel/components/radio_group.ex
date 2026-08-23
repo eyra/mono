@@ -1,5 +1,6 @@
 defmodule Frameworks.Pixel.RadioGroup do
   use CoreWeb, :live_component
+  use Frameworks.Pixel.FabricBridge
 
   @impl true
   def update(%{items: items}, socket) do
@@ -28,7 +29,7 @@ defmodule Frameworks.Pixel.RadioGroup do
       when current_status != status do
     {
       :noreply,
-      socket |> send_event(:parent, "update", %{status: String.to_existing_atom(status)})
+      emit_to_parent(socket, {"update", %{status: String.to_existing_atom(status)}})
     }
   end
 

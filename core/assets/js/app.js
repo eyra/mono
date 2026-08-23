@@ -21,7 +21,7 @@ import { SidePanel } from "./side_panel";
 import { Toggle } from "./toggle";
 import { Cell } from "./cell";
 import { LiveContent, LiveField } from "./live_content";
-import { Tab, TabBar, TabContent, TabFooterItem } from "./tabbed";
+import { Tab, TabBar, TabBarFit, TabContent, TabFooterItem } from "./tabbed";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { AuthCodeInput } from "./auth_code_input";
@@ -96,6 +96,7 @@ let Hooks = {
   Toggle,
   Tab,
   TabBar,
+  TabBarFit,
   TabContent,
   TabFooterItem,
   Viewport,

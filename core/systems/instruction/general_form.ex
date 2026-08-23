@@ -1,5 +1,5 @@
 defmodule Systems.Instruction.GeneralForm do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   use Gettext, backend: CoreWeb.Gettext
 

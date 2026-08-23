@@ -97,13 +97,16 @@ if config_env() == :prod do
              ]}
 
           "pay_in_expiration" ->
-            {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Budget.PayInExpirationWorker}]}
+            {Oban.Plugins.Cron, crontab: [{"* * * * *", Systems.Fund.PayInExpirationWorker}]}
 
           "payment_reconciliation" ->
             {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
 
           "auth_code_cleanup" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
+
+          "auto_approve" ->
+            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
 
           _ ->
             nil
@@ -260,6 +263,9 @@ if config_env() == :prod do
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 
   config :core, payment_provider: Core.Config.payment_provider()
+
+  config :core,
+    auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer()
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

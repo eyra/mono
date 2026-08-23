@@ -10,7 +10,7 @@ defmodule Systems.Fund.Model do
   alias Ecto.Changeset
 
   alias Systems.Fund
-  alias Systems.Budget
+  alias Systems.Fund
   alias Systems.Bookkeeping
 
   @icon_type :emoji
@@ -20,7 +20,7 @@ defmodule Systems.Fund.Model do
     field(:icon, Frameworks.Utility.EctoTuple)
     field(:virtual_icon, :string, virtual: true)
     belongs_to(:currency, Fund.CurrencyModel)
-    belongs_to(:currency_ledger, Budget.CurrencyLedgerModel)
+    belongs_to(:currency_ledger, Fund.CurrencyLedgerModel)
     belongs_to(:available, Bookkeeping.AccountModel, foreign_key: :fund_id)
     belongs_to(:pending, Bookkeeping.AccountModel, foreign_key: :reserve_id)
     belongs_to(:auth_node, Core.Authorization.Node)

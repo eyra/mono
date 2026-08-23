@@ -14,6 +14,7 @@ defmodule Systems.Promotion.LandingPage do
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
 
+  alias Systems.Assignment
   alias Systems.Promotion
 
   @impl true
@@ -51,6 +52,20 @@ defmodule Systems.Promotion.LandingPage do
         id: "preview_inform",
         title: dgettext("eyra-promotion", "preview.inform.title"),
         text: dgettext("eyra-promotion", "preview.inform.text")
+      }
+    }
+  end
+
+  @impl true
+  def compose(:full_inform, _) do
+    %{
+      module: CoreWeb.UI.Dialog.Plain,
+      params: %{
+        type: :inform,
+        id: "full_inform",
+        title: dgettext("eyra-advert", "promotion.full.inform.title"),
+        text: dgettext("eyra-advert", "promotion.full.inform.text"),
+        primary_button_label: dgettext("eyra-advert", "promotion.full.inform.button")
       }
     }
   end
@@ -98,9 +113,27 @@ defmodule Systems.Promotion.LandingPage do
   def handle_event(
         "call-to-action",
         _params,
-        %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket
+        %{
+          assigns: %{
+            vm: %{
+              call_to_action: %{
+                advert: %{assignment: %{id: assignment_id}},
+                handle: handle
+              }
+            }
+          }
+        } = socket
       ) do
-    {:noreply, handle.(socket)}
+    if assignment_id |> Assignment.Public.get!() |> Assignment.Public.has_budget_capacity?() do
+      {:noreply, handle.(socket)}
+    else
+      {
+        :noreply,
+        socket
+        |> compose_child(:full_inform)
+        |> Fabric.ModalController.show_modal(:full_inform, :compact)
+      }
+    end
   end
 
   @impl true
@@ -108,16 +141,10 @@ defmodule Systems.Promotion.LandingPage do
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_event("inform_ok", _params, socket) do
-    {:noreply, socket |> assign(dialog: nil)}
-  end
-
   defp grid_cols(1), do: "grid-cols-1 sm:grid-cols-1"
   defp grid_cols(2), do: "grid-cols-1 sm:grid-cols-2"
   defp grid_cols(_), do: "grid-cols-1 sm:grid-cols-3"
 
-  attr(:active?, :boolean, required: true)
   attr(:label, :string, required: true)
   attr(:event, :string, required: true)
   attr(:testid, :string, required: true)
@@ -127,8 +154,7 @@ defmodule Systems.Promotion.LandingPage do
     <Button.dynamic
       action={%{type: :send, event: @event}}
       face={%{type: :primary, label: @label}}
-      enabled?={@active?}
-      testid={if @active?, do: @testid, else: @testid <> "-disabled"}
+      testid={@testid}
     />
     """
   end
@@ -142,7 +168,7 @@ defmodule Systems.Promotion.LandingPage do
         <div class="h-[360px] bg-grey5">
           <Hero.image_large title={@vm.title} subtitle={@vm.themes} image_info={@image_info}>
             <:call_to_action>
-              <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
+              <.apply_button label={@vm.call_to_action.label} event="call-to-action-1" testid="promotion-apply-button-hero" />
             </:call_to_action>
           </Hero.image_large>
         </div>
@@ -194,7 +220,7 @@ defmodule Systems.Promotion.LandingPage do
           logo_url={@vm.logo_url}
         />
         <.spacing value="XL" />
-        <.apply_button active?={@vm.call_to_action.active?} label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
+        <.apply_button label={@vm.call_to_action.label} event="call-to-action-2" testid="promotion-apply-button-bottom" />
       </Area.content>
     </.live_website>
     </div>

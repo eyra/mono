@@ -8,6 +8,7 @@ defmodule Systems.Crew.Queries do
   alias Systems.Crew
   alias CoreWeb.UI.Timestamp
   alias Systems.Account.User
+  alias Core.Authorization.RoleAssignment
 
   # MEMBERS
 
@@ -33,9 +34,23 @@ defmodule Systems.Crew.Queries do
     build(member_query(crew), :member, user: [id == ^user_id])
   end
 
-  def members_by_user_query(%Ecto.Query{} = users) do
-    user_ids = select(users, [user: u], u.id)
-    build(member_query(), :member, user: [id in subquery(user_ids)])
+  def members_by_task_query(%Ecto.Query{} = tasks) do
+    task_ids = select(tasks, [task: t], t.id)
+
+    member_ids =
+      member_query()
+      |> join(:inner, [member: m], ra in Core.Authorization.RoleAssignment,
+        as: :task_role,
+        on: ra.principal_id == m.user_id and ra.role == :owner
+      )
+      |> join(:inner, [member: m, task_role: ra], t in Crew.TaskModel,
+        as: :task,
+        on: t.auth_node_id == ra.node_id and t.crew_id == m.crew_id
+      )
+      |> where([task: t], t.id in subquery(task_ids))
+      |> select([member: m], m.id)
+
+    build(member_query(), :member, [id in subquery(member_ids)])
   end
 
   def members_by_task_status_query(%Crew.Model{} = crew, status_list) when is_list(status_list) do
@@ -56,15 +71,8 @@ defmodule Systems.Crew.Queries do
 
   def members_by_crew_role_not_expired_query(%Crew.Model{} = crew, role_list)
       when is_list(role_list) do
-    build(member_query(), :member, [
-      expired == false,
-      crew: [
-        id == ^crew.id,
-        auth_node: [
-          role_assignments: [role in ^role_list]
-        ]
-      ]
-    ])
+    crew
+    |> members_with_crew_role_query(role_list)
     |> distinct(true)
   end
 
@@ -72,17 +80,27 @@ defmodule Systems.Crew.Queries do
       when is_list(role_list) do
     user_ids = user_ids(users_finished_query())
 
-    build(member_query(), :member, [
-      expired == false,
-      user: [id in subquery(user_ids)],
-      crew: [
-        id == ^crew.id,
-        auth_node: [
-          role_assignments: [role in ^role_list]
-        ]
-      ]
-    ])
+    crew
+    |> members_with_crew_role_query(role_list)
+    |> where([member: m], m.user_id in subquery(user_ids))
     |> distinct(true)
+  end
+
+  # Correlates each crew member to a role_assignment on the crew's auth_node
+  # whose principal_id == member.user_id — so filtering by role actually filters
+  # per-member, not "does the crew have any assignment with this role."
+  defp members_with_crew_role_query(
+         %Crew.Model{id: crew_id, auth_node_id: auth_node_id},
+         role_list
+       ) do
+    member_query()
+    |> join(:inner, [member: m], ra in RoleAssignment,
+      on:
+        ra.principal_id == m.user_id and ra.node_id == ^auth_node_id and
+          ra.role in ^role_list,
+      as: :role_assignment
+    )
+    |> where([member: m], m.crew_id == ^crew_id and m.expired == false)
   end
 
   def member_expired_query(%Crew.Model{} = crew, user_ref) do
@@ -179,6 +197,22 @@ defmodule Systems.Crew.Queries do
   def tasks_finished_query() do
     status_list = Crew.TaskStatus.finished_states()
     build(task_query(), :task, [status in ^status_list])
+  end
+
+  def task_counts_by_user_query(%Crew.Model{id: crew_id}, status_list)
+      when is_list(status_list) do
+    from(task in Crew.TaskModel,
+      as: :task,
+      join: node in assoc(task, :auth_node),
+      as: :auth_node,
+      join: role in assoc(node, :role_assignments),
+      as: :role_assignments,
+      where:
+        task.crew_id == ^crew_id and task.expired == false and task.status in ^status_list and
+          role.role == :owner,
+      group_by: role.principal_id,
+      select: {role.principal_id, count(task.id, :distinct)}
+    )
   end
 
   def task_query_by_template(crew, task_template) when is_list(task_template) do

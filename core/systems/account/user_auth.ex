@@ -5,6 +5,7 @@ defmodule Systems.Account.UserAuth do
   import Phoenix.Controller
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.ReturnTo
   alias Systems.Account
 
   # Make the remember me cookie valid for 60 days.
@@ -29,10 +30,17 @@ defmodule Systems.Account.UserAuth do
   def log_in_user(conn, user, first_time?, params \\ %{}) do
     token = Account.Public.generate_user_session_token(user)
 
+    # For first-time users, we always land on onboarding — but if the caller
+    # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
+    # `?return_to=/pool/panl/join` into the OTP flow), we forward it as a URL
+    # param so onboarding can honour it on its final step. Existing users go
+    # straight to their return_to via `redirect_path_after_signin/2`.
     redirect_to =
-      if first_time?,
-        do: ~p"/user/onboarding",
-        else: redirect_path_after_signin(conn, user)
+      if first_time? do
+        ReturnTo.append(~p"/user/onboarding", get_session(conn, :user_return_to))
+      else
+        redirect_path_after_signin(conn, user)
+      end
 
     conn
     |> renew_session()

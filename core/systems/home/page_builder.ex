@@ -20,14 +20,16 @@ defmodule Systems.Home.PageBuilder do
   # Number of studies shown on the home page before linking to the marketplace
   @home_card_limit 3
 
+  @payout_currency "euro"
+
   # For guest users
   def view_model(_, %{current_user: nil}) do
     %{
       hero: %{
         type: :landing_page,
         params: %{
-          title: dgettext("eyra-home", "member.title"),
-          caption: dgettext("eyra-home", "member.caption")
+          title: dgettext("eyra-home", "guest.title"),
+          caption: dgettext("eyra-home", "guest.caption")
         }
       },
       active_menu_item: :home,
@@ -39,33 +41,29 @@ defmodule Systems.Home.PageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl? = Pool.Public.participant?(:panl, user)
+    panl_member? = Pool.Public.participant?(:panl, user)
 
     %{
       hero: %{
         type: :landing_page,
         params: %{
-          title: dgettext("eyra-home", "member.title"),
-          caption: dgettext("eyra-home", "member.caption")
+          title: dgettext("eyra-home", "member.title")
         }
       },
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
       view_type: :logged_in,
-      blocks: blocks(user, assigns, panl?: panl?),
+      blocks: blocks(user, assigns, panl_member?: panl_member?),
       include_right_sidepadding?: false
     }
   end
 
-  defp block_keys(%Account.User{creator: creator}, opts) do
-    panl? = Keyword.get(opts, :panl?, false)
+  defp block_keys(%Account.User{}, opts) do
+    panl_member? = Keyword.get(opts, :panl_member?, false)
 
     [:next_best_action]
-    |> append_if(
-      :rewards_summary,
-      feature_enabled?(:panl_post_launch) and creator != true
-    )
-    |> append_if(:available_adverts, feature_enabled?(:panl_post_launch) and panl?)
+    |> append_if(:rewards_summary, feature_enabled?(:panl_post_launch))
+    |> append_if(:panl_marketplace, feature_enabled?(:panl_post_launch) and panl_member?)
     |> append_if(:participated, feature_enabled?(:panl_post_launch))
   end
 
@@ -76,17 +74,27 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
-    case Fund.Public.summarize_rewards(user) do
-      %{pending_cents: 0, approved_cents: 0, rejected_cents: 0} ->
+    case {Fund.Public.summarize_rewards(user, @payout_currency), Fund.Public.payout_status(user)} do
+      # No rewards and no unresolved payout — nothing to show.
+      {%{
+         pending_cents: 0,
+         approved_cents: 0,
+         rejected_cents: 0,
+         donating_cents: 0,
+         donated_cents: 0
+       }, :none} ->
         nil
 
-      %{approved_cents: approved_cents} = totals ->
+      {%{approved_cents: approved_cents} = totals, payout_status} ->
         %{
           module: Home.RewardsSummaryView,
           params:
             totals
             |> Map.put(:labels, rewards_summary_labels(approved_cents))
+            |> Map.put(:payout_status, payout_status)
             |> Map.put(:user, user)
+            |> Map.put(:payout_currency, @payout_currency)
+            |> Map.put(:donate_enabled?, feature_enabled?(:opp_phase_3))
         }
     end
   end
@@ -122,11 +130,13 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:available_adverts, %Account.User{} = user, assigns, _opts) do
-    %Pool.Model{id: panl_id} = Pool.Public.get_panl()
+  defp block(:panl_marketplace, %Account.User{} = user, assigns, _opts) do
+    %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
 
     adverts =
-      Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
+      Advert.Public.list_by_pool_and_status(panl, :online,
+        preload: Advert.Model.preload_graph(:down)
+      )
       |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
 
     cards =
@@ -140,22 +150,8 @@ defmodule Systems.Home.PageBuilder do
         title: dgettext("eyra-pool", "marketplace.title"),
         cards: cards,
         count: Enum.count(adverts),
-        more_path: ~p"/pool/#{panl_id}/marketplace"
-      }
-    }
-  end
-
-  defp block(:available_adverts, _, assigns, _opts) do
-    cards =
-      Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
-      |> Enum.filter(&Advert.Public.validate_open(&1))
-      |> Enum.map(&to_card(&1, assigns))
-
-    %{
-      module: Home.AdvertsView,
-      params: %{
-        title: dgettext("eyra-home", "available.visitor.title"),
-        cards: cards
+        more_path: ~p"/pool/#{panl_id}/marketplace",
+        pool_slug: Pool.Model.slug(panl)
       }
     }
   end
@@ -171,9 +167,7 @@ defmodule Systems.Home.PageBuilder do
       approved_caption: dgettext("eyra-fund", "rewards_summary.approved.threshold"),
       rejected_pill: dgettext("eyra-fund", "rewards_summary.rejected.pill"),
       payout_button: dgettext("eyra-fund", "rewards_summary.payout.button"),
-      payout_success: dgettext("eyra-fund", "rewards_summary.payout.success"),
       payout_below_threshold: dgettext("eyra-fund", "rewards_summary.payout.below_threshold"),
-      payout_failed: dgettext("eyra-fund", "rewards_summary.payout.failed"),
       payout_handoff_title: dgettext("eyra-fund", "rewards_summary.payout.handoff.title"),
       payout_handoff_body:
         dgettext("eyra-fund", "rewards_summary.payout.handoff.body",
@@ -181,9 +175,27 @@ defmodule Systems.Home.PageBuilder do
         ),
       payout_handoff_confirm: dgettext("eyra-fund", "rewards_summary.payout.handoff.confirm"),
       payout_handoff_cancel: dgettext("eyra-fund", "rewards_summary.payout.handoff.cancel"),
-      payout_kyc_title: dgettext("eyra-fund", "rewards_summary.payout.kyc.title"),
-      payout_kyc_body: dgettext("eyra-fund", "rewards_summary.payout.kyc.body"),
-      payout_kyc_confirm: dgettext("eyra-fund", "rewards_summary.payout.kyc.confirm")
+      payout_verify_title: dgettext("eyra-fund", "rewards_summary.payout.verify.title"),
+      payout_verify_body: dgettext("eyra-fund", "rewards_summary.payout.verify.body"),
+      payout_verify_confirm: dgettext("eyra-fund", "rewards_summary.payout.verify.confirm"),
+      payout_awaiting_title: dgettext("eyra-fund", "rewards_summary.payout.awaiting.title"),
+      payout_awaiting_body: dgettext("eyra-fund", "rewards_summary.payout.awaiting.body"),
+      payout_awaiting_confirm: dgettext("eyra-fund", "rewards_summary.payout.awaiting.confirm"),
+      payout_in_progress: dgettext("eyra-fund", "rewards_summary.payout.in_progress"),
+      payout_retry_button: dgettext("eyra-fund", "rewards_summary.payout.retry"),
+      payout_manual: dgettext("eyra-fund", "rewards_summary.payout.manual"),
+      donate_button: dgettext("eyra-fund", "rewards_summary.donate.button"),
+      donate_handoff_title: dgettext("eyra-fund", "rewards_summary.donate.handoff.title"),
+      donate_handoff_body:
+        dgettext("eyra-fund", "rewards_summary.donate.handoff.body",
+          amount: Assignment.CurrencyHelpers.format_cents(approved_cents)
+        ),
+      donate_handoff_confirm: dgettext("eyra-fund", "rewards_summary.donate.handoff.confirm"),
+      donate_thanks: dgettext("eyra-fund", "rewards_summary.donate.thanks"),
+      donate_failed: dgettext("eyra-fund", "rewards_summary.donate.failed"),
+      donate_pending: dgettext("eyra-fund", "rewards_summary.donate.pending"),
+      donate_in_progress: dgettext("eyra-fund", "rewards_summary.donate.in_progress"),
+      donated_total: dgettext("eyra-fund", "rewards_summary.donate.total")
     }
   end
 
@@ -207,8 +219,7 @@ defmodule Systems.Home.PageBuilder do
          } = assignment,
          user
        ) do
-    idempotence_key = Assignment.Public.idempotence_key(assignment, user)
-    reward_row = Fund.Public.get_reward(idempotence_key, [])
+    reward_row = Assignment.Public.get_reward(assignment, user)
 
     %{
       path: ~p"/assignment/#{assignment_id}",
@@ -242,8 +253,13 @@ defmodule Systems.Home.PageBuilder do
        when status in [:reserved, :pending_approval],
        do: :awaiting
 
-  defp reward_status(%{status: :approved}), do: :approved
-  defp reward_status(%{status: :paid}), do: :approved
+  # Everything from approval onwards reads the same to the participant: the
+  # money is theirs. Whether it is still approved, locked on a payout, paid, or
+  # donated is the rewards-summary card's business, not this card's.
+  defp reward_status(%{status: status})
+       when status in [:approved, :paid, :pending_payout, :donating, :donated],
+       do: :approved
+
   defp reward_status(%{status: :rejected}), do: :rejected
   defp reward_status(_), do: nil
 

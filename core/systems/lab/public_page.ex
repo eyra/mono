@@ -2,7 +2,7 @@ defmodule Systems.Lab.PublicPage do
   @moduledoc """
   The public lab screen.
   """
-  use CoreWeb, :live_view
+  use CoreWeb, :live_view_fabric
 
   alias Systems.Lab
 

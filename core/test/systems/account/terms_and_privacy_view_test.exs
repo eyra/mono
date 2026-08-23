@@ -21,7 +21,7 @@ defmodule Systems.Account.TermsAndPrivacyViewTest do
       |> Repo.insert()
 
     conn = conn |> Map.put(:request_path, "/user/onboarding")
-    session = %{"live_context" => LiveContext.new(%{user_id: user.id})}
+    session = %{"live_context" => LiveContext.new(%{user_id: user.id, show_title: true})}
 
     %{conn: conn, user: user, session: session}
   end

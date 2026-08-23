@@ -7,16 +7,21 @@ defmodule Systems.Account.OnboardingPageBuilder do
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
-  alias Systems.Pool
 
   def view_model(%Account.User{email: email} = user, assigns) do
-    steps = build_steps(user)
     current_step_index = Map.get(assigns, :current_step_index, 0)
+    steps = build_steps(user, current_step_index)
     current_step = Enum.at(steps, current_step_index)
 
+    # `show_title: false` in the shared context means each step view drops
+    # its own title so the page-level `hero_title` is the sole visual
+    # anchor across the flow. Each callsite that mounts the same view
+    # outside the flow (e.g. Account settings tabs) passes
+    # `show_title: true`.
     live_context =
       LiveContext.new(%{
-        user_id: user.id
+        user_id: user.id,
+        show_title: false
       })
 
     step_view =
@@ -35,19 +40,32 @@ defmodule Systems.Account.OnboardingPageBuilder do
       step_title: build_step_title(current_step),
       step_body: build_step_body(current_step, email),
       is_last_step: current_step_index >= length(steps) - 1,
-      continue_button: build_continue_button(current_step)
+      continue_button: build_continue_button(current_step),
+      progress_dots: build_progress_dots(steps, current_step_index)
     }
   end
 
-  defp build_steps(user) do
-    steps = [:profile]
+  # Progress dots only appear for multi-step flows. A single-step flow
+  # (activated non-PANL user with just :profile) doesn't need them.
+  defp build_progress_dots(steps, index) when length(steps) > 1,
+    do: %{current: index, total: length(steps)}
 
-    steps =
-      if Pool.Public.participant?(:panl, user) do
-        steps ++ [:features]
-      else
-        steps
-      end
+  defp build_progress_dots(_steps, _index), do: nil
+
+  # Once we're past step 0 the flow is committed — a passwordless user who
+  # just accepted terms is now activated in the DB, but we still want to
+  # show them as being at step 2 of 2 in the same [:terms_and_privacy, :profile]
+  # flow. Same trick as `Pool.OnboardingPageBuilder.build_steps/3`.
+  defp build_steps(user, index) when index > 0 do
+    cond do
+      Account.Public.passwordless?(user) -> [:terms_and_privacy, :profile]
+      not Account.Public.activated?(user) -> [:profile, :activate_account]
+      true -> [:profile]
+    end
+  end
+
+  defp build_steps(user, 0) do
+    steps = [:profile]
 
     cond do
       Account.Public.activated?(user) ->
@@ -59,14 +77,6 @@ defmodule Systems.Account.OnboardingPageBuilder do
       true ->
         steps ++ [:activate_account]
     end
-  end
-
-  defp build_step_view(:features, _user, live_context) do
-    CoreWeb.Live.Element.prepare_live_view(
-      :features_view,
-      Account.FeaturesView,
-      live_context: live_context
-    )
   end
 
   defp build_step_view(:profile, _user, live_context) do

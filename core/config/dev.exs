@@ -39,6 +39,7 @@ config :core, :features,
   leaderboard: true,
   member_google_sign_in: true,
   onyx: true,
+  opp_phase_3: true,
   otp: true,
   panl: true,
   panl_post_launch: true,
@@ -118,11 +119,13 @@ config :core, Oban,
        # Clean up old data donation files every hour
        {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
        # Fail pending pay-in transactions older than 15 minutes
-       {"* * * * *", Systems.Budget.PayInExpirationWorker},
+       {"* * * * *", Systems.Fund.PayInExpirationWorker},
        # Reconcile pay-in/payout state against the payment provider daily
        {"0 3 * * *", Systems.Payment.ReconciliationWorker},
        # Prune auth codes past their validity window every hour
-       {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}
+       {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+       # Approve pending rewards every hour
+       {"0 * * * *", Systems.Fund.AutoApproveWorker}
      ]}
   ]
 
@@ -160,8 +163,6 @@ config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
   open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
-
-config :core, :apns_backend, Core.APNS.LoggingBackend
 
 # Service login for load testing
 config :core, :service_login, key: "dev-test-key"

@@ -3,8 +3,10 @@ defmodule Systems.Payment.Controller do
 
   require Logger
 
+  alias Frameworks.Signal
+  alias Systems.Account
   alias Systems.Payment.Webhook
-  alias Systems.Budget
+  alias Systems.Fund
 
   def webhook(conn, %{"provider" => provider}) do
     case Webhook.handler(provider) do
@@ -21,8 +23,11 @@ defmodule Systems.Payment.Controller do
   defp handle_webhook(conn, handler) do
     case handler.verify_and_parse(conn) do
       {:ok, event} ->
-        Logger.info("[Payment.Webhook] Received event=#{event.type} object=#{event.object_uid}")
-        process_event(event)
+        Logger.info(
+          "[Payment.Webhook] Received category=#{event.category} type=#{event.raw_type}"
+        )
+
+        route(event)
         json(conn, %{status: "ok"})
 
       {:error, error} ->
@@ -34,20 +39,36 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp process_event(%{type: type, object_uid: uid} = event) do
-    Logger.info("[Payment.Webhook] Processing event type=#{type} object_uid=#{uid}")
-    Logger.info("[Payment.Webhook] Full event: #{inspect(event)}")
-    handle_event(type, uid)
-  end
+  # The adapter has already translated its wire format into a provider-agnostic
+  # category, so routing knows nothing about any provider's event strings.
+  defp route(%{category: :transaction, object_uid: uid}),
+    do: handle_transaction_status_change(uid)
 
-  defp handle_event("transaction.status_changed", uid), do: handle_transaction_status_change(uid)
-  defp handle_event("transaction.status.changed", uid), do: handle_transaction_status_change(uid)
+  defp route(%{category: :withdrawal, object_uid: uid}), do: handle_withdrawal_status_change(uid)
 
-  defp handle_event("withdrawal.status_changed", uid), do: handle_withdrawal_status_change(uid)
-  defp handle_event("withdrawal.status.changed", uid), do: handle_withdrawal_status_change(uid)
+  defp route(%{category: :kyc, merchant_uid: merchant_uid}) when is_binary(merchant_uid),
+    do: notify_kyc(merchant_uid)
 
-  defp handle_event(type, _uid) do
-    Logger.info("[Payment.Webhook] Ignoring event type=#{type}")
+  # A KYC event the adapter couldn't tie to a merchant. The guard above keeps it
+  # from reaching notify_kyc/1 with a nil uid; the adapter has already logged why
+  # the badge won't refresh, so we stay silent rather than emit a second line.
+  defp route(%{category: :kyc}), do: :ok
+
+  defp route(%{raw_type: raw_type}),
+    do: Logger.info("[Payment.Webhook] Ignoring event type=#{raw_type}")
+
+  defp notify_kyc(merchant_uid) do
+    case Account.Public.get_user_by_merchant_uid(merchant_uid) do
+      %Account.User{id: user_id} ->
+        Logger.info(
+          "[Payment.Webhook] KYC update for user ##{user_id} (merchant #{merchant_uid})"
+        )
+
+        Signal.Public.dispatch({:payment_kyc, :updated}, %{user_id: user_id})
+
+      nil ->
+        Logger.warning("[Payment.Webhook] No user for merchant #{merchant_uid}")
+    end
   end
 
   defp handle_transaction_status_change(uid) do
@@ -61,13 +82,13 @@ defmodule Systems.Payment.Controller do
     end
   end
 
-  defp apply_transaction_status("completed", uid) do
-    result = Budget.Public.complete_transaction(uid)
+  defp apply_transaction_status(:completed, uid) do
+    result = Fund.Public.complete_transaction(uid)
     Logger.info("[Payment.Webhook] Complete result: #{inspect(result)}")
   end
 
-  defp apply_transaction_status("failed", uid) do
-    result = Budget.Public.fail_transaction(uid)
+  defp apply_transaction_status(:failed, uid) do
+    result = Fund.Public.fail_transaction(uid)
     Logger.info("[Payment.Webhook] Fail result: #{inspect(result)}")
   end
 
@@ -77,9 +98,9 @@ defmodule Systems.Payment.Controller do
 
   defp handle_withdrawal_status_change(uid) do
     case Systems.Payment.Public.get_withdrawal(uid) do
-      {:ok, %{status: status}} ->
+      {:ok, %{status: status} = withdrawal} ->
         Logger.info("[Payment.Webhook] Provider withdrawal status=#{status} for uid=#{uid}")
-        result = Systems.Fund.Public.apply_withdrawal_status(uid, status)
+        result = Systems.Fund.Public.apply_withdrawal_status(uid, withdrawal)
         Logger.info("[Payment.Webhook] Withdrawal apply result: #{inspect(result)}")
 
       {:error, error} ->

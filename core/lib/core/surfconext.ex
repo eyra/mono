@@ -1,7 +1,13 @@
 defmodule Core.SurfConext do
+  @moduledoc """
+  SURFconext identity provider. Implements `Core.Identity.Provider` —
+  the orchestration of "find user by email, attach or refresh satellite"
+  lives in `Core.Identity`.
+  """
+  @behaviour Core.Identity.Provider
+
   alias Systems.Account.User
   alias Core.Repo
-  alias Frameworks.Signal
   import Ecto.Query, warn: false
 
   require Logger
@@ -10,65 +16,56 @@ defmodule Core.SurfConext do
     defexception [:message]
   end
 
-  def get_user_by_sub(sub) do
-    from(u in User,
-      where:
-        u.id in subquery(
-          from(sc in Core.SurfConext.User, where: sc.sub == ^sub, select: sc.user_id)
-        )
-    )
-    |> Repo.one()
-  end
-
-  def get_surfconext_user_by_user(%User{id: id}) do
-    from(surfconext_user in Core.SurfConext.User, where: surfconext_user.user_id == ^id)
-    |> Repo.one!()
-  end
-
-  def register_user(attrs) do
+  @impl Core.Identity.Provider
+  def user_attrs(userinfo) when is_map(userinfo) do
     fullname =
       ~w(given_name family_name)
-      |> Enum.map(&Map.get(attrs, &1, ""))
+      |> Enum.map(&Map.get(userinfo, &1, ""))
       |> Enum.filter(&(&1 != ""))
       |> Enum.join(" ")
 
-    display_name = Map.get(attrs, "given_name", fullname)
-    email = get_email(attrs)
-
-    sso_info = %{
-      email: email,
-      displayname: display_name,
-      profile: %{
-        fullname: fullname
-      },
+    %{
+      email: get_email(userinfo),
+      displayname: Map.get(userinfo, "given_name", fullname),
       creator: true,
-      confirmed_at: NaiveDateTime.utc_now()
+      confirmed_at: NaiveDateTime.utc_now(),
+      fullname: fullname
     }
-
-    user = User.sso_changeset(%User{}, sso_info)
-    sub = Map.get(attrs, "sub")
-
-    with {:ok, surf_user} <-
-           %Core.SurfConext.User{}
-           |> Core.SurfConext.User.register_changeset(%{email: email, sub: sub, userinfo: attrs})
-           |> Ecto.Changeset.put_assoc(:user, user)
-           |> Repo.insert() do
-      Signal.Public.dispatch!({:user, :created}, %{user: surf_user.user})
-      {:ok, surf_user}
-    end
   end
 
-  defp get_email(attrs) do
-    case Map.get(attrs, "email") do
-      nil -> raise SurfConextError, "No email found in user info #{attrs |> inspect()}"
+  @impl Core.Identity.Provider
+  def get(%User{id: id}) do
+    Repo.get_by(Core.SurfConext.User, user_id: id)
+  end
+
+  @impl Core.Identity.Provider
+  def attach(%User{} = user, userinfo) when is_map(userinfo) do
+    %Core.SurfConext.User{}
+    |> Core.SurfConext.User.register_changeset(satellite_attrs(userinfo))
+    |> Ecto.Changeset.put_assoc(:user, user)
+    |> Repo.insert()
+  end
+
+  @impl Core.Identity.Provider
+  def refresh(%User{} = user, userinfo) when is_map(userinfo) do
+    get(user)
+    |> Core.SurfConext.User.update_changeset(%{userinfo: userinfo})
+    |> Repo.update!()
+  end
+
+  defp satellite_attrs(userinfo) do
+    %{
+      email: get_email(userinfo),
+      sub: Map.get(userinfo, "sub"),
+      userinfo: userinfo
+    }
+  end
+
+  defp get_email(userinfo) do
+    case Map.get(userinfo, "email") do
+      nil -> raise SurfConextError, "No email found in user info #{inspect(userinfo)}"
       email -> email
     end
-  end
-
-  def update_user(%User{} = user, attrs) do
-    get_surfconext_user_by_user(user)
-    |> Core.SurfConext.User.update_changeset(%{userinfo: attrs})
-    |> Repo.update!()
   end
 
   defmacro routes(otp_app) do

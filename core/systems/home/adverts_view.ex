@@ -1,5 +1,5 @@
 defmodule Systems.Home.AdvertsView do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Logo
@@ -18,6 +18,7 @@ defmodule Systems.Home.AdvertsView do
         cards: cards,
         count: Map.get(params, :count, Enum.count(cards)),
         more_path: Map.get(params, :more_path),
+        pool_slug: Map.get(params, :pool_slug),
         sub_heading_text: sub_heading_text
       )
     }
@@ -49,7 +50,7 @@ defmodule Systems.Home.AdvertsView do
           </Text.title2>
           <div class="flex-grow" />
           <div>
-            <Logo.product name={:panl} variant={:wide} class="h-12" />
+            <Logo.pool name={@pool_slug} variant={:wide} class="h-12" />
           </div>
         </div>
         <.spacing value="S" />
@@ -67,12 +68,12 @@ defmodule Systems.Home.AdvertsView do
           <Advert.CardView.dynamic card={card} target={@myself}/>
         <% end %>
       </Grid.dynamic>
-      <%= if @more_path && @count > Enum.count(@cards) do %>
+      <%= if @more_path && @count > 0 do %>
         <.spacing value="M" />
         <div class="flex flex-row justify-end">
           <.link navigate={@more_path}>
             <div class="flex flex-row items-center gap-2 text-button font-button text-primary">
-              <%= dgettext("eyra-pool", "marketplace.show_more") %>
+              <%= dgettext("eyra-pool", "marketplace.see_all") %>
               <img src={~p"/images/icons/forward.svg"} alt="" />
             </div>
           </.link>

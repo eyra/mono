@@ -1,5 +1,5 @@
 defmodule CoreWeb.UI.Dialog.Plain do
-  use CoreWeb, :live_component
+  use CoreWeb, :live_component_fabric
   use Gettext, backend: CoreWeb.Gettext
 
   import CoreWeb.UI.Dialog
@@ -53,11 +53,17 @@ defmodule CoreWeb.UI.Dialog.Plain do
   end
 
   defp update_buttons(
-         %{assigns: %{type: :inform, primary_button_label: primary_button_label}} = socket
+         %{
+           assigns: %{
+             type: :inform,
+             id: id,
+             primary_button_label: primary_button_label
+           }
+         } = socket
        ) do
     buttons = [
       %{
-        action: %{type: :send, event: "inform_ok"},
+        action: %{type: :send, event: "close_modal", item: id, target: nil},
         face: %{type: :primary, label: primary_button_label}
       }
     ]

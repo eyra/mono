@@ -41,7 +41,6 @@ defmodule Systems.Advert.ContentPage do
         modal={@modal}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
-        tabbar_size={@tabbar_size}
         actions={@actions}
       />
     """
