@@ -9,6 +9,20 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#28 2026-08-24
+* Added - Contributions replace the pay-out modal: participation now owns the completed/accepted/rejected lifecycle, with a Contributions tab (Pending / Confirmed / Declined) and a next-best-action for owners; declining reopens the assignment spot and the participant is notified of the outcome
+* Added - Participant pay-outs verified through iDEAL bank verification, with an Uitbetalingen tab showing verification status and pay-out history
+* Added - Provider-to-local reconciliation detects orphaned pay-ins, pay-outs and merchants; a stranded pay-out is resumed rather than restarted, either by the participant via a retry button or by the reconciler as a backstop
+* Added - Donation flow for participants (behind `:opp_phase_3`, off in prod)
+* Added - Pool-scoped join flow with reworked onboarding and pool branding on the join screen, plus a Pool Admin page reachable from the org's Pools tab
+* Added - Any user can be an org member or admin, and orgs show which pools they are linked to
+* Added - Linking an existing account when signing in through an identity provider
+* Changed - Desktop layout gained side padding, a 1536px max content width and a paper-sheet background
+* Changed - Budget folded into Fund; ten components migrated off Fabric to LiveNest
+* Removed - The old notification inbox and its unused push and mail handlers (APNS, WebPush); the tables stay behind under the deferred-drop pattern
+* Fixed - Money-flow hardening: fund balance is read under a row lock, non-positive rewards are rejected, pay-outs no longer sum across currencies, and an unset payment provider refuses to boot instead of silently defaulting
+* Fixed - Marketplace and participant home made mobile-friendly; promotion apply routes through the pool join flow, and a full study shows a "study is full" page instead of an error
+
 ## \#27 2026-06-24
 * Added - OTP email-first authentication (behind `:otp` flag, off in prod): single email field at /user/auth, 6-digit code page, then routed through terms & privacy on first sign-up; SurfConext / Google domains still hand off to their SSO providers from the same entry point
 * Added - Hourly cron prunes expired OTP codes so the auth_codes table stays bounded
