@@ -113,7 +113,6 @@ config :wallaby,
   ]
 
 config :core, :features,
-  sign_in_with_apple: true,
   member_google_sign_in: true,
   password_sign_in: true,
   debug_expire_force: true,

@@ -6,18 +6,6 @@ defmodule Self.Account.SessionController do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Account
-  alias Systems.Account.Identity.Apple
-
-  plug(:setup_sign_in_with_apple, :core when action != :delete)
-
-  defp setup_sign_in_with_apple(conn, otp_app) do
-    if feature_enabled?(:sign_in_with_apple) do
-      conf = Application.fetch_env!(otp_app, Apple)
-      Apple.Helpers.setup_session(conn, conf)
-    else
-      conn
-    end
-  end
 
   def new(conn, _params) do
     conn

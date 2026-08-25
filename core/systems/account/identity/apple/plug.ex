@@ -1,12 +1,9 @@
 defmodule Systems.Account.Identity.Apple.CallbackPlug do
   import Plug.Conn
   import Systems.Account.Identity.Apple.Helpers, only: [backend_module: 1, apply_defaults: 1]
-  use Core.FeatureFlags
-
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(conn, otp_app) do
-    require_feature(:sign_in_with_apple)
     config = otp_app |> Application.get_env(Systems.Account.Identity.Apple) |> apply_defaults
     session_params = get_session(conn, :sign_in_with_apple)
     config = Keyword.put(config, :session_params, session_params)

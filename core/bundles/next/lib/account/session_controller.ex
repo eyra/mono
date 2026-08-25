@@ -9,17 +9,6 @@ defmodule Next.Account.SessionController do
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
-  plug(:setup_sign_in_with_apple, :core when action != :delete)
-
-  defp setup_sign_in_with_apple(conn, otp_app) do
-    if feature_enabled?(:sign_in_with_apple) do
-      conf = Application.fetch_env!(otp_app, Systems.Account.Identity.Apple)
-      Systems.Account.Identity.Apple.Helpers.setup_session(conn, conf)
-    else
-      conn
-    end
-  end
-
   def new(conn, _params) do
     conn
     |> set_return_to()

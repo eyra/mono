@@ -12,9 +12,6 @@ defmodule CoreWeb.Router do
   require Systems.Account.Identity.Google
   Systems.Account.Identity.Google.routes(:core)
 
-  require Systems.Account.Identity.Apple
-  Systems.Account.Identity.Apple.routes(:core)
-
   Systems.Account.Identity.Surfconext.routes(:core)
 
   CoreWeb.Routes.routes()

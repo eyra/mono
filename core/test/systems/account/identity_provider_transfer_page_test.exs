@@ -4,7 +4,7 @@ defmodule Systems.Account.IdentityProviderTransferPageTest do
   import Phoenix.LiveViewTest
 
   alias Core.{Factories, Repo}
-  alias Systems.Account.Identity.{Apple, Email, Google, Surfconext}
+  alias Systems.Account.Identity.{Email, Google, Surfconext}
 
   test "renders the transfer details from the pending transition", %{conn: conn} do
     conn =
@@ -24,7 +24,6 @@ defmodule Systems.Account.IdentityProviderTransferPageTest do
   end
 
   for {idp, provider, userinfo} <- [
-        {"apple", Apple, %{"sub" => "apple-transfer-sub"}},
         {"google", Google, %{"sub" => "google-transfer-sub"}},
         {"surfconext", Surfconext,
          %{"email" => "surfconext-transfer@example.com", "sub" => "surfconext-transfer-sub"}}
