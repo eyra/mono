@@ -1,0 +1,70 @@
+defmodule Systems.Account.Auth.External do
+  alias Systems.Account
+  alias Core.Repo
+  import Ecto.Query, warn: false
+
+  def sign_in(conn, organisation, external_id) do
+    if user = get_user_by_external_id(external_id) do
+      conn
+      |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+      |> Plug.Conn.assign(:current_user, user)
+    else
+      case register_user(organisation, external_id) do
+        {:ok, user} ->
+          conn
+          |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+          |> Plug.Conn.assign(:current_user, user)
+
+        {:error, changeset} ->
+          Systems.Account.Auth.SSOHelpers.handle_registration_error(conn, changeset)
+      end
+    end
+  end
+
+  def get_user_by_external_id(nil), do: nil
+
+  def get_user_by_external_id(external_id) do
+    external_user_query =
+      from(ex in Systems.Account.Auth.External.User,
+        where: ex.external_id == ^external_id,
+        select: ex.user_id
+      )
+
+    from(u in Account.User, where: u.id in subquery(external_user_query))
+    |> Repo.one()
+  end
+
+  def register_user(organisation, external_id) when is_atom(organisation) do
+    register_user(Atom.to_string(organisation), external_id)
+  end
+
+  def register_user(organisation, external_id) do
+    name = "#{organisation}_#{external_id}"
+
+    user =
+      Account.User.sso_changeset(%Account.User{}, %{
+        email: "external+#{name}@eyra.co",
+        creator: false,
+        displayname: name,
+        profile: %{
+          fullname: name
+        }
+      })
+
+    external_user =
+      Systems.Account.Auth.External.User.changeset(
+        %Systems.Account.Auth.External.User{},
+        %{
+          external_id: external_id,
+          organisation: organisation
+        }
+      )
+
+    case external_user
+         |> Ecto.Changeset.put_assoc(:user, user)
+         |> Repo.insert() do
+      {:ok, result} -> {:ok, result.user}
+      {:error, changeset} -> {:error, changeset}
+    end
+  end
+end

@@ -3,6 +3,7 @@ defmodule Systems.Account.EmailRouter do
 
   alias Core.Repo
   alias Systems.Account
+  alias Systems.Account.Auth.Methods
 
   def route(email) when is_binary(email) do
     case Account.Public.get_user_by_email(email) do
@@ -19,7 +20,7 @@ defmodule Systems.Account.EmailRouter do
   defp user_check_idp(email) do
     case Frameworks.UserCheck.check_email(email) do
       {:ok, result} ->
-        Systems.Account.AuthMethods.provider_for_mx_provider(result.mx_provider) || :otp
+        Methods.provider_for_mx_provider(result.mx_provider) || :otp
 
       {:error, _reason} ->
         :otp
@@ -27,9 +28,9 @@ defmodule Systems.Account.EmailRouter do
   end
 
   defp identity_provider(user) do
-    Systems.Account.AuthMethods.satellite_providers()
+    Methods.satellite_providers()
     |> Enum.find_value(fn provider ->
-      model = Systems.Account.AuthMethods.satellite(provider)
+      model = Methods.satellite(provider)
       Repo.exists?(from(s in model, where: s.user_id == ^user.id)) && provider
     end)
   end

@@ -10,7 +10,7 @@ defmodule Core.Factories do
 
   alias Systems.Account
   alias Systems.Account.User
-  alias Systems.Account.Identity
+  alias Systems.Account.Auth
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Alliance
@@ -735,7 +735,7 @@ defmodule Core.Factories do
   def build(:external_user, %{} = attributes) do
     {user, attributes} = Map.pop(attributes, :user, build(:member))
 
-    %Systems.Account.Identity.External.User{
+    %Systems.Account.Auth.External.User{
       user: user
     }
     |> struct!(attributes)
@@ -1180,12 +1180,12 @@ defmodule Core.Factories do
   end
 
   def build(:google_user, %{} = attributes) do
-    %Identity.Google.UserModel{}
+    %Auth.Google.UserModel{}
     |> struct!(attributes)
   end
 
   def build(:email_user, %{} = attributes) do
-    %Identity.Email.UserModel{}
+    %Auth.Email.UserModel{}
     |> struct!(attributes)
   end
 

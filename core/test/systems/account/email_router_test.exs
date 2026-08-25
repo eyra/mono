@@ -29,8 +29,8 @@ defmodule Systems.Account.EmailRouterTest do
   test "routes an existing account with a Google satellite without OTP" do
     user = Factories.insert!(:creator, %{email: "existing-google@custom-domain.test"})
 
-    %Systems.Account.Identity.Google.UserModel{}
-    |> Systems.Account.Identity.Google.UserModel.changeset(%{sub: "existing-google-sub"})
+    %Systems.Account.Auth.Google.UserModel{}
+    |> Systems.Account.Auth.Google.UserModel.changeset(%{sub: "existing-google-sub"})
     |> Ecto.Changeset.put_assoc(:user, user)
     |> Repo.insert!()
 
@@ -41,7 +41,7 @@ defmodule Systems.Account.EmailRouterTest do
     user = Factories.insert!(:creator, %{email: "existing-surf@custom-domain.test"})
 
     {:ok, _satellite} =
-      Systems.Account.Identity.Surfconext.attach(user, %{
+      Systems.Account.Auth.Surfconext.attach(user, %{
         "sub" => "existing-surf-sub",
         "email" => user.email
       })

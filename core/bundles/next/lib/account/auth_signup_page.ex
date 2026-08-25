@@ -10,8 +10,9 @@ defmodule Next.Account.AuthSignupPage do
   import CoreWeb.Menus
 
   alias Frameworks.Pixel.Button
+  alias Systems.Account.Auth.Methods
 
-  defp providers, do: Systems.Account.AuthMethods.providers()
+  defp providers, do: Methods.providers()
 
   @impl true
   def mount(%{"provider" => provider}, _session, socket) do

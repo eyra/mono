@@ -82,8 +82,8 @@ defmodule Next.Account.SessionController do
          email,
          payload
        ) do
-    if Systems.Account.Identity.Email.provisional?(user) do
-      case Systems.Account.Identity.Email.link(user, email) do
+    if Systems.Account.Auth.Email.provisional?(user) do
+      case Systems.Account.Auth.Email.link(user, email) do
         {:ok, linked_user} ->
           conn
           |> stash_return_to(payload)

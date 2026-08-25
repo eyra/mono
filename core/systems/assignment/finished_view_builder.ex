@@ -92,7 +92,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
           Pool.Public.participant?(pool_slug, user) ->
             build_email_capture_submitted(pool_slug)
 
-          Systems.Account.Identity.Email.get_by_user(user) != nil ->
+          Systems.Account.Auth.Email.get_by_user(user) != nil ->
             build_email_capture_submitted(pool_slug)
 
           true ->

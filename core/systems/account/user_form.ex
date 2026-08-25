@@ -134,22 +134,6 @@ defmodule Systems.Account.UserForm do
     """
   end
 
-  attr(:conn, :map, required: true)
-
-  def apple_signin(%{conn: conn} = assigns) do
-    config = Application.fetch_env!(:core, Systems.Account.Identity.Apple)
-    button = {:safe, Systems.Account.Identity.Apple.Helpers.html_sign_in_button(conn, config)}
-
-    assigns = Map.put(assigns, :button, button)
-
-    ~H"""
-    <div class="flex w-full h-12 bg-apple rounded justify-center items-center hover:opacity-80">
-        <div class="w-full h-full pl-4 pr-4 focus:outline-none" id="appleid-signin" data-color="black" data-border="false" data-type="sign in" data-logo-size="small" data-label-position="10" ></div>
-        <%= @button %>
-    </div>
-    """
-  end
-
   attr(:creator?, :boolean, required: true)
   attr(:post_signin_action, :string, default: nil)
 

@@ -135,7 +135,7 @@ defmodule Systems.Account.Public do
     |> Repo.exists?()
   end
 
-  # Deprecated. Systems.Account.Identity.External.User is replaced by Affiliate.User
+  # Deprecated. Systems.Account.Auth.External.User is replaced by Affiliate.User
 
   def external?(%User{id: user_id}) do
     external?(user_id)
@@ -144,7 +144,7 @@ defmodule Systems.Account.Public do
   def external?(nil), do: false
 
   def external?(user_id) do
-    from(ex in Systems.Account.Identity.External.User,
+    from(ex in Systems.Account.Auth.External.User,
       where: ex.user_id == ^user_id
     )
     |> Repo.exists?()
@@ -276,10 +276,10 @@ defmodule Systems.Account.Public do
   with `confirmed_at`/`verified_at` set by the caller's attrs and is
   immediately usable. Dispatches `{:user, :created}`.
 
-  `attrs` is the flat normalized map produced by a `Systems.Account.Identity.Provider`'s
+  `attrs` is the flat normalized map produced by a `Systems.Account.Auth.Provider`'s
   `user_attrs/1` callback — the User vs Profile schema split is an internal
   concern handled here, not something the IdP has to know about. See
-  `Systems.Account.Identity.Provider.user_attrs/0` for the allowed keys.
+  `Systems.Account.Auth.Provider.user_attrs/0` for the allowed keys.
   """
   def register_via_sso(%{email: _} = attrs) do
     with {:ok, user} <-

@@ -49,7 +49,7 @@ defmodule Systems.Account.Queries do
 
   def user_query(external?: true) do
     user_query()
-    |> join(:left, [user: u], e in Systems.Account.Identity.External.User,
+    |> join(:left, [user: u], e in Systems.Account.Auth.External.User,
       on: u.id == e.user_id,
       as: :external
     )
@@ -59,7 +59,7 @@ defmodule Systems.Account.Queries do
   def user_query(internal?: true) do
     user_query()
     |> join(:left, [user: u], a in Affiliate.User, on: u.id == a.user_id, as: :affiliate)
-    |> join(:left, [user: u], e in Systems.Account.Identity.External.User,
+    |> join(:left, [user: u], e in Systems.Account.Auth.External.User,
       on: u.id == e.user_id,
       as: :external
     )
