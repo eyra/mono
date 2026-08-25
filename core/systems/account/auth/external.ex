@@ -25,7 +25,7 @@ defmodule Systems.Account.Auth.External do
 
   def get_user_by_external_id(external_id) do
     external_user_query =
-      from(ex in Systems.Account.Auth.External.User,
+      from(ex in Systems.Account.Auth.External.UserModel,
         where: ex.external_id == ^external_id,
         select: ex.user_id
       )
@@ -52,8 +52,8 @@ defmodule Systems.Account.Auth.External do
       })
 
     external_user =
-      Systems.Account.Auth.External.User.changeset(
-        %Systems.Account.Auth.External.User{},
+      Systems.Account.Auth.External.UserModel.changeset(
+        %Systems.Account.Auth.External.UserModel{},
         %{
           external_id: external_id,
           organisation: organisation

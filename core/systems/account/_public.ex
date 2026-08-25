@@ -135,7 +135,7 @@ defmodule Systems.Account.Public do
     |> Repo.exists?()
   end
 
-  # Deprecated. Systems.Account.Auth.External.User is replaced by Affiliate.User
+  # Deprecated. Systems.Account.Auth.External.UserModel is replaced by Affiliate.User
 
   def external?(%User{id: user_id}) do
     external?(user_id)
@@ -144,7 +144,7 @@ defmodule Systems.Account.Public do
   def external?(nil), do: false
 
   def external?(user_id) do
-    from(ex in Systems.Account.Auth.External.User,
+    from(ex in Systems.Account.Auth.External.UserModel,
       where: ex.user_id == ^user_id
     )
     |> Repo.exists?()

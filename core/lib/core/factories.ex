@@ -735,7 +735,7 @@ defmodule Core.Factories do
   def build(:external_user, %{} = attributes) do
     {user, attributes} = Map.pop(attributes, :user, build(:member))
 
-    %Systems.Account.Auth.External.User{
+    %Systems.Account.Auth.External.UserModel{
       user: user
     }
     |> struct!(attributes)

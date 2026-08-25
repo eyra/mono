@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.External.User do
+defmodule Systems.Account.Auth.External.UserModel do
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -13,7 +13,7 @@ defmodule Systems.Account.Auth.External.User do
     timestamps()
   end
 
-  def changeset(%Systems.Account.Auth.External.User{} = user, attrs) do
+  def changeset(%Systems.Account.Auth.External.UserModel{} = user, attrs) do
     user
     |> cast(attrs, @fields)
     |> validate_required(@required_fields)
