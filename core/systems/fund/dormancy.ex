@@ -1,34 +1,8 @@
 defmodule Systems.Fund.Dormancy do
   @moduledoc """
-  Auto-donation of dormant reward balances (SF-OPP-07).
-
-  A participant who never claims an approved reward eventually has it donated to
-  Eyra. Two passes, both driven by `Fund.AutoDonateWorker`:
-
-    * `remind/2` warns a participant whose rewards have sat `:approved` since
-      before the cutoff, and records the warning against each reward.
-    * `donate/1` donates the rewards whose warning is older than the grace
-      period.
-
-  ## The clock is the warning, not the approval
-
-  `donate/1` never looks at how long a reward has been approved — only at how
-  long ago it was warned about. That is what makes the first run safe: a backlog
-  of rewards approved years ago all get warned on day one and cannot be donated
-  until a full grace period later. Worker downtime is covered the same way, and
-  no participant can lose money without having been told first.
-
-  ## Activity postpones on its own
-
-  Every reward transition stamps `updated_at`, and a payout or donation attempt
-  that fails reverts the reward to `:approved` with a fresh stamp. So a
-  participant doing anything at all pushes their dormancy deadline out; the
-  clock can only ever be delayed, never brought forward.
-
-  Scoped to the euro balance, the only currency participants are ever paid in
-  (see `Systems.Home.PageBuilder`) and the only one the provider charge is
-  denominated in.
+  Auto-donation of dormant reward balances
   """
+
   use Core, :public
 
   require Logger
@@ -45,16 +19,17 @@ defmodule Systems.Fund.Dormancy do
   @doc """
   Warns every participant holding rewards untouched since before `cutoff`, and
   marks those rewards as warned. One mail per participant, however many rewards
-  it covers. Already-warned rewards are skipped, so re-running is harmless.
+  it covers. A reward still untouched since its last warning is skipped, so
+  re-running is harmless.
 
   Returns the rewards that were warned about.
   """
   def remind(%NaiveDateTime{} = cutoff, %Date{} = deadline) do
-    warned = warned_reward_ids()
+    warnings = warning_times()
 
     cutoff
     |> dormant_rewards()
-    |> Enum.reject(&warned?(&1, warned))
+    |> Enum.reject(&warned_since?(&1, warnings))
     |> Enum.group_by(&participant/1)
     |> Enum.flat_map(&warn_participant(&1, deadline))
   end
@@ -78,50 +53,72 @@ defmodule Systems.Fund.Dormancy do
     |> Repo.preload(:user)
   end
 
-  # No age filter here on purpose: how long a reward has been approved is the
-  # warning pass's business, and re-applying it would let a reward that was
-  # warned about slip back out of reach.
   defp warned_rewards(cutoff) do
-    warned = warned_reward_ids(recorded_before: cutoff)
+    warnings = warning_times(recorded_before: cutoff)
 
     @currency
-    |> Fund.Queries.approved_rewards()
+    |> Fund.Queries.approved_rewards_before(cutoff)
     |> Repo.all()
     |> Repo.preload(:user)
-    |> Enum.filter(&warned?(&1, warned))
+    |> Enum.filter(&warned_since?(&1, warnings))
   end
 
-  # The warning event *is* the durable mark: it names the rewards it covered,
-  # so one event per participant carries one mail and however many marks.
-  defp warned_reward_ids(opts \\ []) do
+  defp warning_times(opts \\ []) do
     @warning
     |> Notify.Public.list_events(opts)
-    |> Enum.flat_map(&covered_reward_ids/1)
-    |> MapSet.new()
+    |> Enum.flat_map(&covered_reward_times/1)
+    |> Map.new()
   end
 
-  defp covered_reward_ids(%Notify.EventModel{metadata: %{"reward_ids" => ids}}), do: ids
-  defp covered_reward_ids(%Notify.EventModel{}), do: []
+  defp covered_reward_times(%Notify.EventModel{
+         metadata: %{"reward_ids" => ids},
+         inserted_at: warned_at
+       }),
+       do: Enum.map(ids, &{&1, warned_at})
+
+  defp covered_reward_times(%Notify.EventModel{}), do: []
 
   defp participant(%Fund.RewardModel{user: user}), do: user
 
-  defp warned?(%Fund.RewardModel{id: id}, warned), do: MapSet.member?(warned, id)
+  defp warned_since?(%Fund.RewardModel{id: id, updated_at: updated_at}, warnings) do
+    case Map.fetch(warnings, id) do
+      {:ok, warned_at} -> NaiveDateTime.compare(updated_at, warned_at) != :gt
+      :error -> false
+    end
+  end
 
   defp warn_participant({user, rewards}, deadline) do
-    Notify.Public.record_event(%Notify.EventAttrs{
+    case Notify.Public.record_event(warning_event(user, rewards, deadline)) do
+      {:ok, _event} -> warned(user, rewards, deadline)
+      {:error, reason} -> failed_to_warn(user, reason)
+    end
+  end
+
+  defp warning_event(%Account.User{id: user_id} = user, rewards, deadline) do
+    %Notify.EventAttrs{
       type: @warning,
       subject_user: user,
-      correlation_id: "fund_dormancy:user:#{user.id}",
+      correlation_id: "fund_dormancy:user:#{user_id}",
       source: __MODULE__,
       metadata: %{
         "reward_ids" => Enum.map(rewards, & &1.id),
         "amount_cents" => total_amount(rewards),
         "deadline" => Date.to_string(deadline)
       }
-    })
+    }
+  end
 
+  defp warned(user, rewards, deadline) do
     log_warning(user, rewards, deadline)
     rewards
+  end
+
+  defp failed_to_warn(%Account.User{id: user_id}, reason) do
+    Logger.error(
+      "[Fund.Dormancy] failed to warn user ##{user_id} about dormant rewards: #{inspect(reason)}"
+    )
+
+    []
   end
 
   defp donate_balance({user, rewards}) do

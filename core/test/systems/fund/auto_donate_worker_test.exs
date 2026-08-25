@@ -13,7 +13,7 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
   alias Systems.Payment.ProviderMock
 
   @dormant_days 180
-  @grace_days 30
+  @notice_days 30
 
   setup :verify_on_exit!
 
@@ -47,8 +47,6 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
     reward
   end
 
-  # The warning event is recorded with a real `inserted_at`, so ageing it is the
-  # only way to reach the donation pass through the worker.
   defp age_warnings(days_ago) do
     timestamp =
       NaiveDateTime.utc_now()
@@ -61,7 +59,7 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
   defp run, do: perform_job(AutoDonateWorker, %{})
 
   test "warns a dormant balance without donating it", %{donor: donor, fund: fund} do
-    reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days - @grace_days + 1)
+    reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days - @notice_days + 1)
 
     assert :ok = run()
 
@@ -70,7 +68,7 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
   end
 
   test "leaves a balance younger than the warning line alone", %{donor: donor, fund: fund} do
-    reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days - @grace_days - 1)
+    reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days - @notice_days - 1)
 
     assert :ok = run()
 
@@ -78,14 +76,14 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
     assert %{status: :approved} = Repo.reload!(reward)
   end
 
-  test "donates once the warning has aged past the grace period",
+  test "donates once the warning has aged past the notice period",
        %{donor: donor, fund: fund} do
     reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days)
 
     assert :ok = run()
     assert %{status: :approved} = Repo.reload!(reward)
 
-    age_warnings(@grace_days + 1)
+    age_warnings(@notice_days + 1)
 
     expect(ProviderMock, :charge_to_partner, fn _from, 1000, _key ->
       {:ok, %{uid: "chg_auto", status: :pending, raw_status: "created", amount: 1000}}
@@ -95,12 +93,21 @@ defmodule Systems.Fund.AutoDonateWorkerTest do
     assert %{status: :donated} = Repo.reload!(reward)
   end
 
-  test "a backlog approved long ago still gets a full grace period first",
+  test "does not donate on the deadline date named in the warning",
+       %{donor: donor, fund: fund} do
+    reward = insert_reward(donor, fund, 1000) |> backdate(@dormant_days)
+
+    assert :ok = run()
+    age_warnings(@notice_days)
+
+    assert :ok = run()
+    assert %{status: :approved} = Repo.reload!(reward)
+  end
+
+  test "a backlog approved long ago still gets a full notice period first",
        %{donor: donor, fund: fund} do
     reward = insert_reward(donor, fund, 1000) |> backdate(10 * 365)
 
-    # No charge is stubbed: a donation on this first run would fail the Mox
-    # expectation, which is exactly the regression being guarded.
     assert :ok = run()
     assert %{status: :approved} = Repo.reload!(reward)
   end
