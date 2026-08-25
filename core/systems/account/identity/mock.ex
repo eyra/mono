@@ -9,14 +9,18 @@ defmodule Systems.Account.Identity.Mock do
   def user_attrs(%{"email" => email}),
     do: %{email: email, creator: true, verified_at: NaiveDateTime.utc_now()}
 
+  defmodule UserModel do
+    defstruct [:user_id]
+  end
+
   @impl true
   def get(_user), do: nil
 
   @impl true
-  def attach(_user, _userinfo), do: {:ok, :mock}
+  def attach(user, _userinfo), do: {:ok, %UserModel{user_id: user.id}}
 
   @impl true
-  def refresh(_user, _userinfo), do: :mock
+  def refresh(user, _userinfo), do: %UserModel{user_id: user.id}
 end
 
 defmodule Systems.Account.Identity.Mock.InitiatorPlug do

@@ -2,7 +2,6 @@ defmodule Systems.Account.Identity.Apple.Test do
   use Core.DataCase, async: true
 
   alias Core.Factories
-  alias Systems.Account.Identity.Apple
 
   describe "get_user_by_sub/1" do
     test "get a user by their subject id" do
@@ -23,7 +22,7 @@ defmodule Systems.Account.Identity.Apple.Test do
         sso_info = %{
           sub: Faker.UUID.v4(),
           email: Faker.Internet.email(),
-          is_private_email: :random.uniform(2) == 1,
+          is_private_email: :rand.uniform(2) == 1,
           first_name: Faker.Person.first_name(),
           middle_name: middle_name,
           last_name: Faker.Person.last_name()

@@ -5,7 +5,6 @@ defmodule MockAuthTest do
 
   alias Core.Repo
   alias Systems.Account.FeaturesModel
-  alias Systems.Account.Identity.Mock
   alias Systems.Account.User
 
   setup do
