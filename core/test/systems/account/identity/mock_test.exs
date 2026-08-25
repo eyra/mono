@@ -1,4 +1,4 @@
-defmodule MockAuthTest do
+defmodule Systems.Account.Identity.MockTest do
   use CoreWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
   import Phoenix.LiveViewTest

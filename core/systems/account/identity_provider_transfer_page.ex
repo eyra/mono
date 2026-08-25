@@ -25,8 +25,10 @@ defmodule Systems.Account.IdentityProviderTransferPage do
     {:ok, Phoenix.LiveView.redirect(socket, to: ~p"/user/auth/identify")}
   end
 
+  defp idp_label("apple"), do: "Apple"
+  defp idp_label("google"), do: "Google"
+  defp idp_label("mock"), do: "Mock"
   defp idp_label("surfconext"), do: "SURFconext"
-  defp idp_label(idp), do: String.capitalize(idp)
 
   def update_menus(%{assigns: %{current_user: user, uri: uri}} = socket) do
     assign(socket, menus: build_menus(stripped_menus_config(), user, uri))

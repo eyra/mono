@@ -28,6 +28,7 @@ defmodule Systems.Account.Identity do
   alias Core.Repo
   alias Ecto.Multi
   alias Systems.Account
+  alias Systems.Account.AuthMethods
   alias Systems.Account.User
 
   @typedoc "Normalized Account.User attrs returned by `c:Provider.user_attrs/1`."
@@ -86,10 +87,10 @@ defmodule Systems.Account.Identity do
 
   def transfer(provider, satellite_key, %User{} = user, userinfo) do
     satellites =
-      Systems.Account.AuthMethods.satellites()
+      AuthMethods.satellites()
       |> Map.values()
 
-    selected_satellite = Systems.Account.AuthMethods.satellite(satellite_key)
+    selected_satellite = AuthMethods.satellite(satellite_key)
     user_id = user.id
 
     Multi.new()
@@ -116,7 +117,7 @@ defmodule Systems.Account.Identity do
 
     Multi.new()
     |> Multi.run(:remove_identities, fn repo, _changes ->
-      Systems.Account.AuthMethods.satellites()
+      AuthMethods.satellites()
       |> Map.values()
       |> Enum.each(fn satellite ->
         satellite

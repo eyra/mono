@@ -3,6 +3,9 @@ defmodule Systems.Account.IdentityProviderTransferPageTest do
 
   import Phoenix.LiveViewTest
 
+  alias Core.{Factories, Repo}
+  alias Systems.Account.Identity.{Apple, Email, Google, Surfconext}
+
   test "renders the transfer details from the pending transition", %{conn: conn} do
     conn =
       Phoenix.ConnTest.init_test_session(conn, %{
@@ -18,6 +21,33 @@ defmodule Systems.Account.IdentityProviderTransferPageTest do
              "[data-testid='idp-transfer-page']",
              "We detected you have an existing account with email address john@doe.nl"
            )
+  end
+
+  for {idp, provider, userinfo} <- [
+        {"apple", Apple, %{"sub" => "apple-transfer-sub"}},
+        {"google", Google, %{"sub" => "google-transfer-sub"}},
+        {"surfconext", Surfconext,
+         %{"email" => "surfconext-transfer@example.com", "sub" => "surfconext-transfer-sub"}}
+      ] do
+    test "confirming #{idp} replaces existing authentication satellites", %{conn: conn} do
+      user = Factories.insert!(:member)
+      Factories.insert!(:email_user, %{user_id: user.id})
+
+      conn =
+        Phoenix.ConnTest.init_test_session(conn, %{
+          "idp_transfer" => %{
+            "idp" => unquote(idp),
+            "user_id" => user.id,
+            "userinfo" => unquote(Macro.escape(userinfo))
+          }
+        })
+        |> post("/auth/#{unquote(idp)}/transfer/confirm")
+
+      assert conn.status == 302
+      refute get_session(conn, :idp_transfer)
+      assert unquote(provider).get(user)
+      refute Repo.get_by(Email.UserModel, user_id: user.id)
+    end
   end
 
   test "declining clears the pending transfer", %{conn: conn} do
