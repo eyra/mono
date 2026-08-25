@@ -127,7 +127,8 @@ config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :core, Oban, queues: false, plugins: false
 
-config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
+config :core, Systems.Account.Identity.Surfconext,
+  oidc_module: Systems.Account.Identity.Surfconext.FakeOIDC
 
 # Tests always use the next bundle
 config :core, :bundle, :next

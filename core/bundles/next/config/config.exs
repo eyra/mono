@@ -32,6 +32,12 @@ config :core, :meta,
   bundle_title: "Next",
   bundle: :next
 
-config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
+config :core, :account,
+  auth_methods: %{
+    surfconext: %{provider: true, satellite: true},
+    google: %{provider: true, satellite: true, mx_provider: "google"},
+    apple: %{provider: true, satellite: true},
+    email: %{provider: false, satellite: true}
+  }
 
 config :core, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]

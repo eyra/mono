@@ -89,9 +89,14 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     case Affiliate.Public.get_user(user) do
       {:ok, _affiliate_user} ->
         cond do
-          Pool.Public.participant?(pool_slug, user) -> build_email_capture_submitted(pool_slug)
-          EmailSignUp.get_by_user(user) != nil -> build_email_capture_submitted(pool_slug)
-          true -> build_email_capture_form(pool_slug, submitting?)
+          Pool.Public.participant?(pool_slug, user) ->
+            build_email_capture_submitted(pool_slug)
+
+          Systems.Account.Identity.Email.get_by_user(user) != nil ->
+            build_email_capture_submitted(pool_slug)
+
+          true ->
+            build_email_capture_form(pool_slug, submitting?)
         end
 
       {:error, :user_not_found} ->

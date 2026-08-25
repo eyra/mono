@@ -57,7 +57,7 @@ defmodule Systems.Assignment.FinishedView do
       ) do
     email_error =
       try do
-        case EmailSignUp.link(user, email) do
+        case Systems.Account.Identity.Email.link(user, email) do
           {:ok, _user} ->
             Pool.Public.add_to_pool(pool_slug, user)
             nil

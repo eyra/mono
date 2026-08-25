@@ -1,0 +1,277 @@
+defmodule Systems.Account.Identity.Surfconext.FakeOIDC do
+  def callback(config, _params) do
+    sub = Keyword.get(config, :sub, "test")
+    token = Keyword.get(config, :token, "test-token")
+
+    {:ok, %{user: %{"sub" => sub}, token: token}}
+  end
+
+  def fetch_userinfo(config, "test-token") do
+    {:ok, base_user(config)}
+  end
+
+  def fetch_userinfo(config, "student-token") do
+    user =
+      config
+      |> base_user()
+      |> Map.put("eduperson_affiliation", ["student"])
+
+    {:ok, user}
+  end
+
+  def fetch_userinfo(config, "researcher-token") do
+    user =
+      config
+      |> base_user()
+      |> Map.put("eduperson_affiliation", ["employee"])
+
+    {:ok, user}
+  end
+
+  defp base_user(config) do
+    sub = Keyword.get(config, :sub, "test")
+    email = Keyword.get(config, :email, Faker.Internet.email())
+
+    first_name = Faker.Person.first_name()
+    last_name = Faker.Person.last_name()
+
+    %{
+      "sub" => sub,
+      "email" => email,
+      "email_verified" => true,
+      "preferred_username" => "#{first_name} #{last_name}",
+      "given_name" => first_name,
+      "family_name" => last_name,
+      "updated_at" => 1_615_100_207
+    }
+  end
+
+  def authorize_url(config) do
+    {:ok, %{url: Keyword.get(config, :base_url), session_params: %{some: :stuff}}}
+  end
+end
+
+defmodule Systems.Account.Identity.Surfconext.AuthorizePlug.Test do
+  use ExUnit.Case, async: false
+  import Plug.Test
+  import Plug.Conn
+  alias Systems.Account.Identity.Surfconext.AuthorizePlug
+
+  describe "call/1" do
+    test "redirects to Surfconext login page" do
+      domain = Faker.Internet.domain_name()
+
+      Application.put_env(:test, Systems.Account.Identity.Surfconext,
+        client_id: domain,
+        client_secret: Faker.Lorem.sentence(),
+        base_url: "https://connect.test.surfconext.nl",
+        redirect_uri: "https://#{domain}/auth/surfconext/callback",
+        oidc_module: Systems.Account.Identity.Surfconext.FakeOIDC
+      )
+
+      conn =
+        conn(:get, "/auth/surfconext/callback")
+        |> init_test_session(%{})
+        |> AuthorizePlug.call(:test)
+
+      assert conn.private.plug_session["surfconext"]
+      assert conn.status == 302
+      [location] = get_resp_header(conn, "location")
+      assert String.starts_with?(location, "https://connect.test.surfconext.nl")
+    end
+  end
+end
+
+defmodule Systems.Account.Identity.Surfconext.CallbackController.Test do
+  use CoreWeb.ConnCase, async: false
+
+  setup do
+    conf = Application.get_env(:core, Systems.Account.Identity.Surfconext, [])
+
+    on_exit(fn ->
+      Application.put_env(:core, Systems.Account.Identity.Surfconext, conf)
+    end)
+
+    domain = Faker.Internet.domain_name()
+
+    test_conf = [
+      client_id: domain,
+      client_secret: Faker.Lorem.sentence(),
+      base_url: "https://connect.test.surfconext.nl",
+      redirect_uri: "https://#{domain}/auth/surfconext/callback",
+      oidc_module: Systems.Account.Identity.Surfconext.FakeOIDC
+    ]
+
+    Application.put_env(:core, Systems.Account.Identity.Surfconext, test_conf)
+
+    conn =
+      CoreWeb.ConnCase.build_conn()
+      |> init_test_session(%{surfconext: %{state: "test-state"}})
+
+    {:ok, conn: conn, conf: test_conf}
+  end
+
+  describe "authenticate/1" do
+    test "creates a user", %{conn: conn} do
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
+
+      assert [user] = Core.Repo.all(Systems.Account.User)
+      assert user.verified_at == nil
+      assert user.confirmed_at != nil
+      assert user.creator == true
+    end
+
+    test "authenticates an existing user", %{conn: conn, conf: conf} do
+      email = Faker.Internet.email()
+
+      Systems.Account.Identity.authenticate(Systems.Account.Identity.Surfconext, %{
+        "sub" => "test",
+        "email" => email,
+        "preferred_username" => Faker.Person.name()
+      })
+
+      Application.put_env(
+        :core,
+        Systems.Account.Identity.Surfconext,
+        Keyword.put(conf, :email, email)
+      )
+
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/project"
+    end
+
+    test "authenticates an existing researcher", %{conn: conn, conf: conf} do
+      email = Faker.Internet.email()
+
+      Systems.Account.Identity.authenticate(Systems.Account.Identity.Surfconext, %{
+        "sub" => "test",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["employee"]
+      })
+
+      Application.put_env(
+        :core,
+        Systems.Account.Identity.Surfconext,
+        Keyword.put(conf, :email, email)
+      )
+
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/project"
+    end
+
+    test "authenticates an existing student", %{conn: conn, conf: conf} do
+      email = Faker.Internet.email()
+
+      Systems.Account.Identity.authenticate(Systems.Account.Identity.Surfconext, %{
+        "sub" => "test",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["student"]
+      })
+
+      Application.put_env(
+        :core,
+        Systems.Account.Identity.Surfconext,
+        Keyword.put(conf, :email, email)
+      )
+
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/project"
+    end
+
+    test "authenticates new researcher", %{conn: conn, conf: conf} do
+      conf =
+        conf
+        |> Keyword.put(:sub, "researcher")
+        |> Keyword.put(:token, "researcher-token")
+
+      Application.put_env(:core, Systems.Account.Identity.Surfconext, conf)
+
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
+    end
+
+    test "authenticates new student", %{conn: conn, conf: conf} do
+      conf =
+        conf
+        |> Keyword.put(:sub, "student")
+        |> Keyword.put(:token, "student-token")
+
+      Application.put_env(:core, Systems.Account.Identity.Surfconext, conf)
+
+      conn = conn |> get("/auth/surfconext/callback")
+      assert redirected_to(conn) == "/user/onboarding"
+    end
+
+    test "updates an existing student", %{conn: conn, conf: conf} do
+      email = Faker.Internet.email()
+
+      Systems.Account.Identity.authenticate(Systems.Account.Identity.Surfconext, %{
+        "sub" => "student",
+        "email" => email,
+        "preferred_username" => Faker.Person.name(),
+        "eduperson_affiliation" => ["student"]
+      })
+
+      conf =
+        conf
+        |> Keyword.put(:sub, "student")
+        |> Keyword.put(:token, "student-token")
+        |> Keyword.put(:email, email)
+
+      Application.put_env(:core, Systems.Account.Identity.Surfconext, conf)
+
+      conn = conn |> get("/auth/surfconext/callback")
+
+      user = Systems.Account.Public.get_user_by_email(email)
+      surfconext_user = Systems.Account.Identity.Surfconext.get(user)
+
+      assert redirected_to(conn) == "/project"
+      assert surfconext_user.userinfo["eduperson_affiliation"] == ["student"]
+    end
+
+    test "offers account transfer for an existing email/password account", %{
+      conn: conn,
+      conf: conf
+    } do
+      existing_email = "duplicate@example.com"
+      existing = Core.Factories.insert!(:member, %{email: existing_email, creator: true})
+
+      conf =
+        conf
+        |> Keyword.put(:sub, "new-sso-user-different-sub")
+        |> Keyword.put(:email, existing_email)
+
+      Application.put_env(:core, Systems.Account.Identity.Surfconext, conf)
+
+      conn = conn |> get("/auth/surfconext/callback")
+
+      assert redirected_to(conn) == "/auth/surfconext/transfer"
+
+      # Confirmation attaches the satellite; the callback only offers transfer.
+      reloaded = Systems.Account.Public.get_user!(existing.id)
+      assert reloaded.email == existing_email
+      assert Systems.Account.Identity.Surfconext.get(reloaded) == nil
+    end
+
+    test "redirects to signin and logs error when session is missing" do
+      import ExUnit.CaptureLog
+
+      log =
+        capture_log([level: :error], fn ->
+          conn =
+            CoreWeb.ConnCase.build_conn()
+            |> init_test_session(%{})
+            |> get("/auth/surfconext/callback?code=abc&state=xyz")
+
+          assert redirected_to(conn) == "/user/signin"
+          assert Phoenix.Flash.get(conn.assigns.flash, :error) =~ "Sign-in could not be completed"
+        end)
+
+      assert log =~ "[error]"
+      assert log =~ "[Surfconext] OAuth callback without session state"
+    end
+  end
+end

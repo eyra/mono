@@ -137,8 +137,8 @@ defmodule Systems.Account.UserForm do
   attr(:conn, :map, required: true)
 
   def apple_signin(%{conn: conn} = assigns) do
-    config = Application.fetch_env!(:core, SignInWithApple)
-    button = {:safe, SignInWithApple.Helpers.html_sign_in_button(conn, config)}
+    config = Application.fetch_env!(:core, Systems.Account.Identity.Apple)
+    button = {:safe, Systems.Account.Identity.Apple.Helpers.html_sign_in_button(conn, config)}
 
     assigns = Map.put(assigns, :button, button)
 

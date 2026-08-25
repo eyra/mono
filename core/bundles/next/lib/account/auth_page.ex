@@ -74,6 +74,9 @@ defmodule Next.Account.AuthPage do
       :surfconext ->
         {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
 
+      :mock ->
+        {:noreply, redirect(socket, to: "/auth/mock/callback?email=#{URI.encode(email)}")}
+
       :otp ->
         case Account.Public.generate_otp(email) do
           :ok ->

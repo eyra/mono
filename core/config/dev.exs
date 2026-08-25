@@ -134,10 +134,14 @@ config :core,
     "*@eyra.co"
   ]
 
-existing_providers =
-  Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
-
-config :core, :account, auth_providers: existing_providers ++ [:mock]
+config :core, :account,
+  auth_methods: %{
+    surfconext: %{provider: true, satellite: true},
+    google: %{provider: true, satellite: true, mx_provider: "google"},
+    apple: %{provider: true, satellite: true},
+    email: %{provider: false, satellite: true},
+    mock: %{provider: true, satellite: false}
+  }
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,

@@ -397,3 +397,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr ""

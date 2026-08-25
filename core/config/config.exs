@@ -186,23 +186,23 @@ config :core, Systems.Email.Mailer,
   adapter: Bamboo.TestAdapter,
   default_from_email: "no-reply@example.com"
 
-config :core, Core.SurfConext,
+config :core, Systems.Account.Identity.Surfconext,
   client_id: "not-set",
   client_secret: "not-set",
   base_url: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
 
-# Domains routed to SurfConext SSO on the email-first auth page.
+# Domains routed to Surfconext SSO on the email-first auth page.
 # Override in runtime config per environment.
 config :core, :surfconext_domains, []
 
-config :core, SignInWithApple,
+config :core, Systems.Account.Identity.Apple,
   client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
   team_id: System.get_env("SIGN_IN_WITH_APPLE_TEAM_ID"),
   private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
   redirect_uri: "https://localhost/apple/auth"
 
-config :core, GoogleSignIn,
+config :core, Systems.Account.Identity.Google,
   client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET"),
   redirect_uri: "http://localhost:4000/auth/google/callback"

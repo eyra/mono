@@ -11,8 +11,8 @@ defmodule Self.Account.SessionController do
 
   defp setup_sign_in_with_apple(conn, otp_app) do
     if feature_enabled?(:signin_with_apple) do
-      conf = Application.fetch_env!(otp_app, SignInWithApple)
-      SignInWithApple.Helpers.setup_session(conn, conf)
+      conf = Application.fetch_env!(otp_app, Systems.Account.Identity.Apple)
+      Systems.Account.Identity.Apple.Helpers.setup_session(conn, conf)
     end
   end
 

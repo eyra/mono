@@ -132,12 +132,12 @@ defmodule Next.Account.SessionControllerTest do
       assert updated_user.email == new_email
     end
 
-    test "creates a satellite EmailSignUp record for the linked email", %{
+    test "creates a satellite Systems.Account.Identity.Email record for the linked email", %{
       conn: conn,
       provisional_user: provisional_user
     } do
       new_email = "real-#{Faker.UUID.v4()}@example.com"
-      refute EmailSignUp.get_by_user(provisional_user)
+      refute Systems.Account.Identity.Email.get_by_user(provisional_user)
 
       redeem_token =
         Phoenix.Token.sign(Endpoint, @token_salt, %{
@@ -148,7 +148,7 @@ defmodule Next.Account.SessionControllerTest do
 
       _conn = get(conn, ~p"/user/auth/redeem?token=#{redeem_token}")
 
-      assert EmailSignUp.get_by_user(provisional_user) != nil
+      assert Systems.Account.Identity.Email.get_by_user(provisional_user) != nil
     end
   end
 

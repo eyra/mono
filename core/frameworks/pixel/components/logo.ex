@@ -6,7 +6,7 @@ defmodule Frameworks.Pixel.Logo do
 
   Directory structure:
   - /images/logos/products/  - Eyra's own product family (Next, Eyra, Self, Yoda, ...)
-  - /images/logos/platforms/ - External third-party brands (Google, Apple, TikTok, SurfConext, ...)
+  - /images/logos/platforms/ - External third-party brands (Google, Apple, TikTok, Surfconext, ...)
   - /images/logos/pools/     - Participant pool brand marks (Panl, LISS Panel, ...) —
                                neither Eyra products nor external third parties.
                                Each pool ships two assets: `<slug>.svg` (icon-only

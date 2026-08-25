@@ -39,15 +39,24 @@ defmodule CoreWeb.Live.User.Routes do
         )
       end
 
-      scope "/auth", Systems.Account.MockAuth do
+      scope "/auth", Systems.Account do
         pipe_through([:browser])
-        get("/mock", InitiatorPlug, [])
-        get("/mock/callback", CallbackController, :authenticate)
+        post("/:idp/transfer/confirm", IdentityProviderTransferController, :confirm)
+        post("/:idp/transfer/decline", IdentityProviderTransferController, :decline)
+        live("/:idp/transfer", IdentityProviderTransferPage)
       end
 
-      scope "/user/auth", Systems.Account.MockAuth do
-        pipe_through([:browser])
-        get("/mock/reset", ResetController, :reset)
+      if Application.compile_env(:core, :enable_e2e_support, false) do
+        scope "/auth", Systems.Account.Identity.Mock do
+          pipe_through([:browser])
+          live("/mock", SigninPage)
+          get("/mock/callback", CallbackController, :authenticate)
+        end
+
+        scope "/user/auth", Systems.Account.Identity.Mock do
+          pipe_through([:browser])
+          get("/mock/reset", ResetController, :reset)
+        end
       end
 
       scope "/api/service", Systems.Account do

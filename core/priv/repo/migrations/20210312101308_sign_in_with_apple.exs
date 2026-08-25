@@ -1,4 +1,4 @@
-defmodule Link.Repo.Migrations.SignInWithApple do
+defmodule Link.Repo.Migrations.Systems.Account.Identity.Apple do
   use Ecto.Migration
 
   def change do

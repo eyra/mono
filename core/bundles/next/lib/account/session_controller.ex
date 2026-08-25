@@ -12,9 +12,11 @@ defmodule Next.Account.SessionController do
   plug(:setup_sign_in_with_apple, :core when action != :delete)
 
   defp setup_sign_in_with_apple(conn, otp_app) do
-    if feature_enabled?(:signin_with_apple) do
-      conf = Application.fetch_env!(otp_app, SignInWithApple)
-      SignInWithApple.Helpers.setup_session(conn, conf)
+    if feature_enabled?(:sign_in_with_apple) do
+      conf = Application.fetch_env!(otp_app, Systems.Account.Identity.Apple)
+      Systems.Account.Identity.Apple.Helpers.setup_session(conn, conf)
+    else
+      conn
     end
   end
 
@@ -91,8 +93,8 @@ defmodule Next.Account.SessionController do
          email,
          payload
        ) do
-    if EmailSignUp.provisional?(user) do
-      case EmailSignUp.link(user, email) do
+    if Systems.Account.Identity.Email.provisional?(user) do
+      case Systems.Account.Identity.Email.link(user, email) do
         {:ok, linked_user} ->
           conn
           |> stash_return_to(payload)

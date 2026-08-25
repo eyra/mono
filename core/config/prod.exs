@@ -7,7 +7,7 @@ config :logger, :default_handler, formatter: {LoggerJSON.Formatters.Basic, metad
 
 config :core, CoreWeb.Endpoint, cache_static_manifest: "priv/static/cache_manifest.json"
 
-config :core, SurfConext,
+config :core, Surfconext,
   site: "https://connect.test.surfconext.nl",
   client_id: System.get_env("SURFCONEXT_CLIENT_ID")
 

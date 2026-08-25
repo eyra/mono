@@ -21,7 +21,7 @@ defmodule Core.GreenLight.PrincipalTest do
       current_admins = Application.get_env(:core, :admins, [])
 
       on_exit(fn ->
-        Application.put_env(:core, Core.SurfConext, current_env)
+        Application.put_env(:core, Systems.Account.Identity.Surfconext, current_env)
         Application.put_env(:core, :admins, current_admins)
       end)
 

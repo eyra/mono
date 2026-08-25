@@ -6,7 +6,7 @@ defmodule Frameworks.UserCheckTest do
 
   describe "check_email/1 with MockClient" do
     test "returns valid result for normal email" do
-      assert {:ok, %ResultModel{disposable: false, mx: true, blocklisted: false}} =
+      assert {:ok, %ResultModel{disposable: false, mx_provider: nil, blocklisted: false}} =
                UserCheck.check_email("user@example.com")
     end
 
@@ -26,7 +26,7 @@ defmodule Frameworks.UserCheckTest do
     end
 
     test "detects invalid MX" do
-      assert {:ok, %ResultModel{mx: false}} =
+      assert {:ok, %ResultModel{raw: %{"mx" => false}}} =
                UserCheck.check_email("nomx@nonexistent.com")
     end
 

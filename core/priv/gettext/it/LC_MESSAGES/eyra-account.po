@@ -398,3 +398,11 @@ msgstr "Ti abbiamo inviato un codice"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr "Il fornitore di pagamenti non ha accettato questo numero di telefono. Controllalo e riprova."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr "Abbiamo rilevato che hai già un account con l'indirizzo email <strong>%{email}</strong>. Vuoi usare <strong>%{idp}</strong> per accedere d'ora in poi? Se confermi, non potrai più usare i metodi di accesso esistenti."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr "Trasferisci autenticazione"

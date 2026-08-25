@@ -11,9 +11,7 @@ defmodule Next.Account.AuthSignupPage do
 
   alias Frameworks.Pixel.Button
 
-  defp providers do
-    Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
-  end
+  defp providers, do: Systems.Account.AuthMethods.providers()
 
   @impl true
   def mount(%{"provider" => provider}, _session, socket) do
