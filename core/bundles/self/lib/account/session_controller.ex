@@ -7,15 +7,6 @@ defmodule Self.Account.SessionController do
 
   alias Systems.Account
 
-  plug(:setup_sign_in_with_apple, :core when action != :delete)
-
-  defp setup_sign_in_with_apple(conn, otp_app) do
-    if feature_enabled?(:signin_with_apple) do
-      conf = Application.fetch_env!(otp_app, SignInWithApple)
-      SignInWithApple.Helpers.setup_session(conn, conf)
-    end
-  end
-
   def new(conn, _params) do
     conn
     |> set_return_to()

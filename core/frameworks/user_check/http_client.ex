@@ -28,7 +28,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
         result = parse(body)
 
         Logger.info(
-          "[UserCheck] Result for #{email}: disposable=#{result.disposable}, mx=#{result.mx}, role=#{result.role_account}, blocklisted=#{result.blocklisted}"
+          "[UserCheck] Result for #{email}: mx_provider=#{result.mx_provider}, disposable=#{result.disposable}, role=#{result.role_account}, blocklisted=#{result.blocklisted}"
         )
 
         {:ok, result}
@@ -53,7 +53,11 @@ defmodule Frameworks.UserCheck.HTTPClient do
   defp to_result(json) do
     %ResultModel{
       disposable: Map.get(json, "disposable", false),
-      mx: Map.get(json, "mx", true),
+      mx_provider:
+        json
+        |> Map.get("mx_providers", [])
+        |> List.first()
+        |> then(&(&1 && &1["slug"])),
       blocklisted: Map.get(json, "blocklisted", false),
       role_account: Map.get(json, "role_account", false),
       public_domain: Map.get(json, "public_domain", false),

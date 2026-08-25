@@ -30,7 +30,7 @@ defmodule Frameworks.UserCheck.MockClient do
   end
 
   def check_email("nomx@" <> _) do
-    {:ok, %ResultModel{valid_result() | mx: false}}
+    {:ok, %ResultModel{valid_result() | raw: Map.put(valid_result().raw, "mx", false)}}
   end
 
   def check_email("spam@" <> _) do
@@ -43,6 +43,10 @@ defmodule Frameworks.UserCheck.MockClient do
 
   def check_email("public@gmail.com") do
     {:ok, %ResultModel{valid_result() | public_domain: true}}
+  end
+
+  def check_email("google@" <> _) do
+    {:ok, %ResultModel{valid_result() | mx_provider: "google"}}
   end
 
   def check_email("alias+tag@" <> _) do
@@ -60,7 +64,7 @@ defmodule Frameworks.UserCheck.MockClient do
   defp valid_result do
     %ResultModel{
       disposable: false,
-      mx: true,
+      mx_provider: nil,
       blocklisted: false,
       role_account: false,
       public_domain: false,

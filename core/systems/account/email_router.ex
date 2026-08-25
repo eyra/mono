@@ -1,28 +1,37 @@
 defmodule Systems.Account.EmailRouter do
-  @google_mx_regex ~r/\.google\.com\.?$/i
+  import Ecto.Query
+
+  alias Core.Repo
+  alias Systems.Account
+  alias Systems.Account.Auth.Methods
 
   def route(email) when is_binary(email) do
-    domain = domain_from(email)
-
-    cond do
-      surfconext_domain?(domain) -> :surfconext
-      google_workspace_domain?(domain) -> :google
-      true -> :otp
+    case Account.Public.get_user_by_email(email) do
+      nil -> route_unknown_email(email)
+      user -> identity_provider(user) || :otp
     end
   end
 
-  defp domain_from(email) do
-    email |> String.split("@") |> List.last() |> String.downcase()
+  defp route_unknown_email(email), do: organization_idp(email) || user_check_idp(email)
+
+  # ponytail: returns nil until Next Org domains gain an IdP property.
+  defp organization_idp(_email), do: nil
+
+  defp user_check_idp(email) do
+    case Frameworks.UserCheck.check_email(email) do
+      {:ok, result} ->
+        Methods.provider_for_mx_provider(result.mx_provider) || :otp
+
+      {:error, _reason} ->
+        :otp
+    end
   end
 
-  defp surfconext_domain?(domain) do
-    domain in Application.get_env(:core, :surfconext_domains, [])
-  end
-
-  defp google_workspace_domain?(domain) do
-    :inet_res.lookup(String.to_charlist(domain), :in, :mx)
-    |> Enum.any?(fn {_prio, host} -> Regex.match?(@google_mx_regex, to_string(host)) end)
-  rescue
-    _ -> false
+  defp identity_provider(user) do
+    Methods.satellite_providers()
+    |> Enum.find_value(fn provider ->
+      model = Methods.satellite(provider)
+      Repo.exists?(from(s in model, where: s.user_id == ^user.id)) && provider
+    end)
   end
 end

@@ -166,23 +166,16 @@ if config_env() == :prod do
   # SHARED CONFIGURATION
   # =============================================================================
 
-  config :core, GoogleSignIn,
+  config :core, Systems.Account.Auth.Google,
     redirect_uri: "#{base_url}/auth/google/callback",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
-  config :core, Core.SurfConext,
+  config :core, Systems.Account.Auth.Surfconext,
     redirect_uri: "#{base_url}/auth/surfconext/callback",
     base_url: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
-
-  config :core, SignInWithApple,
-    redirect_uri: "#{base_url}/apple/auth",
-    client_id: System.get_env("SIGN_IN_WITH_APPLE_CLIENT_ID"),
-    team_id: System.get_env("SIGN_IN_WITH_APPLE_TEAM_ID"),
-    private_key_id: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_ID"),
-    private_key_path: System.get_env("SIGN_IN_WITH_APPLE_PRIVATE_KEY_PATH")
 
   config :core, Core.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
@@ -274,9 +267,11 @@ if config_env() == :prod do
   end
 
   if deploy_env != :prod do
-    existing_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+    auth_methods =
+      Application.get_env(:core, :account, [])
+      |> Keyword.get(:auth_methods, %{})
+      |> Map.put(:mock, %{provider: true, satellite: false})
 
-    config :core, :account, auth_providers: existing_providers ++ [:mock]
+    config :core, :account, auth_methods: auth_methods
   end
 end

@@ -399,3 +399,11 @@ msgstr "We hebben je een code gestuurd"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr "De betaaldienst accepteert dit telefoonnummer niet. Controleer het nummer en probeer het opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr "We hebben vastgesteld dat u al een account hebt met e-mailadres <strong>%{email}</strong>. Wilt u voortaan <strong>%{idp}</strong> gebruiken om in te loggen? Als u bevestigt, kunt u bestaande inlogmethoden niet meer gebruiken."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr "Inlogmethode wijzigen"

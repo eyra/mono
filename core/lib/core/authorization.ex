@@ -32,6 +32,8 @@ defmodule Core.Authorization do
   grant_access(CoreWeb.FakeQualtrics, [:member])
   grant_access(Systems.Account.AwaitConfirmation, [:visitor])
   grant_access(Systems.Account.ConfirmToken, [:visitor])
+  grant_access(Systems.Account.Auth.IdentityProviderTransferPage, [:visitor])
+  grant_access(Systems.Account.Auth.Mock.SigninPage, [:visitor])
   grant_access(Systems.Account.ResetPassword, [:visitor])
   grant_access(Systems.Account.ResetPasswordToken, [:visitor])
   grant_access(Systems.Account.SignupPage, [:visitor])

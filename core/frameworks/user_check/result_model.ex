@@ -8,7 +8,7 @@ defmodule Frameworks.UserCheck.ResultModel do
 
   @type t :: %__MODULE__{
           disposable: boolean(),
-          mx: boolean(),
+          mx_provider: String.t() | nil,
           blocklisted: boolean(),
           role_account: boolean(),
           public_domain: boolean(),
@@ -20,7 +20,7 @@ defmodule Frameworks.UserCheck.ResultModel do
 
   defstruct [
     :disposable,
-    :mx,
+    :mx_provider,
     :blocklisted,
     :role_account,
     :public_domain,

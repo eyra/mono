@@ -399,3 +399,11 @@ msgstr "We've emailed you a code"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr "The payment provider didn't accept this phone number. Please check it and try again."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr "We detected you have an existing account with email address <strong>%{email}</strong>. Do you want to use <strong>%{idp}</strong> to sign in from now on? If you confirm, all existing sign in methods can no longer be used."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr "Transfer authentication"

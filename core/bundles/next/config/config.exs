@@ -15,7 +15,6 @@ config :core, Systems.Account.UserAuth,
 # On Fly/AWS, ENABLED_APP_FEATURES merges on top: listed flags become true,
 # unlisted flags keep their default from this config.
 config :core, :features,
-  sign_in_with_apple: false,
   surfconext_sign_in: false,
   member_google_sign_in: true,
   password_sign_in: true,
@@ -32,6 +31,11 @@ config :core, :meta,
   bundle_title: "Next",
   bundle: :next
 
-config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
+config :core, :account,
+  auth_methods: %{
+    surfconext: %{provider: true, satellite: true},
+    google: %{provider: true, satellite: true, mx_provider: "google"},
+    email: %{provider: false, satellite: true}
+  }
 
 config :core, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]
