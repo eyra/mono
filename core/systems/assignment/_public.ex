@@ -639,14 +639,14 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def decline_member(%Assignment.Model{crew: crew}, user) do
+  def expire_member(%Assignment.Model{crew: crew}, user) do
     if member = Crew.Public.get_member(crew, user) do
       Multi.new()
       |> Crew.Public.expire_member(member)
-      |> Signal.Public.multi_dispatch({:crew_member, :declined}, message: %{crew_member: member})
+      |> Signal.Public.multi_dispatch({:crew_member, :expired}, message: %{crew_member: member})
       |> Repo.commit()
     else
-      Logger.warning("Unable to decline member, probably expired already")
+      Logger.warning("Unable to expire member, probably expired already")
     end
   end
 
@@ -1047,7 +1047,7 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Marks a participation as rejected — the owner declined the contribution.
-  Sets `rejected_at` + `rejected_message`, rejects the associated reward
+  Sets `rejected_at` + `rejected_message` and rejects the associated reward
   (rolling the deposit back into the fund) if any, and dispatches
   `{:assignment_participation, :rejected}`. All in one transaction.
   Idempotent on `rejected_at`.

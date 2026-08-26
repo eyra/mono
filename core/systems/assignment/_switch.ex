@@ -108,6 +108,8 @@ defmodule Systems.Assignment.Switch do
       dispatch!({:fund_rewards_summary, :updated}, %{user_id: participation.user_id})
     end
 
+    Assignment.Public.expire_member(assignment, participation.user_id)
+
     notify_participant(:contribution_declined, %{participation | assignment: assignment})
 
     update_content_page(assignment, from_pid)
@@ -216,7 +218,8 @@ defmodule Systems.Assignment.Switch do
             crew_member
           )
 
-        {:crew_member, :declined} ->
+        {:crew_member, :expired} ->
+          # Keep the historical :declined metric key; changing it would split existing reporting.
           Assignment.Private.log_performance_event(assignment, :declined, crew_member)
 
           Assignment.Private.send_progress_event(

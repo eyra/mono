@@ -59,7 +59,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         Assignment.Factories.create_assignment_with_consent_and_affiliate(nil)
         |> Assignment.Factories.add_participant(user)
 
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
@@ -86,7 +86,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
@@ -148,7 +148,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       assigns = build_assigns(user, redirect_url)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
@@ -292,7 +292,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
         |> Assignment.Factories.add_participant(user)
 
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)

@@ -108,7 +108,7 @@ defmodule Systems.Assignment.CrewPage do
         %{name: :decline},
         %{assigns: %{model: model, current_user: user}} = socket
       ) do
-    Assignment.Public.decline_member(model, user)
+    Assignment.Public.expire_member(model, user)
     socket = store(socket, onboarding_identifier(socket), "{\"status\":\"consent declined\"}")
     {:stop, socket |> handle_action(:decline)}
   end
