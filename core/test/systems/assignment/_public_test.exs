@@ -3,6 +3,7 @@ defmodule Systems.Assignment.PublicTest do
   import Systems.NextAction.TestHelper
   import Systems.Fund.TestHelper
 
+  alias Systems.Account
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Fund
@@ -377,7 +378,7 @@ defmodule Systems.Assignment.PublicTest do
       assert %{expired: false} = Crew.Public.get_task!(task.id)
     end
 
-    test "decline_member/2 does expire member and tasks and updates metric" do
+    test "expire_member/2 does expire member and tasks and updates metric" do
       %{crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
       user = Factories.insert!(:member)
       member = Crew.Factories.create_member(crew, user)
@@ -388,7 +389,7 @@ defmodule Systems.Assignment.PublicTest do
       assert %{expired: false} = Crew.Public.get_task!(task.id)
       assert 0 = Monitor.Public.count(metric)
 
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       assert %{expired: true} = Crew.Public.get_member!(member.id)
       assert %{expired: true} = Crew.Public.get_task!(task.id)
@@ -807,6 +808,22 @@ defmodule Systems.Assignment.PublicTest do
 
       assert %{status: :rejected, deposit_id: nil} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
+    end
+
+    test "reopens the assignment spot", %{participation: participation} do
+      assignment = Assignment.Public.get!(participation.assignment_id, [:crew, :info])
+      user = Account.Public.get_user!(participation.user_id)
+      {:ok, _} = Assignment.Public.add_participant!(assignment, user)
+
+      assignment = Assignment.Public.get!(participation.assignment_id, [:crew, :info])
+      assert Assignment.Public.count_participants(assignment) == 1
+      refute Assignment.Public.has_open_spots?(assignment)
+
+      {:ok, _} = Assignment.Public.reject_participation(participation, "bad data")
+
+      assignment = Assignment.Public.get!(participation.assignment_id, [:crew, :info])
+      assert Assignment.Public.count_participants(assignment) == 0
+      assert Assignment.Public.has_open_spots?(assignment)
     end
 
     test "is idempotent — second call is a no-op", %{participation: participation} do

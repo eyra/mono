@@ -82,7 +82,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assert consent_view.implementation == Assignment.OnboardingConsentView
 
       # User declines - simulate round trip with action and vm.view from previous render
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
       assigns_with_action = build_assigns(user, %{view: consent_view, action: :decline})
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns_with_action)
 
@@ -94,7 +94,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assignment = Assignment.Factories.add_participant(assignment, user)
 
       # Decline consent
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
 
       # Simulate retry from finished view by including previous view in assigns
       previous_view = %{implementation: Assignment.FinishedView}
@@ -164,7 +164,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       %{view: consent_view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 
       # User declines - simulate round trip with action and vm.view from previous render
-      Assignment.Public.decline_member(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
       assigns_with_action = build_assigns(user, %{view: consent_view, action: :decline})
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns_with_action)
 

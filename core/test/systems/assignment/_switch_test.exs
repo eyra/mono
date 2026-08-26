@@ -39,7 +39,7 @@ defmodule Systems.Assignment.SwitchTest do
 
     test "crew_member declined", %{user: user, crew: crew, crew_member: crew_member} do
       message = %{crew: crew, crew_member: crew_member, from_pid: self()}
-      assert :ok = Switch.intercept({:crew, {:crew_member, :declined}}, message)
+      assert :ok = Switch.intercept({:crew, {:crew_member, :expired}}, message)
 
       assert %{monitor_event: {_, :declined, _}} =
                assert_signal_dispatched({:assignment, :monitor_event})
