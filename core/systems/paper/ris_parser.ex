@@ -92,9 +92,7 @@ defmodule Systems.Paper.RISParser do
 
     # Log warning if we hit the line limit
     if length(lines) >= @max_lines do
-      Logger.warning(
-        "RIS file exceeded maximum line limit of #{@max_lines}. File may be truncated."
-      )
+      Logger.warning("RIS file exceeded maximum line limit of #{@max_lines}. File may be truncated.")
     end
 
     lines
@@ -251,8 +249,7 @@ defmodule Systems.Paper.RISParser do
   defp validate_type_of_reference(_type) do
     supported_types = Enum.join(@supported_reference_types, ", ")
 
-    {:error,
-     dgettext("eyra-paper", "ris.error.unsupported_type", supported_types: supported_types)}
+    {:error, dgettext("eyra-paper", "ris.error.unsupported_type", supported_types: supported_types)}
   end
 
   defp parse_ris_line(line) do

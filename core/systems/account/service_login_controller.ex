@@ -19,8 +19,7 @@ defmodule Systems.Account.ServiceLoginController do
 
   Returns 200 with session cookie on success, 401/403 on failure.
   """
-  def create(conn, %{"email" => email, "password" => password})
-      when is_binary(email) and is_binary(password) do
+  def create(conn, %{"email" => email, "password" => password}) when is_binary(email) and is_binary(password) do
     with :ok <- verify_service_key(conn),
          :ok <- verify_service_domain(email) do
       authenticate(conn, email, password)

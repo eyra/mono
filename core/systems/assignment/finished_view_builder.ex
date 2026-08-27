@@ -175,8 +175,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   defp get_redirect_url(%{redirect_url: redirect_url}), do: redirect_url
   defp get_redirect_url(_), do: nil
 
-  defp build_title(true = _declined?),
-    do: dgettext("eyra-assignment", "finished_view.title.declined")
+  defp build_title(true = _declined?), do: dgettext("eyra-assignment", "finished_view.title.declined")
 
   defp build_title(false = _declined?), do: dgettext("eyra-assignment", "finished_view.title")
 
@@ -186,9 +185,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
     cond do
       declined? and has_redirect? and has_platform? ->
-        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform", platform: platform_name)
 
       declined? and has_redirect? ->
         dgettext("eyra-assignment", "finished_view.body.declined.redirect")
@@ -197,9 +194,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
         dgettext("eyra-assignment", "finished_view.body.declined")
 
       has_redirect? and has_platform? ->
-        dgettext("eyra-assignment", "finished_view.body.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.redirect.platform", platform: platform_name)
 
       has_redirect? ->
         dgettext("eyra-assignment", "finished_view.body.redirect")
@@ -209,8 +204,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     end
   end
 
-  defp build_illustration(false = _declined?, nil = _redirect_url),
-    do: "/images/illustrations/finished.svg"
+  defp build_illustration(false = _declined?, nil = _redirect_url), do: "/images/illustrations/finished.svg"
 
   defp build_illustration(_declined?, _redirect_url), do: nil
 

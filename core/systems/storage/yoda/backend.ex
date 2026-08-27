@@ -34,8 +34,7 @@ defmodule Systems.Storage.Yoda.Backend do
   @impl true
   def connected?(%{user: user, password: _, url: _}) when user == nil or user == "", do: false
 
-  def connected?(%{user: _, password: password, url: _}) when password == nil or password == "",
-    do: false
+  def connected?(%{user: _, password: password, url: _}) when password == nil or password == "", do: false
 
   def connected?(%{user: _, password: _, url: url}) when url == nil or url == "", do: false
 

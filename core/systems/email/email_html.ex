@@ -27,11 +27,9 @@ defmodule Systems.Email.EmailHTML do
   def account_created("html", assigns), do: assigns |> account_created_html() |> to_binary()
   def account_created("text", assigns), do: assigns |> account_created_text() |> to_binary()
 
-  def already_activated_notification("html", assigns),
-    do: assigns |> already_activated_notification_html() |> to_binary()
+  def already_activated_notification("html", assigns), do: assigns |> already_activated_notification_html() |> to_binary()
 
-  def already_activated_notification("text", assigns),
-    do: assigns |> already_activated_notification_text() |> to_binary()
+  def already_activated_notification("text", assigns), do: assigns |> already_activated_notification_text() |> to_binary()
 
   def debug_message("html", assigns), do: assigns |> debug_message_html() |> to_binary()
   def debug_message("text", assigns), do: assigns |> debug_message_text() |> to_binary()
@@ -39,27 +37,19 @@ defmodule Systems.Email.EmailHTML do
   def notification("html", assigns), do: assigns |> notification_html() |> to_binary()
   def notification("text", assigns), do: assigns |> notification_text() |> to_binary()
 
-  def reset_password_instructions("html", assigns),
-    do: assigns |> reset_password_instructions_html() |> to_binary()
+  def reset_password_instructions("html", assigns), do: assigns |> reset_password_instructions_html() |> to_binary()
 
-  def reset_password_instructions("text", assigns),
-    do: assigns |> reset_password_instructions_text() |> to_binary()
+  def reset_password_instructions("text", assigns), do: assigns |> reset_password_instructions_text() |> to_binary()
 
-  def update_email_instructions("html", assigns),
-    do: assigns |> update_email_instructions_html() |> to_binary()
+  def update_email_instructions("html", assigns), do: assigns |> update_email_instructions_html() |> to_binary()
 
-  def update_email_instructions("text", assigns),
-    do: assigns |> update_email_instructions_text() |> to_binary()
+  def update_email_instructions("text", assigns), do: assigns |> update_email_instructions_text() |> to_binary()
 
-  def contribution_accepted("html", assigns),
-    do: assigns |> contribution_accepted_html() |> to_binary()
+  def contribution_accepted("html", assigns), do: assigns |> contribution_accepted_html() |> to_binary()
 
-  def contribution_accepted("text", assigns),
-    do: assigns |> contribution_accepted_text() |> to_binary()
+  def contribution_accepted("text", assigns), do: assigns |> contribution_accepted_text() |> to_binary()
 
-  def contribution_declined("html", assigns),
-    do: assigns |> contribution_declined_html() |> to_binary()
+  def contribution_declined("html", assigns), do: assigns |> contribution_declined_html() |> to_binary()
 
-  def contribution_declined("text", assigns),
-    do: assigns |> contribution_declined_text() |> to_binary()
+  def contribution_declined("text", assigns), do: assigns |> contribution_declined_text() |> to_binary()
 end

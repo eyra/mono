@@ -47,9 +47,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
     assign(socket, scores: [])
   end
 
-  defp update_scores(
-         %{assigns: %{active_metric: active_metric, metric_scores: metric_scores}} = socket
-       ) do
+  defp update_scores(%{assigns: %{active_metric: active_metric, metric_scores: metric_scores}} = socket) do
     assign(socket, scores: Map.get(metric_scores, active_metric, []))
   end
 
@@ -62,11 +60,7 @@ defmodule Systems.Graphite.LeaderboardTableView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_id",
-        %{active_item_id: active_item_id, source: %{name: :metric_selector}},
-        socket
-      ) do
+  def handle_event("active_item_id", %{active_item_id: active_item_id, source: %{name: :metric_selector}}, socket) do
     {
       :noreply,
       socket

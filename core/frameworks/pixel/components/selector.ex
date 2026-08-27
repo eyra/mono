@@ -20,8 +20,7 @@ defmodule Frameworks.Pixel.Selector do
   defp grid_options(:radio, _), do: "flex flex-col gap-3"
   defp grid_options(:checkbox, _), do: "flex flex-row flex-wrap gap-x-8 gap-y-3 items-center"
 
-  defp grid_options(:segmented, _),
-    do: "flex flex-row flex-wrap gap-0 items-center rounded-full overflow-hidden"
+  defp grid_options(:segmented, _), do: "flex flex-row flex-wrap gap-0 items-center rounded-full overflow-hidden"
 
   defp grid_options(_, _), do: "flex flex-row flex-wrap gap-3 items-center"
 
@@ -69,10 +68,7 @@ defmodule Frameworks.Pixel.Selector do
     {:noreply, send_to_parent(socket, active_item_ids)}
   end
 
-  defp send_to_parent(
-         %{assigns: %{type: type, current_items: current_items}} = socket,
-         active_item_ids
-       ) do
+  defp send_to_parent(%{assigns: %{type: type, current_items: current_items}} = socket, active_item_ids) do
     if multiselect?(type) do
       emit_to_parent(
         socket,
@@ -112,8 +108,7 @@ defmodule Frameworks.Pixel.Selector do
     assign(socket, current_items: items)
   end
 
-  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id)
-       when is_atom(item_id) do
+  defp toggle(%{assigns: %{items: items, type: type, optional?: optional?}}, item, item_id) when is_atom(item_id) do
     multiselect? = multiselect?(type)
     active_count = active_count(items)
 

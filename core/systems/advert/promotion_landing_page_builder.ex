@@ -77,11 +77,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
         %{
           assigns: %{
             current_user: current_user,
-            vm: %{
-              call_to_action: %{
-                advert: %{assignment: %{id: id}, promotion: promotion, submission: %{pool: pool}}
-              }
-            }
+            vm: %{call_to_action: %{advert: %{assignment: %{id: id}, promotion: promotion, submission: %{pool: pool}}}}
           }
         } = socket
       ) do

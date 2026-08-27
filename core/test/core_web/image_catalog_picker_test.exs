@@ -53,9 +53,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker.Test do
     conn = Phoenix.ConnTest.build_conn(:get, "/", nil)
 
     {:ok, view, html} =
-      live_isolated(conn, Frameworks.Pixel.ImageCatalogPicker.Test.View,
-        connect_params: %{testing: 1124}
-      )
+      live_isolated(conn, Frameworks.Pixel.ImageCatalogPicker.Test.View, connect_params: %{testing: 1124})
 
     {:ok, [view: view, html: html]}
   end

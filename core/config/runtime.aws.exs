@@ -79,8 +79,7 @@ if config_env() == :prod do
           "data_donation_cleanup" ->
             {Cron,
              crontab: [
-               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
-                queue: storage_delivery_queue}
+               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker, queue: storage_delivery_queue}
              ]}
 
           "payment_reconciliation" ->
@@ -286,22 +285,17 @@ if config_env() == :prod do
   # Default retention is 2 weeks (336 hours), configurable via FELDSPAR_DATA_DONATION_RETENTION
   config :core, :feldspar_data_donation,
     path: System.fetch_env!("FELDSPAR_DATA_DONATION_PATH"),
-    retention_hours:
-      "FELDSPAR_DATA_DONATION_RETENTION" |> System.get_env("336") |> String.to_integer()
+    retention_hours: "FELDSPAR_DATA_DONATION_RETENTION" |> System.get_env("336") |> String.to_integer()
 
   config :core, :paper,
-    import_batch_size:
-      "PAPER_RIS_IMPORT_BATCH_SIZE" |> System.get_env("100") |> String.to_integer(),
-    import_batch_timeout:
-      "PAPER_RIS_IMPORT_BATCH_TIMEOUT" |> System.get_env("30000") |> String.to_integer(),
+    import_batch_size: "PAPER_RIS_IMPORT_BATCH_SIZE" |> System.get_env("100") |> String.to_integer(),
+    import_batch_timeout: "PAPER_RIS_IMPORT_BATCH_TIMEOUT" |> System.get_env("30000") |> String.to_integer(),
     # Maximum allowed RIS file size (default 150MB, supports ~100,000 paper references)
-    ris_max_file_size:
-      "PAPER_RIS_MAX_FILE_SIZE" |> System.get_env("157286400") |> String.to_integer(),
+    ris_max_file_size: "PAPER_RIS_MAX_FILE_SIZE" |> System.get_env("157286400") |> String.to_integer(),
     # Chunk size for streaming RIS files (default 64KB)
     # Smaller chunks (8KB-32KB): Better for unreliable networks, lower memory usage
     # Larger chunks (128KB-1MB): Better for fast networks, reduces overhead for large files
-    ris_stream_chunk_size:
-      "PAPER_RIS_STREAM_CHUNK_SIZE" |> System.get_env("65536") |> String.to_integer()
+    ris_stream_chunk_size: "PAPER_RIS_STREAM_CHUNK_SIZE" |> System.get_env("65536") |> String.to_integer()
 
   config :core,
     auto_approve_timeout: "AUTO_APPROVE_TIMEOUT" |> System.get_env("14") |> String.to_integer()

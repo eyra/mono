@@ -17,8 +17,7 @@ defmodule Frameworks.Pixel.Tabbed do
 
   defp shape(%{size: :wide, type: :segmented}), do: "rounded-full overflow-hidden h-10 bg-grey5"
 
-  defp shape(%{size: :full, type: :segmented}),
-    do: "rounded-full overflow-hidden h-10 w-full bg-grey5"
+  defp shape(%{size: :full, type: :segmented}), do: "rounded-full overflow-hidden h-10 w-full bg-grey5"
 
   defp shape(%{size: :narrow}), do: "w-full"
   defp shape(_), do: ""

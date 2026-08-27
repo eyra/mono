@@ -1,7 +1,6 @@
 defmodule Next.Account.SessionController do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   use Gettext, backend: CoreWeb.Gettext
 
@@ -86,11 +85,7 @@ defmodule Next.Account.SessionController do
   # email — link the real email to *that* user instead. Without this,
   # completing auth from the finished-page "Join Panl" CTA would leave the
   # synth affiliate record behind and mint a new duplicate user.
-  defp handle_new_email_redeem(
-         %{assigns: %{current_user: %Account.User{} = user}} = conn,
-         email,
-         payload
-       ) do
+  defp handle_new_email_redeem(%{assigns: %{current_user: %Account.User{} = user}} = conn, email, payload) do
     if EmailSignUp.provisional?(user) do
       case EmailSignUp.link(user, email) do
         {:ok, linked_user} ->
@@ -106,8 +101,7 @@ defmodule Next.Account.SessionController do
     end
   end
 
-  defp handle_new_email_redeem(conn, email, payload),
-    do: register_new_email_user(conn, email, payload)
+  defp handle_new_email_redeem(conn, email, payload), do: register_new_email_user(conn, email, payload)
 
   defp register_new_email_user(conn, email, payload) do
     case Account.Public.register_user_with_email(email) do
@@ -127,8 +121,7 @@ defmodule Next.Account.SessionController do
   # `redirect_path_after_signin/2`) before renewing the session, so
   # placing it here honours the caller's intent for both new users
   # (falls back to onboarding) and existing users (honoured).
-  defp stash_return_to(conn, %{return_to: "/" <> _rest = path}),
-    do: put_session(conn, :user_return_to, path)
+  defp stash_return_to(conn, %{return_to: "/" <> _rest = path}), do: put_session(conn, :user_return_to, path)
 
   defp stash_return_to(conn, _payload), do: conn
 

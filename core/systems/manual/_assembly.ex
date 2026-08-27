@@ -39,11 +39,7 @@ defmodule Systems.Manual.Assembly do
     |> put_assoc(:userflow, chapter_userflow)
   end
 
-  def prepare_page(
-        %Manual.ChapterModel{} = chapter,
-        %Userflow.StepModel{} = chapter_userflow_step,
-        title
-      ) do
+  def prepare_page(%Manual.ChapterModel{} = chapter, %Userflow.StepModel{} = chapter_userflow_step, title) do
     %Manual.PageModel{}
     |> Manual.PageModel.changeset(%{title: title})
     |> put_assoc(:chapter, chapter)
@@ -127,10 +123,7 @@ defmodule Systems.Manual.Assembly do
     end)
   end
 
-  def create_next_page(
-        %Multi{} = multi,
-        %Manual.ChapterModel{userflow: chapter_userflow} = chapter
-      ) do
+  def create_next_page(%Multi{} = multi, %Manual.ChapterModel{userflow: chapter_userflow} = chapter) do
     page_title = dgettext("eyra-manual", "page.title.default")
 
     multi

@@ -96,11 +96,7 @@ defmodule Systems.Fund.BankAccountForm do
     {:noreply, send_event(socket, :parent, "cancelled")}
   end
 
-  defp change(
-         %{assigns: %{bank_account: bank_account, validate_changeset?: validate_changeset?}} =
-           socket,
-         attrs
-       ) do
+  defp change(%{assigns: %{bank_account: bank_account, validate_changeset?: validate_changeset?}} = socket, attrs) do
     apply_change(
       socket,
       bank_account |> Model.change(attrs) |> Model.validate(validate_changeset?)

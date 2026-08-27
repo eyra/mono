@@ -56,20 +56,12 @@ defmodule Frameworks.Pixel.DropdownSelector do
     }
   end
 
-  defp validate_selection(
-         %{assigns: %{selected_option: nil, selected_option_index: nil}} = socket
-       ) do
+  defp validate_selection(%{assigns: %{selected_option: nil, selected_option_index: nil}} = socket) do
     socket
   end
 
   defp validate_selection(
-         %{
-           assigns: %{
-             options: options,
-             selected_option_index: selected_option_index,
-             selected_option: nil
-           }
-         } = socket
+         %{assigns: %{options: options, selected_option_index: selected_option_index, selected_option: nil}} = socket
        ) do
     case Enum.at(options, selected_option_index) do
       nil ->
@@ -81,13 +73,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
   end
 
   defp validate_selection(
-         %{
-           assigns: %{
-             options: options,
-             selected_option: %{id: selected_option_id},
-             selected_option_index: nil
-           }
-         } = socket
+         %{assigns: %{options: options, selected_option: %{id: selected_option_id}, selected_option_index: nil}} = socket
        ) do
     selected_option_index = Enum.find_index(options, &(&1.id == selected_option_id))
 
@@ -108,9 +94,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
     assign(socket, selector_text: "-")
   end
 
-  defp update_selector_text(
-         %{assigns: %{options: options, selected_option_index: selected_option_index}} = socket
-       ) do
+  defp update_selector_text(%{assigns: %{options: options, selected_option_index: selected_option_index}} = socket) do
     selector_text =
       options
       |> Enum.at(selected_option_index)
@@ -133,11 +117,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
   end
 
   @impl true
-  def handle_event(
-        "option_click",
-        %{"item" => selected_item},
-        %{assigns: %{options: options}} = socket
-      ) do
+  def handle_event("option_click", %{"item" => selected_item}, %{assigns: %{options: options}} = socket) do
     selected_option_index = String.to_integer(selected_item)
 
     selected_option = Enum.at(options, selected_option_index)

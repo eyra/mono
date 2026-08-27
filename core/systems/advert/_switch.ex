@@ -52,12 +52,7 @@ defmodule Systems.Advert.Switch do
 
   defp handle({:advert, _}, %{
          advert:
-           %Advert.Model{
-             id: id,
-             promotion_id: promotion_id,
-             promotion: promotion,
-             assignment_id: assignment_id
-           } = advert,
+           %Advert.Model{id: id, promotion_id: promotion_id, promotion: promotion, assignment_id: assignment_id} = advert,
          from_pid: from_pid
        }) do
     update(Promotion.LandingPage, promotion_id, promotion, from_pid)

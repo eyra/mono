@@ -61,11 +61,7 @@ defmodule Systems.Advert.ListView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :advert_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :advert_filters}}, socket) do
     {
       :noreply,
       socket

@@ -151,18 +151,14 @@ defmodule Core.Authorization do
     end
   end
 
-  def copy(%Core.Authorization.Node{role_assignments: role_assignments})
-      when is_list(role_assignments) do
+  def copy(%Core.Authorization.Node{role_assignments: role_assignments}) when is_list(role_assignments) do
     auth_node = create_node!()
 
     Enum.each(role_assignments, &copy_role(&1, auth_node))
     auth_node
   end
 
-  def copy(
-        %Core.Authorization.Node{role_assignments: role_assignments},
-        %Core.Authorization.Node{} = new_parent
-      )
+  def copy(%Core.Authorization.Node{role_assignments: role_assignments}, %Core.Authorization.Node{} = new_parent)
       when is_list(role_assignments) do
     auth_node = create_node!(new_parent)
 
@@ -198,9 +194,7 @@ defmodule Core.Authorization do
       where(Core.Authorization.Node, [n], n.id == ^GreenLight.AuthorizationNode.id(entity))
 
     recursion_query =
-      join(Core.Authorization.Node, :inner, [n], nt in "auth_node_parents",
-        on: n.id == nt.parent_id
-      )
+      join(Core.Authorization.Node, :inner, [n], nt in "auth_node_parents", on: n.id == nt.parent_id)
 
     parents_query = union_all(initial_query, ^recursion_query)
 
@@ -304,9 +298,7 @@ defmodule Core.Authorization do
         select: ra.principal_id
       )
 
-    Repo.all(
-      from(u in User, where: u.id in subquery(principal_ids), preload: ^preload, order_by: u.id)
-    )
+    Repo.all(from(u in User, where: u.id in subquery(principal_ids), preload: ^preload, order_by: u.id))
   end
 
   def user_has_role?(%{id: user_id}, entity, role) do
@@ -331,10 +323,7 @@ defmodule Core.Authorization do
     |> link({parent, t})
   end
 
-  def link(
-        multi,
-        {%Core.Authorization.Node{} = parent, {%Core.Authorization.Node{} = child, subtree}}
-      ) do
+  def link(multi, {%Core.Authorization.Node{} = parent, {%Core.Authorization.Node{} = child, subtree}}) do
     multi
     |> link({parent, child})
     |> link({child, subtree})
@@ -374,9 +363,7 @@ defmodule Core.Authorization do
   end
 
   def print_roles(node_id) when is_integer(node_id) do
-    Logger.notice(
-      "------------------------------------------------------------------------------------------"
-    )
+    Logger.notice("------------------------------------------------------------------------------------------")
 
     node_id
     |> get_parent_nodes()
@@ -398,9 +385,7 @@ defmodule Core.Authorization do
       end
     end)
 
-    Logger.notice(
-      "------------------------------------------------------------------------------------------"
-    )
+    Logger.notice("------------------------------------------------------------------------------------------")
   end
 
   @entities [

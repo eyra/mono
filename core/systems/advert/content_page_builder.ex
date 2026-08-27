@@ -10,10 +10,7 @@ defmodule Systems.Advert.ContentPageBuilder do
   alias Systems.Monitor
   alias Systems.Pool
 
-  def view_model(
-        %{id: advert_id, submission: submission, promotion: promotion} = advert,
-        %{branch: branch} = assigns
-      ) do
+  def view_model(%{id: advert_id, submission: submission, promotion: promotion} = advert, %{branch: branch} = assigns) do
     submitted? = Pool.SubmissionModel.submitted?(submission)
     show_errors = submitted?
 
@@ -67,10 +64,7 @@ defmodule Systems.Advert.ContentPageBuilder do
     }
   end
 
-  defp create_tab(:pool, %Advert.Model{submission: _} = advert, show_errors, %{
-         fabric: fabric,
-         current_user: user
-       }) do
+  defp create_tab(:pool, %Advert.Model{submission: _} = advert, show_errors, %{fabric: fabric, current_user: user}) do
     child =
       Fabric.prepare_child(fabric, :submission_form, Advert.SubmissionView, %{
         vm: Advert.SubmissionViewBuilder.view_model(advert, %{current_user: user})
@@ -219,13 +213,11 @@ defmodule Systems.Advert.ContentPageBuilder do
 
   defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
 
-  defp actions(%{status: :offline}, %{publish: publish, close: close}),
-    do: [publish: publish, close: close]
+  defp actions(%{status: :offline}, %{publish: publish, close: close}), do: [publish: publish, close: close]
 
   defp actions(%{status: :idle}, %{open: open}), do: [open: open]
 
-  defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
-    do: [publish: publish, preview: preview]
+  defp actions(%{status: _concept}, %{publish: publish, preview: preview}), do: [publish: publish, preview: preview]
 
   @impl true
   def set_status(%{assigns: %{model: advert}} = socket, status) do

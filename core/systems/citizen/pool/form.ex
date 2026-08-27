@@ -140,11 +140,7 @@ defmodule Systems.Citizen.Pool.Form do
   end
 
   @impl true
-  def handle_event(
-        "dropdown_selected",
-        %{option: %{id: id}},
-        %{assigns: %{currencies: currencies}} = socket
-      ) do
+  def handle_event("dropdown_selected", %{option: %{id: id}}, %{assigns: %{currencies: currencies}} = socket) do
     selected_currency = Enum.find(currencies, &(&1.id == id))
     {:noreply, assign(socket, selected_currency: selected_currency)}
   end
@@ -162,10 +158,7 @@ defmodule Systems.Citizen.Pool.Form do
     )
   end
 
-  defp handle_submit(
-         %{assigns: %{pool: pool, user: user, selected_currency: selected_currency}} = socket,
-         attrs
-       ) do
+  defp handle_submit(%{assigns: %{pool: pool, user: user, selected_currency: selected_currency}} = socket, attrs) do
     # Create modus
     apply_submit(
       socket,

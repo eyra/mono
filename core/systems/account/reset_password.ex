@@ -51,8 +51,7 @@ defmodule Systems.Account.ResetPassword do
         }
 
       changeset ->
-        {:noreply,
-         socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
+        {:noreply, socket |> assign(changeset: changeset) |> put_flash(:error, "Invalid email address")}
     end
   end
 

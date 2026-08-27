@@ -26,10 +26,7 @@ defmodule Systems.Graphite.ToolViewBuilder do
     }
   end
 
-  defp build_leaderboard_button(
-         %{leaderboard: %{status: :online, id: leaderboard_id}},
-         false = _open_for_submissions?
-       ) do
+  defp build_leaderboard_button(%{leaderboard: %{status: :online, id: leaderboard_id}}, false = _open_for_submissions?) do
     %{
       action: %{
         type: :http_get,

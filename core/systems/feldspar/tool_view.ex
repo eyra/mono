@@ -8,8 +8,7 @@ defmodule Systems.Feldspar.ToolView do
 
   require Logger
 
-  def dependencies,
-    do: [:title, :icon, :tool_ref, :assignment_id, :participant, :workflow_item_id]
+  def dependencies, do: [:title, :icon, :tool_ref, :assignment_id, :participant, :workflow_item_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     Workflow.ToolRefModel.tool(tool_ref)
@@ -21,8 +20,7 @@ defmodule Systems.Feldspar.ToolView do
   end
 
   @impl true
-  def handle_view_model_updated(%{assigns: %{vm: %{error: error}}} = socket)
-      when not is_nil(error) do
+  def handle_view_model_updated(%{assigns: %{vm: %{error: error}}} = socket) when not is_nil(error) do
     Flash.put_error(socket, error)
   end
 
@@ -35,8 +33,7 @@ defmodule Systems.Feldspar.ToolView do
     {:noreply, assign(socket, started: true)}
   end
 
-  def handle_event("start", _, %{assigns: %{vm: %{error: error}}} = socket)
-      when not is_nil(error) do
+  def handle_event("start", _, %{assigns: %{vm: %{error: error}}} = socket) when not is_nil(error) do
     {:noreply, Flash.push_error(socket, error)}
   end
 
@@ -63,11 +60,7 @@ defmodule Systems.Feldspar.ToolView do
     {:noreply, handle_feldspar_event(socket, event)}
   end
 
-  defp handle_feldspar_event(socket, %{
-         "__type__" => "CommandSystemExit",
-         "code" => code,
-         "info" => info
-       }) do
+  defp handle_feldspar_event(socket, %{"__type__" => "CommandSystemExit", "code" => code, "info" => info}) do
     if code == 0 do
       publish_event(socket, :tool_completed)
     else
@@ -78,10 +71,7 @@ defmodule Systems.Feldspar.ToolView do
     end
   end
 
-  defp handle_feldspar_event(socket, %{
-         "__type__" => "CommandSystemEvent",
-         "name" => "initialized"
-       }) do
+  defp handle_feldspar_event(socket, %{"__type__" => "CommandSystemEvent", "name" => "initialized"}) do
     socket
     |> assign(initialized: true, loading: false)
     |> update_view_model()

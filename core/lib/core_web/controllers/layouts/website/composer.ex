@@ -4,8 +4,7 @@ defmodule CoreWeb.Layouts.Website.Composer do
     quote do
       import CoreWeb.Layouts.Website.Html
 
-      def get_menus_config,
-        do: {:website_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_navbar]}
+      def get_menus_config, do: {:website_menu_builder, [:mobile_menu, :mobile_navbar, :desktop_navbar]}
 
       on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
       on_mount({CoreWeb.Live.Hook.User, __MODULE__})

@@ -158,11 +158,7 @@ defmodule Systems.Home.RewardsSummaryView do
   # resumes it directly. request_payout resumes an unresolved payout rather than
   # starting a new one, so the currency only satisfies the signature here.
   @impl true
-  def handle_event(
-        "retry_payout",
-        _params,
-        %{assigns: %{user: user, payout_currency: payout_currency}} = socket
-      ) do
+  def handle_event("retry_payout", _params, %{assigns: %{user: user, payout_currency: payout_currency}} = socket) do
     case Fund.Public.request_payout(user, payout_currency) do
       {:ok, _result} ->
         send(self(), :payout_completed)
@@ -196,14 +192,7 @@ defmodule Systems.Home.RewardsSummaryView do
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
-        %{
-          assigns: %{
-            handoff_mode: :donate,
-            donate_enabled?: true,
-            user: user,
-            payout_currency: payout_currency
-          }
-        } = socket
+        %{assigns: %{handoff_mode: :donate, donate_enabled?: true, user: user, payout_currency: payout_currency}} = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
     {:noreply, flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))}
@@ -212,11 +201,7 @@ defmodule Systems.Home.RewardsSummaryView do
   # Awaiting-verification info modal: "OK" only dismisses; the participant
   # can't do anything but wait for the provider's review to complete.
   @impl true
-  def handle_event(
-        "confirmed",
-        %{source: %{name: :handoff_modal}},
-        %{assigns: %{handoff_mode: :awaiting}} = socket
-      ) do
+  def handle_event("confirmed", %{source: %{name: :handoff_modal}}, %{assigns: %{handoff_mode: :awaiting}} = socket) do
     {:noreply, hide_modal(socket, :handoff_modal)}
   end
 
@@ -230,8 +215,7 @@ defmodule Systems.Home.RewardsSummaryView do
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
-        %{assigns: %{handoff_mode: :payout, user: user, payout_currency: payout_currency}} =
-          socket
+        %{assigns: %{handoff_mode: :payout, user: user, payout_currency: payout_currency}} = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
 
@@ -261,11 +245,8 @@ defmodule Systems.Home.RewardsSummaryView do
   @impl true
   def handle_modal_closed(socket, :handoff_modal), do: socket
 
-  defp handle_payout_error(
-         %{assigns: %{labels: labels}} = socket,
-         {:error, {:below_threshold, _cents}}
-       ),
-       do: Flash.push_error(socket, labels.payout_below_threshold)
+  defp handle_payout_error(%{assigns: %{labels: labels}} = socket, {:error, {:below_threshold, _cents}}),
+    do: Flash.push_error(socket, labels.payout_below_threshold)
 
   defp handle_payout_error(socket, {:error, _reason}), do: present_handoff(socket, :verify)
 
@@ -275,11 +256,8 @@ defmodule Systems.Home.RewardsSummaryView do
   # The charge may well have gone through: the rewards stay :donating and the
   # card already says so, so telling the participant to try again would be both
   # wrong and impossible (their approved balance is now zero).
-  defp flash_donation_result(
-         %{assigns: %{labels: labels}} = socket,
-         {:error, {:opp_uncertain, _}}
-       ),
-       do: Flash.push_info(socket, labels.donate_pending)
+  defp flash_donation_result(%{assigns: %{labels: labels}} = socket, {:error, {:opp_uncertain, _}}),
+    do: Flash.push_info(socket, labels.donate_pending)
 
   defp flash_donation_result(%{assigns: %{labels: labels}} = socket, error) do
     Logger.warning("[RewardsSummaryView] donation failed: #{inspect(error)}")

@@ -68,8 +68,7 @@ defmodule Systems.Crew.Public do
     |> Repo.insert()
   end
 
-  def create_task(crew, user, [_ | _] = identifier, expire_at),
-    do: create_task(crew, [user], identifier, expire_at)
+  def create_task(crew, user, [_ | _] = identifier, expire_at), do: create_task(crew, [user], identifier, expire_at)
 
   def create_task!(crew, users, identifier, expire_at \\ nil)
 
@@ -291,12 +290,7 @@ defmodule Systems.Crew.Public do
     end
   end
 
-  def apply_member_with_role(
-        %Crew.Model{} = crew,
-        %User{} = user,
-        role \\ :participant,
-        expire_at \\ nil
-      ) do
+  def apply_member_with_role(%Crew.Model{} = crew, %User{} = user, role \\ :participant, expire_at \\ nil) do
     if member = get_expired_member(crew, user, [:crew]) do
       member = reset_member!(member, expire_at, dispatch: true)
       {:ok, %{member: member}}
@@ -407,12 +401,7 @@ defmodule Systems.Crew.Public do
     |> Repo.commit()
   end
 
-  def reset_member(
-        %Multi{} = multi,
-        %Crew.MemberModel{crew: %NotLoaded{}} = member,
-        expire_at,
-        opts
-      ) do
+  def reset_member(%Multi{} = multi, %Crew.MemberModel{crew: %NotLoaded{}} = member, expire_at, opts) do
     reset_member(multi, Repo.preload(member, [:crew]), expire_at, opts)
   end
 
@@ -453,9 +442,7 @@ defmodule Systems.Crew.Public do
   end
 
   def subject(crew, public_id) when is_integer(public_id) do
-    Repo.one(
-      from(m in Crew.MemberModel, where: m.crew_id == ^crew.id and m.public_id == ^public_id)
-    )
+    Repo.one(from(m in Crew.MemberModel, where: m.crew_id == ^crew.id and m.public_id == ^public_id))
   end
 
   @doc """

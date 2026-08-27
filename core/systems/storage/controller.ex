@@ -1,7 +1,6 @@
 defmodule Systems.Storage.Controller do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Concept
@@ -23,11 +22,7 @@ defmodule Systems.Storage.Controller do
     end
   end
 
-  def export(
-        %{remote_ip: remote_ip} = conn,
-        %Storage.BuiltIn.EndpointModel{} = builtin,
-        branch_name
-      ) do
+  def export(%{remote_ip: remote_ip} = conn, %Storage.BuiltIn.EndpointModel{} = builtin, branch_name) do
     date = Timestamp.format_date_short!(Timestamp.now())
 
     export_name =

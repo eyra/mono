@@ -23,16 +23,13 @@ defmodule Systems.Assignment.CrewTaskListView do
   end
 
   @impl true
-  def handle_view_model_updated(
-        %{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket
-      )
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: %{id: id}}, tool_modal: %{id: current_id}}} = socket)
       when id == current_id do
     # Same modal already presented, do nothing
     socket
   end
 
-  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
-      when not is_nil(tool_modal) do
+  def handle_view_model_updated(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket) when not is_nil(tool_modal) do
     socket
     |> assign(tool_modal: tool_modal)
     |> present_modal(tool_modal)
@@ -43,9 +40,7 @@ defmodule Systems.Assignment.CrewTaskListView do
   # Behaviours
 
   @impl true
-  def handle_tool_completed(
-        %{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket
-      )
+  def handle_tool_completed(%{assigns: %{tool_modal: tool_modal, vm: %{work_item: {_, task}}}} = socket)
       when not is_nil(tool_modal) do
     # First hide the modal, then complete task (which triggers signals that may kill this process)
     socket
@@ -102,8 +97,7 @@ defmodule Systems.Assignment.CrewTaskListView do
     publish_event(socket, :task_completed)
   end
 
-  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
-       when not is_nil(tool_modal) do
+  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket) when not is_nil(tool_modal) do
     socket
     |> hide_modal(tool_modal)
     |> assign(tool_modal: nil)

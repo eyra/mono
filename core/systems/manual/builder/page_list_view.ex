@@ -57,9 +57,7 @@ defmodule Systems.Manual.Builder.PageListView do
     assign(socket, selected_page_id: page.id)
   end
 
-  def update_selected_page_id(
-        %{assigns: %{pages: pages, selected_page_id: selected_page_id}} = socket
-      ) do
+  def update_selected_page_id(%{assigns: %{pages: pages, selected_page_id: selected_page_id}} = socket) do
     # Select the page if it exists, otherwise select the first page
     page =
       case Enum.find(pages, fn page -> page.id == selected_page_id end) do
@@ -132,11 +130,7 @@ defmodule Systems.Manual.Builder.PageListView do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "select_page",
-        %{"item" => page_id},
-        %{assigns: %{selected_page_id: selected_page_id}} = socket
-      ) do
+  def handle_event("select_page", %{"item" => page_id}, %{assigns: %{selected_page_id: selected_page_id}} = socket) do
     page_id_int = String.to_integer(page_id)
 
     # If the page is already selected, deselect it by setting selected_page_id to nil

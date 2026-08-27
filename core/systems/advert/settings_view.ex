@@ -20,9 +20,7 @@ defmodule Systems.Advert.SettingsView do
     }
   end
 
-  defp assign_pool_visibility(
-         %{assigns: %{advert: %{assignment_id: assignment_id} = advert}} = socket
-       ) do
+  defp assign_pool_visibility(%{assigns: %{advert: %{assignment_id: assignment_id} = advert}} = socket) do
     assign(socket,
       pool_visibility: Advert.Public.pool_visibility(advert),
       manage_participants_path: ~p"/assignment/#{assignment_id}/content?tab=#{:participants}"

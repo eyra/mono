@@ -92,16 +92,14 @@ defmodule Systems.Fund.PayoutModel do
   must present a fresh one — hence the attempt counter. The `payout=<uid>` prefix
   is what a stranded withdrawal is later found by, via its `reference`.
   """
-  def withdrawal_key(%__MODULE__{uid: uid, withdrawal_attempt: attempt})
-      when is_binary(uid) and is_integer(attempt),
-      do: "payout=#{uid},type=withdrawal,attempt=#{attempt}"
+  def withdrawal_key(%__MODULE__{uid: uid, withdrawal_attempt: attempt}) when is_binary(uid) and is_integer(attempt),
+    do: "payout=#{uid},type=withdrawal,attempt=#{attempt}"
 
   @doc """
   Prefix shared by every withdrawal attempt of this payout — used to match a
   withdrawal back to its payout when only the provider's `reference` is known.
   """
-  def withdrawal_key_prefix(%__MODULE__{uid: uid}) when is_binary(uid),
-    do: "payout=#{uid},type=withdrawal"
+  def withdrawal_key_prefix(%__MODULE__{uid: uid}) when is_binary(uid), do: "payout=#{uid},type=withdrawal"
 
   @required_fields ~w(user_id amount_cents)a
   @optional_fields ~w(currency status provider_uid transfer_uid funds_committed_at withdrawal_attempt failure_reason)a

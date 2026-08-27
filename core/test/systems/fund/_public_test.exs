@@ -1033,17 +1033,11 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(merchant_uid)
 
       # Charge moves the funds platform (eyra) -> participant merchant first.
-      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform_test",
-                                                     ^merchant_uid,
-                                                     1000,
-                                                     "payout=" <> _ ->
+      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform_test", ^merchant_uid, 1000, "payout=" <> _ ->
         {:ok, %{uid: "chg_2", status: "created", amount: 1000}}
       end)
 
-      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid,
-                                                  :EUR,
-                                                  %{amount: 1000},
-                                                  "payout=" <> _ ->
+      expect(ProviderMock, :create_withdrawal, fn ^merchant_uid, :EUR, %{amount: 1000}, "payout=" <> _ ->
         {:ok, %{uid: "w_2", status: "created", amount: 1000}}
       end)
 
@@ -1304,8 +1298,7 @@ defmodule Systems.Fund.PublicTest do
       stub_charge_ok()
 
       expect(ProviderMock, :create_withdrawal, fn _, :EUR, _, _ ->
-        {:ok,
-         %{uid: "w_fresh", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+        {:ok, %{uid: "w_fresh", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
       end)
 
       assert {:ok, %{payout: %{provider_uid: "w_fresh"}}} =
@@ -1445,8 +1438,7 @@ defmodule Systems.Fund.PublicTest do
       expect(ProviderMock, :create_withdrawal, fn "m_resume_1", :EUR, %{amount: 1000}, key ->
         assert key =~ "type=withdrawal,attempt=0"
 
-        {:ok,
-         %{uid: "w_new", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+        {:ok, %{uid: "w_new", status: :pending, raw_status: "created", reference: key, amount: 1000}}
       end)
 
       assert {:ok, _} = Fund.Public.resume_payout(payout)
@@ -1469,8 +1461,7 @@ defmodule Systems.Fund.PublicTest do
         # A fresh key, distinct from the failed attempt=0 withdrawal.
         assert key =~ "type=withdrawal,attempt=1"
 
-        {:ok,
-         %{uid: "w_retry", status: :pending, raw_status: "created", reference: key, amount: 1000}}
+        {:ok, %{uid: "w_retry", status: :pending, raw_status: "created", reference: key, amount: 1000}}
       end)
 
       assert {:ok, _} = Fund.Public.resume_payout(payout)
@@ -1742,8 +1733,7 @@ defmodule Systems.Fund.PublicTest do
     # idempotent in tests that don't care about that step.
     defp stub_existing_bank_account(merchant_uid) do
       expect(ProviderMock, :list_bank_accounts, fn ^merchant_uid ->
-        {:ok,
-         [%{uid: "ba_existing", status: :verified, raw_status: "approved", verification_url: nil}]}
+        {:ok, [%{uid: "ba_existing", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
     end
 

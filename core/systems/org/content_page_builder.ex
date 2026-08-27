@@ -9,10 +9,7 @@ defmodule Systems.Org.ContentPageBuilder do
   alias Systems.Org
   alias Systems.Pool
 
-  def view_model(
-        %{id: node_id, full_name_bundle: full_name_bundle} = node,
-        %{current_user: user} = assigns
-      ) do
+  def view_model(%{id: node_id, full_name_bundle: full_name_bundle} = node, %{current_user: user} = assigns) do
     is_admin? = Admin.Public.admin?(user)
     locale = Map.get(assigns, :locale, :en)
     org_name = Content.TextBundleModel.text(full_name_bundle, locale)

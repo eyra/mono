@@ -30,6 +30,5 @@ defmodule Systems.Zircon.Screening.ToolReferenceFileAssoc do
 
   def preload_graph(:tool), do: [tool: Screening.ToolModel.preload_graph(:up)]
 
-  def preload_graph(:reference_file),
-    do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
+  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
 end

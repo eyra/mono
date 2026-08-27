@@ -9,36 +9,21 @@ defmodule Systems.Lab.CheckInItem do
   defp title(%{email: nil, subject: subject}), do: "Subject #{subject}"
   defp title(%{email: email}), do: email
 
-  defp message(%{status: :reservation_available, time_slot: time_slot}),
-    do: time_slot_message(time_slot)
+  defp message(%{status: :reservation_available, time_slot: time_slot}), do: time_slot_message(time_slot)
 
-  defp message(%{status: :reservation_not_found}),
-    do: "❔ " <> dgettext("link-lab", "search.subject.noreservation")
+  defp message(%{status: :reservation_not_found}), do: "❔ " <> dgettext("link-lab", "search.subject.noreservation")
 
-  defp message(%{status: :reservation_cancelled}),
-    do: "❌ " <> dgettext("link-lab", "search.subject.cancelled")
+  defp message(%{status: :reservation_cancelled}), do: "❌ " <> dgettext("link-lab", "search.subject.cancelled")
 
-  defp message(%{status: :reservation_expired}),
-    do: "❔ " <> dgettext("link-lab", "search.subject.expired")
+  defp message(%{status: :reservation_expired}), do: "❔ " <> dgettext("link-lab", "search.subject.expired")
 
-  defp message(%{
-         status: :signed_up_already,
-         email: email,
-         subject: subject,
-         check_in_date: check_in_date
-       })
+  defp message(%{status: :signed_up_already, email: email, subject: subject, check_in_date: check_in_date})
        when email != nil,
        do:
-         "✅ " <>
-           dgettext("link-lab", "search.subject.checkedin.full",
-             date: date_string(check_in_date),
-             subject: subject
-           )
+         "✅ " <> dgettext("link-lab", "search.subject.checkedin.full", date: date_string(check_in_date), subject: subject)
 
   defp message(%{status: :signed_up_already, check_in_date: check_in_date}),
-    do:
-      "✅ " <>
-        dgettext("link-lab", "search.subject.checkedin.short", date: date_string(check_in_date))
+    do: "✅ " <> dgettext("link-lab", "search.subject.checkedin.short", date: date_string(check_in_date))
 
   defp date_string(nil), do: ""
 

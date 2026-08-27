@@ -74,8 +74,7 @@ defmodule Systems.Assignment.InfoModel do
   def devices(%{devices: devices}) when not is_nil(devices), do: devices
   def devices(_), do: []
 
-  def spot_count(%{subject_count: subject_count}) when not is_nil(subject_count),
-    do: subject_count
+  def spot_count(%{subject_count: subject_count}) when not is_nil(subject_count), do: subject_count
 
   def spot_count(_), do: 0
 

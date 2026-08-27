@@ -79,9 +79,7 @@ defmodule Core.Repo do
   defp find_belongs_to_fields(module, associations, module_under_inspection) do
     associations
     |> Enum.map(&module.__schema__(:association, &1))
-    |> Enum.filter(
-      &match?(%{__struct__: Ecto.Association.BelongsTo, related: ^module_under_inspection}, &1)
-    )
+    |> Enum.filter(&match?(%{__struct__: Ecto.Association.BelongsTo, related: ^module_under_inspection}, &1))
     |> Enum.map(fn %{field: field} ->
       field
     end)
@@ -99,8 +97,7 @@ defmodule Core.Repo do
     end)
   end
 
-  defp create_query(module, field, model_id)
-       when is_atom(module) and is_atom(field) and is_integer(model_id) do
+  defp create_query(module, field, model_id) when is_atom(module) and is_atom(field) and is_integer(model_id) do
     field_id = String.to_existing_atom("#{field}_id")
     from(e in module, where: field(e, ^field_id) == ^model_id)
   end

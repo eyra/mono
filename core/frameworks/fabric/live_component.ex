@@ -25,12 +25,7 @@ defmodule Fabric.LiveComponent do
 
       @impl true
       def update(
-            %{
-              fabric_event: %{
-                name: :handle_modal_closed,
-                payload: %{source: %{name: :modal_presenter}}
-              }
-            },
+            %{fabric_event: %{name: :handle_modal_closed, payload: %{source: %{name: :modal_presenter}}}},
             %{assigns: %{fabric: fabric}} = socket
           ) do
         {:ok, send_event(socket, :parent, :handle_modal_closed)}

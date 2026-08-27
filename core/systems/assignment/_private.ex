@@ -44,8 +44,7 @@ defmodule Systems.Assignment.Private do
 
   def get_template(:data_donation), do: %Assignment.TemplateDataDonation{id: :data_donation}
 
-  def get_template(:benchmark_challenge),
-    do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
+  def get_template(:benchmark_challenge), do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
 
   def get_template(:paper_screening), do: %Assignment.TemplatePaperScreening{id: :paper_screening}
 
@@ -65,11 +64,7 @@ defmodule Systems.Assignment.Private do
     |> Repo.exists?()
   end
 
-  def send_progress_event(
-        %Assignment.Model{} = assignment,
-        event,
-        %{user_id: user_id} = _crew_member
-      ) do
+  def send_progress_event(%Assignment.Model{} = assignment, event, %{user_id: user_id} = _crew_member) do
     user = Account.Public.get_user!(user_id)
     Affiliate.Public.send_event(assignment, %{progress: event}, user)
   end
@@ -92,11 +87,7 @@ defmodule Systems.Assignment.Private do
     Slug.slugify(title, separator: ?_)
   end
 
-  def log_performance_event(
-        %Assignment.Model{} = assignment,
-        %Crew.TaskModel{} = crew_task,
-        topic
-      ) do
+  def log_performance_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, topic) do
     with {:ok, workflow_item} <- get_workflow_item(crew_task),
          {:ok, user_ref} <- get_crew_member(crew_task),
          false <- Assignment.Public.tester?(assignment, user_ref) do
@@ -132,18 +123,14 @@ defmodule Systems.Assignment.Private do
     "assignment=#{id}"
   end
 
-  def reward_idempotence_key(%Assignment.ParticipationModel{
-        assignment_id: assignment_id,
-        user_id: user_id
-      }),
-      do: reward_idempotence_key(assignment_id, user_id)
+  def reward_idempotence_key(%Assignment.ParticipationModel{assignment_id: assignment_id, user_id: user_id}),
+    do: reward_idempotence_key(assignment_id, user_id)
 
   def reward_idempotence_key(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do
     reward_idempotence_key(assignment_id, user_id)
   end
 
-  def reward_idempotence_key(assignment_id, user_id)
-      when is_integer(assignment_id) and is_integer(user_id) do
+  def reward_idempotence_key(assignment_id, user_id) when is_integer(assignment_id) and is_integer(user_id) do
     "assignment=#{assignment_id},user=#{user_id}"
   end
 
@@ -154,11 +141,9 @@ defmodule Systems.Assignment.Private do
     Systems.Affiliate.Public.url_for_resource(assignment) <> "?p=preview"
   end
 
-  def page_title_default(:assignment_information),
-    do: dgettext("eyra-assignment", "intro.page.title")
+  def page_title_default(:assignment_information), do: dgettext("eyra-assignment", "intro.page.title")
 
-  def page_title_default(:assignment_helpdesk),
-    do: dgettext("eyra-assignment", "support.page.title")
+  def page_title_default(:assignment_helpdesk), do: dgettext("eyra-assignment", "support.page.title")
 
   def page_body_default(:assignment_information), do: ""
   def page_body_default(:assignment_helpdesk), do: ""
@@ -180,8 +165,7 @@ defmodule Systems.Assignment.Private do
   def connection_title(:storage, %{storage_endpoint: storage_endpoint}),
     do: connection_title(:storage, Storage.EndpointModel.special_field(storage_endpoint))
 
-  def connection_title(:storage, storage_service_id),
-    do: Storage.ServiceIds.translate(storage_service_id)
+  def connection_title(:storage, storage_service_id), do: Storage.ServiceIds.translate(storage_service_id)
 
   def connection_title(:panel, %{external_panel: external_panel}),
     do: Assignment.ExternalPanelIds.translate(external_panel)
@@ -208,11 +192,9 @@ defmodule Systems.Assignment.Private do
     end
   end
 
-  def member_id(%Crew.TaskModel{identifier: identifier}),
-    do: Identifier.get_attribute(identifier, "member")
+  def member_id(%Crew.TaskModel{identifier: identifier}), do: Identifier.get_attribute(identifier, "member")
 
-  def workflow_item_id(%Crew.TaskModel{identifier: identifier}),
-    do: Identifier.get_attribute(identifier, "item")
+  def workflow_item_id(%Crew.TaskModel{identifier: identifier}), do: Identifier.get_attribute(identifier, "item")
 
   def task_template(%{special: :data_donation}, %Workflow.ItemModel{id: item_id}) do
     ["item=#{item_id}"]
@@ -226,11 +208,7 @@ defmodule Systems.Assignment.Private do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
-  def task_identifier(
-        %{special: :benchmark_challenge},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: :benchmark_challenge}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 

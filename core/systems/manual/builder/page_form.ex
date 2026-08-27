@@ -41,9 +41,7 @@ defmodule Systems.Manual.Builder.PageForm do
   end
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, %{
-        encoded_image_info: encoded_image_info
-      }) do
+  def process_file(%{assigns: %{entity: entity}} = socket, %{encoded_image_info: encoded_image_info}) do
     changeset = Manual.PageModel.changeset(entity, %{image: encoded_image_info})
 
     socket

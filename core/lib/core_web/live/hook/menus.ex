@@ -70,8 +70,7 @@ defmodule CoreWeb.Live.Hook.Menus do
 
   defp handle_next_actions_broadcast(socket, live_view_module) do
     attach_hook(socket, :menus_next_actions_broadcast, :handle_info, fn
-      %Phoenix.Socket.Broadcast{topic: "next_actions:" <> _, event: "next_actions_updated"},
-      socket ->
+      %Phoenix.Socket.Broadcast{topic: "next_actions:" <> _, event: "next_actions_updated"}, socket ->
         {:cont, update_menus(socket, live_view_module)}
 
       _, socket ->
@@ -79,9 +78,7 @@ defmodule CoreWeb.Live.Hook.Menus do
     end)
   end
 
-  defp ensure_active_menu_item(
-         %{assigns: %{menus_config: {menu_builder, menus, active_menu_item}}} = socket
-       ) do
+  defp ensure_active_menu_item(%{assigns: %{menus_config: {menu_builder, menus, active_menu_item}}} = socket) do
     assign(socket, menus_config: {menu_builder, menus}, active_menu_item: active_menu_item)
   end
 

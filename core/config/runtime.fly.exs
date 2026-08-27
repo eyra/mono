@@ -86,8 +86,7 @@ if config_env() == :prod do
 
             {Cron,
              crontab: [
-               {cleanup_schedule, Systems.Feldspar.DataDonationCleanupWorker,
-                queue: storage_delivery_queue}
+               {cleanup_schedule, Systems.Feldspar.DataDonationCleanupWorker, queue: storage_delivery_queue}
              ]}
 
           "pay_in_expiration" ->
@@ -255,18 +254,13 @@ if config_env() == :prod do
 
   config :core, :feldspar_data_donation,
     path: System.fetch_env!("FELDSPAR_DATA_DONATION_PATH"),
-    retention_hours:
-      "FELDSPAR_DATA_DONATION_RETENTION" |> System.get_env("336") |> String.to_integer()
+    retention_hours: "FELDSPAR_DATA_DONATION_RETENTION" |> System.get_env("336") |> String.to_integer()
 
   config :core, :paper,
-    import_batch_size:
-      "PAPER_RIS_IMPORT_BATCH_SIZE" |> System.get_env("100") |> String.to_integer(),
-    import_batch_timeout:
-      "PAPER_RIS_IMPORT_BATCH_TIMEOUT" |> System.get_env("30000") |> String.to_integer(),
-    ris_max_file_size:
-      "PAPER_RIS_MAX_FILE_SIZE" |> System.get_env("157286400") |> String.to_integer(),
-    ris_stream_chunk_size:
-      "PAPER_RIS_STREAM_CHUNK_SIZE" |> System.get_env("65536") |> String.to_integer()
+    import_batch_size: "PAPER_RIS_IMPORT_BATCH_SIZE" |> System.get_env("100") |> String.to_integer(),
+    import_batch_timeout: "PAPER_RIS_IMPORT_BATCH_TIMEOUT" |> System.get_env("30000") |> String.to_integer(),
+    ris_max_file_size: "PAPER_RIS_MAX_FILE_SIZE" |> System.get_env("157286400") |> String.to_integer(),
+    ris_stream_chunk_size: "PAPER_RIS_STREAM_CHUNK_SIZE" |> System.get_env("65536") |> String.to_integer()
 
   config :core,
     auto_approve_timeout: "AUTO_APPROVE_TIMEOUT" |> System.get_env("14") |> String.to_integer()

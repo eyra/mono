@@ -401,8 +401,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       expect(ProviderMock, :list_withdrawals, fn "m_retry" -> {:ok, []} end)
 
       expect(ProviderMock, :create_withdrawal, fn "m_retry", :EUR, %{amount: 1000}, _key ->
-        {:ok,
-         %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+        {:ok, %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
       end)
 
       {:noreply, _socket} = RewardsSummaryView.handle_event("retry_payout", %{}, socket(user))

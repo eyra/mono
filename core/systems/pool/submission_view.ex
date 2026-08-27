@@ -43,11 +43,7 @@ defmodule Systems.Pool.SubmissionView do
         %{
           id: id,
           entity:
-            %{
-              schedule_start: schedule_start,
-              schedule_end: schedule_end,
-              pool: %{currency: %{type: currency_type}}
-            } =
+            %{schedule_start: schedule_start, schedule_end: schedule_end, pool: %{currency: %{type: currency_type}}} =
               entity,
           validate?: validate?
         },
@@ -119,10 +115,7 @@ defmodule Systems.Pool.SubmissionView do
     }
   end
 
-  defp update_ui(
-         %{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} =
-           socket
-       ) do
+  defp update_ui(%{assigns: %{entity: %{schedule_start: schedule_start, schedule_end: schedule_end}}} = socket) do
     # Events
     assign(socket,
       schedule_start_disabled: schedule_start == nil,

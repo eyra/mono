@@ -24,9 +24,7 @@ defmodule Systems.Instruction.Public do
   end
 
   def get_asset_by(%Content.RepositoryModel{id: id}, preload \\ []) do
-    Repo.one(
-      from(asset in Instruction.AssetModel, where: asset.repository_id == ^id, preload: ^preload)
-    )
+    Repo.one(from(asset in Instruction.AssetModel, where: asset.repository_id == ^id, preload: ^preload))
   end
 
   def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do

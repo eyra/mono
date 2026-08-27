@@ -13,10 +13,7 @@ defmodule Systems.Advert.FundingView do
 
   # Handle update from parent
   @impl true
-  def update(
-        %{assignment: assignment, submission: submission, fund: fund},
-        %{assigns: %{id: _id}} = socket
-      ) do
+  def update(%{assignment: assignment, submission: submission, fund: fund}, %{assigns: %{id: _id}} = socket) do
     {
       :ok,
       socket
@@ -36,10 +33,7 @@ defmodule Systems.Advert.FundingView do
 
   # Initial update
   @impl true
-  def update(
-        %{id: id, assignment: %{fund: fund} = assignment, submission: submission, user: user},
-        socket
-      ) do
+  def update(%{id: id, assignment: %{fund: fund} = assignment, submission: submission, user: user}, socket) do
     changeset = Pool.SubmissionModel.changeset(submission, %{})
 
     {
@@ -65,13 +59,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp update_state(
-         %{
-           assigns: %{
-             selected_fund: selected_fund,
-             assignment: assignment,
-             submission: %{reward_value: reward_value}
-           }
-         } =
+         %{assigns: %{selected_fund: selected_fund, assignment: assignment, submission: %{reward_value: reward_value}}} =
            socket
        ) do
     reward_value = guard_number_nil(reward_value)
@@ -101,12 +89,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp update_reward(
-         %{
-           assigns: %{
-             submission: %{reward_value: reward_value, pool: %{currency: currency}},
-             locale: locale
-           }
-         } = socket
+         %{assigns: %{submission: %{reward_value: reward_value, pool: %{currency: currency}}, locale: locale}} = socket
        ) do
     reward_value = guard_number_nil(reward_value)
     reward_value_label = Fund.CurrencyModel.label(currency, locale, reward_value)
@@ -167,10 +150,7 @@ defmodule Systems.Advert.FundingView do
     assign(socket, fund_description: fund_description)
   end
 
-  defp update_funds(
-         %{assigns: %{submission: %{pool: %{currency: %{id: _id} = currency}}, user: user}} =
-           socket
-       ) do
+  defp update_funds(%{assigns: %{submission: %{pool: %{currency: %{id: _id} = currency}}, user: user}} = socket) do
     funds =
       Fund.Public.list_owned_by_currency(user, currency, Fund.Model.preload_graph(:full))
 
@@ -178,15 +158,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp update_fund_items(
-         %{
-           assigns: %{
-             funds: funds,
-             selected_fund: selected_fund,
-             state: state,
-             locale: locale,
-             myself: myself
-           }
-         } = socket
+         %{assigns: %{funds: funds, selected_fund: selected_fund, state: state, locale: locale, myself: myself}} = socket
        ) do
     assign(socket,
       fund_items: Enum.map(funds, &to_item(&1, selected_fund, state, locale, myself))
@@ -223,8 +195,7 @@ defmodule Systems.Advert.FundingView do
   def handle_event(
         "select_fund",
         %{"item" => fund_id},
-        %{assigns: %{assignment: assignment, funds: funds, changeset: submission_changeset}} =
-          socket
+        %{assigns: %{assignment: assignment, funds: funds, changeset: submission_changeset}} = socket
       ) do
     selected_fund = Enum.find(funds, &(&1.id == String.to_integer(fund_id)))
     changeset = Assignment.Model.changeset(assignment, selected_fund)
@@ -244,11 +215,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   @impl true
-  def handle_event(
-        "change_reward",
-        %{"submission_model" => attrs},
-        %{assigns: %{submission: submission}} = socket
-      ) do
+  def handle_event("change_reward", %{"submission_model" => attrs}, %{assigns: %{submission: submission}} = socket) do
     changeset = Pool.SubmissionModel.changeset(submission, attrs)
 
     {

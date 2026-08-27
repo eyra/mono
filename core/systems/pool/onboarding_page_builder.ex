@@ -51,8 +51,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
 
   # Progress dots are only meaningful for multi-step flows. A one-step
   # terminal screen like `:already_member` doesn't get one.
-  defp build_progress_dots(steps, index) when length(steps) > 1,
-    do: %{current: index, total: length(steps)}
+  defp build_progress_dots(steps, index) when length(steps) > 1, do: %{current: index, total: length(steps)}
 
   defp build_progress_dots(_steps, _index), do: nil
 
@@ -72,8 +71,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
 
   # `show_title: false` hides each step view's own title so the page-level
   # `hero_title` is the sole visual anchor across the flow.
-  defp build_live_context(%Account.User{id: user_id}),
-    do: LiveContext.new(%{user_id: user_id, show_title: false})
+  defp build_live_context(%Account.User{id: user_id}), do: LiveContext.new(%{user_id: user_id, show_title: false})
 
   defp build_live_context(_), do: nil
 

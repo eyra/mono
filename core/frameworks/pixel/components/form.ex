@@ -899,10 +899,7 @@ defmodule Frameworks.Pixel.Form do
   attr(:options_id, :string, required: true)
   attr(:target, :any, required: true)
 
-  def dropdown_option(
-        %{option: option, field_value: field_value, options_id: options_id, target: target} =
-          assigns
-      ) do
+  def dropdown_option(%{option: option, field_value: field_value, options_id: options_id, target: target} = assigns) do
     text_color =
       if option.value == field_value do
         "text-primary"

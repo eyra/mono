@@ -79,11 +79,7 @@ defmodule Systems.Account.UserFormDebug do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        %{"user_profile_edit" => attrs},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("save", %{"user_profile_edit" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket

@@ -33,8 +33,7 @@ defmodule Systems.Graphite.Factories do
     Factories.insert!(:graphite_submission, %{
       tool: tool,
       description: "description",
-      github_commit_url:
-        "https://github.com/org/repo/commit/4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
+      github_commit_url: "https://github.com/org/repo/commit/4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
     })
   end
 
@@ -42,8 +41,7 @@ defmodule Systems.Graphite.Factories do
     submission_attr = %{
       tool: tool,
       description: description,
-      github_commit_url:
-        "https://github.com/eyra/mono/commit/9d10bd2907dda135ebe86511489570dbf8c067c0"
+      github_commit_url: "https://github.com/eyra/mono/commit/9d10bd2907dda135ebe86511489570dbf8c067c0"
     }
 
     Factories.insert!(:graphite_submission, submission_attr)

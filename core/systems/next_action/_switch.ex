@@ -11,11 +11,7 @@ defmodule Systems.NextAction.Switch do
     :ok
   end
 
-  def intercept({:next_action, :cleared}, %{
-        user: user,
-        action_type: _action_type,
-        from_pid: from_pid
-      }) do
+  def intercept({:next_action, :cleared}, %{user: user, action_type: _action_type, from_pid: from_pid}) do
     update(NextAction.OverviewPage, user, from_pid)
     notify_menus(user)
     :ok

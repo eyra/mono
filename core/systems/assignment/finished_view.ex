@@ -29,11 +29,7 @@ defmodule Systems.Assignment.FinishedView do
     {:noreply, assign(socket, email_error: nil)}
   end
 
-  def handle_event(
-        "submit_email",
-        %{"email" => email},
-        %{assigns: %{vm: %{email_capture: %{pool_slug: _}}}} = socket
-      ) do
+  def handle_event("submit_email", %{"email" => email}, %{assigns: %{vm: %{email_capture: %{pool_slug: _}}}} = socket) do
     send(self(), {:do_submit_email, email})
 
     {:noreply,
@@ -63,8 +59,7 @@ defmodule Systems.Assignment.FinishedView do
           email_error_message(:unknown)
       end
 
-    {:noreply,
-     socket |> assign(submitting: false, email_error: email_error) |> update_view_model()}
+    {:noreply, socket |> assign(submitting: false, email_error: email_error) |> update_view_model()}
   end
 
   @impl true
@@ -139,23 +134,17 @@ defmodule Systems.Assignment.FinishedView do
     """
   end
 
-  defp email_error_message(:invalid_format),
-    do: dgettext("eyra-assignment", "email_capture.error.invalid_format")
+  defp email_error_message(:invalid_format), do: dgettext("eyra-assignment", "email_capture.error.invalid_format")
 
-  defp email_error_message(:already_registered),
-    do: dgettext("eyra-assignment", "email_capture.error.already_registered")
+  defp email_error_message(:already_registered), do: dgettext("eyra-assignment", "email_capture.error.already_registered")
 
-  defp email_error_message(:role_account),
-    do: dgettext("eyra-assignment", "email_capture.error.role_account")
+  defp email_error_message(:role_account), do: dgettext("eyra-assignment", "email_capture.error.role_account")
 
-  defp email_error_message(:disposable),
-    do: dgettext("eyra-assignment", "email_capture.error.disposable")
+  defp email_error_message(:disposable), do: dgettext("eyra-assignment", "email_capture.error.disposable")
 
-  defp email_error_message(:invalid_mx),
-    do: dgettext("eyra-assignment", "email_capture.error.invalid_format")
+  defp email_error_message(:invalid_mx), do: dgettext("eyra-assignment", "email_capture.error.invalid_format")
 
-  defp email_error_message(:blocklisted),
-    do: dgettext("eyra-assignment", "email_capture.error.disposable")
+  defp email_error_message(:blocklisted), do: dgettext("eyra-assignment", "email_capture.error.disposable")
 
   defp email_error_message(_), do: dgettext("eyra-assignment", "email_capture.error.unknown")
 end

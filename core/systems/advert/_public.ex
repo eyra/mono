@@ -71,9 +71,7 @@ defmodule Systems.Advert.Public do
   end
 
   def list_by_assignments(assignment_ids, preload) when is_list(assignment_ids) do
-    Repo.all(
-      from(c in Advert.Model, where: c.assignment_id in ^assignment_ids, preload: ^preload)
-    )
+    Repo.all(from(c in Advert.Model, where: c.assignment_id in ^assignment_ids, preload: ^preload))
   end
 
   def list_by_pools_and_submission_status(pools, submission_status, opts \\ [])
@@ -188,8 +186,7 @@ defmodule Systems.Advert.Public do
     |> list_by_assignments(preload)
   end
 
-  defp list_excluded_assignment_ids(%Advert.Model{assignment: %{excluded: excluded}})
-       when is_list(excluded) do
+  defp list_excluded_assignment_ids(%Advert.Model{assignment: %{excluded: excluded}}) when is_list(excluded) do
     Enum.map(excluded, & &1.id)
   end
 
@@ -357,11 +354,7 @@ defmodule Systems.Advert.Public do
     handle_exclusion(assignment, Advert.Public.get!(id, [:assignment]), active)
   end
 
-  defp handle_exclusion(
-         %Assignment.Model{} = assignment,
-         %Advert.Model{assignment: other},
-         active
-       ) do
+  defp handle_exclusion(%Assignment.Model{} = assignment, %Advert.Model{assignment: other}, active) do
     handle_exclusion(assignment, other, active)
   end
 
@@ -548,8 +541,7 @@ defmodule Systems.Advert.Public do
     )
   end
 
-  def import_participant_reward(participant_id, amount, session_key, currency)
-      when is_binary(currency) do
+  def import_participant_reward(participant_id, amount, session_key, currency) when is_binary(currency) do
     idempotence_key = import_idempotence_key(session_key, participant_id)
     participant = Systems.Account.Public.get_user!(participant_id)
 

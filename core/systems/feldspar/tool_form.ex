@@ -7,10 +7,7 @@ defmodule Systems.Feldspar.ToolForm do
   alias Systems.Feldspar
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, %{
-        public_url: public_url,
-        original_filename: original_filename
-      }) do
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url, original_filename: original_filename}) do
     save(socket, entity, %{archive_ref: public_url, archive_name: original_filename})
   end
 

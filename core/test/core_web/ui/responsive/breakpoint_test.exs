@@ -79,24 +79,16 @@ defmodule CoreWeb.UI.Responsive.BreakpointTest do
     end
 
     test "single breakpoint with multiple percentage breaks" do
-      assert Breakpoint.value({:sm, 0}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) ==
+      assert Breakpoint.value({:sm, 0}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
                "base_value"
 
-      assert Breakpoint.value({:sm, 40}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) ==
+      assert Breakpoint.value({:sm, 40}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
                "break_value-sm-10"
 
-      assert Breakpoint.value({:sm, 50}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) ==
+      assert Breakpoint.value({:sm, 50}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
                "break_value-sm-50"
 
-      assert Breakpoint.value({:sm, 70}, "base_value",
-               sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}
-             ) ==
+      assert Breakpoint.value({:sm, 70}, "base_value", sm: %{10 => "break_value-sm-10", 50 => "break_value-sm-50"}) ==
                "break_value-sm-50"
     end
 

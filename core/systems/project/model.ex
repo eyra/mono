@@ -44,11 +44,7 @@ defmodule Systems.Project.Model do
       vm(project, page, user)
     end
 
-    defp vm(
-           %{id: id, name: name, root: %{id: root_node_id, items: items}},
-           {Project.OverviewPage, :card},
-           _user
-         ) do
+    defp vm(%{id: id, name: name, root: %{id: root_node_id, items: items}}, {Project.OverviewPage, :card}, _user) do
       path = ~p"/project/node/#{root_node_id}"
 
       people = %{

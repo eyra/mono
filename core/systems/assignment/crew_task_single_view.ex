@@ -56,8 +56,7 @@ defmodule Systems.Assignment.CrewTaskSingleView do
 
   # Private
 
-  defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket)
-       when not is_nil(task) do
+  defp complete_task(%{assigns: %{work_item: {_workflow_item, task}}} = socket) when not is_nil(task) do
     {:ok, _} = Crew.Public.complete_task(task)
 
     publish_event(socket, :work_done)

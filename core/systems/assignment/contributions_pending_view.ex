@@ -21,11 +21,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
   end
 
   @impl true
-  def handle_event(
-        "expand_decline",
-        %{"item" => participation_id_str},
-        %{assigns: %{rows: rows}} = socket
-      ) do
+  def handle_event("expand_decline", %{"item" => participation_id_str}, %{assigns: %{rows: rows}} = socket) do
     participation_id = String.to_integer(participation_id_str)
 
     case Enum.find(rows, &(&1.participation_id == participation_id)) do
@@ -133,8 +129,7 @@ defmodule Systems.Assignment.ContributionsPendingView do
     """
   end
 
-  defp tasks_class(%{completed_task_count: c, total_task_count: t}) when c >= t and t > 0,
-    do: "text-grey2"
+  defp tasks_class(%{completed_task_count: c, total_task_count: t}) when c >= t and t > 0, do: "text-grey2"
 
   defp tasks_class(_), do: "text-warning"
 

@@ -172,9 +172,7 @@ defmodule Systems.Consent.Public do
     )
   end
 
-  def update_revision(
-        %Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset
-      ) do
+  def update_revision(%Ecto.Changeset{data: %Consent.RevisionModel{id: id, updated_at: updated_at}} = changeset) do
     Multi.new()
     |> Multi.run(:validate, fn _, _ ->
       %{updated_at: stored_updated_at, signatures: signatures} =

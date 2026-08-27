@@ -57,8 +57,7 @@ defmodule Systems.Payment.Public do
     provider().add_merchant_phone(merchant_uid, phone)
   end
 
-  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user, phone)
-       when is_binary(merchant_uid) do
+  defp do_ensure_merchant_for(%Account.User{merchant_uid: merchant_uid} = user, phone) when is_binary(merchant_uid) do
     case get_merchant(merchant_uid) do
       {:ok, merchant} -> ensure_merchant_phone(user, merchant, phone)
       {:error, _} = error -> error
@@ -77,9 +76,7 @@ defmodule Systems.Payment.Public do
         lookup_merchant_by_email(user)
 
       {:error, error} ->
-        Logger.warning(
-          "[Payment] Merchant creation failed for user ##{user_id}: #{inspect(error)}"
-        )
+        Logger.warning("[Payment] Merchant creation failed for user ##{user_id}: #{inspect(error)}")
 
         {:error, error}
     end
@@ -126,8 +123,7 @@ defmodule Systems.Payment.Public do
     )
   end
 
-  defp maybe_put_phone(attrs, phone) when is_binary(phone) and phone != "",
-    do: Map.put(attrs, :phone, phone)
+  defp maybe_put_phone(attrs, phone) when is_binary(phone) and phone != "", do: Map.put(attrs, :phone, phone)
 
   defp maybe_put_phone(attrs, _phone), do: attrs
 

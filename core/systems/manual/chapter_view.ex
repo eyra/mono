@@ -13,10 +13,7 @@ defmodule Systems.Manual.ChapterView do
 
   # Use page_id from params, fallback to current assign
   @impl true
-  def update(
-        %{id: id, manual_id: manual_id, chapter: chapter, user: user, page_id: page_id},
-        socket
-      ) do
+  def update(%{id: id, manual_id: manual_id, chapter: chapter, user: user, page_id: page_id}, socket) do
     page_id = page_id || Map.get(socket.assigns, :page_id)
 
     {
@@ -127,16 +124,12 @@ defmodule Systems.Manual.ChapterView do
     {:noreply, socket}
   end
 
-  defp mark_chapter_visited(
-         %{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket
-       ) do
+  defp mark_chapter_visited(%{assigns: %{chapter: %{userflow_step: userflow_step}, user: user}} = socket) do
     Userflow.Public.mark_visited(userflow_step, user)
     socket
   end
 
-  defp mark_selected_page_visited(
-         %{assigns: %{chapter: %{pages: pages}, page_id: page_id, user: user}} = socket
-       ) do
+  defp mark_selected_page_visited(%{assigns: %{chapter: %{pages: pages}, page_id: page_id, user: user}} = socket) do
     %{userflow_step: userflow_step} = current_page(pages, page_id)
     Userflow.Public.mark_visited(userflow_step, user)
     socket

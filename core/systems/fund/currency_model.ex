@@ -65,8 +65,7 @@ defmodule Systems.Fund.CurrencyModel do
 
   def preload_graph(:full), do: preload_graph([:label_bundle, :bank_account])
 
-  def preload_graph(:label_bundle),
-    do: [label_bundle: Content.TextBundleModel.preload_graph(:full)]
+  def preload_graph(:label_bundle), do: [label_bundle: Content.TextBundleModel.preload_graph(:full)]
 
   def preload_graph(:bank_account), do: [bank_account: [:account]]
 

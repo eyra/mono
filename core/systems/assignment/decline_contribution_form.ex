@@ -130,13 +130,7 @@ defmodule Systems.Assignment.DeclineContributionForm do
   def handle_event(
         "submit",
         _,
-        %{
-          assigns: %{
-            changeset: changeset,
-            participation_id: participation_id,
-            controller_pid: pid
-          }
-        } = socket
+        %{assigns: %{changeset: changeset, participation_id: participation_id, controller_pid: pid}} = socket
       ) do
     if changeset.valid? do
       reason = Changeset.get_field(changeset, :reason)

@@ -52,10 +52,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
     objects ++ list_objects(bucket, prefix, continuation)
   end
 
-  defp list_objects(bucket, prefix, %{
-         is_truncated: "true",
-         next_continuation_token: continuation_token
-       }) do
+  defp list_objects(bucket, prefix, %{is_truncated: "true", next_continuation_token: continuation_token}) do
     {objects, continuation} =
       list_objects(bucket, prefix: prefix, continuation_token: continuation_token)
 

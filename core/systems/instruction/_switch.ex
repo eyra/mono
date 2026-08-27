@@ -21,10 +21,7 @@ defmodule Systems.Instruction.Switch do
   end
 
   @impl true
-  def intercept(
-        {:content_repository, _} = signal,
-        %{content_repository: content_repository} = message
-      ) do
+  def intercept({:content_repository, _} = signal, %{content_repository: content_repository} = message) do
     if asset =
          Instruction.Public.get_asset_by(
            content_repository,
@@ -40,10 +37,7 @@ defmodule Systems.Instruction.Switch do
   end
 
   @impl true
-  def intercept(
-        {:instruction_asset, _} = signal,
-        %{instruction_asset: %{tool_id: tool_id}} = message
-      ) do
+  def intercept({:instruction_asset, _} = signal, %{instruction_asset: %{tool_id: tool_id}} = message) do
     tool = Instruction.Public.get_tool!(tool_id, Instruction.ToolModel.preload_graph(:down))
 
     dispatch!(

@@ -45,11 +45,7 @@ defmodule Systems.Lab.DayEntryView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_id",
-        %{active_item_ids: active_item_ids},
-        %{assigns: %{entry: entry}} = socket
-      ) do
+  def handle_event("active_item_id", %{active_item_ids: active_item_ids}, %{assigns: %{entry: entry}} = socket) do
     enabled? = not Enum.empty?(active_item_ids)
     entry = %{entry | enabled?: enabled?}
 

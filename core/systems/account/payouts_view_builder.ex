@@ -87,12 +87,7 @@ defmodule Systems.Account.PayoutsViewBuilder do
   defp bank_button(:pending), do: nil
 
   defp bank_button(_status),
-    do:
-      send_button(
-        "start_verification",
-        :primary,
-        dgettext("eyra-account", "payouts.bank.button.add")
-      )
+    do: send_button("start_verification", :primary, dgettext("eyra-account", "payouts.bank.button.add"))
 
   defp send_button(event, face_type, label) do
     %{
@@ -112,8 +107,7 @@ defmodule Systems.Account.PayoutsViewBuilder do
     Map.merge(base_overview(), %{
       empty?: false,
       years: years,
-      rows_by_year:
-        Map.new(by_year, fn {year, list} -> {year, Enum.map(list, &payout_row/1)} end),
+      rows_by_year: Map.new(by_year, fn {year, list} -> {year, Enum.map(list, &payout_row/1)} end),
       totals_by_year: Map.new(by_year, fn {year, list} -> {year, format_total(list)} end)
     })
   end
@@ -140,11 +134,7 @@ defmodule Systems.Account.PayoutsViewBuilder do
 
   # A table row is the list of cell values; the column types live in the layout.
   # The status cell is a `:tag` chip (text + colors), matching the pay-in chips.
-  defp payout_row(%Fund.PayoutModel{
-         inserted_at: inserted_at,
-         amount_cents: amount_cents,
-         status: status
-       }) do
+  defp payout_row(%Fund.PayoutModel{inserted_at: inserted_at, amount_cents: amount_cents, status: status}) do
     [
       format_date(inserted_at),
       CurrencyHelpers.format_cents(amount_cents),
@@ -152,8 +142,7 @@ defmodule Systems.Account.PayoutsViewBuilder do
     ]
   end
 
-  defp format_date(%NaiveDateTime{} = inserted_at),
-    do: Calendar.strftime(inserted_at, "%d - %m - %Y")
+  defp format_date(%NaiveDateTime{} = inserted_at), do: Calendar.strftime(inserted_at, "%d - %m - %Y")
 
   defp format_total(payouts) do
     payouts

@@ -76,8 +76,7 @@ defmodule Systems.Payment.ControllerTest do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_completed")
 
       expect(ProviderMock, :get_withdrawal, fn "w_ctrl_completed" ->
-        {:ok,
-         %{uid: "w_ctrl_completed", status: :completed, raw_status: "completed", amount: 1000}}
+        {:ok, %{uid: "w_ctrl_completed", status: :completed, raw_status: "completed", amount: 1000}}
       end)
 
       conn = post_webhook(conn, "withdrawal.status.changed", "w_ctrl_completed")
@@ -92,8 +91,7 @@ defmodule Systems.Payment.ControllerTest do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_underscore")
 
       expect(ProviderMock, :get_withdrawal, fn "w_ctrl_underscore" ->
-        {:ok,
-         %{uid: "w_ctrl_underscore", status: :completed, raw_status: "completed", amount: 1000}}
+        {:ok, %{uid: "w_ctrl_underscore", status: :completed, raw_status: "completed", amount: 1000}}
       end)
 
       conn = post_webhook(conn, "withdrawal.status_changed", "w_ctrl_underscore")
@@ -166,8 +164,7 @@ defmodule Systems.Payment.ControllerTest do
       {payout, reward} = insert_pending_payout(user, fund, 1000, "w_ctrl_non_terminal")
 
       expect(ProviderMock, :get_withdrawal, fn "w_ctrl_non_terminal" ->
-        {:ok,
-         %{uid: "w_ctrl_non_terminal", status: :pending, raw_status: "processing", amount: 1000}}
+        {:ok, %{uid: "w_ctrl_non_terminal", status: :pending, raw_status: "processing", amount: 1000}}
       end)
 
       conn = post_webhook(conn, "merchant.withdrawal.status.changed", "w_ctrl_non_terminal")

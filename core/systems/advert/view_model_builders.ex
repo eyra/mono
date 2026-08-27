@@ -21,13 +21,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          %{
            id: id,
            submission: submission,
-           promotion: %{
-             id: promotion_id,
-             title: title,
-             image_id: image_id,
-             themes: themes,
-             marks: marks
-           },
+           promotion: %{id: promotion_id, title: title, image_id: image_id, themes: themes, marks: marks},
            assignment: %{info: %{duration: duration, language: language}} = assignment
          },
          {Next.Desktop, :card},
@@ -86,8 +80,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
            id: id,
            submission: submission,
            promotion: %{title: title, themes: themes, marks: marks},
-           assignment:
-             %{info: %{image_id: image_id, duration: duration, language: language}} = assignment
+           assignment: %{info: %{image_id: image_id, duration: duration, language: language}} = assignment
          },
          {Advert.OverviewPage, :card},
          _assigns
@@ -182,8 +175,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          %{
            id: id,
            promotion: %{id: promotion_id, title: title, themes: themes},
-           assignment:
-             %{info: %{image_id: image_id, logo_url: logo_url, duration: duration}} = assignment,
+           assignment: %{info: %{image_id: image_id, logo_url: logo_url, duration: duration}} = assignment,
            submission: submission
          },
          {:marketplace, :card},
@@ -266,8 +258,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   end
 
   defp vm(
-         %{id: id, updated_at: updated_at, promotion: %{title: title, image_id: image_id}} =
-           advert,
+         %{id: id, updated_at: updated_at, promotion: %{title: title, image_id: image_id}} = advert,
          {Fund.FundingPage, :fund_adverts},
          _assigns
        ) do
@@ -299,12 +290,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     vm(advert, :contribution, user, path)
   end
 
-  defp vm(
-         %{promotion: %{title: title, image_id: image_id}, assignment: assignment},
-         :contribution,
-         user,
-         path
-       ) do
+  defp vm(%{promotion: %{title: title, image_id: image_id}, assignment: assignment}, :contribution, user, path) do
     status = Assignment.Public.status(assignment, user)
     tag = tag(status)
     subtitle = subtitle(status, user, assignment)
@@ -407,12 +393,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     |> Timestamp.humanize()
   end
 
-  defp get_content_list_item_subtitle(
-         nil,
-         promotion_ready?,
-         open_spot_count,
-         target_subject_count
-       ) do
+  defp get_content_list_item_subtitle(nil, promotion_ready?, open_spot_count, target_subject_count) do
     get_content_list_item_subtitle(
       %{status: :idle},
       promotion_ready?,
@@ -421,12 +402,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     )
   end
 
-  defp get_content_list_item_subtitle(
-         submission,
-         promotion_ready?,
-         open_spot_count,
-         target_subject_count
-       ) do
+  defp get_content_list_item_subtitle(submission, promotion_ready?, open_spot_count, target_subject_count) do
     case submission.status do
       :idle ->
         if promotion_ready? do

@@ -45,10 +45,7 @@ defmodule Systems.Account.OnboardingPage do
   # would collapse the step list from [:terms_and_privacy, :profile] to
   # just [:profile], dropping the progress dots mid-flow.
   @impl true
-  def consume_event(
-        %{name: :terms_completed},
-        %{assigns: %{vm: %{current_step_index: idx}}} = socket
-      ) do
+  def consume_event(%{name: :terms_completed}, %{assigns: %{vm: %{current_step_index: idx}}} = socket) do
     {:stop,
      socket
      |> assign(current_step_index: idx + 1)

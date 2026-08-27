@@ -27,13 +27,9 @@ defmodule Frameworks.Pixel.Content do
   attr(:tag, :map, default: %{type: nil, text: nil})
   attr(:image, :map, default: nil)
 
-  attr(:title_css, :string,
-    default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1"
-  )
+  attr(:title_css, :string, default: "font-title7 text-title7 md:font-title5 md:text-title5 text-grey1")
 
-  attr(:subtitle_css, :string,
-    default: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap"
-  )
+  attr(:subtitle_css, :string, default: "text-bodysmall md:text-bodymedium font-body text-grey2 whitespace-pre-wrap")
 
   def item(assigns) do
     ~H"""

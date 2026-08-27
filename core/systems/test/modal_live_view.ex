@@ -9,11 +9,7 @@ defmodule Systems.Test.ModalLiveView do
 
   def dependencies, do: [:title, :button_configs]
 
-  def get_model(
-        :not_mounted_at_router,
-        %{"title" => title, "button_configs" => button_configs},
-        _socket
-      ) do
+  def get_model(:not_mounted_at_router, %{"title" => title, "button_configs" => button_configs}, _socket) do
     %Test.ModalModel{
       id: :modal_test,
       title: title,

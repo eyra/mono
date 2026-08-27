@@ -55,9 +55,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
     assign(socket, storage_endpoint: %Storage.EndpointModel{})
   end
 
-  def update_storage_endpoint(
-        %{assigns: %{entity: %{storage_endpoint: storage_endpoint}}} = socket
-      ) do
+  def update_storage_endpoint(%{assigns: %{entity: %{storage_endpoint: storage_endpoint}}} = socket) do
     assign(socket, storage_endpoint: storage_endpoint)
   end
 
@@ -73,11 +71,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{source: %{name: :storage_endpoint_form}, changeset: changeset},
-        socket
-      ) do
+  def handle_event("update", %{source: %{name: :storage_endpoint_form}, changeset: changeset}, socket) do
     {
       :noreply,
       assign(socket, endpoint_changeset: changeset)

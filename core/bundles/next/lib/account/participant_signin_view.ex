@@ -23,9 +23,7 @@ defmodule Next.Account.ParticipantSigninView do
     }
   end
 
-  defp update_password_form(
-         %{assigns: %{email: email, post_signin_action: post_signin_action}} = socket
-       ) do
+  defp update_password_form(%{assigns: %{email: email, post_signin_action: post_signin_action}} = socket) do
     attrs =
       if User.valid_email?(email) do
         %{"email" => email}

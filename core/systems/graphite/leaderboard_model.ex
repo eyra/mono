@@ -94,8 +94,7 @@ defmodule Systems.Graphite.LeaderboardModel do
 
     def status(%{status: status}), do: %Status{value: status}
 
-    defp format_datetime(nil, _timezone),
-      do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
+    defp format_datetime(nil, _timezone), do: dgettext("eyra-project", "leaderboard.unspecified.deadline.label")
 
     defp format_datetime(_, nil), do: ""
 

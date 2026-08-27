@@ -6,10 +6,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
   # Single view: get the first (and only) work item
   alias Systems.Assignment
 
-  def view_model(
-        %{crew: crew} = assignment,
-        %{current_user: user, live_context: context} = assigns
-      ) do
+  def view_model(%{crew: crew} = assignment, %{current_user: user, live_context: context} = assigns) do
     work_items = build_work_items(assignment, user)
     work_item = List.first(work_items)
 

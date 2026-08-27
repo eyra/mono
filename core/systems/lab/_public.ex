@@ -165,12 +165,7 @@ defmodule Systems.Lab.Public do
   end
 
   defp submit_day_entry(
-         %{
-           type: :time_slot,
-           start_time: start_time,
-           number_of_seats: number_of_seats,
-           enabled?: enabled?
-         },
+         %{type: :time_slot, start_time: start_time, number_of_seats: number_of_seats, enabled?: enabled?},
          %Lab.ToolModel{} = tool,
          og_date,
          og_location,

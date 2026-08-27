@@ -75,9 +75,7 @@ defmodule Systems.Promotion.LandingPage do
     update_image_info(socket)
   end
 
-  defp update_image_info(
-         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket
-       ) do
+  defp update_image_info(%{assigns: %{viewport: %{"width" => viewport_width}, vm: %{image_id: image_id}}} = socket) do
     assign(socket, image_info: ImageHelpers.get_image_info(image_id, viewport_width, 720))
   end
 
@@ -109,11 +107,7 @@ defmodule Systems.Promotion.LandingPage do
   def handle_event(
         "call-to-action",
         _params,
-        %{
-          assigns: %{
-            vm: %{call_to_action: %{advert: %{assignment: %{id: assignment_id}}, handle: handle}}
-          }
-        } = socket
+        %{assigns: %{vm: %{call_to_action: %{advert: %{assignment: %{id: assignment_id}}, handle: handle}}}} = socket
       ) do
     if assignment_id |> Assignment.Public.get!() |> Assignment.Public.has_budget_capacity?() do
       {:noreply, handle.(socket)}

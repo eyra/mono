@@ -29,12 +29,7 @@ defmodule Systems.Zircon.Screening.HumanAgent do
 
   # We don't need to inform any AI about the decision, we just need to update the state
   @impl ScreeningAgent
-  def update_paper(
-        %{"screened_papers" => screened_papers} = state,
-        paper_id,
-        _criterion_id,
-        _label
-      ) do
+  def update_paper(%{"screened_papers" => screened_papers} = state, paper_id, _criterion_id, _label) do
     if Enum.member?(screened_papers, paper_id) do
       {:error, :paper_already_screened}
     else

@@ -93,8 +93,7 @@ defmodule Systems.Payment.Provider.OPP do
         {:ok, uid}
 
       {:ok, _data} ->
-        {:error,
-         %Error{code: :not_found, message: "No contact found for merchant #{merchant_uid}"}}
+        {:error, %Error{code: :not_found, message: "No contact found for merchant #{merchant_uid}"}}
 
       {:error, %Error{}} = error ->
         error
@@ -112,8 +111,7 @@ defmodule Systems.Payment.Provider.OPP do
         metadata: %Transaction.Metadata{} = metadata,
         opts: opts
       })
-      when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
-             is_atom(currency) and
+      when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and is_atom(currency) and
              is_binary(invoice_id) and is_binary(idempotence_key) do
     notify_url = Public.webhook_url()
 
@@ -194,8 +192,7 @@ defmodule Systems.Payment.Provider.OPP do
   # Unknown currency must return an error (not raise) so the caller can revert.
   @impl true
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
-      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
-             is_binary(idempotence_key) do
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and is_binary(idempotence_key) do
     case Map.fetch(@currency_mapping, currency) do
       {:ok, code} ->
         post_withdrawal(
@@ -257,8 +254,7 @@ defmodule Systems.Payment.Provider.OPP do
   # OPP models a merchant-to-merchant transfer as a charge of type `balance`.
   @impl true
   def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and
-             amount > 0 and
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and amount > 0 and
              is_binary(idempotence_key) do
     body = %{
       type: "balance",
@@ -291,8 +287,7 @@ defmodule Systems.Payment.Provider.OPP do
   # `test/systems/payment/opp_test.exs` pins this shape; edit both together.
   @impl true
   def charge_to_partner(from_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and
-             is_binary(idempotence_key) do
+      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     body = %{
       type: "partner_fee",
       amount: amount,

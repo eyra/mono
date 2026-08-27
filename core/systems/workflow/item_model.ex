@@ -54,8 +54,7 @@ defmodule Systems.Workflow.ItemModel do
 
   def preload_graph(:tool_ref), do: [tool_ref: Workflow.ToolRefModel.preload_graph(:down)]
 
-  def external_path(%{tool_ref: tool_ref}, next_id),
-    do: Workflow.ToolRefModel.external_path(tool_ref, next_id)
+  def external_path(%{tool_ref: tool_ref}, next_id), do: Workflow.ToolRefModel.external_path(tool_ref, next_id)
 
   def flatten(%{tool_ref: tool_ref}), do: Workflow.ToolRefModel.flatten(tool_ref)
 end

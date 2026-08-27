@@ -11,11 +11,7 @@ defmodule Systems.Student.Class do
     Enum.map(study_classes, &selector_label(&1, locale, active_codes))
   end
 
-  def selector_label(
-        %Org.NodeModel{short_name_bundle: short_name_bundle} = class,
-        locale,
-        active_codes
-      ) do
+  def selector_label(%Org.NodeModel{short_name_bundle: short_name_bundle} = class, locale, active_codes) do
     text = Content.TextBundleModel.text(short_name_bundle, locale)
     code = code(class)
     %{id: code, value: text, active: active?(code, active_codes)}

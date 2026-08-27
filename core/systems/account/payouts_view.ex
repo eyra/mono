@@ -55,11 +55,7 @@ defmodule Systems.Account.PayoutsView do
   end
 
   @impl true
-  def handle_event(
-        "start_verification",
-        _params,
-        %{assigns: %{model: %{phone: nil} = user}} = socket
-      ) do
+  def handle_event("start_verification", _params, %{assigns: %{model: %{phone: nil} = user}} = socket) do
     {:noreply, present_modal(socket, Account.PayoutsViewBuilder.phone_form_modal(user))}
   end
 

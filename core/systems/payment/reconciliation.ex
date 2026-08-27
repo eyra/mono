@@ -51,8 +51,7 @@ defmodule Systems.Payment.Reconciliation do
   """
   def get_withdrawal(state, uid), do: guarded(state, fn -> Payment.Public.get_withdrawal(uid) end)
 
-  def get_transaction(state, uid),
-    do: guarded(state, fn -> Payment.Public.get_transaction(uid) end)
+  def get_transaction(state, uid), do: guarded(state, fn -> Payment.Public.get_transaction(uid) end)
 
   @doc """
   Provider-side listings for the provider→local pass, under the same breaker and
@@ -134,10 +133,7 @@ defmodule Systems.Payment.Reconciliation do
   @doc """
   Persists the accumulated findings and finalizes the run row with its tally.
   """
-  def finish_run(%ReconciliationRunModel{id: run_id} = run, %State{
-        summary: summary,
-        findings: findings
-      }) do
+  def finish_run(%ReconciliationRunModel{id: run_id} = run, %State{summary: summary, findings: findings}) do
     persist_findings(run_id, findings)
 
     run

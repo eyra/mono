@@ -59,8 +59,7 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   defp extract_status({:ok, %HTTPoison.Response{status_code: status}}), do: status
   defp extract_status({:error, %HTTPoison.Error{reason: reason}}), do: inspect(reason)
 
-  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}})
-       when status in 200..299 do
+  defp handle_response({:ok, %HTTPoison.Response{status_code: status, body: body}}) when status in 200..299 do
     case Jason.decode(body) do
       {:ok, parsed} ->
         {:ok, parsed}

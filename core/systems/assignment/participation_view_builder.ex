@@ -27,15 +27,12 @@ defmodule Systems.Assignment.ParticipationViewBuilder do
   defp title(:accepted), do: dgettext("eyra-assignment", "participation.title.accepted")
   defp title(:rejected), do: dgettext("eyra-assignment", "participation.title.rejected")
 
-  defp body(:accepted, _participation),
-    do: dgettext("eyra-assignment", "participation.body.accepted")
+  defp body(:accepted, _participation), do: dgettext("eyra-assignment", "participation.body.accepted")
 
-  defp body(:rejected, %Assignment.ParticipationModel{rejected_message: reason})
-       when is_binary(reason) and reason != "",
-       do: dgettext("eyra-assignment", "participation.body.rejected.with_reason")
+  defp body(:rejected, %Assignment.ParticipationModel{rejected_message: reason}) when is_binary(reason) and reason != "",
+    do: dgettext("eyra-assignment", "participation.body.rejected.with_reason")
 
-  defp body(:rejected, _participation),
-    do: dgettext("eyra-assignment", "participation.body.rejected")
+  defp body(:rejected, _participation), do: dgettext("eyra-assignment", "participation.body.rejected")
 
   defp reason(:rejected, %Assignment.ParticipationModel{rejected_message: reason})
        when is_binary(reason) and reason != "",

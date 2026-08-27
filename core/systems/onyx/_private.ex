@@ -10,10 +10,7 @@ defmodule Systems.Onyx.Private do
     map_to_card(Repo.preload(model, :entity), type)
   end
 
-  def map_to_card(
-        %Ontology.ConceptModel{id: id, phrase: phrase, entity: entity, inserted_at: inserted_at},
-        card_type
-      ) do
+  def map_to_card(%Ontology.ConceptModel{id: id, phrase: phrase, entity: entity, inserted_at: inserted_at}, card_type) do
     entity_name =
       entity
       |> Authentication.fetch_subject()

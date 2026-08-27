@@ -53,8 +53,7 @@ defmodule Systems.Project.Switch do
     :ok
   end
 
-  defp node_id_from(%{action: %{params: %{"node_id" => node_id}}}) when is_integer(node_id),
-    do: node_id
+  defp node_id_from(%{action: %{params: %{"node_id" => node_id}}}) when is_integer(node_id), do: node_id
 
   defp node_id_from(_), do: nil
 

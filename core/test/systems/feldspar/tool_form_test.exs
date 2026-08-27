@@ -30,9 +30,7 @@ defmodule Systems.Feldspar.ToolFormTest do
       conn = Map.put(conn, :request_path, "/feldspar/tool_form")
 
       assert {:ok, _view, html} =
-               live_isolated(conn, TwoToolFormsView,
-                 session: %{"tool1" => tool1, "tool2" => tool2}
-               )
+               live_isolated(conn, TwoToolFormsView, session: %{"tool1" => tool1, "tool2" => tool2})
 
       assert html =~ "form_1_file_selector_form"
       assert html =~ "form_2_file_selector_form"

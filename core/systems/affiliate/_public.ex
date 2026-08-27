@@ -23,8 +23,7 @@ defmodule Systems.Affiliate.Public do
   def send_event(nil, _event, _user), do: {:error, :affiliate_url_missing}
   def send_event(_affiliate, nil, _user), do: {:error, :event_missing}
 
-  def send_event(_affiliate, event, _user) when not is_map(event),
-    do: {:error, :event_invalid_format}
+  def send_event(_affiliate, event, _user) when not is_map(event), do: {:error, :event_invalid_format}
 
   def send_event(_affiliate, _event, nil), do: {:error, :user_missing}
 

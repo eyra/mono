@@ -80,11 +80,8 @@ defmodule Systems.Fund.PayoutReconciliation do
 
   # resume_payout makes its own provider calls, which don't pass through the
   # circuit breaker; honour an already-open circuit rather than hammering on.
-  defp heal(
-         %Fund.PayoutModel{id: id, status: status, provider_uid: uid},
-         %State{circuit_open: true} = state
-       ),
-       do: record(state, :skipped, id, uid, status, nil, %{reason: "circuit_open"})
+  defp heal(%Fund.PayoutModel{id: id, status: status, provider_uid: uid}, %State{circuit_open: true} = state),
+    do: record(state, :skipped, id, uid, status, nil, %{reason: "circuit_open"})
 
   defp heal(%Fund.PayoutModel{id: id, status: status, provider_uid: uid} = payout, state) do
     case Fund.Public.resume_payout(payout) do

@@ -16,11 +16,7 @@ defmodule Systems.Assignment.ContributionsView do
   end
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        _session,
-        %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket
-      ) do
+  def mount(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket) do
     NextAction.Public.clear_next_action(
       user,
       Systems.Assignment.NextActions.PendingContributions,
@@ -45,9 +41,7 @@ defmodule Systems.Assignment.ContributionsView do
           :ok
 
         error ->
-          Logger.warning(
-            "[ContributionsView] accept_participation #{id} failed: #{inspect(error)}"
-          )
+          Logger.warning("[ContributionsView] accept_participation #{id} failed: #{inspect(error)}")
       end
     end)
 
@@ -72,10 +66,7 @@ defmodule Systems.Assignment.ContributionsView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :submit_decline, payload: %{participation_id: participation_id, reason: reason}},
-        socket
-      )
+  def consume_event(%{name: :submit_decline, payload: %{participation_id: participation_id, reason: reason}}, socket)
       when is_integer(participation_id) do
     socket =
       case Assignment.Public.reject_participation(participation_id, reason) do
@@ -83,9 +74,7 @@ defmodule Systems.Assignment.ContributionsView do
           socket
 
         error ->
-          Logger.warning(
-            "[ContributionsView] reject_participation #{participation_id} failed: #{inspect(error)}"
-          )
+          Logger.warning("[ContributionsView] reject_participation #{participation_id} failed: #{inspect(error)}")
 
           Frameworks.Pixel.Flash.push_error(
             socket,

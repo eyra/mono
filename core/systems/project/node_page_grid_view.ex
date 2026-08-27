@@ -20,10 +20,7 @@ defmodule Systems.Project.NodePageGridView do
     }
   end
 
-  def view_model(
-        %{assigns: %{node: %{id: id, name: name, items: node_items}, user: user} = assigns} =
-          socket
-      ) do
+  def view_model(%{assigns: %{node: %{id: id, name: name, items: node_items}, user: user} = assigns} = socket) do
     assign(socket, %{
       id: id,
       title: name,
@@ -114,11 +111,7 @@ defmodule Systems.Project.NodePageGridView do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{item_cards: item_cards}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{item_cards: item_cards}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(item_cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}

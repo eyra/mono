@@ -30,33 +30,21 @@ defmodule Systems.Assignment.CrewWorkView do
 
   # Forward to task_view component
   @impl true
-  def handle_event(
-        "tool_initialized",
-        _,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("tool_initialized", _, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     send_update(module, id: :task_view, tool_initialized: true)
     {:noreply, socket}
   end
 
   # Forward to task_view component
   @impl true
-  def handle_event(
-        "cancel_task",
-        _payload,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("cancel_task", _payload, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     send_update(module, id: :task_view, cancel_task: true)
     {:noreply, socket}
   end
 
   # Forward to task_view component
   @impl true
-  def handle_event(
-        "feldspar_event",
-        event,
-        %{assigns: %{vm: %{task_view: %{module: module}}}} = socket
-      ) do
+  def handle_event("feldspar_event", event, %{assigns: %{vm: %{task_view: %{module: module}}}} = socket) do
     send_update(module, id: :task_view, feldspar_event: event)
     {:noreply, socket}
   end

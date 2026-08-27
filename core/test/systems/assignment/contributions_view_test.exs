@@ -57,9 +57,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
     {:ok, _} = Assignment.Public.complete_participation(participation)
 
     task =
-      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"],
-        status: :completed
-      )
+      Crew.Factories.create_task(crew, member, ["task1", "member=#{member.id}"], status: :completed)
 
     {idempotence_key, task}
   end

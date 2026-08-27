@@ -47,12 +47,7 @@ defmodule Systems.Lab.DayView do
   end
 
   defp update_entries(
-         %{
-           assigns: %{
-             id: id,
-             day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model
-           }
-         } = socket
+         %{assigns: %{id: id, day_model: %{number_of_seats: number_of_seats, entries: entries} = day_model}} = socket
        )
        when is_list(entries) do
     enabled_timeslots = Enum.filter(entries, &(&1.type == :time_slot and &1.enabled?))
@@ -178,11 +173,7 @@ defmodule Systems.Lab.DayView do
     }
   end
 
-  def handle_event(
-        "update",
-        %{"day_model" => new_day_model},
-        %{assigns: %{day_model: day_model}} = socket
-      ) do
+  def handle_event("update", %{"day_model" => new_day_model}, %{assigns: %{day_model: day_model}} = socket) do
     changeset = Lab.DayModel.changeset(day_model, :submit, new_day_model)
 
     socket =
@@ -203,14 +194,7 @@ defmodule Systems.Lab.DayView do
   def handle_event(
         "submit",
         _,
-        %{
-          assigns: %{
-            error: nil,
-            changeset: changeset,
-            og_day_model: og_day_model,
-            day_model: day_model
-          }
-        } = socket
+        %{assigns: %{error: nil, changeset: changeset, og_day_model: og_day_model, day_model: day_model}} = socket
       ) do
     socket =
       if changeset.valid? do

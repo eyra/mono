@@ -48,11 +48,7 @@ defmodule Systems.Fund.BalanceRaceTest do
     assert available_balance(fund) == balance - amount
   end
 
-  defp reserve_while_locked(
-         %Fund.Model{available: %{id: account_id}} = fund,
-         amount,
-         participants
-       ) do
+  defp reserve_while_locked(%Fund.Model{available: %{id: account_id}} = fund, amount, participants) do
     lock_account(account_id)
     tasks = Enum.map(participants, &reserve_task(fund, amount, &1))
     await_lock_waiters(length(tasks))

@@ -18,11 +18,7 @@ defmodule Systems.Assignment.ParticipationView do
   end
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        _session,
-        %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket
-      ) do
+  def mount(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id, current_user: user}} = socket) do
     # Participant has landed on their outcome page → tell Notify the outcome
     # messages for this participation have been seen.
     mark_outcome_seen(assignment_id, user)

@@ -49,8 +49,7 @@ defmodule Systems.Org.Public do
     |> Multi.run(:auth_node, fn _, _ ->
       {:ok, Repo.insert!(auth_module().prepare_node())}
     end)
-    |> Multi.run(:org, fn _,
-                          %{short_name: short_name, full_name: full_name, auth_node: auth_node} ->
+    |> Multi.run(:org, fn _, %{short_name: short_name, full_name: full_name, auth_node: auth_node} ->
       {
         :ok,
         Org.Public.create_node!(%{
@@ -114,9 +113,7 @@ defmodule Systems.Org.Public do
   end
 
   def delete_user(%Node{} = node, %User{} = user) do
-    Repo.delete_all(
-      from(ua in UserAssociation, where: ua.org_id == ^node.id, where: ua.user_id == ^user.id)
-    )
+    Repo.delete_all(from(ua in UserAssociation, where: ua.org_id == ^node.id, where: ua.user_id == ^user.id))
   end
 
   def list_nodes(preload) do
@@ -292,9 +289,7 @@ defmodule Systems.Org.Public do
   def list_orgs(%User{} = user, preload \\ []) do
     node_ids = auth_module().query_node_ids(role: :owner, principal: user)
 
-    Repo.all(
-      from(node in Node, where: node.auth_node_id in subquery(node_ids), preload: ^preload)
-    )
+    Repo.all(from(node in Node, where: node.auth_node_id in subquery(node_ids), preload: ^preload))
   end
 
   @doc """

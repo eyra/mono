@@ -58,8 +58,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   defp highlight(%Graphite.LeaderboardModel{tool: %{submissions: submissions}}, :submissions) do
     %{
       title: dgettext("eyra-graphite", "highlight.submissions.title"),
-      text:
-        dgettext("eyra-graphite", "highlight.submissions.text", count: Enum.count(submissions))
+      text: dgettext("eyra-graphite", "highlight.submissions.text", count: Enum.count(submissions))
     }
   end
 
@@ -94,8 +93,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   end
 
   defp map_metrics_to_scores(
-         %Graphite.LeaderboardModel{metrics: metrics, scores: scores, visibility: visibility} =
-           leaderboard,
+         %Graphite.LeaderboardModel{metrics: metrics, scores: scores, visibility: visibility} = leaderboard,
          user,
          owner?
        ) do
@@ -134,9 +132,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
     }
   end
 
-  defp get_team(participants, %{
-         submission: %{auth_node: %{role_assignments: [%{principal_id: principal_id} | _]}}
-       }) do
+  defp get_team(participants, %{submission: %{auth_node: %{role_assignments: [%{principal_id: principal_id} | _]}}}) do
     Map.get(participants, principal_id, "Unknown")
   end
 

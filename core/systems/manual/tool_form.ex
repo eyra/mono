@@ -37,8 +37,7 @@ defmodule Systems.Manual.Builder.ToolForm do
     end
   end
 
-  def update_button(%{assigns: %{tool: %{manual_id: manual_id}}} = socket)
-      when not is_nil(manual_id) do
+  def update_button(%{assigns: %{tool: %{manual_id: manual_id}}} = socket) when not is_nil(manual_id) do
     label = dgettext("eyra-manual", "open.manual.button")
 
     button = %{

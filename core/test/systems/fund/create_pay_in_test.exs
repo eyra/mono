@@ -133,8 +133,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
   defp stub_provider_create_transaction do
     stub(ProviderMock, :get_merchant, fn _uid ->
-      {:ok,
-       %{uid: "m_create_pay_in", status: "active", kyc_level: 100, compliance_status: "verified"}}
+      {:ok, %{uid: "m_create_pay_in", status: "active", kyc_level: 100, compliance_status: "verified"}}
     end)
 
     stub(ProviderMock, :create_transaction, fn _request ->

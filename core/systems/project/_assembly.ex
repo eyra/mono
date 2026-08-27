@@ -85,8 +85,7 @@ defmodule Systems.Project.Assembly do
     |> Repo.commit()
   end
 
-  def create_item(template_or_changeset, name, %Project.NodeModel{} = node, user)
-      when is_binary(name) do
+  def create_item(template_or_changeset, name, %Project.NodeModel{} = node, user) when is_binary(name) do
     Multi.new()
     |> Multi.insert(
       :project_item,
@@ -177,11 +176,7 @@ defmodule Systems.Project.Assembly do
 
   # AUTHORIZATION
 
-  def update_path(
-        multi,
-        %Project.NodeModel{id: id, items: items, children: children} = node,
-        project_path
-      ) do
+  def update_path(multi, %Project.NodeModel{id: id, items: items, children: children} = node, project_path) do
     changeset = Project.NodeModel.changeset(node, %{project_path: project_path})
     new_project_path = append_path(project_path, node)
 
@@ -207,8 +202,7 @@ defmodule Systems.Project.Assembly do
 
   def append_path(path, %{id: id}) when is_list(path), do: append_path(path, id)
 
-  def append_path(path, sub_path) when is_list(path) and is_integer(sub_path),
-    do: path ++ [sub_path]
+  def append_path(path, sub_path) when is_list(path) and is_integer(sub_path), do: path ++ [sub_path]
 
   def update_auth(multi, %{project: project}), do: update_auth(multi, project)
   def update_auth(multi, %{project_node: node}), do: update_auth(multi, node)

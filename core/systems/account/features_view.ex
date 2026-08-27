@@ -30,10 +30,7 @@ defmodule Systems.Account.FeaturesView do
 
   # Handle gender selector events (sent via send() from Selector component)
   @impl true
-  def handle_info(
-        {"active_item_id", %{active_item_id: active_item_id}},
-        %{assigns: %{model: features}} = socket
-      ) do
+  def handle_info({"active_item_id", %{active_item_id: active_item_id}}, %{assigns: %{model: features}} = socket) do
     {:noreply, save_features(socket, features, %{"gender" => active_item_id})}
   end
 

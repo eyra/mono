@@ -48,10 +48,7 @@ defmodule Systems.Pool.OnboardingPage do
   end
 
   @impl true
-  def consume_event(
-        %{name: :accept},
-        %{assigns: %{current_user: user, model: %Pool.Model{} = pool}} = socket
-      ) do
+  def consume_event(%{name: :accept}, %{assigns: %{current_user: user, model: %Pool.Model{} = pool}} = socket) do
     Pool.Public.add_participant!(pool, user)
 
     {:stop, advance_or_finish(socket)}
@@ -62,9 +59,7 @@ defmodule Systems.Pool.OnboardingPage do
     {:noreply, advance_or_finish(socket)}
   end
 
-  defp advance_or_finish(
-         %{assigns: %{vm: %{is_last_step: true, finish_path: finish_path}}} = socket
-       ) do
+  defp advance_or_finish(%{assigns: %{vm: %{is_last_step: true, finish_path: finish_path}}} = socket) do
     push_navigate(socket, to: finish_path)
   end
 

@@ -149,10 +149,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept(
-        {:project_item, :inserted} = signal,
-        %{project_item: %{storage_endpoint: _} = project_item} = message
-      ) do
+  def intercept({:project_item, :inserted} = signal, %{project_item: %{storage_endpoint: _} = project_item} = message) do
     project_item
     |> Public.get_node_by_item!()
     |> Public.list_items(:assignment, Project.ItemModel.preload_graph(:down))
@@ -180,8 +177,7 @@ defmodule Systems.Assignment.Switch do
         {:workflow_item, {:manual_tool, {:manual, {:manual_chapter, {:userflow_step, :visited}}}}} ->
           update_content_page(assignment, from_pid)
 
-        {:workflow_item,
-         {:manual_tool, {:manual, {:manual_chapter, {:manual_page, {:userflow_step, :visited}}}}}} ->
+        {:workflow_item, {:manual_tool, {:manual, {:manual_chapter, {:manual_page, {:userflow_step, :visited}}}}}} ->
           update_content_page(assignment, from_pid)
 
         _ ->
@@ -197,10 +193,7 @@ defmodule Systems.Assignment.Switch do
 
   # update only the page for the crew_member that changed
   @impl true
-  def intercept(
-        {:crew, event} = _signal,
-        %{crew: crew, crew_member: crew_member, from_pid: from_pid} = _message
-      ) do
+  def intercept({:crew, event} = _signal, %{crew: crew, crew_member: crew_member, from_pid: from_pid} = _message) do
     if assignment = Assignment.Public.get_by(crew, Assignment.Model.preload_graph(:down)) do
       case event do
         {:crew_member, :accepted} ->
@@ -281,11 +274,7 @@ defmodule Systems.Assignment.Switch do
 
   def intercept(
         {:consent_agreement, {:consent_signature, :created}} = _signal,
-        %{
-          consent_agreement: consent_agreement,
-          consent_signature: %{user: user},
-          from_pid: from_pid
-        } = _message
+        %{consent_agreement: consent_agreement, consent_signature: %{user: user}, from_pid: from_pid} = _message
       ) do
     if assignment =
          Assignment.Public.get_by(consent_agreement, Assignment.Model.preload_graph(:down)) do
@@ -340,10 +329,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   @impl true
-  def intercept(
-        {:project_node, :delete_item} = _signal,
-        %{project_item: %{assignment_id: assignment_id}} = _message
-      )
+  def intercept({:project_node, :delete_item} = _signal, %{project_item: %{assignment_id: assignment_id}} = _message)
       when not is_nil(assignment_id) do
     assignment = Assignment.Public.get!(assignment_id)
     Assignment.Public.update!(assignment, %{status: :idle})
@@ -383,19 +369,13 @@ defmodule Systems.Assignment.Switch do
     :ok
   end
 
-  defp handle(
-         {:assignment, :monitor_event},
-         %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message
-       ) do
+  defp handle({:assignment, :monitor_event}, %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message) do
     assignment = reload_for_views(assignment_id)
     # Don't update the crew page here
     update_content_page(assignment, from_pid)
   end
 
-  defp handle(
-         {:assignment, _},
-         %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message
-       ) do
+  defp handle({:assignment, _}, %{assignment: %{id: assignment_id}, from_pid: from_pid} = _message) do
     assignment = reload_for_views(assignment_id)
     update_content_page(assignment, from_pid)
     update_crew_page(assignment, from_pid)
@@ -501,10 +481,7 @@ defmodule Systems.Assignment.Switch do
   end
 
   defp update_crew_task_next_action(%{id: assignment_id}, %{
-         changeset: %{
-           data: %{status: old_status, auth_node_id: auth_node_id},
-           changes: %{status: new_status}
-         }
+         changeset: %{data: %{status: old_status, auth_node_id: auth_node_id}, changes: %{status: new_status}}
        }) do
     users = auth_module().users_with_role(auth_node_id, :owner)
 

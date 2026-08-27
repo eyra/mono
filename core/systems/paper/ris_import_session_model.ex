@@ -172,8 +172,7 @@ defmodule Systems.Paper.RISImportSessionModel do
   def preload_graph(:down), do: preload_graph([:paper_set, :reference_file])
   def preload_graph(:paper_set), do: [paper_set: Paper.SetModel.preload_graph(:down)]
 
-  def preload_graph(:reference_file),
-    do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
+  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:down)]
 
   @doc """
   Get active import session for a reference file

@@ -28,6 +28,5 @@ defmodule Systems.Paper.ReferenceFilePaperAssoc do
   def preload_graph(:up), do: preload_graph([:reference_file])
   def preload_graph(:paper), do: [paper: Paper.Model.preload_graph(:down)]
 
-  def preload_graph(:reference_file),
-    do: [reference_file: Paper.ReferenceFileModel.preload_graph(:up)]
+  def preload_graph(:reference_file), do: [reference_file: Paper.ReferenceFileModel.preload_graph(:up)]
 end

@@ -44,11 +44,7 @@ defmodule Systems.Account.ResetPasswordToken do
   end
 
   @impl true
-  def handle_event(
-        "reset-password",
-        %{"user" => password_params},
-        %{assigns: %{user: user}} = socket
-      ) do
+  def handle_event("reset-password", %{"user" => password_params}, %{assigns: %{user: user}} = socket) do
     case Account.Public.reset_user_password(user, password_params) do
       {:ok, _} ->
         {:noreply,

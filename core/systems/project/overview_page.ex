@@ -79,11 +79,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{vm: %{cards: cards}}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{vm: %{cards: cards}}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(cards, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}
@@ -175,11 +171,7 @@ defmodule Systems.Project.OverviewPage do
   end
 
   @impl true
-  def handle_event(
-        "remove_user",
-        %{user: user},
-        %{assigns: %{active_project: project_id}} = socket
-      ) do
+  def handle_event("remove_user", %{user: user}, %{assigns: %{active_project: project_id}} = socket) do
     case project_id
          |> Project.Public.get!()
          |> Project.Public.remove_owner!(user) do

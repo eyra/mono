@@ -68,11 +68,7 @@ defmodule Systems.Admin.OrgView do
   end
 
   @impl true
-  def handle_event(
-        "setup_admins",
-        %{"item" => org_id_string},
-        %{assigns: %{locale: locale}} = socket
-      ) do
+  def handle_event("setup_admins", %{"item" => org_id_string}, %{assigns: %{locale: locale}} = socket) do
     org_id = String.to_integer(org_id_string)
     org = Org.Public.get_node!(org_id, Org.NodeModel.preload_graph(:full))
     org_name = Systems.Content.TextBundleModel.text(org.full_name_bundle, locale)
@@ -81,10 +77,7 @@ defmodule Systems.Admin.OrgView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :search_query, payload: %{query: query, query_string: query_string}},
-        socket
-      ) do
+  def consume_event(%{name: :search_query, payload: %{query: query, query_string: query_string}}, socket) do
     {
       :stop,
       socket
@@ -94,10 +87,7 @@ defmodule Systems.Admin.OrgView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :active_item_ids, payload: %{active_item_ids: active_filters}},
-        socket
-      ) do
+  def consume_event(%{name: :active_item_ids, payload: %{active_item_ids: active_filters}}, socket) do
     {
       :stop,
       socket

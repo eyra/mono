@@ -35,9 +35,7 @@ defmodule Systems.Manual.Builder.View do
     assign(socket, selected_chapter_id: nil, selected_chapter: nil)
   end
 
-  def update_selected_chapter(
-        %{assigns: %{selected_chapter_id: selected_chapter_id, chapters: chapters}} = socket
-      ) do
+  def update_selected_chapter(%{assigns: %{selected_chapter_id: selected_chapter_id, chapters: chapters}} = socket) do
     selected_chapter =
       case Enum.find(chapters, fn chapter -> chapter.id == selected_chapter_id end) do
         nil ->

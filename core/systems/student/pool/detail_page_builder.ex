@@ -61,10 +61,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
   defp scale({:unknown, _}), do: 5
   defp scale(breakpoint), do: value(breakpoint, 10, md: %{0 => 5})
 
-  defp load_dashboard(
-         %{breakpoint: breakpoint},
-         %Pool.Model{target: target, currency: currency} = pool
-       ) do
+  defp load_dashboard(%{breakpoint: breakpoint}, %Pool.Model{target: target, currency: currency} = pool) do
     participants = Pool.Public.list_participants(pool)
     scale = scale(breakpoint)
 
@@ -146,8 +143,7 @@ defmodule Systems.Student.Pool.DetailPageBuilder do
     }
   end
 
-  defp do_round(number) when is_float(number),
-    do: number |> Decimal.from_float() |> Decimal.round(2)
+  defp do_round(number) when is_float(number), do: number |> Decimal.from_float() |> Decimal.round(2)
 
   defp do_round(number), do: number
 end

@@ -60,11 +60,7 @@ defmodule Systems.Student.UserForm do
 
   defp finished_last_year?(_, _, _), do: false
 
-  defp successor?(
-         %{identifier: finished_currency} = _finished_course,
-         %{identifier: currency} = _course,
-         current_year
-       ) do
+  defp successor?(%{identifier: finished_currency} = _finished_course, %{identifier: currency} = _course, current_year) do
     Student.Public.successor?(finished_currency, currency, current_year)
   end
 
@@ -100,9 +96,7 @@ defmodule Systems.Student.UserForm do
     }
   end
 
-  defp update_student_classes(
-         %{assigns: %{student_classes: student_classes, user: user}} = socket
-       ) do
+  defp update_student_classes(%{assigns: %{student_classes: student_classes, user: user}} = socket) do
     active_classes = Student.Public.list_classes(user)
 
     active_codes =

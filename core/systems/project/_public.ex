@@ -255,11 +255,7 @@ defmodule Systems.Project.Public do
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
 
-  def prepare_node(
-        %{name: _, project_path: _} = attrs,
-        items,
-        auth_node \\ auth_module().prepare_node()
-      )
+  def prepare_node(%{name: _, project_path: _} = attrs, items, auth_node \\ auth_module().prepare_node())
       when is_list(items) do
     %Project.NodeModel{}
     |> Project.NodeModel.changeset(attrs)

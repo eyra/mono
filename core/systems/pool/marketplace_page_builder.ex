@@ -36,9 +36,7 @@ defmodule Systems.Pool.MarketplacePageBuilder do
   defp build_items(%Pool.Model{id: pool_id}, %Account.User{} = user, assigns) do
     :online
     |> Advert.Public.list_by_status(preload: Advert.Model.preload_graph(:down))
-    |> Enum.filter(
-      &(&1.submission.pool_id == pool_id and Advert.Public.validate_open(&1, user) == :ok)
-    )
+    |> Enum.filter(&(&1.submission.pool_id == pool_id and Advert.Public.validate_open(&1, user) == :ok))
     |> Enum.map(&to_item(&1, assigns))
   end
 
@@ -49,8 +47,7 @@ defmodule Systems.Pool.MarketplacePageBuilder do
     }
   end
 
-  defp published_year(%Advert.Model{submission: %{submitted_at: %NaiveDateTime{year: year}}}),
-    do: year
+  defp published_year(%Advert.Model{submission: %{submitted_at: %NaiveDateTime{year: year}}}), do: year
 
   defp published_year(%Advert.Model{inserted_at: %NaiveDateTime{year: year}}), do: year
 

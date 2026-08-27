@@ -12,8 +12,7 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     context = %{
       assignment: assignment,
       members_by_user_id: members_by_user_id(crew),
-      completed_task_counts_by_user_id:
-        Crew.Public.task_status_counts_by_user(crew, [:completed]),
+      completed_task_counts_by_user_id: Crew.Public.task_status_counts_by_user(crew, [:completed]),
       total_task_count: total_task_count(assignment)
     }
 
@@ -92,9 +91,7 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     }
   end
 
-  defp row(:confirmed, %Assignment.ParticipationModel{id: id, user_id: user_id}, %{
-         members_by_user_id: mbi
-       }) do
+  defp row(:confirmed, %Assignment.ParticipationModel{id: id, user_id: user_id}, %{members_by_user_id: mbi}) do
     %{
       participation_id: id,
       member_public_id: member_public_id(mbi, user_id) || id
@@ -119,9 +116,7 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
     }
   end
 
-  defp total_task_count(%Assignment.Model{workflow: %Workflow.Model{items: items}})
-       when is_list(items),
-       do: length(items)
+  defp total_task_count(%Assignment.Model{workflow: %Workflow.Model{items: items}}) when is_list(items), do: length(items)
 
   defp total_task_count(_), do: 0
 

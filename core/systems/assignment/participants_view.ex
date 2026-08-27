@@ -129,9 +129,7 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, invite_url: url)
   end
 
-  defp update_affiliate_title(
-         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
-       )
+  defp update_affiliate_title(%{assigns: %{assignment: %{external_panel: external_panel}}} = socket)
        when not is_nil(external_panel) do
     # backward compatibility using deprecated Assignment.external_panel field
     affiliate_title = dgettext("eyra-assignment", "external.panel.title")
@@ -143,9 +141,7 @@ defmodule Systems.Assignment.ParticipantsView do
     assign(socket, affiliate_title: affiliate_title)
   end
 
-  defp update_affiliate_annotation(
-         %{assigns: %{assignment: %{external_panel: external_panel}}} = socket
-       )
+  defp update_affiliate_annotation(%{assigns: %{assignment: %{external_panel: external_panel}}} = socket)
        when not is_nil(external_panel) do
     # backward compatibility using deprecated Assignment.external_panel field
     annotation = dgettext("eyra-assignment", "external.panel.annotation")

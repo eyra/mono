@@ -109,11 +109,7 @@ defmodule Systems.Assignment.BrandingForm do
   end
 
   @impl true
-  def handle_event(
-        "finish",
-        %{image_id: image_id, state: state},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("finish", %{image_id: image_id, state: state}, %{assigns: %{entity: entity}} = socket) do
     # Saving
     {
       :noreply,

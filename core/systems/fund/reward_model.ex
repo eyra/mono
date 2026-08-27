@@ -61,15 +61,11 @@ defmodule Systems.Fund.RewardModel do
     ]
   end
 
-  def deposit_idempotence_key(%Fund.RewardModel{
-        idempotence_key: idempotence_key,
-        attempt: attempt
-      }),
-      do: "#{idempotence_key},type=deposit,attempt=#{attempt}"
+  def deposit_idempotence_key(%Fund.RewardModel{idempotence_key: idempotence_key, attempt: attempt}),
+    do: "#{idempotence_key},type=deposit,attempt=#{attempt}"
 
   def payment_idempotence_key(%Fund.RewardModel{idempotence_key: idempotence_key}),
     do: payment_idempotence_key(idempotence_key)
 
-  def payment_idempotence_key(reward_idempotence_key),
-    do: "#{reward_idempotence_key},type=payment"
+  def payment_idempotence_key(reward_idempotence_key), do: "#{reward_idempotence_key},type=payment"
 end

@@ -51,11 +51,7 @@ defmodule Systems.Fund.DepositForm do
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"deposit_model" => %{"amount" => amount, "reference" => reference}},
-        socket
-      ) do
+  def handle_event("submit", %{"deposit_model" => %{"amount" => amount, "reference" => reference}}, socket) do
     changeset = Fund.DepositModel.changeset(amount, reference)
 
     case apply_action(changeset, :submit) do

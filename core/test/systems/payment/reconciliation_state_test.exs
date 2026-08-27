@@ -113,6 +113,5 @@ defmodule Systems.Payment.ReconciliationStateTest do
     end
   end
 
-  defp fail_times(state, count),
-    do: Enum.reduce(1..count, state, fn _, state -> State.record_failure(state) end)
+  defp fail_times(state, count), do: Enum.reduce(1..count, state, fn _, state -> State.record_failure(state) end)
 end

@@ -22,10 +22,7 @@ defmodule CoreWeb.Live.Feature.Menus do
 
       def update_menus(%{assigns: %{menus_config: nil}} = socket), do: assign(socket, menus: nil)
 
-      def update_menus(
-            %{assigns: %{menus_config: {menu_builder, menus}, active_menu_item: active_menu_item}} =
-              socket
-          ) do
+      def update_menus(%{assigns: %{menus_config: {menu_builder, menus}, active_menu_item: active_menu_item}} = socket) do
         update_menus(socket, menu_builder, menus, active_menu_item)
       end
 

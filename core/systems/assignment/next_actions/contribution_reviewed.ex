@@ -22,15 +22,11 @@ defmodule Systems.Assignment.NextActions.ContributionReviewed do
     }
   end
 
-  defp title("accepted"),
-    do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.accepted.title")
+  defp title("accepted"), do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.accepted.title")
 
-  defp title("declined"),
-    do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.declined.title")
+  defp title("declined"), do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.declined.title")
 
-  defp description("accepted"),
-    do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.accepted.description")
+  defp description("accepted"), do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.accepted.description")
 
-  defp description("declined"),
-    do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.declined.description")
+  defp description("declined"), do: dgettext("eyra-nextaction", "assignment.contribution_reviewed.declined.description")
 end

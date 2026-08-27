@@ -20,9 +20,7 @@ defmodule Systems.Zircon.Queries do
   end
 
   def screening_tool_query(%Paper.ReferenceFileModel{id: reference_file_id}) do
-    build(screening_tool_query(), :zircon_screening_tool,
-      reference_files: [id == ^reference_file_id]
-    )
+    build(screening_tool_query(), :zircon_screening_tool, reference_files: [id == ^reference_file_id])
   end
 
   def screening_tool_reference_file_query do

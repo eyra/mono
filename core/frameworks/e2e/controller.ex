@@ -55,8 +55,7 @@ defmodule Frameworks.E2E.Controller do
       json(conn, %{
         service_email: service_user.email,
         service_password: @service_password,
-        message:
-          "Service user ready. Use /api/service/login to authenticate, then call /api/e2e/setup"
+        message: "Service user ready. Use /api/service/login to authenticate, then call /api/e2e/setup"
       })
     else
       conn
@@ -381,9 +380,7 @@ defmodule Frameworks.E2E.Controller do
     import Ecto.Query
 
     has_project_item =
-      Repo.exists?(
-        from(pi in Systems.Project.ItemModel, where: pi.assignment_id == ^assignment.id)
-      )
+      Repo.exists?(from(pi in Systems.Project.ItemModel, where: pi.assignment_id == ^assignment.id))
 
     if !has_project_item do
       setup_storage_for_assignment(assignment)
@@ -528,9 +525,7 @@ defmodule Frameworks.E2E.Controller do
   defp find_e2e_feldspar_tool do
     import Ecto.Query
 
-    Repo.one(
-      from(t in Feldspar.ToolModel, where: t.archive_name == ^@feldspar_filename, limit: 1)
-    )
+    Repo.one(from(t in Feldspar.ToolModel, where: t.archive_name == ^@feldspar_filename, limit: 1))
   end
 
   defp download_and_store_feldspar_app do

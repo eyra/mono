@@ -35,8 +35,7 @@ defmodule Systems.Instruction.ForkForm do
     assign(socket, changeset: changeset)
   end
 
-  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket)
-       when not is_nil(page) do
+  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket) when not is_nil(page) do
     assign(socket, page: page)
   end
 

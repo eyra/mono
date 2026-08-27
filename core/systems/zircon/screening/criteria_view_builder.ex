@@ -48,8 +48,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
   end
 
   defp get_library_items(%{} = dimension_framework_map) do
-    Enum.map(dimension_framework_map, fn {dimension,
-                                          %{definition: definition, frameworks: frameworks}} ->
+    Enum.map(dimension_framework_map, fn {dimension, %{definition: definition, frameworks: frameworks}} ->
       %Builder.LibraryItemModel{
         id: dimension.phrase,
         type: "Research Dimension",

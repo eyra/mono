@@ -32,12 +32,7 @@ defmodule Systems.Onyx.BrowserViewBuilder do
     view_model(model, @filter_keys[module], history_cards, assigns)
   end
 
-  def view_model(
-        model,
-        filter_keys,
-        history_cards,
-        %{entities: entities, history: history, query: query} = assigns
-      )
+  def view_model(model, filter_keys, history_cards, %{entities: entities, history: history, query: query} = assigns)
       when is_list(filter_keys) do
     active_filters =
       assigns |> Map.get(:active_filters, []) |> Enum.map(&String.to_existing_atom/1)
@@ -147,10 +142,7 @@ defmodule Systems.Onyx.BrowserViewBuilder do
     matches_query?(phrase, query)
   end
 
-  defp matches_query?(
-         %Ontology.PredicateModel{subject: subject, type: type, object: object},
-         query
-       ) do
+  defp matches_query?(%Ontology.PredicateModel{subject: subject, type: type, object: object}, query) do
     matches_query?(subject, query) or matches_query?(type, query) or matches_query?(object, query)
   end
 

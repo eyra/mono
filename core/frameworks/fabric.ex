@@ -44,8 +44,7 @@ defmodule Fabric do
         %{socket | assigns: compose_element(assigns, element_id)}
       end
 
-      def compose_element(%{} = assigns, element_id)
-          when is_atom(element_id) or is_binary(element_id) do
+      def compose_element(%{} = assigns, element_id) when is_atom(element_id) or is_binary(element_id) do
         element = compose(element_id, assigns)
         Phoenix.Component.assign(assigns, element_id, element)
       end
@@ -69,8 +68,7 @@ defmodule Fabric do
         %{socket | assigns: compose_child(assigns, child_name)}
       end
 
-      def compose_child(%{fabric: _} = assigns, child_name)
-          when is_atom(child_name) or is_binary(child_name) do
+      def compose_child(%{fabric: _} = assigns, child_name) when is_atom(child_name) or is_binary(child_name) do
         Fabric.compose_child(assigns, child_name, compose(child_name, assigns))
       end
 
@@ -116,8 +114,7 @@ defmodule Fabric do
 
   def child_id(%{id: id}, child_name), do: child_id(id, child_name)
 
-  def child_id(context, child_name) when is_atom(child_name),
-    do: child_id(context, Atom.to_string(child_name))
+  def child_id(context, child_name) when is_atom(child_name), do: child_id(context, Atom.to_string(child_name))
 
   def child_id(context, child_name) when is_binary(child_name) do
     [child_name, context]
@@ -149,8 +146,7 @@ defmodule Fabric do
     %Model{ref: child_ref, params: params}
   end
 
-  def install_children(%Socket{assigns: %{fabric: fabric}} = socket, children)
-      when is_list(children) do
+  def install_children(%Socket{assigns: %{fabric: fabric}} = socket, children) when is_list(children) do
     Phoenix.Component.assign(socket, fabric: install_children(fabric, children))
   end
 

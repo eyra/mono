@@ -48,13 +48,8 @@ defmodule Systems.Fund.TransactionReconciliation do
     )
   end
 
-  defp reconcile_transaction(
-         %Fund.TransactionModel{transaction_id: nil, id: id, status: status},
-         state
-       ) do
-    Logger.error(
-      "[Budget] reconcile: transaction ##{id} (#{status}) has no provider uid — manual review"
-    )
+  defp reconcile_transaction(%Fund.TransactionModel{transaction_id: nil, id: id, status: status}, state) do
+    Logger.error("[Budget] reconcile: transaction ##{id} (#{status}) has no provider uid — manual review")
 
     record(state, :unresolvable, id, nil, status, nil, %{reason: "no provider uid"})
   end
@@ -63,18 +58,13 @@ defmodule Systems.Fund.TransactionReconciliation do
     State.tally(state, :verified)
   end
 
-  defp reconcile_transaction(
-         %Fund.TransactionModel{transaction_id: uid, id: id, status: status} = transaction,
-         state
-       ) do
+  defp reconcile_transaction(%Fund.TransactionModel{transaction_id: uid, id: id, status: status} = transaction, state) do
     case Payment.Public.reconcile_get_transaction(state, uid) do
       {{:ok, %{status: provider_status, raw_status: raw_status}}, state} ->
         apply_status(state, transaction, provider_status, raw_status)
 
       {:not_found, state} ->
-        Logger.error(
-          "[Budget] reconcile: transaction ##{id} (#{status}) missing at provider #{uid}"
-        )
+        Logger.error("[Budget] reconcile: transaction ##{id} (#{status}) missing at provider #{uid}")
 
         record(state, :missing_at_provider, id, uid, status, nil, %{provider: "not_found"})
 
@@ -87,13 +77,8 @@ defmodule Systems.Fund.TransactionReconciliation do
     end
   end
 
-  defp apply_status(
-         state,
-         %Fund.TransactionModel{status: :completed},
-         _provider_status,
-         _raw_status
-       ),
-       do: State.tally(state, :verified)
+  defp apply_status(state, %Fund.TransactionModel{status: :completed}, _provider_status, _raw_status),
+    do: State.tally(state, :verified)
 
   defp apply_status(
          state,

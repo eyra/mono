@@ -54,9 +54,7 @@ defmodule Systems.Payment.Provider.LocalController do
   end
 
   defp return_path(%{target_fund_id: fund_id}) do
-    case Core.Repo.one(
-           from(a in Systems.Assignment.Model, where: a.fund_id == ^fund_id, select: a.id)
-         ) do
+    case Core.Repo.one(from(a in Systems.Assignment.Model, where: a.fund_id == ^fund_id, select: a.id)) do
       nil -> "/"
       assignment_id -> "/assignment/#{assignment_id}/content"
     end

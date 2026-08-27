@@ -22,11 +22,7 @@ defmodule Systems.Storage.EndpointFilesView do
   end
 
   @impl true
-  def handle_event(
-        "start_loading",
-        _payload,
-        %{assigns: %{endpoint: endpoint, timezone: timezone}} = socket
-      ) do
+  def handle_event("start_loading", _payload, %{assigns: %{endpoint: endpoint, timezone: timezone}} = socket) do
     files =
       endpoint
       |> Storage.Public.list_files()

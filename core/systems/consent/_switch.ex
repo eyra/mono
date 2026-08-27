@@ -6,10 +6,7 @@ defmodule Systems.Consent.Switch do
   alias Systems.Consent
 
   @impl true
-  def intercept(
-        {:consent_revision, _} = signal,
-        %{consent_revision: %{agreement_id: agreement_id}} = message
-      ) do
+  def intercept({:consent_revision, _} = signal, %{consent_revision: %{agreement_id: agreement_id}} = message) do
     consent_agreement =
       Consent.Public.get_agreement!(agreement_id, Consent.AgreementModel.preload_graph(:down))
 

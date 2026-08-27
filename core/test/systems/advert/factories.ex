@@ -7,14 +7,7 @@ defmodule Systems.Advert.Factories do
   alias Systems.Assignment
   alias Systems.Crew
 
-  def create_advert(
-        researcher,
-        status,
-        subject_count \\ 1,
-        fund \\ nil,
-        schedule_start \\ nil,
-        schedule_end \\ nil
-      ) do
+  def create_advert(researcher, status, subject_count \\ 1, fund \\ nil, schedule_start \\ nil, schedule_end \\ nil) do
     promotion = Factories.insert!(:promotion, %{director: :advert})
 
     pool = Factories.insert!(:pool, %{name: "test_pool", director: :citizen})
@@ -66,8 +59,7 @@ defmodule Systems.Advert.Factories do
     create_task(identifier, user, crew, status, expired, minutes_ago)
   end
 
-  def create_task(identifier, user, crew, status, expired, minutes_ago)
-      when is_boolean(expired) do
+  def create_task(identifier, user, crew, status, expired, minutes_ago) when is_boolean(expired) do
     expire_at = naive_timestamp(-1)
 
     member = Crew.Factories.create_member(crew, user)

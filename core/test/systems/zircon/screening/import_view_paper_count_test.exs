@@ -61,9 +61,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
-        live_isolated(conn, Screening.ImportView,
-          session: %{"title" => "Import Papers", "tool" => tool}
-        )
+        live_isolated(conn, Screening.ImportView, session: %{"title" => "Import Papers", "tool" => tool})
 
       # Verify initial paper count is 3
       assert import_html =~ "Import Papers"
@@ -108,9 +106,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
-        live_isolated(conn, Screening.ImportView,
-          session: %{"title" => "Import Papers", "tool" => tool}
-        )
+        live_isolated(conn, Screening.ImportView, session: %{"title" => "Import Papers", "tool" => tool})
 
       # Verify initial paper count
       assert import_html =~ ">3</span>"
@@ -193,9 +189,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
-        live_isolated(conn, Screening.ImportView,
-          session: %{"title" => "Import Papers", "tool" => tool}
-        )
+        live_isolated(conn, Screening.ImportView, session: %{"title" => "Import Papers", "tool" => tool})
 
       # Initial count should be 3
       assert import_html =~ ">3</span>"

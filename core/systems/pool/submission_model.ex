@@ -28,8 +28,7 @@ defmodule Systems.Pool.SubmissionModel do
 
   def preload_graph(:down), do: preload_graph([:criteria, :pool_minimal])
 
-  def preload_graph(:pool_minimal),
-    do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node])]
+  def preload_graph(:pool_minimal), do: [pool: Pool.Model.preload_graph([:currency, :org, :auth_node])]
 
   def preload_graph(:criteria), do: [criteria: []]
 
@@ -93,8 +92,7 @@ defmodule Systems.Pool.SubmissionModel do
   def status(%{status: status}), do: status
   def status(_), do: :idle
 
-  def submitted?(%{submitted_at: submitted_at, status: status}),
-    do: submitted_at != nil and status != :idle
+  def submitted?(%{submitted_at: submitted_at, status: status}), do: submitted_at != nil and status != :idle
 
   def submitted?(_), do: false
 

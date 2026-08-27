@@ -99,9 +99,7 @@ defmodule Systems.Fund.FundingPage do
     assign(socket, selected_fund: fund)
   end
 
-  defp update_selected_fund(
-         %{assigns: %{funds: funds, selected_fund: %{id: selected_id}}} = socket
-       ) do
+  defp update_selected_fund(%{assigns: %{funds: funds, selected_fund: %{id: selected_id}}} = socket) do
     fund = Enum.find(funds, &(&1.id == selected_id))
     assign(socket, selected_fund: fund)
   end
@@ -110,9 +108,7 @@ defmodule Systems.Fund.FundingPage do
     assign(socket, balance: nil)
   end
 
-  defp update_balance(
-         %{assigns: %{selected_fund: %{currency: currency} = fund, locale: locale}} = socket
-       ) do
+  defp update_balance(%{assigns: %{selected_fund: %{currency: currency} = fund, locale: locale}} = socket) do
     available = Fund.Model.amount_available(fund)
     reserved = Fund.Model.amount_reserved(fund)
     spend = Fund.Model.amount_spend(fund)
@@ -140,15 +136,12 @@ defmodule Systems.Fund.FundingPage do
   end
 
   # Events
-  defp update_squares(
-         %{assigns: %{funds: funds, selected_fund: selected_fund, locale: locale}} = socket
-       ) do
+  defp update_squares(%{assigns: %{funds: funds, selected_fund: selected_fund, locale: locale}} = socket) do
     assign(socket, squares: Enum.map(funds, &to_square(&1, selected_fund, locale)))
   end
 
   defp to_square(
-         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon} =
-           _fund,
+         %Fund.Model{id: id, name: name, available: available, currency: currency, icon: icon} = _fund,
          %{id: selected_id},
          locale
        ) do

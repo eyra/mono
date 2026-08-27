@@ -20,10 +20,7 @@ defmodule Systems.Org.PoolsViewBuilder do
     }
   end
 
-  defp pool_item(
-         %Pool.Model{id: id, name: name, currency: currency, director: director} = pool,
-         locale
-       ) do
+  defp pool_item(%Pool.Model{id: id, name: name, currency: currency, director: director} = pool, locale) do
     %{
       item: id,
       title: name,

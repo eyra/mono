@@ -39,8 +39,7 @@ defmodule Systems.Pool.MarketplacePageBuilderTest do
     user
   end
 
-  defp build_assigns(user, pool),
-    do: %{current_user: user, uri_path: "/pool/#{pool.id}/marketplace"}
+  defp build_assigns(user, pool), do: %{current_user: user, uri_path: "/pool/#{pool.id}/marketplace"}
 
   describe "view_model/2" do
     test "returns Activities > Marketplace breadcrumbs" do

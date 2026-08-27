@@ -70,10 +70,7 @@ defmodule Systems.Assignment.Queries do
   end
 
   # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
-  def participant_query(%Assignment.Model{
-        external_panel: external_panel,
-        crew: %{id: id, auth_node_id: auth_node_id}
-      })
+  def participant_query(%Assignment.Model{external_panel: external_panel, crew: %{id: id, auth_node_id: auth_node_id}})
       when not is_nil(external_panel) do
     participant_query()
     |> build(:member, [crew_id == ^id, user: [id != nil]])
@@ -92,10 +89,7 @@ defmodule Systems.Assignment.Queries do
     })
   end
 
-  def participant_query(%Assignment.Model{
-        affiliate: %{id: affiliate_id},
-        crew: %{id: id, auth_node_id: auth_node_id}
-      }) do
+  def participant_query(%Assignment.Model{affiliate: %{id: affiliate_id}, crew: %{id: id, auth_node_id: auth_node_id}}) do
     participant_query()
     |> build(:member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], au in Affiliate.User, on: u.id == au.user_id, as: :affiliate_user)

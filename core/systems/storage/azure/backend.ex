@@ -55,16 +55,8 @@ defmodule Systems.Storage.Azure.Backend do
   @impl true
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
-  defp url(
-         %{
-           "account_name" => storage_account_name,
-           "container" => container,
-           "sas_token" => sas_token
-         },
-         path
-       ) do
-    {:ok,
-     "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
+  defp url(%{"account_name" => storage_account_name, "container" => container, "sas_token" => sas_token}, path) do
+    {:ok, "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
   end
 
   defp url(_, _) do

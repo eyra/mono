@@ -7,16 +7,7 @@ defmodule Systems.Assignment.GeneralForm do
   alias Systems.Assignment
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity,
-          viewport: viewport,
-          breakpoint: breakpoint,
-          content_flags: content_flags
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity, viewport: viewport, breakpoint: breakpoint, content_flags: content_flags}, socket) do
     changeset = Assignment.InfoModel.changeset(entity, :create, %{})
 
     {
@@ -34,9 +25,7 @@ defmodule Systems.Assignment.GeneralForm do
     }
   end
 
-  def update_language_items(
-        %{assigns: %{entity: %{language: language}, content_flags: content_flags}} = socket
-      ) do
+  def update_language_items(%{assigns: %{entity: %{language: language}, content_flags: content_flags}} = socket) do
     language_mode = determine_language_mode(content_flags)
     resolved_language = resolve_language(language, language_mode)
 

@@ -16,9 +16,7 @@ defmodule Systems.Advert.SubmissionView do
     }
   end
 
-  defp compose_inclusion_selectors(
-         %{assigns: %{vm: %{selector_option_labels: selector_option_labels}}} = socket
-       ) do
+  defp compose_inclusion_selectors(%{assigns: %{vm: %{selector_option_labels: selector_option_labels}}} = socket) do
     selector_option_labels
     |> Map.keys()
     |> Enum.reduce(socket, fn key, socket -> compose_child(socket, key) end)
@@ -50,10 +48,7 @@ defmodule Systems.Advert.SubmissionView do
     }
   end
 
-  defp persist_criteria_changes(
-         %{assigns: %{vm: %{entity: %{criteria: criteria}}}} = socket,
-         attrs
-       ) do
+  defp persist_criteria_changes(%{assigns: %{vm: %{entity: %{criteria: criteria}}}} = socket, attrs) do
     changeset = Pool.CriteriaModel.changeset(criteria, attrs)
 
     socket
@@ -69,17 +64,12 @@ defmodule Systems.Advert.SubmissionView do
 
   defp inclusion_criterium_title(:genders), do: dgettext("eyra-account", "features.gender.title")
 
-  defp inclusion_criterium_title(:birth_years),
-    do: dgettext("eyra-account", "features.birthyear.title")
+  defp inclusion_criterium_title(:birth_years), do: dgettext("eyra-account", "features.birthyear.title")
 
   @impl true
   def handle_event(
         "active_item_ids",
-        %{
-          active_item_ids: excluded_advert_ids,
-          source: %{name: :exclude_adverts},
-          current_items: current_items
-        },
+        %{active_item_ids: excluded_advert_ids, source: %{name: :exclude_adverts}, current_items: current_items},
         %{assigns: %{vm: %{assignment: assignment}}} = socket
       ) do
     Advert.Public.handle_exclusion(assignment, current_items)
@@ -94,11 +84,7 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: selected_values, source: %{name: criteria_field}},
-        socket
-      )
+  def handle_event("active_item_ids", %{active_item_ids: selected_values, source: %{name: criteria_field}}, socket)
       when criteria_field == :genders do
     attrs = %{criteria_field => selected_values}
 

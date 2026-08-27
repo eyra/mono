@@ -6,10 +6,7 @@ defmodule Systems.Email.Dialog do
   alias Systems.Email
 
   @impl true
-  def update(
-        %{id: id, users: users, current_user: current_user},
-        %{assigns: %{myself: myself}} = socket
-      ) do
+  def update(%{id: id, users: users, current_user: current_user}, %{assigns: %{myself: myself}} = socket) do
     close_button = %{
       action: %{type: :send, event: "close", target: myself},
       face: %{type: :icon, icon: :close}

@@ -57,11 +57,7 @@ defmodule Systems.Support.HelpdeskForm do
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"ticket_model" => data},
-        %{assigns: %{user: user, type: type}} = socket
-      ) do
+  def handle_event("submit", %{"ticket_model" => data}, %{assigns: %{user: user, type: type}} = socket) do
     data = Map.put(data, "type", type)
 
     socket =

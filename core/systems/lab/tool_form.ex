@@ -6,10 +6,7 @@ defmodule Systems.Lab.ToolForm do
   alias Systems.Lab
 
   @impl true
-  def update(
-        %{id: id, entity_id: entity_id, validate?: validate?},
-        %{assigns: %{myself: myself}} = socket
-      ) do
+  def update(%{id: id, entity_id: entity_id, validate?: validate?}, %{assigns: %{myself: myself}} = socket) do
     add_day_button = %{
       action: %{type: :send, event: "add_day", target: myself},
       face: %{type: :primary, label: dgettext("link-lab", "add.day.button")}

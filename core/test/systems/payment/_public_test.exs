@@ -65,8 +65,7 @@ defmodule Systems.Payment.PublicTest do
         {:ok, merchant(%{uid: "m_freshly_created"})}
       end)
 
-      assert {:ok,
-              {%Account.User{merchant_uid: "m_freshly_created"}, %{uid: "m_freshly_created"}}} =
+      assert {:ok, {%Account.User{merchant_uid: "m_freshly_created"}, %{uid: "m_freshly_created"}}} =
                Payment.Public.ensure_merchant_for(user)
 
       # Persisted on the user row, not just returned in memory.
@@ -241,8 +240,7 @@ defmodule Systems.Payment.PublicTest do
     test "creates a fresh account when the only existing one is disapproved" do
       ProviderMock
       |> expect(:list_bank_accounts, fn "m_dis" ->
-        {:ok,
-         [%{uid: "ba_bad", status: :rejected, raw_status: "disapproved", verification_url: nil}]}
+        {:ok, [%{uid: "ba_bad", status: :rejected, raw_status: "disapproved", verification_url: nil}]}
       end)
       |> expect(:create_bank_account, fn "m_dis", _attrs ->
         {:ok,

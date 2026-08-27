@@ -60,11 +60,7 @@ defmodule Systems.Project.NodePageBuilder do
     }
   end
 
-  defp create_tab(
-         :data,
-         show_errors,
-         %{fabric: fabric, timezone: timezone, node: node} = _assigns
-       ) do
+  defp create_tab(:data, show_errors, %{fabric: fabric, timezone: timezone, node: node} = _assigns) do
     case Enum.find(node.items, &(&1.name == "Data" and &1.storage_endpoint)) do
       %{storage_endpoint: storage_endpoint} ->
         ready? = true

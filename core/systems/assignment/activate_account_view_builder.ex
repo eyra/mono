@@ -7,10 +7,7 @@ defmodule Systems.Assignment.ActivateAccountViewBuilder do
   def view_model(%Account.User{email: email}, _assigns) do
     %{
       title: dgettext("eyra-assignment", "activate_account.title"),
-      body:
-        dgettext("eyra-assignment", "activate_account.body",
-          email: ~s(<span class="text-primary">#{email}</span>)
-        ),
+      body: dgettext("eyra-assignment", "activate_account.body", email: ~s(<span class="text-primary">#{email}</span>)),
       resend_button: resend_button(),
       check_button: check_button()
     }

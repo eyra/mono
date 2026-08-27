@@ -82,11 +82,9 @@ defmodule Systems.Graphite.ToolModel do
 
   def preload_graph(:auth_node), do: [auth_node: []]
 
-  def preload_graph(:submissions),
-    do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
+  def preload_graph(:submissions), do: [submissions: Graphite.SubmissionModel.preload_graph(:down)]
 
-  def preload_graph(:leaderboard),
-    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
+  def preload_graph(:leaderboard), do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
   def ready?(tool) do
     changeset =

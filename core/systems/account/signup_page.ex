@@ -94,10 +94,7 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def consume_event(
-        %{name: :active_item_ids, payload: %{active_item_ids: active_item_ids} = payload},
-        socket
-      ) do
+  def consume_event(%{name: :active_item_ids, payload: %{active_item_ids: active_item_ids} = payload}, socket) do
     normalized_ids = normalize_ids(active_item_ids)
     component_id = component_id_from_payload(payload)
 

@@ -57,8 +57,7 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
-  def create_assignment(info, consent_agreement, workflow, auth_node, status)
-      when is_atom(status) do
+  def create_assignment(info, consent_agreement, workflow, auth_node, status) when is_atom(status) do
     crew = Factories.insert!(:crew)
 
     Factories.insert!(:assignment, %{

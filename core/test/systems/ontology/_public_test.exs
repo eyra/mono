@@ -43,9 +43,7 @@ defmodule Ontology.PublicTest do
 
       assert %{
                errors: [
-                 phrase:
-                   {"has already been taken",
-                    [constraint: :unique, constraint_name: "ontology_concept_unique"]}
+                 phrase: {"has already been taken", [constraint: :unique, constraint_name: "ontology_concept_unique"]}
                ]
              } = changeset
     end
@@ -56,9 +54,7 @@ defmodule Ontology.PublicTest do
 
       assert %{
                errors: [
-                 phrase:
-                   {"has already been taken",
-                    [constraint: :unique, constraint_name: "ontology_concept_unique"]}
+                 phrase: {"has already been taken", [constraint: :unique, constraint_name: "ontology_concept_unique"]}
                ]
              } = changeset
     end
@@ -69,9 +65,7 @@ defmodule Ontology.PublicTest do
 
       assert %{
                errors: [
-                 phrase:
-                   {"has already been taken",
-                    [constraint: :unique, constraint_name: "ontology_concept_unique"]}
+                 phrase: {"has already been taken", [constraint: :unique, constraint_name: "ontology_concept_unique"]}
                ]
              } = changeset
     end

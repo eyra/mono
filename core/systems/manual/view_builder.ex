@@ -9,12 +9,7 @@ defmodule Systems.Manual.ViewBuilder do
   Always builds chapter_list, conditionally builds chapter based on selection.
   Receives chapter and page directly from {:user_state, [:chapter, :page]} dependency.
   """
-  def view_model(manual, %{
-        title: title,
-        current_user: user,
-        presentation: presentation,
-        user_state: user_state
-      }) do
+  def view_model(manual, %{title: title, current_user: user, presentation: presentation, user_state: user_state}) do
     manual = ensure_chapter_list(manual)
     chapter_id = user_state[:chapter]
     page_id = user_state[:page]

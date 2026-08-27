@@ -144,13 +144,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp actions(%{status: :online}, %{retract: retract}), do: [retract: retract]
 
-  defp actions(%{status: :offline}, %{publish: publish, close: close}),
-    do: [publish: publish, close: close]
+  defp actions(%{status: :offline}, %{publish: publish, close: close}), do: [publish: publish, close: close]
 
   defp actions(%{status: :idle}, %{open: open}), do: [open: open]
 
-  defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
-    do: [publish: publish, preview: preview]
+  defp actions(%{status: _concept}, %{publish: publish, preview: preview}), do: [publish: publish, preview: preview]
 
   @impl true
   def set_status(%{assigns: %{model: assignment}} = socket, status) do
@@ -158,12 +156,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     Phoenix.Component.assign(socket, model: assignment)
   end
 
-  defp create_tabs(
-         assignment,
-         template,
-         show_errors,
-         %{uri_origin: _, viewport: _, breakpoint: _} = assigns
-       ) do
+  defp create_tabs(assignment, template, show_errors, %{uri_origin: _, viewport: _, breakpoint: _} = assigns) do
     workflow_config = Assignment.Template.workflow_config(template)
 
     template
@@ -186,8 +179,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} =
-           _assigns
+         %{fabric: fabric, uri_origin: uri_origin, viewport: viewport, breakpoint: breakpoint} = _assigns
        ) do
     ready? = false
 
@@ -233,19 +225,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
     raise "Workflow tab is not supported for singleton workflows. Please provide alternative tab(s) for manipulating the workflow. See :import and :criteria tabs for examples."
   end
 
-  defp create_tab(
-         :workflow,
-         %{workflow: workflow},
-         {title, content_flags},
-         workflow_config,
-         show_errors,
-         %{
-           fabric: fabric,
-           current_user: user,
-           uri_origin: uri_origin,
-           timezone: timezone
-         }
-       ) do
+  defp create_tab(:workflow, %{workflow: workflow}, {title, content_flags}, workflow_config, show_errors, %{
+         fabric: fabric,
+         current_user: user,
+         uri_origin: uri_origin,
+         timezone: timezone
+       }) do
     ready? = false
 
     child =
@@ -273,9 +258,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{
-         fabric: fabric
-       }) do
+  defp create_tab(:affiliate, assignment, {title, content_flags}, _, show_errors, %{fabric: fabric}) do
     ready? = false
 
     child =
@@ -298,11 +281,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :import,
-         %{
-           workflow: %{
-             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
-           }
-         },
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, _content_flags},
          _workflow_config,
          show_errors,
@@ -332,11 +311,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp create_tab(
          :criteria,
-         %{
-           workflow: %{
-             items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]
-           }
-         },
+         %{workflow: %{items: [%{tool_ref: %{zircon_screening_tool: %{} = zircon_screening_tool}}]}},
          {title, _content_flags},
          _workflow_config,
          show_errors,
@@ -367,19 +342,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
     raise "Criteria tab is only supported for singleton workflows with one Zircon tool"
   end
 
-  defp create_tab(
-         :participants,
-         assignment,
-         {title, content_flags},
-         _workflow_config,
-         show_errors,
-         %{
-           fabric: fabric,
-           current_user: user,
-           viewport: viewport,
-           breakpoint: breakpoint
-         }
-       ) do
+  defp create_tab(:participants, assignment, {title, content_flags}, _workflow_config, show_errors, %{
+         fabric: fabric,
+         current_user: user,
+         viewport: viewport,
+         breakpoint: breakpoint
+       }) do
     child =
       Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
         assignment: assignment,
@@ -403,14 +371,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :contributions,
-         assignment,
-         {title, content_flags},
-         _workflow_config,
-         show_errors,
-         _assigns
-       ) do
+  defp create_tab(:contributions, assignment, {title, content_flags}, _workflow_config, show_errors, _assigns) do
     element =
       Element.prepare_live_view(
         "contributions",

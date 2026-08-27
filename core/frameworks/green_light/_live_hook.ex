@@ -33,9 +33,7 @@ defmodule Frameworks.GreenLight.LiveHook do
         can_access?
       rescue
         Ecto.NoResultsError ->
-          Logger.warning(
-            "Authorization context not found for #{live_view_module}, denying access"
-          )
+          Logger.warning("Authorization context not found for #{live_view_module}, denying access")
 
           false
       end

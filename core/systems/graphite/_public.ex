@@ -28,10 +28,7 @@ defmodule Systems.Graphite.Public do
     |> Repo.preload(preload)
   end
 
-  def list_leaderboards(
-        %Assignment.Model{special: :benchmark_challenge, workflow: workflow},
-        preload \\ []
-      ) do
+  def list_leaderboards(%Assignment.Model{special: :benchmark_challenge, workflow: workflow}, preload \\ []) do
     workflow
     |> Workflow.Public.list_tools(:submit)
     |> leaderboards_by_tools()

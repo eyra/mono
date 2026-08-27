@@ -42,11 +42,7 @@ defmodule Systems.Account.ProfileView do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        %{"user_profile_edit_model" => attrs},
-        %{assigns: %{model: entity}} = socket
-      ) do
+  def handle_event("save", %{"user_profile_edit_model" => attrs}, %{assigns: %{model: entity}} = socket) do
     {:noreply, save(socket, entity, :auto_save, attrs)}
   end
 

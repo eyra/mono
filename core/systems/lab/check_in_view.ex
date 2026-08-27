@@ -43,11 +43,7 @@ defmodule Systems.Lab.CheckInView do
   #   |> Account.Public.get_user!()
 
   @impl true
-  def handle_event(
-        "accept",
-        %{"item" => _user_id},
-        %{assigns: %{tool: _tool, parent: _parent}} = _socket
-      ) do
+  def handle_event("accept", %{"item" => _user_id}, %{assigns: %{tool: _tool, parent: _parent}} = _socket) do
     raise "FIXME: Apply member and activate task"
     # {:noreply, socket |> assign(query: nil, message: nil)}
   end
@@ -58,11 +54,7 @@ defmodule Systems.Lab.CheckInView do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"check_in_model" => %{"query" => query}},
-        %{assigns: %{tool: tool}} = socket
-      ) do
+  def handle_event("update", %{"check_in_model" => %{"query" => query}}, %{assigns: %{tool: tool}} = socket) do
     {items, message} =
       case Integer.parse(query) do
         {public_id, ""} -> search(public_id, tool)
@@ -189,11 +181,7 @@ defmodule Systems.Lab.CheckInView do
     }
   end
 
-  defp to_view_model(
-         {%{user_id: user_id, public_id: public_id} = _member,
-          [%{completed_at: completed_at} = task]},
-         tool
-       ) do
+  defp to_view_model({%{user_id: user_id, public_id: public_id} = _member, [%{completed_at: completed_at} = task]}, tool) do
     reservation = reservation(user_id, tool)
     time_slot = time_slot(reservation)
     status = item_status(task, reservation)

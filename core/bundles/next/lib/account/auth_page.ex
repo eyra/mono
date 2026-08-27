@@ -92,8 +92,7 @@ defmodule Next.Account.AuthPage do
 
   defp verify_url(email, nil), do: ~p"/user/auth/verify?email=#{email}"
 
-  defp verify_url(email, return_to),
-    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
+  defp verify_url(email, return_to), do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
 
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 

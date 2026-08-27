@@ -96,22 +96,17 @@ defmodule Systems.Admin.AccountViewBuilder do
   defp matches_filters?(user, [filter | rest], index),
     do: matches_filter?(user, filter, index) and matches_filters?(user, rest, index)
 
-  defp matches_filter?(%Account.User{id: id}, :affiliate, %{affiliate_user_ids: ids}),
-    do: MapSet.member?(ids, id)
+  defp matches_filter?(%Account.User{id: id}, :affiliate, %{affiliate_user_ids: ids}), do: MapSet.member?(ids, id)
 
-  defp matches_filter?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}),
-    do: MapSet.member?(ids, id)
+  defp matches_filter?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}), do: MapSet.member?(ids, id)
 
-  defp matches_filter?(user, filter, _index) when is_atom(filter),
-    do: matches_filter?(user, filter)
+  defp matches_filter?(user, filter, _index) when is_atom(filter), do: matches_filter?(user, filter)
 
   defp matches_filter?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
 
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified),
-    do: verified_at == nil
+  defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified), do: verified_at == nil
 
-  defp matches_filter?(%Account.User{creator: creator}, :creator) when not is_nil(creator),
-    do: creator
+  defp matches_filter?(%Account.User{creator: creator}, :creator) when not is_nil(creator), do: creator
 
   defp matches_filter?(%Account.User{}, :affiliate), do: false
   defp matches_filter?(%Account.User{}, :in_pool), do: false
@@ -130,8 +125,7 @@ defmodule Systems.Admin.AccountViewBuilder do
 
   defp matches_word?(_user, _word), do: false
 
-  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, word)
-       when not is_nil(fullname) do
+  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, word) when not is_nil(fullname) do
     String.contains?(String.downcase(fullname), word)
   end
 
@@ -162,8 +156,7 @@ defmodule Systems.Admin.AccountViewBuilder do
 
   defp verified_info(%Account.User{verified_at: nil}), do: ""
 
-  defp verified_info(%Account.User{verified_at: verified_at}),
-    do: "Verified #{Timestamp.humanize(verified_at)}"
+  defp verified_info(%Account.User{verified_at: verified_at}), do: "Verified #{Timestamp.humanize(verified_at)}"
 
   defp build_verify_button(%Account.User{creator: false, id: id}) do
     %{

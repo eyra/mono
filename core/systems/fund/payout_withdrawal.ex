@@ -135,9 +135,8 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  defp settled_match?(%{reference: reference, settled: settled}, key)
-       when is_binary(reference) and not is_nil(settled),
-       do: reference == key
+  defp settled_match?(%{reference: reference, settled: settled}, key) when is_binary(reference) and not is_nil(settled),
+    do: reference == key
 
   defp settled_match?(_transfer, _key), do: false
 

@@ -50,21 +50,12 @@ defmodule Systems.Support.TicketPageBuilder do
   defp to_member(%{
          id: id,
          title: title,
-         user: %{
-           email: email,
-           creator: creator,
-           profile: %{fullname: fullname, photo_url: photo_url},
-           features: features
-         }
+         user: %{email: email, creator: creator, profile: %{fullname: fullname, photo_url: photo_url}, features: features}
        }) do
     build_member(id, title, email, creator, fullname, photo_url, features)
   end
 
-  defp to_member(%{
-         id: id,
-         title: title,
-         user: %{email: email, creator: creator, features: features}
-       }) do
+  defp to_member(%{id: id, title: title, user: %{email: email, creator: creator, features: features}}) do
     build_member(id, title, email, creator, email, nil, features)
   end
 

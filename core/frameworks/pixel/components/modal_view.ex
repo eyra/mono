@@ -28,10 +28,7 @@ defmodule Frameworks.Pixel.ModalView do
         {:stop, socket}
       end
 
-      def consume_event(
-            %{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}},
-            socket
-          ) do
+      def consume_event(%{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}}, socket) do
         {:stop, ModalView.update_modal_buttons(socket, source, buttons)}
       end
     end

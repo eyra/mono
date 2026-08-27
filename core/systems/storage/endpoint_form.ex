@@ -90,13 +90,7 @@ defmodule Systems.Storage.EndpointForm do
   end
 
   defp update_changeset(
-         %{
-           assigns: %{
-             endpoint: endpoint,
-             special_type: special_type,
-             special_changeset: special_changeset
-           }
-         } = socket
+         %{assigns: %{endpoint: endpoint, special_type: special_type, special_changeset: special_changeset}} = socket
        ) do
     changeset =
       endpoint

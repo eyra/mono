@@ -2,8 +2,7 @@ defmodule Systems.Affiliate.Controller do
   use Systems.Affiliate.Constants
 
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
@@ -243,9 +242,7 @@ defmodule Systems.Affiliate.Controller do
     info = strip_query_string(params)
     user_info = Affiliate.Public.obtain_user_info!(affiliate_user, info)
 
-    Logger.debug(
-      "Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}"
-    )
+    Logger.debug("Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}")
 
     # Param Mappings
     conn
@@ -254,9 +251,7 @@ defmodule Systems.Affiliate.Controller do
   defp obtain_participation(%{assigns: %{current_user: user}} = conn, assignment) do
     participation = Assignment.Public.obtain_participation!(assignment, user)
 
-    Logger.debug(
-      "Starting session for assignment #{assignment.id} with participation #{participation.id}"
-    )
+    Logger.debug("Starting session for assignment #{assignment.id} with participation #{participation.id}")
 
     conn
   end

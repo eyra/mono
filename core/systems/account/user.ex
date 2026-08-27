@@ -115,9 +115,7 @@ defmodule Systems.Account.User do
         changeset
 
       "+" <> _ ->
-        validate_format(changeset, :phone, ~r/^\+[1-9]\d{7,14}$/,
-          message: "must be a valid phone number"
-        )
+        validate_format(changeset, :phone, ~r/^\+[1-9]\d{7,14}$/, message: "must be a valid phone number")
 
       _ ->
         add_error(changeset, :phone, "must start with a country code (e.g. +31) or leading 0")
@@ -159,9 +157,7 @@ defmodule Systems.Account.User do
     |> validate_length(:password, min: 12, max: 80)
     |> validate_format(:password, ~r/[a-z]/, message: "at least one lower case character")
     |> validate_format(:password, ~r/[A-Z]/, message: "at least one upper case character")
-    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/,
-      message: "at least one digit or punctuation character"
-    )
+    |> validate_format(:password, ~r/[!?@#$%^&*_0-9]/, message: "at least one digit or punctuation character")
     |> maybe_hash_password(opts)
   end
 
@@ -295,11 +291,9 @@ defmodule Systems.Account.User do
   def get_gender(%{features: nil}), do: nil
   def get_gender(%{features: %{gender: gender}}), do: gender
 
-  def label(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
-    do: fullname
+  def label(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "", do: fullname
 
-  def label(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
-    do: displayname
+  def label(%{displayname: displayname}) when is_binary(displayname) and displayname != "", do: displayname
 
   def label(%{email: nil}), do: "?"
   def label(%{email: email}), do: email |> String.split("@") |> List.first()
@@ -314,11 +308,9 @@ defmodule Systems.Account.User do
   def user_id(_), do: nil
 
   defimpl Core.Authentication.Subject do
-    def name(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
-      do: fullname
+    def name(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "", do: fullname
 
-    def name(%{displayname: displayname}) when is_binary(displayname) and displayname != "",
-      do: displayname
+    def name(%{displayname: displayname}) when is_binary(displayname) and displayname != "", do: displayname
 
     def name(%{email: nil}), do: "?"
     def name(%{email: email}), do: email |> String.split("@") |> List.first()

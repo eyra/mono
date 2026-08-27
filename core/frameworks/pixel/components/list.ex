@@ -73,8 +73,7 @@ defmodule Frameworks.Pixel.List do
   defp filter_rows(rows, _terms, nil), do: rows
   defp filter_rows(rows, [], _fn), do: rows
 
-  defp filter_rows(rows, terms, haystack_fn)
-       when is_list(terms) and is_function(haystack_fn, 1) do
+  defp filter_rows(rows, terms, haystack_fn) when is_list(terms) and is_function(haystack_fn, 1) do
     Enum.filter(rows, fn row ->
       haystack = row |> haystack_fn.() |> String.downcase()
       Enum.all?(terms, &String.contains?(haystack, String.downcase(&1)))
@@ -165,8 +164,7 @@ defmodule Frameworks.Pixel.List do
   defp search_bar_visible?(%{haystack_fn: nil}), do: false
   defp search_bar_visible?(%{query_string: q}) when q not in [nil, ""], do: true
 
-  defp search_bar_visible?(%{rows: rows, page_size: page_size}) when is_integer(page_size),
-    do: length(rows) > page_size
+  defp search_bar_visible?(%{rows: rows, page_size: page_size}) when is_integer(page_size), do: length(rows) > page_size
 
   defp search_bar_visible?(_), do: false
 

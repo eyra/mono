@@ -22,12 +22,7 @@ defmodule Systems.Assignment.OnboardingView do
   def handle_event(
         "continue",
         _payload,
-        %{
-          assigns: %{
-            current_user: user,
-            vm: %{page_ref: %{key: key, assignment_id: assignment_id}}
-          }
-        } = socket
+        %{assigns: %{current_user: user, vm: %{page_ref: %{key: key, assignment_id: assignment_id}}}} = socket
       ) do
     Account.Public.mark_as_visited(user, {key, assignment_id})
 

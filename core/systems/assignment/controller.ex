@@ -1,7 +1,6 @@
 defmodule Systems.Assignment.Controller do
   use CoreWeb,
-      {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+      {:controller, [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
@@ -116,14 +115,7 @@ defmodule Systems.Assignment.Controller do
     )
   end
 
-  def progress_csv_data(
-        assignment,
-        headers,
-        participants,
-        workflow_items,
-        signatures,
-        show_consent?
-      ) do
+  def progress_csv_data(assignment, headers, participants, workflow_items, signatures, show_consent?) do
     participants
     |> Enum.map(
       &participant_progress(
@@ -147,8 +139,7 @@ defmodule Systems.Assignment.Controller do
 
   defp show_consent?(_assignment, [_ | _] = _signatures), do: true
 
-  defp show_consent?(%Assignment.Model{consent_agreement_id: id}, _signatures) when is_number(id),
-    do: true
+  defp show_consent?(%Assignment.Model{consent_agreement_id: id}, _signatures) when is_number(id), do: true
 
   defp show_consent?(_, _), do: false
 
@@ -205,11 +196,7 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
-  defp task_status(
-         %Assignment.Model{crew: crew},
-         %Workflow.ItemModel{title: workflow_title},
-         task_identifier
-       ) do
+  defp task_status(%Assignment.Model{crew: crew}, %Workflow.ItemModel{title: workflow_title}, task_identifier) do
     status_value =
       case Crew.Public.get_task(crew, task_identifier) do
         %{started_at: nil} -> @progress_not_applicable

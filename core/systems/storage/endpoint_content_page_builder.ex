@@ -59,12 +59,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     }
   end
 
-  defp create_tab(
-         :data,
-         endpoint,
-         show_errors,
-         %{branch: branch, fabric: fabric, timezone: timezone} = _assigns
-       ) do
+  defp create_tab(:data, endpoint, show_errors, %{branch: branch, fabric: fabric, timezone: timezone} = _assigns) do
     ready? = true
     branch_name = Concept.Branch.name(branch, :parent)
 

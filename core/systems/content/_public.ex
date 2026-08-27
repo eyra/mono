@@ -89,8 +89,7 @@ defmodule Systems.Content.Public do
 
   defp translate_item({locale, text}), do: %{locale: Atom.to_string(locale), text: text}
 
-  defp translate_item({locale, single, plural}),
-    do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
+  defp translate_item({locale, single, plural}), do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
 end
 
 defimpl Core.Persister, for: Systems.Content.PageModel do

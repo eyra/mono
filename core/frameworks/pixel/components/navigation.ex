@@ -69,9 +69,7 @@ defmodule Frameworks.Pixel.Navigation do
   attr(:align, :atom, default: :left)
   slot(:inner_block, required: true)
 
-  def action_bar(
-        %{right_bar_buttons: right_bar_buttons, breadcrumbs: breadcrumbs, align: align} = assigns
-      ) do
+  def action_bar(%{right_bar_buttons: right_bar_buttons, breadcrumbs: breadcrumbs, align: align} = assigns) do
     assigns =
       assign(assigns, %{
         has_right_bar_buttons: not Enum.empty?(right_bar_buttons),

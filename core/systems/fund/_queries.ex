@@ -37,8 +37,7 @@ defmodule Systems.Fund.Queries do
   # Rewards for a user, scoped to a currency via the reward's fund. Shared base
   # for the per-status summary and the approved-payout list, both of which only
   # ever consider rewards payable in a single currency.
-  def reward_query_in_currency(user_id, currency_name)
-      when is_integer(user_id) and is_binary(currency_name) do
+  def reward_query_in_currency(user_id, currency_name) when is_integer(user_id) and is_binary(currency_name) do
     from(reward in Fund.RewardModel,
       as: :reward,
       join: fund in assoc(reward, :fund),

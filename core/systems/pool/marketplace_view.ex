@@ -28,10 +28,7 @@ defmodule Systems.Pool.MarketplaceView do
   end
 
   @impl true
-  def compose(:marketplace_search_bar, %{
-        vm: %{search_placeholder: placeholder},
-        query_string: query_string
-      }) do
+  def compose(:marketplace_search_bar, %{vm: %{search_placeholder: placeholder}, query_string: query_string}) do
     %{
       module: SearchBar,
       params: %{

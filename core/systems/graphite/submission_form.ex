@@ -47,9 +47,7 @@ defmodule Systems.Graphite.SubmissionForm do
     )
   end
 
-  defp update_humanized_deadline(
-         %{assigns: %{tool: %{deadline: deadline}, timezone: timezone}} = socket
-       ) do
+  defp update_humanized_deadline(%{assigns: %{tool: %{deadline: deadline}, timezone: timezone}} = socket) do
     humanized_deadline =
       deadline
       |> Timestamp.convert(timezone)

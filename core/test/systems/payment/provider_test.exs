@@ -92,10 +92,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "transfer_to_merchant/4" do
     test "delegates to configured provider" do
-      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform",
-                                                     "mer_participant",
-                                                     1000,
-                                                     "payout=1,type=transfer" ->
+      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform", "mer_participant", 1000, "payout=1,type=transfer" ->
         {:ok, %{uid: "chg1", status: "created", amount: 1000}}
       end)
 

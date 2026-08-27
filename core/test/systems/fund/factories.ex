@@ -99,21 +99,11 @@ defmodule Systems.Fund.Factories do
 
   def create_wallet(user, currency, balance_credit \\ 0, balance_debit \\ 0)
 
-  def create_wallet(
-        %User{id: user_id},
-        %Fund.CurrencyModel{} = currency,
-        balance_credit,
-        balance_debit
-      ) do
+  def create_wallet(%User{id: user_id}, %Fund.CurrencyModel{} = currency, balance_credit, balance_debit) do
     create_wallet(user_id, currency, balance_credit, balance_debit)
   end
 
-  def create_wallet(
-        user_id,
-        %Fund.CurrencyModel{name: currency_name},
-        balance_credit,
-        balance_debit
-      ) do
+  def create_wallet(user_id, %Fund.CurrencyModel{name: currency_name}, balance_credit, balance_debit) do
     Core.Factories.insert!(:book_account, %{
       identifier: ["wallet", currency_name, "#{user_id}"],
       balance_credit: balance_credit,

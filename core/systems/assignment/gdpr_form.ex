@@ -88,11 +88,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{status: :on},
-        %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
-      ) do
+  def handle_event("update", %{status: :on}, %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket) do
     consent_agreement = Consent.Public.prepare_agreement(auth_node)
     {:ok, _} = Assignment.Public.update_consent_agreement(assignment, consent_agreement)
 
@@ -122,11 +118,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def handle_event(
-        "confirmed",
-        %{source: %{name: :confirmation_modal}},
-        %{assigns: %{entity: assignment}} = socket
-      ) do
+  def handle_event("confirmed", %{source: %{name: :confirmation_modal}}, %{assigns: %{entity: assignment}} = socket) do
     {:ok, _} = Assignment.Public.delete_consent_agreement(assignment)
 
     {

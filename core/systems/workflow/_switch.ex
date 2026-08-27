@@ -47,10 +47,7 @@ defmodule Systems.Workflow.Switch do
   end
 
   @impl true
-  def intercept(
-        {:workflow_item, _} = signal,
-        %{workflow_item: %{workflow_id: workflow_id}} = message
-      ) do
+  def intercept({:workflow_item, _} = signal, %{workflow_item: %{workflow_id: workflow_id}} = message) do
     workflow = Workflow.Public.get!(workflow_id)
 
     dispatch!(

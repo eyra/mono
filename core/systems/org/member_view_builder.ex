@@ -24,10 +24,7 @@ defmodule Systems.Org.MemberViewBuilder do
 
   @max_members 50
 
-  def view_model(
-        %{id: org_id, domains: domains} = node,
-        %{current_user: current_user, locale: locale} = assigns
-      ) do
+  def view_model(%{id: org_id, domains: domains} = node, %{current_user: current_user, locale: locale} = assigns) do
     active_filters = Map.get(assigns, :active_filters, [])
     query = Map.get(assigns, :query, [])
     query_string = Map.get(assigns, :query_string, "")
@@ -85,8 +82,7 @@ defmodule Systems.Org.MemberViewBuilder do
     end)
   end
 
-  defp chip_matches?({user, _added_at}, :external, domains, _week_start),
-    do: not domain_match?(user, domains)
+  defp chip_matches?({user, _added_at}, :external, domains, _week_start), do: not domain_match?(user, domains)
 
   defp chip_matches?({_user, added_at}, :recent, _domains, week_start),
     do: NaiveDateTime.compare(added_at, week_start) != :lt
@@ -112,8 +108,7 @@ defmodule Systems.Org.MemberViewBuilder do
 
   defp matches_query?(_user, []), do: true
 
-  defp matches_query?(user, [term | rest]),
-    do: matches_term?(user, term) and matches_query?(user, rest)
+  defp matches_query?(user, [term | rest]), do: matches_term?(user, term) and matches_query?(user, rest)
 
   defp matches_term?(_user, ""), do: true
 
@@ -124,9 +119,8 @@ defmodule Systems.Org.MemberViewBuilder do
 
   defp matches_term?(_user, _term), do: false
 
-  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, term)
-       when is_binary(fullname),
-       do: String.contains?(String.downcase(fullname), term)
+  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, term) when is_binary(fullname),
+    do: String.contains?(String.downcase(fullname), term)
 
   defp profile_matches?(_profile, _term), do: false
 

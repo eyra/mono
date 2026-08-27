@@ -42,9 +42,7 @@ defmodule Systems.Fund.Public do
         principal: user
       )
 
-    Repo.all(
-      from(b in Fund.Model, where: b.auth_node_id in subquery(node_ids), preload: ^preload)
-    )
+    Repo.all(from(b in Fund.Model, where: b.auth_node_id in subquery(node_ids), preload: ^preload))
   end
 
   def list_owned_by_currency(%User{} = user, %Fund.CurrencyModel{id: currency_id}, preload \\ []) do
@@ -91,9 +89,7 @@ defmodule Systems.Fund.Public do
   end
 
   def list_rewards(%User{id: user_id}, preload \\ []) do
-    Repo.all(
-      from(reward in Fund.RewardModel, where: reward.user_id == ^user_id, preload: ^preload)
-    )
+    Repo.all(from(reward in Fund.RewardModel, where: reward.user_id == ^user_id, preload: ^preload))
   end
 
   @doc """
@@ -231,8 +227,7 @@ defmodule Systems.Fund.Public do
     |> Repo.insert!()
   end
 
-  def move_wallet_balance([_ | _] = from, [_ | _] = to, idempotence_key, limit)
-      when is_integer(limit) do
+  def move_wallet_balance([_ | _] = from, [_ | _] = to, idempotence_key, limit) when is_integer(limit) do
     from
     |> Bookkeeping.Public.get_account()
     |> move_wallet_balance(to, idempotence_key, limit)
@@ -255,16 +250,10 @@ defmodule Systems.Fund.Public do
   end
 
   def move_wallet_balance(_, _, idempotence_key, limit, amount) do
-    Logger.info(
-      "Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}"
-    )
+    Logger.info("Move wallet ballance skipped: amount=#{amount} limit=#{limit} idempotence_key=#{idempotence_key}")
   end
 
-  def wallet_is_passive?(%{
-        identifier: ["wallet", _, _],
-        balance_credit: balance_credit,
-        balance_debit: balance_debit
-      }) do
+  def wallet_is_passive?(%{identifier: ["wallet", _, _], balance_credit: balance_credit, balance_debit: balance_debit}) do
     balance_credit > 0 and balance_credit == balance_debit
   end
 
@@ -297,14 +286,11 @@ defmodule Systems.Fund.Public do
     |> make_deposit()
   end
 
-  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :legal}} = fund, amount)
-       when is_integer(amount) do
+  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :legal}} = fund, amount) when is_integer(amount) do
     Multi.run(multi, :fund_balance, fn repo, _ -> verify_fund_balance(repo, fund, amount) end)
   end
 
-  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :virtual}}, amount)
-       when is_integer(amount),
-       do: multi
+  defp guard_fund_balance(multi, %Fund.Model{currency: %{type: :virtual}}, amount) when is_integer(amount), do: multi
 
   defp guard_fund_balance(multi, %Fund.Model{id: fund_id}, amount) when is_integer(amount) do
     Logger.error("[Fund] refusing reservation on fund ##{fund_id} with an unresolvable currency")
@@ -339,9 +325,7 @@ defmodule Systems.Fund.Public do
     query =
       from(r in Fund.RewardModel, where: r.id == ^id and r.status == ^:reserved)
 
-    Multi.update_all(multi, :mark_pending_approval, query,
-      set: [status: :pending_approval, updated_at: now()]
-    )
+    Multi.update_all(multi, :mark_pending_approval, query, set: [status: :pending_approval, updated_at: now()])
   end
 
   def approve_pending_rewards(cutoff) do
@@ -375,9 +359,7 @@ defmodule Systems.Fund.Public do
   reserve: only `:legal` currencies are constrained by real available
   balance; `:virtual` currencies have no such constraint.
   """
-  def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in @past_approval,
-      do: multi
+  def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: status}) when status in @past_approval, do: multi
 
   def approve_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected} = reward) do
     multi
@@ -403,8 +385,7 @@ defmodule Systems.Fund.Public do
     end
   end
 
-  defp check_available_balance(_repo, %Fund.Model{currency: %{type: :virtual}}, _amount),
-    do: {:ok, :ok}
+  defp check_available_balance(_repo, %Fund.Model{currency: %{type: :virtual}}, _amount), do: {:ok, :ok}
 
   defp check_available_balance(_repo, %Fund.Model{id: fund_id}, _amount) do
     Logger.error("[Fund] refusing approval on fund ##{fund_id} with an unresolvable currency")
@@ -472,8 +453,7 @@ defmodule Systems.Fund.Public do
   """
   def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: :rejected}), do: multi
 
-  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status})
-      when status in @past_approval do
+  def reject_reward(%Multi{} = multi, %Fund.RewardModel{status: status}) when status in @past_approval do
     Multi.run(multi, :reject_guard, fn _, _ -> {:error, :reward_already_approved} end)
   end
 
@@ -507,10 +487,7 @@ defmodule Systems.Fund.Public do
   def multiply_rewards(_, multiplier), do: raise("Attempt to multiply rewards by #{multiplier}")
 
   defp multiply_reward(
-         %Bookkeeping.AccountModel{
-           balance_credit: balance_credit,
-           identifier: ["wallet", currency_name, user_id]
-         },
+         %Bookkeeping.AccountModel{balance_credit: balance_credit, identifier: ["wallet", currency_name, user_id]},
          %Fund.Model{} = fund,
          multiplier
        )
@@ -527,8 +504,7 @@ defmodule Systems.Fund.Public do
     Fund.Public.payout_reward(idempotence_key)
   end
 
-  defp upsert_reward(multi, %Fund.Model{} = fund, amount, %User{} = user, idempotence_key)
-       when is_integer(amount) do
+  defp upsert_reward(multi, %Fund.Model{} = fund, amount, %User{} = user, idempotence_key) when is_integer(amount) do
     Multi.run(multi, :reward, fn _, _ ->
       case Fund.Public.get_reward(idempotence_key, Fund.RewardModel.preload_graph(:full)) do
         nil -> insert_reward(fund, amount, user, idempotence_key)
@@ -537,8 +513,7 @@ defmodule Systems.Fund.Public do
     end)
   end
 
-  defp insert_reward(%Fund.Model{} = fund, amount, %User{} = user, idempotence_key)
-       when is_integer(amount) do
+  defp insert_reward(%Fund.Model{} = fund, amount, %User{} = user, idempotence_key) when is_integer(amount) do
     %Fund.RewardModel{}
     |> Fund.RewardModel.changeset(%{
       idempotence_key: idempotence_key,
@@ -612,10 +587,7 @@ defmodule Systems.Fund.Public do
   def make_test_deposit(
         %Fund.Model{
           id: fund_id,
-          currency: %{
-            name: currency_name,
-            bank_account: %{id: bank_account_id, account: %{identifier: bank_account}}
-          },
+          currency: %{name: currency_name, bank_account: %{id: bank_account_id, account: %{identifier: bank_account}}},
           available: %{identifier: fund_account}
         },
         %Fund.DepositModel{amount: amount, reference: reference}
@@ -678,10 +650,7 @@ defmodule Systems.Fund.Public do
   end
 
   defp create_deposit_transaction(
-         %Fund.RewardModel{
-           amount: amount,
-           fund: %{id: fund_id, name: fund_name, currency: currency} = the_fund
-         } = reward
+         %Fund.RewardModel{amount: amount, fund: %{id: fund_id, name: fund_name, currency: currency} = the_fund} = reward
        ) do
     amount_label = Fund.CurrencyModel.label(currency, :en, amount)
     journal_message = "Reserved #{amount_label} on fund #{fund_name} ##{fund_id}"
@@ -695,16 +664,12 @@ defmodule Systems.Fund.Public do
   end
 
   defp create_payment_transaction(%{amount: amount, payment: %{idempotence_key: idempotence_key}}) do
-    Logger.warning(
-      "Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}"
-    )
+    Logger.warning("Reward payout already done: amount=#{amount} idempotence_key=#{idempotence_key}")
 
     {:error, :payment_already_available}
   end
 
-  defp create_payment_transaction(
-         %{deposit: nil, fund: %{available: %{identifier: fund_id}}} = reward
-       ) do
+  defp create_payment_transaction(%{deposit: nil, fund: %{available: %{identifier: fund_id}}} = reward) do
     create_payment_transaction(reward, fund_id)
   end
 
@@ -750,17 +715,13 @@ defmodule Systems.Fund.Public do
 
     case Bookkeeping.Public.get_entry(idempotence_key) do
       %Bookkeeping.EntryModel{} = existing ->
-        Logger.info(
-          "Reward payout already booked, adopting existing entry: idempotence_key=#{idempotence_key}"
-        )
+        Logger.info("Reward payout already booked, adopting existing entry: idempotence_key=#{idempotence_key}")
 
         {:ok, %{entry: existing}}
 
       nil ->
         with {:error, error} <- Bookkeeping.Public.enter(payment) do
-          Logger.warning(
-            "Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}"
-          )
+          Logger.warning("Reward payout failed: idempotence_key=#{idempotence_key}, error=#{error}")
 
           {:error, error}
         end
@@ -775,16 +736,11 @@ defmodule Systems.Fund.Public do
 
   defp revert_deposit(%{deposit: nil}), do: {:error, :deposit_not_available}
 
-  defp revert_deposit(%{payment: payment}) when not is_nil(payment),
-    do: {:error, :payment_already_available}
+  defp revert_deposit(%{payment: payment}) when not is_nil(payment), do: {:error, :payment_already_available}
 
   defp revert_deposit(%{deposit: deposit}), do: revert_deposit(deposit)
 
-  defp revert_deposit(%{
-         lines: lines,
-         idempotence_key: idempotence_key,
-         journal_message: journal_message
-       })
+  defp revert_deposit(%{lines: lines, idempotence_key: idempotence_key, journal_message: journal_message})
        when is_list(lines) do
     lines = Enum.map(lines, &revert_deposit_line(&1))
 
@@ -797,9 +753,7 @@ defmodule Systems.Fund.Public do
     Bookkeeping.Public.enter(rollback_entry)
   end
 
-  defp revert_deposit_line(
-         %{account: %{identifier: account_id}, debit: debit, credit: credit} = _line
-       ) do
+  defp revert_deposit_line(%{account: %{identifier: account_id}, debit: debit, credit: credit} = _line) do
     %{
       account: account_id,
       debit: credit,
@@ -954,8 +908,7 @@ defmodule Systems.Fund.Public do
 
   defp display_status(:awaiting_provider), do: :in_progress
 
-  defp display_status(phase) when phase in [:awaiting_withdrawal, :withdrawal_retryable],
-    do: :retryable
+  defp display_status(phase) when phase in [:awaiting_withdrawal, :withdrawal_retryable], do: :retryable
 
   defp display_status(:awaiting_transfer), do: :manual
 
@@ -1001,9 +954,8 @@ defmodule Systems.Fund.Public do
        when is_binary(verification_url) and verification_url != "",
        do: {:error, {:kyc_required, :bank, verification_url}}
 
-  defp payout_ready_for(%{status: status})
-       when is_atom(status) and not is_nil(status) and status != :new,
-       do: {:error, :awaiting_verification}
+  defp payout_ready_for(%{status: status}) when is_atom(status) and not is_nil(status) and status != :new,
+    do: {:error, :awaiting_verification}
 
   defp payout_ready_for(_bank_account), do: {:error, :kyc_unavailable}
 
@@ -1108,9 +1060,7 @@ defmodule Systems.Fund.Public do
   end
 
   defp lock_failed(user_id, reward_ids, reason) do
-    Logger.warning(
-      "[Fund] lock failed for user=#{user_id} rewards=#{inspect(reward_ids)}: #{inspect(reason)}"
-    )
+    Logger.warning("[Fund] lock failed for user=#{user_id} rewards=#{inspect(reward_ids)}: #{inspect(reason)}")
 
     {:error, :lock_failed}
   end
@@ -1387,9 +1337,7 @@ defmodule Systems.Fund.Public do
   defp finalize(subject, attrs, reward_status) do
     Multi.new()
     |> Multi.update(:subject, finalize_changeset(subject, attrs))
-    |> Multi.update_all(:rewards, locked_rewards(subject),
-      set: [status: reward_status, updated_at: now()]
-    )
+    |> Multi.update_all(:rewards, locked_rewards(subject), set: [status: reward_status, updated_at: now()])
     |> Multi.run(:notify_rewards_summary, &notify_finalized/2)
     |> Repo.commit()
     |> case do
@@ -1400,21 +1348,15 @@ defmodule Systems.Fund.Public do
 
   # --- Pay-in creation ---
 
-  defp finalize_changeset(%Fund.DonationModel{} = donation, attrs),
-    do: Fund.DonationModel.changeset(donation, attrs)
+  defp finalize_changeset(%Fund.DonationModel{} = donation, attrs), do: Fund.DonationModel.changeset(donation, attrs)
 
-  defp finalize_changeset(%Fund.PayoutModel{} = payout, attrs),
-    do: Fund.PayoutModel.changeset(payout, attrs)
+  defp finalize_changeset(%Fund.PayoutModel{} = payout, attrs), do: Fund.PayoutModel.changeset(payout, attrs)
 
   defp locked_rewards(%Fund.DonationModel{id: donation_id}),
-    do:
-      from(r in Fund.RewardModel, where: r.donation_id == ^donation_id and r.status == :donating)
+    do: from(r in Fund.RewardModel, where: r.donation_id == ^donation_id and r.status == :donating)
 
   defp locked_rewards(%Fund.PayoutModel{id: payout_id}),
-    do:
-      from(r in Fund.RewardModel,
-        where: r.payout_id == ^payout_id and r.status == :pending_payout
-      )
+    do: from(r in Fund.RewardModel, where: r.payout_id == ^payout_id and r.status == :pending_payout)
 
   defp notify_finalized(_repo, %{subject: subject}), do: notify_rewards_summary(subject)
 
@@ -1533,8 +1475,7 @@ defmodule Systems.Fund.Public do
   Flags provider withdrawals and transfers that have no local payout row.
   See `Systems.Fund.PayoutOrphanReconciliation`.
   """
-  def reconcile_orphaned_payouts(opts, state),
-    do: Fund.PayoutOrphanReconciliation.run(opts, state)
+  def reconcile_orphaned_payouts(opts, state), do: Fund.PayoutOrphanReconciliation.run(opts, state)
 
   def rewarded_amount(idempotence_key) when is_binary(idempotence_key) do
     payment_idempotence_key = Fund.RewardModel.payment_idempotence_key(idempotence_key)
@@ -1573,8 +1514,7 @@ defmodule Systems.Fund.Public do
   Lazily creates an OPP merchant for the user if needed.
   Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.
   """
-  def create_pay_in(%Assignment.Model{info: info} = assignment, %User{} = user, attrs)
-      when is_map(attrs) do
+  def create_pay_in(%Assignment.Model{info: info} = assignment, %User{} = user, attrs) when is_map(attrs) do
     changeset =
       %Fund.PayInRequestModel{}
       |> Fund.PayInRequestModel.changeset(with_info_defaults(info, attrs))
@@ -1625,12 +1565,7 @@ defmodule Systems.Fund.Public do
 
   defp create_paid_pay_in(
          %Assignment.Model{
-           info: %{
-             subject_reward: subject_reward,
-             title: title,
-             subtitle: subtitle,
-             aim_of_study: aim_of_study
-           },
+           info: %{subject_reward: subject_reward, title: title, subtitle: subtitle, aim_of_study: aim_of_study},
            fund: fund
          } = assignment,
          %User{id: user_id} = user,
@@ -1848,8 +1783,7 @@ defmodule Systems.Fund.Public do
   Flags provider transactions that have no local pay-in row.
   See `Systems.Fund.TransactionOrphanReconciliation`.
   """
-  def reconcile_orphaned_transactions(opts, state),
-    do: Fund.TransactionOrphanReconciliation.run(opts, state)
+  def reconcile_orphaned_transactions(opts, state), do: Fund.TransactionOrphanReconciliation.run(opts, state)
 
   defp get_reward_per_participant(%Fund.TransactionModel{target_fund_id: fund_id}) do
     Repo.one(

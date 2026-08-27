@@ -46,17 +46,11 @@ defmodule Systems.Rate.LeakyBucketAlgorithm do
     %Bucket{level: 0, capacity: limit, drop_rate: drop_rate(quota), updated_at: now}
   end
 
-  defp bucket_key(
-         %Quota{scope: :local, window: window, unit: unit, limit: limit},
-         {service, client_id, _}
-       ),
-       do: "#{limit}:#{unit}/#{window}@#{service}=>#{client_id}"
+  defp bucket_key(%Quota{scope: :local, window: window, unit: unit, limit: limit}, {service, client_id, _}),
+    do: "#{limit}:#{unit}/#{window}@#{service}=>#{client_id}"
 
-  defp bucket_key(
-         %Quota{scope: :global, window: window, unit: unit, limit: limit},
-         {service, _, _}
-       ),
-       do: "#{limit}:#{unit}/#{window}@#{service}"
+  defp bucket_key(%Quota{scope: :global, window: window, unit: unit, limit: limit}, {service, _, _}),
+    do: "#{limit}:#{unit}/#{window}@#{service}"
 
   defp drops(%Quota{unit: :byte}, {_, _, packet_size}), do: packet_size
   defp drops(%Quota{unit: :call}, _), do: 1

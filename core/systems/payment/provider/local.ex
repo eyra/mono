@@ -81,8 +81,7 @@ defmodule Systems.Payment.Provider.Local do
         metadata: %Transaction.Metadata{},
         opts: opts
       })
-      when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
-             is_atom(currency) and
+      when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and is_atom(currency) and
              is_binary(invoice_id) and is_binary(idempotence_key) do
     uid = generate_uid()
 
@@ -121,17 +120,14 @@ defmodule Systems.Payment.Provider.Local do
 
   @impl true
   def list_recent_transactions(%DateTime{} = since) do
-    Logger.info(
-      "[Payment.Local] list_recent_transactions since=#{DateTime.to_iso8601(since)} -> []"
-    )
+    Logger.info("[Payment.Local] list_recent_transactions since=#{DateTime.to_iso8601(since)} -> []")
 
     {:ok, []}
   end
 
   @impl true
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
-      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
-             is_binary(idempotence_key) do
+      when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
@@ -174,17 +170,14 @@ defmodule Systems.Payment.Provider.Local do
   # payout: an empty list is the honest answer, not a stub.
   @impl true
   def list_recent_withdrawals(%DateTime{} = since) do
-    Logger.info(
-      "[Payment.Local] list_recent_withdrawals since=#{DateTime.to_iso8601(since)} -> []"
-    )
+    Logger.info("[Payment.Local] list_recent_withdrawals since=#{DateTime.to_iso8601(since)} -> []")
 
     {:ok, []}
   end
 
   @impl true
   def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and
-             amount > 0 and
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and amount > 0 and
              is_binary(idempotence_key) do
     uid = generate_uid()
 
@@ -218,8 +211,7 @@ defmodule Systems.Payment.Provider.Local do
 
   @impl true
   def charge_to_partner(from_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and
-             is_binary(idempotence_key) do
+      when is_binary(from_owner_uid) and is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(

@@ -13,11 +13,7 @@ defmodule Systems.Onyx.BrowserView do
   alias Systems.Onyx
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"model" => model, "entities" => entities, "history" => history},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"model" => model, "entities" => entities, "history" => history}, socket) do
     {
       :ok,
       socket
@@ -65,11 +61,7 @@ defmodule Systems.Onyx.BrowserView do
   end
 
   @impl true
-  def handle_event(
-        "toggle-filter",
-        %{"item" => item_id},
-        %{assigns: %{active_filters: active_filters}} = socket
-      ) do
+  def handle_event("toggle-filter", %{"item" => item_id}, %{assigns: %{active_filters: active_filters}} = socket) do
     active_filters =
       if Enum.member?(active_filters, item_id) do
         List.delete(active_filters, item_id)
@@ -112,10 +104,7 @@ defmodule Systems.Onyx.BrowserView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :search_query, payload: %{query: query, query_string: query_string}},
-        socket
-      ) do
+  def consume_event(%{name: :search_query, payload: %{query: query, query_string: query_string}}, socket) do
     {
       :stop,
       socket

@@ -9,8 +9,7 @@ defmodule Systems.Zircon.Screening.RISErrorContentTest do
       # Create an error structure similar to what comes from the parser
       error_from_parser = %{
         "line_number" => 5,
-        "message" =>
-          "Unsupported reference type. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
+        "message" => "Unsupported reference type. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
         "type" => "validation_error",
         # This is what we want to see
         "line_content" => "TY  - BOOK"
@@ -27,8 +26,7 @@ defmodule Systems.Zircon.Screening.RISErrorContentTest do
       # Create an error structure with line_content
       error_map = %{
         "line_number" => 5,
-        "message" =>
-          "Unsupported reference type. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
+        "message" => "Unsupported reference type. Supported types are: JOUR, JFULL, ABST, INPR, CPAPER, THES",
         "type" => "validation_error",
         "line_content" => "TY  - BOOK"
       }

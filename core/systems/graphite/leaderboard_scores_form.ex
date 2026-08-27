@@ -53,11 +53,7 @@ defmodule Systems.Graphite.LeaderboardScoresForm do
     assign(socket, csv_url: csv_url, csv_remote_file: original_filename, parsed_results: result)
   end
 
-  def handle_event(
-        "submit",
-        _params,
-        %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket
-      ) do
+  def handle_event("submit", _params, %{assigns: %{leaderboard: leaderboard, parsed_results: parsed_results}} = socket) do
     Graphite.Public.import_scores(leaderboard, parsed_results)
     {:noreply, assign(socket, parsed_results: nil)}
   end

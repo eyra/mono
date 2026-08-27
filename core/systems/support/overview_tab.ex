@@ -33,11 +33,7 @@ defmodule Systems.Support.OverviewTab do
   end
 
   defp to_view_model(
-         %Support.TicketModel{
-           updated_at: updated_at,
-           title: title,
-           user: %{email: email, features: features}
-         } = ticket,
+         %Support.TicketModel{updated_at: updated_at, title: title, user: %{email: email, features: features}} = ticket,
          _socket
        ) do
     build_item(ticket, title, email, nil, features, updated_at)

@@ -24,9 +24,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
     }
   end
 
-  defp assign_criteria_elements(
-         %{assigns: %{vm: %{criteria_list: criteria_list}, current_user: current_user}} = socket
-       ) do
+  defp assign_criteria_elements(%{assigns: %{vm: %{criteria_list: criteria_list}, current_user: current_user}} = socket) do
     criteria_elements =
       criteria_list
       |> Enum.with_index()
@@ -55,11 +53,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
   end
 
   @impl true
-  def handle_event(
-        "add",
-        %{"item" => dimension_phrase},
-        %{assigns: %{vm: %{dimension_list: dimension_list}}} = socket
-      ) do
+  def handle_event("add", %{"item" => dimension_phrase}, %{assigns: %{vm: %{dimension_list: dimension_list}}} = socket) do
     if dimension =
          Enum.find(dimension_list, fn dimension -> dimension.phrase == dimension_phrase end) do
       insert_criterion(dimension, socket)
@@ -92,10 +86,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
     assign_criteria_elements(socket)
   end
 
-  defp insert_criterion(
-         dimension,
-         %{assigns: %{model: model, current_user: current_user}} = socket
-       ) do
+  defp insert_criterion(dimension, %{assigns: %{model: model, current_user: current_user}} = socket) do
     result = Zircon.Public.insert_screening_tool_criterion(model, dimension, current_user)
     handle_insert_criterion(socket, dimension, result)
   end
@@ -109,11 +100,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
     socket
   end
 
-  defp handle_insert_criterion(
-         socket,
-         dimension,
-         {:error, :validate_criterion_does_not_exist, false, %{}}
-       ) do
+  defp handle_insert_criterion(socket, dimension, {:error, :validate_criterion_does_not_exist, false, %{}}) do
     Flash.push_error(
       socket,
       dgettext("eyra-zircon", "criterion.already_exists", dimension: dimension.phrase)

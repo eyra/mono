@@ -250,15 +250,13 @@ defmodule Systems.Home.PageBuilder do
   defp image_info(nil), do: nil
   defp image_info(image_id), do: Core.ImageHelpers.get_image_info(image_id, 96, 64)
 
-  defp reward_status(%{status: status}) when status in [:reserved, :pending_approval],
-    do: :awaiting
+  defp reward_status(%{status: status}) when status in [:reserved, :pending_approval], do: :awaiting
 
   # Everything from approval onwards reads the same to the participant: the
   # money is theirs. Whether it is still approved, locked on a payout, paid, or
   # donated is the rewards-summary card's business, not this card's.
-  defp reward_status(%{status: status})
-       when status in [:approved, :paid, :pending_payout, :donating, :donated],
-       do: :approved
+  defp reward_status(%{status: status}) when status in [:approved, :paid, :pending_payout, :donating, :donated],
+    do: :approved
 
   defp reward_status(%{status: :rejected}), do: :rejected
   defp reward_status(_), do: nil

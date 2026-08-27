@@ -9,9 +9,7 @@ defmodule Fabric.ModalPresenter do
       def handle_event("prepare_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
           if fabric_modal.live_component.ref.id != id do
-            Logger.debug(
-              "[Warning] Preparing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
-            )
+            Logger.debug("[Warning] Preparing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}")
           end
         end
 
@@ -29,9 +27,7 @@ defmodule Fabric.ModalPresenter do
       def handle_event("show_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
           if fabric_modal.live_component.ref.id != id do
-            Logger.debug(
-              "[Warning] Showing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
-            )
+            Logger.debug("[Warning] Showing modal #{id} that is not the same as current modal #{fabric_modal.ref.id}")
           end
         end
 
@@ -48,9 +44,7 @@ defmodule Fabric.ModalPresenter do
       def handle_event("hide_modal", %{live_component: %{ref: %{id: id}}} = modal, socket) do
         if fabric_modal = Map.get(socket.assigns, :fabric_modal) do
           if fabric_modal.live_component.ref.id != id do
-            Logger.debug(
-              "[Warning] Hiding modal #{id} that is not the same as current modal #{fabric_modal.ref.id}"
-            )
+            Logger.debug("[Warning] Hiding modal #{id} that is not the same as current modal #{fabric_modal.ref.id}")
           end
         end
 
@@ -74,10 +68,7 @@ defmodule Fabric.ModalPresenter do
         }
       end
 
-      def notify_modal_controller(
-            %{assigns: %{fabric_modal: %{live_component: %{ref: ref}}}} = socket,
-            modal_id
-          ) do
+      def notify_modal_controller(%{assigns: %{fabric_modal: %{live_component: %{ref: ref}}}} = socket, modal_id) do
         Fabric.send_event(ref, %{
           name: :handle_modal_closed,
           payload: %{source: %{name: :modal_presenter}}
@@ -96,8 +87,7 @@ defmodule Fabric.ModalPresenter do
       defoverridable notify_modal_controller: 2
 
       def map_live_nest_modal(
-            %{live_component: %{ref: %{id: id, module: module}, params: params}, style: style} =
-              _modal,
+            %{live_component: %{ref: %{id: id, module: module}, params: params}, style: style} = _modal,
             visible
           ) do
         %LiveNest.Modal{

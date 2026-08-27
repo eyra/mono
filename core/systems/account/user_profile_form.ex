@@ -14,10 +14,7 @@ defmodule Systems.Account.UserProfileForm do
   end
 
   @impl true
-  def update(
-        %{active_item_ids: active_item_ids, source: %{name: field}},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def update(%{active_item_ids: active_item_ids, source: %{name: field}}, %{assigns: %{entity: entity}} = socket) do
     {:ok, save(socket, entity, :auto_save, %{field => active_item_ids})}
   end
 
@@ -51,11 +48,7 @@ defmodule Systems.Account.UserProfileForm do
   end
 
   @impl true
-  def handle_event(
-        "save",
-        %{"user_profile_edit_model" => attrs},
-        %{assigns: %{entity: entity}} = socket
-      ) do
+  def handle_event("save", %{"user_profile_edit_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket

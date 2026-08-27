@@ -16,12 +16,7 @@ defmodule Systems.Lab.TaskView do
   end
 
   @impl true
-  def update(
-        %{
-          model: %{lab_tool: lab_tool, status: status, actions: actions, reservation: reservation}
-        },
-        socket
-      ) do
+  def update(%{model: %{lab_tool: lab_tool, status: status, actions: actions, reservation: reservation}}, socket) do
     selected_timeslot = Map.get(socket.assigns, :selected_timeslot, nil)
 
     {
@@ -89,10 +84,7 @@ defmodule Systems.Lab.TaskView do
 
   # Updating
 
-  def compose(:timeslot_selector, %{
-        options: options,
-        selected_timeslot: %{id: selected_timeslot_id}
-      }) do
+  def compose(:timeslot_selector, %{options: options, selected_timeslot: %{id: selected_timeslot_id}}) do
     selected_option_index = Enum.find_index(options, &(&1.id == selected_timeslot_id))
 
     %{
@@ -125,9 +117,7 @@ defmodule Systems.Lab.TaskView do
     }
   end
 
-  defp handle_delayed_update(
-         %{assigns: %{new_model: %{lab_tool: lab_tool, reservation: reservation}}} = socket
-       ) do
+  defp handle_delayed_update(%{assigns: %{new_model: %{lab_tool: lab_tool, reservation: reservation}}} = socket) do
     socket
     |> assign(
       lab_tool: lab_tool,
@@ -190,11 +180,7 @@ defmodule Systems.Lab.TaskView do
   end
 
   @impl true
-  def handle_event(
-        "dropdown_selected",
-        %{option: %{id: id}},
-        %{assigns: %{timeslots: timeslots}} = socket
-      ) do
+  def handle_event("dropdown_selected", %{option: %{id: id}}, %{assigns: %{timeslots: timeslots}} = socket) do
     selected_timeslot = Enum.find(timeslots, &(&1.id == id))
 
     {

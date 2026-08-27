@@ -30,9 +30,7 @@ defmodule CoreWeb.FileUploader do
       @behaviour CoreWeb.FileUploader
 
       # Skip init if this key is already registered
-      def init_file_uploader(%{assigns: %{uploads: uploads}} = socket, key)
-          when is_map_key(uploads, key),
-          do: socket
+      def init_file_uploader(%{assigns: %{uploads: uploads}} = socket, key) when is_map_key(uploads, key), do: socket
 
       def init_file_uploader(socket, key) do
         allow_upload(socket, key,
@@ -48,11 +46,7 @@ defmodule CoreWeb.FileUploader do
         Keyword.fetch!(config, :max_file_size)
       end
 
-      def handle_progress(
-            _key,
-            %{uuid: upload_entry_id, progress: progress, client_name: client_name} = entry,
-            socket
-          ) do
+      def handle_progress(_key, %{uuid: upload_entry_id, progress: progress, client_name: client_name} = entry, socket) do
         socket =
           if upload_entry_id == Map.get(socket.assigns, :upload_entry_id) do
             socket

@@ -55,11 +55,7 @@ defmodule Frameworks.UserState.LiveFeature do
 
       # Persists to localStorage with key built from [:crew, 123, :task]
   """
-  def publish_user_state_change(
-        %{assigns: %{live_context: context, current_user: current_user}} = socket,
-        key,
-        value
-      )
+  def publish_user_state_change(%{assigns: %{live_context: context, current_user: current_user}} = socket, key, value)
       when is_atom(key) do
     namespace = LiveContext.retrieve(context, :user_state_namespace, socket) || []
 

@@ -27,15 +27,12 @@ defmodule Systems.Assignment.ParticipationModel do
   end
 
   def validate(changeset) do
-    unique_constraint(changeset, [:user_id, :assignment_id],
-      name: :assignment_participation_unique
-    )
+    unique_constraint(changeset, [:user_id, :assignment_id], name: :assignment_participation_unique)
   end
 
   def preload_graph(:up), do: []
 
-  def preload_graph(:down),
-    do: [assignment: preload_graph(:assignment), user: preload_graph(:user)]
+  def preload_graph(:down), do: [assignment: preload_graph(:assignment), user: preload_graph(:user)]
 
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
   def preload_graph(:user), do: [user: []]

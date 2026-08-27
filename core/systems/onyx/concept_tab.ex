@@ -10,11 +10,7 @@ defmodule Systems.Onyx.ConceptTab do
   alias Systems.Onyx
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"title" => title, "concepts" => concepts, "user" => user, "depth" => depth},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"title" => title, "concepts" => concepts, "user" => user, "depth" => depth}, socket) do
     {
       :ok,
       socket
@@ -34,11 +30,7 @@ defmodule Systems.Onyx.ConceptTab do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => id},
-        %{assigns: %{user: user, depth: depth}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => id}, %{assigns: %{user: user, depth: depth}} = socket) do
     concept_id = id |> String.split("-") |> List.last() |> String.to_integer()
 
     modal =

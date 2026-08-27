@@ -37,12 +37,8 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
-    |> click(
-      Query.css("[data-selector-item='next_privacy_policy_accepted'] .selector-icon-inactive")
-    )
-    |> click(
-      Query.css("[data-selector-item='panl_privacy_policy_accepted'] .selector-icon-inactive")
-    )
+    |> click(Query.css("[data-selector-item='next_privacy_policy_accepted'] .selector-icon-inactive"))
+    |> click(Query.css("[data-selector-item='panl_privacy_policy_accepted'] .selector-icon-inactive"))
     |> click(Query.css("button[type='submit']"))
     |> assert_has(Query.css("[data-testid='onboarding-continue']", text: "Doorgaan"))
   end
@@ -61,9 +57,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
-    |> click(
-      Query.css("[data-selector-item='next_privacy_policy_accepted'] .selector-icon-inactive")
-    )
+    |> click(Query.css("[data-selector-item='next_privacy_policy_accepted'] .selector-icon-inactive"))
     |> click(Query.css("button[type='submit']"))
     |> assert_has(Query.css("[data-testid='await-confirmation-page']"))
     |> assert_has(Query.text("Activeer je account"))

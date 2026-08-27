@@ -159,10 +159,7 @@ defmodule Systems.Account.PeopleEditorComponent do
     assign(socket, message: nil)
   end
 
-  defp update_search_message(
-         %{assigns: %{user_item: nil, people: people, query_string: qs}} = socket
-       )
-       when qs != "" do
+  defp update_search_message(%{assigns: %{user_item: nil, people: people, query_string: qs}} = socket) when qs != "" do
     message =
       if find_user_by_email(people, qs) do
         dgettext("eyra-account", "people.search.alread_added.message")

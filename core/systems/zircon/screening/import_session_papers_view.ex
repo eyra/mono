@@ -7,11 +7,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
 
   alias Frameworks.Pixel.Text
 
-  def get_model(
-        :not_mounted_at_router,
-        %{"session" => %{id: id} = session, "filter" => filter},
-        _socket
-      ) do
+  def get_model(:not_mounted_at_router, %{"session" => %{id: id} = session, "filter" => filter}, _socket) do
     %{
       id: id,
       session: session,
@@ -38,10 +34,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
   end
 
   @impl true
-  def consume_event(
-        %{name: "search_query", payload: %{query: query, query_string: _query_string}},
-        socket
-      ) do
+  def consume_event(%{name: "search_query", payload: %{query: query, query_string: _query_string}}, socket) do
     {
       :stop,
       socket

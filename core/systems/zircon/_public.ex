@@ -33,10 +33,7 @@ defmodule Systems.Zircon.Public do
     |> Repo.preload(preload)
   end
 
-  def get_screening_tool_by_reference_file!(
-        %Paper.ReferenceFileModel{} = reference_file,
-        preload \\ []
-      ) do
+  def get_screening_tool_by_reference_file!(%Paper.ReferenceFileModel{} = reference_file, preload \\ []) do
     reference_file
     |> screening_tool_query()
     |> Repo.one!()
@@ -123,8 +120,7 @@ defmodule Systems.Zircon.Public do
     |> Multi.insert(:paper_reference_file, Public.prepare_reference_file(original_filename))
     |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
                                                                       zircon_screening_tool: tool,
-                                                                      paper_reference_file:
-                                                                        reference_file
+                                                                      paper_reference_file: reference_file
                                                                     } ->
       prepare_screening_tool_reference_file_assoc(tool, reference_file)
     end)
@@ -147,8 +143,7 @@ defmodule Systems.Zircon.Public do
     )
     |> Multi.insert(:zircon_screening_tool_reference_file_assoc, fn %{
                                                                       zircon_screening_tool: tool,
-                                                                      paper_reference_file:
-                                                                        reference_file
+                                                                      paper_reference_file: reference_file
                                                                     } ->
       prepare_screening_tool_reference_file_assoc(tool, reference_file)
     end)
@@ -320,11 +315,7 @@ defmodule Systems.Zircon.Public do
     |> Enum.uniq_by(& &1.id)
   end
 
-  def insert_screening_tool_criterion(
-        %ToolModel{} = tool,
-        %Ontology.ConceptModel{} = dimension,
-        user
-      ) do
+  def insert_screening_tool_criterion(%ToolModel{} = tool, %Ontology.ConceptModel{} = dimension, user) do
     entity = Authentication.obtain_entity!(user)
 
     Multi.new()

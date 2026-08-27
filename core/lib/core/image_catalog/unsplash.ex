@@ -110,8 +110,7 @@ defmodule Core.ImageCatalog.Unsplash do
     %{
       id: image_id,
       url: image_url(raw_url, w: requested_width, h: requested_height),
-      srcset:
-        Enum.map_join(1..3, ",", &srcset_item(raw_url, requested_width, requested_height, &1)),
+      srcset: Enum.map_join(1..3, ",", &srcset_item(raw_url, requested_width, requested_height, &1)),
       blur_hash: blur_hash,
       width: width,
       height: height,

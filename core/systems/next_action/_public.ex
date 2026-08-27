@@ -56,8 +56,7 @@ defmodule Systems.NextAction.Public do
   and a set of key values (typically ids of the scoping object — assignments
   in a project, pools in an org, etc.). Returns `nil` when nothing matches.
   """
-  def next_best_action_for_scope(%User{id: user_id}, action, scope_ids)
-      when is_atom(action) and is_list(scope_ids) do
+  def next_best_action_for_scope(%User{id: user_id}, action, scope_ids) when is_atom(action) and is_list(scope_ids) do
     action_string = to_string(action)
     keys = Enum.map(scope_ids, &to_string/1)
 

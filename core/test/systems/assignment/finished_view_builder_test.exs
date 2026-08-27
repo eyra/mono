@@ -134,9 +134,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
       # Should use platform-specific body with interpolated name
       expected_body =
-        dgettext("eyra-assignment", "finished_view.body.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.redirect.platform", platform: platform_name)
 
       assert vm.body == expected_body
       assert vm.body =~ platform_name
@@ -172,9 +170,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.title == dgettext("eyra-assignment", "finished_view.title.declined")
 
       expected_body =
-        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform",
-          platform: platform_name
-        )
+        dgettext("eyra-assignment", "finished_view.body.declined.redirect.platform", platform: platform_name)
 
       assert vm.body == expected_body
       assert vm.body =~ platform_name

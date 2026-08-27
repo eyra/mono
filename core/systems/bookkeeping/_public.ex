@@ -25,15 +25,11 @@ defmodule Systems.Bookkeeping.Public do
   end
 
   def get_account!([_ | _] = identifier, preload \\ []) do
-    Repo.one!(
-      from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload)
-    )
+    Repo.one!(from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload))
   end
 
   def get_account([_ | _] = identifier, preload \\ []) do
-    Repo.one(
-      from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload)
-    )
+    Repo.one(from(account in AccountModel, where: account.identifier == ^identifier, preload: ^preload))
   end
 
   def get_entry(idempotence_key, preload \\ [:lines]) do
@@ -157,8 +153,7 @@ defmodule Systems.Bookkeeping.Public do
     )
   end
 
-  defp handle_validation_error(%{errors: [idempotence_key: _]}),
-    do: {:error, :idempotence_key_conflict}
+  defp handle_validation_error(%{errors: [idempotence_key: _]}), do: {:error, :idempotence_key_conflict}
 
   defp handle_validation_error(error) when is_atom(error), do: {:error, error}
   defp handle_validation_error(_), do: {:error, :unexpected_entity_error}

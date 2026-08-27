@@ -4,11 +4,7 @@ defmodule Frameworks.Pixel.SearchBar do
   use Frameworks.Pixel.FabricBridge
 
   @impl true
-  def update(
-        %{id: id, query_string: query_string, placeholder: placeholder, debounce: debounce} =
-          assigns,
-        socket
-      ) do
+  def update(%{id: id, query_string: query_string, placeholder: placeholder, debounce: debounce} = assigns, socket) do
     {
       :ok,
       assign(socket,

@@ -38,10 +38,7 @@ defmodule Systems.Consent.ClickWrapView do
     }
   end
 
-  defp update_buttons(
-         %{assigns: %{myself: myself, accept_text: accept_text, decline_text: decline_text}} =
-           socket
-       ) do
+  defp update_buttons(%{assigns: %{myself: myself, accept_text: accept_text, decline_text: decline_text}} = socket) do
     accept_button = %{
       action: %{type: :send, event: "accept", target: myself},
       face: %{

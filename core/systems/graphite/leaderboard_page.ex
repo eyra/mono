@@ -52,8 +52,7 @@ defmodule Systems.Graphite.LeaderboardPage do
   end
 
   defp update_image_info(
-         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
-           socket
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} = socket
        ) do
     image_width = viewport_width
     image_height = 360

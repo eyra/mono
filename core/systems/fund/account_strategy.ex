@@ -43,8 +43,7 @@ defmodule Systems.Fund.AccountStrategy do
     end
   end
 
-  defp map_to_account(type, currency, id, checksum)
-       when is_binary(type) and is_atom(currency) and is_binary(id) do
+  defp map_to_account(type, currency, id, checksum) when is_binary(type) and is_atom(currency) and is_binary(id) do
     identifier =
       Bookkeeping.Public.to_identifier({
         Map.fetch!(@account_map, type),

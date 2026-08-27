@@ -45,11 +45,7 @@ defmodule Systems.Email.Form do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"model" => form_data},
-        %{assigns: %{model: model, validate?: validate?}} = socket
-      ) do
+  def handle_event("update", %{"model" => form_data}, %{assigns: %{model: model, validate?: validate?}} = socket) do
     type =
       if validate? do
         :validate

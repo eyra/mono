@@ -62,13 +62,7 @@ defmodule Systems.Rate.Server do
     Enum.map_join(quotas, "\n", &format_quota/1)
   end
 
-  defp format_quota(%Quota{
-         service: service,
-         limit: limit,
-         unit: unit,
-         window: window,
-         scope: scope
-       }) do
+  defp format_quota(%Quota{service: service, limit: limit, unit: unit, window: window, scope: scope}) do
     "  - #{service}: #{limit} #{unit}/#{window} (#{scope})"
   end
 end

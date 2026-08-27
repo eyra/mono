@@ -10,10 +10,7 @@ defmodule Systems.Zircon.Switch do
   # Update the ImportView to reflect the changed reference file
   alias Systems.Zircon.Screening.ImportView
 
-  def intercept({:paper_reference_file, :updated}, %{
-        paper_reference_file: paper_reference_file,
-        from_pid: from_pid
-      }) do
+  def intercept({:paper_reference_file, :updated}, %{paper_reference_file: paper_reference_file, from_pid: from_pid}) do
     zircon_screening_tool =
       Zircon.Public.get_screening_tool_by_reference_file!(paper_reference_file)
 
@@ -33,20 +30,14 @@ defmodule Systems.Zircon.Switch do
     :ok
   end
 
-  def intercept({:zircon_screening_tool_annotation_assoc, :deleted}, %{
-        zircon_screening_tool: tool,
-        from_pid: from_pid
-      }) do
+  def intercept({:zircon_screening_tool_annotation_assoc, :deleted}, %{zircon_screening_tool: tool, from_pid: from_pid}) do
     tool = Repo.preload(tool, [annotations: Annotation.Model.preload_graph(:down)], force: true)
     update_criteria_view(tool, from_pid)
 
     :ok
   end
 
-  def intercept({:zircon_screening_sessions, :invalidated}, %{
-        zircon_screening_sessions: sessions,
-        from_pid: _from_pid
-      }) do
+  def intercept({:zircon_screening_sessions, :invalidated}, %{zircon_screening_sessions: sessions, from_pid: _from_pid}) do
     # TODO: update screening sessions
     "sessions invalidated: #{inspect(sessions)}"
     :ok
@@ -55,8 +46,7 @@ defmodule Systems.Zircon.Switch do
   # Handle processing progress updates during RIS processing phase
   def intercept(
         {:paper_ris_import_session, :processing_progress},
-        %{paper_ris_import_session: %{reference_file_id: reference_file_id}, from_pid: from_pid} =
-          _message
+        %{paper_ris_import_session: %{reference_file_id: reference_file_id}, from_pid: from_pid} = _message
       ) do
     # Get the tool from the reference file
     reference_file = Paper.Public.get_reference_file!(reference_file_id)
@@ -116,10 +106,7 @@ defmodule Systems.Zircon.Switch do
   # Handle all paper_ris_import_session status changes
   def intercept(
         {:paper_ris_import_session, status},
-        %{
-          paper_ris_import_session: %{reference_file_id: reference_file_id} = _session,
-          from_pid: from_pid
-        } = _message
+        %{paper_ris_import_session: %{reference_file_id: reference_file_id} = _session, from_pid: from_pid} = _message
       ) do
     # Always update import_view to show current status
     reference_file = Paper.Public.get_reference_file!(reference_file_id)

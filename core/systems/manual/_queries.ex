@@ -12,9 +12,7 @@ defmodule Systems.Manual.Queries do
   end
 
   def get_by_id!(id) do
-    Core.Repo.one!(
-      from(m in Manual.Model, where: m.id == ^id, preload: ^Manual.Model.preload_graph(:down))
-    )
+    Core.Repo.one!(from(m in Manual.Model, where: m.id == ^id, preload: ^Manual.Model.preload_graph(:down)))
   end
 
   def get_chapters(manual_id) do

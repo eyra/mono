@@ -8,14 +8,7 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def update(
-        %{
-          id: id,
-          assignment: assignment,
-          page_key: page_key,
-          opt_in?: opt_in?,
-          on_text: on_text,
-          off_text: off_text
-        },
+        %{id: id, assignment: assignment, page_key: page_key, opt_in?: opt_in?, on_text: on_text, off_text: off_text},
         socket
       ) do
     confirming_status_off = Map.get(socket.assigns, :confirming_status_off, false)
@@ -39,9 +32,7 @@ defmodule Systems.Assignment.ContentPageForm do
     }
   end
 
-  def update_page_ref(
-        %{assigns: %{assignment: %{page_refs: page_refs}, page_key: page_key}} = socket
-      ) do
+  def update_page_ref(%{assigns: %{assignment: %{page_refs: page_refs}, page_key: page_key}} = socket) do
     page_ref = Enum.find(page_refs, &(&1.key == page_key))
     assign(socket, page_ref: page_ref)
   end
@@ -102,11 +93,7 @@ defmodule Systems.Assignment.ContentPageForm do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{status: :on},
-        %{assigns: %{assignment: assignment, page_key: page_key}} = socket
-      ) do
+  def handle_event("update", %{status: :on}, %{assigns: %{assignment: assignment, page_key: page_key}} = socket) do
     {:ok, %{assignment_page_ref: page_ref}} =
       Assignment.Public.create_page_ref(assignment, page_key)
 
@@ -143,11 +130,7 @@ defmodule Systems.Assignment.ContentPageForm do
   end
 
   @impl true
-  def handle_event(
-        "confirmed",
-        %{source: %{name: :confirmation_modal}},
-        %{assigns: %{page_ref: page_ref}} = socket
-      ) do
+  def handle_event("confirmed", %{source: %{name: :confirmation_modal}}, %{assigns: %{page_ref: page_ref}} = socket) do
     {:ok, _} = Assignment.Public.delete_page_ref(page_ref)
 
     {

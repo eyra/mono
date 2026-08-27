@@ -110,11 +110,7 @@ defmodule Systems.Advert.SubmissionViewBuilder do
     end
   end
 
-  defp pool_stats(
-         %Pool.Model{name: pool_name} = pool,
-         %Pool.CriteriaModel{} = criteria,
-         excluded_user_ids
-       ) do
+  defp pool_stats(%Pool.Model{name: pool_name} = pool, %Pool.CriteriaModel{} = criteria, excluded_user_ids) do
     user_ids_in_pool =
       pool
       |> Pool.Public.list_participants()

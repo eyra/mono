@@ -9,10 +9,7 @@ defmodule SignInWithApple do
   def get_user_by_sub(sub) do
     Repo.one(
       from(u in User,
-        where:
-          u.id in subquery(
-            from(sc in SignInWithApple.User, where: sc.sub == ^sub, select: sc.user_id)
-          )
+        where: u.id in subquery(from(sc in SignInWithApple.User, where: sc.sub == ^sub, select: sc.user_id))
       )
     )
   end

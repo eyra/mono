@@ -65,12 +65,7 @@ defmodule Systems.Admin.OrgViewBuilder do
     end
   end
 
-  defp next_action_to_banner(%{
-         title: title,
-         description: description,
-         cta_label: cta_label,
-         cta_action: cta_action
-       }) do
+  defp next_action_to_banner(%{title: title, description: description, cta_label: cta_label, cta_action: cta_action}) do
     %{
       title: title,
       subtitle: description,
@@ -90,10 +85,7 @@ defmodule Systems.Admin.OrgViewBuilder do
       action: %{type: :send, event: "show_archived"},
       face: %{
         type: :plain,
-        label:
-          dngettext("eyra-admin", "show.archived.button", "show.archived.button.plural", count,
-            count: count
-          ),
+        label: dngettext("eyra-admin", "show.archived.button", "show.archived.button.plural", count, count: count),
         icon: :archive
       }
     }

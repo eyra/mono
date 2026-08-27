@@ -89,8 +89,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp next_view(assignment, assigns, %{action: action, tester?: tester?})
-       when not is_nil(action) do
+  defp next_view(assignment, assigns, %{action: action, tester?: tester?}) when not is_nil(action) do
     case action do
       :onboarding_continue ->
         consent_or_work_view(assignment, assigns)
@@ -212,10 +211,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     )
   end
 
-  defp activate_account_view(
-         %{id: assignment_id} = _assignment,
-         %{live_context: context} = _assigns
-       ) do
+  defp activate_account_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
     Element.prepare_live_view(
       "activate_account_view_#{assignment_id}",
       Assignment.ActivateAccountView,

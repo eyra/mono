@@ -15,8 +15,7 @@ defmodule Systems.Payment.ReconciliationState do
   def tally(%__MODULE__{summary: summary} = state, outcome),
     do: %{state | summary: ReconciliationSummary.tally(summary, outcome)}
 
-  def add_finding(%__MODULE__{findings: findings} = state, finding),
-    do: %{state | findings: [finding | findings]}
+  def add_finding(%__MODULE__{findings: findings} = state, finding), do: %{state | findings: [finding | findings]}
 
   def record_success(%__MODULE__{} = state), do: %{state | consecutive_failures: 0}
 

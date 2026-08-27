@@ -166,10 +166,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     Enum.map(get_citizen_pools(), &to_view_model(&1, locale))
   end
 
-  defp to_view_model(
-         %Fund.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
+  defp to_view_model(%Fund.BankAccountModel{id: id, name: name, icon: icon, currency: currency}, locale) do
     subtitle = Fund.CurrencyModel.title(currency, locale)
 
     %{

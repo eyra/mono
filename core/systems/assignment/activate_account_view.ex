@@ -27,8 +27,7 @@ defmodule Systems.Assignment.ActivateAccountView do
            &(CoreWeb.Endpoint.url() <> "/user/onboarding/confirm/#{&1}")
          ) do
       {:ok, _} ->
-        {:noreply,
-         Flash.push_info(socket, dgettext("eyra-assignment", "activate_account.resend.success"))}
+        {:noreply, Flash.push_info(socket, dgettext("eyra-assignment", "activate_account.resend.success"))}
 
       {:error, :already_confirmed} ->
         {:noreply, publish_event(socket, :email_confirmed)}
@@ -42,8 +41,7 @@ defmodule Systems.Assignment.ActivateAccountView do
     if Account.Public.confirmed?(fresh_user) do
       {:noreply, publish_event(socket, :email_confirmed)}
     else
-      {:noreply,
-       Flash.push_error(socket, dgettext("eyra-assignment", "activate_account.not_yet_confirmed"))}
+      {:noreply, Flash.push_error(socket, dgettext("eyra-assignment", "activate_account.not_yet_confirmed"))}
     end
   end
 

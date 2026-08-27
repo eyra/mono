@@ -155,9 +155,7 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})) ==
                1
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 1
@@ -192,9 +190,7 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 1
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant.id})) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 2
@@ -243,14 +239,10 @@ defmodule Systems.Advert.PublicTest do
       assert Enum.count(Bookkeeping.Public.list_accounts(["wallet"])) == 2
       assert Enum.count(Bookkeeping.Public.list_accounts(["fund"])) == 1
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant1.id})) ==
                2
 
-      assert Enum.count(
-               Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})
-             ) ==
+      assert Enum.count(Bookkeeping.Public.list_entries({:wallet, "fake_currency", participant2.id})) ==
                2
 
       assert Enum.count(Bookkeeping.Public.list_entries({:fund, "test"})) == 4

@@ -37,9 +37,7 @@ defmodule Systems.Graphite.ToolForm do
     assign(socket, leaderboard_button: leaderboard_button)
   end
 
-  def update_leaderboard_button(
-        %{assigns: %{entity: %{leaderboard: %{id: leaderboard_id}}}} = socket
-      ) do
+  def update_leaderboard_button(%{assigns: %{entity: %{leaderboard: %{id: leaderboard_id}}}} = socket) do
     leaderboard_button = %{
       action: %{type: :redirect, to: ~p"/graphite/leaderboard/#{leaderboard_id}/content"},
       face: %{
@@ -58,11 +56,7 @@ defmodule Systems.Graphite.ToolForm do
   end
 
   @impl true
-  def handle_event(
-        "create_leaderboard",
-        _payload,
-        %{assigns: %{entity: entity, title: title}} = socket
-      ) do
+  def handle_event("create_leaderboard", _payload, %{assigns: %{entity: entity, title: title}} = socket) do
     require_feature(:leaderboard)
     Graphite.Assembly.create_leaderboard(entity, title)
     {:noreply, socket}

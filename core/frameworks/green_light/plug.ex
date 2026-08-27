@@ -11,9 +11,7 @@ defmodule Frameworks.GreenLight.Plug do
   def init(auth_module), do: auth_module
 
   def call(
-        %Plug.Conn{
-          private: %{phoenix_controller: phoenix_controller, phoenix_action: phoenix_action}
-        } = conn,
+        %Plug.Conn{private: %{phoenix_controller: phoenix_controller, phoenix_action: phoenix_action}} = conn,
         auth_module
       ) do
     # This code mandates a permission assignment for the current user and
@@ -69,11 +67,7 @@ defmodule Frameworks.GreenLight.Plug do
     end
   end
 
-  defp ensure_authorization(
-         %{private: %{auth_principal_roles: roles}} = conn,
-         permission,
-         auth_module
-       ) do
+  defp ensure_authorization(%{private: %{auth_principal_roles: roles}} = conn, permission, auth_module) do
     # Validate the entity with the current use against the permission map
     if auth_module.allowed?(roles, permission) do
       conn

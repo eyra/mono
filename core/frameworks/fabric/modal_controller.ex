@@ -19,8 +19,7 @@ defmodule Fabric.ModalController do
     context
   end
 
-  def prepare_modal(context, child_name, modal_style)
-      when is_atom(child_name) or is_binary(child_name) do
+  def prepare_modal(context, child_name, modal_style) when is_atom(child_name) or is_binary(child_name) do
     if child = get_child(context, child_name) do
       prepared_modal_style = Map.get(child, :prepared_modal_style)
 
@@ -46,8 +45,7 @@ defmodule Fabric.ModalController do
     Phoenix.Component.assign(assigns, fabric: add_child(fabric, child))
   end
 
-  def show_modal(context, child_name, modal_style)
-      when is_atom(child_name) or is_binary(child_name) do
+  def show_modal(context, child_name, modal_style) when is_atom(child_name) or is_binary(child_name) do
     if child = get_child(context, child_name) do
       show_modal(context, child, modal_style)
     else

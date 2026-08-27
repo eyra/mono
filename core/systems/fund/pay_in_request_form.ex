@@ -16,8 +16,7 @@ defmodule Systems.Fund.PayInRequestForm do
   def update(
         %{
           id: id,
-          assignment:
-            %{info: %{subject_reward: subject_reward, aim_of_study: aim_of_study}} = assignment,
+          assignment: %{info: %{subject_reward: subject_reward, aim_of_study: aim_of_study}} = assignment,
           user: user,
           active_currency: active_currency,
           reward_locked?: reward_locked?

@@ -33,8 +33,7 @@ defmodule Systems.Instruction.DownloadForm do
     }
   end
 
-  defp update_file(%{assigns: %{tool: %{assets: [%{file: file} | _]}}} = socket)
-       when not is_nil(file) do
+  defp update_file(%{assigns: %{tool: %{assets: [%{file: file} | _]}}} = socket) when not is_nil(file) do
     assign(socket, file: file)
   end
 
@@ -50,8 +49,7 @@ defmodule Systems.Instruction.DownloadForm do
     assign(socket, filename: nil)
   end
 
-  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket)
-       when not is_nil(page) do
+  defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket) when not is_nil(page) do
     assign(socket, page: page)
   end
 
@@ -69,11 +67,7 @@ defmodule Systems.Instruction.DownloadForm do
     {:noreply, socket}
   end
 
-  def handle_save(
-        %{assigns: %{page: nil, tool: %{auth_node: auth_node} = tool}} = socket,
-        name,
-        ref
-      ) do
+  def handle_save(%{assigns: %{page: nil, tool: %{auth_node: auth_node} = tool}} = socket, name, ref) do
     file = Content.Public.prepare_file(name, ref)
 
     page =

@@ -31,9 +31,7 @@ defmodule Systems.Alliance.CallbackPage do
     }
   end
 
-  defp activate_participant_task(
-         %{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket
-       ) do
+  defp activate_participant_task(%{assigns: %{vm: %{state: :participant}, model: model, current_user: user}} = socket) do
     Assignment.Public.complete_task(model, user)
     socket
   end
@@ -41,11 +39,7 @@ defmodule Systems.Alliance.CallbackPage do
   defp activate_participant_task(socket), do: socket
 
   @impl true
-  def handle_event(
-        "call-to-action",
-        _params,
-        %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket
-      ) do
+  def handle_event("call-to-action", _params, %{assigns: %{vm: %{call_to_action: %{handle: handle}}}} = socket) do
     {:noreply, handle.(socket)}
   end
 

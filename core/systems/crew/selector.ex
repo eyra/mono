@@ -124,9 +124,7 @@ defmodule Systems.Crew.Selector do
 
         selector
         |> join(:inner, [{^binding, b}], _ in assoc(b, :auth_node), as: ^auth_node_binding)
-        |> join(:inner, [{^auth_node_binding, b}], _ in assoc(b, :role_assignments),
-          as: ^assignments_binding
-        )
+        |> join(:inner, [{^auth_node_binding, b}], _ in assoc(b, :role_assignments), as: ^assignments_binding)
         |> where([{^assignments_binding, b}], b.role in ^role_list)
       end
 

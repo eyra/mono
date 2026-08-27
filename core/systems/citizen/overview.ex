@@ -38,10 +38,7 @@ defmodule Systems.Citizen.Overview do
 
   # Initial update
   @impl true
-  def update(
-        %{id: id, props: %{citizens: citizens, pool: pool}} = _params,
-        %{assigns: %{myself: target}} = socket
-      ) do
+  def update(%{id: id, props: %{citizens: citizens, pool: pool}} = _params, %{assigns: %{myself: target}} = socket) do
     filter_labels = Citizen.CriteriaFilters.labels([])
 
     email_button = %{
@@ -124,9 +121,7 @@ defmodule Systems.Citizen.Overview do
 
   # Events
 
-  defp prepare_citizens(
-         %{assigns: %{citizens: citizens, active_filters: active_filters, query: query}} = socket
-       ) do
+  defp prepare_citizens(%{assigns: %{citizens: citizens, active_filters: active_filters, query: query}} = socket) do
     filtered_citizens =
       citizens
       |> filter(active_filters)
@@ -148,11 +143,7 @@ defmodule Systems.Citizen.Overview do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :citizen_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :citizen_filters}}, socket) do
     {
       :noreply,
       socket

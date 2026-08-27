@@ -51,11 +51,7 @@ defmodule Systems.Storage.EndpointForm.Helper do
       end
 
       @impl true
-      def handle_event(
-            "save",
-            %{"endpoint_model" => attrs},
-            %{assigns: %{entity: entity}} = socket
-          ) do
+      def handle_event("save", %{"endpoint_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
         changeset = Model.changeset(entity, attrs)
 
         {

@@ -45,8 +45,7 @@ defmodule Systems.Ontology.Queries do
     from(p in Ontology.PredicateModel, as: :predicate)
   end
 
-  def predicate_query(%{subject: subject, type: type})
-      when is_binary(subject) and is_binary(type) do
+  def predicate_query(%{subject: subject, type: type}) when is_binary(subject) and is_binary(type) do
     build(predicate_query(), :predicate,
       subject: [phrase == ^subject],
       type: [phrase == ^type]
@@ -109,12 +108,7 @@ defmodule Systems.Ontology.Queries do
     )
   end
 
-  def ref_query(%Ontology.PredicateModel{
-        id: predicate_id,
-        subject_id: subject_id,
-        type_id: type_id,
-        object_id: object_id
-      }) do
+  def ref_query(%Ontology.PredicateModel{id: predicate_id, subject_id: subject_id, type_id: type_id, object_id: object_id}) do
     concept_ids = [subject_id, type_id, object_id]
     build(ref_query(), :ref, concept_id in ^concept_ids or predicate_id == ^predicate_id)
   end

@@ -66,10 +66,7 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :search_query, payload: %{query: query, query_string: query_string}},
-        socket
-      ) do
+  def consume_event(%{name: :search_query, payload: %{query: query, query_string: query_string}}, socket) do
     {
       :stop,
       socket
@@ -79,10 +76,7 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :active_item_ids, payload: %{active_item_ids: active_filters}},
-        socket
-      ) do
+  def consume_event(%{name: :active_item_ids, payload: %{active_item_ids: active_filters}}, socket) do
     {
       :stop,
       socket

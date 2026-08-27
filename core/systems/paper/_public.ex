@@ -32,10 +32,7 @@ defmodule Systems.Paper.Public do
     |> Repo.update!()
   end
 
-  def mark_as_failed!(
-        %Paper.ReferenceFileModel{} = reference_file,
-        %Paper.RISError{message: message} = _error
-      ) do
+  def mark_as_failed!(%Paper.ReferenceFileModel{} = reference_file, %Paper.RISError{message: message} = _error) do
     Multi.new()
     |> Multi.update(:paper_reference_file, update_reference_file_status(reference_file, :failed))
     |> Multi.insert(
@@ -59,8 +56,7 @@ defmodule Systems.Paper.Public do
     |> put_assoc(:file, content_file)
   end
 
-  def prepare_reference_file(original_filename, url)
-      when is_binary(original_filename) and is_binary(url) do
+  def prepare_reference_file(original_filename, url) when is_binary(original_filename) and is_binary(url) do
     prepare_reference_file(Content.Public.prepare_file(original_filename, url))
   end
 
@@ -102,8 +98,7 @@ defmodule Systems.Paper.Public do
   Aborts active import sessions for multiple reference files.
   Returns the number of sessions aborted.
   """
-  def abort_active_imports_for_reference_files!(reference_file_ids)
-      when is_list(reference_file_ids) do
+  def abort_active_imports_for_reference_files!(reference_file_ids) when is_list(reference_file_ids) do
     aborted_count =
       reference_file_ids
       |> Enum.filter(&has_active_import_for_reference_file?/1)
@@ -187,10 +182,7 @@ defmodule Systems.Paper.Public do
     end
   end
 
-  def prepare_import_session(
-        %Paper.ReferenceFileModel{} = reference_file,
-        %Paper.SetModel{} = paper_set
-      ) do
+  def prepare_import_session(%Paper.ReferenceFileModel{} = reference_file, %Paper.SetModel{} = paper_set) do
     # Create session, enqueue job, and dispatch signal atomically
     Multi.new()
     |> Multi.insert(
@@ -219,15 +211,13 @@ defmodule Systems.Paper.Public do
     end
   end
 
-  def get_active_import_session_for_reference_file(reference_file_id)
-      when is_integer(reference_file_id) do
+  def get_active_import_session_for_reference_file(reference_file_id) when is_integer(reference_file_id) do
     reference_file_id
     |> Paper.RISImportSessionModel.active_for_reference_file_tool()
     |> List.first()
   end
 
-  def has_active_import_for_reference_file?(reference_file_id)
-      when is_integer(reference_file_id) do
+  def has_active_import_for_reference_file?(reference_file_id) when is_integer(reference_file_id) do
     Paper.RISImportSessionModel.has_active_import_for_reference_file?(reference_file_id)
   end
 
@@ -355,8 +345,7 @@ defmodule Systems.Paper.Public do
     Paper.SetModel.changeset(%Paper.SetModel{}, %{category: category, identifier: identifier})
   end
 
-  def remove_paper_from_set!(paper_set_id, paper_id)
-      when is_integer(paper_set_id) and is_integer(paper_id) do
+  def remove_paper_from_set!(paper_set_id, paper_id) when is_integer(paper_set_id) and is_integer(paper_id) do
     Multi.new()
     |> Multi.delete_all(
       :delete_association,
@@ -387,17 +376,7 @@ defmodule Systems.Paper.Public do
   # credo:disable-for-next-line
   # RIS
 
-  def prepare_paper(
-        doi,
-        title,
-        subtitle,
-        year,
-        date,
-        abbreviated_journal,
-        authors,
-        abstract,
-        keywords
-      ) do
+  def prepare_paper(doi, title, subtitle, year, date, abbreviated_journal, authors, abstract, keywords) do
     Paper.Model.changeset(%Paper.Model{}, %{
       doi: doi,
       title: title,

@@ -6,10 +6,7 @@ defmodule Systems.Document.ToolForm do
   alias Systems.Document
 
   @impl true
-  def process_file(%{assigns: %{entity: entity}} = socket, %{
-        public_url: public_url,
-        original_filename: original_filename
-      }) do
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url, original_filename: original_filename}) do
     save(socket, entity, %{ref: public_url, name: original_filename})
   end
 

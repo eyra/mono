@@ -5,10 +5,7 @@ defmodule Systems.Storage.Switch do
   alias Systems.Storage
 
   @impl true
-  def intercept(
-        {:storage_delivery, :delivered} = signal,
-        %{storage_delivery: %{"endpoint_id" => endpoint_id}} = message
-      ) do
+  def intercept({:storage_delivery, :delivered} = signal, %{storage_delivery: %{"endpoint_id" => endpoint_id}} = message) do
     storage_endpoint =
       Storage.Public.get_endpoint!(endpoint_id, Storage.EndpointModel.preload_graph(:down))
 

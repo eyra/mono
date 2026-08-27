@@ -6,10 +6,7 @@ defmodule Systems.Promotion.WysiwygForm do
   alias Systems.Promotion
 
   @impl true
-  def update(
-        %{id: id, entity: %Promotion.Model{} = entity, field_name: field_name} = assigns,
-        socket
-      )
+  def update(%{id: id, entity: %Promotion.Model{} = entity, field_name: field_name} = assigns, socket)
       when is_atom(field_name) do
     field = Map.get(entity, field_name)
     form = to_form(%{Atom.to_string(field_name) => field})

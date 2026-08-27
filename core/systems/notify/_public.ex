@@ -126,9 +126,7 @@ defmodule Systems.Notify.Public do
           :ok
 
         other ->
-          Logger.warning(
-            "[Notify] channel #{channel} mark_seen returned #{inspect(other)} for message #{message.id}"
-          )
+          Logger.warning("[Notify] channel #{channel} mark_seen returned #{inspect(other)} for message #{message.id}")
       end
     end
 

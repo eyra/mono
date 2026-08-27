@@ -206,8 +206,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     expect(ProviderMock, :list_withdrawals, fn "m_recon" -> {:ok, []} end)
 
     expect(ProviderMock, :create_withdrawal, fn "m_recon", :EUR, %{amount: 1000}, _key ->
-      {:ok,
-       %{uid: "w_issued", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      {:ok, %{uid: "w_issued", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
     end)
 
     assert %{scanned: 1, still_pending: 1} = reconcile()
@@ -227,8 +226,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     expect(ProviderMock, :create_withdrawal, fn "m_recon", :EUR, %{amount: 1000}, key ->
       assert key =~ "attempt=1"
 
-      {:ok,
-       %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      {:ok, %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
     end)
 
     assert %{scanned: 1, still_pending: 1} = reconcile()
@@ -275,8 +273,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     expect(ProviderMock, :list_withdrawals, fn _merchant -> {:ok, []} end)
 
     expect(ProviderMock, :create_withdrawal, fn _merchant, :EUR, %{amount: 1000}, _key ->
-      {:ok,
-       %{uid: "w_healed", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
+      {:ok, %{uid: "w_healed", status: :pending, raw_status: "created", reference: nil, amount: 1000}}
     end)
 
     assert %{scanned: 1, still_pending: 1} = reconcile()

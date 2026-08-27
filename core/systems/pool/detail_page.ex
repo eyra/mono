@@ -58,10 +58,7 @@ defmodule Systems.Pool.DetailPage do
     }
   end
 
-  def handle_info(
-        {:email_dialog, %{recipients: recipients}},
-        %{assigns: %{current_user: current_user}} = socket
-      ) do
+  def handle_info({:email_dialog, %{recipients: recipients}}, %{assigns: %{current_user: current_user}} = socket) do
     {
       :noreply,
       assign(socket,

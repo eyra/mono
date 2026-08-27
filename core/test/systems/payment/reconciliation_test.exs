@@ -24,8 +24,7 @@ defmodule Systems.Payment.ReconciliationTest do
   @attempts_before_giving_up 3
   @retryable_statuses [429, 500, 502, 503, 504]
 
-  defp provider_error(status),
-    do: {:error, %Error{code: :provider_error, message: "boom", details: %{status: status}}}
+  defp provider_error(status), do: {:error, %Error{code: :provider_error, message: "boom", details: %{status: status}}}
 
   defp withdrawal, do: {:ok, %{uid: "w_1", status: :completed, raw_status: "completed"}}
 

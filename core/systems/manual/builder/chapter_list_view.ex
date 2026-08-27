@@ -37,9 +37,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
     assign(socket, chapter_items: chapter_items)
   end
 
-  def map_chapter_to_item(
-        {%Manual.ChapterModel{id: id, title: title, userflow_step: %{group: group}}, index}
-      ) do
+  def map_chapter_to_item({%Manual.ChapterModel{id: id, title: title, userflow_step: %{group: group}}, index}) do
     up_button = %{
       action: %{type: :send, event: "up_chapter", item: id},
       face: %{type: :icon, icon: :arrow_up}
@@ -84,11 +82,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
     {:noreply, socket}
   end
 
-  def handle_event(
-        "delete_chapter",
-        %{"item" => chapter_id},
-        %{assigns: %{chapters: chapters}} = socket
-      ) do
+  def handle_event("delete_chapter", %{"item" => chapter_id}, %{assigns: %{chapters: chapters}} = socket) do
     chapter =
       Enum.find(chapters, fn chapter -> chapter.id == String.to_integer(chapter_id) end)
 
@@ -100,11 +94,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
     {:noreply, send_event(socket, :parent, "select_chapter", %{chapter_id: chapter_id})}
   end
 
-  def handle_event(
-        "up_chapter",
-        %{"item" => chapter_id},
-        %{assigns: %{chapters: chapters}} = socket
-      ) do
+  def handle_event("up_chapter", %{"item" => chapter_id}, %{assigns: %{chapters: chapters}} = socket) do
     chapter =
       Enum.find(chapters, fn chapter -> chapter.id == String.to_integer(chapter_id) end)
 

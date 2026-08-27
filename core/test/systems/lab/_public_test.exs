@@ -12,26 +12,22 @@ defmodule Systems.Lab.PublicTest do
        Factories.insert!(:lab_tool, %{
          time_slots: [
            %{
-             start_time:
-               Timex.set(Timestamp.yesterday(), hour: 9, minute: 0, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.yesterday(), hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 2
            },
            %{
-             start_time:
-               Timex.set(Timestamp.yesterday(), hour: 9, minute: 30, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.yesterday(), hour: 9, minute: 30, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 2
            },
            %{
-             start_time:
-               Timex.set(Timestamp.tomorrow(), hour: 9, minute: 0, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.tomorrow(), hour: 9, minute: 0, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            },
            %{
-             start_time:
-               Timex.set(Timestamp.tomorrow(), hour: 9, minute: 30, second: 0, microsecond: 0),
+             start_time: Timex.set(Timestamp.tomorrow(), hour: 9, minute: 30, second: 0, microsecond: 0),
              location: Faker.Lorem.sentence(),
              number_of_seats: 9
            }

@@ -114,11 +114,9 @@ defmodule Systems.Workflow.ToolRefModel do
     end)
   end
 
-  def tag(%Workflow.ToolRefModel{special: :questionnaire}),
-    do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
+  def tag(%Workflow.ToolRefModel{special: :questionnaire}), do: dgettext("eyra-project", "tool_ref.tag.questionnaire")
 
-  def tag(%Workflow.ToolRefModel{special: :graphite}),
-    do: dgettext("eyra-project", "tool_ref.tag.graphite")
+  def tag(%Workflow.ToolRefModel{special: :graphite}), do: dgettext("eyra-project", "tool_ref.tag.graphite")
 
   def tag(%Workflow.ToolRefModel{special: _special}) do
     dgettext("eyra-project", "tool_ref.tag.default")

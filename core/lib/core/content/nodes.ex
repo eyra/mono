@@ -14,8 +14,7 @@ defmodule Core.Content.Nodes do
   def ready?(%Node{} = node), do: ready?(node, node.parent_id)
   def ready?(%Node{} = node, nil), do: node.ready
 
-  def ready?(%Node{} = node, parent_id) when is_integer(parent_id),
-    do: node.ready && ready?(get(parent_id))
+  def ready?(%Node{} = node, parent_id) when is_integer(parent_id), do: node.ready && ready?(get(parent_id))
 
   def ready?(%Node{} = node, %Node{} = parent), do: node.ready && ready?(parent)
 

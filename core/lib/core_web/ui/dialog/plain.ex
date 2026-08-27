@@ -53,9 +53,7 @@ defmodule CoreWeb.UI.Dialog.Plain do
     assign(socket, buttons: buttons)
   end
 
-  defp update_buttons(
-         %{assigns: %{type: :inform, id: id, primary_button_label: primary_button_label}} = socket
-       ) do
+  defp update_buttons(%{assigns: %{type: :inform, id: id, primary_button_label: primary_button_label}} = socket) do
     buttons = [
       %{
         action: %{type: :send, event: "close_modal", item: id, target: nil},

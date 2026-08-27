@@ -6,10 +6,7 @@ defmodule Systems.Manual.ChapterListView do
   alias Systems.Manual
 
   @impl true
-  def update(
-        %{id: id, manual: manual, title: title, selected_chapter_id: selected_chapter_id},
-        socket
-      ) do
+  def update(%{id: id, manual: manual, title: title, selected_chapter_id: selected_chapter_id}, socket) do
     {
       :ok,
       socket
@@ -41,9 +38,7 @@ defmodule Systems.Manual.ChapterListView do
     assign(socket, chapter_items: chapter_items)
   end
 
-  def map_chapter_to_item(
-        {%Manual.ChapterModel{id: id, title: title, userflow_step: %{group: group}}, index}
-      ) do
+  def map_chapter_to_item({%Manual.ChapterModel{id: id, title: title, userflow_step: %{group: group}}, index}) do
     %{
       id: id,
       title: title,
@@ -56,8 +51,7 @@ defmodule Systems.Manual.ChapterListView do
     chapter_id_int = String.to_integer(chapter_id)
     source = %{id: id, module: __MODULE__}
 
-    {:noreply,
-     publish_event(socket, {:select_chapter, %{chapter_id: chapter_id_int, source: source}})}
+    {:noreply, publish_event(socket, {:select_chapter, %{chapter_id: chapter_id_int, source: source}})}
   end
 
   @impl true

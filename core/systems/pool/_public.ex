@@ -182,8 +182,7 @@ defmodule Systems.Pool.Public do
 
   def get_by_name(name, preload \\ [])
 
-  def get_by_name(name, preload) when is_atom(name),
-    do: get_by_name(Atom.to_string(name), preload)
+  def get_by_name(name, preload) when is_atom(name), do: get_by_name(Atom.to_string(name), preload)
 
   def get_by_name(name, preload) do
     Pool.Model
@@ -372,11 +371,7 @@ defmodule Systems.Pool.Public do
   end
 
   def count_eligitable_users(
-        %Pool.CriteriaModel{
-          genders: genders,
-          min_birth_year: min_birth_year,
-          max_birth_year: max_birth_year
-        },
+        %Pool.CriteriaModel{genders: genders, min_birth_year: min_birth_year, max_birth_year: max_birth_year},
         include,
         exclude
       ) do
@@ -443,10 +438,7 @@ defmodule Systems.Pool.Public do
 
   def wallet_related?(_, _), do: false
 
-  defp notify_when_submitted(
-         %Pool.SubmissionModel{pool_id: pool_id} = submission,
-         %Changeset{} = changeset
-       ) do
+  defp notify_when_submitted(%Pool.SubmissionModel{pool_id: pool_id} = submission, %Changeset{} = changeset) do
     if Changeset.get_change(changeset, :status) === :submitted do
       for user <- Account.Public.list_pool_admins() do
         NextAction.Public.create_next_action(user, Pool.ReviewSubmission,

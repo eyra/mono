@@ -9,8 +9,7 @@ defmodule Frameworks.Utility.Identifier do
   defp stringafy(":" <> sub_string), do: sub_string
   defp stringafy(term) when is_binary(term), do: term
 
-  def from_string(code, include_year?) when is_atom(code),
-    do: from_string(Atom.to_string(code), include_year?)
+  def from_string(code, include_year?) when is_atom(code), do: from_string(Atom.to_string(code), include_year?)
 
   def from_string(string, include_year?) do
     string

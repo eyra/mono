@@ -30,8 +30,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "url" => "git@github.com:eyra/fertility-prediction-challenge.git",
                        "ref" => "92ec9ad16ca8eeb96c3f55bfe2e0261dd36d6874",
                        "status" => "error",
-                       "error_message" =>
-                         "Repo does not have expect Dockerfile with name: Dockerfile"
+                       "error_message" => "Repo does not have expect Dockerfile with name: Dockerfile"
                      }, [:missing_submission]}
                   ]},
                success: {[], []}
@@ -61,8 +60,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                       "url" => ^url,
                       "ref" => ^ref,
                       "status" => "error",
-                      "error_message" =>
-                        "Repo does not have expect Dockerfile with name: Dockerfile",
+                      "error_message" => "Repo does not have expect Dockerfile with name: Dockerfile",
                       "submission_record" => {
                         "git@github.com:org/repo.git",
                         "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"
@@ -385,25 +383,20 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {5,
                      %{
                        "accuracy" => "",
-                       "error_message" =>
-                         "Repo does not have expect Dockerfile with name: Dockerfile",
+                       "error_message" => "Repo does not have expect Dockerfile with name: Dockerfile",
                        "f1_score" => "",
                        "precision" => "",
                        "recall" => "",
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {7,
@@ -416,9 +409,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {8,
@@ -431,9 +422,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {11,
@@ -446,9 +435,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {12,
@@ -461,9 +448,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {13,
@@ -476,9 +461,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {15,
@@ -491,9 +474,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {19,
@@ -506,9 +487,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "error",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []}
                   ], []},
@@ -524,9 +503,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {2,
@@ -539,9 +516,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {3,
@@ -554,9 +529,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {6,
@@ -569,9 +542,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {9,
@@ -584,9 +555,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {10,
@@ -599,9 +568,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {14,
@@ -614,9 +581,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {16,
@@ -629,9 +594,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {17,
@@ -644,9 +607,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []},
                     {18,
@@ -659,9 +620,7 @@ defmodule Systems.Graphite.ScoresParserTest do
                        "ref" => "4cf8a66bcbe349488fabc211e1bfb72007a9f14a",
                        "status" => "success",
                        "submission-id" => ^submission_id,
-                       "submission_record" =>
-                         {"git@github.com:org/repo.git",
-                          "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
+                       "submission_record" => {"git@github.com:org/repo.git", "4cf8a66bcbe349488fabc211e1bfb72007a9f14a"},
                        "url" => "git@github.com:org/repo.git"
                      }, []}
                   ], []}

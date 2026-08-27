@@ -243,8 +243,7 @@ defmodule Core.Factories do
   def build(:graphite_submission) do
     build(:graphite_submission, %{
       description: "description",
-      github_commit_url:
-        "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
+      github_commit_url: "https://github.com/eyra/mono/commit/5405deccef0aa1a594cc09da99185860bc3e0cd2"
     })
   end
 
@@ -1017,8 +1016,7 @@ defmodule Core.Factories do
     end
   end
 
-  defp random_identifier(type) when is_atom(type),
-    do: type |> Atom.to_string() |> random_identifier()
+  defp random_identifier(type) when is_atom(type), do: type |> Atom.to_string() |> random_identifier()
 
   defp random_identifier(type) when is_binary(type) do
     [type] ++ Faker.Lorem.words(3..5)

@@ -39,19 +39,16 @@ defmodule Systems.Project.ItemModel do
 
   def preload_graph(:up), do: preload_graph([:node])
 
-  def preload_graph(:down),
-    do: preload_graph([:assignment, :leaderboard, :advert, :storage_endpoint])
+  def preload_graph(:down), do: preload_graph([:assignment, :leaderboard, :advert, :storage_endpoint])
 
   def preload_graph(:node), do: [node: [:parent, :children, :items, :auth_node]]
   def preload_graph(:assignment), do: [assignment: Assignment.Model.preload_graph(:down)]
 
-  def preload_graph(:leaderboard),
-    do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
+  def preload_graph(:leaderboard), do: [leaderboard: Graphite.LeaderboardModel.preload_graph(:down)]
 
   def preload_graph(:advert), do: [advert: Advert.Model.preload_graph(:down)]
 
-  def preload_graph(:storage_endpoint),
-    do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
+  def preload_graph(:storage_endpoint), do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
   def auth_tree(%Project.ItemModel{assignment: %NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
@@ -81,8 +78,7 @@ defmodule Systems.Project.ItemModel do
     auth_tree(Repo.preload(item, :storage_endpoint))
   end
 
-  def auth_tree(%Project.ItemModel{storage_endpoint: storage_endpoint})
-      when not is_nil(storage_endpoint) do
+  def auth_tree(%Project.ItemModel{storage_endpoint: storage_endpoint}) when not is_nil(storage_endpoint) do
     Storage.EndpointModel.auth_tree(storage_endpoint)
   end
 
@@ -94,8 +90,7 @@ defmodule Systems.Project.ItemModel do
     def tag(item), do: item |> Project.ItemModel.special() |> Concept.Leaf.tag()
     def resource_id(item), do: item |> Project.ItemModel.special() |> Concept.Leaf.resource_id()
 
-    def info(item, timezone),
-      do: item |> Project.ItemModel.special() |> Concept.Leaf.info(timezone)
+    def info(item, timezone), do: item |> Project.ItemModel.special() |> Concept.Leaf.info(timezone)
 
     def status(item), do: item |> Project.ItemModel.special() |> Concept.Leaf.status()
   end
@@ -104,11 +99,7 @@ defmodule Systems.Project.ItemModel do
     use Gettext, backend: CoreWeb.Gettext
     use CoreWeb, :verified_routes
 
-    def view_model(
-          %Project.ItemModel{id: id, name: name} = item,
-          {Project.NodePage, :item_card},
-          %{timezone: timezone}
-        ) do
+    def view_model(%Project.ItemModel{id: id, name: name} = item, {Project.NodePage, :item_card}, %{timezone: timezone}) do
       %{
         type: :secondary,
         id: id,

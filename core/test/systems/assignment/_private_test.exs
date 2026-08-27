@@ -29,9 +29,7 @@ defmodule Systems.Assignment.PrivateTest do
       member = %{id: member_id} = Crew.Factories.create_member(crew, user)
 
       task =
-        Crew.Factories.create_task(crew, member, ["item=#{item_id}", "member=#{member_id}"],
-          expired: false
-        )
+        Crew.Factories.create_task(crew, member, ["item=#{item_id}", "member=#{member_id}"], expired: false)
 
       assert {:ok,
               %Workflow.ItemModel{
@@ -47,9 +45,7 @@ defmodule Systems.Assignment.PrivateTest do
       member = %{id: member_id} = Crew.Factories.create_member(crew, user)
 
       task =
-        Crew.Factories.create_task(crew, member, ["item=#{item_id}", "member=#{member_id}"],
-          expired: false
-        )
+        Crew.Factories.create_task(crew, member, ["item=#{item_id}", "member=#{member_id}"], expired: false)
 
       assert {:ok,
               %Crew.MemberModel{

@@ -45,11 +45,9 @@ defmodule Frameworks.Pixel.Flash do
 
   def push_error(socket), do: push_error(socket, default_error())
 
-  def push_error(socket, message),
-    do: push(socket, {:show_flash, %{type: :error, message: message, auto_hide: false}})
+  def push_error(socket, message), do: push(socket, {:show_flash, %{type: :error, message: message, auto_hide: false}})
 
-  def push_info(socket, message),
-    do: push(socket, {:show_flash, %{type: :info, message: message, auto_hide: true}})
+  def push_info(socket, message), do: push(socket, {:show_flash, %{type: :info, message: message, auto_hide: true}})
 
   def push_hide(socket), do: push(socket, :hide_flash)
 
@@ -67,8 +65,7 @@ defmodule Frameworks.Pixel.Flash do
     send(pid, payload)
   end
 
-  defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket)
-       when not is_nil(hide_timer) do
+  defp cancel_hide_timer(%{assigns: %{hide_timer: hide_timer}} = socket) when not is_nil(hide_timer) do
     Process.cancel_timer(hide_timer)
     socket
   end
@@ -88,10 +85,7 @@ defmodule Frameworks.Pixel.Flash do
           {:noreply, Flash.hide(socket)}
         end
 
-        def handle_info(
-              {:show_flash, %{type: type, message: message, auto_hide: auto_hide}},
-              socket
-            ) do
+        def handle_info({:show_flash, %{type: type, message: message, auto_hide: auto_hide}}, socket) do
           {:noreply, Flash.put(socket, type, message, auto_hide)}
         end
       end

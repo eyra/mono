@@ -10,10 +10,7 @@ defmodule Systems.Graphite.Switch do
   require Logger
 
   @impl true
-  def intercept(
-        {:project_item, _} = signal,
-        %{project_item: %{leaderboard: %{tool: tool}}} = message
-      ) do
+  def intercept({:project_item, _} = signal, %{project_item: %{leaderboard: %{tool: tool}}} = message) do
     if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
@@ -25,10 +22,7 @@ defmodule Systems.Graphite.Switch do
   end
 
   @impl true
-  def intercept(
-        {:graphite_tool, _} = signal,
-        %{graphite_tool: tool, from_pid: from_pid} = message
-      ) do
+  def intercept({:graphite_tool, _} = signal, %{graphite_tool: tool, from_pid: from_pid} = message) do
     if assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down)) do
       dispatch!(
         {:assignment, signal},
@@ -88,19 +82,13 @@ defmodule Systems.Graphite.Switch do
   end
 
   @impl true
-  def intercept({:graphite_leaderboard, _}, %{
-        graphite_leaderboard: leaderboard,
-        from_pid: from_pid
-      }) do
+  def intercept({:graphite_leaderboard, _}, %{graphite_leaderboard: leaderboard, from_pid: from_pid}) do
     update_pages(leaderboard, from_pid)
     :ok
   end
 
   @impl true
-  def intercept({:assignment, _}, %{
-        assignment: %{special: :benchmark_challenge} = assignment,
-        from_pid: from_pid
-      }) do
+  def intercept({:assignment, _}, %{assignment: %{special: :benchmark_challenge} = assignment, from_pid: from_pid}) do
     assignment
     |> Graphite.Public.list_leaderboards(Graphite.LeaderboardModel.preload_graph(:down))
     |> Enum.each(&update_pages(&1, from_pid))

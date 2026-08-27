@@ -19,10 +19,7 @@ defmodule Systems.Notify.Channel.NA do
   require Logger
 
   @impl true
-  def build_payload(%EventModel{
-        type: "contribution_accepted",
-        metadata: %{"assignment_id" => assignment_id} = metadata
-      }) do
+  def build_payload(%EventModel{type: "contribution_accepted", metadata: %{"assignment_id" => assignment_id} = metadata}) do
     {:ok,
      %{
        "action_module" => "Elixir.Systems.Assignment.NextActions.ContributionReviewed",
@@ -35,10 +32,7 @@ defmodule Systems.Notify.Channel.NA do
      }}
   end
 
-  def build_payload(%EventModel{
-        type: "contribution_declined",
-        metadata: %{"assignment_id" => assignment_id} = metadata
-      }) do
+  def build_payload(%EventModel{type: "contribution_declined", metadata: %{"assignment_id" => assignment_id} = metadata}) do
     {:ok,
      %{
        "action_module" => "Elixir.Systems.Assignment.NextActions.ContributionReviewed",

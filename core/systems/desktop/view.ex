@@ -12,11 +12,7 @@ defmodule Systems.Desktop.View do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{vm: %{content_items: content_items}}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{vm: %{content_items: content_items}}} = socket) do
     card_id = String.to_integer(card_id)
     %{path: path} = Enum.find(content_items, &(&1.id == card_id))
     {:noreply, push_navigate(socket, to: path)}

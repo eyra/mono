@@ -38,10 +38,7 @@ defmodule Systems.Student.Overview do
 
   # Initial update
   @impl true
-  def update(
-        %{id: id, students: students, pool: pool} = _params,
-        %{assigns: %{myself: target}} = socket
-      ) do
+  def update(%{id: id, students: students, pool: pool} = _params, %{assigns: %{myself: target}} = socket) do
     filter_labels = Student.CriteriaFilters.labels([]) ++ Student.Filters.labels([])
 
     email_button = %{
@@ -128,14 +125,7 @@ defmodule Systems.Student.Overview do
   end
 
   defp prepare_students(
-         %{
-           assigns: %{
-             students: students,
-             pool: pool,
-             active_filters: active_filters,
-             query: query
-           }
-         } = socket
+         %{assigns: %{students: students, pool: pool, active_filters: active_filters, query: query}} = socket
        ) do
     filtered_students =
       students
@@ -158,11 +148,7 @@ defmodule Systems.Student.Overview do
   end
 
   @impl true
-  def handle_event(
-        "active_item_ids",
-        %{active_item_ids: active_filters, source: %{name: :student_filters}},
-        socket
-      ) do
+  def handle_event("active_item_ids", %{active_item_ids: active_filters, source: %{name: :student_filters}}, socket) do
     {
       :noreply,
       socket

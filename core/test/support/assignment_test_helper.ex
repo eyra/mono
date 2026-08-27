@@ -14,11 +14,7 @@ defmodule Systems.Assignment.TestHelper do
   does at signup time but scoped for tests that need to set up rewards
   directly.
   """
-  def create_reward(
-        %Assignment.Model{fund: %Fund.Model{} = fund} = assignment,
-        %User{} = user,
-        amount
-      )
+  def create_reward(%Assignment.Model{fund: %Fund.Model{} = fund} = assignment, %User{} = user, amount)
       when is_integer(amount) do
     Fund.Public.create_reward(
       fund,

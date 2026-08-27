@@ -33,11 +33,7 @@ defmodule Systems.Advert.Assembly do
     |> Multi.delete(:promotion_auth_node, auth_node)
   end
 
-  def create(
-        %Assignment.Model{info: %{image_id: image_id, title: title}} = assignment,
-        user,
-        pool
-      ) do
+  def create(%Assignment.Model{info: %{image_id: image_id, title: title}} = assignment, user, pool) do
     project_node =
       %{auth_node: project_auth_node} =
       assignment
@@ -126,9 +122,7 @@ defmodule Systems.Advert.Assembly do
           auth_node: advert_auth_node,
           submission: submission,
           promotion: %{auth_node: promotion_auth_node} = promotion,
-          assignment:
-            %{fund: fund, auth_node: assignment_auth_node, info: info, workflow: workflow} =
-              assignment
+          assignment: %{fund: fund, auth_node: assignment_auth_node, info: info, workflow: workflow} = assignment
         } = advert
       ) do
     advert_auth_node = auth_module().copy(advert_auth_node)

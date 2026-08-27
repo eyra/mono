@@ -34,9 +34,7 @@ defmodule Systems.Pool.AccountPostActionHandler do
   end
 
   def handle(%Account.User{id: user_id}, action) do
-    Logger.warning(
-      "Ignoring unknown post account action: #{inspect(action)} for user: #{user_id}"
-    )
+    Logger.warning("Ignoring unknown post account action: #{inspect(action)} for user: #{user_id}")
 
     :ok
   end

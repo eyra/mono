@@ -3,8 +3,7 @@ defmodule Systems.Assignment.InfoModelTest do
 
   alias Systems.Assignment
 
-  defp changeset(params, type \\ :auto_save),
-    do: Assignment.InfoModel.changeset(%Assignment.InfoModel{}, type, params)
+  defp changeset(params, type \\ :auto_save), do: Assignment.InfoModel.changeset(%Assignment.InfoModel{}, type, params)
 
   describe "changeset/3 subject_reward" do
     test "defaults to 0 so an assignment without a reward is still valid" do

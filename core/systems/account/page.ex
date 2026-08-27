@@ -32,13 +32,7 @@ defmodule Systems.Account.Page do
   # matches the layout (website for participants, workspace for creators).
   def get_menus_config, do: nil
 
-  def update_menus(
-        %{
-          assigns: %{
-            vm: %{menus_config: {menu_builder, menus}, active_menu_item: active_menu_item}
-          }
-        } = socket
-      ) do
+  def update_menus(%{assigns: %{vm: %{menus_config: {menu_builder, menus}, active_menu_item: active_menu_item}}} = socket) do
     update_menus(socket, menu_builder, menus, active_menu_item)
   end
 

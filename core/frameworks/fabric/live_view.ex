@@ -19,10 +19,7 @@ defmodule Fabric.LiveView do
       defoverridable handle_event: 3
 
       @impl true
-      def handle_info(
-            %{fabric_event: %{name: :handle_modal_closed, payload: %{source: %{name: name}}}},
-            socket
-          ) do
+      def handle_info(%{fabric_event: %{name: :handle_modal_closed, payload: %{source: %{name: name}}}}, socket) do
         socket =
           if function_exported?(__MODULE__, :handle_modal_closed, 2) do
             apply(__MODULE__, :handle_modal_closed, [socket, name])
@@ -44,20 +41,12 @@ defmodule Fabric.LiveView do
         handle_async(socket, async)
       end
 
-      defp handle_async(socket, %{
-             source: %Fabric.LiveComponent.RefModel{} = live_component,
-             event: name,
-             result: result
-           }) do
+      defp handle_async(socket, %{source: %Fabric.LiveComponent.RefModel{} = live_component, event: name, result: result}) do
         Fabric.send_event(live_component, %{name: name, payload: result})
         {:noreply, socket}
       end
 
-      defp handle_async(socket, %{
-             source: %Fabric.LiveView.RefModel{},
-             event: name,
-             result: result
-           }) do
+      defp handle_async(socket, %{source: %Fabric.LiveView.RefModel{}, event: name, result: result}) do
         handle_event(name, result, socket)
       end
     end

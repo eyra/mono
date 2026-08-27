@@ -46,8 +46,7 @@ defmodule Systems.Paper.RISImportCommitJob do
     candidate_papers
     |> Enum.chunk_every(batch_size)
     |> Enum.with_index(1)
-    |> Enum.reduce_while({:ok, %{inserted: 0, skipped: 0, processed: 0}}, fn {batch, batch_num},
-                                                                             {:ok, totals} ->
+    |> Enum.reduce_while({:ok, %{inserted: 0, skipped: 0, processed: 0}}, fn {batch, batch_num}, {:ok, totals} ->
       papers_processed_so_far = totals.processed + length(batch)
 
       case execute_batch_transaction(
@@ -77,15 +76,7 @@ defmodule Systems.Paper.RISImportCommitJob do
     # Build final progress with cumulative counts
   end
 
-  defp execute_batch_transaction(
-         batch,
-         session,
-         batch_num,
-         total_batches,
-         current_totals,
-         papers_processed,
-         total_papers
-       ) do
+  defp execute_batch_transaction(batch, session, batch_num, total_batches, current_totals, papers_processed, total_papers) do
     batch_timeout = Paper.Config.import_batch_timeout()
 
     {multi, paper_keys} = build_paper_insertion_multi(Multi.new(), batch, session.paper_set)

@@ -66,12 +66,7 @@ defmodule Systems.Paper.Model do
 
     This can be used as identifier for a paper. It is not guaranteed to be unique due to spelling differences in author and journal names.
   """
-  def citation(%{
-        authors: [main_author | _],
-        year: year,
-        title: title,
-        abbreviated_journal: abbreviated_journal
-      }) do
+  def citation(%{authors: [main_author | _], year: year, title: title, abbreviated_journal: abbreviated_journal}) do
     "#{main_author} (#{year}) #{title} #{abbreviated_journal}"
   end
 

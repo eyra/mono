@@ -25,10 +25,7 @@ defmodule Systems.Pool.ParticipantsView do
   end
 
   @impl true
-  def consume_event(
-        %{name: :search_query, payload: %{query: query, query_string: query_string}},
-        socket
-      ) do
+  def consume_event(%{name: :search_query, payload: %{query: query, query_string: query_string}}, socket) do
     {
       :stop,
       socket

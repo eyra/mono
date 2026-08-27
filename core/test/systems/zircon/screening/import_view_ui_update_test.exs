@@ -177,9 +177,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
       conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, view, _} =
-        live_isolated(conn, Screening.ImportView,
-          session: %{"title" => "Phase Test", "tool" => tool}
-        )
+        live_isolated(conn, Screening.ImportView, session: %{"title" => "Phase Test", "tool" => tool})
 
       # Phase 1: Prompting - should show Continue button
       prompting_html = render(view)

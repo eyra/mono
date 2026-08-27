@@ -6,10 +6,7 @@ defmodule Systems.Assignment.StorageView do
   alias Systems.Storage
 
   @impl true
-  def update(
-        %{project_node: project_node, storage_endpoint: storage_endpoint, user: user},
-        socket
-      ) do
+  def update(%{project_node: project_node, storage_endpoint: storage_endpoint, user: user}, socket) do
     special_type = Map.get(socket, :special_type, :builtin)
 
     {
@@ -71,8 +68,7 @@ defmodule Systems.Assignment.StorageView do
     assign(socket, storage_button: storage_button)
   end
 
-  defp update_logo(%{assigns: %{storage_endpoint: storage_endpoint}} = socket)
-       when not is_nil(storage_endpoint) do
+  defp update_logo(%{assigns: %{storage_endpoint: storage_endpoint}} = socket) when not is_nil(storage_endpoint) do
     logo = Storage.EndpointModel.asset_image_src(storage_endpoint, {:logo, {:product, :wide}})
     assign(socket, logo: logo)
   end
@@ -81,8 +77,7 @@ defmodule Systems.Assignment.StorageView do
     assign(socket, logo: nil)
   end
 
-  defp update_body(%{assigns: %{storage_endpoint: storage_endpoint}} = socket)
-       when is_nil(storage_endpoint) do
+  defp update_body(%{assigns: %{storage_endpoint: storage_endpoint}} = socket) when is_nil(storage_endpoint) do
     assign(socket, body: dgettext("eyra-storage", "create.storage.body"))
   end
 
@@ -94,13 +89,7 @@ defmodule Systems.Assignment.StorageView do
   def handle_event(
         "create_storage",
         _payload,
-        %{
-          assigns: %{
-            special_type: special_type,
-            project_node: %{id: project_node_id} = project_node,
-            user: user
-          }
-        } =
+        %{assigns: %{special_type: special_type, project_node: %{id: project_node_id} = project_node, user: user}} =
           socket
       ) do
     name = dgettext("eyra-storage", "default.name")

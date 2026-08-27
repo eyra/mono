@@ -6,10 +6,7 @@ defmodule Systems.Storage.EndpointDataView do
   alias Systems.Storage
 
   @impl true
-  def update(
-        %{endpoint: endpoint, branch_name: branch_name, timezone: timezone},
-        %{assigns: %{}} = socket
-      ) do
+  def update(%{endpoint: endpoint, branch_name: branch_name, timezone: timezone}, %{assigns: %{}} = socket) do
     total_count = Map.get(socket.assigns, :total_count, nil)
     visible_count = Map.get(socket.assigns, :visible_count, nil)
     query = Map.get(socket.assigns, :query, nil)

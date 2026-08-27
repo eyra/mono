@@ -53,8 +53,7 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   defp update_image_info(
-         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} =
-           socket
+         %{assigns: %{viewport: %{"width" => viewport_width}, vm: %{info: %{image_id: image_id}}}} = socket
        ) do
     image_width = viewport_width
     image_height = 360
@@ -120,32 +119,21 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def consume_event(
-        %{name: :work_done},
-        %{assigns: %{model: assignment, current_user: user}} = socket
-      ) do
+  def consume_event(%{name: :work_done}, %{assigns: %{model: assignment, current_user: user}} = socket) do
     Assignment.Public.complete_participation(assignment, user)
 
     {:stop, handle_action(socket, :work_done)}
   end
 
   @impl true
-  def consume_event(
-        %{name: :store, payload: %{task: task, key: key, group: group, data: data}},
-        socket
-      ) do
+  def consume_event(%{name: :store, payload: %{task: task, key: key, group: group, data: data}}, socket) do
     {:stop, store(socket, task_identifier(socket, task, group, key), data)}
   end
 
   # HTTP upload complete - blob stored via HTTP endpoint, schedule delivery
   @impl true
-  def consume_event(
-        %{name: :deliver_blob, payload: %{task: task, key: key, group: group, blob_id: blob_id}},
-        socket
-      ) do
-    Logger.info(
-      "[CrewPage] Blob stored, scheduling delivery: task=#{task} key=#{key} group=#{group} blob_id=#{blob_id}"
-    )
+  def consume_event(%{name: :deliver_blob, payload: %{task: task, key: key, group: group, blob_id: blob_id}}, socket) do
+    Logger.info("[CrewPage] Blob stored, scheduling delivery: task=#{task} key=#{key} group=#{group} blob_id=#{blob_id}")
 
     {:stop, deliver_blob(socket, task_identifier(socket, task, group, key), blob_id)}
   end
@@ -156,9 +144,7 @@ defmodule Systems.Assignment.CrewPage do
     |> update_view_model()
   end
 
-  defp onboarding_identifier(%{
-         assigns: %{model: assignment, panel_info: panel_info, vm: %{session_id: session_id}}
-       }) do
+  defp onboarding_identifier(%{assigns: %{model: assignment, panel_info: panel_info, vm: %{session_id: session_id}}}) do
     [
       [:assignment, assignment.id],
       [:participant, Map.get(panel_info, :participant, "")],

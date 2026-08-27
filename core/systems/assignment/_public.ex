@@ -79,11 +79,9 @@ defmodule Systems.Assignment.Public do
 
   def get_by(%Assignment.InfoModel{id: id}, preload), do: get_by(:info_id, id, preload)
 
-  def get_by(%Storage.EndpointModel{id: id}, preload),
-    do: get_by(:storage_endpoint_id, id, preload)
+  def get_by(%Storage.EndpointModel{id: id}, preload), do: get_by(:storage_endpoint_id, id, preload)
 
-  def get_by(%Consent.AgreementModel{id: id}, preload),
-    do: get_by(:consent_agreement_id, id, preload)
+  def get_by(%Consent.AgreementModel{id: id}, preload), do: get_by(:consent_agreement_id, id, preload)
 
   def get_by(%Workflow.Model{id: id}, preload), do: get_by(:workflow_id, id, preload)
 
@@ -244,17 +242,7 @@ defmodule Systems.Assignment.Public do
     )
   end
 
-  def prepare(
-        %{} = attrs,
-        crew,
-        info,
-        affiliate,
-        page_refs,
-        workflow,
-        fund,
-        consent_agreement,
-        auth_node
-      ) do
+  def prepare(%{} = attrs, crew, info, affiliate, page_refs, workflow, fund, consent_agreement, auth_node) do
     %Assignment.Model{}
     |> Assignment.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:info, info)
@@ -336,9 +324,7 @@ defmodule Systems.Assignment.Public do
     |> Repo.commit()
   end
 
-  def delete_page_ref(
-        %Assignment.PageRefModel{assignment_id: assignment_id, page_id: page_id} = page_ref
-      ) do
+  def delete_page_ref(%Assignment.PageRefModel{assignment_id: assignment_id, page_id: page_id} = page_ref) do
     page_refs =
       from(pr in Assignment.PageRefModel,
         where: pr.assignment_id == ^assignment_id,
@@ -489,8 +475,7 @@ defmodule Systems.Assignment.Public do
   end
 
   defp reserve_reward!(
-         %Assignment.Model{fund: %Fund.Model{} = fund, info: %{subject_reward: amount}} =
-           assignment,
+         %Assignment.Model{fund: %Fund.Model{} = fund, info: %{subject_reward: amount}} = assignment,
          %User{} = user
        )
        when is_integer(amount) and amount > 0 do
@@ -763,8 +748,7 @@ defmodule Systems.Assignment.Public do
     Logger.warning("Can not start task")
   end
 
-  def complete_task(%Assignment.Model{crew: crew}, [_ | _] = identifier),
-    do: complete_task(crew, identifier)
+  def complete_task(%Assignment.Model{crew: crew}, [_ | _] = identifier), do: complete_task(crew, identifier)
 
   def complete_task(%Crew.Model{} = crew, [_ | _] = identifier) do
     crew
@@ -840,9 +824,8 @@ defmodule Systems.Assignment.Public do
     |> budget_capacity()
   end
 
-  defp budget_capacity(%Assignment.Model{info: %{subject_reward: reward}})
-       when not (is_integer(reward) and reward > 0),
-       do: true
+  defp budget_capacity(%Assignment.Model{info: %{subject_reward: reward}}) when not (is_integer(reward) and reward > 0),
+    do: true
 
   defp budget_capacity(%Assignment.Model{
          info: %{subject_reward: reward},
@@ -852,10 +835,7 @@ defmodule Systems.Assignment.Public do
     Fund.Model.amount_available(fund) >= reward
   end
 
-  defp budget_capacity(%Assignment.Model{
-         fund: %Fund.Model{currency: %Fund.CurrencyModel{type: :virtual}}
-       }),
-       do: true
+  defp budget_capacity(%Assignment.Model{fund: %Fund.Model{currency: %Fund.CurrencyModel{type: :virtual}}}), do: true
 
   defp budget_capacity(%Assignment.Model{id: id}) do
     Logger.warning("[Assignment] paid assignment ##{id} has no resolvable fund; treating as full")
@@ -986,8 +966,7 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p),
-    do: {:ok, p}
+  def complete_participation(%Assignment.ParticipationModel{completed_at: %NaiveDateTime{}} = p), do: {:ok, p}
 
   def complete_participation(%Assignment.ParticipationModel{} = participation) do
     participation = Repo.preload(participation, :assignment)
@@ -1027,8 +1006,7 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def accept_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}} = p),
-    do: {:ok, p}
+  def accept_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}} = p), do: {:ok, p}
 
   def accept_participation(%Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}}),
     do: {:error, :participation_already_rejected}
@@ -1071,17 +1049,10 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def reject_participation(
-        %Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}} = p,
-        _message
-      ),
-      do: {:ok, p}
+  def reject_participation(%Assignment.ParticipationModel{rejected_at: %NaiveDateTime{}} = p, _message), do: {:ok, p}
 
-  def reject_participation(
-        %Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}},
-        _message
-      ),
-      do: {:error, :participation_already_accepted}
+  def reject_participation(%Assignment.ParticipationModel{accepted_at: %NaiveDateTime{}}, _message),
+    do: {:error, :participation_already_accepted}
 
   def reject_participation(%Assignment.ParticipationModel{} = participation, message)
       when is_binary(message) or is_nil(message) do

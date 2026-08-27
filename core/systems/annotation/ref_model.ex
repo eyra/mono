@@ -44,8 +44,7 @@ defmodule Systems.Annotation.RefModel do
   def preload_graph(:entity), do: [entity: []]
   def preload_graph(:resource), do: [resource: Annotation.ResourceModel.preload_graph(:down)]
 
-  def preload_graph(:annotation),
-    do: [annotation: [:entity, type: Ontology.ConceptModel.preload_graph(:down)]]
+  def preload_graph(:annotation), do: [annotation: [:entity, type: Ontology.ConceptModel.preload_graph(:down)]]
 
   def preload_graph(:ontology_ref), do: [ontology_ref: Ontology.RefModel.preload_graph(:down)]
 

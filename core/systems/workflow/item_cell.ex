@@ -86,13 +86,7 @@ defmodule Systems.Workflow.ItemCell do
   end
 
   defp update_item_form(
-         %{
-           assigns: %{
-             id: id,
-             item: %{tool_ref: tool_ref} = item,
-             workflow_config: workflow_config
-           }
-         } = socket
+         %{assigns: %{id: id, item: %{tool_ref: tool_ref} = item, workflow_config: workflow_config}} = socket
        ) do
     group_enabled? = group_enabled?(workflow_config, tool_ref)
 
@@ -106,9 +100,7 @@ defmodule Systems.Workflow.ItemCell do
     assign(socket, item_form: item_form)
   end
 
-  defp group_enabled?(%Workflow.Config{group_enabled?: override}, _tool_ref)
-       when is_boolean(override),
-       do: override
+  defp group_enabled?(%Workflow.Config{group_enabled?: override}, _tool_ref) when is_boolean(override), do: override
 
   defp group_enabled?(_workflow_config, tool_ref) do
     tool_ref

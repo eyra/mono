@@ -74,8 +74,7 @@ defmodule Systems.Pool.ParticipantsViewBuilder do
 
   defp matches_query?(_user, []), do: true
 
-  defp matches_query?(user, [term | rest]),
-    do: matches_term?(user, term) and matches_query?(user, rest)
+  defp matches_query?(user, [term | rest]), do: matches_term?(user, term) and matches_query?(user, rest)
 
   defp matches_term?(_user, ""), do: true
 
@@ -86,9 +85,8 @@ defmodule Systems.Pool.ParticipantsViewBuilder do
 
   defp matches_term?(_user, _term), do: false
 
-  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, term)
-       when is_binary(fullname),
-       do: String.contains?(String.downcase(fullname), term)
+  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, term) when is_binary(fullname),
+    do: String.contains?(String.downcase(fullname), term)
 
   defp profile_matches?(_profile, _term), do: false
 end

@@ -211,8 +211,7 @@ defmodule Systems.Account.Public do
 
   ## User registration
 
-  def reconcile_orphaned_merchants(opts, state),
-    do: Account.MerchantOrphanReconciliation.run(opts, state)
+  def reconcile_orphaned_merchants(opts, state), do: Account.MerchantOrphanReconciliation.run(opts, state)
 
   @doc """
   Gets a user by email and password.
@@ -226,8 +225,7 @@ defmodule Systems.Account.Public do
       nil
 
   """
-  def get_user_by_email_and_password(email, password)
-      when is_binary(email) and is_binary(password) do
+  def get_user_by_email_and_password(email, password) when is_binary(email) and is_binary(password) do
     if user = Repo.one(from(u in User, where: u.email == ^email and not is_nil(u.confirmed_at))) do
       User.valid_password?(user, password) && user
     end

@@ -46,8 +46,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
 
   # Progress dots only appear for multi-step flows. A single-step flow
   # (activated non-PANL user with just :profile) doesn't need them.
-  defp build_progress_dots(steps, index) when length(steps) > 1,
-    do: %{current: index, total: length(steps)}
+  defp build_progress_dots(steps, index) when length(steps) > 1, do: %{current: index, total: length(steps)}
 
   defp build_progress_dots(_steps, _index), do: nil
 

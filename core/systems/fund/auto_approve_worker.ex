@@ -48,8 +48,6 @@ defmodule Systems.Fund.AutoApproveWorker do
   defp log_audit(0, 0), do: :ok
 
   defp log_audit(approved, failed) do
-    Logger.info(
-      "[Fund.AutoApproveWorker] auto-approved #{approved} reward(s), #{failed} failure(s)"
-    )
+    Logger.info("[Fund.AutoApproveWorker] auto-approved #{approved} reward(s), #{failed} failure(s)")
   end
 end

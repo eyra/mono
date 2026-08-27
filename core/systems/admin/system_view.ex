@@ -6,15 +6,7 @@ defmodule Systems.Admin.SystemView do
   alias Systems.Admin.SystemViewBuilder
   alias Systems.Observatory
 
-  def dependencies,
-    do: [
-      :current_user,
-      :locale,
-      :bank_accounts,
-      :bank_account_items,
-      :citizen_pools,
-      :citizen_pool_items
-    ]
+  def dependencies, do: [:current_user, :locale, :bank_accounts, :bank_account_items, :citizen_pools, :citizen_pool_items]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -48,8 +40,7 @@ defmodule Systems.Admin.SystemView do
   def handle_event(
         "edit_citizen_pool",
         %{"item" => item},
-        %{assigns: %{current_user: user, locale: locale, vm: %{citizen_pools: citizen_pools}}} =
-          socket
+        %{assigns: %{current_user: user, locale: locale, vm: %{citizen_pools: citizen_pools}}} = socket
       ) do
     pool = Enum.find(citizen_pools, &(&1.id == String.to_integer(item)))
     modal = SystemViewBuilder.build_citizen_pool_modal(pool, user, locale)
@@ -58,11 +49,7 @@ defmodule Systems.Admin.SystemView do
   end
 
   @impl true
-  def handle_event(
-        "create_citizen_pool",
-        _,
-        %{assigns: %{current_user: user, locale: locale}} = socket
-      ) do
+  def handle_event("create_citizen_pool", _, %{assigns: %{current_user: user, locale: locale}} = socket) do
     modal = SystemViewBuilder.build_citizen_pool_modal(nil, user, locale)
 
     {:noreply, present_modal(socket, modal)}
