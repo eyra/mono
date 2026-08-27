@@ -406,3 +406,11 @@ msgstr "Wir haben festgestellt, dass Sie bereits ein Konto mit der E-Mail-Adress
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr "Anmeldung übertragen"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Übertragung bestätigen"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Ablehnen"

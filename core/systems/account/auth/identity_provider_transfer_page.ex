@@ -62,12 +62,12 @@ defmodule Systems.Account.Auth.IdentityProviderTransferPage do
               <Button.dynamic_bar buttons={[
                 %{
                   action: %{type: :http_post, to: ~p"/auth/#{@idp_key}/transfer/confirm"},
-                  face: %{type: :primary, label: "Confirm transfer"},
+                  face: %{type: :primary, label: dgettext("eyra-account", "idp.transfer.confirm")},
                   testid: "idp-transfer-confirm"
                 },
                 %{
                   action: %{type: :http_post, to: ~p"/auth/#{@idp_key}/transfer/decline"},
-                  face: %{type: :secondary, label: "Decline"},
+                  face: %{type: :secondary, label: dgettext("eyra-account", "idp.transfer.decline")},
                   testid: "idp-transfer-decline"
                 }
               ]} />

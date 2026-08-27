@@ -407,3 +407,11 @@ msgstr "We detected you have an existing account with email address <strong>%{em
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr "Transfer authentication"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Confirm transfer"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Decline"

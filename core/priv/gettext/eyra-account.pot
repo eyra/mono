@@ -405,3 +405,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr ""

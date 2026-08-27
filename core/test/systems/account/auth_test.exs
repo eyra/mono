@@ -1,5 +1,5 @@
 defmodule Systems.Account.AuthTest do
-  use Core.DataCase, async: true
+  use Core.DataCase
   import Frameworks.Signal.TestHelper
 
   alias Core.Factories

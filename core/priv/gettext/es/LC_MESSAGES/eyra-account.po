@@ -406,3 +406,11 @@ msgstr "Hemos detectado que ya tiene una cuenta con la dirección de correo elec
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr "Transferir autenticación"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Confirmar transferencia"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Rechazar"
