@@ -406,3 +406,11 @@ msgstr "Abbiamo rilevato che hai già un account con l'indirizzo email <strong>%
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr "Trasferisci autenticazione"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Conferma il trasferimento"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Rifiuta"

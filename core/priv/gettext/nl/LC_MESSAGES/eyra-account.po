@@ -407,3 +407,11 @@ msgstr "We hebben vastgesteld dat u al een account hebt met e-mailadres <strong>
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.title"
 msgstr "Inlogmethode wijzigen"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Overdracht bevestigen"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Weigeren"
