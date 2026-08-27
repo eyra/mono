@@ -30,8 +30,8 @@ defmodule CoreWeb.FeatureCase do
     quote do
       use Wallaby.Feature
 
-      import Wallaby.Query
       import CoreWeb.FeatureCase
+      import Wallaby.Query
 
       alias Core.Factories
       alias Core.Repo
@@ -41,17 +41,17 @@ defmodule CoreWeb.FeatureCase do
       # single /url POST (Wallaby gotcha — recv_timeout is :infinity in
       # config/test.exs so a real hang is caught by this ExUnit timeout
       # rather than a false-positive HTTPoison error). 120s gives that
+      # Note: We do NOT add a manual setup block here.
       # natural variability headroom while still failing hard on a genuine
+      # Wallaby.Feature handles session creation automatically, including:
       # hang.
+      # - Single session via `%{session: session}` in feature tests
+      # - Multiple sessions via `@sessions N` and `%{sessions: [s1, s2, ...]}` in feature tests
+      # - Ecto sandbox checkout for database isolation
+
       @moduletag timeout: 120_000
     end
   end
-
-  # Note: We do NOT add a manual setup block here.
-  # Wallaby.Feature handles session creation automatically, including:
-  # - Single session via `%{session: session}` in feature tests
-  # - Multiple sessions via `@sessions N` and `%{sessions: [s1, s2, ...]}` in feature tests
-  # - Ecto sandbox checkout for database isolation
 
   @doc """
   Signs in a user through the browser login form.
@@ -118,7 +118,7 @@ defmodule CoreWeb.FeatureCase do
     user =
       Core.Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     session = sign_in(session, user, password)
@@ -135,7 +135,7 @@ defmodule CoreWeb.FeatureCase do
     Core.Factories.insert!(:member, %{
       email: email,
       password: password,
-      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+      confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
       creator: creator
     })
   end

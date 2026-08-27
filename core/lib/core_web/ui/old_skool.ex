@@ -4,12 +4,12 @@ defimpl Browser.Ua, for: Phoenix.LiveView.Socket do
 end
 
 defmodule CoreWeb.UI.OldSkool do
-  import Phoenix.Component
-  import CoreWeb.UI.Footer
-
   @moduledoc """
   Conveniences for reusable UI components
   """
+
+  import CoreWeb.UI.Footer
+  import Phoenix.Component
 
   def native_web?(conn) do
     user_agent = Browser.Ua.to_ua(conn)
@@ -31,14 +31,14 @@ defmodule CoreWeb.UI.OldSkool do
   def warning(assigns, message) do
     assigns = assign(assigns, :message, message)
 
+    # def primary_button(%{assigns: assigns}, label, to), do: primary_button(assigns, label, to)
+
     ~H"""
     <div class="mb-5 text-warning font-caption bg-warning bg-opacity-20 text-center leading-none rounded">
       <p class="inline-block mt-4 mb-4"><%= @message %></p>
     </div>
     """
   end
-
-  # def primary_button(%{assigns: assigns}, label, to), do: primary_button(assigns, label, to)
 
   def primary_button(assigns, label, to) do
     assigns =

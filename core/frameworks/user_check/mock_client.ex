@@ -18,35 +18,35 @@ defmodule Frameworks.UserCheck.MockClient do
 
   @impl true
   def check_email("disposable@" <> _) do
-    {:ok, %ResultModel{valid_result() | disposable: true}}
+    {:ok, %{valid_result() | disposable: true}}
   end
 
   def check_email("role@" <> _) do
-    {:ok, %ResultModel{valid_result() | role_account: true}}
+    {:ok, %{valid_result() | role_account: true}}
   end
 
   def check_email("blocklisted@" <> _) do
-    {:ok, %ResultModel{valid_result() | blocklisted: true}}
+    {:ok, %{valid_result() | blocklisted: true}}
   end
 
   def check_email("nomx@" <> _) do
-    {:ok, %ResultModel{valid_result() | mx: false}}
+    {:ok, %{valid_result() | mx: false}}
   end
 
   def check_email("spam@" <> _) do
-    {:ok, %ResultModel{valid_result() | spam: true}}
+    {:ok, %{valid_result() | spam: true}}
   end
 
   def check_email("typo@gmial.com") do
-    {:ok, %ResultModel{valid_result() | did_you_mean: "typo@gmail.com"}}
+    {:ok, %{valid_result() | did_you_mean: "typo@gmail.com"}}
   end
 
   def check_email("public@gmail.com") do
-    {:ok, %ResultModel{valid_result() | public_domain: true}}
+    {:ok, %{valid_result() | public_domain: true}}
   end
 
   def check_email("alias+tag@" <> _) do
-    {:ok, %ResultModel{valid_result() | alias: true}}
+    {:ok, %{valid_result() | alias: true}}
   end
 
   def check_email("error@" <> _) do

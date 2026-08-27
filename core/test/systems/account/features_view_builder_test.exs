@@ -25,7 +25,7 @@ defmodule Systems.Account.FeaturesViewBuilderTest do
     test "builds gender selector as LiveNest element", %{features: features} do
       vm = Account.FeaturesViewBuilder.view_model(features, %{})
 
-      assert vm.gender_selector != nil
+      assert vm.gender_selector
       assert vm.gender_selector.implementation == Frameworks.Pixel.Selector
       assert vm.gender_selector.id == :gender_selector
     end
@@ -57,7 +57,7 @@ defmodule Systems.Account.FeaturesViewBuilderTest do
       # Gender selector should have items with man selected
       expected_labels = Genders.labels(:man)
       assert length(expected_labels) > 0
-      assert vm.gender_selector != nil
+      assert vm.gender_selector
     end
   end
 end

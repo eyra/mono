@@ -56,7 +56,8 @@ defmodule Systems.Admin.OrgViewBuilder do
   defp build_next_action_banners(nil), do: []
 
   defp build_next_action_banners(user) do
-    NextAction.Public.list_next_actions_by_type(user, Org.NextActions.AddDomainMembers)
+    user
+    |> NextAction.Public.list_next_actions_by_type(Org.NextActions.AddDomainMembers)
     |> List.first()
     |> case do
       nil -> []
@@ -81,7 +82,7 @@ defmodule Systems.Admin.OrgViewBuilder do
   end
 
   defp count_archived_nodes do
-    Org.Public.list_archived_nodes([]) |> length()
+    [] |> Org.Public.list_archived_nodes() |> length()
   end
 
   defp build_show_archived_button(count) when count > 0 do

@@ -1,9 +1,7 @@
 defmodule Systems.Graphite.ExportControllerTest do
   use Core.DataCase
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   test "export/1 with valid submission" do
     tool = Factories.insert!(:graphite_tool, %{})

@@ -1,12 +1,12 @@
 defmodule Systems.Email.Dispatcher do
+  @moduledoc false
   use Oban.Worker, queue: :email_dispatchers
-  alias Ecto.Multi
+
   alias Core.Repo
+  alias Ecto.Multi
 
   @impl Oban.Worker
-  def perform(%Oban.Job{
-        args: %{"to" => to} = args
-      }) do
+  def perform(%Oban.Job{args: %{"to" => to} = args}) do
     Multi.new()
     |> dispatch_multi(0, to, args)
     |> Repo.commit()

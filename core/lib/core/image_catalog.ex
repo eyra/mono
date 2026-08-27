@@ -1,4 +1,5 @@
 defmodule Core.ImageCatalog do
+  @moduledoc false
   @type image_id :: binary
   @type image_size :: {pos_integer, pos_integer}
   @type url_opts :: [width: pos_integer, height: pos_integer]

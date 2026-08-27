@@ -1,4 +1,5 @@
 defmodule Systems.Account.PageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
@@ -38,7 +39,8 @@ defmodule Systems.Account.PageBuilder do
   end
 
   def build_items(user, live_context) do
-    visible_tabs(user)
+    user
+    |> visible_tabs()
     |> Enum.map(&tab_to_item(&1.build(user, live_context)))
   end
 
@@ -50,12 +52,12 @@ defmodule Systems.Account.PageBuilder do
   end
 
   def tab_keys(user) do
-    visible_tabs(user)
+    user
+    |> visible_tabs()
     |> Enum.map(& &1.key())
   end
 
   defp visible_tabs(user) do
-    @tabs
-    |> Enum.filter(& &1.visible?(user))
+    Enum.filter(@tabs, & &1.visible?(user))
   end
 end

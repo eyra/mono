@@ -1,6 +1,10 @@
 defmodule Systems.Email.Model do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Systems.Email.Model
 
   embedded_schema do
     @derive Jason.Encoder
@@ -13,12 +17,11 @@ defmodule Systems.Email.Model do
 
   @fields ~w(from to title byline message)a
 
-  def changeset(:init, %Systems.Email.Model{} = email, attrs) do
-    email
-    |> cast(attrs, @fields)
+  def changeset(:init, %Model{} = email, attrs) do
+    cast(email, attrs, @fields)
   end
 
-  def changeset(:validate, %Systems.Email.Model{} = email, attrs) do
+  def changeset(:validate, %Model{} = email, attrs) do
     email
     |> cast(attrs, @fields)
     |> validate_required(@fields)

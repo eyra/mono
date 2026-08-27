@@ -1,5 +1,7 @@
 import Config
 
+alias Core.ImageCatalog.Unsplash
+
 upload_path =
   File.cwd!()
   |> Path.join("priv")
@@ -14,43 +16,6 @@ feldspar_data_donation_path =
   |> Path.join("donations")
   |> tap(&File.mkdir_p!/1)
 
-config :phoenix, :plug_init_mode, :runtime
-
-config :phoenix_live_view,
-  debug_heex_annotations: true,
-  debug_attributes: true,
-  enable_expensive_runtime_checks: true
-
-config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
-
-config :core,
-  domain: "localhost",
-  name: "Next [local]",
-  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
-  payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
-  upload_path: upload_path
-
-config :core, :feldspar_data_donation,
-  path: feldspar_data_donation_path,
-  retention_hours: 336
-
-config :core, :features,
-  e2e: true,
-  leaderboard: true,
-  member_google_sign_in: true,
-  onyx: true,
-  opp_phase_3: true,
-  otp: true,
-  panl: true,
-  panl_post_launch: true,
-  password_sign_in: true,
-  surfconext_sign_in: true
-
-# Only in tests, remove the complexity from the password hashing algorithm
-config :bcrypt_elixir, :log_rounds, 1
-
-config :logger, level: :debug
-
 # Configure your database
 cacertfile = System.get_env("DB_CA_PATH")
 
@@ -61,7 +26,16 @@ verify_mode =
     _ -> :verify_peer
   end
 
-config :core, skip_webhook_verification: true
+# Node-local queue for storage delivery (data donation files are on local filesystem)
+# IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
+# This duplication is required because config runs before modules are loaded.
+storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+
+existing_providers =
+  :core |> Application.get_env(:account, []) |> Keyword.get(:auth_providers, [])
+
+# Only in tests, remove the complexity from the password hashing algorithm
+config :bcrypt_elixir, :log_rounds, 1
 
 config :core, Core.Repo,
   username: "postgres",
@@ -97,10 +71,7 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
-# Node-local queue for storage delivery (data donation files are on local filesystem)
-# IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
-# This duplication is required because config runs before modules are loaded.
-storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :core, Oban,
   queues: [
@@ -112,7 +83,7 @@ config :core, Oban,
   ],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
+    {Oban.Plugins.Lifeline, rescue_after: to_timeout(hour: 1)},
     {Oban.Plugins.Cron,
      crontab: [
        {"*/5 * * * *", Systems.Advert.ExpirationWorker},
@@ -129,15 +100,41 @@ config :core, Oban,
      ]}
   ]
 
-config :core,
-  admins: [
-    "*@eyra.co"
-  ]
+config :core, Systems.Email.Mailer,
+  # #  For Minio (local S3)
+  # config :ex_aws,
+  #   scheme: "http://",
+  adapter: Bamboo.LocalAdapter,
+  open_email_in_browser_url: "http://localhost:4000/sent_emails",
+  default_from_email: "no-reply@example.com"
 
-existing_providers =
-  Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+config :core, Unsplash,
+  access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
+  app_name: System.get_env("UNSPLASH_APP_NAME")
 
 config :core, :account, auth_providers: existing_providers ++ [:mock]
+config :core, :content, backend: Systems.Content.LocalFS
+
+# Compile in E2E support facilities (e.g. local payment simulator).
+config :core, :enable_e2e_support, true
+
+config :core, :features,
+  e2e: true,
+  leaderboard: true,
+  member_google_sign_in: true,
+  onyx: true,
+  opp_phase_3: true,
+  otp: true,
+  panl: true,
+  panl_post_launch: true,
+  password_sign_in: true,
+  surfconext_sign_in: true
+
+config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+
+config :core, :feldspar_data_donation,
+  path: feldspar_data_donation_path,
+  retention_hours: 336
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
@@ -153,34 +150,36 @@ config :core, :rate,
     ]
   ]
 
-config :core, Core.ImageCatalog.Unsplash,
-  access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
-  app_name: System.get_env("UNSPLASH_APP_NAME")
-
-config :core, image_catalog: Core.ImageCatalog.Unsplash
-
-config :core, Systems.Email.Mailer,
-  adapter: Bamboo.LocalAdapter,
-  open_email_in_browser_url: "http://localhost:4000/sent_emails",
-  default_from_email: "no-reply@example.com"
-
-# Service login for load testing
-config :core, :service_login, key: "dev-test-key"
-
-# #  For Minio (local S3)
-# config :ex_aws,
-#   scheme: "http://",
 #   host: "localhost",
 #   port: 9000
+
+# Service login for load testing
 #   access_key_id: "my_access_key",
-#   secret_access_key: "a_super_secret"
+config :core, :service_login, key: "dev-test-key"
 
-config :core, :content, backend: Systems.Content.LocalFS
+config :core,
+  admins: [
+    "*@eyra.co"
+  ]
 
-config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+config :core,
+  domain: "localhost",
+  name: "Next [local]",
+  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
+  payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
+  upload_path: upload_path
 
-# Compile in E2E support facilities (e.g. local payment simulator).
-config :core, :enable_e2e_support, true
+config :core, image_catalog: Unsplash
+config :core, skip_webhook_verification: true
+
+config :logger, level: :debug
+
+config :phoenix, :plug_init_mode, :runtime
+
+config :phoenix_live_view,
+  debug_heex_annotations: true,
+  debug_attributes: true,
+  enable_expensive_runtime_checks: true
 
 try do
   import_config "dev.secret.exs"
@@ -189,3 +188,5 @@ rescue
     # Continuing without `dev.secret.exs` file...
     nil
 end
+
+#   secret_access_key: "a_super_secret"

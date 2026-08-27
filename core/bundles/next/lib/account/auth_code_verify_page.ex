@@ -1,18 +1,19 @@
 defmodule Next.Account.AuthCodeVerifyPage do
+  @moduledoc false
   use CoreWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Menus
 
   alias CoreWeb.Endpoint
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
 
   @token_salt "otp-redeem"
   @token_max_age 120

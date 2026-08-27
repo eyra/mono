@@ -1,17 +1,21 @@
 defmodule Systems.Project.Assembly do
-  import Ecto.Query, warn: false
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
-
-  require Logger
   use Core, :auth
+
+  import Ecto.Query, warn: false
+
   alias Core.Repo
+  alias Ecto.Association.NotLoaded
   alias Ecto.Changeset
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Frameworks.Utility.EctoHelper
-  alias Systems.Storage
   alias Systems.Assignment
   alias Systems.Project
+  alias Systems.Storage
+
+  require Logger
 
   def template(%Project.ItemModel{} = item) do
     item
@@ -69,13 +73,15 @@ defmodule Systems.Project.Assembly do
 
       Storage.Public.prepare_endpoint(:builtin, %{key: key})
     end)
+    # LOAD
     |> Multi.insert(:storage_item, fn %{project: project, storage_endpoint: endpoint} ->
-      Project.Public.prepare_item(
-        %{name: dgettext("eyra-storage", "default.name"), project_path: []},
-        endpoint
-      )
-      |> Ecto.Changeset.put_assoc(:node, project.root)
+      %{name: dgettext("eyra-storage", "default.name"), project_path: []}
+      |> Project.Public.prepare_item(endpoint)
+      |> Changeset.put_assoc(:node, project.root)
     end)
+
+    # PREPARE
+
     |> Repo.commit()
   end
 
@@ -84,7 +90,8 @@ defmodule Systems.Project.Assembly do
     Multi.new()
     |> Multi.insert(
       :project_item,
-      prepare_item(template_or_changeset, name, user)
+      template_or_changeset
+      |> prepare_item(name, user)
       |> Changeset.put_assoc(:node, node)
     )
     |> EctoHelper.run(:project_node, &load_node!/1)
@@ -94,13 +101,9 @@ defmodule Systems.Project.Assembly do
     |> Repo.commit()
   end
 
-  # LOAD
-
   defp load_node!(%{project_item: %{node_id: node_id}}) do
     {:ok, Project.Public.get_node!(node_id, Project.NodeModel.preload_graph(:down))}
   end
-
-  # PREPARE
 
   defp prepare_project(name, items, user) when is_list(items) do
     Project.Public.prepare(%{name: name}, items, user)
@@ -108,7 +111,8 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_item(:benchmark_challenge, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:benchmark_challenge, :project, user)
+      :benchmark_challenge
+      |> Assignment.Assembly.prepare(:project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
@@ -116,7 +120,8 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_item(:data_donation, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:data_donation, :project, user)
+      :data_donation
+      |> Assignment.Assembly.prepare(:project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
@@ -124,7 +129,8 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_item(:questionnaire, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:questionnaire, :project, user)
+      :questionnaire
+      |> Assignment.Assembly.prepare(:project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
@@ -132,13 +138,14 @@ defmodule Systems.Project.Assembly do
 
   defp prepare_item(:paper_screening, name, user) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:paper_screening, :project, user)
+      :paper_screening
+      |> Assignment.Assembly.prepare(:project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
   end
 
-  defp prepare_item(%Ecto.Changeset{} = changeset, name, _user) do
+  defp prepare_item(%Changeset{} = changeset, name, _user) do
     Project.Public.prepare_item(%{name: name, project_path: []}, changeset)
   end
 
@@ -153,28 +160,22 @@ defmodule Systems.Project.Assembly do
   end
 
   @spec update_path(
-          Ecto.Multi.t(),
+          Multi.t(),
           %{
             :__struct__ => Systems.Project.ItemModel | Systems.Project.NodeModel,
             optional(atom()) => any()
           },
           any()
         ) :: any()
-  def update_path(
-        multi,
-        %Project.NodeModel{children: %Ecto.Association.NotLoaded{}} = node,
-        project_path
-      ) do
+  def update_path(multi, %Project.NodeModel{children: %NotLoaded{}} = node, project_path) do
     update_path(multi, Repo.preload(node, :children), project_path)
   end
 
-  def update_path(
-        multi,
-        %Project.NodeModel{items: %Ecto.Association.NotLoaded{}} = node,
-        project_path
-      ) do
+  def update_path(multi, %Project.NodeModel{items: %NotLoaded{}} = node, project_path) do
     update_path(multi, Repo.preload(node, :items), project_path)
   end
+
+  # AUTHORIZATION
 
   def update_path(
         multi,
@@ -208,8 +209,6 @@ defmodule Systems.Project.Assembly do
 
   def append_path(path, sub_path) when is_list(path) and is_integer(sub_path),
     do: path ++ [sub_path]
-
-  # AUTHORIZATION
 
   def update_auth(multi, %{project: project}), do: update_auth(multi, project)
   def update_auth(multi, %{project_node: node}), do: update_auth(multi, node)

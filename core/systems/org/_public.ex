@@ -1,40 +1,32 @@
 defmodule Systems.Org.Public do
+  @moduledoc false
   use Core, :public
+  use Systems.Org.Internals
+
   import Ecto.Query, warn: false
 
   alias Core.Repo
-  alias Systems.Account.User
   alias Ecto.Multi
-
-  use Systems.{
-    Org.Internals
-  }
-
-  alias Systems.{
-    Content
-  }
+  alias Frameworks.Signal.Public
+  alias Systems.Account.User
+  alias Systems.Admin
+  alias Systems.Content
+  alias Systems.NextAction
+  alias Systems.Org
+  alias Systems.Org.NextActions.AddDomainMembers
 
   def get_node([_ | _] = identifier, preload \\ []) do
-    from(node in Node,
-      where: node.identifier == ^identifier,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(node in Node, where: node.identifier == ^identifier, preload: ^preload))
   end
 
   def get_node!(id, preload \\ [])
 
   def get_node!([_ | _] = identifier, preload) do
-    from(node in Node,
-      where: node.identifier == ^identifier,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(node in Node, where: node.identifier == ^identifier, preload: ^preload))
   end
 
   def get_node!(id, preload) do
-    from(node in Node, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(node in Node, preload: ^preload), id)
   end
 
   def create_node!(identifier, short_name, full_name) do
@@ -55,19 +47,18 @@ defmodule Systems.Org.Public do
       {:ok, bundle}
     end)
     |> Multi.run(:auth_node, fn _, _ ->
-      {:ok, auth_module().prepare_node() |> Repo.insert!()}
+      {:ok, Repo.insert!(auth_module().prepare_node())}
     end)
     |> Multi.run(:org, fn _,
                           %{short_name: short_name, full_name: full_name, auth_node: auth_node} ->
       {
         :ok,
-        %{
+        Org.Public.create_node!(%{
           identifier: identifier,
           short_name_bundle: short_name,
           full_name_bundle: full_name,
           auth_node: auth_node
-        }
-        |> Org.Public.create_node!()
+        })
       }
     end)
     |> Repo.commit()
@@ -78,17 +69,19 @@ defmodule Systems.Org.Public do
     {full_name_bundle, attrs} = Map.pop(attrs, :full_name_bundle, nil)
     {auth_node, attrs} = Map.pop(attrs, :auth_node, nil)
 
-    Node.create(attrs, short_name_bundle, full_name_bundle, auth_node)
+    attrs
+    |> Node.create(short_name_bundle, full_name_bundle, auth_node)
     |> Repo.insert!()
   end
 
   def get_link(%Node{id: from_id}, %Node{id: to_id}, preload \\ []) do
-    from(link in Link,
-      where: link.from_id == ^from_id,
-      where: link.to_id == ^to_id,
-      preload: ^preload
+    Repo.one(
+      from(link in Link,
+        where: link.from_id == ^from_id,
+        where: link.to_id == ^to_id,
+        preload: ^preload
+      )
     )
-    |> Repo.one()
   end
 
   def create_link!(%Node{} = from, %Node{} = to) do
@@ -100,7 +93,8 @@ defmodule Systems.Org.Public do
   end
 
   def add_user([_ | _] = identifier, %User{} = user) do
-    get_node!(identifier)
+    identifier
+    |> get_node!()
     |> add_user(user)
   end
 
@@ -114,32 +108,34 @@ defmodule Systems.Org.Public do
   end
 
   def delete_user([_ | _] = identifier, %User{} = user) do
-    get_node!(identifier)
+    identifier
+    |> get_node!()
     |> delete_user(user)
   end
 
   def delete_user(%Node{} = node, %User{} = user) do
-    from(ua in UserAssociation,
-      where: ua.org_id == ^node.id,
-      where: ua.user_id == ^user.id
+    Repo.delete_all(
+      from(ua in UserAssociation, where: ua.org_id == ^node.id, where: ua.user_id == ^user.id)
     )
-    |> Repo.delete_all()
   end
 
   def list_nodes(preload) do
-    list_nodes_query(preload)
+    preload
+    |> list_nodes_query()
     |> exclude_archived()
     |> Repo.all()
   end
 
   def list_nodes(%User{} = user, preload) do
-    list_nodes_query(user, preload)
+    user
+    |> list_nodes_query(preload)
     |> exclude_archived()
     |> Repo.all()
   end
 
   def list_nodes(identifier_template, preload) when is_list(identifier_template) do
-    list_nodes_query(identifier_template, preload)
+    identifier_template
+    |> list_nodes_query(preload)
     |> exclude_archived()
     |> Repo.all()
   end
@@ -148,31 +144,33 @@ defmodule Systems.Org.Public do
   Lists all nodes including archived ones. Use sparingly.
   """
   def list_all_nodes(preload) do
-    list_nodes_query(preload)
+    preload
+    |> list_nodes_query()
     |> Repo.all()
   end
 
   defp list_nodes_query(preload) do
-    from(node in Node)
-    |> query_preload(preload)
+    query_preload(from(node in Node), preload)
   end
 
   defp list_nodes_query(identifier_template, preload) when is_list(identifier_template) do
-    from(node in Node,
-      where: fragment("?::text[] @> ?", node.identifier, ^identifier_template)
+    query_preload(
+      from(node in Node, where: fragment("?::text[] @> ?", node.identifier, ^identifier_template)),
+      preload
     )
-    |> query_preload(preload)
   end
 
   defp list_nodes_query(%User{} = user, preload) do
-    from(node in Node,
-      inner_join: ua in UserAssociation,
-      on: ua.org_id == node.id,
-      inner_join: u in User,
-      on: u.id == ua.user_id,
-      where: u.id == ^user.id
+    query_preload(
+      from(node in Node,
+        inner_join: ua in UserAssociation,
+        on: ua.org_id == node.id,
+        inner_join: u in User,
+        on: u.id == ua.user_id,
+        where: u.id == ^user.id
+      ),
+      preload
     )
-    |> query_preload(preload)
   end
 
   defp query_preload(query, preload) when is_list(preload) do
@@ -189,7 +187,8 @@ defmodule Systems.Org.Public do
   Lists only archived organisation nodes.
   """
   def list_archived_nodes(preload) do
-    list_nodes_query(preload)
+    preload
+    |> list_nodes_query()
     |> only_archived()
     |> Repo.all()
   end
@@ -202,6 +201,7 @@ defmodule Systems.Org.Public do
   Archives an organisation node.
   """
   def archive(%Node{} = node) do
+    # Owner role management
     result =
       node
       |> Node.archive_changeset()
@@ -209,7 +209,7 @@ defmodule Systems.Org.Public do
 
     case result do
       {:ok, archived_node} ->
-        Frameworks.Signal.Public.dispatch!({:org_node, :archived}, %{
+        Public.dispatch!({:org_node, :archived}, %{
           org_node: archived_node,
           from_pid: self()
         })
@@ -232,7 +232,7 @@ defmodule Systems.Org.Public do
 
     case result do
       {:ok, restored_node} ->
-        Frameworks.Signal.Public.dispatch!({:org_node, :restored}, %{
+        Public.dispatch!({:org_node, :restored}, %{
           org_node: restored_node,
           from_pid: self()
         })
@@ -243,8 +243,6 @@ defmodule Systems.Org.Public do
         error
     end
   end
-
-  # Owner role management
 
   @doc """
   Assigns the :owner role to a user for the given organisation and
@@ -279,11 +277,14 @@ defmodule Systems.Org.Public do
   def list_owners(%Node{auth_node_id: nil}), do: []
 
   def list_owners(%Node{} = org) do
-    auth_module().list_principals(org)
+    org
+    |> auth_module().list_principals()
     |> Enum.filter(fn %{roles: roles} -> :owner in roles end)
     |> Enum.map(fn %{id: user_id} -> Repo.get(User, user_id) end)
     |> Enum.reject(&is_nil/1)
   end
+
+  # Member role management (Option C pattern - auth roles as source of truth)
 
   @doc """
   Lists all organisations where the user has the :owner role.
@@ -291,11 +292,9 @@ defmodule Systems.Org.Public do
   def list_orgs(%User{} = user, preload \\ []) do
     node_ids = auth_module().query_node_ids(role: :owner, principal: user)
 
-    from(node in Node,
-      where: node.auth_node_id in subquery(node_ids),
-      preload: ^preload
+    Repo.all(
+      from(node in Node, where: node.auth_node_id in subquery(node_ids), preload: ^preload)
     )
-    |> Repo.all()
   end
 
   @doc """
@@ -306,10 +305,7 @@ defmodule Systems.Org.Public do
   def owns_any?(%User{} = user) do
     node_ids = auth_module().query_node_ids(role: :owner, principal: user)
 
-    from(node in Node,
-      where: node.auth_node_id in subquery(node_ids)
-    )
-    |> Repo.exists?()
+    Repo.exists?(from(node in Node, where: node.auth_node_id in subquery(node_ids)))
   end
 
   def owns_any?(_), do: false
@@ -325,14 +321,13 @@ defmodule Systems.Org.Public do
     current_member_ids = Enum.map(current_members, & &1.id)
     domain_patterns = Enum.map(domains, &"%@#{&1}")
 
-    from(user in User,
-      where: fragment("? ILIKE ANY(?)", user.email, ^domain_patterns),
-      where: user.id not in ^current_member_ids
+    Repo.all(
+      from(user in User,
+        where: fragment("? ILIKE ANY(?)", user.email, ^domain_patterns),
+        where: user.id not in ^current_member_ids
+      )
     )
-    |> Repo.all()
   end
-
-  # Member role management (Option C pattern - auth roles as source of truth)
 
   @doc """
   Lists all users with the :member role for the given organisation.
@@ -340,8 +335,10 @@ defmodule Systems.Org.Public do
   """
   def list_members(%Node{auth_node_id: nil}), do: []
 
+  # NextAction sync for domain-matched users
   def list_members(%Node{} = org) do
-    auth_module().list_principals(org)
+    org
+    |> auth_module().list_principals()
     |> Enum.filter(fn %{roles: roles} -> :member in roles end)
     |> Enum.map(fn %{id: user_id} -> Repo.get(User, user_id) end)
     |> Enum.reject(&is_nil/1)
@@ -357,13 +354,14 @@ defmodule Systems.Org.Public do
 
   def list_members_with_added_at(%Node{auth_node_id: auth_node_id}) do
     rows =
-      from(ra in Core.Authorization.RoleAssignment,
-        join: u in User,
-        on: u.id == ra.principal_id,
-        where: ra.node_id == ^auth_node_id and ra.role == :member,
-        select: {u, ra.inserted_at}
+      Repo.all(
+        from(ra in Core.Authorization.RoleAssignment,
+          join: u in User,
+          on: u.id == ra.principal_id,
+          where: ra.node_id == ^auth_node_id and ra.role == :member,
+          select: {u, ra.inserted_at}
+        )
       )
-      |> Repo.all()
 
     profiles_by_id =
       rows
@@ -396,14 +394,10 @@ defmodule Systems.Org.Public do
   Checks if a user is a member of the given organisation.
   """
   def member?(%Node{} = org, %User{} = user) do
-    list_members(org)
+    org
+    |> list_members()
     |> Enum.any?(&(&1.id == user.id))
   end
-
-  # NextAction sync for domain-matched users
-
-  alias Systems.NextAction
-  alias Systems.Org
 
   defp format_domains(nil), do: ""
   defp format_domains([]), do: ""
@@ -429,14 +423,14 @@ defmodule Systems.Org.Public do
 
       NextAction.Public.create_next_action(
         user,
-        Org.NextActions.AddDomainMembers,
+        AddDomainMembers,
         key: "org:#{org_id}",
         params: %{org_id: org_id, org_name: org_name, domains: domains_text}
       )
     else
       NextAction.Public.clear_next_action(
         user,
-        Org.NextActions.AddDomainMembers,
+        AddDomainMembers,
         key: "org:#{org_id}"
       )
     end
@@ -450,7 +444,7 @@ defmodule Systems.Org.Public do
   def clear_domain_match_next_action(org_id, %User{} = user) do
     NextAction.Public.clear_next_action(
       user,
-      Org.NextActions.AddDomainMembers,
+      AddDomainMembers,
       key: "org:#{org_id}"
     )
   end
@@ -462,7 +456,9 @@ defmodule Systems.Org.Public do
   def sync_next_actions_for_new_user(%User{email: email}) do
     user_domain = extract_domain(email)
 
-    list_nodes(Node.preload_graph(:full))
+    :full
+    |> Node.preload_graph()
+    |> list_nodes()
     |> Enum.filter(&domain_matches?(&1.domains, user_domain))
     |> Enum.each(fn org ->
       owners = list_owners(org)
@@ -486,8 +482,6 @@ defmodule Systems.Org.Public do
   defp domain_matches?(domains, user_domain) do
     Enum.any?(domains, &(String.downcase(&1) == user_domain))
   end
-
-  alias Systems.Admin
 
   @doc """
   Returns true when the user is allowed to manage the given organisation
@@ -513,7 +507,9 @@ defmodule Systems.Org.Public do
   def sync_all_domain_match_next_actions(%User{} = user) do
     is_admin? = Admin.Public.admin?(user)
 
-    list_nodes(Node.preload_graph(:full))
+    :full
+    |> Node.preload_graph()
+    |> list_nodes()
     |> filter_orgs_for_user(user, is_admin?)
     |> Enum.each(&sync_domain_match_next_action(&1, user))
   end

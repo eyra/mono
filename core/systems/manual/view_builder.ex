@@ -1,4 +1,5 @@
 defmodule Systems.Manual.ViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Manual
@@ -43,7 +44,7 @@ defmodule Systems.Manual.ViewBuilder do
   defp ensure_chapter_list(manual), do: manual
 
   defp get_chapters(%{chapters: [_ | _] = chapters}) do
-    chapters |> Enum.sort_by(& &1.userflow_step.order)
+    Enum.sort_by(chapters, & &1.userflow_step.order)
   end
 
   defp get_chapters(_), do: []
@@ -104,7 +105,7 @@ defmodule Systems.Manual.ViewBuilder do
   end
 
   defp get_pages(%{pages: [_ | _] = pages}) do
-    pages |> Enum.sort_by(& &1.userflow_step.order)
+    Enum.sort_by(pages, & &1.userflow_step.order)
   end
 
   defp get_pages(_), do: []

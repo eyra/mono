@@ -1,4 +1,5 @@
 defmodule Systems.Promotion.WysiwygForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
@@ -21,8 +22,7 @@ defmodule Systems.Promotion.WysiwygForm do
 
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         entity: entity,
         visible: visible,
@@ -47,8 +47,7 @@ defmodule Systems.Promotion.WysiwygForm do
         |> flash_persister_saved()
 
       {:error, changeset} ->
-        socket
-        |> handle_save_errors(changeset)
+        handle_save_errors(socket, changeset)
     end
   end
 
@@ -57,8 +56,7 @@ defmodule Systems.Promotion.WysiwygForm do
     field_content = Map.get(socket.assigns, field_name)
     attributes = Map.put(%{}, field_name, field_content)
 
-    socket
-    |> save(entity, attributes)
+    save(socket, entity, attributes)
   end
 
   defp handle_save_errors(socket, %{errors: errors}) do
@@ -66,11 +64,11 @@ defmodule Systems.Promotion.WysiwygForm do
   end
 
   defp handle_save_errors(socket, [{_, {message, _}} | _]) do
-    socket |> flash_persister_error(message)
+    flash_persister_error(socket, message)
   end
 
   defp handle_save_errors(socket, _) do
-    socket |> flash_persister_error()
+    flash_persister_error(socket)
   end
 
   @impl true

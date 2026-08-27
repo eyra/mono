@@ -6,6 +6,7 @@ defmodule Frameworks.UserStateTest do
   alias Frameworks.UserState
   alias Frameworks.UserState.LocalStorage
   alias Frameworks.UserState.Storage
+  alias Phoenix.LiveView.Socket
 
   describe "save/5" do
     test "builds storage key from namespace and key" do
@@ -13,7 +14,7 @@ defmodule Frameworks.UserStateTest do
       namespace = [:manual, 123]
       key = :chapter
 
-      socket = %Phoenix.LiveView.Socket{
+      socket = %Socket{
         transport_pid: self(),
         assigns: %{__changed__: %{}},
         private: %{live_temp: %{}}
@@ -32,7 +33,7 @@ defmodule Frameworks.UserStateTest do
       namespace = []
       key = :theme
 
-      socket = %Phoenix.LiveView.Socket{
+      socket = %Socket{
         transport_pid: self(),
         assigns: %{__changed__: %{}},
         private: %{live_temp: %{}}
@@ -55,7 +56,7 @@ defmodule Frameworks.UserStateTest do
 
   describe "LocalStorage.save/3" do
     test "calls push_event with save_user_state event" do
-      socket = %Phoenix.LiveView.Socket{
+      socket = %Socket{
         transport_pid: self(),
         assigns: %{__changed__: %{}},
         private: %{live_temp: %{}}
@@ -131,7 +132,7 @@ defmodule Frameworks.UserStateTest do
 
       # Verify event was published (we can't directly observe it in isolated view,
       # but we can verify no errors occurred)
-      assert view |> has_element?("[data-testid='leaf-view']")
+      assert has_element?(view, "[data-testid='leaf-view']")
     end
   end
 

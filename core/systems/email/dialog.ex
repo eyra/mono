@@ -1,19 +1,13 @@
 defmodule Systems.Email.Dialog do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Text
-
-  alias Systems.{
-    Email
-  }
+  alias Systems.Email
 
   @impl true
   def update(
-        %{
-          id: id,
-          users: users,
-          current_user: current_user
-        },
+        %{id: id, users: users, current_user: current_user},
         %{assigns: %{myself: myself}} = socket
       ) do
     close_button = %{
@@ -23,13 +17,7 @@ defmodule Systems.Email.Dialog do
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        users: users,
-        current_user: current_user,
-        close_button: close_button
-      )
+      assign(socket, id: id, users: users, current_user: current_user, close_button: close_button)
     }
   end
 
@@ -38,12 +26,12 @@ defmodule Systems.Email.Dialog do
     {:noreply, update_parent(socket, :close)}
   end
 
+  # data(close_button, :map)
+
   defp update_parent(socket, message) do
     send(self(), {:email_dialog, message})
     socket
   end
-
-  # data(close_button, :map)
 
   attr(:users, :list, required: true)
   attr(:current_user, :map, required: true)

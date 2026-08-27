@@ -1,6 +1,8 @@
 defmodule Systems.Assignment.CrewWorkViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.Live.Element
   alias Systems.Assignment
   alias Systems.Workflow
 
@@ -44,32 +46,28 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
         label: dgettext("eyra-assignment", "context.menu.privacy.title"),
         url: privacy_doc.ref
       }
-    else
-      nil
     end
   end
 
   defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do
     if consent_agreement do
       %{id: key, label: dgettext("eyra-assignment", "context.menu.consent.title")}
-    else
-      nil
     end
   end
 
   defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
-    else
+    if Enum.find(page_refs, &(&1.key == :assignment_information)) == nil do
       nil
+    else
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
     end
   end
 
   defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
-    if Enum.find(page_refs, &(&1.key == key)) != nil do
-      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
-    else
+    if Enum.find(page_refs, &(&1.key == key)) == nil do
       nil
+    else
+      %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
     end
   end
 
@@ -81,7 +79,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
 
   # Single item - show single view
   defp task_view(1, assignment_id, _user_state, context) do
-    CoreWeb.Live.Element.prepare_live_view(
+    Element.prepare_live_view(
       "crew_task_single_view_#{assignment_id}",
       Assignment.CrewTaskSingleView,
       live_context: context
@@ -90,7 +88,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
 
   # Multiple items - show list view
   defp task_view(_item_count, assignment_id, _user_state, context) do
-    CoreWeb.Live.Element.prepare_live_view(
+    Element.prepare_live_view(
       "crew_task_list_view_#{assignment_id}",
       Assignment.CrewTaskListView,
       live_context: context

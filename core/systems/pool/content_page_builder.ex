@@ -1,6 +1,8 @@
 defmodule Systems.Pool.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.Live.Element
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
   alias Systems.Content
@@ -36,7 +38,7 @@ defmodule Systems.Pool.ContentPageBuilder do
 
   defp participants_tab(pool_id, live_context) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "pool_participants_view_#{pool_id}",
         Pool.ParticipantsView,
         live_context: live_context
@@ -54,7 +56,7 @@ defmodule Systems.Pool.ContentPageBuilder do
 
   defp settings_tab(pool_id, live_context) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "pool_settings_view_#{pool_id}",
         Pool.SettingsView,
         live_context: live_context

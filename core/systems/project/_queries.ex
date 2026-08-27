@@ -1,13 +1,14 @@
 defmodule Systems.Project.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Project
 
-  def item_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def item_query do
     from(Project.ItemModel, as: :item)
   end
 
@@ -42,9 +43,8 @@ defmodule Systems.Project.Queries do
   end
 
   def item_query_by_special(special_name, special_id) do
-    special_id_field = "#{special_name}_id" |> String.to_existing_atom()
+    special_id_field = String.to_existing_atom("#{special_name}_id")
 
-    item_query()
-    |> where([item: i], field(i, ^special_id_field) == ^special_id)
+    where(item_query(), [item: i], field(i, ^special_id_field) == ^special_id)
   end
 end

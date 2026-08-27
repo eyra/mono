@@ -1,10 +1,8 @@
 defmodule Systems.Project.ModelTest do
-  alias Core.Authorization
   use Core.DataCase
 
-  alias Systems.{
-    Project
-  }
+  alias Core.Authorization
+  alias Systems.Project
 
   test "auth_tree/1 succeeds with assignment item" do
     project =
@@ -30,7 +28,7 @@ defmodule Systems.Project.ModelTest do
              id: ^project_id,
              children: []
            } =
-             Repo.get!(Authorization.Node, project_id) |> Repo.preload(children: [:children])
+             Authorization.Node |> Repo.get!(project_id) |> Repo.preload(children: [:children])
 
     Authorization.link(auth_tree)
 
@@ -47,6 +45,6 @@ defmodule Systems.Project.ModelTest do
                }
              ]
            } =
-             Repo.get!(Authorization.Node, project_id) |> Repo.preload(children: [:children])
+             Authorization.Node |> Repo.get!(project_id) |> Repo.preload(children: [:children])
   end
 end

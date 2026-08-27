@@ -1,4 +1,5 @@
 defmodule Systems.Bookkeeping.LineModel do
+  @moduledoc false
   use Ecto.Schema
 
   schema "book_entry_lines" do

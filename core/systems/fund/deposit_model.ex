@@ -1,5 +1,7 @@
 defmodule Systems.Fund.DepositModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Fund.DepositModel

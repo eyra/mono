@@ -1,12 +1,10 @@
 defmodule Systems.Graphite.LeaderboardTableView do
   use CoreWeb, :live_component_fabric
 
-  alias Frameworks.Pixel.Selector
+  import Systems.Graphite.LeaderboardScoreHTML
+
   alias Frameworks.Pixel.Align
-
-  alias Systems.Graphite
-
-  import Graphite.LeaderboardScoreHTML
+  alias Frameworks.Pixel.Selector
 
   @impl true
   def update(%{id: id, metrics: metrics, metric_scores: metric_scores}, socket) do

@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.Director do
+  @moduledoc false
   @behaviour Frameworks.Concept.ToolDirector
-
-  alias Systems.Assignment
-  alias Systems.Workflow
 
   # @impl true
   # def apply_member_and_complete_task(tool, user) do
   #   identifier = Assignment.Private.task_identifier(tool, user)
+  alias Systems.Assignment
+  alias Systems.Workflow
 
   #   assignment = Assignment.Public.get_by_tool(tool, Assignment.Model.preload_graph(:down))
   #   reward_value = Directable.director(assignment).reward_value(assignment)
@@ -31,7 +31,8 @@ defmodule Systems.Assignment.Director do
     assignment = Assignment.Public.get_by_tool(tool)
 
     task =
-      Assignment.Private.task_identifier(assignment, item, member)
+      assignment
+      |> Assignment.Private.task_identifier(item, member)
       |> then(&Assignment.Public.get_task(tool, &1))
 
     task

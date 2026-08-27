@@ -10,7 +10,7 @@ defmodule Systems.Org.AdminsModalViewTest do
     setup ctx do
       user = Factories.insert!(:creator)
       {:ok, ctx} = login(user, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/org/admins")
+      conn = Map.put(ctx[:conn], :request_path, "/org/admins")
       {:ok, conn: conn, user: user}
     end
 

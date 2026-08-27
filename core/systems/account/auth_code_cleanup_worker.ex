@@ -11,9 +11,9 @@ defmodule Systems.Account.AuthCodeCleanupWorker do
     priority: 3,
     max_attempts: 1
 
-  require Logger
-
   alias Systems.Account
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do

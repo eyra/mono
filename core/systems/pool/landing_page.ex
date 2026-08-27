@@ -21,8 +21,7 @@ defmodule Systems.Pool.LandingPage do
   def handle_event("register", _, socket) do
     {
       :noreply,
-      socket
-      |> register()
+      register(socket)
     }
   end
 
@@ -30,8 +29,7 @@ defmodule Systems.Pool.LandingPage do
   def handle_event("unregister", _, socket) do
     {
       :noreply,
-      socket
-      |> unregister()
+      unregister(socket)
     }
   end
 

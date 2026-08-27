@@ -1,4 +1,5 @@
 defmodule Systems.Advert.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Advert do

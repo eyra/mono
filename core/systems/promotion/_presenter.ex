@@ -1,4 +1,5 @@
 defmodule Systems.Promotion.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   alias Systems.Promotion

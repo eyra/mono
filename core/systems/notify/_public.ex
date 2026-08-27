@@ -4,19 +4,18 @@ defmodule Systems.Notify.Public do
   wherever a notifiable thing happens; the scheduler + channels take it from
   there.
   """
-  require Logger
-
   import Ecto.Query
 
   alias Core.Repo
-
   alias Systems.Monitor
   alias Systems.Notify
+  alias Systems.Notify.EventAttrs
   alias Systems.Notify.EventModel
   alias Systems.Notify.EventType
   alias Systems.Notify.MessageModel
-  alias Systems.Notify.EventAttrs
   alias Systems.Notify.Scheduler
+
+  require Logger
 
   @doc """
   Record a domain event and hand it to the scheduler.
@@ -91,7 +90,7 @@ defmodule Systems.Notify.Public do
 
   defp messages_to_mark_seen(user_id, opts) do
     correlation_id = Keyword.get(opts, :correlation_id)
-    event_types = Keyword.get(opts, :event_types, []) |> Enum.map(&to_string/1)
+    event_types = opts |> Keyword.get(:event_types, []) |> Enum.map(&to_string/1)
 
     query =
       from(m in MessageModel,
@@ -151,11 +150,9 @@ defmodule Systems.Notify.Public do
 
   # Fire-and-forget metric log. A failure here shouldn't roll back the event.
   defp log_to_monitor(%EventModel{type: type, subject_user_id: user_id}) do
-    try do
-      Monitor.Public.log(["notify=#{type}", "user=#{user_id}"])
-    rescue
-      error ->
-        Logger.warning("[Notify] monitor log failed: #{Exception.message(error)}")
-    end
+    Monitor.Public.log(["notify=#{type}", "user=#{user_id}"])
+  rescue
+    error ->
+      Logger.warning("[Notify] monitor log failed: #{Exception.message(error)}")
   end
 end

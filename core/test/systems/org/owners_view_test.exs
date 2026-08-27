@@ -10,7 +10,7 @@ defmodule Systems.Org.OwnersViewTest do
     setup ctx do
       user = Factories.insert!(:member)
       {:ok, ctx} = login(user, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/org/owners")
+      conn = Map.put(ctx[:conn], :request_path, "/org/owners")
       {:ok, conn: conn, user: user}
     end
 

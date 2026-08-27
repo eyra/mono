@@ -1,14 +1,15 @@
 defmodule Systems.Ontology.Queries do
+  @moduledoc false
   import Ecto.Query
-  require Frameworks.Utility.Query
-
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Core.Authentication
   alias Systems.Ontology
 
+  require Frameworks.Utility.Query
+
   # CONCEPT
-  def concept_query() do
+  def concept_query do
     from(c in Ontology.ConceptModel, as: :concept)
   end
 
@@ -28,8 +29,10 @@ defmodule Systems.Ontology.Queries do
     build(concept_query(), :concept, [entity_id == ^entity.id])
   end
 
+  # PREDICATE
+
   def concept_query_include(query, :entities, entities) do
-    entity_ids = entities |> Enum.map(& &1.id)
+    entity_ids = Enum.map(entities, & &1.id)
     build(query, :concept, entity: [id in ^entity_ids])
   end
 
@@ -38,9 +41,7 @@ defmodule Systems.Ontology.Queries do
     build(query, :concept, id in ^concept_ids)
   end
 
-  # PREDICATE
-
-  def predicate_query() do
+  def predicate_query do
     from(p in Ontology.PredicateModel, as: :predicate)
   end
 
@@ -69,6 +70,7 @@ defmodule Systems.Ontology.Queries do
   end
 
   def predicate_query(%Ontology.ConceptModel{} = concept) do
+    # REF
     build(predicate_query(), :predicate, [
       subject_id == ^concept.id or
         type_id == ^concept.id or
@@ -81,23 +83,23 @@ defmodule Systems.Ontology.Queries do
   end
 
   def predicate_query_include(query, :entities, entities) do
-    entity_ids = entities |> Enum.map(& &1.id)
+    entity_ids = Enum.map(entities, & &1.id)
     build(query, :predicate, entity: [id in ^entity_ids])
   end
 
-  # REF
-
-  def ref_query() do
+  def ref_query do
     from(r in Ontology.RefModel, as: :ref)
   end
 
   def ref_query(%Ontology.ConceptModel{} = concept) do
     concept_ids =
-      concept_query(concept.id)
+      concept.id
+      |> concept_query()
       |> select([concept: c], c.id)
 
     predicate_ids =
-      predicate_query(concept)
+      concept
+      |> predicate_query()
       |> select([predicate: p], p.id)
 
     build(

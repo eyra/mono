@@ -1,16 +1,17 @@
 defmodule Systems.Email.Public do
+  @moduledoc false
   use Core, :public
+
   import Bamboo.Email
   import Bamboo.Phoenix
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Email
 
   def base_email do
     new_email()
     |> from(
-      Application.fetch_env!(:core, Systems.Email.Mailer)
+      :core
+      |> Application.fetch_env!(Systems.Email.Mailer)
       |> Keyword.fetch!(:default_from_email)
     )
     |> put_layout({Systems.Email.EmailLayoutHTML, :email})
@@ -21,20 +22,17 @@ defmodule Systems.Email.Public do
   def deliver_later!(email), do: Email.Mailer.deliver_later!(email)
   def deliver_later(email), do: Email.Mailer.deliver_later(email)
 
-  def deliver_now!(%Email.Model{
-        title: title,
-        byline: byline,
-        message: message,
-        to: to
-      }) do
-    Email.Factory.notification(title, byline, message, to)
+  def deliver_now!(%Email.Model{title: title, byline: byline, message: message, to: to}) do
+    title
+    |> Email.Factory.notification(byline, message, to)
     |> deliver_now!()
   end
 
   def deliver_now!(email), do: Email.Mailer.deliver_now!(email)
 
   def deliver_now(%Email.Model{title: title, byline: byline, message: message, to: to}) do
-    Email.Factory.notification(title, byline, message, to)
+    title
+    |> Email.Factory.notification(byline, message, to)
     |> deliver_now()
   end
 

@@ -1,11 +1,13 @@
 defmodule Systems.Lab.DayList do
+  @moduledoc false
   use CoreWeb, :html
 
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
 
   defp datestamp(%Date{} = date) do
-    Timestamp.humanize_date(date)
+    date
+    |> Timestamp.humanize_date()
     |> Macro.camelize()
   end
 

@@ -1,4 +1,5 @@
 defmodule Systems.Support.OverviewPage do
+  @moduledoc false
   use Systems.Content.Composer, :tabbar_page
 
   @impl true
@@ -12,8 +13,7 @@ defmodule Systems.Support.OverviewPage do
 
     {
       :ok,
-      socket
-      |> assign(tabbar_id: "support_overview", initial_tab: initial_tab)
+      assign(socket, tabbar_id: "support_overview", initial_tab: initial_tab)
     }
   end
 

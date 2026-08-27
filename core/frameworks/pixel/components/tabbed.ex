@@ -3,6 +3,7 @@ defmodule Frameworks.Pixel.Tabbed do
   use CoreWeb, :pixel
 
   import CoreWeb.UI.FunctionComponent
+
   alias Frameworks.Pixel.Button
 
   defp get_tab(:seperated, tab, index), do: Map.merge(tab, %{type: :seperated, index: index})
@@ -186,7 +187,7 @@ defmodule Frameworks.Pixel.Tabbed do
   defp align(_), do: "justify-left"
 
   defp combine_shifted(tabs) do
-    tabs |> Enum.chunk_every(2, 1, [%{id: "fake_tab"}])
+    Enum.chunk_every(tabs, 2, 1, [%{id: "fake_tab"}])
   end
 
   attr(:bar_id, :string, required: true)

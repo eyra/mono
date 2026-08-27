@@ -1,4 +1,5 @@
 defmodule Systems.Storage.FakeBackend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
   @impl true

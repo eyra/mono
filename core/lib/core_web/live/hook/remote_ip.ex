@@ -4,7 +4,7 @@ defmodule CoreWeb.Live.Hook.RemoteIp do
 
   @impl true
   def mount(_live_view_module, _params, %{"remote_ip" => remote_ip}, socket) do
-    {:cont, socket |> assign(remote_ip: remote_ip)}
+    {:cont, assign(socket, remote_ip: remote_ip)}
   end
 end
 

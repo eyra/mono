@@ -6,6 +6,7 @@ defmodule Systems.Org.ContentPageTest do
   global :admin role.
   """
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Core.Factories

@@ -1,13 +1,12 @@
 defmodule Systems.Admin.SystemView do
   use CoreWeb, :embedded_live_view
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
-
+  alias Frameworks.Pixel.Text
   alias Systems.Admin.SystemViewBuilder
   alias Systems.Observatory
 
-  def dependencies(),
+  def dependencies,
     do: [
       :current_user,
       :locale,
@@ -35,18 +34,14 @@ defmodule Systems.Admin.SystemView do
     bank_account = Enum.find(bank_accounts, &(&1.id == String.to_integer(item)))
     modal = SystemViewBuilder.build_bank_account_modal(bank_account, user)
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
-  def handle_event(
-        "create_bank_account",
-        _,
-        %{assigns: %{current_user: user}} = socket
-      ) do
+  def handle_event("create_bank_account", _, %{assigns: %{current_user: user}} = socket) do
     modal = SystemViewBuilder.build_bank_account_modal(nil, user)
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
@@ -59,7 +54,7 @@ defmodule Systems.Admin.SystemView do
     pool = Enum.find(citizen_pools, &(&1.id == String.to_integer(item)))
     modal = SystemViewBuilder.build_citizen_pool_modal(pool, user, locale)
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
@@ -70,7 +65,7 @@ defmodule Systems.Admin.SystemView do
       ) do
     modal = SystemViewBuilder.build_citizen_pool_modal(nil, user, locale)
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true

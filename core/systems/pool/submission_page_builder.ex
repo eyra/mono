@@ -1,6 +1,6 @@
 defmodule Systems.Pool.SubmissionPageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
 
   # FIXME: Pool should not have relation with Advert

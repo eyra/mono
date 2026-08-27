@@ -23,7 +23,7 @@ defmodule Systems.Payment.ReconciliationSummaryTest do
 
     test "carries no keys beyond scanned and the outcomes" do
       assert Summary.new() |> Map.keys() |> Enum.sort() ==
-               [:scanned | Summary.outcomes()] |> Enum.sort()
+               Enum.sort([:scanned | Summary.outcomes()])
     end
   end
 
@@ -82,7 +82,7 @@ defmodule Systems.Payment.ReconciliationSummaryTest do
   describe "merge/2" do
     test "sums each counter pairwise" do
       a = Summary.new() |> Summary.tally(:verified) |> Summary.tally(:errors)
-      b = Summary.new() |> Summary.tally(:verified)
+      b = Summary.tally(Summary.new(), :verified)
 
       assert %{verified: 2, errors: 1, scanned: 3} = Summary.merge(a, b)
     end
@@ -94,13 +94,13 @@ defmodule Systems.Payment.ReconciliationSummaryTest do
     end
 
     test "keeps a fresh summary as the identity" do
-      summary = Summary.new() |> Summary.tally(:unresolvable)
+      summary = Summary.tally(Summary.new(), :unresolvable)
 
       assert Summary.merge(summary, Summary.new()) == summary
     end
 
     test "is commutative, so reconciler order does not change the run totals" do
-      a = Summary.new() |> Summary.tally(:resolved_completed)
+      a = Summary.tally(Summary.new(), :resolved_completed)
       b = Summary.new() |> Summary.tally(:resolved_failed) |> Summary.tally(:skipped)
 
       assert Summary.merge(a, b) == Summary.merge(b, a)

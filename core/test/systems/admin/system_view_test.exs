@@ -1,5 +1,6 @@
 defmodule Systems.Admin.SystemViewTest do
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Core.Factories
@@ -10,7 +11,7 @@ defmodule Systems.Admin.SystemViewTest do
     setup ctx do
       user = Factories.insert!(:member)
       {:ok, ctx} = login(user, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/admin/system")
+      conn = Map.put(ctx[:conn], :request_path, "/admin/system")
 
       context =
         LiveContext.new(%{
@@ -29,7 +30,7 @@ defmodule Systems.Admin.SystemViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.SystemView, session: %{"live_context" => context})
 
-      assert view |> has_element?("[data-testid='system-view']")
+      assert has_element?(view, "[data-testid='system-view']")
     end
 
     test "renders bank accounts section", %{conn: conn, context: context} do
@@ -50,18 +51,18 @@ defmodule Systems.Admin.SystemViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.SystemView, session: %{"live_context" => context})
 
-      _ = view |> render_click("create_bank_account")
+      _ = render_click(view, "create_bank_account")
 
-      assert view |> has_element?("[data-testid='system-view']")
+      assert has_element?(view, "[data-testid='system-view']")
     end
 
     test "create_citizen_pool event presents modal", %{conn: conn, context: context} do
       {:ok, view, _html} =
         live_isolated(conn, Admin.SystemView, session: %{"live_context" => context})
 
-      _ = view |> render_click("create_citizen_pool")
+      _ = render_click(view, "create_citizen_pool")
 
-      assert view |> has_element?("[data-testid='system-view']")
+      assert has_element?(view, "[data-testid='system-view']")
     end
 
     test "edit_bank_account event presents modal", %{conn: conn, user: user} do
@@ -81,9 +82,9 @@ defmodule Systems.Admin.SystemViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.SystemView, session: %{"live_context" => context})
 
-      _ = view |> render_click("edit_bank_account", %{"item" => "#{bank_account.id}"})
+      _ = render_click(view, "edit_bank_account", %{"item" => "#{bank_account.id}"})
 
-      assert view |> has_element?("[data-testid='system-view']")
+      assert has_element?(view, "[data-testid='system-view']")
     end
 
     test "edit_citizen_pool event presents modal", %{conn: conn, user: user} do
@@ -103,9 +104,9 @@ defmodule Systems.Admin.SystemViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.SystemView, session: %{"live_context" => context})
 
-      _ = view |> render_click("edit_citizen_pool", %{"item" => "#{pool.id}"})
+      _ = render_click(view, "edit_citizen_pool", %{"item" => "#{pool.id}"})
 
-      assert view |> has_element?("[data-testid='system-view']")
+      assert has_element?(view, "[data-testid='system-view']")
     end
   end
 end

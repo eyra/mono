@@ -1,4 +1,5 @@
 defmodule Systems.Org.ContentPage do
+  @moduledoc false
   use Systems.Content.Composer, {:tabbar_page, :live_nest}
 
   alias Systems.Org
@@ -8,7 +9,7 @@ defmodule Systems.Org.ContentPage do
     org = get_model(params, session, socket)
     user = Map.get(socket.assigns, :current_user)
 
-    if Org.Public.can_manage?(org, user), do: org, else: nil
+    if Org.Public.can_manage?(org, user), do: org
   end
 
   @impl true
@@ -23,11 +24,7 @@ defmodule Systems.Org.ContentPage do
 
     {
       :ok,
-      socket
-      |> assign(
-        tabbar_id: tabbar_id,
-        initial_tab: initial_tab
-      )
+      assign(socket, tabbar_id: tabbar_id, initial_tab: initial_tab)
     }
   end
 

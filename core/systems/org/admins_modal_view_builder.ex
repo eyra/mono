@@ -19,7 +19,8 @@ defmodule Systems.Org.AdminsModalViewBuilder do
     # Org admins can be any user — the org owner decides who has access,
     # not the platform.
     users =
-      Account.Public.list_users([:profile])
+      [:profile]
+      |> Account.Public.list_users()
       |> Enum.reject(&(&1.id in people_ids))
 
     %{

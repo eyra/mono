@@ -1,13 +1,12 @@
 defmodule Systems.Home.PageBuilderTest do
   use Core.DataCase
 
-  alias Systems.Home
-  alias Systems.Pool
+  alias Core.Factories
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Fund
-
-  alias Core.Factories
+  alias Systems.Home
+  alias Systems.Pool
 
   defp block_keys(vm), do: Enum.map(vm.blocks, &elem(&1, 0))
 
@@ -99,7 +98,8 @@ defmodule Systems.Home.PageBuilderTest do
       give_reward(user)
 
       params =
-        Home.PageBuilder.view_model(nil, %{current_user: user})
+        nil
+        |> Home.PageBuilder.view_model(%{current_user: user})
         |> block_params(:rewards_summary)
 
       socket = %Phoenix.LiveView.Socket{assigns: %{__changed__: %{}}}

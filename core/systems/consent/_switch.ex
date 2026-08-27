@@ -1,13 +1,9 @@
 defmodule Systems.Consent.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
-  alias Frameworks.{
-    Signal
-  }
-
-  alias Systems.{
-    Consent
-  }
+  alias Frameworks.Signal
+  alias Systems.Consent
 
   @impl true
   def intercept(
@@ -19,7 +15,7 @@ defmodule Systems.Consent.Switch do
 
     dispatch!(
       {:consent_agreement, signal},
-      Map.merge(message, %{consent_agreement: consent_agreement})
+      Map.put(message, :consent_agreement, consent_agreement)
     )
 
     :ok
@@ -35,7 +31,7 @@ defmodule Systems.Consent.Switch do
 
     dispatch!(
       {:consent_agreement, signal},
-      Map.merge(message, %{consent_agreement: consent_agreement})
+      Map.put(message, :consent_agreement, consent_agreement)
     )
 
     :ok

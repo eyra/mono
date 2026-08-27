@@ -1,12 +1,13 @@
 defmodule Systems.Instruction.DownloadForm do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
   use CoreWeb.FileUploader, accept: ~w(.zip)
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Pixel.FileSelector
 
-  alias Systems.Instruction
   alias Systems.Content
+  alias Systems.Instruction
 
   @impl true
   def process_file(socket, %{public_url: public_url, original_filename: original_filename}) do
@@ -34,33 +35,33 @@ defmodule Systems.Instruction.DownloadForm do
 
   defp update_file(%{assigns: %{tool: %{assets: [%{file: file} | _]}}} = socket)
        when not is_nil(file) do
-    socket |> assign(file: file)
+    assign(socket, file: file)
   end
 
   defp update_file(socket) do
-    socket |> assign(file: nil)
+    assign(socket, file: nil)
   end
 
   defp update_filename(%{assigns: %{file: %{name: filename}}} = socket) do
-    socket |> assign(filename: filename)
+    assign(socket, filename: filename)
   end
 
   defp update_filename(socket) do
-    socket |> assign(filename: nil)
+    assign(socket, filename: nil)
   end
 
   defp update_page(%{assigns: %{tool: %{pages: [%{page: page} | _]}}} = socket)
        when not is_nil(page) do
-    socket |> assign(page: page)
+    assign(socket, page: page)
   end
 
   defp update_page(socket) do
-    socket |> assign(page: nil)
+    assign(socket, page: nil)
   end
 
   @impl true
   def handle_event("save", %{"file_model" => %{"name" => name, "ref" => ref}}, socket) do
-    {:noreply, socket |> handle_save(name, ref)}
+    {:noreply, handle_save(socket, name, ref)}
   end
 
   @impl true
@@ -82,29 +83,31 @@ defmodule Systems.Instruction.DownloadForm do
       )
 
     result = Instruction.Public.add_file_and_page(tool, file, page)
-    socket |> handle_result(result)
+    handle_result(socket, result)
   end
 
   def handle_save(%{assigns: %{file: file, page: page, tool: tool}} = socket, name, ref) do
     file =
-      Content.FileModel.changeset(file, %{name: name, ref: ref})
+      file
+      |> Content.FileModel.changeset(%{name: name, ref: ref})
       |> Content.FileModel.validate()
 
     page =
-      Content.PageModel.changeset(page, %{body: get_body(name, ref)})
+      page
+      |> Content.PageModel.changeset(%{body: get_body(name, ref)})
       |> Content.PageModel.validate()
 
     result = Instruction.Public.update_file_and_page(tool, file, page)
-    socket |> handle_result(result)
+    handle_result(socket, result)
   end
 
   defp handle_result(socket, result) do
     case result do
       {:ok, %{content_file: file, content_page: page}} ->
-        socket |> assign(file: file, page: page)
+        assign(socket, file: file, page: page)
 
       {:error, :content_file, changeset, _} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

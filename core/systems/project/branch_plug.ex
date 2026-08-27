@@ -1,9 +1,11 @@
 defmodule Systems.Project.BranchPlug do
+  @moduledoc false
   @behaviour Plug
+
   alias Frameworks.Concept
+  alias Systems.Assignment
   alias Systems.Project
   alias Systems.Storage
-  alias Systems.Assignment
 
   @impl true
   def init(opts), do: opts
@@ -11,7 +13,7 @@ defmodule Systems.Project.BranchPlug do
   @impl true
   def call(%{request_path: request_path} = conn, _opts) do
     branch = branch(Path.split(request_path))
-    conn |> Plug.Conn.assign(:branch, branch)
+    Plug.Conn.assign(conn, :branch, branch)
   end
 
   defp branch(["/", "storage", "endpoint", id | _]), do: branch(Storage.Public.get_endpoint!(id))
@@ -23,9 +25,9 @@ defmodule Systems.Project.BranchPlug do
 
   defp branch(%{} = leaf) do
     with false <- Concept.Leaf.impl_for(leaf) == nil,
-         item <- Project.Public.get_item_by(leaf),
-         false <- item == nil,
-         node <- Project.Public.get_node_by_item!(item) do
+         item = Project.Public.get_item_by(leaf),
+         false <- item == nil do
+      node = Project.Public.get_node_by_item!(item)
       %Project.Branch{node_id: node.id, item_id: item.id}
     else
       _ -> nil

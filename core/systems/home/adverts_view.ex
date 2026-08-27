@@ -12,8 +12,7 @@ defmodule Systems.Home.AdvertsView do
 
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         title: title,
         cards: cards,
         count: Map.get(params, :count, Enum.count(cards)),
@@ -25,11 +24,7 @@ defmodule Systems.Home.AdvertsView do
   end
 
   @impl true
-  def handle_event(
-        "card_clicked",
-        %{"item" => card_id},
-        %{assigns: %{cards: cards}} = socket
-      ) do
+  def handle_event("card_clicked", %{"item" => card_id}, %{assigns: %{cards: cards}} = socket) do
     card_id = String.to_integer(card_id)
 
     case Enum.find(cards, &(&1.id == card_id)) do

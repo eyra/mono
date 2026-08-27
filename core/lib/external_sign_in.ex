@@ -1,18 +1,21 @@
 defmodule ExternalSignIn do
-  alias Systems.Account
-  alias Core.Repo
+  @moduledoc false
   import Ecto.Query, warn: false
+
+  alias Core.Repo
+  alias Systems.Account
+  alias Systems.Account.UserAuth
 
   def sign_in(conn, organisation, external_id) do
     if user = get_user_by_external_id(external_id) do
       conn
-      |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+      |> UserAuth.log_in_user_without_redirect(user)
       |> Plug.Conn.assign(:current_user, user)
     else
       case register_user(organisation, external_id) do
         {:ok, user} ->
           conn
-          |> Systems.Account.UserAuth.log_in_user_without_redirect(user)
+          |> UserAuth.log_in_user_without_redirect(user)
           |> Plug.Conn.assign(:current_user, user)
 
         {:error, changeset} ->
@@ -30,8 +33,7 @@ defmodule ExternalSignIn do
         select: ex.user_id
       )
 
-    from(u in Account.User, where: u.id in subquery(external_user_query))
-    |> Repo.one()
+    Repo.one(from(u in Account.User, where: u.id in subquery(external_user_query)))
   end
 
   def register_user(organisation, external_id) when is_atom(organisation) do

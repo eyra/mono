@@ -20,7 +20,7 @@ defmodule Systems.Annotation.Pattern.Parameter do
 
   defstruct [:statement, :dimension, :entity]
 
-  def type_phrase(), do: "Parameter"
+  def type_phrase, do: "Parameter"
 end
 
 defimpl Systems.Annotation.Pattern, for: Systems.Annotation.Pattern.Parameter do
@@ -32,11 +32,7 @@ defimpl Systems.Annotation.Pattern, for: Systems.Annotation.Pattern.Parameter do
   def obtain(%{dimension: nil}), do: raise(MissingFieldError, :dimension)
   def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
 
-  def obtain(%{
-        statement: statement,
-        dimension: dimension,
-        entity: entity
-      }) do
+  def obtain(%{statement: statement, dimension: dimension, entity: entity}) do
     if annotation = get(statement: statement, dimension: dimension, entity: entity) do
       {:ok, annotation}
     else
@@ -56,7 +52,8 @@ defimpl Systems.Annotation.Pattern, for: Systems.Annotation.Pattern.Parameter do
   end
 
   defp get(statement: statement, dimension: dimension, entity: entity) do
-    query(statement, dimension, entity)
+    statement
+    |> query(dimension, entity)
     |> Repo.one()
   end
 end

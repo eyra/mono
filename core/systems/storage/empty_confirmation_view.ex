@@ -50,7 +50,7 @@ defmodule Systems.Storage.EmptyConfirmationView do
         %{assigns: %{branch_name: branch_name}} = socket
       ) do
     submit_enabled = confirm_name == branch_name
-    {:noreply, socket |> assign(confirm_name: confirm_name, submit_enabled: submit_enabled)}
+    {:noreply, assign(socket, confirm_name: confirm_name, submit_enabled: submit_enabled)}
   end
 
   def handle_event("submit", _, %{assigns: %{submit_enabled: submit_enabled}} = socket) do

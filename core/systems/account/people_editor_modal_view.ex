@@ -16,13 +16,14 @@ defmodule Systems.Account.PeopleEditorModalView do
   """
   use CoreWeb, :modal_live_view
 
+  alias Phoenix.LiveView.Socket
   alias Systems.Account
 
-  @callback handle_add_user(user :: Account.User.t(), socket :: Phoenix.LiveView.Socket.t()) ::
-              Phoenix.LiveView.Socket.t()
+  @callback handle_add_user(user :: Account.User.t(), socket :: Socket.t()) ::
+              Socket.t()
 
-  @callback handle_remove_user(user :: Account.User.t(), socket :: Phoenix.LiveView.Socket.t()) ::
-              Phoenix.LiveView.Socket.t()
+  @callback handle_remove_user(user :: Account.User.t(), socket :: Socket.t()) ::
+              Socket.t()
 
   defmacro __using__(_opts) do
     quote do

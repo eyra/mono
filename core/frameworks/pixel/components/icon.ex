@@ -1,7 +1,7 @@
 defmodule Frameworks.Pixel.Icon do
-  use CoreWeb, :pixel
-
+  @moduledoc false
   # Path function for use outside of components
+  use CoreWeb, :pixel
 
   def path(name), do: "/images/icons/#{name}.svg"
 

@@ -10,6 +10,7 @@ defmodule Systems.Payment.ReconciliationTest do
   if the provider was called more or fewer times than declared.
   """
   use Core.DataCase, async: true
+
   import Mox
 
   alias Systems.Payment.Error
@@ -107,13 +108,13 @@ defmodule Systems.Payment.ReconciliationTest do
     end
 
     test "skips the provider entirely once open" do
-      open_state = %State{State.new() | circuit_open: true}
+      open_state = %{State.new() | circuit_open: true}
 
       assert {:circuit_open, ^open_state} = Reconciliation.get_withdrawal(open_state, "w_1")
     end
 
     test "skips get_transaction once open too" do
-      open_state = %State{State.new() | circuit_open: true}
+      open_state = %{State.new() | circuit_open: true}
 
       assert {:circuit_open, ^open_state} = Reconciliation.get_transaction(open_state, "tx_1")
     end

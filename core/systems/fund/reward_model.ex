@@ -3,14 +3,12 @@ defmodule Systems.Fund.RewardModel do
   The fund reward type.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Account
-
-  alias Systems.{
-    Fund,
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Fund
 
   @statuses [
     :reserved,

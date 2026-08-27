@@ -1,13 +1,14 @@
 defmodule Systems.Document.Public do
+  @moduledoc false
   use Core, :public
-  import Ecto.Query, warn: false
-  alias Core.Repo
 
+  import Ecto.Query, warn: false
+
+  alias Core.Repo
   alias Systems.Document
 
   def get_tool!(id, preload \\ []) do
-    from(tool in Document.ToolModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(tool in Document.ToolModel, preload: ^preload), id)
   end
 
   def prepare_tool(attrs, auth_node \\ auth_module().prepare_node()) do

@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.Query do
+  @moduledoc false
   require Ecto.Query
 
   defmacro or_where(exprs) do

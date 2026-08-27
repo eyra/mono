@@ -2,14 +2,13 @@ defmodule Systems.Org.NodeView do
   use CoreWeb, :embedded_live_view
   use CoreWeb.Live.FlashHelpers
 
+  import Frameworks.Pixel.Form
+  import Systems.Content.TextBundleInput
+
   alias Frameworks.Pixel.Text
-  alias Systems.Content
   alias Systems.Org
 
-  import Content.TextBundleInput
-  import Frameworks.Pixel.Form
-
-  def dependencies(), do: [:node_id, :is_admin?]
+  def dependencies, do: [:node_id, :is_admin?]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{node_id: node_id}}) do
     Org.Public.get_node!(node_id, Org.NodeModel.preload_graph(:full))
@@ -24,8 +23,7 @@ defmodule Systems.Org.NodeView do
   def handle_event("save", %{"node_model" => attrs}, %{assigns: %{model: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 

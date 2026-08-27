@@ -1,8 +1,10 @@
 defmodule Systems.Zircon.Screening.ImportSessionWarningsViewTest do
   use CoreWeb.ConnCase
+
   import Phoenix.LiveViewTest
 
   alias Systems.Paper
+  alias Systems.Zircon.Screening.ImportSessionWarningsView
 
   describe "modal opening with session_id" do
     setup do
@@ -69,14 +71,14 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewTest do
       # This simulates what happens when the modal is opened with the full session object
       # The view expects the actual session, not just the ID
 
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       # Preload the reference file association with nested file
-      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+      import_session = Core.Repo.preload(import_session, reference_file: :file)
 
       # Mount the view with full session object (as fixed in ImportView)
       assert {:ok, _view, _html} =
-               live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
+               live_isolated(conn, ImportSessionWarningsView,
                  session: %{
                    "session" => import_session,
                    "title" => "Warnings"
@@ -88,14 +90,14 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewTest do
       conn: conn,
       import_session: import_session
     } do
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       # Preload the reference file association with nested file
-      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+      import_session = Core.Repo.preload(import_session, reference_file: :file)
 
       # Mount the view with full session object
       {:ok, view, html} =
-        live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
+        live_isolated(conn, ImportSessionWarningsView,
           session: %{
             "session" => import_session,
             "title" => "Warnings"
@@ -171,14 +173,14 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewTest do
       conn: conn,
       import_session: import_session
     } do
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       # Preload the reference file association with nested file
-      import_session = import_session |> Core.Repo.preload(reference_file: :file)
+      import_session = Core.Repo.preload(import_session, reference_file: :file)
 
       # Mount the view with full session object
       {:ok, view, html} =
-        live_isolated(conn, Systems.Zircon.Screening.ImportSessionWarningsView,
+        live_isolated(conn, ImportSessionWarningsView,
           session: %{
             "session" => import_session,
             "title" => "Warnings"

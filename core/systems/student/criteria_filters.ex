@@ -9,7 +9,7 @@ defmodule Systems.Student.CriteriaFilters do
   def include?(codes, []) when is_list(codes), do: true
 
   def include?(codes, filters) when is_list(codes) and is_list(filters) do
-    filters = filters |> Enum.filter(&Enum.member?(values(), &1))
+    filters = Enum.filter(filters, &Enum.member?(values(), &1))
 
     filter_count = Enum.count(filters)
     match_count = Enum.count(filters, &include?(codes, &1))

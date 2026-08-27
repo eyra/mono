@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Form.CheckboxHelpers do
+  @moduledoc false
   defmacro __using__(_opts) do
     quote do
       def handle_event(
@@ -18,8 +19,7 @@ defmodule Frameworks.Pixel.Form.CheckboxHelpers do
 
         {
           :noreply,
-          socket
-          |> save(entity, :auto_save, attrs)
+          save(socket, entity, :auto_save, attrs)
         }
       end
     end

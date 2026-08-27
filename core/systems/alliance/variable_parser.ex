@@ -1,14 +1,16 @@
 defmodule Systems.Alliance.VariableParser do
-  @dialyzer {:nowarn_function, parse: 1}
-
+  @moduledoc false
   import NimbleParsec
 
+  @dialyzer {:nowarn_function, parse: 1}
+
   variable =
-    string("{")
+    "{"
+    |> string()
     |> ignore()
     |> utf8_string([?a..?z, ?A..?Z], min: 1)
     |> tag(:variable)
-    |> concat(string("}") |> ignore())
+    |> concat("}" |> string() |> ignore())
     |> label("variable (ex. {participantId}")
 
   non_variable =
@@ -18,5 +20,5 @@ defmodule Systems.Alliance.VariableParser do
     |> tag(:plain)
     |> label("plain")
 
-  defparsec(:parse, choice([variable, non_variable]) |> eos())
+  defparsec(:parse, [variable, non_variable] |> choice() |> eos())
 end

@@ -1,14 +1,15 @@
 defmodule Systems.Fund.Form do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
-  require Logger
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Utility.EctoHelper
+
   alias Frameworks.Pixel.DropdownSelector
   alias Frameworks.Pixel.Text
-
+  alias Frameworks.Utility.EctoHelper
   alias Systems.Fund
+
+  require Logger
 
   # Initial update create
   @impl true
@@ -75,23 +76,24 @@ defmodule Systems.Fund.Form do
   end
 
   defp update_selected_currency(%{assigns: %{fund: %{currency: %{id: _id} = currency}}} = socket) do
-    socket |> assign(selected_currency: currency)
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(%{assigns: %{currencies: [currency | _]}} = socket) do
-    socket |> assign(selected_currency: currency)
+    assign(socket, selected_currency: currency)
   end
 
   defp update_selected_currency(socket) do
-    socket |> assign(selected_currency: nil)
+    assign(socket, selected_currency: nil)
   end
 
   defp update_currencies(socket) do
     currencies =
-      Fund.Public.list_bank_accounts(currency: Fund.CurrencyModel.preload_graph(:full))
+      [currency: Fund.CurrencyModel.preload_graph(:full)]
+      |> Fund.Public.list_bank_accounts()
       |> Enum.map(& &1.currency)
 
-    socket |> assign(currencies: currencies)
+    assign(socket, currencies: currencies)
   end
 
   defp update_options(%{assigns: %{currencies: currencies, locale: locale}} = socket) do
@@ -103,12 +105,11 @@ defmodule Systems.Fund.Form do
         }
       end)
 
-    socket |> assign(options: options)
+    assign(socket, options: options)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
         %{
           action: %{type: :submit},
@@ -126,18 +127,18 @@ defmodule Systems.Fund.Form do
   def handle_event("change", %{"model" => attrs}, socket) do
     {
       :noreply,
-      socket |> change(attrs)
+      change(socket, attrs)
     }
   end
 
   @impl true
   def handle_event("submit", %{"model" => attrs}, socket) do
-    {:noreply, socket |> handle_submit(attrs)}
+    {:noreply, handle_submit(socket, attrs)}
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "fund_cancelled")}
+    {:noreply, send_event(socket, :parent, "fund_cancelled")}
   end
 
   @impl true
@@ -146,42 +147,34 @@ defmodule Systems.Fund.Form do
         %{option: %{id: id}},
         %{assigns: %{currencies: currencies}} = socket
       ) do
-    selected_currency = currencies |> Enum.find(&(&1.id == id))
-    {:noreply, socket |> assign(selected_currency: selected_currency)}
+    selected_currency = Enum.find(currencies, &(&1.id == id))
+    {:noreply, assign(socket, selected_currency: selected_currency)}
   end
 
   @impl true
   def handle_event("dropdown_toggle", _payload, socket) do
-    {:noreply, socket |> assign(currency_error: nil)}
+    {:noreply, assign(socket, currency_error: nil)}
   end
 
-  defp change(
-         %{assigns: %{fund: fund, validate_changeset?: validate_changeset?}} = socket,
-         attrs
-       ) do
-    socket
-    |> apply_change(
-      fund
-      |> Fund.Model.change(attrs)
-      |> Fund.Model.validate(validate_changeset?)
+  defp change(%{assigns: %{fund: fund, validate_changeset?: validate_changeset?}} = socket, attrs) do
+    apply_change(
+      socket,
+      fund |> Fund.Model.change(attrs) |> Fund.Model.validate(validate_changeset?)
     )
   end
 
   defp apply_change(socket, changeset) do
     case Ecto.Changeset.apply_action(changeset, :change) do
-      {:ok, _fund} -> socket |> assign(changeset: changeset)
-      {:error, changeset} -> socket |> assign(changeset: changeset)
+      {:ok, _fund} -> assign(socket, changeset: changeset)
+      {:error, changeset} -> assign(socket, changeset: changeset)
     end
   end
 
   defp handle_submit(%{assigns: %{fund: %{currency: %{id: _id}} = fund}} = socket, attrs) do
     # Edit modus
-    socket
-    |> apply_submit(
-      fund
-      |> Fund.Model.change(attrs)
-      |> Fund.Model.validate()
-      |> Fund.Model.submit()
+    apply_submit(
+      socket,
+      fund |> Fund.Model.change(attrs) |> Fund.Model.validate() |> Fund.Model.submit()
     )
   end
 
@@ -190,8 +183,8 @@ defmodule Systems.Fund.Form do
          attrs
        ) do
     # Create modus
-    socket
-    |> apply_submit(
+    apply_submit(
+      socket,
       fund
       |> Fund.Model.change(attrs)
       |> Fund.Model.validate()
@@ -202,10 +195,10 @@ defmodule Systems.Fund.Form do
   defp apply_submit(socket, changeset) do
     case EctoHelper.upsert(changeset) do
       {:ok, _fund} ->
-        socket |> send_event(:parent, "fund_saved")
+        send_event(socket, :parent, "fund_saved")
 
       {:error, changeset} ->
-        socket |> assign(changeset: changeset)
+        assign(socket, changeset: changeset)
     end
   end
 

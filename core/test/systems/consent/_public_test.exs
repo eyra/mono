@@ -1,14 +1,16 @@
 defmodule Systems.Consent.PublicTest do
   use Core.DataCase
+
   alias Ecto.Multi
   alias Systems.Consent
+  alias Systems.Consent.AgreementModel
+  alias Systems.Consent.RevisionModel
+  alias Systems.Consent.SignatureModel
 
   test "list/0 returns all created agreements" do
-    {:ok, %{id: id}} =
-      Core.Authorization.prepare_node()
-      |> Consent.Public.create_agreement()
+    {:ok, %{id: id}} = Consent.Public.create_agreement(Core.Authorization.prepare_node())
 
-    assert [%Systems.Consent.AgreementModel{id: ^id}] = Consent.Public.list_agreements()
+    assert [%AgreementModel{id: ^id}] = Consent.Public.list_agreements()
   end
 
   test "list/0 returns all created agreements with revisions" do
@@ -27,15 +29,15 @@ defmodule Systems.Consent.PublicTest do
       |> Repo.commit()
 
     assert [
-             %Systems.Consent.AgreementModel{
+             %AgreementModel{
                revisions: [
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: _
                  },
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: "revision2"
                  },
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: "revision3"
                  }
                ]
@@ -78,25 +80,25 @@ defmodule Systems.Consent.PublicTest do
       |> Repo.commit()
 
     assert [
-             %Systems.Consent.AgreementModel{
+             %AgreementModel{
                revisions: [
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: _source,
                    signatures: []
                  },
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: "revision2",
                    signatures: [
-                     %Systems.Consent.SignatureModel{user_id: ^user_a_id},
-                     %Systems.Consent.SignatureModel{user_id: ^user_b_id}
+                     %SignatureModel{user_id: ^user_a_id},
+                     %SignatureModel{user_id: ^user_b_id}
                    ]
                  },
-                 %Systems.Consent.RevisionModel{
+                 %RevisionModel{
                    source: "revision3",
                    signatures: [
-                     %Systems.Consent.SignatureModel{user_id: ^user_a_id},
-                     %Systems.Consent.SignatureModel{user_id: ^user_b_id},
-                     %Systems.Consent.SignatureModel{user_id: ^user_c_id}
+                     %SignatureModel{user_id: ^user_a_id},
+                     %SignatureModel{user_id: ^user_b_id},
+                     %SignatureModel{user_id: ^user_c_id}
                    ]
                  }
                ]
@@ -114,10 +116,10 @@ defmodule Systems.Consent.PublicTest do
     %{id: _revision_1_id} = Factories.insert!(:consent_revision, %{agreement: agreement})
     %{id: revision_2_id} = Factories.insert!(:consent_revision, %{agreement: agreement})
 
-    assert %Systems.Consent.RevisionModel{
+    assert %RevisionModel{
              id: ^revision_2_id,
              source: nil,
-             agreement: %Systems.Consent.AgreementModel{id: ^id}
+             agreement: %AgreementModel{id: ^id}
            } = Consent.Public.latest_revision(agreement, [:agreement])
   end
 
@@ -134,7 +136,7 @@ defmodule Systems.Consent.PublicTest do
   test "bump_revision_if_needed!/1 returns first revision" do
     agreement = Factories.insert!(:consent_agreement)
 
-    assert %Systems.Consent.RevisionModel{
+    assert %RevisionModel{
              source: "<div>Add terms and conditions that participants need to consent to.</div>"
            } = Consent.Public.bump_revision_if_needed!(agreement)
   end
@@ -143,7 +145,7 @@ defmodule Systems.Consent.PublicTest do
     agreement = Factories.insert!(:consent_agreement)
     %{id: id} = Factories.insert!(:consent_revision, %{agreement: agreement, source: "source"})
 
-    assert %Systems.Consent.RevisionModel{
+    assert %RevisionModel{
              id: ^id,
              source: "source"
            } = Consent.Public.bump_revision_if_needed!(agreement)
@@ -156,7 +158,7 @@ defmodule Systems.Consent.PublicTest do
     revision_1 = Factories.insert!(:consent_revision, %{agreement: agreement, source: "source"})
     _signature = Factories.insert!(:consent_signature, %{revision: revision_1, user: user})
 
-    assert %Systems.Consent.RevisionModel{
+    assert %RevisionModel{
              id: revision_2_id,
              source: "source"
            } = Consent.Public.bump_revision_if_needed!(agreement)
@@ -201,6 +203,6 @@ defmodule Systems.Consent.PublicTest do
     revision = Factories.insert!(:consent_revision, %{agreement: agreement})
     _signature = Factories.insert!(:consent_signature, %{revision: revision, user: user_a})
 
-    assert not Consent.Public.has_signature(revision, user_b)
+    refute Consent.Public.has_signature(revision, user_b)
   end
 end

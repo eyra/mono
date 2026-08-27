@@ -1,14 +1,17 @@
 defmodule Systems.Feldspar.ControllerTest do
   use CoreWeb.ConnCase, async: false
 
-  @moduletag :capture_log
-
   alias Systems.Assignment
-  alias Systems.Storage
+  alias Systems.Rate.Server
 
   # ============================================================================
   # Donate endpoint tests
   # ============================================================================
+
+  alias Systems.Storage
+  alias Systems.Storage.MockJobScheduler
+
+  @moduletag :capture_log
 
   describe "donate/2 - missing required fields" do
     setup :login_as_member
@@ -22,9 +25,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"data" => upload, "context" => context})
+      conn = post(conn, "/api/feldspar/donate", %{"data" => upload, "context" => context})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: key"}
     end
@@ -32,17 +33,13 @@ defmodule Systems.Feldspar.ControllerTest do
     test "returns 400 when data is missing", %{conn: conn} do
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"key" => "test-key", "context" => context})
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "context" => context})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: data"}
     end
 
     test "returns 400 when both key and data are missing", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{})
+      conn = post(conn, "/api/feldspar/donate", %{})
 
       assert json_response(conn, 400) == %{
                "error" => "Missing required fields: key, data, context"
@@ -60,9 +57,7 @@ defmodule Systems.Feldspar.ControllerTest do
         content_type: "application/json"
       }
 
-      conn =
-        conn
-        |> post("/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
+      conn = post(conn, "/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: context"}
     end
@@ -75,8 +70,7 @@ defmodule Systems.Feldspar.ControllerTest do
       }
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => ""
@@ -93,8 +87,7 @@ defmodule Systems.Feldspar.ControllerTest do
       }
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => "{}"
@@ -111,8 +104,7 @@ defmodule Systems.Feldspar.ControllerTest do
       }
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => "not valid json"
@@ -133,8 +125,7 @@ defmodule Systems.Feldspar.ControllerTest do
       context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -165,8 +156,7 @@ defmodule Systems.Feldspar.ControllerTest do
         })
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -183,7 +173,7 @@ defmodule Systems.Feldspar.ControllerTest do
       assignment = create_assignment_with_storage()
 
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -197,8 +187,7 @@ defmodule Systems.Feldspar.ControllerTest do
         })
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -210,7 +199,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
     test "returns 422 without assignment_id in context", %{conn: conn} do
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -223,8 +212,7 @@ defmodule Systems.Feldspar.ControllerTest do
         })
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -254,8 +242,7 @@ defmodule Systems.Feldspar.ControllerTest do
         })
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -285,7 +272,7 @@ defmodule Systems.Feldspar.ControllerTest do
       assignment = create_assignment_with_storage()
 
       upload = %Plug.Upload{
-        path: create_temp_file("{\"test\": \"data\"}"),
+        path: create_temp_file(~s({"test": "data"})),
         filename: "data.json",
         content_type: "application/json"
       }
@@ -304,17 +291,16 @@ defmodule Systems.Feldspar.ControllerTest do
       Application.put_env(
         :core,
         :storage,
-        Keyword.put(storage_config, :job_scheduler, Systems.Storage.MockJobScheduler)
+        Keyword.put(storage_config, :job_scheduler, MockJobScheduler)
       )
 
       # Mock insert to return an error - this causes the Multi to fail with 4-tuple
-      expect(Systems.Storage.MockJobScheduler, :insert, fn _changeset ->
+      expect(MockJobScheduler, :insert, fn _changeset ->
         {:error, %Ecto.Changeset{valid?: false, errors: [queue: {"invalid", []}]}}
       end)
 
       conn =
-        conn
-        |> post("/api/feldspar/donate", %{
+        post(conn, "/api/feldspar/donate", %{
           "key" => "test-key",
           "data" => upload,
           "context" => context
@@ -373,8 +359,7 @@ defmodule Systems.Feldspar.ControllerTest do
               })
 
             result =
-              conn
-              |> post("/api/feldspar/donate", %{
+              post(conn, "/api/feldspar/donate", %{
                 "key" => "test-key-#{i}",
                 "data" => upload,
                 "context" => context
@@ -402,6 +387,10 @@ defmodule Systems.Feldspar.ControllerTest do
         Enum.each(failures, fn {i, status, body} ->
           IO.puts("  Request #{i}: HTTP #{status} - #{body}")
         end)
+
+        # ============================================================================
+        # Log endpoint tests
+        # ============================================================================
       end
 
       assert length(successes) == num_requests,
@@ -409,33 +398,23 @@ defmodule Systems.Feldspar.ControllerTest do
     end
   end
 
-  # ============================================================================
-  # Log endpoint tests
-  # ============================================================================
-
   describe "log/2 - missing required fields" do
     setup :login_as_member
 
     test "returns 400 when level is missing", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"message" => "test message"})
+      conn = post(conn, "/api/feldspar/log", %{"message" => "test message"})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: level"}
     end
 
     test "returns 400 when message is missing", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "info"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "info"})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: message"}
     end
 
     test "returns 400 when both level and message are missing", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{})
+      conn = post(conn, "/api/feldspar/log", %{})
 
       assert json_response(conn, 400) == %{"error" => "Missing required fields: level, message"}
     end
@@ -445,9 +424,7 @@ defmodule Systems.Feldspar.ControllerTest do
     setup :login_as_member
 
     test "returns 400 for invalid level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "invalid", "message" => "test"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "invalid", "message" => "test"})
 
       assert json_response(conn, 400) == %{
                "error" => "Invalid level. Must be one of: debug, info, warn, error"
@@ -455,9 +432,7 @@ defmodule Systems.Feldspar.ControllerTest do
     end
 
     test "returns 400 for empty level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "", "message" => "test"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "", "message" => "test"})
 
       assert json_response(conn, 400) == %{
                "error" => "Invalid level. Must be one of: debug, info, warn, error"
@@ -467,9 +442,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
   describe "log/2 - authentication" do
     test "returns 401 when user is not authenticated", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "info", "message" => "test"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "info", "message" => "test"})
 
       assert json_response(conn, 401) == %{"error" => "Not authenticated"}
     end
@@ -479,48 +452,35 @@ defmodule Systems.Feldspar.ControllerTest do
     setup :login_as_member
 
     test "accepts debug level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "debug", "message" => "debug message"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "debug", "message" => "debug message"})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
     end
 
     test "accepts info level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "info", "message" => "info message"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "info", "message" => "info message"})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
     end
 
     test "accepts warn level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "warn", "message" => "warning message"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "warn", "message" => "warning message"})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
     end
 
     test "accepts error level", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "error", "message" => "error message"})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "error", "message" => "error message"})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
     end
 
     test "accepts optional context", %{conn: conn} do
       conn =
-        conn
-        |> post("/api/feldspar/log", %{
+        post(conn, "/api/feldspar/log", %{
           "level" => "info",
           "message" => "message with context",
-          "context" => %{
-            "assignment_id" => 123,
-            "participant" => "p1",
-            "key" => "test-key"
-          }
+          "context" => %{"assignment_id" => 123, "participant" => "p1", "key" => "test-key"}
         })
 
       assert json_response(conn, 200) == %{"status" => "ok"}
@@ -528,8 +488,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
     test "works without context", %{conn: conn} do
       conn =
-        conn
-        |> post("/api/feldspar/log", %{
+        post(conn, "/api/feldspar/log", %{
           "level" => "info",
           "message" => "message without context"
         })
@@ -538,9 +497,7 @@ defmodule Systems.Feldspar.ControllerTest do
     end
 
     test "handles empty message", %{conn: conn} do
-      conn =
-        conn
-        |> post("/api/feldspar/log", %{"level" => "info", "message" => ""})
+      conn = post(conn, "/api/feldspar/log", %{"level" => "info", "message" => ""})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
     end
@@ -561,16 +518,16 @@ defmodule Systems.Feldspar.ControllerTest do
       ]
 
       # Stop, delete, and re-add with new config
-      Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
-      Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
-      Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, low_limit_config})
+      Supervisor.terminate_child(Core.Supervisor, Server)
+      Supervisor.delete_child(Core.Supervisor, Server)
+      Supervisor.start_child(Core.Supervisor, {Server, low_limit_config})
 
       on_exit(fn ->
         # Restore original config
         original_config = Application.get_env(:core, :rate)
-        Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
-        Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
-        Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, original_config})
+        Supervisor.terminate_child(Core.Supervisor, Server)
+        Supervisor.delete_child(Core.Supervisor, Server)
+        Supervisor.start_child(Core.Supervisor, {Server, original_config})
       end)
 
       :ok
@@ -578,7 +535,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
     test "returns 429 when rate limit exceeded", %{conn: conn} do
       # Use unique IP to avoid interference from other tests
-      unique_ip = {10, 0, 0, :erlang.unique_integer([:positive]) |> rem(255)}
+      unique_ip = {10, 0, 0, [:positive] |> :erlang.unique_integer() |> rem(255)}
 
       # First request should succeed
       assert conn
@@ -595,11 +552,11 @@ defmodule Systems.Feldspar.ControllerTest do
 
       assert response["error"] =~ "Rate limited"
     end
-  end
 
-  # ============================================================================
-  # Helper functions
-  # ============================================================================
+    # ============================================================================
+    # Helper functions
+    # ============================================================================
+  end
 
   defp create_temp_file(content) do
     path = Path.join(System.tmp_dir!(), "test_upload_#{:erlang.unique_integer()}.json")
@@ -630,7 +587,8 @@ defmodule Systems.Feldspar.ControllerTest do
 
     # Create storage endpoint using Storage.Public.prepare_endpoint
     storage_endpoint =
-      Storage.Public.prepare_endpoint(:builtin, %{key: "test_key_#{:erlang.unique_integer()}"})
+      :builtin
+      |> Storage.Public.prepare_endpoint(%{key: "test_key_#{:erlang.unique_integer()}"})
       |> Core.Repo.insert!()
 
     # Create project_item linking assignment to the node

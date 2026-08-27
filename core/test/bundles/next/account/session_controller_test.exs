@@ -7,6 +7,7 @@ defmodule Next.Account.SessionControllerTest do
 
   alias CoreWeb.Endpoint
   alias Next.Account.AuthCodeVerifyPage
+  alias Systems.Account.Public
 
   @token_salt "otp-redeem"
 
@@ -60,7 +61,7 @@ defmodule Next.Account.SessionControllerTest do
         Factories.insert!(:member, %{
           email: "existing-#{Faker.UUID.v4()}@example.com",
           creator: false,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       token =
@@ -99,7 +100,7 @@ defmodule Next.Account.SessionControllerTest do
           confirmed_at: nil
         })
 
-      token = Systems.Account.Public.generate_user_session_token(provisional_user)
+      token = Public.generate_user_session_token(provisional_user)
 
       conn =
         conn
@@ -128,7 +129,7 @@ defmodule Next.Account.SessionControllerTest do
       assert redirected_to(conn) == "/pool/panl/join"
       assert user_count() == before_count
 
-      updated_user = Systems.Account.Public.get_user!(provisional_user.id)
+      updated_user = Public.get_user!(provisional_user.id)
       assert updated_user.email == new_email
     end
 
@@ -148,7 +149,7 @@ defmodule Next.Account.SessionControllerTest do
 
       _conn = get(conn, ~p"/user/auth/redeem?token=#{redeem_token}")
 
-      assert EmailSignUp.get_by_user(provisional_user) != nil
+      assert EmailSignUp.get_by_user(provisional_user)
     end
   end
 
@@ -160,7 +161,7 @@ defmodule Next.Account.SessionControllerTest do
       activated_user = Factories.insert!(:member, %{creator: false})
       original_email = activated_user.email
 
-      token = Systems.Account.Public.generate_user_session_token(activated_user)
+      token = Public.generate_user_session_token(activated_user)
 
       conn =
         conn
@@ -189,13 +190,14 @@ defmodule Next.Account.SessionControllerTest do
 
       assert user_count() == before_count + 1
 
-      assert Systems.Account.Public.get_user!(activated_user.id).email ==
+      assert Public.get_user!(activated_user.id).email ==
                original_email
     end
   end
 
   defp user_count do
     import Ecto.Query
+
     Core.Repo.aggregate(from(u in Systems.Account.User), :count, :id)
   end
 end

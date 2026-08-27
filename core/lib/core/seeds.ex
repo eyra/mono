@@ -10,9 +10,9 @@ defmodule Core.Seeds do
   All seed modules must be idempotent — safe to run multiple times.
   """
 
-  require Logger
-
   alias Core.Seeds
+
+  require Logger
 
   @doc """
   Runs all seeds for the current deploy environment.

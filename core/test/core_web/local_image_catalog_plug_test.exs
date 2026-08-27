@@ -1,6 +1,8 @@
 defmodule CoreWeb.LocalImageCatalogPlug.Test do
   use ExUnit.Case, async: true
+
   import Plug.Test
+
   alias CoreWeb.LocalImageCatalogPlug
 
   def call(conn) do

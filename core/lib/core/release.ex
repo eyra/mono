@@ -1,4 +1,5 @@
 defmodule Core.Release do
+  @moduledoc false
   @app :core
 
   def migrate do
@@ -42,7 +43,7 @@ defmodule Core.Release do
 
         case Core.Repo.get_by(Account.User, email: email) do
           nil ->
-            now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+            now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
             hashed_password = Bcrypt.hash_pwd_salt(password)
 
             {:ok, user} =

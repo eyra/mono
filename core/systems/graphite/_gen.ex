@@ -1,8 +1,10 @@
 defmodule Systems.Graphite.Gen do
+  @moduledoc false
   use Core, :auth
+
   alias Core.Factories
-  alias Systems.Graphite
   alias Systems.Account
+  alias Systems.Graphite
 
   require Logger
 
@@ -19,7 +21,8 @@ defmodule Systems.Graphite.Gen do
     multi = Ecto.Multi.new()
 
     {:ok, result} =
-      Enum.reduce(1..amount, multi, fn i, multi ->
+      1..amount
+      |> Enum.reduce(multi, fn i, multi ->
         name = "#{prefix}-#{i}"
 
         multi
@@ -46,7 +49,7 @@ defmodule Systems.Graphite.Gen do
     |> Enum.count(fn {key, _} -> key == type end)
   end
 
-  defp gen_commit_url() do
+  defp gen_commit_url do
     s = for _ <- 1..40, into: "", do: <<Enum.random(~c"0123456789abcdef")>>
 
     "https://github.com/eyra/mono/commit/" <> s
@@ -54,7 +57,7 @@ defmodule Systems.Graphite.Gen do
 
   defp create_submission(multi, name, tool) do
     Ecto.Multi.insert(multi, {:submission, name}, fn %{{:auth_node, ^name} => auth_node} ->
-      Core.Factories.build(:graphite_submission, %{
+      Factories.build(:graphite_submission, %{
         tool: tool,
         auth_node: auth_node,
         github_commit_url: gen_commit_url(),

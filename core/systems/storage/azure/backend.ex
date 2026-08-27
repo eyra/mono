@@ -1,14 +1,11 @@
 defmodule Systems.Storage.Azure.Backend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
   require Logger
 
   @impl true
-  def store(
-        endpoint,
-        data,
-        %{"identifier" => identifier}
-      ) do
+  def store(endpoint, data, %{"identifier" => identifier}) do
     filename = filename(identifier)
 
     headers = [
@@ -18,7 +15,8 @@ defmodule Systems.Storage.Azure.Backend do
 
     case url(endpoint, filename) do
       {:ok, url} ->
-        HTTPoison.put(url, data, headers)
+        url
+        |> HTTPoison.put(data, headers)
         |> case do
           {:ok, %{status_code: 201}} ->
             :ok

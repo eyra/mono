@@ -1,20 +1,15 @@
 defmodule Systems.Storage.EndpointForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Frameworks.Concept
-  alias Frameworks.Pixel.RadioGroup
   alias Frameworks.Pixel.Annotation
   alias Frameworks.Pixel.Panel
-
-  alias Systems.{
-    Storage
-  }
+  alias Frameworks.Pixel.RadioGroup
+  alias Systems.Storage
 
   @impl true
-  def update(
-        %{id: id, endpoint: endpoint, key: key},
-        socket
-      ) do
+  def update(%{id: id, endpoint: endpoint, key: key}, socket) do
     {
       :ok,
       socket
@@ -108,8 +103,7 @@ defmodule Systems.Storage.EndpointForm do
       |> Storage.EndpointModel.changeset(%{})
       |> Storage.EndpointModel.change_special(special_type, special_changeset)
 
-    socket
-    |> send_event(:parent, "update", %{changeset: changeset})
+    send_event(socket, :parent, "update", %{changeset: changeset})
   end
 
   @impl true
@@ -142,7 +136,7 @@ defmodule Systems.Storage.EndpointForm do
 
   @impl true
   def handle_event("show_errors", _payload, socket) do
-    {:noreply, socket |> send_event(:special_form, "show_errors")}
+    {:noreply, send_event(socket, :special_form, "show_errors")}
   end
 
   @impl true

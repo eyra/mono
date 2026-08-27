@@ -12,12 +12,15 @@ defmodule Core.Authorization do
 
   use Core.BundleOverrides
 
-  require Logger
-
   import Ecto.Query
-  alias Ecto.Multi
+
+  alias Core.Authorization.RoleAssignment
   alias Core.Repo
+  alias Ecto.Multi
   alias Frameworks.GreenLight
+  alias Systems.Account.User
+
+  require Logger
 
   Frameworks.GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
@@ -82,7 +85,7 @@ defmodule Core.Authorization do
 
   def get_node!(id), do: Repo.get!(Core.Authorization.Node, id)
 
-  def prepare_node() do
+  def prepare_node do
     %Core.Authorization.Node{}
   end
 
@@ -112,12 +115,13 @@ defmodule Core.Authorization do
   end
 
   def prepare_role(%{} = principal, role) when is_atom(role) do
-    GreenLight.Principal.id(principal)
+    principal
+    |> GreenLight.Principal.id()
     |> prepare_role(role)
   end
 
   def prepare_role(principal_id, role) when is_integer(principal_id) and is_atom(role) do
-    %Core.Authorization.RoleAssignment{
+    %RoleAssignment{
       principal_id: principal_id,
       role: role
     }
@@ -126,7 +130,7 @@ defmodule Core.Authorization do
   def prepare_role(%Core.Authorization.Node{id: node_id}, principal, role) when is_atom(role) do
     principal_id = GreenLight.Principal.id(principal)
 
-    %Core.Authorization.RoleAssignment{
+    %RoleAssignment{
       principal_id: principal_id,
       role: role,
       node_id: node_id
@@ -134,14 +138,14 @@ defmodule Core.Authorization do
   end
 
   def create_node(parent \\ nil) do
-    case prepare_node(parent) |> Core.Repo.insert() do
+    case parent |> prepare_node() |> Repo.insert() do
       {:ok, node} -> {:ok, node.id}
       error -> error
     end
   end
 
   def create_node!(parent \\ nil) do
-    case prepare_node(parent) |> Core.Repo.insert() do
+    case parent |> prepare_node() |> Repo.insert() do
       {:ok, node} -> node
       error -> error
     end
@@ -151,9 +155,7 @@ defmodule Core.Authorization do
       when is_list(role_assignments) do
     auth_node = create_node!()
 
-    role_assignments
-    |> Enum.each(&copy_role(&1, auth_node))
-
+    Enum.each(role_assignments, &copy_role(&1, auth_node))
     auth_node
   end
 
@@ -164,9 +166,7 @@ defmodule Core.Authorization do
       when is_list(role_assignments) do
     auth_node = create_node!(new_parent)
 
-    role_assignments
-    |> Enum.each(&copy_role(&1, auth_node))
-
+    Enum.each(role_assignments, &copy_role(&1, auth_node))
     auth_node
   end
 
@@ -182,27 +182,27 @@ defmodule Core.Authorization do
     copy(auth_node)
   end
 
-  def copy_role(%Core.Authorization.RoleAssignment{} = role, node) do
-    %Core.Authorization.RoleAssignment{}
-    |> Core.Authorization.RoleAssignment.changeset(Map.from_struct(role))
+  def copy_role(%RoleAssignment{} = role, node) do
+    %RoleAssignment{}
+    |> RoleAssignment.changeset(Map.from_struct(role))
     |> Ecto.Changeset.put_assoc(:node, node)
     |> Repo.insert!()
   end
 
   def delete_role_assignments(%Core.Authorization.Node{id: node_id}) do
-    from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
-    |> Core.Repo.delete_all()
+    Repo.delete_all(from(ra in RoleAssignment, where: ra.node_id == ^node_id))
   end
 
   defp parent_node_query(entity) do
     initial_query =
-      Core.Authorization.Node |> where([n], n.id == ^GreenLight.AuthorizationNode.id(entity))
+      where(Core.Authorization.Node, [n], n.id == ^GreenLight.AuthorizationNode.id(entity))
 
     recursion_query =
-      Core.Authorization.Node
-      |> join(:inner, [n], nt in "auth_node_parents", on: n.id == nt.parent_id)
+      join(Core.Authorization.Node, :inner, [n], nt in "auth_node_parents",
+        on: n.id == nt.parent_id
+      )
 
-    parents_query = initial_query |> union_all(^recursion_query)
+    parents_query = union_all(initial_query, ^recursion_query)
 
     from("auth_node_parents")
     |> recursive_ctes(true)
@@ -211,18 +211,19 @@ defmodule Core.Authorization do
   end
 
   def get_parent_nodes(node_id) do
-    node_id |> parent_node_query |> Core.Repo.all()
+    node_id |> parent_node_query() |> Repo.all()
   end
 
   def roles_intersect?(principal, entity, roles) do
-    nodes_query = entity |> parent_node_query
+    nodes_query = parent_node_query(entity)
 
-    from(ra in Core.Authorization.RoleAssignment,
-      where:
-        ra.node_id in subquery(nodes_query) and ra.role in ^roles and
-          ra.principal_id == ^GreenLight.Principal.id(principal)
+    Repo.exists?(
+      from(ra in RoleAssignment,
+        where:
+          ra.node_id in subquery(nodes_query) and ra.role in ^roles and
+            ra.principal_id == ^GreenLight.Principal.id(principal)
+      )
     )
-    |> Core.Repo.exists?()
   end
 
   defp has_required_roles_in_context?(principal, entity, permission) do
@@ -264,23 +265,25 @@ defmodule Core.Authorization do
   def users_with_role(node_id, role, preload) when is_number(node_id) do
     principal_ids = query_principal_ids(node_id: node_id, role: role)
 
-    Ecto.Query.from(u in Systems.Account.User,
-      where: u.id in subquery(principal_ids),
-      preload: ^preload,
-      order_by: u.id
+    Repo.all(
+      Ecto.Query.from(u in User,
+        where: u.id in subquery(principal_ids),
+        preload: ^preload,
+        order_by: u.id
+      )
     )
-    |> Core.Repo.all()
   end
 
   def users_with_role(entity, role, preload) do
     principal_ids = query_principal_ids(role: role, entity: entity)
 
-    Ecto.Query.from(u in Systems.Account.User,
-      where: u.id in subquery(principal_ids),
-      preload: ^preload,
-      order_by: u.id
+    Repo.all(
+      Ecto.Query.from(u in User,
+        where: u.id in subquery(principal_ids),
+        preload: ^preload,
+        order_by: u.id
+      )
     )
-    |> Core.Repo.all()
   end
 
   @doc """
@@ -296,17 +299,14 @@ defmodule Core.Authorization do
   """
   def users_with_inherited_role(entity, role, preload \\ []) do
     principal_ids =
-      from(ra in Core.Authorization.RoleAssignment,
+      from(ra in RoleAssignment,
         where: ra.node_id in subquery(parent_node_query(entity)) and ra.role == ^role,
         select: ra.principal_id
       )
 
-    from(u in Systems.Account.User,
-      where: u.id in subquery(principal_ids),
-      preload: ^preload,
-      order_by: u.id
+    Repo.all(
+      from(u in User, where: u.id in subquery(principal_ids), preload: ^preload, order_by: u.id)
     )
-    |> Core.Repo.all()
   end
 
   def user_has_role?(%{id: user_id}, entity, role) do
@@ -314,7 +314,8 @@ defmodule Core.Authorization do
   end
 
   def user_has_role?(user_id, entity, role) do
-    users_with_role(entity, role)
+    entity
+    |> users_with_role(role)
     |> Enum.any?(&(&1.id == user_id))
   end
 
@@ -355,7 +356,8 @@ defmodule Core.Authorization do
 
   def link(multi, %Core.Authorization.Node{} = parent, %Core.Authorization.Node{} = child) do
     changeset =
-      Core.Authorization.Node.change(child)
+      child
+      |> Core.Authorization.Node.change()
       |> Ecto.Changeset.put_assoc(:parent, parent)
 
     Multi.update(multi, Ecto.UUID.generate(), changeset)
@@ -380,8 +382,8 @@ defmodule Core.Authorization do
     |> get_parent_nodes()
     |> Enum.each(fn node_id ->
       roles =
-        from(ra in Core.Authorization.RoleAssignment, where: ra.node_id == ^node_id)
-        |> Core.Repo.all()
+        from(ra in RoleAssignment, where: ra.node_id == ^node_id)
+        |> Repo.all()
         |> Enum.map(fn %{role: role, principal_id: principal_id} ->
           "##{principal_id} => :#{role}"
         end)
@@ -390,7 +392,7 @@ defmodule Core.Authorization do
         Logger.notice("0 roles for #{find_entity(node_id)} ##{node_id}", ansi_color: :blue)
       else
         Logger.notice(
-          "#{Enum.count(roles)} roles for #{find_entity(node_id)} ##{node_id}: [#{roles |> Enum.join(", ")}]",
+          "#{Enum.count(roles)} roles for #{find_entity(node_id)} ##{node_id}: [#{Enum.join(roles, ", ")}]",
           ansi_color: :magenta
         )
       end
@@ -413,10 +415,8 @@ defmodule Core.Authorization do
   ]
 
   defp find_entity(node_id) do
-    @entities
-    |> Enum.reduce("Unkown", fn entity, acc ->
-      if from(e in entity, where: e.auth_node_id == ^node_id)
-         |> Core.Repo.exists?() do
+    Enum.reduce(@entities, "Unkown", fn entity, acc ->
+      if Repo.exists?(from(e in entity, where: e.auth_node_id == ^node_id)) do
         entity
         |> Atom.to_string()
         |> String.replace("Elixir.Systems.", "")

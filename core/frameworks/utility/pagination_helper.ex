@@ -34,7 +34,7 @@ defmodule Frameworks.Utility.PaginationHelper do
     filtered_items = filter_fn.(items, query)
     item_count = length(filtered_items)
     page_count = max(1, ceil(item_count / @page_size))
-    page_items = filtered_items |> Enum.slice(page_index * @page_size, @page_size)
+    page_items = Enum.slice(filtered_items, page_index * @page_size, @page_size)
 
     search_bar =
       LiveNest.Element.prepare_live_component(:search_bar, Frameworks.Pixel.SearchBar,

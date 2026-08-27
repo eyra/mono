@@ -46,7 +46,8 @@ defmodule Frameworks.UserCheck do
   end
 
   defp client do
-    Application.get_env(:core, __MODULE__, [])
+    :core
+    |> Application.get_env(__MODULE__, [])
     |> Keyword.get(:client, Frameworks.UserCheck.HTTPClient)
   end
 end

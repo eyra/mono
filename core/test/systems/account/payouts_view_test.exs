@@ -1,7 +1,8 @@
 defmodule Systems.Account.PayoutsViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
   alias Frameworks.Concept.LiveContext
@@ -16,7 +17,7 @@ defmodule Systems.Account.PayoutsViewTest do
   end
 
   defp mount(conn, user) do
-    conn = conn |> Map.put(:request_path, "/user/profile/payouts")
+    conn = Map.put(conn, :request_path, "/user/profile/payouts")
     session = %{"live_context" => LiveContext.new(%{user_id: user.id})}
     live_isolated(conn, Account.PayoutsView, session: session)
   end
@@ -36,7 +37,7 @@ defmodule Systems.Account.PayoutsViewTest do
     test "renders the not-verified status with an Add button", %{conn: conn, user: user} do
       {:ok, view, html} = mount(conn, user)
 
-      assert view |> has_element?("[data-testid='payouts-view']")
+      assert has_element?(view, "[data-testid='payouts-view']")
       assert html =~ "Not verified"
       assert html =~ "Add"
     end
@@ -54,9 +55,8 @@ defmodule Systems.Account.PayoutsViewTest do
     } do
       {:ok, view, _html} = mount(conn, user)
 
-      view |> render_click("start_verification")
-
-      assert view |> has_element?("[data-testid='payouts-view']")
+      render_click(view, "start_verification")
+      assert has_element?(view, "[data-testid='payouts-view']")
     end
   end
 
@@ -75,11 +75,11 @@ defmodule Systems.Account.PayoutsViewTest do
 
       {:ok, view, html} = mount(conn, user)
 
-      assert view |> has_element?("[data-testid='payouts-table']")
-      assert view |> has_element?("[data-testid='year-filter']")
+      assert has_element?(view, "[data-testid='payouts-table']")
+      assert has_element?(view, "[data-testid='year-filter']")
       assert html =~ "2025"
       # status renders as a chip (same component as the pay-in status)
-      assert view |> has_element?("[data-testid='payouts-table'] .prism-tag")
+      assert has_element?(view, "[data-testid='payouts-table'] .prism-tag")
       assert html =~ "Paid out"
     end
 
@@ -89,7 +89,7 @@ defmodule Systems.Account.PayoutsViewTest do
 
       {:ok, view, _html} = mount(conn, user)
 
-      html = view |> render_click("select_year", %{"year" => "2024"})
+      html = render_click(view, "select_year", %{"year" => "2024"})
       assert html =~ "2024"
     end
   end

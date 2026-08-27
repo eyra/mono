@@ -8,9 +8,9 @@ defmodule Systems.Fund.AutoApproveWorker do
     max_attempts: 3,
     unique: [period: :infinity, states: [:available, :scheduled, :executing, :retryable]]
 
-  require Logger
-
   alias Systems.Fund
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{}) do

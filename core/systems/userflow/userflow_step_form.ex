@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.StepForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Systems.Userflow
@@ -20,11 +21,9 @@ defmodule Systems.Userflow.StepForm do
     changeset =
       if entity do
         Userflow.StepModel.changeset(entity, %{})
-      else
-        nil
       end
 
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   @impl true
@@ -33,8 +32,7 @@ defmodule Systems.Userflow.StepForm do
 
     {
       :noreply,
-      socket
-      |> save(changeset)
+      save(socket, changeset)
     }
   end
 

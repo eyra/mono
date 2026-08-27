@@ -7,8 +7,7 @@ defmodule Systems.Advert.MonitorView do
   def update(%{number_widgets: number_widgets}, socket) do
     {
       :ok,
-      socket
-      |> assign(number_widgets: number_widgets)
+      assign(socket, number_widgets: number_widgets)
     }
   end
 

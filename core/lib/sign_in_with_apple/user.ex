@@ -1,5 +1,7 @@
 defmodule SignInWithApple.User do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "sign_in_with_apple_users" do

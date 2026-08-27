@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Dialog do
+  @moduledoc false
   use CoreWeb, :ui
 
   alias Frameworks.Pixel.Button

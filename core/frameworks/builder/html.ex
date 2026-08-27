@@ -1,11 +1,11 @@
 defmodule Frameworks.Builder.HTML do
   use CoreWeb, :html
 
-  alias Frameworks.Pixel.Panel
-  alias Frameworks.Pixel.Align
-
   import CoreWeb.UI.StepIndicator
   import Frameworks.Pixel.Tag
+
+  alias Frameworks.Pixel.Align
+  alias Frameworks.Pixel.Panel
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)

@@ -1,8 +1,12 @@
 defmodule Systems.Banking.ProcessorTest do
   use Core.DataCase, async: true
+
   import ExUnit.CaptureLog
   import Mox
-  alias Systems.{Banking, Bookkeeping, Fund}
+
+  alias Systems.Banking
+  alias Systems.Bookkeeping
+  alias Systems.Fund
 
   setup :verify_on_exit!
 

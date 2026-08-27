@@ -8,7 +8,13 @@ defmodule Systems.Account.User do
   https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#password-hashing-algorithms
   """
   use Ecto.Schema
+
   import Ecto.Changeset
+
+  alias Ecto.Association.NotLoaded
+  alias Systems.Account.FeaturesModel
+  alias Systems.Account.User
+  alias Systems.Account.UserProfileModel
 
   def email_max_length, do: 160
   def email_format, do: ~r/^[^\s]+@[^\s]+$/
@@ -26,8 +32,8 @@ defmodule Systems.Account.User do
     field(:merchant_uid, :string)
     field(:phone, :string)
 
-    has_one(:profile, Systems.Account.UserProfileModel)
-    has_one(:features, Systems.Account.FeaturesModel)
+    has_one(:profile, UserProfileModel)
+    has_one(:features, FeaturesModel)
 
     timestamps()
   end
@@ -45,8 +51,8 @@ defmodule Systems.Account.User do
           creator: boolean() | nil,
           merchant_uid: String.t() | nil,
           phone: String.t() | nil,
-          profile: Systems.Account.UserProfileModel.t() | Ecto.Association.NotLoaded.t() | nil,
-          features: Systems.Account.FeaturesModel.t() | Ecto.Association.NotLoaded.t() | nil,
+          profile: UserProfileModel.t() | NotLoaded.t() | nil,
+          features: FeaturesModel.t() | NotLoaded.t() | nil,
           inserted_at: NaiveDateTime.t(),
           updated_at: NaiveDateTime.t()
         }
@@ -83,8 +89,7 @@ defmodule Systems.Account.User do
   User changeset for profile page
   """
   def user_profile_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:creator, :displayname])
+    cast(user, attrs, [:creator, :displayname])
   end
 
   @doc """
@@ -176,7 +181,7 @@ defmodule Systems.Account.User do
   end
 
   def valid_email_changeset(email \\ nil) do
-    %Systems.Account.User{}
+    %User{}
     |> cast(%{email: email}, [:email])
     |> validate_required([:email])
     |> validate_format(:email, email_format(), message: "must have the @ sign and no spaces")
@@ -190,8 +195,7 @@ defmodule Systems.Account.User do
   end
 
   def admin_changeset(user, attrs) do
-    user
-    |> cast(attrs, [:creator, :verified_at, :confirmed_at])
+    cast(user, attrs, [:creator, :verified_at, :confirmed_at])
   end
 
   @doc """
@@ -253,13 +257,12 @@ defmodule Systems.Account.User do
   Confirms the account by setting `confirmed_at`.
   """
   def confirm_changeset(user) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     change(user, confirmed_at: now)
   end
 
   def new_session_changeset(credentials) do
-    %Systems.Account.User{}
-    |> cast(credentials, [:email, :password])
+    cast(%User{}, credentials, [:email, :password])
   end
 
   @doc """
@@ -268,7 +271,7 @@ defmodule Systems.Account.User do
   If there is no user or the user doesn't have a password, we call
   `Bcrypt.no_user_verify/0` to avoid timing attacks.
   """
-  def valid_password?(%Systems.Account.User{hashed_password: hashed_password}, password)
+  def valid_password?(%User{hashed_password: hashed_password}, password)
       when is_binary(hashed_password) and byte_size(password) > 0 do
     Bcrypt.verify_pass(password, hashed_password)
   end
@@ -299,7 +302,7 @@ defmodule Systems.Account.User do
     do: displayname
 
   def label(%{email: nil}), do: "?"
-  def label(%{email: email}), do: String.split(email, "@") |> List.first()
+  def label(%{email: email}), do: email |> String.split("@") |> List.first()
 
   def user_id(%{assigns: assigns}), do: user_id(assigns)
   def user_id(%{current_user: user}), do: user_id(user)
@@ -318,6 +321,6 @@ defmodule Systems.Account.User do
       do: displayname
 
     def name(%{email: nil}), do: "?"
-    def name(%{email: email}), do: String.split(email, "@") |> List.first()
+    def name(%{email: email}), do: email |> String.split("@") |> List.first()
   end
 end

@@ -1,8 +1,9 @@
 defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Paper.RISEntry
   alias Frameworks.Utility.PaginationHelper
+  alias Systems.Paper.RISEntry
 
   def view_model(%{entries: entries, reference_file: %{file: %{name: _filename}}}, assigns) do
     errors = extract_errors(entries)

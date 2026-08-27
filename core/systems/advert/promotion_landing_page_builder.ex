@@ -1,28 +1,23 @@
 defmodule Systems.Advert.PromotionLandingPageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Phoenix.LiveView
-
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Logo
+  alias Phoenix.LiveView
   alias Systems.Advert
+  alias Systems.Advert.Builders.Highlight
+  alias Systems.Assignment
   alias Systems.Pool
   alias Systems.Promotion
-  alias Systems.Assignment
 
   def view_model(
         %Advert.Model{
           id: id,
-          submission:
-            %{
-              pool: %{name: pool_name}
-            } = submission,
+          submission: %{pool: %{name: pool_name}} = submission,
           promotion: promotion,
-          assignment:
-            %{
-              info: %{logo_url: logo_url} = info
-            } = assignment
+          assignment: %{info: %{logo_url: logo_url} = info} = assignment
         } = advert,
         _assigns
       ) do
@@ -33,18 +28,20 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
     icon_url = Logo.path(pool_name, {:pool, {:wide, :dark}})
 
-    %{
-      id: id,
-      icon_url: icon_url,
-      logo_url: logo_url,
-      themes: themes(promotion),
-      highlights: highlights(assignment, submission),
-      call_to_action: apply_call_to_action(advert),
-      language: Assignment.Model.language(assignment),
-      devices: Assignment.InfoModel.devices(info),
-      active_menu_item: :projects
-    }
-    |> Map.merge(extra)
+    Map.merge(
+      %{
+        id: id,
+        icon_url: icon_url,
+        logo_url: logo_url,
+        themes: themes(promotion),
+        highlights: highlights(assignment, submission),
+        call_to_action: apply_call_to_action(advert),
+        language: Assignment.Model.language(assignment),
+        devices: Assignment.InfoModel.devices(info),
+        active_menu_item: :projects
+      },
+      extra
+    )
   end
 
   defp themes(%{themes: themes}, themes_module \\ Advert.Themes) do
@@ -56,9 +53,9 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
 
   defp highlights(assignment, submission) do
     [
-      Advert.Builders.Highlight.view_model({submission, assignment}, :reward),
-      Advert.Builders.Highlight.view_model(assignment, :duration),
-      Advert.Builders.Highlight.view_model(assignment, :status)
+      Highlight.view_model({submission, assignment}, :reward),
+      Highlight.view_model(assignment, :duration),
+      Highlight.view_model(assignment, :status)
     ]
   end
 

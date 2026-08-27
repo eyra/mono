@@ -23,8 +23,7 @@ defmodule Core.Authentication.Actor do
   @required_fields @fields
 
   def change(actor, attrs \\ %{}) do
-    actor
-    |> Changeset.cast(attrs, @fields)
+    Changeset.cast(actor, attrs, @fields)
   end
 
   def validate(changeset) do

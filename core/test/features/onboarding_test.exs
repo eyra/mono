@@ -19,7 +19,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     user =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     _panl_pool =
@@ -45,7 +45,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     user =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     session
@@ -62,7 +62,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     user =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     session

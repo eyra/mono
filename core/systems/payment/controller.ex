@@ -1,12 +1,13 @@
 defmodule Systems.Payment.Controller do
   use CoreWeb, {:controller, [formats: [:json]]}
 
-  require Logger
-
   alias Frameworks.Signal
   alias Systems.Account
-  alias Systems.Payment.Webhook
   alias Systems.Fund
+  alias Systems.Payment.Public
+  alias Systems.Payment.Webhook
+
+  require Logger
 
   def webhook(conn, %{"provider" => provider}) do
     case Webhook.handler(provider) do
@@ -72,7 +73,7 @@ defmodule Systems.Payment.Controller do
   end
 
   defp handle_transaction_status_change(uid) do
-    case Systems.Payment.Public.get_transaction(uid) do
+    case Public.get_transaction(uid) do
       {:ok, %{status: status}} ->
         Logger.info("[Payment.Webhook] Provider transaction status=#{status} for uid=#{uid}")
         apply_transaction_status(status, uid)
@@ -97,7 +98,7 @@ defmodule Systems.Payment.Controller do
   end
 
   defp handle_withdrawal_status_change(uid) do
-    case Systems.Payment.Public.get_withdrawal(uid) do
+    case Public.get_withdrawal(uid) do
       {:ok, %{status: status} = withdrawal} ->
         Logger.info("[Payment.Webhook] Provider withdrawal status=#{status} for uid=#{uid}")
         result = Systems.Fund.Public.apply_withdrawal_status(uid, withdrawal)

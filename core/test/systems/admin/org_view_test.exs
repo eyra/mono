@@ -1,11 +1,14 @@
 defmodule Systems.Admin.OrgViewTest do
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Core.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
+  alias Systems.NextAction.Public
   alias Systems.Org
+  alias Systems.Org.NextActions.AddDomainMembers
 
   describe "OrgView" do
     setup ctx do
@@ -29,7 +32,7 @@ defmodule Systems.Admin.OrgViewTest do
           governable_orgs: [org]
         })
 
-      conn = ctx[:conn] |> Map.put(:request_path, "/admin/orgs")
+      conn = Map.put(ctx[:conn], :request_path, "/admin/orgs")
 
       {:ok, conn: conn, user: user, org: org, context: context}
     end
@@ -38,14 +41,14 @@ defmodule Systems.Admin.OrgViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      assert view |> has_element?("[data-testid='org-view']")
+      assert has_element?(view, "[data-testid='org-view']")
     end
 
     test "renders title", %{conn: conn, context: context} do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      assert view |> has_element?("[data-testid='org-title']")
+      assert has_element?(view, "[data-testid='org-title']")
     end
 
     test "handle_item_click redirects to org page", %{conn: conn, org: org, context: context} do
@@ -53,7 +56,7 @@ defmodule Systems.Admin.OrgViewTest do
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
       assert {:error, {:live_redirect, %{to: path}}} =
-               view |> render_click("handle_item_click", %{"item" => org.id})
+               render_click(view, "handle_item_click", %{"item" => org.id})
 
       assert path == "/org/node/#{org.id}"
     end
@@ -62,8 +65,7 @@ defmodule Systems.Admin.OrgViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      assert {:error, {:live_redirect, %{to: path}}} =
-               view |> render_click("create_org")
+      assert {:error, {:live_redirect, %{to: path}}} = render_click(view, "create_org")
 
       assert path =~ "/org/node/"
     end
@@ -73,7 +75,7 @@ defmodule Systems.Admin.OrgViewTest do
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
       assert {:error, {:live_redirect, %{to: path}}} =
-               view |> render_click("card_clicked", %{"item" => org.id})
+               render_click(view, "card_clicked", %{"item" => org.id})
 
       assert path == "/org/node/#{org.id}"
     end
@@ -82,28 +84,28 @@ defmodule Systems.Admin.OrgViewTest do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      _ = view |> render_click("archive_org", %{"item" => "#{org.id}"})
+      _ = render_click(view, "archive_org", %{"item" => "#{org.id}"})
 
       updated_org = Org.Public.get_node!(org.id)
-      assert updated_org.archived_at != nil
+      assert updated_org.archived_at
     end
 
     test "setup_admins presents modal", %{conn: conn, org: org, context: context} do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      _ = view |> render_click("setup_admins", %{"item" => "#{org.id}"})
+      _ = render_click(view, "setup_admins", %{"item" => "#{org.id}"})
 
-      assert view |> has_element?("[data-testid='org-view']")
+      assert has_element?(view, "[data-testid='org-view']")
     end
 
     test "show_archived presents modal", %{conn: conn, context: context} do
       {:ok, view, _html} =
         live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
 
-      _ = view |> render_click("show_archived")
+      _ = render_click(view, "show_archived")
 
-      assert view |> has_element?("[data-testid='org-view']")
+      assert has_element?(view, "[data-testid='org-view']")
     end
 
     # Regression coverage for FX#9905887344 — the AddDomainMembers banner
@@ -112,9 +114,9 @@ defmodule Systems.Admin.OrgViewTest do
     # revoked in another session).
     test "AddDomainMembers banner disappears live when the NextAction is cleared",
          %{conn: conn, user: user, org: org, context: context} do
-      Systems.NextAction.Public.create_next_action(
+      Public.create_next_action(
         user,
-        Systems.Org.NextActions.AddDomainMembers,
+        AddDomainMembers,
         key: "org:#{org.id}",
         params: %{org_id: org.id, org_name: "Test Org", domains: "test-domain.test"}
       )
@@ -124,9 +126,9 @@ defmodule Systems.Admin.OrgViewTest do
 
       assert html =~ "Manage members"
 
-      Systems.NextAction.Public.clear_next_action(
+      Public.clear_next_action(
         user,
-        Systems.Org.NextActions.AddDomainMembers,
+        AddDomainMembers,
         key: "org:#{org.id}"
       )
 

@@ -1,14 +1,16 @@
 defmodule Systems.Assignment.InfoModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
   use Frameworks.Utility.Model
 
-  require Core.Enums.Devices
   import Ecto.Changeset
 
+  alias Core.Enums.Devices
   alias Systems.Assignment
 
   require Assignment.Languages
+  require Devices
 
   schema "assignment_info" do
     field(:title, :string)
@@ -26,7 +28,7 @@ defmodule Systems.Assignment.InfoModel do
       values: Assignment.Languages.schema_values()
     )
 
-    field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
+    field(:devices, {:array, Ecto.Enum}, values: Devices.schema_values())
     field(:ethical_approval, :boolean)
     field(:ethical_code, :string)
 
@@ -49,9 +51,10 @@ defmodule Systems.Assignment.InfoModel do
   end
 
   defp validate_true(changeset, field) do
-    case get_field(changeset, field) do
-      true -> changeset
-      _ -> add_error(changeset, field, "is not true")
+    if get_field(changeset, field) do
+      changeset
+    else
+      add_error(changeset, field, "is not true")
     end
   end
 

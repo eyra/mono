@@ -1,4 +1,5 @@
 defmodule SignInWithApple.Helpers do
+  @moduledoc false
   import Plug.Conn, only: [put_session: 3, get_session: 2]
 
   def backend_module(config) do
@@ -34,6 +35,6 @@ defmodule SignInWithApple.Helpers do
 
     {:ok, %{session_params: session_params}} = backend_module(config).authorize_url(config)
 
-    conn |> put_session(:sign_in_with_apple, session_params)
+    put_session(conn, :sign_in_with_apple, session_params)
   end
 end

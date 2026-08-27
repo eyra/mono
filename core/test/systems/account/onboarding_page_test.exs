@@ -1,12 +1,12 @@
 defmodule Systems.Account.OnboardingPageTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
-  import Frameworks.Signal.TestHelper
 
   # `:features` has moved to the Pool-scoped onboarding, so a confirmed
   # user's account onboarding is now just `:profile` (with an optional
   # `:activate_account` step for unconfirmed users, and a leading
   # `:terms_and_privacy` for passwordless users).
+  import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   setup %{conn: conn} do
     isolate_signals()
@@ -21,7 +21,7 @@ defmodule Systems.Account.OnboardingPageTest do
     test "renders profile step first for a confirmed user", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/onboarding")
 
-      assert view |> has_element?("[data-testid='profile-view']")
+      assert has_element?(view, "[data-testid='profile-view']")
     end
 
     test "renders continue button", %{conn: conn} do
@@ -35,7 +35,7 @@ defmodule Systems.Account.OnboardingPageTest do
     test "redirects to home when skip is clicked", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/onboarding")
 
-      assert {:error, {:live_redirect, %{to: "/"}}} = view |> render_click("skip")
+      assert {:error, {:live_redirect, %{to: "/"}}} = render_click(view, "skip")
     end
   end
 
@@ -43,7 +43,7 @@ defmodule Systems.Account.OnboardingPageTest do
     test "redirects to home on last step (profile is the only step)", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/onboarding")
 
-      assert {:error, {:live_redirect, %{to: "/"}}} = view |> render_click("continue")
+      assert {:error, {:live_redirect, %{to: "/"}}} = render_click(view, "continue")
     end
   end
 
@@ -56,10 +56,10 @@ defmodule Systems.Account.OnboardingPageTest do
       {:ok, view, _html} = live(logged_in_conn, "/user/onboarding")
 
       # Step 1: profile
-      assert view |> has_element?("[data-testid='profile-view']")
+      assert has_element?(view, "[data-testid='profile-view']")
 
       # Step 2: activate_account
-      html = view |> render_click("continue")
+      html = render_click(view, "continue")
       assert html =~ "activate" or html =~ "Activate" or html =~ "activeer" or html =~ "Activeer"
     end
 
@@ -71,8 +71,8 @@ defmodule Systems.Account.OnboardingPageTest do
       {:ok, view, _html} = live(logged_in_conn, "/user/onboarding")
 
       # Navigate through: profile -> activate_account -> home
-      view |> render_click("continue")
-      assert {:error, {:live_redirect, %{to: "/"}}} = view |> render_click("continue")
+      render_click(view, "continue")
+      assert {:error, {:live_redirect, %{to: "/"}}} = render_click(view, "continue")
     end
   end
 end

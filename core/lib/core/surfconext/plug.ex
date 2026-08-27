@@ -1,4 +1,5 @@
 defmodule Core.SurfConext.PlugUtils do
+  @moduledoc false
   def config(otp_app) do
     Application.get_env(otp_app, Core.SurfConext)
   end
@@ -19,8 +20,8 @@ defmodule Core.SurfConext.AuthorizePlug do
 
   See this site for more info: https://sp.surfconext.nl/
   """
-  import Plug.Conn
   import Core.SurfConext.PlugUtils
+  import Plug.Conn
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
@@ -36,12 +37,13 @@ defmodule Core.SurfConext.AuthorizePlug do
 end
 
 defmodule Core.SurfConext.CallbackController do
-  require Logger
   use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
 
-  import Plug.Conn
   import Core.SurfConext.PlugUtils
+  import Plug.Conn
+
+  require Logger
 
   def authenticate(conn, params) do
     Logger.debug("SURFconext params: #{inspect(params)}")
@@ -59,7 +61,7 @@ defmodule Core.SurfConext.CallbackController do
     Logger.error("[SurfConext] OAuth callback without session state",
       request_path: conn.request_path,
       query_string: conn.query_string,
-      user_agent: get_req_header(conn, "user-agent") |> List.first()
+      user_agent: conn |> get_req_header("user-agent") |> List.first()
     )
   end
 
@@ -70,7 +72,7 @@ defmodule Core.SurfConext.CallbackController do
   end
 
   defp do_authenticate(conn, params, session_params) do
-    config = config(:core) |> Keyword.put(:session_params, session_params)
+    config = :core |> config() |> Keyword.put(:session_params, session_params)
 
     {:ok, %{token: token}} = oidc_module(config).callback(config, params)
 

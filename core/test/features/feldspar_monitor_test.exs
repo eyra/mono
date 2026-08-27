@@ -38,7 +38,7 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
     user =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     session
@@ -48,21 +48,17 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
     |> click(Query.css("[data-testid='signin-submit-button']"))
 
     # Wait for sign in to complete
-    session
-    |> assert_has(Query.css("[data-testid='home-page']"))
+    assert_has(session, Query.css("[data-testid='home-page']"))
 
     # Visit the mock Feldspar app page
-    session
-    |> visit("/feldspar/apps/#{@mock_app_id}")
+    visit(session, "/feldspar/apps/#{@mock_app_id}")
 
     # Wait for LiveView to connect
-    session
-    |> assert_has(Query.css("iframe"))
+    assert_has(session, Query.css("iframe"))
 
     # The mock app should show "Logs sent!" after sending monitor:log messages
     # This indicates the JavaScript successfully processed the monitor:log messages
-    session
-    |> assert_has(Query.css("iframe"))
+    assert_has(session, Query.css("iframe"))
 
     # Wait for the iframe to load and process
     # The mock app updates its status div when logs are sent
@@ -71,7 +67,6 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
     # We can't directly assert iframe content in Wallaby easily,
     # but we can verify the page loaded without errors
     # The real test is that no JavaScript errors occurred
-    session
-    |> assert_has(Query.css("iframe"))
+    assert_has(session, Query.css("iframe"))
   end
 end

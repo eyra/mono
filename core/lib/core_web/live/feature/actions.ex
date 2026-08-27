@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Feature.Actions do
+  @moduledoc false
   def create_actions(%{assigns: %{vm: %{actions: actions}}}), do: Keyword.values(actions)
   def create_actions(_socket), do: []
 

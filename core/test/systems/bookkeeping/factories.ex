@@ -1,9 +1,7 @@
 defmodule Systems.Bookkeeping.Factories do
+  @moduledoc false
   alias Core.Factories
-
-  alias Systems.{
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
 
   def create_entry(from, to, amount, idempotence_key, journal_message) do
     entry =

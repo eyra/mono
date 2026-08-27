@@ -1,4 +1,5 @@
 defmodule Core.Config do
+  @moduledoc false
   def payment_provider do
     name =
       case System.get_env("PAYMENT_PROVIDER") do

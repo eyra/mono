@@ -33,8 +33,6 @@ defmodule CoreWeb.TestComponentWrapper do
 
   @impl true
   def handle_info({:update_component, updates}, socket) do
-    {:noreply,
-     socket
-     |> update(:component_assigns, fn assigns -> Map.merge(assigns, updates) end)}
+    {:noreply, update(socket, :component_assigns, fn assigns -> Map.merge(assigns, updates) end)}
   end
 end

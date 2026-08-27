@@ -1,4 +1,5 @@
 defmodule Systems.Annotation.Pattern.Definition do
+  @moduledoc false
   alias Core.Authentication
   alias Systems.Ontology
 
@@ -17,11 +18,7 @@ defmodule Systems.Annotation.Pattern.Definition do
     def obtain(%{subject: nil}), do: raise(MissingFieldError, :subject)
     def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
 
-    def obtain(%{
-          definition: definition,
-          subject: subject,
-          entity: entity
-        }) do
+    def obtain(%{definition: definition, subject: subject, entity: entity}) do
       if annotation = get(definition: definition, subject: subject, entity: entity) do
         {:ok, annotation}
       else
@@ -46,7 +43,8 @@ defmodule Systems.Annotation.Pattern.Definition do
     end
 
     defp get(definition: definition, subject: subject, entity: entity) do
-      query(definition, subject, entity)
+      definition
+      |> query(subject, entity)
       |> Repo.one()
     end
   end

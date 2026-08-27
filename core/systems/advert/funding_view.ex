@@ -4,11 +4,10 @@ defmodule Systems.Advert.FundingView do
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.Square
-
-  alias Systems.Fund
-  alias Systems.Bookkeeping
-  alias Systems.Pool
   alias Systems.Assignment
+  alias Systems.Bookkeeping
+  alias Systems.Fund
+  alias Systems.Pool
 
   @minimal_reward_per_minute 10
 
@@ -38,12 +37,7 @@ defmodule Systems.Advert.FundingView do
   # Initial update
   @impl true
   def update(
-        %{
-          id: id,
-          assignment: %{fund: fund} = assignment,
-          submission: submission,
-          user: user
-        },
+        %{id: id, assignment: %{fund: fund} = assignment, submission: submission, user: user},
         socket
       ) do
     changeset = Pool.SubmissionModel.changeset(submission, %{})
@@ -77,7 +71,8 @@ defmodule Systems.Advert.FundingView do
              assignment: assignment,
              submission: %{reward_value: reward_value}
            }
-         } = socket
+         } =
+           socket
        ) do
     reward_value = guard_number_nil(reward_value)
     amount_available = Fund.Model.amount_available(selected_fund)
@@ -102,7 +97,7 @@ defmodule Systems.Advert.FundingView do
         end
       end
 
-    socket |> assign(state: state, count: count, open_spot_count: open_spot_count)
+    assign(socket, state: state, count: count, open_spot_count: open_spot_count)
   end
 
   defp update_reward(
@@ -116,7 +111,7 @@ defmodule Systems.Advert.FundingView do
     reward_value = guard_number_nil(reward_value)
     reward_value_label = Fund.CurrencyModel.label(currency, locale, reward_value)
     reward_label = dgettext("eyra-advert", "funding.reward.label", amount: reward_value_label)
-    socket |> assign(reward_label: reward_label)
+    assign(socket, reward_label: reward_label)
   end
 
   defp update_shortage(
@@ -131,7 +126,7 @@ defmodule Systems.Advert.FundingView do
     reward_value = guard_number_nil(reward_value)
     shortage = open_spot_count * reward_value
     shortage_label = Fund.CurrencyModel.label(currency, locale, shortage)
-    socket |> assign(shortage_label: shortage_label)
+    assign(socket, shortage_label: shortage_label)
   end
 
   defp update_reward_description(
@@ -153,7 +148,7 @@ defmodule Systems.Advert.FundingView do
         duration: duration
       )
 
-    socket |> assign(reward_description: reward_description)
+    assign(socket, reward_description: reward_description)
   end
 
   defp update_fund_description(%{assigns: %{state: state, count: count}} = socket) do
@@ -169,7 +164,7 @@ defmodule Systems.Advert.FundingView do
           dgettext("eyra-advert", "funding.fund.description.error")
       end
 
-    socket |> assign(fund_description: fund_description)
+    assign(socket, fund_description: fund_description)
   end
 
   defp update_funds(
@@ -179,7 +174,7 @@ defmodule Systems.Advert.FundingView do
     funds =
       Fund.Public.list_owned_by_currency(user, currency, Fund.Model.preload_graph(:full))
 
-    socket |> assign(funds: funds)
+    assign(socket, funds: funds)
   end
 
   defp update_fund_items(
@@ -193,8 +188,9 @@ defmodule Systems.Advert.FundingView do
            }
          } = socket
        ) do
-    socket
-    |> assign(fund_items: Enum.map(funds, &to_item(&1, selected_fund, state, locale, myself)))
+    assign(socket,
+      fund_items: Enum.map(funds, &to_item(&1, selected_fund, state, locale, myself))
+    )
   end
 
   defp to_item(
@@ -230,7 +226,7 @@ defmodule Systems.Advert.FundingView do
         %{assigns: %{assignment: assignment, funds: funds, changeset: submission_changeset}} =
           socket
       ) do
-    selected_fund = funds |> Enum.find(&(&1.id == String.to_integer(fund_id)))
+    selected_fund = Enum.find(funds, &(&1.id == String.to_integer(fund_id)))
     changeset = Assignment.Model.changeset(assignment, selected_fund)
 
     {
@@ -270,7 +266,7 @@ defmodule Systems.Advert.FundingView do
   end
 
   defp copy_entity(%{assigns: %{entity: entity}} = socket, field) do
-    socket |> assign(field, entity)
+    assign(socket, field, entity)
   end
 
   defp guard_number_nil(nil), do: 0

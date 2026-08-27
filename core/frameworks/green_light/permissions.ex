@@ -3,7 +3,8 @@ defmodule Frameworks.GreenLight.Permissions do
   The permissions module provides several functions that create permission
   strings and `GreenLight.PermissionMap`s.
   """
-  alias Frameworks.GreenLight.{PermissionMap, Permissions}
+  alias Frameworks.GreenLight.PermissionMap
+  alias Frameworks.GreenLight.Permissions
 
   defp atom_to_permission_name(val) do
     val
@@ -14,17 +15,16 @@ defmodule Frameworks.GreenLight.Permissions do
   end
 
   def access_permission(module) do
-    "access/#{module |> atom_to_permission_name()}"
+    "access/#{atom_to_permission_name(module)}"
   end
 
   def action_permission(module, action) do
-    action_string = action |> Atom.to_string()
-    "invoke/#{module |> atom_to_permission_name()}@#{action_string}"
+    action_string = Atom.to_string(action)
+    "invoke/#{atom_to_permission_name(module)}@#{action_string}"
   end
 
   def actions_permission_map(module, action_to_roles_map) do
-    action_to_roles_map
-    |> Enum.reduce(PermissionMap.new(), fn {action, roles}, permission_map ->
+    Enum.reduce(action_to_roles_map, PermissionMap.new(), fn {action, roles}, permission_map ->
       PermissionMap.grant(
         permission_map,
         action_permission(module, action),
@@ -44,14 +44,15 @@ defmodule Frameworks.GreenLight.Permissions do
 
   def grant(module, permission, roles) do
     permission_map =
-      get_permission_map_from_module(module) |> PermissionMap.grant(permission, roles)
+      module |> get_permission_map_from_module() |> PermissionMap.grant(permission, roles)
 
     Module.put_attribute(module, :permission_map, permission_map)
   end
 
   def grant(module, permission_map) do
     permission_map =
-      get_permission_map_from_module(module)
+      module
+      |> get_permission_map_from_module()
       |> PermissionMap.merge(permission_map)
 
     Module.put_attribute(
@@ -78,7 +79,7 @@ defmodule Frameworks.GreenLight.Permissions do
 
   defmacro __before_compile__(_env) do
     quote do
-      def permission_map, do: @permission_map |> PermissionMap.new_t()
+      def permission_map, do: PermissionMap.new_t(@permission_map)
     end
   end
 end

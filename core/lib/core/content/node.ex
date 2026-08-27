@@ -3,8 +3,10 @@ defmodule Core.Content.Node do
   The content node schema.
   """
   use Ecto.Schema
-  require Core.Enums.Themes
+
   import Ecto.Changeset
+
+  require Core.Enums.Themes
 
   schema "content_nodes" do
     field(:ready, :boolean)

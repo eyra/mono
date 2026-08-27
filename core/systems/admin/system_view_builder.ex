@@ -8,8 +8,8 @@ defmodule Systems.Admin.SystemViewBuilder do
   """
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Fund
   alias Systems.Citizen
+  alias Systems.Fund
 
   def view_model(_model, assigns) do
     bank_accounts = Map.get(assigns, :bank_accounts, [])

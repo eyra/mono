@@ -1,8 +1,10 @@
 defmodule Core.Authentication do
+  @moduledoc false
   import Ecto.Query
-  alias Ecto.Multi
-  alias Core.Repo
+
   alias Core.Authentication
+  alias Core.Repo
+  alias Ecto.Multi
 
   def obtain_entity!(subject) do
     case obtain_entity(subject) do
@@ -78,14 +80,14 @@ defmodule Core.Authentication do
     %Authentication.Entity{}
     |> Authentication.Entity.change(%{identifier: identifier})
     |> Authentication.Entity.validate()
-    |> Core.Repo.insert()
+    |> Repo.insert()
   end
 
   defp insert_actor(type, name) do
     %Authentication.Actor{}
     |> Authentication.Actor.change(%{type: type, name: name})
     |> Authentication.Actor.validate()
-    |> Core.Repo.insert()
+    |> Repo.insert()
   end
 
   defp encode_identifier(module, id) do

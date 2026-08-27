@@ -1,5 +1,10 @@
 defmodule Systems.Payment.Provider.OPP.Webhook do
+  @moduledoc false
   @behaviour Systems.Payment.Webhook
+
+  alias Systems.Payment.Error
+
+  require Logger
 
   @signature_regex ~r/(\w+)="([^"]*)"/
 
@@ -8,10 +13,6 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   @merchant_type "merchant"
   @bank_account_type "bank_account"
   @kyc_object_types [@merchant_type, @bank_account_type]
-
-  require Logger
-
-  alias Systems.Payment.Error
 
   @impl true
   def verify_and_parse(conn) do
@@ -52,7 +53,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   defp verify_digest(digest_header, body) do
     case String.split(digest_header, "=", parts: 2) do
       ["SHA-256", expected_digest] ->
-        actual_digest = :crypto.hash(:sha256, body) |> Base.encode64()
+        actual_digest = :sha256 |> :crypto.hash(body) |> Base.encode64()
 
         if Plug.Crypto.secure_compare(actual_digest, expected_digest) do
           :ok
@@ -67,8 +68,9 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
 
   defp parse_signature_header(header) do
     params =
-      Regex.scan(@signature_regex, header)
-      |> Enum.into(%{}, fn [_, key, value] -> {key, value} end)
+      @signature_regex
+      |> Regex.scan(header)
+      |> Map.new(fn [_, key, value] -> {key, value} end)
 
     if Map.has_key?(params, "signature") do
       {:ok, params}
@@ -82,7 +84,8 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
     signing_string = build_signing_string(conn, signed_headers)
 
     expected_signature =
-      :crypto.mac(:hmac, :sha256, secret, signing_string)
+      :hmac
+      |> :crypto.mac(:sha256, secret, signing_string)
       |> Base.encode64()
 
     if Plug.Crypto.secure_compare(expected_signature, signature) do
@@ -101,7 +104,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
     |> String.split(" ")
     |> Enum.map_join("\n", fn
       "(request-target)" ->
-        method = conn.method |> String.downcase()
+        method = String.downcase(conn.method)
         path = conn.request_path
         "(request-target): #{method} #{path}"
 
@@ -213,7 +216,8 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp notification_secret do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP)
+    :core
+    |> Application.fetch_env!(Systems.Payment.Provider.OPP)
     |> Keyword.fetch!(:notification_secret)
   end
 end

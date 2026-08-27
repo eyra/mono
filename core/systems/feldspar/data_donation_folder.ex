@@ -159,11 +159,11 @@ defmodule Systems.Feldspar.DataDonationFolder do
   Returns the count of deleted files.
   """
   def cleanup_older_than(hours) do
-    cutoff = DateTime.utc_now() |> DateTime.add(-hours * 3600, :second)
+    cutoff = DateTime.shift(DateTime.utc_now(), hour: -hours)
 
     list_all()
     |> Enum.filter(fn %{created_at: created_at} ->
-      DateTime.compare(created_at, cutoff) == :lt
+      DateTime.before?(created_at, cutoff)
     end)
     |> Enum.reduce(0, fn %{id: file_id}, count ->
       case delete(file_id) do

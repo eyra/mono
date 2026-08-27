@@ -19,7 +19,7 @@ defmodule Frameworks.Pixel.Create do
   def create(module, socket, changeset) do
     case module.create(socket, changeset) do
       {:ok, redirect_path} ->
-        {:noreply, socket |> push_navigate(to: redirect_path, replace: true)}
+        {:noreply, push_navigate(socket, to: redirect_path, replace: true)}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         handle_validation_error(socket, changeset)
@@ -27,7 +27,7 @@ defmodule Frameworks.Pixel.Create do
   end
 
   def mount(_entity_name, changeset, socket) do
-    {:ok, socket |> assign(changeset: changeset)}
+    {:ok, assign(socket, changeset: changeset)}
   end
 
   defmacro __using__(entity_name) do
@@ -45,7 +45,7 @@ defmodule Frameworks.Pixel.Create do
 
       def handle_event("create", params, socket) do
         entity_name = unquote(entity_name)
-        attrs = params[entity_name |> to_string]
+        attrs = params[to_string(entity_name)]
         changeset = get_changeset(attrs)
         Create.create(__MODULE__, socket, changeset)
       end

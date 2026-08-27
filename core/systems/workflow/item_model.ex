@@ -1,9 +1,11 @@
 defmodule Systems.Workflow.ItemModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
-  alias Frameworks.Concept
 
   import Ecto.Changeset
+
+  alias Frameworks.Concept
   alias Systems.Workflow
 
   schema "workflow_items" do
@@ -22,13 +24,11 @@ defmodule Systems.Workflow.ItemModel do
   @required_fields ~w(position title description)a
 
   def changeset(item, params) do
-    item
-    |> cast(params, @fields)
+    cast(item, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(item) do
@@ -37,7 +37,8 @@ defmodule Systems.Workflow.ItemModel do
   end
 
   defp tool_ready?(%{tool_ref: tool_ref}) do
-    Workflow.ToolRefModel.flatten(tool_ref)
+    tool_ref
+    |> Workflow.ToolRefModel.flatten()
     |> Concept.ToolModel.ready?()
   end
 
@@ -49,11 +50,7 @@ defmodule Systems.Workflow.ItemModel do
     end
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :tool_ref
-      ])
+  def preload_graph(:down), do: preload_graph([:tool_ref])
 
   def preload_graph(:tool_ref), do: [tool_ref: Workflow.ToolRefModel.preload_graph(:down)]
 

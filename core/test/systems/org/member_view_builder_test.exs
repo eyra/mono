@@ -154,12 +154,12 @@ defmodule Systems.Org.MemberViewBuilderTest do
     import Ecto.Query, only: [from: 2]
 
     {1, _} =
-      from(ra in Core.Authorization.RoleAssignment,
-        where:
-          ra.node_id == ^org.auth_node_id and
-            ra.principal_id == ^user.id and
-            ra.role == :member
+      Core.Repo.update_all(
+        from(ra in Core.Authorization.RoleAssignment,
+          where:
+            ra.node_id == ^org.auth_node_id and ra.principal_id == ^user.id and ra.role == :member
+        ),
+        set: [inserted_at: at]
       )
-      |> Core.Repo.update_all(set: [inserted_at: at])
   end
 end

@@ -1,6 +1,6 @@
 defmodule Systems.Desktop.PageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Utility.ViewModelBuilder

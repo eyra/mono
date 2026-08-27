@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Hook.Actions do
+  @moduledoc false
   use Frameworks.Concept.LiveHook
 
   @impl true
@@ -16,7 +17,7 @@ defmodule CoreWeb.Live.Hook.Actions do
   defp handle_action_click(socket, live_view_module) do
     attach_hook(socket, :tabbar_handle_action_click, :handle_event, fn
       "action_click", %{"item" => action_id}, socket ->
-        {:cont, socket |> handle_action_click(live_view_module, action_id)}
+        {:cont, handle_action_click(socket, live_view_module, action_id)}
 
       _, _, socket ->
         {:cont, socket}
@@ -25,14 +26,14 @@ defmodule CoreWeb.Live.Hook.Actions do
 
   defp handle_uri(socket, live_view_module) do
     attach_hook(socket, :actions_handle_uri, :handle_params, fn _params, _uri, socket ->
-      {:cont, socket |> update_actions(live_view_module)}
+      {:cont, update_actions(socket, live_view_module)}
     end)
   end
 
   defp handle_view_model_updated(socket, live_view_module) do
     attach_hook(socket, :actions_handle_view_model_updated, :handle_info, fn
       :view_model_updated, socket ->
-        {:cont, socket |> update_actions(live_view_module)}
+        {:cont, update_actions(socket, live_view_module)}
 
       _, socket ->
         {:cont, socket}

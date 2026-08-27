@@ -6,17 +6,20 @@ defmodule Core.SurfConext do
   """
   @behaviour Core.Identity.Provider
 
-  alias Systems.Account.User
-  alias Core.Repo
   import Ecto.Query, warn: false
+
+  alias Core.Identity.Provider
+  alias Core.Repo
+  alias Systems.Account.User
 
   require Logger
 
   defmodule SurfConextError do
+    @moduledoc false
     defexception [:message]
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def user_attrs(userinfo) when is_map(userinfo) do
     fullname =
       ~w(given_name family_name)
@@ -33,12 +36,12 @@ defmodule Core.SurfConext do
     }
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def get(%User{id: id}) do
     Repo.get_by(Core.SurfConext.User, user_id: id)
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def attach(%User{} = user, userinfo) when is_map(userinfo) do
     %Core.SurfConext.User{}
     |> Core.SurfConext.User.register_changeset(satellite_attrs(userinfo))
@@ -46,9 +49,10 @@ defmodule Core.SurfConext do
     |> Repo.insert()
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def refresh(%User{} = user, userinfo) when is_map(userinfo) do
-    get(user)
+    user
+    |> get()
     |> Core.SurfConext.User.update_changeset(%{userinfo: userinfo})
     |> Repo.update!()
   end

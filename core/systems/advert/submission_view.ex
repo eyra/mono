@@ -62,8 +62,7 @@ defmodule Systems.Advert.SubmissionView do
   end
 
   defp update_vm_changeset(%{assigns: %{vm: vm, changeset: changeset}} = socket) do
-    socket
-    |> assign(vm: Map.put(vm, :changeset, changeset))
+    assign(socket, vm: Map.put(vm, :changeset, changeset))
   end
 
   defp update_vm_changeset(socket), do: socket
@@ -97,10 +96,7 @@ defmodule Systems.Advert.SubmissionView do
   @impl true
   def handle_event(
         "active_item_ids",
-        %{
-          active_item_ids: selected_values,
-          source: %{name: criteria_field}
-        },
+        %{active_item_ids: selected_values, source: %{name: criteria_field}},
         socket
       )
       when criteria_field == :genders do
@@ -108,8 +104,7 @@ defmodule Systems.Advert.SubmissionView do
 
     {
       :noreply,
-      socket
-      |> persist_criteria_changes(attrs)
+      persist_criteria_changes(socket, attrs)
     }
   end
 
@@ -117,8 +112,7 @@ defmodule Systems.Advert.SubmissionView do
   def handle_event("change", %{"criteria_model" => attrs}, socket) do
     {
       :noreply,
-      socket
-      |> persist_criteria_changes(attrs)
+      persist_criteria_changes(socket, attrs)
     }
   end
 

@@ -5,11 +5,10 @@ defmodule Systems.Admin.AccountView do
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem
-
   alias Systems.Account
   alias Systems.Observatory
 
-  def dependencies(), do: []
+  def dependencies, do: []
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -19,8 +18,7 @@ defmodule Systems.Admin.AccountView do
   def mount(:not_mounted_at_router, _session, socket) do
     {
       :ok,
-      socket
-      |> assign(query_string: "")
+      assign(socket, query_string: "")
     }
   end
 
@@ -28,21 +26,21 @@ defmodule Systems.Admin.AccountView do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
     changeset = Account.User.admin_changeset(user, attrs)
     {:ok, _} = Core.Persister.save(user, changeset)
-    socket |> update_view_model()
+    update_view_model(socket)
   end
 
   # Events
 
   @impl true
   def handle_event("make_creator", %{"item" => user_id_string}, socket) do
-    {:noreply, socket |> save(user_id_string, %{creator: true})}
+    {:noreply, save(socket, user_id_string, %{creator: true})}
   end
 
   @impl true
   def handle_event("verify_creator", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
+      save(socket, user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
     }
   end
 
@@ -50,7 +48,7 @@ defmodule Systems.Admin.AccountView do
   def handle_event("unverify_creator", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{verified_at: nil})
+      save(socket, user_id_string, %{verified_at: nil})
     }
   end
 
@@ -58,13 +56,13 @@ defmodule Systems.Admin.AccountView do
   def handle_event("activate_user", %{"item" => user_id_string}, socket) do
     {
       :noreply,
-      socket |> save(user_id_string, %{confirmed_at: NaiveDateTime.utc_now()})
+      save(socket, user_id_string, %{confirmed_at: NaiveDateTime.utc_now()})
     }
   end
 
   @impl true
   def handle_event("deactivate_user", %{"item" => user_id_string}, socket) do
-    {:noreply, socket |> save(user_id_string, %{confirmed_at: nil})}
+    {:noreply, save(socket, user_id_string, %{confirmed_at: nil})}
   end
 
   @impl true

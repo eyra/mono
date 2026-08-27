@@ -29,13 +29,11 @@ defmodule Systems.Account.UserProfileEditModel do
   end
 
   def to_user(user_edit) do
-    user_edit
-    |> Map.take(@user_fields)
+    Map.take(user_edit, @user_fields)
   end
 
   def to_profile(user_edit) do
-    user_edit
-    |> Map.take(@profile_fields)
+    Map.take(user_edit, @profile_fields)
   end
 
   def create(user, profile) do
@@ -44,9 +42,7 @@ defmodule Systems.Account.UserProfileEditModel do
       |> Map.take(@user_fields)
       |> Map.put(:user_id, user.id)
 
-    profile_opts =
-      profile
-      |> Map.take(@profile_fields)
+    profile_opts = Map.take(profile, @profile_fields)
 
     opts =
       %{}

@@ -1,4 +1,5 @@
 defmodule Systems.Onyx.BrowserViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Annotation
@@ -25,6 +26,7 @@ defmodule Systems.Onyx.BrowserViewBuilder do
       |> Enum.reverse()
       |> Enum.take(@max_history_count)
       |> Enum.reverse()
+      # Make sure to include all filters if no active filters are set
       |> Enum.map(&map_to_card(&1, :tertiary))
 
     view_model(model, @filter_keys[module], history_cards, assigns)
@@ -37,10 +39,11 @@ defmodule Systems.Onyx.BrowserViewBuilder do
         %{entities: entities, history: history, query: query} = assigns
       )
       when is_list(filter_keys) do
-    active_filters = Map.get(assigns, :active_filters, []) |> Enum.map(&String.to_existing_atom/1)
+    active_filters =
+      assigns |> Map.get(:active_filters, []) |> Enum.map(&String.to_existing_atom/1)
+
     filters = Enum.map(filter_keys, &map_to_filter(&1, Enum.member?(active_filters, &1)))
 
-    # Make sure to include all filters if no active filters are set
     model_filters =
       case active_filters do
         [] -> filter_keys
@@ -48,7 +51,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
       end
 
     cards =
-      get_models(model_filters, entities, model)
+      model_filters
+      |> get_models(entities, model)
       |> Enum.filter(fn model ->
         matches_query?(model, query)
       end)
@@ -59,7 +63,7 @@ defmodule Systems.Onyx.BrowserViewBuilder do
       history_count: Enum.count(history),
       history_cards: history_cards,
       card_count: Enum.count(cards),
-      cards: cards |> Enum.take(@max_card_count),
+      cards: Enum.take(cards, @max_card_count),
       entities: entities
     }
   end
@@ -107,7 +111,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
   end
 
   defp get_models(:concept, _entities, %Annotation.Model{} = model) do
-    Ontology.Element.flatten(model)
+    model
+    |> Ontology.Element.flatten()
     |> Enum.filter(fn %module{} -> module == Ontology.ConceptModel end)
     |> Enum.uniq_by(& &1.id)
   end
@@ -121,7 +126,8 @@ defmodule Systems.Onyx.BrowserViewBuilder do
   end
 
   defp get_models(:predicate, _entities, %Annotation.Model{} = model) do
-    Ontology.Element.flatten(model)
+    model
+    |> Ontology.Element.flatten()
     |> Enum.filter(fn %module{} -> module == Ontology.PredicateModel end)
     |> Enum.uniq_by(& &1.id)
   end

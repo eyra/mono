@@ -7,9 +7,10 @@ defmodule Core.SSOHelpers do
   error handling across SurfConext, Google Sign In, Sign In with Apple, etc.
   """
 
-  import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
   use Gettext, backend: CoreWeb.Gettext
   use CoreWeb, :verified_routes
+
+  import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
 
   @doc """
   Handles SSO registration result, redirecting to signin with error flash on failure.
@@ -33,7 +34,8 @@ defmodule Core.SSOHelpers do
   def handle_registration_error(conn, changeset) do
     errors = collect_errors(changeset)
 
-    Enum.reduce(errors, conn, fn message, conn ->
+    errors
+    |> Enum.reduce(conn, fn message, conn ->
       put_flash(conn, :error, message)
     end)
     |> redirect(to: ~p"/user/signin")

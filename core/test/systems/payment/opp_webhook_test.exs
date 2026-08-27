@@ -1,35 +1,36 @@
 defmodule Systems.Payment.Provider.OPP.WebhookTest do
   use ExUnit.Case, async: true
 
-  @moduletag :capture_log
-
-  alias Systems.Payment.Provider.OPP.Webhook
   alias Systems.Payment.Error
+  alias Systems.Payment.Provider.OPP
+  alias Systems.Payment.Provider.OPP.Webhook
+
+  @moduletag :capture_log
 
   @secret Faker.String.base64(32)
   @host Faker.Internet.domain_name()
   @date "Mon, 09 Mar 2026 12-00-00 GMT"
 
   setup do
-    original = Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    original = Application.get_env(:core, OPP, [])
 
     Application.put_env(
       :core,
-      Systems.Payment.Provider.OPP,
+      OPP,
       Keyword.put(original, :notification_secret, @secret)
     )
 
-    on_exit(fn -> Application.put_env(:core, Systems.Payment.Provider.OPP, original) end)
+    on_exit(fn -> Application.put_env(:core, OPP, original) end)
     :ok
   end
 
   defp build_signed_conn(body) do
-    digest = "SHA-256=" <> (:crypto.hash(:sha256, body) |> Base.encode64())
+    digest = "SHA-256=" <> (:sha256 |> :crypto.hash(body) |> Base.encode64())
 
     signing_string =
       "(request-target): post #{"/webhook"}\nhost: #{@host}\ndate: #{@date}\ndigest: #{digest}"
 
-    signature = :crypto.mac(:hmac, :sha256, @secret, signing_string) |> Base.encode64()
+    signature = :hmac |> :crypto.mac(:sha256, @secret, signing_string) |> Base.encode64()
 
     signature_header =
       "keyId=\"test\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date digest\",signature=\"#{signature}\""
@@ -170,10 +171,10 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
   describe "verify_and_parse/1 signature verification" do
     test "rejects invalid signature" do
       body = valid_event_body()
-      digest = "SHA-256=" <> (:crypto.hash(:sha256, body) |> Base.encode64())
+      digest = "SHA-256=" <> (:sha256 |> :crypto.hash(body) |> Base.encode64())
 
       signature_header =
-        "keyId=\"test\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date digest\",signature=\"invalidsig\""
+        ~s{keyId="test",algorithm="hmac-sha256",headers="(request-target) host date digest",signature="invalidsig"}
 
       conn = Plug.Test.conn(:post, "/webhook", body)
 
@@ -203,7 +204,7 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
 
     test "rejects missing signature header" do
       body = valid_event_body()
-      digest = "SHA-256=" <> (:crypto.hash(:sha256, body) |> Base.encode64())
+      digest = "SHA-256=" <> (:sha256 |> :crypto.hash(body) |> Base.encode64())
 
       conn = Plug.Test.conn(:post, "/webhook", body)
 

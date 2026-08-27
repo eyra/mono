@@ -1,7 +1,8 @@
 defmodule Systems.Account.ProfileViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
   alias Frameworks.Concept.LiveContext
@@ -17,7 +18,7 @@ defmodule Systems.Account.ProfileViewTest do
 
   describe "rendering" do
     test "renders profile view with title and form", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
@@ -36,7 +37,7 @@ defmodule Systems.Account.ProfileViewTest do
       assert html =~ "Profile"
 
       # Should render form elements
-      assert view |> has_element?("[data-testid='profile-view']")
+      assert has_element?(view, "[data-testid='profile-view']")
 
       # Should render name inputs
       assert html =~ "fullname"
@@ -47,7 +48,7 @@ defmodule Systems.Account.ProfileViewTest do
     end
 
     test "renders signout button", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
@@ -69,7 +70,7 @@ defmodule Systems.Account.ProfileViewTest do
 
   describe "form interactions" do
     test "saves fullname on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
@@ -85,15 +86,15 @@ defmodule Systems.Account.ProfileViewTest do
       {:ok, view, _html} = live_isolated(conn, Account.ProfileView, session: session)
 
       # Submit name change
-      view |> render_change("save", %{"user_profile_edit_model" => %{"fullname" => "New Name"}})
+      render_change(view, "save", %{"user_profile_edit_model" => %{"fullname" => "New Name"}})
 
       # Verify it was saved
-      profile = Account.Public.get_profile(user) |> Repo.reload!()
+      profile = user |> Account.Public.get_profile() |> Repo.reload!()
       assert profile.fullname == "New Name"
     end
 
     test "saves displayname on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
@@ -109,8 +110,7 @@ defmodule Systems.Account.ProfileViewTest do
       {:ok, view, _html} = live_isolated(conn, Account.ProfileView, session: session)
 
       # Submit displayname change
-      view
-      |> render_change("save", %{"user_profile_edit_model" => %{"displayname" => "NewDisplay"}})
+      render_change(view, "save", %{"user_profile_edit_model" => %{"displayname" => "NewDisplay"}})
 
       # Verify it was saved - displayname is stored on the user, not the profile
       updated_user = Account.Public.get_user!(user.id)
@@ -122,7 +122,7 @@ defmodule Systems.Account.ProfileViewTest do
     test "shows title field for creator users", %{conn: conn} do
       creator = Factories.insert!(:member, %{creator: true})
 
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{
@@ -142,7 +142,7 @@ defmodule Systems.Account.ProfileViewTest do
     end
 
     test "hides title field for non-creator users", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account")
+      conn = Map.put(conn, :request_path, "/user/account")
 
       live_context =
         LiveContext.new(%{

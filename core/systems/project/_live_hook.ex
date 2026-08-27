@@ -7,18 +7,19 @@ defmodule Systems.Project.LiveHook do
 
   @impl true
   def mount(_live_view_module, _params, _session, socket) do
+    model = Map.get(socket.assigns, :model, nil)
+
     branch =
-      with model <- Map.get(socket.assigns, :model, nil),
-           false <- model == nil,
+      with false <- model == nil,
            false <- Concept.Leaf.impl_for(model) == nil,
-           item <- Project.Public.get_item_by(model),
-           false <- item == nil,
-           node <- Project.Public.get_node_by_item!(item) do
+           item = Project.Public.get_item_by(model),
+           false <- item == nil do
+        node = Project.Public.get_node_by_item!(item)
         %Project.Branch{node_id: node.id, item_id: item.id}
       else
         _ -> nil
       end
 
-    {:cont, socket |> assign(branch: branch)}
+    {:cont, assign(socket, branch: branch)}
   end
 end

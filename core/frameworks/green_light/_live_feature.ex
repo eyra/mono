@@ -1,4 +1,5 @@
 defmodule Frameworks.GreenLight.LiveFeature do
+  @moduledoc false
   @callback get_authorization_context(
               Phoenix.LiveView.unsigned_params() | :not_mounted_at_router,
               session :: map,

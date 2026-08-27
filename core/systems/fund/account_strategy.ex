@@ -1,20 +1,19 @@
 defmodule Systems.Fund.AccountStrategy do
+  @moduledoc false
   @behaviour Systems.Bookkeeping.AccountStrategy
 
-  require Logger
+  alias Systems.Bookkeeping
+  alias Systems.Fund
 
-  alias Systems.{
-    Bookkeeping,
-    Fund
-  }
+  require Logger
 
   @accounts %{
     fund: "F",
     wallet: "W"
   }
-  @account_map Enum.map(@accounts, fn {k, v} -> {v, k} end) |> Enum.into(%{})
+  @account_map Map.new(@accounts, fn {k, v} -> {v, k} end)
 
-  @account_patterns Map.keys(@account_map) |> Enum.join("|")
+  @account_patterns @account_map |> Map.keys() |> Enum.join("|")
   @description_re Regex.compile!("(#{@account_patterns})\\s*(\\d+)\\s*\\/\\s*(\\w+)")
 
   def encode(account) do

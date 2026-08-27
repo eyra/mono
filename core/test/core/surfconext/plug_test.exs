@@ -1,4 +1,5 @@
 defmodule Core.SurfConext.FakeOIDC do
+  @moduledoc false
   def callback(config, _params) do
     sub = Keyword.get(config, :sub, "test")
     token = Keyword.get(config, :token, "test-token")
@@ -53,8 +54,10 @@ end
 
 defmodule Core.SurfConext.AuthorizePlug.Test do
   use ExUnit.Case, async: false
-  import Plug.Test
+
   import Plug.Conn
+  import Plug.Test
+
   alias Core.SurfConext.AuthorizePlug
 
   describe "call/1" do
@@ -70,7 +73,8 @@ defmodule Core.SurfConext.AuthorizePlug.Test do
       )
 
       conn =
-        conn(:get, "/auth/surfconext/callback")
+        :get
+        |> conn("/auth/surfconext/callback")
         |> init_test_session(%{})
         |> AuthorizePlug.call(:test)
 
@@ -84,6 +88,8 @@ end
 
 defmodule Core.SurfConext.CallbackController.Test do
   use CoreWeb.ConnCase, async: false
+
+  alias Systems.Account.Public
 
   setup do
     conf = Application.get_env(:core, Core.SurfConext, [])
@@ -104,21 +110,19 @@ defmodule Core.SurfConext.CallbackController.Test do
 
     Application.put_env(:core, Core.SurfConext, test_conf)
 
-    conn =
-      CoreWeb.ConnCase.build_conn()
-      |> init_test_session(%{surfconext: %{state: "test-state"}})
+    conn = init_test_session(CoreWeb.ConnCase.build_conn(), %{surfconext: %{state: "test-state"}})
 
     {:ok, conn: conn, conf: test_conf}
   end
 
   describe "authenticate/1" do
     test "creates a user", %{conn: conn} do
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
 
       assert [user] = Core.Repo.all(Systems.Account.User)
       assert user.verified_at == nil
-      assert user.confirmed_at != nil
+      assert user.confirmed_at
       assert user.creator == true
     end
 
@@ -133,7 +137,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -149,7 +153,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -165,7 +169,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, Keyword.put(conf, :email, email))
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/project"
     end
 
@@ -177,7 +181,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
     end
 
@@ -189,7 +193,7 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
     end
 
@@ -211,9 +215,9 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
 
-      user = Systems.Account.Public.get_user_by_email(email)
+      user = Public.get_user_by_email(email)
       surfconext_user = Core.SurfConext.get(user)
 
       assert redirected_to(conn) == "/project"
@@ -234,14 +238,14 @@ defmodule Core.SurfConext.CallbackController.Test do
 
       Application.put_env(:core, Core.SurfConext, conf)
 
-      conn = conn |> get("/auth/surfconext/callback")
+      conn = get(conn, "/auth/surfconext/callback")
 
       assert redirected_to(conn) == "/project"
 
       # Satellite is now attached to the existing user; identity is unchanged.
-      reloaded = Systems.Account.Public.get_user!(existing.id)
+      reloaded = Public.get_user!(existing.id)
       assert reloaded.email == existing_email
-      assert Core.SurfConext.get(reloaded) != nil
+      assert Core.SurfConext.get(reloaded)
     end
 
     test "redirects to signin and logs error when session is missing" do

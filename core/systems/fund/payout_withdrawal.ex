@@ -13,15 +13,15 @@ defmodule Systems.Fund.PayoutWithdrawal do
   re-issuing a leg and hoping it de-dupes, it asks the provider what actually
   happened and acts on that.
   """
-  require Logger
-
-  alias Core.Repo
-  alias Systems.Account
   import Ecto.Query
 
+  alias Core.Repo
   alias Ecto.Multi
+  alias Systems.Account
   alias Systems.Fund
   alias Systems.Payment
+
+  require Logger
 
   @doc """
   Issue the withdrawal for a payout whose funds are already on the participant's
@@ -84,9 +84,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
   # the row and re-reading it fresh means the loser dispatches on the phase the
   # winner advanced it to — usually a no-op — not a stale one.
   defp resume_locked(repo, id) do
-    payout =
-      from(p in Fund.PayoutModel, where: p.id == ^id, lock: "FOR UPDATE")
-      |> repo.one!()
+    payout = repo.one!(from(p in Fund.PayoutModel, where: p.id == ^id, lock: "FOR UPDATE"))
 
     resume_by_phase(Fund.PayoutModel.phase(payout), payout)
   end
@@ -251,5 +249,5 @@ defmodule Systems.Fund.PayoutWithdrawal do
     end
   end
 
-  defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+  defp now, do: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 end

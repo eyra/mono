@@ -1,10 +1,8 @@
 defmodule Systems.Lab.DayListItemModelTest do
   use Core.DataCase, async: true
-  alias Core.Factories
 
-  alias Systems.{
-    Lab
-  }
+  alias Core.Factories
+  alias Systems.Lab
 
   describe "parse/1" do
     test "1 time slot" do

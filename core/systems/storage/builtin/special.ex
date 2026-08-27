@@ -1,4 +1,5 @@
 defmodule Systems.Storage.BuiltIn.Special do
+  @moduledoc false
   @callback store(
               folder :: binary(),
               identifier :: list(tuple()),

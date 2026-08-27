@@ -1,14 +1,10 @@
 defmodule Systems.Document.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Document
-  }
+  alias Systems.Document
 
-  def view_model(
-        %Document.ToolModel{id: id},
-        _assigns
-      ) do
+  def view_model(%Document.ToolModel{id: id}, _assigns) do
     %{
       id: id,
       title: dgettext("eyra-document", "content.title"),

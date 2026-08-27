@@ -1,6 +1,7 @@
 defmodule Systems.Content.TextBundleInput do
   @moduledoc false
   use CoreWeb, :html
+
   import Frameworks.Pixel.Form
 
   attr(:form, :any)

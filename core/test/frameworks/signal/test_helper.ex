@@ -1,4 +1,5 @@
 defmodule Frameworks.Signal.TestHelper do
+  @moduledoc false
   import ExUnit.Assertions
 
   @doc """

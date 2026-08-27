@@ -1,5 +1,6 @@
 defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
   use Core.DataCase
+
   alias Systems.Zircon.Screening.PaperSetViewBuilder
 
   describe "view_model/2 basic functionality" do
@@ -13,7 +14,7 @@ defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
       assert result.page_count == 0
       assert result.page == []
       assert result.show_action_bar? == false
-      assert result.search_bar != nil
+      assert result.search_bar
     end
 
     test "creates view model with papers" do

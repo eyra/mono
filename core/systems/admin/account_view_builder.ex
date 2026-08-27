@@ -56,7 +56,8 @@ defmodule Systems.Admin.AccountViewBuilder do
   end
 
   defp filter_user_list(active_filters, query) do
-    Account.Public.list_users([:profile])
+    [:profile]
+    |> Account.Public.list_users()
     |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
     |> filter_users(active_filters, build_filter_index(active_filters))
     |> filter_users(query)
@@ -104,8 +105,7 @@ defmodule Systems.Admin.AccountViewBuilder do
   defp matches_filter?(user, filter, _index) when is_atom(filter),
     do: matches_filter?(user, filter)
 
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :verified),
-    do: verified_at != nil
+  defp matches_filter?(%Account.User{verified_at: verified_at}, :verified), do: verified_at != nil
 
   defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified),
     do: verified_at == nil
@@ -119,8 +119,7 @@ defmodule Systems.Admin.AccountViewBuilder do
 
   defp matches?(_user, []), do: true
 
-  defp matches?(user, [term | rest]),
-    do: matches_word?(user, term) and matches?(user, rest)
+  defp matches?(user, [term | rest]), do: matches_word?(user, term) and matches?(user, rest)
 
   defp matches_word?(_user, ""), do: true
 

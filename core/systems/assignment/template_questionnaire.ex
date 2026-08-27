@@ -1,14 +1,14 @@
 defmodule Systems.Assignment.TemplateQuestionnaire do
+  @moduledoc false
+  alias Frameworks.Builder
   alias Systems.Assignment
   alias Systems.Workflow
-  alias Frameworks.Builder
 
   defstruct [:id]
 
   defimpl Assignment.Template do
     use Gettext, backend: CoreWeb.Gettext
     use Core.FeatureFlags
-    alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)
 
@@ -67,8 +67,7 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
 
     def currency(_t), do: :EUR
 
-    def runtime_config(_t),
-      do: %Assignment.RuntimeConfig{pool: :panl}
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{pool: :panl}
 
     def workflow_config(_t),
       do: %Workflow.Config{

@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Private do
+  @moduledoc false
   require Logger
 
   def merge(_redirect_url, _user_info, extra_query \\ %{})
@@ -19,11 +20,11 @@ defmodule Systems.Affiliate.Private do
   end
 
   def merge_query(%URI{query: nil} = url, %{} = query) do
-    merge_query(%URI{url | query: ""}, query)
+    merge_query(%{url | query: ""}, query)
   end
 
   def merge_query(%URI{query: old_query} = url, %{} = query) do
-    %URI{
+    %{
       url
       | query:
           old_query

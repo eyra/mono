@@ -51,12 +51,12 @@ defmodule Frameworks.Pixel.SelectorTest.View do
 
   @impl true
   def handle_event("active_item_id", %{active_item_id: id}, socket) do
-    {:noreply, socket |> assign(:active_item_id, id)}
+    {:noreply, assign(socket, :active_item_id, id)}
   end
 
   @impl true
   def handle_event("active_item_ids", %{active_item_ids: ids}, socket) do
-    {:noreply, socket |> assign(:active_item_ids, ids)}
+    {:noreply, assign(socket, :active_item_ids, ids)}
   end
 
   @impl true
@@ -67,6 +67,7 @@ end
 
 defmodule Frameworks.Pixel.SelectorTest do
   use CoreWeb.ConnCase
+
   import Phoenix.LiveViewTest
 
   alias Frameworks.Pixel.SelectorTest.View

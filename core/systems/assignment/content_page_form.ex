@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.ContentPageForm do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel
@@ -42,11 +43,11 @@ defmodule Systems.Assignment.ContentPageForm do
         %{assigns: %{assignment: %{page_refs: page_refs}, page_key: page_key}} = socket
       ) do
     page_ref = Enum.find(page_refs, &(&1.key == page_key))
-    socket |> assign(page_ref: page_ref)
+    assign(socket, page_ref: page_ref)
   end
 
   def update_status(%{assigns: %{confirming_status_off: true}} = socket) do
-    socket |> assign(status: :off)
+    assign(socket, status: :off)
   end
 
   def update_status(%{assigns: %{page_ref: page_ref}} = socket) do
@@ -57,16 +58,11 @@ defmodule Systems.Assignment.ContentPageForm do
         :off
       end
 
-    socket |> assign(status: status)
+    assign(socket, status: status)
   end
 
   @impl true
-  def compose(:switch, %{
-        opt_in?: opt_in?,
-        on_text: on_text,
-        off_text: off_text,
-        status: status
-      }) do
+  def compose(:switch, %{opt_in?: opt_in?, on_text: on_text, off_text: off_text, status: status}) do
     %{
       module: Pixel.Switch,
       params: %{
@@ -124,7 +120,10 @@ defmodule Systems.Assignment.ContentPageForm do
 
   @impl true
   def handle_event("update", %{status: :off}, socket) do
-    if socket.assigns.page_ref.page.body != nil do
+    if socket.assigns.page_ref.page.body == nil do
+      {:ok, _} = Assignment.Public.delete_page_ref(socket.assigns.page_ref)
+      {:noreply, socket}
+    else
       {
         :noreply,
         socket
@@ -132,9 +131,6 @@ defmodule Systems.Assignment.ContentPageForm do
         |> compose_child(:confirmation_modal)
         |> show_modal(:confirmation_modal, :compact)
       }
-    else
-      {:ok, _} = Assignment.Public.delete_page_ref(socket.assigns.page_ref)
-      {:noreply, socket}
     end
   end
 

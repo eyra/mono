@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.LandingPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   def view_model(%{info: info}, _assigns) do

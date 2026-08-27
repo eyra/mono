@@ -17,8 +17,8 @@ defmodule Systems.Pool.AssemblyTest do
                director: :citizen
              } = pool
 
-      assert pool.currency != nil
-      assert pool.org != nil
+      assert pool.currency
+      assert pool.org
     end
 
     test "returns existing PANL pool when it exists" do

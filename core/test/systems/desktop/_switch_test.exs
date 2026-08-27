@@ -9,6 +9,7 @@ defmodule Systems.Desktop.SwitchTest do
 
   alias Core.Factories
   alias CoreWeb.Endpoint
+  alias Phoenix.Socket.Broadcast
   alias Systems.Desktop
 
   describe "intercept/2" do
@@ -27,7 +28,7 @@ defmodule Systems.Desktop.SwitchTest do
           %{user: user, from_pid: self()}
         )
 
-      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+      assert_receive %Broadcast{topic: ^topic, event: "observation"}
     end
 
     test "{:next_action, :cleared} broadcasts a Desktop.Page observation",
@@ -38,7 +39,7 @@ defmodule Systems.Desktop.SwitchTest do
           %{user: user, from_pid: self()}
         )
 
-      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+      assert_receive %Broadcast{topic: ^topic, event: "observation"}
     end
   end
 end

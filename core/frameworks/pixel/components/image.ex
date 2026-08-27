@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Image do
+  @moduledoc false
   use CoreWeb, :pixel
 
   attr(:id, :any, required: true)

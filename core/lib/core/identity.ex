@@ -56,7 +56,7 @@ defmodule Core.Identity do
         ) :: {:ok, result()} | {:error, Ecto.Changeset.t()}
   def authenticate(provider, userinfo, register_overrides \\ %{})
       when is_atom(provider) and is_map(userinfo) and is_map(register_overrides) do
-    attrs = provider.user_attrs(userinfo) |> Map.merge(register_overrides)
+    attrs = userinfo |> provider.user_attrs() |> Map.merge(register_overrides)
 
     with {:ok, user, first_time?} <- find_or_register(attrs),
          {:ok, _satellite} <- upsert_satellite(provider, user, userinfo) do

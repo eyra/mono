@@ -5,6 +5,7 @@ defmodule Frameworks.GreenLight.LiveHook do
   use Frameworks.Concept.LiveHook
   use Core, :auth
   use CoreWeb, :verified_routes
+
   require Logger
 
   @impl true

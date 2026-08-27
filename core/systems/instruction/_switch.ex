@@ -1,13 +1,11 @@
 defmodule Systems.Instruction.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Systems.Instruction
 
   @impl true
-  def intercept(
-        {:content_page, _} = signal,
-        %{content_page: content_page} = message
-      ) do
+  def intercept({:content_page, _} = signal, %{content_page: content_page} = message) do
     if tool =
          Instruction.Public.get_tool_by(
            content_page,
@@ -15,7 +13,7 @@ defmodule Systems.Instruction.Switch do
          ) do
       dispatch!(
         {:instruction_tool, signal},
-        Map.merge(message, %{instruction_tool: tool})
+        Map.put(message, :instruction_tool, tool)
       )
     end
 
@@ -34,7 +32,7 @@ defmodule Systems.Instruction.Switch do
          ) do
       dispatch!(
         {:instruction_asset, signal},
-        Map.merge(message, %{instruction_asset: asset})
+        Map.put(message, :instruction_asset, asset)
       )
     end
 
@@ -50,7 +48,7 @@ defmodule Systems.Instruction.Switch do
 
     dispatch!(
       {:instruction_tool, signal},
-      Map.merge(message, %{instruction_tool: tool})
+      Map.put(message, :instruction_tool, tool)
     )
 
     :ok

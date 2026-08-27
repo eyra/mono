@@ -1,8 +1,9 @@
 defmodule Frameworks.Pixel.Empty do
+  @moduledoc false
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   attr(:title, :string, required: true)
   attr(:body, :string, required: true)

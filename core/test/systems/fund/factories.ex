@@ -1,4 +1,6 @@
 defmodule Systems.Fund.Factories do
+  @moduledoc false
+  alias Systems.Account.User
   alias Systems.Fund
 
   def create_currency(name, type, sign, decimal_scale) do
@@ -69,7 +71,7 @@ defmodule Systems.Fund.Factories do
     })
   end
 
-  def insert_pay_in!(%Fund.Model{id: fund_id}, %Systems.Account.User{id: user_id}) do
+  def insert_pay_in!(%Fund.Model{id: fund_id}, %User{id: user_id}) do
     %Fund.TransactionModel{}
     |> Fund.TransactionModel.changeset(%{
       transaction_id: "tx_#{System.unique_integer([:positive])}",
@@ -98,7 +100,7 @@ defmodule Systems.Fund.Factories do
   def create_wallet(user, currency, balance_credit \\ 0, balance_debit \\ 0)
 
   def create_wallet(
-        %Systems.Account.User{id: user_id},
+        %User{id: user_id},
         %Fund.CurrencyModel{} = currency,
         balance_credit,
         balance_debit

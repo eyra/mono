@@ -1,5 +1,6 @@
 defmodule Systems.Paper.RISParserStreamTest do
   use Core.DataCase
+
   alias Systems.Paper.RISParserStream
 
   describe "parse_stream/1" do
@@ -13,7 +14,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:ok, {attrs, _raw}} = hd(results)
@@ -42,13 +43,12 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 3
 
       titles =
-        results
-        |> Enum.map(fn {:ok, {attrs, _}} -> attrs.title end)
+        Enum.map(results, fn {:ok, {attrs, _}} -> attrs.title end)
 
       assert titles == ["First Article", "Second Article", "Third Paper"]
     end
@@ -63,7 +63,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       ]
 
       stream = Stream.map(chunks, & &1)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:ok, {attrs, _}} = hd(results)
@@ -85,7 +85,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:ok, {_attrs, _}} = hd(results)
@@ -101,7 +101,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:error, {error, _raw}} = hd(results)
@@ -116,7 +116,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:error, {error, _raw}} = hd(results)
@@ -125,7 +125,7 @@ defmodule Systems.Paper.RISParserStreamTest do
 
     test "handles empty stream" do
       stream = Stream.map([], & &1)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert results == []
     end
@@ -133,7 +133,7 @@ defmodule Systems.Paper.RISParserStreamTest do
     test "handles stream with only whitespace" do
       content = "   \n  \n   \n"
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert results == []
     end
@@ -144,7 +144,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       content = String.duplicate(record, 1000)
 
       stream = string_to_stream(content, chunk_size: 10_000)
-      results = RISParserStream.parse_stream(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream() |> Enum.to_list()
 
       assert length(results) == 1000
 
@@ -161,7 +161,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       binary_content = <<0xFF, 0xD8, 0xFF, 0xE0>> <> String.duplicate("A", 1000)
       stream = Stream.map([binary_content], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:error, {error_map, _raw}} = hd(results)
@@ -174,7 +174,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       invalid_content = <<0xFF, 0xFE, 0xFD>> <> "Some text"
       stream = Stream.map([invalid_content], & &1)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:error, {error_map, _raw}} = hd(results)
@@ -185,7 +185,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       content = "This is not a RIS file\nJust random text\n"
       stream = string_to_stream(content)
 
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:error, {error_map, _raw}} = hd(results)
@@ -200,7 +200,7 @@ defmodule Systems.Paper.RISParserStreamTest do
       """
 
       stream = string_to_stream(content)
-      results = RISParserStream.parse_stream_with_validation(stream) |> Enum.to_list()
+      results = stream |> RISParserStream.parse_stream_with_validation() |> Enum.to_list()
 
       assert length(results) == 1
       assert {:ok, {attrs, _}} = hd(results)

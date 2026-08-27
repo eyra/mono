@@ -28,7 +28,7 @@ defmodule CoreWeb.UI.ProgressBar do
   defp color(%{color: color}), do: "bg-#{color}"
 
   defp sort_by_size(bars) do
-    bars |> Enum.sort_by(& &1.size, :desc)
+    Enum.sort_by(bars, & &1.size, :desc)
   end
 
   attr(:size, :integer, default: 0)

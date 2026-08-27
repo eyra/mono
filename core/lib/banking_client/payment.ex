@@ -1,8 +1,10 @@
 defmodule BankingClient.Payment do
+  @moduledoc false
   use Ecto.Schema
-  @primary_key false
 
   alias BankingClient.PaymentAlias
+
+  @primary_key false
 
   embedded_schema do
     field(:amount_in_cents, :integer)

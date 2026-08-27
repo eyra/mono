@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Public do
+  @moduledoc false
   use Core, :public
 
   import Systems.Manual.Assembly, only: [create_next_chapter: 2, create_next_page: 2]
@@ -27,17 +28,20 @@ defmodule Systems.Manual.Public do
   Gets a manual by its id.
   """
   def get_manual!(id, preload \\ []) do
-    Repo.get!(Manual.Model, id)
+    Manual.Model
+    |> Repo.get!(id)
     |> Repo.preload(preload)
   end
 
   def get_chapter!(chapter_id, preload \\ []) do
-    Repo.get!(Manual.ChapterModel, chapter_id)
+    Manual.ChapterModel
+    |> Repo.get!(chapter_id)
     |> Repo.preload(preload)
   end
 
   def get_chapter_by_step(%Userflow.StepModel{id: step_id}) do
-    Manual.Queries.get_chapter_by_userflow_step(step_id)
+    step_id
+    |> Manual.Queries.get_chapter_by_userflow_step()
     |> Repo.one()
   end
 
@@ -67,7 +71,8 @@ defmodule Systems.Manual.Public do
   Gets all chapters in a manual.
   """
   def get_chapters(manual) do
-    Manual.Queries.get_chapters(manual.id)
+    manual.id
+    |> Manual.Queries.get_chapters()
     |> Repo.all()
   end
 
@@ -83,7 +88,8 @@ defmodule Systems.Manual.Public do
   """
 
   def get_page_by_step(%Userflow.StepModel{id: step_id}) do
-    Manual.Queries.get_page_by_userflow_step(step_id)
+    step_id
+    |> Manual.Queries.get_page_by_userflow_step()
     |> Repo.one()
   end
 

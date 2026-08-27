@@ -1,10 +1,12 @@
 defmodule Systems.Admin.ConfigPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.Live.Element
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
-  alias Systems.Fund
   alias Systems.Citizen
+  alias Systems.Fund
   alias Systems.Org
   alias Systems.Pool
 
@@ -45,21 +47,20 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   # System admins see all tabs
   defp create_tabs(%{is_admin?: true} = assigns) do
-    [:system, :account, :org, :actions]
-    |> Enum.map(&create_admin_tab(&1, assigns))
+    Enum.map([:system, :account, :org, :actions], &create_admin_tab(&1, assigns))
   end
 
   # Org admins see group tabs (e.g., Organisations)
   # Currently only Organisations group exists for non-admins
   defp create_tabs(%{governable_orgs: orgs} = assigns) when length(orgs) > 0 do
     # Show the Organisations group tab (same as admin :org tab)
+    # Admin tabs (system, account, org list, actions)
+
     [create_admin_tab(:org, assigns)]
   end
 
   # No access - return empty tabs
   defp create_tabs(_assigns), do: []
-
-  # Admin tabs (system, account, org list, actions)
 
   defp create_admin_tab(:system, %{live_context: context} = assigns) do
     child_context =
@@ -71,7 +72,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
       })
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "admin_system_view",
         Admin.SystemView,
         live_context: child_context
@@ -96,7 +97,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
       })
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "admin_account_view",
         Admin.AccountView,
         live_context: child_context
@@ -114,7 +115,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   defp create_admin_tab(:org, %{live_context: context}) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "admin_org_view",
         Admin.OrgView,
         live_context: context
@@ -132,7 +133,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   defp create_admin_tab(:actions, %{live_context: context}) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "admin_actions_view",
         Admin.ActionsView,
         live_context: context
@@ -140,6 +141,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
     %{
       id: :actions,
+      # Helper functions
       ready: false,
       show_errors: false,
       title: dgettext("eyra-admin", "actions.title"),
@@ -148,15 +150,12 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  # Helper functions
-
   defp get_bank_accounts do
     Fund.Public.list_bank_accounts(Fund.BankAccountModel.preload_graph(:full))
   end
 
   defp get_bank_account_items(%{locale: locale}) do
-    get_bank_accounts()
-    |> Enum.map(&to_view_model(&1, locale))
+    Enum.map(get_bank_accounts(), &to_view_model(&1, locale))
   end
 
   defp get_citizen_pools do
@@ -164,8 +163,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp get_citizen_pool_items(%{locale: locale}) do
-    get_citizen_pools()
-    |> Enum.map(&to_view_model(&1, locale))
+    Enum.map(get_citizen_pools(), &to_view_model(&1, locale))
   end
 
   defp to_view_model(
@@ -182,10 +180,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     }
   end
 
-  defp to_view_model(
-         %Pool.Model{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
+  defp to_view_model(%Pool.Model{id: id, name: name, icon: icon, currency: currency}, locale) do
     subtitle = Fund.CurrencyModel.title(currency, locale)
 
     %{

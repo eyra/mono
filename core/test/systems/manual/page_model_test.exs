@@ -16,7 +16,8 @@ defmodule Systems.Manual.PageModelTest do
       }
 
       changeset =
-        Manual.PageModel.changeset(%Manual.PageModel{}, attrs)
+        %Manual.PageModel{}
+        |> Manual.PageModel.changeset(attrs)
         |> put_assoc(:userflow_step, userflow_step)
         |> Manual.PageModel.validate()
 

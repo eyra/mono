@@ -24,6 +24,7 @@ defmodule CoreWeb.Validator.Plug do
   """
 
   alias Plug.Conn
+
   require Logger
 
   def init(opts), do: opts
@@ -41,7 +42,7 @@ defmodule CoreWeb.Validator.Plug do
 
       validations ->
         conn = Conn.fetch_query_params(conn)
-        errors = validations |> collect_errors(conn)
+        errors = collect_errors(validations, conn)
 
         if map_size(errors) > 0 do
           handle_validation_error(conn, errors, opts)

@@ -1,12 +1,12 @@
 defmodule Systems.Advert.SettingsView do
   use CoreWeb, :live_component_fabric
-  require Systems.Advert.Themes
 
   alias Frameworks.Pixel.AlertBanner
-
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Promotion
+
+  require Systems.Advert.Themes
 
   @impl true
   def update(%{advert: advert}, socket) do

@@ -1,4 +1,5 @@
 defmodule CoreWeb.LocalImageCatalogPlug do
+  @moduledoc false
   use Plug.Builder
 
   plug(Plug.Static,

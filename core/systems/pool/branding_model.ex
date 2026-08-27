@@ -4,6 +4,7 @@ defmodule Systems.Pool.BrandingModel do
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   @fields ~w(title description logo_url)a

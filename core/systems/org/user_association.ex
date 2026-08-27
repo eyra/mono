@@ -1,12 +1,11 @@
 defmodule Systems.Org.UserAssociation do
+  @moduledoc false
   use Ecto.Schema
+  use Systems.Org.Internals
+
   import Ecto.Changeset
 
   alias Systems.Account.User
-
-  use Systems.Org.{
-    Internals
-  }
 
   schema "org_users" do
     belongs_to(:org, Node)

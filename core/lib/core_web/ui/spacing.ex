@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Spacing do
+  @moduledoc false
   use CoreWeb, :ui
 
   defp spacing("XXL", "t"), do: "mt-16 lg:mt-24"

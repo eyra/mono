@@ -3,6 +3,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
   describe "view_model/2" do
@@ -20,7 +21,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
       assignment: assignment
     } do
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user
         })
 
@@ -32,13 +33,13 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
       vm = Assignment.CrewTaskSingleViewBuilder.view_model(assignment, assigns)
 
       # Should have work_item
-      assert vm.work_item != nil
+      assert vm.work_item
       {workflow_item, task} = vm.work_item
       assert workflow_item.title == "Test Task"
-      assert task.identifier != nil
+      assert task.identifier
 
       # Should have tool_view configured correctly
-      assert vm.tool_view != nil
+      assert vm.tool_view
       assert vm.tool_view.id == "tool_view"
       assert vm.tool_view.type == :live_view
       assert vm.tool_view.implementation == Systems.Alliance.ToolView
@@ -49,7 +50,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
       assignment: assignment
     } do
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user
         })
 
@@ -79,7 +80,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
 
       # User is not a participant, so build_work_items returns []
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user
         })
 

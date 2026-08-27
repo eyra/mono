@@ -23,13 +23,13 @@ defmodule Systems.Account.MerchantOrphanReconciliation do
   """
   import Ecto.Query
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Account
   alias Systems.Payment
   alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   @doc """
   Scans provider merchants created in the `[max_age_days, min_age_minutes]`
@@ -69,8 +69,7 @@ defmodule Systems.Account.MerchantOrphanReconciliation do
   end
 
   defp query_merchant_uids(uids) do
-    from(u in Account.User, where: u.merchant_uid in ^uids, select: u.merchant_uid)
-    |> Repo.all()
+    Repo.all(from(u in Account.User, where: u.merchant_uid in ^uids, select: u.merchant_uid))
   end
 
   defp check_one(%{uid: uid} = merchant, known, state) do

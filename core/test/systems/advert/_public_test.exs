@@ -1,16 +1,18 @@
 defmodule Systems.Advert.PublicTest do
   use Core.DataCase
+
   import Systems.Fund.TestHelper
 
+  alias Systems.Assignment.Public
+
   describe "assignments" do
+    alias Core.Factories
+    alias CoreWeb.UI.Timestamp
     alias Systems.Advert
     alias Systems.Assignment
-    alias Systems.Crew
     alias Systems.Bookkeeping
+    alias Systems.Crew
     alias Systems.Fund
-
-    alias CoreWeb.UI.Timestamp
-    alias Core.Factories
 
     setup do
       currency = Fund.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -49,7 +51,7 @@ defmodule Systems.Advert.PublicTest do
       fund: fund,
       user: user
     } do
-      schedule_end = yesterday() |> Timestamp.format_user_input_date()
+      schedule_end = Timestamp.format_user_input_date(yesterday())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(user, :accepted, 1, fund, nil, schedule_end)
@@ -65,8 +67,8 @@ defmodule Systems.Advert.PublicTest do
       fund: fund,
       user: user
     } do
-      schedule_start = tomorrow() |> Timestamp.format_user_input_date()
-      schedule_end = next_week() |> Timestamp.format_user_input_date()
+      schedule_start = Timestamp.format_user_input_date(tomorrow())
+      schedule_end = Timestamp.format_user_input_date(next_week())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(
@@ -102,7 +104,7 @@ defmodule Systems.Advert.PublicTest do
       fund: fund,
       user: user
     } do
-      schedule_end = yesterday() |> Timestamp.format_user_input_date()
+      schedule_end = Timestamp.format_user_input_date(yesterday())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(user, :accepted, 1, fund, nil, schedule_end)
@@ -118,8 +120,8 @@ defmodule Systems.Advert.PublicTest do
       fund: fund,
       user: user
     } do
-      schedule_start = tomorrow() |> Timestamp.format_user_input_date()
-      schedule_end = next_week() |> Timestamp.format_user_input_date()
+      schedule_start = Timestamp.format_user_input_date(tomorrow())
+      schedule_end = Timestamp.format_user_input_date(next_week())
 
       %{assignment: %{crew: crew}} =
         Advert.Factories.create_advert(
@@ -262,24 +264,28 @@ defmodule Systems.Advert.PublicTest do
                Bookkeeping.Public.balance({:wallet, "fake_currency", participant2.id})
     end
 
-    defp yesterday() do
+    defp yesterday do
       Advert.Factories.timestamp(-24 * 60)
     end
 
-    defp tomorrow() do
+    # Fill the single subject slot, mimicking one completed participant.
+    defp tomorrow do
       Advert.Factories.timestamp(24 * 60)
     end
 
-    defp next_week() do
+    # Regression: FX#10029220671. A researcher/tester added to the crew for
+    # preview must not occupy a paid participant spot. With 2 subject slots +
+    # 1 real participant + 1 tester, the advert must stay :visible.
+    defp next_week do
       Advert.Factories.timestamp(7 * 24 * 60)
     end
   end
 
   describe "pool_visibility" do
+    alias Core.Factories
     alias Systems.Advert
     alias Systems.Crew
     alias Systems.Fund
-    alias Core.Factories
 
     setup do
       currency = Fund.Factories.create_currency("vis_currency", :legal, "ƒ", 2)
@@ -302,7 +308,7 @@ defmodule Systems.Advert.PublicTest do
 
     test "is :invisible when the advert is not online", %{currency: currency, user: user} do
       fund = Fund.Factories.create_fund("draft", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> reload()
+      advert = user |> Advert.Factories.create_advert(:accepted, 1, fund) |> reload()
 
       assert advert.status != :online
       assert Advert.Public.pool_visibility(advert) == nil
@@ -313,14 +319,14 @@ defmodule Systems.Advert.PublicTest do
       user: user
     } do
       fund = Fund.Factories.create_fund("funded", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+      advert = user |> Advert.Factories.create_advert(:accepted, 1, fund) |> online()
 
       assert Advert.Public.pool_visibility(advert) == :visible
     end
 
     test "is :not_funded when online and the fund is empty", %{currency: currency, user: user} do
       fund = Fund.Factories.create_fund("empty", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+      advert = user |> Advert.Factories.create_advert(:accepted, 1, fund) |> online()
       empty_fund(advert)
 
       assert Advert.Public.pool_visibility(reload(advert)) == :not_funded
@@ -331,7 +337,7 @@ defmodule Systems.Advert.PublicTest do
       user: user
     } do
       fund = Fund.Factories.create_fund("free", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
+      advert = user |> Advert.Factories.create_advert(:accepted, 1, fund) |> online()
 
       advert.submission
       |> Ecto.Changeset.change(%{reward_value: 0})
@@ -347,30 +353,25 @@ defmodule Systems.Advert.PublicTest do
       user: user
     } do
       fund = Fund.Factories.create_fund("filled", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online()
-
-      # Fill the single subject slot, mimicking one completed participant.
+      advert = user |> Advert.Factories.create_advert(:accepted, 1, fund) |> online()
       participant = Factories.insert!(:member)
-      Systems.Assignment.Public.add_participant!(advert.assignment, participant)
+      Public.add_participant!(advert.assignment, participant)
 
       assert Advert.Public.pool_visibility(reload(advert)) == :filled
     end
 
-    # Regression: FX#10029220671. A researcher/tester added to the crew for
-    # preview must not occupy a paid participant spot. With 2 subject slots +
-    # 1 real participant + 1 tester, the advert must stay :visible.
     test "stays :visible when a tester joins the crew alongside a real participant", %{
       currency: currency,
       user: user
     } do
       fund = Fund.Factories.create_fund("mixed_members", currency)
-      advert = Advert.Factories.create_advert(user, :accepted, 2, fund) |> online()
+      advert = user |> Advert.Factories.create_advert(:accepted, 2, fund) |> online()
 
       tester = Factories.insert!(:member)
       Crew.Factories.create_member(advert.assignment.crew, tester)
 
       participant = Factories.insert!(:member)
-      Systems.Assignment.Public.add_participant!(advert.assignment, participant)
+      Public.add_participant!(advert.assignment, participant)
 
       assert Advert.Public.pool_visibility(reload(advert)) == :visible
     end
@@ -380,7 +381,8 @@ defmodule Systems.Advert.PublicTest do
       fund = Fund.Factories.create_fund("scheduled", currency)
 
       advert =
-        Advert.Factories.create_advert(user, :accepted, 1, fund, "2099-01-01", nil)
+        user
+        |> Advert.Factories.create_advert(:accepted, 1, fund, "2099-01-01", nil)
         |> online()
 
       assert Advert.Public.pool_visibility(reload(advert)) == nil

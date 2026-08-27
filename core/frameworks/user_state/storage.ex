@@ -5,13 +5,15 @@ defmodule Frameworks.UserState.Storage do
   Defines the contract for storing and retrieving user state key/value pairs.
   """
 
+  alias Phoenix.LiveView.Socket
+
   @doc """
   Saves a key/value pair to storage.
 
   Returns the socket with any necessary side effects applied (e.g., push_event).
   """
-  @callback save(socket :: Phoenix.LiveView.Socket.t(), key :: String.t(), value :: any()) ::
-              Phoenix.LiveView.Socket.t()
+  @callback save(socket :: Socket.t(), key :: String.t(), value :: any()) ::
+              Socket.t()
 
   @doc """
   Returns the configured storage backend module.

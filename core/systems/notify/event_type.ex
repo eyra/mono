@@ -36,7 +36,8 @@ defmodule Systems.Notify.EventType do
 
   defp build do
     notifiers =
-      Application.get_env(:core, Systems.Notify, [])
+      :core
+      |> Application.get_env(Systems.Notify, [])
       |> Keyword.get(:notifiers, [])
 
     registry =

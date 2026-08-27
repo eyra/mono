@@ -2,13 +2,12 @@ defmodule Systems.Project.NodePageGridView do
   use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Empty
+
+  alias Frameworks.Concept
   alias Frameworks.Pixel.Grid
+  alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Assignment
   alias Systems.NextAction
-  alias Systems.Project
-
-  alias Frameworks.Utility.ViewModelBuilder
-  alias Frameworks.Concept
   alias Systems.Project
 
   @impl true
@@ -25,8 +24,7 @@ defmodule Systems.Project.NodePageGridView do
         %{assigns: %{node: %{id: id, name: name, items: node_items}, user: user} = assigns} =
           socket
       ) do
-    socket
-    |> assign(%{
+    assign(socket, %{
       id: id,
       title: name,
       breadcrumbs: breadcrumbs(id),
@@ -66,10 +64,7 @@ defmodule Systems.Project.NodePageGridView do
   defp item_feature_enabled?(_), do: true
 
   @impl true
-  def compose(
-        :create_item_view,
-        %{node: node, user: user}
-      ) do
+  def compose(:create_item_view, %{node: node, user: user}) do
     %{
       module: Project.CreateItemView,
       params: %{node: node, user: user}
@@ -131,7 +126,7 @@ defmodule Systems.Project.NodePageGridView do
 
   @impl true
   def handle_event("saved", %{source: %{name: modal_view}}, socket) do
-    {:noreply, socket |> hide_modal(modal_view)}
+    {:noreply, hide_modal(socket, modal_view)}
   end
 
   @impl true

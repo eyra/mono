@@ -7,8 +7,8 @@ defmodule Systems.Affiliate.Controller do
 
   import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
-  alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Assignment
   alias Systems.Rate
 
   require Logger
@@ -52,7 +52,8 @@ defmodule Systems.Affiliate.Controller do
 
   defp generate_participant_id do
     random =
-      :crypto.strong_rand_bytes(6)
+      6
+      |> :crypto.strong_rand_bytes()
       |> Base.url_encode64(padding: false)
 
     "R_#{random}"
@@ -246,6 +247,7 @@ defmodule Systems.Affiliate.Controller do
       "Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}"
     )
 
+    # Param Mappings
     conn
   end
 
@@ -266,7 +268,7 @@ defmodule Systems.Affiliate.Controller do
       participant: participant
     }
 
-    conn |> put_session(:panel_info, panel_info)
+    put_session(conn, :panel_info, panel_info)
   end
 
   defp add_panel_info_for_participant(conn, params, affiliate, affiliate_user) do
@@ -282,14 +284,11 @@ defmodule Systems.Affiliate.Controller do
     end
   end
 
-  # Param Mappings
-
   defp get_participant(%{"p" => participant}), do: participant
 
   defp get_participant(_), do: nil
 
   defp strip_query_string(params) do
-    params
-    |> Map.delete("sqid")
+    Map.delete(params, "sqid")
   end
 end

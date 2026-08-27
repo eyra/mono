@@ -45,7 +45,9 @@ defmodule CoreWeb.Layouts.Workspace.Composer do
   # - Actions: action bar
   defp live_nest_setup do
     quote do
-      def get_menus_config(),
+      import CoreWeb.Layouts.Workspace.Html
+
+      def get_menus_config,
         do: {
           :workspace_menu_builder,
           [
@@ -64,23 +66,23 @@ defmodule CoreWeb.Layouts.Workspace.Composer do
       on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
       on_mount({Systems.Project.LiveHook, __MODULE__})
+      # Fabric setup - includes all hooks
       on_mount({Systems.Observatory.LiveHook, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Actions, __MODULE__})
 
-      import CoreWeb.Layouts.Workspace.Html
-
       @impl true
       def handle_info({:handle_auto_save_done, _}, socket) do
-        {:noreply, socket |> update_menus()}
+        {:noreply, update_menus(socket)}
       end
     end
   end
 
-  # Fabric setup - includes all hooks
   defp fabric_setup do
     quote do
-      def get_menus_config(),
+      import CoreWeb.Layouts.Workspace.Html
+
+      def get_menus_config,
         do: {
           :workspace_menu_builder,
           [
@@ -105,11 +107,9 @@ defmodule CoreWeb.Layouts.Workspace.Composer do
       on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
       on_mount({CoreWeb.Live.Hook.Actions, __MODULE__})
 
-      import CoreWeb.Layouts.Workspace.Html
-
       @impl true
       def handle_info({:handle_auto_save_done, _}, socket) do
-        {:noreply, socket |> update_menus()}
+        {:noreply, update_menus(socket)}
       end
     end
   end

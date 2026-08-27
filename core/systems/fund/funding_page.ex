@@ -1,15 +1,17 @@
 defmodule Systems.Fund.FundingPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Line
   import Systems.Fund.BalanceView
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square
-  alias Systems.Fund
-  alias Systems.Bookkeeping
+  alias Frameworks.Pixel.Text
   alias Systems.Advert
+  alias Systems.Bookkeeping
+  alias Systems.Fund
+  alias Systems.Fund.Form
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
@@ -33,7 +35,7 @@ defmodule Systems.Fund.FundingPage do
   @impl true
   def compose(:create_fund_form, %{user: user, locale: locale}) do
     %{
-      module: Systems.Fund.Form,
+      module: Form,
       params: %{
         fund: nil,
         user: user,
@@ -45,7 +47,7 @@ defmodule Systems.Fund.FundingPage do
   @impl true
   def compose(:edit_fund_form, %{selected_fund: selected_fund, user: user, locale: locale}) do
     %{
-      module: Systems.Fund.Form,
+      module: Form,
       params: %{
         fund: selected_fund,
         user: user,
@@ -63,7 +65,7 @@ defmodule Systems.Fund.FundingPage do
   end
 
   defp update_adverts(%{assigns: %{selected_fund: nil}} = socket) do
-    socket |> assign(advert_items: [])
+    assign(socket, advert_items: [])
   end
 
   defp update_adverts(%{assigns: %{selected_fund: selected_fund} = assigns} = socket) do
@@ -72,7 +74,7 @@ defmodule Systems.Fund.FundingPage do
       |> Advert.Public.list_by_fund(Advert.Model.preload_graph(:down))
       |> Enum.map(&to_content_list_item(&1, assigns))
 
-    socket |> assign(advert_items: advert_items)
+    assign(socket, advert_items: advert_items)
   end
 
   defp to_content_list_item(advert, assigns) do
@@ -81,30 +83,31 @@ defmodule Systems.Fund.FundingPage do
 
   defp update_funds(%{assigns: %{current_user: user}} = socket) do
     funds =
-      Fund.Public.list_owned(user, [
+      user
+      |> Fund.Public.list_owned([
         :available,
         :pending,
         currency: Fund.CurrencyModel.preload_graph(:full)
       ])
       |> Enum.filter(&(&1.currency.type == :legal))
 
-    socket |> assign(funds: funds)
+    assign(socket, funds: funds)
   end
 
   defp update_selected_fund(%{assigns: %{funds: funds, selected_fund: nil}} = socket) do
     fund = List.first(funds)
-    socket |> assign(selected_fund: fund)
+    assign(socket, selected_fund: fund)
   end
 
   defp update_selected_fund(
          %{assigns: %{funds: funds, selected_fund: %{id: selected_id}}} = socket
        ) do
     fund = Enum.find(funds, &(&1.id == selected_id))
-    socket |> assign(selected_fund: fund)
+    assign(socket, selected_fund: fund)
   end
 
   defp update_balance(%{assigns: %{selected_fund: nil}} = socket) do
-    socket |> assign(balance: nil)
+    assign(socket, balance: nil)
   end
 
   defp update_balance(
@@ -133,14 +136,14 @@ defmodule Systems.Fund.FundingPage do
       }
     }
 
-    socket |> assign(balance: balance)
+    assign(socket, balance: balance)
   end
 
+  # Events
   defp update_squares(
-         %{assigns: %{funds: funds, selected_fund: selected_fund, locale: locale}} =
-           socket
+         %{assigns: %{funds: funds, selected_fund: selected_fund, locale: locale}} = socket
        ) do
-    socket |> assign(squares: Enum.map(funds, &to_square(&1, selected_fund, locale)))
+    assign(socket, squares: Enum.map(funds, &to_square(&1, selected_fund, locale)))
   end
 
   defp to_square(
@@ -167,8 +170,6 @@ defmodule Systems.Fund.FundingPage do
       state: state
     }
   end
-
-  # Events
 
   @impl true
   def handle_event("create_fund", _, socket) do
@@ -201,12 +202,8 @@ defmodule Systems.Fund.FundingPage do
   end
 
   @impl true
-  def handle_event(
-        "select_fund",
-        %{"item" => fund_id},
-        %{assigns: %{funds: funds}} = socket
-      ) do
-    selected_fund = funds |> Enum.find(&(&1.id == String.to_integer(fund_id)))
+  def handle_event("select_fund", %{"item" => fund_id}, %{assigns: %{funds: funds}} = socket) do
+    selected_fund = Enum.find(funds, &(&1.id == String.to_integer(fund_id)))
 
     {
       :noreply,
@@ -232,11 +229,7 @@ defmodule Systems.Fund.FundingPage do
   end
 
   @impl true
-  def handle_event(
-        "fund_saved",
-        %{source: %{name: modal_id, module: Systems.Fund.Form}},
-        socket
-      ) do
+  def handle_event("fund_saved", %{source: %{name: modal_id, module: Form}}, socket) do
     {
       :noreply,
       socket
@@ -252,14 +245,13 @@ defmodule Systems.Fund.FundingPage do
   def handle_event("fund_cancelled", %{source: %{name: modal_id}}, socket) do
     {
       :noreply,
-      socket
-      |> Fabric.ModalController.hide_modal(modal_id)
+      Fabric.ModalController.hide_modal(socket, modal_id)
     }
   end
 
   @impl true
   def handle_event("deposit_cancelled", %{source: %{name: modal_id}}, socket) do
-    {:noreply, socket |> Fabric.ModalController.hide_modal(modal_id)}
+    {:noreply, Fabric.ModalController.hide_modal(socket, modal_id)}
   end
 
   @impl true

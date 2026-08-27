@@ -31,15 +31,15 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     researcher =
       Factories.insert!(:member, %{
         password: researcher_password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 
     participant =
       Factories.insert!(:member, %{
         password: participant_password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: false
       })
 
@@ -120,8 +120,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     # so retry on StaleReferenceError until the click goes through. Then
     # confirm we landed on the advert page by waiting for its publish button.
     retry_stale do
-      researcher_session
-      |> click(Query.css("[data-testid='goto-advert-button']"))
+      click(researcher_session, Query.css("[data-testid='goto-advert-button']"))
     end
 
     # Publish the advert

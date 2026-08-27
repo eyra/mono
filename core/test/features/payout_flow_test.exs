@@ -70,16 +70,16 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     researcher =
       Factories.insert!(:member, %{
         password: researcher_password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 
     participant =
       Factories.insert!(:member, %{
         password: participant_password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: false,
         merchant_uid: merchant_uid
       })

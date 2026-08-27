@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Assembly do
+  @moduledoc false
   alias Core.Repo
   alias Systems.Storage
 

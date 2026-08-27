@@ -1,7 +1,9 @@
 defmodule Systems.Payment.Provider.OPP.HTTP do
-  require Logger
-
+  @moduledoc false
   alias Systems.Payment.Error
+  alias Systems.Payment.Provider.OPP
+
+  require Logger
 
   @timeout 10_000
   @recv_timeout 30_000
@@ -94,10 +96,10 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   end
 
   defp base_url do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:base_url)
+    :core |> Application.fetch_env!(OPP) |> Keyword.fetch!(:base_url)
   end
 
   defp api_key do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:api_key)
+    :core |> Application.fetch_env!(OPP) |> Keyword.fetch!(:api_key)
   end
 end

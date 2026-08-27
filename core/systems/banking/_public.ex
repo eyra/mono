@@ -1,10 +1,10 @@
 defmodule Systems.Banking.Public do
+  @moduledoc false
   use Core, :public
-  require Logger
 
-  alias Systems.{
-    Banking
-  }
+  alias Systems.Banking
+
+  require Logger
 
   @spec submit_payment(
           payment :: %{
@@ -53,8 +53,7 @@ defmodule Systems.Banking.Public do
   end
 
   def is_live?(currency) when is_binary(currency) do
-    Banking.Supervisor.currencies()
-    |> Enum.member?(currency)
+    Enum.member?(Banking.Supervisor.currencies(), currency)
   end
 
   def backend do

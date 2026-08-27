@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.LeaderboardContentPage do
+  @moduledoc false
   use Systems.Content.Composer, :management_page
 
   alias Systems.Graphite
@@ -23,8 +24,7 @@ defmodule Systems.Graphite.LeaderboardContentPage do
 
     {
       :ok,
-      socket
-      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
+      assign(socket, initial_tab: initial_tab, tabbar_id: tabbar_id)
     }
   end
 

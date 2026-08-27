@@ -1,17 +1,11 @@
 defmodule Systems.Graphite.LeaderboardSubmissionsForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Frameworks.Pixel.Text
 
   @impl true
-  def update(
-        %{
-          id: id,
-          leaderboard: leaderboard,
-          submissions: submissions
-        },
-        socket
-      ) do
+  def update(%{id: id, leaderboard: leaderboard, submissions: submissions}, socket) do
     {
       :ok,
       socket

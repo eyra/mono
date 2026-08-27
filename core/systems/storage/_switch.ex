@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Systems.Storage
@@ -13,17 +14,14 @@ defmodule Systems.Storage.Switch do
 
     dispatch!(
       {:storage_endpoint, signal},
-      Map.merge(message, %{storage_endpoint: storage_endpoint})
+      Map.put(message, :storage_endpoint, storage_endpoint)
     )
 
     :ok
   end
 
   @impl true
-  def intercept({:storage_endpoint, _}, %{
-        storage_endpoint: storage_endpoint,
-        from_pid: from_pid
-      }) do
+  def intercept({:storage_endpoint, _}, %{storage_endpoint: storage_endpoint, from_pid: from_pid}) do
     update_page(Storage.EndpointContentPage, storage_endpoint, from_pid)
     :ok
   end

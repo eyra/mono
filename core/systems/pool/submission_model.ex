@@ -7,11 +7,8 @@ defmodule Systems.Pool.SubmissionModel do
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Pool
-  }
-
   alias CoreWeb.UI.Timestamp
+  alias Systems.Pool
 
   schema "pool_submissions" do
     field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
@@ -50,11 +47,13 @@ defmodule Systems.Pool.SubmissionModel do
 
   defp validate_schedule(changeset, start_field, end_field) do
     start_date =
-      get_field(changeset, start_field)
+      changeset
+      |> get_field(start_field)
       |> Timestamp.parse_user_input_date()
 
     end_date =
-      get_field(changeset, end_field)
+      changeset
+      |> get_field(end_field)
       |> Timestamp.parse_user_input_date()
 
     case {start_date, end_date} do
@@ -74,13 +73,11 @@ defmodule Systems.Pool.SubmissionModel do
   end
 
   def changeset(submission, pool_id) when is_integer(pool_id) do
-    submission
-    |> cast(%{pool_id: pool_id}, [:pool_id])
+    cast(submission, %{pool_id: pool_id}, [:pool_id])
   end
 
   def changeset(submission, attrs) do
-    submission
-    |> cast(attrs, @fields)
+    cast(submission, attrs, @fields)
   end
 
   def schedule_ended?(%{schedule_end: schedule_end}) do
@@ -107,7 +104,8 @@ defmodule Systems.Pool.SubmissionModel do
   defp past?(nil), do: false
 
   defp past?(schedule_end) do
-    Timestamp.parse_user_input_date(schedule_end)
+    schedule_end
+    |> Timestamp.parse_user_input_date()
     # add one day to include the end date
     |> Timex.shift(days: 1)
     |> Timestamp.past?()

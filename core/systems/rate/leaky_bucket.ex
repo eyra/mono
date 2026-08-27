@@ -1,4 +1,5 @@
 defmodule Systems.Rate.LeakyBucket do
+  @moduledoc false
   @type t :: %__MODULE__{
           level: number,
           capacity: number,

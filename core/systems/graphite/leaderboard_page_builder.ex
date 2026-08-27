@@ -1,7 +1,7 @@
 defmodule Systems.Graphite.LeaderboardPageBuilder do
+  @moduledoc false
   use Core, :auth
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
 
   alias CoreWeb.UI.Timestamp
@@ -52,12 +52,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   end
 
   defp highlights(leaderboard) do
-    [
-      :submissions,
-      :generated_on,
-      :visibility
-    ]
-    |> Enum.map(&highlight(leaderboard, &1))
+    Enum.map([:submissions, :generated_on, :visibility], &highlight(leaderboard, &1))
   end
 
   defp highlight(%Graphite.LeaderboardModel{tool: %{submissions: submissions}}, :submissions) do
@@ -161,7 +156,8 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
   defp anonymize(string, _), do: string
 
   defp participants(%Graphite.LeaderboardModel{} = leaderboard) do
-    Graphite.Public.get_participants(leaderboard)
+    leaderboard
+    |> Graphite.Public.get_participants()
     |> Enum.reduce(%{}, fn participant, acc ->
       Map.put(acc, participant.id, User.label(participant))
     end)

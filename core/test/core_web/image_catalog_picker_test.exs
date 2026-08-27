@@ -40,12 +40,13 @@ defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
 
   @impl true
   def handle_event("set_image_id", %{"image_id" => image_id}, socket) do
-    {:noreply, socket |> assign(:image_id, image_id)}
+    {:noreply, assign(socket, :image_id, image_id)}
   end
 end
 
 defmodule Frameworks.Pixel.ImageCatalogPicker.Test do
   use CoreWeb.ConnCase
+
   import Phoenix.LiveViewTest
 
   setup do

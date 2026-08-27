@@ -7,6 +7,7 @@ defmodule Systems.Admin.SwitchTest do
   use Core.DataCase, async: false
 
   alias CoreWeb.Endpoint
+  alias Phoenix.Socket.Broadcast
   alias Systems.Admin
 
   describe "intercept/2" do
@@ -20,14 +21,14 @@ defmodule Systems.Admin.SwitchTest do
          %{topic: topic} do
       :ok = Admin.Switch.intercept({:next_action, :created}, %{from_pid: self()})
 
-      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+      assert_receive %Broadcast{topic: ^topic, event: "observation"}
     end
 
     test "{:next_action, :cleared} broadcasts an Admin.OrgView observation",
          %{topic: topic} do
       :ok = Admin.Switch.intercept({:next_action, :cleared}, %{from_pid: self()})
 
-      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+      assert_receive %Broadcast{topic: ^topic, event: "observation"}
     end
   end
 end

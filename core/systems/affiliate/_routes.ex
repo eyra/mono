@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/a", Systems.Affiliate do

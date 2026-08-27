@@ -9,12 +9,12 @@ defmodule Systems.Fund.PayoutReconciliation do
   """
   import Ecto.Query
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   @min_age_minutes 60
   @max_age_days 7
@@ -27,24 +27,26 @@ defmodule Systems.Fund.PayoutReconciliation do
     min_age = Keyword.get(opts, :min_age_minutes, @min_age_minutes)
     max_age = Keyword.get(opts, :max_age_days, @max_age_days)
 
-    scan_payouts(min_age, max_age)
+    min_age
+    |> scan_payouts(max_age)
     |> Enum.reduce(state, &reconcile_payout/2)
   end
 
   defp scan_payouts(min_age_minutes, max_age_days) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     age_cutoff = NaiveDateTime.add(now, -min_age_minutes * 60, :second)
     lookback_cutoff = NaiveDateTime.add(now, -max_age_days * 24 * 60 * 60, :second)
 
     # A :failed payout whose funds moved (:withdrawal_retryable) is still open;
     # one that moved nothing already released its lock and is terminal.
-    from(p in Fund.PayoutModel,
-      where:
-        (p.status in [:pending, :completed] or
-           (p.status == :failed and not is_nil(p.funds_committed_at))) and
-          p.inserted_at < ^age_cutoff and p.inserted_at > ^lookback_cutoff
+    Repo.all(
+      from(p in Fund.PayoutModel,
+        where:
+          (p.status in [:pending, :completed] or
+             (p.status == :failed and not is_nil(p.funds_committed_at))) and
+            p.inserted_at < ^age_cutoff and p.inserted_at > ^lookback_cutoff
+      )
     )
-    |> Repo.all()
   end
 
   defp reconcile_payout(%Fund.PayoutModel{} = payout, state) do
@@ -108,8 +110,7 @@ defmodule Systems.Fund.PayoutReconciliation do
     end
   end
 
-  defp apply_status(state, _id, _uid, :completed, _withdrawal),
-    do: State.tally(state, :verified)
+  defp apply_status(state, _id, _uid, :completed, _withdrawal), do: State.tally(state, :verified)
 
   defp apply_status(state, id, uid, local_status, %{raw_status: raw_status} = withdrawal) do
     case resolve(uid, withdrawal) do

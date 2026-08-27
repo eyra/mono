@@ -19,7 +19,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
 
   defp policy_url(key), do: @policy_urls[key]
 
-  def dependencies(), do: [:user_id, :show_title]
+  def dependencies, do: [:user_id, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     Account.Public.get_user!(user_id)
@@ -28,8 +28,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
     {:ok,
-     socket
-     |> assign(
+     assign(socket,
        terms_accepted: false,
        terms_url: policy_url(:next_terms),
        privacy_url: policy_url(:next_privacy)
@@ -60,7 +59,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
       |> Account.User.confirm_changeset()
       |> Core.Repo.update()
 
-    {:noreply, socket |> publish_event(:terms_completed)}
+    {:noreply, publish_event(socket, :terms_completed)}
   end
 
   @impl true

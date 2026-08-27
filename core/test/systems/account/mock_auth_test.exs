@@ -1,5 +1,6 @@
 defmodule Systems.Account.MockAuthTest do
   use CoreWeb.ConnCase, async: false
+
   import Frameworks.Signal.TestHelper
 
   alias Core.Repo
@@ -11,7 +12,7 @@ defmodule Systems.Account.MockAuthTest do
     isolate_signals()
 
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+      :core |> Application.get_env(:account, []) |> Keyword.get(:auth_providers, [])
 
     on_exit(fn ->
       put_auth_providers(original_providers)
@@ -25,13 +26,13 @@ defmodule Systems.Account.MockAuthTest do
     Application.put_env(:core, :account, Keyword.put(account, :auth_providers, providers))
   end
 
-  defp enable_mock(), do: put_auth_providers([:mock])
-  defp disable_mock(), do: put_auth_providers([])
+  defp enable_mock, do: put_auth_providers([:mock])
+  defp disable_mock, do: put_auth_providers([])
 
-  defp insert_mock_user() do
+  defp insert_mock_user do
     Factories.insert!(:creator, %{
       email: "mock@example.com",
-      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     })
   end
 
@@ -50,13 +51,13 @@ defmodule Systems.Account.MockAuthTest do
   describe "InitiatorPlug" do
     test "redirects to callback when configured", %{conn: conn} do
       enable_mock()
-      conn = conn |> get("/auth/mock")
+      conn = get(conn, "/auth/mock")
       assert redirected_to(conn) == "/auth/mock/callback"
     end
 
     test "returns 404 when not configured", %{conn: conn} do
       disable_mock()
-      conn = conn |> get("/auth/mock")
+      conn = get(conn, "/auth/mock")
       assert conn.status == 404
     end
   end
@@ -68,14 +69,14 @@ defmodule Systems.Account.MockAuthTest do
       enable_mock()
       assert is_nil(Repo.get_by(User, email: "mock@example.com"))
 
-      conn = conn |> get("/auth/mock/callback")
+      conn = get(conn, "/auth/mock/callback")
 
       assert redirected_to(conn) == "/user/onboarding"
 
       user = Repo.get_by(User, email: "mock@example.com")
       assert user
       assert user.creator == true
-      assert user.verified_at != nil
+      assert user.verified_at
       assert user.confirmed_at == nil
     end
 
@@ -83,13 +84,13 @@ defmodule Systems.Account.MockAuthTest do
       enable_mock()
       insert_mock_user()
 
-      conn = conn |> get("/auth/mock/callback")
+      conn = get(conn, "/auth/mock/callback")
       assert redirected_to(conn) == "/project"
     end
 
     test "returns 404 when not configured", %{conn: conn} do
       disable_mock()
-      conn = conn |> get("/auth/mock/callback")
+      conn = get(conn, "/auth/mock/callback")
       assert conn.status == 404
     end
   end
@@ -100,7 +101,7 @@ defmodule Systems.Account.MockAuthTest do
       user = insert_mock_user()
       assert Repo.get(User, user.id)
 
-      conn = conn |> get("/user/auth/mock/reset")
+      conn = get(conn, "/user/auth/mock/reset")
 
       assert redirected_to(conn) == "/user/auth/identify/mock"
       refute Repo.get(User, user.id)
@@ -111,8 +112,7 @@ defmodule Systems.Account.MockAuthTest do
       user = insert_mock_user()
       assert Repo.get_by(FeaturesModel, user_id: user.id)
 
-      conn |> get("/user/auth/mock/reset")
-
+      get(conn, "/user/auth/mock/reset")
       refute Repo.get_by(FeaturesModel, user_id: user.id)
     end
 
@@ -120,13 +120,13 @@ defmodule Systems.Account.MockAuthTest do
       enable_mock()
       assert is_nil(Repo.get_by(User, email: "mock@example.com"))
 
-      conn = conn |> get("/user/auth/mock/reset")
+      conn = get(conn, "/user/auth/mock/reset")
       assert redirected_to(conn) == "/user/auth/identify/mock"
     end
 
     test "returns 404 when not configured", %{conn: conn} do
       disable_mock()
-      conn = conn |> get("/user/auth/mock/reset")
+      conn = get(conn, "/user/auth/mock/reset")
       assert conn.status == 404
     end
   end

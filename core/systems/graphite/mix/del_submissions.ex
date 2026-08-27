@@ -1,4 +1,5 @@
 defmodule Mix.Tasks.Core.Graphite.Del.Submissions do
+  @shortdoc "Remove Graphite submissions"
   @moduledoc """
   Remove Submissions generated with the generate submissions command.
 
@@ -9,7 +10,6 @@ defmodule Mix.Tasks.Core.Graphite.Del.Submissions do
 
   alias Systems.Graphite
 
-  @shortdoc "Remove Graphite submissions"
   def run(args) do
     Mix.Task.run("app.start")
 
@@ -24,7 +24,7 @@ defmodule Mix.Tasks.Core.Graphite.Del.Submissions do
     Graphite.Gen.delete_submissions(prefix)
   end
 
-  defp print_usage() do
+  defp print_usage do
     IO.puts("""
     Please provide a single argument: the prefix for the records to be removed.
     """)

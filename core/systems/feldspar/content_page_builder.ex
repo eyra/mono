@@ -1,14 +1,10 @@
 defmodule Systems.Feldspar.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Feldspar
-  }
+  alias Systems.Feldspar
 
-  def view_model(
-        %Feldspar.ToolModel{id: id},
-        _assigns
-      ) do
+  def view_model(%Feldspar.ToolModel{id: id}, _assigns) do
     %{
       id: id,
       title: dgettext("eyra-feldspar", "content.title"),

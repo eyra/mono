@@ -1,10 +1,15 @@
 defmodule Fabric.LiveComponent do
+  @moduledoc false
   defmodule RefModel do
+    @moduledoc false
     @type t :: %__MODULE__{id: atom() | binary(), name: atom() | binary(), module: atom()}
     defstruct [:id, :name, :module]
   end
 
+  # Sent from Fabric.ModalPresenter.handle_modal_closed/2 indicating this live component has been closed as a modal view.
+  # Notify the parent as the modal controller.
   defmodule Model do
+    @moduledoc false
     @type ref :: Fabric.LiveComponent.RefModel.t()
     @type params :: map()
     @type t :: %__MODULE__{ref: ref, params: params}
@@ -15,6 +20,7 @@ defmodule Fabric.LiveComponent do
     quote do
       use Phoenix.LiveComponent
       use Fabric
+
       import Fabric.ModalController
 
       @impl true
@@ -27,9 +33,7 @@ defmodule Fabric.LiveComponent do
             },
             %{assigns: %{fabric: fabric}} = socket
           ) do
-        # Sent from Fabric.ModalPresenter.handle_modal_closed/2 indicating this live component has been closed as a modal view.
-        # Notify the parent as the modal controller.
-        {:ok, socket |> send_event(:parent, :handle_modal_closed)}
+        {:ok, send_event(socket, :parent, :handle_modal_closed)}
       end
 
       @impl true
@@ -56,13 +60,13 @@ defmodule Fabric.LiveComponent do
       @impl true
       def update(%{id: _id, fabric: fabric} = params, %{assigns: %{fabric: _}} = socket) do
         # only assign fabric once
-        params = Map.drop(params, [:fabric])
+        params = Map.delete(params, :fabric)
         update(params, socket)
       end
 
       @impl true
       def update(%{id: id, fabric: fabric} = params, socket) do
-        params = Map.drop(params, [:fabric])
+        params = Map.delete(params, :fabric)
         socket = assign(socket, id: id, fabric: fabric)
         update(params, socket)
       end

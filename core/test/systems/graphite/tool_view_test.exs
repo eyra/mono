@@ -1,10 +1,12 @@
 defmodule Systems.Graphite.ToolViewTest do
   use CoreWeb.ConnCase, async: false
   use Gettext, backend: CoreWeb.Gettext
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Graphite
   alias Systems.Workflow
 
@@ -22,10 +24,10 @@ defmodule Systems.Graphite.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{graphite_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/graphite/tool")
+      conn = Map.put(conn, :request_path, "/graphite/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user,
           timezone: "UTC",
           tool_ref: tool_ref
@@ -47,10 +49,10 @@ defmodule Systems.Graphite.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{graphite_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/graphite/tool")
+      conn = Map.put(conn, :request_path, "/graphite/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user,
           timezone: "UTC",
           tool_ref: tool_ref
@@ -75,10 +77,10 @@ defmodule Systems.Graphite.ToolViewTest do
     end
 
     test "handles done event", %{conn: conn, user: user, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/graphite/tool")
+      conn = Map.put(conn, :request_path, "/graphite/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user,
           timezone: "UTC",
           tool_ref: tool_ref
@@ -89,17 +91,17 @@ defmodule Systems.Graphite.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Graphite.ToolView, session: session)
 
       # Send done event
-      html = view |> render_click("done")
+      html = render_click(view, "done")
 
       # Verify view still renders (event was handled without error)
       assert html =~ dgettext("eyra-graphite", "submission.title")
     end
 
     test "handles go_to_leaderboard event", %{conn: conn, user: user, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/graphite/tool")
+      conn = Map.put(conn, :request_path, "/graphite/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user,
           timezone: "UTC",
           tool_ref: tool_ref
@@ -110,7 +112,7 @@ defmodule Systems.Graphite.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Graphite.ToolView, session: session)
 
       # Send go_to_leaderboard event
-      html = view |> render_click("go_to_leaderboard")
+      html = render_click(view, "go_to_leaderboard")
 
       # Verify view still renders (event was handled without error)
       assert html =~ dgettext("eyra-graphite", "submission.title")
@@ -123,10 +125,10 @@ defmodule Systems.Graphite.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{graphite_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/graphite/tool")
+      conn = Map.put(conn, :request_path, "/graphite/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           current_user: user,
           timezone: "Europe/Amsterdam",
           tool_ref: tool_ref

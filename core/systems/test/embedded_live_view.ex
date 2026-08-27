@@ -7,7 +7,7 @@ defmodule Systems.Test.EmbeddedLiveView do
 
   alias Systems.Test
 
-  def dependencies(), do: [:vm]
+  def dependencies, do: [:vm]
 
   def get_model(:not_mounted_at_router, %{"vm" => vm}, _socket) do
     %Test.EmbeddedModel{

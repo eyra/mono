@@ -13,6 +13,7 @@ defmodule Systems.Pool.JoinConsentView do
   agreement, wrap `Systems.Consent.ClickWrapView` instead.
   """
   use CoreWeb.LiveForm
+
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   @impl true
@@ -44,7 +45,7 @@ defmodule Systems.Pool.JoinConsentView do
 
   @impl true
   def handle_event("accept", _payload, socket) do
-    {:noreply, socket |> publish_event(:accept)}
+    {:noreply, publish_event(socket, :accept)}
   end
 
   @impl true

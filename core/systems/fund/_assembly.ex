@@ -3,8 +3,8 @@ defmodule Systems.Fund.Assembly do
   Assembly module for creating and managing fund-related entities.
   """
   alias Core.Repo
-  alias Systems.Fund
   alias Systems.Content
+  alias Systems.Fund
 
   # Ledger enum (:EUR) and currency name ("euro") are different naming domains;
   # the mapping must be explicit, never derived by downcasing the atom.

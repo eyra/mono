@@ -1,4 +1,5 @@
 defmodule Systems.Payment.Provider do
+  @moduledoc false
   alias Systems.Payment.Error
   alias Systems.Payment.Transaction
 
@@ -12,9 +13,10 @@ defmodule Systems.Payment.Provider do
   everything past the cap, which reads as "nothing wrong" precisely when the
   provider holds more than we can walk.
   """
-  @type listing(object) :: {:ok, [object]} | {:truncated, [object]} | {:error, Error.t()}
 
   # Merchants
+
+  @type listing(object) :: {:ok, [object]} | {:truncated, [object]} | {:error, Error.t()}
 
   @type merchant :: %{
           uid: String.t(),
@@ -54,6 +56,8 @@ defmodule Systems.Payment.Provider do
   """
   @callback list_recent_merchants(since :: DateTime.t()) :: listing(merchant())
 
+  # Bank accounts
+
   @doc """
   Set (or add) a phone number on an existing merchant's primary contact,
   satisfying OPP's `contact.phonenumber.required` compliance requirement via the
@@ -62,8 +66,6 @@ defmodule Systems.Payment.Provider do
   """
   @callback add_merchant_phone(merchant_uid :: String.t(), phone :: String.t()) ::
               {:ok, merchant()} | {:error, Error.t()}
-
-  # Bank accounts
 
   @typedoc """
   Provider-agnostic bank-account (KYC) verification status. Each adapter maps its
@@ -99,13 +101,14 @@ defmodule Systems.Payment.Provider do
     * `is_default` - boolean
     * `reference` - free-form string (≤50 chars)
   """
+
+  # Transactions
+
   @callback create_bank_account(merchant_uid :: String.t(), attrs :: map()) ::
               {:ok, bank_account()} | {:error, Error.t()}
 
   @callback list_bank_accounts(merchant_uid :: String.t()) ::
               {:ok, [bank_account()]} | {:error, Error.t()}
-
-  # Transactions
 
   @typedoc """
   Provider-agnostic lifecycle status shared by transactions, withdrawals and
@@ -154,6 +157,9 @@ defmodule Systems.Payment.Provider do
     * `return_url` - redirect URL after payment completion
     * `notify_url` - webhook URL for transaction status updates
   """
+
+  # Withdrawals
+
   @callback create_transaction(request :: Transaction.Request.t()) ::
               {:ok, transaction()} | {:error, Error.t()}
   @callback get_transaction(uid :: String.t()) :: {:ok, transaction()} | {:error, Error.t()}
@@ -164,8 +170,6 @@ defmodule Systems.Payment.Provider do
   `list_recent_withdrawals/1` for why this is not anchored to local state.
   """
   @callback list_recent_transactions(since :: DateTime.t()) :: listing(transaction())
-
-  # Withdrawals
 
   @type withdrawal :: %{
           uid: String.t(),
@@ -200,6 +204,7 @@ defmodule Systems.Payment.Provider do
               {:ok, withdrawal()} | {:error, Error.t()}
   @callback get_withdrawal(uid :: String.t()) :: {:ok, withdrawal()} | {:error, Error.t()}
 
+  # Transfers
   @doc """
   Every withdrawal the provider holds for a merchant.
 
@@ -225,8 +230,6 @@ defmodule Systems.Payment.Provider do
   callers get a complete list, oldest-cutoff enforced, no pagination to thread.
   """
   @callback list_recent_withdrawals(since :: DateTime.t()) :: listing(withdrawal())
-
-  # Transfers
 
   @type transfer :: %{
           uid: String.t(),

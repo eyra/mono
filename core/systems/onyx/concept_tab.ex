@@ -1,4 +1,5 @@
 defmodule Systems.Onyx.ConceptTab do
+  @moduledoc false
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
   use CoreWeb.UI
@@ -6,7 +7,6 @@ defmodule Systems.Onyx.ConceptTab do
   use Frameworks.Signal.LiveFeature
 
   alias Frameworks.Pixel.Grid
-
   alias Systems.Onyx
 
   @impl true
@@ -29,7 +29,7 @@ defmodule Systems.Onyx.ConceptTab do
   end
 
   defp update_cards(%{assigns: %{concepts: concepts, depth: depth}} = socket) do
-    cards = concepts |> Enum.map(&Onyx.Private.map_to_card(&1, "concept_tab-#{depth}"))
+    cards = Enum.map(concepts, &Onyx.Private.map_to_card(&1, "concept_tab-#{depth}"))
     assign(socket, :cards, cards)
   end
 
@@ -49,7 +49,7 @@ defmodule Systems.Onyx.ConceptTab do
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true

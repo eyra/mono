@@ -59,8 +59,7 @@ defmodule Systems.Promotion.Model do
   def preload_graph(:auth_node), do: [auth_node: [:role_assignments]]
 
   def to_map(promotion) do
-    promotion
-    |> Map.take(@fields)
+    Map.take(promotion, @fields)
   end
 
   def changeset(promotion, :publish, params) do

@@ -1,12 +1,14 @@
 defmodule Systems.Alliance.SwitchTest do
   use Core.DataCase
+
   import Frameworks.Signal.TestHelper
 
   alias Systems.Alliance.Switch
+  alias Systems.Alliance.ToolView
 
   describe "alliance_tool events" do
     setup do
-      isolate_signals(except: [Systems.Alliance.Switch])
+      isolate_signals(except: [Switch])
 
       tool = Factories.insert!(:alliance_tool)
       %{tool: tool}
@@ -16,7 +18,7 @@ defmodule Systems.Alliance.SwitchTest do
       message = %{alliance_tool: tool, from_pid: self()}
       assert :ok = Switch.intercept({:alliance_tool, :updated}, message)
 
-      message = assert_signal_dispatched({:embedded_live_view, Systems.Alliance.ToolView})
+      message = assert_signal_dispatched({:embedded_live_view, ToolView})
       assert message.id == tool.id
       assert message.model.id == tool.id
       assert message.from_pid == self()
@@ -34,7 +36,7 @@ defmodule Systems.Alliance.SwitchTest do
     test "handles message without from_pid", %{tool: tool} do
       message = %{alliance_tool: tool}
       assert :ok = Switch.intercept({:alliance_tool, :updated}, message)
-      refute_signal_dispatched({:embedded_live_view, Systems.Alliance.ToolView})
+      refute_signal_dispatched({:embedded_live_view, ToolView})
     end
   end
 end

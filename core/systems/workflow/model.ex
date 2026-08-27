@@ -1,11 +1,12 @@
 defmodule Systems.Workflow.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.Workflow
   alias Systems.Assignment
+  alias Systems.Workflow
 
   schema "workflows" do
     has_many(:items, Workflow.ItemModel, foreign_key: :workflow_id)
@@ -23,11 +24,7 @@ defmodule Systems.Workflow.Model do
     |> validate_required(@required_fields)
   end
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :items
-      ])
+  def preload_graph(:down), do: preload_graph([:items])
 
   def preload_graph(:items), do: [items: Workflow.ItemModel.preload_graph(:down)]
 

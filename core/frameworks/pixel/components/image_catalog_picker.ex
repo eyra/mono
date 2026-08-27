@@ -1,13 +1,14 @@
 defmodule Frameworks.Pixel.ImageCatalogPicker do
+  @moduledoc false
   use CoreWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
-  import CoreWeb.UI.Dialog
   import CoreWeb.LiveDefaults
+  import CoreWeb.UI.Dialog
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Image
+  alias Frameworks.Pixel.Text
 
   defp gap(%{"width" => width}, :mobile) when width < 400, do: "gap-4"
   defp gap(%{"width" => width}, :mobile) when width < 500, do: "gap-8"
@@ -39,15 +40,15 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
         %{assigns: %{viewport: current_viewport}} = socket
       ) do
     socket =
-      if new_viewport != current_viewport do
+      if new_viewport == current_viewport do
+        socket
+      else
         socket
         |> assign(viewport: new_viewport)
         |> assign(breakpoint: new_breakpoint)
         |> assign(search_results: nil)
         |> assign(query: nil)
         |> assign(meta: nil)
-      else
-        socket
       end
 
     {
@@ -58,12 +59,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
 
   @impl true
   def update(
-        %{
-          id: id,
-          static_path: static_path,
-          image_catalog: image_catalog,
-          state: state
-        } = props,
+        %{id: id, static_path: static_path, image_catalog: image_catalog, state: state} = props,
         socket
       ) do
     {
@@ -83,12 +79,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
   end
 
   def update_state(%{} = socket, nil) do
-    socket
-    |> assign(
-      query: nil,
-      selected_page: 1,
-      selected_image: nil
-    )
+    assign(socket, query: nil, selected_page: 1, selected_image: nil)
   end
 
   def update_state(%{} = socket, %{
@@ -96,8 +87,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
         selected_page: selected_page,
         selected_image: selected_image
       }) do
-    socket
-    |> assign(
+    assign(socket,
       initial_query: query,
       query: query,
       selected_page: selected_page,
@@ -131,7 +121,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
   end
 
   defp update_title(socket) do
-    socket |> assign(:title, dgettext("eyra-imagecatalog", "search.image.title"))
+    assign(socket, :title, dgettext("eyra-imagecatalog", "search.image.title"))
   end
 
   defp update_buttons(%{assigns: %{myself: myself}} = socket) do
@@ -190,7 +180,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
 
   @impl true
   def handle_event("select_image", %{"image" => image_id}, socket) do
-    {:noreply, socket |> assign(selected_image: image_id)}
+    {:noreply, assign(socket, selected_image: image_id)}
   end
 
   defp search(
@@ -203,8 +193,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker do
     results = image_catalog.search_info(query, page, page_size, width: 400, height: 300)
 
     {:noreply,
-     socket
-     |> assign(
+     assign(socket,
        query: query,
        initial_query: query,
        search_results: results.images,

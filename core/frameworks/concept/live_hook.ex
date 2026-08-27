@@ -1,4 +1,5 @@
 defmodule Frameworks.Concept.LiveHook do
+  @moduledoc false
   @type live_view_module :: atom()
   @type params :: map()
   @type session :: map()
@@ -11,10 +12,10 @@ defmodule Frameworks.Concept.LiveHook do
     quote do
       @behaviour Frameworks.Concept.LiveHook
 
+      import Phoenix.Component, only: [assign: 2]
+
       import Phoenix.LiveView,
         only: [attach_hook: 4, connected?: 1, get_connect_params: 1, redirect: 2]
-
-      import Phoenix.Component, only: [assign: 2]
 
       def optional_apply(socket, live_view_module, function) do
         Frameworks.Utility.Module.optional_apply(live_view_module, function, [socket], socket)

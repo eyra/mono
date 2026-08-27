@@ -1,5 +1,6 @@
 defmodule Self.Bundle do
-  defp include?() do
+  @moduledoc false
+  defp include? do
     Application.fetch_env!(:core, :bundle) == :self
   end
 

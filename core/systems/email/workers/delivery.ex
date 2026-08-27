@@ -1,10 +1,10 @@
 defmodule Systems.Email.Delivery do
+  @moduledoc false
   use Oban.Worker, queue: :email_delivery
-  require Logger
 
-  alias Systems.{
-    Email
-  }
+  alias Systems.Email
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do

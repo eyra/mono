@@ -1,10 +1,11 @@
 defmodule Systems.Admin.AccountViewTest do
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
-  require LiveNest.Constants
-
   alias Systems.Admin
+
+  require LiveNest.Constants
 
   describe "AccountView" do
     setup do
@@ -13,43 +14,43 @@ defmodule Systems.Admin.AccountViewTest do
         Factories.insert!(:member, %{
           creator: true,
           verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       %{creator: creator}
     end
 
     test "renders account view with title", %{conn: conn} do
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Should render account view
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
 
       # Should show title
-      assert view |> has_element?("[data-testid='account-title']")
+      assert has_element?(view, "[data-testid='account-title']")
       assert html =~ "Users"
     end
 
     test "renders user list", %{conn: conn, creator: creator} do
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Should render user list
-      assert view |> has_element?("[data-testid='user-list']")
+      assert has_element?(view, "[data-testid='user-list']")
 
       # Should show the creator user
       assert html =~ creator.email
     end
 
     test "shows user count in title", %{conn: conn} do
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
@@ -60,17 +61,17 @@ defmodule Systems.Admin.AccountViewTest do
     end
 
     test "verify_creator event updates user", %{conn: conn, creator: creator} do
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Click verify button
-      view |> render_click("verify_creator", %{"item" => "#{creator.id}"})
+      render_click(view, "verify_creator", %{"item" => "#{creator.id}"})
 
       # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
     end
 
     test "make_creator event updates user", %{conn: conn} do
@@ -78,20 +79,20 @@ defmodule Systems.Admin.AccountViewTest do
       non_creator =
         Factories.insert!(:member, %{
           creator: false,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Click make_creator button
-      view |> render_click("make_creator", %{"item" => "#{non_creator.id}"})
+      render_click(view, "make_creator", %{"item" => "#{non_creator.id}"})
 
       # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
     end
 
     test "activate_user event updates user", %{conn: conn} do
@@ -102,17 +103,17 @@ defmodule Systems.Admin.AccountViewTest do
           confirmed_at: nil
         })
 
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Click activate button
-      view |> render_click("activate_user", %{"item" => "#{unconfirmed.id}"})
+      render_click(view, "activate_user", %{"item" => "#{unconfirmed.id}"})
 
       # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
     end
 
     test "unverify_creator event updates user", %{conn: conn, creator: creator} do
@@ -120,35 +121,35 @@ defmodule Systems.Admin.AccountViewTest do
       verified_creator =
         creator
         |> Ecto.Changeset.change(%{
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
         |> Core.Repo.update!()
 
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Click unverify button
-      view |> render_click("unverify_creator", %{"item" => "#{verified_creator.id}"})
+      render_click(view, "unverify_creator", %{"item" => "#{verified_creator.id}"})
 
       # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
     end
 
     test "deactivate_user event updates user", %{conn: conn, creator: creator} do
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
 
       session = %{}
 
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
 
       # Click deactivate button
-      view |> render_click("deactivate_user", %{"item" => "#{creator.id}"})
+      render_click(view, "deactivate_user", %{"item" => "#{creator.id}"})
 
       # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, "[data-testid='account-view']")
     end
 
     # Regression coverage for FX#9905883929 — Pixel.Selector emits parent
@@ -160,10 +161,10 @@ defmodule Systems.Admin.AccountViewTest do
       non_creator =
         Factories.insert!(:member, %{
           creator: false,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
       {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: %{})
 
       # Default filter is [:creator] — a non-creator should not be visible.
@@ -187,16 +188,16 @@ defmodule Systems.Admin.AccountViewTest do
       a_creator =
         Factories.insert!(:member, %{
           creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       other_creator =
         Factories.insert!(:member, %{
           creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
+      conn = Map.put(conn, :request_path, "/admin/accounts")
       {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: %{})
 
       assert html =~ a_creator.email

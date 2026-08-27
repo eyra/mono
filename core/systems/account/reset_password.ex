@@ -4,18 +4,18 @@ defmodule Systems.Account.ResetPassword do
   """
   use CoreWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
   alias Systems.Account
   alias Systems.Account.User
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
 
   @impl true
   def mount(_params, _session, socket) do
@@ -47,8 +47,7 @@ defmodule Systems.Account.ResetPassword do
 
         {
           :noreply,
-          socket
-          |> put_flash(:info, dgettext("eyra-user", "user.password_reset.flash"))
+          put_flash(socket, :info, dgettext("eyra-user", "user.password_reset.flash"))
         }
 
       changeset ->

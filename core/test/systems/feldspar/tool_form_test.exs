@@ -1,5 +1,6 @@
 defmodule Systems.Feldspar.ToolFormTest do
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Systems.Feldspar
@@ -26,7 +27,7 @@ defmodule Systems.Feldspar.ToolFormTest do
     test "two instances with different ids render without crashing", %{conn: conn} do
       tool1 = Factories.insert!(:feldspar_tool)
       tool2 = Factories.insert!(:feldspar_tool)
-      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      conn = Map.put(conn, :request_path, "/feldspar/tool_form")
 
       assert {:ok, _view, html} =
                live_isolated(conn, TwoToolFormsView,
@@ -39,7 +40,7 @@ defmodule Systems.Feldspar.ToolFormTest do
 
     test "each instance gets an upload key scoped to its id", %{conn: conn} do
       tool = Factories.insert!(:feldspar_tool)
-      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      conn = Map.put(conn, :request_path, "/feldspar/tool_form")
 
       # The file input name is derived from the upload key (file_<id>).
       # If the key were the global :file, the name would be "file" instead.

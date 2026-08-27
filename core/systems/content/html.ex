@@ -1,17 +1,18 @@
 defmodule Systems.Content.Html do
+  @moduledoc false
   use CoreWeb, :html
-  import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
-  import CoreWeb.Layouts.Website.Html, only: [website: 1]
+
   import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
+  import CoreWeb.Layouts.Website.Html, only: [website: 1]
+  import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
   import Frameworks.Pixel.Line
+
   alias Frameworks.Pixel.Breadcrumbs
   alias Frameworks.Pixel.ModalView
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Text
   alias Systems.Content.Adaptable
-
-  import Frameworks.Pixel.Line
 
   attr(:items, :list, required: true)
   attr(:target, :any, default: "")

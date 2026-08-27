@@ -4,12 +4,11 @@ defmodule Systems.Assignment.PaidSlotsHtml do
   All state and event handling live in the parent (ParticipantsView).
   """
   use CoreWeb, :html
-
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Tag
-  alias Frameworks.Pixel.Button
   alias Systems.Assignment.PaidSlotsLogic, as: Helpers
 
   attr(:entity, :map, required: true)

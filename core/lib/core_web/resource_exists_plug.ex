@@ -17,8 +17,9 @@ defmodule CoreWeb.ResourceExistsPlug do
       end
   """
 
-  import Plug.Conn
   use CoreWeb, :verified_routes
+
+  import Plug.Conn
 
   def init(opts), do: opts
 

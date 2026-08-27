@@ -1,12 +1,14 @@
 defmodule Systems.Rate.Public do
+  @moduledoc false
   use Core, :public
 
   defmodule RateLimitError do
+    @moduledoc false
     defexception [:message]
   end
 
   def request_permission(service, client_id, packet_size) when is_atom(service) do
-    request_permission(service |> Atom.to_string(), client_id, packet_size)
+    service |> Atom.to_string() |> request_permission(client_id, packet_size)
   end
 
   def request_permission(service, client_id, packet_size)

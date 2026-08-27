@@ -1,7 +1,7 @@
 defmodule Systems.Pool.PublicTest do
   use Core.DataCase
-  alias Core.Factories
 
+  alias Core.Factories
   alias Systems.Pool.Public
 
   setup do
@@ -148,7 +148,7 @@ defmodule Systems.Pool.PublicTest do
       assert :ok = Public.add_user_to_panl_pool(user)
 
       # Pool should now exist
-      assert Public.get_panl() != nil
+      assert Public.get_panl()
       assert Public.participant?(:panl, user)
     end
 

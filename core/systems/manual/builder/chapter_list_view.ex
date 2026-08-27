@@ -21,11 +21,11 @@ defmodule Systems.Manual.Builder.ChapterListView do
   end
 
   def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
-    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+    assign(socket, chapters: Enum.sort_by(chapters, & &1.userflow_step.order))
   end
 
   def update_chapters(socket) do
-    socket |> assign(chapters: [])
+    assign(socket, chapters: [])
   end
 
   def update_chapter_items(%{assigns: %{chapters: chapters}} = socket) do
@@ -34,7 +34,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
       |> Enum.with_index()
       |> Enum.map(&map_chapter_to_item/1)
 
-    socket |> assign(chapter_items: chapter_items)
+    assign(socket, chapter_items: chapter_items)
   end
 
   def map_chapter_to_item(
@@ -76,7 +76,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
       }
     }
 
-    socket |> assign(button: button)
+    assign(socket, button: button)
   end
 
   def handle_event("create_chapter", _params, %{assigns: %{manual: manual}} = socket) do
@@ -90,14 +90,14 @@ defmodule Systems.Manual.Builder.ChapterListView do
         %{assigns: %{chapters: chapters}} = socket
       ) do
     chapter =
-      Enum.find(chapters, fn chapter -> chapter.id == chapter_id |> String.to_integer() end)
+      Enum.find(chapters, fn chapter -> chapter.id == String.to_integer(chapter_id) end)
 
     Manual.Public.remove_chapter(chapter)
     {:noreply, socket}
   end
 
   def handle_event("select_chapter", %{"item" => chapter_id}, socket) do
-    {:noreply, socket |> send_event(:parent, "select_chapter", %{chapter_id: chapter_id})}
+    {:noreply, send_event(socket, :parent, "select_chapter", %{chapter_id: chapter_id})}
   end
 
   def handle_event(
@@ -106,7 +106,7 @@ defmodule Systems.Manual.Builder.ChapterListView do
         %{assigns: %{chapters: chapters}} = socket
       ) do
     chapter =
-      Enum.find(chapters, fn chapter -> chapter.id == chapter_id |> String.to_integer() end)
+      Enum.find(chapters, fn chapter -> chapter.id == String.to_integer(chapter_id) end)
 
     Manual.Public.move_chapter(chapter, :up)
     {:noreply, socket}

@@ -10,6 +10,7 @@ defmodule Systems.Payment.ReconciliationFindingModel do
   the identification instead.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Payment

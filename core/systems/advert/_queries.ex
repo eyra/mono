@@ -1,14 +1,15 @@
 defmodule Systems.Advert.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Advert
   alias Systems.Account
+  alias Systems.Advert
 
-  def advert_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def advert_query do
     from(Advert.Model, as: :advert)
   end
 

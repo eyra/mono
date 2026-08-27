@@ -1,4 +1,5 @@
 defmodule Systems.Test.ModalLiveViewBuilder do
+  @moduledoc false
   alias Frameworks.Pixel.ModalButton
   alias Systems.Test
 

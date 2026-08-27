@@ -1,8 +1,10 @@
 defmodule Systems.Account.FeaturesForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Core.Enums.Genders
-  alias Frameworks.Pixel.{Selector, Text}
+  alias Frameworks.Pixel.Selector
+  alias Frameworks.Pixel.Text
   alias Systems.Account
 
   @impl true
@@ -63,8 +65,7 @@ defmodule Systems.Account.FeaturesForm do
       ) do
     {
       :noreply,
-      socket
-      |> save_features(entity, :auto_save, %{to_string(field) => active_item_id})
+      save_features(socket, entity, :auto_save, %{to_string(field) => active_item_id})
     }
   end
 

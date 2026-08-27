@@ -1,4 +1,7 @@
 defmodule Frameworks.Pixel.ConfirmationModal do
+  # Optional custom confirm action (e.g. an http_get link to an external
+  # URL). Defaults to a "confirm" send event handled by the parent.
+  @moduledoc false
   use CoreWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
@@ -19,8 +22,9 @@ defmodule Frameworks.Pixel.ConfirmationModal do
       |> assign_new(:cancel_label, fn ->
         Map.get(assigns, :cancel_label, dgettext("eyra-ui", "cancel.button"))
       end)
-      # Optional custom confirm action (e.g. an http_get link to an external
-      # URL). Defaults to a "confirm" send event handled by the parent.
+
+      # Pass cancel_label: nil to render an info-only modal with just the confirm
+      # button (e.g. "OK — got it").
       |> assign_new(:confirm_action, fn -> Map.get(assigns, :confirm_action) end)
       |> update_buttons()
     }
@@ -42,8 +46,6 @@ defmodule Frameworks.Pixel.ConfirmationModal do
       testid: "confirmation-modal-confirm-button"
     }
 
-    # Pass cancel_label: nil to render an info-only modal with just the confirm
-    # button (e.g. "OK — got it").
     buttons =
       if is_nil(cancel_label) do
         [confirm]

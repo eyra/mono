@@ -6,7 +6,6 @@ defmodule Systems.Fund.FailTransactionTest do
   alias Core.Factories
   alias Core.Repo
   alias Systems.Fund
-  alias Systems.Fund
 
   describe "fail_transaction/1" do
     test "fails a :pending transaction via the normal path" do

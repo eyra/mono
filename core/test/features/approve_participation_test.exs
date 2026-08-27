@@ -30,14 +30,14 @@ defmodule CoreWeb.Features.ApproveParticipationTest do
     researcher =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 
     participant =
       Factories.insert!(:member, %{
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: false
       })
 
@@ -67,7 +67,8 @@ defmodule CoreWeb.Features.ApproveParticipationTest do
       |> Core.Repo.update()
 
     assignment =
-      Core.Repo.get!(Assignment.Model, assignment.id)
+      Assignment.Model
+      |> Core.Repo.get!(assignment.id)
       |> Core.Repo.preload(Assignment.Model.preload_graph(:down), force: true)
 
     # Researcher owns the assignment so they can see the Contributions tab.

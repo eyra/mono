@@ -1,4 +1,5 @@
 defmodule Systems.Observatory.LiveHook do
+  @moduledoc false
   use Frameworks.Concept.LiveHook
 
   require Logger
@@ -42,7 +43,7 @@ defmodule Systems.Observatory.LiveHook do
   defp attach_auto_save_status_hook(socket, _live_view_module) do
     attach_hook(socket, :handle_auto_save_status, :handle_info, fn
       %{auto_save: status}, socket ->
-        {:cont, socket |> assign(auto_save_status: status)}
+        {:cont, assign(socket, auto_save_status: status)}
 
       _, socket ->
         {:cont, socket}
@@ -52,11 +53,11 @@ defmodule Systems.Observatory.LiveHook do
   defp attach_model_update_hook(socket, live_view_module) do
     attach_hook(socket, :handle_model_update, :handle_info, fn
       %{topic: _topic, payload: {_signal, %{model: model, from_pid: from_pid}}}, socket ->
-        {:cont, socket |> handle_model_update(live_view_module, model, from_pid)}
+        {:cont, handle_model_update(socket, live_view_module, model, from_pid)}
 
       %{topic: _topic, payload: {_signal, %{model: model}}}, socket ->
         Logger.warning("Unknown sender, no from_pid provided")
-        {:cont, socket |> handle_model_update(live_view_module, model, nil)}
+        {:cont, handle_model_update(socket, live_view_module, model, nil)}
 
       _, socket ->
         {:cont, socket}

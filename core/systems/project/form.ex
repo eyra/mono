@@ -1,16 +1,12 @@
 defmodule Systems.Project.Form do
+  @moduledoc false
   use CoreWeb.LiveForm
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   # Handle initial update
   @impl true
-  def update(
-        %{id: id, project: project},
-        socket
-      ) do
+  def update(%{id: id, project: project}, socket) do
     changeset = Project.Model.changeset(project, %{})
 
     {
@@ -37,10 +33,10 @@ defmodule Systems.Project.Form do
       face: %{type: :primary, label: dgettext("eyra-ui", "submit.button")}
     }
 
+    # Handle Events
+
     assign(socket, buttons: [submit])
   end
-
-  # Handle Events
 
   @impl true
   def handle_event("change", %{"model" => attrs}, %{assigns: %{project: project}} = socket) do
@@ -48,26 +44,26 @@ defmodule Systems.Project.Form do
 
     {
       :noreply,
-      socket |> assign(changeset: changeset)
+      assign(socket, changeset: changeset)
     }
   end
 
   @impl true
   def handle_event("submit", _, socket) do
-    {:noreply, socket |> submit_form()}
-  end
-
-  @impl true
-  def handle_event("cancel", _, socket) do
-    {:noreply, socket |> finish()}
+    {:noreply, submit_form(socket)}
   end
 
   # Submit
 
+  @impl true
+  def handle_event("cancel", _, socket) do
+    {:noreply, finish(socket)}
+  end
+
   defp submit_form(%{assigns: %{project: project, changeset: changeset}} = socket) do
     case Core.Persister.save(project, changeset) do
       {:ok, _} ->
-        socket |> finish()
+        finish(socket)
 
       {:error, changeset} ->
         socket
@@ -77,7 +73,7 @@ defmodule Systems.Project.Form do
   end
 
   defp finish(socket) do
-    socket |> send_event(:parent, "finish")
+    send_event(socket, :parent, "finish")
   end
 
   @impl true

@@ -4,6 +4,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
   flag the ones whose payout has no local row — the restore-orphan case.
   """
   use Core.DataCase, async: true
+
   import Mox
 
   alias Core.Factories
@@ -70,7 +71,7 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
     }
   end
 
-  defp hours_ago(hours), do: DateTime.add(DateTime.utc_now(), -hours * 60 * 60, :second)
+  defp hours_ago(hours), do: DateTime.shift(DateTime.utc_now(), hour: -hours)
 
   defp expect_listings(withdrawals, transfers) do
     expect(ProviderMock, :list_recent_withdrawals, fn _since -> {:ok, withdrawals} end)

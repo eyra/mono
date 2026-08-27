@@ -1,5 +1,7 @@
 defmodule Systems.Bookkeeping.AccountModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   @type t :: %__MODULE__{
@@ -19,7 +21,8 @@ defmodule Systems.Bookkeeping.AccountModel do
   @required_fields @fields
 
   def checksum(term) do
-    to_identifier(term)
+    term
+    |> to_identifier()
     |> Enum.join()
     |> :erlang.crc32()
     |> Integer.to_string(32)
@@ -34,8 +37,7 @@ defmodule Systems.Bookkeeping.AccountModel do
   end
 
   def change(account, %{} = attrs) do
-    account
-    |> cast(attrs, @fields)
+    cast(account, attrs, @fields)
   end
 
   def validate(changeset, condition \\ true) do

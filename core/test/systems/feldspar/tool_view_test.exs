@@ -1,10 +1,12 @@
 defmodule Systems.Feldspar.ToolViewTest do
   use CoreWeb.ConnCase, async: false
   use Gettext, backend: CoreWeb.Gettext
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Feldspar
   alias Systems.Workflow
 
@@ -20,10 +22,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Feldspar App",
           icon: "test_icon",
           tool_ref: tool_ref,
@@ -45,11 +47,11 @@ defmodule Systems.Feldspar.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       # Use mixed case icon name (as might be stored in database)
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "TikTok",
           tool_ref: tool_ref,
@@ -72,10 +74,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -103,10 +105,10 @@ defmodule Systems.Feldspar.ToolViewTest do
     end
 
     test "handles start event", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -120,7 +122,7 @@ defmodule Systems.Feldspar.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
 
       # Send start event
-      html = view |> render_click("start")
+      html = render_click(view, "start")
 
       # Verify view still renders correctly after start
       assert html =~ "Test App"
@@ -140,10 +142,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       conn: conn,
       tool_ref: tool_ref
     } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -163,7 +165,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         "info" => "Normal exit"
       }
 
-      view |> render_click("feldspar_event", event)
+      render_click(view, "feldspar_event", event)
 
       # Verify tool_exited event was published
       # Note: In isolated test, we can't easily assert published events
@@ -174,10 +176,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       conn: conn,
       tool_ref: tool_ref
     } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -197,7 +199,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         "info" => "Error occurred"
       }
 
-      html = view |> render_click("feldspar_event", event)
+      html = render_click(view, "feldspar_event", event)
 
       # Verify error message is shown (check flash)
       # The view should still render without crashing
@@ -208,10 +210,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       conn: conn,
       tool_ref: tool_ref
     } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -228,10 +230,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       event = %{
         "__type__" => "CommandSystemDonate",
         "key" => "survey_response",
-        "json_string" => "{\"answer\": \"yes\"}"
+        "json_string" => ~s({"answer": "yes"})
       }
 
-      html = view |> render_click("feldspar_event", event)
+      html = render_click(view, "feldspar_event", event)
 
       # Verify view still renders without crashing after donate event
       # Note: Flash messages are handled by parent LiveView, so we just verify
@@ -243,10 +245,10 @@ defmodule Systems.Feldspar.ToolViewTest do
       conn: conn,
       tool_ref: tool_ref
     } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -260,7 +262,7 @@ defmodule Systems.Feldspar.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
 
       # Start the tool first
-      view |> render_click("start")
+      render_click(view, "start")
 
       # Send CommandSystemEvent with initialized
       event = %{
@@ -268,19 +270,19 @@ defmodule Systems.Feldspar.ToolViewTest do
         "name" => "initialized"
       }
 
-      view |> render_click("feldspar_event", event)
+      render_click(view, "feldspar_event", event)
 
       # Verify initialized state: app-container should have 'block' class (visible)
       # and start-container should have 'hidden' class
-      assert view |> has_element?("[data-testid='app-container'].block")
-      assert view |> has_element?("[data-testid='start-container'].hidden")
+      assert has_element?(view, "[data-testid='app-container'].block")
+      assert has_element?(view, "[data-testid='start-container'].hidden")
     end
 
     test "handles unknown event type - shows error message", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -299,7 +301,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         "data" => "test"
       }
 
-      html = view |> render_click("feldspar_event", event)
+      html = render_click(view, "feldspar_event", event)
 
       # Verify error message is shown (check for the event type in error)
       # The view should still render
@@ -307,10 +309,10 @@ defmodule Systems.Feldspar.ToolViewTest do
     end
 
     test "handles malformed event - shows error message", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -328,7 +330,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         "some_field" => "value"
       }
 
-      html = view |> render_click("feldspar_event", event)
+      html = render_click(view, "feldspar_event", event)
 
       # Verify error message is shown
       # The view should still render
@@ -346,10 +348,10 @@ defmodule Systems.Feldspar.ToolViewTest do
     end
 
     test "handles tool_initialized event from JS hook", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+      conn = Map.put(conn, :request_path, "/feldspar/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test App",
           icon: "test",
           tool_ref: tool_ref,
@@ -363,15 +365,15 @@ defmodule Systems.Feldspar.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
 
       # Start the tool first
-      view |> render_click("start")
+      render_click(view, "start")
 
       # Send tool_initialized event (from JS hook)
-      view |> render_click("tool_initialized")
+      render_click(view, "tool_initialized")
 
       # Verify initialized state: app-container should have 'block' class (visible)
       # and start-container should have 'hidden' class
-      assert view |> has_element?("[data-testid='app-container'].block")
-      assert view |> has_element?("[data-testid='start-container'].hidden")
+      assert has_element?(view, "[data-testid='app-container'].block")
+      assert has_element?(view, "[data-testid='start-container'].hidden")
     end
   end
 end

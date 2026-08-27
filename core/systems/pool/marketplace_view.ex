@@ -60,7 +60,7 @@ defmodule Systems.Pool.MarketplaceView do
         %{query: query, query_string: query_string, source: %{name: :marketplace_search_bar}},
         socket
       ) do
-    {:noreply, socket |> assign(query: query, query_string: query_string)}
+    {:noreply, assign(socket, query: query, query_string: query_string)}
   end
 
   @impl true
@@ -75,7 +75,7 @@ defmodule Systems.Pool.MarketplaceView do
         year -> year
       end
 
-    {:noreply, socket |> assign(active_year: active_year)}
+    {:noreply, assign(socket, active_year: active_year)}
   end
 
   @impl true

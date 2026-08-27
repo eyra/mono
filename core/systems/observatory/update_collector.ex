@@ -98,7 +98,7 @@ defmodule Systems.Observatory.UpdateCollector do
   Useful for testing and debugging.
   """
   def count do
-    Process.get(@process_key, []) |> length()
+    @process_key |> Process.get([]) |> length()
   end
 
   @doc """

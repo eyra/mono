@@ -4,10 +4,10 @@ defmodule Frameworks.Pixel.Hero do
   """
   use CoreWeb, :pixel
 
+  import Frameworks.Pixel.ImagePreview
+
   alias Frameworks.Pixel.Image
   alias Frameworks.Pixel.Text
-
-  import Frameworks.Pixel.ImagePreview
 
   attr(:type, :atom, required: true)
   attr(:params, :map, required: true)

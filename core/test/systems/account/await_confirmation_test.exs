@@ -1,5 +1,6 @@
 defmodule Systems.Account.AwaitConfirmationTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

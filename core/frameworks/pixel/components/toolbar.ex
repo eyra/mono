@@ -6,6 +6,7 @@ defmodule Frameworks.Pixel.Toolbar do
   use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Line
+
   alias Frameworks.Pixel.Button
 
   @impl true

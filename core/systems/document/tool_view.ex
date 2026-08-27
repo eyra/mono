@@ -6,7 +6,7 @@ defmodule Systems.Document.ToolView do
 
   alias Systems.Workflow
 
-  def dependencies(), do: [:title, :tool_ref]
+  def dependencies, do: [:title, :tool_ref]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     Workflow.ToolRefModel.tool(tool_ref)

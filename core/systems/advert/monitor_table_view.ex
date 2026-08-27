@@ -1,11 +1,7 @@
 defmodule Systems.Advert.MonitorTableView do
   use CoreWeb, :html
 
-  alias Systems.{
-    Crew
-  }
-
-  import Crew.TaskItemView
+  import Systems.Crew.TaskItemView
 
   defp padding(0), do: "pl-0"
   defp padding(_), do: "pl-8"

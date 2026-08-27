@@ -1,13 +1,13 @@
 defmodule Systems.Zircon.Screening.CriteriaView do
   use CoreWeb, :embedded_live_view
 
-  import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]
+  import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
 
-  alias Frameworks.Pixel.Text
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
-
+  alias Frameworks.Pixel.Flash
+  alias Frameworks.Pixel.Text
   alias Systems.Zircon
 
   def get_model(:not_mounted_at_router, %{"tool" => tool}, _socket) do
@@ -15,11 +15,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
   end
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"title" => title},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"title" => title}, socket) do
     {
       :ok,
       socket
@@ -65,7 +61,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
         %{assigns: %{vm: %{dimension_list: dimension_list}}} = socket
       ) do
     if dimension =
-         dimension_list |> Enum.find(fn dimension -> dimension.phrase == dimension_phrase end) do
+         Enum.find(dimension_list, fn dimension -> dimension.phrase == dimension_phrase end) do
       insert_criterion(dimension, socket)
     else
       Logger.error("Dimension '#{dimension_phrase}' not found in local dimension list")
@@ -88,12 +84,12 @@ defmodule Systems.Zircon.Screening.CriteriaView do
 
   @impl true
   def handle_info({:handle_auto_save_done, _}, socket) do
-    {:noreply, socket |> assign_criteria_elements()}
+    {:noreply, assign_criteria_elements(socket)}
   end
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket |> assign_criteria_elements()
+    assign_criteria_elements(socket)
   end
 
   defp insert_criterion(
@@ -118,14 +114,14 @@ defmodule Systems.Zircon.Screening.CriteriaView do
          dimension,
          {:error, :validate_criterion_does_not_exist, false, %{}}
        ) do
-    Frameworks.Pixel.Flash.push_error(
+    Flash.push_error(
       socket,
       dgettext("eyra-zircon", "criterion.already_exists", dimension: dimension.phrase)
     )
   end
 
   defp handle_insert_criterion(socket, dimension, {:error, _, _, _}) do
-    Frameworks.Pixel.Flash.push_error(
+    Flash.push_error(
       socket,
       dgettext("eyra-zircon", "criterion.insert.error", dimension: dimension.phrase)
     )

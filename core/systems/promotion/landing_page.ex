@@ -4,18 +4,18 @@ defmodule Systems.Promotion.LandingPage do
   """
   use Systems.Content.Composer, :live_website
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-
-  import Systems.Promotion.BannerView
   import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
+  import Systems.Promotion.BannerView
 
   alias Core.ImageHelpers
-  alias Frameworks.Pixel.Hero
+  alias CoreWeb.UI.Dialog.Plain
   alias Frameworks.Pixel.Card
-
+  alias Frameworks.Pixel.Hero
   alias Systems.Assignment
   alias Systems.Promotion
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -23,11 +23,7 @@ defmodule Systems.Promotion.LandingPage do
   end
 
   @impl true
-  def mount(
-        _params,
-        _session,
-        %{assigns: %{current_user: user, model: promotion}} = socket
-      ) do
+  def mount(_params, _session, %{assigns: %{current_user: user, model: promotion}} = socket) do
     if Phoenix.LiveView.connected?(socket) do
       Promotion.Private.log_performance_event(promotion, :views)
     end
@@ -46,7 +42,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def compose(:preview_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "preview_inform",
@@ -59,7 +55,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def compose(:full_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: Plain,
       params: %{
         type: :inform,
         id: "full_inform",
@@ -115,12 +111,7 @@ defmodule Systems.Promotion.LandingPage do
         _params,
         %{
           assigns: %{
-            vm: %{
-              call_to_action: %{
-                advert: %{assignment: %{id: assignment_id}},
-                handle: handle
-              }
-            }
+            vm: %{call_to_action: %{advert: %{assignment: %{id: assignment_id}}, handle: handle}}
           }
         } = socket
       ) do

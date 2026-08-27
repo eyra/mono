@@ -1,15 +1,10 @@
 import Config
 
-config :core,
-  start_pages: Next.StartPages,
-  menu_items: Next.Menu.Items,
-  workspace_menu_builder: Next.Layouts.Workspace.MenuBuilder,
-  website_menu_builder: Next.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder
-
 config :core, Systems.Account.UserAuth,
   creator_signed_in_page: "/project",
   member_signed_in_page: "/"
+
+config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
 
 # Feature flags: these are the defaults for local dev.
 # On Fly/AWS, ENABLED_APP_FEATURES merges on top: listed flags become true,
@@ -32,6 +27,11 @@ config :core, :meta,
   bundle_title: "Next",
   bundle: :next
 
-config :core, :account, auth_providers: [:surfconext, :google, :centerdata]
-
 config :core, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]
+
+config :core,
+  start_pages: Next.StartPages,
+  menu_items: Next.Menu.Items,
+  workspace_menu_builder: Next.Layouts.Workspace.MenuBuilder,
+  website_menu_builder: Next.Layouts.Website.MenuBuilder,
+  stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder

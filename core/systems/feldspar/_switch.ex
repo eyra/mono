@@ -1,13 +1,11 @@
 defmodule Systems.Feldspar.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Systems.Feldspar
 
   @impl true
-  def intercept(
-        {:feldspar_tool, _},
-        %{feldspar_tool: tool, from_pid: from_pid}
-      ) do
+  def intercept({:feldspar_tool, _}, %{feldspar_tool: tool, from_pid: from_pid}) do
     update_tool_view(tool, from_pid)
     :ok
   end

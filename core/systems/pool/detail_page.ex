@@ -4,13 +4,10 @@ defmodule Systems.Pool.DetailPage do
   """
   use Systems.Content.Composer, :live_workspace
 
-  alias Frameworks.Pixel.Tabbed
   alias Frameworks.Pixel.Navigation
-
-  alias Systems.{
-    Pool,
-    Email
-  }
+  alias Frameworks.Pixel.Tabbed
+  alias Systems.Email
+  alias Systems.Pool
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -27,8 +24,7 @@ defmodule Systems.Pool.DetailPage do
 
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         tabbar_id: tabbar_id,
         initial_tab: initial_tab,
@@ -42,8 +38,7 @@ defmodule Systems.Pool.DetailPage do
   def handle_event("close_email_dialog", _, socket) do
     {
       :noreply,
-      socket
-      |> close_email_dialog()
+      close_email_dialog(socket)
     }
   end
 
@@ -52,16 +47,14 @@ defmodule Systems.Pool.DetailPage do
 
     {
       :noreply,
-      socket
-      |> close_email_dialog()
+      close_email_dialog(socket)
     }
   end
 
   def handle_info({:email_dialog, :close}, socket) do
     {
       :noreply,
-      socket
-      |> close_email_dialog()
+      close_email_dialog(socket)
     }
   end
 
@@ -71,8 +64,7 @@ defmodule Systems.Pool.DetailPage do
       ) do
     {
       :noreply,
-      socket
-      |> assign(
+      assign(socket,
         email_dialog: %{
           module: Email.Dialog,
           id: :email_dialog,
@@ -88,8 +80,7 @@ defmodule Systems.Pool.DetailPage do
   end
 
   defp close_email_dialog(socket) do
-    socket
-    |> assign(email_dialog: nil)
+    assign(socket, email_dialog: nil)
   end
 
   @impl true

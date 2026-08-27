@@ -1,15 +1,17 @@
 defmodule Systems.Storage.Private do
+  @moduledoc false
   alias Systems.Storage
+  alias Systems.Storage.BuiltIn.EndpointModel
 
-  def allowed_service_ids() do
+  def allowed_service_ids do
     Keyword.get(config(), :services, [])
   end
 
-  defp config() do
+  defp config do
     Application.get_env(:core, :storage)
   end
 
-  def build_special(:builtin), do: %Storage.BuiltIn.EndpointModel{}
+  def build_special(:builtin), do: %EndpointModel{}
   def build_special(:yoda), do: %Storage.Yoda.EndpointModel{}
   def build_special(:aws), do: %Storage.AWS.EndpointModel{}
   def build_special(:azure), do: %Storage.Azure.EndpointModel{}
@@ -20,7 +22,7 @@ defmodule Systems.Storage.Private do
     |> special_info()
   end
 
-  def special_info(%Storage.BuiltIn.EndpointModel{}), do: {:builtin, Storage.BuiltIn.Backend}
+  def special_info(%EndpointModel{}), do: {:builtin, Storage.BuiltIn.Backend}
   def special_info(%Storage.Yoda.EndpointModel{}), do: {:yoda, Storage.Yoda.Backend}
   def special_info(%Storage.AWS.EndpointModel{}), do: {:aws, Storage.AWS.Backend}
   def special_info(%Storage.Azure.EndpointModel{}), do: {:azure, Storage.Azure.Backend}

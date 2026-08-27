@@ -1,11 +1,10 @@
 defmodule Systems.Assignment.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
-  alias Systems.{
-    Account,
-    Assignment,
-    Alliance
-  }
+  alias Systems.Account
+  alias Systems.Alliance
+  alias Systems.Assignment
 
   @impl true
   def view_model(Assignment.ActivateAccountView, %Account.User{} = user, assigns) do

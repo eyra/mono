@@ -1,14 +1,13 @@
 defmodule Systems.Assignment.ConnectorPopupStorage do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   import CoreWeb.UI.Dialog
 
-  require Logger
+  alias Systems.Assignment
+  alias Systems.Storage
 
-  alias Systems.{
-    Assignment,
-    Storage
-  }
+  require Logger
 
   @impl true
   def update(%{id: id, entity: assignment}, socket) do
@@ -81,22 +80,22 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
       ) do
     {
       :noreply,
-      socket |> assign(endpoint_changeset: changeset)
+      assign(socket, endpoint_changeset: changeset)
     }
   end
 
   @impl true
   def handle_event("connect_storage", _payload, socket) do
-    {:noreply, socket |> connect()}
+    {:noreply, connect(socket)}
   end
 
   @impl true
   def handle_event("cancel", _payload, socket) do
-    {:noreply, socket |> cancel_popup()}
+    {:noreply, cancel_popup(socket)}
   end
 
   defp cancel_popup(socket) do
-    socket |> send_event(:parent, "cancel")
+    send_event(socket, :parent, "cancel")
   end
 
   defp connect(%{assigns: %{endpoint_changeset: nil}} = socket) do
@@ -111,8 +110,7 @@ defmodule Systems.Assignment.ConnectorPopupStorage do
         |> send_event(:parent, "finish", %{connection: %{endpoint: assignment.storage_endpoint}})
 
       {:error, _changeset} ->
-        socket
-        |> send_event(:storage_endpoint_form, "show_errors")
+        send_event(socket, :storage_endpoint_form, "show_errors")
     end
   end
 

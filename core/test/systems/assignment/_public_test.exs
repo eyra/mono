@@ -1,29 +1,30 @@
 defmodule Systems.Assignment.PublicTest do
   use Core.DataCase
-  import Systems.NextAction.TestHelper
-  import Systems.Fund.TestHelper
 
-  alias Systems.Assignment
-  alias Systems.Crew
-  alias Systems.Fund
-  alias Systems.Monitor
-  alias Systems.Fund
+  import Systems.Fund.TestHelper
+  import Systems.NextAction.TestHelper
 
   alias Core.Factories
+  alias Systems.Assignment
+  alias Systems.Assignment.Model
+  alias Systems.Crew
+  alias Systems.Fund
+  alias Systems.Fund.Public
+  alias Systems.Monitor
 
   describe "assignment participations" do
     test "obtain_participation!/2 inserts a participation" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       Assignment.Public.obtain_participation!(assignment, user)
 
-      assert Assignment.Public.get_participation(assignment, user) != nil
+      assert Assignment.Public.get_participation(assignment, user)
     end
 
     test "obtain_participation!/2 is idempotent per (assignment, user)" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       participation = Assignment.Public.obtain_participation!(assignment, user)
       participation_2 = Assignment.Public.obtain_participation!(assignment, user)
@@ -33,14 +34,14 @@ defmodule Systems.Assignment.PublicTest do
 
     test "get_participation/2 returns nil if no participation exists" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       assert Assignment.Public.get_participation(assignment, user) == nil
     end
 
     test "get_participation/2 returns the participation if it exists" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       %{id: participation_id} = Assignment.Public.obtain_participation!(assignment, user)
 
@@ -50,9 +51,9 @@ defmodule Systems.Assignment.PublicTest do
 
     test "list_participations/1 returns all participations" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
-      %{user: user_2} = Factories.build(:affiliate_user) |> Repo.insert!()
-      %{user: user_3} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
+      %{user: user_2} = :affiliate_user |> Factories.build() |> Repo.insert!()
+      %{user: user_3} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       %{id: id_1} = Assignment.Public.obtain_participation!(assignment, user)
       %{id: id_2} = Assignment.Public.obtain_participation!(assignment, user_2)
@@ -67,7 +68,7 @@ defmodule Systems.Assignment.PublicTest do
 
     test "complete_participation/2 creates and completes when no participation exists" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       assert {:ok, %{completed_at: %NaiveDateTime{}}} =
                Assignment.Public.complete_participation(assignment, user)
@@ -75,7 +76,7 @@ defmodule Systems.Assignment.PublicTest do
 
     test "complete_participation/2 completes an existing incomplete participation" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       %{id: participation_id, completed_at: nil} =
         Assignment.Public.obtain_participation!(assignment, user)
@@ -86,7 +87,7 @@ defmodule Systems.Assignment.PublicTest do
 
     test "complete_participation/2 is a no-op when participation is already completed" do
       assignment = Factories.insert!(:assignment)
-      %{user: user} = Factories.build(:affiliate_user) |> Repo.insert!()
+      %{user: user} = :affiliate_user |> Factories.build() |> Repo.insert!()
 
       {:ok, %{id: participation_id, completed_at: first_completed_at}} =
         Assignment.Public.complete_participation(assignment, user)
@@ -214,7 +215,7 @@ defmodule Systems.Assignment.PublicTest do
     end
 
     test "list_participants?/1 with 1 affiliate user" do
-      affiliate = Factories.build(:affiliate) |> Repo.insert!()
+      affiliate = :affiliate |> Factories.build() |> Repo.insert!()
 
       affiliate_user =
         %{identifier: identifier, user: %{id: user_id}} =
@@ -357,7 +358,7 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment_id: nil
                }
-             ] = Fund.Public.list_rewards(user, [:fund, :user, :deposit, :payment])
+             ] = Public.list_rewards(user, [:fund, :user, :deposit, :payment])
     end
 
     test "apply_member/4 re-uses expired member" do
@@ -409,12 +410,12 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: nil,
                  payment: nil
                }
-             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
+             ] = Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                available: %{balance_credit: 1000, balance_debit: 1000},
                pending: %{balance_credit: 1000, balance_debit: 1000}
-             } = Fund.Public.get!(assignment.fund_id)
+             } = Public.get!(assignment.fund_id)
     end
 
     test "apply_member/3 re-apply member creates reward with next attempt deposit" do
@@ -435,12 +436,12 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment: nil
                }
-             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
+             ] = Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                available: %{balance_credit: 1000, balance_debit: 3000},
                pending: %{balance_credit: 3000, balance_debit: 1000}
-             } = Fund.Public.get!(assignment.fund_id)
+             } = Public.get!(assignment.fund_id)
     end
 
     test "approve_reward creates transaction from fund reserve to user wallet" do
@@ -464,12 +465,12 @@ defmodule Systems.Assignment.PublicTest do
                  deposit: %{idempotence_key: ^deposit_idempotence_key},
                  payment: %{idempotence_key: ^payment_idempotence_key}
                }
-             ] = Fund.Public.list_rewards(user, [:deposit, :payment])
+             ] = Public.list_rewards(user, [:deposit, :payment])
 
       assert %{
                available: %{balance_credit: 1000, balance_debit: 3000},
                pending: %{balance_credit: 3000, balance_debit: 3000}
-             } = Fund.Public.get!(assignment.fund_id)
+             } = Public.get!(assignment.fund_id)
     end
 
     test "approve_reward is idempotent" do
@@ -552,11 +553,11 @@ defmodule Systems.Assignment.PublicTest do
       Assignment.Public.exclude(assignment1, assignment2)
 
       assert %{
-               excluded: [%Systems.Assignment.Model{id: ^id2}]
+               excluded: [%Model{id: ^id2}]
              } = Assignment.Public.get!(assignment1.id, [:excluded])
 
       assert %{
-               excluded: [%Systems.Assignment.Model{id: ^id1}]
+               excluded: [%Model{id: ^id1}]
              } = Assignment.Public.get!(assignment2.id, [:excluded])
     end
 
@@ -663,10 +664,10 @@ defmodule Systems.Assignment.PublicTest do
       :ok = Core.Authorization.assign_role(project_owner, assignment, :owner)
 
       assignment =
-        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+        Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      {:ok, _} = Public.create_reward(fund, 1000, user, idempotence_key)
       Systems.Fund.Factories.insert_pay_in!(fund, project_owner)
       {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
 
@@ -690,7 +691,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Assignment.Public.complete_participation(participation)
 
       assert %{status: :pending_approval} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
 
     test "creates a PendingContributions next-action for the owner", %{
@@ -716,7 +717,7 @@ defmodule Systems.Assignment.PublicTest do
       assert once.completed_at == twice.completed_at
 
       assert %{status: :pending_approval} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
 
     test "does not flip reward when the assignment has no fund" do
@@ -734,10 +735,10 @@ defmodule Systems.Assignment.PublicTest do
     %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
 
     assignment =
-      Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+      Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
 
     idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-    {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+    {:ok, _} = Public.create_reward(fund, 1000, user, idempotence_key)
     {:ok, _} = mark_pending_approval(idempotence_key)
     {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
     {:ok, participation} = Assignment.Public.complete_participation(participation)
@@ -762,9 +763,9 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Assignment.Public.accept_participation(participation)
 
       assert %{status: :approved, payment_id: payment_id} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
 
-      refute is_nil(payment_id)
+      assert payment_id
     end
 
     test "is idempotent — second call is a no-op", %{participation: participation} do
@@ -781,7 +782,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Assignment.Public.accept_participation(id)
 
       assert %{status: :approved} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
   end
 
@@ -806,7 +807,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Assignment.Public.reject_participation(participation, "bad data")
 
       assert %{status: :rejected, deposit_id: nil} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
 
     test "is idempotent — second call is a no-op", %{participation: participation} do
@@ -824,7 +825,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Assignment.Public.reject_participation(id, "bad data")
 
       assert %{status: :rejected} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
   end
 
@@ -840,7 +841,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, rejected} = Assignment.Public.reject_participation(participation, "changed my mind")
 
       assert %{status: :rejected, deposit_id: nil} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
 
       assert {:error, :participation_already_rejected} =
                Assignment.Public.accept_participation(rejected)
@@ -851,7 +852,7 @@ defmodule Systems.Assignment.PublicTest do
       assert %NaiveDateTime{} = reloaded.rejected_at
 
       # And the Fund reward stays rejected too — the Multi never ran.
-      assert %{status: :rejected} = Systems.Fund.Public.get_reward(idempotence_key, [])
+      assert %{status: :rejected} = Public.get_reward(idempotence_key, [])
     end
 
     test "accept after reject is blocked when called by id", %{
@@ -870,9 +871,9 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, accepted} = Assignment.Public.accept_participation(participation)
 
       assert %{status: :approved, payment_id: payment_id} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
 
-      refute is_nil(payment_id)
+      assert payment_id
 
       assert {:error, :participation_already_accepted} =
                Assignment.Public.reject_participation(accepted, "too late")
@@ -885,7 +886,7 @@ defmodule Systems.Assignment.PublicTest do
 
       # And the Fund reward stays approved — the Multi never ran.
       assert %{status: :approved, payment_id: ^payment_id} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
 
     test "reject after accept is blocked when called by id", %{
@@ -919,13 +920,13 @@ defmodule Systems.Assignment.PublicTest do
       user = Factories.insert!(:member)
       %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
-      assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+      assignment = Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
       [%{id: workflow_item_id} | _] = assignment.workflow.items
 
       member = Crew.Factories.create_member(crew, user)
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
+      {:ok, _} = Public.create_reward(fund, 1000, user, idempotence_key)
 
       task_a =
         Crew.Factories.create_task(
@@ -951,7 +952,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Crew.Public.complete_task(task_a)
 
       assert %{status: :reserved} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
 
     test "reward flips to :pending_approval after completing the last task", %{
@@ -963,7 +964,7 @@ defmodule Systems.Assignment.PublicTest do
       {:ok, _} = Crew.Public.complete_task(task_b)
 
       assert %{status: :pending_approval} =
-               Systems.Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
     end
   end
 
@@ -977,7 +978,7 @@ defmodule Systems.Assignment.PublicTest do
       |> Core.Repo.update!()
 
       assignment =
-        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+        Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
 
       {:ok, user: user, assignment: assignment}
     end
@@ -988,9 +989,9 @@ defmodule Systems.Assignment.PublicTest do
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
-               Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
 
-      refute is_nil(deposit_id)
+      assert deposit_id
     end
 
     test "Towel rollback returns money to fund.available and clears deposit", %{
@@ -999,22 +1000,22 @@ defmodule Systems.Assignment.PublicTest do
     } do
       Assignment.Public.add_participant!(assignment, user)
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-      original_available_after_join = Fund.Model.amount_available(Fund.Public.get!(fund_id))
+      original_available_after_join = Fund.Model.amount_available(Public.get!(fund_id))
 
       member = Crew.Public.get_member(crew, user)
 
       member
       |> Ecto.Changeset.change(%{
         expired: true,
-        expire_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        expire_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
       |> Core.Repo.update!()
 
       Assignment.Public.rollback_expired_deposits()
 
-      assert %{deposit_id: nil} = Fund.Public.get_reward(idempotence_key, [])
+      assert %{deposit_id: nil} = Public.get_reward(idempotence_key, [])
 
-      assert Fund.Model.amount_available(Fund.Public.get!(fund_id)) ==
+      assert Fund.Model.amount_available(Public.get!(fund_id)) ==
                original_available_after_join + 100
     end
 
@@ -1024,12 +1025,12 @@ defmodule Systems.Assignment.PublicTest do
       |> Core.Repo.update!()
 
       assignment =
-        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+        Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
 
       Assignment.Public.add_participant!(assignment, user)
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-      assert nil == Fund.Public.get_reward(idempotence_key, [])
+      assert nil == Public.get_reward(idempotence_key, [])
     end
 
     test "resolves currency for pre-fix fund (currency nil, ledger :EUR) without crashing", %{
@@ -1037,7 +1038,7 @@ defmodule Systems.Assignment.PublicTest do
       assignment: %{fund_id: fund_id} = assignment
     } do
       eur_ledger = Core.Repo.insert!(Fund.CurrencyLedgerModel.create(:EUR))
-      fund = Fund.Public.get!(fund_id)
+      fund = Public.get!(fund_id)
 
       fund
       |> Ecto.Changeset.change(%{currency_id: nil, currency_ledger_id: eur_ledger.id})
@@ -1050,16 +1051,16 @@ defmodule Systems.Assignment.PublicTest do
       |> Core.Repo.update!()
 
       assignment =
-        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
+        Assignment.Public.get!(assignment.id, Model.preload_graph(:down))
 
       Assignment.Public.add_participant!(assignment, user)
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
 
       assert %{status: :reserved, amount: 100, deposit_id: deposit_id} =
-               Fund.Public.get_reward(idempotence_key, [])
+               Public.get_reward(idempotence_key, [])
 
-      refute is_nil(deposit_id)
+      assert deposit_id
     end
   end
 

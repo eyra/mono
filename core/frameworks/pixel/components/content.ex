@@ -1,9 +1,11 @@
 defmodule Frameworks.Pixel.Content do
+  @moduledoc false
   use CoreWeb, :pixel
 
   import Frameworks.Pixel.Image
-  alias Frameworks.Pixel.Text
+
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   attr(:items, :list, required: true)
 

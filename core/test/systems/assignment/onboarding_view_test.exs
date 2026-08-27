@@ -1,9 +1,11 @@
 defmodule Systems.Assignment.OnboardingViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
   setup do
@@ -31,10 +33,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
 
       assignment = Repo.preload(assignment, [page_refs: :page], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/onboarding")
+      conn = Map.put(conn, :request_path, "/assignment/onboarding")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user
         })
@@ -46,10 +48,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.OnboardingView, session: session)
 
       # Should render content page with title
-      assert view |> render() =~ "About"
+      assert render(view) =~ "About"
 
       # Should show continue button
-      assert view |> render() =~ "Continue"
+      assert render(view) =~ "Continue"
     end
 
     test "continue button triggers continue event", %{conn: conn, user: user} do
@@ -64,10 +66,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
 
       assignment = Repo.preload(assignment, [page_refs: :page], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/onboarding")
+      conn = Map.put(conn, :request_path, "/assignment/onboarding")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user
         })
@@ -79,7 +81,7 @@ defmodule Systems.Assignment.OnboardingViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.OnboardingView, session: session)
 
       # Send continue event directly
-      view |> render_click("continue")
+      render_click(view, "continue")
 
       # Reload user to check visited pages
       user = Repo.get!(Systems.Account.User, user.id)
@@ -88,7 +90,7 @@ defmodule Systems.Assignment.OnboardingViewTest do
       assert Systems.Account.Public.visited?(user, {:assignment_information, assignment.id})
 
       # Verify no errors occurred
-      assert view |> render() =~ "Continue"
+      assert render(view) =~ "Continue"
     end
   end
 
@@ -97,10 +99,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Repo.preload(assignment, [:page_refs], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/onboarding")
+      conn = Map.put(conn, :request_path, "/assignment/onboarding")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user
         })
@@ -112,10 +114,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.OnboardingView, session: session)
 
       # Should NOT render content page (no "About" title)
-      refute view |> render() =~ "About"
+      refute render(view) =~ "About"
 
       # Should show continue button
-      assert view |> render() =~ "Continue"
+      assert render(view) =~ "Continue"
     end
   end
 
@@ -124,10 +126,10 @@ defmodule Systems.Assignment.OnboardingViewTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Repo.preload(assignment, [:page_refs], force: true)
 
-      conn = conn |> Map.put(:request_path, "/assignment/onboarding")
+      conn = Map.put(conn, :request_path, "/assignment/onboarding")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user
         })
@@ -139,7 +141,7 @@ defmodule Systems.Assignment.OnboardingViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.OnboardingView, session: session)
 
       # Initial state - should have continue button
-      assert view |> render() =~ "Continue"
+      assert render(view) =~ "Continue"
 
       # Note: In a real scenario, assignment would be updated and Observatory would
       # trigger VM rebuild. In this isolated test, we verify the initial state renders correctly

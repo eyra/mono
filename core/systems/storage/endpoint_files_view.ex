@@ -12,8 +12,7 @@ defmodule Systems.Storage.EndpointFilesView do
 
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         endpoint: endpoint,
         query: query,
         timezone: timezone,

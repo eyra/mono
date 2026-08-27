@@ -2,6 +2,7 @@ defmodule Systems.Fund.BalanceView do
   use CoreWeb, :html
 
   import CoreWeb.UI.ProgressBar
+
   alias Frameworks.Pixel.Text
 
   attr(:progress, :map, required: true)

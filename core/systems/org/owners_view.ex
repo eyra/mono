@@ -4,7 +4,7 @@ defmodule Systems.Org.OwnersView do
   alias Frameworks.Pixel.Text
   alias Systems.Org
 
-  def dependencies(), do: [:node_id]
+  def dependencies, do: [:node_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{node_id: node_id}}) do
     Org.Public.get_node!(node_id, Org.NodeModel.preload_graph(:full))

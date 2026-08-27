@@ -37,8 +37,9 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
       |> NaiveDateTime.add(-days_ago * 24 * 60 * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(r in Fund.RewardModel, where: r.idempotence_key == ^key)
-    |> Repo.update_all(set: [updated_at: timestamp])
+    Repo.update_all(from(r in Fund.RewardModel, where: r.idempotence_key == ^key),
+      set: [updated_at: timestamp]
+    )
 
     key
   end
@@ -68,7 +69,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
       assert :ok = perform_job(AutoApproveWorker, %{})
 
       %{payment_id: payment_id} = Fund.Public.get_reward(key, [])
-      refute is_nil(payment_id)
+      assert payment_id
     end
 
     test "skips a reward still inside the timeout window", %{fund: fund} do
@@ -146,7 +147,7 @@ defmodule Systems.Fund.AutoApproveWorkerTest do
 
   describe "uniqueness" do
     test "does not overlap with an already scheduled or running job" do
-      unique = AutoApproveWorker.__opts__() |> Keyword.fetch!(:unique)
+      unique = Keyword.fetch!(AutoApproveWorker.__opts__(), :unique)
 
       assert unique[:period] == :infinity
       assert Enum.sort(unique[:states]) == [:available, :executing, :retryable, :scheduled]

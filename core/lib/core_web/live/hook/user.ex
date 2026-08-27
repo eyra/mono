@@ -3,11 +3,12 @@ defmodule CoreWeb.Live.Hook.User do
     Live Hook that injects the current user.
   """
   use Frameworks.Concept.LiveHook
+
   alias Systems.Account
 
   @impl true
   def mount(_live_view_module, _params, session, socket) do
-    {:cont, socket |> assign(current_user: current_user(session))}
+    {:cont, assign(socket, current_user: current_user(session))}
   end
 
   defp current_user(%{assigns: %{current_user: current_user}}), do: current_user

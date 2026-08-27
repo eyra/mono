@@ -13,7 +13,7 @@ defmodule Systems.Pool.ParticipantsView do
   alias Frameworks.Pixel.UserListItem
   alias Systems.Pool
 
-  def dependencies(), do: [:pool_id]
+  def dependencies, do: [:pool_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{pool_id: pool_id}}) do
     Pool.Public.get!(pool_id)
@@ -21,7 +21,7 @@ defmodule Systems.Pool.ParticipantsView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(query_string: "")}
+    {:ok, assign(socket, query_string: "")}
   end
 
   @impl true

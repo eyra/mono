@@ -1,4 +1,5 @@
 defmodule Systems.Admin.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/admin", Systems.Admin do

@@ -1,27 +1,17 @@
 defmodule Systems.Project.ItemConfigForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
-  alias Systems.{
-    Project
-  }
+  alias Systems.Project
 
   # Handle initial update
   @impl true
-  def update(
-        %{id: id, entity: item, sub_form: sub_form},
-        socket
-      ) do
+  def update(%{id: id, entity: item, sub_form: sub_form}, socket) do
     changeset = Project.ItemModel.changeset(item, %{})
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: item,
-        sub_form: sub_form,
-        changeset: changeset
-      )
+      assign(socket, id: id, entity: item, sub_form: sub_form, changeset: changeset)
     }
   end
 
@@ -30,18 +20,15 @@ defmodule Systems.Project.ItemConfigForm do
   def handle_event("save", %{"item_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      # Saving
+      save(socket, entity, attrs)
     }
   end
-
-  # Saving
 
   def save(socket, entity, attrs) do
     changeset = Project.Model.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

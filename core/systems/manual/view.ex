@@ -6,7 +6,7 @@ defmodule Systems.Manual.View do
   alias Frameworks.Pixel.Toolbar
   alias Systems.Manual
 
-  def dependencies(),
+  def dependencies,
     do: [:manual_id, :title, :current_user, :presentation, {:user_state, [:chapter, :page]}]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{manual_id: manual_id}}) do
@@ -15,13 +15,12 @@ defmodule Systems.Manual.View do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> publish_toolbar_buttons()}
+    {:ok, publish_toolbar_buttons(socket)}
   end
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket
-    |> publish_toolbar_buttons()
+    publish_toolbar_buttons(socket)
   end
 
   # Modal presentation: publish buttons to parent modal

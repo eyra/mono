@@ -2,8 +2,8 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
   use CoreWeb, :embedded_live_view
   use Gettext, backend: CoreWeb.Gettext
 
-  import Systems.Zircon.HTML, only: [ris_entry_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
+  import Systems.Zircon.HTML, only: [ris_entry_table: 1]
 
   alias Frameworks.Pixel.Text
 
@@ -28,7 +28,7 @@ defmodule Systems.Zircon.Screening.ImportSessionPapersView do
     # Extract title and filter, handling both string and atom keys
     title = Map.get(session, "title")
     filter = Map.get(session, "filter")
-    {:ok, socket |> assign(title: title, page_index: 0, query: nil, filter: filter)}
+    {:ok, assign(socket, title: title, page_index: 0, query: nil, filter: filter)}
   end
 
   @impl true

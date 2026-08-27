@@ -39,7 +39,8 @@ defmodule Systems.Userflow.StepModelTest do
       }
 
       changeset =
-        Userflow.StepModel.changeset(%Userflow.StepModel{}, attrs)
+        %Userflow.StepModel{}
+        |> Userflow.StepModel.changeset(attrs)
         |> Ecto.Changeset.put_assoc(:userflow, userflow)
         |> Userflow.StepModel.validate()
 
@@ -48,7 +49,8 @@ defmodule Systems.Userflow.StepModelTest do
 
     test "invalid when missing required fields" do
       changeset =
-        Userflow.StepModel.changeset(%Userflow.StepModel{}, %{})
+        %Userflow.StepModel{}
+        |> Userflow.StepModel.changeset(%{})
         |> Userflow.StepModel.validate()
 
       refute changeset.valid?

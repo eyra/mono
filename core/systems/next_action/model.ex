@@ -1,6 +1,9 @@
 defmodule Systems.NextAction.Model do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
+
   alias Systems.Account.User
 
   @primary_key false

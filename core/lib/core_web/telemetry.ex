@@ -3,6 +3,7 @@ defmodule CoreWeb.Telemetry do
   The Telemtry configuration for the Link application.
   """
   use Supervisor
+
   import Telemetry.Metrics
 
   def start_link(arg) do

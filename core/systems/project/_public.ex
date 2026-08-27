@@ -1,16 +1,15 @@
 defmodule Systems.Project.Public do
+  @moduledoc false
   use Core, :public
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Query, warn: false
   import Systems.Project.Queries
 
   alias Core.Repo
   alias Ecto.Multi
-
   alias Frameworks.Signal
-
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Graphite
@@ -19,19 +18,11 @@ defmodule Systems.Project.Public do
   alias Systems.Workflow
 
   def get!(id, preload \\ []) do
-    from(project in Project.Model,
-      where: project.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(project in Project.Model, where: project.id == ^id, preload: ^preload))
   end
 
   def get_by_root(%Project.NodeModel{id: id}, preload \\ []) do
-    from(project in Project.Model,
-      where: project.root_id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one()
+    Repo.one(from(project in Project.Model, where: project.root_id == ^id, preload: ^preload))
   end
 
   def get_by_item_special(special) do
@@ -42,11 +33,7 @@ defmodule Systems.Project.Public do
   end
 
   def get_node!(id, preload \\ []) do
-    from(node in Project.NodeModel,
-      where: node.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(node in Project.NodeModel, where: node.id == ^id, preload: ^preload))
   end
 
   def get_node_by_item!(%Project.ItemModel{node_id: node_id}, preload \\ []) do
@@ -54,11 +41,7 @@ defmodule Systems.Project.Public do
   end
 
   def get_item!(id, preload \\ []) do
-    from(item in Project.ItemModel,
-      where: item.id == ^id,
-      preload: ^preload
-    )
-    |> Repo.one!()
+    Repo.one!(from(item in Project.ItemModel, where: item.id == ^id, preload: ^preload))
   end
 
   def get_storage_endpoint_by(%Assignment.Model{} = assignment) do
@@ -118,7 +101,8 @@ defmodule Systems.Project.Public do
   end
 
   defp get_item_by_special(special_name, special_id) do
-    item_query_by_special(special_name, special_id)
+    special_name
+    |> item_query_by_special(special_id)
     |> Repo.one()
     |> Repo.preload(Project.ItemModel.preload_graph(:down))
   end
@@ -136,12 +120,13 @@ defmodule Systems.Project.Public do
         principal: user
       )
 
-    from(s in Project.Model,
-      where: s.auth_node_id in subquery(node_ids),
-      order_by: [desc: s.updated_at],
-      preload: ^preload
+    Repo.all(
+      from(s in Project.Model,
+        where: s.auth_node_id in subquery(node_ids),
+        order_by: [desc: s.updated_at],
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def list_items(_, selector \\ nil, preload \\ [])
@@ -151,48 +136,56 @@ defmodule Systems.Project.Public do
   end
 
   def list_items(node, nil, preload) do
-    item_query(node)
+    node
+    |> item_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_items(node, :assignment, preload) do
-    item_query_by_assignment(node)
+    node
+    |> item_query_by_assignment()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_items(node, {:assignment, template}, preload) do
-    item_query_by_assignment(node, template)
+    node
+    |> item_query_by_assignment(template)
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_items(node, :advert, preload) do
-    item_query_by_advert(node)
+    node
+    |> item_query_by_advert()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_items(node, :leaderboard, preload) do
-    item_query_by_leaderboard(node)
+    node
+    |> item_query_by_leaderboard()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_items(node, :storage_endpoint, preload) do
-    item_query_by_storage_endpoint(node)
+    node
+    |> item_query_by_storage_endpoint()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def exists?(user, name) do
-    list_owned_projects(user)
+    user
+    |> list_owned_projects()
     |> Enum.find(&(&1.name == name)) != nil
   end
 
   def item_exists?(project_node, name) do
-    list_items(project_node)
+    project_node
+    |> list_items()
     |> Enum.find(&(&1.name == name)) != nil
   end
 
@@ -235,33 +228,27 @@ defmodule Systems.Project.Public do
   end
 
   def delete(id) when is_number(id) do
-    get!(id, Project.Model.preload_graph(:down))
+    id
+    |> get!(Project.Model.preload_graph(:down))
     |> Project.Assembly.delete()
   end
 
   def delete_item(id) when is_number(id) do
-    get_item!(id, Project.ItemModel.preload_graph(:down))
+    id
+    |> get_item!(Project.ItemModel.preload_graph(:down))
     |> Project.Assembly.delete()
   end
 
-  def prepare(
-        %{name: _name} = attrs,
-        items,
-        user
-      )
-      when is_list(items) do
+  def prepare(%{name: _name} = attrs, items, user) when is_list(items) do
     {:ok, root} =
-      prepare_node(%{name: "Project", project_path: []}, items)
+      %{name: "Project", project_path: []}
+      |> prepare_node(items)
       |> Ecto.Changeset.apply_action(:prepare)
 
     prepare(attrs, root, auth_module().prepare_node(user, :owner))
   end
 
-  def prepare(
-        %{name: _name} = attrs,
-        %Project.NodeModel{} = root,
-        %{} = auth_node
-      ) do
+  def prepare(%{name: _name} = attrs, %Project.NodeModel{} = root, %{} = auth_node) do
     %Project.Model{}
     |> Project.Model.changeset(attrs)
     |> Ecto.Changeset.put_assoc(:root, root)
@@ -308,11 +295,7 @@ defmodule Systems.Project.Public do
     prepare_item(attrs, :leaderboard, changeset)
   end
 
-  def prepare_item(
-        %{name: _name, project_path: _} = attrs,
-        field_name,
-        concrete
-      ) do
+  def prepare_item(%{name: _name, project_path: _} = attrs, field_name, concrete) do
     %Project.ItemModel{}
     |> Project.ItemModel.changeset(attrs)
     |> Ecto.Changeset.put_assoc(field_name, concrete)
@@ -334,8 +317,8 @@ defmodule Systems.Project.Public do
 
   def add_owner!(%Project.Model{} = project, user) do
     Multi.new()
-    |> Ecto.Multi.put(:project, project)
-    |> Ecto.Multi.put(:user, user)
+    |> Multi.put(:project, project)
+    |> Multi.put(:user, user)
     |> Multi.run(:add, fn _, %{user: user, project: project} ->
       case auth_module().assign_role(user, project, :owner) do
         :ok -> {:ok, :added}
@@ -348,8 +331,8 @@ defmodule Systems.Project.Public do
 
   def remove_owner!(%Project.Model{} = project, user) do
     Multi.new()
-    |> Ecto.Multi.put(:project, project)
-    |> Ecto.Multi.put(:user, user)
+    |> Multi.put(:project, project)
+    |> Multi.put(:user, user)
     |> Multi.run(:remove, fn _, %{user: user, project: project} ->
       case auth_module().remove_role!(user, project, :owner) do
         {count, _} when count > 0 -> {:ok, :removed}
@@ -375,8 +358,8 @@ defimpl Core.Persister, for: Systems.Project.Model do
 end
 
 defimpl Core.Persister, for: Systems.Project.ItemModel do
-  alias Frameworks.Utility.EctoHelper
   alias Frameworks.Signal
+  alias Frameworks.Utility.EctoHelper
   alias Systems.Project
 
   def save(_project_item, changeset) do

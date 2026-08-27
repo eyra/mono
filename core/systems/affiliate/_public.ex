@@ -1,19 +1,19 @@
 defmodule Systems.Affiliate.Public do
+  @moduledoc false
   use Systems.Affiliate.Constants
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
-  require Logger
-
-  import Ecto.Query, warn: true
   import Ecto.Changeset
+  import Ecto.Query, warn: true
 
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-
   alias Systems.Account
   alias Systems.Affiliate
+
+  require Logger
 
   @resource_map %{
     Systems.Assignment.Model => @annotation_resource_id
@@ -74,8 +74,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def prepare_affiliate(callback_url \\ nil, redirect_url \\ nil) do
-    %Affiliate.Model{}
-    |> Affiliate.Model.changeset(%{
+    Affiliate.Model.changeset(%Affiliate.Model{}, %{
       callback_url: callback_url,
       redirect_url: redirect_url
     })
@@ -128,8 +127,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def list_user_ids do
-    from(au in Affiliate.User, select: au.user_id, distinct: true)
-    |> Repo.all()
+    Repo.all(from(au in Affiliate.User, select: au.user_id, distinct: true))
   end
 
   def get_user(%Account.User{} = user) do
@@ -160,10 +158,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def get_user_info(%Affiliate.User{} = user) do
-    from(aui in Affiliate.UserInfoModel,
-      where: aui.user_id == ^user.id
-    )
-    |> Repo.one()
+    Repo.one(from(aui in Affiliate.UserInfoModel, where: aui.user_id == ^user.id))
   end
 
   def register_user!(organisation, external_id) do
@@ -217,18 +212,20 @@ defmodule Systems.Affiliate.Public do
   end
 
   def count_users(%Affiliate.Model{id: affiliate_id}) do
-    from(au in Affiliate.User,
-      where: au.affiliate_id == ^affiliate_id
+    Repo.aggregate(
+      from(au in Affiliate.User, where: au.affiliate_id == ^affiliate_id),
+      :count,
+      :id
     )
-    |> Repo.aggregate(:count, :id)
   end
 
   def prepare_user(%Affiliate.Model{id: affiliate_id}, identifier) do
     email = "affiliate_#{affiliate_id}_#{identifier}@next.eyra.co"
     name = "Affiliate User #{identifier}"
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
-    Account.User.sso_changeset(%Account.User{}, %{
+    %Account.User{}
+    |> Account.User.sso_changeset(%{
       email: email,
       creator: false,
       displayname: name,

@@ -1,4 +1,5 @@
 defmodule Systems.Manual.ToolViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Concept.LiveContext

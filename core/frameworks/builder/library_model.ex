@@ -1,4 +1,5 @@
 defmodule Frameworks.Builder.LibraryModel do
+  @moduledoc false
   alias Frameworks.Builder.LibraryItemModel
 
   @type t :: %__MODULE__{

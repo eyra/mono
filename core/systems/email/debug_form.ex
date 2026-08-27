@@ -1,4 +1,5 @@
 defmodule Systems.Email.DebugModel do
+  @moduledoc false
   use Ecto.Schema
 
   embedded_schema do
@@ -9,14 +10,14 @@ defmodule Systems.Email.DebugModel do
 end
 
 defmodule Systems.Email.DebugForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   import Ecto.Changeset
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
 
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
   alias Systems.Account
   alias Systems.Email
 
@@ -31,20 +32,12 @@ defmodule Systems.Email.DebugForm do
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{"debug_model" => mail_data},
-        socket
-      ) do
+  def handle_event("update", %{"debug_model" => mail_data}, socket) do
     {:noreply, assign(socket, :changeset, changeset(mail_data))}
   end
 
   @impl true
-  def handle_event(
-        "send",
-        %{"debug_model" => mail_data},
-        %{assigns: %{user: from_user}} = socket
-      ) do
+  def handle_event("send", %{"debug_model" => mail_data}, %{assigns: %{user: from_user}} = socket) do
     changeset =
       case changeset(mail_data) do
         %{valid?: true, changes: %{to: to, subject: subject, message: message}} ->
@@ -81,12 +74,12 @@ defmodule Systems.Email.DebugForm do
   end
 
   defp changeset(params) do
-    %Systems.Email.DebugModel{}
-    |> cast(params, [:to, :subject, :message])
+    cast(%Systems.Email.DebugModel{}, params, [:to, :subject, :message])
   end
 
   defp send_mail(subject, message, from_user, to_user) do
-    Email.Factory.debug(subject, message, from_user, to_user)
+    subject
+    |> Email.Factory.debug(message, from_user, to_user)
     |> Email.Public.deliver_now!()
   end
 end

@@ -25,8 +25,6 @@ defmodule Systems.Account.ProfileViewBuilder do
             text_color: "text-delete"
           }
         }
-      else
-        nil
       end
 
     %{

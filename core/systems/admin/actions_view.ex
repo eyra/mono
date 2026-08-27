@@ -5,13 +5,12 @@ defmodule Systems.Admin.ActionsView do
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
-
   alias Systems.Advert
   alias Systems.Assignment
   alias Systems.Feldspar
   alias Systems.Observatory
 
-  def dependencies(), do: []
+  def dependencies, do: []
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()

@@ -1,4 +1,5 @@
 defmodule CoreWeb.Validator.Float do
+  @moduledoc false
   def valid_float?(value) when is_float(value), do: :ok
   def valid_float?(value) when is_integer(value), do: :ok
 

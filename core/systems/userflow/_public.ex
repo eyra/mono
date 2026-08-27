@@ -1,11 +1,12 @@
 defmodule Systems.Userflow.Public do
+  @moduledoc false
   import Systems.Userflow.Assembly, only: [prepare_step: 3, prepare_progress: 2]
 
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-  alias Systems.Userflow
   alias Systems.Account
+  alias Systems.Userflow
 
   def next_order(%Userflow.Model{} = userflow) do
     last_order =
@@ -22,7 +23,8 @@ defmodule Systems.Userflow.Public do
   Gets a userflow by its id.
   """
   def get_userflow!(id) do
-    Userflow.Queries.get_by_id(id)
+    id
+    |> Userflow.Queries.get_by_id()
     |> Repo.one!()
   end
 
@@ -131,7 +133,7 @@ defmodule Systems.Userflow.Public do
     Gets the previous step for a step or nil if there is no previous step.
   """
   def previous_step(%Userflow.StepModel{} = step) do
-    case Userflow.Queries.previous_step(step) |> Repo.one() do
+    case step |> Userflow.Queries.previous_step() |> Repo.one() do
       nil ->
         nil
 
@@ -162,15 +164,15 @@ defmodule Systems.Userflow.Public do
   Gets all steps in a userflow grouped by their group field.
   """
   def steps_by_group(%Userflow.Model{} = userflow) do
-    userflow
-    |> Userflow.Model.steps_by_group()
+    Userflow.Model.steps_by_group(userflow)
   end
 
   @doc """
   Gets all progress for a user in a userflow.
   """
   def list_progress(%Userflow.Model{} = userflow, user_id) do
-    Userflow.Queries.list_progress(userflow.id, user_id)
+    userflow.id
+    |> Userflow.Queries.list_progress(user_id)
     |> Repo.all()
   end
 end

@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Yoda.Backend do
+  @moduledoc false
   @behaviour Systems.Storage.Backend
 
   alias Systems.Storage.Yoda
@@ -6,15 +7,9 @@ defmodule Systems.Storage.Yoda.Backend do
   require Logger
 
   @impl true
-  def store(
-        %{
-          "user" => username,
-          "password" => password,
-          "url" => yoda_url
-        } = _endpoint,
-        data,
-        %{"identifier" => identifier}
-      ) do
+  def store(%{"user" => username, "password" => password, "url" => yoda_url} = _endpoint, data, %{
+        "identifier" => identifier
+      }) do
     filename = filename(identifier)
     file_url = url([yoda_url, filename])
 

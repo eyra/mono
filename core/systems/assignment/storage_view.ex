@@ -100,7 +100,8 @@ defmodule Systems.Assignment.StorageView do
             project_node: %{id: project_node_id} = project_node,
             user: user
           }
-        } = socket
+        } =
+          socket
       ) do
     name = dgettext("eyra-storage", "default.name")
 
@@ -114,7 +115,7 @@ defmodule Systems.Assignment.StorageView do
         {:noreply, socket}
 
       {:error, _} ->
-        {:noreply, socket |> Frameworks.Pixel.Flash.push_error(socket)}
+        {:noreply, Frameworks.Pixel.Flash.push_error(socket, socket)}
     end
   end
 
@@ -122,8 +123,7 @@ defmodule Systems.Assignment.StorageView do
   def handle_event("update", %{source: %{name: :type_selector}, status: special_type}, socket) do
     {
       :noreply,
-      socket
-      |> assign(special_type: special_type)
+      assign(socket, special_type: special_type)
     }
   end
 

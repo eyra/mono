@@ -28,12 +28,12 @@ defmodule Systems.Home.RewardsSummaryView do
 
   alias Frameworks.Pixel
   alias Frameworks.Pixel.Button
-  require Logger
-
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Fund
+
+  require Logger
 
   @impl true
   def update(
@@ -147,7 +147,7 @@ defmodule Systems.Home.RewardsSummaryView do
         {:noreply, present_handoff(socket, :awaiting)}
 
       {:error, {:below_threshold, _cents}} ->
-        {:noreply, socket |> Flash.push_error(labels.payout_below_threshold)}
+        {:noreply, Flash.push_error(socket, labels.payout_below_threshold)}
 
       {:error, _reason} ->
         {:noreply, present_handoff(socket, :verify)}
@@ -179,15 +179,19 @@ defmodule Systems.Home.RewardsSummaryView do
   # Guarded on the server-set :opp_phase_3 assign, not just the hidden button —
   # a client can send the event either way, and confirming it waives a right.
   @impl true
+
+  # MUST stay above the unguarded payout "confirmed" clause below, which would
+  # otherwise swallow this and fire a payout instead of a donation.
   def handle_event("donate", _params, %{assigns: %{donate_enabled?: true}} = socket) do
     {:noreply, present_handoff(socket, :donate)}
   end
 
+  # MS.8: the refreshed card — approved at zero, the donated total shown — is
+  # the confirmation. Nothing to navigate to, and nothing to refresh here
+  # either: request_donation dispatches {:fund_rewards_summary, :updated}, so
+  # Observatory pushes the new totals into this card by itself.
   @impl true
   def handle_event("donate", _params, socket), do: {:noreply, socket}
-
-  # MUST stay above the unguarded payout "confirmed" clause below, which would
-  # otherwise swallow this and fire a payout instead of a donation.
   @impl true
   def handle_event(
         "confirmed",
@@ -202,28 +206,26 @@ defmodule Systems.Home.RewardsSummaryView do
         } = socket
       ) do
     socket = hide_modal(socket, :handoff_modal)
-
-    # MS.8: the refreshed card — approved at zero, the donated total shown — is
-    # the confirmation. Nothing to navigate to, and nothing to refresh here
-    # either: request_donation dispatches {:fund_rewards_summary, :updated}, so
-    # Observatory pushes the new totals into this card by itself.
     {:noreply, flash_donation_result(socket, Fund.Public.request_donation(user, payout_currency))}
   end
 
+  # Awaiting-verification info modal: "OK" only dismisses; the participant
+  # can't do anything but wait for the provider's review to complete.
   @impl true
   def handle_event(
         "confirmed",
         %{source: %{name: :handoff_modal}},
         %{assigns: %{handoff_mode: :awaiting}} = socket
       ) do
-    # Awaiting-verification info modal: "OK" only dismisses; the participant
-    # can't do anything but wait for the provider's review to complete.
     {:noreply, hide_modal(socket, :handoff_modal)}
   end
 
   # Guarded on :payout, not a catch-all: two modes now trigger a money movement
   # from this same event, so an unmatched one must never fall through into the
   # wrong one. Anything not handled above lands on the no-op clause below.
+  # Redirecting here is forbidden — this handler runs inside the
+  # component's update/2 lifecycle (Fabric delivers the modal event via
+  # send_update). Hand off to Home.Page, which redirects from handle_info.
   @impl true
   def handle_event(
         "confirmed",
@@ -235,9 +237,6 @@ defmodule Systems.Home.RewardsSummaryView do
 
     case Fund.Public.request_payout(user, payout_currency) do
       {:ok, _result} ->
-        # Redirecting here is forbidden — this handler runs inside the
-        # component's update/2 lifecycle (Fabric delivers the modal event via
-        # send_update). Hand off to Home.Page, which redirects from handle_info.
         send(self(), :payout_completed)
         {:noreply, socket}
 

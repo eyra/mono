@@ -12,7 +12,7 @@ defmodule Systems.Org.ArchiveModalViewBuilderTest do
       archived_org =
         Factories.insert!(:org_node, %{
           identifier: ["archived_org"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       vm = ArchiveModalViewBuilder.view_model(nil, %{locale: :en})
@@ -33,13 +33,13 @@ defmodule Systems.Org.ArchiveModalViewBuilderTest do
       _archived1 =
         Factories.insert!(:org_node, %{
           identifier: ["arch1"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       _archived2 =
         Factories.insert!(:org_node, %{
           identifier: ["arch2"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       vm = ArchiveModalViewBuilder.view_model(nil, %{locale: :en})
@@ -52,13 +52,13 @@ defmodule Systems.Org.ArchiveModalViewBuilderTest do
       _org1 =
         Factories.insert!(:org_node, %{
           identifier: ["searchable_org"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       _org2 =
         Factories.insert!(:org_node, %{
           identifier: ["other_archived"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       vm = ArchiveModalViewBuilder.view_model(nil, %{locale: :en, query: ["searchable"]})
@@ -74,7 +74,7 @@ defmodule Systems.Org.ArchiveModalViewBuilderTest do
       _archived =
         Factories.insert!(:org_node, %{
           identifier: ["restore_test"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       vm = ArchiveModalViewBuilder.view_model(nil, %{locale: :en})
@@ -99,13 +99,13 @@ defmodule Systems.Org.ArchiveModalViewBuilderTest do
       parent =
         Factories.insert!(:org_node, %{
           identifier: ["parent_arch"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       child =
         Factories.insert!(:org_node, %{
           identifier: ["child_arch"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       Org.Public.create_link!(parent, child)

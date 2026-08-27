@@ -1,19 +1,17 @@
 defmodule Systems.Storage.EndpointForm.Helper do
+  @moduledoc false
   defmacro __using__(model) do
     quote do
       use CoreWeb.LiveForm
-      require Logger
 
       alias Systems.Storage
-
       alias unquote(model), as: Model
+
+      require Logger
 
       # Handle initial update
       @impl true
-      def update(
-            %{id: id, entity: entity},
-            socket
-          ) do
+      def update(%{id: id, entity: entity}, socket) do
         changeset = Model.changeset(entity, %{})
         show_status = Map.get(socket.assigns, :show_status, false)
         loading = Map.get(socket.assigns, :loading, false)
@@ -49,7 +47,7 @@ defmodule Systems.Storage.EndpointForm.Helper do
 
       @impl true
       def handle_event("change", _payload, socket) do
-        {:noreply, socket |> assign(show_status: false)}
+        {:noreply, assign(socket, show_status: false)}
       end
 
       @impl true
@@ -85,7 +83,7 @@ defmodule Systems.Storage.EndpointForm.Helper do
           |> Model.changeset(%{})
           |> Model.validate()
 
-        assign(socket, changeset: %Ecto.Changeset{changeset | action: :update})
+        assign(socket, changeset: %{changeset | action: :update})
       end
 
       defp test_connection(%{assigns: %{changeset: changeset, entity: entity}} = socket) do

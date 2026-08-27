@@ -1,20 +1,23 @@
 defmodule Systems.Paper.Public do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  import Systems.Paper.Queries
-  require Ecto.Query
-  import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
-  require Logger
+  import Ecto.Query, warn: false
+  import Systems.Paper.Queries
 
   alias Core.Repo
   alias Ecto.Changeset
+
+  # Reference File
+
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Systems.Content
   alias Systems.Paper
 
-  # Reference File
+  require Ecto.Query
+  require Logger
 
   def get_reference_file!(id, preload \\ []) do
     reference_file_query()
@@ -25,7 +28,7 @@ defmodule Systems.Paper.Public do
   def update!(%Paper.ReferenceFileModel{file: file} = reference_file, ref) do
     reference_file
     |> Paper.ReferenceFileModel.changeset(%{})
-    |> put_assoc(:file, file |> Content.FileModel.changeset(%{ref: ref}))
+    |> put_assoc(:file, Content.FileModel.changeset(file, %{ref: ref}))
     |> Repo.update!()
   end
 
@@ -130,6 +133,7 @@ defmodule Systems.Paper.Public do
 
   def archive_reference_files([]) do
     Logger.debug("No files to archive")
+    # Update all reference files to archived status in one query
     0
   end
 
@@ -137,13 +141,10 @@ defmodule Systems.Paper.Public do
     Logger.info("Archiving #{length(file_ids)} reference files: #{inspect(file_ids)}")
 
     multi =
-      Multi.new()
-      |> Multi.update_all(
+      Multi.update_all(
+        Multi.new(),
         :archive_files,
-        # Update all reference files to archived status in one query
-        from(rf in Paper.ReferenceFileModel,
-          where: rf.id in ^file_ids
-        ),
+        from(rf in Paper.ReferenceFileModel, where: rf.id in ^file_ids),
         set: [status: :archived, updated_at: NaiveDateTime.utc_now()]
       )
 
@@ -175,7 +176,8 @@ defmodule Systems.Paper.Public do
   end
 
   def prepare_import_session!(reference_file, paper_set) do
-    prepare_import_session(reference_file, paper_set)
+    reference_file
+    |> prepare_import_session(paper_set)
     |> case do
       {:ok, session} ->
         session
@@ -193,10 +195,11 @@ defmodule Systems.Paper.Public do
     Multi.new()
     |> Multi.insert(
       :paper_ris_import_session,
-      Paper.RISImportSessionModel.create_changeset(%{
+      %{
         status: :activated,
         phase: :waiting
-      })
+      }
+      |> Paper.RISImportSessionModel.create_changeset()
       |> put_assoc(:reference_file, reference_file)
       |> put_assoc(:paper_set, paper_set)
     )
@@ -218,7 +221,8 @@ defmodule Systems.Paper.Public do
 
   def get_active_import_session_for_reference_file(reference_file_id)
       when is_integer(reference_file_id) do
-    Paper.RISImportSessionModel.active_for_reference_file_tool(reference_file_id)
+    reference_file_id
+    |> Paper.RISImportSessionModel.active_for_reference_file_tool()
     |> List.first()
   end
 
@@ -228,7 +232,8 @@ defmodule Systems.Paper.Public do
   end
 
   def get_import_session!(session_id, preload \\ []) do
-    Repo.get!(Paper.RISImportSessionModel, session_id)
+    Paper.RISImportSessionModel
+    |> Repo.get!(session_id)
     |> Repo.preload(preload)
   end
 
@@ -254,10 +259,11 @@ defmodule Systems.Paper.Public do
   def commit_import_session!(session) do
     # First, transition to importing phase with signal
     {:ok, %{paper_ris_import_session: updated_session}} =
-      session
-      |> Paper.RISImportSessionModel.advance_phase_with_signal(:importing)
+      Paper.RISImportSessionModel.advance_phase_with_signal(session, :importing)
 
     # Then enqueue async job for the actual import work
+    # Reference File Error
+
     %{"session_id" => updated_session.id}
     |> Paper.RISImportCommitJob.new()
     |> Oban.insert!()
@@ -270,26 +276,31 @@ defmodule Systems.Paper.Public do
     Paper.RISImportSessionModel.recent_for_reference_file(reference_file_id, limit)
   end
 
+  # File Paper
+
   def get_most_recent_import_session(paper_set_id) do
-    from(s in Paper.RISImportSessionModel,
-      where: s.paper_set_id == ^paper_set_id,
-      order_by: [desc: s.inserted_at],
-      limit: 1
+    Repo.one(
+      from(s in Paper.RISImportSessionModel,
+        where: s.paper_set_id == ^paper_set_id,
+        order_by: [desc: s.inserted_at],
+        limit: 1
+      )
     )
-    |> Repo.one()
   end
 
   def paper_ids_from_reference_file(%Paper.ReferenceFileModel{} = reference_file) do
-    paper_query(reference_file)
+    reference_file
+    |> paper_query()
     |> select([paper: p], p.id)
     |> Repo.all()
   end
 
-  # Reference File Error
-
   @doc """
     Creates a ReferenceFileErrorModel without saving.
   """
+
+  # Paper Set
+
   def prepare_reference_file_error(reference_file, error) do
     truncated_error = String.slice(error, 0, 255)
 
@@ -297,8 +308,6 @@ defmodule Systems.Paper.Public do
     |> Paper.ReferenceFileErrorModel.changeset(%{error: truncated_error})
     |> put_assoc(:reference_file, reference_file)
   end
-
-  # File Paper
 
   @doc """
     Creates a ReferenceFilePaperAssoc without saving.
@@ -317,8 +326,6 @@ defmodule Systems.Paper.Public do
     put_assoc(file_paper, :paper, paper)
   end
 
-  # Paper Set
-
   def obtain_paper_set!(category, identifier) when is_atom(category) and is_integer(identifier) do
     case get_paper_set(category, identifier) do
       nil -> insert_paper_set!(category, identifier)
@@ -327,23 +334,25 @@ defmodule Systems.Paper.Public do
   end
 
   def get_paper_set!(id, preload \\ []) when is_integer(id) do
-    from(Paper.SetModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(Paper.SetModel, preload: ^preload), id)
   end
 
   def get_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
-    paper_set_query(category, identifier)
+    category
+    |> paper_set_query(identifier)
     |> Repo.one()
   end
 
+  # Paper
+
   def insert_paper_set!(category, identifier) when is_atom(category) and is_integer(identifier) do
-    prepare_paper_set(category, identifier)
+    category
+    |> prepare_paper_set(identifier)
     |> Repo.insert!()
   end
 
   def prepare_paper_set(category, identifier) when is_atom(category) and is_integer(identifier) do
-    %Paper.SetModel{}
-    |> Paper.SetModel.changeset(%{category: category, identifier: identifier})
+    Paper.SetModel.changeset(%Paper.SetModel{}, %{category: category, identifier: identifier})
   end
 
   def remove_paper_from_set!(paper_set_id, paper_id)
@@ -369,12 +378,15 @@ defmodule Systems.Paper.Public do
     end
   end
 
-  # Paper
+  # Error
 
   @doc """
     Creates a PaperModel without saving.
   """
+
   # credo:disable-for-next-line
+  # RIS
+
   def prepare_paper(
         doi,
         title,
@@ -386,8 +398,7 @@ defmodule Systems.Paper.Public do
         abstract,
         keywords
       ) do
-    %Paper.Model{}
-    |> Paper.Model.changeset(%{
+    Paper.Model.changeset(%Paper.Model{}, %{
       doi: doi,
       title: title,
       subtitle: subtitle,
@@ -401,21 +412,17 @@ defmodule Systems.Paper.Public do
   end
 
   def get!(id, preloads \\ []) do
-    Repo.get!(Paper.Model, id)
+    Paper.Model
+    |> Repo.get!(id)
     |> Repo.preload(preloads)
   end
-
-  # Error
 
   def prepare_error({:unsupported_type_of_reference, type_of_reference}) do
     dgettext("eyra-zircon", "unsupported_type_of_reference", type: type_of_reference)
   end
 
-  # RIS
-
   def prepare_ris(raw) do
-    %Paper.RISModel{}
-    |> Paper.RISModel.changeset(%{raw: raw})
+    Paper.RISModel.changeset(%Paper.RISModel{}, %{raw: raw})
   end
 
   def finalize_ris(ris, %{paper: paper}) do

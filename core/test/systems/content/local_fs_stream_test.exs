@@ -1,5 +1,6 @@
 defmodule Systems.Content.LocalFSStreamTest do
   use Core.DataCase
+
   alias Systems.Content.LocalFS
 
   describe "stream/1" do
@@ -41,7 +42,7 @@ defmodule Systems.Content.LocalFSStreamTest do
       assert {:ok, stream} = LocalFS.stream(file_path)
 
       # Collect the stream
-      result = stream |> Enum.join("")
+      result = Enum.join(stream, "")
 
       assert result == expected_content
     end
@@ -53,7 +54,7 @@ defmodule Systems.Content.LocalFSStreamTest do
 
       assert {:ok, stream} = LocalFS.stream(url)
 
-      result = stream |> Enum.join("")
+      result = Enum.join(stream, "")
 
       assert result == expected_content
     end
@@ -81,11 +82,12 @@ defmodule Systems.Content.LocalFSStreamTest do
 
       # Get the configured chunk size
       expected_chunk_size =
-        Application.fetch_env!(:core, :paper)
+        :core
+        |> Application.fetch_env!(:paper)
         |> Keyword.fetch!(:ris_stream_chunk_size)
 
       # Verify it's actually streaming
-      chunks = stream |> Enum.to_list()
+      chunks = Enum.to_list(stream)
 
       # Should have multiple chunks for a 1MB file
       assert length(chunks) > 10

@@ -1,15 +1,19 @@
 defmodule Systems.Payment.Provider.OPP do
+  @moduledoc false
   @behaviour Systems.Payment.Provider
 
-  require Logger
-
   alias Systems.Payment.Error
-  alias Systems.Payment.Transaction
   alias Systems.Payment.Provider.OPP.HTTP
+  alias Systems.Payment.Public
+  alias Systems.Payment.Transaction
+
+  require Logger
 
   @currency_mapping %{
     EUR: "EUR"
   }
+
+  # Merchants
 
   @default_withdrawal_description "Payout"
 
@@ -17,8 +21,6 @@ defmodule Systems.Payment.Provider.OPP do
   # 50 pages is far more money movement than a reconciliation window can hold.
   @page_size 100
   @max_pages 50
-
-  # Merchants
 
   @impl true
   def create_merchant(attrs) when is_map(attrs) do
@@ -67,8 +69,7 @@ defmodule Systems.Payment.Provider.OPP do
     do: list_since("/merchants", since, &parse_merchant(Map.get(&1, "uid"), &1))
 
   @impl true
-  def add_merchant_phone(merchant_uid, phone)
-      when is_binary(merchant_uid) and is_binary(phone) do
+  def add_merchant_phone(merchant_uid, phone) when is_binary(merchant_uid) and is_binary(phone) do
     with {:ok, contact_uid} <- primary_contact_uid(merchant_uid),
          {:ok, _contact} <-
            HTTP.post("/merchants/#{merchant_uid}/contacts/#{contact_uid}", %{
@@ -87,6 +88,7 @@ defmodule Systems.Payment.Provider.OPP do
       {:ok, %{"contacts" => %{"data" => [%{"uid" => uid} | _]}}} ->
         {:ok, uid}
 
+      # Transactions
       {:ok, %{"contacts" => [%{"uid" => uid} | _]}} ->
         {:ok, uid}
 
@@ -98,8 +100,6 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
-
-  # Transactions
 
   @impl true
   def create_transaction(%Transaction.Request{
@@ -113,27 +113,30 @@ defmodule Systems.Payment.Provider.OPP do
         opts: opts
       })
       when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
-             is_atom(currency) and is_binary(invoice_id) and is_binary(idempotence_key) do
-    notify_url = Systems.Payment.Public.webhook_url()
+             is_atom(currency) and
+             is_binary(invoice_id) and is_binary(idempotence_key) do
+    notify_url = Public.webhook_url()
 
     body =
-      %{
-        merchant_uid: merchant_uid,
-        total_amount: total_amount,
-        currency: Map.fetch!(@currency_mapping, currency),
-        description: Transaction.Description.format(description, invoice_id),
-        metadata: transaction_metadata(metadata, invoice_id, idempotence_key),
-        notify_url: notify_url,
-        products: [
-          %{
-            name: "Participant slots",
-            quantity: description.participant_count,
-            price: description.amount_per_participant
-          }
-        ],
-        total_price: total_amount
-      }
-      |> put_opts(opts)
+      put_opts(
+        %{
+          merchant_uid: merchant_uid,
+          total_amount: total_amount,
+          currency: Map.fetch!(@currency_mapping, currency),
+          description: Transaction.Description.format(description, invoice_id),
+          metadata: transaction_metadata(metadata, invoice_id, idempotence_key),
+          notify_url: notify_url,
+          products: [
+            %{
+              name: "Participant slots",
+              quantity: description.participant_count,
+              price: description.amount_per_participant
+            }
+          ],
+          total_price: total_amount
+        },
+        opts
+      )
 
     case HTTP.post("/transactions", body, [{"Idempotency-Key", idempotence_key}]) do
       {:ok, %{"uid" => uid} = data} ->
@@ -150,6 +153,8 @@ defmodule Systems.Payment.Provider.OPP do
       {:ok, data} ->
         {:ok, parse_transaction(uid, data)}
 
+      # Bank accounts
+
       {:error, %Error{}} = error ->
         error
     end
@@ -163,8 +168,6 @@ defmodule Systems.Payment.Provider.OPP do
   def list_recent_transactions(%DateTime{} = since),
     do: list_since("/transactions", since, &parse_transaction(Map.get(&1, "uid"), &1))
 
-  # Bank accounts
-
   @impl true
   def create_bank_account(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
     case HTTP.post("/merchants/#{merchant_uid}/bank_accounts", attrs) do
@@ -172,6 +175,7 @@ defmodule Systems.Payment.Provider.OPP do
         {:ok, parse_bank_account(uid, data)}
 
       {:error, %Error{}} = error ->
+        # Withdrawals
         error
     end
   end
@@ -187,13 +191,11 @@ defmodule Systems.Payment.Provider.OPP do
     end
   end
 
-  # Withdrawals
-
+  # Unknown currency must return an error (not raise) so the caller can revert.
   @impl true
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
       when is_binary(merchant_uid) and is_atom(currency) and is_map(attrs) and
              is_binary(idempotence_key) do
-    # Unknown currency must return an error (not raise) so the caller can revert.
     case Map.fetch(@currency_mapping, currency) do
       {:ok, code} ->
         post_withdrawal(
@@ -217,7 +219,7 @@ defmodule Systems.Payment.Provider.OPP do
     |> Map.put(:currency, currency_code)
     |> Map.put(:reference, idempotence_key)
     |> Map.put_new(:description, @default_withdrawal_description)
-    |> Map.put(:notify_url, Systems.Payment.Public.webhook_url())
+    |> Map.put(:notify_url, Public.webhook_url())
   end
 
   defp post_withdrawal(merchant_uid, body, idempotence_key) do
@@ -255,8 +257,9 @@ defmodule Systems.Payment.Provider.OPP do
   # OPP models a merchant-to-merchant transfer as a charge of type `balance`.
   @impl true
   def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
-             is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and
+             amount > 0 and
+             is_binary(idempotence_key) do
     body = %{
       type: "balance",
       amount: amount,
@@ -320,6 +323,7 @@ defmodule Systems.Payment.Provider.OPP do
       {:ok, %{"data" => items}} when is_list(items) ->
         {:ok, Enum.map(items, &parse_transfer(Map.get(&1, "uid"), &1))}
 
+      # Parsers
       {:ok, _data} ->
         {:ok, []}
 
@@ -342,8 +346,6 @@ defmodule Systems.Payment.Provider.OPP do
         error
     end
   end
-
-  # Parsers
 
   defp parse_bank_account(uid, data) do
     raw_status = Map.get(data, "status", "new")

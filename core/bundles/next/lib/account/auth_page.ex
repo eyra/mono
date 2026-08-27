@@ -1,18 +1,19 @@
 defmodule Next.Account.AuthPage do
+  @moduledoc false
   use CoreWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
   import CoreWeb.Menus
   import Frameworks.Pixel.Form
 
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Systems.Account
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
 
   @impl true
   def mount(params, _session, socket) do
@@ -43,9 +44,7 @@ defmodule Next.Account.AuthPage do
     email = String.trim(email)
 
     if valid_email?(email) do
-      socket =
-        socket
-        |> assign(loading: true, error: nil, form: to_form(%{"email" => email}))
+      socket = assign(socket, loading: true, error: nil, form: to_form(%{"email" => email}))
 
       send(self(), {:route_email, email})
       {:noreply, socket}

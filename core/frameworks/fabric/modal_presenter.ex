@@ -1,4 +1,5 @@
 defmodule Fabric.ModalPresenter do
+  @moduledoc false
   defmacro __using__(_opts) do
     quote do
       import Fabric.ModalPresenter
@@ -115,7 +116,7 @@ defmodule Fabric.ModalPresenter do
       end
 
       defp to_keyword_list(%{} = params) do
-        Enum.into(params, [], fn {k, v} -> {k, v} end)
+        Enum.map(params, fn {k, v} -> {k, v} end)
       end
     end
   end

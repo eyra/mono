@@ -5,6 +5,7 @@ defmodule CoreWeb.Layouts.App.Html do
   use CoreWeb, :html
 
   import CoreWeb.UI.Footer
+
   alias Frameworks.Pixel.Navigation
 
   attr(:user, :string, required: true)

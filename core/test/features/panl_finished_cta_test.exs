@@ -18,9 +18,9 @@ defmodule CoreWeb.Features.PanlFinishedCTATest do
   use CoreWeb.FeatureCase
   use Core.FeatureFlags.Test
 
-  alias Systems.Pool
   alias Systems.Assignment
   alias Systems.Crew
+  alias Systems.Pool
 
   setup do
     set_feature_flag(:panl, true)
@@ -89,14 +89,16 @@ defmodule CoreWeb.Features.PanlFinishedCTATest do
     participant =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: false
       })
 
     assignment =
-      Assignment.Factories.create_questionnaire_assignment()
-      |> Assignment.Factories.add_participant(participant)
+      Assignment.Factories.add_participant(
+        Assignment.Factories.create_questionnaire_assignment(),
+        participant
+      )
 
     Factories.insert!(:affiliate_user, %{user: participant, identifier: "test_participant"})
 
@@ -115,8 +117,8 @@ defmodule CoreWeb.Features.PanlFinishedCTATest do
 
   defp mark_assignment_finished(assignment, participant) do
     %{crew: crew, workflow: workflow} = assignment
-    %{items: [item]} = workflow |> Repo.preload([:items])
-    member = Crew.Public.get_member(crew, participant) |> Repo.preload([:user])
+    %{items: [item]} = Repo.preload(workflow, [:items])
+    member = crew |> Crew.Public.get_member(participant) |> Repo.preload([:user])
     identifier = Assignment.Private.task_identifier(assignment, item, member)
     Crew.Factories.create_task(crew, member, identifier, status: :completed)
   end

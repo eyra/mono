@@ -1,5 +1,7 @@
 defmodule Core.SurfConext.User do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "surfconext_users" do

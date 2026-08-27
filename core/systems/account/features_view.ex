@@ -11,7 +11,7 @@ defmodule Systems.Account.FeaturesView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  def dependencies(), do: [:user_id, :show_title]
+  def dependencies, do: [:user_id, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     user = Account.Public.get_user!(user_id)
@@ -38,11 +38,7 @@ defmodule Systems.Account.FeaturesView do
   end
 
   @impl true
-  def handle_event(
-        event,
-        %{"features_model" => attrs},
-        %{assigns: %{model: features}} = socket
-      )
+  def handle_event(event, %{"features_model" => attrs}, %{assigns: %{model: features}} = socket)
       when event in ["change", "submit"] do
     {:noreply, save_features(socket, features, attrs)}
   end

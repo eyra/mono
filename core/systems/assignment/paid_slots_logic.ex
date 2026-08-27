@@ -23,8 +23,12 @@ defmodule Systems.Assignment.PaidSlotsLogic do
 
   defmacro __using__(_opts) do
     quote do
-      require Logger
       import Systems.Assignment.PaidSlotsHtml
+
+      alias Frameworks.Pixel.Flash
+      alias Systems.Assignment.PaidSlotsLogic
+
+      require Logger
 
       @impl true
       def compose(:pay_in_request_form, %{
@@ -54,20 +58,20 @@ defmodule Systems.Assignment.PaidSlotsLogic do
 
       @impl true
       def handle_event("pay_in_request_form_hide", _, socket) do
-        {:noreply, socket |> hide_modal(:pay_in_request_form)}
+        {:noreply, hide_modal(socket, :pay_in_request_form)}
       end
 
       @impl true
       def handle_event("pay_in_request_form_cancelled", _, socket) do
-        {:noreply, socket |> hide_modal(:pay_in_request_form)}
+        {:noreply, hide_modal(socket, :pay_in_request_form)}
       end
 
       @impl true
       def handle_event("pay_in_request_form_submit", _, socket) do
         {:noreply,
          socket
-         |> Systems.Assignment.PaidSlotsLogic.refresh_assignment()
-         |> Systems.Assignment.PaidSlotsLogic.assign_transactions()
+         |> PaidSlotsLogic.refresh_assignment()
+         |> PaidSlotsLogic.assign_transactions()
          |> hide_modal(:pay_in_request_form)}
       end
 
@@ -81,8 +85,8 @@ defmodule Systems.Assignment.PaidSlotsLogic do
             Logger.warning("[PaidSlots] No payment_url for transaction #{provider_uid}")
 
             {:noreply,
-             socket
-             |> Frameworks.Pixel.Flash.push_error(
+             Flash.push_error(
+               socket,
                dgettext("eyra-assignment", "panl_participants.resume.error")
              )}
 
@@ -90,8 +94,8 @@ defmodule Systems.Assignment.PaidSlotsLogic do
             Logger.warning("[PaidSlots] Resume payment failed: #{inspect(error)}")
 
             {:noreply,
-             socket
-             |> Frameworks.Pixel.Flash.push_error(
+             Flash.push_error(
+               socket,
                dgettext("eyra-assignment", "panl_participants.resume.error")
              )}
         end

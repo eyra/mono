@@ -1,5 +1,6 @@
 defmodule Frameworks.Utility.ParamsTest do
   use ExUnit.Case
+
   alias Frameworks.Utility.Params
 
   describe "parse_bool_param/3" do

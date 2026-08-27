@@ -1,4 +1,5 @@
 defmodule Systems.Instruction.ToolViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Content

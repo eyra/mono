@@ -1,4 +1,5 @@
 defmodule Core.ImageCatalog.Local do
+  @moduledoc false
   @behaviour Core.ImageCatalog
 
   def search(query, page, page_size) when query == "" do
@@ -16,9 +17,7 @@ defmodule Core.ImageCatalog.Local do
   end
 
   def search(query, page, page_size) when query != "" do
-    images =
-      list_image_ids()
-      |> Enum.filter(&String.contains?(&1, query))
+    images = Enum.filter(list_image_ids(), &String.contains?(&1, query))
 
     image_count = Enum.count(images)
 
@@ -40,7 +39,7 @@ defmodule Core.ImageCatalog.Local do
 
     %{
       search_result
-      | images: search_result.images |> Enum.map(&info(&1, opts))
+      | images: Enum.map(search_result.images, &info(&1, opts))
     }
   end
 
@@ -60,8 +59,7 @@ defmodule Core.ImageCatalog.Local do
   end
 
   def random(count \\ 2) do
-    list_image_ids()
-    |> Enum.take_random(count)
+    Enum.take_random(list_image_ids(), count)
   end
 
   defp file_name_to_image_info(file_name) do
@@ -86,6 +84,6 @@ defmodule Core.ImageCatalog.Local do
   defp list_image_ids, do: Map.keys(image_map())
 
   defp image_map do
-    list_files() |> Enum.map(&file_name_to_image_info/1) |> Enum.into(%{}, &{&1.id, &1})
+    list_files() |> Enum.map(&file_name_to_image_info/1) |> Map.new(&{&1.id, &1})
   end
 end

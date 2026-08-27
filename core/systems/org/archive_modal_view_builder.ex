@@ -39,7 +39,9 @@ defmodule Systems.Org.ArchiveModalViewBuilder do
   end
 
   defp build_archived_organisation_items(query, active_filters, locale) do
-    Org.Public.list_archived_nodes(Org.NodeModel.preload_graph(:full))
+    :full
+    |> Org.NodeModel.preload_graph()
+    |> Org.Public.list_archived_nodes()
     |> filter_by_hierarchy(active_filters)
     |> Enum.map(&build_archived_organisation_item(&1, locale))
     |> filter_by_query(query)

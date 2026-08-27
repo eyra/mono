@@ -1,16 +1,16 @@
 defmodule Systems.Fund.PayInRequestForm do
+  @moduledoc false
   use CoreWeb.LiveForm
-
-  require Logger
 
   import Frameworks.Pixel.Form
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
-
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Fund
   alias Systems.Payment
+
+  require Logger
 
   @impl true
   def update(
@@ -67,7 +67,7 @@ defmodule Systems.Fund.PayInRequestForm do
   def handle_event("confirm", %{"pay_in_request" => attrs}, socket) do
     case Fund.Public.create_pay_in(socket.assigns.assignment, socket.assigns.user, attrs) do
       {:ok, %{payment_url: nil}} ->
-        {:noreply, socket |> send_event(:parent, "pay_in_request_form_submit")}
+        {:noreply, send_event(socket, :parent, "pay_in_request_form_submit")}
 
       {:ok, %{payment_url: payment_url}} ->
         {:noreply, redirect(socket, external: payment_url)}
@@ -77,13 +77,13 @@ defmodule Systems.Fund.PayInRequestForm do
 
       {:error, reason} ->
         Logger.warning("[PayInRequestForm] Payment creation failed: #{inspect(reason)}")
-        {:noreply, socket |> flash_error()}
+        {:noreply, flash_error(socket)}
     end
   end
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "pay_in_request_form_cancelled")}
+    {:noreply, send_event(socket, :parent, "pay_in_request_form_cancelled")}
   end
 
   defp build_changeset(request, attrs, false) do
@@ -91,7 +91,8 @@ defmodule Systems.Fund.PayInRequestForm do
   end
 
   defp build_changeset(request, attrs, true) do
-    Fund.PayInRequestModel.changeset(request, attrs)
+    request
+    |> Fund.PayInRequestModel.changeset(attrs)
     |> Fund.PayInRequestModel.validate()
     |> Map.put(:action, :validate)
   end

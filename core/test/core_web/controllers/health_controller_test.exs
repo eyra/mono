@@ -1,5 +1,6 @@
 defmodule CoreWeb.HealthControllerTest do
   use CoreWeb.ConnCase, async: true
+
   alias CoreWeb.HealthController
 
   describe "get" do

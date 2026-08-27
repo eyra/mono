@@ -1,8 +1,8 @@
 defmodule Systems.Assignment.ContributionsViewTest do
   use CoreWeb.ConnCase, async: false
 
-  import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
   import Systems.Fund.TestHelper
   import Systems.NextAction.TestHelper
 
@@ -18,7 +18,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
 
     user = Factories.insert!(:member)
     {:ok, ctx} = login(user, ctx)
-    conn = ctx[:conn] |> Map.put(:request_path, "/assignments/contributions")
+    conn = Map.put(ctx[:conn], :request_path, "/assignments/contributions")
 
     participant = Factories.insert!(:member)
     %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
@@ -67,21 +67,21 @@ defmodule Systems.Assignment.ContributionsViewTest do
   describe "mounting" do
     test "renders the contributions frame with the given title", %{conn: conn, context: context} do
       {:ok, view, _html} = mount_view(conn, context)
-      assert view |> has_element?("[data-testid='contributions-view']")
+      assert has_element?(view, "[data-testid='contributions-view']")
       assert render(view) =~ "Contributions"
     end
 
     test "always mounts the pending and confirmed sub-components",
          %{conn: conn, context: context} do
       {:ok, view, _html} = mount_view(conn, context)
-      assert view |> has_element?("[data-testid='contributions-pending']")
-      assert view |> has_element?("[data-testid='contributions-confirmed']")
+      assert has_element?(view, "[data-testid='contributions-pending']")
+      assert has_element?(view, "[data-testid='contributions-confirmed']")
     end
 
     test "omits the declined sub-component when there are no declined rewards",
          %{conn: conn, context: context} do
       {:ok, view, _html} = mount_view(conn, context)
-      refute view |> has_element?("[data-testid='contributions-declined']")
+      refute has_element?(view, "[data-testid='contributions-declined']")
     end
 
     test "mounts the declined sub-component when there is at least one declined participation",
@@ -90,7 +90,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
       {:ok, _} = Assignment.Public.reject_participation(participation, "not eligible")
 
       {:ok, view, _html} = mount_view(conn, context)
-      assert view |> has_element?("[data-testid='contributions-declined']")
+      assert has_element?(view, "[data-testid='contributions-declined']")
     end
   end
 

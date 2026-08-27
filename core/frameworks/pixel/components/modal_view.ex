@@ -2,30 +2,27 @@ defmodule Frameworks.Pixel.ModalView do
   use CoreWeb, :pixel
   use Gettext, backend: CoreWeb.Gettext
 
-  require Logger
-
   import LiveNest.HTML
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Toolbar
 
+  require Logger
+
   defmacro __using__(_) do
     quote do
+      import Frameworks.Pixel.ModalView, only: [update_modal_buttons: 3]
+
       alias Frameworks.Pixel.ModalView
 
-      import ModalView, only: [update_modal_buttons: 3]
-
       # Handle toolbar action events from the Toolbar LiveComponent
-      def consume_event(
-            %{name: :toolbar_action, payload: %{action: action}},
-            socket
-          ) do
+      def consume_event(%{name: :toolbar_action, payload: %{action: action}}, socket) do
         # Forward to the source that published the buttons
         source = Map.get(socket.assigns, :modal_button_source)
 
         if source do
-          Frameworks.Pixel.ModalView.forward_toolbar_action(source, action)
+          ModalView.forward_toolbar_action(source, action)
         end
 
         {:stop, socket}
@@ -35,7 +32,7 @@ defmodule Frameworks.Pixel.ModalView do
             %{name: :update_modal_buttons, source: source, payload: %{buttons: buttons}},
             socket
           ) do
-        {:stop, Frameworks.Pixel.ModalView.update_modal_buttons(socket, source, buttons)}
+        {:stop, ModalView.update_modal_buttons(socket, source, buttons)}
       end
     end
   end
@@ -115,8 +112,7 @@ defmodule Frameworks.Pixel.ModalView do
   end
 
   def resolve_aspects(opts, _overrides) when is_list(opts) do
-    @defaults
-    |> Keyword.merge(opts)
+    Keyword.merge(@defaults, opts)
   end
 
   # Legacy style to aspects mapping

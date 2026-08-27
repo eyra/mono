@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.ContentPage do
+  @moduledoc false
   use Systems.Content.Composer, :management_page
 
   alias Systems.Assignment
@@ -11,7 +12,9 @@ defmodule Systems.Assignment.ContentPage do
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
-    Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
+    id
+    |> String.to_integer()
+    |> Assignment.Public.get!(Assignment.Model.preload_graph(:down))
     |> Assignment.Private.ensure_affiliate!()
   end
 

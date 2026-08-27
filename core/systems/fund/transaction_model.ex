@@ -1,4 +1,5 @@
 defmodule Systems.Fund.TransactionModel do
+  @moduledoc false
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset

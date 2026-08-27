@@ -8,10 +8,12 @@ defmodule Systems.Account.PhoneFormHandlersTest do
   the case the participant can actually fix — a number OPP rejected.
   """
   use Core.DataCase
+
   import Mox
 
   alias Core.Factories
   alias Systems.Account
+  alias Systems.Payment.Error
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
@@ -59,7 +61,7 @@ defmodule Systems.Account.PhoneFormHandlersTest do
 
     stub(ProviderMock, :add_merchant_phone, fn "m_reject", _phone ->
       {:error,
-       %Systems.Payment.Error{
+       %Error{
          code: :api_error,
          message: "OPP API returned 400",
          details: %{status: 400, body: %{"error" => %{"parameters" => %{"phone" => "invalid"}}}}
@@ -73,7 +75,7 @@ defmodule Systems.Account.PhoneFormHandlersTest do
     user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_down"})
 
     stub(ProviderMock, :get_merchant, fn "m_down" ->
-      {:error, %Systems.Payment.Error{code: :connection_error, message: "Failed to connect"}}
+      {:error, %Error{code: :connection_error, message: "Failed to connect"}}
     end)
 
     assert submit(user).assigns.error == t("payouts.phone.error.flash")
@@ -84,7 +86,7 @@ defmodule Systems.Account.PhoneFormHandlersTest do
 
     stub(ProviderMock, :get_merchant, fn "m_500" ->
       {:error,
-       %Systems.Payment.Error{
+       %Error{
          code: :api_error,
          message: "OPP API returned 503",
          details: %{status: 503, body: %{}}

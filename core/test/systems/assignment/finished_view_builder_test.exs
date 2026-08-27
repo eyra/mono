@@ -4,6 +4,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
+  alias Systems.Pool.Assembly
+  alias Systems.Pool.Public
 
   describe "view_model/2" do
     setup do
@@ -35,7 +37,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(redirect_url)
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_affiliate()
         |> Assignment.Factories.add_affiliate_user(user)
 
       assigns = build_assigns(user, redirect_url)
@@ -45,7 +48,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.illustration == nil
 
       # Should have redirect button
-      assert vm.continue_button != nil
+      assert vm.continue_button
       assert vm.continue_button.action.type == :http_get
       assert vm.continue_button.action.to =~ "https://example.com/return"
       assert vm.continue_button.face.type == :primary
@@ -56,7 +59,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
     test "builds correct VM for declined consent without redirect", %{user: user} do
       assignment =
-        Assignment.Factories.create_assignment_with_consent_and_affiliate(nil)
+        nil
+        |> Assignment.Factories.create_assignment_with_consent_and_affiliate()
         |> Assignment.Factories.add_participant(user)
 
       Assignment.Public.decline_member(assignment, user)
@@ -82,7 +86,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_consent_and_affiliate(redirect_url)
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_consent_and_affiliate()
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
@@ -98,7 +103,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.back_button.action.event == "retry"
 
       # Should have redirect button
-      assert vm.continue_button != nil
+      assert vm.continue_button
       assert vm.continue_button.action.type == :http_get
       assert vm.continue_button.action.to =~ "https://example.com/return"
 
@@ -112,7 +117,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(redirect_url, platform_name)
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_affiliate(platform_name)
         |> Assignment.Factories.add_affiliate_user(user)
 
       assigns = build_assigns(user, redirect_url)
@@ -122,7 +128,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.illustration == nil
 
       # Should have redirect button
-      assert vm.continue_button != nil
+      assert vm.continue_button
       assert vm.continue_button.action.type == :http_get
       assert vm.continue_button.action.to =~ "https://example.com/return"
 
@@ -141,10 +147,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_consent_and_affiliate(
-          redirect_url,
-          platform_name
-        )
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_consent_and_affiliate(platform_name)
         |> Assignment.Factories.add_affiliate_user(user)
         |> Assignment.Factories.add_participant(user)
 
@@ -160,7 +164,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.back_button.action.event == "retry"
 
       # Should have redirect button
-      assert vm.continue_button != nil
+      assert vm.continue_button
       assert vm.continue_button.action.type == :http_get
       assert vm.continue_button.action.to =~ "https://example.com/return"
 
@@ -180,7 +184,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(redirect_url, "")
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_affiliate("")
         |> Assignment.Factories.add_affiliate_user(user)
 
       assigns = build_assigns(user, redirect_url)
@@ -194,7 +199,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       redirect_url = "https://example.com/return"
 
       assignment =
-        Assignment.Factories.create_assignment_with_affiliate(redirect_url, nil)
+        redirect_url
+        |> Assignment.Factories.create_assignment_with_affiliate(nil)
         |> Assignment.Factories.add_affiliate_user(user)
 
       assigns = build_assigns(user, redirect_url)
@@ -221,11 +227,11 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
+      assert vm.email_capture
       assert vm.email_capture.pool_slug == :panl
-      assert vm.email_capture.title != nil
-      assert vm.email_capture.body != nil
-      assert vm.email_capture.email_label != nil
+      assert vm.email_capture.title
+      assert vm.email_capture.body
+      assert vm.email_capture.email_label
       assert vm.email_capture.submit_button.action.type == :submit
       assert vm.email_capture.submit_button.face.type == :primary
     end
@@ -252,15 +258,15 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     test "shows the submitted acknowledgment once the user is a pool member",
          %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
-      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
-      Systems.Pool.Public.add_participant!(panl_pool, user)
+      panl_pool = Assembly.get_or_create_panl()
+      Public.add_participant!(panl_pool, user)
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
-      assert vm.email_capture.title != nil
-      assert vm.email_capture.body != nil
+      assert vm.email_capture
+      assert vm.email_capture.title
+      assert vm.email_capture.body
       refute Map.has_key?(vm.email_capture, :submit_button)
     end
 
@@ -280,7 +286,8 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       crew = Factories.insert!(:crew)
 
       assignment =
-        Factories.insert!(:assignment, %{
+        :assignment
+        |> Factories.insert!(%{
           info: info,
           consent_agreement: consent_agreement,
           workflow: workflow,
@@ -317,7 +324,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
+      assert vm.email_capture
       assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
       assert vm.email_capture.body == dgettext("eyra-assignment", "panl.cta.join.body")
       refute Map.has_key?(vm.email_capture, :submit_button)
@@ -334,13 +341,13 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
     test "renders a Home CTA once the affiliate has joined the pool",
          %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
-      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
-      Systems.Pool.Public.add_participant!(panl_pool, user)
+      panl_pool = Assembly.get_or_create_panl()
+      Public.add_participant!(panl_pool, user)
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
+      assert vm.email_capture
       assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.home.title")
       assert vm.email_capture.body == dgettext("eyra-assignment", "panl.cta.home.body")
       refute Map.has_key?(vm.email_capture, :submit_button)
@@ -358,7 +365,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
+      assert vm.email_capture
       assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
 
       assert vm.email_capture.cta_button.action == %{
@@ -369,15 +376,15 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
     test "renders a Home CTA for a non-affiliate user who is already a pool member" do
       user = Factories.insert!(:member, %{creator: false})
-      panl_pool = Systems.Pool.Assembly.get_or_create_panl()
-      Systems.Pool.Public.add_participant!(panl_pool, user)
+      panl_pool = Assembly.get_or_create_panl()
+      Public.add_participant!(panl_pool, user)
 
       assignment = Assignment.Factories.create_questionnaire_assignment()
 
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      assert vm.email_capture != nil
+      assert vm.email_capture
       assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.home.title")
       assert vm.email_capture.cta_button.action == %{type: :http_get, to: "/"}
     end

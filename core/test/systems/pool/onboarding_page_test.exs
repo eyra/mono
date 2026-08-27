@@ -2,6 +2,7 @@ defmodule Systems.Pool.OnboardingPageTest do
   # async: false — same reason as PanlSignupTest: this exercises the global
   # `Pool.Public.get_by_slug/1` lookup on a fixed-name "Panl" pool.
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Systems.Pool
@@ -17,13 +18,13 @@ defmodule Systems.Pool.OnboardingPageTest do
     test "renders the join consent view first", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
 
-      assert view |> has_element?("[data-testid='pool-join-consent-view']")
+      assert has_element?(view, "[data-testid='pool-join-consent-view']")
     end
 
     test "does not render the features view yet", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
 
-      refute view |> has_element?("[data-testid='features-view']")
+      refute has_element?(view, "[data-testid='features-view']")
     end
   end
 
@@ -36,8 +37,8 @@ defmodule Systems.Pool.OnboardingPageTest do
     test "renders the already-member info view (not the join prompt)", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
 
-      assert view |> has_element?("[data-testid='pool-already-member-view']")
-      refute view |> has_element?("[data-testid='pool-join-consent-view']")
+      assert has_element?(view, "[data-testid='pool-already-member-view']")
+      refute has_element?(view, "[data-testid='pool-join-consent-view']")
     end
 
     test "home button on the info view redirects to home", %{conn: conn} do
@@ -88,7 +89,7 @@ defmodule Systems.Pool.OnboardingPageTest do
          %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
 
-      refute view |> has_element?("[data-testid='pool-join-consent-decline-button']")
+      refute has_element?(view, "[data-testid='pool-join-consent-decline-button']")
     end
   end
 

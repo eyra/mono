@@ -1,12 +1,17 @@
 defmodule Frameworks.Utility.EctoHelper do
+  @moduledoc false
   import Ecto.Query, only: [from: 2]
-  require Logger
-  alias Ecto.{Multi, Changeset}
+
   alias Core.Repo
+  alias Ecto.Changeset
+  alias Ecto.Multi
   alias Frameworks.Signal
 
+  require Logger
+
   def get_assoc(entity, assoc) when is_atom(assoc) do
-    Repo.preload(entity, [assoc])
+    entity
+    |> Repo.preload([assoc])
     |> Map.get(assoc)
   end
 
@@ -74,7 +79,8 @@ defmodule Frameworks.Utility.EctoHelper do
       when is_atom(field) and is_atom(virtual) and is_list(delimiters) do
     case Map.fetch(changeset.params || %{}, to_string(virtual)) do
       {:ok, virtual_string} when is_binary(virtual_string) ->
-        value = virtual_string |> String.split(delimiters, trim: true)
+        value = String.split(virtual_string, delimiters, trim: true)
+        # Multi
         Changeset.put_change(changeset, field, value)
 
       _ ->
@@ -92,13 +98,11 @@ defmodule Frameworks.Utility.EctoHelper do
 
   def apply_virtual_icon_change(changeset, icon_type) do
     if icon_value = Changeset.get_change(changeset, :virtual_icon) do
-      changeset |> Changeset.put_change(:icon, {icon_type, icon_value})
+      Changeset.put_change(changeset, :icon, {icon_type, icon_value})
     else
       changeset
     end
   end
-
-  # Multi
 
   def run(multi, name, function) do
     case :erlang.fun_info(function)[:arity] do

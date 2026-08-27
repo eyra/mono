@@ -1,9 +1,7 @@
 defmodule Systems.Assignment.Private do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
-
-  require Logger
 
   import Ecto.Query, only: [where: 3]
 
@@ -11,16 +9,17 @@ defmodule Systems.Assignment.Private do
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
-
   alias Systems.Account
   alias Systems.Account.User
   alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Consent
-  alias Systems.Workflow
   alias Systems.Crew
-  alias Systems.Storage
   alias Systems.Monitor
+  alias Systems.Storage
+  alias Systems.Workflow
+
+  require Logger
 
   def ensure_affiliate!(%Assignment.Model{} = assignment) do
     {:ok, %{assignment: assignment}} = ensure_affiliate(assignment)
@@ -31,7 +30,8 @@ defmodule Systems.Assignment.Private do
     Multi.new()
     |> Multi.insert(:affiliate, Affiliate.Public.prepare_affiliate())
     |> Multi.update(:assignment, fn %{affiliate: affiliate} ->
-      Assignment.Model.changeset(assignment, %{})
+      assignment
+      |> Assignment.Model.changeset(%{})
       |> Ecto.Changeset.put_assoc(:affiliate, affiliate)
     end)
     |> Signal.Public.multi_dispatch({:affiliate, :inserted})
@@ -47,11 +47,9 @@ defmodule Systems.Assignment.Private do
   def get_template(:benchmark_challenge),
     do: %Assignment.TemplateBenchmarkChallenge{id: :benchmark_challenge}
 
-  def get_template(:paper_screening),
-    do: %Assignment.TemplatePaperScreening{id: :paper_screening}
+  def get_template(:paper_screening), do: %Assignment.TemplatePaperScreening{id: :paper_screening}
 
-  def get_template(:questionnaire),
-    do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
+  def get_template(:questionnaire), do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 
   def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
 
@@ -79,7 +77,7 @@ defmodule Systems.Assignment.Private do
   def send_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
     %{user: user} = Assignment.Public.get_member_by_task(crew_task, [:user])
     {:ok, %{title: title, position: position}} = get_workflow_item(crew_task)
-    task_slug = title |> slugify()
+    task_slug = slugify(title)
 
     Affiliate.Public.send_event(
       assignment,
@@ -91,7 +89,7 @@ defmodule Systems.Assignment.Private do
   def slugify(nil), do: "?"
 
   def slugify(title) do
-    title |> Slug.slugify(separator: ?_)
+    Slug.slugify(title, separator: ?_)
   end
 
   def log_performance_event(
@@ -125,7 +123,8 @@ defmodule Systems.Assignment.Private do
   end
 
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
-    Monitor.Public.event({assignment, topic, user_ref})
+    {assignment, topic, user_ref}
+    |> Monitor.Public.event()
     |> Monitor.Public.clear()
   end
 
@@ -148,9 +147,10 @@ defmodule Systems.Assignment.Private do
     "assignment=#{assignment_id},user=#{user_id}"
   end
 
+  # Crew Task & Workflow Item mapping
+  # Preview uses the same affiliate URL as participants with a default participant ID
+  # The affiliate controller detects the logged-in user is a tester and handles accordingly
   def get_preview_url(%Assignment.Model{} = assignment) do
-    # Preview uses the same affiliate URL as participants with a default participant ID
-    # The affiliate controller detects the logged-in user is a tester and handles accordingly
     Systems.Affiliate.Public.url_for_resource(assignment) <> "?p=preview"
   end
 
@@ -163,11 +163,11 @@ defmodule Systems.Assignment.Private do
   def page_body_default(:assignment_information), do: ""
   def page_body_default(:assignment_helpdesk), do: ""
 
-  def allowed_external_panel_ids() do
+  def allowed_external_panel_ids do
     Keyword.get(config(), :external_panels, [])
   end
 
-  defp config() do
+  defp config do
     Application.get_env(:core, :assignment)
   end
 
@@ -185,8 +185,6 @@ defmodule Systems.Assignment.Private do
 
   def connection_title(:panel, %{external_panel: external_panel}),
     do: Assignment.ExternalPanelIds.translate(external_panel)
-
-  # Crew Task & Workflow Item mapping
 
   def get_workflow_item(%Crew.TaskModel{} = task, preload \\ []) do
     if item_id = workflow_item_id(task) do
@@ -220,19 +218,11 @@ defmodule Systems.Assignment.Private do
     ["item=#{item_id}"]
   end
 
-  def task_identifier(
-        assignment,
-        workflow_item,
-        %Crew.MemberModel{id: member_id}
-      ) do
+  def task_identifier(assignment, workflow_item, %Crew.MemberModel{id: member_id}) do
     task_identifier(assignment, workflow_item, member_id)
   end
 
-  def task_identifier(
-        %{special: :data_donation},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: :data_donation}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
@@ -244,19 +234,11 @@ defmodule Systems.Assignment.Private do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
-  def task_identifier(
-        %{special: :questionnaire},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: :questionnaire}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 
-  def task_identifier(
-        %{special: :paper_screening},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: :paper_screening}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 end

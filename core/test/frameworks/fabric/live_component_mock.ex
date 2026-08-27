@@ -1,9 +1,10 @@
 defmodule Fabric.LiveComponentMock do
+  @moduledoc false
   use Fabric.LiveComponent
 
   @impl true
   def update(%{text: text}, socket) do
-    {:ok, socket |> assign(text: text)}
+    {:ok, assign(socket, text: text)}
   end
 
   @impl true

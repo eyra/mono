@@ -10,14 +10,13 @@ defmodule Systems.Notify.Dispatcher do
   Channels that decide the event isn't relevant to them can return `:skip`
   from `build_payload/1` — no message is persisted for that channel.
   """
-  require Logger
-
   alias Core.Repo
   alias Ecto.Multi
-
   alias Systems.Notify
   alias Systems.Notify.EventModel
   alias Systems.Notify.MessageModel
+
+  require Logger
 
   @doc """
   Fan an event out to all channels registered for its type. Persists a message

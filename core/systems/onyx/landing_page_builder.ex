@@ -1,9 +1,11 @@
 defmodule Systems.Onyx.LandingPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Authentication
-  alias Systems.Ontology
+  alias CoreWeb.Live.Element
   alias Systems.Annotation
+  alias Systems.Ontology
   alias Systems.Onyx
 
   @tab_keys [:annotation, :concept, :predicate]
@@ -13,14 +15,16 @@ defmodule Systems.Onyx.LandingPageBuilder do
     system_actor = Authentication.obtain_actor!(:system, "Onyx")
     system_entity = Authentication.obtain_entity!(system_actor)
 
-    %{
-      tabbar_id: "onyx_landing",
-      title: dgettext("eyra-onyx", "landing.title"),
-      active_menu_item: :onyx,
-      show_errors: false,
-      entities: [user_entity, system_entity]
-    }
-    |> put_tabs(assigns)
+    put_tabs(
+      %{
+        tabbar_id: "onyx_landing",
+        title: dgettext("eyra-onyx", "landing.title"),
+        active_menu_item: :onyx,
+        show_errors: false,
+        entities: [user_entity, system_entity]
+      },
+      assigns
+    )
   end
 
   defp put_tabs(vm, assigns) do
@@ -28,8 +32,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
   end
 
   defp create_tabs(vm, assigns) do
-    @tab_keys
-    |> Enum.map(&create_tab(&1, vm, assigns))
+    Enum.map(@tab_keys, &create_tab(&1, vm, assigns))
   end
 
   defp create_tab(:concept, _, %{current_user: user}) do
@@ -37,7 +40,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
     concepts = Ontology.Public.list_concepts([:entity])
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         :landing_page_concept,
         Onyx.ConceptTab,
         title: title,
@@ -62,7 +65,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
     predicates = Ontology.Public.list_predicates([:entity, :subject, :type, :object])
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         :landing_page_predicate,
         Onyx.PredicateTab,
         title: title,
@@ -89,7 +92,7 @@ defmodule Systems.Onyx.LandingPageBuilder do
       Annotation.Public.list_annotations(entities, Annotation.Model.preload_graph(:down))
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         :landing_page_annotation,
         Onyx.AnnotationTab,
         title: title,

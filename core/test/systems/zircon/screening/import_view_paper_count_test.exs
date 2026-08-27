@@ -1,6 +1,7 @@
 defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
   use CoreWeb.ConnCase, async: false
   use Oban.Testing, repo: Core.Repo
+
   import Phoenix.LiveViewTest
 
   alias Core.Repo
@@ -57,7 +58,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       papers: [_paper1, paper2, _paper3]
     } do
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
         live_isolated(conn, Screening.ImportView,
@@ -70,14 +71,13 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       assert import_html =~ ">3</span>"
 
       # Mount the PaperSetView in a separate process
-      conn2 = conn |> Map.put(:request_path, "/paper_set/#{paper_set.id}")
+      conn2 = Map.put(conn, :request_path, "/paper_set/#{paper_set.id}")
 
       {:ok, paper_set_view, _} =
         live_isolated(conn2, Screening.PaperSetView, session: %{"paper_set_id" => paper_set.id})
 
       # Delete paper2 from the paper set view
-      paper_set_view
-      |> render_click(:delete, %{"item" => "#{paper2.id}"})
+      render_click(paper_set_view, :delete, %{"item" => "#{paper2.id}"})
 
       # Give time for signal propagation and Observatory update
       Process.sleep(100)
@@ -105,7 +105,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       assert initial_paper_count == 3
 
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
         live_isolated(conn, Screening.ImportView,
@@ -155,8 +155,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       # Process the import (simulating commit_import)
       # First transition to importing phase
       {:ok, %{paper_ris_import_session: updated_session}} =
-        import_session
-        |> Paper.RISImportSessionModel.advance_phase_with_signal(:importing)
+        Paper.RISImportSessionModel.advance_phase_with_signal(import_session, :importing)
 
       # Manually run the commit job since Oban is disabled in tests
       assert :ok =
@@ -191,7 +190,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       papers: [paper1, paper2, paper3]
     } do
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, import_view, import_html} =
         live_isolated(conn, Screening.ImportView,
@@ -202,15 +201,13 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       assert import_html =~ ">3</span>"
 
       # Mount PaperSetView for deletions
-      conn2 = conn |> Map.put(:request_path, "/paper_set/#{paper_set.id}")
+      conn2 = Map.put(conn, :request_path, "/paper_set/#{paper_set.id}")
 
       {:ok, paper_set_view, _} =
         live_isolated(conn2, Screening.PaperSetView, session: %{"paper_set_id" => paper_set.id})
 
       # Delete paper1
-      paper_set_view
-      |> render_click(:delete, %{"item" => "#{paper1.id}"})
-
+      render_click(paper_set_view, :delete, %{"item" => "#{paper1.id}"})
       Process.sleep(50)
 
       # Should be 2 now
@@ -218,9 +215,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       assert html_after_first_delete =~ ">2</span>"
 
       # Delete paper2
-      paper_set_view
-      |> render_click(:delete, %{"item" => "#{paper2.id}"})
-
+      render_click(paper_set_view, :delete, %{"item" => "#{paper2.id}"})
       Process.sleep(50)
 
       # Should be 1 now
@@ -228,9 +223,7 @@ defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
       assert html_after_second_delete =~ ">1</span>"
 
       # Delete paper3 (last one)
-      paper_set_view
-      |> render_click(:delete, %{"item" => "#{paper3.id}"})
-
+      render_click(paper_set_view, :delete, %{"item" => "#{paper3.id}"})
       Process.sleep(50)
 
       # Should be 0 now

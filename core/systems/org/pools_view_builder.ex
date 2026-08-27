@@ -1,4 +1,5 @@
 defmodule Systems.Org.PoolsViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Fund

@@ -1,9 +1,10 @@
 defmodule Systems.Pool.MarketplacePage do
+  @moduledoc false
   use Systems.Content.Composer, :live_website
 
-  alias Systems.Pool
-  alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Breadcrumbs
+  alias Frameworks.Pixel.Hero
+  alias Systems.Pool
 
   @impl true
   def get_model(%{"id" => id}, _session, _socket) do
@@ -13,9 +14,9 @@ defmodule Systems.Pool.MarketplacePage do
   @impl true
   def mount(_params, _session, %{assigns: %{current_user: user, model: pool}} = socket) do
     if Pool.Public.participant?(pool, user) do
-      {:ok, socket |> compose_child(:marketplace_view)}
+      {:ok, compose_child(socket, :marketplace_view)}
     else
-      {:ok, socket |> push_navigate(to: ~p"/")}
+      {:ok, push_navigate(socket, to: ~p"/")}
     end
   end
 
@@ -33,7 +34,7 @@ defmodule Systems.Pool.MarketplacePage do
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket |> update_child(:marketplace_view)
+    update_child(socket, :marketplace_view)
   end
 
   @impl true

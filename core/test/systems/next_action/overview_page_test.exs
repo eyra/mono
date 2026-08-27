@@ -1,13 +1,17 @@
 defmodule Systems.NextAction.OverviewPageTest do
   use CoreWeb.ConnCase
+
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
+
   alias Systems.NextAction
+  alias Systems.NextAction.ViewModel
 
   defmodule SomeAction do
-    @behaviour Systems.NextAction.ViewModel
+    @moduledoc false
+    @behaviour ViewModel
 
-    @impl Systems.NextAction.ViewModel
+    @impl ViewModel
     def to_view_model(count, _params) do
       %{
         title: "Test: #{count}",

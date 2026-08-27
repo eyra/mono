@@ -1,13 +1,15 @@
 defmodule Systems.Pool.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
-  require Logger
 
-  alias Systems.Pool
   alias Systems.Account
-  alias Systems.Pool.AccountPostActionHandler
-  alias Systems.NextAction
   alias Systems.Account.NextActions.FillinCharacteristics
   alias Systems.Monitor
+  alias Systems.NextAction
+  alias Systems.Pool
+  alias Systems.Pool.AccountPostActionHandler
+
+  require Logger
 
   @impl true
   def intercept(
@@ -15,7 +17,7 @@ defmodule Systems.Pool.Switch do
         %{criteria: %{submission_id: submission_id}} = message
       ) do
     submission = Pool.Public.get_submission!(submission_id)
-    dispatch!({:submission, signal}, Map.merge(message, %{submission: submission}))
+    dispatch!({:submission, signal}, Map.put(message, :submission, submission))
     :ok
   end
 
@@ -26,7 +28,7 @@ defmodule Systems.Pool.Switch do
       ) do
     update_page(Pool.SubmissionPage, submission, from_pid)
     pool = Pool.Public.get_by_submission!(submission)
-    dispatch!({:pool, signal}, Map.merge(message, %{pool: pool}))
+    dispatch!({:pool, signal}, Map.put(message, :pool, pool))
     :ok
   end
 

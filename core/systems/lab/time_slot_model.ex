@@ -1,10 +1,11 @@
 defmodule Systems.Lab.TimeSlotModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
-  alias Systems.{
-    Lab
-  }
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Lab
 
   schema "lab_time_slots" do
     belongs_to(:tool, Lab.ToolModel)
@@ -21,21 +22,18 @@ defmodule Systems.Lab.TimeSlotModel do
 
   @doc false
   def changeset(time_slot, attrs \\ %{}) do
-    time_slot
-    |> cast(attrs, [:enabled?, :location, :start_time, :number_of_seats])
+    cast(time_slot, attrs, [:enabled?, :location, :start_time, :number_of_seats])
   end
 
   def message(%{start_time: start_time, location: location}) do
     date =
       start_time
-      |> CoreWeb.UI.Timestamp.to_date()
-      |> CoreWeb.UI.Timestamp.humanize_date()
+      |> Timestamp.to_date()
+      |> Timestamp.humanize_date()
 
-    time =
-      start_time
-      |> CoreWeb.UI.Timestamp.humanize_time()
+    time = Timestamp.humanize_time(start_time)
 
-    " #{date}  |  #{time}  |  #{location}" |> Macro.camelize()
+    Macro.camelize(" #{date}  |  #{time}  |  #{location}")
   end
 
   def count_reservations(timeslot, included) do
@@ -45,12 +43,10 @@ defmodule Systems.Lab.TimeSlotModel do
   end
 
   def filter_reservations(%{reservations: reservations}, included) when is_list(included) do
-    reservations
-    |> Enum.filter(&Enum.member?(included, &1.status))
+    Enum.filter(reservations, &Enum.member?(included, &1.status))
   end
 
   def filter_reservations(%{reservations: reservations}, included) when is_atom(included) do
-    reservations
-    |> Enum.filter(&(&1.status == included))
+    Enum.filter(reservations, &(&1.status == included))
   end
 end

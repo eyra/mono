@@ -102,12 +102,10 @@ defmodule Frameworks.UserState do
   def integer_value(data, key) do
     if value = Map.get(data, key) do
       try do
-        value |> String.to_integer()
+        String.to_integer(value)
       rescue
         ArgumentError -> nil
       end
-    else
-      nil
     end
   end
 

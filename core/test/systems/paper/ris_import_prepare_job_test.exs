@@ -2,9 +2,13 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
   use Core.DataCase
   use Oban.Testing, repo: Core.Repo
 
-  @moduletag :capture_log
-
   import Frameworks.Signal.TestHelper
+
+  alias Systems.Paper.ReferenceFileModel
+  alias Systems.Paper.RISImportPrepareJob
+  alias Systems.Paper.RISImportSessionModel
+
+  @moduletag :capture_log
 
   setup do
     # Isolate signals to prevent unwanted side effects during unit testing
@@ -45,7 +49,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       reference_file: reference_file
     } do
       # Update reference file to point to non-existent file
-      reference_file = reference_file |> Repo.preload(:file, force: true)
+      reference_file = Repo.preload(reference_file, :file, force: true)
 
       Repo.update!(
         Ecto.Changeset.change(reference_file.file, %{
@@ -53,11 +57,11 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
         })
       )
 
-      reference_file = reference_file |> Repo.preload(:file, force: true)
+      reference_file = Repo.preload(reference_file, :file, force: true)
 
       # Create an import session first
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -68,17 +72,17 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       job_args = %{"session_id" => session.id}
 
       # The job should handle the fetch error gracefully
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
 
       assert error_msg =~
                "Unable to process the file. Please try again. If the problem persists, please contact support."
 
       # Verify the session was updated with error status
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Core.Repo.get!(RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       assert Enum.any?(updated_session.errors, &(&1 =~ "Unable to process the file"))
-      assert updated_session.completed_at != nil
+      assert updated_session.completed_at
     end
 
     test "prevents duplicate creation during normal import flow", %{
@@ -89,7 +93,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -98,10 +102,10 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should parse and process the file (not import yet)
       job_args = %{"session_id" => session.id}
-      assert :ok = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert :ok = perform_job(RISImportPrepareJob, job_args)
 
       # Verify the session is in prompting phase (after processing)
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Core.Repo.get!(RISImportSessionModel, session.id)
       assert updated_session.status == :activated
       # After parsing and processing, it goes to prompting phase
       assert updated_session.phase == :prompting
@@ -154,7 +158,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -163,20 +167,20 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should fail with validation error
       job_args = %{"session_id" => session.id}
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
       assert error_msg =~ "image or document file"
 
       # Verify the session was marked as failed
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Core.Repo.get!(RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       # Should still be in processing phase
       assert updated_session.phase == :processing
       assert Enum.any?(updated_session.errors, &(&1 =~ "image or document file"))
-      assert updated_session.completed_at != nil
+      assert updated_session.completed_at
 
       # Verify the reference file was marked as failed
-      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Core.Repo.get!(ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # Clean up temp file
@@ -208,7 +212,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -217,17 +221,17 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should fail with validation error
       job_args = %{"session_id" => session.id}
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
       assert error_msg =~ "doesn't appear to be a valid RIS file"
 
       # Verify the session was marked as failed
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Core.Repo.get!(RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       assert Enum.any?(updated_session.errors, &(&1 =~ "doesn't appear to be a valid RIS file"))
 
       # Verify the reference file was marked as failed
-      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Core.Repo.get!(ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # Clean up temp file
@@ -253,7 +257,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -262,15 +266,15 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job
       job_args = %{"session_id" => session.id}
-      assert :ok = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert :ok = perform_job(RISImportPrepareJob, job_args)
 
       # Verify the session has moved to prompting phase
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Core.Repo.get!(RISImportSessionModel, session.id)
       assert updated_session.status == :activated
       assert updated_session.phase == :prompting
 
       # Check that progress was tracked (final state should show all references processed)
-      assert updated_session.progress != nil
+      assert updated_session.progress
       assert Map.get(updated_session.progress, "total_references") == 12
       # The last progress update should show all references processed
       assert Map.get(updated_session.progress, "current_reference") == 12

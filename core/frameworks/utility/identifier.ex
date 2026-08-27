@@ -1,9 +1,9 @@
 defmodule Frameworks.Utility.Identifier do
+  @moduledoc false
   def to_string(%{identifier: identifier}), do: __MODULE__.to_string(identifier)
 
   def to_string([_ | _] = identifier) do
-    identifier
-    |> Enum.map_join("_", &stringafy(&1))
+    Enum.map_join(identifier, "_", &stringafy(&1))
   end
 
   defp stringafy(":" <> sub_string), do: sub_string

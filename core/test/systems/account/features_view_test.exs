@@ -1,7 +1,8 @@
 defmodule Systems.Account.FeaturesViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
   alias Frameworks.Concept.LiveContext
@@ -17,7 +18,7 @@ defmodule Systems.Account.FeaturesViewTest do
 
   describe "rendering" do
     test "renders features view with title and form", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account/features")
+      conn = Map.put(conn, :request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -33,14 +34,14 @@ defmodule Systems.Account.FeaturesViewTest do
       assert html =~ "Panl"
 
       # Should render gender selector
-      assert view |> has_element?("[data-testid='features-view']")
+      assert has_element?(view, "[data-testid='features-view']")
 
       # Should render birth year input
       assert html =~ "birth_year"
     end
 
     test "renders gender options", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account/features")
+      conn = Map.put(conn, :request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -60,7 +61,7 @@ defmodule Systems.Account.FeaturesViewTest do
 
   describe "form interactions" do
     test "saves birth year on change", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account/features")
+      conn = Map.put(conn, :request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -73,7 +74,7 @@ defmodule Systems.Account.FeaturesViewTest do
       {:ok, view, _html} = live_isolated(conn, Account.FeaturesView, session: session)
 
       # Submit birth year change
-      view |> render_change("change", %{"features_model" => %{"birth_year" => "1990"}})
+      render_change(view, "change", %{"features_model" => %{"birth_year" => "1990"}})
 
       # Verify it was saved
       features = Account.Public.get_features(user)
@@ -81,7 +82,7 @@ defmodule Systems.Account.FeaturesViewTest do
     end
 
     test "saves gender on selection", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account/features")
+      conn = Map.put(conn, :request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -100,14 +101,14 @@ defmodule Systems.Account.FeaturesViewTest do
       :timer.sleep(100)
 
       # Verify it was saved
-      features = Account.Public.get_features(user) |> Repo.reload!()
+      features = user |> Account.Public.get_features() |> Repo.reload!()
       assert features.gender == :woman
     end
   end
 
   describe "validation" do
     test "shows error for invalid birth year", %{conn: conn, user: user} do
-      conn = conn |> Map.put(:request_path, "/user/account/features")
+      conn = Map.put(conn, :request_path, "/user/account/features")
 
       live_context =
         LiveContext.new(%{
@@ -120,7 +121,7 @@ defmodule Systems.Account.FeaturesViewTest do
       {:ok, view, _html} = live_isolated(conn, Account.FeaturesView, session: session)
 
       # Submit invalid birth year (too old)
-      view |> render_change("change", %{"features_model" => %{"birth_year" => "1800"}})
+      render_change(view, "change", %{"features_model" => %{"birth_year" => "1800"}})
 
       # Verify error is shown (birth year validation is in changeset)
       # The features should not be updated to 1800

@@ -14,7 +14,6 @@ defmodule Systems.Org.ArchiveModalView do
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
-
   alias Systems.Observatory
   alias Systems.Org
 
@@ -26,13 +25,7 @@ defmodule Systems.Org.ArchiveModalView do
   def mount(:not_mounted_at_router, %{"locale" => locale}, socket) do
     {
       :ok,
-      socket
-      |> assign(
-        locale: locale,
-        query: nil,
-        query_string: "",
-        active_filters: []
-      )
+      assign(socket, locale: locale, query: nil, query_string: "", active_filters: [])
     }
   end
 

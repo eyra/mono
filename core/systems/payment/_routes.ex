@@ -1,4 +1,5 @@
 defmodule Systems.Payment.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/api/payment", Systems.Payment do

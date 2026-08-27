@@ -4,22 +4,22 @@ defmodule Systems.Account.SignupPage do
   """
   use CoreWeb, :live_view_fabric
 
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+
+  alias Frameworks.Signal
+  alias Frameworks.Utility.Params
+  alias Systems.Account
+  alias Systems.Account.User
+  alias Systems.Account.UserForm
+  alias Systems.Rate
+
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  alias Systems.Account
-  alias Systems.Account.UserForm
-  alias Systems.Account.User
-  alias Systems.Rate
-  alias Frameworks.Utility.Params
-  alias Frameworks.Signal
 
   @privacy_assignments %{
     "next_privacy_policy_accepted" => %{
@@ -62,11 +62,7 @@ defmodule Systems.Account.SignupPage do
   end
 
   @impl true
-  def handle_event(
-        "signup",
-        %{"user" => user_params},
-        %{assigns: assigns} = socket
-      ) do
+  def handle_event("signup", %{"user" => user_params}, %{assigns: assigns} = socket) do
     user_params = Map.put(user_params, "creator", assigns.creator?)
 
     with :ok <- check_rate_limit(assigns),
@@ -75,9 +71,7 @@ defmodule Systems.Account.SignupPage do
       handle_successful_registration(socket, user)
     else
       {:error, :rate_limited} ->
-        {:noreply,
-         socket
-         |> put_flash(:error, dgettext("eyra-account", "signup.rate_limited"))}
+        {:noreply, put_flash(socket, :error, dgettext("eyra-account", "signup.rate_limited"))}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -92,8 +86,7 @@ defmodule Systems.Account.SignupPage do
     changeset = Account.Public.change_user_registration(%User{}, attrs)
 
     {:noreply,
-     socket
-     |> assign(
+     assign(socket,
        changeset: changeset,
        next_privacy_policy_error: nil,
        panl_privacy_policy_error: nil
@@ -222,7 +215,7 @@ defmodule Systems.Account.SignupPage do
 
   defp parse_post_signup_action(params) do
     case Params.parse_string_param(params, "post_signup_action") do
-      "add_to_panl" -> if feature_enabled?(:panl), do: "add_to_panl", else: nil
+      "add_to_panl" -> if feature_enabled?(:panl), do: "add_to_panl"
       other -> other
     end
   end

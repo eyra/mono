@@ -3,7 +3,6 @@ defmodule Systems.Notify.MarkSeenTest do
 
   alias Core.Factories
   alias Core.Repo
-
   alias Systems.NextAction
   alias Systems.Notify
 
@@ -134,6 +133,7 @@ defmodule Systems.Notify.MarkSeenTest do
 
   defp nba_exists?(%{id: user_id}, key) do
     import Ecto.Query
+
     Repo.exists?(from(na in NextAction.Model, where: na.user_id == ^user_id and na.key == ^key))
   end
 end

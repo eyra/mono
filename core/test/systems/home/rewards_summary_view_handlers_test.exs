@@ -11,13 +11,14 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   stale-socket-user regression (a first-time payout reloads merchant_uid).
   """
   use Core.DataCase
+
   import Mox
 
   alias Core.Factories
   alias Systems.Fund
-  alias Systems.Payment
-  alias Systems.Payment.ProviderMock
   alias Systems.Home.RewardsSummaryView
+  alias Systems.Payment.Error
+  alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
 
@@ -320,7 +321,8 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       # :approved (a concurrent winner moved them to :pending_payout), so
       # request_payout fails. The card must refresh to drop the now-stale
       # approved balance — otherwise the loser keeps clicking a doomed button.
-      Core.Repo.get_by!(Fund.RewardModel, user_id: user.id)
+      Fund.RewardModel
+      |> Core.Repo.get_by!(user_id: user.id)
       |> Ecto.Changeset.change(%{status: :pending_payout})
       |> Core.Repo.update!()
 
@@ -338,7 +340,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_c_down")
 
       stub(ProviderMock, :list_bank_accounts, fn "m_c_down" ->
-        {:error, %Payment.Error{code: :service_unavailable, message: "OPP down"}}
+        {:error, %Error{code: :service_unavailable, message: "OPP down"}}
       end)
 
       {:noreply, socket} =
@@ -503,7 +505,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_donate_fail")
 
       expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
-        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+        {:error, %Error{code: :api_error, details: %{status: 422}}}
       end)
 
       {:noreply, _socket} =
@@ -523,7 +525,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       user = user_with_reward(1000, "m_donate_uncertain")
 
       expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
-        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+        {:error, %Error{code: :connection_error, message: "boom"}}
       end)
 
       {:noreply, _socket} =

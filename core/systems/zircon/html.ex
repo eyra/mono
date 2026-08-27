@@ -24,7 +24,7 @@ defmodule Systems.Zircon.HTML do
       %{type: :action, width: "w-3", align: "text-right"}
     ]
 
-    rows = items |> Enum.map(&paper_set_row/1)
+    rows = Enum.map(items, &paper_set_row/1)
 
     assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)
 
@@ -60,7 +60,7 @@ defmodule Systems.Zircon.HTML do
       %{type: :action, width: "w-3", align: "text-right"}
     ]
 
-    rows = items |> Enum.map(&ris_entry_row/1)
+    rows = Enum.map(items, &ris_entry_row/1)
 
     assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)
 
@@ -86,7 +86,7 @@ defmodule Systems.Zircon.HTML do
       %{type: :text, width: "flex-1", align: "text-left"}
     ]
 
-    rows = errors |> Enum.map(&ris_entry_error_row/1)
+    rows = Enum.map(errors, &ris_entry_error_row/1)
 
     assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)
 

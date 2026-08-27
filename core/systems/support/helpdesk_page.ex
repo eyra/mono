@@ -1,4 +1,5 @@
 defmodule Systems.Support.HelpdeskPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   @impl true

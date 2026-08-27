@@ -1,17 +1,11 @@
 defmodule Self.StartPages do
+  @moduledoc false
   @behaviour CoreWeb.StartPageProvider
 
-  def pages(),
-    do: %{
-      projects: %{id: :projects, path: "/project", domain: "eyra-ui"}
-    }
+  def pages, do: %{projects: %{id: :projects, path: "/project", domain: "eyra-ui"}}
 
   @impl true
-  def values(),
-    do: %{
-      creator: pages().projects,
-      member: pages().projects
-    }
+  def values, do: %{creator: pages().projects, member: pages().projects}
 
   defmacro __using__(_opts) do
     quote do

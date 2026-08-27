@@ -1,10 +1,12 @@
 defmodule Systems.Monitor.Public do
+  @moduledoc false
   use Core, :public
-  alias Ecto.Multi
+
   alias Core.Repo
+  alias Ecto.Multi
+  alias Frameworks.Utility.Module
   alias Systems.Account.User
   alias Systems.Monitor.Queries
-  alias Frameworks.Utility.Module
 
   require Logger
 
@@ -61,7 +63,7 @@ defmodule Systems.Monitor.Public do
   end
 
   def multi_reset(%Multi{} = multi, event_template) when is_tuple(event_template) do
-    multi_reset(multi, event_template |> event())
+    multi_reset(multi, event(event_template))
   end
 
   def multi_reset(%Multi{} = multi, event_template) when is_list(event_template) do

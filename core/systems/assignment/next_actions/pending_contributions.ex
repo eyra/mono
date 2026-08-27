@@ -9,8 +9,8 @@ defmodule Systems.Assignment.NextActions.PendingContributions do
   contribution.
   """
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
 
+  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
@@ -34,14 +34,15 @@ defmodule Systems.Assignment.NextActions.PendingContributions do
   end
 
   defp resolve_assignment_name(assignment_id) do
-    case Repo.get(Assignment.Model, assignment_id) |> Repo.preload(:project_item) do
+    case Assignment.Model |> Repo.get(assignment_id) |> Repo.preload(:project_item) do
       %{project_item: %{name: name}} when is_binary(name) and name != "" -> name
       _ -> "assignment ##{assignment_id}"
     end
   end
 
   defp build_description(name) do
-    dgettext("eyra-nextaction", "assignment.pending_contributions.description", name: name)
+    "eyra-nextaction"
+    |> dgettext("assignment.pending_contributions.description", name: name)
     |> truncate(@max_description_length)
   end
 

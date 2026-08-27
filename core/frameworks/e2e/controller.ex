@@ -20,8 +20,6 @@ defmodule Frameworks.E2E.Controller do
   use CoreWeb, {:controller, [formats: [:json]]}
   use Core.FeatureFlags
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Account
   alias Systems.Advert
@@ -31,6 +29,8 @@ defmodule Frameworks.E2E.Controller do
   alias Systems.Org
   alias Systems.Pool
   alias Systems.Storage
+
+  require Logger
 
   @service_email "e2e@eyra.service"
   @service_password "E2EServicePassword123!"
@@ -79,7 +79,7 @@ defmodule Frameworks.E2E.Controller do
           json(conn, %{status: "already_confirmed", email: user.email})
 
         user ->
-          now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
           user
           |> Ecto.Changeset.change(%{confirmed_at: now})
@@ -110,30 +110,28 @@ defmodule Frameworks.E2E.Controller do
     end
   end
 
+  # No transaction needed - all operations are idempotent (get_or_create)
   defp setup_fixtures do
-    # No transaction needed - all operations are idempotent (get_or_create)
-    try do
-      researcher = get_or_create_researcher()
-      researcher_b = get_or_create_researcher_b()
-      participant = get_or_create_participant()
-      assignment = get_or_create_donate_assignment(researcher)
-      _panl_advert = get_or_create_panl_advert(researcher)
-      test_org = get_or_create_e2e_test_org(researcher)
+    researcher = get_or_create_researcher()
+    researcher_b = get_or_create_researcher_b()
+    participant = get_or_create_participant()
+    assignment = get_or_create_donate_assignment(researcher)
+    _panl_advert = get_or_create_panl_advert(researcher)
+    test_org = get_or_create_e2e_test_org(researcher)
 
-      {:ok,
-       %{
-         researcher_email: researcher.email,
-         researcher_password: @e2e_password,
-         researcher_b_email: researcher_b.email,
-         researcher_b_password: @e2e_password,
-         participant_email: participant.email,
-         participant_password: @e2e_password,
-         donate_assignment_path: assignment_path(assignment),
-         test_org_id: test_org.id
-       }}
-    rescue
-      e -> {:error, Exception.message(e)}
-    end
+    {:ok,
+     %{
+       researcher_email: researcher.email,
+       researcher_password: @e2e_password,
+       researcher_b_email: researcher_b.email,
+       researcher_b_password: @e2e_password,
+       participant_email: participant.email,
+       participant_password: @e2e_password,
+       donate_assignment_path: assignment_path(assignment),
+       test_org_id: test_org.id
+     }}
+  rescue
+    e -> {:error, Exception.message(e)}
   end
 
   defp get_or_create_service_user do
@@ -144,7 +142,7 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp create_service_user do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     Core.Factories.insert!(:member, %{
       email: @service_email,
@@ -161,14 +159,14 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp ensure_verified(%{verified_at: nil} = user) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     user |> Ecto.Changeset.change(%{verified_at: now}) |> Repo.update!()
   end
 
   defp ensure_verified(user), do: user
 
   defp create_researcher do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     Core.Factories.insert!(:member, %{
       email: @researcher_email,
@@ -187,7 +185,7 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp create_researcher_b do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     Core.Factories.insert!(:member, %{
       email: @researcher_b_email,
@@ -206,7 +204,7 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp create_participant do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     Core.Factories.insert!(:member, %{
       email: @participant_email,
@@ -235,7 +233,7 @@ defmodule Frameworks.E2E.Controller do
           )
       end
 
-    unless researcher in Org.Public.list_owners(org) do
+    if researcher not in Org.Public.list_owners(org) do
       Org.Public.assign_owner(org, researcher)
       Logger.info("[E2E] Assigned #{researcher.email} as owner of E2E test org")
     end
@@ -253,18 +251,19 @@ defmodule Frameworks.E2E.Controller do
   defp find_e2e_panl_advert do
     import Ecto.Query
 
-    from(a in Advert.Model,
-      join: p in assoc(a, :promotion),
-      where: like(p.title, "E2E PaNL%"),
-      where: a.status == :online,
-      limit: 1
+    Repo.one(
+      from(a in Advert.Model,
+        join: p in assoc(a, :promotion),
+        where: like(p.title, "E2E PaNL%"),
+        where: a.status == :online,
+        limit: 1
+      )
     )
-    |> Repo.one()
   end
 
   defp create_panl_advert(researcher) do
     panl_pool = Pool.Assembly.get_or_create_panl()
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     promotion = Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study"})
 
@@ -352,7 +351,7 @@ defmodule Frameworks.E2E.Controller do
     # Ensure storage endpoint is configured
     assignment = ensure_storage(assignment)
 
-    assignment |> Repo.preload(Assignment.Model.preload_graph(:down))
+    Repo.preload(assignment, Assignment.Model.preload_graph(:down))
   end
 
   defp ensure_feldspar_app(assignment) do
@@ -382,12 +381,11 @@ defmodule Frameworks.E2E.Controller do
     import Ecto.Query
 
     has_project_item =
-      from(pi in Systems.Project.ItemModel,
-        where: pi.assignment_id == ^assignment.id
+      Repo.exists?(
+        from(pi in Systems.Project.ItemModel, where: pi.assignment_id == ^assignment.id)
       )
-      |> Repo.exists?()
 
-    unless has_project_item do
+    if !has_project_item do
       setup_storage_for_assignment(assignment)
     end
 
@@ -399,12 +397,13 @@ defmodule Frameworks.E2E.Controller do
   defp find_e2e_assignment do
     import Ecto.Query
 
-    from(a in Assignment.Model,
-      join: i in assoc(a, :info),
-      where: i.title == ^@donate_assignment_title,
-      limit: 1
+    Repo.one(
+      from(a in Assignment.Model,
+        join: i in assoc(a, :info),
+        where: i.title == ^@donate_assignment_title,
+        limit: 1
+      )
     )
-    |> Repo.one()
   end
 
   defp create_donate_assignment(researcher) do
@@ -467,11 +466,12 @@ defmodule Frameworks.E2E.Controller do
     # Create project structure with storage endpoint for data donation
     setup_storage_for_assignment(assignment)
 
-    assignment |> Repo.preload(Assignment.Model.preload_graph(:down))
+    Repo.preload(assignment, Assignment.Model.preload_graph(:down))
   end
 
+  # Feldspar app download and storage
+  # Create project node
   defp setup_storage_for_assignment(assignment) do
-    # Create project node
     project_node =
       Core.Factories.insert!(:project_node, %{
         name: "e2e_test_node",
@@ -482,7 +482,8 @@ defmodule Frameworks.E2E.Controller do
     # so re-running setup against an env with leftover endpoints from prior
     # runs doesn't collide on the unique builtin-key index.
     storage_endpoint =
-      Storage.Public.prepare_endpoint(:builtin, %{key: "e2e_test_storage_#{assignment.id}"})
+      :builtin
+      |> Storage.Public.prepare_endpoint(%{key: "e2e_test_storage_#{assignment.id}"})
       |> Repo.insert!()
 
     # Link assignment to project node
@@ -505,12 +506,11 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp assignment_path(%Assignment.Model{} = assignment) do
-    Affiliate.Public.url_for_resource(assignment)
+    assignment
+    |> Affiliate.Public.url_for_resource()
     |> URI.parse()
     |> Map.get(:path)
   end
-
-  # Feldspar app download and storage
 
   defp get_or_download_feldspar_app do
     # Check if we already have an E2E Feldspar app stored
@@ -528,11 +528,9 @@ defmodule Frameworks.E2E.Controller do
   defp find_e2e_feldspar_tool do
     import Ecto.Query
 
-    from(t in Feldspar.ToolModel,
-      where: t.archive_name == ^@feldspar_filename,
-      limit: 1
+    Repo.one(
+      from(t in Feldspar.ToolModel, where: t.archive_name == ^@feldspar_filename, limit: 1)
     )
-    |> Repo.one()
   end
 
   defp download_and_store_feldspar_app do

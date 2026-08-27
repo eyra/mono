@@ -17,8 +17,6 @@ defmodule Systems.Account.Page do
 
   import Systems.Content.Html
 
-  alias Core
-
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
@@ -32,7 +30,7 @@ defmodule Systems.Account.Page do
 
   # Defer menus_config to the page builder so it can pick the menu set that
   # matches the layout (website for participants, workspace for creators).
-  def get_menus_config(), do: nil
+  def get_menus_config, do: nil
 
   def update_menus(
         %{
@@ -63,17 +61,13 @@ defmodule Systems.Account.Page do
 
     {
       :ok,
-      socket
-      |> assign(
-        tabbar_id: tabbar_id,
-        initial_item: initial_item
-      )
+      assign(socket, tabbar_id: tabbar_id, initial_item: initial_item)
     }
   end
 
   @impl true
   def handle_event("close_modal", %{"item" => modal_id}, socket) do
-    {:noreply, socket |> handle_close_modal(modal_id)}
+    {:noreply, handle_close_modal(socket, modal_id)}
   end
 
   @impl true

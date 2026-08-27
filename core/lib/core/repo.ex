@@ -5,6 +5,7 @@ defmodule Core.Repo do
     types: GreenLight.Postgres.Types
 
   import Ecto.Query, warn: false
+
   alias Ecto.Multi
   alias Systems.Observatory
 
@@ -29,8 +30,7 @@ defmodule Core.Repo do
   end
 
   defp up_to_date?(repo, %schema{id: id, updated_at: updated_at}) do
-    from(e in schema, where: e.id == ^id and e.updated_at == ^updated_at)
-    |> repo.exists?()
+    repo.exists?(from(e in schema, where: e.id == ^id and e.updated_at == ^updated_at))
   end
 
   @doc """
@@ -140,8 +140,8 @@ defmodule Core.Repo do
     - `{:ok, result}` - Transaction succeeded and updates were dispatched
     - `{:error, operation, failed_value, changes_so_far}` - Transaction failed
   """
-  @spec commit(Ecto.Multi.t(), Keyword.t()) ::
-          {:ok, any()} | {:error, any()} | Ecto.Multi.failure()
+  @spec commit(Multi.t(), Keyword.t()) ::
+          {:ok, any()} | {:error, any()} | Multi.failure()
   def commit(multi, opts \\ []) do
     # credo:disable-for-next-line Credo.Check.Warning.NoRepoTransaction
     case transaction(multi, opts) do

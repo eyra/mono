@@ -10,7 +10,7 @@ defmodule Systems.Org.ArchiveModalViewTest do
     setup ctx do
       user = Factories.insert!(:creator)
       {:ok, ctx} = login(user, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/admin/archived")
+      conn = Map.put(ctx[:conn], :request_path, "/admin/archived")
       {:ok, conn: conn, user: user}
     end
 
@@ -29,7 +29,7 @@ defmodule Systems.Org.ArchiveModalViewTest do
       _archived =
         Factories.insert!(:org_node, %{
           identifier: ["archived_view_test"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       {:ok, view, _html} =
@@ -47,7 +47,7 @@ defmodule Systems.Org.ArchiveModalViewTest do
       archived_org =
         Factories.insert!(:org_node, %{
           identifier: ["restore_view_test"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       {:ok, view, _html} =
@@ -58,10 +58,10 @@ defmodule Systems.Org.ArchiveModalViewTest do
         )
 
       # Initially archived
-      assert Org.Public.get_node!(archived_org.id).archived_at != nil
+      assert Org.Public.get_node!(archived_org.id).archived_at
 
       # Trigger restore
-      view |> render_click("restore_org", %{"item" => to_string(archived_org.id)})
+      render_click(view, "restore_org", %{"item" => to_string(archived_org.id)})
 
       # Now restored
       assert Org.Public.get_node!(archived_org.id).archived_at == nil

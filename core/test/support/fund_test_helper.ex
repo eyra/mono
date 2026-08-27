@@ -16,8 +16,8 @@ defmodule Systems.Fund.TestHelper do
       `{:error, :reward_not_found}` — approving/rejecting a missing
       reward is a caller bug, not an idempotent no-op.
   """
-  alias Ecto.Multi
   alias Core.Repo
+  alias Ecto.Multi
   alias Systems.Fund
 
   def mark_pending_approval(idempotence_key) when is_binary(idempotence_key) do

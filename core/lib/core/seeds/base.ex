@@ -5,10 +5,10 @@ defmodule Core.Seeds.Base do
   All operations must be idempotent.
   """
 
-  require Logger
-
   alias Systems.Fund
   alias Systems.Pool
+
+  require Logger
 
   @doc """
   Runs all base seeds. Safe to run multiple times.
@@ -34,7 +34,7 @@ defmodule Core.Seeds.Base do
     case Fund.CurrencyLedgerModel.get_by_currency(currency) do
       nil ->
         Logger.info("[Seeds.Base] Creating #{currency} currency ledger")
-        Fund.CurrencyLedgerModel.create(currency) |> Core.Repo.insert!()
+        currency |> Fund.CurrencyLedgerModel.create() |> Core.Repo.insert!()
 
       _existing ->
         Logger.info("[Seeds.Base] #{currency} currency ledger already exists")

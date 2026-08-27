@@ -1,4 +1,5 @@
 defmodule Frameworks.Concept.Presenter do
+  @moduledoc false
   @type page :: atom()
   @type model :: pos_integer() | map | nil
   @type assigns :: map

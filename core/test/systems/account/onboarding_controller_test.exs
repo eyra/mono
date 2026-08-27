@@ -34,7 +34,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       assert redirected_to(conn) == "/user/onboarding"
 
       # Verify user is logged in by checking session
-      assert get_session(conn, :user_token) != nil
+      assert get_session(conn, :user_token)
     end
   end
 
@@ -43,7 +43,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       conn = get(conn, ~p"/user/onboarding/start?token=invalid_token")
 
       assert redirected_to(conn) == "/user/signin"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil
+      assert Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
     test "redirects to signin for tampered token", %{conn: conn} do
@@ -55,7 +55,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       conn = get(conn, ~p"/user/onboarding/start?token=#{tampered_token}")
 
       assert redirected_to(conn) == "/user/signin"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil
+      assert Phoenix.Flash.get(conn.assigns.flash, :error)
     end
 
     test "redirects to signin for empty token", %{conn: conn} do
@@ -75,7 +75,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       conn = get(conn, ~p"/user/onboarding/start?token=#{expired_token}")
 
       assert redirected_to(conn) == "/user/signin"
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil
+      assert Phoenix.Flash.get(conn.assigns.flash, :error)
     end
   end
 

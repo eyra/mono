@@ -31,14 +31,10 @@ defmodule Frameworks.GreenLight.Loaders do
       |> Enum.map_reduce(conn, fn {loader, as_parent}, conn ->
         {key, entity} = loader.(conn, path_params, as_parent)
 
-        {entity,
-         conn
-         |> Plug.Conn.assign(key, entity)}
+        {entity, Plug.Conn.assign(conn, key, entity)}
       end)
 
-    {entities,
-     conn
-     |> Plug.Conn.put_private(:greenlight_entities, entities)}
+    {entities, Plug.Conn.put_private(conn, :greenlight_entities, entities)}
   end
 
   defmacro entity_loader(loader, opts \\ []) do
@@ -68,7 +64,7 @@ defmodule Frameworks.GreenLight.Loaders do
   """
   defmacro defloader(key, callback) do
     path_param = "id"
-    parent_path_param = "#{key |> Atom.to_string()}_#{path_param}"
+    parent_path_param = "#{Atom.to_string(key)}_#{path_param}"
 
     quote do
       def unquote(:"#{key}!")(_conn, params, as_parent) do

@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Azure.EndpointForm do
+  @moduledoc false
   use Systems.Storage.EndpointForm.Helper, Systems.Storage.Azure.EndpointModel
 
   @impl true

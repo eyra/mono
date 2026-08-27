@@ -1,5 +1,6 @@
 defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
   use Core.DataCase
+
   alias Systems.Zircon.Screening.ImportViewBuilder
 
   # Helper function to extract import buttons assigns from nested structure
@@ -88,8 +89,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Check file selector exists
       {file_selector_type, _file_selector_assigns} =
-        import_section_assigns.stack
-        |> Enum.find(fn {type, _} -> type == :import_file_selector end)
+        Enum.find(import_section_assigns.stack, fn {type, _} -> type == :import_file_selector end)
 
       assert file_selector_type == :import_file_selector
 
@@ -130,7 +130,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       {content_type, content_assigns} = Enum.at(stack, 2)
       assert content_type == :content
       # Has papers
-      refute is_nil(content_assigns.paper_set_view)
+      assert content_assigns.paper_set_view
     end
 
     test "extracts title from assigns with different structures" do
@@ -139,19 +139,19 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       # Test direct title
       assigns = %{"title" => "Custom Title"}
       result = ImportViewBuilder.view_model(tool, assigns)
-      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, header_assigns} = Enum.find(result.stack, fn {type, _} -> type == :header end)
       assert header_assigns.title == "Custom Title"
 
       # Test session title
       assigns = %{session: %{"title" => "Session Title"}}
       result = ImportViewBuilder.view_model(tool, assigns)
-      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, header_assigns} = Enum.find(result.stack, fn {type, _} -> type == :header end)
       assert header_assigns.title == "Session Title"
 
       # Test default title
       assigns = %{}
       result = ImportViewBuilder.view_model(tool, assigns)
-      {_, header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, header_assigns} = Enum.find(result.stack, fn {type, _} -> type == :header end)
       assert header_assigns.title == "Import Papers"
     end
   end
@@ -163,7 +163,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       result = ImportViewBuilder.view_model(tool, assigns)
 
-      {_, _header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, _header_assigns} = Enum.find(result.stack, fn {type, _} -> type == :header end)
       # No file uploaded, so should have file selector but no import buttons
       assert has_block_in_import_section?(result.stack, :import_file_selector)
       refute has_block_in_import_section?(result.stack, :import_buttons)
@@ -201,18 +201,18 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       result = ImportViewBuilder.view_model(tool, assigns)
 
-      {_, _header_assigns} = result.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, _header_assigns} = Enum.find(result.stack, fn {type, _} -> type == :header end)
       # Button is not shown during active imports - it's handled in the processing_status block
       # header and import_section (no content when 0 papers)
       assert length(result.stack) == 2
 
       # Check processing_status block exists nested in import_section
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       processing_status_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
-      assert processing_status_block != nil
+      assert processing_status_block
     end
   end
 
@@ -246,10 +246,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
         # During active imports, the processing_status block should be present nested in import_section
         {_, import_section} =
-          result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+          Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
         processing_status_block =
-          import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+          Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
         assert processing_status_block != nil,
                "Expected processing_status block for phase #{phase}"
@@ -301,10 +301,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
         # Should have processing status for active processing sessions
         {_, import_section} =
-          result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+          Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
         session_block =
-          import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+          Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
         assert session_block, "Should have processing status block for phase #{phase}"
 
@@ -321,7 +321,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, %{})
 
       # No content block should exist when there are no papers
-      content_block = result.stack |> Enum.find(fn {type, _} -> type == :content end)
+      content_block = Enum.find(result.stack, fn {type, _} -> type == :content end)
       assert content_block == nil
     end
 
@@ -344,10 +344,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Content block should exist when there are papers
       {content_type, content_assigns} =
-        result.stack |> Enum.find(fn {type, _} -> type == :content end)
+        Enum.find(result.stack, fn {type, _} -> type == :content end)
 
       assert content_type == :content
-      refute is_nil(content_assigns.paper_set_view)
+      assert content_assigns.paper_set_view
     end
   end
 
@@ -467,12 +467,12 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # header and import_section (no content when 0 papers)
       assert length(result.stack) == 2
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
       # Check that processing_status is nested inside import_section
       processing_status_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
-      assert processing_status_block != nil
+      assert processing_status_block
 
       # Clean up and test with completed session
       Core.Repo.delete!(active_session)
@@ -489,22 +489,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # header and import_section (no content when 0 papers)
       assert length(result.stack) == 2
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       # Check that there's no import_session or processing_status nested in import_section (should have file selector instead)
       import_session_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :import_session end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :import_session end)
 
       processing_status_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       assert import_session_block == nil
       assert processing_status_block == nil
 
       file_selector_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :import_file_selector end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :import_file_selector end)
 
-      assert file_selector_block != nil
+      assert file_selector_block
     end
   end
 
@@ -531,7 +531,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       assert has_block_in_import_section?(result.stack, :import_buttons)
 
       buttons = get_import_buttons_assigns(result.stack)
-      assert buttons != nil
+      assert buttons
       assert buttons.import_button_face.type == :primary
       assert buttons.import_button_enabled == true
     end
@@ -767,10 +767,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, %{})
 
       # Check prompting summary
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, summary_assigns} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :prompting_summary end)
 
       assert summary_assigns.warning_count == 2
       assert summary_assigns.new_paper_count == 0
@@ -839,12 +839,12 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       assert length(result.stack) == 2
 
       # Check import_section contains prompting_summary
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       prompting_summary =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :prompting_summary end)
 
-      assert prompting_summary != nil
+      assert prompting_summary
 
       # Check prompting summary contains correct counts
       {_, summary_assigns} = prompting_summary
@@ -864,7 +864,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           btn.action.event == "show_warnings"
         end)
 
-      assert warning_button != nil
+      assert warning_button
       assert warning_button.face.text_color == "text-warning"
 
       # Check new papers button
@@ -873,7 +873,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
           btn.action.event == "show_new_papers"
         end)
 
-      assert new_papers_button != nil
+      assert new_papers_button
 
       # Should have Continue button since there are new papers
       assert length(summary_assigns.action_buttons) == 1
@@ -921,10 +921,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, %{})
 
       # Check prompting summary
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, summary_assigns} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :prompting_summary end)
 
       assert summary_assigns.warning_count == 2
       assert summary_assigns.new_paper_count == 0
@@ -975,10 +975,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Check that we have progress percentage
       # 15/25 * 100 = 60
@@ -1015,10 +1015,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should show generic processing message
       assert processing_status.message == "Processing papers"
@@ -1073,10 +1073,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Check that we have progress percentage for importing phase
       # 250 processed out of 500 total = 50%
@@ -1121,13 +1121,13 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       processing_status_tuple =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should show processing status since we have 25 new papers (>= threshold)
-      assert processing_status_tuple != nil
+      assert processing_status_tuple
       {_, processing_status} = processing_status_tuple
 
       # Should show generic importing message
@@ -1171,10 +1171,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the import_section
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       processing_status_tuple =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should NOT show processing status for only 5 new papers (< threshold)
       assert processing_status_tuple == nil
@@ -1210,10 +1210,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, %{})
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       processing_status_tuple =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should not show processing status block at all for small batch
       assert processing_status_tuple == nil
@@ -1249,10 +1249,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, %{})
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should show progress for batch at threshold
       # 10/20 * 100
@@ -1288,10 +1288,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should show parsing message with progress at 0
       assert processing_status.message == "Parsing file"
@@ -1326,10 +1326,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       result = ImportViewBuilder.view_model(tool, assigns)
 
       # Find the processing_status block
-      {_, import_section} = result.stack |> Enum.find(fn {type, _} -> type == :import_section end)
+      {_, import_section} = Enum.find(result.stack, fn {type, _} -> type == :import_section end)
 
       {_, processing_status} =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :processing_status end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :processing_status end)
 
       # Should show waiting message without progress
       assert processing_status.message == "Starting import"

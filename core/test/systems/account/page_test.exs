@@ -1,7 +1,8 @@
 defmodule Systems.Account.PageTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Systems.Pool
 
@@ -11,7 +12,7 @@ defmodule Systems.Account.PageTest do
     user =
       Factories.insert!(:member, %{
         creator: false,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
       })
 
     {:ok, conn: conn, user: user} = login(user, %{conn: conn})
@@ -45,7 +46,7 @@ defmodule Systems.Account.PageTest do
       {:ok, view, _html} = live(conn, "/user/account")
 
       # Should render the profile view
-      assert view |> has_element?("[data-testid='profile-view']")
+      assert has_element?(view, "[data-testid='profile-view']")
     end
 
     test "renders tabbar", %{conn: conn} do
@@ -68,7 +69,7 @@ defmodule Systems.Account.PageTest do
       creator =
         Factories.insert!(:member, %{
           creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       {:ok, conn: conn, user: _user} = login(creator, %{conn: conn})
@@ -84,7 +85,7 @@ defmodule Systems.Account.PageTest do
     test "can navigate to profile tab via URL", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/account/profile")
 
-      assert view |> has_element?("[data-testid='profile-view']")
+      assert has_element?(view, "[data-testid='profile-view']")
     end
   end
 
@@ -92,7 +93,7 @@ defmodule Systems.Account.PageTest do
     setup %{conn: conn} do
       user =
         Factories.insert!(:member, %{
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       panl_pool =
@@ -116,7 +117,7 @@ defmodule Systems.Account.PageTest do
     test "can navigate to features tab via URL", %{conn: conn} do
       {:ok, view, _html} = live(conn, "/user/account/features")
 
-      assert view |> has_element?("[data-testid='features-view']")
+      assert has_element?(view, "[data-testid='features-view']")
     end
   end
 end

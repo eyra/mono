@@ -1,9 +1,10 @@
 defmodule Systems.Workflow.Factories do
+  @moduledoc false
   alias Core.Factories
   alias Systems.Document
   alias Systems.Graphite
 
-  def create_tool() do
+  def create_tool do
     Factories.insert!(:document_tool, %{
       director: :assignment
     })
@@ -23,7 +24,7 @@ defmodule Systems.Workflow.Factories do
     })
   end
 
-  def create_workflow() do
+  def create_workflow do
     Factories.insert!(:workflow, %{})
   end
 

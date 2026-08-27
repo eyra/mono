@@ -4,6 +4,7 @@ defmodule Core.Authorization.RoleAssignment do
   specific entity.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "authorization_role_assignments" do

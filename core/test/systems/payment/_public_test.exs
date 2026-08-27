@@ -1,10 +1,12 @@
 defmodule Systems.Payment.PublicTest do
   use Core.DataCase
+
   import Mox
 
   alias Core.Factories
   alias Systems.Account
   alias Systems.Payment
+  alias Systems.Payment.Error
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
@@ -46,10 +48,10 @@ defmodule Systems.Payment.PublicTest do
       user = fresh_user(%{merchant_uid: "m_unreachable"})
 
       expect(ProviderMock, :get_merchant, fn "m_unreachable" ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+        {:error, %Error{code: :http_error, message: "boom"}}
       end)
 
-      assert {:error, %Systems.Payment.Error{code: :http_error}} =
+      assert {:error, %Error{code: :http_error}} =
                Payment.Public.ensure_merchant_for(user)
     end
   end
@@ -77,7 +79,7 @@ defmodule Systems.Payment.PublicTest do
       ProviderMock
       |> expect(:create_merchant, fn _ ->
         {:error,
-         %Systems.Payment.Error{
+         %Error{
            code: :validation,
            message: "email taken",
            details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => ["taken"]}}}}
@@ -98,10 +100,10 @@ defmodule Systems.Payment.PublicTest do
       user = fresh_user(%{merchant_uid: nil})
 
       expect(ProviderMock, :create_merchant, fn _ ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "down"}}
+        {:error, %Error{code: :http_error, message: "down"}}
       end)
 
-      assert {:error, %Systems.Payment.Error{code: :http_error}} =
+      assert {:error, %Error{code: :http_error}} =
                Payment.Public.ensure_merchant_for(user)
 
       assert %{merchant_uid: nil} = Core.Repo.reload!(user)
@@ -169,10 +171,10 @@ defmodule Systems.Payment.PublicTest do
 
     test "propagates a provider error" do
       expect(ProviderMock, :add_merchant_phone, fn "m_1", _phone ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "down"}}
+        {:error, %Error{code: :http_error, message: "down"}}
       end)
 
-      assert {:error, %Systems.Payment.Error{code: :http_error}} =
+      assert {:error, %Error{code: :http_error}} =
                Payment.Public.set_merchant_phone("m_1", "+31611112222")
     end
   end
@@ -217,10 +219,10 @@ defmodule Systems.Payment.PublicTest do
 
     test "bubbles up list_bank_accounts errors without calling create_bank_account" do
       expect(ProviderMock, :list_bank_accounts, fn "m_z" ->
-        {:error, %Systems.Payment.Error{code: :http_error, message: "down"}}
+        {:error, %Error{code: :http_error, message: "down"}}
       end)
 
-      assert {:error, %Systems.Payment.Error{code: :http_error}} =
+      assert {:error, %Error{code: :http_error}} =
                Payment.Public.ensure_bank_account_for("m_z")
     end
 

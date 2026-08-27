@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Switch do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel
@@ -51,8 +52,7 @@ defmodule Frameworks.Pixel.Switch do
   def handle_event("update", %{status: status}, socket) do
     {
       :noreply,
-      socket
-      |> send_event(:parent, "update", %{status: status})
+      send_event(socket, :parent, "update", %{status: status})
     }
   end
 

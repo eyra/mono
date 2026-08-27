@@ -11,6 +11,7 @@ defmodule Systems.Fund.PayoutModel do
   what `phase/1` answers, derived from `funds_committed_at` and `provider_uid`.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Account
@@ -82,8 +83,7 @@ defmodule Systems.Fund.PayoutModel do
   least while it still remembers it); minting a new one would move the money a
   second time.
   """
-  def transfer_key(%__MODULE__{uid: uid}) when is_binary(uid),
-    do: "payout=#{uid},type=transfer"
+  def transfer_key(%__MODULE__{uid: uid}) when is_binary(uid), do: "payout=#{uid},type=transfer"
 
   @doc """
   Idempotency key for the withdrawal leg.

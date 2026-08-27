@@ -16,11 +16,11 @@ defmodule Systems.Fund.CreatePayInTest do
   """
 
   use Core.DataCase, async: false
+
   import Mox
 
   alias Core.Factories
   alias Core.Repo
-  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
 
@@ -58,7 +58,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
       # Both rows persisted, both `:pending`.
       assert [%{status: :pending}, %{status: :pending}] =
-               Repo.all(Fund.TransactionModel) |> Enum.sort_by(& &1.id)
+               Fund.TransactionModel |> Repo.all() |> Enum.sort_by(& &1.id)
     end
 
     test "can create a fresh transaction after a previous one was marked :failed (UC-OPP-01.A1: retry)" do
@@ -98,7 +98,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
     user =
       Factories.insert!(:member, %{
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true,
         merchant_uid: "m_create_pay_in"
       })

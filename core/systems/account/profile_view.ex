@@ -12,7 +12,7 @@ defmodule Systems.Account.ProfileView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  def dependencies(), do: [:user_id, :show_signout_button, :show_email, :show_title]
+  def dependencies, do: [:user_id, :show_signout_button, :show_email, :show_title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     user = Account.Public.get_user!(user_id)

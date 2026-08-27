@@ -13,9 +13,9 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     priority: 3,
     max_attempts: 1
 
-  require Logger
-
   alias Systems.Feldspar
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}) do

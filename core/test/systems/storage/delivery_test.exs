@@ -2,18 +2,19 @@ defmodule Systems.Storage.DeliveryTest do
   use Core.DataCase, async: false
   use Oban.Testing, repo: Core.Repo
 
-  @moduletag :capture_log
-
-  import Mox
   import Frameworks.Signal.TestHelper
+  import Mox
 
-  alias Systems.Storage.Delivery
   alias Systems.Feldspar.DataDonationFolder
+  alias Systems.Storage.BuiltIn
   alias Systems.Storage.BuiltIn.Backend
   alias Systems.Storage.BuiltIn.MockSpecial
+  alias Systems.Storage.Delivery
 
   # Force module load to register atom in atom table
   require Backend
+
+  @moduletag :capture_log
 
   setup :verify_on_exit!
 
@@ -22,15 +23,15 @@ defmodule Systems.Storage.DeliveryTest do
     isolate_signals()
 
     # Configure mock backend
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
+    initial_config = Application.get_env(:core, BuiltIn)
+    Application.put_env(:core, BuiltIn, special: MockSpecial)
 
     # Clean up test data donation directory
     data_donation_path = Application.get_env(:core, :feldspar_data_donation)[:path]
     File.rm_rf(data_donation_path)
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:core, BuiltIn, initial_config)
       File.rm_rf(data_donation_path)
     end)
 

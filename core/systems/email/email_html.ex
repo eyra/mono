@@ -15,51 +15,51 @@ defmodule Systems.Email.EmailHTML do
 
   # Define template functions for bamboo_phoenix 2.0
   # Each function takes format ("html" or "text") as first arg and assigns as second
-  def otp_sign_in("html", assigns), do: otp_sign_in_html(assigns) |> to_binary()
-  def otp_sign_in("text", assigns), do: otp_sign_in_text(assigns) |> to_binary()
+  def otp_sign_in("html", assigns), do: assigns |> otp_sign_in_html() |> to_binary()
+  def otp_sign_in("text", assigns), do: assigns |> otp_sign_in_text() |> to_binary()
 
   def account_confirmation_instructions("html", assigns),
-    do: account_confirmation_instructions_html(assigns) |> to_binary()
+    do: assigns |> account_confirmation_instructions_html() |> to_binary()
 
   def account_confirmation_instructions("text", assigns),
-    do: account_confirmation_instructions_text(assigns) |> to_binary()
+    do: assigns |> account_confirmation_instructions_text() |> to_binary()
 
-  def account_created("html", assigns), do: account_created_html(assigns) |> to_binary()
-  def account_created("text", assigns), do: account_created_text(assigns) |> to_binary()
+  def account_created("html", assigns), do: assigns |> account_created_html() |> to_binary()
+  def account_created("text", assigns), do: assigns |> account_created_text() |> to_binary()
 
   def already_activated_notification("html", assigns),
-    do: already_activated_notification_html(assigns) |> to_binary()
+    do: assigns |> already_activated_notification_html() |> to_binary()
 
   def already_activated_notification("text", assigns),
-    do: already_activated_notification_text(assigns) |> to_binary()
+    do: assigns |> already_activated_notification_text() |> to_binary()
 
-  def debug_message("html", assigns), do: debug_message_html(assigns) |> to_binary()
-  def debug_message("text", assigns), do: debug_message_text(assigns) |> to_binary()
+  def debug_message("html", assigns), do: assigns |> debug_message_html() |> to_binary()
+  def debug_message("text", assigns), do: assigns |> debug_message_text() |> to_binary()
 
-  def notification("html", assigns), do: notification_html(assigns) |> to_binary()
-  def notification("text", assigns), do: notification_text(assigns) |> to_binary()
+  def notification("html", assigns), do: assigns |> notification_html() |> to_binary()
+  def notification("text", assigns), do: assigns |> notification_text() |> to_binary()
 
   def reset_password_instructions("html", assigns),
-    do: reset_password_instructions_html(assigns) |> to_binary()
+    do: assigns |> reset_password_instructions_html() |> to_binary()
 
   def reset_password_instructions("text", assigns),
-    do: reset_password_instructions_text(assigns) |> to_binary()
+    do: assigns |> reset_password_instructions_text() |> to_binary()
 
   def update_email_instructions("html", assigns),
-    do: update_email_instructions_html(assigns) |> to_binary()
+    do: assigns |> update_email_instructions_html() |> to_binary()
 
   def update_email_instructions("text", assigns),
-    do: update_email_instructions_text(assigns) |> to_binary()
+    do: assigns |> update_email_instructions_text() |> to_binary()
 
   def contribution_accepted("html", assigns),
-    do: contribution_accepted_html(assigns) |> to_binary()
+    do: assigns |> contribution_accepted_html() |> to_binary()
 
   def contribution_accepted("text", assigns),
-    do: contribution_accepted_text(assigns) |> to_binary()
+    do: assigns |> contribution_accepted_text() |> to_binary()
 
   def contribution_declined("html", assigns),
-    do: contribution_declined_html(assigns) |> to_binary()
+    do: assigns |> contribution_declined_html() |> to_binary()
 
   def contribution_declined("text", assigns),
-    do: contribution_declined_text(assigns) |> to_binary()
+    do: assigns |> contribution_declined_text() |> to_binary()
 end

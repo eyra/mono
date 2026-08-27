@@ -1,4 +1,5 @@
 defmodule Systems.Promotion.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Promotion do

@@ -1,5 +1,6 @@
 defmodule Systems.Bookkeeping.PublicTest do
   use Core.DataCase, async: true
+
   alias Systems.Bookkeeping
 
   describe "enter/1" do

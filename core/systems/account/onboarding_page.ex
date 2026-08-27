@@ -27,8 +27,7 @@ defmodule Systems.Account.OnboardingPage do
   @impl true
   def mount(params, _session, socket) do
     {:ok,
-     socket
-     |> assign(
+     assign(socket,
        current_step_index: 0,
        modal_toolbar_buttons: [],
        return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
@@ -66,12 +65,12 @@ defmodule Systems.Account.OnboardingPage do
     } = socket
 
     if is_last_step do
-      {:noreply, socket |> push_navigate(to: post_onboarding_path(socket, user))}
+      {:noreply, push_navigate(socket, to: post_onboarding_path(socket, user))}
     else
       next_step = Enum.at(steps, current_step_index + 1)
 
       if next_step == :activate_account and activated?(socket) do
-        {:noreply, socket |> push_navigate(to: post_onboarding_path(socket, user))}
+        {:noreply, push_navigate(socket, to: post_onboarding_path(socket, user))}
       else
         {:noreply,
          socket
@@ -83,15 +82,14 @@ defmodule Systems.Account.OnboardingPage do
 
   @impl true
   def handle_event("skip", _params, %{assigns: %{current_user: user}} = socket) do
-    {:noreply, socket |> push_navigate(to: post_onboarding_path(socket, user))}
+    {:noreply, push_navigate(socket, to: post_onboarding_path(socket, user))}
   end
 
   defp post_onboarding_path(%{assigns: %{return_to: return_to}}, user),
     do: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user))
 
   defp activated?(%{assigns: %{current_user: %{id: user_id}}}) do
-    user_id
-    |> Account.Public.activated?()
+    Account.Public.activated?(user_id)
   end
 
   @impl true

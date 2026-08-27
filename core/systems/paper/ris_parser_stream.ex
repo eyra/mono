@@ -21,16 +21,14 @@ defmodule Systems.Paper.RISParserStream do
   This allows processing millions of references without loading them all into memory.
   """
   def parse_stream(content_stream) do
-    content_stream
-    |> Stream.transform(
+    Stream.transform(
+      content_stream,
       # Initial accumulator: {buffer, line_number, record_count}
       fn -> {"", 1, 0} end,
-
       # Transform function
       fn chunk, {buffer, line_num, record_count} ->
         # Add chunk to buffer
         full_buffer = buffer <> chunk
-
         # Process complete records in the buffer
         {records, remaining_buffer, new_line_num} =
           extract_complete_records(full_buffer, line_num)
@@ -42,7 +40,6 @@ defmodule Systems.Paper.RISParserStream do
 
         {parsed_records, {remaining_buffer, new_line_num, new_record_count}}
       end,
-
       # Final function - process any remaining buffer
       fn
         {"", _line_num, _record_count} ->
@@ -83,7 +80,7 @@ defmodule Systems.Paper.RISParserStream do
     case validate_initial_chunk(first_chunk) do
       :ok ->
         # If valid, parse the full stream
-        full_stream = Stream.concat([first_chunk], content_stream |> Stream.drop(1))
+        full_stream = Stream.concat([first_chunk], Stream.drop(content_stream, 1))
         parse_stream(full_stream)
 
       {:error, reason} ->
@@ -100,7 +97,7 @@ defmodule Systems.Paper.RISParserStream do
       line_content: ""
     }
 
-    Stream.iterate({:error, {error_map, ""}}, fn _ -> nil end) |> Stream.take(1)
+    {:error, {error_map, ""}} |> Stream.iterate(fn _ -> nil end) |> Stream.take(1)
   end
 
   defp extract_complete_records(buffer, line_num) do
@@ -159,8 +156,7 @@ defmodule Systems.Paper.RISParserStream do
 
     # Parse the lines into attributes
     attrs =
-      lines
-      |> Enum.reduce(%{line_number: start_line}, fn line, acc ->
+      Enum.reduce(lines, %{line_number: start_line}, fn line, acc ->
         process_parsed_line(parse_ris_line(line), acc)
       end)
 

@@ -2,9 +2,10 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   use Core.DataCase
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Assignment
-  alias Systems.Crew
   alias Systems.Account
+  alias Systems.Assignment
+  alias Systems.Consent.Public
+  alias Systems.Crew
 
   describe "view_model/2 - state machine" do
     setup do
@@ -248,7 +249,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       mark_intro_visited(assignment, unconfirmed_user)
 
       # Simulate the user confirming email - update the user record
-      confirmed_at = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      confirmed_at = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
       {:ok, confirmed_user} =
         unconfirmed_user
@@ -271,7 +272,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   end
 
   defp finish_all_tasks(%{crew: crew, workflow: workflow} = assignment, user) do
-    %{items: [item]} = workflow |> Repo.preload([:items])
+    %{items: [item]} = Repo.preload(workflow, [:items])
     member = Crew.Public.get_member(crew, user)
     identifier = Assignment.Private.task_identifier(assignment, item, member)
     task = Crew.Public.create_task!(crew, [user], identifier)
@@ -298,7 +299,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   defp maybe_add_action(assigns, _opts), do: assigns
 
   defp sign_consent(%{consent_agreement: consent_agreement}, user) do
-    revision = Systems.Consent.Public.latest_revision(consent_agreement)
-    Systems.Consent.Public.create_signature(revision, user)
+    revision = Public.latest_revision(consent_agreement)
+    Public.create_signature(revision, user)
   end
 end

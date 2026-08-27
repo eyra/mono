@@ -1,4 +1,5 @@
 defmodule Systems.Payment.Webhook do
+  @moduledoc false
   alias Systems.Payment.Error
 
   @typedoc """

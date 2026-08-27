@@ -1,12 +1,13 @@
 defmodule Systems.Crew.Selector do
+  @moduledoc false
   defmacro __using__({model, key}) do
     quote bind_quoted: [model: model, key: key] do
+      require Ecto.Query
+
       @enforce_keys [:query]
 
       @type t :: %__MODULE__{query: Ecto.Query.t()}
       defstruct [:query]
-
-      require Ecto.Query
 
       defmacro where(selector, binding \\ [], expr) do
         quote do
@@ -76,18 +77,18 @@ defmodule Systems.Crew.Selector do
         quote do: ^unquote(value)
       end
 
-      def update(selector, %Ecto.Query{} = query) do
-        %__MODULE__{selector | query: query}
-      end
-
-      def new() do
-        %__MODULE__{query: Ecto.Query.from(x in unquote(model), as: unquote(key))}
-      end
-
       # def new(graph) do
       #   query = Ecto.Query.from(x in unquote(model), as: unquote(key))
       #   %__MODULE__{query: parse_graph(query, graph)}
       # end
+
+      def update(selector, %Ecto.Query{} = query) do
+        %{selector | query: query}
+      end
+
+      def new do
+        %__MODULE__{query: Ecto.Query.from(x in unquote(model), as: unquote(key))}
+      end
 
       def maybe(%__MODULE__{} = selector, expr, f) when is_function(f, 1) do
         if expr do
@@ -98,6 +99,10 @@ defmodule Systems.Crew.Selector do
       end
 
       def maybe(%__MODULE__{} = selector, expr, f) when is_function(f, 2) do
+        # def join(%__MODULE__{} = selector, binding, assoc, opts \\ []) when is_atom(binding) and is_atom(assoc) do
+        #   type = Keyword.get(opts, :type, :inner)
+        #   append(selector, &Ecto.Query.join(&1, type, [{:binding, b}], _ in assoc(b, assoc), as: assoc))
+        # end
         if expr do
           selector.update(f.(selector.query, expr))
         else
@@ -108,11 +113,6 @@ defmodule Systems.Crew.Selector do
       defimpl Ecto.Queryable do
         def to_query(%{query: query}), do: query
       end
-
-      # def join(%__MODULE__{} = selector, binding, assoc, opts \\ []) when is_atom(binding) and is_atom(assoc) do
-      #   type = Keyword.get(opts, :type, :inner)
-      #   append(selector, &Ecto.Query.join(&1, type, [{:binding, b}], _ in assoc(b, assoc), as: assoc))
-      # end
 
       def authorize(%__MODULE__{} = selector, binding, role) when is_atom(role) do
         authorize(selector, binding, [role])
@@ -133,14 +133,16 @@ defmodule Systems.Crew.Selector do
       def authorize(%__MODULE__{} = selector, binding, role, %{} = user_ids_queryable) do
         assignments_binding = String.to_atom("#{binding}_auth_node_role_assignments")
 
-        authorize(selector, binding, role)
+        selector
+        |> authorize(binding, role)
         |> where([{^assignments_binding, b}], b.principal_id in subquery(user_ids_queryable))
       end
 
       def authorize(%__MODULE__{} = selector, binding, role, user_ids) when is_list(user_ids) do
         assignments_binding = String.to_atom("#{binding}_auth_node_role_assignments")
 
-        authorize(selector, binding, role)
+        selector
+        |> authorize(binding, role)
         |> where([{^assignments_binding, b}], b.principal_id in ^user_ids)
       end
 

@@ -1,5 +1,7 @@
 defmodule Systems.Org.NextActions.AddDomainMembers do
+  @moduledoc false
   @behaviour Systems.NextAction.ViewModel
+
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 

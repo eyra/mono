@@ -4,10 +4,10 @@ defmodule Frameworks.Pixel.Button do
   """
   use CoreWeb, :pixel
 
-  require Logger
-
   alias Frameworks.Pixel.Button.Action
   alias Frameworks.Pixel.Button.Face
+
+  require Logger
 
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
@@ -20,7 +20,8 @@ defmodule Frameworks.Pixel.Button do
       assigns
       |> assign(
         :action,
-        Map.put(assigns.action, :testid, assigns.testid)
+        assigns.action
+        |> Map.put(:testid, assigns.testid)
         |> Map.put(:full_width, assigns.full_width)
       )
       |> assign(:face, Map.put(assigns.face, :full_width, assigns.full_width))

@@ -9,15 +9,17 @@ defmodule LiveNest.InfiniteLoopTest do
   """
 
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   # Minimal routed LiveView that doesn't handle :unhandled_event
   defmodule UnhandledEventPage do
+    @moduledoc false
     use CoreWeb, :routed_live_view
 
     @impl true
     def mount(_params, _session, socket) do
-      {:ok, socket |> assign(triggered: false, modal: nil)}
+      {:ok, assign(socket, triggered: false, modal: nil)}
     end
 
     @impl true
@@ -30,12 +32,11 @@ defmodule LiveNest.InfiniteLoopTest do
       """
     end
 
+    # Note: No consume_event/2 for :unhandled_event
     @impl true
     def handle_event("trigger_unhandled_event", _, socket) do
       {:noreply, socket |> assign(triggered: true) |> publish_event(:unhandled_event)}
     end
-
-    # Note: No consume_event/2 for :unhandled_event
   end
 
   describe "infinite loop prevention" do

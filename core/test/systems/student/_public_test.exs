@@ -1,13 +1,11 @@
 defmodule Systems.Student.PublicTest do
   use Core.DataCase
 
-  alias Systems.{
-    Student,
-    Fund,
-    Pool,
-    Org,
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Fund
+  alias Systems.Org
+  alias Systems.Pool
+  alias Systems.Student
 
   test "handle_features_updated/3 succeeded" do
     student = Factories.insert!(:member, %{creator: false})

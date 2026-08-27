@@ -18,7 +18,7 @@ defmodule Frameworks.Pixel.FormHelpers do
   end
 
   def field_is_valid?(assigns, form) do
-    !(assigns |> field_has_error?(form))
+    !field_has_error?(assigns, form)
   end
 
   def field_error_message(assigns, form) do
@@ -27,22 +27,9 @@ defmodule Frameworks.Pixel.FormHelpers do
 
   def reset_field_color(js \\ %JS{}, field) do
     border_classes =
-      [
-        "border-grey3",
-        "border-primary",
-        "border-tertiary",
-        "border-warning"
-      ]
-      |> Enum.join(" ")
+      Enum.join(["border-grey3", "border-primary", "border-tertiary", "border-warning"], " ")
 
-    text_classes =
-      [
-        "text-grey1",
-        "text-primary",
-        "text-tertiary",
-        "text-warning"
-      ]
-      |> Enum.join(" ")
+    text_classes = Enum.join(["text-grey1", "text-primary", "text-tertiary", "text-warning"], " ")
 
     js
     |> JS.remove_class(border_classes, to: "##{field}", time: 0)

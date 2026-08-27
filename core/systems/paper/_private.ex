@@ -1,6 +1,7 @@
 defmodule Systems.Paper.Private do
-  import Systems.Paper.Queries
+  @moduledoc false
   import Ecto.Query, only: [last: 2]
+  import Systems.Paper.Queries
 
   alias Core.Repo
   alias Systems.Version
@@ -19,24 +20,26 @@ defmodule Systems.Paper.Private do
   end
 
   def obtain_version!(%{version: %Version.Model{} = version}) do
-    Version.Public.prepare_new(version)
+    version
+    |> Version.Public.prepare_new()
     |> Repo.insert!()
   end
 
   def obtain_version!(_) do
-    Version.Public.prepare_first()
-    |> Repo.insert!()
+    Repo.insert!(Version.Public.prepare_first())
   end
 
   def get_paper_by_doi(doi, paper_set, preload \\ []) do
-    paper_query_by_doi(doi, paper_set)
+    doi
+    |> paper_query_by_doi(paper_set)
     |> last(:inserted_at)
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
   def get_paper_by_title(title, paper_set) do
-    paper_query_by_title(title, paper_set)
+    title
+    |> paper_query_by_title(paper_set)
     |> last(:inserted_at)
     |> Repo.one()
     |> Repo.preload(:version)

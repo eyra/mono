@@ -50,7 +50,7 @@ defmodule Frameworks.Pixel.FabricBridge do
       # module once no Fabric parents remain.
       @impl true
       def update(%{id: id, fabric: fabric} = params, socket) do
-        params = Map.drop(params, [:fabric])
+        params = Map.delete(params, :fabric)
 
         socket =
           socket

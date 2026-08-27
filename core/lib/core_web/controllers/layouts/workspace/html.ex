@@ -6,8 +6,8 @@ defmodule CoreWeb.Layouts.Workspace.Html do
 
   import CoreWeb.UI.Footer
 
-  alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Hero
+  alias Frameworks.Pixel.Navigation
   alias Phoenix.LiveView.JS
 
   attr(:title, :string, default: nil)

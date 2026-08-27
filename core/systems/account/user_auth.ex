@@ -1,10 +1,12 @@
 defmodule Systems.Account.UserAuth do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
-  import Plug.Conn
-  import Phoenix.Controller
   use Gettext, backend: CoreWeb.Gettext
 
+  import Phoenix.Controller
+  import Plug.Conn
+
+  alias Cldr.Plug.PutLocale
   alias CoreWeb.ReturnTo
   alias Systems.Account
 
@@ -71,7 +73,7 @@ defmodule Systems.Account.UserAuth do
   # session to avoid fixation attacks. Preserves locale across
   # session renewal.
   defp renew_session(conn) do
-    locale = get_session(conn, Cldr.Plug.PutLocale.session_key())
+    locale = get_session(conn, PutLocale.session_key())
 
     conn
     |> configure_session(renew: true)
@@ -81,8 +83,7 @@ defmodule Systems.Account.UserAuth do
 
   defp maybe_restore_locale(conn, nil), do: conn
 
-  defp maybe_restore_locale(conn, locale),
-    do: put_session(conn, Cldr.Plug.PutLocale.session_key(), locale)
+  defp maybe_restore_locale(conn, locale), do: put_session(conn, PutLocale.session_key(), locale)
 
   @doc """
   Signs out the current user without redirecting.
@@ -193,19 +194,17 @@ defmodule Systems.Account.UserAuth do
 
   defp onboarding_path(_), do: nil
 
-  def signed_in_path(%{creator: false}),
-    do: path(:member_signed_in_page)
+  def signed_in_path(%{creator: false}), do: path(:member_signed_in_page)
 
-  def signed_in_path(%{creator: true}),
-    do: path(:creator_signed_in_page)
+  def signed_in_path(%{creator: true}), do: path(:creator_signed_in_page)
 
-  def signed_in_path(_user),
-    do: path(:member_signed_in_page)
+  def signed_in_path(_user), do: path(:member_signed_in_page)
 
   defp path(key), do: auth_config(key)
 
   defp auth_config(key) when is_atom(key) do
-    Application.get_env(:core, Systems.Account.UserAuth, [])
+    :core
+    |> Application.get_env(Systems.Account.UserAuth, [])
     |> Keyword.get(key)
   end
 end

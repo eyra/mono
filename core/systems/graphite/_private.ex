@@ -1,9 +1,8 @@
 defmodule Systems.Graphite.Private do
+  @moduledoc false
   use CoreWeb, :verified_routes
 
-  alias Systems.{
-    Graphite
-  }
+  alias Systems.Graphite
 
   def get_preview_url(%Graphite.LeaderboardModel{id: id}) do
     ~p"/graphite/leaderboard/#{id}"

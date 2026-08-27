@@ -7,9 +7,9 @@ defmodule Core.Seeds.Helpers do
   in one place.
   """
 
-  require Logger
-
   alias Systems.Account
+
+  require Logger
 
   @doc """
   Returns the existing user with the given email or inserts a confirmed user.
@@ -43,7 +43,7 @@ defmodule Core.Seeds.Helpers do
     password = Keyword.fetch!(opts, :password)
     name = Keyword.fetch!(opts, :name)
     creator? = Keyword.get(opts, :creator, false)
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     {:ok, user} =
       %Account.User{}

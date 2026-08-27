@@ -9,12 +9,12 @@ defmodule Systems.Pool.SettingsView do
   use CoreWeb, :embedded_live_view
   use CoreWeb.Live.FlashHelpers
 
+  import Frameworks.Pixel.Form
+
   alias Frameworks.Pixel.Text
   alias Systems.Pool
 
-  import Frameworks.Pixel.Form
-
-  def dependencies(), do: [:pool_id]
+  def dependencies, do: [:pool_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{pool_id: pool_id}}) do
     Pool.Public.get!(pool_id)

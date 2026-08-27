@@ -13,6 +13,8 @@ defmodule Frameworks.GreenLight.Public do
   """
   use Core, :public
 
+  alias Frameworks.GreenLight.Config
+
   @doc false
   defmacro __using__(config) do
     quote do
@@ -27,10 +29,12 @@ defmodule Frameworks.GreenLight.Public do
 
   defmacro __register_permission_map do
     quote do
-      @before_compile Frameworks.GreenLight.Permissions
       import Frameworks.GreenLight.Permissions, only: [grant_access: 2, grant_actions: 2]
 
-      Frameworks.GreenLight.Permissions.setup_permission_map(__MODULE__)
+      alias Frameworks.GreenLight.Permissions
+
+      @before_compile Permissions
+      Permissions.setup_permission_map(__MODULE__)
     end
   end
 
@@ -56,7 +60,7 @@ defmodule Frameworks.GreenLight.Public do
   defmacro __register_helpers do
     quote do
       def allowed?(roles, permission) do
-        permission_map() |> Frameworks.GreenLight.PermissionMap.allowed?(permission, roles)
+        Frameworks.GreenLight.PermissionMap.allowed?(permission_map(), permission, roles)
       end
     end
   end
@@ -82,8 +86,8 @@ defmodule Frameworks.GreenLight.Public do
   end
 
   defmacro __register_authorization_management_functions(config) do
-    repo = Frameworks.GreenLight.Config.repo!(config)
-    schema = Frameworks.GreenLight.Config.role_assignment_schema!(config)
+    repo = Config.repo!(config)
+    schema = Config.role_assignment_schema!(config)
 
     quote do
       def list_roles(principal, entities) do
@@ -96,8 +100,7 @@ defmodule Frameworks.GreenLight.Public do
       end
 
       def build_role_assignment(principal, entity, role) do
-        unquote(schema)
-        |> struct(%{
+        struct(unquote(schema), %{
           principal_id: Frameworks.GreenLight.Principal.id(principal),
           node_id: Frameworks.GreenLight.AuthorizationNode.id(entity),
           role: role
@@ -126,8 +129,8 @@ defmodule Frameworks.GreenLight.Public do
       end
 
       def remove_role!(principal, entity, role) do
-        unquote(repo)
-        |> Frameworks.GreenLight.Ecto.Query.remove_role!(
+        Frameworks.GreenLight.Ecto.Query.remove_role!(
+          unquote(repo),
           unquote(schema),
           principal,
           entity,
@@ -136,14 +139,13 @@ defmodule Frameworks.GreenLight.Public do
       end
 
       def list_principals(entity) do
-        unquote(repo)
-        |> Frameworks.GreenLight.Ecto.Query.list_principals(unquote(schema), entity)
+        Frameworks.GreenLight.Ecto.Query.list_principals(unquote(repo), unquote(schema), entity)
       end
     end
   end
 
   defmacro __register_query_functions(config) do
-    schema = Frameworks.GreenLight.Config.role_assignment_schema!(config)
+    schema = Config.role_assignment_schema!(config)
 
     quote do
       def query_node_ids(opts \\ []) do
@@ -155,8 +157,7 @@ defmodule Frameworks.GreenLight.Public do
       end
 
       def query_role_assignment(principal, entity, role) do
-        unquote(schema)
-        |> Frameworks.GreenLight.Ecto.Query.query_role_assignments(
+        Frameworks.GreenLight.Ecto.Query.query_role_assignments(unquote(schema),
           principal: principal,
           entity: entity,
           role: role

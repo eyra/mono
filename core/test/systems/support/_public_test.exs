@@ -12,7 +12,7 @@ defmodule Systems.Support.PublicTest do
 
     test "don't return closed tickets" do
       Factories.insert!(:helpdesk_ticket, %{
-        completed_at: Faker.DateTime.backward(10) |> DateTime.truncate(:second)
+        completed_at: 10 |> Faker.DateTime.backward() |> DateTime.truncate(:second)
       })
 
       assert Public.list_tickets(:open) == []

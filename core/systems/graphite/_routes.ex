@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/graphite", Systems.Graphite do

@@ -13,8 +13,8 @@ defmodule Systems.Pool.Controller do
   use CoreWeb, {:controller, [formats: [:html]]}
 
   alias CoreWeb.ReturnTo
-  alias Systems.Pool
   alias Systems.Account
+  alias Systems.Pool
 
   def join(conn, %{"slug" => slug} = params) do
     user = conn.assigns.current_user

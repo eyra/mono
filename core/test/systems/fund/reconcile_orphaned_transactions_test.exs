@@ -4,12 +4,12 @@ defmodule Systems.Fund.ReconcileOrphanedTransactionsTest do
   flag the ones with no local row — the restore-orphan case.
   """
   use Core.DataCase, async: true
+
   import Mox
 
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -21,7 +21,7 @@ defmodule Systems.Fund.ReconcileOrphanedTransactionsTest do
   defp local_transaction(idempotence_key, opts \\ []) do
     currency_ledger =
       case Fund.CurrencyLedgerModel.get_by_currency(:EUR) do
-        nil -> Fund.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
+        nil -> :EUR |> Fund.CurrencyLedgerModel.create() |> Repo.insert!()
         existing -> Repo.preload(existing, [:inbound, :outbound])
       end
 
@@ -65,7 +65,7 @@ defmodule Systems.Fund.ReconcileOrphanedTransactionsTest do
     }
   end
 
-  defp hours_ago(hours), do: DateTime.add(DateTime.utc_now(), -hours * 60 * 60, :second)
+  defp hours_ago(hours), do: DateTime.shift(DateTime.utc_now(), hour: -hours)
 
   defp run(transactions, opts \\ []) do
     expect(ProviderMock, :list_recent_transactions, fn _since -> {:ok, transactions} end)

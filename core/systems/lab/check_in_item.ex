@@ -1,12 +1,10 @@
 defmodule Systems.Lab.CheckInItem do
+  @moduledoc false
   use CoreWeb, :html
-
   use Gettext, backend: CoreWeb.Gettext
-  alias CoreWeb.UI.Timestamp
 
-  alias Systems.{
-    Lab
-  }
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Lab
 
   defp title(%{email: nil, subject: subject}), do: "Subject #{subject}"
   defp title(%{email: email}), do: email
@@ -62,12 +60,7 @@ defmodule Systems.Lab.CheckInItem do
     do: [
       %{
         action: %{type: :send, item: id, target: target, event: "accept"},
-        face: %{
-          type: :icon,
-          icon: :add,
-          color: :tertiary,
-          label: "Sign up"
-        }
+        face: %{type: :icon, icon: :add, color: :tertiary, label: "Sign up"}
       }
     ]
 

@@ -1,15 +1,15 @@
 defmodule Systems.Assignment.ContributionsView do
   use CoreWeb, :embedded_live_view
 
-  require Logger
-
   alias Frameworks.Pixel.Text
   alias Systems.Assignment
   alias Systems.NextAction
 
+  require Logger
+
   @decline_modal_id "decline-contribution-modal"
 
-  def dependencies(), do: [:assignment_id, :title]
+  def dependencies, do: [:assignment_id, :title]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
@@ -68,7 +68,7 @@ defmodule Systems.Assignment.ContributionsView do
         style: :compact
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
@@ -93,11 +93,11 @@ defmodule Systems.Assignment.ContributionsView do
           )
       end
 
-    {:stop, socket |> hide_decline_modal()}
+    {:stop, hide_decline_modal(socket)}
   end
 
   def consume_event(%{name: :hide_decline_modal}, socket) do
-    {:stop, socket |> hide_decline_modal()}
+    {:stop, hide_decline_modal(socket)}
   end
 
   defp hide_decline_modal(socket) do

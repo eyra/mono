@@ -8,7 +8,7 @@ defmodule Systems.Desktop.View do
 
   @impl true
   def update(%{vm: vm}, socket) do
-    {:ok, socket |> assign(vm: vm)}
+    {:ok, assign(socket, vm: vm)}
   end
 
   @impl true

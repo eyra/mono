@@ -24,23 +24,25 @@ defmodule CoreWeb.Live.FlashHelpers do
     quote do
       use Gettext, backend: CoreWeb.Gettext
 
+      alias Frameworks.Pixel.Flash
+
       def hide_flash(socket) do
-        Frameworks.Pixel.Flash.push_hide(socket)
+        Flash.push_hide(socket)
         socket
       end
 
       def flash_info(socket, message) do
-        Frameworks.Pixel.Flash.push_info(socket, message)
+        Flash.push_info(socket, message)
         socket
       end
 
       def flash_error(socket) do
-        Frameworks.Pixel.Flash.push_error(socket)
+        Flash.push_error(socket)
         socket
       end
 
       def flash_error(socket, message) do
-        Frameworks.Pixel.Flash.push_error(socket, message)
+        Flash.push_error(socket, message)
         socket
       end
 
@@ -49,13 +51,13 @@ defmodule CoreWeb.Live.FlashHelpers do
       end
 
       def flash_persister_error(socket, message) do
-        Frameworks.Pixel.Flash.push_error(socket, message)
+        Flash.push_error(socket, message)
         socket
       end
 
       def flash_persister_saved(socket) do
         message = dgettext("eyra-ui", "persister.saved.flash")
-        Frameworks.Pixel.Flash.push_info(socket, message)
+        Flash.push_info(socket, message)
         socket
       end
     end

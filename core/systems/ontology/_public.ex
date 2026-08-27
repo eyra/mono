@@ -1,9 +1,10 @@
 defmodule Systems.Ontology.Public do
+  @moduledoc false
   use Core, :auth
   use Systems.Ontology.Constants
 
-  import Ecto.Query, only: [order_by: 3, select: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
+  import Ecto.Query, only: [order_by: 3, select: 3]
   import Systems.Ontology.Queries
 
   alias Core.Repo
@@ -48,7 +49,8 @@ defmodule Systems.Ontology.Public do
   end
 
   def query_concept_ids(entities, selector) do
-    concept_query(selector)
+    selector
+    |> concept_query()
     |> concept_query_include(:entities, entities)
     |> select([concept: c], c.id)
   end
@@ -56,13 +58,15 @@ defmodule Systems.Ontology.Public do
   def get_concept(_, preloads \\ [])
 
   def get_concept(id, preloads) when is_integer(id) do
-    concept_query(id)
+    id
+    |> concept_query()
     |> Repo.one()
     |> Repo.preload(preloads)
   end
 
   def get_concept(phrase, preloads) when is_binary(phrase) do
-    concept_query(phrase)
+    phrase
+    |> concept_query()
     |> Repo.one()
     |> Repo.preload(preloads)
   end
@@ -75,14 +79,17 @@ defmodule Systems.Ontology.Public do
   end
 
   def list_concepts(phrases, preloads) when is_list(phrases) and is_list(preloads) do
-    concept_query(phrases)
+    phrases
+    |> concept_query()
+    # Predicate
     |> order_by([concept: c], desc: c.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
 
   def insert_concept(phrase, entity, opts \\ []) do
-    prepare_concept(phrase, entity, opts)
+    phrase
+    |> prepare_concept(entity, opts)
     |> Repo.insert()
   end
 
@@ -92,8 +99,6 @@ defmodule Systems.Ontology.Public do
     |> put_assoc(:entity, entity)
     |> Ontology.ConceptModel.validate()
   end
-
-  # Predicate
 
   def obtain_predicate!(subject, subsumes, object, entity) do
     {:ok, predicate} = obtain_predicate(subject, subsumes, object, entity)
@@ -122,12 +127,14 @@ defmodule Systems.Ontology.Public do
   end
 
   def query_predicate_ids(selector) do
-    predicate_query(selector)
+    selector
+    |> predicate_query()
     |> select([predicate: p], p.id)
   end
 
   def get_predicate(selector, preloads \\ []) do
-    predicate_query(selector)
+    selector
+    |> predicate_query()
     |> Repo.one()
     |> Repo.preload(preloads)
   end
@@ -140,14 +147,17 @@ defmodule Systems.Ontology.Public do
   end
 
   def list_predicates(%Ontology.ConceptModel{} = concept, preloads) do
-    predicate_query(concept)
+    # Ref
+    concept
+    |> predicate_query()
     |> order_by([predicate: p], desc: p.id)
     |> Repo.all()
     |> Repo.preload(preloads)
   end
 
   def insert_predicate(subject, type, object, entity, opts \\ []) do
-    prepare_predicate(subject, type, object, entity, opts)
+    subject
+    |> prepare_predicate(type, object, entity, opts)
     |> Repo.insert()
   end
 
@@ -163,10 +173,9 @@ defmodule Systems.Ontology.Public do
     |> Ontology.PredicateModel.validate()
   end
 
-  # Ref
-
   def query_ref_ids(selector) do
-    ref_query(selector)
+    selector
+    |> ref_query()
     |> select([ref: r], r.id)
   end
 
@@ -191,6 +200,8 @@ defmodule Systems.Ontology.Public do
         raise "Failed to obtain ontology ref"
     end
   end
+
+  # Helper functions based on primitive concepts and predicates
 
   def obtain_ontology_ref(concept_or_predicate) do
     Multi.new()
@@ -218,10 +229,9 @@ defmodule Systems.Ontology.Public do
     |> put_assoc(:predicate, predicate)
   end
 
-  # Helper functions based on primitive concepts and predicates
-
   def get_members_of_category(object) when is_binary(object) do
-    predicate_query(%{object: object, type: @subsumes})
+    %{object: object, type: @subsumes}
+    |> predicate_query()
     |> Repo.all()
     |> Repo.preload([:subject])
     |> Enum.map(fn predicate -> predicate.subject end)
@@ -229,7 +239,8 @@ defmodule Systems.Ontology.Public do
   end
 
   def get_categories_for_member(subject) when is_binary(subject) do
-    predicate_query(%{subject: subject, type: @subsumes})
+    %{subject: subject, type: @subsumes}
+    |> predicate_query()
     |> Repo.all()
     |> Repo.preload([:object])
     |> Enum.map(fn predicate -> predicate.object end)

@@ -1,6 +1,8 @@
 defmodule Systems.Org.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.Live.Element
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
   alias Systems.Content
@@ -58,12 +60,13 @@ defmodule Systems.Org.ContentPageBuilder do
   end
 
   defp create_tabs(node, assigns) do
-    tab_ids(node)
+    node
+    |> tab_ids()
     |> Enum.map(&create_tab(&1, node, assigns))
   end
 
   defp tab_ids(node) do
-    if Pool.Public.list_by_orgs([node]) |> Enum.any?() do
+    if [node] |> Pool.Public.list_by_orgs() |> Enum.any?() do
       [:users, :pools, :node]
     else
       [:users, :node]
@@ -72,7 +75,7 @@ defmodule Systems.Org.ContentPageBuilder do
 
   defp create_tab(:node, %{id: node_id}, %{live_context: context}) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "org_node_view_#{node_id}",
         Org.NodeView,
         live_context: context
@@ -90,7 +93,7 @@ defmodule Systems.Org.ContentPageBuilder do
 
   defp create_tab(:users, %{id: node_id}, %{live_context: context}) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "org_user_view_#{node_id}",
         Org.MemberView,
         live_context: context
@@ -108,7 +111,7 @@ defmodule Systems.Org.ContentPageBuilder do
 
   defp create_tab(:pools, %{id: node_id}, %{live_context: context}) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "org_pools_view_#{node_id}",
         Org.PoolsView,
         live_context: context

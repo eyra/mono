@@ -6,10 +6,10 @@ defmodule Systems.Onyx.SeedBase do
   used across different seed modules with a clean DSL.
   """
 
-  import Systems.Ontology.Public
-
   use Systems.Ontology.Constants
   use Systems.Annotation.Constants
+
+  import Systems.Ontology.Public
 
   alias Systems.Annotation
   alias Systems.Onyx
@@ -20,12 +20,11 @@ defmodule Systems.Onyx.SeedBase do
   defmacro annotate_definition(concept, definition, entity) do
     quote do
       {:ok, _annotation} =
-        %Annotation.Pattern.Definition{
+        Annotation.Pattern.obtain(%Annotation.Pattern.Definition{
           definition: unquote(definition),
           subject: unquote(concept),
           entity: unquote(entity)
-        }
-        |> Annotation.Pattern.obtain()
+        })
 
       unquote(concept)
     end

@@ -1,16 +1,17 @@
 defmodule Systems.Payment.Public do
+  @moduledoc false
   use Core, :public
-
-  require Logger
 
   alias Core.Repo
   alias Systems.Account
   alias Systems.Payment.Error
+  # Merchants
   alias Systems.Payment.Provider
+  alias Systems.Payment.Provider.OPP
   alias Systems.Payment.Reconciliation
   alias Systems.Payment.Transaction
 
-  # Merchants
+  require Logger
 
   @spec create_merchant(attrs :: map()) :: {:ok, Provider.merchant()} | {:error, Error.t()}
   def create_merchant(attrs) do
@@ -52,8 +53,7 @@ defmodule Systems.Payment.Public do
   """
   @spec set_merchant_phone(String.t(), String.t()) ::
           {:ok, Provider.merchant()} | {:error, Error.t()}
-  def set_merchant_phone(merchant_uid, phone)
-      when is_binary(merchant_uid) and is_binary(phone) do
+  def set_merchant_phone(merchant_uid, phone) when is_binary(merchant_uid) and is_binary(phone) do
     provider().add_merchant_phone(merchant_uid, phone)
   end
 
@@ -110,18 +110,20 @@ defmodule Systems.Payment.Public do
   defp merchant_attrs(%Account.User{id: user_id, email: email, displayname: displayname}, phone) do
     {first, last} = split_name(displayname)
 
-    %{
-      type: "consumer",
-      emailaddress: email,
-      country: "NLD",
-      locale: "nl",
-      name_first: first,
-      name_last: last,
-      notify_url: webhook_url(),
-      return_url: return_url(),
-      metadata: %{user_id: "#{user_id}"}
-    }
-    |> maybe_put_phone(phone)
+    maybe_put_phone(
+      %{
+        type: "consumer",
+        emailaddress: email,
+        country: "NLD",
+        locale: "nl",
+        name_first: first,
+        name_last: last,
+        notify_url: webhook_url(),
+        return_url: return_url(),
+        metadata: %{user_id: "#{user_id}"}
+      },
+      phone
+    )
   end
 
   defp maybe_put_phone(attrs, phone) when is_binary(phone) and phone != "",
@@ -131,6 +133,8 @@ defmodule Systems.Payment.Public do
 
   defp split_name(nil), do: {"", ""}
   defp split_name(""), do: {"", ""}
+
+  # Bank accounts
 
   defp split_name(displayname) when is_binary(displayname) do
     case String.split(displayname, " ", parts: 2) do
@@ -165,8 +169,6 @@ defmodule Systems.Payment.Public do
     {:ok, user}
   end
 
-  # Bank accounts
-
   @spec create_bank_account(merchant_uid :: String.t(), attrs :: map()) ::
           {:ok, Provider.bank_account()} | {:error, Error.t()}
   def create_bank_account(merchant_uid, attrs) do
@@ -178,6 +180,8 @@ defmodule Systems.Payment.Public do
   def list_bank_accounts(merchant_uid) do
     provider().list_bank_accounts(merchant_uid)
   end
+
+  # Transactions
 
   @doc """
   Ensures the merchant has a usable bank account, creating one when it has none
@@ -197,6 +201,7 @@ defmodule Systems.Payment.Public do
 
   defp log_error({:error, reason} = result, context) do
     Logger.warning("[Payment] #{context} failed: #{inspect(reason)}")
+    # Withdrawals
     result
   end
 
@@ -217,8 +222,6 @@ defmodule Systems.Payment.Public do
     }
   end
 
-  # Transactions
-
   @spec create_transaction(Transaction.Request.t()) ::
           {:ok, Provider.transaction()} | {:error, Error.t()}
   def create_transaction(%Transaction.Request{} = request) do
@@ -230,6 +233,8 @@ defmodule Systems.Payment.Public do
     provider().get_transaction(uid)
   end
 
+  # Reconciliation
+
   @doc """
   Every transaction the provider created at or after `since`, across all
   merchants — the provider-side input to the provider→local pay-in scan.
@@ -240,8 +245,6 @@ defmodule Systems.Payment.Public do
     provider().list_recent_transactions(since)
   end
 
-  # Withdrawals
-
   @spec create_withdrawal(
           merchant_uid :: String.t(),
           currency :: atom(),
@@ -251,6 +254,8 @@ defmodule Systems.Payment.Public do
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key) do
     provider().create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
   end
+
+  # Transfers
 
   @spec get_withdrawal(uid :: String.t()) :: {:ok, Provider.withdrawal()} | {:error, Error.t()}
   def get_withdrawal(uid) do
@@ -276,8 +281,6 @@ defmodule Systems.Payment.Public do
     provider().list_recent_withdrawals(since)
   end
 
-  # Reconciliation
-
   defdelegate new_reconciliation_state(), to: Reconciliation, as: :new_state
   defdelegate reconciliation_scan_window(opts), to: Reconciliation, as: :scan_window
   defdelegate reconcile_get_withdrawal(state, uid), to: Reconciliation, as: :get_withdrawal
@@ -301,8 +304,6 @@ defmodule Systems.Payment.Public do
 
   defdelegate start_reconciliation_run(run_type), to: Reconciliation, as: :start_run
   defdelegate finish_reconciliation_run(run, state), to: Reconciliation, as: :finish_run
-
-  # Transfers
 
   @spec transfer_to_merchant(
           from_owner_uid :: String.t(),
@@ -344,7 +345,8 @@ defmodule Systems.Payment.Public do
   """
   @spec platform_merchant_uid() :: String.t() | nil
   def platform_merchant_uid do
-    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    :core
+    |> Application.get_env(OPP, [])
     |> Keyword.get(:merchant_uid)
   end
 
@@ -362,7 +364,8 @@ defmodule Systems.Payment.Public do
   """
   @spec partner_fee_percentage() :: non_neg_integer()
   def partner_fee_percentage do
-    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    :core
+    |> Application.get_env(OPP, [])
     |> Keyword.get(:partner_fee_percentage, 0)
   end
 

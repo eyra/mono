@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.ConfirmationModalTest do
   (e.g. the payout handoff) can use custom CTAs while reusing the shared modal.
   """
   use ExUnit.Case, async: true
+
   import Phoenix.LiveViewTest
 
   alias Frameworks.Pixel.ConfirmationModal

@@ -1,13 +1,12 @@
 defmodule Systems.Student.Pool.SubmissionPageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
-
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Student,
-    Pool,
-    Advert
-  }
+  alias CoreWeb.UI.Timestamp
+  alias Systems.Advert
+  alias Systems.Pool
+  alias Systems.Student
 
   def view_model(%Pool.SubmissionModel{} = submission, %{current_user: user}) do
     %{promotion: promotion} = advert = Advert.Public.get_by_submission(submission, [:promotion])
@@ -22,15 +21,16 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
 
     update_at =
       advert.updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> Timestamp.apply_timezone()
+      |> Timestamp.humanize()
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 
     preview_path = ~p"/promotion/#{promotion.id}?preview=true"
 
     excluded_adverts =
-      Advert.Public.list_excluded_adverts([advert], Advert.Model.preload_graph(:down))
+      [advert]
+      |> Advert.Public.list_excluded_adverts(Advert.Model.preload_graph(:down))
       |> Enum.map(&Pool.AdvertItemBuilder.view_model(&1))
 
     form = %{

@@ -1,4 +1,5 @@
 defmodule Systems.Org.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/org", Systems.Org do

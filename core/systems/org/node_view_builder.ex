@@ -1,4 +1,5 @@
 defmodule Systems.Org.NodeViewBuilder do
+  @moduledoc false
   alias Systems.Org
 
   def view_model(node, %{is_admin?: is_admin?}) do

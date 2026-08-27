@@ -37,7 +37,7 @@ defmodule Systems.Assignment.OnboardingViewBuilderTest do
       assert vm.user == user
 
       # Should have content_page configured
-      assert vm.content_page != nil
+      assert vm.content_page
       assert vm.content_page.module == Content.PageView
       assert vm.content_page.id == :content_page
       assert vm.content_page.title == dgettext("eyra-assignment", "onboarding.intro.title")

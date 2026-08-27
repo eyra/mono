@@ -1,11 +1,11 @@
 defmodule Systems.Content.TextBundleModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Systems.{
-    Content
-  }
+  alias Systems.Content
 
   schema "text_bundles" do
     has_many(:items, Content.TextItemModel,

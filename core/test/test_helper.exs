@@ -1,3 +1,5 @@
+alias Systems.Banking.MockBackend
+
 require Promox
 
 # Start Wallaby for feature tests
@@ -8,16 +10,17 @@ Promox.defmock(for: Frameworks.Concept.Branch)
 # Ensure test signal handlers are compiled and loaded
 Code.ensure_loaded!(Frameworks.Signal.TestRecorder)
 Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
+
+# TestHelper should not be globally added - it should only be active
+# when tests explicitly call isolate_signals()
+# Removed incorrect global TestHelper configuration
+
 Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
 
 ExUnit.start(exclude: [:slow], capture_log: true)
 Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
-
-# TestHelper should not be globally added - it should only be active
-# when tests explicitly call isolate_signals()
-# Removed incorrect global TestHelper configuration
 
 Application.put_env(
   :core,
@@ -28,8 +31,8 @@ Application.put_env(
   ])
 )
 
-Mox.defmock(Systems.Banking.MockBackend, for: Systems.Banking.Backend)
-Application.put_env(:core, :banking_backend, Systems.Banking.MockBackend)
+Mox.defmock(MockBackend, for: Systems.Banking.Backend)
+Application.put_env(:core, :banking_backend, MockBackend)
 
 Mox.defmock(BankingClient.MockClient, for: BankingClient.API)
 Application.put_env(:core, BankingClient, client: BankingClient.MockClient)

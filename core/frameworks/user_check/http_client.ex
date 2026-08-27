@@ -14,9 +14,9 @@ defmodule Frameworks.UserCheck.HTTPClient do
 
   @behaviour Frameworks.UserCheck.Client
 
-  require Logger
-
   alias Frameworks.UserCheck.ResultModel
+
+  require Logger
 
   @impl true
   def check_email(email) when is_binary(email) do
@@ -92,7 +92,8 @@ defmodule Frameworks.UserCheck.HTTPClient do
   defp base_url, do: config(:base_url, "https://api.usercheck.com")
 
   defp config(key, default \\ nil) do
-    Application.get_env(:core, Frameworks.UserCheck, [])
+    :core
+    |> Application.get_env(Frameworks.UserCheck, [])
     |> Keyword.get(key, default)
   end
 end

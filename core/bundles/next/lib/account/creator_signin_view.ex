@@ -3,6 +3,7 @@ defmodule Next.Account.CreatorSigninView do
 
   import Frameworks.Pixel.Line
   import Systems.Account.UserForm
+
   alias Systems.Account.User
 
   @impl true
@@ -23,7 +24,7 @@ defmodule Next.Account.CreatorSigninView do
         %{}
       end
 
-    socket |> assign(:password_form, to_form(attrs))
+    assign(socket, :password_form, to_form(attrs))
   end
 
   @impl true

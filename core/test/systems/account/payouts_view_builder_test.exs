@@ -1,12 +1,13 @@
 defmodule Systems.Account.PayoutsViewBuilderTest do
   use Core.DataCase
+
   import Mox
 
+  alias Core.Factories
   alias Systems.Account
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
-  alias Core.Factories
 
   setup :verify_on_exit!
 

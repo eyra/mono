@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.DropdownSelector do
+  @moduledoc false
   use CoreWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
@@ -9,19 +10,13 @@ defmodule Frameworks.Pixel.DropdownSelector do
 
   # Warning update
   @impl true
-  def update(
-        %{model: %{warning: warning}},
-        socket
-      ) do
-    {:ok, socket |> assign(warning: warning)}
+  def update(%{model: %{warning: warning}}, socket) do
+    {:ok, assign(socket, warning: warning)}
   end
 
   # Realtime update
   @impl true
-  def update(
-        %{model: %{options: options}},
-        socket
-      ) do
+  def update(%{model: %{options: options}}, socket) do
     {
       :ok,
       socket
@@ -78,15 +73,10 @@ defmodule Frameworks.Pixel.DropdownSelector do
        ) do
     case Enum.at(options, selected_option_index) do
       nil ->
-        socket
-        |> assign(
-          selected_option_index: nil,
-          selected_option: nil
-        )
+        assign(socket, selected_option_index: nil, selected_option: nil)
 
       selected_option ->
-        socket
-        |> assign(selected_option: selected_option)
+        assign(socket, selected_option: selected_option)
     end
   end
 
@@ -110,12 +100,12 @@ defmodule Frameworks.Pixel.DropdownSelector do
         |> assign(selected_option_index: nil, selected_option: nil, warning: warning)
 
       index ->
-        socket |> assign(selected_option_index: index, warning: nil)
+        assign(socket, selected_option_index: index, warning: nil)
     end
   end
 
   defp update_selector_text(%{assigns: %{selected_option_index: nil}} = socket) do
-    socket |> assign(selector_text: "-")
+    assign(socket, selector_text: "-")
   end
 
   defp update_selector_text(
@@ -126,15 +116,11 @@ defmodule Frameworks.Pixel.DropdownSelector do
       |> Enum.at(selected_option_index)
       |> Map.get(:label)
 
-    socket |> assign(selector_text: selector_text)
+    assign(socket, selector_text: selector_text)
   end
 
   @impl true
-  def handle_event(
-        "toggle_options",
-        _,
-        %{assigns: %{show_options?: show_options?}} = socket
-      ) do
+  def handle_event("toggle_options", _, %{assigns: %{show_options?: show_options?}} = socket) do
     {
       :noreply,
       socket
@@ -154,9 +140,7 @@ defmodule Frameworks.Pixel.DropdownSelector do
       ) do
     selected_option_index = String.to_integer(selected_item)
 
-    selected_option =
-      options
-      |> Enum.at(selected_option_index)
+    selected_option = Enum.at(options, selected_option_index)
 
     {
       :noreply,

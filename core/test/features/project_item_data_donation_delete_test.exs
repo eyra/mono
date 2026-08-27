@@ -21,8 +21,8 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     researcher_user =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 
@@ -70,7 +70,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> assert_has(Query.css("[data-testid='retract-button']"))
 
     # Step 6: Participant visits the affiliate URL
-    participant_url = affiliate_url |> String.replace("participant_id", "test_participant_456")
+    participant_url = String.replace(affiliate_url, "participant_id", "test_participant_456")
 
     participant
     |> visit(participant_url)
@@ -84,21 +84,19 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> click(Query.css(@card_selector))
 
     # Wait for project node page to be fully connected
-    researcher
-    |> assert_has(Query.css("[data-testid^='show_more__action__card_']", count: :any))
+    assert_has(researcher, Query.css("[data-testid^='show_more__action__card_']", count: :any))
 
     # Use retry_stale to handle DOM morphing between find and click
     retry_stale do
-      researcher |> click(Query.css("[data-testid^='show_more__action__card_']"))
+      click(researcher, Query.css("[data-testid^='show_more__action__card_']"))
     end
 
     retry_stale do
-      researcher |> click(Query.css("[data-testid^='delete__action__card_']"))
+      click(researcher, Query.css("[data-testid^='delete__action__card_']"))
     end
 
     # Wait for the card to be removed - project should now show empty state
-    researcher
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    assert_has(researcher, Query.css("[data-testid='create-first-item-button']"))
 
     # Step 8: Participant tries to access the affiliate URL again - should get 404
     participant

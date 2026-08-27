@@ -4,15 +4,14 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   import Frameworks.Utility.Guards
 
-  alias Systems.{
-    Advert,
-    Promotion,
-    Assignment,
-    Pool,
-    Fund
-  }
-
   alias Core.ImageHelpers
+  alias CoreWeb.UI.Timestamp
+  alias Next.Desktop.StartPage
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Fund
+  alias Systems.Pool
+  alias Systems.Promotion
 
   def view_model(%Advert.Model{} = advert, page, assigns) do
     vm(advert, page, assigns)
@@ -29,13 +28,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
              themes: themes,
              marks: marks
            },
-           assignment:
-             %{
-               info: %{
-                 duration: duration,
-                 language: language
-               }
-             } = assignment
+           assignment: %{info: %{duration: duration, language: language}} = assignment
          },
          {Next.Desktop, :card},
          %{uri_path: uri_path}
@@ -52,11 +45,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     ]
 
     info1_elements =
-      if language != nil do
-        language_label = language |> String.upcase(:ascii)
-        info1_elements ++ ["#{language_label}"]
-      else
+      if language == nil do
         info1_elements
+      else
+        language_label = String.upcase(language, :ascii)
+        info1_elements ++ ["#{language_label}"]
       end
 
     info1 = Enum.join(info1_elements, " | ")
@@ -92,19 +85,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          %{
            id: id,
            submission: submission,
-           promotion: %{
-             title: title,
-             themes: themes,
-             marks: marks
-           },
+           promotion: %{title: title, themes: themes, marks: marks},
            assignment:
-             %{
-               info: %{
-                 image_id: image_id,
-                 duration: duration,
-                 language: language
-               }
-             } = assignment
+             %{info: %{image_id: image_id, duration: duration, language: language}} = assignment
          },
          {Advert.OverviewPage, :card},
          _assigns
@@ -125,11 +108,11 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     ]
 
     info1_elements =
-      if language != nil do
-        language_label = "#{language}" |> String.upcase(:ascii)
-        info1_elements ++ ["#{language_label}"]
-      else
+      if language == nil do
         info1_elements
+      else
+        language_label = String.upcase("#{language}", :ascii)
+        info1_elements ++ ["#{language_label}"]
       end
 
     info1 = Enum.join(info1_elements, " | ")
@@ -198,19 +181,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   defp vm(
          %{
            id: id,
-           promotion: %{
-             id: promotion_id,
-             title: title,
-             themes: themes
-           },
+           promotion: %{id: promotion_id, title: title, themes: themes},
            assignment:
-             %{
-               info: %{
-                 image_id: image_id,
-                 logo_url: logo_url,
-                 duration: duration
-               }
-             } = assignment,
+             %{info: %{image_id: image_id, logo_url: logo_url, duration: duration}} = assignment,
            submission: submission
          },
          {:marketplace, :card},
@@ -250,19 +223,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
            id: id,
            updated_at: updated_at,
            submission: submission,
-           promotion:
-             %{
-               title: title,
-               image_id: image_id
-             } = promotion,
-           assignment:
-             %{
-               info: %{
-                 subject_count: target_subject_count
-               }
-             } = assignment
+           promotion: %{title: title, image_id: image_id} = promotion,
+           assignment: %{info: %{subject_count: target_subject_count}} = assignment
          },
-         {Next.Desktop.StartPage, :content},
+         {StartPage, :content},
          _assigns
        ) do
     tag = Pool.Public.get_tag(submission)
@@ -302,14 +266,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   end
 
   defp vm(
-         %{
-           id: id,
-           updated_at: updated_at,
-           promotion: %{
-             title: title,
-             image_id: image_id
-           }
-         } = advert,
+         %{id: id, updated_at: updated_at, promotion: %{title: title, image_id: image_id}} =
+           advert,
          {Fund.FundingPage, :fund_adverts},
          _assigns
        ) do
@@ -331,32 +289,18 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     }
   end
 
-  defp vm(
-         %{assignment: assignment} = advert,
-         {Next.Desktop.StartPage, :contribution},
-         user
-       ) do
+  defp vm(%{assignment: assignment} = advert, {StartPage, :contribution}, user) do
     path = ~p"/assignment/#{assignment.id}/landing"
     vm(advert, :contribution, user, path)
   end
 
-  defp vm(
-         %{submission: submission} = advert,
-         {Pool.ParticipantPage, :contribution},
-         user
-       ) do
+  defp vm(%{submission: submission} = advert, {Pool.ParticipantPage, :contribution}, user) do
     path = ~p"/pool/advert/#{submission.id}"
     vm(advert, :contribution, user, path)
   end
 
   defp vm(
-         %{
-           promotion: %{
-             title: title,
-             image_id: image_id
-           },
-           assignment: assignment
-         },
+         %{promotion: %{title: title, image_id: image_id}, assignment: assignment},
          :contribution,
          user,
          path
@@ -432,11 +376,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     end
   end
 
-  defp subtitle(
-         status,
-         user,
-         assignment
-       ) do
+  defp subtitle(status, user, assignment) do
     case status do
       :pending ->
         dgettext("eyra-marketplace", "assignment.status.pending.subtitle")
@@ -463,8 +403,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp get_quick_summary(updated_at) do
     updated_at
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
+    |> Timestamp.apply_timezone()
+    |> Timestamp.humanize()
   end
 
   defp get_content_list_item_subtitle(
@@ -518,10 +458,9 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     end
   end
 
-  defp reward_value_label(
-         %Pool.SubmissionModel{pool: %{currency: currency}},
-         %Assignment.Model{info: %{subject_reward: subject_reward}}
-       ) do
+  defp reward_value_label(%Pool.SubmissionModel{pool: %{currency: currency}}, %Assignment.Model{
+         info: %{subject_reward: subject_reward}
+       }) do
     reward_value_label(currency, subject_reward)
   end
 
@@ -535,9 +474,10 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   defp reward_value_label(_, _), do: "?"
 
   def get_card_type(submission) do
-    case inactive?(submission) do
-      true -> :secondary
-      false -> :primary
+    if inactive?(submission) do
+      :secondary
+    else
+      :primary
     end
   end
 
@@ -558,8 +498,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   def get_card_tags(nil), do: []
 
   def get_card_tags(themes) do
-    themes
-    |> Enum.map(&Advert.Themes.translate(&1))
+    Enum.map(themes, &Advert.Themes.translate(&1))
   end
 
   def get_card_icon_url(marks) do

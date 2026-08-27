@@ -1,12 +1,13 @@
 defmodule Systems.Content.PageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.NotificationView
-
+  alias Phoenix.LiveView.Socket
   alias Systems.Account
 
-  @callback set_status(socket :: Phoenix.LiveView.Socket.t(), status :: atom()) ::
-              Phoenix.LiveView.Socket.t()
+  @callback set_status(socket :: Socket.t(), status :: atom()) ::
+              Socket.t()
 
   def handle_request_verification(%{assigns: %{fabric: fabric}} = socket) do
     child =
@@ -23,27 +24,28 @@ defmodule Systems.Content.PageBuilder do
   defmacro __using__(_) do
     quote do
       @behaviour Systems.Content.PageBuilder
+
       alias Systems.Content
 
       def handle_publish(%{assigns: %{current_user: %{id: user_id}}} = socket) do
         # reload user for latest config
         if Content.Private.can_user_publish?(Account.Public.get!(user_id)) do
-          socket |> set_status(:online)
+          set_status(socket, :online)
         else
           Content.PageBuilder.handle_request_verification(socket)
         end
       end
 
       def handle_retract(socket) do
-        socket |> set_status(:offline)
+        set_status(socket, :offline)
       end
 
       def handle_close(socket) do
-        socket |> set_status(:idle)
+        set_status(socket, :idle)
       end
 
       def handle_open(socket) do
-        socket |> set_status(:concept)
+        set_status(socket, :concept)
       end
     end
   end

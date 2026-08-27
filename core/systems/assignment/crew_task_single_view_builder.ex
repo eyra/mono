@@ -1,7 +1,9 @@
 defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
+  @moduledoc false
   import Systems.Assignment.CrewTaskHelpers, only: [build_work_items: 2, get_participant: 3]
 
   alias Frameworks.Concept.LiveContext
+  # Single view: get the first (and only) work item
   alias Systems.Assignment
 
   def view_model(
@@ -9,7 +11,6 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
         %{current_user: user, live_context: context} = assigns
       ) do
     work_items = build_work_items(assignment, user)
-    # Single view: get the first (and only) work item
     work_item = List.first(work_items)
 
     # Compute participant here to avoid timing issues (mount runs AFTER ViewBuilder)

@@ -1,4 +1,5 @@
 defmodule CoreWeb.UI.Dialog.Plain do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
   use Gettext, backend: CoreWeb.Gettext
 
@@ -8,10 +9,10 @@ defmodule CoreWeb.UI.Dialog.Plain do
     target = Map.get(params, :target, nil)
 
     primary_button_label =
-      params |> Map.get(:primary_button_label, dgettext("eyra-ui", "ok.button"))
+      Map.get(params, :primary_button_label, dgettext("eyra-ui", "ok.button"))
 
     secondary_button_label =
-      params |> Map.get(:secondary_button_label, dgettext("eyra-ui", "cancel.button"))
+      Map.get(params, :secondary_button_label, dgettext("eyra-ui", "cancel.button"))
 
     {
       :ok,
@@ -49,17 +50,11 @@ defmodule CoreWeb.UI.Dialog.Plain do
       }
     ]
 
-    socket |> assign(buttons: buttons)
+    assign(socket, buttons: buttons)
   end
 
   defp update_buttons(
-         %{
-           assigns: %{
-             type: :inform,
-             id: id,
-             primary_button_label: primary_button_label
-           }
-         } = socket
+         %{assigns: %{type: :inform, id: id, primary_button_label: primary_button_label}} = socket
        ) do
     buttons = [
       %{
@@ -68,7 +63,7 @@ defmodule CoreWeb.UI.Dialog.Plain do
       }
     ]
 
-    socket |> assign(buttons: buttons)
+    assign(socket, buttons: buttons)
   end
 
   def render(assigns) do

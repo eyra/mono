@@ -3,10 +3,11 @@ defmodule Frameworks.Pixel.UserListItem do
     User list item
   """
   use CoreWeb, :live_component
-  require Logger
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
+
+  require Logger
 
   @impl true
   def update(%{people_item: people_item} = assigns, socket),

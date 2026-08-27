@@ -1,11 +1,12 @@
 defmodule Systems.Project.Factories do
+  @moduledoc false
   alias Core.Factories
-  alias Systems.Project
   alias Systems.Alliance
   alias Systems.Assignment
   alias Systems.Graphite
+  alias Systems.Project
 
-  def build_project() do
+  def build_project do
     Factories.build(:project, %{name: "project"})
   end
 
@@ -13,7 +14,7 @@ defmodule Systems.Project.Factories do
     Factories.build(:project, %{name: "project", node: node})
   end
 
-  def build_node(), do: build_node([])
+  def build_node, do: build_node([])
 
   def build_node(arguments) when is_list(arguments) do
     {items, arguments} = Keyword.pop(arguments, :items, [])
@@ -63,14 +64,14 @@ defmodule Systems.Project.Factories do
     })
   end
 
-  def build_tool() do
+  def build_tool do
     Factories.build(:alliance_tool, %{
       url: "https://eyra.co/alliance/123",
       director: :assignment
     })
   end
 
-  def build_assignment() do
+  def build_assignment do
     Factories.build(:assignment)
   end
 end

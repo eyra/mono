@@ -2,8 +2,8 @@ defmodule Systems.Admin.AccountViewBuilderTest do
   use Core.DataCase
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Admin.AccountViewBuilder
   alias Systems.Account
+  alias Systems.Admin.AccountViewBuilder
 
   describe "view_model/2" do
     test "builds correct view model structure" do
@@ -29,22 +29,22 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       creator_verified =
         Factories.insert!(:member, %{
           creator: true,
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       creator_unverified =
         Factories.insert!(:member, %{
           creator: true,
           verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       non_creator =
         Factories.insert!(:member, %{
           creator: false,
           verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       %{
@@ -84,7 +84,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       user =
         Factories.insert!(:member, %{
           creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       # Search by email
@@ -100,8 +100,8 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       user =
         Factories.insert!(:member, %{
           creator: true,
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       user = Account.Public.get_user!(user.id, [:profile])
@@ -115,12 +115,12 @@ defmodule Systems.Admin.AccountViewBuilderTest do
 
       # Verified creator should have unverify button
       verify_button = Enum.find(item.action_buttons, &(&1.action.event == "unverify_creator"))
-      assert verify_button != nil
+      assert verify_button
       assert verify_button.face.label == "Unverify"
 
       # Confirmed user should have deactivate button
       activate_button = Enum.find(item.action_buttons, &(&1.action.event == "deactivate_user"))
-      assert activate_button != nil
+      assert activate_button
       assert activate_button.face.label == "Deactivate"
     end
 
@@ -129,7 +129,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
         Factories.insert!(:member, %{
           creator: true,
           verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       user = Account.Public.get_user!(user.id, [:profile])
@@ -139,7 +139,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
 
       # Unverified creator should have verify button
       verify_button = Enum.find(item.action_buttons, &(&1.action.event == "verify_creator"))
-      assert verify_button != nil
+      assert verify_button
       assert verify_button.face.label == "Verify"
     end
 
@@ -148,7 +148,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
         Factories.insert!(:member, %{
           creator: false,
           verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       user = Account.Public.get_user!(user.id, [:profile])
@@ -156,7 +156,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
 
       # Non-creator should have make_creator button
       creator_button = Enum.find(item.action_buttons, &(&1.action.event == "make_creator"))
-      assert creator_button != nil
+      assert creator_button
       assert creator_button.face.label == "Make creator"
     end
 
@@ -173,7 +173,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
 
       # Unconfirmed user should have activate button
       activate_button = Enum.find(item.action_buttons, &(&1.action.event == "activate_user"))
-      assert activate_button != nil
+      assert activate_button
       assert activate_button.face.label == "Activate"
     end
   end
@@ -184,7 +184,7 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       for _ <- 1..60 do
         Factories.insert!(:member, %{
           creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
       end
 
@@ -197,14 +197,14 @@ defmodule Systems.Admin.AccountViewBuilderTest do
     test ":affiliate filter uses the bulk index and returns affiliate users only" do
       affiliate =
         Factories.insert!(:member, %{
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       Factories.insert!(:affiliate_user, %{user: affiliate, identifier: "affiliate_user_test"})
 
       non_affiliate =
         Factories.insert!(:member, %{
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       vm = AccountViewBuilder.view_model(nil, %{active_filters: [:affiliate], query: []})

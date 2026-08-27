@@ -1,10 +1,11 @@
 defmodule Next.Account.AuthSignupPageTest do
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   setup do
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+      :core |> Application.get_env(:account, []) |> Keyword.get(:auth_providers, [])
 
     on_exit(fn ->
       account = Application.get_env(:core, :account, [])

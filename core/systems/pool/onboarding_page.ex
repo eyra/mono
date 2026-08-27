@@ -44,7 +44,7 @@ defmodule Systems.Pool.OnboardingPage do
 
   @impl true
   def mount(params, _session, socket) do
-    {:ok, socket |> assign(return_to: ReturnTo.sanitize(Map.get(params, "return_to")))}
+    {:ok, assign(socket, return_to: ReturnTo.sanitize(Map.get(params, "return_to")))}
   end
 
   @impl true
@@ -54,12 +54,12 @@ defmodule Systems.Pool.OnboardingPage do
       ) do
     Pool.Public.add_participant!(pool, user)
 
-    {:stop, socket |> advance_or_finish()}
+    {:stop, advance_or_finish(socket)}
   end
 
   @impl true
   def handle_event("continue", _params, socket) do
-    {:noreply, socket |> advance_or_finish()}
+    {:noreply, advance_or_finish(socket)}
   end
 
   defp advance_or_finish(

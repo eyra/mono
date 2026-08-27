@@ -15,7 +15,7 @@ defmodule Systems.Fund.AssemblyTest do
                decimal_scale: 2
              } = currency
 
-      assert currency.label_bundle != nil
+      assert currency.label_bundle
     end
 
     test "returns existing euro currency when it exists" do
@@ -48,7 +48,7 @@ defmodule Systems.Fund.AssemblyTest do
       assert %Fund.CurrencyModel{name: "euro", type: :legal, decimal_scale: 2} = currency
     end
 
-    test ":EUR resolves to the same row as get_or_create_euro/0 (no \"eur\" vs \"euro\" mismatch)" do
+    test ~s{:EUR resolves to the same row as get_or_create_euro/0 (no "eur" vs "euro" mismatch)} do
       euro = Fund.Assembly.get_or_create_euro()
       via_atom = Fund.Assembly.get_or_create(:EUR)
 

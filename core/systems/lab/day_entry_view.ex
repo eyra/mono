@@ -2,6 +2,7 @@ defmodule Systems.Lab.DayEntryView do
   use CoreWeb, :live_component_fabric
 
   import Frameworks.Pixel.Line
+
   alias Frameworks.Pixel.Selector
 
   def update(%{entry: entry}, socket) do
@@ -33,14 +34,14 @@ defmodule Systems.Lab.DayEntryView do
   defp update_timestamp(%{assigns: %{entry: %{start_time: start_time}}} = socket) do
     timestamp =
       if start_time >= 0 and start_time <= 2400 do
-        hour = (start_time / 100) |> trunc()
-        minute = "#{rem(start_time, 100)}" |> String.pad_leading(2, "0")
+        hour = trunc(start_time / 100)
+        minute = String.pad_leading("#{rem(start_time, 100)}", 2, "0")
         "#{hour}:#{minute}"
       else
         "--:--"
       end
 
-    socket |> assign(timestamp: timestamp)
+    assign(socket, timestamp: timestamp)
   end
 
   @impl true

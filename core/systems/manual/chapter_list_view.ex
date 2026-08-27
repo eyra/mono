@@ -25,11 +25,11 @@ defmodule Systems.Manual.ChapterListView do
   end
 
   def update_chapters(%{assigns: %{manual: %{chapters: [_ | _] = chapters}}} = socket) do
-    socket |> assign(chapters: chapters |> Enum.sort_by(& &1.userflow_step.order))
+    assign(socket, chapters: Enum.sort_by(chapters, & &1.userflow_step.order))
   end
 
   def update_chapters(socket) do
-    socket |> assign(chapters: [])
+    assign(socket, chapters: [])
   end
 
   def update_chapter_items(%{assigns: %{chapters: chapters}} = socket) do
@@ -38,7 +38,7 @@ defmodule Systems.Manual.ChapterListView do
       |> Enum.with_index()
       |> Enum.map(&map_chapter_to_item/1)
 
-    socket |> assign(chapter_items: chapter_items)
+    assign(socket, chapter_items: chapter_items)
   end
 
   def map_chapter_to_item(

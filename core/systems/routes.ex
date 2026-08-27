@@ -1,4 +1,5 @@
 defmodule Systems.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       use Systems.Subroutes, [

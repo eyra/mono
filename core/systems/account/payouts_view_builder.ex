@@ -102,16 +102,14 @@ defmodule Systems.Account.PayoutsViewBuilder do
   end
 
   defp build_overview([]) do
-    base_overview()
-    |> Map.merge(%{empty?: true, years: [], rows_by_year: %{}, totals_by_year: %{}})
+    Map.merge(base_overview(), %{empty?: true, years: [], rows_by_year: %{}, totals_by_year: %{}})
   end
 
   defp build_overview(payouts) do
     by_year = Enum.group_by(payouts, &payout_year/1)
     years = by_year |> Map.keys() |> Enum.sort(:desc)
 
-    base_overview()
-    |> Map.merge(%{
+    Map.merge(base_overview(), %{
       empty?: false,
       years: years,
       rows_by_year:

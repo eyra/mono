@@ -1,14 +1,14 @@
 defmodule Systems.Feldspar.ToolView do
   use CoreWeb, :modal_live_view
-  use CoreWeb, :verified_routes
   use Frameworks.Pixel
 
-  require Logger
-
+  alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Logo
   alias Systems.Workflow
 
-  def dependencies(),
+  require Logger
+
+  def dependencies,
     do: [:title, :icon, :tool_ref, :assignment_id, :participant, :workflow_item_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
@@ -23,7 +23,7 @@ defmodule Systems.Feldspar.ToolView do
   @impl true
   def handle_view_model_updated(%{assigns: %{vm: %{error: error}}} = socket)
       when not is_nil(error) do
-    socket |> Frameworks.Pixel.Flash.put_error(error)
+    Flash.put_error(socket, error)
   end
 
   def handle_view_model_updated(socket) do
@@ -37,7 +37,7 @@ defmodule Systems.Feldspar.ToolView do
 
   def handle_event("start", _, %{assigns: %{vm: %{error: error}}} = socket)
       when not is_nil(error) do
-    {:noreply, socket |> Frameworks.Pixel.Flash.push_error(error)}
+    {:noreply, Flash.push_error(socket, error)}
   end
 
   def handle_event("start", _, socket) do
@@ -63,18 +63,15 @@ defmodule Systems.Feldspar.ToolView do
     {:noreply, handle_feldspar_event(socket, event)}
   end
 
-  defp handle_feldspar_event(
-         socket,
-         %{
-           "__type__" => "CommandSystemExit",
-           "code" => code,
-           "info" => info
-         }
-       ) do
+  defp handle_feldspar_event(socket, %{
+         "__type__" => "CommandSystemExit",
+         "code" => code,
+         "info" => info
+       }) do
     if code == 0 do
-      socket |> publish_event(:tool_completed)
+      publish_event(socket, :tool_completed)
     else
-      Frameworks.Pixel.Flash.put_info(
+      Flash.put_info(
         socket,
         "Application stopped unexpectedly [#{code}]: #{info}"
       )
@@ -92,11 +89,11 @@ defmodule Systems.Feldspar.ToolView do
   end
 
   defp handle_feldspar_event(socket, %{"__type__" => type}) do
-    socket |> Frameworks.Pixel.Flash.put_error("Unsupported event " <> type)
+    Flash.put_error(socket, "Unsupported event " <> type)
   end
 
   defp handle_feldspar_event(socket, _) do
-    socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
+    Flash.put_error(socket, "Unsupported event")
   end
 
   @impl true

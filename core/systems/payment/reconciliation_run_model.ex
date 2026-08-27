@@ -4,6 +4,7 @@ defmodule Systems.Payment.ReconciliationRunModel do
   outcome tally. Lets us query reconciliation history without grepping logs.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Payment

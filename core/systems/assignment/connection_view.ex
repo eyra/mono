@@ -2,10 +2,7 @@ defmodule Systems.Assignment.ConnectionView do
   use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Panel
-
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
   def update(
@@ -99,7 +96,7 @@ defmodule Systems.Assignment.ConnectionView do
 
   @impl true
   def handle_event("edit", _payload, socket) do
-    {:noreply, socket |> send_event(:parent, "edit")}
+    {:noreply, send_event(socket, :parent, "edit")}
   end
 
   @impl true

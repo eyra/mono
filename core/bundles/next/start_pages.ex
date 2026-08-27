@@ -1,18 +1,15 @@
 defmodule Next.StartPages do
+  @moduledoc false
   @behaviour CoreWeb.StartPageProvider
 
-  def pages(),
+  def pages,
     do: %{
       home: %{id: :home, path: "/", domain: "eyra-ui"},
       projects: %{id: :projects, path: "/project", domain: "eyra-ui"}
     }
 
   @impl true
-  def values(),
-    do: %{
-      creator: pages().projects,
-      member: pages().home
-    }
+  def values, do: %{creator: pages().projects, member: pages().home}
 
   defmacro __using__(_opts) do
     quote do

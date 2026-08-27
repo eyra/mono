@@ -1,4 +1,5 @@
 defmodule Systems.Banking.Backend do
+  @moduledoc false
   alias Systems.Banking
 
   @type account :: Banking.Public.account()

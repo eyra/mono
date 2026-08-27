@@ -1,4 +1,5 @@
 defmodule Systems.Test.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   alias Systems.Observatory

@@ -1,9 +1,12 @@
 defmodule Systems.Zircon.Screening.ImportViewTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
-  import Frameworks.Signal.TestHelper
-  import Ecto.Query
 
+  import Ecto.Query
+  import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
+
+  alias Systems.Paper.Public
+  alias Systems.Paper.RISImportSessionModel
   alias Systems.Zircon.Screening
 
   setup do
@@ -64,34 +67,34 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # Verify session is active
       assert active_session.status == :activated
-      assert Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id)
+      assert Public.has_active_import_for_reference_file?(reference_file.id)
 
       # Directly test the abort logic that happens in process_file
       # This simulates what happens when a new file is uploaded
       reference_files = Systems.Zircon.Public.list_reference_files(tool)
 
       Enum.each(reference_files, fn ref_file ->
-        if Systems.Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
+        if Public.has_active_import_for_reference_file?(ref_file.id) do
           active_session =
-            Systems.Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
+            Public.get_active_import_session_for_reference_file(ref_file.id)
 
           if active_session do
-            Systems.Paper.Public.abort_import_session!(active_session)
+            Public.abort_import_session!(active_session)
           end
         end
       end)
 
       # Verify the active session was aborted
-      aborted_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, active_session.id)
+      aborted_session = Core.Repo.get!(RISImportSessionModel, active_session.id)
       assert aborted_session.status == :aborted
-      assert aborted_session.completed_at != nil
+      assert aborted_session.completed_at
     end
   end
 
   describe "show import view" do
     test "renders with basic session", %{conn: conn, tool: tool} do
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Test Import View",
@@ -100,13 +103,13 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session)
 
-      assert view |> has_element?("[data-testid='import-view']")
-      assert view |> has_element?("[data-testid='import-title']")
+      assert has_element?(view, "[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-title']")
     end
 
     test "displays import functionality elements", %{conn: conn, tool: tool} do
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "RIS File Import",
@@ -116,12 +119,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session)
 
       # Check for basic import-related content
-      assert view |> has_element?("[data-testid='import-view']")
-      assert view |> has_element?("[data-testid='import-title']")
+      assert has_element?(view, "[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-title']")
       # The view should have file selector
-      assert view |> has_element?("[data-testid='file-selector']")
+      assert has_element?(view, "[data-testid='file-selector']")
       # Should not show content block when no papers
-      refute view |> has_element?("[data-testid='content-block']")
+      refute has_element?(view, "[data-testid='content-block']")
     end
 
     test "displays import session data when session exists", %{conn: conn, tool: tool} do
@@ -174,11 +177,11 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
             "imported" => 1,
             "skipped_duplicates" => 0
           },
-          inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          inserted_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Import Results",
@@ -188,19 +191,19 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session)
 
       # Check that the import session data is displayed
-      assert view |> has_element?("[data-testid='import-view']")
-      assert view |> has_element?("[data-testid='import-title']")
+      assert has_element?(view, "[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-title']")
       # The view should render the file selector
-      assert view |> has_element?("[data-testid='file-selector']")
+      assert has_element?(view, "[data-testid='file-selector']")
       # Basic test - verify the import session exists in database
-      import_sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      import_sessions = Core.Repo.all(RISImportSessionModel)
       assert length(import_sessions) == 1
       assert hd(import_sessions).status == :succeeded
     end
 
     test "can interact with import button to trigger file selection", %{conn: conn, tool: tool} do
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Test Import Button",
@@ -210,8 +213,8 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, html} = live_isolated(conn, Screening.ImportView, session: session)
 
       # Verify initial state - no papers, so file selector should be visible
-      assert view |> has_element?("[data-testid='import-view']")
-      assert view |> has_element?("[data-testid='file-selector']")
+      assert has_element?(view, "[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='file-selector']")
 
       # Find the file input element (it's hidden but should be present)
       assert html =~ ~r/input.*type="file".*accept="\.ris"/
@@ -224,12 +227,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       result = render_change(view, :change, %{"_target" => ["file"]})
 
       # The change event should be handled without errors (returns the updated view)
-      assert result |> String.contains?("data-testid")
+      assert String.contains?(result, "data-testid")
     end
 
     test "can simulate file upload to trigger import process", %{conn: conn, tool: tool} do
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Test File Upload",
@@ -239,7 +242,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, html} = live_isolated(conn, Screening.ImportView, session: session)
 
       # Verify the file upload is configured correctly
-      assert view |> has_element?("[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-view']")
       assert has_element?(view, "[data-testid='file-selector']")
 
       # Create a test file to simulate upload (this is a basic test - real files need proper handling)
@@ -261,12 +264,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       file_change_result = render_change(view, :change, %{"_target" => ["file"], "file" => %{}})
 
       # Should return updated HTML without errors
-      assert file_change_result |> String.contains?("data-testid")
+      assert String.contains?(file_change_result, "data-testid")
     end
 
     test "can upload real RIS file and trigger import process", %{conn: conn, tool: tool} do
       # add bogus request path to prevent error: not an iodata term
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Real File Upload Test",
@@ -276,7 +279,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, _html} = live_isolated(conn, Screening.ImportView, session: session)
 
       # Verify initial state
-      assert view |> has_element?("[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-view']")
       assert has_element?(view, "[data-testid='file-selector']")
 
       # Use the test RIS file from the test_data directory
@@ -310,15 +313,15 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       reference_file = Systems.Zircon.Public.insert_reference_file!(tool, "sample.ris")
 
       # Get paper set
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       # Start the import process (skip the file update for now since it's not critical for this test)
       import_session =
-        Systems.Paper.Public.prepare_import_session!(reference_file, paper_set)
+        Public.prepare_import_session!(reference_file, paper_set)
 
       # Render the view one more time
       html_after_upload = render(view)
-      assert html_after_upload |> String.contains?("data-testid")
+      assert String.contains?(html_after_upload, "data-testid")
 
       # Now verify the complete import workflow was triggered:
 
@@ -337,11 +340,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # 4. Oban job was created with correct session_id
       import_jobs =
-        from(j in Oban.Job,
-          where: j.worker == "Systems.Paper.RISImportPrepareJob",
-          where: j.args["session_id"] == ^import_session.id
+        Core.Repo.all(
+          from(j in Oban.Job,
+            where: j.worker == "Systems.Paper.RISImportPrepareJob",
+            where: j.args["session_id"] == ^import_session.id
+          )
         )
-        |> Core.Repo.all()
 
       assert length(import_jobs) > 0, "Import job should have been enqueued"
 
@@ -373,11 +377,11 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
         )
 
       # Ensure no import session exists (file uploaded but import not started)
-      import_sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      import_sessions = Core.Repo.all(RISImportSessionModel)
       assert Enum.empty?(import_sessions), "No import sessions should exist for this test"
 
       # Simulate page refresh - create a new LiveView instance
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Import Button Persistence Test",
@@ -387,18 +391,18 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       {:ok, view, html} = live_isolated(conn, Screening.ImportView, session: session_data)
 
       # EXPECTED: Import button should be visible because an unprocessed reference file exists
-      assert view |> has_element?("[data-testid='import-buttons-block']"),
+      assert has_element?(view, "[data-testid='import-buttons-block']"),
              "Import button should be visible when an unprocessed reference file exists"
 
       # Verify the filename is displayed in the file selector
       assert html =~ "test.ris", "Original filename should be displayed in file selector"
 
       # Verify that we can still trigger import
-      assert view |> has_element?("[phx-click='prepare_import']"),
+      assert has_element?(view, "[phx-click='prepare_import']"),
              "Start import event should be available"
 
       # Verify NO import session block is shown
-      refute view |> has_element?("[data-testid='import-session-container']"),
+      refute has_element?(view, "[data-testid='import-session-container']"),
              "Import session should not be visible when no import has been started"
     end
   end
@@ -450,11 +454,11 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
           # Currently being processed
           status: :activated,
           phase: :parsing,
-          inserted_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          inserted_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
 
       # First render - should show "Processing file..." since status is :parsing
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session = %{
         "title" => "Import View Test",
@@ -491,15 +495,15 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # since session is completed and there's no active import
 
       # Import button should be enabled for new imports
-      assert html2 |> String.contains?("import-section")
+      assert String.contains?(html2, "import-section")
 
       # Verify the session is completed
-      sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      sessions = Core.Repo.all(RISImportSessionModel)
       assert length(sessions) == 1
       assert hd(sessions).status == :succeeded
 
       # No active imports should exist
-      refute Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
+      refute Public.has_active_import_for_reference_file?(reference_file.id),
              "Completed sessions should not be considered active"
     end
 
@@ -522,7 +526,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # Update reference file to point to actual test RIS file
       test_file_path = Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/small.ris")
-      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
+      reference_file = Core.Repo.preload(reference_file, :file, force: true)
 
       Core.Repo.update!(
         Ecto.Changeset.change(reference_file.file, %{
@@ -531,11 +535,11 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       )
 
       # Reload to get the updated file ref
-      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
+      reference_file = Core.Repo.preload(reference_file, :file, force: true)
 
       # Create session manually (avoiding automatic Oban job execution)
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Core.Repo.insert!(%RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -549,7 +553,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert result == :ok
 
       # Reload the session to get the updated state
-      processed_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      processed_session = Core.Repo.get!(RISImportSessionModel, session.id)
 
       # Verify the processing completed successfully but import hasn't happened yet
       assert processed_session.status == :activated
@@ -559,7 +563,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert length(processed_session.entries) == 3
 
       # Now manually continue the import (this is what the Continue button would do)
-      final_session = Systems.Paper.Public.commit_import_session!(processed_session)
+      final_session = Public.commit_import_session!(processed_session)
       assert final_session.status == :activated
       assert final_session.phase == :importing
 
@@ -569,7 +573,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert final_session.phase == :importing
 
       # Now test the view - this simulates a page refresh after import completion
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       session_data = %{
         "title" => "Import Complete Test",
@@ -582,21 +586,21 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # since there's no active import session anymore
 
       # Verify the view shows the expected content for a tool with imported papers
-      assert view |> has_element?("[data-testid='import-view']")
-      assert view |> has_element?("[data-testid='import-title']")
+      assert has_element?(view, "[data-testid='import-view']")
+      assert has_element?(view, "[data-testid='import-title']")
 
       # The import section should be available for new imports
-      assert view |> has_element?("[data-testid='import-section-block']")
+      assert has_element?(view, "[data-testid='import-section-block']")
 
       # Verify backend state matches what the view should see
       vm = Systems.Zircon.Screening.ImportViewBuilder.view_model(tool, %{})
 
       # Paper count will be 0 since import happens asynchronously via job
-      {_, header_block} = vm.stack |> Enum.find(fn {type, _} -> type == :header end)
+      {_, header_block} = Enum.find(vm.stack, fn {type, _} -> type == :header end)
       assert header_block.paper_count == 0, "View model should show 0 papers (import is async)"
 
       # Session remains active in :importing phase until the job completes
-      assert Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
+      assert Public.has_active_import_for_reference_file?(reference_file.id),
              "Should still have active import in :importing phase"
     end
   end

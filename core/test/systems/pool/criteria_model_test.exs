@@ -36,7 +36,7 @@ defmodule Systems.Pool.CriteriaModelTest do
         genders: [:woman]
       }
 
-      assert not Pool.CriteriaModel.eligitable?(criteria, features)
+      refute Pool.CriteriaModel.eligitable?(criteria, features)
     end
 
     test "eligitable when criteria allows multiple genders including user's gender", %{

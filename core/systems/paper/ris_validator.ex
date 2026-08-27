@@ -3,8 +3,9 @@ defmodule Systems.Paper.RISValidator do
   Validates RIS files before parsing to prevent crashes from invalid files.
   """
 
-  require Logger
   use Gettext, backend: CoreWeb.Gettext
+
+  require Logger
 
   # Maximum time allowed for validation (30 seconds for large files)
   @validation_timeout 30_000
@@ -42,14 +43,13 @@ defmodule Systems.Paper.RISValidator do
     with :ok <- validate_size(content),
          :ok <- validate_not_binary(content),
          :ok <- validate_text_encoding(content),
+         # Private validation functions
          :ok <- validate_ris_format(content) do
       {:ok, content}
     end
   end
 
   def validate_content(_), do: {:error, dgettext("eyra-paper", "ris.error.invalid_content")}
-
-  # Private validation functions
 
   defp validate_size(content) do
     size = byte_size(content)
@@ -67,7 +67,8 @@ defmodule Systems.Paper.RISValidator do
   end
 
   defp get_max_file_size do
-    Application.fetch_env!(:core, :paper)
+    :core
+    |> Application.fetch_env!(:paper)
     |> Keyword.fetch!(:ris_max_file_size)
   end
 
@@ -89,9 +90,10 @@ defmodule Systems.Paper.RISValidator do
     sample_size = min(byte_size(content), 10_000)
     sample = binary_part(content, 0, sample_size)
 
-    case String.valid?(sample) do
-      true -> :ok
-      false -> {:error, dgettext("eyra-paper", "ris.error.invalid_text_encoding")}
+    if String.valid?(sample) do
+      :ok
+    else
+      {:error, dgettext("eyra-paper", "ris.error.invalid_text_encoding")}
     end
   end
 
@@ -165,7 +167,7 @@ defmodule Systems.Paper.RISValidator do
 
   defp has_valid_ris_structure?(content) do
     # Basic check for RIS line structure (TAG  - VALUE)
-    lines = String.split(content, ~r/\r?\n/, trim: true) |> Enum.take(100)
+    lines = content |> String.split(~r/\r?\n/, trim: true) |> Enum.take(100)
 
     # Count valid RIS format lines
     valid_lines =

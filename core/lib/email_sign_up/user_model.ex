@@ -8,6 +8,7 @@ defmodule EmailSignUp.UserModel do
   the user activates their account (sets a password, links Google, etc.).
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   schema "email_sign_up_user" do

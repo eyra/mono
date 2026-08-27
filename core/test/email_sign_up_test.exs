@@ -9,13 +9,13 @@ defmodule EmailSignUpTest do
       assert user.email == "valid@example.com"
       assert user.hashed_password == "no-password-set"
       assert user.creator == false
-      assert user.verified_at != nil
+      assert user.verified_at
 
       satellite = EmailSignUp.get_by_user(user)
-      assert satellite != nil
+      assert satellite
       assert satellite.user_id == user.id
-      assert satellite.validated_at != nil
-      assert satellite.validation_data != nil
+      assert satellite.validated_at
+      assert satellite.validation_data
     end
 
     test "stores full validation data from UserCheck" do
@@ -60,7 +60,9 @@ defmodule EmailSignUpTest do
 
     test "accepts custom rejection policy" do
       defmodule AcceptAllPolicy do
+        @moduledoc false
         @behaviour EmailSignUp.RejectionPolicy
+
         def reject?(_result), do: :ok
       end
 
@@ -79,7 +81,7 @@ defmodule EmailSignUpTest do
       assert updated_user.id == user.id
 
       satellite = EmailSignUp.get_by_user(updated_user)
-      assert satellite != nil
+      assert satellite
       assert satellite.user_id == user.id
     end
 
@@ -112,7 +114,7 @@ defmodule EmailSignUpTest do
       user
       |> User.password_changeset(%{password: "SecurePassword123!"})
       |> Repo.update!()
-      |> then(&assert(not EmailSignUp.provisional?(&1)))
+      |> then(&refute(EmailSignUp.provisional?(&1)))
     end
 
     test "returns false after confirmation" do
@@ -121,7 +123,7 @@ defmodule EmailSignUpTest do
       user
       |> User.confirm_changeset()
       |> Repo.update!()
-      |> then(&assert(not EmailSignUp.provisional?(&1)))
+      |> then(&refute(EmailSignUp.provisional?(&1)))
     end
   end
 

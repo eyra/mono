@@ -1,15 +1,14 @@
 defmodule Systems.Fund.PublicTest do
   use Core.DataCase
+
   import Mox
   import Systems.Fund.TestHelper
 
-  alias Systems.{
-    Fund,
-    Bookkeeping
-  }
-
-  alias Systems.Payment.ProviderMock
   alias Core.Factories
+  alias Systems.Bookkeeping
+  alias Systems.Fund
+  alias Systems.Payment.Error
+  alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
 
@@ -408,14 +407,14 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 succeeded" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -441,14 +440,14 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 skipped: exceeding limit" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -474,7 +473,7 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 skipped: from account does not exist" do
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -595,7 +594,7 @@ defmodule Systems.Fund.PublicTest do
     test "transitions :reserved → :approved and creates wallet payment", %{key: key} do
       assert {:ok, %{status: :approved, payment_id: payment_id}} = approve_reward(key)
 
-      refute is_nil(payment_id)
+      assert payment_id
     end
 
     test "transitions :pending_approval → :approved", %{key: key} do
@@ -777,7 +776,7 @@ defmodule Systems.Fund.PublicTest do
 
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :rejected
-      refute is_nil(reward.rejected_at)
+      assert reward.rejected_at
     end
 
     test "approve_reward overrides a rejected reward, paying from fund.available",
@@ -790,7 +789,7 @@ defmodule Systems.Fund.PublicTest do
       reward = Fund.Public.get_reward(key, [])
       assert reward.status == :approved
       assert is_nil(reward.rejected_at)
-      refute is_nil(reward.payment_id)
+      assert reward.payment_id
 
       _ = fund_id
     end
@@ -1088,10 +1087,10 @@ defmodule Systems.Fund.PublicTest do
       # A 4xx means the provider received the transfer and refused it before
       # moving any money, so releasing the lock is safe.
       expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+        {:error, %Error{code: :api_error, details: %{status: 422}}}
       end)
 
-      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
+      assert {:error, {:opp_failed, %Error{}}} =
                Fund.Public.request_payout(user, "euro")
 
       assert %{status: :approved} = Fund.Public.get_reward(reward_key(id), [])
@@ -1107,10 +1106,10 @@ defmodule Systems.Fund.PublicTest do
       # money. Reverting would let a retry charge again, so the rewards stay
       # locked and the payout stays :pending for reconciliation.
       expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+        {:error, %Error{code: :connection_error, message: "boom"}}
       end)
 
-      assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
+      assert {:error, {:opp_uncertain, %Error{}}} =
                Fund.Public.request_payout(user, "euro")
 
       assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id), [])
@@ -1127,7 +1126,8 @@ defmodule Systems.Fund.PublicTest do
       # during this request's OPP readiness recheck. list_bank_accounts runs
       # inside recheck_payout_ready, just before lock_for_payout's compare-and-swap.
       expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
-        Core.Repo.get!(Fund.RewardModel, id)
+        Fund.RewardModel
+        |> Core.Repo.get!(id)
         |> Ecto.Changeset.change(%{status: :pending_payout})
         |> Core.Repo.update!()
 
@@ -1193,7 +1193,7 @@ defmodule Systems.Fund.PublicTest do
       stub_payout_ready(user.merchant_uid)
 
       expect(ProviderMock, :transfer_to_merchant, fn _, _, _, _ ->
-        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+        {:error, %Error{code: :api_error, details: %{status: 422}}}
       end)
 
       assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user, "euro")
@@ -1225,7 +1225,8 @@ defmodule Systems.Fund.PublicTest do
         })
 
       locked =
-        insert_reward(user, fund, 1000, :pending_payout)
+        user
+        |> insert_reward(fund, 1000, :pending_payout)
         |> Ecto.Changeset.change(%{payout_id: stranded.id})
         |> Core.Repo.update!()
 
@@ -2215,10 +2216,10 @@ defmodule Systems.Fund.PublicTest do
       %{id: id} = insert_reward(donor, euro, 600, :approved)
 
       expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
-        {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 422}}}
+        {:error, %Error{code: :api_error, details: %{status: 422}}}
       end)
 
-      assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
+      assert {:error, {:opp_failed, %Error{}}} =
                Fund.Public.request_donation(donor, "euro")
 
       assert %{status: :approved, donation_id: nil} = Core.Repo.get!(Fund.RewardModel, id)
@@ -2231,10 +2232,10 @@ defmodule Systems.Fund.PublicTest do
       %{id: id} = insert_reward(donor, euro, 600, :approved)
 
       expect(ProviderMock, :charge_to_partner, fn _from, _amount, _key ->
-        {:error, %Systems.Payment.Error{code: :connection_error, message: "boom"}}
+        {:error, %Error{code: :connection_error, message: "boom"}}
       end)
 
-      assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
+      assert {:error, {:opp_uncertain, %Error{}}} =
                Fund.Public.request_donation(donor, "euro")
 
       assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
@@ -2279,7 +2280,8 @@ defmodule Systems.Fund.PublicTest do
     import Ecto.Query
 
     {1, _} =
-      from(r in Fund.RewardModel, where: r.idempotence_key == ^key)
-      |> Core.Repo.update_all(set: [status: status, updated_at: DateTime.utc_now(:second)])
+      Core.Repo.update_all(from(r in Fund.RewardModel, where: r.idempotence_key == ^key),
+        set: [status: status, updated_at: DateTime.utc_now(:second)]
+      )
   end
 end

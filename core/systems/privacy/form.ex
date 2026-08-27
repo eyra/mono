@@ -1,4 +1,5 @@
 defmodule Systems.Privacy.Form do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   @impl true

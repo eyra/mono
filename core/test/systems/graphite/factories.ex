@@ -1,10 +1,11 @@
 defmodule Systems.Graphite.Factories do
+  @moduledoc false
   alias Core.Factories
+  alias Systems.Assignment
   alias Systems.Graphite
   alias Systems.Workflow
-  alias Systems.Assignment
 
-  def create_tool() do
+  def create_tool do
     Factories.insert!(:graphite_tool, %{})
   end
 
@@ -16,7 +17,7 @@ defmodule Systems.Graphite.Factories do
     Factories.insert!(:graphite_leaderboard, Map.put(opts, :tool, tool))
   end
 
-  def create_challenge() do
+  def create_challenge do
     Factories.insert!(:assignment, %{special: :benchmark_challenge})
   end
 

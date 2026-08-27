@@ -1,4 +1,5 @@
 defmodule Systems.Admin.Switch do
+  @moduledoc false
   use Frameworks.Concept.Switch
 
   alias Systems.Admin

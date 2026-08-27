@@ -1,10 +1,8 @@
 defmodule Systems.Pool.StudentFiltersTest do
   use Core.DataCase, async: true
 
-  alias Systems.{
-    Fund,
-    Student
-  }
+  alias Systems.Fund
+  alias Systems.Student
 
   describe "include?/2" do
     test "include with 3 supported filters" do

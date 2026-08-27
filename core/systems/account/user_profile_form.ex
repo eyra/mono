@@ -1,4 +1,5 @@
 defmodule Systems.Account.UserProfileForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
@@ -8,10 +9,7 @@ defmodule Systems.Account.UserProfileForm do
   alias Systems.Account
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{public_url: public_url}
-      ) do
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url}) do
     save(socket, entity, :auto_save, %{photo_url: public_url})
   end
 
@@ -20,7 +18,7 @@ defmodule Systems.Account.UserProfileForm do
         %{active_item_ids: active_item_ids, source: %{name: field}},
         %{assigns: %{entity: entity}} = socket
       ) do
-    {:ok, socket |> save(entity, :auto_save, %{field => active_item_ids})}
+    {:ok, save(socket, entity, :auto_save, %{field => active_item_ids})}
   end
 
   @impl true
@@ -49,8 +47,7 @@ defmodule Systems.Account.UserProfileForm do
   defp update_ui(socket, entity) do
     changeset = Account.UserProfileEditModel.changeset(entity, :mount, %{})
 
-    socket
-    |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   @impl true
@@ -70,8 +67,7 @@ defmodule Systems.Account.UserProfileForm do
   def save(socket, %Account.UserProfileEditModel{} = entity, type, attrs) do
     changeset = Account.UserProfileEditModel.changeset(entity, type, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   attr(:user, :map, required: true)

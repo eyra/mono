@@ -5,8 +5,9 @@ defmodule Systems.Account.PayoutsReactiveTest do
   PayoutsView re-fetches its status and the badge flips without a reload.
   """
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Mox
+  import Phoenix.LiveViewTest
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account

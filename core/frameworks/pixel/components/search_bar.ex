@@ -5,18 +5,13 @@ defmodule Frameworks.Pixel.SearchBar do
 
   @impl true
   def update(
-        %{
-          id: id,
-          query_string: query_string,
-          placeholder: placeholder,
-          debounce: debounce
-        } = assigns,
+        %{id: id, query_string: query_string, placeholder: placeholder, debounce: debounce} =
+          assigns,
         socket
       ) do
     {
       :ok,
-      socket
-      |> assign(
+      assign(socket,
         id: id,
         query_string: query_string,
         placeholder: placeholder,
@@ -27,28 +22,18 @@ defmodule Frameworks.Pixel.SearchBar do
   end
 
   @impl true
-  def handle_event(
-        "change",
-        %{"query" => query},
-        socket
-      ) do
+  def handle_event("change", %{"query" => query}, socket) do
     {
       :noreply,
-      socket
-      |> send_to_parent(query)
+      send_to_parent(socket, query)
     }
   end
 
   @impl true
-  def handle_event(
-        "submit",
-        %{"query" => query},
-        socket
-      ) do
+  def handle_event("submit", %{"query" => query}, socket) do
     {
       :noreply,
-      socket
-      |> send_to_parent(query)
+      send_to_parent(socket, query)
     }
   end
 

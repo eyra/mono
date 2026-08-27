@@ -1,12 +1,12 @@
 defmodule Systems.Workflow.BuilderView do
   use CoreWeb, :live_component_fabric
 
-  require Logger
-
-  import Frameworks.Pixel.SidePanel
   import Frameworks.Builder.HTML, only: [library: 1]
+  import Frameworks.Pixel.SidePanel
 
   alias Systems.Workflow
+
+  require Logger
 
   @impl true
   def update(

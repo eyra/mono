@@ -1,14 +1,10 @@
 defmodule Systems.Alliance.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Alliance
-  }
+  alias Systems.Alliance
 
-  def view_model(
-        %Alliance.ToolModel{id: id},
-        _assigns
-      ) do
+  def view_model(%Alliance.ToolModel{id: id}, _assigns) do
     %{
       id: id,
       title: dgettext("eyra-alliance", "content.title"),

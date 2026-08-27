@@ -5,7 +5,7 @@ defmodule Systems.Home.NextBestActionView do
 
   @impl true
   def update(%{next_best_action: next_best_action}, %{assigns: %{}} = socket) do
-    {:ok, socket |> assign(next_best_action: next_best_action)}
+    {:ok, assign(socket, next_best_action: next_best_action)}
   end
 
   @impl true

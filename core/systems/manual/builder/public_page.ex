@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Builder.PublicPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_website
 
   alias Systems.Manual
@@ -12,8 +13,7 @@ defmodule Systems.Manual.Builder.PublicPage do
   def mount(_params, _session, socket) do
     {
       :ok,
-      socket
-      |> compose_child(:manual_builder)
+      compose_child(socket, :manual_builder)
     }
   end
 
@@ -26,7 +26,7 @@ defmodule Systems.Manual.Builder.PublicPage do
   end
 
   def handle_view_model_updated(socket) do
-    socket |> update_child(:manual_builder)
+    update_child(socket, :manual_builder)
   end
 
   @impl true

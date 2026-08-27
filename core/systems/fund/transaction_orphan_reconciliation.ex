@@ -26,13 +26,13 @@ defmodule Systems.Fund.TransactionOrphanReconciliation do
   """
   import Ecto.Query
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   @doc """
   Scans provider transactions created in the `[max_age_days, min_age_minutes]`
@@ -69,11 +69,12 @@ defmodule Systems.Fund.TransactionOrphanReconciliation do
   end
 
   defp query_idempotence_keys(keys) do
-    from(t in Fund.TransactionModel,
-      where: t.idempotence_key in ^keys,
-      select: t.idempotence_key
+    Repo.all(
+      from(t in Fund.TransactionModel,
+        where: t.idempotence_key in ^keys,
+        select: t.idempotence_key
+      )
     )
-    |> Repo.all()
   end
 
   # Logged at info, not error: until the first window after deploy has rolled

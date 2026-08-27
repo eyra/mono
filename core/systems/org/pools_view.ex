@@ -8,13 +8,13 @@ defmodule Systems.Org.PoolsView do
   """
   use CoreWeb, :embedded_live_view
 
+  import Systems.Org.ItemView
+
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
   alias Systems.Org
 
-  import Org.ItemView
-
-  def dependencies(), do: [:node_id, :locale]
+  def dependencies, do: [:node_id, :locale]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{node_id: node_id}}) do
     Org.Public.get_node!(node_id)

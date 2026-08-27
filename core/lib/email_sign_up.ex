@@ -20,13 +20,13 @@ defmodule EmailSignUp do
       end
   """
 
-  require Logger
-
-  alias Systems.Account.User
   alias Core.Repo
   alias Ecto.Multi
-  alias Frameworks.UserCheck
   alias Frameworks.Signal
+  alias Frameworks.UserCheck
+  alias Systems.Account.User
+
+  require Logger
 
   @doc """
   Registers a user via email-first signup.
@@ -130,7 +130,7 @@ defmodule EmailSignUp do
   end
 
   defp validation_attrs(%UserCheck.ResultModel{raw: raw} = _result) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     %{validation_data: raw, validated_at: now}
   end
 
@@ -144,8 +144,7 @@ defmodule EmailSignUp do
     Multi.new()
     |> Multi.update(:user, email_changeset)
     |> Multi.insert(:email_sign_up_user, fn _changes ->
-      %EmailSignUp.UserModel{user_id: user_id}
-      |> EmailSignUp.UserModel.changeset(validation_attrs)
+      EmailSignUp.UserModel.changeset(%EmailSignUp.UserModel{user_id: user_id}, validation_attrs)
     end)
     |> Repo.commit()
     |> case do
@@ -161,7 +160,7 @@ defmodule EmailSignUp do
   end
 
   defp create_user_with_satellite(email, validation_attrs) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     user_changeset =
       User.sso_changeset(%User{}, %{
@@ -173,8 +172,7 @@ defmodule EmailSignUp do
     Multi.new()
     |> Multi.insert(:user, user_changeset)
     |> Multi.insert(:email_sign_up_user, fn %{user: user} ->
-      %EmailSignUp.UserModel{user_id: user.id}
-      |> EmailSignUp.UserModel.changeset(validation_attrs)
+      EmailSignUp.UserModel.changeset(%EmailSignUp.UserModel{user_id: user.id}, validation_attrs)
     end)
     |> Repo.commit()
     |> case do

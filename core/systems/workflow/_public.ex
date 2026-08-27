@@ -1,43 +1,42 @@
 defmodule Systems.Workflow.Public do
+  @moduledoc false
   use Core, :public
+
   import Ecto.Query, warn: false
   import Systems.Workflow.Queries
 
-  alias Ecto.Multi
   alias Core.Repo
-
+  alias Ecto.Multi
   alias Frameworks.Signal
-
-  alias Systems.Workflow
-  alias Systems.Document
   alias Systems.Alliance
+  alias Systems.Document
   alias Systems.Feldspar
-  alias Systems.Lab
-  alias Systems.Manual
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Lab
+  alias Systems.Manual
+  alias Systems.Workflow
   alias Systems.Zircon
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
 
   def list_items(workflow_id, preload) do
-    from(item in Workflow.ItemModel,
-      where: item.workflow_id == ^workflow_id,
-      order_by: {:asc, :position},
-      preload: ^preload
+    Repo.all(
+      from(item in Workflow.ItemModel,
+        where: item.workflow_id == ^workflow_id,
+        order_by: {:asc, :position},
+        preload: ^preload
+      )
     )
-    |> Repo.all()
   end
 
   def get!(id, preload \\ []) do
-    from(item in Workflow.Model, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(item in Workflow.Model, preload: ^preload), id)
   end
 
   def get_item!(id, preload \\ []) do
-    from(item in Workflow.ItemModel, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(item in Workflow.ItemModel, preload: ^preload), id)
   end
 
   def get_item_by_tool(%{id: id} = tool, preload \\ []) do
@@ -52,11 +51,9 @@ defmodule Systems.Workflow.Public do
   end
 
   def get_item_by_tool_ref(tool_ref_id, preload) do
-    from(item in Workflow.ItemModel,
-      where: item.tool_ref_id == ^tool_ref_id,
-      preload: ^preload
+    Repo.one(
+      from(item in Workflow.ItemModel, where: item.tool_ref_id == ^tool_ref_id, preload: ^preload)
     )
-    |> Repo.one()
   end
 
   def get_item_by_tool!(field, tool_id, preload \\ [])
@@ -74,14 +71,16 @@ defmodule Systems.Workflow.Public do
         preload: ^preload
       )
 
-    Enum.reduce(tl, query, fn key, query ->
-      query |> or_where([tool_ref], field(tool_ref, ^key) == ^tool_id)
+    tl
+    |> Enum.reduce(query, fn key, query ->
+      or_where(query, [tool_ref], field(tool_ref, ^key) == ^tool_id)
     end)
     |> Repo.one!()
   end
 
   def add_item(workflow_id, %{} = item, director, user) when is_integer(workflow_id) do
-    get!(workflow_id)
+    workflow_id
+    |> get!()
     |> add_item(item, director, user)
   end
 
@@ -120,7 +119,8 @@ defmodule Systems.Workflow.Public do
   def list_tools(%Workflow.Model{} = workflow, special) do
     preload = Workflow.ItemModel.preload_graph(:down)
 
-    item_query(workflow, special)
+    workflow
+    |> item_query(special)
     |> Repo.all()
     |> Repo.preload(preload)
     |> Enum.map(& &1.tool_ref)
@@ -128,11 +128,12 @@ defmodule Systems.Workflow.Public do
   end
 
   def item_count(%Workflow.Model{id: workflow_id}) do
-    from(item in Workflow.ItemModel,
-      where: item.workflow_id == ^workflow_id,
-      select: count(item.id)
+    Repo.one(
+      from(item in Workflow.ItemModel,
+        where: item.workflow_id == ^workflow_id,
+        select: count(item.id)
+      )
     )
-    |> Repo.one()
   end
 
   def prepare_item(%Workflow.Model{} = workflow, position, tool_ref) do

@@ -1,4 +1,5 @@
 defmodule Core.Seeder do
+  @moduledoc false
   @app :core
 
   def run(names) when is_list(names) do

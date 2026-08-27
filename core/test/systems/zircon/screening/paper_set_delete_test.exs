@@ -1,7 +1,8 @@
 defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
   alias Systems.Paper
@@ -55,7 +56,7 @@ defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
       papers: [paper1, paper2, paper3]
     } do
       # Set request path
-      conn = conn |> Map.put(:request_path, "/paper_set/#{paper_set.id}")
+      conn = Map.put(conn, :request_path, "/paper_set/#{paper_set.id}")
 
       # Mount the paper set view
       {:ok, view, html} =
@@ -96,7 +97,7 @@ defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
       assert remaining_count == 2
 
       # Verify paper2 still exists but is no longer in the set
-      assert Repo.get(Paper.Model, paper2.id) != nil
+      assert Repo.get(Paper.Model, paper2.id)
 
       assoc_exists =
         Paper.SetAssoc
@@ -108,7 +109,7 @@ defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
 
     test "can delete multiple papers", %{conn: conn, paper_set: paper_set, papers: papers} do
       # Set request path
-      conn = conn |> Map.put(:request_path, "/paper_set/#{paper_set.id}")
+      conn = Map.put(conn, :request_path, "/paper_set/#{paper_set.id}")
 
       {:ok, view, _html} =
         live_isolated(conn, Screening.PaperSetView, session: %{"paper_set_id" => paper_set.id})

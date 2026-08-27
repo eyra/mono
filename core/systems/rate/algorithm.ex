@@ -1,5 +1,6 @@
 defmodule Systems.Rate.Algorithm do
   # ARGS
+  @moduledoc false
   @type state :: map
   @type service :: :atom
   @type client_id :: String.t()

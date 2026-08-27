@@ -1,23 +1,23 @@
 defmodule Systems.Workflow.ToolRefModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
-  require Logger
-
-  import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Concept
+  import Ecto.Changeset
 
-  alias Systems.Workflow
-  alias Systems.Document
+  alias Frameworks.Concept
   alias Systems.Alliance
-  alias Systems.Lab
-  alias Systems.Manual
+  alias Systems.Document
   alias Systems.Feldspar
   alias Systems.Graphite
   alias Systems.Instruction
+  alias Systems.Lab
+  alias Systems.Manual
+  alias Systems.Workflow
   alias Systems.Zircon
+
+  require Logger
 
   @tools [
     :alliance_tool,
@@ -104,8 +104,7 @@ defmodule Systems.Workflow.ToolRefModel do
   def tool_id_field(tool), do: String.to_existing_atom("#{Concept.ToolModel.key(tool)}_tool_id")
 
   def tool(tool_ref) do
-    @tools
-    |> Enum.reduce(nil, fn tool, acc ->
+    Enum.reduce(@tools, nil, fn tool, acc ->
       tool = Map.get(tool_ref, tool)
 
       case tool do

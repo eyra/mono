@@ -1,8 +1,9 @@
 defmodule Systems.Fund.WalletView do
   use CoreWeb, :html
 
-  alias Frameworks.Pixel.Text
   import CoreWeb.UI.ProgressBar
+
+  alias Frameworks.Pixel.Text
 
   attr(:items, :list, required: true)
 

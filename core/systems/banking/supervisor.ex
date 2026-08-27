@@ -31,13 +31,15 @@ defmodule Systems.Banking.Supervisor do
     {Systems.Banking.AccountSupervisor, {currency, account_number}}
   end
 
-  def bank_accounts() do
-    Registry.lookup(@registry, @registry_key)
+  def bank_accounts do
+    @registry
+    |> Registry.lookup(@registry_key)
     |> Enum.map(fn {_currency, bank_account} -> bank_account end)
   end
 
-  def currencies() do
-    Registry.lookup(@registry, @registry_key)
+  def currencies do
+    @registry
+    |> Registry.lookup(@registry_key)
     |> Enum.map(fn {currency, _bank_account} -> currency end)
   end
 end

@@ -1,17 +1,15 @@
 defmodule Systems.Assignment.FinishedView do
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.InlineBlock
   alias Frameworks.Pixel.Logo
-
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment
   alias Systems.Pool
 
-  def dependencies(), do: [:assignment_id, :current_user]
+  def dependencies, do: [:assignment_id, :current_user]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
@@ -19,16 +17,16 @@ defmodule Systems.Assignment.FinishedView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(email_error: nil, submitting: false, email_value: nil)}
+    {:ok, assign(socket, email_error: nil, submitting: false, email_value: nil)}
   end
 
   @impl true
   def handle_event("retry", _, socket) do
-    {:noreply, socket |> publish_event(:retry)}
+    {:noreply, publish_event(socket, :retry)}
   end
 
   def handle_event("change_email", _params, socket) do
-    {:noreply, socket |> assign(email_error: nil)}
+    {:noreply, assign(socket, email_error: nil)}
   end
 
   def handle_event(
@@ -47,13 +45,7 @@ defmodule Systems.Assignment.FinishedView do
   @impl true
   def handle_info(
         {:do_submit_email, email},
-        %{
-          assigns: %{
-            current_user: user,
-            vm: %{email_capture: %{pool_slug: pool_slug}}
-          }
-        } =
-          socket
+        %{assigns: %{current_user: user, vm: %{email_capture: %{pool_slug: pool_slug}}}} = socket
       ) do
     email_error =
       try do

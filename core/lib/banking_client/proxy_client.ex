@@ -1,6 +1,9 @@
 defmodule BankingClient.ProxyClient do
+  @moduledoc false
+  @behaviour BankingClient.API
+
   alias BankingClient.API
-  @behaviour API
+
   @timeout :infinity
 
   @impl API

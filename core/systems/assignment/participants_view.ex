@@ -1,16 +1,15 @@
 defmodule Systems.Assignment.ParticipantsView do
   use CoreWeb, :live_component_fabric
-
   use Gettext, backend: CoreWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic
 
   alias Frameworks.Pixel.InlineBlock
   alias Frameworks.Pixel.Logo
-  alias Systems.Affiliate
   alias Systems.Advert
-  alias Systems.Pool
+  alias Systems.Affiliate
   alias Systems.Assignment
   alias Systems.Assignment.PaidSlotsLogic
+  alias Systems.Pool
 
   @impl true
   def update(

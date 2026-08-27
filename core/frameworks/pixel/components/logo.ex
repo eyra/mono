@@ -1,6 +1,4 @@
 defmodule Frameworks.Pixel.Logo do
-  use CoreWeb, :pixel
-
   @moduledoc """
   Logo component for product, platform, and pool logos.
 
@@ -28,6 +26,7 @@ defmodule Frameworks.Pixel.Logo do
   """
 
   # Path functions for use outside of components
+  use CoreWeb, :pixel
 
   def path(name, {:product, variant}), do: build_path(:products, name, variant)
   def path(name, {:product}), do: build_path(:products, name, :default)
@@ -44,12 +43,13 @@ defmodule Frameworks.Pixel.Logo do
   # not listed so callers can omit the icon slot instead of rendering
   # a broken image. Compile-time list so we don't stat the filesystem
   # on every render.
-  @pool_assets Application.compile_env(:core, [:pixel, :pool_assets], [])
+  @pool_assets :core
+               |> Application.compile_env([:pixel, :pool_assets], [])
                |> Enum.map(&to_string/1)
 
   defp pool_path(name, variant) do
     path = build_path(:pools, name, variant)
-    if pool_asset_exists?(path), do: path, else: nil
+    if pool_asset_exists?(path), do: path
   end
 
   defp pool_asset_exists?("/images/logos/pools/" <> file_with_ext) do
@@ -59,6 +59,7 @@ defmodule Frameworks.Pixel.Logo do
   defp build_path(type, name, variant) do
     name
     |> to_string()
+    # Components
     |> String.downcase()
     |> file_with_variant(variant)
     |> then(&"/images/logos/#{type}/#{&1}.svg")
@@ -70,8 +71,6 @@ defmodule Frameworks.Pixel.Logo do
   defp file_with_variant(name, :standing), do: "#{name}_standing"
   defp file_with_variant(name, :square), do: "#{name}_square"
   defp file_with_variant(name, _), do: name
-
-  # Components
 
   attr(:name, :atom, required: true)
   attr(:variant, :atom, default: :default, values: [:default, :wide, :standing])

@@ -1,13 +1,11 @@
 defmodule Systems.Alliance.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias Systems.Alliance
 
   @impl true
-  def intercept(
-        {:alliance_tool, _},
-        %{alliance_tool: tool, from_pid: from_pid}
-      ) do
+  def intercept({:alliance_tool, _}, %{alliance_tool: tool, from_pid: from_pid}) do
     update_tool_view(tool, from_pid)
     :ok
   end

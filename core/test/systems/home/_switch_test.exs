@@ -2,6 +2,7 @@ defmodule Systems.Home.SwitchTest do
   use Core.DataCase, async: false
 
   alias Frameworks.Signal
+  alias Phoenix.Socket.Broadcast
   alias Systems.Home
   alias Systems.Observatory
 
@@ -18,7 +19,7 @@ defmodule Systems.Home.SwitchTest do
                  %{user_id: user_id}
                )
 
-      assert_received %Phoenix.Socket.Broadcast{
+      assert_received %Broadcast{
         event: "observation",
         payload: {Systems.Home.Page, %{model: %{id: :singleton}}}
       }
@@ -37,7 +38,7 @@ defmodule Systems.Home.SwitchTest do
                  %{user_id: acting_user_id}
                )
 
-      refute_received %Phoenix.Socket.Broadcast{event: "observation"}
+      refute_received %Broadcast{event: "observation"}
     end
   end
 end

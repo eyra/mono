@@ -1,5 +1,6 @@
 defmodule Next.Bundle do
-  defp include?() do
+  @moduledoc false
+  defp include? do
     Application.fetch_env!(:core, :bundle) == :next
   end
 

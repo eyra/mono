@@ -84,13 +84,13 @@ defmodule Systems.Account.AuthCodeTest do
       {_code, auth_code} = AuthCodeModel.build("user@example.com", nil)
       Repo.insert!(auth_code)
 
-      result = AuthCodeModel.active_query("user@example.com") |> Repo.one()
-      assert result != nil
+      result = "user@example.com" |> AuthCodeModel.active_query() |> Repo.one()
+      assert result
       assert result.email == "user@example.com"
     end
 
     test "returns nil for unknown email" do
-      result = AuthCodeModel.active_query("unknown@example.com") |> Repo.one()
+      result = "unknown@example.com" |> AuthCodeModel.active_query() |> Repo.one()
       assert result == nil
     end
 
@@ -103,8 +103,8 @@ defmodule Systems.Account.AuthCodeTest do
 
       Repo.insert!(%{auth_code | attempts: 5})
 
-      result = AuthCodeModel.active_query("user@example.com") |> Repo.one()
-      assert result != nil
+      result = "user@example.com" |> AuthCodeModel.active_query() |> Repo.one()
+      assert result
       assert result.attempts == 5
     end
 
@@ -115,7 +115,7 @@ defmodule Systems.Account.AuthCodeTest do
       inserted1 = Repo.insert!(auth_code1)
       inserted2 = Repo.insert!(auth_code2)
 
-      result = AuthCodeModel.active_query("user@example.com") |> Repo.one()
+      result = "user@example.com" |> AuthCodeModel.active_query() |> Repo.one()
       assert result.id == inserted2.id
       assert result.id != inserted1.id
     end
@@ -126,7 +126,7 @@ defmodule Systems.Account.AuthCodeTest do
       email = "new@example.com"
       Account.Public.generate_otp(email)
 
-      assert Repo.one(AuthCodeModel.active_query(email)) != nil
+      assert Repo.one(AuthCodeModel.active_query(email))
     end
 
     test "replaces existing auth code" do

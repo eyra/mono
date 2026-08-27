@@ -13,7 +13,6 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   alias Core.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
-  alias Systems.Fund
 
   describe "GET /payment/local/:uid" do
     test "renders the simulator with a complete and a fail action", %{conn: conn} do
@@ -95,7 +94,8 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   defp simulate(conn, %{transaction_id: uid}, action) do
     conn = get(conn, ~p"/payment/local/#{uid}")
 
-    recycle(conn)
+    conn
+    |> recycle()
     |> post("/payment/local/#{uid}/#{action}", %{"_csrf_token" => csrf_token(conn)})
   end
 
@@ -157,8 +157,8 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
 
   defp ensure_currency_ledger(currency) do
     case Fund.CurrencyLedgerModel.get_by_currency(currency) do
-      nil -> Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
-      existing -> existing |> Repo.preload([:inbound, :outbound])
+      nil -> currency |> Fund.CurrencyLedgerModel.create() |> Repo.insert!()
+      existing -> Repo.preload(existing, [:inbound, :outbound])
     end
   end
 end

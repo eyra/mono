@@ -1,10 +1,9 @@
 defmodule Systems.Fund.CurrencySelector do
-  alias Systems.{
-    Fund
-  }
+  @moduledoc false
+  alias Systems.Fund
 
   def init(currencies, locale, parent) when is_list(currencies) do
-    options = currencies |> Enum.map(&to_option(&1, locale))
+    options = Enum.map(currencies, &to_option(&1, locale))
 
     {selected_option_index, selected_currency} =
       if Enum.empty?(options) do

@@ -1,4 +1,5 @@
 defmodule Core.BundleOverrides do
+  @moduledoc false
   defmacro __using__(_opts \\ []) do
     bundle = Application.fetch_env!(:core, :bundle)
     bundle_info = Mix.Utils.last_modified_and_size("bundles/#{bundle}/bundle.ex")

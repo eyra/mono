@@ -1,8 +1,9 @@
 defmodule Systems.Observatory.ViewModelObserveTest do
   use CoreWeb.ConnCase
+
+  import Core.AuthTestHelpers
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Core.AuthTestHelpers
 
   alias Systems.Test
 

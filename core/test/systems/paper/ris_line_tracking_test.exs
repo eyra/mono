@@ -1,9 +1,9 @@
 defmodule Systems.Paper.RISLineTrackingTest do
   use Core.DataCase, async: true
 
+  alias Systems.Paper.RISEntry
   alias Systems.Paper.RISParser
   alias Systems.Paper.RISProcessor
-  alias Systems.Paper.RISEntry
 
   describe "line number tracking in parse errors" do
     test "tracks line number for invalid RIS line format" do

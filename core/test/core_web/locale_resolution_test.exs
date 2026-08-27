@@ -7,7 +7,10 @@ defmodule CoreWeb.LocaleResolutionTest do
 
   use CoreWeb.ConnCase, async: true
 
-  @plug_opts Cldr.Plug.PutLocale.init(
+  alias Cldr.Plug.PutLocale
+  alias CoreWeb.Plug.PersistLocale
+
+  @plug_opts PutLocale.init(
                apps: [
                  cldr: CoreWeb.Cldr,
                  gettext: :global,
@@ -18,34 +21,37 @@ defmodule CoreWeb.LocaleResolutionTest do
                default: "en"
              )
 
-  @session_key Cldr.Plug.PutLocale.session_key()
+  @session_key PutLocale.session_key()
 
   defp call_plug(conn) do
     conn
     |> Plug.Test.init_test_session(%{})
-    |> Cldr.Plug.PutLocale.call(@plug_opts)
+    |> PutLocale.call(@plug_opts)
   end
 
   describe "Cldr.Plug.PutLocale (browser pipeline config)" do
     test "uses session locale when present" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> Plug.Test.init_test_session(%{@session_key => "nl"})
-      |> Cldr.Plug.PutLocale.call(@plug_opts)
+      |> PutLocale.call(@plug_opts)
 
       assert "nl" == Gettext.get_locale(CoreWeb.Gettext)
     end
 
     test "session locale wins over Accept-Language" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> Plug.Conn.put_req_header("accept-language", "de-DE,de;q=0.9")
       |> Plug.Test.init_test_session(%{@session_key => "nl"})
-      |> Cldr.Plug.PutLocale.call(@plug_opts)
+      |> PutLocale.call(@plug_opts)
 
       assert "nl" == Gettext.get_locale(CoreWeb.Gettext)
     end
 
     test "falls back to Accept-Language when no session locale" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> Plug.Conn.put_req_header("accept-language", "nl-NL,nl;q=0.9,en;q=0.8")
       |> call_plug()
 
@@ -53,7 +59,8 @@ defmodule CoreWeb.LocaleResolutionTest do
     end
 
     test "picks first supported language from Accept-Language q-values" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> Plug.Conn.put_req_header("accept-language", "fr;q=0.9,nl;q=0.8,en;q=0.5")
       |> call_plug()
 
@@ -61,7 +68,8 @@ defmodule CoreWeb.LocaleResolutionTest do
     end
 
     test "falls back to default when Accept-Language has no supported language" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> Plug.Conn.put_req_header("accept-language", "fr-FR,fr;q=0.9,ja;q=0.8")
       |> call_plug()
 
@@ -69,7 +77,8 @@ defmodule CoreWeb.LocaleResolutionTest do
     end
 
     test "falls back to default when Accept-Language header is absent" do
-      build_conn(:get, "/")
+      :get
+      |> build_conn("/")
       |> call_plug()
 
       assert "en" == Gettext.get_locale(CoreWeb.Gettext)
@@ -84,20 +93,22 @@ defmodule CoreWeb.LocaleResolutionTest do
   describe "CoreWeb.Plug.PersistLocale" do
     test "writes the Accept-Language-derived locale to the session" do
       conn =
-        build_conn(:get, "/")
+        :get
+        |> build_conn("/")
         |> Plug.Conn.put_req_header("accept-language", "nl-NL,nl;q=0.9")
         |> call_plug()
-        |> CoreWeb.Plug.PersistLocale.call([])
+        |> PersistLocale.call([])
 
       assert Plug.Conn.get_session(conn, @session_key) == "nl"
     end
 
     test "writes the session-derived locale back to the session" do
       conn =
-        build_conn(:get, "/")
+        :get
+        |> build_conn("/")
         |> Plug.Test.init_test_session(%{@session_key => "de"})
-        |> Cldr.Plug.PutLocale.call(@plug_opts)
-        |> CoreWeb.Plug.PersistLocale.call([])
+        |> PutLocale.call(@plug_opts)
+        |> PersistLocale.call([])
 
       assert Plug.Conn.get_session(conn, @session_key) == "de"
     end
@@ -106,9 +117,10 @@ defmodule CoreWeb.LocaleResolutionTest do
       # No accept-language header, no session — Cldr falls back to the
       # default. We still expect PersistLocale to write something safe.
       conn =
-        build_conn(:get, "/")
+        :get
+        |> build_conn("/")
         |> call_plug()
-        |> CoreWeb.Plug.PersistLocale.call([])
+        |> PersistLocale.call([])
 
       assert Plug.Conn.get_session(conn, @session_key) == "en"
     end

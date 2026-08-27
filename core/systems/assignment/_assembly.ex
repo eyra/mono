@@ -1,17 +1,19 @@
 defmodule Systems.Assignment.Assembly do
-  alias Core.Repo
+  @moduledoc false
   use Core, :auth
 
+  alias Core.Repo
   alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Fund
+  alias Systems.Bookkeeping.AccountModel
   alias Systems.Consent
   alias Systems.Crew
   alias Systems.Fund
   alias Systems.Workflow
 
   def create(template, director, user, budget \\ nil) do
-    prepare(template, director, user, budget)
+    template
+    |> prepare(director, user, budget)
     |> Repo.insert()
   end
 
@@ -66,8 +68,7 @@ defmodule Systems.Assignment.Assembly do
     prepare_workflow(special, initial_items, auth_node)
   end
 
-  defp prepare_workflow(special, initial_items, %{} = auth_node)
-       when is_list(initial_items) do
+  defp prepare_workflow(special, initial_items, %{} = auth_node) when is_list(initial_items) do
     Assignment.Public.prepare_workflow(special, initial_items, auth_node)
   end
 
@@ -75,7 +76,8 @@ defmodule Systems.Assignment.Assembly do
     %{initial_items: initial_items, library: %{items: library_items}} =
       Assignment.Template.workflow_config(template)
 
-    Enum.map(initial_items, fn tool_special ->
+    initial_items
+    |> Enum.map(fn tool_special ->
       %{type: tool_type} = Enum.find(library_items, &(&1.id == tool_special))
       tool_auth_node = auth_module().create_node!(auth_node)
 
@@ -96,8 +98,8 @@ defmodule Systems.Assignment.Assembly do
       name: uuid,
       currency: fund_currency,
       currency_ledger: currency_ledger,
-      available: Systems.Bookkeeping.AccountModel.create({:fund, uuid}),
-      pending: Systems.Bookkeeping.AccountModel.create({:reserve, uuid}),
+      available: AccountModel.create({:fund, uuid}),
+      pending: AccountModel.create({:reserve, uuid}),
       auth_node: auth_module().prepare_node(user, :owner)
     }
   end

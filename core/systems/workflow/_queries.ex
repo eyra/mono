@@ -1,13 +1,14 @@
 defmodule Systems.Workflow.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Workflow
 
-  def item_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def item_query do
     from(Workflow.ItemModel, as: :item)
   end
 

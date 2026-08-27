@@ -18,9 +18,7 @@ defmodule Systems.Userflow.ModelTest do
         Userflow.Factories.insert(:progress, %{user: user, step: step})
       end
 
-      userflow =
-        %{userflow | steps: steps}
-        |> Repo.preload(steps: [:progress])
+      userflow = Repo.preload(%{userflow | steps: steps}, steps: [:progress])
 
       assert Userflow.Model.finished?(userflow, user.id)
     end

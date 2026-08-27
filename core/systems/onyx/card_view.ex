@@ -1,8 +1,8 @@
 defmodule Systems.Onyx.CardView do
   use CoreWeb, :html
 
-  import Frameworks.Pixel.Tag
   import Frameworks.Pixel.ClickableCard
+  import Frameworks.Pixel.Tag
 
   attr(:card, :map, required: true)
 

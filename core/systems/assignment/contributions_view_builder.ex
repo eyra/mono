@@ -1,4 +1,5 @@
 defmodule Systems.Assignment.ContributionsViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Assignment
@@ -7,10 +8,7 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
 
   @section_keys [:pending, :declined, :confirmed]
 
-  def view_model(
-        %Assignment.Model{crew: %Crew.Model{} = crew} = assignment,
-        %{} = assigns
-      ) do
+  def view_model(%Assignment.Model{crew: %Crew.Model{} = crew} = assignment, %{} = assigns) do
     context = %{
       assignment: assignment,
       members_by_user_id: members_by_user_id(crew),
@@ -81,15 +79,11 @@ defmodule Systems.Assignment.ContributionsViewBuilder do
      }}
   end
 
-  defp row(
-         :pending,
-         %Assignment.ParticipationModel{id: id, user_id: user_id},
-         %{
-           completed_task_counts_by_user_id: counts,
-           members_by_user_id: mbi,
-           total_task_count: total
-         }
-       ) do
+  defp row(:pending, %Assignment.ParticipationModel{id: id, user_id: user_id}, %{
+         completed_task_counts_by_user_id: counts,
+         members_by_user_id: mbi,
+         total_task_count: total
+       }) do
     %{
       participation_id: id,
       member_public_id: member_public_id(mbi, user_id) || id,

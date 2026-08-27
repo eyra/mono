@@ -1,11 +1,9 @@
 defmodule Systems.NextAction.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
   alias CoreWeb.Endpoint
-
-  alias Systems.{
-    NextAction
-  }
+  alias Systems.NextAction
 
   def intercept({:next_action, :created}, %{user: user, action: _action, from_pid: from_pid}) do
     update(NextAction.OverviewPage, user, from_pid)

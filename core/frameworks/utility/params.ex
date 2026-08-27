@@ -28,7 +28,7 @@ defmodule Frameworks.Utility.Params do
         nil
 
       val when is_binary(val) ->
-        v = val |> String.trim()
+        v = String.trim(val)
         if v == "", do: nil, else: v
 
       _ ->

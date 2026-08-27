@@ -1,4 +1,5 @@
 defmodule Systems.Feldspar.LocalFS do
+  @moduledoc false
   use CoreWeb, :verified_routes
 
   def public_path, do: "/feldspar/apps"

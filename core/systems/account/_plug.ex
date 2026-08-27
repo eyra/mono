@@ -1,10 +1,12 @@
 defmodule Systems.Account.Plug do
+  @moduledoc false
   @behaviour Plug
 
-  require Logger
-
   import Plug.Conn
+
   alias Systems.Account
+
+  require Logger
 
   @valid_participant_path ~r"^\/((assignment\/(callback\/)?\d.*)|(a\/.{6,}))$"
 
@@ -26,8 +28,7 @@ defmodule Systems.Account.Plug do
     end
   end
 
-  defp restricted?(user),
-    do: Account.Public.external?(user) or Account.Public.affiliate?(user)
+  defp restricted?(user), do: Account.Public.external?(user) or Account.Public.affiliate?(user)
 
   defp current_user(conn) do
     if user_token = get_session(conn, :user_token) do

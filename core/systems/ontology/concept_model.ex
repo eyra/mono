@@ -1,6 +1,8 @@
 defmodule Systems.Ontology.ConceptModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   alias Core.Authentication
@@ -26,8 +28,7 @@ defmodule Systems.Ontology.ConceptModel do
   @required_fields @fields
 
   def changeset(concept, attrs) do
-    concept
-    |> cast(attrs, @fields)
+    cast(concept, attrs, @fields)
   end
 
   def validate(changeset) do

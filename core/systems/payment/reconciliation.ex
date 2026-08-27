@@ -8,14 +8,14 @@ defmodule Systems.Payment.Reconciliation do
   rows and reach the provider only via `get_withdrawal/2` and `get_transaction/2`
   here, so rate-limit and outage handling lives in one place.
   """
-  require Logger
-
   alias Core.Repo
   alias Systems.Payment
-  alias Systems.Rate
-  alias Systems.Payment.ReconciliationState, as: State
-  alias Systems.Payment.ReconciliationRunModel
   alias Systems.Payment.ReconciliationFindingModel
+  alias Systems.Payment.ReconciliationRunModel
+  alias Systems.Payment.ReconciliationState, as: State
+  alias Systems.Rate
+
+  require Logger
 
   @max_retries 2
   @max_throttle_waits 5
@@ -41,8 +41,7 @@ defmodule Systems.Payment.Reconciliation do
     max_age = Keyword.get(opts, :max_age_days, @max_age_days)
     now = DateTime.utc_now()
 
-    {DateTime.add(now, -max_age * 24 * 60 * 60, :second),
-     DateTime.add(now, -min_age * 60, :second)}
+    {DateTime.shift(now, day: -max_age), DateTime.shift(now, minute: -min_age)}
   end
 
   @doc """
@@ -154,5 +153,5 @@ defmodule Systems.Payment.Reconciliation do
     end)
   end
 
-  defp now, do: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+  defp now, do: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 end

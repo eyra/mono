@@ -7,7 +7,7 @@ defmodule Systems.Content.PageView do
   def update(%{title: title, page: %Content.PageModel{body: body}}, socket) do
     {
       :ok,
-      socket |> assign(title: title, body: body)
+      assign(socket, title: title, body: body)
     }
   end
 

@@ -7,8 +7,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "create_merchant/1" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:create_merchant, fn %{name: "Test"} ->
+      expect(ProviderMock, :create_merchant, fn %{name: "Test"} ->
         {:ok, %{uid: "m1", status: "active", kyc_level: 0}}
       end)
 
@@ -18,8 +17,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "get_merchant/1" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:get_merchant, fn "m1" ->
+      expect(ProviderMock, :get_merchant, fn "m1" ->
         {:ok, %{uid: "m1", status: "active", kyc_level: 100}}
       end)
 
@@ -54,8 +52,7 @@ defmodule Systems.Payment.ProviderTest do
         metadata: metadata
       }
 
-      ProviderMock
-      |> expect(:create_transaction, fn ^request ->
+      expect(ProviderMock, :create_transaction, fn ^request ->
         {:ok,
          %{
            uid: "t1",
@@ -74,8 +71,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "get_transaction/1" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:get_transaction, fn "t1" ->
+      expect(ProviderMock, :get_transaction, fn "t1" ->
         {:ok, %{uid: "t1", status: "completed", payment_url: nil, amount: 5000}}
       end)
 
@@ -85,8 +81,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "create_withdrawal/4" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:create_withdrawal, fn "m1", :EUR, %{amount: 1000}, "payout=1" ->
+      expect(ProviderMock, :create_withdrawal, fn "m1", :EUR, %{amount: 1000}, "payout=1" ->
         {:ok, %{uid: "w1", status: :pending, raw_status: "created", amount: 1000}}
       end)
 
@@ -97,11 +92,10 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "transfer_to_merchant/4" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:transfer_to_merchant, fn "mer_platform",
-                                          "mer_participant",
-                                          1000,
-                                          "payout=1,type=transfer" ->
+      expect(ProviderMock, :transfer_to_merchant, fn "mer_platform",
+                                                     "mer_participant",
+                                                     1000,
+                                                     "payout=1,type=transfer" ->
         {:ok, %{uid: "chg1", status: "created", amount: 1000}}
       end)
 
@@ -117,8 +111,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "get_withdrawal/1" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:get_withdrawal, fn "w1" ->
+      expect(ProviderMock, :get_withdrawal, fn "w1" ->
         {:ok,
          %{
            uid: "w1",
@@ -135,8 +128,7 @@ defmodule Systems.Payment.ProviderTest do
 
   describe "list_withdrawals/1" do
     test "delegates to configured provider" do
-      ProviderMock
-      |> expect(:list_withdrawals, fn "m1" ->
+      expect(ProviderMock, :list_withdrawals, fn "m1" ->
         {:ok,
          [
            %{

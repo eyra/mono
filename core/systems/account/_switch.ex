@@ -1,17 +1,16 @@
 defmodule Systems.Account.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
+
   import Ecto.Changeset
 
-  alias Systems.{
-    Email,
-    NextAction,
-    Org
-  }
-
   alias Systems.Account
+  alias Systems.Account.NextActions.CompleteProfile
+  alias Systems.Account.NextActions.PromotePushStudent
+  alias Systems.Email
+  alias Systems.NextAction
   alias Systems.Observatory
-
-  alias Systems.Account.NextActions.{CompleteProfile, PromotePushStudent}
+  alias Systems.Org
 
   @impl true
   def intercept({:user_profile, :updated}, %{
@@ -51,7 +50,8 @@ defmodule Systems.Account.Switch do
 
   @impl true
   def intercept({:user, :created}, %{user: user}) do
-    Email.Factory.account_created(user)
+    user
+    |> Email.Factory.account_created()
     |> Email.Public.deliver_later()
 
     # Sync NextActions for org owners whose domains match this new user

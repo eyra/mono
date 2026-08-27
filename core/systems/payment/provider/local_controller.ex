@@ -1,11 +1,11 @@
 defmodule Systems.Payment.Provider.LocalController do
   use CoreWeb, {:controller, [formats: [:html]]}
 
-  require Logger
-
   import Ecto.Query
 
   alias Systems.Fund
+
+  require Logger
 
   def pay(conn, %{"uid" => uid}) do
     html(conn, """

@@ -27,8 +27,7 @@ defmodule CoreWeb.LiveForm do
 
       # Backward compatibility: existing forms use save/2
       def save(socket, changeset) do
-        socket
-        |> save_closure(fn socket ->
+        save_closure(socket, fn socket ->
           case Ecto.Changeset.apply_action(changeset, :update) do
             {:ok, _entity} ->
               do_auto_save_legacy(socket, changeset)

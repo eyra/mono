@@ -4,18 +4,18 @@ defmodule Systems.Account.ResetPasswordToken do
   """
   use CoreWeb, :live_view_fabric
 
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+  import Frameworks.Pixel.Form
+
+  alias Frameworks.Pixel.Button
+  alias Systems.Account
+
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
-
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-  import Frameworks.Pixel.Form
-
-  alias Systems.Account
-  alias Frameworks.Pixel.Button
 
   @impl true
   def mount(%{"token" => token}, _session, socket) do

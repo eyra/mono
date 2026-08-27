@@ -118,7 +118,8 @@ defmodule Systems.Userflow.PublicTest do
 
     test "returns all progress for user in userflow", %{user: user, userflow: userflow} do
       progress =
-        Userflow.Public.list_progress(userflow, user.id)
+        userflow
+        |> Userflow.Public.list_progress(user.id)
         |> Repo.preload([:user, step: :userflow])
 
       assert length(progress) == length(userflow.steps)

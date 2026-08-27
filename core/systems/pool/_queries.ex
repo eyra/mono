@@ -1,15 +1,16 @@
 defmodule Systems.Pool.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Pool
-  alias Systems.Fund
   alias Systems.Account
+  alias Systems.Fund
+  alias Systems.Pool
 
-  def pool_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def pool_query do
     from(Pool.Model, as: :pool)
   end
 

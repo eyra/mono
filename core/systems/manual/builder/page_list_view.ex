@@ -27,11 +27,11 @@ defmodule Systems.Manual.Builder.PageListView do
   end
 
   def update_pages(%{assigns: %{chapter: %{pages: [_ | _] = pages}}} = socket) do
-    socket |> assign(pages: pages |> Enum.sort_by(& &1.userflow_step.order))
+    assign(socket, pages: Enum.sort_by(pages, & &1.userflow_step.order))
   end
 
   def update_pages(socket) do
-    socket |> assign(pages: [])
+    assign(socket, pages: [])
   end
 
   def update_button(socket) do
@@ -40,7 +40,7 @@ defmodule Systems.Manual.Builder.PageListView do
       face: %{type: :secondary, label: dgettext("eyra-manual", "create.page.button"), icon: :add}
     }
 
-    socket |> assign(button: button)
+    assign(socket, button: button)
   end
 
   def update_selected_page_id(%{assigns: %{deselected: true}} = socket) do
@@ -49,13 +49,12 @@ defmodule Systems.Manual.Builder.PageListView do
 
   def update_selected_page_id(%{assigns: %{pages: []}} = socket) do
     # Disable selection if there are no pages
-    socket |> assign(selected_page_id: nil)
+    assign(socket, selected_page_id: nil)
   end
 
   def update_selected_page_id(%{assigns: %{pages: [page | _], selected_page_id: nil}} = socket) do
     # Select the first page if no page is selected
-    socket
-    |> assign(selected_page_id: page.id)
+    assign(socket, selected_page_id: page.id)
   end
 
   def update_selected_page_id(
@@ -71,7 +70,7 @@ defmodule Systems.Manual.Builder.PageListView do
           page
       end
 
-    socket |> assign(selected_page_id: page.id)
+    assign(socket, selected_page_id: page.id)
   end
 
   @impl true
@@ -92,8 +91,7 @@ defmodule Systems.Manual.Builder.PageListView do
         map_page_to_list_item(page, selected_page_id, index)
       end)
 
-    socket
-    |> assign(list_items: list_items)
+    assign(socket, list_items: list_items)
   end
 
   def map_page_to_list_item(page, selected_page_id, index) do
@@ -129,7 +127,7 @@ defmodule Systems.Manual.Builder.PageListView do
   end
 
   def handle_event("delete_page", %{"item" => page_id}, %{assigns: %{pages: pages}} = socket) do
-    page = Enum.find(pages, fn page -> page.id == page_id |> String.to_integer() end)
+    page = Enum.find(pages, fn page -> page.id == String.to_integer(page_id) end)
     Manual.Public.delete_page(page)
     {:noreply, socket}
   end
@@ -139,7 +137,7 @@ defmodule Systems.Manual.Builder.PageListView do
         %{"item" => page_id},
         %{assigns: %{selected_page_id: selected_page_id}} = socket
       ) do
-    page_id_int = page_id |> String.to_integer()
+    page_id_int = String.to_integer(page_id)
 
     # If the page is already selected, deselect it by setting selected_page_id to nil
     new_selected_id = if page_id_int == selected_page_id, do: nil, else: page_id_int
@@ -158,7 +156,7 @@ defmodule Systems.Manual.Builder.PageListView do
   end
 
   def handle_event("up", %{"item" => page_id}, %{assigns: %{pages: pages}} = socket) do
-    page = Enum.find(pages, fn page -> page.id == page_id |> String.to_integer() end)
+    page = Enum.find(pages, fn page -> page.id == String.to_integer(page_id) end)
     Manual.Public.move_page(page, :up)
     {:noreply, socket}
   end

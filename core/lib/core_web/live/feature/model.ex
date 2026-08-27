@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Feature.Model do
+  @moduledoc false
   @callback get_model(map(), map(), Phoenix.LiveView.Socket.t()) :: map | struct | nil
 
   defmacro __using__(_opts \\ nil) do

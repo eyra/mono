@@ -1,12 +1,11 @@
 defmodule Systems.Advert.ViewModelBuilderTest do
   use Core.DataCase
 
-  alias Systems.Assignment
-  alias Systems.Promotion
-  alias Systems.Advert
-  alias Systems.Crew
-
   alias Frameworks.Utility.ViewModelBuilder
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Promotion
 
   describe "Advert ViewModelBuilder for Promotion.LandingPage" do
     alias Core.Factories

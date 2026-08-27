@@ -1,13 +1,11 @@
 defmodule CoreWeb.Menu.Helpers do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   alias CoreWeb.Menu.ItemsProvider
-
-  alias Systems.{
-    Support,
-    NextAction
-  }
+  alias Systems.NextAction
+  alias Systems.Support
 
   def build_home(menu_id, id, config, uri) do
     if Keyword.has_key?(config, menu_id) do
@@ -22,8 +20,6 @@ defmodule CoreWeb.Menu.Helpers do
         end
 
       home_item(menu_id, id, action, size)
-    else
-      nil
     end
   end
 
@@ -76,22 +72,16 @@ defmodule CoreWeb.Menu.Helpers do
     icon =
       if Enum.member?(flags, :icon) do
         icon(id)
-      else
-        nil
       end
 
     title =
       if Enum.member?(flags, :title) do
         title(id)
-      else
-        nil
       end
 
     counter =
       if Enum.member?(flags, :counter) do
         counter(id, user)
-      else
-        nil
       end
 
     %{
@@ -147,10 +137,12 @@ defmodule CoreWeb.Menu.Helpers do
   def supported_languages do
     current_locale = Gettext.get_locale(CoreWeb.Gettext)
 
-    [
-      %{id: "en", name: gettext("English")}
-    ]
-    |> Enum.reject(fn %{id: locale} -> current_locale == locale end)
+    Enum.reject(
+      [
+        %{id: "en", name: gettext("English")}
+      ],
+      fn %{id: locale} -> current_locale == locale end
+    )
   end
 
   def select_items(menu_id, config) do

@@ -2,10 +2,7 @@ defmodule Systems.Alliance.PublicTest do
   use Core.DataCase
 
   alias Core.Repo
-
-  alias Systems.{
-    Alliance
-  }
+  alias Systems.Alliance
 
   describe "alliance_tools" do
     alias Core.Factories
@@ -16,8 +13,7 @@ defmodule Systems.Alliance.PublicTest do
       alliance_tool = Factories.insert!(:alliance_tool)
 
       assert Alliance.Public.list_tools()
-             |> Enum.map(& &1.id)
-             |> MapSet.new()
+             |> MapSet.new(& &1.id)
              |> MapSet.member?(alliance_tool.id)
     end
 
@@ -32,7 +28,7 @@ defmodule Systems.Alliance.PublicTest do
       auth_node = Factories.insert!(:auth_node)
 
       assert {:ok, %Alliance.ToolModel{} = _alliance_tool} =
-               Alliance.Public.prepare_tool(%{}, auth_node) |> Repo.insert()
+               %{} |> Alliance.Public.prepare_tool(auth_node) |> Repo.insert()
     end
 
     test "update_tool/2 with valid data updates the alliance_tool" do

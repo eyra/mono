@@ -1,12 +1,14 @@
 defmodule Systems.Onyx.LandingPage do
+  @moduledoc false
   use Systems.Content.Composer, :live_workspace
 
   import LiveNest.HTML
-  require Logger
 
   alias Core.Repo
   alias Systems.Observatory
   alias Systems.Onyx
+
+  require Logger
 
   @impl true
   def get_authorization_context(params, session, socket) do

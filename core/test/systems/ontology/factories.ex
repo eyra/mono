@@ -1,4 +1,5 @@
 defmodule Systems.Ontology.Factories do
+  @moduledoc false
   alias Core.Factories
   alias Systems.Ontology.ConceptModel
   alias Systems.Ontology.PredicateModel

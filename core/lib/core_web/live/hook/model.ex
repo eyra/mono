@@ -11,6 +11,6 @@ defmodule CoreWeb.Live.Hook.Model do
         socket
       ])
 
-    {:cont, socket |> assign(model: model)}
+    {:cont, assign(socket, model: model)}
   end
 end

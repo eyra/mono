@@ -1,13 +1,14 @@
 defmodule Systems.Consent.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Consent
 
-  def signature_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def signature_query do
     from(Consent.SignatureModel, as: :signature)
   end
 

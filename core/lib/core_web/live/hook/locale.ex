@@ -23,14 +23,14 @@ defmodule CoreWeb.Live.Hook.Locale do
 
   use Frameworks.Concept.LiveHook
 
-  @cldr_locales CoreWeb.Cldr.known_locale_names() |> Enum.map(&Atom.to_string/1)
+  @cldr_locales Enum.map(CoreWeb.Cldr.known_locale_names(), &Atom.to_string/1)
   @default_locale "en"
 
   @impl true
   def mount(_live_view_module, _params, session, socket) do
     locale = resolve_locale(session)
     put_locale(locale)
-    {:cont, socket |> Phoenix.Component.assign(locale: locale)}
+    {:cont, Phoenix.Component.assign(socket, locale: locale)}
   end
 
   defp resolve_locale(session) do
@@ -61,7 +61,7 @@ defmodule CoreWeb.Live.Hook.Locale do
     Gettext.put_locale(Timex.Gettext, locale)
   end
 
-  def get_locale() do
+  def get_locale do
     Gettext.get_locale()
   end
 end
@@ -79,13 +79,15 @@ defmodule CoreWeb.Plug.ResolveLocale do
   """
   import Plug.Conn
 
+  alias Cldr.Plug.PutLocale
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
     if creator?(conn) do
-      put_session(conn, Cldr.Plug.PutLocale.session_key(), "en")
+      put_session(conn, PutLocale.session_key(), "en")
     else
-      delete_session(conn, Cldr.Plug.PutLocale.session_key())
+      delete_session(conn, PutLocale.session_key())
     end
   end
 
@@ -111,12 +113,14 @@ defmodule CoreWeb.Plug.PersistLocale do
   """
   import Plug.Conn
 
+  alias Cldr.Plug.PutLocale
+
   def init(opts), do: opts
 
   def call(conn, _opts) do
-    case Cldr.Plug.PutLocale.get_cldr_locale(conn) do
+    case PutLocale.get_cldr_locale(conn) do
       %Cldr.LanguageTag{cldr_locale_name: name} when not is_nil(name) ->
-        put_session(conn, Cldr.Plug.PutLocale.session_key(), to_string(name))
+        put_session(conn, PutLocale.session_key(), to_string(name))
 
       _ ->
         conn

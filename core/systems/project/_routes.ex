@@ -1,4 +1,5 @@
 defmodule Systems.Project.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Project do

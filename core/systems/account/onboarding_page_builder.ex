@@ -5,6 +5,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.Live.Element
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
 
@@ -27,8 +28,6 @@ defmodule Systems.Account.OnboardingPageBuilder do
     step_view =
       if current_step do
         build_step_view(current_step, user, live_context)
-      else
-        nil
       end
 
     %{
@@ -86,7 +85,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
         show_email: false
       })
 
-    CoreWeb.Live.Element.prepare_live_view(
+    Element.prepare_live_view(
       :profile_view,
       Account.ProfileView,
       live_context: profile_context
@@ -94,7 +93,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
   end
 
   defp build_step_view(:terms_and_privacy, _user, live_context) do
-    CoreWeb.Live.Element.prepare_live_view(
+    Element.prepare_live_view(
       :terms_and_privacy_view,
       Account.TermsAndPrivacyView,
       live_context: live_context

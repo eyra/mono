@@ -1,9 +1,11 @@
 defmodule Systems.Zircon.Screening.ToolReferenceFileAssoc do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Changeset
 
-  alias Systems.Zircon.Screening
   alias Systems.Paper
+  alias Systems.Zircon.Screening
 
   schema "zircon_screening_tool_reference_file" do
     belongs_to(:tool, Screening.ToolModel)
@@ -16,13 +18,11 @@ defmodule Systems.Zircon.Screening.ToolReferenceFileAssoc do
   @required_fields @fields
 
   def changeset(association, attrs) do
-    association
-    |> cast(attrs, @fields)
+    cast(association, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def preload_graph(:down), do: preload_graph(:reference_file)

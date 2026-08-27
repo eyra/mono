@@ -20,9 +20,7 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
       |> NaiveDateTime.add(-minutes_ago * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(t in AuthCodeModel, where: t.id == ^inserted.id)
-    |> Repo.update_all(set: [inserted_at: ts])
-
+    Repo.update_all(from(t in AuthCodeModel, where: t.id == ^inserted.id), set: [inserted_at: ts])
     Repo.get!(AuthCodeModel, inserted.id)
   end
 

@@ -13,7 +13,7 @@ defmodule Frameworks.GreenLight.PermissionMap do
   @opaque t :: %{permission => role_list}
 
   @spec new() :: t
-  def new() do
+  def new do
     Map.new()
   end
 
@@ -45,7 +45,7 @@ defmodule Frameworks.GreenLight.PermissionMap do
     permission_map
     |> Enum.sort()
     |> Enum.map(fn {permission, roles} ->
-      {permission, roles |> Enum.sort()}
+      {permission, Enum.sort(roles)}
     end)
   end
 
@@ -86,7 +86,7 @@ defmodule Frameworks.GreenLight.PermissionMap do
 
   def merge(a, b) do
     Enum.reduce(a, b, fn {permission, roles}, permission_map ->
-      grant(permission_map, permission, roles |> MapSet.to_list())
+      grant(permission_map, permission, MapSet.to_list(roles))
     end)
   end
 end

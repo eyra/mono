@@ -1,17 +1,13 @@
 defmodule Systems.Fund.WalletViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Pool,
-    Fund,
-    Bookkeeping
-  }
+  alias Systems.Bookkeeping
+  alias Systems.Fund
+  alias Systems.Pool
 
   def view_model(
-        %Bookkeeping.AccountModel{
-          id: id,
-          identifier: ["wallet", currency, _user_id]
-        } = account,
+        %Bookkeeping.AccountModel{id: id, identifier: ["wallet", currency, _user_id]} = account,
         user
       ) do
     locale = Gettext.get_locale(CoreWeb.Gettext)

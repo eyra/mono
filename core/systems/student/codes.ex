@@ -3,12 +3,10 @@ defmodule Systems.Student.Codes do
     Defines study program codes used as user feature for vu students.
   """
 
-  alias Systems.{
-    Org,
-    Content
-  }
+  alias Systems.Content
+  alias Systems.Org
 
-  def values(),
+  def values,
     do: [
       :vu_sbe_bk_1,
       :vu_sbe_bk_1_h,
@@ -36,7 +34,7 @@ defmodule Systems.Student.Codes do
   end
 
   def year?(value, year) when is_atom(value) and is_binary(year) do
-    Atom.to_string(value) |> String.contains?(parse_year(year))
+    value |> Atom.to_string() |> String.contains?(parse_year(year))
   end
 
   def parse_study_program("resit"), do: "_h"
@@ -49,7 +47,8 @@ defmodule Systems.Student.Codes do
       |> String.downcase()
       |> parse_study_program()
 
-    Atom.to_string(value)
+    value
+    |> Atom.to_string()
     |> String.contains?(study_program)
   end
 
@@ -63,20 +62,17 @@ defmodule Systems.Student.Codes do
   def contains_study_program?(nil, _), do: false
 
   def contains_study_program?(values, study_program) do
-    values
-    |> Enum.find(&is_study_program?(&1, study_program)) != nil
+    Enum.find(values, &is_study_program?(&1, study_program)) != nil
   end
 
   def contains_year?(nil, _), do: false
 
   def contains_year?(values, year) do
-    values
-    |> Enum.find(&year?(&1, year)) != nil
+    Enum.find(values, &year?(&1, year)) != nil
   end
 
   def values_by_year(year) do
-    values()
-    |> Enum.filter(&year?(&1, year))
+    Enum.filter(values(), &year?(&1, year))
   end
 
   def labels_by_year(year, nil) do
@@ -84,7 +80,8 @@ defmodule Systems.Student.Codes do
   end
 
   def labels_by_year(year, active_values) when is_list(active_values) do
-    values_by_year(year)
+    year
+    |> values_by_year()
     |> Enum.map(&convert_to_label(&1, active_values))
   end
 
@@ -98,9 +95,7 @@ defmodule Systems.Student.Codes do
       |> Atom.to_string()
       |> translate()
 
-    active =
-      active_values
-      |> Enum.member?(value)
+    active = Enum.member?(active_values, value)
 
     %{id: value, value: value_as_string, active: active}
   end

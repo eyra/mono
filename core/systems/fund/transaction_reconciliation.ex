@@ -11,12 +11,12 @@ defmodule Systems.Fund.TransactionReconciliation do
   """
   import Ecto.Query
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   @min_age_minutes 60
   @max_age_days 7
@@ -29,21 +29,23 @@ defmodule Systems.Fund.TransactionReconciliation do
     min_age = Keyword.get(opts, :min_age_minutes, @min_age_minutes)
     max_age = Keyword.get(opts, :max_age_days, @max_age_days)
 
-    scan_transactions(min_age, max_age)
+    min_age
+    |> scan_transactions(max_age)
     |> Enum.reduce(state, &reconcile_transaction/2)
   end
 
   defp scan_transactions(min_age_minutes, max_age_days) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
     age_cutoff = NaiveDateTime.add(now, -min_age_minutes * 60, :second)
     lookback_cutoff = NaiveDateTime.add(now, -max_age_days * 24 * 60 * 60, :second)
 
-    from(t in Fund.TransactionModel,
-      where:
-        t.status in [:pending, :failed, :completed] and t.inserted_at < ^age_cutoff and
-          t.inserted_at > ^lookback_cutoff
+    Repo.all(
+      from(t in Fund.TransactionModel,
+        where:
+          t.status in [:pending, :failed, :completed] and t.inserted_at < ^age_cutoff and
+            t.inserted_at > ^lookback_cutoff
+      )
     )
-    |> Repo.all()
   end
 
   defp reconcile_transaction(

@@ -27,13 +27,13 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   """
   import Ecto.Query
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.OrphanScan
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   # Anchored to a field boundary, not to the start of the reference: the
   # `payout=` pair is not guaranteed to be the first one in the key.
@@ -105,7 +105,9 @@ defmodule Systems.Fund.PayoutOrphanReconciliation do
   # One query per kind, not per object: a scan window holds at most a few
   # hundred references and both kinds key on a `uid` column.
   defp known_subjects(pairs) do
-    for({{:ok, subject}, _object} <- pairs, do: subject)
+    for_result = for({{:ok, subject}, _object} <- pairs, do: subject)
+
+    for_result
     |> Enum.group_by(&elem(&1, 0), &elem(&1, 1))
     |> Enum.flat_map(&query_subject_uids/1)
     |> MapSet.new()

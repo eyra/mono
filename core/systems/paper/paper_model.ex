@@ -1,8 +1,10 @@
 defmodule Systems.Paper.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
+
   alias Systems.Paper
   alias Systems.Version
 

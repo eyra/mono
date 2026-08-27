@@ -1,11 +1,14 @@
 defmodule Systems.Assignment.CrewTaskSingleViewTest do
   use CoreWeb.ConnCase, async: false
   use Gettext, backend: CoreWeb.Gettext
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
+  alias Systems.Crew.Public
 
   setup do
     isolate_signals()
@@ -20,10 +23,10 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      conn = conn |> Map.put(:request_path, "/assignment/task")
+      conn = Map.put(conn, :request_path, "/assignment/task")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           panel_info: nil
@@ -49,10 +52,10 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
     end
 
     test "handles complete_task event", %{conn: conn, user: user, assignment: assignment} do
-      conn = conn |> Map.put(:request_path, "/assignment/task")
+      conn = Map.put(conn, :request_path, "/assignment/task")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           panel_info: nil
@@ -65,7 +68,7 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       {:ok, view, _html} = live_isolated(conn, Assignment.CrewTaskSingleView, session: session)
 
       # Send complete_task event
-      html = view |> render_click("complete_task")
+      html = render_click(view, "complete_task")
 
       # Verify view still renders after event
       assert html =~ "data-testid=\"crew-task-single-view\""
@@ -77,10 +80,10 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      conn = conn |> Map.put(:request_path, "/assignment/task")
+      conn = Map.put(conn, :request_path, "/assignment/task")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           panel_info: nil
@@ -107,10 +110,10 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       assignment = Assignment.Factories.create_base_assignment()
       assignment = Assignment.Factories.add_participant(assignment, user)
 
-      conn = conn |> Map.put(:request_path, "/assignment/task")
+      conn = Map.put(conn, :request_path, "/assignment/task")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           panel_info: nil
@@ -138,19 +141,19 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       assignment = Repo.preload(assignment, [:crew, workflow: [:items]], force: true)
 
       crew = assignment.crew
-      member = Systems.Crew.Public.get_member(crew, user)
+      member = Public.get_member(crew, user)
       ordered_items = Systems.Workflow.Model.ordered_items(assignment.workflow)
       [first_item | _] = ordered_items
 
       identifier = Assignment.Private.task_identifier(assignment, first_item, member)
 
       # Verify no task exists yet (will be created by get_or_create_task in view)
-      assert is_nil(Systems.Crew.Public.get_task(crew, identifier))
+      assert is_nil(Public.get_task(crew, identifier))
 
-      conn = conn |> Map.put(:request_path, "/assignment/task")
+      conn = Map.put(conn, :request_path, "/assignment/task")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           assignment_id: assignment.id,
           current_user: user,
           panel_info: nil
@@ -163,9 +166,9 @@ defmodule Systems.Assignment.CrewTaskSingleViewTest do
       {:ok, _view, _html} = live_isolated(conn, Assignment.CrewTaskSingleView, session: session)
 
       # Task should now be started (created and started by mount)
-      updated_task = Systems.Crew.Public.get_task(crew, identifier)
-      assert not is_nil(updated_task)
-      assert not is_nil(updated_task.started_at)
+      updated_task = Public.get_task(crew, identifier)
+      assert updated_task
+      assert updated_task.started_at
     end
   end
 end

@@ -5,8 +5,8 @@ defmodule Systems.Assignment.NextActions.ContributionReviewed do
   assignment's participation outcome page.
   """
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
 
+  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   @impl Systems.NextAction.ViewModel

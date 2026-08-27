@@ -63,7 +63,7 @@ defmodule Systems.Graphite.ToolViewBuilderTest do
       vm = Graphite.ToolViewBuilder.view_model(tool, assigns)
 
       # Should have leaderboard button
-      assert vm.leaderboard_button != nil
+      assert vm.leaderboard_button
       assert vm.leaderboard_button.action.type == :http_get
       assert vm.leaderboard_button.action.to == "/graphite/leaderboard/#{leaderboard.id}"
       assert vm.leaderboard_button.action.target == "_blank"

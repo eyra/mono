@@ -60,7 +60,7 @@ defmodule Systems.Test.ModalToolbarTest do
       {:ok, view, html} = live(conn, "/test/routed/with_modal")
 
       # Verify the page loaded
-      assert view |> has_element?("[data-testid='routed-live-view']")
+      assert has_element?(view, "[data-testid='routed-live-view']")
 
       # Modal should be visible with full style
       assert html =~ "modal-full"
@@ -69,7 +69,7 @@ defmodule Systems.Test.ModalToolbarTest do
       assert html =~ "phx-click=\"close_modal\""
 
       # Modal embedded view should be rendered
-      assert view |> has_element?("[data-testid='modal-embedded-view']")
+      assert has_element?(view, "[data-testid='modal-embedded-view']")
     end
 
     test "toolbar buttons update when update_modal_buttons event is sent", %{conn: conn} do

@@ -21,7 +21,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilderTest do
       vm = Assignment.CrewWorkViewBuilder.view_model(assignment, assigns)
 
       # Should have task view for single item
-      assert vm.task_view != nil
+      assert vm.task_view
       assert vm.task_view.implementation == Assignment.CrewTaskSingleView
       assert String.starts_with?(vm.task_view.id, "crew_task_single_view_")
     end

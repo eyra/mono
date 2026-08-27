@@ -27,12 +27,11 @@ defmodule Systems.Payment.ReconciliationWorker do
     max_attempts: 1,
     unique: [period: :infinity, states: [:available, :scheduled, :executing, :retryable]]
 
-  require Logger
-
   alias Systems.Account
   alias Systems.Fund
-  alias Systems.Fund
   alias Systems.Payment
+
+  require Logger
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: args}), do: run(reconcile_opts(args))

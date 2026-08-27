@@ -1,18 +1,19 @@
 defmodule Next.Account.AuthSignupPage do
+  @moduledoc false
   use CoreWeb, :live_view_fabric
+
+  import CoreWeb.Layouts.Stripped.Composer
+  import CoreWeb.Layouts.Stripped.Html
+  import CoreWeb.Menus
+
+  alias Frameworks.Pixel.Button
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
 
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
-
-  alias Frameworks.Pixel.Button
-
   defp providers do
-    Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+    :core |> Application.get_env(:account, []) |> Keyword.get(:auth_providers, [])
   end
 
   @impl true

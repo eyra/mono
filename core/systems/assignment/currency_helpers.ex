@@ -1,6 +1,8 @@
 defmodule Systems.Assignment.CurrencyHelpers do
   @moduledoc false
 
+  alias CoreWeb.Cldr.Number
+
   @currency "EUR"
 
   def format_cents(cents) when is_integer(cents) and cents > 0 do
@@ -17,7 +19,7 @@ defmodule Systems.Assignment.CurrencyHelpers do
   def cents_to_display(cents) when is_integer(cents) do
     decimal = cents_to_decimal(cents)
 
-    case CoreWeb.Cldr.Number.to_string(decimal, locale: locale()) do
+    case Number.to_string(decimal, locale: locale()) do
       {:ok, formatted} -> formatted
       _ -> Decimal.to_string(decimal, :normal)
     end
@@ -68,7 +70,7 @@ defmodule Systems.Assignment.CurrencyHelpers do
   end
 
   defp format_currency(%Decimal{} = amount, locale) do
-    case CoreWeb.Cldr.Number.to_string(amount,
+    case Number.to_string(amount,
            format: :currency,
            currency: @currency,
            locale: locale

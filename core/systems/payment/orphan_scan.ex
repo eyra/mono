@@ -13,9 +13,9 @@ defmodule Systems.Payment.OrphanScan do
   with no local row has no local id to point at, so `provider_uid` and `details`
   carry the identification instead.
   """
-  require Logger
-
   alias Systems.Payment.ReconciliationState, as: State
+
+  require Logger
 
   @doc """
   Whether an object is old enough to judge.

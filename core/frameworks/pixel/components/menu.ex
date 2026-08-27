@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Menu do
+  @moduledoc false
   use CoreWeb, :pixel
 
   alias Frameworks.Pixel.Button

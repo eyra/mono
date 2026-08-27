@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Builder.ChapterForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   alias Systems.Manual
@@ -34,11 +35,9 @@ defmodule Systems.Manual.Builder.ChapterForm do
     changeset =
       if entity do
         Manual.ChapterModel.changeset(entity, %{})
-      else
-        nil
       end
 
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   @impl true
@@ -47,8 +46,7 @@ defmodule Systems.Manual.Builder.ChapterForm do
 
     {
       :noreply,
-      socket
-      |> save(changeset)
+      save(socket, changeset)
     }
   end
 

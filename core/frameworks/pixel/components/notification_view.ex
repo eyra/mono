@@ -5,7 +5,7 @@ defmodule Frameworks.Pixel.NotificationView do
 
   @impl true
   def update(%{title: title, body: body}, socket) do
-    {:ok, socket |> assign(title: title, body: body)}
+    {:ok, assign(socket, title: title, body: body)}
   end
 
   @impl true

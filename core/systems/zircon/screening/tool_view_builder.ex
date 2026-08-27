@@ -1,4 +1,5 @@
 defmodule Systems.Zircon.Screening.ToolViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Paper

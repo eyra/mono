@@ -7,17 +7,18 @@ defmodule Systems.Org.MemberViewTest do
   use CoreWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
-  require LiveNest.Constants
 
   alias Core.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Org
 
+  require LiveNest.Constants
+
   describe "MemberView authorization" do
     setup ctx do
       owner = Factories.insert!(:creator)
       {:ok, ctx} = login(owner, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/org/node")
+      conn = Map.put(ctx[:conn], :request_path, "/org/node")
 
       org =
         Factories.insert!(:org_node, %{
@@ -95,7 +96,7 @@ defmodule Systems.Org.MemberViewTest do
     setup ctx do
       owner = Factories.insert!(:creator)
       {:ok, ctx} = login(owner, ctx)
-      conn = ctx[:conn] |> Map.put(:request_path, "/org/node")
+      conn = Map.put(ctx[:conn], :request_path, "/org/node")
 
       org =
         Factories.insert!(:org_node, %{

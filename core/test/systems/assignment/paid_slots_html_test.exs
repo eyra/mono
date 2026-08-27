@@ -8,6 +8,7 @@ defmodule Systems.Assignment.PaidSlotsHtmlTest do
   mints a fresh idempotence key) rather than reopening the old one.
   """
   use ExUnit.Case, async: true
+
   import Phoenix.LiveViewTest
 
   alias Systems.Assignment.PaidSlotsHtml

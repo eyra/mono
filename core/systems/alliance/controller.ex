@@ -4,7 +4,6 @@ defmodule Systems.Alliance.Controller do
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
   def callback(conn, %{"id" => _id}) do
-    conn
-    |> redirect(to: "/assignment/#{1}")
+    redirect(conn, to: "/assignment/#{1}")
   end
 end

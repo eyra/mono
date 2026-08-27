@@ -1,15 +1,16 @@
 defmodule Systems.Pool.ParticipantPageBuilder do
-  alias Frameworks.Utility.ViewModelBuilder
-
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
+  alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Account
-  alias Systems.Fund
   alias Systems.Advert
+  alias Systems.Fund
 
   def view_model(user, assigns) do
     wallets =
-      Fund.Public.list_wallets(user)
+      user
+      |> Fund.Public.list_wallets()
       |> Enum.map(&Fund.WalletViewBuilder.view_model(&1, assigns))
 
     contributions =
@@ -27,18 +28,10 @@ defmodule Systems.Pool.ParticipantPageBuilder do
 
   defp to_member(%{
          email: email,
-         profile: %{
-           fullname: fullname,
-           photo_url: photo_url
-         },
-         features:
-           %{
-             gender: gender
-           } = features
+         profile: %{fullname: fullname, photo_url: photo_url},
+         features: %{gender: gender} = features
        }) do
-    subtitle =
-      [email | Account.FeaturesModel.get_student_classes(features)]
-      |> Enum.join(" ▪︎ ")
+    subtitle = Enum.join([email | Account.FeaturesModel.get_student_classes(features)], " ▪︎ ")
 
     action = %{type: :http_get, to: "mailto:#{email}"}
 

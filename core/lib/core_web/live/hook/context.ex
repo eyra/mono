@@ -37,10 +37,11 @@ defmodule CoreWeb.Live.Hook.Context do
   """
 
   import Phoenix.Component
-  require Logger
 
   alias Frameworks.Concept.LiveContext
   alias Frameworks.UserState
+
+  require Logger
 
   @session_key "live_context"
 

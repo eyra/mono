@@ -1,4 +1,5 @@
 defmodule Systems.Content.Private do
+  @moduledoc false
   def get_backend do
     :core
     |> Application.fetch_env!(:content)

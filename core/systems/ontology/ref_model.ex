@@ -59,8 +59,6 @@ defmodule Systems.Ontology.RefModel do
   end
 
   defimpl Systems.Ontology.Element do
-    alias Systems.Ontology
-
     def flatten(%{} = ontology_ref) do
       [ontology_ref] ++ Ontology.Element.flatten(Ontology.RefModel.get_target(ontology_ref))
     end

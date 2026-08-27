@@ -4,14 +4,7 @@ defmodule Systems.Assignment.AffiliateView do
   alias Systems.Affiliate
 
   @impl true
-  def update(
-        %{
-          id: id,
-          assignment: assignment,
-          title: title
-        },
-        socket
-      ) do
+  def update(%{id: id, assignment: assignment, title: title}, socket) do
     {
       :ok,
       socket

@@ -1,4 +1,5 @@
 defmodule Systems.Graphite.ToolViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Graphite

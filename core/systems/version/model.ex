@@ -1,6 +1,8 @@
 defmodule Systems.Version.Model do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
   alias Systems.Version
@@ -18,8 +20,7 @@ defmodule Systems.Version.Model do
   @required_fields @fields
 
   def changeset(version, attrs) do
-    version
-    |> cast(attrs, @fields)
+    cast(version, attrs, @fields)
   end
 
   def validate(changeset) do
@@ -28,7 +29,7 @@ defmodule Systems.Version.Model do
     |> validate_number(:number, greater_than: 0)
   end
 
-  def prepare_first() do
+  def prepare_first do
     %__MODULE__{}
     |> cast(%{number: 1}, @fields)
     |> validate()

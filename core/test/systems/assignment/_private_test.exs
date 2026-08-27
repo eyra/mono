@@ -1,18 +1,17 @@
 defmodule Systems.Assignment.PrivateTest do
   use Core.DataCase
 
+  alias Core.Factories
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
-
-  alias Core.Factories
 
   describe "Crew Task & Workflow Item mapping" do
     test "task_identifier/2" do
       %{crew: crew, workflow: workflow} =
         assignment = Assignment.Factories.create_assignment(31, 1)
 
-      %{items: [%{id: item_id} = item]} = workflow |> Core.Repo.preload([:items])
+      %{items: [%{id: item_id} = item]} = Core.Repo.preload(workflow, [:items])
       user = Factories.insert!(:member)
       member = %{id: member_id} = Crew.Factories.create_member(crew, user)
 
@@ -24,7 +23,7 @@ defmodule Systems.Assignment.PrivateTest do
 
     test "get_workflow_item/2" do
       %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
-      %{items: [%{id: item_id}]} = workflow |> Core.Repo.preload([:items])
+      %{items: [%{id: item_id}]} = Core.Repo.preload(workflow, [:items])
 
       user = Factories.insert!(:member)
       member = %{id: member_id} = Crew.Factories.create_member(crew, user)
@@ -42,7 +41,7 @@ defmodule Systems.Assignment.PrivateTest do
 
     test "get_crew_member/2" do
       %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
-      %{items: [%{id: item_id}]} = workflow |> Core.Repo.preload([:items])
+      %{items: [%{id: item_id}]} = Core.Repo.preload(workflow, [:items])
 
       user = %{id: user_id} = Factories.insert!(:member)
       member = %{id: member_id} = Crew.Factories.create_member(crew, user)

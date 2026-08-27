@@ -25,8 +25,9 @@ defmodule Systems.Zircon.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Zircon.Constants
       alias Systems.Zircon.Constants
+
+      require Constants
 
       @research_framework Constants.research_framework()
       @research_dimension Constants.research_dimension()

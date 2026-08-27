@@ -24,6 +24,7 @@ defmodule Systems.Notify.EventDeclaration do
   defmacro __using__(_opts) do
     quote do
       import Systems.Notify.EventDeclaration, only: [event: 2]
+
       Module.register_attribute(__MODULE__, :notify_events_acc, accumulate: true)
       @before_compile Systems.Notify.EventDeclaration
     end

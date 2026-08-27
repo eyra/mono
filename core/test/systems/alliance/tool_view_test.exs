@@ -1,10 +1,12 @@
 defmodule Systems.Alliance.ToolViewTest do
   use CoreWeb.ConnCase, async: false
   use Gettext, backend: CoreWeb.Gettext
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Core.Repo
+  alias Frameworks.Concept.LiveContext
   alias Systems.Alliance
   alias Systems.Workflow
 
@@ -20,10 +22,10 @@ defmodule Systems.Alliance.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{alliance_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/alliance/tool")
+      conn = Map.put(conn, :request_path, "/alliance/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Alliance Survey",
           description: "Test description",
           url: "https://external-survey.example.com?participant=123",
@@ -46,10 +48,10 @@ defmodule Systems.Alliance.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{alliance_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/alliance/tool")
+      conn = Map.put(conn, :request_path, "/alliance/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Survey",
           description: "Test description",
           url: "https://external-survey.example.com",
@@ -75,10 +77,10 @@ defmodule Systems.Alliance.ToolViewTest do
     end
 
     test "handles tool_started event", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/alliance/tool")
+      conn = Map.put(conn, :request_path, "/alliance/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Survey",
           description: "Test description",
           url: "https://external-survey.example.com",
@@ -90,7 +92,7 @@ defmodule Systems.Alliance.ToolViewTest do
       {:ok, view, _html} = live_isolated(conn, Alliance.ToolView, session: session)
 
       # Send start_tool event
-      html = view |> render_click("start_tool")
+      html = render_click(view, "start_tool")
 
       # Verify view handled the event (view still renders)
       assert html =~ "Test Survey"
@@ -103,10 +105,10 @@ defmodule Systems.Alliance.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{alliance_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/alliance/tool")
+      conn = Map.put(conn, :request_path, "/alliance/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Survey",
           description: "Survey for participant-123",
           url: "https://external-survey.example.com?participant=participant-123",
@@ -127,10 +129,10 @@ defmodule Systems.Alliance.ToolViewTest do
       tool_ref = Factories.insert!(:tool_ref, %{alliance_tool: tool})
       tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
 
-      conn = conn |> Map.put(:request_path, "/alliance/tool")
+      conn = Map.put(conn, :request_path, "/alliance/tool")
 
       live_context =
-        Frameworks.Concept.LiveContext.new(%{
+        LiveContext.new(%{
           title: "Test Survey",
           description: "Generic survey description",
           url: "https://external-survey.example.com",

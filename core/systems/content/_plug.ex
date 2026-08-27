@@ -1,5 +1,8 @@
 defmodule Systems.Content.Plug do
+  @moduledoc false
   @behaviour Plug
+
+  alias Systems.Content.LocalFS
 
   defmacro setup() do
     quote do
@@ -16,15 +19,12 @@ defmodule Systems.Content.Plug do
   end
 
   @impl true
-  def call(
-        conn,
-        options
-      ) do
+  def call(conn, options) do
     call(Systems.Content.Private.get_backend(), conn, options)
   end
 
-  def call(Systems.Content.LocalFS, conn, options) do
-    root_path = Systems.Content.LocalFS.get_root_path()
+  def call(LocalFS, conn, options) do
+    root_path = LocalFS.get_root_path()
     options = Map.put(options, :from, root_path)
     Plug.Static.call(conn, options)
   end

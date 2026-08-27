@@ -5,10 +5,10 @@ defmodule Systems.Pool.AccountPostActionHandler do
 
   use Core.FeatureFlags
 
-  require Logger
-
-  alias Systems.Pool
   alias Systems.Account
+  alias Systems.Pool
+
+  require Logger
 
   def handle(%Account.User{creator: true}, _action), do: :ok
 

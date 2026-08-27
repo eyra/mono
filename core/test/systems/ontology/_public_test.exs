@@ -1,8 +1,9 @@
 defmodule Ontology.PublicTest do
   use Core.DataCase
 
-  alias Core.Repo
   import Systems.Ontology.Public
+
+  alias Core.Repo
   alias Systems.Ontology
 
   describe "insert_concept/3" do
@@ -23,10 +24,8 @@ defmodule Ontology.PublicTest do
       {:ok, %{id: id1}} = insert_concept("Gravitational Force", entity)
       {:ok, %{id: id2}} = insert_concept("Electromagnetic Force", entity)
 
-      assert [
-               %Ontology.ConceptModel{id: ^id1},
-               %Ontology.ConceptModel{id: ^id2}
-             ] = from(Ontology.ConceptModel, order_by: :id) |> Repo.all()
+      assert [%Ontology.ConceptModel{id: ^id1}, %Ontology.ConceptModel{id: ^id2}] =
+               Repo.all(from(Ontology.ConceptModel, order_by: :id))
 
       assert id1 != id2
     end
@@ -118,10 +117,8 @@ defmodule Ontology.PublicTest do
       {:ok, %{id: id1}} = insert_predicate(subject1, type, object, entity)
       {:ok, %{id: id2}} = insert_predicate(subject2, type, object, entity)
 
-      assert [
-               %Ontology.PredicateModel{id: ^id1},
-               %Ontology.PredicateModel{id: ^id2}
-             ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}, %Ontology.PredicateModel{id: ^id2}] =
+               Repo.all(from(Ontology.PredicateModel, order_by: :id))
 
       assert id1 != id2
     end
@@ -134,10 +131,8 @@ defmodule Ontology.PublicTest do
       {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
       {:ok, %{id: id2}} = insert_predicate(subject, type2, object, entity)
 
-      assert [
-               %Ontology.PredicateModel{id: ^id1},
-               %Ontology.PredicateModel{id: ^id2}
-             ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}, %Ontology.PredicateModel{id: ^id2}] =
+               Repo.all(from(Ontology.PredicateModel, order_by: :id))
 
       assert id1 != id2
     end
@@ -152,10 +147,8 @@ defmodule Ontology.PublicTest do
       {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
       {:ok, %{id: id2}} = insert_predicate(subject, type, object2, entity)
 
-      assert [
-               %Ontology.PredicateModel{id: ^id1},
-               %Ontology.PredicateModel{id: ^id2}
-             ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}, %Ontology.PredicateModel{id: ^id2}] =
+               Repo.all(from(Ontology.PredicateModel, order_by: :id))
 
       assert id1 != id2
     end
@@ -183,8 +176,7 @@ defmodule Ontology.PublicTest do
                   ]}
              ] = changeset.errors
 
-      assert [%Ontology.PredicateModel{id: ^id1}] =
-               from(Ontology.PredicateModel) |> Core.Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}] = Repo.all(from(Ontology.PredicateModel))
     end
 
     test "insert + insert (different type_negated?)", %{
@@ -198,10 +190,8 @@ defmodule Ontology.PublicTest do
       {:ok, %{id: id1}} = insert_predicate(subject, type, object, entity)
       {:ok, %{id: id2}} = insert_predicate(subject, type, object, entity, type_negated?: true)
 
-      assert [
-               %Ontology.PredicateModel{id: ^id1},
-               %Ontology.PredicateModel{id: ^id2}
-             ] = from(Ontology.PredicateModel, order_by: :id) |> Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}, %Ontology.PredicateModel{id: ^id2}] =
+               Repo.all(from(Ontology.PredicateModel, order_by: :id))
 
       assert id1 != id2
     end
@@ -220,8 +210,7 @@ defmodule Ontology.PublicTest do
                   ]}
              ] = changeset.errors
 
-      assert [%Ontology.PredicateModel{id: ^id1}] =
-               from(Ontology.PredicateModel) |> Core.Repo.all()
+      assert [%Ontology.PredicateModel{id: ^id1}] = Repo.all(from(Ontology.PredicateModel))
     end
   end
 end

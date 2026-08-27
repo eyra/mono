@@ -12,6 +12,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
+      elixirc_options: [warnings_as_errors: true],
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
@@ -66,8 +67,7 @@ defmodule Core.MixProject do
   defp elixirc_paths(:test),
     do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
 
-  defp elixirc_paths(:dev),
-    do: ["bundles", "apps", "systems", "frameworks", "lib"]
+  defp elixirc_paths(:dev), do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
   defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
 
@@ -78,6 +78,7 @@ defmodule Core.MixProject do
     [
       # Deps
       {:appsignal_phoenix, "2.7.0"},
+      {:appsignal, "2.17.4", override: true},
       {:assent, "0.3.1"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
@@ -85,17 +86,19 @@ defmodule Core.MixProject do
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "2.5.0"},
       {:bcrypt_elixir, "3.3.2"},
-      {:cldr_utils, "2.28.3", override: true},
+      {:cldr_utils, "2.29.7", override: true},
       {:csv, "3.2.2"},
+      {:decimal, "3.1.1", override: true},
       {:ecto_sql, "3.13.2"},
       {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "2.5.8"},
+      {:ex_aws, "2.7.0", override: true},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "0.19.0-alpha.1"},
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
-      {:hackney, "1.25.0"},
-      {:httpoison, "2.2.3"},
+      {:hackney, "4.7.4", override: true},
+      {:httpoison, "3.0.0", override: true},
       {:image, "0.62.0"},
       {:jason, "1.4.4"},
       {:libcluster, "3.5.0"},
@@ -111,11 +114,11 @@ defmodule Core.MixProject do
       {:phoenix_html, "4.3.0"},
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
-      {:phoenix_live_view, "1.1.13"},
+      {:phoenix_live_view, "1.1.33"},
       {:phoenix_view, "2.0.4"},
-      {:phoenix, "1.8.1"},
-      {:plug_cowboy, "2.7.4"},
-      {:postgrex, "0.21.1"},
+      {:phoenix, "1.8.13"},
+      {:plug_cowboy, "2.9.0"},
+      {:postgrex, "0.22.4"},
       {:remote_ip, "1.2.0"},
       {:slugify, "1.3.1"},
       {:sqids, "0.2.1"},
@@ -125,14 +128,14 @@ defmodule Core.MixProject do
       {:telemetry_poller, "1.3.0"},
       {:timex, "3.7.13"},
       {:typed_struct, "0.3.0"},
-      {:tzdata, "1.1.3"},
+      {:tzdata, "1.1.4"},
       # i18n
-      {:ex_cldr, "2.43.2"},
-      {:ex_cldr_numbers, "2.35.2"},
-      {:ex_cldr_dates_times, "2.24.0"},
-      {:ex_cldr_plugs, "1.3.4"},
+      {:ex_cldr, "2.47.5"},
+      {:ex_cldr_numbers, "2.38.3"},
+      {:ex_cldr_dates_times, "2.25.6"},
+      {:ex_cldr_plugs, "1.4.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "2.15.0"},
+      {:certifi, "2.17.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:ssl_verify_fun, "1.1.7"},
       # Dev and test deps
@@ -143,14 +146,15 @@ defmodule Core.MixProject do
       {:mox, "1.2.0", only: :test},
       {:promox, "0.1.4", only: :test},
       {:mock, "0.3.9", only: :test},
-      {:wallaby, "0.30.9", only: :test, runtime: false},
+      {:wallaby, "0.31.0", only: :test, runtime: false},
       {:phoenix_live_reload, "1.6.1", only: :dev},
       {:credo, "1.7.12", only: [:dev, :test], runtime: false},
       {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
       {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},
       {:browser, "0.5.5"},
-      {:tidewave, "0.5.2", only: :dev}
+      {:tidewave, "0.5.2", only: :dev},
+      {:styler, "~> 1.11", only: [:dev, :test], runtime: false}
     ]
   end
 
@@ -171,8 +175,16 @@ defmodule Core.MixProject do
         "assets.build"
       ],
       "lfs.pull": "cmd git lfs pull",
-      "test.unit": ["ecto.create --quiet", "ecto.migrate", "test --exclude feature"],
-      "test.feature": ["ecto.create --quiet", "ecto.migrate", "test --only feature"],
+      "test.unit": [
+        "ecto.create --quiet",
+        "ecto.migrate",
+        "test --exclude feature --warnings-as-errors"
+      ],
+      "test.feature": [
+        "ecto.create --quiet",
+        "ecto.migrate",
+        "test --only feature --warnings-as-errors"
+      ],
       "test.js": "cmd cd ./assets && npm test",
       "test.ci": ["test.unit", "test.feature", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
@@ -198,7 +210,7 @@ defmodule Core.MixProject do
       ],
       run: "phx.server",
       github_release:
-        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
+        ~s{cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo "Build tag: next_$(date +%F)_$NUM" && echo "URL: $URL"},
       precommit: "cmd cd .. && pre-commit run --all-files",
       "test.e2e":
         "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",

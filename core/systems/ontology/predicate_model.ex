@@ -1,10 +1,12 @@
 defmodule Systems.Ontology.PredicateModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
+
   import Ecto.Changeset
 
-  alias Systems.Ontology
   alias Core.Authentication
+  alias Systems.Ontology
 
   schema "ontology_predicate" do
     field(:type_negated?, :boolean, default: false)
@@ -35,8 +37,7 @@ defmodule Systems.Ontology.PredicateModel do
   @unique_fields ~w(subject_id object_id type_id entity_id type_negated?)a
 
   def changeset(predicate, attrs) do
-    predicate
-    |> cast(attrs, @fields)
+    cast(predicate, attrs, @fields)
   end
 
   def validate(changeset) do

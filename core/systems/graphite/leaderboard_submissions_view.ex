@@ -4,14 +4,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
   alias Systems.Graphite
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: leaderboard,
-          submissions: submissions
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: leaderboard, submissions: submissions}, socket) do
     {
       :ok,
       socket
@@ -25,10 +18,7 @@ defmodule Systems.Graphite.LeaderboardSubmissionsView do
   end
 
   @impl true
-  def compose(:download, %{
-        leaderboard: leaderboard,
-        submissions: submissions
-      }) do
+  def compose(:download, %{leaderboard: leaderboard, submissions: submissions}) do
     %{
       module: Graphite.LeaderboardSubmissionsForm,
       params: %{

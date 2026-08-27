@@ -71,7 +71,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
       assert vm.current_step == :activate_account
       assert vm.step_view == nil
       assert vm.step_title == dgettext("eyra-account", "onboarding.activate_account.title")
-      assert vm.step_body != nil
+      assert vm.step_body
     end
 
     test "activate_account step has special continue button label", %{user: user} do
@@ -90,7 +90,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
           email: "sso-#{System.unique_integer([:positive])}@example.com",
           displayname: "SSO User",
           creator: true,
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+          verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
         })
         |> Core.Repo.insert()
 

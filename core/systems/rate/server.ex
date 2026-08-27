@@ -1,19 +1,20 @@
 defmodule Systems.Rate.Server do
+  @moduledoc false
   use GenServer
+
+  alias Systems.Rate.LeakyBucketAlgorithm, as: Algorithm
+  # PUBLIC API
+  alias Systems.Rate.LeakyBucketState, as: State
+  alias Systems.Rate.Quota, as: Quota
+
   require Logger
 
-  alias Systems.Rate.Quota, as: Quota
-  alias Systems.Rate.LeakyBucketState, as: State
-  alias Systems.Rate.LeakyBucketAlgorithm, as: Algorithm
-
-  # PUBLIC API
+  # SERVER
 
   def request_permission(service, client_id, byte_count)
       when is_binary(service) and is_binary(client_id) and is_number(byte_count) do
     GenServer.call(__MODULE__, {:request_permission, {service, client_id, byte_count}})
   end
-
-  # SERVER
 
   def start_link(init_args) do
     GenServer.start_link(__MODULE__, init_args, name: __MODULE__)
@@ -24,12 +25,13 @@ defmodule Systems.Rate.Server do
     prune_interval = Keyword.get(args, :prune_interval, 60 * 60 * 1000)
 
     quotas =
-      Keyword.get(args, :quotas, [])
+      args
+      |> Keyword.get(:quotas, [])
       |> Enum.map(&Quota.init(&1))
 
     Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
-    {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
+    {:ok, prune_interval |> State.init(quotas) |> schedule_prune()}
   end
 
   @impl true

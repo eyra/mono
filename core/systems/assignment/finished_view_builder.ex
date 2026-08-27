@@ -1,9 +1,10 @@
 defmodule Systems.Assignment.FinishedViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
   use Core.FeatureFlags
 
-  alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Assignment
   alias Systems.Pool
 
   def view_model(
@@ -177,8 +178,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   defp build_title(true = _declined?),
     do: dgettext("eyra-assignment", "finished_view.title.declined")
 
-  defp build_title(false = _declined?),
-    do: dgettext("eyra-assignment", "finished_view.title")
+  defp build_title(false = _declined?), do: dgettext("eyra-assignment", "finished_view.title")
 
   defp build_body(declined?, redirect_url, platform_name) do
     has_redirect? = not is_nil(redirect_url)

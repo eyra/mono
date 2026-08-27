@@ -17,11 +17,13 @@ defmodule CoreWeb.ChannelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
+      import CoreWeb.ChannelCase
       # Import conveniences for testing with channels
       import Phoenix.ChannelTest
-      import CoreWeb.ChannelCase
 
       # The default endpoint for testing
       @endpoint CoreWeb.Endpoint
@@ -29,10 +31,10 @@ defmodule CoreWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Core.Repo)
+    :ok = Sandbox.checkout(Core.Repo)
 
-    unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, {:shared, self()})
+    if !tags[:async] do
+      Sandbox.mode(Core.Repo, {:shared, self()})
     end
 
     :ok

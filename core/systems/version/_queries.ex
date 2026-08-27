@@ -1,12 +1,13 @@
 defmodule Systems.Version.Queries do
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Version
 
-  def version_query() do
+  require Frameworks.Utility.Query
+
+  def version_query do
     from(v in Version.Model, as: :version)
   end
 

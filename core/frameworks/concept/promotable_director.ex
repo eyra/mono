@@ -1,4 +1,5 @@
 defmodule Frameworks.Promotable.Director do
+  @moduledoc false
   @type promotable :: map()
   @type error :: atom()
   @type user :: map()

@@ -1,4 +1,5 @@
 defmodule Systems.Storage.Backend do
+  @moduledoc false
   @typedoc "Value in a storage identifier entry: integer, string, or nil"
   @type storage_identifier_value :: integer() | String.t() | nil
 

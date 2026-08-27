@@ -1,20 +1,20 @@
 defmodule Systems.Assignment.CrewPage do
+  @moduledoc false
   use CoreWeb, :routed_live_view
   use CoreWeb.Layouts.Stripped.Composer
 
   import LiveNest.HTML
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-
-  require Logger
-
   alias Core.ImageHelpers
   alias Frameworks.Pixel.Hero
-
   alias Systems.Assignment
   alias Systems.Project
   alias Systems.Storage
+
+  require Logger
+
+  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -44,14 +44,12 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket
-    |> update_image_info()
+    update_image_info(socket)
   end
 
   @impl true
   def handle_resize(socket) do
-    socket
-    |> update_image_info()
+    update_image_info(socket)
   end
 
   defp update_image_info(
@@ -62,8 +60,7 @@ defmodule Systems.Assignment.CrewPage do
     image_height = 360
     image_info = ImageHelpers.get_image_info(image_id, image_width, image_height)
 
-    socket
-    |> assign(image_info: image_info)
+    assign(socket, image_info: image_info)
   end
 
   defp update_image_info(socket) do
@@ -80,7 +77,7 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def handle_event("store", %{task: task, key: key, group: group, data: data}, socket) do
-    {:noreply, socket |> store(task_identifier(socket, task, group, key), data)}
+    {:noreply, store(socket, task_identifier(socket, task, group, key), data)}
   end
 
   @impl true
@@ -90,37 +87,31 @@ defmodule Systems.Assignment.CrewPage do
 
   @impl true
   def consume_event(%{name: :onboarding_continue}, socket) do
-    {:stop, socket |> handle_action(:onboarding_continue)}
+    {:stop, handle_action(socket, :onboarding_continue)}
   end
 
   @impl true
-  def consume_event(
-        %{name: :accept},
-        %{assigns: %{model: model, current_user: user}} = socket
-      ) do
+  def consume_event(%{name: :accept}, %{assigns: %{model: model, current_user: user}} = socket) do
     Assignment.Public.accept_member(model, user)
-    socket = store(socket, onboarding_identifier(socket), "{\"status\":\"consent accepted\"}")
-    {:stop, socket |> handle_action(:accept)}
+    socket = store(socket, onboarding_identifier(socket), ~s({"status":"consent accepted"}))
+    {:stop, handle_action(socket, :accept)}
   end
 
   @impl true
-  def consume_event(
-        %{name: :decline},
-        %{assigns: %{model: model, current_user: user}} = socket
-      ) do
+  def consume_event(%{name: :decline}, %{assigns: %{model: model, current_user: user}} = socket) do
     Assignment.Public.decline_member(model, user)
-    socket = store(socket, onboarding_identifier(socket), "{\"status\":\"consent declined\"}")
-    {:stop, socket |> handle_action(:decline)}
+    socket = store(socket, onboarding_identifier(socket), ~s({"status":"consent declined"}))
+    {:stop, handle_action(socket, :decline)}
   end
 
   @impl true
   def consume_event(%{name: :email_confirmed}, socket) do
-    {:stop, socket |> handle_action(:email_confirmed)}
+    {:stop, handle_action(socket, :email_confirmed)}
   end
 
   @impl true
   def consume_event(%{name: :retry}, socket) do
-    {:stop, socket |> handle_action(:retry)}
+    {:stop, handle_action(socket, :retry)}
   end
 
   @impl true
@@ -135,7 +126,7 @@ defmodule Systems.Assignment.CrewPage do
       ) do
     Assignment.Public.complete_participation(assignment, user)
 
-    {:stop, socket |> handle_action(:work_done)}
+    {:stop, handle_action(socket, :work_done)}
   end
 
   @impl true
@@ -149,10 +140,7 @@ defmodule Systems.Assignment.CrewPage do
   # HTTP upload complete - blob stored via HTTP endpoint, schedule delivery
   @impl true
   def consume_event(
-        %{
-          name: :deliver_blob,
-          payload: %{task: task, key: key, group: group, blob_id: blob_id}
-        },
+        %{name: :deliver_blob, payload: %{task: task, key: key, group: group, blob_id: blob_id}},
         socket
       ) do
     Logger.info(
@@ -198,8 +186,8 @@ defmodule Systems.Assignment.CrewPage do
     }
 
     result =
-      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment),
-           storage_info <- Storage.Public.storage_info(storage_endpoint) do
+      with {:ok, storage_endpoint} <- Project.Public.get_storage_endpoint_by(assignment) do
+        storage_info = Storage.Public.storage_info(storage_endpoint)
         Storage.Public.store(storage_endpoint, storage_info, data, meta_data)
       end
 
@@ -209,12 +197,12 @@ defmodule Systems.Assignment.CrewPage do
 
       {:error, step, reason, _} ->
         Logger.error("[CrewPage.store] FAILED at #{step}: #{inspect(reason)}")
-        socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
+        put_flash(socket, :error, dgettext("eyra-assignment", "storage.failed.warning"))
 
       _ ->
         message = dgettext("eyra-assignment", "storage.not_available.warning")
         Logger.error("[CrewPage.store] #{message}")
-        socket |> put_flash(:error, message)
+        put_flash(socket, :error, message)
     end
   end
 
@@ -238,12 +226,12 @@ defmodule Systems.Assignment.CrewPage do
 
       {:error, step, reason, _} ->
         Logger.error("[CrewPage.deliver_file] FAILED at #{step}: #{inspect(reason)}")
-        socket |> put_flash(:error, dgettext("eyra-assignment", "storage.failed.warning"))
+        put_flash(socket, :error, dgettext("eyra-assignment", "storage.failed.warning"))
 
       _ ->
         message = dgettext("eyra-assignment", "storage.not_available.warning")
         Logger.error("[CrewPage.deliver_file] #{message}")
-        socket |> put_flash(:error, message)
+        put_flash(socket, :error, message)
     end
   end
 

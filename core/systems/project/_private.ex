@@ -1,4 +1,5 @@
 defmodule Systems.Project.Private do
+  @moduledoc false
   alias Systems.Project
 
   def get_project_key(%Project.Model{root: %Project.NodeModel{id: id}} = _project) do

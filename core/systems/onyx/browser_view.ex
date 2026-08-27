@@ -4,14 +4,12 @@ defmodule Systems.Onyx.BrowserView do
   use CoreWeb.UI
   use Frameworks.Pixel
   use Frameworks.Signal.LiveFeature
-
   use Gettext, backend: CoreWeb.Gettext
 
   import Frameworks.Pixel.FilterBar
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.SearchBar
-
   alias Systems.Onyx
 
   @impl true
@@ -109,8 +107,7 @@ defmodule Systems.Onyx.BrowserView do
 
     {
       :noreply,
-      socket
-      |> publish_event({event, payload})
+      publish_event(socket, {event, payload})
     }
   end
 

@@ -1,9 +1,17 @@
 defmodule Systems.Observatory.LiveFeature do
-  @callback handle_view_model_updated(Phoenix.LiveView.Socket.t()) :: Phoenix.LiveView.Socket.t()
+  @moduledoc false
+  alias Phoenix.LiveView.Socket
+
+  @callback handle_view_model_updated(Socket.t()) :: Socket.t()
 
   defmacro __using__(_opts \\ []) do
     quote do
       @behaviour Systems.Observatory.LiveFeature
+
+      use Gettext, backend: CoreWeb.Gettext
+
+      alias Frameworks.Pixel.Flash
+      alias Systems.Observatory
 
       @impl true
       def handle_view_model_updated(socket), do: socket
@@ -11,9 +19,6 @@ defmodule Systems.Observatory.LiveFeature do
       defoverridable handle_view_model_updated: 1
 
       @presenter Frameworks.Concept.System.presenter(__MODULE__)
-
-      use Gettext, backend: CoreWeb.Gettext
-      alias Systems.Observatory
 
       # Stubs for messages that are handled in Live Hooks
       def handle_info(%Phoenix.Socket.Broadcast{}, socket), do: {:noreply, socket}
@@ -25,7 +30,7 @@ defmodule Systems.Observatory.LiveFeature do
 
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         user_id =
-          if current_user = socket.assigns |> Map.get(:current_user) do
+          if current_user = Map.get(socket.assigns, :current_user) do
             current_user.id
           else
             0
@@ -40,24 +45,23 @@ defmodule Systems.Observatory.LiveFeature do
       end
 
       def update_view_model(%{assigns: %{model: model}} = socket) do
-        socket
-        |> Observatory.Public.update_view_model(__MODULE__, model, @presenter)
+        Observatory.Public.update_view_model(socket, __MODULE__, model, @presenter)
       end
 
       def put_info_flash(socket, from_pid) do
         if from_pid == self() do
-          socket |> put_saved_info_flash()
+          put_saved_info_flash(socket)
         else
-          socket |> put_updated_info_flash()
+          put_updated_info_flash(socket)
         end
       end
 
       def put_updated_info_flash(socket) do
-        socket |> Frameworks.Pixel.Flash.put_info("Updated")
+        Flash.put_info(socket, "Updated")
       end
 
       def put_saved_info_flash(socket) do
-        socket |> Frameworks.Pixel.Flash.put_info("Saved")
+        Flash.put_info(socket, "Saved")
       end
     end
   end

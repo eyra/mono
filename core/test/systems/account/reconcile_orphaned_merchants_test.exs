@@ -5,11 +5,13 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
   and unable to re-register under the same email.
   """
   use Core.DataCase, async: true
+
   import Mox
 
   alias Core.Factories
   alias Systems.Account
   alias Systems.Payment
+  alias Systems.Payment.Provider.OPP
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
@@ -27,7 +29,7 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
     }
   end
 
-  defp hours_ago(hours), do: DateTime.add(DateTime.utc_now(), -hours * 60 * 60, :second)
+  defp hours_ago(hours), do: DateTime.shift(DateTime.utc_now(), hour: -hours)
 
   defp run(merchants, opts \\ []) do
     expect(ProviderMock, :list_recent_merchants, fn _since -> {:ok, merchants} end)
@@ -103,15 +105,15 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
 
   describe "the platform merchant" do
     setup do
-      previous = Application.get_env(:core, Systems.Payment.Provider.OPP)
+      previous = Application.get_env(:core, OPP)
 
       Application.put_env(
         :core,
-        Systems.Payment.Provider.OPP,
-        Keyword.merge(previous || [], merchant_uid: "mer_platform")
+        OPP,
+        Keyword.put(previous || [], :merchant_uid, "mer_platform")
       )
 
-      on_exit(fn -> Application.put_env(:core, Systems.Payment.Provider.OPP, previous) end)
+      on_exit(fn -> Application.put_env(:core, OPP, previous) end)
       :ok
     end
 

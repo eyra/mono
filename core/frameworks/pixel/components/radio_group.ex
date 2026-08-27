@@ -1,11 +1,12 @@
 defmodule Frameworks.Pixel.RadioGroup do
+  @moduledoc false
   use CoreWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
   @impl true
   def update(%{items: items}, socket) do
     value =
-      if active_item = items |> Enum.find(& &1.active) do
+      if active_item = Enum.find(items, & &1.active) do
         "#{active_item.id}"
       else
         ""
@@ -15,8 +16,7 @@ defmodule Frameworks.Pixel.RadioGroup do
 
     {
       :ok,
-      socket
-      |> assign(items: items, form: form)
+      assign(socket, items: items, form: form)
     }
   end
 

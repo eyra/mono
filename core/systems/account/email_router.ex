@@ -20,7 +20,9 @@ defmodule Systems.Account.EmailRouter do
   end
 
   defp google_workspace_domain?(domain) do
-    :inet_res.lookup(String.to_charlist(domain), :in, :mx)
+    domain
+    |> String.to_charlist()
+    |> :inet_res.lookup(:in, :mx)
     |> Enum.any?(fn {_prio, host} -> Regex.match?(@google_mx_regex, to_string(host)) end)
   rescue
     _ -> false

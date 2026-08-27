@@ -1,7 +1,8 @@
 defmodule Systems.Zircon.Screening.ImportViewBatchTest do
   use CoreWeb.ConnCase, async: false
-  import Phoenix.LiveViewTest
+
   import Frameworks.Signal.TestHelper
+  import Phoenix.LiveViewTest
 
   alias Systems.Paper
   alias Systems.Zircon.Screening
@@ -81,7 +82,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         })
 
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, view, _html} =
         live_isolated(conn, Screening.ImportView,
@@ -95,8 +96,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       assert has_element?(view, "[data-testid='prompting-summary-block']")
 
       # Click Continue to start import
-      view
-      |> render_click(:commit_import)
+      render_click(view, :commit_import)
 
       # The session should now be in importing phase
       updated_session = Paper.Public.get_import_session!(session.id)
@@ -190,7 +190,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         })
 
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, view, _html} =
         live_isolated(conn, Screening.ImportView,
@@ -201,8 +201,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         )
 
       # Click Continue to start import
-      view
-      |> render_click(:commit_import)
+      render_click(view, :commit_import)
 
       # Run the import job
       assert :ok =
@@ -290,7 +289,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         })
 
       # Mount the ImportView - should show progress
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, _view, html} =
         live_isolated(conn, Screening.ImportView,
@@ -374,7 +373,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         })
 
       # Mount the ImportView
-      conn = conn |> Map.put(:request_path, "/zircon/screening/import")
+      conn = Map.put(conn, :request_path, "/zircon/screening/import")
 
       {:ok, view, _html} =
         live_isolated(conn, Screening.ImportView,
@@ -385,8 +384,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
         )
 
       # Click Continue to start import
-      view
-      |> render_click(:commit_import)
+      render_click(view, :commit_import)
 
       # Run the import job - should handle the error
       _result =

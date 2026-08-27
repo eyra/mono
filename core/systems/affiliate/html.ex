@@ -4,8 +4,8 @@ defmodule Systems.Affiliate.Html do
   """
   use CoreWeb, :html
 
-  alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation
+  alias Frameworks.Pixel.Panel
 
   attr(:title, :string, required: true)
   attr(:annotation, :any, default: nil)

@@ -1,12 +1,11 @@
 defmodule Systems.Consent.RevisionModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.{
-    Consent
-  }
+  alias Systems.Consent
 
   schema "consent_revisions" do
     field(:source, :string)
@@ -25,12 +24,10 @@ defmodule Systems.Consent.RevisionModel do
   def preload_graph(:signatures), do: [signatures: Consent.SignatureModel.preload_graph(:down)]
 
   def changeset(revision, attrs) do
-    revision
-    |> cast(attrs, @fields)
+    cast(revision, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 end

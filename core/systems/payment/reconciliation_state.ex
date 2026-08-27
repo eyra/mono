@@ -18,8 +18,7 @@ defmodule Systems.Payment.ReconciliationState do
   def add_finding(%__MODULE__{findings: findings} = state, finding),
     do: %{state | findings: [finding | findings]}
 
-  def record_success(%__MODULE__{} = state),
-    do: %{state | consecutive_failures: 0}
+  def record_success(%__MODULE__{} = state), do: %{state | consecutive_failures: 0}
 
   def record_failure(%__MODULE__{consecutive_failures: failures} = state) do
     failures = failures + 1

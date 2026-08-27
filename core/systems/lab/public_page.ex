@@ -31,7 +31,7 @@ defmodule Systems.Lab.PublicPage do
       |> String.to_integer()
       |> Lab.Public.reserve_time_slot(user)
 
-    {:noreply, socket |> assign(:reservation, reservation)}
+    {:noreply, assign(socket, :reservation, reservation)}
   end
 
   @impl true
@@ -41,7 +41,7 @@ defmodule Systems.Lab.PublicPage do
         %{assigns: %{current_user: user, tool: tool}} = socket
       ) do
     Lab.Public.cancel_reservation(tool, user)
-    {:noreply, socket |> assign(:reservation, nil)}
+    {:noreply, assign(socket, :reservation, nil)}
   end
 
   # data(reservation, :any, default: nil)

@@ -1,4 +1,5 @@
 defmodule Frameworks.Utility.ConfigHelpers do
+  @moduledoc false
   def from_json_string(string) do
     Jason.decode!(string)
   end

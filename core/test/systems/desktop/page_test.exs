@@ -6,6 +6,7 @@ defmodule Systems.Desktop.PageTest do
   without a manual refresh.
   """
   use CoreWeb.ConnCase, async: false
+
   import Phoenix.LiveViewTest
 
   alias Core.Factories

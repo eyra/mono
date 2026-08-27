@@ -14,7 +14,7 @@ defmodule Systems.Pool.ContentPage do
     pool = get_model(params, session, socket)
     user = Map.get(socket.assigns, :current_user)
 
-    if Pool.Public.can_manage?(pool, user), do: pool, else: nil
+    if Pool.Public.can_manage?(pool, user), do: pool
   end
 
   @impl true
@@ -29,11 +29,7 @@ defmodule Systems.Pool.ContentPage do
 
     {
       :ok,
-      socket
-      |> assign(
-        tabbar_id: tabbar_id,
-        initial_tab: initial_tab
-      )
+      assign(socket, tabbar_id: tabbar_id, initial_tab: initial_tab)
     }
   end
 

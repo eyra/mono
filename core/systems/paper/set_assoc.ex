@@ -1,4 +1,5 @@
 defmodule Systems.Paper.SetAssoc do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
@@ -17,8 +18,7 @@ defmodule Systems.Paper.SetAssoc do
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def preload_graph(:up), do: []

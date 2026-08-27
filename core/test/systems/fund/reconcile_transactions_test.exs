@@ -1,14 +1,15 @@
 defmodule Systems.Fund.ReconcileTransactionsTest do
   use Core.DataCase, async: true
-  import Mox
+
   import Ecto.Query
+  import Mox
 
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
-  alias Systems.Fund
   alias Systems.Payment
+  alias Systems.Payment.Error
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
@@ -64,13 +65,14 @@ defmodule Systems.Fund.ReconcileTransactionsTest do
       |> NaiveDateTime.add(-minutes_ago * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(t in Fund.TransactionModel, where: t.id == ^transaction.id)
-    |> Repo.update_all(set: [inserted_at: ts])
+    Repo.update_all(from(t in Fund.TransactionModel, where: t.id == ^transaction.id),
+      set: [inserted_at: ts]
+    )
   end
 
   defp ensure_currency_ledger(currency) do
     case Fund.CurrencyLedgerModel.get_by_currency(currency) do
-      nil -> Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
+      nil -> currency |> Fund.CurrencyLedgerModel.create() |> Repo.insert!()
       existing -> Repo.preload(existing, [:inbound, :outbound])
     end
   end
@@ -136,7 +138,7 @@ defmodule Systems.Fund.ReconcileTransactionsTest do
     transaction = setup_transaction(:completed)
 
     expect(ProviderMock, :get_transaction, fn _uid ->
-      {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 404}}}
+      {:error, %Error{code: :api_error, details: %{status: 404}}}
     end)
 
     assert %{scanned: 1, missing_at_provider: 1} = reconcile()
@@ -158,8 +160,9 @@ defmodule Systems.Fund.ReconcileTransactionsTest do
     # transaction completes (a winning "completed" webhook). The guard refuses the
     # stale "failed"; that benign race must be tallied as verified, not as an error.
     expect(ProviderMock, :get_transaction, fn uid ->
-      from(t in Fund.TransactionModel, where: t.transaction_id == ^uid)
-      |> Repo.update_all(set: [status: :completed])
+      Repo.update_all(from(t in Fund.TransactionModel, where: t.transaction_id == ^uid),
+        set: [status: :completed]
+      )
 
       {:ok, %{uid: uid, status: :failed, raw_status: "failed", payment_url: nil, amount: 0}}
     end)
@@ -187,7 +190,7 @@ defmodule Systems.Fund.ReconcileTransactionsTest do
     transaction = setup_transaction(:pending)
 
     expect(ProviderMock, :get_transaction, fn _uid ->
-      {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      {:error, %Error{code: :http_error, message: "boom"}}
     end)
 
     assert %{scanned: 1, errors: 1} = reconcile()

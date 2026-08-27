@@ -1,4 +1,5 @@
 defmodule CoreWeb.Validator.Boolean do
+  @moduledoc false
   def valid_boolean?(value) when value in [true, false], do: :ok
   def valid_boolean?("true"), do: :ok
   def valid_boolean?("false"), do: :ok

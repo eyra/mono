@@ -1,8 +1,9 @@
 defmodule Systems.Graphite.SubmissionModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Ecto.Changeset
 
   alias Systems.Graphite
@@ -24,16 +25,14 @@ defmodule Systems.Graphite.SubmissionModel do
   @valid_github_commit_url ~r"https:\/\/github\.com\/([a-zA-Z0-9-_]+\/[a-zA-Z0-9-_]+)(?:\/pull\/\d+)?\/commits?\/([0-9a-f]{40})\/?$"
   @github_url_template "git@github.com:${owner_repo}.git"
 
-  def valid_github_commit_url(), do: @valid_github_commit_url
+  def valid_github_commit_url, do: @valid_github_commit_url
 
   def prepare(submission, params) do
-    submission
-    |> cast(params, @fields)
+    cast(submission, params, @fields)
   end
 
   def change(submission, params) do
-    submission
-    |> cast(params, @fields)
+    cast(submission, params, @fields)
   end
 
   def validate(changeset) do

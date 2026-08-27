@@ -1,14 +1,12 @@
 defmodule Systems.Fund.DepositForm do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   import Ecto.Changeset
-
   import Frameworks.Pixel.Form
-  alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Fund
-  }
+  alias Frameworks.Pixel.Text
+  alias Systems.Fund
 
   # Initial update
   @impl true
@@ -27,16 +25,13 @@ defmodule Systems.Fund.DepositForm do
   end
 
   defp init_changeset(socket) do
-    changeset =
-      %Fund.DepositModel{}
-      |> Fund.DepositModel.changeset()
+    changeset = Fund.DepositModel.changeset(%Fund.DepositModel{})
 
-    socket |> assign(changeset: changeset)
+    assign(socket, changeset: changeset)
   end
 
   defp init_buttons(%{assigns: %{myself: myself}} = socket) do
-    socket
-    |> assign(
+    assign(socket,
       buttons: [
         %{
           action: %{type: :submit},
@@ -52,7 +47,7 @@ defmodule Systems.Fund.DepositForm do
 
   @impl true
   def handle_event("cancel", _, socket) do
-    {:noreply, socket |> send_event(:parent, "deposit_cancelled")}
+    {:noreply, send_event(socket, :parent, "deposit_cancelled")}
   end
 
   @impl true
@@ -68,24 +63,24 @@ defmodule Systems.Fund.DepositForm do
         {:noreply, socket |> assign(changeset: changeset) |> make_deposit(deposit)}
 
       {:error, changeset} ->
-        {:noreply, socket |> assign(changeset: changeset)}
-    end
-  end
-
-  defp make_deposit(%{assigns: %{fund: fund}} = socket, deposit) do
-    case Fund.Public.make_test_deposit(fund, deposit) do
-      {:ok, _} ->
-        socket |> send_event(:parent, "deposit_saved")
-        socket
-
-      {:error, error} ->
-        socket |> assign(error: error)
+        {:noreply, assign(socket, changeset: changeset)}
     end
   end
 
   # data(changeset, :map)
   # data(buttons, :list)
   # data(error, :any, default: nil)
+
+  defp make_deposit(%{assigns: %{fund: fund}} = socket, deposit) do
+    case Fund.Public.make_test_deposit(fund, deposit) do
+      {:ok, _} ->
+        send_event(socket, :parent, "deposit_saved")
+        socket
+
+      {:error, error} ->
+        assign(socket, error: error)
+    end
+  end
 
   attr(:fund, :map, required: true)
   attr(:target, :any)

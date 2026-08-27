@@ -1,4 +1,5 @@
 defmodule GoogleSignIn.PlugUtils do
+  @moduledoc false
   def config(otp_app) do
     Application.get_env(otp_app, GoogleSignIn)
   end
@@ -14,13 +15,14 @@ defmodule GoogleSignIn.PlugUtils do
 end
 
 defmodule GoogleSignIn.AuthorizePlug do
-  import Plug.Conn
+  @moduledoc false
   import GoogleSignIn.PlugUtils
+  import Plug.Conn
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
   def call(%{params: conn_params} = conn, otp_app) do
-    config = config(otp_app) |> with_login_hint(conn_params)
+    config = otp_app |> config() |> with_login_hint(conn_params)
 
     {:ok, %{url: url, session_params: session_params}} =
       google_module(config).authorize_url(config)
@@ -53,15 +55,18 @@ defmodule GoogleSignIn.AuthorizePlug do
 end
 
 defmodule GoogleSignIn.CallbackPlug do
-  import Plug.Conn
-  import GoogleSignIn.PlugUtils
-  require Logger
+  @moduledoc false
   use Phoenix.Controller, formats: [:html]
   use CoreWeb, :verified_routes
   use Core.FeatureFlags
 
-  alias Frameworks.Utility.Params
+  import GoogleSignIn.PlugUtils
+  import Plug.Conn
+
   alias Frameworks.Signal
+  alias Frameworks.Utility.Params
+
+  require Logger
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
@@ -80,7 +85,7 @@ defmodule GoogleSignIn.CallbackPlug do
     Logger.error("[GoogleSignIn] OAuth callback without session state",
       request_path: conn.request_path,
       query_string: conn.query_string,
-      user_agent: get_req_header(conn, "user-agent") |> List.first()
+      user_agent: conn |> get_req_header("user-agent") |> List.first()
     )
   end
 
@@ -94,7 +99,7 @@ defmodule GoogleSignIn.CallbackPlug do
     creator? = Params.parse_creator(session_params)
     post_action = Params.parse_string_param(session_params, "post_signin_action")
 
-    config = config(otp_app) |> Keyword.put(:session_params, session_params)
+    config = otp_app |> config() |> Keyword.put(:session_params, session_params)
 
     {:ok, %{user: google_user}} = google_module(config).callback(config, conn.params)
 

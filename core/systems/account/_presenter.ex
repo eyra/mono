@@ -1,4 +1,5 @@
 defmodule Systems.Account.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   alias Systems.Account

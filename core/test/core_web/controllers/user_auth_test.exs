@@ -1,8 +1,8 @@
 defmodule Systems.Account.UserAuthTest do
   use CoreWeb.ConnCase, async: true
 
-  alias Systems.Account.UserAuth
   alias Systems.Account
+  alias Systems.Account.UserAuth
 
   @remember_me_cookie "_core_web_user_remember_me"
 
@@ -12,10 +12,10 @@ defmodule Systems.Account.UserAuthTest do
       |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    conf = Application.get_env(:core, Systems.Account.UserAuth, [])
+    conf = Application.get_env(:core, UserAuth, [])
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Account.UserAuth, conf)
+      Application.put_env(:core, UserAuth, conf)
     end)
 
     %{user: Core.Factories.insert!(:member), conn: conn}
@@ -57,8 +57,8 @@ defmodule Systems.Account.UserAuthTest do
 
     test "creator first time redirects to oauth onboarding", %{conn: conn, user: user} do
       first_time? = true
-      user = user |> Map.put(:creator, first_time?)
-      conn = conn |> UserAuth.log_in_user(user, true, %{})
+      user = Map.put(user, :creator, first_time?)
+      conn = UserAuth.log_in_user(conn, user, true, %{})
 
       assert redirected_to(conn) == "/user/onboarding"
     end
@@ -66,12 +66,12 @@ defmodule Systems.Account.UserAuthTest do
 
   describe "signed_in_path/1" do
     test "returns creator_signed_in_page for creators", %{user: user} do
-      user = user |> Map.put(:creator, true)
+      user = Map.put(user, :creator, true)
       assert UserAuth.signed_in_path(user) == "/project"
     end
 
     test "returns member_signed_in_page for non-creators", %{user: user} do
-      user = user |> Map.put(:creator, false)
+      user = Map.put(user, :creator, false)
       assert UserAuth.signed_in_path(user) == "/"
     end
 
@@ -101,11 +101,11 @@ defmodule Systems.Account.UserAuthTest do
         |> UserAuth.sign_out_current_user()
 
       refute conn.halted
-      refute Map.has_key?(conn.resp_headers |> Map.new(), "location")
+      refute conn.resp_headers |> Map.new() |> Map.has_key?("location")
     end
 
     test "works on a fresh conn with no session", %{conn: conn} do
-      conn = conn |> UserAuth.sign_out_current_user()
+      conn = UserAuth.sign_out_current_user(conn)
       refute get_session(conn, :user_token)
     end
   end

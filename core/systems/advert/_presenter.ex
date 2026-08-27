@@ -1,11 +1,10 @@
 defmodule Systems.Advert.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
-  alias Systems.{
-    Advert,
-    Promotion,
-    Assignment
-  }
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Promotion
 
   @impl true
   def view_model(page, %Assignment.Model{} = assignment, assigns) do

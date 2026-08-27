@@ -27,7 +27,7 @@ defmodule Systems.Notify.EventTypeTest do
   end
 
   test "all/0 lists declared event types" do
-    types = EventType.all() |> MapSet.new()
+    types = MapSet.new(EventType.all())
     assert MapSet.subset?(MapSet.new(["contribution_accepted", "contribution_declined"]), types)
   end
 end

@@ -1,4 +1,5 @@
 defmodule Systems.Pool.MarketplaceViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   def view_model(_items, years) do
@@ -38,9 +39,7 @@ defmodule Systems.Pool.MarketplaceViewBuilder do
       active: true
     }
 
-    year_items =
-      years
-      |> Enum.map(&%{id: &1, value: Integer.to_string(&1), active: false})
+    year_items = Enum.map(years, &%{id: &1, value: Integer.to_string(&1), active: false})
 
     [all | year_items]
   end

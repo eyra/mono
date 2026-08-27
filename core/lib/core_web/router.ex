@@ -1,25 +1,27 @@
 defmodule CoreWeb.Router do
   use CoreWeb, :router
 
+  alias Frameworks.E2E.Routes
+
   require Core.BundleOverrides
   require Core.SurfConext
-  require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
-  require Frameworks.E2E.Routes
+  require CoreWeb.Routes
+  require GoogleSignIn
+  require Routes
+  require SignInWithApple
 
   Core.BundleOverrides.routes()
 
-  require GoogleSignIn
   GoogleSignIn.routes(:core)
 
-  require SignInWithApple
   SignInWithApple.routes(:core)
 
   Core.SurfConext.routes(:core)
 
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
-  Frameworks.E2E.Routes.routes()
+  Routes.routes()
 
   scope "/", CoreWeb do
     pipe_through([:browser_base])

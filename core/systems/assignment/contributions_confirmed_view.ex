@@ -9,13 +9,7 @@ defmodule Systems.Assignment.ContributionsConfirmedView do
   def update(%{id: id, rows: rows, count: count}, socket) do
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        rows: rows,
-        count: count,
-        labels: labels()
-      )
+      assign(socket, id: id, rows: rows, count: count, labels: labels())
     }
   end
 

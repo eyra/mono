@@ -66,7 +66,7 @@ defmodule Systems.Account.PageBuilderTest do
       vm = Account.PageBuilder.view_model(user, %{})
 
       profile_item = Enum.find(vm.items, &(&1.id == :profile))
-      assert profile_item != nil
+      assert profile_item
       assert Map.has_key?(profile_item, :element)
       assert %LiveNest.Element{} = profile_item.element
       assert profile_item.element.implementation == Account.ProfileView

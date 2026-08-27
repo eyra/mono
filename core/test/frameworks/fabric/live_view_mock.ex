@@ -1,6 +1,8 @@
 defmodule Fabric.LiveViewMock do
+  @moduledoc false
   use Phoenix.LiveView, layout: {Fabric.TestLayouts, :live}
   use Fabric.LiveView
+
   CoreWeb.Layouts
 
   @impl true
@@ -15,13 +17,7 @@ defmodule Fabric.LiveViewMock do
   end
 
   def add_child(socket, child_id, text) when is_binary(text) do
-    socket
-    |> add_child(child_id, %{
-      module: Fabric.LiveComponentMock,
-      params: %{
-        text: text
-      }
-    })
+    add_child(socket, child_id, %{module: Fabric.LiveComponentMock, params: %{text: text}})
   end
 
   @impl true

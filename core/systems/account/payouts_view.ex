@@ -33,7 +33,7 @@ defmodule Systems.Account.PayoutsView do
 
   @poll_interval_ms 30_000
 
-  def dependencies(), do: [:user_id]
+  def dependencies, do: [:user_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     Account.Public.get_user!(user_id)

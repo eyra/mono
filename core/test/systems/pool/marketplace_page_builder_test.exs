@@ -1,9 +1,9 @@
 defmodule Systems.Pool.MarketplacePageBuilderTest do
   use Core.DataCase
 
-  alias Systems.Pool
-  alias Systems.Advert
   alias Core.Factories
+  alias Systems.Advert
+  alias Systems.Pool
 
   # Builds an advert that passes Advert.Public.validate_open/2 for any pool
   # member and binds its submission to the given pool: online status, an open
@@ -100,7 +100,7 @@ defmodule Systems.Pool.MarketplacePageBuilderTest do
 
       vm = Pool.MarketplacePageBuilder.view_model(pool, build_assigns(user, pool))
 
-      assert Enum.map(vm.items, & &1.year) |> Enum.sort() == [2024, 2025]
+      assert vm.items |> Enum.map(& &1.year) |> Enum.sort() == [2024, 2025]
     end
 
     test "years are deduplicated when multiple adverts share a year" do

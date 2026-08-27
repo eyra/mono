@@ -17,6 +17,7 @@ defmodule Systems.Fund.DonationModel do
   participant can be underpaid or double-paid by it.
   """
   use Ecto.Schema
+
   import Ecto.Changeset
 
   alias Systems.Account
@@ -49,8 +50,7 @@ defmodule Systems.Fund.DonationModel do
   second time. Also written as the charge's `metadata.reference`, which is what
   a stuck donation is found by in the provider dashboard.
   """
-  def charge_key(%__MODULE__{uid: uid}) when is_binary(uid),
-    do: "donation=#{uid},type=charge"
+  def charge_key(%__MODULE__{uid: uid}) when is_binary(uid), do: "donation=#{uid},type=charge"
 
   @required_fields ~w(user_id amount_cents)a
   @optional_fields ~w(currency status charge_uid failure_reason)a

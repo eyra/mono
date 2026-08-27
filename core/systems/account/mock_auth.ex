@@ -1,12 +1,15 @@
 defmodule Systems.Account.MockAuth do
-  def configured?() do
-    Application.get_env(:core, :account, [])
+  @moduledoc false
+  def configured? do
+    :core
+    |> Application.get_env(:account, [])
     |> Keyword.get(:auth_providers, [])
     |> Enum.member?(:mock)
   end
 end
 
 defmodule Systems.Account.MockAuth.InitiatorPlug do
+  @moduledoc false
   import Plug.Conn
 
   def init(opts), do: opts
@@ -28,27 +31,28 @@ defmodule Systems.Account.MockAuth.CallbackController do
 
   alias Core.Repo
   alias Systems.Account.User
+  alias Systems.Account.UserAuth
 
   def authenticate(conn, _params) do
     if Systems.Account.MockAuth.configured?() do
       {user, first_time?} = find_or_create_mock_user()
 
       conn
-      |> Systems.Account.UserAuth.sign_out_current_user()
-      |> Systems.Account.UserAuth.log_in_user(user, first_time?)
+      |> UserAuth.sign_out_current_user()
+      |> UserAuth.log_in_user(user, first_time?)
     else
       conn |> send_resp(404, "Not found") |> halt()
     end
   end
 
-  defp find_or_create_mock_user() do
+  defp find_or_create_mock_user do
     case Repo.get_by(User, email: "mock@example.com") do
       nil -> {create_mock_user(), true}
       user -> {user, false}
     end
   end
 
-  defp create_mock_user() do
+  defp create_mock_user do
     sso_info = %{
       email: "mock@example.com",
       displayname: "Mock User",
@@ -80,7 +84,7 @@ defmodule Systems.Account.MockAuth.ResetController do
 
   def reset(conn, _params) do
     if Systems.Account.MockAuth.configured?() do
-      Repo.get_by(User, email: "mock@example.com") |> delete_if_present()
+      User |> Repo.get_by(email: "mock@example.com") |> delete_if_present()
 
       conn
       |> Systems.Account.UserAuth.sign_out_current_user()

@@ -1,9 +1,7 @@
 defmodule Systems.Assignment.ConnectorView do
   use CoreWeb, :live_component_fabric
 
-  alias Systems.{
-    Assignment
-  }
+  alias Systems.Assignment
 
   @impl true
   def update(
@@ -76,7 +74,7 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    {:noreply, socket |> show_modal(child, :compact)}
+    {:noreply, show_modal(socket, child, :compact)}
   end
 
   @impl true
@@ -88,7 +86,7 @@ defmodule Systems.Assignment.ConnectorView do
         entity: assignment
       })
 
-    {:noreply, socket |> show_modal(child, :compact)}
+    {:noreply, show_modal(socket, child, :compact)}
   end
 
   @impl true
@@ -97,12 +95,12 @@ defmodule Systems.Assignment.ConnectorView do
         %{source: %{name: :connector_popup}, connection: _connection},
         socket
       ) do
-    {:noreply, socket |> hide_modal(:connector_popup)}
+    {:noreply, hide_modal(socket, :connector_popup)}
   end
 
   @impl true
   def handle_event("cancel", %{source: %{name: :connector_popup}}, socket) do
-    {:noreply, socket |> hide_modal(:connector_popup)}
+    {:noreply, hide_modal(socket, :connector_popup)}
   end
 
   @impl true

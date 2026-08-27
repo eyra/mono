@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.Factories do
+  @moduledoc false
   use ExMachina.Ecto, repo: Core.Repo
 
   alias Core.Repo
@@ -31,7 +32,7 @@ defmodule Systems.Userflow.Factories do
   def userflow_started(user \\ Core.Factories.insert!(:member)) do
     userflow = %{steps: steps} = userflow()
     insert(:progress, %{user: user, step: Enum.at(steps, 0)})
-    userflow |> Repo.preload(steps: [:progress])
+    Repo.preload(userflow, steps: [:progress])
   end
 
   def userflow_finished(user \\ Core.Factories.insert!(:member)) do
@@ -41,7 +42,7 @@ defmodule Systems.Userflow.Factories do
       insert(:progress, %{user: user, step: step})
     end
 
-    userflow |> Repo.preload(steps: [:progress])
+    Repo.preload(userflow, steps: [:progress])
   end
 
   @doc """

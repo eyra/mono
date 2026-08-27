@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Assembly do
+  @moduledoc false
   use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
@@ -6,7 +7,6 @@ defmodule Systems.Manual.Assembly do
 
   alias Core.Repo
   alias Ecto.Multi
-
   alias Frameworks.Signal
   alias Systems.Manual
   alias Systems.Userflow
@@ -50,7 +50,7 @@ defmodule Systems.Manual.Assembly do
     |> put_assoc(:userflow_step, chapter_userflow_step)
   end
 
-  def create_manual() do
+  def create_manual do
     Multi.new()
     |> create_manual(:manual)
     |> Signal.Public.multi_dispatch({:manual, :created})
@@ -64,7 +64,7 @@ defmodule Systems.Manual.Assembly do
       tool
       |> Repo.preload(:manual)
       |> Manual.ToolModel.changeset(%{})
-      |> put_assoc(:manual, manual |> Repo.preload(Manual.Model.preload_graph(:down)))
+      |> put_assoc(:manual, Repo.preload(manual, Manual.Model.preload_graph(:down)))
     end)
     |> Signal.Public.multi_dispatch({:manual_tool, :manual_created})
     |> Repo.commit()

@@ -1,7 +1,9 @@
 defmodule Frameworks.Pixel.Widget do
+  @moduledoc false
   use CoreWeb, :pixel
 
   import CoreWeb.UI.ProgressBar
+
   alias Frameworks.Pixel.Text
 
   attr(:integer, :integer, required: true)
@@ -105,7 +107,8 @@ defmodule Frameworks.Pixel.Widget do
     count = Integer.floor_div(max, scale)
 
     value_count_list =
-      Enum.to_list(0..count)
+      0..count
+      |> Enum.to_list()
       |> Enum.map(fn index ->
         from = index * scale
         to = (index + 1) * scale

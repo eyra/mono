@@ -1,4 +1,5 @@
 defmodule Systems.Userflow.Assembly do
+  @moduledoc false
   use Core, :auth
   use Gettext, backend: CoreWeb.Gettext
 
@@ -12,17 +13,15 @@ defmodule Systems.Userflow.Assembly do
   @doc """
     Builds a new userflow.
   """
-  def prepare_userflow() do
-    %Userflow.Model{}
-    |> Userflow.Model.changeset(%{})
+  def prepare_userflow do
+    Userflow.Model.changeset(%Userflow.Model{}, %{})
   end
 
   @doc """
     Builds a new step.
   """
   def prepare_step(order, group \\ nil) when is_integer(order) do
-    %Userflow.StepModel{}
-    |> Userflow.StepModel.changeset(%{order: order, group: group})
+    Userflow.StepModel.changeset(%Userflow.StepModel{}, %{order: order, group: group})
   end
 
   @doc """
@@ -47,9 +46,8 @@ defmodule Systems.Userflow.Assembly do
   @doc """
   Creates a new userflow.
   """
-  def create_userflow() do
-    prepare_userflow()
-    |> Repo.insert()
+  def create_userflow do
+    Repo.insert(prepare_userflow())
   end
 
   @doc """
@@ -65,15 +63,13 @@ defmodule Systems.Userflow.Assembly do
     Creates a new progress.
   """
   def create_progress(%Multi{} = multi, %Account.User{} = user, %Userflow.StepModel{} = step) do
-    multi
-    |> Multi.insert(:progress, fn _ ->
+    Multi.insert(multi, :progress, fn _ ->
       prepare_progress(user, step)
     end)
   end
 
   def create_userflow(%Multi{} = multi, name) do
-    multi
-    |> Multi.insert(name, prepare_userflow())
+    Multi.insert(multi, name, prepare_userflow())
   end
 
   def create_userflow_and_step(%Multi{} = multi, userflow_name, step_name, group) do
@@ -83,9 +79,9 @@ defmodule Systems.Userflow.Assembly do
   end
 
   def create_first_step(%Multi{} = multi, name, userflow_name, group) do
-    multi
-    |> Multi.insert(name, fn state ->
-      Map.get(state, userflow_name)
+    Multi.insert(multi, name, fn state ->
+      state
+      |> Map.get(userflow_name)
       |> prepare_step(0, group)
     end)
   end
@@ -95,11 +91,12 @@ defmodule Systems.Userflow.Assembly do
     |> Multi.run(:next_order, fn _, state ->
       {
         :ok,
-        Map.get(state, userflow_name) |> Userflow.Public.next_order()
+        state |> Map.get(userflow_name) |> Userflow.Public.next_order()
       }
     end)
     |> Multi.insert(name, fn %{next_order: next_order} = state ->
-      Map.get(state, userflow_name)
+      state
+      |> Map.get(userflow_name)
       |> prepare_step(next_order, nil)
     end)
   end

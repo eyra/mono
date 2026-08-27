@@ -1,14 +1,10 @@
 defmodule Systems.Lab.ContentPageBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.{
-    Lab
-  }
+  alias Systems.Lab
 
-  def view_model(
-        %Lab.ToolModel{id: id},
-        _assigns
-      ) do
+  def view_model(%Lab.ToolModel{id: id}, _assigns) do
     %{
       id: id,
       title: dgettext("link-lab", "content.title"),

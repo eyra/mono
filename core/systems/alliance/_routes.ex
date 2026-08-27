@@ -1,4 +1,5 @@
 defmodule Systems.Alliance.Routes do
+  @moduledoc false
   defmacro routes() do
     quote do
       scope "/", Systems.Alliance do

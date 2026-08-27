@@ -1,28 +1,28 @@
 defmodule Systems.Crew.Public do
+  @moduledoc false
   use Core, :public
-  require Logger
 
-  require Ecto.Query
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
   import Systems.Crew.Queries
 
-  alias Ecto.Multi
   alias Core.Repo
-
-  alias Systems.Account.User
   alias CoreWeb.UI.Timestamp
+  alias Ecto.Association.NotLoaded
+  alias Ecto.Multi
   alias Frameworks.Signal
+  alias Systems.Account.User
   alias Systems.Crew
 
+  require Ecto.Query
+  require Logger
+
   def list(preload \\ [:tasks, :members]) do
-    from(c in Crew.Model, preload: ^preload)
-    |> Repo.all()
+    Repo.all(from(c in Crew.Model, preload: ^preload))
   end
 
   def get!(id, preload \\ [:tasks, :members]) do
-    from(c in Crew.Model, where: c.id == ^id, preload: ^preload)
-    |> Repo.one()
+    Repo.one(from(c in Crew.Model, where: c.id == ^id, preload: ^preload))
   end
 
   def prepare(auth_node, attrs \\ %{}) do
@@ -32,12 +32,12 @@ defmodule Systems.Crew.Public do
   end
 
   def active?(crew) do
-    from(t in Crew.TaskModel, where: t.crew_id == ^crew.id, select: count(t.id))
-    |> Repo.one() > 0
+    Repo.one(from(t in Crew.TaskModel, where: t.crew_id == ^crew.id, select: count(t.id))) > 0
   end
 
   def user_finished?(crew, user_ref) do
-    list_tasks_for_user(crew, user_ref)
+    crew
+    |> list_tasks_for_user(user_ref)
     |> Enum.map(& &1.id)
     |> tasks_finished?()
   end
@@ -46,12 +46,14 @@ defmodule Systems.Crew.Public do
   def get_task(_crew, nil), do: nil
 
   def get_task(crew, [_ | _] = identifier) do
-    build(task_query(crew), :task, [identifier == ^identifier])
+    crew
+    |> task_query()
+    |> build(:task, [identifier == ^identifier])
     |> Repo.one()
   end
 
   def get_task!(id, preload \\ []) do
-    Repo.get!(Crew.TaskModel, id) |> Repo.preload(preload)
+    Crew.TaskModel |> Repo.get!(id) |> Repo.preload(preload)
   end
 
   def create_task(crew, users, identifier, expire_at \\ nil)
@@ -86,28 +88,26 @@ defmodule Systems.Crew.Public do
   end
 
   def list_tasks(crew, order_by \\ {:desc, :id}) do
-    from(task in Crew.TaskModel,
-      where: task.crew_id == ^crew.id,
-      where: task.expired == false,
-      order_by: ^order_by
+    Repo.all(
+      from(task in Crew.TaskModel,
+        where: task.crew_id == ^crew.id,
+        where: task.expired == false,
+        order_by: ^order_by
+      )
     )
-    |> Repo.all()
   end
 
   def list_tasks_by_template(crew, task_template, order_by \\ {:desc, :id}) do
-    from(t in task_query_by_template(crew, task_template),
-      order_by: ^order_by
-    )
-    |> Repo.all()
+    Repo.all(from(t in task_query_by_template(crew, task_template), order_by: ^order_by))
   end
 
   def list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id}) do
-    from(t in task_query(crew, user_ref, false), order_by: ^order_by)
-    |> Repo.all()
+    Repo.all(from(t in task_query(crew, user_ref, false), order_by: ^order_by))
   end
 
   def count_tasks(crew, status_list) do
-    task_query(crew, status_list, false)
+    crew
+    |> task_query(status_list, false)
     |> select([task: t], count(t.id, :distinct))
     |> Repo.one()
   end
@@ -125,18 +125,21 @@ defmodule Systems.Crew.Public do
   end
 
   def expired_pending_started_tasks(crew) do
-    tasks_expired_pending_started_query(crew)
+    crew
+    |> tasks_expired_pending_started_query()
     |> Repo.all()
   end
 
   def completed_tasks(crew) do
-    task_query(crew, [:completed])
+    crew
+    |> task_query([:completed])
     |> order_by([task: t], desc: t.completed_at)
     |> Repo.all()
   end
 
   def count_pending_tasks(crew) do
-    task_query(crew, [:pending], false)
+    crew
+    |> task_query([:pending], false)
     |> select([task: t], count(t.id, :distinct))
     |> Repo.one()
   end
@@ -166,6 +169,7 @@ defmodule Systems.Crew.Public do
               :completed
             )
 
+          # Members
           _ ->
             update_task(task, %{status: :completed, completed_at: timestamp}, :completed)
         end
@@ -206,8 +210,6 @@ defmodule Systems.Crew.Public do
 
   def delete_task(_), do: nil
 
-  # Members
-
   def cancel(crew, user_ref) do
     Multi.new()
     |> cancel(crew, user_ref)
@@ -225,21 +227,24 @@ defmodule Systems.Crew.Public do
 
   def count_members(crew) do
     # including declined members
-    members_not_expired_query(crew)
+    crew
+    |> members_not_expired_query()
     |> select([member: m], count(m.id, :distinct))
     |> Repo.one()
   end
 
   def count_participants(crew) do
     # including declined members
-    members_by_crew_role_not_expired_query(crew, [:participant])
+    crew
+    |> members_by_crew_role_not_expired_query([:participant])
     |> select([member: m], count(m.id, :distinct))
     |> Repo.one()
   end
 
   def count_participants_finished(crew) do
     # including declined members
-    members_by_crew_role_finished_query(crew, [:participant])
+    crew
+    |> members_by_crew_role_finished_query([:participant])
     |> select([member: m], count(m.id, :distinct))
     |> Repo.one()
   end
@@ -250,18 +255,21 @@ defmodule Systems.Crew.Public do
   end
 
   def get_member!(id, preload \\ []) when is_integer(id) do
-    Repo.get!(Crew.MemberModel, id) |> Repo.preload(preload)
+    Crew.MemberModel |> Repo.get!(id) |> Repo.preload(preload)
   end
 
   def get_member(crew, user_ref, preload \\ []) do
-    build(member_query(crew, user_ref), :member, [expired == false])
+    crew
+    |> member_query(user_ref)
+    |> build(:member, [expired == false])
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
   def get_member_unsafe(crew, user_ref, preload \\ []) do
     # method is unsafe since it returns members regardless their expired status
-    member_query(crew, user_ref)
+    crew
+    |> member_query(user_ref)
     |> Repo.one()
     |> Repo.preload(preload)
   end
@@ -300,10 +308,7 @@ defmodule Systems.Crew.Public do
     end
   end
 
-  def expire_member(
-        %Multi{} = multi,
-        %Crew.MemberModel{crew: %Ecto.Association.NotLoaded{}} = member
-      ) do
+  def expire_member(%Multi{} = multi, %Crew.MemberModel{crew: %NotLoaded{}} = member) do
     expire_member(multi, Repo.preload(member, [:crew]))
   end
 
@@ -321,7 +326,8 @@ defmodule Systems.Crew.Public do
   def started?(%Crew.MemberModel{} = member) do
     crew = get!(member.crew_id)
 
-    task_query(crew, member, false)
+    crew
+    |> task_query(member, false)
     |> Repo.all()
     |> Enum.any?(&(&1.started_at != nil))
   end
@@ -329,13 +335,15 @@ defmodule Systems.Crew.Public do
   def finished?(%Crew.MemberModel{} = member) do
     crew = get!(member.crew_id)
 
-    task_query(crew, member, false)
+    crew
+    |> task_query(member, false)
     |> Repo.all()
     |> Enum.all?(&(&1.status in Crew.TaskStatus.finished_states()))
   end
 
   def tasks_finished?(task_ids) when is_list(task_ids) do
-    tasks_pending(task_ids)
+    task_ids
+    |> tasks_pending()
     |> Repo.all()
     |> Enum.empty?()
   end
@@ -375,13 +383,15 @@ defmodule Systems.Crew.Public do
   end
 
   def get_expired_member(%Crew.Model{} = crew, user_ref, preload \\ []) do
-    member_expired_query(crew, user_ref)
+    crew
+    |> member_expired_query(user_ref)
     |> Repo.one()
     |> Repo.preload(preload)
   end
 
   def list_members(%Crew.Model{} = crew) do
-    members_not_expired_query(crew)
+    crew
+    |> members_not_expired_query()
     |> Repo.all()
     |> Repo.preload([:user])
   end
@@ -399,7 +409,7 @@ defmodule Systems.Crew.Public do
 
   def reset_member(
         %Multi{} = multi,
-        %Crew.MemberModel{crew: %Ecto.Association.NotLoaded{}} = member,
+        %Crew.MemberModel{crew: %NotLoaded{}} = member,
         expire_at,
         opts
       ) do
@@ -424,27 +434,28 @@ defmodule Systems.Crew.Public do
   end
 
   def member(crew, user_ref) do
-    member_not_expired_query(crew, user_ref)
+    crew
+    |> member_not_expired_query(user_ref)
     |> Repo.one()
   end
 
   def member?(%Crew.Model{} = crew, user_ref) do
-    member_not_expired_query(crew, user_ref)
+    crew
+    |> member_not_expired_query(user_ref)
     |> Repo.exists?()
   end
 
   def expired_member?(crew, user_ref) do
-    build(member_query(crew, user_ref), :member, [expired == true])
+    crew
+    |> member_query(user_ref)
+    |> build(:member, [expired == true])
     |> Repo.exists?()
   end
 
   def subject(crew, public_id) when is_integer(public_id) do
-    from(m in Crew.MemberModel,
-      where:
-        m.crew_id == ^crew.id and
-          m.public_id == ^public_id
+    Repo.one(
+      from(m in Crew.MemberModel, where: m.crew_id == ^crew.id and m.public_id == ^public_id)
     )
-    |> Repo.one()
   end
 
   @doc """
@@ -452,7 +463,7 @@ defmodule Systems.Crew.Public do
     - expire_at is in the past
     - started_at is nil
   """
-  def mark_expired() do
+  def mark_expired do
     # Query expired and not started tasks. Expired, started but not completed tasks are the responsibility
     # of the researcher since surveys on third party platforms (such as Qualtrics) can have problems where
     # participants are not redirected to complete the task. This can be caused by

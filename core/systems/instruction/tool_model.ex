@@ -1,9 +1,10 @@
 defmodule Systems.Instruction.ToolModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
+  use Gettext, backend: CoreWeb.Gettext
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Instruction
   alias Systems.Workflow
@@ -22,13 +23,11 @@ defmodule Systems.Instruction.ToolModel do
   @required_fields @fields
 
   def changeset(repository, attrs \\ %{}) do
-    repository
-    |> cast(attrs, @fields)
+    cast(repository, attrs, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(%{pages: []}), do: false
@@ -42,7 +41,6 @@ defmodule Systems.Instruction.ToolModel do
   defimpl Frameworks.Concept.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
 
-    alias Systems.Instruction
     def key(_), do: :instruction
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("eyra-instruction", "apply.cta.title")

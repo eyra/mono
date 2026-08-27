@@ -10,8 +10,8 @@ defmodule Frameworks.Pixel.InlineBlock do
   """
   use CoreWeb, :pixel
 
-  alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)

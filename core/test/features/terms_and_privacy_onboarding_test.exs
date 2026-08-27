@@ -10,7 +10,7 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
 
   setup do
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+      :core |> Application.get_env(:account, []) |> Keyword.get(:auth_providers, [])
 
     account = Application.get_env(:core, :account, [])
 

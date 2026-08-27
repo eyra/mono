@@ -1,9 +1,10 @@
 defmodule Systems.Onyx.Private do
-  alias Core.Repo
+  @moduledoc false
   alias Core.Authentication
+  alias Core.Repo
   alias CoreWeb.UI.Timestamp
-  alias Systems.Ontology
   alias Systems.Annotation
+  alias Systems.Ontology
 
   def map_to_card(%{entity: %Ecto.Association.NotLoaded{}} = model, type) do
     map_to_card(Repo.preload(model, :entity), type)
@@ -14,7 +15,8 @@ defmodule Systems.Onyx.Private do
         card_type
       ) do
     entity_name =
-      Authentication.fetch_subject(entity)
+      entity
+      |> Authentication.fetch_subject()
       |> Authentication.Subject.name()
 
     %{
@@ -39,7 +41,8 @@ defmodule Systems.Onyx.Private do
         card_type
       ) do
     entity_name =
-      Authentication.fetch_subject(entity)
+      entity
+      |> Authentication.fetch_subject()
       |> Authentication.Subject.name()
 
     title =
@@ -67,10 +70,11 @@ defmodule Systems.Onyx.Private do
         card_type
       ) do
     entity_name =
-      Authentication.fetch_subject(entity)
+      entity
+      |> Authentication.fetch_subject()
       |> Authentication.Subject.name()
 
-    reference_summaries = references |> Enum.map(&Annotation.Public.summarize/1)
+    reference_summaries = Enum.map(references, &Annotation.Public.summarize/1)
 
     %{
       type: card_type,

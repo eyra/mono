@@ -1,8 +1,9 @@
 defmodule Systems.Project.CardView do
   use CoreWeb, :html
 
-  import Frameworks.Pixel.Tag
   import Frameworks.Pixel.ClickableCard
+  import Frameworks.Pixel.Tag
+
   alias Frameworks.Pixel.Card
   alias Frameworks.Pixel.Image
 

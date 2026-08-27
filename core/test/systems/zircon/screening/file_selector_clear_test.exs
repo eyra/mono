@@ -1,10 +1,14 @@
 defmodule Systems.Zircon.Screening.FileSelectorClearTest do
   use CoreWeb.ConnCase, async: false
+
   import Frameworks.Signal.TestHelper
 
   alias Core.Repo
   alias Systems.Paper
   alias Systems.Zircon
+  alias Systems.Zircon.Screening.ImportViewBuilder
+  alias Systems.Zircon.Screening.ToolModel
+  alias Systems.Zircon.Screening.ToolReferenceFileAssoc
 
   setup do
     # Isolate all signals to prevent unwanted propagation
@@ -38,7 +42,7 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
             })
         })
 
-      Repo.insert!(%Systems.Zircon.Screening.ToolReferenceFileAssoc{
+      Repo.insert!(%ToolReferenceFileAssoc{
         tool: tool,
         reference_file: reference_file
       })
@@ -62,7 +66,7 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
 
       # BEFORE ABORT: View model should show the session and file
       assigns = %{}
-      vm_before = Zircon.Screening.ImportViewBuilder.view_model(tool, assigns)
+      vm_before = ImportViewBuilder.view_model(tool, assigns)
 
       # Should show file selector and prompting summary
       {:import_section, import_section} =
@@ -70,10 +74,10 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
 
       # Should show both file selector and prompting summary
       file_selector_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :import_file_selector end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :import_file_selector end)
 
       prompting_summary_block =
-        import_section.stack |> Enum.find(fn {type, _} -> type == :prompting_summary end)
+        Enum.find(import_section.stack, fn {type, _} -> type == :prompting_summary end)
 
       assert file_selector_block != nil, "Should show file selector in prompting phase"
       assert prompting_summary_block != nil, "Should show prompting summary before abort"
@@ -85,8 +89,8 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
 
       # AFTER ABORT: View model should show empty file selector
       # Reload tool to ensure fresh data
-      tool = Repo.get!(Zircon.Screening.ToolModel, tool.id)
-      vm_after = Zircon.Screening.ImportViewBuilder.view_model(tool, assigns)
+      tool = Repo.get!(ToolModel, tool.id)
+      vm_after = ImportViewBuilder.view_model(tool, assigns)
 
       # Should now show file selector (not import session)
       {:import_section, import_section_after} =
@@ -151,9 +155,8 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
         })
 
       # Associate all with tool
-      [ref_file_1, ref_file_2, ref_file_3]
-      |> Enum.each(fn rf ->
-        Repo.insert!(%Systems.Zircon.Screening.ToolReferenceFileAssoc{
+      Enum.each([ref_file_1, ref_file_2, ref_file_3], fn rf ->
+        Repo.insert!(%ToolReferenceFileAssoc{
           tool: tool,
           reference_file: rf
         })
@@ -178,7 +181,7 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
 
       # Check view model before abort
       assigns = %{}
-      vm_before = Zircon.Screening.ImportViewBuilder.view_model(tool, assigns)
+      vm_before = ImportViewBuilder.view_model(tool, assigns)
 
       # Should show current.ris from the active session
       assert vm_before.active_filename == "current.ris"
@@ -187,8 +190,8 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
       Zircon.Public.abort_import!(import_session)
 
       # Check view model after abort
-      tool = Repo.get!(Zircon.Screening.ToolModel, tool.id)
-      vm_after = Zircon.Screening.ImportViewBuilder.view_model(tool, assigns)
+      tool = Repo.get!(ToolModel, tool.id)
+      vm_after = ImportViewBuilder.view_model(tool, assigns)
 
       # Check status of all files
       ref_file_1_after = Repo.get!(Paper.ReferenceFileModel, ref_file_1.id)

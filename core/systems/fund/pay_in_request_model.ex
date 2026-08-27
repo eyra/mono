@@ -28,8 +28,7 @@ defmodule Systems.Fund.PayInRequestModel do
   @fields ~w(subject_count subject_reward aim_of_study)a
 
   def changeset(%__MODULE__{} = request, attrs \\ %{}) do
-    request
-    |> cast(normalize_reward(attrs), @fields)
+    cast(request, normalize_reward(attrs), @fields)
   end
 
   def validate(%Ecto.Changeset{} = changeset) do

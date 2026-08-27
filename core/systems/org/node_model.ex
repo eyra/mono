@@ -1,17 +1,13 @@
 defmodule Systems.Org.NodeModel do
+  @moduledoc false
   use Ecto.Schema
+  use Systems.Org.Internals
+
   import Ecto.Changeset
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
   alias Systems.Account.User
-
-  use Systems.{
-    Org.Internals
-  }
-
-  alias Systems.{
-    Content
-  }
+  alias Systems.Content
 
   schema "org_nodes" do
     field(:identifier, {:array, :string})
@@ -100,7 +96,7 @@ defmodule Systems.Org.NodeModel do
   end
 
   defp to_string(nil, _delimiter), do: ""
-  defp to_string(field, delimiter), do: field |> Enum.join(delimiter)
+  defp to_string(field, delimiter), do: Enum.join(field, delimiter)
 
   defp apply_virtual_changes(changeset) do
     changeset
@@ -112,13 +108,11 @@ defmodule Systems.Org.NodeModel do
   def archived?(%{archived_at: _}), do: true
 
   def archive_changeset(node) do
-    node
-    |> change(%{archived_at: DateTime.utc_now() |> DateTime.truncate(:second)})
+    change(node, %{archived_at: DateTime.truncate(DateTime.utc_now(), :second)})
   end
 
   def restore_changeset(node) do
-    node
-    |> change(%{archived_at: nil})
+    change(node, %{archived_at: nil})
   end
 
   defimpl Frameworks.GreenLight.AuthorizationNode do

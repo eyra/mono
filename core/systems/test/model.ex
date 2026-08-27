@@ -1,4 +1,5 @@
 defmodule Systems.Test.Model do
+  @moduledoc false
   defstruct [:director, :id, :name, :department, :age]
 
   defimpl Frameworks.Utility.ViewModelBuilder do

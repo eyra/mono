@@ -1,15 +1,16 @@
 defmodule Systems.Lab.ToolModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Model
   use Frameworks.Utility.Schema
-
-  require Core.Enums.Themes
+  use Gettext, backend: CoreWeb.Gettext
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Lab
   alias Systems.Workflow
+
+  require Core.Enums.Themes
 
   @tool_directors Application.compile_env(:core, :tool_directors)
 
@@ -38,12 +39,7 @@ defmodule Systems.Lab.ToolModel do
   @impl true
   def operational_validation(changeset), do: changeset
 
-  def preload_graph(:down),
-    do:
-      preload_graph([
-        :auth_node,
-        :time_slots
-      ])
+  def preload_graph(:down), do: preload_graph([:auth_node, :time_slots])
 
   def preload_graph(:auth_node), do: [auth_node: []]
   def preload_graph(:time_slots), do: [time_slots: []]
@@ -65,18 +61,17 @@ defmodule Systems.Lab.ToolModel do
   end
 
   def changeset(tool, params) do
-    tool
-    |> cast(params, @fields)
+    cast(tool, params, @fields)
   end
 
   def validate(changeset) do
-    changeset
-    |> validate_required(@required_fields)
+    validate_required(changeset, @required_fields)
   end
 
   def ready?(tool) do
     changeset =
-      changeset(tool, %{})
+      tool
+      |> changeset(%{})
       |> validate()
 
     changeset.valid?
@@ -85,7 +80,6 @@ defmodule Systems.Lab.ToolModel do
   defimpl Frameworks.Concept.ToolModel do
     use Gettext, backend: CoreWeb.Gettext
 
-    alias Systems.Lab
     def key(_), do: :lab
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: dgettext("link-lab", "apply.cta.title")

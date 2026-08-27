@@ -1,6 +1,10 @@
 defmodule Systems.Advert.SubmissionViewBuilder do
+  @moduledoc false
   alias Frameworks.Concept.Directable
-  alias Systems.{Advert, Project, Assignment, Pool}
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Pool
+  alias Systems.Project
 
   @enum_map %{
     genders: Core.Enums.Genders,
@@ -63,7 +67,8 @@ defmodule Systems.Advert.SubmissionViewBuilder do
   # Build labels for adverts from the user's owned projects, excluding the
   # advert currently being edited and adverts without an assignment.
   defp advert_labels_for_users_projects(user, advert_id, excluded_assignment_ids) do
-    Project.Public.list_owned_projects(user, preload: Project.Model.preload_graph(:down))
+    user
+    |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
     |> Enum.flat_map(& &1.root.items)
     |> Enum.reject(&(&1.advert == nil))
     |> Enum.map(& &1.advert)
@@ -72,11 +77,7 @@ defmodule Systems.Advert.SubmissionViewBuilder do
   end
 
   defp to_advert_label(
-         %Advert.Model{
-           id: id,
-           promotion: %{title: title},
-           assignment_id: assignment_id
-         },
+         %Advert.Model{id: id, promotion: %{title: title}, assignment_id: assignment_id},
          excluded_assignment_ids
        ) do
     excluded = Enum.member?(excluded_assignment_ids, assignment_id)
@@ -97,9 +98,7 @@ defmodule Systems.Advert.SubmissionViewBuilder do
   defp labels_for_field(:genders, %Pool.CriteriaModel{} = criteria) do
     enum_module = Map.fetch!(@enum_map, :genders)
 
-    allowed_values =
-      enum_module.values()
-      |> Enum.reject(&(&1 == :prefer_not_to_say))
+    allowed_values = Enum.reject(enum_module.values(), &(&1 == :prefer_not_to_say))
 
     {:genders, enum_module.labels(Map.get(criteria, :genders, []), allowed_values)}
   end

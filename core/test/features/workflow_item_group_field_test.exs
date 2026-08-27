@@ -38,8 +38,7 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     expand_cell(researcher)
 
     # Group field SHOULD be visible for data donation template
-    researcher
-    |> assert_has(Query.css(@group_field_selector))
+    assert_has(researcher, Query.css(@group_field_selector))
   end
 
   defp create_and_login_researcher(session) do
@@ -48,8 +47,8 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     researcher =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 

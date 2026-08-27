@@ -1,4 +1,5 @@
 defmodule Systems.Zircon.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   @impl true

@@ -1,9 +1,9 @@
 defmodule Systems.Advert.PromotionLandingPageBuilderTest do
   use CoreWeb.ConnCase, async: true
-  import Phoenix.ConnTest
-  import Phoenix.LiveViewTest
 
   import ExUnit.Assertions
+  import Phoenix.ConnTest
+  import Phoenix.LiveViewTest
 
   alias Systems.Advert
   alias Systems.Fund
@@ -54,7 +54,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       refute html =~ "This study is fully booked"
       assert html =~ "promotion-apply-button-hero"
 
-      result = view |> render_click("call-to-action-1")
+      result = render_click(view, "call-to-action-1")
 
       # backstop: no navigation; participant stays on the promotion page.
       assert result =~ "promotion-apply-button-hero"
@@ -73,8 +73,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
 
-      view |> render_click("call-to-action-1")
-
+      render_click(view, "call-to-action-1")
       slug = Pool.Model.slug(pool)
 
       assert_redirected(
@@ -99,8 +98,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
 
-      view |> render_click("call-to-action-1")
-
+      render_click(view, "call-to-action-1")
       assert_redirected(view, "/assignment/#{assignment_id}/apply")
     end
   end
@@ -116,8 +114,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
 
-      view |> render_click("call-to-action-1")
-
+      render_click(view, "call-to-action-1")
       apply_path = "/assignment/#{assignment_id}/apply"
       join_path = "/pool/#{slug}/join?return_to=#{URI.encode_www_form(apply_path)}"
       identify_path = "/user/auth/identify?return_to=#{URI.encode_www_form(join_path)}"

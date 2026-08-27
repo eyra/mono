@@ -1,11 +1,12 @@
 defmodule Systems.Payment.Provider.Local do
+  @moduledoc false
   @behaviour Systems.Payment.Provider
-
-  require Logger
 
   alias Systems.Payment.Transaction
 
   # Merchants
+
+  require Logger
 
   defp stub_merchant(uid) do
     %{
@@ -40,23 +41,22 @@ defmodule Systems.Payment.Provider.Local do
   @impl true
   def find_merchant_by_email(email) when is_binary(email) do
     uid = generate_uid()
+    # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
     Logger.info("[Payment.Local] find_merchant_by_email email=#{email} uid=#{uid}")
     {:ok, stub_merchant(uid)}
   end
 
   @impl true
-  def add_merchant_phone(merchant_uid, phone)
-      when is_binary(merchant_uid) and is_binary(phone) do
+  def add_merchant_phone(merchant_uid, phone) when is_binary(merchant_uid) and is_binary(phone) do
     Logger.info("[Payment.Local] add_merchant_phone merchant=#{merchant_uid} phone=#{phone}")
     {:ok, stub_merchant(merchant_uid)}
   end
-
-  # Bank accounts — always "approved" so the pay-out path doesn't stall in KYC.
 
   defp stub_bank_account(uid) do
     %{uid: uid, status: :verified, raw_status: "approved", verification_url: nil}
   end
 
+  # Transactions
   @impl true
   def create_bank_account(merchant_uid, attrs) when is_binary(merchant_uid) and is_map(attrs) do
     uid = generate_uid()
@@ -70,8 +70,6 @@ defmodule Systems.Payment.Provider.Local do
     {:ok, [stub_bank_account(generate_uid())]}
   end
 
-  # Transactions
-
   @impl true
   def create_transaction(%Transaction.Request{
         merchant_uid: merchant_uid,
@@ -84,7 +82,8 @@ defmodule Systems.Payment.Provider.Local do
         opts: opts
       })
       when is_binary(merchant_uid) and is_integer(total_amount) and total_amount > 0 and
-             is_atom(currency) and is_binary(invoice_id) and is_binary(idempotence_key) do
+             is_atom(currency) and
+             is_binary(invoice_id) and is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(
@@ -110,6 +109,7 @@ defmodule Systems.Payment.Provider.Local do
     {:ok,
      %{
        uid: uid,
+       # Withdrawals
        status: :pending,
        raw_status: "created",
        payment_url: nil,
@@ -127,8 +127,6 @@ defmodule Systems.Payment.Provider.Local do
 
     {:ok, []}
   end
-
-  # Withdrawals
 
   @impl true
   def create_withdrawal(merchant_uid, currency, attrs, idempotence_key)
@@ -185,8 +183,9 @@ defmodule Systems.Payment.Provider.Local do
 
   @impl true
   def transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)
-      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and
-             is_integer(amount) and amount > 0 and is_binary(idempotence_key) do
+      when is_binary(from_owner_uid) and is_binary(to_owner_uid) and is_integer(amount) and
+             amount > 0 and
+             is_binary(idempotence_key) do
     uid = generate_uid()
 
     Logger.info(

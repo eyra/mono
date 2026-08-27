@@ -3,13 +3,13 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
 
   import Ecto.Query, only: [from: 1]
 
-  alias Core.Repo
-  alias Core.Factories
   alias Core.Authentication
+  alias Core.Factories
+  alias Core.Repo
   alias Systems.Annotation
-  alias Systems.Ontology
-
   alias Systems.Annotation.Pattern.Definition
+  alias Systems.Annotation.Pattern.MissingFieldError
+  alias Systems.Ontology
 
   describe "obtain/1" do
     setup do
@@ -208,7 +208,7 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
         entity: entity
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         Annotation.Pattern.obtain(recipe)
       end
     end
@@ -219,7 +219,7 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
         entity: entity
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         Annotation.Pattern.obtain(recipe)
       end
     end
@@ -230,7 +230,7 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
         subject: subject
       }
 
-      assert_raise Annotation.Pattern.MissingFieldError, fn ->
+      assert_raise MissingFieldError, fn ->
         Annotation.Pattern.obtain(recipe)
       end
     end
@@ -273,7 +273,7 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
       }
 
       assert {:ok, query} = Annotation.Pattern.query(recipe)
-      assert %{id: ^annotation_id} = query |> Repo.one()
+      assert %{id: ^annotation_id} = Repo.one(query)
     end
 
     test "should not find any annotation" do
@@ -282,7 +282,7 @@ defmodule Systems.Annotation.Pattern.DefinitionTest do
       }
 
       assert {:ok, query} = Annotation.Pattern.query(recipe)
-      refute query |> Repo.exists?()
+      refute Repo.exists?(query)
     end
   end
 end

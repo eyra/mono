@@ -2,15 +2,14 @@ defmodule Systems.Assignment.ActivateAccountView do
   use CoreWeb, :embedded_live_view
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.UI.Area
+  alias CoreWeb.UI.Margin
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
-  alias CoreWeb.UI.Area
-  alias CoreWeb.UI.Margin
-
   alias Systems.Account
 
-  def dependencies(), do: [:user_id]
+  def dependencies, do: [:user_id]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{user_id: user_id}}) do
     Account.Public.get_user!(user_id)
@@ -29,11 +28,10 @@ defmodule Systems.Assignment.ActivateAccountView do
          ) do
       {:ok, _} ->
         {:noreply,
-         socket
-         |> Flash.push_info(dgettext("eyra-assignment", "activate_account.resend.success"))}
+         Flash.push_info(socket, dgettext("eyra-assignment", "activate_account.resend.success"))}
 
       {:error, :already_confirmed} ->
-        {:noreply, socket |> publish_event(:email_confirmed)}
+        {:noreply, publish_event(socket, :email_confirmed)}
     end
   end
 
@@ -42,11 +40,10 @@ defmodule Systems.Assignment.ActivateAccountView do
     fresh_user = Account.Public.get_user!(user_id)
 
     if Account.Public.confirmed?(fresh_user) do
-      {:noreply, socket |> publish_event(:email_confirmed)}
+      {:noreply, publish_event(socket, :email_confirmed)}
     else
       {:noreply,
-       socket
-       |> Flash.push_error(dgettext("eyra-assignment", "activate_account.not_yet_confirmed"))}
+       Flash.push_error(socket, dgettext("eyra-assignment", "activate_account.not_yet_confirmed"))}
     end
   end
 

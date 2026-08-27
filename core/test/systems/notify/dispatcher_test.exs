@@ -41,7 +41,7 @@ defmodule Systems.Notify.DispatcherTest do
     end
 
     test "stamps dispatched_at on the event", %{event: event} do
-      assert Repo.reload!(event).dispatched_at != nil
+      assert Repo.reload!(event).dispatched_at
     end
   end
 end

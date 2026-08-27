@@ -7,7 +7,7 @@ defmodule Systems.Test.ModalLiveView do
 
   alias Systems.Test
 
-  def dependencies(), do: [:title, :button_configs]
+  def dependencies, do: [:title, :button_configs]
 
   def get_model(
         :not_mounted_at_router,
@@ -36,8 +36,7 @@ defmodule Systems.Test.ModalLiveView do
 
   @impl true
   def handle_view_model_updated(socket) do
-    socket
-    |> publish_toolbar_buttons()
+    publish_toolbar_buttons(socket)
   end
 
   defp publish_toolbar_buttons(%{assigns: %{vm: %{buttons: buttons}}} = socket) do

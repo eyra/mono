@@ -1,4 +1,5 @@
 defmodule Systems.Admin.ConfigPage do
+  @moduledoc false
   use Systems.Content.Composer, {:tabbar_page, :live_nest}
 
   alias Systems.Admin
@@ -27,7 +28,7 @@ defmodule Systems.Admin.ConfigPage do
 
   defp mount_with_tabs(params, socket) do
     initial_tab = Map.get(params, "tab")
-    {:ok, socket |> assign(initial_tab: initial_tab)}
+    {:ok, assign(socket, initial_tab: initial_tab)}
   end
 
   @impl true
@@ -37,7 +38,7 @@ defmodule Systems.Admin.ConfigPage do
 
   @impl true
   def handle_event("close_modal", %{"item" => modal_id}, socket) do
-    {:noreply, socket |> handle_close_modal(modal_id)}
+    {:noreply, handle_close_modal(socket, modal_id)}
   end
 
   @impl true

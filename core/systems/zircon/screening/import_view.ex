@@ -4,15 +4,15 @@ defmodule Systems.Zircon.Screening.ImportView do
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]
 
-  alias Frameworks.Pixel.Flash
-  alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.LoadingSpinner
   alias CoreWeb.UI.Area
   alias CoreWeb.UI.Margin
-
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Flash
+  alias Frameworks.Pixel.LoadingSpinner
+  alias Frameworks.Pixel.Text
   alias Systems.Paper
   alias Systems.Zircon
+  alias Systems.Zircon.Screening.ImportSessionPapersView
 
   @impl true
   def file_upload_start(socket, {original_filename, _}) do
@@ -23,14 +23,13 @@ defmodule Systems.Zircon.Screening.ImportView do
     |> update_view_model()
   end
 
+  # Clean up any existing reference files (abort active imports and archive uploaded files)
   @impl true
   def process_file(%{assigns: %{model: tool}} = socket, %{
         public_url: url,
         original_filename: filename
       }) do
     Logger.info("File uploaded: #{filename} at #{url}")
-
-    # Clean up any existing reference files (abort active imports and archive uploaded files)
     Zircon.Public.cleanup_reference_files_for_new_upload!(tool)
 
     # Create reference file immediately when file is uploaded so it persists across page refreshes
@@ -46,11 +45,7 @@ defmodule Systems.Zircon.Screening.ImportView do
   end
 
   @impl true
-  def mount(
-        :not_mounted_at_router,
-        %{"title" => title},
-        socket
-      ) do
+  def mount(:not_mounted_at_router, %{"title" => title}, socket) do
     {
       :ok,
       socket
@@ -68,8 +63,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     )
 
     # Get filename from view model - will be nil when no active file
-    socket
-    |> assign(filename: filename, url: url)
+    assign(socket, filename: filename, url: url)
   end
 
   def handle_view_model_updated(socket) do
@@ -90,6 +84,7 @@ defmodule Systems.Zircon.Screening.ImportView do
 
   @impl true
   def handle_event("change", %{"_target" => ["file"]}, socket) do
+    # Find the uploaded reference file (created during file upload)
     {:noreply, socket}
   end
 
@@ -99,13 +94,10 @@ defmodule Systems.Zircon.Screening.ImportView do
         %{assigns: %{model: %{id: tool_id} = tool, filename: filename}} = socket
       ) do
     paper_set = Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool_id)
-
-    # Find the uploaded reference file (created during file upload)
     reference_files = Zircon.Public.list_reference_files(tool)
 
     reference_file =
-      reference_files
-      |> Enum.find(fn ref_file ->
+      Enum.find(reference_files, fn ref_file ->
         ref_file.status == :uploaded and
           ref_file.file.name == filename
       end)
@@ -155,7 +147,7 @@ defmodule Systems.Zircon.Screening.ImportView do
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   def handle_event(
@@ -171,12 +163,12 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-new-papers",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "new"],
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   def handle_event(
@@ -192,12 +184,12 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-duplicates",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "duplicates"],
         style: :full
       )
 
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
@@ -216,8 +208,6 @@ defmodule Systems.Zircon.Screening.ImportView do
     """
   end
 
-  # Block render functions
-
   def render_block(:header, assigns) do
     ~H"""
     <div data-testid="header-block">
@@ -233,6 +223,8 @@ defmodule Systems.Zircon.Screening.ImportView do
       </div>
     </div>
     """
+
+    # Block render functions
   end
 
   def render_block(:content, assigns) do

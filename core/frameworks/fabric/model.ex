@@ -1,6 +1,7 @@
 defmodule Fabric.Model do
-  alias Fabric.LiveView
+  @moduledoc false
   alias Fabric.LiveComponent
+  alias Fabric.LiveView
 
   @type ref :: LiveView.RefModel.t() | LiveComponent.RefModel.t()
   @type ref_optional :: ref | nil

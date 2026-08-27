@@ -1,4 +1,5 @@
 defmodule Frameworks.Pixel.Spinner do
+  @moduledoc false
   use CoreWeb, :html
 
   attr(:alt, :string, default: "Loading")

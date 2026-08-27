@@ -10,13 +10,13 @@ defmodule Systems.Notify.Channel.NA do
   """
   @behaviour Systems.Notify.Channel
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Account
   alias Systems.NextAction
   alias Systems.Notify.EventModel
   alias Systems.Notify.MessageModel
+
+  require Logger
 
   @impl true
   def build_payload(%EventModel{

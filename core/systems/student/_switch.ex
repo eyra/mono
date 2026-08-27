@@ -1,11 +1,9 @@
 defmodule Systems.Student.Switch do
+  @moduledoc false
   use Frameworks.Signal.Handler
 
-  alias Systems.{
-    Student
-  }
-
   alias Systems.Account
+  alias Systems.Student
 
   @impl true
   def intercept(:features_updated, %{features: features, features_changeset: features_changeset}) do

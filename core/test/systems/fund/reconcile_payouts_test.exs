@@ -1,12 +1,14 @@
 defmodule Systems.Fund.ReconcilePayoutsTest do
   use Core.DataCase, async: true
-  import Mox
+
   import Ecto.Query
+  import Mox
 
   alias Core.Factories
   alias Core.Repo
   alias Systems.Fund
   alias Systems.Payment
+  alias Systems.Payment.Error
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
@@ -71,8 +73,9 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       |> NaiveDateTime.add(-minutes_ago * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(p in Fund.PayoutModel, where: p.id == ^payout.id)
-    |> Repo.update_all(set: [inserted_at: ts])
+    Repo.update_all(from(p in Fund.PayoutModel, where: p.id == ^payout.id),
+      set: [inserted_at: ts]
+    )
   end
 
   test "resolves a pending payout that OPP has completed", %{user: user, fund: fund} do
@@ -134,7 +137,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, _reward} = insert_payout(user, fund, 1000, "w_err")
 
     expect(ProviderMock, :get_withdrawal, fn "w_err" ->
-      {:error, %Systems.Payment.Error{code: :http_error, message: "boom"}}
+      {:error, %Error{code: :http_error, message: "boom"}}
     end)
 
     assert %{scanned: 1, errors: 1} = reconcile()
@@ -148,7 +151,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     # Circuit opens after 5 consecutive failures, so only 5 provider calls happen;
     # the 6th payout is skipped without a call (Mox would raise on a 6th call).
     expect(ProviderMock, :get_withdrawal, 5, fn _uid ->
-      {:error, %Systems.Payment.Error{code: :connection_error, message: "down"}}
+      {:error, %Error{code: :connection_error, message: "down"}}
     end)
 
     assert %{scanned: 6, errors: 5, skipped: 1} = reconcile()
@@ -158,7 +161,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
     {payout, _reward} = insert_payout(user, fund, 1000, "w_gone", status: :completed)
 
     expect(ProviderMock, :get_withdrawal, fn "w_gone" ->
-      {:error, %Systems.Payment.Error{code: :api_error, details: %{status: 404}}}
+      {:error, %Error{code: :api_error, details: %{status: 404}}}
     end)
 
     assert %{scanned: 1, missing_at_provider: 1} = reconcile()

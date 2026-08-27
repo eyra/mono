@@ -1,9 +1,8 @@
 defmodule Systems.Test.Public do
+  @moduledoc false
   use Core, :public
 
-  alias Systems.{
-    Test
-  }
+  alias Systems.Test
 
   def get(id) do
     %Test.Model{

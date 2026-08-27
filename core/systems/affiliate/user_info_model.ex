@@ -1,4 +1,5 @@
 defmodule Systems.Affiliate.UserInfoModel do
+  @moduledoc false
   use Ecto.Schema
   use Frameworks.Utility.Schema
 

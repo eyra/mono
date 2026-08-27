@@ -1,4 +1,5 @@
 defmodule Systems.Project.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   alias Systems.Project

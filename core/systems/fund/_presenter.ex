@@ -1,4 +1,5 @@
 defmodule Systems.Fund.Presenter do
+  @moduledoc false
   use Frameworks.Concept.Presenter
 
   @impl true

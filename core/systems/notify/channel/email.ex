@@ -13,13 +13,13 @@ defmodule Systems.Notify.Channel.Email do
   """
   @behaviour Systems.Notify.Channel
 
-  require Logger
-
   alias Core.Repo
   alias Systems.Account
   alias Systems.Email
   alias Systems.Notify.EventModel
   alias Systems.Notify.MessageModel
+
+  require Logger
 
   @impl true
   def build_payload(%EventModel{type: "contribution_accepted"} = event) do
@@ -68,8 +68,7 @@ defmodule Systems.Notify.Channel.Email do
     {:ok, Email.Factory.contribution_declined(user, metadata)}
   end
 
-  defp build_email(other, _user, _metadata),
-    do: {:error, {:unknown_factory_fn, other}}
+  defp build_email(other, _user, _metadata), do: {:error, {:unknown_factory_fn, other}}
 
   # Email is out-of-band; the server has no way to unsend or mark-as-read a
   # message once it's been handed to the delivery worker. Nothing to do.

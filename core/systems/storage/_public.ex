@@ -1,22 +1,27 @@
 defmodule Systems.Storage.Public do
+  @moduledoc false
   use Core, :public
-  require Logger
 
-  alias Ecto.Multi
-  alias Ecto.Changeset
   alias Core.Repo
+  alias Ecto.Changeset
+  alias Ecto.Multi
   alias Frameworks.Signal
+  alias Systems.Monitor
   alias Systems.Rate
   alias Systems.Storage
-  alias Systems.Monitor
+  alias Systems.Storage.BuiltIn.EndpointModel
+
+  require Logger
 
   def get_endpoint!(id, preload \\ []) do
-    Repo.get!(Storage.EndpointModel, id)
+    Storage.EndpointModel
+    |> Repo.get!(id)
     |> Repo.preload(preload)
   end
 
   def get_endpoint_by!(id, preload \\ []) do
-    Repo.get!(Storage.EndpointModel, id)
+    Storage.EndpointModel
+    |> Repo.get!(id)
     |> Repo.preload(preload)
   end
 
@@ -30,34 +35,26 @@ defmodule Systems.Storage.Public do
   end
 
   defp prepare_endpoint_special(:builtin, attrs) do
-    %Storage.BuiltIn.EndpointModel{}
-    |> Storage.BuiltIn.EndpointModel.changeset(attrs)
+    EndpointModel.changeset(%EndpointModel{}, attrs)
   end
 
   defp prepare_endpoint_special(:yoda, attrs) do
-    %Storage.Yoda.EndpointModel{}
-    |> Storage.Yoda.EndpointModel.changeset(attrs)
+    Storage.Yoda.EndpointModel.changeset(%Storage.Yoda.EndpointModel{}, attrs)
   end
 
   defp prepare_endpoint_special(:aws, attrs) do
-    %Storage.AWS.EndpointModel{}
-    |> Storage.AWS.EndpointModel.changeset(attrs)
+    Storage.AWS.EndpointModel.changeset(%Storage.AWS.EndpointModel{}, attrs)
   end
 
   defp prepare_endpoint_special(:azure, attrs) do
-    %Storage.Azure.EndpointModel{}
-    |> Storage.Azure.EndpointModel.changeset(attrs)
+    Storage.Azure.EndpointModel.changeset(%Storage.Azure.EndpointModel{}, attrs)
   end
 
   @doc """
   Schedules delivery of a file to a storage endpoint.
   The file_id refers to a file in the configured temp file store.
   """
-  def deliver_file(
-        %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        file_id,
-        meta_data
-      ) do
+  def deliver_file(%Storage.EndpointModel{id: endpoint_id} = endpoint, file_id, meta_data) do
     %{backend: backend, special: special} = storage_info(endpoint)
 
     result =
@@ -192,7 +189,7 @@ defmodule Systems.Storage.Public do
   end
 
   def file_count(endpoint) do
-    list_files(endpoint) |> Enum.count()
+    endpoint |> list_files() |> Enum.count()
   end
 
   defp temp_file_store do

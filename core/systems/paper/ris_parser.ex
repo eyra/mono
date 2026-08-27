@@ -6,8 +6,9 @@ defmodule Systems.Paper.RISParser do
   Simply parses RIS format into structured data.
   """
 
-  require Logger
   use Gettext, backend: CoreWeb.Gettext
+
+  require Logger
 
   # Supported RIS reference types
   @supported_reference_types ["JOUR", "JFULL", "ABST", "INPR", "CPAPER", "THES"]
@@ -83,8 +84,9 @@ defmodule Systems.Paper.RISParser do
       ris_content
       |> String.split(~r{(\r\n|\r|\n)})
       # Limit number of lines processed
-      |> Enum.take(@max_lines)
+      # Private functions
       # Add line numbers starting from 1
+      |> Enum.take(@max_lines)
       |> Enum.with_index(1)
       |> Enum.reject(fn {line, _} -> line == "" end)
 
@@ -99,8 +101,6 @@ defmodule Systems.Paper.RISParser do
     |> chunk_references()
     |> Enum.map(&parse_reference/1)
   end
-
-  # Private functions
 
   defp chunk_references(lines_with_numbers) do
     chunk_fun = fn {line, line_num}, acc ->
@@ -136,8 +136,7 @@ defmodule Systems.Paper.RISParser do
   end
 
   defp extract_raw_text(ris_lines_with_numbers) do
-    ris_lines_with_numbers
-    |> Enum.map_join("\n", fn {line, _} -> line end)
+    Enum.map_join(ris_lines_with_numbers, "\n", fn {line, _} -> line end)
   end
 
   defp get_first_line_number(ris_lines_with_numbers) do

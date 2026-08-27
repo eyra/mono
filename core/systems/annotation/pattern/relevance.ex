@@ -18,6 +18,7 @@ defmodule Systems.Annotation.Pattern.Relevance do
 
   defimpl Systems.Annotation.Pattern do
     use Systems.Annotation.Pattern.Helpers
+
     import Ecto.Query, warn: true
 
     @relevance "Relevance"
@@ -28,12 +29,7 @@ defmodule Systems.Annotation.Pattern.Relevance do
     def obtain(%{resource: nil}), do: raise(MissingFieldError, :resource)
     def obtain(%{entity: nil}), do: raise(MissingFieldError, :entity)
 
-    def obtain(%{
-          relevance: relevance,
-          parameter: parameter,
-          resource: resource,
-          entity: entity
-        }) do
+    def obtain(%{relevance: relevance, parameter: parameter, resource: resource, entity: entity}) do
       if annotation =
            get(relevance: relevance, parameter: parameter, resource: resource, entity: entity) do
         {:ok, annotation}
@@ -62,7 +58,8 @@ defmodule Systems.Annotation.Pattern.Relevance do
     end
 
     defp query(relevance, parameter, resource, entity) do
-      query_annotation(@relevance, to_statement(relevance, parameter), entity)
+      @relevance
+      |> query_annotation(to_statement(relevance, parameter), entity)
       |> where(
         [annotation: a, annotation_ref: ar],
         (ar.type_id == ^@parameter and a.id == ^parameter.id) or
@@ -72,7 +69,8 @@ defmodule Systems.Annotation.Pattern.Relevance do
     end
 
     defp get(relevance: relevance, parameter: parameter, resource: resource, entity: entity) do
-      query(relevance, parameter, resource, entity)
+      relevance
+      |> query(parameter, resource, entity)
       |> Repo.one()
     end
 

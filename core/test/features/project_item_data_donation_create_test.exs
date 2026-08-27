@@ -13,8 +13,8 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
     researcher =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: true
       })
 
@@ -37,7 +37,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
     |> click(Query.css(@card_selector))
 
     # Wait for project page to be connected
-    session |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    assert_has(session, Query.css("[data-testid='create-first-item-button']"))
 
     # Create assignment
     session
@@ -48,7 +48,6 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
     |> click(Query.css("[data-testid='create-item-button']"))
 
     # Verify assignment card appears
-    session
-    |> assert_has(Query.css(@card_selector, count: 1))
+    assert_has(session, Query.css(@card_selector, count: 1))
   end
 end

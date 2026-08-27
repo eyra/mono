@@ -1,9 +1,12 @@
 defmodule Fabric.Factories do
-  def create_fabric() do
-    create_fabric(%Fabric.LiveView.RefModel{pid: self()})
+  @moduledoc false
+  alias Fabric.LiveView.RefModel
+
+  def create_fabric do
+    create_fabric(%RefModel{pid: self()})
   end
 
-  def create_fabric(%Fabric.LiveView.RefModel{} = self) do
+  def create_fabric(%RefModel{} = self) do
     %Fabric.Model{parent: nil, self: self, children: nil}
   end
 

@@ -12,9 +12,9 @@ defmodule Core.Seeds.Local do
   `/api/e2e/bootstrap` (same flow as prod) and not seeded here.
   """
 
-  require Logger
-
   import Core.Seeds.Helpers
+
+  require Logger
 
   @password "asdf;lkjASDF0987"
 

@@ -34,6 +34,13 @@ defmodule Systems.Content.Adaptable do
   ```
   """
 
+  use CoreWeb, :html
+
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Navigation
+  alias Frameworks.Pixel.Tabbed
+  alias Frameworks.Pixel.Text
+
   defmodule Item do
     @moduledoc """
     An item to display in the adaptable layout.
@@ -79,13 +86,6 @@ defmodule Systems.Content.Adaptable do
       }
     end
   end
-
-  use CoreWeb, :html
-
-  alias Frameworks.Pixel.Navigation
-  alias Frameworks.Pixel.Tabbed
-  alias Frameworks.Pixel.Button
-  alias Frameworks.Pixel.Text
 
   @threshold 5
 
@@ -314,6 +314,8 @@ defmodule Systems.Content.Adaptable do
       </Area.dynamic>
     </div>
     """
+
+    # Helper functions
   end
 
   # Render individual item content
@@ -347,8 +349,6 @@ defmodule Systems.Content.Adaptable do
     <Button.dynamic {@button} />
     """
   end
-
-  # Helper functions
 
   defp items_to_tabs(items) do
     Enum.map(items, fn item ->

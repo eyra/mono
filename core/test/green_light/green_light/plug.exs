@@ -1,17 +1,20 @@
 defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
   use Core.DataCase
-  import Plug.Test
+
   import Plug.Conn
-  alias Plug.Conn
-  alias Core.Authorization.Plug.ControllerAuthorization
+  import Plug.Test
+
   alias Core.Authorization.PermissionMap
+  alias Core.Authorization.Plug.ControllerAuthorization
+  alias Plug.Conn
   alias Systems.Account
 
   defmodule TestStruct do
+    @moduledoc false
     defstruct id: ""
   end
 
-  @permission_map PermissionMap.new() |> PermissionMap.grant(:access_example_controller, :admin)
+  @permission_map PermissionMap.grant(PermissionMap.new(), :access_example_controller, :admin)
   @opts ControllerAuthorization.init(@permission_map)
 
   @admin %{
@@ -28,7 +31,8 @@ defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
   test "deny by default" do
     # Create a test connection
     conn =
-      conn(:get, "/example", %{"test" => "some-id"})
+      :get
+      |> conn("/example", %{"test" => "some-id"})
       |> EntityExtractor.call(@opts)
 
     assert conn.assigns.entities == %{"test" => %TestStruct{id: "some-id"}}

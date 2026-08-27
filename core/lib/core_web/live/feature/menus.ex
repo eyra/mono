@@ -1,4 +1,5 @@
 defmodule CoreWeb.Live.Feature.Menus do
+  @moduledoc false
   @type menu_builder :: atom()
   @type menus :: list(atom())
   @type active_menu_item :: atom()
@@ -9,19 +10,17 @@ defmodule CoreWeb.Live.Feature.Menus do
   defmacro __using__(_opts) do
     quote do
       @behaviour CoreWeb.Live.Feature.Menus
-      import Phoenix.Component, only: [assign: 2]
-
-      @impl true
-      def get_menus_config(), do: nil
-
-      defoverridable get_menus_config: 0
 
       import Phoenix.Component
 
+      @impl true
+      def get_menus_config, do: nil
+
+      defoverridable get_menus_config: 0
+
       def update_menus(%{assigns: %{authorization_failed: true}} = socket), do: socket
 
-      def update_menus(%{assigns: %{menus_config: nil}} = socket),
-        do: socket |> assign(menus: nil)
+      def update_menus(%{assigns: %{menus_config: nil}} = socket), do: assign(socket, menus: nil)
 
       def update_menus(
             %{assigns: %{menus_config: {menu_builder, menus}, active_menu_item: active_menu_item}} =
@@ -35,7 +34,7 @@ defmodule CoreWeb.Live.Feature.Menus do
         uri = Map.get(socket.assigns, :uri)
 
         menus = CoreWeb.Menus.build_menus(menu_builder, menus, active_menu_item, user, uri)
-        socket |> assign(menus: menus)
+        assign(socket, menus: menus)
       end
 
       defoverridable update_menus: 1

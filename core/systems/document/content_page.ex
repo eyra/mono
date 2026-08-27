@@ -1,4 +1,5 @@
 defmodule Systems.Document.ContentPage do
+  @moduledoc false
   use Systems.Content.Composer, :management_page
 
   alias Systems.Document
@@ -20,8 +21,7 @@ defmodule Systems.Document.ContentPage do
 
     {
       :ok,
-      socket
-      |> assign(initial_tab: initial_tab, tabbar_id: tabbar_id)
+      assign(socket, initial_tab: initial_tab, tabbar_id: tabbar_id)
     }
   end
 

@@ -1,9 +1,9 @@
 defmodule Systems.Affiliate.PublicTest do
   use Core.DataCase
 
-  @moduletag :capture_log
-
   alias Systems.Affiliate
+
+  @moduletag :capture_log
 
   describe "redirect_url" do
     setup do
@@ -94,7 +94,7 @@ defmodule Systems.Affiliate.PublicTest do
       affiliate_user: %{user: user},
       event: event
     } do
-      assert {:error, :econnrefused} = Affiliate.Public.send_event(affiliate, event, user)
+      assert {:error, :closed} = Affiliate.Public.send_event(affiliate, event, user)
     end
   end
 
@@ -124,7 +124,7 @@ defmodule Systems.Affiliate.PublicTest do
       affiliate = Factories.insert!(:affiliate)
       user = Affiliate.Public.obtain_user!("test_user", affiliate)
 
-      assert user.id != nil
+      assert user.id
       assert user.user.email == "affiliate_#{affiliate.id}_test_user@next.eyra.co"
     end
 

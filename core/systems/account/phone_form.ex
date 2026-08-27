@@ -12,8 +12,6 @@ defmodule Systems.Account.PhoneForm do
   """
   use CoreWeb, :live_component_fabric
 
-  require Logger
-
   import Frameworks.Pixel.Form
 
   alias Ecto.Changeset
@@ -21,6 +19,8 @@ defmodule Systems.Account.PhoneForm do
   alias Systems.Account
   alias Systems.Fund
   alias Systems.Payment
+
+  require Logger
 
   @payouts_path "/user/account?tab=payouts"
 

@@ -22,8 +22,8 @@ defmodule Systems.Pool.OnboardingPageBuilder do
 
   alias CoreWeb.ReturnTo
   alias Frameworks.Concept.LiveContext
-  alias Systems.Pool
   alias Systems.Account
+  alias Systems.Pool
 
   def view_model(%Pool.Model{} = pool, assigns) do
     current_step_index = Map.get(assigns, :current_step_index, 0)
@@ -63,8 +63,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
 
   # Copy is generic — the pool identity is carried by the pool logo
   # rendered next to the title on the OnboardingPage hero row.
-  defp build_hero_title(_step, %Pool.Model{}),
-    do: dgettext("eyra-pool", "onboarding.hero.title")
+  defp build_hero_title(_step, %Pool.Model{}), do: dgettext("eyra-pool", "onboarding.hero.title")
 
   defp build_finish_path(return_to, %Account.User{} = user),
     do: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user))

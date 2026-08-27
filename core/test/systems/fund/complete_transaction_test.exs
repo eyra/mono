@@ -5,7 +5,6 @@ defmodule Systems.Fund.CompleteTransactionTest do
   alias Core.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
-  alias Systems.Fund
 
   describe "complete_transaction/1" do
     test "completes a :failed transaction when OPP webhook arrives after local expiry" do
@@ -71,10 +70,10 @@ defmodule Systems.Fund.CompleteTransactionTest do
   defp ensure_currency_ledger(currency) do
     case Fund.CurrencyLedgerModel.get_by_currency(currency) do
       nil ->
-        Fund.CurrencyLedgerModel.create(currency) |> Repo.insert!()
+        currency |> Fund.CurrencyLedgerModel.create() |> Repo.insert!()
 
       existing ->
-        existing |> Repo.preload([:inbound, :outbound])
+        Repo.preload(existing, [:inbound, :outbound])
     end
   end
 end

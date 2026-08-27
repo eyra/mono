@@ -5,6 +5,7 @@ defmodule Frameworks.Utility.EctoHelperTest do
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
   defmodule TestSchema do
+    @moduledoc false
     use Ecto.Schema
 
     embedded_schema do

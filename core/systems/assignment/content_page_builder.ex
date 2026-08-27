@@ -1,11 +1,16 @@
 defmodule Systems.Assignment.ContentPageBuilder do
-  use CoreWeb, :verified_routes
-  require Logger
-  use Systems.Content.PageBuilder
+  @moduledoc """
+    Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
+    This builder module supports several specials with each a specific View Model.
+    For a full overview of the template feature see `Systems.Assignment.Template`.
+  """
 
+  use CoreWeb, :verified_routes
+  use Systems.Content.PageBuilder
   use Gettext, backend: CoreWeb.Gettext
 
   alias Core.Repo
+  alias CoreWeb.Live.Element
   alias Frameworks.Concept
   alias Systems.Annotation
   alias Systems.Assignment
@@ -16,11 +21,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   alias Systems.Workflow
   alias Systems.Zircon
 
-  @moduledoc """
-    Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
-    This builder module supports several specials with each a specific View Model.
-    For a full overview of the template feature see `Systems.Assignment.Template`.
-  """
+  require Logger
 
   @doc """
     Returns a view model based on the templates defined in:
@@ -29,10 +30,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     * Data Donation: `Systems.Assignment.TemplateDataDonation`
     * Questionnaire: `Systems.Assignment.TemplateQuestionnaire`
   """
-  def view_model(
-        %{id: id} = assignment,
-        %{branch: branch} = assigns
-      ) do
+  def view_model(%{id: id} = assignment, %{branch: branch} = assigns) do
     show_errors = false
     template = Assignment.Private.get_template(assignment)
     breadcrumbs = Concept.Branch.hierarchy(branch)
@@ -157,7 +155,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
   @impl true
   def set_status(%{assigns: %{model: assignment}} = socket, status) do
     {:ok, assignment} = Assignment.Public.update(assignment, %{status: status})
-    socket |> Phoenix.Component.assign(model: assignment)
+    Phoenix.Component.assign(socket, model: assignment)
   end
 
   defp create_tabs(
@@ -206,8 +204,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
     storage_endpoint =
       if project_item do
         Map.get(project_item, :storage_endpoint)
-      else
-        nil
       end
 
     child =
@@ -313,7 +309,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          %{current_user: user}
        ) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
+      Element.prepare_live_view(:import, Zircon.Screening.ImportView,
         tool: zircon_screening_tool,
         user: user,
         title: title
@@ -350,7 +346,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       Repo.preload(zircon_screening_tool, annotations: Annotation.Model.preload_graph(:down))
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
+      Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
         title: title
@@ -377,7 +373,12 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, content_flags},
          _workflow_config,
          show_errors,
-         %{fabric: fabric, current_user: user, viewport: viewport, breakpoint: breakpoint}
+         %{
+           fabric: fabric,
+           current_user: user,
+           viewport: viewport,
+           breakpoint: breakpoint
+         }
        ) do
     child =
       Fabric.prepare_child(fabric, :system, Assignment.ParticipantsView, %{
@@ -411,7 +412,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          _assigns
        ) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      Element.prepare_live_view(
         "contributions",
         Assignment.ContributionsView,
         live_context:
@@ -472,13 +473,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp number_widgets(assignment) do
-    [:started, :finished, :declined]
-    |> Enum.map(&number_widget(&1, assignment))
+    Enum.map([:started, :finished, :declined], &number_widget(&1, assignment))
   end
 
   defp number_widget(:started, assignment) do
     metric =
-      Monitor.Public.event({assignment, :started})
+      {assignment, :started}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     %{
@@ -490,7 +491,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:finished, assignment) do
     metric =
-      Monitor.Public.event({assignment, :finished})
+      {assignment, :finished}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     %{
@@ -502,7 +504,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp number_widget(:declined, assignment) do
     metric =
-      Monitor.Public.event({assignment, :declined})
+      {assignment, :declined}
+      |> Monitor.Public.event()
       |> Monitor.Public.unique()
 
     color =
@@ -520,7 +523,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
   end
 
   defp progress_widgets(%{workflow: workflow} = assignment) do
-    Workflow.Public.list_items(workflow)
+    workflow
+    |> Workflow.Public.list_items()
     |> Enum.map(&progress_widget(&1, assignment))
   end
 

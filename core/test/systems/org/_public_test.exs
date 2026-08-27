@@ -3,6 +3,7 @@ defmodule Systems.Org.PublicTest do
 
   alias Core.Factories
   alias Systems.Org
+  alias Systems.Org.NextActions.AddDomainMembers
   alias Systems.Org.Public
 
   describe "organisation" do
@@ -175,7 +176,7 @@ defmodule Systems.Org.PublicTest do
       archived_org =
         Factories.insert!(:org_node, %{
           identifier: ["list_archived"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       nodes = Public.list_nodes([])
@@ -222,7 +223,7 @@ defmodule Systems.Org.PublicTest do
       archived_org =
         Factories.insert!(:org_node, %{
           identifier: ["all_archived"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       nodes = Public.list_all_nodes([])
@@ -238,7 +239,7 @@ defmodule Systems.Org.PublicTest do
       archived_org =
         Factories.insert!(:org_node, %{
           identifier: ["archived_only"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       nodes = Public.list_archived_nodes([])
@@ -255,7 +256,7 @@ defmodule Systems.Org.PublicTest do
 
       {:ok, archived_org} = Public.archive(org)
 
-      assert archived_org.archived_at != nil
+      assert archived_org.archived_at
     end
 
     test "archive/1 removes org from list_nodes" do
@@ -274,7 +275,7 @@ defmodule Systems.Org.PublicTest do
       org =
         Factories.insert!(:org_node, %{
           identifier: ["to_restore"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       {:ok, restored_org} = Public.restore(org)
@@ -286,7 +287,7 @@ defmodule Systems.Org.PublicTest do
       org =
         Factories.insert!(:org_node, %{
           identifier: ["restore_list_test"],
-          archived_at: DateTime.utc_now() |> DateTime.truncate(:second)
+          archived_at: DateTime.truncate(DateTime.utc_now(), :second)
         })
 
       nodes_before = Public.list_nodes([])
@@ -380,7 +381,7 @@ defmodule Systems.Org.PublicTest do
       :ok = Public.assign_owner(org, owner)
 
       next_actions =
-        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner, AddDomainMembers)
 
       assert length(next_actions) >= 1
     end
@@ -397,7 +398,7 @@ defmodule Systems.Org.PublicTest do
       :ok = Public.assign_owner(org, owner)
 
       next_actions =
-        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner, AddDomainMembers)
 
       assert Enum.empty?(next_actions)
     end
@@ -419,7 +420,7 @@ defmodule Systems.Org.PublicTest do
       assert length(
                NextAction.Public.list_next_actions_by_type(
                  owner,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              ) >= 1
 
@@ -428,7 +429,7 @@ defmodule Systems.Org.PublicTest do
       assert Enum.empty?(
                NextAction.Public.list_next_actions_by_type(
                  owner,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              )
     end
@@ -452,14 +453,14 @@ defmodule Systems.Org.PublicTest do
       assert length(
                NextAction.Public.list_next_actions_by_type(
                  owner1,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              ) >= 1
 
       assert length(
                NextAction.Public.list_next_actions_by_type(
                  owner2,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              ) >= 1
 
@@ -468,14 +469,14 @@ defmodule Systems.Org.PublicTest do
       assert Enum.empty?(
                NextAction.Public.list_next_actions_by_type(
                  owner1,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              )
 
       assert length(
                NextAction.Public.list_next_actions_by_type(
                  owner2,
-                 Org.NextActions.AddDomainMembers
+                 AddDomainMembers
                )
              ) >= 1
     end
@@ -648,7 +649,7 @@ defmodule Systems.Org.PublicTest do
 
       # Verify the owner has a NextAction of the correct type
       next_actions =
-        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner, AddDomainMembers)
 
       assert length(next_actions) >= 1
     end
@@ -673,7 +674,7 @@ defmodule Systems.Org.PublicTest do
 
       # Verify the owner has no NextAction (since no domains match)
       next_actions =
-        NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner, AddDomainMembers)
 
       assert Enum.empty?(next_actions)
     end
@@ -700,10 +701,10 @@ defmodule Systems.Org.PublicTest do
 
       # Verify both owners have a NextAction
       next_actions1 =
-        NextAction.Public.list_next_actions_by_type(owner1, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner1, AddDomainMembers)
 
       next_actions2 =
-        NextAction.Public.list_next_actions_by_type(owner2, Org.NextActions.AddDomainMembers)
+        NextAction.Public.list_next_actions_by_type(owner2, AddDomainMembers)
 
       assert length(next_actions1) >= 1
       assert length(next_actions2) >= 1

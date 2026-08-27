@@ -34,7 +34,7 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       assert vm.app_view.implementation == Systems.Feldspar.AppView
       assert vm.app_view.options[:key] == "feldspar_tool_#{tool.id}"
       assert vm.app_view.options[:url] == "https://example.com/app/index.html"
-      assert vm.app_view.options[:locale] != nil
+      assert vm.app_view.options[:locale]
     end
 
     test "builds app_view with correct URL format", %{tool: tool} do

@@ -1,5 +1,6 @@
 defmodule Core.IdentityTest do
   use Core.DataCase, async: true
+
   import Frameworks.Signal.TestHelper
 
   alias Core.Factories
@@ -24,7 +25,7 @@ defmodule Core.IdentityTest do
       assert first_time? == true
       assert user.email == "new@uva.nl"
       assert user.creator == true
-      assert SurfConext.get(user) != nil
+      assert SurfConext.get(user)
       assert_signal_dispatched({:user, :created})
     end
 
@@ -42,7 +43,7 @@ defmodule Core.IdentityTest do
 
       assert first_time? == false
       assert user.id == existing.id
-      assert SurfConext.get(user) != nil
+      assert SurfConext.get(user)
     end
 
     test "refreshes the satellite on subsequent sign-ins" do

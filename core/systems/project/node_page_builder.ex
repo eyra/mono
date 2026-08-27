@@ -1,34 +1,30 @@
 defmodule Systems.Project.NodePageBuilder do
+  @moduledoc false
   use Core.FeatureFlags
-
   use Gettext, backend: CoreWeb.Gettext
 
-  alias Systems.Storage.EndpointDataView
-
-  alias Systems.Project.NodePageEmptyDataView
-  alias Systems.Project.NodePageGridView
   alias Frameworks.Concept
   alias Systems.Project
+  alias Systems.Project.NodePageEmptyDataView
+  alias Systems.Project.NodePageGridView
+  alias Systems.Storage.EndpointDataView
 
-  def view_model(
-        %Project.NodeModel{id: id} = node,
-        %{
-          fabric: _fabric
-        } = assigns
-      ) do
+  def view_model(%Project.NodeModel{id: id} = node, %{fabric: _fabric} = assigns) do
     assigns = Map.put(assigns, :node, node)
     branch = %Project.Branch{node_id: node.id}
     breadcrumbs = Concept.Branch.hierarchy(branch)
 
-    %{
-      id: id,
-      title: node.name,
-      show_errors: false,
-      tabbar_id: :node_page,
-      initial_tab: :overview,
-      breadcrumbs: breadcrumbs
-    }
-    |> put_tabs(assigns)
+    put_tabs(
+      %{
+        id: id,
+        title: node.name,
+        show_errors: false,
+        tabbar_id: :node_page,
+        initial_tab: :overview,
+        breadcrumbs: breadcrumbs
+      },
+      assigns
+    )
   end
 
   defp put_tabs(vm, assigns) do
@@ -36,15 +32,10 @@ defmodule Systems.Project.NodePageBuilder do
   end
 
   defp create_tabs(show_errors, assigns) do
-    get_tab_keys()
-    |> Enum.map(&create_tab(&1, show_errors, assigns))
+    Enum.map(get_tab_keys(), &create_tab(&1, show_errors, assigns))
   end
 
-  defp create_tab(
-         :overview,
-         show_errors,
-         %{fabric: fabric, node: node} = assigns
-       ) do
+  defp create_tab(:overview, show_errors, %{fabric: fabric, node: node} = assigns) do
     ready? = false
 
     child =
@@ -114,7 +105,7 @@ defmodule Systems.Project.NodePageBuilder do
     end
   end
 
-  defp get_tab_keys() do
+  defp get_tab_keys do
     [
       :overview,
       :data

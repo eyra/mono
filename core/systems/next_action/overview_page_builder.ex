@@ -1,4 +1,5 @@
 defmodule Systems.NextAction.OverviewPageBuilder do
+  @moduledoc false
   alias Systems.NextAction
 
   def view_model(user, _assigns) do

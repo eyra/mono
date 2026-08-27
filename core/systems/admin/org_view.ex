@@ -1,6 +1,8 @@
 defmodule Systems.Admin.OrgView do
   use CoreWeb, :embedded_live_view
 
+  import Systems.Org.ItemView
+
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.AlertBanner
   alias Frameworks.Pixel.Button
@@ -8,14 +10,11 @@ defmodule Systems.Admin.OrgView do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-
   alias Systems.Admin
   alias Systems.Observatory
   alias Systems.Org
 
-  import Org.ItemView
-
-  def dependencies(), do: [:current_user, :locale, :is_admin?, :governable_orgs]
+  def dependencies, do: [:current_user, :locale, :is_admin?, :governable_orgs]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -38,7 +37,7 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("create_org", _, socket) do
-    timestamp = Timestamp.now() |> DateTime.to_unix()
+    timestamp = DateTime.to_unix(Timestamp.now())
 
     {:ok, %{org: %{id: org_id}}} =
       Org.Public.create_node(
@@ -49,15 +48,14 @@ defmodule Systems.Admin.OrgView do
 
     {
       :noreply,
-      socket
-      |> push_navigate(to: ~p"/org/node/#{org_id}")
+      push_navigate(socket, to: ~p"/org/node/#{org_id}")
     }
   end
 
   @impl true
   def handle_event("show_archived", _, %{assigns: %{locale: locale}} = socket) do
     modal = Admin.OrgViewBuilder.build_archived_orgs_modal(locale)
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true
@@ -79,7 +77,7 @@ defmodule Systems.Admin.OrgView do
     org = Org.Public.get_node!(org_id, Org.NodeModel.preload_graph(:full))
     org_name = Systems.Content.TextBundleModel.text(org.full_name_bundle, locale)
     modal = Admin.OrgViewBuilder.build_admins_modal(org_id, org_name)
-    {:noreply, socket |> present_modal(modal)}
+    {:noreply, present_modal(socket, modal)}
   end
 
   @impl true

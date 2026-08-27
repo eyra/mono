@@ -1,4 +1,5 @@
 defmodule Systems.Pool.MarketplacePageBuilder do
+  @moduledoc false
   use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
@@ -33,7 +34,8 @@ defmodule Systems.Pool.MarketplacePageBuilder do
   end
 
   defp build_items(%Pool.Model{id: pool_id}, %Account.User{} = user, assigns) do
-    Advert.Public.list_by_status(:online, preload: Advert.Model.preload_graph(:down))
+    :online
+    |> Advert.Public.list_by_status(preload: Advert.Model.preload_graph(:down))
     |> Enum.filter(
       &(&1.submission.pool_id == pool_id and Advert.Public.validate_open(&1, user) == :ok)
     )

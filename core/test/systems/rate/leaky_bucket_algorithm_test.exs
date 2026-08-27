@@ -1,10 +1,10 @@
 defmodule Systems.Rate.LeakyBucketAlgorithmTest do
   use ExUnit.Case, async: true
 
-  alias Systems.Rate.Quota
   alias Systems.Rate.LeakyBucket, as: Bucket
-  alias Systems.Rate.LeakyBucketState, as: State
   alias Systems.Rate.LeakyBucketAlgorithm, as: Algorithm
+  alias Systems.Rate.LeakyBucketState, as: State
+  alias Systems.Rate.Quota
 
   @prune_interval 60 * 60 * 1000
 

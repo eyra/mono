@@ -1,4 +1,5 @@
 defmodule Core.PaymentCase do
+  @moduledoc false
   use ExUnit.CaseTemplate
 
   Mox.defmock(Systems.Payment.ProviderMock, for: Systems.Payment.Provider)
@@ -7,9 +8,9 @@ defmodule Core.PaymentCase do
     quote do
       import Mox
 
+      alias Systems.Payment.Error
       alias Systems.Payment.Provider
       alias Systems.Payment.ProviderMock
-      alias Systems.Payment.Error
     end
   end
 

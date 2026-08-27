@@ -13,11 +13,13 @@ defmodule GoogleSignIn do
   """
   @behaviour Core.Identity.Provider
 
-  alias Systems.Account.User
-  alias Core.Repo
   import Ecto.Query, warn: false
 
-  @impl Core.Identity.Provider
+  alias Core.Identity.Provider
+  alias Core.Repo
+  alias Systems.Account.User
+
+  @impl Provider
   def user_attrs(userinfo) when is_map(userinfo) do
     fullname =
       ~w(given_name family_name)
@@ -33,12 +35,12 @@ defmodule GoogleSignIn do
     }
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def get(%User{id: id}) do
     Repo.get_by(GoogleSignIn.User, user_id: id)
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def attach(%User{} = user, userinfo) when is_map(userinfo) do
     %GoogleSignIn.User{}
     |> GoogleSignIn.User.changeset(userinfo)
@@ -46,9 +48,10 @@ defmodule GoogleSignIn do
     |> Repo.insert()
   end
 
-  @impl Core.Identity.Provider
+  @impl Provider
   def refresh(%User{} = user, userinfo) when is_map(userinfo) do
-    get(user)
+    user
+    |> get()
     |> GoogleSignIn.User.changeset(userinfo)
     |> Repo.update!()
   end

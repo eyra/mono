@@ -1,4 +1,5 @@
 defmodule Systems.Content.PageForm do
+  @moduledoc false
   use CoreWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
@@ -10,19 +11,13 @@ defmodule Systems.Content.PageForm do
 
     {
       :ok,
-      socket
-      |> assign(
-        id: id,
-        entity: entity,
-        original_form: original_form
-      )
+      assign(socket, id: id, entity: entity, original_form: original_form)
     }
   end
 
   @impl true
   def handle_wysiwyg_update(%{assigns: %{body: body, entity: entity}} = socket) do
-    socket
-    |> save(entity, %{body: body})
+    save(socket, entity, %{body: body})
   end
 
   # Saving
@@ -33,8 +28,7 @@ defmodule Systems.Content.PageForm do
   def save(socket, entity, attrs) do
     changeset = Content.PageModel.changeset(entity, attrs)
 
-    socket
-    |> save(changeset)
+    save(socket, changeset)
   end
 
   @impl true

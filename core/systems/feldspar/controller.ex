@@ -8,19 +8,20 @@ defmodule Systems.Feldspar.Controller do
   """
   use CoreWeb, {:controller, [formats: [:json]]}
 
-  require Logger
-
   alias Systems.Assignment
   alias Systems.Feldspar
   alias Systems.Project
   alias Systems.Rate
-  alias Systems.Storage
-
-  @valid_log_levels ~w(debug info warn error)
 
   # ============================================================================
   # Donate endpoint
   # ============================================================================
+
+  alias Systems.Storage
+
+  require Logger
+
+  @valid_log_levels ~w(debug info warn error)
 
   @doc """
   Accepts a data donation, stores it as a file, and schedules delivery.
@@ -68,10 +69,10 @@ defmodule Systems.Feldspar.Controller do
 
     with {:ok, _user} <- get_current_user(conn),
          {:ok, data} <- read_upload(upload),
-         meta_data <- build_meta_data(conn, key, context),
+         meta_data = build_meta_data(conn, key, context),
          :ok <- check_rate_limit(:feldspar_data_donation, meta_data.remote_ip, byte_size(data)),
          {:ok, storage_endpoint} <- get_storage_endpoint(context),
-         file_id <- Feldspar.DataDonationFolder.filename(context),
+         file_id = Feldspar.DataDonationFolder.filename(context),
          {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
          :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
       measurements = %{file_size_bytes: byte_size(data)}
@@ -155,6 +156,9 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "Scheduling failed"})
 
       {:error, reason} ->
+        # ============================================================================
+        # Log endpoint
+        # ============================================================================
         emit_telemetry_exception([:feldspar, :donate], start_time, reason, telemetry_metadata)
         log_message("Server", "error", "Storage failed: #{inspect(reason)}", context)
 
@@ -163,10 +167,6 @@ defmodule Systems.Feldspar.Controller do
         |> json(%{error: "Storage failed"})
     end
   end
-
-  # ============================================================================
-  # Log endpoint
-  # ============================================================================
 
   @doc """
   Accepts a log entry from the client and forwards it to Elixir Logger (-> AppSignal).
@@ -184,7 +184,7 @@ defmodule Systems.Feldspar.Controller do
   """
   def log(conn, %{"level" => level, "message" => message} = params) do
     context = params["context"] || %{}
-    telemetry_metadata = telemetry_metadata(context) |> Map.put(:level, level)
+    telemetry_metadata = context |> telemetry_metadata() |> Map.put(:level, level)
     start_time = emit_telemetry_start([:feldspar, :log], telemetry_metadata)
 
     with {:ok, _user} <- get_current_user(conn),
@@ -231,6 +231,9 @@ defmodule Systems.Feldspar.Controller do
   def log(conn, params) do
     missing =
       ["level", "message"]
+      # ============================================================================
+      # Shared private functions
+      # ============================================================================
       |> Enum.reject(&Map.has_key?(params, &1))
       |> Enum.join(", ")
 
@@ -238,10 +241,6 @@ defmodule Systems.Feldspar.Controller do
     |> put_status(:bad_request)
     |> json(%{error: "Missing required fields: #{missing}"})
   end
-
-  # ============================================================================
-  # Shared private functions
-  # ============================================================================
 
   defp get_current_user(conn) do
     case conn.assigns[:current_user] do
@@ -257,16 +256,15 @@ defmodule Systems.Feldspar.Controller do
   end
 
   defp check_rate_limit(service, remote_ip, size) do
+    # ============================================================================
+    # Donate-specific private functions
+    # ============================================================================
     Rate.Public.request_permission(service, remote_ip, size)
     :ok
   rescue
     e in Rate.Public.RateLimitError ->
       {:error, :rate_limited, e.message}
   end
-
-  # ============================================================================
-  # Donate-specific private functions
-  # ============================================================================
 
   defp read_upload(%Plug.Upload{path: path}) do
     case File.read(path) do
@@ -318,6 +316,9 @@ defmodule Systems.Feldspar.Controller do
   defp build_meta_data(conn, key, context) do
     %{
       remote_ip: get_remote_ip(conn),
+      # ============================================================================
+      # Log-specific private functions
+      # ============================================================================
       panel_info: context["panel_info"] || %{},
       identifier: [
         [:assignment, context["assignment_id"] || ""],
@@ -328,10 +329,6 @@ defmodule Systems.Feldspar.Controller do
       ]
     }
   end
-
-  # ============================================================================
-  # Log-specific private functions
-  # ============================================================================
 
   defp validate_log_level(level) when level in @valid_log_levels, do: :ok
   defp validate_log_level(_), do: {:error, :invalid_level}
@@ -354,22 +351,20 @@ defmodule Systems.Feldspar.Controller do
 
   defp set_appsignal_attributes(context) do
     metadata =
-      context
-      |> Enum.map(fn {k, v} -> {String.to_atom("feldspar_#{k}"), to_string(v)} end)
+      Enum.map(context, fn {k, v} -> {String.to_atom("feldspar_#{k}"), to_string(v)} end)
 
     Logger.metadata(metadata)
   end
 
+  # ============================================================================
+  # Telemetry helpers
+  # ============================================================================
   defp format_log_context(context) when context == %{}, do: ""
 
   defp format_log_context(context) do
     formatted = Enum.map_join(context, ", ", fn {k, v} -> "#{k}=#{inspect(v)}" end)
     " [#{formatted}]"
   end
-
-  # ============================================================================
-  # Telemetry helpers
-  # ============================================================================
 
   defp telemetry_metadata(context) do
     %{

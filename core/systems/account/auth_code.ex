@@ -1,5 +1,7 @@
 defmodule Systems.Account.AuthCodeModel do
+  @moduledoc false
   use Ecto.Schema
+
   import Ecto.Query
 
   @hash_algorithm :sha256
@@ -60,10 +62,9 @@ defmodule Systems.Account.AuthCodeModel do
     min = Integer.pow(10, @code_length - 1)
     max = Integer.pow(10, @code_length) - 1
 
-    random_int = :crypto.strong_rand_bytes(4) |> :binary.decode_unsigned()
+    random_int = 4 |> :crypto.strong_rand_bytes() |> :binary.decode_unsigned()
 
-    (min + rem(random_int, max - min + 1))
-    |> Integer.to_string()
+    Integer.to_string(min + rem(random_int, max - min + 1))
   end
 
   defp hash_code(code), do: :crypto.hash(@hash_algorithm, code)

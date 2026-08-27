@@ -2,24 +2,16 @@ defmodule Systems.Promotion.FormView do
   use CoreWeb.LiveForm
   use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
-  alias Systems.{
-    Promotion
-  }
+  import Frameworks.Pixel.Form
 
   alias Core.ImageHelpers
-
-  import Frameworks.Pixel.Form
-
   alias Frameworks.Pixel.Text
-  import Frameworks.Pixel.Form
+  alias Systems.Promotion
+  alias Systems.Promotion.WysiwygForm
 
   @impl true
-  def process_file(
-        %{assigns: %{entity: entity}} = socket,
-        %{public_url: public_url}
-      ) do
-    socket
-    |> save(entity, %{banner_photo_url: public_url})
+  def process_file(%{assigns: %{entity: entity}} = socket, %{public_url: public_url}) do
+    save(socket, entity, %{banner_photo_url: public_url})
   end
 
   @impl true
@@ -36,13 +28,7 @@ defmodule Systems.Promotion.FormView do
   end
 
   @impl true
-  def update(
-        %{
-          id: id,
-          entity: entity
-        },
-        socket
-      ) do
+  def update(%{id: id, entity: entity}, socket) do
     {
       :ok,
       socket
@@ -63,12 +49,12 @@ defmodule Systems.Promotion.FormView do
 
   defp update_changeset(%{assigns: %{entity: entity}} = socket) do
     changeset = Promotion.Model.changeset(entity, :create, %{})
-    socket |> assign(changeset: changeset, form: to_form(changeset))
+    assign(socket, changeset: changeset, form: to_form(changeset))
   end
 
   defp update_image_info(%{assigns: %{entity: %{image_id: image_id}}} = socket) do
     image_info = ImageHelpers.get_image_info(image_id, 400, 300)
-    socket |> assign(image_info: image_info)
+    assign(socket, image_info: image_info)
   end
 
   defp update_image_picker_button(%{assigns: %{myself: myself}} = socket) do
@@ -81,7 +67,7 @@ defmodule Systems.Promotion.FormView do
       }
     }
 
-    socket |> assign(image_picker_button: image_picker_button)
+    assign(socket, image_picker_button: image_picker_button)
   end
 
   # Save
@@ -96,17 +82,17 @@ defmodule Systems.Promotion.FormView do
   # Validate
   def validate_for_publish(%{assigns: %{entity: entity}} = socket) do
     changeset =
-      Promotion.Model.operational_changeset(entity, %{})
+      entity
+      |> Promotion.Model.operational_changeset(%{})
       |> Map.put(:action, :validate_for_publish)
 
-    socket
-    |> assign(changeset: changeset, form: to_form(changeset))
+    assign(socket, changeset: changeset, form: to_form(changeset))
   end
 
   @impl true
   def compose(:expectations_form, %{entity: entity}) do
     %{
-      module: Systems.Promotion.WysiwygForm,
+      module: WysiwygForm,
       params: %{
         field_name: :expectations,
         entity: entity,
@@ -121,7 +107,7 @@ defmodule Systems.Promotion.FormView do
   @impl true
   def compose(:description_form, %{entity: entity}) do
     %{
-      module: Systems.Promotion.WysiwygForm,
+      module: WysiwygForm,
       params: %{
         field_name: :description,
         entity: entity,
@@ -136,7 +122,7 @@ defmodule Systems.Promotion.FormView do
   @impl true
   def compose(:prerequisites_form, %{entity: entity}) do
     %{
-      module: Systems.Promotion.WysiwygForm,
+      module: WysiwygForm,
       params: %{
         field_name: :prerequisites,
         entity: entity,
@@ -153,8 +139,7 @@ defmodule Systems.Promotion.FormView do
   def handle_event("save", %{"model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
-      socket
-      |> save(entity, attrs)
+      save(socket, entity, attrs)
     }
   end
 
@@ -166,8 +151,7 @@ defmodule Systems.Promotion.FormView do
       ) do
     {
       :noreply,
-      socket
-      |> save(entity, %{:themes => Enum.map(themes, &Atom.to_string(&1))})
+      save(socket, entity, %{:themes => Enum.map(themes, &Atom.to_string(&1))})
     }
   end
 

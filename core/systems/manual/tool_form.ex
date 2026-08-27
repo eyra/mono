@@ -1,4 +1,5 @@
 defmodule Systems.Manual.Builder.ToolForm do
+  @moduledoc false
   use CoreWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Annotation
@@ -45,7 +46,7 @@ defmodule Systems.Manual.Builder.ToolForm do
       face: %{type: :secondary, label: label, icon: :edit}
     }
 
-    socket |> assign(button: button)
+    assign(socket, button: button)
   end
 
   def update_button(%{assigns: %{tool: %{manual_id: nil}}} = socket) do
@@ -54,7 +55,7 @@ defmodule Systems.Manual.Builder.ToolForm do
       face: %{type: :primary, label: dgettext("eyra-manual", "create.manual.button")}
     }
 
-    socket |> assign(button: button)
+    assign(socket, button: button)
   end
 
   def handle_event("create_manual", _, %{assigns: %{tool: tool}} = socket) do
@@ -71,8 +72,7 @@ defmodule Systems.Manual.Builder.ToolForm do
   def handle_event("open_manual", _, socket) do
     {
       :noreply,
-      socket
-      |> goto_manual_builder()
+      goto_manual_builder(socket)
     }
   end
 
@@ -85,8 +85,7 @@ defmodule Systems.Manual.Builder.ToolForm do
 
   @impl true
   def handle_modal_closed(socket, :manual_builder) do
-    socket
-    |> hide_child(:manual_builder)
+    hide_child(socket, :manual_builder)
   end
 
   @impl true

@@ -14,7 +14,7 @@ defmodule Systems.Org.MemberView do
   alias Systems.Account
   alias Systems.Org
 
-  def dependencies(), do: [:node_id, :current_user, :locale]
+  def dependencies, do: [:node_id, :current_user, :locale]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{node_id: node_id}}) do
     Org.Public.get_node!(node_id, Org.NodeModel.preload_graph(:full))
@@ -22,7 +22,7 @@ defmodule Systems.Org.MemberView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> assign(query_string: "")}
+    {:ok, assign(socket, query_string: "")}
   end
 
   @impl true

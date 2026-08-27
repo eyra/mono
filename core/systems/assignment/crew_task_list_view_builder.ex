@@ -1,25 +1,21 @@
 defmodule Systems.Assignment.CrewTaskListViewBuilder do
+  @moduledoc false
   use Gettext, backend: CoreWeb.Gettext
 
   import Systems.Assignment.CrewTaskHelpers,
     only: [map_item: 1, build_work_items: 2, get_participant: 3]
 
+  # Compute participant here to avoid timing issues (mount runs AFTER ViewBuilder)
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
 
   def view_model(
         %{crew: crew} = assignment,
-        %{
-          current_user: user,
-          user_state: user_state,
-          live_context: context
-        } = assigns
+        %{current_user: user, user_state: user_state, live_context: context} = assigns
       ) do
     work_items = build_work_items(assignment, user)
     work_item_id = user_state[:task]
     work_item = find_work_item(work_items, work_item_id)
-
-    # Compute participant here to avoid timing issues (mount runs AFTER ViewBuilder)
     assignment_id = Map.get(assigns, :assignment_id)
     participant = get_participant(crew, user, assigns)
 

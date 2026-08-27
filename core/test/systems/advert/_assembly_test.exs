@@ -1,17 +1,18 @@
 defmodule Systems.Advert.AssemblyTest do
   use CoreWeb.ConnCase
 
-  import Mox
   # alias Core.Repo
   # alias CoreWeb.UI.Timestamp
 
-  alias Systems.Project
+  import Mox
+
   alias Systems.Advert
   # alias Systems.Assignment
   # alias Systems.Workflow
   # alias Systems.Alliance
   # alias Systems.Pool
   alias Systems.Fund
+  alias Systems.Project
 
   setup_all do
     Mox.defmock(Systems.Advert.AssemblyTest.UnsplashMockClient,
@@ -33,13 +34,10 @@ defmodule Systems.Advert.AssemblyTest do
   end
 
   describe "advert assembly" do
-    alias Systems.Advert
-
     setup [:login_as_creator]
 
     test "create advert", %{user: creator, mock: mock, pool: pool} do
-      mock
-      |> expect(:get, fn _, "/photos/random", "query=abstract" ->
+      expect(mock, :get, fn _, "/photos/random", "query=abstract" ->
         {:ok,
          %{
            "urls" => %{"raw" => "http://example.org"},

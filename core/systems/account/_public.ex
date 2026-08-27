@@ -1,26 +1,28 @@
 defmodule Systems.Account.Public do
+  @moduledoc false
   use Core, :public
   use CoreWeb.StartPageProvider
-  require Logger
 
   import Ecto.Query
   import Systems.Account.Queries
+
   alias Core.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-
   alias Systems.Account
   alias Systems.Account.User
   alias Systems.Affiliate
   alias Systems.Rate
 
+  require Logger
+
   def create_profile!(user_id) do
-    %Account.UserProfileModel{user_id: user_id}
-    |> Repo.insert!()
+    Repo.insert!(%Account.UserProfileModel{user_id: user_id})
   end
 
   def get!(id, preload \\ []) do
-    user_query(id)
+    id
+    |> user_query()
     |> Repo.one!()
     |> Repo.preload(preload)
   end
@@ -46,7 +48,8 @@ defmodule Systems.Account.Public do
   end
 
   def get_display_label(user_id) when is_integer(user_id) do
-    get_user!(user_id)
+    user_id
+    |> get_user!()
     |> get_display_label()
   end
 
@@ -57,25 +60,29 @@ defmodule Systems.Account.Public do
   end
 
   def list_affiliate_users(preload \\ []) do
-    user_query(affiliate?: true)
+    [affiliate?: true]
+    |> user_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_external_users(preload \\ []) do
-    user_query(external?: true)
+    [external?: true]
+    |> user_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_internal_users(preload \\ []) do
-    user_query(internal?: true)
+    [internal?: true]
+    |> user_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def list_creators(preload \\ []) do
-    user_query(creator?: true)
+    [creator?: true]
+    |> user_query()
     |> Repo.all()
     |> Repo.preload(preload)
   end
@@ -86,12 +93,14 @@ defmodule Systems.Account.Public do
   end
 
   def search(query, preload \\ []) do
-    user_query_by_email("%#{query}%")
+    "%#{query}%"
+    |> user_query_by_email()
     |> Repo.all()
     |> Repo.preload(preload)
   end
 
   def update_user(user_changeset) do
+    ## Affiliate
     Multi.new()
     |> Multi.update(:user, user_changeset)
     |> Repo.commit()
@@ -107,6 +116,8 @@ defmodule Systems.Account.Public do
     |> Repo.update()
   end
 
+  # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
+
   def update_user_profile(user_changeset, profile_changeset) do
     Multi.new()
     |> Multi.update(:profile, profile_changeset)
@@ -120,8 +131,6 @@ defmodule Systems.Account.Public do
     |> Repo.commit()
   end
 
-  ## Affiliate
-
   def affiliate?(%User{id: user_id}) do
     affiliate?(user_id)
   end
@@ -129,13 +138,8 @@ defmodule Systems.Account.Public do
   def affiliate?(nil), do: false
 
   def affiliate?(user_id) do
-    from(au in Affiliate.User,
-      where: au.user_id == ^user_id
-    )
-    |> Repo.exists?()
+    Repo.exists?(from(au in Affiliate.User, where: au.user_id == ^user_id))
   end
-
-  # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
 
   def external?(%User{id: user_id}) do
     external?(user_id)
@@ -144,10 +148,8 @@ defmodule Systems.Account.Public do
   def external?(nil), do: false
 
   def external?(user_id) do
-    from(ex in ExternalSignIn.User,
-      where: ex.user_id == ^user_id
-    )
-    |> Repo.exists?()
+    ## Database getters
+    Repo.exists?(from(ex in ExternalSignIn.User, where: ex.user_id == ^user_id))
   end
 
   # Internal users are not affiliate users and not external users
@@ -170,15 +172,13 @@ defmodule Systems.Account.Public do
   def activated?(%User{id: user_id}), do: activated?(user_id)
 
   def activated?(user_id) when is_integer(user_id) do
-    get!(user_id) |> confirmed?()
+    user_id |> get!() |> confirmed?()
   end
 
   def passwordless?(%User{hashed_password: "no-password-set"}), do: true
   def passwordless?(%User{}), do: false
 
   def show_profile_menu_item?(user), do: internal?(user)
-
-  ## Database getters
 
   @doc """
   Gets a user by email.
@@ -208,6 +208,9 @@ defmodule Systems.Account.Public do
   Flags provider merchants that no user carries.
   See `Systems.Account.MerchantOrphanReconciliation`.
   """
+
+  ## User registration
+
   def reconcile_orphaned_merchants(opts, state),
     do: Account.MerchantOrphanReconciliation.run(opts, state)
 
@@ -225,8 +228,7 @@ defmodule Systems.Account.Public do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    if user =
-         from(u in User, where: u.email == ^email and not is_nil(u.confirmed_at)) |> Repo.one() do
+    if user = Repo.one(from(u in User, where: u.email == ^email and not is_nil(u.confirmed_at))) do
       User.valid_password?(user, password) && user
     end
   end
@@ -246,11 +248,8 @@ defmodule Systems.Account.Public do
 
   """
   def get_user!(id, preload \\ []) do
-    from(user in User, preload: ^preload)
-    |> Repo.get!(id)
+    Repo.get!(from(user in User, preload: ^preload), id)
   end
-
-  ## User registration
 
   @doc """
   Registers a user.
@@ -281,6 +280,9 @@ defmodule Systems.Account.Public do
   concern handled here, not something the IdP has to know about. See
   `Core.Identity.Provider.user_attrs/0` for the allowed keys.
   """
+
+  ## Settings
+
   def register_via_sso(%{email: _} = attrs) do
     with {:ok, user} <-
            %User{}
@@ -306,7 +308,7 @@ defmodule Systems.Account.Public do
   & privacy in the onboarding step.
   """
   def register_user_with_email(email) when is_binary(email) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    now = NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second)
 
     %User{}
     |> User.sso_changeset(%{email: email, creator: false, verified_at: now})
@@ -326,8 +328,6 @@ defmodule Systems.Account.Public do
   def change_user_registration(%User{} = user, attrs \\ %{}) do
     User.registration_changeset(user, attrs, hash_password: false)
   end
-
-  ## Settings
 
   @doc """
   Returns an `%Ecto.Changeset{}` for changing the user email.
@@ -383,13 +383,15 @@ defmodule Systems.Account.Public do
   defp user_email_multi(user, email, context) do
     changeset = user |> User.email_changeset(%{email: email}) |> User.confirm_changeset()
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(
+    Multi.new()
+    |> Multi.update(:user, changeset)
+    |> Multi.delete_all(
       :tokens,
       Account.UserTokenModel.user_and_contexts_query(user, [context])
     )
   end
+
+  ## Session
 
   @doc """
   Delivers the update email instructions to the given user.
@@ -422,6 +424,9 @@ defmodule Systems.Account.Public do
       %Ecto.Changeset{data: %User{}}
 
   """
+
+  ## OTP
+
   def change_user_password(user, attrs \\ %{}) do
     User.password_changeset(user, attrs, hash_password: false)
   end
@@ -444,9 +449,9 @@ defmodule Systems.Account.Public do
       |> User.password_changeset(attrs)
       |> User.validate_current_password(password)
 
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, changeset)
-    |> Ecto.Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
+    Multi.new()
+    |> Multi.update(:user, changeset)
+    |> Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
     |> Repo.commit()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
@@ -454,14 +459,13 @@ defmodule Systems.Account.Public do
     end
   end
 
-  ## Session
-
   @doc """
   Generates a session token.
   """
   def generate_user_session_token(user) do
     {token, user_token} = Account.UserTokenModel.build_session_token(user)
     Repo.insert!(user_token)
+    ## Confirmation
     token
   end
 
@@ -480,8 +484,6 @@ defmodule Systems.Account.Public do
     Repo.delete_all(Account.UserTokenModel.token_and_context_query(token, "session"))
     :ok
   end
-
-  ## OTP
 
   def generate_otp(email) when is_binary(email) do
     Rate.Public.request_permission(:otp_request, email, 1)
@@ -510,10 +512,11 @@ defmodule Systems.Account.Public do
   end
 
   def verify_otp(email, code) when is_binary(email) and is_binary(code) do
-    case Account.AuthCodeModel.active_query(email) |> Repo.one() do
+    case email |> Account.AuthCodeModel.active_query() |> Repo.one() do
       nil ->
         {:error, :not_found}
 
+      ## Reset password
       token ->
         case Account.AuthCodeModel.verify(token, code) do
           :ok ->
@@ -530,8 +533,6 @@ defmodule Systems.Account.Public do
         end
     end
   end
-
-  ## Confirmation
 
   @doc """
   Delivers the confirmation email instructions to the given user.
@@ -578,18 +579,18 @@ defmodule Systems.Account.Public do
     else
       _ -> :error
     end
+
+    # User Features
   end
 
   defp confirm_user_multi(user) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.confirm_changeset(user))
-    |> Ecto.Multi.delete_all(
+    Multi.new()
+    |> Multi.update(:user, User.confirm_changeset(user))
+    |> Multi.delete_all(
       :tokens,
       Account.UserTokenModel.user_and_contexts_query(user, ["confirm"])
     )
   end
-
-  ## Reset password
 
   @doc """
   Delivers the reset password email to the given user.
@@ -605,6 +606,7 @@ defmodule Systems.Account.Public do
     {encoded_token, user_token} = Account.UserTokenModel.build_email_token(user, "reset_password")
     Repo.insert!(user_token)
 
+    # Visited Pages
     Account.UserNotifier.deliver_reset_password_instructions(
       user,
       reset_password_url_fun.(encoded_token)
@@ -645,17 +647,15 @@ defmodule Systems.Account.Public do
 
   """
   def reset_user_password(user, attrs) do
-    Ecto.Multi.new()
-    |> Ecto.Multi.update(:user, User.password_changeset(user, attrs))
-    |> Ecto.Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
+    Multi.new()
+    |> Multi.update(:user, User.password_changeset(user, attrs))
+    |> Multi.delete_all(:tokens, Account.UserTokenModel.user_and_contexts_query(user, :all))
     |> Repo.commit()
     |> case do
       {:ok, %{user: user}} -> {:ok, user}
       {:error, :user, changeset, _} -> {:error, changeset}
     end
   end
-
-  # User Features
 
   def get_features(%User{id: user_id}) do
     get_features(user_id)
@@ -668,8 +668,7 @@ defmodule Systems.Account.Public do
   end
 
   defp create_features!(user_id) do
-    %Account.FeaturesModel{user_id: user_id}
-    |> Repo.insert!()
+    Repo.insert!(%Account.FeaturesModel{user_id: user_id})
   end
 
   def update_features(%Account.FeaturesModel{} = features, changeset) do
@@ -683,8 +682,6 @@ defmodule Systems.Account.Public do
     )
     |> Repo.commit()
   end
-
-  # Visited Pages
 
   def mark_as_visited(%User{visited_pages: nil} = user, page) when is_binary(page) do
     update_visited(user, [page])
@@ -701,7 +698,7 @@ defmodule Systems.Account.Public do
   def mark_as_visited(user, page), do: mark_as_visited(user, page_key(page))
 
   defp update_visited(user, visited_pages) do
-    changeset = user |> User.visited_changeset(%{visited_pages: visited_pages})
+    changeset = User.visited_changeset(user, %{visited_pages: visited_pages})
 
     Multi.new()
     |> Multi.update(:user, changeset)
@@ -726,8 +723,8 @@ defmodule Systems.Account.Public do
 end
 
 defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do
-  alias Systems.Account.UserProfileEditModel
   alias Systems.Account
+  alias Systems.Account.UserProfileEditModel
 
   def save(%{user_id: user_id} = _user_profile_edit, %{changes: changes} = changeset) do
     user = Account.Public.get_user!(user_id)

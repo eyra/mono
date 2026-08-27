@@ -1,4 +1,5 @@
 defmodule Systems.Consent.WysiwygTestForm do
+  @moduledoc false
   use CoreWeb.LiveForm
 
   @impl true
@@ -10,11 +11,11 @@ defmodule Systems.Consent.WysiwygTestForm do
   end
 
   defp update_visible(%{assigns: %{x: nil}} = socket) do
-    socket |> assign(visible: false)
+    assign(socket, visible: false)
   end
 
   defp update_visible(socket) do
-    socket |> assign(visible: true)
+    assign(socket, visible: true)
   end
 
   @impl true

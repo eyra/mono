@@ -5,22 +5,22 @@ defmodule Core.Authorization.Node do
   """
   use Ecto.Schema
 
+  alias Core.Authorization.RoleAssignment
   alias Ecto.Changeset
 
   schema "authorization_nodes" do
     belongs_to(:parent, __MODULE__)
     has_many(:children, __MODULE__, foreign_key: :parent_id, references: :id)
 
-    has_many(:role_assignments, Core.Authorization.RoleAssignment)
+    has_many(:role_assignments, RoleAssignment)
     timestamps()
   end
 
   def change(node) do
-    node
-    |> Changeset.cast(%{}, [])
+    Changeset.cast(node, %{}, [])
   end
 
-  def create() do
+  def create do
     %__MODULE__{}
   end
 
@@ -32,7 +32,7 @@ defmodule Core.Authorization.Node do
 
   def create([_ | _] = principal_ids, role) do
     role_assignments =
-      Enum.map(principal_ids, &Core.Authorization.RoleAssignment.create(&1, role))
+      Enum.map(principal_ids, &RoleAssignment.create(&1, role))
 
     %__MODULE__{
       role_assignments: role_assignments

@@ -1,11 +1,11 @@
 defmodule Systems.Affiliate.RecruitTest do
   use CoreWeb.ConnCase, async: false
 
-  @moduletag :capture_log
-
-  alias Systems.Assignment
   alias Systems.Affiliate
+  alias Systems.Assignment
   alias Systems.Fund
+
+  @moduletag :capture_log
 
   describe "GET /r/:sqid" do
     setup do

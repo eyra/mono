@@ -1,4 +1,5 @@
 defmodule Systems.Home.Presenter do
+  @moduledoc false
   @behaviour Frameworks.Concept.Presenter
 
   @impl true

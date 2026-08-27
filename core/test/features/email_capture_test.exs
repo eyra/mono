@@ -8,9 +8,9 @@ defmodule CoreWeb.Features.EmailCaptureTest do
   """
   use CoreWeb.FeatureCase
 
-  alias Systems.Pool
   alias Systems.Assignment
   alias Systems.Crew
+  alias Systems.Pool
 
   @tag :feature
   @tag :skip
@@ -22,8 +22,8 @@ defmodule CoreWeb.Features.EmailCaptureTest do
     participant =
       Factories.insert!(:member, %{
         password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
+        confirmed_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
+        verified_at: NaiveDateTime.truncate(NaiveDateTime.utc_now(), :second),
         creator: false
       })
 
@@ -36,8 +36,8 @@ defmodule CoreWeb.Features.EmailCaptureTest do
 
     # Mark task as completed using the correct identifier format
     %{crew: crew, workflow: workflow} = assignment
-    %{items: [item]} = workflow |> Repo.preload([:items])
-    member = Crew.Public.get_member(crew, participant) |> Repo.preload([:user])
+    %{items: [item]} = Repo.preload(workflow, [:items])
+    member = crew |> Crew.Public.get_member(participant) |> Repo.preload([:user])
     identifier = Assignment.Private.task_identifier(assignment, item, member)
     Crew.Factories.create_task(crew, member, identifier, status: :completed)
 
@@ -73,7 +73,6 @@ defmodule CoreWeb.Features.EmailCaptureTest do
     |> click(Query.css("[data-testid='email-capture-submit']"))
 
     # Should see success state
-    session
-    |> assert_has(Query.css("[data-testid='email-capture-success']"))
+    assert_has(session, Query.css("[data-testid='email-capture-success']"))
   end
 end

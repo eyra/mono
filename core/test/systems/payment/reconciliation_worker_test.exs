@@ -8,13 +8,13 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   four and returns :ok.
   """
   use Core.DataCase, async: true
-  import Mox
+
   import Ecto.Query
+  import Mox
 
   alias Core.Factories
   alias Core.Repo
   alias Systems.Bookkeeping
-  alias Systems.Fund
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
   alias Systems.Payment.ReconciliationFindingModel
@@ -38,7 +38,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
       |> NaiveDateTime.add(-minutes_ago * 60, :second)
       |> NaiveDateTime.truncate(:second)
 
-    from(r in queryable, where: r.id == ^id) |> Repo.update_all(set: [inserted_at: ts])
+    Repo.update_all(from(r in queryable, where: r.id == ^id), set: [inserted_at: ts])
   end
 
   defp stuck_payout do
@@ -79,7 +79,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   defp stuck_transaction do
     currency_ledger =
       case Fund.CurrencyLedgerModel.get_by_currency(:EUR) do
-        nil -> Fund.CurrencyLedgerModel.create(:EUR) |> Repo.insert!()
+        nil -> :EUR |> Fund.CurrencyLedgerModel.create() |> Repo.insert!()
         existing -> Repo.preload(existing, [:inbound, :outbound])
       end
 
@@ -169,7 +169,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
 
     run = Repo.one!(ReconciliationRunModel)
     assert run.run_type == :cron
-    assert run.finished_at != nil
+    assert run.finished_at
     assert run.scanned == 2
     assert run.resolved_completed == 2
 
@@ -192,7 +192,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
            raw_status: "completed",
            reference: "payout=#{Ecto.UUID.generate()},type=withdrawal,attempt=0",
            amount: 1000,
-           created: DateTime.add(DateTime.utc_now(), -24 * 60 * 60, :second)
+           created: DateTime.shift(DateTime.utc_now(), day: -1)
          }
        ]}
     end)
@@ -210,7 +210,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
            payment_url: nil,
            amount: 1440,
            reference: "pay_in:fund=1:#{Ecto.UUID.generate()}",
-           created: DateTime.add(DateTime.utc_now(), -24 * 60 * 60, :second)
+           created: DateTime.shift(DateTime.utc_now(), day: -1)
          }
        ]}
     end)

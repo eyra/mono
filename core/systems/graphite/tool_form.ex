@@ -1,7 +1,8 @@
 defmodule Systems.Graphite.ToolForm do
+  @moduledoc false
   use CoreWeb.LiveForm
-
   use Gettext, backend: CoreWeb.Gettext
+
   import Frameworks.Pixel.Form
 
   alias Systems.Graphite
@@ -69,7 +70,7 @@ defmodule Systems.Graphite.ToolForm do
 
   @impl true
   def handle_event("change", %{"tool_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
-    {:noreply, socket |> save(entity, attrs)}
+    {:noreply, save(socket, entity, attrs)}
   end
 
   def save(%{assigns: %{timezone: nil}} = socket, _entity, _attrs) do

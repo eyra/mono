@@ -1,5 +1,7 @@
 defmodule Systems.Storage.Yoda.Client do
+  @moduledoc false
   alias Frameworks.Utility.HTTPClient
+
   require Logger
 
   # issue with HTTPPoison not supporting HTTP method :mkcol

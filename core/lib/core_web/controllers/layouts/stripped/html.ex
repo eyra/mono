@@ -4,10 +4,11 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   """
   use CoreWeb, :html
 
-  import Phoenix.Component
   import CoreWeb.UI.Footer
-  alias Frameworks.Pixel.Navigation
+  import Phoenix.Component
+
   alias Frameworks.Pixel.Hero
+  alias Frameworks.Pixel.Navigation
 
   attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)

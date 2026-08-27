@@ -1,13 +1,14 @@
 defmodule Systems.Fund.Queries do
-  require Ecto.Query
-  require Frameworks.Utility.Query
-
+  @moduledoc false
   import Ecto.Query, warn: false
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Fund
 
-  def currency_query() do
+  require Ecto.Query
+  require Frameworks.Utility.Query
+
+  def currency_query do
     from(Fund.CurrencyModel, as: :currency)
   end
 
@@ -17,7 +18,7 @@ defmodule Systems.Fund.Queries do
     ])
   end
 
-  def reward_query() do
+  def reward_query do
     from(Fund.RewardModel, as: :reward)
   end
 

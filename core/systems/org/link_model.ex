@@ -1,10 +1,9 @@
 defmodule Systems.Org.LinkModel do
+  @moduledoc false
   use Ecto.Schema
-  import Ecto.Changeset
+  use Systems.Org.Internals
 
-  use Systems.Org.{
-    Internals
-  }
+  import Ecto.Changeset
 
   schema "org_links" do
     belongs_to(:from, Node)
@@ -16,7 +15,6 @@ defmodule Systems.Org.LinkModel do
   @fields ~w()a
 
   def changeset(link, attrs) do
-    link
-    |> cast(attrs, @fields)
+    cast(link, attrs, @fields)
   end
 end

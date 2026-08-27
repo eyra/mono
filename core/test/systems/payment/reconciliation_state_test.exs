@@ -29,7 +29,7 @@ defmodule Systems.Payment.ReconciliationStateTest do
 
   describe "tally/2" do
     test "counts the outcome on the carried summary" do
-      %State{summary: summary} = State.new() |> State.tally(:verified)
+      %State{summary: summary} = State.tally(State.new(), :verified)
 
       assert summary.verified == 1
       assert summary.scanned == 1

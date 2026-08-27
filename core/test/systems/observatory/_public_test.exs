@@ -1,5 +1,7 @@
 defmodule Systems.Observatory.PublicTest do
   use Core.DataCase, async: true
+
+  alias Phoenix.Socket.Broadcast
   alias Systems.Observatory.Public
 
   describe "subscribe/1" do
@@ -24,7 +26,7 @@ defmodule Systems.Observatory.PublicTest do
       assert Process.info(self(), :messages) ==
                {:messages,
                 [
-                  %Phoenix.Socket.Broadcast{
+                  %Broadcast{
                     event: "observation",
                     payload: {:stuff_happened, %{some: :data}},
                     topic: "signal:stuff_happened:"
@@ -44,7 +46,7 @@ defmodule Systems.Observatory.PublicTest do
       assert Process.info(self(), :messages) ==
                {:messages,
                 [
-                  %Phoenix.Socket.Broadcast{
+                  %Broadcast{
                     event: "observation",
                     payload: {:stuff_happened, %{some: :data}},
                     topic: "signal:stuff_happened:1"
@@ -65,7 +67,7 @@ defmodule Systems.Observatory.PublicTest do
       assert Process.info(self(), :messages) ==
                {:messages,
                 [
-                  %Phoenix.Socket.Broadcast{
+                  %Broadcast{
                     event: "observation",
                     payload: {:stuff_happened, %{some: :data}},
                     topic: "signal:stuff_happened:"
@@ -85,7 +87,7 @@ defmodule Systems.Observatory.PublicTest do
       assert Process.info(self(), :messages) ==
                {:messages,
                 [
-                  %Phoenix.Socket.Broadcast{
+                  %Broadcast{
                     event: "observation",
                     payload: {:stuff_happened, %{some: :data}},
                     topic: "signal:stuff_happened:1"

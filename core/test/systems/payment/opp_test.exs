@@ -7,8 +7,8 @@ defmodule Systems.Payment.Provider.OPPTest do
   """
   use ExUnit.Case, async: false
 
-  alias Systems.Payment.Provider.OPP
   alias Systems.Payment.Error
+  alias Systems.Payment.Provider.OPP
   alias Systems.Payment.Transaction
 
   setup do
@@ -66,7 +66,7 @@ defmodule Systems.Payment.Provider.OPPTest do
         Plug.Conn.resp(conn, 422, ~s<{"error": "nope"}>)
       end)
 
-      assert {:error, %Systems.Payment.Error{code: :api_error}} =
+      assert {:error, %Error{code: :api_error}} =
                OPP.create_bank_account("m_1", %{})
     end
   end

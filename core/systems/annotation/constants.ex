@@ -15,8 +15,9 @@ defmodule Systems.Annotation.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Ontology.Constants
       alias Systems.Ontology.Constants
+
+      require Constants
 
       @definition Constants.definition()
       @subject Constants.subject()
