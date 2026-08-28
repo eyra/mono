@@ -212,11 +212,11 @@ msgstr "Passed"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.first"
-msgstr ""
+msgstr "First year"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "student_years.second"
-msgstr ""
+msgstr "Second year"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "currency_types.legal"

@@ -13,23 +13,23 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "apply.cta.title"
-msgstr ""
+msgstr "Participate"
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Document"
 
 #, elixir-autogen, elixir-format
 msgid "open.cta.title"
-msgstr ""
+msgstr "Proceed"
 
 #, elixir-autogen, elixir-format
 msgid "participated.label"
-msgstr ""
+msgstr "Participated"
 
 #, elixir-autogen, elixir-format
 msgid "pending.label"
-msgstr ""
+msgstr "Pending"
 
 #, elixir-autogen, elixir-format
 msgid "pdf-replace-file-button"

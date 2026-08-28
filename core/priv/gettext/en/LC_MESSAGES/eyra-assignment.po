@@ -470,7 +470,7 @@ msgstr "Thank you. You have completed this part. Click Continue to proceed to %{
 
 #, elixir-autogen, elixir-format
 msgid "storage.failed.warning"
-msgstr ""
+msgstr "Could not store the data. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "activate_account.body"
@@ -782,7 +782,7 @@ msgstr[1] "Could not confirm %{count} contributions. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
-msgstr ""
+msgstr "Could not confirm the contributions. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "participation.title.accepted"
