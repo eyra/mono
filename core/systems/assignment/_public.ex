@@ -529,7 +529,7 @@ defmodule Systems.Assignment.Public do
   defp ensure_fund_currency(fund), do: fund
 
   def participant_id(%Assignment.Model{crew: crew}, user) do
-    case Crew.Public.get_member_unsafe(crew, user) do
+    case Crew.Public.get_member_including_expired(crew, user) do
       %{public_id: public_id} -> {:ok, public_id}
       _ -> :error
     end
@@ -673,7 +673,7 @@ defmodule Systems.Assignment.Public do
 
   def reset_member(%{crew: crew} = assignment, user, opts \\ []) do
     # get member regardless expired state
-    if member = Crew.Public.get_member_unsafe(crew, user, [:crew]) do
+    if member = Crew.Public.get_member_including_expired(crew, user, [:crew]) do
       expire_at = expiration_timestamp(assignment)
       Crew.Public.reset_member!(member, expire_at, opts)
     else

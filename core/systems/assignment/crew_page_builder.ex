@@ -44,7 +44,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
       view: current_view(assignment, assigns_with_context),
       info: assignment.info,
       crew: crew,
-      crew_member: Crew.Public.get_member_unsafe(crew, user),
+      crew_member: Crew.Public.get_member_including_expired(crew, user),
       user_state: user_state,
       footer: %{
         privacy_text: dgettext("eyra-ui", "privacy.link"),
@@ -259,7 +259,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
 
   defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
     if Assignment.Public.tester?(assignment, user) or status == :online do
-      member = Crew.Public.get_member(crew, user)
+      member = Crew.Public.get_member_including_expired(crew, user)
       work_items(assignment, member, user)
     else
       []
