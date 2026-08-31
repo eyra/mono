@@ -259,8 +259,7 @@ defmodule Systems.Crew.Public do
     |> Repo.preload(preload)
   end
 
-  def get_member_unsafe(crew, user_ref, preload \\ []) do
-    # method is unsafe since it returns members regardless their expired status
+  def get_member_including_expired(crew, user_ref, preload \\ []) do
     member_query(crew, user_ref)
     |> Repo.one()
     |> Repo.preload(preload)

@@ -72,6 +72,28 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assert view.implementation == Assignment.FinishedView
     end
 
+    test "shows participation view after rejected contribution and member expiry", %{
+      assignment: assignment,
+      user: user
+    } do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      mark_intro_visited(assignment, user)
+      finish_all_tasks(assignment, user)
+
+      assignment
+      |> Assignment.Public.get_participation(user)
+      |> Ecto.Changeset.change(
+        rejected_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      )
+      |> Repo.update!()
+
+      Assignment.Public.expire_member(assignment, user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+
+      assert view.implementation == Assignment.ParticipationView
+    end
+
     test "shows finished view when consent declined", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
