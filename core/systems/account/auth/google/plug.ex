@@ -91,7 +91,6 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
   end
 
   defp authenticate(conn, otp_app, session_params) do
-    creator? = Params.parse_creator(session_params)
     post_action = Params.parse_string_param(session_params, "post_signin_action")
 
     config = config(otp_app) |> Keyword.put(:session_params, session_params)
@@ -105,9 +104,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
     case Systems.Account.Auth.authenticate_or_transfer(
            Systems.Account.Auth.Google,
            google_user,
-           %{
-             creator: creator?
-           }
+           %{creator: true}
          ) do
       {:transfer, user} ->
         conn

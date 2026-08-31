@@ -12,6 +12,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
   alias CoreWeb.Endpoint
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
+  alias Frameworks.Utility.Params
   alias Systems.Account
 
   @token_salt "otp-redeem"
@@ -27,6 +28,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
           email: email,
           form: to_form(%{"code" => ""}),
           error: nil,
+          creator?: Params.parse_creator(params),
           return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
         )
         |> update_menus()
@@ -42,13 +44,22 @@ defmodule Next.Account.AuthCodeVerifyPage do
   end
 
   @impl true
-  def handle_event("verify", %{"code" => code}, %{assigns: %{email: email}} = socket) do
+  def handle_event(
+        "verify",
+        %{"code" => code},
+        %{assigns: %{email: email, return_to: return_to, creator?: creator?}} = socket
+      ) do
     code = String.trim(code)
-    return_to = socket.assigns[:return_to]
 
     case Account.Public.verify_otp(email, code) do
       {:ok, user} ->
-        payload = %{user_id: user && user.id, email: email, return_to: return_to}
+        payload = %{
+          user_id: user && user.id,
+          email: email,
+          creator?: creator?,
+          return_to: return_to
+        }
+
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
         {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
 

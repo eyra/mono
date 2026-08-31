@@ -61,9 +61,11 @@ defmodule Systems.Account.Auth.Mock.CallbackController do
       case Repo.get_by(User, email: email) do
         nil ->
           {:ok, %{user: user}} =
-            Systems.Account.Auth.authenticate(Systems.Account.Auth.Mock, %{
-              "email" => email
-            })
+            Systems.Account.Auth.authenticate(
+              Systems.Account.Auth.Mock,
+              %{"email" => email},
+              %{creator: true}
+            )
 
           conn
           |> Systems.Account.UserAuth.sign_out_current_user()

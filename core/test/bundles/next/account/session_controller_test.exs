@@ -29,6 +29,25 @@ defmodule Next.Account.SessionControllerTest do
       conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
 
       assert redirected_to(conn) == "/user/onboarding"
+      refute Systems.Account.Public.get_user_by_email(email).creator
+    end
+  end
+
+  describe "GET /user/auth/redeem — participant entry" do
+    test "creates a participant account", %{conn: conn} do
+      email = "participant-#{Faker.UUID.v4()}@example.com"
+
+      token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: nil,
+          email: email,
+          creator?: false,
+          return_to: nil
+        })
+
+      _conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
+
+      refute Systems.Account.Public.get_user_by_email(email).creator
     end
   end
 
@@ -73,6 +92,24 @@ defmodule Next.Account.SessionControllerTest do
       conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
 
       assert redirected_to(conn) == "/pool/panl/join"
+    end
+  end
+
+  describe "GET /user/auth/redeem — existing creator via participant entry" do
+    test "retains the stored account type", %{conn: conn} do
+      user = Factories.insert!(:member, %{creator: true})
+
+      token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: user.id,
+          email: user.email,
+          creator?: false,
+          return_to: nil
+        })
+
+      _conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
+
+      assert Systems.Account.Public.get_user!(user.id).creator
     end
   end
 

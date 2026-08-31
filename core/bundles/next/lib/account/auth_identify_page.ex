@@ -1,4 +1,4 @@
-defmodule Next.Account.AuthPage do
+defmodule Next.Account.AuthIdentifyPage do
   use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
@@ -16,6 +16,8 @@ defmodule Next.Account.AuthPage do
 
   @impl true
   def mount(params, _session, socket) do
+    creator? = socket.assigns.live_action != :participant
+
     if feature_enabled?(:otp) do
       {
         :ok,
@@ -24,6 +26,7 @@ defmodule Next.Account.AuthPage do
           form: to_form(%{"email" => ""}),
           error: nil,
           loading: false,
+          creator?: creator?,
           return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
         )
         |> update_menus()
@@ -64,9 +67,10 @@ defmodule Next.Account.AuthPage do
   end
 
   @impl true
-  def handle_info({:route_email, email}, socket) do
-    return_to = socket.assigns[:return_to]
-
+  def handle_info(
+        {:route_email, email},
+        %{assigns: %{return_to: return_to, creator?: creator?}} = socket
+      ) do
     case Account.EmailRouter.route(email) do
       :google ->
         {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}
@@ -75,12 +79,15 @@ defmodule Next.Account.AuthPage do
         {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
 
       :mock ->
-        {:noreply, redirect(socket, to: "/auth/mock/callback?email=#{URI.encode(email)}")}
+        {:noreply,
+         redirect(socket,
+           to: "/auth/mock/callback?email=#{URI.encode(email)}"
+         )}
 
       :otp ->
         case Account.Public.generate_otp(email) do
           :ok ->
-            {:noreply, push_navigate(socket, to: verify_url(email, return_to))}
+            {:noreply, push_navigate(socket, to: verify_url(email, return_to, creator?))}
 
           {:error, :rate_limited} ->
             {:noreply,
@@ -94,10 +101,11 @@ defmodule Next.Account.AuthPage do
 
   defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
 
-  defp verify_url(email, nil), do: ~p"/user/auth/verify?email=#{email}"
+  defp verify_url(email, nil, creator?),
+    do: ~p"/user/auth/verify?email=#{email}&creator=#{creator?}"
 
-  defp verify_url(email, return_to),
-    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}"
+  defp verify_url(email, return_to, creator?),
+    do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}&creator=#{creator?}"
 
   defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 

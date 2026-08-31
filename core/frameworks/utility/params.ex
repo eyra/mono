@@ -22,6 +22,8 @@ defmodule Frameworks.Utility.Params do
   end
 
   @doc "Get a trimmed string param when present; returns nil for missing/blank."
+  def parse_creator(params), do: parse_bool_param(params, "creator", true)
+
   def parse_string_param(params, key) when is_map(params) do
     case Map.get(params, key) do
       nil ->
@@ -35,6 +37,4 @@ defmodule Frameworks.Utility.Params do
         nil
     end
   end
-
-  def parse_creator(params), do: parse_bool_param(params, "creator")
 end
