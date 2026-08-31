@@ -12,20 +12,10 @@ defmodule Systems.Account.EmailRouter do
     end
   end
 
-  defp route_unknown_email(email), do: organization_idp(email) || user_check_idp(email)
+  defp route_unknown_email(email), do: organization_idp(email) || :otp
 
   # ponytail: returns nil until Next Org domains gain an IdP property.
   defp organization_idp(_email), do: nil
-
-  defp user_check_idp(email) do
-    case Frameworks.UserCheck.check_email(email) do
-      {:ok, result} ->
-        Methods.provider_for_mx_provider(result.mx_provider) || :otp
-
-      {:error, _reason} ->
-        :otp
-    end
-  end
 
   defp identity_provider(user) do
     Methods.satellite_providers()

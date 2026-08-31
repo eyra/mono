@@ -56,11 +56,11 @@ defmodule Systems.Account.EmailRouterTest do
     assert EmailRouter.route(user.email) == :otp
   end
 
-  test "routes an unknown email to its supported UserCheck MX provider" do
-    assert EmailRouter.route("google@custom-domain.test") == :google
+  test "routes an unknown Google-hosted email to OTP" do
+    assert EmailRouter.route("google@custom-domain.test") == :otp
   end
 
-  test "falls back to OTP when UserCheck has no supported provider" do
+  test "routes unknown emails to OTP" do
     assert EmailRouter.route("unknown-#{System.unique_integer([:positive])}@custom-domain.test") ==
              :otp
   end
