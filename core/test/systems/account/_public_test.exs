@@ -128,6 +128,13 @@ defmodule Systems.Account.PublicTest do
       assert user.email == email
       assert user.hashed_password == "no-password-set"
       assert Account.Public.passwordless?(user)
+      assert user.creator
+    end
+
+    test "creates a participant when requested" do
+      {:ok, user} = Account.Public.register_user_with_email(Faker.Internet.email(), false)
+
+      refute user.creator
     end
 
     test "does not set confirmed_at (terms acceptance will)" do

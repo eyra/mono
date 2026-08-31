@@ -1,4 +1,4 @@
-defmodule Next.Account.AuthSignupPageTest do
+defmodule Next.Account.AuthProviderPageTest do
   use CoreWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 

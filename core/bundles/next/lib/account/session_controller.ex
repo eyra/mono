@@ -101,7 +101,7 @@ defmodule Next.Account.SessionController do
     do: register_new_email_user(conn, email, payload)
 
   defp register_new_email_user(conn, email, payload) do
-    case Account.Public.register_user_with_email(email) do
+    case Account.Public.register_user_with_email(email, Map.get(payload, :creator?, false)) do
       {:ok, user} ->
         conn
         |> stash_return_to(payload)

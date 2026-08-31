@@ -305,11 +305,12 @@ defmodule Systems.Account.Public do
   the inbox). The account stays unconfirmed until the user accepts terms
   & privacy in the onboarding step.
   """
-  def register_user_with_email(email) when is_binary(email) do
+  def register_user_with_email(email, creator? \\ true)
+      when is_binary(email) and is_boolean(creator?) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     %User{}
-    |> User.sso_changeset(%{email: email, creator: false, verified_at: now})
+    |> User.sso_changeset(%{email: email, creator: creator?, verified_at: now})
     |> User.validate_email()
     |> Repo.insert()
   end

@@ -1,4 +1,4 @@
-defmodule Next.Account.AuthSignupPage do
+defmodule Next.Account.AuthProviderPage do
   use CoreWeb, :live_view_fabric
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
