@@ -67,10 +67,10 @@ defmodule Next.Account.AuthIdentifyPage do
   end
 
   @impl true
-  def handle_info({:route_email, email}, socket) do
-    return_to = socket.assigns[:return_to]
-    creator? = socket.assigns.creator?
-
+  def handle_info(
+        {:route_email, email},
+        %{assigns: %{return_to: return_to, creator?: creator?}} = socket
+      ) do
     case Account.EmailRouter.route(email) do
       :google ->
         {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}

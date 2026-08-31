@@ -44,10 +44,12 @@ defmodule Next.Account.AuthCodeVerifyPage do
   end
 
   @impl true
-  def handle_event("verify", %{"code" => code}, %{assigns: %{email: email}} = socket) do
+  def handle_event(
+        "verify",
+        %{"code" => code},
+        %{assigns: %{email: email, return_to: return_to, creator?: creator?}} = socket
+      ) do
     code = String.trim(code)
-    return_to = socket.assigns[:return_to]
-    creator? = socket.assigns.creator?
 
     case Account.Public.verify_otp(email, code) do
       {:ok, user} ->
