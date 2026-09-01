@@ -22,6 +22,8 @@ The Native Navigator owns the route stack across LiveView and BFF pages. Next pr
 
 A mobile page uses the rendering layer that matches its needs. The shared WebView is never duplicated per route, while native navigation provides a single stack for all page types.
 
+The rendering layer is selected case by case while defining a User Journey or Use Case. The choice between a LiveView page and a BFF Page is recorded with that work; no product area is committed wholesale to either renderer.
+
 This is a narrow Next application implementation, not a general navigation library. It creates the need for device-independent UI models for BFF pages, addressed by [ADR 0003](0003-adopt-device-independent-mobile-ui-models.md).
 
 ## Alternatives considered
