@@ -1,8 +1,5 @@
 # 0001. Do not invest in LiveView Native
 
-**Status:** Accepted
-**Date:** 2026-09-01
-
 ## Context
 
 LVN is a general UI platform. Its maintainers must continuously define a common model for components, events, state updates, navigation, focus, lifecycle, and compatibility across HTML, SwiftUI, and Compose.
