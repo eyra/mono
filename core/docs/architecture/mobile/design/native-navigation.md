@@ -1,6 +1,16 @@
 # Native navigation
 
-Implementation design placeholder.
+## Scope
+
+## Native Navigator
+
+## WebView route proposals
+
+## Route handling and history
+
+## LiveView and BFF transitions
+
+## Recovery and errors
 
 ## Decisions
 

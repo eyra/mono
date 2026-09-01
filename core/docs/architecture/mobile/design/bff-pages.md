@@ -1,6 +1,20 @@
 # BFF Pages
 
-Implementation design placeholder.
+## Scope
+
+## BFF Page lifecycle
+
+## UI-model tree and component vocabulary
+
+## Page builders and reusable models
+
+## Observatory updates
+
+## Actions
+
+## Snapshots and reconnect
+
+## Contract validation and compatibility
 
 ## Decisions
 
