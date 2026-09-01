@@ -187,7 +187,8 @@ if config_env() == :prod do
       ),
     client_id: System.get_env("CENTERDATA_CLIENT_ID"),
     client_secret: System.get_env("CENTERDATA_CLIENT_SECRET"),
-    authorization_params: [scope: "email"]
+    authorization_params: [scope: "email"],
+    code_verifier: true
 
   config :core, Core.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
