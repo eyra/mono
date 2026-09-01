@@ -39,4 +39,3 @@ Define the JSON Schema, validation, fixtures, compatibility, and renderer confor
 ## Related documentation
 
 - [Centerdata integration](centerdata/design-briefing.md)
-- [Centerdata integration decisions](centerdata/integration-decisions.md)
