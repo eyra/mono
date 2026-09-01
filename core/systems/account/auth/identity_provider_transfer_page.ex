@@ -25,6 +25,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferPage do
     {:ok, Phoenix.LiveView.redirect(socket, to: ~p"/user/auth/identify")}
   end
 
+  defp idp_label("centerdata"), do: "Centerdata"
   defp idp_label("surfconext"), do: "SURFconext"
   defp idp_label(idp), do: String.capitalize(idp)
 

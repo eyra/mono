@@ -114,6 +114,7 @@ config :wallaby,
 
 config :core, :features,
   member_google_sign_in: true,
+  centerdata_sign_in: true,
   password_sign_in: true,
   debug_expire_force: true,
   panl: true,
@@ -128,6 +129,9 @@ config :core, Oban, queues: false, plugins: false
 
 config :core, Systems.Account.Auth.Surfconext,
   oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
+
+config :core, Systems.Account.Auth.Centerdata,
+  oidc_module: Systems.Account.Auth.Centerdata.FakeOIDC
 
 # Tests always use the next bundle
 config :core, :bundle, :next

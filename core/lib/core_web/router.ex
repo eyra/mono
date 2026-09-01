@@ -3,6 +3,7 @@ defmodule CoreWeb.Router do
 
   require Core.BundleOverrides
   require Systems.Account.Auth.Surfconext
+  require Systems.Account.Auth.Centerdata
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
   require Frameworks.E2E.Routes
@@ -13,6 +14,7 @@ defmodule CoreWeb.Router do
   Systems.Account.Auth.Google.routes(:core)
 
   Systems.Account.Auth.Surfconext.routes(:core)
+  Systems.Account.Auth.Centerdata.routes(:core)
 
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()

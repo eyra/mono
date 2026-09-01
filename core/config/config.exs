@@ -192,6 +192,14 @@ config :core, Systems.Account.Auth.Surfconext,
   base_url: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
 
+config :core, Systems.Account.Auth.Centerdata,
+  client_id: "not-set",
+  client_secret: "not-set",
+  base_url: "https://messpanel.test.centerdata.nl",
+  openid_configuration_uri: "https://messpanel.test.centerdata.nl/openid_configuration/",
+  redirect_uri: "not-set",
+  authorization_params: [scope: "email"]
+
 # Domains routed to Surfconext SSO on the email-first auth page.
 # Override in runtime config per environment.
 config :core, :surfconext_domains, []
