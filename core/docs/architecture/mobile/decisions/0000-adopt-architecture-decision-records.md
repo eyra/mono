@@ -5,11 +5,11 @@
 
 ## Context
 
-Next architecture decisions need a durable, discoverable record of their context, decision, and consequences. Decisions often change over time; the record must preserve what was decided and why.
+Next mobile architecture decisions need a durable, discoverable record of their context, decision, and consequences. Decisions often change over time; the record must preserve what was decided and why.
 
 ## Decision
 
-Store Architecture Decision Records (ADRs) in `core/docs/architecture/decisions/`.
+Store Architecture Decision Records (ADRs) in `core/docs/architecture/mobile/decisions/`.
 
 - Name records with an immutable four-digit sequence and a short kebab-case title: `0001-short-title.md`.
 - Use the headings: **Context**, **Decision**, **Consequences**, and **Alternatives considered** when alternatives materially informed the decision.
