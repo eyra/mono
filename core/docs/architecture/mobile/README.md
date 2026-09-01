@@ -132,6 +132,6 @@ The architecture is complete when one iOS and one Android proof of concept can:
 
 ## Related documentation
 
-- [`liveview-native.md`](liveview-native.md) — decision not to invest in LiveView Native.
+- [`../decisions/0001-do-not-invest-in-liveview-native.md`](../decisions/0001-do-not-invest-in-liveview-native.md) — decision not to invest in LiveView Native.
 - [`centerdata/design-briefing.md`](centerdata/design-briefing.md)
 - [`centerdata/integration-decisions.md`](centerdata/integration-decisions.md)

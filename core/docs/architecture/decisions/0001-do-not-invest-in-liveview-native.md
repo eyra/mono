@@ -1,14 +1,9 @@
-# Why Next is not investing in LiveView Native
+# 0001. Do not invest in LiveView Native
 
-**Status:** Decision
+**Status:** Accepted
+**Date:** 2026-09-01
 
-## Decision
-
-Next will not invest in LiveView Native (LVN) as the foundation of its mobile application.
-
-## Rationale
-
-### LVN carries permanent cross-platform pressure
+## Context
 
 LVN is a general UI platform. Its maintainers must continuously define a common model for components, events, state updates, navigation, focus, lifecycle, and compatibility across HTML, SwiftUI, and Compose.
 
@@ -20,23 +15,25 @@ This work has no completion point. The supported component surface must evolve w
 
 Mobile adds a second permanent concern: native app binaries remain installed while the server evolves. LVN must preserve the meaning of old component trees and events for long-lived iOS and Android versions. A framework can manage this, but it cannot eliminate it.
 
-This is not a criticism of the goal. It is the permanent responsibility of a general multi-renderer framework. Investing in LVN means accepting its abstraction, roadmap, and trade-offs as a central part of Next.
-
-### LVN has not proven it can carry that responsibility
-
 LVN has not established sufficient credible production adoption for a dependency at the centre of Next's mobile product. A mobile UI foundation needs evidence that teams operate it successfully across releases, platform changes, failures, and long-lived app versions. Project activity alone is not that evidence.
 
 LVN also remains unfinished. Its published Phoenix package and core libraries have not reached a stable, broadly proven product state. Next would take on the risk of becoming an early maintainer of foundational infrastructure rather than a consumer of a proven product.
 
-### The required confidence is absent
+## Decision
 
-A choice to invest in LVN would be a strategic commitment to that platform and its ecosystem, not a small library choice. Its lack of production proof means we do not have the confidence required to make that commitment.
+Next will not invest in LiveView Native as the foundation of its mobile application.
 
-## Scope of this decision
+## Consequences
 
-This decision concerns investment in LVN only. It does not claim that server-driven native UI is impossible or undesirable, and it does not prescribe an alternative implementation.
+Next does not accept LVN's abstraction, roadmap, and trade-offs as a central dependency of its mobile product. This decision concerns LVN only; it does not claim that server-driven native UI is impossible or undesirable.
 
-## Evidence
+## Alternatives considered
+
+### Invest in LiveView Native
+
+Rejected. The permanent cross-platform responsibility, together with LVN's unfinished state and lack of sufficient production proof, does not provide the confidence required for this strategic commitment.
+
+## References
 
 - LiveView Native Phoenix package releases: https://github.com/liveview-native/live_view_native/releases
 - LiveView Native core releases: https://github.com/liveview-native/liveview-native-core/releases
