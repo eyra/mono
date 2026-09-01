@@ -669,16 +669,8 @@ msgid "contributions.decline.submit.button"
 msgstr "Bijdrage afwijzen"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.declined.heading"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "contributions.overview.heading"
 msgstr "Bevestigd"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.pagination.single_page"
-msgstr "1 pagina"
 
 #, elixir-autogen, elixir-format
 msgid "contributions.search.placeholder"
@@ -697,14 +689,6 @@ msgid "contributions.waiting.heading"
 msgstr "Wachtend"
 
 #, elixir-autogen, elixir-format
-msgid "contributions.overview.amount_label"
-msgstr "Bedrag"
-
-#, elixir-autogen, elixir-format
-msgid "contributions.overview.date_label"
-msgstr "Datum"
-
-#, elixir-autogen, elixir-format
 msgid "contributions.overview.empty"
 msgstr "Nog geen bevestigde bijdragen."
 
@@ -717,12 +701,20 @@ msgid "assignment_full.title"
 msgstr "Deze studie zit vol"
 
 #, elixir-autogen, elixir-format
-msgid "pay_in_request_form.fee.invalid"
-msgstr "Voer een bedrag in, bijv. 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "pay_in_request_form.aim.placeholder"
 msgstr "Een korte omschrijving van je studie"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.slots.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.aim.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.fee.required"
+msgstr "Voer een bedrag in, bijv. 3,75"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.contributions"
@@ -732,17 +724,43 @@ msgstr "Bijdragen"
 msgid "contributions.confirm_all.button"
 msgstr ""
 
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.all_tasks_finished"
+msgstr "Wachtend"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.body"
+msgstr "Afwijzen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.placeholder"
+msgstr "Deze bijdrage kon niet worden afgewezen. Probeer het opnieuw."
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.title"
+msgstr "Afwijzen"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.modal.title"
+msgstr "Afwijzen"
+
 #, elixir-autogen, elixir-format
-msgid "contributions.confirm_all.error"
+msgid "contributions.declined.heading"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "participation.title.accepted"
-msgstr "Bedankt!"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.search.no_match"
+msgstr "Zoeken"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.tasks_finished.one"
+msgid_plural "contributions.tasks_finished.other"
+msgstr[0] "Afwijzen"
+msgstr[1] "Afwijzen"
 
 #, elixir-autogen, elixir-format
-msgid "participation.title.rejected"
-msgstr "Je bijdrage is afgewezen"
+msgid "participation.back_home.button"
+msgstr "Terug naar startpagina"
 
 #, elixir-autogen, elixir-format
 msgid "participation.body.accepted"
@@ -757,5 +775,9 @@ msgid "participation.body.rejected.with_reason"
 msgstr "Je bijdrage is afgewezen om de volgende reden:"
 
 #, elixir-autogen, elixir-format
-msgid "participation.back_home.button"
-msgstr "Terug naar startpagina"
+msgid "participation.title.accepted"
+msgstr "Bedankt!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Je bijdrage is afgewezen"

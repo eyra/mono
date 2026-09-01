@@ -125,7 +125,9 @@ config :core, Oban,
        # Prune auth codes past their validity window every hour
        {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
        # Approve pending rewards every hour
-       {"0 * * * *", Systems.Fund.AutoApproveWorker}
+       {"0 * * * *", Systems.Fund.AutoApproveWorker},
+       # Warn about and auto-donate dormant reward balances daily
+       {"0 4 * * *", Systems.Fund.AutoDonateWorker}
      ]}
   ]
 

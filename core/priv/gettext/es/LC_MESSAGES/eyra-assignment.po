@@ -670,15 +670,7 @@ msgid "contributions.decline.submit.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "contributions.declined.heading"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "contributions.overview.heading"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "contributions.pagination.single_page"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -698,14 +690,6 @@ msgid "contributions.waiting.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "contributions.overview.amount_label"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "contributions.overview.date_label"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "contributions.overview.empty"
 msgstr ""
 
@@ -718,12 +702,20 @@ msgid "assignment_full.title"
 msgstr "Este estudio está completo"
 
 #, elixir-autogen, elixir-format
-msgid "pay_in_request_form.fee.invalid"
-msgstr "Introduce un importe, p. ej., 3,75"
-
-#, elixir-autogen, elixir-format
 msgid "pay_in_request_form.aim.placeholder"
 msgstr "Una breve descripción de tu estudio"
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.slots.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.aim.required"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "pay_in_request_form.fee.required"
+msgstr "Introduce un importe, p. ej., 3,75"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.contributions"
@@ -733,17 +725,43 @@ msgstr "Contribuciones"
 msgid "contributions.confirm_all.button"
 msgstr ""
 
-#, elixir-autogen, elixir-format
-msgid "contributions.confirm_all.error"
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.all_tasks_finished"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.confirm.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.decline.modal.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "participation.title.accepted"
-msgstr "¡Gracias!"
+msgid "contributions.declined.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.search.no_match"
+msgstr ""
+
+#, elixir-autogen, elixir-format, fuzzy
+msgid "contributions.tasks_finished.one"
+msgid_plural "contributions.tasks_finished.other"
+msgstr[0] ""
+msgstr[1] ""
 
 #, elixir-autogen, elixir-format
-msgid "participation.title.rejected"
-msgstr "Tu contribución ha sido rechazada"
+msgid "participation.back_home.button"
+msgstr "Volver al inicio"
 
 #, elixir-autogen, elixir-format
 msgid "participation.body.accepted"
@@ -758,5 +776,9 @@ msgid "participation.body.rejected.with_reason"
 msgstr "Tu contribución ha sido rechazada por el siguiente motivo:"
 
 #, elixir-autogen, elixir-format
-msgid "participation.back_home.button"
-msgstr "Volver al inicio"
+msgid "participation.title.accepted"
+msgstr "¡Gracias!"
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
+msgstr "Tu contribución ha sido rechazada"

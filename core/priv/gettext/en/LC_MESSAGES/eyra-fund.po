@@ -245,3 +245,35 @@ msgstr "Donated to Eyra"
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
 msgstr "We're still confirming your donation. No need to try again."
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.byline"
+msgstr "%{amount} donated to Eyra"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.message"
+msgstr "%{amount} that was waiting in your wallet has been donated to Eyra, because no payout was requested after our earlier reminder.\n\nThank you for supporting research. If you think this was a mistake, please reply to this email."
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.title"
+msgstr "Your reward has been donated"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.byline"
+msgstr "%{amount} is waiting in your wallet"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.message"
+msgstr "You earned %{amount} for taking part in research, and it has been waiting in your wallet for a while.\n\nIf you would like to be paid out, please request it before %{date}. After that date the amount is donated to Eyra to support further research.\n\nYou can request a payout, or donate right away, from your home page."
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.title"
+msgstr "You still have an unclaimed reward"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.subject"
+msgstr "Your reward has been donated"
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.subject"
+msgstr "Your unclaimed reward expires soon"

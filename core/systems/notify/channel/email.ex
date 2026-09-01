@@ -40,6 +40,24 @@ defmodule Systems.Notify.Channel.Email do
      }}
   end
 
+  def build_payload(%EventModel{type: "reward_dormancy_warning"} = event) do
+    {:ok,
+     %{
+       "factory_fn" => "reward_dormancy_warning",
+       "subject_user_id" => event.subject_user_id,
+       "metadata" => event.metadata
+     }}
+  end
+
+  def build_payload(%EventModel{type: "reward_auto_donated"} = event) do
+    {:ok,
+     %{
+       "factory_fn" => "reward_auto_donated",
+       "subject_user_id" => event.subject_user_id,
+       "metadata" => event.metadata
+     }}
+  end
+
   def build_payload(_event), do: :skip
 
   @impl true
@@ -66,6 +84,14 @@ defmodule Systems.Notify.Channel.Email do
 
   defp build_email("contribution_declined", user, metadata) do
     {:ok, Email.Factory.contribution_declined(user, metadata)}
+  end
+
+  defp build_email("reward_dormancy_warning", user, metadata) do
+    {:ok, Email.Factory.reward_dormancy_warning(user, metadata)}
+  end
+
+  defp build_email("reward_auto_donated", user, metadata) do
+    {:ok, Email.Factory.reward_auto_donated(user, metadata)}
   end
 
   defp build_email(other, _user, _metadata),

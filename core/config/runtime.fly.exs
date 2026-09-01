@@ -108,6 +108,9 @@ if config_env() == :prod do
           "auto_approve" ->
             {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
 
+          "auto_donate" ->
+            {Oban.Plugins.Cron, crontab: [{"0 4 * * *", Systems.Fund.AutoDonateWorker}]}
+
           _ ->
             nil
         end
@@ -258,7 +261,9 @@ if config_env() == :prod do
   config :core, payment_provider: Core.Config.payment_provider()
 
   config :core,
-    auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer()
+    auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer(),
+    auto_donate_timeout: System.get_env("AUTO_DONATE_TIMEOUT", "180") |> String.to_integer(),
+    auto_donate_notice: System.get_env("AUTO_DONATE_NOTICE", "30") |> String.to_integer()
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)

@@ -673,10 +673,6 @@ msgid "contributions.overview.heading"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "contributions.pagination.single_page"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "contributions.search.placeholder"
 msgstr ""
 
@@ -690,14 +686,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "contributions.waiting.heading"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "contributions.overview.amount_label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "contributions.overview.date_label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -737,5 +725,59 @@ msgid "contributions.confirm_all.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "contributions.confirm_all.error"
+msgid "contributions.all_tasks_finished"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.confirm.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.confirm.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.confirm.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.decline.modal.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.declined.heading"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.search.no_match"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "contributions.tasks_finished.one"
+msgid_plural "contributions.tasks_finished.other"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.back_home.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.body.rejected.with_reason"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.accepted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participation.title.rejected"
 msgstr ""

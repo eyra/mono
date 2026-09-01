@@ -33,6 +33,23 @@ defmodule Systems.Fund.Queries do
     ])
   end
 
+  def approved_rewards(currency_name) when is_binary(currency_name) do
+    from(reward in Fund.RewardModel,
+      as: :reward,
+      join: fund in assoc(reward, :fund),
+      join: currency in assoc(fund, :currency),
+      where: reward.status == :approved and currency.name == ^currency_name,
+      order_by: [asc: reward.updated_at]
+    )
+  end
+
+  def approved_rewards_before(currency_name, %NaiveDateTime{} = cutoff)
+      when is_binary(currency_name) do
+    currency_name
+    |> approved_rewards()
+    |> where([reward: r], r.updated_at < ^cutoff)
+  end
+
   # Rewards for a user, scoped to a currency via the reward's fund. Shared base
   # for the per-status summary and the approved-payout list, both of which only
   # ever consider rewards payable in a single currency.

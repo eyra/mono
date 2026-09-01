@@ -70,6 +70,32 @@ defmodule Systems.Notify.Public do
   end
 
   @doc """
+  Events of `type`, oldest first. The recorded event doubles as the durable
+  "we already told them" mark, so callers that must not notify twice — or that
+  gate an action on how long ago the notice went out — read it back here.
+
+  Options:
+
+      * `recorded_before: ~N[...]` — only events older than this
+
+  """
+  def list_events(type, opts \\ []) do
+    type
+    |> events_query()
+    |> filter_recorded_before(Keyword.get(opts, :recorded_before))
+    |> Repo.all()
+  end
+
+  defp events_query(type) do
+    from(e in EventModel, where: e.type == ^to_string(type), order_by: [asc: e.inserted_at])
+  end
+
+  defp filter_recorded_before(query, nil), do: query
+
+  defp filter_recorded_before(query, %NaiveDateTime{} = cutoff),
+    do: from(e in query, where: e.inserted_at < ^cutoff)
+
+  @doc """
   Mark messages as seen by the user. Each channel adapter's `mark_seen/1`
   callback (if implemented) runs the side effect (e.g. NA clears the NBA);
   message status flips to `:seen` and `seen_at` stamped.

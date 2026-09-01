@@ -245,3 +245,35 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.byline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.byline"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.message"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.donated.subject"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "dormancy.warning.subject"
+msgstr ""

@@ -24,7 +24,8 @@ config :core, :deploy_env, :local
 # (e.g. omit an integration-only notifier in dev).
 config :core, Systems.Notify,
   notifiers: [
-    Systems.Assignment.Notify
+    Systems.Assignment.Notify,
+    Systems.Fund.Notify
   ]
 
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
