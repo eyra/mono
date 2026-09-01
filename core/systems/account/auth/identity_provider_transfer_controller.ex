@@ -29,6 +29,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
 
   @providers %{
     "apple" => {Auth.Apple, :apple},
+    "centerdata" => {Auth.Centerdata, :centerdata},
     "google" => {Auth.Google, :google},
     "surfconext" => {Auth.Surfconext, :surfconext}
   }

@@ -137,6 +137,7 @@ config :core,
 config :core, :account,
   auth_methods: %{
     surfconext: %{provider: true, satellite: true},
+    centerdata: %{provider: true, satellite: true},
     google: %{provider: true, satellite: true, mx_provider: "google"},
     apple: %{provider: true, satellite: true},
     email: %{provider: false, satellite: true},

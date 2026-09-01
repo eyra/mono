@@ -11,6 +11,7 @@ defmodule Systems.Account.Auth.MethodsTest do
       :account,
       Keyword.put(account, :auth_methods, %{
         surfconext: %{provider: true, satellite: true},
+        centerdata: %{provider: true, satellite: true},
         google: %{provider: true, satellite: true, mx_provider: "google"},
         email: %{provider: false, satellite: true},
         mock: %{provider: true, satellite: false}
@@ -24,14 +25,15 @@ defmodule Systems.Account.Auth.MethodsTest do
   test "derives satellite modules" do
     assert Methods.satellites() == %{
              surfconext: Systems.Account.Auth.Surfconext.UserModel,
+             centerdata: Systems.Account.Auth.Centerdata.UserModel,
              google: Systems.Account.Auth.Google.UserModel,
              email: Systems.Account.Auth.Email.UserModel
            }
   end
 
   test "returns providers and satellite-backed providers" do
-    assert Enum.sort(Methods.providers()) == [:google, :mock, :surfconext]
-    assert Enum.sort(Methods.satellite_providers()) == [:google, :surfconext]
+    assert Enum.sort(Methods.providers()) == [:centerdata, :google, :mock, :surfconext]
+    assert Enum.sort(Methods.satellite_providers()) == [:centerdata, :google, :surfconext]
   end
 
   test "returns a satellite module" do

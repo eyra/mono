@@ -16,6 +16,7 @@ config :core, Systems.Account.UserAuth,
 # unlisted flags keep their default from this config.
 config :core, :features,
   surfconext_sign_in: false,
+  centerdata_sign_in: false,
   member_google_sign_in: true,
   password_sign_in: true,
   debug_expire_force: false,
@@ -34,6 +35,7 @@ config :core, :meta,
 config :core, :account,
   auth_methods: %{
     surfconext: %{provider: true, satellite: true},
+    centerdata: %{provider: true, satellite: true},
     google: %{provider: true, satellite: true, mx_provider: "google"},
     email: %{provider: false, satellite: true}
   }
