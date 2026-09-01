@@ -8,7 +8,7 @@ This directory records the architecture of the Next mobile application. Architec
 - [0001. Do not invest in LiveView Native](decisions/0001-do-not-invest-in-liveview-native.md)
 - [0002. Adopt a hybrid mobile architecture](decisions/0002-adopt-a-hybrid-mobile-architecture.md)
 - [0003. Adopt device-independent mobile UI models](decisions/0003-adopt-device-independent-mobile-ui-models.md)
-- [0004. Define the realtime BFF page protocol](decisions/0004-define-the-realtime-bff-page-protocol.md)
+- [0004. Adopt server-authoritative realtime BFF Pages](decisions/0004-adopt-server-authoritative-realtime-bff-pages.md)
 
 ## Concepts to address
 

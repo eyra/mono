@@ -1,4 +1,4 @@
-# 0004. Define the realtime BFF page protocol
+# 0004. Adopt server-authoritative realtime BFF Pages
 
 ## Context
 
@@ -10,7 +10,7 @@ A BFF page needs a consistent lifecycle for opening a URL, receiving realtime up
 
 A BFF Page is addressed by a Next URL and has one realtime page session.
 
-Next authorizes the current user, builds the current Page UI model, and delivers it to the native page. Relevant Observatory updates rebuild and publish the Page's complete UI-model snapshot. On reconnect, the native page receives the current authoritative snapshot.
+Next authorizes the current user, builds the current Page UI model, and delivers it to the native page. Each BFF Page subscribes to its relevant Observatory updates; those updates rebuild and publish the Page's complete UI-model snapshot. On reconnect, the native page receives the current authoritative snapshot.
 
 Native actions go to the BFF Page session. Next authorizes and handles them, then delivers the resulting Page snapshot. The initial protocol sends complete snapshots, not renderer diffs or client-side patches.
 
