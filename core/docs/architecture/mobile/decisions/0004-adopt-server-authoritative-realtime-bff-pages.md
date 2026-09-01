@@ -35,7 +35,7 @@ Next remains the authority for page state and actions. Native pages render the l
 
 ## Design
 
-- [BFF UI](../design/bff-ui.md)
+- [BFF Pages](../design/bff-pages.md)
 
 ## Alternatives considered
 

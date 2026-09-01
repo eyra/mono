@@ -28,7 +28,7 @@ The UI-model vocabulary grows only when a real mobile page requires a new concep
 
 ## Design
 
-- [BFF UI](../design/bff-ui.md)
+- [BFF Pages](../design/bff-pages.md)
 
 ## Alternatives considered
 

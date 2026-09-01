@@ -1,4 +1,4 @@
-# BFF UI
+# BFF Pages
 
 Implementation design placeholder.
 
