@@ -26,6 +26,10 @@ The rendering layer is selected case by case while defining a User Journey or Us
 
 This is a narrow Next application implementation, not a general navigation library. It creates the need for device-independent UI models for BFF pages, addressed by [ADR 0003](0003-adopt-device-independent-mobile-ui-models.md).
 
+## Design
+
+- [Native navigation](../design/native-navigation.md)
+
 ## Alternatives considered
 
 ### Use LiveView Native as the shared mobile renderer

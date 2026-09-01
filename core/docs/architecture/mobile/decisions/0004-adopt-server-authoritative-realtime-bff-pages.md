@@ -33,6 +33,10 @@ A Button may present either behaviour. The distinction is behaviour, not appeara
 
 Next remains the authority for page state and actions. Native pages render the latest authorized UI model and do not need their own reconciliation or diff engine.
 
+## Design
+
+- [BFF UI](../design/bff-ui.md)
+
 ## Alternatives considered
 
 ### Poll for the current UI model

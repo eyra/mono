@@ -26,6 +26,10 @@ Existing `Frameworks.Pixel` components remain unchanged in the near term. There 
 
 The UI-model vocabulary grows only when a real mobile page requires a new concept. A future Web renderer may consume UI models, but this decision does not require one.
 
+## Design
+
+- [BFF UI](../design/bff-ui.md)
+
 ## Alternatives considered
 
 ### Migrate existing Pixel components into a shared model now
