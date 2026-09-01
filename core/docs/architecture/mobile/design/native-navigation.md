@@ -1,5 +1,7 @@
 # Native navigation
 
+This document is intentionally a placeholder. Fill its sections as the implementation design is decided.
+
 ## Scope
 
 ## Native Navigator
