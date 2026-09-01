@@ -198,7 +198,8 @@ config :core, Systems.Account.Auth.Centerdata,
   base_url: "https://messpanel.test.centerdata.nl",
   openid_configuration_uri: "https://messpanel.test.centerdata.nl/openid_configuration/",
   redirect_uri: "not-set",
-  authorization_params: [scope: "email"]
+  authorization_params: [scope: "email"],
+  code_verifier: true
 
 # Domains routed to Surfconext SSO on the email-first auth page.
 # Override in runtime config per environment.
