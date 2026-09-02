@@ -200,11 +200,6 @@ if config_env() == :prod do
   config :core, Systems.Account.Auth.Centerdata,
     redirect_uri: "#{base_url}/auth/centerdata/callback",
     base_url: System.get_env("CENTERDATA_SITE", "https://messpanel.test.centerdata.nl"),
-    openid_configuration_uri:
-      System.get_env(
-        "CENTERDATA_OPENID_CONFIGURATION_URI",
-        "https://messpanel.test.centerdata.nl/openid_configuration/"
-      ),
     client_id: System.get_env("CENTERDATA_CLIENT_ID"),
     client_secret: System.get_env("CENTERDATA_CLIENT_SECRET"),
     authorization_params: [scope: "email"],
