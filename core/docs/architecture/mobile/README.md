@@ -42,8 +42,9 @@ Record the selected approach and only the resulting commitments as ADRs after th
 ## Decision records
 
 - [0000. Adopt architecture decision records](decisions/0000-adopt-architecture-decision-records.md)
-- [0001. Adopt mobile delivery capability tiers and defer implementation](decisions/0001-adopt-mobile-delivery-capability-tiers.md)
-- [0002. Require agent-driven physical-device debugging](decisions/0002-require-agent-driven-physical-device-debugging.md)
+- [0001. Do not invest in LiveView Native](decisions/0001-do-not-invest-in-liveview-native.md)
+- [0002. Adopt mobile delivery capability tiers](decisions/0002-adopt-mobile-delivery-capability-tiers.md)
+- [0003. Require agent-driven physical-device debugging](decisions/0003-require-agent-driven-physical-device-debugging.md)
 
 ## Related documentation
 

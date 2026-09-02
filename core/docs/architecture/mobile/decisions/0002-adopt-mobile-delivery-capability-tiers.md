@@ -1,4 +1,4 @@
-# 0001. Adopt mobile delivery capability tiers and defer implementation
+# 0002. Adopt mobile delivery capability tiers
 
 ## Context
 
