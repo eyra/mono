@@ -8,9 +8,9 @@ The mobile delivery implementation is still under evaluation. A debugging tool m
 
 ## Decision
 
-Every mobile delivery proof of concept must evaluate an approved way for an AI coding agent to inspect and control a running application on physical iOS and Android devices.
+Every mobile delivery proof of concept must evaluate an approved way for an AI coding agent to remotely inspect and control a running application on physical iOS and Android devices. The path must work when the agent and device are on different hosts, using an authenticated, access-controlled connection.
 
-The required capability is implementation-specific: each candidate must demonstrate the debugging path appropriate to its renderer. The chosen device-automation transport, MCP server, and any framework-specific adapters are implementation details. Appium is the initial candidate transport to evaluate, not an architectural component or an adopted implementation.
+The required capability is implementation-specific: each candidate must demonstrate the debugging path appropriate to its renderer. The chosen remote device-debugging implementation, MCP server, and any framework-specific adapters are implementation details. Appium is the initial candidate remote device-debugging implementation to evaluate, not an architectural component or an adopted implementation.
 
 The minimum demonstration is:
 
