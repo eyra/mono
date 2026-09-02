@@ -11,7 +11,7 @@ defmodule BankingProxy.MixProject do
       escript: escript(),
       docs: [
         main: "readme",
-        logo: "../core/priv/static/images/icons/next.svg",
+        logo: "../core/priv/static/images/logos/products/next.svg",
         extras: [
           "README.md"
         ]
