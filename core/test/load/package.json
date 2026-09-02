@@ -12,6 +12,6 @@
     "test:xlarge": "artillery run donate.yml -e xlarge"
   },
   "devDependencies": {
-    "artillery": "^2.0.0"
+    "artillery": "^2.0.34"
   }
 }
