@@ -9,8 +9,8 @@ Next needs an architecture that can evolve from its existing LiveView experience
 Describe mobile delivery in these cumulative capability tiers:
 
 1. **Web** — a route is rendered by Phoenix LiveView in a browser or WebView.
-2. **Web + native navigation** — web-rendered routes participate in an application-owned native navigation experience.
-3. **Web + native navigation + native routes** — selected routes can be rendered natively alongside web-rendered routes.
+2. **Native navigation** — web-rendered routes participate in an application-owned native navigation experience.
+3. **Native routes** — selected routes can be rendered natively alongside web-rendered routes.
 
 A route's tier is chosen per use case. No product area is committed wholesale to web or native rendering.
 

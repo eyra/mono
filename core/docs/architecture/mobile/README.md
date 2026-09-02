@@ -6,11 +6,11 @@
 
 A route may be delivered at one of three levels. The tiers are cumulative; they are not commitments to a particular implementation.
 
-| Tier                                        | Capability                                                                            |
-| ------------------------------------------- | ------------------------------------------------------------------------------------- |
-| **Web**                                     | The route is rendered by Phoenix LiveView in a browser or WebView.                    |
-| **Web + native navigation**                 | Web-rendered routes participate in an application-owned native navigation experience. |
-| **Web + native navigation + native routes** | The application can mix web-rendered routes with selected routes rendered natively.   |
+| Tier                  | Capability                                                                            |
+| --------------------- | ------------------------------------------------------------------------------------- |
+| **Web**               | The route is rendered by Phoenix LiveView in a browser or WebView.                    |
+| **Native navigation** | Web-rendered routes participate in an application-owned native navigation experience. |
+| **Native routes**     | The application can mix web-rendered routes with selected routes rendered natively.   |
 
 The architecture must allow a route's delivery level to be chosen deliberately per use case. It must not require an entire product area to be permanently web or native.
 

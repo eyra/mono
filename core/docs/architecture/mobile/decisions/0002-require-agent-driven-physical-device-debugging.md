@@ -8,7 +8,7 @@ The mobile delivery implementation is still under evaluation. A debugging tool m
 
 ## Decision
 
-Every mobile delivery proof of concept and implementation must provide an approved way for an AI coding agent to inspect and control a running application on physical iOS and Android devices.
+Every mobile delivery proof of concept must evaluate an approved way for an AI coding agent to inspect and control a running application on physical iOS and Android devices.
 
 The required capability is implementation-specific: each candidate must demonstrate the debugging path appropriate to its renderer. The chosen device-automation transport, MCP server, and any framework-specific adapters are implementation details. Appium is the initial candidate transport to evaluate, not an architectural component or an adopted implementation.
 
@@ -26,7 +26,7 @@ UI controls used in the representative journeys must expose stable, accessible n
 
 ## Consequences
 
-Physical-device debugging is a PoC acceptance criterion and a continuing development capability. A candidate that cannot provide it is not ready for selection, even if its product behaviour otherwise looks promising.
+Physical-device debugging must be evaluated in every PoC and documented as part of the implementation decision. A candidate's limitations, mitigation, and cost must be explicit before selection.
 
 The debugging setup may use local, trusted development devices and test accounts only. It must not expose device control or sensitive diagnostic data through the production application.
 
@@ -37,7 +37,3 @@ Later implementation ADRs must name the selected tooling, setup, supported platf
 ### Verify only with simulators or emulators
 
 Rejected. This leaves physical-device behaviour untested and prevents agents from investigating device-specific failures.
-
-### Adopt Appium or another tool now
-
-Rejected. Tool selection depends on the renderer and must be proven by the corresponding PoC.
