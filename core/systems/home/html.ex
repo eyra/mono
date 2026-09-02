@@ -3,6 +3,9 @@ defmodule Systems.Home.HTML do
 
   import Frameworks.Pixel.NumberIcon
 
+  @video_id "f9f37259d1a84cffbe9baddc1d982603"
+  @video_thumbnail_url "https://cdn.loom.com/sessions/thumbnails/#{@video_id}-977720d1fcae0568.gif"
+
   def intro(assigns) do
     ~H"""
     <section class="py-6 lg:py-12 bg-white">
@@ -124,6 +127,11 @@ defmodule Systems.Home.HTML do
   end
 
   def video(assigns) do
+    assigns =
+      assigns
+      |> assign(:video_id, @video_id)
+      |> assign(:video_thumbnail_url, @video_thumbnail_url)
+
     ~H"""
     <section class="h-full pt-8 lg:pt-24 px-6 bg-white">
         <h1 class="text-title3 font-title3 lg:text-title1 lg:font-title1 text-center text-grey1">
@@ -131,30 +139,42 @@ defmodule Systems.Home.HTML do
         </h1>
       <div class="flex justify-center pt-6">
       <!-- XS-SM: up to 639px -->
-      <iframe
-        loading="lazy"
-        class="block sm:hidden w-[290px] h-[202px] rounded-lg shadow"
-        src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603"
-        allowfullscreen
-      ></iframe>
+      <div class="relative block sm:hidden w-[290px] h-[202px] rounded-lg shadow overflow-hidden">
+        <img src={@video_thumbnail_url} class="absolute inset-0 w-full h-full object-cover" alt="" />
+        <iframe
+          loading="lazy"
+          class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500"
+          src={"https://www.loom.com/embed/#{@video_id}"}
+          allowfullscreen
+          onload="this.style.opacity=1"
+        ></iframe>
+      </div>
 
       <!-- SM - XL: 640px – 1023px -->
-      <iframe
-        loading="lazy"
-        class="hidden sm:block xl:hidden w-[600px] h-[360px] rounded-lg shadow"
-        src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603"
-        allowfullscreen
-      ></iframe>
+      <div class="relative hidden sm:block xl:hidden w-[600px] h-[360px] rounded-lg shadow overflow-hidden">
+        <img src={@video_thumbnail_url} class="absolute inset-0 w-full h-full object-cover" alt="" />
+        <iframe
+          loading="lazy"
+          class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500"
+          src={"https://www.loom.com/embed/#{@video_id}"}
+          allowfullscreen
+          onload="this.style.opacity=1"
+        ></iframe>
+      </div>
 
       <!-- XL: from 1024px up -->
-      <iframe
+      <div class="relative hidden xl:block h-1/2 lg:h-[60vh] w-3/4 rounded-lg mt-6 shadow overflow-hidden">
+        <img src={@video_thumbnail_url} class="absolute inset-0 w-full h-full object-cover" alt="" />
+        <iframe
           loading="lazy"
-          class="hidden xl:block h-1/2 lg:h-[60vh] w-3/4 rounded-lg mt-6 shadow"
-          src="https://www.loom.com/embed/f9f37259d1a84cffbe9baddc1d982603?sid=1d3270c1-e5ce-4dbb-921c-0fab4fcb3efc"
+          class="absolute inset-0 w-full h-full opacity-0 transition-opacity duration-500"
+          src={"https://www.loom.com/embed/#{@video_id}?sid=1d3270c1-e5ce-4dbb-921c-0fab4fcb3efc"}
           title={dgettext("eyra-crew", "home.video.preview_title")}
           allowfullscreen
+          onload="this.style.opacity=1"
         >
-      </iframe>
+        </iframe>
+      </div>
       </div>
     </section>
     """

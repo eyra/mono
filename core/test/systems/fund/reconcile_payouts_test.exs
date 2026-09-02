@@ -182,7 +182,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
            uid: "w_adopted",
            status: :completed,
            raw_status: "completed",
-           reference: prefix <> ",attempt=0",
+           reference: prefix <> "0",
            amount: 1000
          }
        ]}
@@ -222,7 +222,7 @@ defmodule Systems.Fund.ReconcilePayoutsTest do
       )
 
     expect(ProviderMock, :create_withdrawal, fn "m_recon", :EUR, %{amount: 1000}, key ->
-      assert key =~ "attempt=1"
+      assert key =~ ",wd=1"
 
       {:ok,
        %{uid: "w_retry", status: :pending, raw_status: "created", reference: nil, amount: 1000}}

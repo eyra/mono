@@ -9,7 +9,16 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#29 2026-09-02
+
+* Added - Identity-provider account transfer: users can move an existing account to a different sign-in provider without losing access
+* Changed - Authentication code consolidated under `Systems.Account.Auth`, with Apple, email, Google, Mock and SURFconext providers using the shared model
+* Fixed - Declining a contribution reliably reopens its assignment spot
+* Fixed - OPP pay-out references are capped at the provider limit, provider validation errors are classified correctly, and missing withdrawals return 404 instead of a misleading phone-number error
+* Fixed - Homepage video shows its thumbnail while loading, and Manual task launch no longer loads all tools unnecessarily
+
 ## \#28 2026-08-24
+
 * Added - Contributions replace the pay-out modal: participation now owns the completed/accepted/rejected lifecycle, with a Contributions tab (Pending / Confirmed / Declined) and a next-best-action for owners; declining reopens the assignment spot and the participant is notified of the outcome
 * Added - Participant pay-outs verified through iDEAL bank verification, with an Uitbetalingen tab showing verification status and pay-out history
 * Added - Provider-to-local reconciliation detects orphaned pay-ins, pay-outs and merchants; a stranded pay-out is resumed rather than restarted, either by the participant via a retry button or by the reconciler as a backstop
@@ -24,6 +33,7 @@
 * Fixed - Marketplace and participant home made mobile-friendly; promotion apply routes through the pool join flow, and a full study shows a "study is full" page instead of an error
 
 ## \#27 2026-06-24
+
 * Added - OTP email-first authentication (behind `:otp` flag, off in prod): single email field at /user/auth, 6-digit code page, then routed through terms & privacy on first sign-up; SurfConext / Google domains still hand off to their SSO providers from the same entry point
 * Added - Hourly cron prunes expired OTP codes so the auth_codes table stays bounded
 * Added - Budget capacity (SF-OPP-08): paid-slot adverts switch to a disabled "Fully booked" state once the budget is exhausted; returning participants can still re-enter assignments they had already joined
@@ -34,6 +44,7 @@
 * Fixed - Data Donation file upload broke (reconnect loop) when a workflow had more than one task
 
 ## \#26 2026-06-17
+
 * Added - Participant pay-out request (UC-OPP-06): "Uitbetalen" button on the home rewards card opens a handoff modal, then routes through the OPP withdrawal flow (pay-in via the platform merchant, withdrawal backed by a platform→participant charge); home rewards card refreshes reactively as the payout transitions
 * Added - OTP authentication backend (dormant until UI lands): 6-digit code, 10-minute TTL, 5-attempt cap, rate-limited to 3 requests/minute per email
 * Changed - Pay-out concurrency hardened: a second tab/device firing pay-out loses the race and rolls back instead of double-charging
@@ -41,16 +52,19 @@
 * Fixed - "Participants waiting for pay out" banner intermittently hid pending money for participants with more than one task
 
 ## \#25.1 2026-06-14
+
 * Fixed - Affiliate URLs with `?p=null` or `?p=undefined` now return 403 instead of silently creating ghost affiliate users (came from external panels coercing an empty JS variable to the string "null")
 * Fixed - 403 page and other status pages showed raw msgids ("page.title" / "403.body") instead of translated text on DE / ES / IT / LT / RO
 
 ## \#25 2026-06-10
+
 * Fixed - "Participants waiting for pay out" banner on the Participants tab was lost in the milestone 23 refactor; restored with correct copy
 * Fixed - Pay-out modal translations (payout.*) were wiped in the SURFconext-auth merge; EN and NL strings restored
 * Added - Pay-out Overview tab now shows a list of completed payouts instead of the "coming soon" placeholder
 * Changed - Updated PaNL onboarding copy
 
 ## \#24 Unreleased
+
 * Changed - SURFconext userinfo (name, email, affiliation) is now stored as a raw JSON map; individual parsed columns removed from the database
 * Fixed - Auth signup page (/user/auth/:provider) had no side margins on mobile
 * Fixed - Sign-in button incorrectly appeared in the navbar on dedicated provider auth pages
@@ -67,6 +81,7 @@
 * Fixed - Free studies were excluded from the marketplace visibility check on milestone 23 — now treated as visible
 
 ## \#23 2026-05-22
+
 * Added - Organisations: org owner role, admin pages per org, owners modal, archive modal, org node/admin views, members search & filter
 * Added - Onboarding journey nested under /user/onboarding/*: await-confirmation, confirm-token, post-signup activation
 * Added - Paid participant slots block on the Participants tab: subject count + reward, budget transactions, "Pay to add participants" button, payment-resume flow
@@ -89,6 +104,7 @@
 * Fixed - "Reward is set to …" line on the Participants tab only shows once at least one transaction exists; empty-state copy rephrased
 
 ## \#22.2 2026-05-07
+
 * Added - Recruit URL (/r/:code) for organic participant recruitment with rate limiting (5/min/IP)
 * Added - Recruit participants panel in CMS for questionnaire studies
 * Added - /api/e2e/features endpoint for E2E feature flag introspection
@@ -96,11 +112,13 @@
 * Fixed - Privacy and terms link translations being removed by gettext extract
 
 ## \#22.1 2026-04-23
+
 * Fixed - Panl capitalization normalized across all translations
 * Changed - Dutch copy from formal (u/uw) to informal (je/jouw)
 * Added - Terms and privacy link translations for sign-up page
 
 ## \#22 2026-04-17
+
 * Added - Panl pre-launch email capture flow for participant onboarding
 * Added - Email validation via UserCheck API (disposable, role account, MX checks)
 * Added - AppSignal custom metrics for Feldspar donate and log endpoints
@@ -113,6 +131,7 @@
 * Fixed - Admin user page performance for large user counts
 
 ## \#21 2026-02-28
+
 * Fixed - Google Sign In callback to show error message instead of 500
 * Fixed - SSO duplicate email handling across all providers
 * Fixed - OAuth2 missing session state handling in SSO callbacks
@@ -137,6 +156,7 @@
 * Changed - Improved Feldspar controller logging with uploadContext
 
 ## \#20.3 2026-02-12
+
 * Fixed - Race condition in affiliate user creation
 * Fixed - Race condition in crew member and role assignment creation
 * Added - Service login API endpoint with SERVICE_LOGIN_KEY security
@@ -146,6 +166,7 @@
 * Changed - Increase HTTP body limit from 200MB to 210MB for data donations
 
 ## \#20.2 2026-01-27
+
 * Fixed - FunctionClauseError in embedded LiveViews for flash messages
 * Fixed - File upload controller to handle invalid filenames and missing files
 * Fixed - Ecto.NoResultsError in GreenLight authorization context
@@ -155,12 +176,14 @@
 * Changed - Update Prism UI to 0.1.5 with spinner centering fix
 
 ## \#20 2026-01-14
+
 * Added - Romanian (RO) and Lithuanian (LT) language support
 * Changed - Font from Finador to Nunito / Nunito Sans
 * Added - Prism UI framework integration
 * Changed - Restructured icons and logos folders
 
 ## \#19 2026-01-03
+
 * Added - Privacy policy acceptance with clickable links during signup (Next platform)
 * Added - UserState framework for managing client-side state (timezone, language)
 * Added - LiveContext framework for passing context through LiveView hierarchy
@@ -174,6 +197,7 @@
 * Changed - Enhanced toolbar component
 
 ## \#18 2025-10-22
+
 * Added: Annotation Recipes (WIP)
 * Added:Ontology + Annotation + Criteria Live View (WIP)
 * Added: support for LiveView tabs
@@ -195,9 +219,11 @@
 * Changed: Update sorting and preloading for Annotation/Ontology systems
 
 ## \#17.1 2025-10-15
+
 * Fixed: High CPU usage when viewing PDF
 
 ## \#17 2025-10-01
+
 * Fixed: PDF viewer no longer refreshes when pressing Done button
 * Fixed: Changing number of participants no longer causes page refresh
 * Fixed: Helpdesk form type switching no longer causes immediate submit
@@ -208,10 +234,12 @@
 * Updated: Moved number of participants and participant language to participant tab
 
 ## \#16.1 2025-06-25
+
 * Fixed: Export progress report pre-affiliate participant links
 * Fixed: Rendering pre-affiliate participant links on pre-affiliate Data Donation assignments
 
 ## \#16 2025-06-18
+
 * Added: Affiliate system for panel company integration
 * Added: Support for end-of-flow redirect to Affiliates
 * Added: Support for sending events to Affiliates
@@ -223,25 +251,31 @@
 * Security: Bump Erlang/OTP due to security risk
 
 ## \#15.2 2025-05-31
+
 * Fixed: Realtime updates interfering participant flows
 * Added: Support for sending realtime updates to pages targeted to specific users
 
 ## \#15.1 2025-05-08
+
 * Fixed: When a participant returns from a questionnaire back to Next, a popup is shown and the participant must click  'close'.
 
 ## \#15 2025-05-07
+
 * Changed: Next Landing page
 * Fixed: Account activated successfully message low contrast
 * Added: Manual builder to workflow library for Panl studies
 
 ## \#14 2025-04-26
+
 * Fixed: Next compatability with feldspar version 4 (loading issue)
 
 ## \#13 2025-04-25
+
 * Changed: Refinement of the instruction manual builder based on feedback
 * Fixed: Mobile friendly header title for participant flow
 
 ## \#12 2025-04-19
+
 * Maintenance release
 
 ## \#11 2025-04-09

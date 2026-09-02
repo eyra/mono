@@ -239,8 +239,8 @@ defmodule Systems.Payment.Provider.OPPTest do
     test "lists a merchant's withdrawals with their reference", %{bypass: bypass} do
       Bypass.expect_once(bypass, "GET", "/merchants/m_1/withdrawals", fn conn ->
         Plug.Conn.resp(conn, 200, ~s<{"data": [
-          {"uid": "w_1", "status": "completed", "reference": "payout=abc,type=withdrawal,attempt=0", "amount": 1000},
-          {"uid": "w_2", "status": "failed", "reference": "payout=def,type=withdrawal,attempt=0", "amount": 500}
+          {"uid": "w_1", "status": "completed", "reference": "payout=abc,wd=0", "amount": 1000},
+          {"uid": "w_2", "status": "failed", "reference": "payout=def,wd=0", "amount": 500}
         ]}>)
       end)
 
@@ -249,11 +249,11 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert %{
                uid: "w_1",
                status: :completed,
-               reference: "payout=abc,type=withdrawal,attempt=0",
+               reference: "payout=abc,wd=0",
                amount: 1000
              } = first
 
-      assert %{uid: "w_2", status: :failed, reference: "payout=def,type=withdrawal,attempt=0"} =
+      assert %{uid: "w_2", status: :failed, reference: "payout=def,wd=0"} =
                second
     end
 
@@ -525,29 +525,20 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
   end
 
-  # UNVERIFIED CONTRACT. Unlike the balance charge above, nothing has exercised
-  # a merchant -> partner charge against OPP. This block pins the shape the
-  # adapter currently sends so the assumption is visible and reviewable; edit it
-  # and `OPP.charge_to_partner/3` together once OPP's partner-charge docs (or a
-  # sandbox call) confirm the endpoint, the `type` value, and whether a partner
-  # uid must be sent as `to_owner_uid`.
   describe "charge_to_partner/3" do
     test "POSTs a partner charge with idempotency key and parses the response",
          %{bypass: bypass} do
-      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+      Bypass.expect_once(bypass, "POST", "/merchants/mer_platform/charges", fn conn ->
         assert ["donation=abc,type=charge"] = Plug.Conn.get_req_header(conn, "idempotency-key")
         {:ok, raw, conn} = Plug.Conn.read_body(conn)
         body = Jason.decode!(raw)
-        assert body["type"] == "partner_fee"
+        assert body["type"] == "balance"
         assert body["currency"] == "EUR"
-        assert body["from_owner_uid"] == "mer_platform"
         assert body["amount"] == 1000
 
-        # The destination is the platform operator itself, so no to_owner_uid.
+        refute Map.has_key?(body, "from_owner_uid")
         refute Map.has_key?(body, "to_owner_uid")
 
-        # Same as the balance charge: a charge cannot be listed, so metadata is
-        # the only thing tying it back to its donation for a manual check.
         assert body["metadata"]["reference"] == "donation=abc,type=charge"
 
         Plug.Conn.resp(conn, 200, ~s<{"uid": "chg_d", "status": "created", "amount": 1000}>)
@@ -558,7 +549,7 @@ defmodule Systems.Payment.Provider.OPPTest do
     end
 
     test "surfaces an OPP API error on non-2xx", %{bypass: bypass} do
-      Bypass.expect_once(bypass, "POST", "/charges", fn conn ->
+      Bypass.expect_once(bypass, "POST", "/merchants/mer_platform/charges", fn conn ->
         Plug.Conn.resp(conn, 400, ~s<{"error": {"message": "nope"}}>)
       end)
 
@@ -590,7 +581,7 @@ defmodule Systems.Payment.Provider.OPPTest do
           conn,
           200,
           page_json(
-            [withdrawal_json("wtd_1", "payout=abc,type=withdrawal,attempt=0", created)],
+            [withdrawal_json("wtd_1", "payout=abc,wd=0", created)],
             1
           )
         )
@@ -601,7 +592,7 @@ defmodule Systems.Payment.Provider.OPPTest do
       assert %{
                uid: "wtd_1",
                status: :completed,
-               reference: "payout=abc,type=withdrawal,attempt=0",
+               reference: "payout=abc,wd=0",
                amount: 1000
              } = withdrawal
 
@@ -779,6 +770,29 @@ defmodule Systems.Payment.Provider.OPPTest do
 
       assert {:ok, [%{uid: "chg_2", reference: nil}]} =
                OPP.list_recent_transfers(~U[2026-07-01 00:00:00Z])
+    end
+  end
+
+  describe "error classification" do
+    test "names the rejected fields as a provider-neutral validation error",
+         %{bypass: bypass} do
+      Bypass.expect_once(bypass, "POST", "/merchants", fn conn ->
+        Plug.Conn.resp(conn, 400, ~s<{"error": {"parameters": {"phonenumber": ["invalid"]}}}>)
+      end)
+
+      assert {:error, %Error{code: :validation_error, details: %{fields: ["phonenumber"]}}} =
+               OPP.create_merchant(%{emailaddress: "someone@example.org"})
+    end
+
+    test "keeps the query string out of the error path", %{bypass: bypass} do
+      Bypass.expect_once(bypass, "GET", "/merchants", fn conn ->
+        Plug.Conn.resp(conn, 500, ~s<{"error": {"message": "boom"}}>)
+      end)
+
+      assert {:error, %Error{details: %{path: "/merchants"}, message: message}} =
+               OPP.find_merchant_by_email("someone@example.org")
+
+      refute message =~ "emailaddress"
     end
   end
 end

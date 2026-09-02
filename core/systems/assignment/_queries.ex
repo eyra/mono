@@ -66,14 +66,17 @@ defmodule Systems.Assignment.Queries do
     from(Crew.MemberModel, as: :member, order_by: [asc: :public_id])
   end
 
-  # Deprecated. ExternalSignIn.User is replaced by Affiliate.User
+  # Deprecated. Systems.Account.Auth.External.UserModel is replaced by Affiliate.User
   def participant_query(%Assignment.Model{
         external_panel: external_panel,
         crew: %{id: id, auth_node_id: auth_node_id}
       })
       when not is_nil(external_panel) do
     build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
-    |> join(:left, [user: u], e in ExternalSignIn.User, on: u.id == e.user_id, as: :external_user)
+    |> join(:left, [user: u], e in Systems.Account.Auth.External.UserModel,
+      on: u.id == e.user_id,
+      as: :external_user
+    )
     |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment

@@ -407,3 +407,19 @@ msgstr "Išsiuntėme tau kodą"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr "Mokėjimų paslaugų teikėjas nepriėmė šio telefono numerio. Patikrink jį ir bandyk dar kartą."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr "Aptikome, kad jau turite paskyrą su el. pašto adresu <strong>%{email}</strong>. Ar nuo šiol norite prisijungti naudodami <strong>%{idp}</strong>? Patvirtinus, esamų prisijungimo būdų naudoti nebegalėsite."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr "Perkelti autentifikavimą"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Patvirtinti perkėlimą"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Atmesti"

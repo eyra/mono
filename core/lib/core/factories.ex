@@ -10,6 +10,7 @@ defmodule Core.Factories do
 
   alias Systems.Account
   alias Systems.Account.User
+  alias Systems.Account.Auth
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Alliance
@@ -71,6 +72,17 @@ defmodule Core.Factories do
     build(:external_user, %{
       organisation: Faker.Company.name(),
       external_id: Faker.UUID.v4()
+    })
+  end
+
+  def build(:google_user) do
+    build(:google_user, %{sub: Faker.UUID.v4()})
+  end
+
+  def build(:email_user) do
+    build(:email_user, %{
+      validation_data: %{},
+      validated_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
     })
   end
 
@@ -723,7 +735,7 @@ defmodule Core.Factories do
   def build(:external_user, %{} = attributes) do
     {user, attributes} = Map.pop(attributes, :user, build(:member))
 
-    %ExternalSignIn.User{
+    %Systems.Account.Auth.External.UserModel{
       user: user
     }
     |> struct!(attributes)
@@ -1164,6 +1176,16 @@ defmodule Core.Factories do
     %Paper.ReferenceFileModel{
       file: file
     }
+    |> struct!(attributes)
+  end
+
+  def build(:google_user, %{} = attributes) do
+    %Auth.Google.UserModel{}
+    |> struct!(attributes)
+  end
+
+  def build(:email_user, %{} = attributes) do
+    %Auth.Email.UserModel{}
     |> struct!(attributes)
   end
 

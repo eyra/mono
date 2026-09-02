@@ -81,6 +81,15 @@ defmodule Systems.Fund.PayoutModelTest do
                PayoutModel.withdrawal_key(payout(%{withdrawal_attempt: 1}))
     end
 
+    # OPP rejects a withdrawal whose `reference` exceeds 50 characters, and the
+    # key is sent as that reference verbatim.
+    test "the withdrawal key stays within the provider's reference limit" do
+      for attempt <- [0, 9, 99] do
+        assert String.length(PayoutModel.withdrawal_key(payout(%{withdrawal_attempt: attempt}))) <=
+                 50
+      end
+    end
+
     test "every withdrawal attempt shares the prefix a stranded withdrawal is found by" do
       prefix = PayoutModel.withdrawal_key_prefix(payout())
 

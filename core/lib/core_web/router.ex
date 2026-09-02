@@ -2,20 +2,17 @@ defmodule CoreWeb.Router do
   use CoreWeb, :router
 
   require Core.BundleOverrides
-  require Core.SurfConext
+  require Systems.Account.Auth.Surfconext
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
   require Frameworks.E2E.Routes
 
   Core.BundleOverrides.routes()
 
-  require GoogleSignIn
-  GoogleSignIn.routes(:core)
+  require Systems.Account.Auth.Google
+  Systems.Account.Auth.Google.routes(:core)
 
-  require SignInWithApple
-  SignInWithApple.routes(:core)
-
-  Core.SurfConext.routes(:core)
+  Systems.Account.Auth.Surfconext.routes(:core)
 
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()

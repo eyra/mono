@@ -43,30 +43,69 @@ defmodule Systems.Account.PhoneFormHandlersTest do
     socket
   end
 
+  defp merchant(uid) do
+    %{
+      uid: uid,
+      status: "pending",
+      kyc_level: 0,
+      compliance_status: "unverified",
+      overview_url: nil
+    }
+  end
+
   test "a number the provider rejects yields the actionable error" do
     user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_reject"})
 
-    stub(ProviderMock, :get_merchant, fn "m_reject" ->
-      {:ok,
-       %{
-         uid: "m_reject",
-         status: "pending",
-         kyc_level: 0,
-         compliance_status: "unverified",
-         overview_url: nil
-       }}
-    end)
+    stub(ProviderMock, :get_merchant, fn "m_reject" -> {:ok, merchant("m_reject")} end)
 
     stub(ProviderMock, :add_merchant_phone, fn "m_reject", _phone ->
       {:error,
        %Systems.Payment.Error{
-         code: :api_error,
+         code: :validation_error,
          message: "OPP API returned 400",
-         details: %{status: 400, body: %{"error" => %{"parameters" => %{"phone" => "invalid"}}}}
+         details: %{status: 400, fields: ["phone"]}
        }}
     end)
 
     assert submit(user).assigns.error == t("payouts.phone.error.rejected")
+  end
+
+  test "a validation error on another field yields the generic try-again error" do
+    user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_other"})
+
+    stub(ProviderMock, :get_merchant, fn "m_other" -> {:ok, merchant("m_other")} end)
+
+    stub(ProviderMock, :add_merchant_phone, fn "m_other", _phone ->
+      {:error,
+       %Systems.Payment.Error{
+         code: :validation_error,
+         message: "OPP API returned 400",
+         details: %{status: 400, fields: ["emailaddress"]}
+       }}
+    end)
+
+    assert submit(user).assigns.error == t("payouts.phone.error.flash")
+  end
+
+  test "a 404 yields the generic try-again error, never one blaming the phone number" do
+    user = Factories.insert!(:member, %{creator: false, merchant_uid: "m_404"})
+
+    stub(ProviderMock, :get_merchant, fn "m_404" -> {:ok, merchant("m_404")} end)
+
+    stub(ProviderMock, :add_merchant_phone, fn "m_404", _phone ->
+      {:error,
+       %Systems.Payment.Error{
+         code: :api_error,
+         message: "OPP API returned 404 on /merchants/m_404/contacts/c_1",
+         details: %{
+           status: 404,
+           path: "/merchants/m_404/contacts/c_1",
+           body: %{"error" => %{"message" => "Not Found"}}
+         }
+       }}
+    end)
+
+    assert submit(user).assigns.error == t("payouts.phone.error.flash")
   end
 
   test "a provider outage yields the generic try-again error" do

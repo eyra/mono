@@ -190,7 +190,7 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
            uid: "wdr_orphan",
            status: :completed,
            raw_status: "completed",
-           reference: "payout=#{Ecto.UUID.generate()},type=withdrawal,attempt=0",
+           reference: "payout=#{Ecto.UUID.generate()},wd=0",
            amount: 1000,
            created: DateTime.add(DateTime.utc_now(), -24 * 60 * 60, :second)
          }

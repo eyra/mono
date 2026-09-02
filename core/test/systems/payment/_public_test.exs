@@ -42,6 +42,28 @@ defmodule Systems.Payment.PublicTest do
       assert m.overview_url == "https://opp.test/overview/existing"
     end
 
+    test "replaces a merchant_uid the provider 404s on, rather than failing forever" do
+      user = fresh_user(%{merchant_uid: "m_gone"})
+
+      expect(ProviderMock, :get_merchant, fn "m_gone" ->
+        {:error,
+         %Systems.Payment.Error{
+           code: :api_error,
+           message: "OPP API returned 404 on /merchants/m_gone",
+           details: %{status: 404, path: "/merchants/m_gone", body: %{}}
+         }}
+      end)
+
+      expect(ProviderMock, :create_merchant, fn _attrs ->
+        {:ok, merchant(%{uid: "m_replacement"})}
+      end)
+
+      assert {:ok, {_user, %{uid: "m_replacement"}}} =
+               Payment.Public.ensure_merchant_for(user)
+
+      assert %{merchant_uid: "m_replacement"} = Core.Repo.reload!(user)
+    end
+
     test "bubbles up an OPP error from get_merchant" do
       user = fresh_user(%{merchant_uid: "m_unreachable"})
 
@@ -78,9 +100,9 @@ defmodule Systems.Payment.PublicTest do
       |> expect(:create_merchant, fn _ ->
         {:error,
          %Systems.Payment.Error{
-           code: :validation,
+           code: :validation_error,
            message: "email taken",
-           details: %{body: %{"error" => %{"parameters" => %{"emailaddress" => ["taken"]}}}}
+           details: %{fields: ["emailaddress"]}
          }}
       end)
       |> expect(:find_merchant_by_email, fn email ->
@@ -92,6 +114,24 @@ defmodule Systems.Payment.PublicTest do
                Payment.Public.ensure_merchant_for(user)
 
       assert %{merchant_uid: "m_recovered"} = Core.Repo.reload!(user)
+    end
+
+    test "bubbles up a validation error on a field other than the email" do
+      user = fresh_user(%{merchant_uid: nil})
+
+      expect(ProviderMock, :create_merchant, fn _ ->
+        {:error,
+         %Systems.Payment.Error{
+           code: :validation_error,
+           message: "phone rejected",
+           details: %{fields: ["phonenumber"]}
+         }}
+      end)
+
+      assert {:error, %Systems.Payment.Error{code: :validation_error}} =
+               Payment.Public.ensure_merchant_for(user)
+
+      assert %{merchant_uid: nil} = Core.Repo.reload!(user)
     end
 
     test "bubbles up a non-collision create_merchant error without persisting anything" do

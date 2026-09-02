@@ -4,7 +4,7 @@ defmodule Next.Account.AuthSignupPageTest do
 
   setup do
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_providers, [])
+      Application.get_env(:core, :account, []) |> Keyword.get(:auth_methods, %{})
 
     on_exit(fn ->
       account = Application.get_env(:core, :account, [])
@@ -12,7 +12,7 @@ defmodule Next.Account.AuthSignupPageTest do
       Application.put_env(
         :core,
         :account,
-        Keyword.put(account, :auth_providers, original_providers)
+        Keyword.put(account, :auth_methods, original_providers)
       )
     end)
 
@@ -20,8 +20,15 @@ defmodule Next.Account.AuthSignupPageTest do
   end
 
   defp set_providers(providers) do
+    satellites =
+      Map.new(providers, fn
+        :surfconext -> {:surfconext, %{provider: true, satellite: true}}
+        :google -> {:google, %{provider: true, satellite: true}}
+        :mock -> {:mock, %{provider: true, satellite: false}}
+      end)
+
     account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :auth_providers, providers))
+    Application.put_env(:core, :account, Keyword.put(account, :auth_methods, satellites))
   end
 
   describe "rendering" do

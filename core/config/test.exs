@@ -113,7 +113,6 @@ config :wallaby,
   ]
 
 config :core, :features,
-  sign_in_with_apple: true,
   member_google_sign_in: true,
   password_sign_in: true,
   debug_expire_force: true,
@@ -127,7 +126,8 @@ config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :core, Oban, queues: false, plugins: false
 
-config :core, Core.SurfConext, oidc_module: Core.SurfConext.FakeOIDC
+config :core, Systems.Account.Auth.Surfconext,
+  oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
 
 # Tests always use the next bundle
 config :core, :bundle, :next

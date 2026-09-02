@@ -407,3 +407,19 @@ msgstr "Ți-am trimis un cod"
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
 msgstr "Furnizorul de plăți nu a acceptat acest număr de telefon. Verifică-l și încearcă din nou."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.body"
+msgstr "Am detectat că aveți deja un cont cu adresa de e-mail <strong>%{email}</strong>. Doriți să utilizați <strong>%{idp}</strong> pentru autentificare de acum înainte? Dacă confirmați, metodele de autentificare existente nu vor mai putea fi utilizate."
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.title"
+msgstr "Transferă autentificarea"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.confirm"
+msgstr "Confirmă transferul"
+
+#, elixir-autogen, elixir-format
+msgid "idp.transfer.decline"
+msgstr "Refuză"
