@@ -1,6 +1,6 @@
 # Mobile delivery architecture
 
-**Status: exploration.** This document describes the product capabilities the mobile delivery architecture must support. It deliberately does not select a mobile framework, navigation bridge, rendering protocol, or BFF design. Those choices require a focused proof of concept.
+This document describes the product capabilities the mobile delivery architecture must support. It deliberately does not select a mobile framework, navigation bridge, rendering protocol, or BFF design. Those choices require a focused proof of concept.
 
 ## Capability tiers
 
