@@ -25,19 +25,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "genders.man"
-msgstr ""
+msgstr "Vyras"
 
 #, elixir-autogen, elixir-format
 msgid "genders.woman"
-msgstr ""
+msgstr "Moteris"
 
 #, elixir-autogen, elixir-format
 msgid "genders.non_binary"
-msgstr ""
+msgstr "Nebinaris asmuo"
 
 #, elixir-autogen, elixir-format
 msgid "genders.prefer_not_to_say"
-msgstr ""
+msgstr "Nenoriu atsakyti"
 
 #, elixir-autogen, elixir-format
 msgid "themes.art"

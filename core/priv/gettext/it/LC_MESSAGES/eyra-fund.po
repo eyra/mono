@@ -151,29 +151,29 @@ msgstr "Rifiutate"
 msgid "rewards_summary.title"
 msgstr "Ricompense"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.below_threshold"
-msgstr ""
+msgstr "Il pagamento richiede un saldo minimo di 5 €."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
 msgstr "Riscuoti"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
-msgstr ""
+msgstr "🔒 %{amount} verranno accreditati sul tuo conto bancario. I pagamenti sono elaborati in modo sicuro dal nostro fornitore di pagamenti."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.cancel"
-msgstr ""
+msgstr "Annulla"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
-msgstr ""
+msgstr "Riscuoti ora"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
-msgstr ""
+msgstr "Avvia riscossione"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.body"
@@ -187,62 +187,62 @@ msgstr "Vai alla verifica"
 msgid "rewards_summary.payout.verify.title"
 msgstr "Conto bancario non ancora verificato"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.in_progress"
-msgstr ""
+msgstr "Il tuo pagamento è in elaborazione."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.manual"
-msgstr ""
+msgstr "Il tuo pagamento è in elaborazione. Contatta l'assistenza se richiede troppo tempo."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr "Riprova riscossione"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.body"
-msgstr ""
+msgstr "Il tuo conto bancario è in fase di verifica da parte del nostro fornitore di pagamenti. Di solito richiede alcuni minuti: riprova tra poco."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.confirm"
-msgstr ""
+msgstr "OK"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
-msgstr ""
+msgstr "Verifica in corso"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.button"
-msgstr ""
+msgstr "Dona"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.failed"
-msgstr ""
+msgstr "Donazione non riuscita. Riprova più tardi."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.body"
-msgstr ""
+msgstr "Stai donando %{amount} a Eyra. In questo modo rinunci al diritto di ricevere questo importo. L'operazione non può essere annullata."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.confirm"
-msgstr ""
+msgstr "Sì, dona"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.title"
-msgstr ""
+msgstr "Dona a Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.in_progress"
-msgstr ""
+msgstr "La tua donazione è in elaborazione."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.thanks"
-msgstr ""
+msgstr "Grazie per la tua donazione!"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
-msgstr ""
+msgstr "Donato a Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
-msgstr ""
+msgstr "Stiamo ancora confermando la tua donazione. Non è necessario riprovare."

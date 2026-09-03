@@ -85,12 +85,12 @@ msgstr "Completar características"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.cta"
-msgstr ""
+msgstr "Revisar"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.description"
-msgstr ""
+msgstr "Revisa las contribuciones completadas en %{name}."
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
-msgstr ""
+msgstr "Nuevas contribuciones"

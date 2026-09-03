@@ -3,8 +3,10 @@ defmodule CoreWeb.GettextTest do
 
   use Gettext, backend: CoreWeb.Gettext
 
-  # Translated in en, empty in es.
+  # Translated in en and nl. "zz" has no translations at all, so it always takes
+  # the missing-translation path, whatever the .po files come to hold.
   @key "rewards_summary.donate.button"
+  @untranslated_locale "zz"
 
   setup do
     original = Application.get_env(:core, :gettext_fallback_locale)
@@ -21,7 +23,7 @@ defmodule CoreWeb.GettextTest do
     end
 
     test "an untranslated string renders the raw key" do
-      assert translate("es") == @key
+      assert translate(@untranslated_locale) == @key
     end
 
     test "a translated string is unaffected" do
@@ -36,7 +38,7 @@ defmodule CoreWeb.GettextTest do
     end
 
     test "an untranslated string falls back to the fallback locale" do
-      assert translate("es") == "Donate"
+      assert translate(@untranslated_locale) == "Donate"
     end
 
     test "a translated string keeps its own locale" do
@@ -44,7 +46,7 @@ defmodule CoreWeb.GettextTest do
     end
 
     test "a key missing from the fallback locale too renders the raw key" do
-      assert Gettext.with_locale("es", fn ->
+      assert Gettext.with_locale(@untranslated_locale, fn ->
                dgettext("eyra-fund", "no.such.key.exists")
              end) == "no.such.key.exists"
     end

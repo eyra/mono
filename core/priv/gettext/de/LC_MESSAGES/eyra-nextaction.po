@@ -85,12 +85,12 @@ msgstr "Merkmale vervollständigen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.cta"
-msgstr ""
+msgstr "Prüfen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.description"
-msgstr ""
+msgstr "Prüfen Sie abgeschlossene Beiträge zu %{name}."
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
-msgstr ""
+msgstr "Neue Beiträge"
