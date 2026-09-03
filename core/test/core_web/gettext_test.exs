@@ -31,6 +31,17 @@ defmodule CoreWeb.GettextTest do
     end
   end
 
+  describe "with an empty fallback locale" do
+    setup do
+      Application.put_env(:core, :gettext_fallback_locale, "")
+      :ok
+    end
+
+    test "an untranslated string renders the raw key" do
+      assert translate(@untranslated_locale) == @key
+    end
+  end
+
   describe "with a fallback locale" do
     setup do
       Application.put_env(:core, :gettext_fallback_locale, "en")

@@ -20,8 +20,8 @@ defmodule CoreWeb.Gettext do
 
   Msgids in this app are dotted keys rather than English sentences, so an
   untranslated string renders as a raw key. Set `GETTEXT_FALLBACK_LOCALE` to
-  serve another locale's text instead; leave it unset to keep the raw keys
-  visible, which is what you want when hunting missing translations.
+  serve another locale's text instead; leave it unset or empty to keep the raw
+  keys visible, which is what you want when hunting missing translations.
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
@@ -55,6 +55,7 @@ defmodule CoreWeb.Gettext do
   defp fallback_locale(locale) do
     case Application.get_env(:core, :gettext_fallback_locale) do
       ^locale -> nil
+      "" -> nil
       fallback -> fallback
     end
   end

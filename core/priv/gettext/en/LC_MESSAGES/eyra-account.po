@@ -312,7 +312,7 @@ msgstr "Your bank account has been verified."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.overview.empty"
-msgstr "You have not received any payouts yet."
+msgstr ""
 "No payouts have been made yet. Once payouts have taken place, you will find an "
 "overview here."
 
