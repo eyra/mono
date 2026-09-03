@@ -39,6 +39,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     tabs = create_tabs(assignment, template, show_errors, assigns)
     action_map = action_map(assignment)
     actions = actions(assignment, action_map)
+    more_actions = more_actions(assignment, action_map)
 
     %{
       id: id,
@@ -46,12 +47,13 @@ defmodule Systems.Assignment.ContentPageBuilder do
       breadcrumbs: breadcrumbs,
       tabs: tabs,
       actions: actions,
+      more_actions: more_actions,
       show_errors: show_errors,
       active_menu_item: :projects
     }
   end
 
-  defp action_map(assignment) do
+  defp action_map(%{id: id} = assignment) do
     preview_url = Assignment.Private.get_preview_url(assignment)
 
     preview_action = %{type: :http_get, to: preview_url, target: "_blank"}
@@ -59,6 +61,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}
     open_action = %{type: :send, event: "action_click", item: :open}
+    export_setup_action = %{type: :http_get, to: ~p"/assignment/#{id}/export", target: "_blank"}
 
     %{
       preview: %{
@@ -113,6 +116,17 @@ defmodule Systems.Assignment.ContentPageBuilder do
         },
         handle_click: &handle_retract/1
       },
+      export_setup: %{
+        label: %{
+          action: export_setup_action,
+          face: %{
+            type: :plain,
+            label: dgettext("eyra-assignment", "export.setup.button"),
+            text_color: "text-grey1"
+          },
+          testid: "export-setup-button"
+        }
+      },
       close: %{
         label: %{
           action: close_action,
@@ -153,6 +167,8 @@ defmodule Systems.Assignment.ContentPageBuilder do
 
   defp actions(%{status: _concept}, %{publish: publish, preview: preview}),
     do: [publish: publish, preview: preview]
+
+  defp more_actions(_assignment, %{export_setup: export_setup}), do: [export_setup: export_setup]
 
   @impl true
   def set_status(%{assigns: %{model: assignment}} = socket, status) do

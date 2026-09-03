@@ -759,3 +759,7 @@ msgstr "Je bijdrage is afgewezen om de volgende reden:"
 #, elixir-autogen, elixir-format
 msgid "participation.back_home.button"
 msgstr "Terug naar startpagina"
+
+#, elixir-autogen, elixir-format
+msgid "export.setup.button"
+msgstr "Exporteer studie-opzet"

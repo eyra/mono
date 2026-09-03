@@ -76,6 +76,7 @@ defmodule Systems.Assignment.ContentPage do
         show_errors={@vm.show_errors}
         breadcrumbs={@vm.breadcrumbs}
         actions={@actions}
+        more_actions={@more_actions}
         tabbar_id={@tabbar_id}
         initial_tab={@initial_tab}
         menus={@menus}

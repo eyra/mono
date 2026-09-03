@@ -15,6 +15,7 @@ defmodule Systems.Assignment.Routes do
         get("/apply", Controller, :apply)
         get("/join", Controller, :join)
         get("/export", Controller, :export)
+        get("/export-progress", Controller, :export_progress)
       end
 
       scope "/", Systems.Assignment do

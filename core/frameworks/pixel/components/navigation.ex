@@ -75,6 +75,7 @@ defmodule Frameworks.Pixel.Navigation do
     assigns =
       assign(assigns, %{
         has_right_bar_buttons: not Enum.empty?(right_bar_buttons),
+        has_more_buttons: not Enum.empty?(assigns.more_buttons),
         has_breadcrumbs: not Enum.empty?(breadcrumbs),
         justify: action_bar_justify(align),
         tabs_slot_class: tabs_slot_class(align)
@@ -82,9 +83,6 @@ defmodule Frameworks.Pixel.Navigation do
 
     ~H"""
     <div>
-      <div id="action_menu" class="hidden z-50 absolute right-14px -mt-6 top-navbar-height">
-        <.action_menu buttons={@more_buttons} />
-      </div>
       <%= if @has_breadcrumbs do %>
         <div class="hidden md:block">
           <div class="bg-white">
@@ -118,6 +116,26 @@ defmodule Frameworks.Pixel.Navigation do
               <% end %>
             </div>
           <% end %>
+          <%= if @has_more_buttons do %>
+            <div class="relative flex-shrink-0">
+              <div
+                id="action_menu_toggle"
+                phx-hook="Toggle"
+                target="action_menu"
+                data-testid="action-menu-toggle"
+                class="w-6 h-6 cursor-pointer"
+              >
+                <img
+                  class="pointer-events-none"
+                  src={~p"/images/icons/more.svg"}
+                  alt={dgettext("eyra-ui", "action_menu.alt")}
+                >
+              </div>
+              <div id="action_menu" class="hidden absolute z-50 right-0 top-8">
+                <.action_menu buttons={@more_buttons} />
+              </div>
+            </div>
+          <% end %>
         </div>
       </Area.content>
       <.line />
@@ -135,9 +153,9 @@ defmodule Frameworks.Pixel.Navigation do
 
   def action_menu(assigns) do
     ~H"""
-    <div class="flex flex-col justify-left -gap-1 p-6 rounded bg-white shadow-2xl w-action_menu-width">
-      <%= for button <- @buttons do %>
-        <Button.dynamic {button} />
+    <div class="flex flex-col justify-left gap-4 p-6 rounded bg-white shadow-2xl w-action_menu-width">
+      <%= for %{label: label} <- @buttons do %>
+        <Button.dynamic {label} />
       <% end %>
     </div>
     """

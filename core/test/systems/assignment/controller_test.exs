@@ -295,8 +295,8 @@ defmodule Systems.Assignment.ControllerTest do
 
       response =
         conn
-        |> Plug.Conn.assign(:branch, nil)
-        |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
+        |> assign_owner(assignment)
+        |> Assignment.Controller.export_progress(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
       assert response.resp_body =~ "affiliate_id_1,no,rejected,started\r\n"
@@ -394,14 +394,58 @@ defmodule Systems.Assignment.ControllerTest do
 
       response =
         conn
-        |> Plug.Conn.assign(:branch, nil)
-        |> Assignment.Controller.export(%{"id" => "#{assignment.id}"})
+        |> assign_owner(assignment)
+        |> Assignment.Controller.export_progress(%{"id" => "#{assignment.id}"})
 
       assert response.resp_body =~ "Participant,Consent,Task 1,Task 2\r\n"
       assert response.resp_body =~ "external_id_1,no,rejected,started\r\n"
       assert response.resp_body =~ "external_id_2,yes,accepted,finished\r\n"
       assert response.resp_body =~ "external_id_3,no,n/a,n/a\r\n"
     end
+  end
+
+  describe "export study setup" do
+    setup :login_as_member
+
+    test "streams a zip holding next-metadata.json", %{conn: conn} do
+      assignment = Assignment.Factories.create_assignment(31, 10, :online)
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, assignment, :owner)
+
+      conn = get(conn, ~p"/assignment/#{assignment.id}/export")
+
+      assert conn.status == 200
+      assert [content_type] = get_resp_header(conn, "content-type")
+      assert content_type =~ "application/zip"
+
+      {:ok, [{path, json}]} = :zip.unzip(conn.resp_body, [:memory])
+      assert to_string(path) =~ ~r|/next-metadata\.json$|
+      assert %{"format_version" => 1} = Jason.decode!(json)
+    end
+
+    test "denies a member who does not own the assignment", %{conn: conn} do
+      %{id: id} = Assignment.Factories.create_assignment(31, 10, :online)
+
+      conn = get(conn, ~p"/assignment/#{id}/export")
+
+      assert conn.status == 403
+    end
+  end
+
+  describe "export progress authorization" do
+    setup :login_as_member
+
+    test "denies a member who does not own the assignment", %{conn: conn} do
+      %{id: id} = Assignment.Factories.create_assignment(31, 10, :online)
+
+      conn = get(conn, ~p"/assignment/#{id}/export-progress")
+
+      assert conn.status == 403
+    end
+  end
+
+  defp assign_owner(%{assigns: %{current_user: user}} = conn, assignment) do
+    :ok = Core.Authorization.assign_role(user, assignment, :owner)
+    Plug.Conn.assign(conn, :branch, nil)
   end
 
   defp online_paid_assignment_id(subject_reward) do

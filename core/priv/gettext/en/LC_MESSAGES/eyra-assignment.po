@@ -807,3 +807,7 @@ msgstr "Your contribution was declined for the following reason:"
 #, elixir-autogen, elixir-format
 msgid "participation.back_home.button"
 msgstr "Back to home"
+
+#, elixir-autogen, elixir-format
+msgid "export.setup.button"
+msgstr "Export study setup"

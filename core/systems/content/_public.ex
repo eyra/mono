@@ -47,6 +47,22 @@ defmodule Systems.Content.Public do
     Content.Private.get_backend().get_public_url(id)
   end
 
+  @doc """
+  Resolves a public URL back to the file on disk, or nil when the content is not
+  readable from this node.
+  """
+  def get_local_path(url) when is_binary(url) do
+    get_local_path(Content.Private.get_backend(), URI.parse(url).path)
+  end
+
+  defp get_local_path(Content.LocalFS, path) when is_binary(path) do
+    if String.starts_with?(path, Content.LocalFS.public_path() <> "/") do
+      Path.join(Content.LocalFS.get_root_path(), Path.basename(path))
+    end
+  end
+
+  defp get_local_path(_backend, _path), do: nil
+
   def get_text_item!(id, preload \\ []) do
     from(t in TextItem, preload: ^preload)
     |> Repo.get!(id)
