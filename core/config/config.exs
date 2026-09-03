@@ -208,7 +208,8 @@ config :core, :surfconext_domains, []
 config :core, Systems.Account.Auth.Google,
   client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET"),
-  redirect_uri: "http://localhost:4000/auth/google/callback"
+  redirect_uri: "http://localhost:4000/auth/google/callback",
+  http_adapter: Systems.Account.Auth.Google.HTTPAdapter
 
 config :core, Core.ImageCatalog.Unsplash,
   access_key: "",
