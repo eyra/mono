@@ -64,9 +64,9 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
-  def export(conn, %{"id" => id}) do
+  def export_setup(conn, %{"id" => id}) do
     assignment =
-      Assignment.Public.get!(String.to_integer(id), Assignment.SetupExport.preload_graph())
+      Assignment.Public.get!(String.to_integer(id), Assignment.SetupExporter.preload_graph())
 
     if authorized?(conn, assignment) do
       branch_name = branch_name(conn, id)
@@ -76,25 +76,26 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
-  defp export_setup(conn, assignment, branch_name, name) do
+  defp export_setup(conn, assignment, branch_name, folder) do
     manifest =
       assignment
-      |> Assignment.SetupExport.entries(branch_name, name)
+      |> Assignment.SetupExporter.entries(branch_name, folder)
       |> Packmatic.Manifest.create()
 
     case manifest do
-      %{valid?: true} -> stream_zip(conn, manifest, name)
+      %{valid?: true} -> stream_zip(conn, manifest, "#{folder}.zip")
       %{valid?: false} -> service_unavailable(conn)
     end
   end
 
-  defp stream_zip(conn, manifest, name) do
+  defp stream_zip(conn, manifest, filename) do
     manifest
     |> Packmatic.build_stream(on_error: :skip, on_event: &log_skipped_entry/1)
-    |> Packmatic.Conn.send_chunked(conn, "#{name}.zip")
+    |> Packmatic.Conn.send_chunked(conn, filename)
   end
 
   defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
+    Assignment.SetupExporter.record_skipped(path, reason)
     Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
   end
 

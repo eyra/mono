@@ -1,14 +1,15 @@
-defmodule Systems.Assignment.SetupExportTest do
+defmodule Systems.Assignment.SetupExporterTest do
   use Core.DataCase
 
   alias Core.Factories
   alias Systems.Assignment
+  alias Systems.Manual
 
   defp load(assignment),
-    do: Repo.preload(assignment, Assignment.SetupExport.preload_graph(), force: true)
+    do: Repo.preload(assignment, Assignment.SetupExporter.preload_graph(), force: true)
 
   defp metadata(assignment, name \\ "test study"),
-    do: assignment |> load() |> Assignment.SetupExport.metadata(name)
+    do: assignment |> load() |> Assignment.SetupExporter.metadata(name)
 
   defp asset_paths(map) do
     map
@@ -53,16 +54,16 @@ defmodule Systems.Assignment.SetupExportTest do
 
       assignment = Factories.insert!(:assignment, %{info: info, privacy_doc: privacy_doc})
 
-      entries = assignment |> load() |> Assignment.SetupExport.entries("study", "study_2026")
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
 
       assert %{valid?: true, errors: []} = Packmatic.Manifest.create(entries)
-      assert length(entries) == 3
+      assert length(entries) == 4
     end
 
     test "produces a manifest Packmatic accepts when the study has no assets" do
       assignment = Factories.insert!(:assignment, %{info: nil})
 
-      entries = assignment |> load() |> Assignment.SetupExport.entries("study", "study_2026")
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
 
       assert %{valid?: true, errors: []} = Packmatic.Manifest.create(entries)
     end
@@ -72,7 +73,7 @@ defmodule Systems.Assignment.SetupExportTest do
       info = Factories.insert!(:assignment_info, %{logo_url: logo_url})
       assignment = Factories.insert!(:assignment, %{info: info})
 
-      entries = assignment |> load() |> Assignment.SetupExport.entries("study", "study_2026")
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
       entry = Enum.find(entries, &(&1[:path] == "study_2026/assets/logo.png"))
 
       assert {:file, path} = entry[:source]
@@ -82,9 +83,25 @@ defmodule Systems.Assignment.SetupExportTest do
     test "nests every entry under the folder" do
       assignment = Factories.insert!(:assignment, %{info: nil})
 
-      entries = assignment |> load() |> Assignment.SetupExport.entries("study", "study_2026")
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
 
       assert Enum.all?(entries, &String.starts_with?(&1[:path], "study_2026/"))
+    end
+
+    test "reports skipped assets in the warnings entry, which resolves last" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
+      entry = List.last(entries)
+
+      assert entry[:path] == "study_2026/export-warnings.json"
+
+      :ok = Assignment.SetupExporter.record_skipped("study_2026/assets/logo.png", :timeout)
+
+      assert {:ok, {:stream, [json]}} = entry[:source] |> elem(1) |> apply([])
+
+      assert %{"skipped" => [%{"path" => "study_2026/assets/logo.png", "reason" => ":timeout"}]} =
+               Jason.decode!(json)
     end
   end
 
@@ -176,5 +193,55 @@ defmodule Systems.Assignment.SetupExportTest do
 
       assert %{type: "graphite", title: "Benchmark"} = task
     end
+
+    test "bundles an uploaded manual page image stored as encoded image info" do
+      image =
+        Jason.encode!(%{
+          url: "https://x.test/uploads/step.png",
+          width: 100,
+          height: 50,
+          blur_hash: "abc"
+        })
+
+      assignment = assignment_with_manual_page(image)
+
+      {%{workflow: %{tasks: [task]}}, assets} = metadata(assignment)
+
+      assert %{chapters: [%{pages: [%{image: "assets/instruction-step-1-1-1.png"}]}]} = task
+
+      assert [
+               %{
+                 path: "assets/instruction-step-1-1-1.png",
+                 url: "https://x.test/uploads/step.png"
+               }
+             ] =
+               assets
+    end
+
+    test "bundles a manual page image stored as a plain url" do
+      assignment = assignment_with_manual_page("https://x.test/uploads/step.jpg")
+
+      {_map, assets} = metadata(assignment)
+
+      assert [%{url: "https://x.test/uploads/step.jpg"}] = assets
+    end
+  end
+
+  defp assignment_with_manual_page(image) do
+    manual_tool = Manual.Factories.create_manual_tool(1, 1, Factories.insert!(:auth_node))
+    %{chapters: [%{pages: [page]}]} = manual_tool.manual
+    Repo.update!(Ecto.Changeset.change(page, image: image))
+
+    tool_ref = Factories.insert!(:tool_ref, %{manual_tool: manual_tool})
+    workflow = Factories.insert!(:workflow, %{})
+
+    Factories.insert!(:workflow_item, %{
+      workflow: workflow,
+      tool_ref: tool_ref,
+      title: "Manual",
+      position: 0
+    })
+
+    Factories.insert!(:assignment, %{workflow: workflow})
   end
 end

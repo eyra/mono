@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.SetupExport do
+defmodule Systems.Assignment.SetupExporter do
   @moduledoc """
   Serializes the configuration of an assignment for the study setup export.
 
@@ -19,7 +19,8 @@ defmodule Systems.Assignment.SetupExport do
 
   @format_version 1
   @header_image_size {1376, 720}
-  @max_asset_bytes 50_000_000
+  @max_asset_bytes Application.compile_env!(:core, [CoreWeb.FileUploader, :max_file_size])
+  @skipped_key :setup_export_skipped
 
   def preload_graph do
     [
@@ -32,13 +33,40 @@ defmodule Systems.Assignment.SetupExport do
   end
 
   @doc """
-  Packmatic entries for the whole export: the metadata document plus one entry
-  per configured asset, all nested under `folder`.
+  Packmatic entries for the whole export: the metadata document, one entry per
+  configured asset and a closing `export-warnings.json`, all nested under
+  `folder`. `name` is the study name written into the metadata; `folder` is the
+  slug used for both the folder and the zip file.
   """
   def entries(%Assignment.Model{} = assignment, name, folder) do
     {metadata, assets} = metadata(assignment, name)
 
-    [metadata_entry(metadata, folder) | Enum.map(assets, &asset_entry(&1, folder))]
+    [metadata_entry(metadata, folder) | Enum.map(assets, &asset_entry(&1, folder))] ++
+      [warnings_entry(folder)]
+  end
+
+  @doc """
+  Registers an asset that Packmatic could not fetch, so `export-warnings.json`
+  can report it. Packmatic consumes the stream in the process that serves the
+  request, so the accumulated list rides along in the process dictionary.
+  """
+  def record_skipped(path, reason) do
+    Process.put(@skipped_key, skipped() ++ [%{path: path, reason: inspect(reason)}])
+    :ok
+  end
+
+  defp skipped, do: Process.get(@skipped_key, [])
+
+  defp warnings_entry(folder) do
+    [
+      source: {:dynamic, &warnings_source/0},
+      path: "#{folder}/export-warnings.json",
+      timestamp: DateTime.utc_now()
+    ]
+  end
+
+  defp warnings_source do
+    {:ok, {:stream, [Jason.encode!(%{skipped: skipped()}, pretty: true)]}}
   end
 
   defp metadata_entry(metadata, folder) do
@@ -206,14 +234,21 @@ defmodule Systems.Assignment.SetupExport do
     do: {%{title: title, pages: []}, []}
 
   defp page(
-         {%Manual.PageModel{title: title, text: text, image: url}, page_index},
+         {%Manual.PageModel{title: title, text: text, image: image}, page_index},
          task_index,
          chapter_index
        ) do
     {image, assets} =
-      asset(url, "instruction-step-#{task_index}-#{chapter_index}-#{page_index}")
+      asset(image_url(image), "instruction-step-#{task_index}-#{chapter_index}-#{page_index}")
 
     {%{title: title, description: text, image: image}, assets}
+  end
+
+  defp image_url(image) do
+    case Core.ImageHelpers.decode_image_info(image) do
+      %{url: url} -> url
+      nil -> nil
+    end
   end
 
   defp sort_by_step(records), do: Enum.sort_by(records, &step_order/1)

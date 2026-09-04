@@ -417,9 +417,16 @@ defmodule Systems.Assignment.ControllerTest do
       assert [content_type] = get_resp_header(conn, "content-type")
       assert content_type =~ "application/zip"
 
-      {:ok, [{path, json}]} = :zip.unzip(conn.resp_body, [:memory])
-      assert to_string(path) =~ ~r|/next-metadata\.json$|
-      assert %{"format_version" => 1} = Jason.decode!(json)
+      {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
+      contents = Map.new(files, fn {path, data} -> {to_string(path), data} end)
+
+      assert [metadata_path] = Enum.filter(Map.keys(contents), &(&1 =~ ~r|/next-metadata\.json$|))
+      assert %{"format_version" => 1} = Jason.decode!(contents[metadata_path])
+
+      assert [warnings_path] =
+               Enum.filter(Map.keys(contents), &(&1 =~ ~r|/export-warnings\.json$|))
+
+      assert %{"skipped" => []} = Jason.decode!(contents[warnings_path])
     end
 
     test "denies a member who does not own the assignment", %{conn: conn} do
