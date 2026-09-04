@@ -151,29 +151,29 @@ msgstr "Abgelehnt"
 msgid "rewards_summary.title"
 msgstr "Vergütungen"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.below_threshold"
-msgstr ""
+msgstr "Für eine Auszahlung ist ein Mindestguthaben von 5 € erforderlich."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
 msgstr "Auszahlen"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
-msgstr ""
+msgstr "🔒 %{amount} wird auf Ihr Bankkonto ausgezahlt. Zahlungen werden sicher von unserem Zahlungsdienstleister verarbeitet."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.cancel"
-msgstr ""
+msgstr "Abbrechen"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
-msgstr ""
+msgstr "Jetzt auszahlen"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
-msgstr ""
+msgstr "Auszahlung starten"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.body"
@@ -187,62 +187,62 @@ msgstr "Zur Verifizierung"
 msgid "rewards_summary.payout.verify.title"
 msgstr "Bankkonto noch nicht verifiziert"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.in_progress"
-msgstr ""
+msgstr "Ihre Auszahlung wird bearbeitet."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.manual"
-msgstr ""
+msgstr "Ihre Auszahlung wird bearbeitet. Bitte wenden Sie sich an den Support, wenn dies länger dauert."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr "Auszahlung wiederholen"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.body"
-msgstr ""
+msgstr "Ihr Bankkonto wird von unserem Zahlungsdienstleister geprüft. Das dauert in der Regel einige Minuten — bitte versuchen Sie es in Kürze erneut."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.confirm"
-msgstr ""
+msgstr "OK"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
-msgstr ""
+msgstr "Verifizierung läuft"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.button"
-msgstr ""
+msgstr "Spenden"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.failed"
-msgstr ""
+msgstr "Spende fehlgeschlagen. Bitte versuchen Sie es später erneut."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.body"
-msgstr ""
+msgstr "Sie spenden %{amount} an Eyra. Damit verzichten Sie auf Ihren Anspruch auf Auszahlung dieses Betrags. Dies kann nicht rückgängig gemacht werden."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.confirm"
-msgstr ""
+msgstr "Ja, spenden"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.title"
-msgstr ""
+msgstr "An Eyra spenden"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.in_progress"
-msgstr ""
+msgstr "Ihre Spende wird bearbeitet."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.thanks"
-msgstr ""
+msgstr "Vielen Dank für Ihre Spende!"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
-msgstr ""
+msgstr "An Eyra gespendet"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
-msgstr ""
+msgstr "Wir bestätigen Ihre Spende noch. Sie müssen es nicht erneut versuchen."

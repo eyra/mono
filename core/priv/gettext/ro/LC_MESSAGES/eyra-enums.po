@@ -25,19 +25,19 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "genders.man"
-msgstr ""
+msgstr "Bărbat"
 
 #, elixir-autogen, elixir-format
 msgid "genders.woman"
-msgstr ""
+msgstr "Femeie"
 
 #, elixir-autogen, elixir-format
 msgid "genders.non_binary"
-msgstr ""
+msgstr "Non-binar"
 
 #, elixir-autogen, elixir-format
 msgid "genders.prefer_not_to_say"
-msgstr ""
+msgstr "Prefer să nu declar"
 
 #, elixir-autogen, elixir-format
 msgid "themes.art"

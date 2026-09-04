@@ -13,4 +13,4 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "task.hero.title"
-msgstr ""
+msgstr "Questionnaire"

@@ -308,4 +308,8 @@ if config_env() == :prod do
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
     config :core, :service_login, key: service_login_key
   end
+
+  # Unset means no fallback: an untranslated string renders its msgid, which in
+  # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
+  config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
 end

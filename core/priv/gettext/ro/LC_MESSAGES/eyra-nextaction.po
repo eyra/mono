@@ -85,12 +85,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.cta"
-msgstr ""
+msgstr "Verifică"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.description"
-msgstr ""
+msgstr "Verifică contribuțiile finalizate la %{name}."
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
-msgstr ""
+msgstr "Contribuții noi"
