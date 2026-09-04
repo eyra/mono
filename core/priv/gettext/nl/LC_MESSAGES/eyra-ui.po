@@ -205,3 +205,7 @@ msgstr "Ga naar %{to}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.onyx"
 msgstr "To-do"
+
+#, elixir-autogen, elixir-format
+msgid "action_menu.alt"
+msgstr "Meer acties"

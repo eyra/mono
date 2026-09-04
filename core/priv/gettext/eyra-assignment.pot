@@ -739,3 +739,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "contributions.confirm_all.error"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "export.setup.button"
+msgstr ""

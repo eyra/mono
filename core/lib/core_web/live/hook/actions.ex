@@ -40,13 +40,13 @@ defmodule CoreWeb.Live.Hook.Actions do
   end
 
   def handle_action_click(
-        %{assigns: %{vm: %{actions: actions}}} = socket,
+        %{assigns: %{vm: %{actions: actions} = vm}} = socket,
         live_view_module,
         action_id
       )
       when is_binary(action_id) do
     action_id = String.to_existing_atom(action_id)
-    action = Keyword.get(actions, action_id)
+    action = Keyword.get(actions ++ Map.get(vm, :more_actions, []), action_id)
 
     socket
     |> action.handle_click.()

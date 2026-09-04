@@ -3,10 +3,11 @@ defmodule Systems.Assignment.Controller do
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
+  require Logger
+
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
-  alias Plug.Conn
   alias CoreWeb.UI.Timestamp
   alias Frameworks.Concept
   alias Systems.Assignment
@@ -63,39 +64,83 @@ defmodule Systems.Assignment.Controller do
     end
   end
 
-  def export(%{assigns: %{branch: branch}} = conn, %{"id" => id}) do
-    if assignment =
-         Assignment.Public.get!(
-           String.to_integer(id),
-           Assignment.Model.preload_graph(:down)
-         ) do
-      date = Timestamp.now() |> Timestamp.format_date_short!()
+  def export_setup(conn, %{"id" => id}) do
+    assignment =
+      Assignment.Public.get!(String.to_integer(id), Assignment.SetupExporter.preload_graph())
 
-      branch_name =
-        if branch do
-          Concept.Branch.name(branch, :self)
-        else
-          "assignment_#{id}"
-        end
-
-      filename =
-        [branch_name, "progress", date]
-        |> Enum.join(" ")
-        |> Slug.slugify(separator: ?_)
-
-      csv_data = progress_csv_data(assignment)
-
-      conn
-      |> put_resp_content_type("text/csv")
-      |> put_resp_header("content-disposition", "attachment; filename=\"#{filename}\".csv")
-      |> send_resp(200, csv_data)
+    if authorized?(conn, assignment) do
+      branch_name = branch_name(conn, id)
+      export_setup(conn, assignment, branch_name, export_name(branch_name))
     else
-      service_unavailable(conn)
+      forbidden(conn)
     end
   end
 
-  def export(%Conn{} = conn, _, _) do
-    service_unavailable(conn)
+  defp export_setup(conn, assignment, branch_name, folder) do
+    manifest =
+      assignment
+      |> Assignment.SetupExporter.entries(branch_name, folder)
+      |> Packmatic.Manifest.create()
+
+    case manifest do
+      %{valid?: true} -> stream_zip(conn, manifest, "#{folder}.zip")
+      %{valid?: false} -> service_unavailable(conn)
+    end
+  end
+
+  defp stream_zip(conn, manifest, filename) do
+    manifest
+    |> Packmatic.build_stream(on_error: :skip, on_event: &log_skipped_entry/1)
+    |> Packmatic.Conn.send_chunked(conn, filename)
+  end
+
+  defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
+    Assignment.SetupExporter.record_skipped(path, reason)
+    Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
+  end
+
+  defp log_skipped_entry(_event), do: :ok
+
+  def export_progress(conn, %{"id" => id}) do
+    assignment =
+      Assignment.Public.get!(String.to_integer(id), Assignment.Model.preload_graph(:down))
+
+    if authorized?(conn, assignment) do
+      export_progress(conn, assignment, "#{export_name(branch_name(conn, id), "progress")}.csv")
+    else
+      forbidden(conn)
+    end
+  end
+
+  defp export_progress(conn, assignment, filename) do
+    conn
+    |> put_resp_content_type("text/csv")
+    |> put_resp_header("content-disposition", "attachment; filename=\"#{filename}\"")
+    |> send_resp(200, progress_csv_data(assignment))
+  end
+
+  defp export_name(branch_name, infix \\ nil) do
+    date = Timestamp.now() |> Timestamp.format_date_short!()
+
+    [branch_name, infix, date]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join(" ")
+    |> Slug.slugify(separator: ?_)
+  end
+
+  defp branch_name(%{assigns: %{branch: branch}}, _id) when not is_nil(branch),
+    do: Concept.Branch.name(branch, :self)
+
+  defp branch_name(_conn, id), do: "assignment_#{id}"
+
+  defp authorized?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment),
+    do: Core.Authorization.can_access?(user, assignment, Assignment.ContentPage)
+
+  defp forbidden(conn) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"403")
   end
 
   def progress_csv_data(%Assignment.Model{workflow: workflow} = assignment) do

@@ -32,7 +32,7 @@ defmodule Systems.Assignment.MonitorView do
     export_button = %{
       action: %{
         type: :http_download,
-        to: ~p"/assignment/#{id}/export"
+        to: ~p"/assignment/#{id}/export-progress"
       },
       face: %{
         type: :label,
