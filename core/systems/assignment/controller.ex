@@ -95,8 +95,10 @@ defmodule Systems.Assignment.Controller do
   end
 
   defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
-    Assignment.SetupExporter.record_skipped(path, reason)
-    Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
+    case Assignment.SetupExporter.record_skipped(path, reason) do
+      :ok -> Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
+      :ignore -> :ok
+    end
   end
 
   defp log_skipped_entry(_event), do: :ok

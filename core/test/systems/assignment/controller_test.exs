@@ -407,7 +407,7 @@ defmodule Systems.Assignment.ControllerTest do
   describe "export study setup" do
     setup :login_as_member
 
-    test "streams a zip holding next-metadata.json", %{conn: conn} do
+    test "streams a zip holding next-metadata.json and an ro-crate description", %{conn: conn} do
       assignment = Assignment.Factories.create_assignment(31, 10, :online)
       :ok = Core.Authorization.assign_role(conn.assigns.current_user, assignment, :owner)
 
@@ -423,10 +423,21 @@ defmodule Systems.Assignment.ControllerTest do
       assert [metadata_path] = Enum.filter(Map.keys(contents), &(&1 =~ ~r|/next-metadata\.json$|))
       assert %{"format_version" => 1} = Jason.decode!(contents[metadata_path])
 
-      assert [warnings_path] =
-               Enum.filter(Map.keys(contents), &(&1 =~ ~r|/export-warnings\.json$|))
+      assert [crate_path] =
+               Enum.filter(Map.keys(contents), &(&1 =~ ~r|/ro-crate-metadata\.json$|))
 
-      assert %{"skipped" => []} = Jason.decode!(contents[warnings_path])
+      crate = Jason.decode!(contents[crate_path])
+      root = Enum.find(crate["@graph"], &(&1["@id"] == "./"))
+      parts = Enum.map(root["hasPart"], & &1["@id"])
+      folder = Path.dirname(crate_path)
+
+      assert crate["@context"] == "https://w3id.org/ro/crate/1.1/context"
+      assert "next-metadata.json" in parts
+      assert Enum.all?(parts, &Map.has_key?(contents, "#{folder}/#{&1}"))
+
+      # a clean export carries no warnings document, in the zip nor in the crate
+      assert Enum.filter(Map.keys(contents), &(&1 =~ ~r|/export-warnings\.json$|)) == []
+      refute "export-warnings.json" in parts
     end
 
     test "denies a member who does not own the assignment", %{conn: conn} do

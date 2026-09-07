@@ -57,7 +57,7 @@ defmodule Systems.Assignment.SetupExporterTest do
       entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
 
       assert %{valid?: true, errors: []} = Packmatic.Manifest.create(entries)
-      assert length(entries) == 4
+      assert length(entries) == 5
     end
 
     test "produces a manifest Packmatic accepts when the study has no assets" do
@@ -102,6 +102,145 @@ defmodule Systems.Assignment.SetupExporterTest do
 
       assert %{"skipped" => [%{"path" => "study_2026/assets/logo.png", "reason" => ":timeout"}]} =
                Jason.decode!(json)
+    end
+
+    test "drops the warnings entry when nothing was skipped" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      entry = assignment |> entries() |> List.last()
+
+      assert entry[:path] == "study_2026/export-warnings.json"
+      assert {:error, :no_warnings} = entry[:source] |> elem(1) |> apply([])
+    end
+
+    test "ignores the dropped warnings entry instead of reporting it as a skipped asset" do
+      assert Assignment.SetupExporter.record_skipped(
+               "study_2026/export-warnings.json",
+               :no_warnings
+             ) == :ignore
+
+      assignment = Factories.insert!(:assignment, %{info: nil})
+      entry = assignment |> entries() |> List.last()
+
+      assert {:error, :no_warnings} = entry[:source] |> elem(1) |> apply([])
+    end
+  end
+
+  describe "entries/3 - ro-crate" do
+    test "describes the package with a metadata descriptor and a root dataset" do
+      info =
+        Factories.insert!(:assignment_info, %{
+          title: "Title",
+          subtitle: "Subtitle",
+          language: :nl,
+          logo_url: "https://example.com/brand/logo.png"
+        })
+
+      assignment = Factories.insert!(:assignment, %{info: info})
+
+      crate = crate(assignment, "My study")
+
+      assert crate["@context"] == "https://w3id.org/ro/crate/1.1/context"
+
+      assert %{
+               "@type" => "CreativeWork",
+               "conformsTo" => %{"@id" => "https://w3id.org/ro/crate/1.1"},
+               "about" => %{"@id" => "./"}
+             } = entity(crate, "ro-crate-metadata.json")
+
+      assert %{
+               "@type" => "Dataset",
+               "name" => "My study",
+               "description" => "Subtitle",
+               "inLanguage" => "nl",
+               "identifier" => identifier,
+               "datePublished" => published
+             } = entity(crate, "./")
+
+      assert identifier == "next-assignment-#{assignment.id}"
+      assert {:ok, _datetime, _offset} = DateTime.from_iso8601(published)
+    end
+
+    test "lists the metadata document and every exported asset" do
+      info =
+        Factories.insert!(:assignment_info, %{
+          title: "Title",
+          logo_url: "https://example.com/brand/logo.png"
+        })
+
+      privacy_doc =
+        Factories.insert!(:content_file, %{name: "p.pdf", ref: "https://x.test/p.pdf"})
+
+      assignment = Factories.insert!(:assignment, %{info: info, privacy_doc: privacy_doc})
+
+      crate = crate(assignment)
+
+      assert parts(crate) == [
+               "next-metadata.json",
+               "assets/logo.png",
+               "assets/privacy-statement.pdf"
+             ]
+
+      assert Enum.all?(parts(crate), &(entity(crate, &1)["@type"] == "File"))
+      assert entity(crate, "assets/logo.png")["encodingFormat"] == "image/png"
+      assert entity(crate, "assets/privacy-statement.pdf")["encodingFormat"] == "application/pdf"
+      assert entity(crate, "next-metadata.json")["encodingFormat"] == "application/json"
+    end
+
+    test "omits the warnings document when nothing was skipped" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      crate = crate(assignment)
+
+      refute "export-warnings.json" in parts(crate)
+      assert entity(crate, "export-warnings.json") == nil
+    end
+
+    test "leaves assets that could not be fetched out of the crate" do
+      info =
+        Factories.insert!(:assignment_info, %{
+          title: "Title",
+          logo_url: "https://example.com/brand/logo.png"
+        })
+
+      assignment = Factories.insert!(:assignment, %{info: info})
+      entries = entries(assignment)
+
+      :ok = Assignment.SetupExporter.record_skipped("study_2026/assets/logo.png", :timeout)
+
+      crate = resolve_crate(entries)
+
+      refute "assets/logo.png" in parts(crate)
+      assert entity(crate, "assets/logo.png") == nil
+      assert parts(crate) == ["next-metadata.json", "export-warnings.json"]
+    end
+
+    test "resolves after the asset entries, so skipped assets are known" do
+      info =
+        Factories.insert!(:assignment_info, %{
+          logo_url: "https://example.com/brand/logo.png"
+        })
+
+      assignment = Factories.insert!(:assignment, %{info: info})
+
+      paths = assignment |> entries() |> Enum.map(& &1[:path])
+
+      assert paths == [
+               "study_2026/next-metadata.json",
+               "study_2026/assets/logo.png",
+               "study_2026/ro-crate-metadata.json",
+               "study_2026/export-warnings.json"
+             ]
+    end
+
+    test "describes an unconfigured study with a generated description" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      crate = crate(assignment, "My study")
+
+      assert entity(crate, "./")["description"] == "Exported study setup of My study."
+      assert entity(crate, "./")["inLanguage"] == "en"
+      assert parts(crate) == ["next-metadata.json"]
     end
   end
 
@@ -244,4 +383,19 @@ defmodule Systems.Assignment.SetupExporterTest do
 
     Factories.insert!(:assignment, %{workflow: workflow})
   end
+
+  defp entries(assignment, name \\ "study"),
+    do: assignment |> load() |> Assignment.SetupExporter.entries(name, "study_2026")
+
+  defp crate(assignment, name \\ "study"), do: assignment |> entries(name) |> resolve_crate()
+
+  defp resolve_crate(entries) do
+    entry = Enum.find(entries, &(&1[:path] == "study_2026/ro-crate-metadata.json"))
+    {:ok, {:stream, [json]}} = entry[:source] |> elem(1) |> apply([])
+    Jason.decode!(json)
+  end
+
+  defp entity(%{"@graph" => graph}, id), do: Enum.find(graph, &(&1["@id"] == id))
+
+  defp parts(crate), do: crate |> entity("./") |> Map.fetch!("hasPart") |> Enum.map(& &1["@id"])
 end

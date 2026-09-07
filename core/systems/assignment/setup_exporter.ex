@@ -21,6 +21,14 @@ defmodule Systems.Assignment.SetupExporter do
   @header_image_size {1376, 720}
   @max_asset_bytes Application.compile_env!(:core, [CoreWeb.FileUploader, :max_file_size])
   @skipped_key :setup_export_skipped
+  @metadata_name "next-metadata.json"
+  @warnings_name "export-warnings.json"
+  @ro_crate_name "ro-crate-metadata.json"
+  @file_descriptions %{
+    @metadata_name =>
+      "Serialized study setup: branding, information pages, consent and workflow tasks.",
+    @warnings_name => "Assets that could not be included in this export."
+  }
 
   def preload_graph do
     [
@@ -34,45 +42,170 @@ defmodule Systems.Assignment.SetupExporter do
 
   @doc """
   Packmatic entries for the whole export: the metadata document, one entry per
-  configured asset and a closing `export-warnings.json`, all nested under
-  `folder`. `name` is the study name written into the metadata; `folder` is the
-  slug used for both the folder and the zip file.
+  configured asset, the RO-Crate description of the package and a closing
+  `export-warnings.json`, all nested under `folder`. `name` is the study name
+  written into the metadata; `folder` is the slug used for both the folder and
+  the zip file.
+
+  The warnings document only materializes when an asset was actually skipped;
+  a clean export carries no `export-warnings.json`.
   """
   def entries(%Assignment.Model{} = assignment, name, folder) do
     {metadata, assets} = metadata(assignment, name)
 
-    [metadata_entry(metadata, folder) | Enum.map(assets, &asset_entry(&1, folder))] ++
-      [warnings_entry(folder)]
+    [metadata_entry(metadata, folder)] ++
+      Enum.map(assets, &asset_entry(&1, folder)) ++
+      [ro_crate_entry(metadata, assets, folder), warnings_entry(folder)]
   end
 
   @doc """
   Registers an asset that Packmatic could not fetch, so `export-warnings.json`
   can report it. Packmatic consumes the stream in the process that serves the
   request, so the accumulated list rides along in the process dictionary.
+
+  Returns `:ignore` for the warnings document itself: a clean export drops that
+  entry, which Packmatic reports as a failure like any other.
   """
   def record_skipped(path, reason) do
-    Process.put(@skipped_key, skipped() ++ [%{path: path, reason: inspect(reason)}])
-    :ok
+    if warnings_document?(path) do
+      :ignore
+    else
+      Process.put(@skipped_key, skipped() ++ [%{path: path, reason: inspect(reason)}])
+      :ok
+    end
   end
+
+  defp warnings_document?(path), do: String.ends_with?(path, "/" <> @warnings_name)
 
   defp skipped, do: Process.get(@skipped_key, [])
 
   defp warnings_entry(folder) do
     [
       source: {:dynamic, &warnings_source/0},
-      path: "#{folder}/export-warnings.json",
+      path: "#{folder}/#{@warnings_name}",
       timestamp: DateTime.utc_now()
     ]
   end
 
   defp warnings_source do
-    {:ok, {:stream, [Jason.encode!(%{skipped: skipped()}, pretty: true)]}}
+    case skipped() do
+      [] -> {:error, :no_warnings}
+      skipped -> {:ok, {:stream, [Jason.encode!(%{skipped: skipped}, pretty: true)]}}
+    end
+  end
+
+  defp ro_crate_entry(metadata, assets, folder) do
+    [
+      source: {:dynamic, fn -> ro_crate_source(metadata, assets, folder) end},
+      path: "#{folder}/#{@ro_crate_name}",
+      timestamp: DateTime.utc_now()
+    ]
+  end
+
+  defp ro_crate_source(metadata, assets, folder) do
+    {:ok, {:stream, [Jason.encode!(ro_crate(metadata, assets, folder), pretty: true)]}}
+  end
+
+  @doc """
+  RO-Crate 1.1 description of the exported package: the metadata file
+  descriptor, the root dataset and one file entity per bundled document.
+
+  Paths stay relative to the export folder, which is the RO-Crate root, so the
+  crate describes the same tree the zip already contains. Assets that Packmatic
+  could not fetch are left out, as is the warnings document when there is
+  nothing to warn about, which is why this document is resolved after every
+  asset entry.
+  """
+  def ro_crate(metadata, assets, folder) do
+    parts = [@metadata_name] ++ exported_asset_paths(assets, folder) ++ warnings_parts()
+
+    %{
+      "@context" => "https://w3id.org/ro/crate/1.1/context",
+      "@graph" =>
+        [ro_crate_descriptor(), ro_crate_root(metadata, parts)] ++
+          Enum.map(parts, &ro_crate_file/1)
+    }
+  end
+
+  defp exported_asset_paths(assets, folder) do
+    skipped = skipped() |> Enum.map(& &1.path) |> MapSet.new()
+
+    assets
+    |> Enum.map(& &1.path)
+    |> Enum.uniq()
+    |> Enum.reject(&MapSet.member?(skipped, "#{folder}/#{&1}"))
+  end
+
+  defp warnings_parts do
+    case skipped() do
+      [] -> []
+      _skipped -> [@warnings_name]
+    end
+  end
+
+  defp ro_crate_descriptor do
+    %{
+      "@id" => @ro_crate_name,
+      "@type" => "CreativeWork",
+      "conformsTo" => %{"@id" => "https://w3id.org/ro/crate/1.1"},
+      "about" => %{"@id" => "./"}
+    }
+  end
+
+  defp ro_crate_root(
+         %{
+           assignment: %{id: id, name: name},
+           language: language,
+           branding: %{subtitle: subtitle}
+         },
+         parts
+       ) do
+    %{
+      "@id" => "./",
+      "@type" => "Dataset",
+      "name" => name,
+      "description" => ro_crate_description(subtitle, name),
+      "datePublished" => DateTime.utc_now() |> DateTime.to_iso8601(),
+      "identifier" => "next-assignment-#{id}",
+      "hasPart" => Enum.map(parts, &%{"@id" => &1})
+    }
+    |> put_language(language)
+  end
+
+  defp ro_crate_description(subtitle, _name) when is_binary(subtitle) and subtitle != "",
+    do: subtitle
+
+  defp ro_crate_description(_subtitle, name), do: "Exported study setup of #{name}."
+
+  defp put_language(root, language) when is_atom(language) and not is_nil(language),
+    do: Map.put(root, "inLanguage", Atom.to_string(language))
+
+  defp put_language(root, language) when is_binary(language) and language != "",
+    do: Map.put(root, "inLanguage", language)
+
+  defp put_language(root, _language), do: root
+
+  defp ro_crate_file(path) do
+    %{
+      "@id" => path,
+      "@type" => "File",
+      "name" => Path.basename(path),
+      "encodingFormat" => MIME.from_path(path)
+    }
+    |> put_file_description(path)
+  end
+
+  defp put_file_description(file, path) do
+    case Map.fetch(@file_descriptions, path) do
+      {:ok, description} -> Map.put(file, "description", description)
+      :error -> file
+    end
   end
 
   defp metadata_entry(metadata, folder) do
     [
       source: {:stream, [Jason.encode!(metadata, pretty: true)]},
-      path: "#{folder}/next-metadata.json",
+      path: "#{folder}/#{@metadata_name}",
       timestamp: DateTime.utc_now()
     ]
   end
