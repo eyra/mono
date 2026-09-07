@@ -151,29 +151,29 @@ msgstr "Atmesta"
 msgid "rewards_summary.title"
 msgstr "Atlygiai"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.below_threshold"
-msgstr ""
+msgstr "Išmokėti galima nuo 5 € likučio."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
 msgstr "Išmokėti"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
-msgstr ""
+msgstr "🔒 %{amount} bus išmokėta į jūsų banko sąskaitą. Mokėjimus saugiai apdoroja mūsų mokėjimų paslaugų teikėjas."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.cancel"
-msgstr ""
+msgstr "Atšaukti"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
-msgstr ""
+msgstr "Išmokėti dabar"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
-msgstr ""
+msgstr "Pradėti išmokėjimą"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.body"
@@ -187,62 +187,62 @@ msgstr "Į patvirtinimą"
 msgid "rewards_summary.payout.verify.title"
 msgstr "Banko sąskaita dar nepatvirtinta"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.in_progress"
-msgstr ""
+msgstr "Jūsų išmoka apdorojama."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.manual"
-msgstr ""
+msgstr "Jūsų išmoka apdorojama. Jei tai užtrunka, susisiekite su pagalbos tarnyba."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr "Bandyti išmokėti dar kartą"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.body"
-msgstr ""
+msgstr "Jūsų banko sąskaitą tikrina mūsų mokėjimų paslaugų teikėjas. Paprastai tai trunka kelias minutes — netrukus bandykite dar kartą."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.confirm"
-msgstr ""
+msgstr "Gerai"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
-msgstr ""
+msgstr "Vyksta patvirtinimas"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.button"
-msgstr ""
+msgstr "Aukoti"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.failed"
-msgstr ""
+msgstr "Aukoti nepavyko. Bandykite dar kartą vėliau."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.body"
-msgstr ""
+msgstr "Jūs aukojate %{amount} Eyra. Taip atsisakote teisės į šios sumos išmokėjimą. Šio veiksmo anuliuoti negalima."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.confirm"
-msgstr ""
+msgstr "Taip, aukoti"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.title"
-msgstr ""
+msgstr "Aukoti Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.in_progress"
-msgstr ""
+msgstr "Jūsų auka apdorojama."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.thanks"
-msgstr ""
+msgstr "Ačiū už jūsų auką!"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
-msgstr ""
+msgstr "Paaukota Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
-msgstr ""
+msgstr "Vis dar patvirtiname jūsų auką. Bandyti dar kartą nereikia."

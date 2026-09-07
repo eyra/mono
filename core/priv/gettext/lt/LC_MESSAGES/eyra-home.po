@@ -30,7 +30,7 @@ msgstr "Istorija"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr ""
+msgstr "Tyrimas"
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"

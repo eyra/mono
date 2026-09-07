@@ -293,3 +293,4 @@ Optional environment variables:
 | PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | "self-prod" |
 | DIST_HOSTS | Comma seperated list of hosts in the cluster, see: [OTP Distribution](https://elixirschool.com/en/lessons/advanced/otp_distribution) | "one, two" |
 | ENABLED_OBAN_PLUGINS | Comma seperated list of Oban plugins to enable, only pruner and lifeline supported | "pruner, lifeline"
+| GETTEXT_FALLBACK_LOCALE | Locale used to render strings that are untranslated in the requested locale. Leave unset or empty to render the raw translation keys instead, which makes missing translations visible | "en" |

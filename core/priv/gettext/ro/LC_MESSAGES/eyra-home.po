@@ -30,7 +30,7 @@ msgstr "Istoric"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr ""
+msgstr "Studiu"
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"

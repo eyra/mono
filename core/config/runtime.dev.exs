@@ -42,4 +42,8 @@ if config_env() == :dev do
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 
   config :core, payment_provider: Core.Config.payment_provider()
+
+  # Unset means no fallback: an untranslated string renders its msgid, which in
+  # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
+  config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
 end

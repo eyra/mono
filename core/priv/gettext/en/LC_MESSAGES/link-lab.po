@@ -166,4 +166,4 @@ msgstr "Location already booked on the selected date"
 
 #, elixir-autogen, elixir-format
 msgid "content.title"
-msgstr ""
+msgstr "Lab study"

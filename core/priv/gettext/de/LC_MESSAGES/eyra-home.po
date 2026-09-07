@@ -21,7 +21,7 @@ msgstr "Verlauf"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr ""
+msgstr "Studie"
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"

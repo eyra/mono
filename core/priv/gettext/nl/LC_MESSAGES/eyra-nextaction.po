@@ -84,15 +84,15 @@ msgstr "Kenmerken invullen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.cta"
-msgstr ""
+msgstr "Beoordelen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.description"
-msgstr ""
+msgstr "Beoordeel afgeronde bijdragen op %{name}."
 
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
-msgstr ""
+msgstr "Nieuwe bijdragen"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.accepted.title"

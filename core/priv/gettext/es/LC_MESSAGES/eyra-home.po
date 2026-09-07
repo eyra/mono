@@ -21,7 +21,7 @@ msgstr "Historial"
 
 #, elixir-autogen, elixir-format
 msgid "activities.fallback_title"
-msgstr ""
+msgstr "Estudio"
 
 #, elixir-autogen, elixir-format
 msgid "participated.reward.label"

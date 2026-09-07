@@ -56,11 +56,11 @@ msgstr "Advertisement"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.funding"
-msgstr ""
+msgstr "Funding"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.funding.forward"
-msgstr ""
+msgstr "Go to Funding"
 
 #, elixir-autogen, elixir-format
 msgid "tabbar.item.monitor"

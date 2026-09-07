@@ -84,11 +84,11 @@ msgstr "There are currently no registered students. You will be notified as soon
 
 #, elixir-autogen, elixir-format
 msgid "adverts.empty.title"
-msgstr ""
+msgstr "Advertisements in this pool will appear here"
 
 #, elixir-autogen, elixir-format
 msgid "excluded.adverts.title"
-msgstr ""
+msgstr "Excluded advertisements"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "tabbar.item.adverts"

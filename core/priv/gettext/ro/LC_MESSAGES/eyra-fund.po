@@ -151,29 +151,29 @@ msgstr "Respinse"
 msgid "rewards_summary.title"
 msgstr "Recompense"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.below_threshold"
-msgstr ""
+msgstr "Încasarea necesită un sold minim de 5 €."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.button"
 msgstr "Încasează"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.body"
-msgstr ""
+msgstr "🔒 %{amount} vor fi transferați în contul tău bancar. Plățile sunt procesate în siguranță de furnizorul nostru de plăți."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.cancel"
-msgstr ""
+msgstr "Anulează"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.confirm"
-msgstr ""
+msgstr "Încasează acum"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.handoff.title"
-msgstr ""
+msgstr "Începe încasarea"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.verify.body"
@@ -187,62 +187,62 @@ msgstr "Către verificare"
 msgid "rewards_summary.payout.verify.title"
 msgstr "Contul bancar nu este încă verificat"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.in_progress"
-msgstr ""
+msgstr "Plata ta este în curs de procesare."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.manual"
-msgstr ""
+msgstr "Plata ta este în curs de procesare. Contactează asistența dacă durează prea mult."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.retry"
 msgstr "Reîncearcă încasarea"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.body"
-msgstr ""
+msgstr "Contul tău bancar este verificat de furnizorul nostru de plăți. De obicei durează câteva minute — încearcă din nou în scurt timp."
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.confirm"
-msgstr ""
+msgstr "OK"
 
-#, elixir-autogen, elixir-format, fuzzy
+#, elixir-autogen, elixir-format
 msgid "rewards_summary.payout.awaiting.title"
-msgstr ""
+msgstr "Verificare în curs"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.button"
-msgstr ""
+msgstr "Donează"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.failed"
-msgstr ""
+msgstr "Donația a eșuat. Încearcă din nou mai târziu."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.body"
-msgstr ""
+msgstr "Donezi %{amount} către Eyra. Prin aceasta renunți la dreptul de a primi această sumă. Acțiunea nu poate fi anulată."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.confirm"
-msgstr ""
+msgstr "Da, donează"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.handoff.title"
-msgstr ""
+msgstr "Donează către Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.in_progress"
-msgstr ""
+msgstr "Donația ta este în curs de procesare."
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.thanks"
-msgstr ""
+msgstr "Îți mulțumim pentru donație!"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.total"
-msgstr ""
+msgstr "Donat către Eyra"
 
 #, elixir-autogen, elixir-format
 msgid "rewards_summary.donate.pending"
-msgstr ""
+msgstr "Încă îți confirmăm donația. Nu este nevoie să încerci din nou."
