@@ -305,25 +305,4 @@ defmodule Frameworks.Pixel.Button do
     </button>
     """
   end
-
-  attr(:id, :string, required: true)
-  attr(:overlay?, :boolean, default: false)
-  attr(:action, :map, required: true)
-  attr(:face, :map, required: true)
-
-  def menu(assigns) do
-    # FIXME: Deprecation notice: Use button.dynamic instead
-
-    ~H"""
-    <div
-      id={@id}
-      phx-hook="NativeWrapper"
-      class="cursor-pointer"
-    >
-      <.action {@action}>
-        <.face {@face} />
-      </.action>
-    </div>
-    """
-  end
 end

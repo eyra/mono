@@ -25,6 +25,7 @@ defmodule Next.Bundle do
         scope "/", Next do
           pipe_through([:browser])
           get("/user/auth/redeem", Account.SessionController, :redeem_otp)
+          get("/user/auth/status", Account.SessionController, :status)
           delete("/user/session", Account.SessionController, :delete)
         end
       end

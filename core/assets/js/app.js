@@ -25,6 +25,7 @@ import { Tab, TabBar, TabBarFit, TabContent, TabFooterItem } from "./tabbed";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { AuthCodeInput } from "./auth_code_input";
+import { installAuthSessionHandlers } from "./auth_session";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { ResetScroll } from "./reset_scroll";
@@ -66,22 +67,7 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 
-const NativeWrapper = {
-  mounted() {
-    console.log("NativeWrapper mounted");
-    window.nativeWrapperHook = this;
-
-    // Add click event listener to handle native panel toggle
-    this.el.addEventListener("click", () => {
-      this.toggleSidePanel();
-    });
-  },
-  toggleSidePanel() {
-    console.log("NativeWrapper::toggleSidePanel");
-    nativeWrapper.toggleSidePanel({ origin: "right" });
-    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}));
-  },
-};
+installAuthSessionHandlers({ csrfToken });
 
 let Hooks = {
   AuthCodeInput,
@@ -90,7 +76,6 @@ let Hooks = {
   FeldsparApp,
   LiveContent,
   LiveField,
-  NativeWrapper,
   PDFViewer,
   SidePanel,
   Toggle,
@@ -126,159 +111,6 @@ let liveSocket = new LiveSocket("/live", Socket, {
   },
   hooks: Hooks,
 });
-
-const nativeIOSWrapper = {
-  // The native code bridge assumes that handlers have been setup. Seethe docs for more info:
-  // https://developer.apple.com/documentation/webkit/wkusercontentcontroller/1537172-add
-  //
-  // Uncomment each section to enable it.
-  setScreenState: (id, state) => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "setScreenState",
-      id,
-      state,
-    });
-  },
-  openScreen: (info) => {
-    if (info.subtype === "push") {
-      window.scrollTo(0, -100); // TBD: makes sure new page is scrolled to top, even with transparant top bar (ios)
-    }
-
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "openScreen",
-      ...info,
-    });
-  },
-  pushModal: () => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "pushModal",
-    });
-  },
-  popModal: () => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "popModal",
-    });
-  },
-  updateScreenInfo: (info) => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "updateScreen",
-      ...info,
-    });
-  },
-  webReady: (id) => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "webReady",
-      id,
-    });
-  },
-  toggleSidePanel: (info) => {
-    window.webkit.messageHandlers.Native.postMessage({
-      type: "toggleSidePanel",
-      ...info,
-    });
-  },
-};
-
-const loggingWrapper = {
-  setScreenState: (id, info) => {
-    console.log(id, info);
-  },
-  openScreen: (info) => {
-    console.log("open screen", info);
-  },
-  pushModal: () => {
-    console.log("push modal screen");
-  },
-  popModal: () => {
-    console.log("pop modal screen");
-  },
-  updateScreenInfo: (info) => {
-    console.log("set screen info", info);
-  },
-  webReady: (id) => {
-    console.log("web ready", id);
-  },
-  toggleSidePanel: (info) => {
-    console.log("toggle side panel", info);
-  },
-};
-
-const nativeWrapper =
-  window.webkit && window.webkit.messageHandlers !== undefined
-    ? nativeIOSWrapper
-    : loggingWrapper;
-
-const screenId = (urlString) => {
-  const url = new URL(urlString);
-  const params = new URLSearchParams(url.search);
-  params.delete("_no");
-  return `${url.protocol}//${url.host}${url.pathname}?${params.toString()}`;
-};
-
-window.addEventListener("phx:page-loading-start", (info) => {
-  // other kind options are "error" and "initial"
-  console.log("phx:page-loading-start");
-  if (info.detail.kind === "redirect") {
-    const to = new URL(info.detail.to);
-    const nativeOperation = to.searchParams.get("_no");
-    console.log("nativeOperation", nativeOperation);
-    nativeWrapper.setScreenState(screenId(window.location), {
-      scrollPosition: window.scrollY,
-    });
-    if (nativeOperation === "replace") {
-      nativeWrapper.openScreen({
-        id: screenId(info.detail.to),
-        subtype: "replace",
-      });
-    } else {
-      nativeWrapper.openScreen({
-        id: screenId(info.detail.to),
-        subtype: "push",
-      });
-    }
-  }
-});
-
-const updateState = (state) => {
-  window.scroll(0, state ? state.scrollPosition : 0);
-};
-
-window.addEventListener("phx:page-loading-stop", (info) => {
-  if (info.detail.kind !== "initial") {
-    return;
-  }
-  const titleNode = document.querySelector("[data-native-title]");
-  const title = titleNode ? titleNode.dataset.nativeTitle : "- no title set -";
-  nativeWrapper.updateScreenInfo({
-    title,
-    id: screenId(info.detail.to),
-    rightBarButtons: [
-      {
-        title: "Menu",
-        action: { id: "toggle-native-menu" },
-      },
-    ],
-  });
-  nativeWrapper.webReady(screenId(info.detail.to));
-});
-
-window.setScreenFromNative = (screenId, state) => {
-  liveSocket.replaceMain(screenId, null, () => {
-    setTimeout(() => {
-      updateState(state);
-    }, 0);
-  });
-};
-window.handleActionFromNative = (action) => {
-  if (action.id === "toggle-native-menu") {
-    nativeWrapper.toggleSidePanel({ origin: "right" });
-    window.dispatchEvent(new CustomEvent("toggle-native-menu", {}));
-  }
-};
-
-window.setStateFromNative = (state) => {
-  updateState(state);
-};
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();

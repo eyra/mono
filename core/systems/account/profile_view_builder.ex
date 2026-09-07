@@ -17,12 +17,13 @@ defmodule Systems.Account.ProfileViewBuilder do
     signout_button =
       if show_signout_button do
         %{
-          action: %{type: :http_delete, to: ~p"/user/session"},
+          action: %{type: :send, event: "signout"},
           face: %{
             type: :secondary,
             label: dgettext("eyra-ui", "menu.item.signout"),
             border_color: "border-delete",
-            text_color: "text-delete"
+            text_color: "text-delete",
+            loading: Map.get(assigns, :signout_loading, false)
           }
         }
       else

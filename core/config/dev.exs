@@ -30,6 +30,10 @@ config :core,
   payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
   upload_path: upload_path
 
+# `mix phx.server` does not load a runtime config. Keep development payment
+# flows local unless `core/start` explicitly selects a configured provider.
+config :core, payment_provider: Systems.Payment.Provider.Local
+
 config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336

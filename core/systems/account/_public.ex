@@ -460,8 +460,8 @@ defmodule Systems.Account.Public do
   @doc """
   Generates a session token.
   """
-  def generate_user_session_token(user) do
-    {token, user_token} = Account.UserTokenModel.build_session_token(user)
+  def generate_user_session_token(user, type \\ :browser) do
+    {token, user_token} = Account.UserTokenModel.build_session_token(user, type)
     Repo.insert!(user_token)
     token
   end
@@ -475,10 +475,17 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
-  Deletes the signed token with the given context.
+  Records authenticated activity for a valid mobile session.
+  """
+  def renew_mobile_session_token(token) do
+    Account.UserTokenModel.touch_mobile_session_token(token)
+  end
+
+  @doc """
+  Deletes the signed session token.
   """
   def delete_session_token(token) do
-    Repo.delete_all(Account.UserTokenModel.token_and_context_query(token, "session"))
+    Repo.delete_all(Account.UserTokenModel.session_token_query(token))
     :ok
   end
 

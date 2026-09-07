@@ -38,6 +38,9 @@ export const AuthCodeInput = {
     });
 
     this.handleEvent("auth_code:clear", () => this.clearCells());
+    this.handleEvent("auth_code:redeem", ({ url }) =>
+      window.location.assign(url)
+    );
 
     if (this.cells[0]) this.cells[0].focus();
   },

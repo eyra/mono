@@ -1,5 +1,8 @@
 # Mobile delivery architecture
 
+Throughout this documentation, mobile refers to the native iOS and Android
+application shells rather than browser-based mobile web.
+
 This document describes the product capabilities the mobile delivery architecture must support. It deliberately does not select a mobile framework, navigation bridge, rendering protocol, or BFF design. Those choices require a focused proof of concept.
 
 ## Capability tiers
@@ -48,4 +51,5 @@ Record the selected approach and only the resulting commitments as ADRs after th
 
 ## Related documentation
 
+- [Authentication session design](designs/authentication-session.md)
 - [Centerdata integration](centerdata/design-briefing.md)

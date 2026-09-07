@@ -163,11 +163,14 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:loading, :boolean, default: false)
 
   def secondary(assigns) do
+    spinner_color = String.replace_prefix(assigns.border_color, "border-", "")
+    assigns = assign(assigns, :spinner_color, spinner_color)
+
     ~H"""
     <div class={"prism-btn prism-btn-secondary #{if @loading, do: "prism-btn-loading"} #{@border_color} #{@text_color}"}>
       <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
       <%= if @loading do %>
-        <Spinner.static color="primary" />
+        <Spinner.static color={@spinner_color} />
       <% end %>
     </div>
     """

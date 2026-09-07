@@ -9,6 +9,16 @@ defmodule Next.Account.SessionController do
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
 
+  @mobile_user_agent ~r/(?:^|\s)NextApp\/[^\s]+\s+(?:iOS|Android)(?:\s|$)/
+
+  def status(conn, _params) do
+    status = if conn.assigns[:current_user], do: :no_content, else: :unauthorized
+
+    conn
+    |> put_resp_header("cache-control", "no-store")
+    |> send_resp(status, "")
+  end
+
   def new(conn, _params) do
     conn
     |> set_return_to()
@@ -62,7 +72,7 @@ defmodule Next.Account.SessionController do
 
         conn
         |> stash_return_to(payload)
-        |> Account.UserAuth.log_in_user(user, false)
+        |> Account.UserAuth.log_in_user(user, false, mobile_session_params(conn))
 
       _ ->
         conn
@@ -87,7 +97,7 @@ defmodule Next.Account.SessionController do
         {:ok, linked_user} ->
           conn
           |> stash_return_to(payload)
-          |> Account.UserAuth.log_in_user(linked_user, false)
+          |> Account.UserAuth.log_in_user(linked_user, false, mobile_session_params(conn))
 
         {:error, _} ->
           register_new_email_user(conn, email, payload)
@@ -105,7 +115,7 @@ defmodule Next.Account.SessionController do
       {:ok, user} ->
         conn
         |> stash_return_to(payload)
-        |> Account.UserAuth.log_in_user(user, true)
+        |> Account.UserAuth.log_in_user(user, true, mobile_session_params(conn))
 
       {:error, _changeset} ->
         conn
@@ -123,13 +133,27 @@ defmodule Next.Account.SessionController do
 
   defp stash_return_to(conn, _payload), do: conn
 
+  defp mobile_session_params(conn), do: %{mobile_session?: mobile_app?(conn)}
+
+  defp mobile_app?(conn) do
+    conn
+    |> Plug.Conn.get_req_header("user-agent")
+    |> Enum.any?(&Regex.match?(@mobile_user_agent, &1))
+  end
+
   defp render_new(conn) do
     redirect(conn, to: ~p"/user/signin")
   end
 
   def delete(conn, _params) do
+    redirect_path =
+      if mobile_app?(conn),
+        do: ~p"/user/auth/identify?session_event=logged_out",
+        else: ~p"/user/signin"
+
     conn
     |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))
-    |> Account.UserAuth.log_out_user()
+    |> Account.UserAuth.sign_out_current_user()
+    |> redirect(to: redirect_path)
   end
 end
