@@ -3,10 +3,11 @@ defmodule CoreWeb.GettextTest do
 
   use Gettext, backend: CoreWeb.Gettext
 
-  # Translated in en and nl. "zz" has no translations at all, so it always takes
-  # the missing-translation path, whatever the .po files come to hold.
   @key "rewards_summary.donate.button"
   @untranslated_locale "zz"
+
+  @plural_key "contributions.confirm_all.partial_error.one"
+  @plural_key_other "contributions.confirm_all.partial_error.other"
 
   setup do
     original = Application.get_env(:core, :gettext_fallback_locale)
@@ -16,6 +17,18 @@ defmodule CoreWeb.GettextTest do
 
   defp translate(locale), do: Gettext.with_locale(locale, fn -> dgettext("eyra-fund", @key) end)
 
+  defp translate_plural(locale, count) do
+    Gettext.with_locale(locale, fn ->
+      dngettext("eyra-assignment", @plural_key, @plural_key_other, count)
+    end)
+  end
+
+  defp payout_body(locale, amount) do
+    Gettext.with_locale(locale, fn ->
+      dgettext("eyra-fund", "rewards_summary.payout.handoff.body", amount: amount)
+    end)
+  end
+
   describe "without a fallback locale" do
     setup do
       Application.put_env(:core, :gettext_fallback_locale, nil)
@@ -24,6 +37,11 @@ defmodule CoreWeb.GettextTest do
 
     test "an untranslated string renders the raw key" do
       assert translate(@untranslated_locale) == @key
+    end
+
+    test "an untranslated plural string renders the raw keys" do
+      assert translate_plural(@untranslated_locale, 1) == @plural_key
+      assert translate_plural(@untranslated_locale, 3) == @plural_key_other
     end
 
     test "a translated string is unaffected" do
@@ -50,6 +68,19 @@ defmodule CoreWeb.GettextTest do
 
     test "an untranslated string falls back to the fallback locale" do
       assert translate(@untranslated_locale) == "Donate"
+    end
+
+    test "an untranslated plural string falls back in both singular and plural form" do
+      assert translate_plural(@untranslated_locale, 1) ==
+               "Could not confirm 1 contribution. Please try again."
+
+      assert translate_plural(@untranslated_locale, 3) ==
+               "Could not confirm 3 contributions. Please try again."
+    end
+
+    test "an untranslated string interpolates bindings into the fallback text" do
+      assert payout_body(@untranslated_locale, "€15") =~ "€15"
+      assert payout_body(@untranslated_locale, "€15") == payout_body("en", "€15")
     end
 
     test "a translated string keeps its own locale" do
