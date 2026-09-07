@@ -810,4 +810,4 @@ msgstr "Back to home"
 
 #, elixir-autogen, elixir-format
 msgid "export.setup.button"
-msgstr "Export study setup"
+msgstr "Export"
