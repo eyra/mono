@@ -113,6 +113,19 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert {:error, :no_warnings} = entry[:source] |> elem(1) |> apply([])
     end
 
+    test "clears assets skipped by an earlier export in the same process" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      :ok = Assignment.SetupExporter.record_skipped("study_2026/assets/logo.png", :timeout)
+
+      {:ok, _stream} =
+        assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
+
+      entry = assignment |> entries() |> List.last()
+
+      assert {:error, :no_warnings} = entry[:source] |> elem(1) |> apply([])
+    end
+
     test "ignores the dropped warnings entry instead of reporting it as a skipped asset" do
       assert Assignment.SetupExporter.record_skipped(
                "study_2026/export-warnings.json",

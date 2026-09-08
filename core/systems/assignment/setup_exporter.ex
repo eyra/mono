@@ -6,7 +6,17 @@ defmodule Systems.Assignment.SetupExporter do
   `next-metadata.json` contents together with the assets that contents refers
   to. Every `assets/...` path in the map originates from an entry in the asset
   list, so the two cannot drift apart.
+
+  Whether an asset can actually be fetched is only known while the zip streams,
+  so the exported documents describe the package from two angles and are
+  expected to disagree: `next-metadata.json` records the configured setup and
+  keeps referring to an asset that failed to download, while
+  `ro-crate-metadata.json` describes the files the package really contains and
+  leaves that asset out. `export-warnings.json` names every dropped asset and
+  bridges the two.
   """
+
+  require Logger
 
   alias Frameworks.Concept
   alias Systems.Alliance
@@ -41,6 +51,36 @@ defmodule Systems.Assignment.SetupExporter do
   end
 
   @doc """
+  Builds the zip stream for the whole export, resetting the skipped-asset list
+  that `export-warnings.json` and the RO-Crate report on.
+
+  The caller must consume the returned stream in the calling process; see
+  `record_skipped/2`.
+  """
+  def stream(%Assignment.Model{} = assignment, name, folder) do
+    Process.delete(@skipped_key)
+
+    assignment
+    |> entries(name, folder)
+    |> Packmatic.Manifest.create()
+    |> build_stream()
+  end
+
+  defp build_stream(%{valid?: true} = manifest),
+    do: {:ok, Packmatic.build_stream(manifest, on_error: :skip, on_event: &log_skipped_entry/1)}
+
+  defp build_stream(%{valid?: false}), do: {:error, :invalid_manifest}
+
+  defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
+    case record_skipped(path, reason) do
+      :ok -> Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
+      :ignore -> :ok
+    end
+  end
+
+  defp log_skipped_entry(_event), do: :ok
+
+  @doc """
   Packmatic entries for the whole export: the metadata document, one entry per
   configured asset, the RO-Crate description of the package and a closing
   `export-warnings.json`, all nested under `folder`. `name` is the study name
@@ -60,8 +100,12 @@ defmodule Systems.Assignment.SetupExporter do
 
   @doc """
   Registers an asset that Packmatic could not fetch, so `export-warnings.json`
-  can report it. Packmatic consumes the stream in the process that serves the
-  request, so the accumulated list rides along in the process dictionary.
+  can report it.
+
+  The accumulated list lives in the process dictionary and `stream/3` clears it
+  before every export. Packmatic reduces the manifest lazily, so the stream must
+  be consumed in the process that called `stream/3`; otherwise the recorded
+  failures and the dynamic sources that read them land in different processes.
 
   Returns `:ignore` for the warnings document itself: a clean export drops that
   entry, which Packmatic reports as a failure like any other.
@@ -106,17 +150,7 @@ defmodule Systems.Assignment.SetupExporter do
     {:ok, {:stream, [Jason.encode!(ro_crate(metadata, assets, folder), pretty: true)]}}
   end
 
-  @doc """
-  RO-Crate 1.1 description of the exported package: the metadata file
-  descriptor, the root dataset and one file entity per bundled document.
-
-  Paths stay relative to the export folder, which is the RO-Crate root, so the
-  crate describes the same tree the zip already contains. Assets that Packmatic
-  could not fetch are left out, as is the warnings document when there is
-  nothing to warn about, which is why this document is resolved after every
-  asset entry.
-  """
-  def ro_crate(metadata, assets, folder) do
+  defp ro_crate(metadata, assets, folder) do
     parts = [@metadata_name] ++ exported_asset_paths(assets, folder) ++ warnings_parts()
 
     %{
@@ -167,23 +201,15 @@ defmodule Systems.Assignment.SetupExporter do
       "description" => ro_crate_description(subtitle, name),
       "datePublished" => DateTime.utc_now() |> DateTime.to_iso8601(),
       "identifier" => "next-assignment-#{id}",
+      "inLanguage" => Atom.to_string(language),
       "hasPart" => Enum.map(parts, &%{"@id" => &1})
     }
-    |> put_language(language)
   end
 
   defp ro_crate_description(subtitle, _name) when is_binary(subtitle) and subtitle != "",
     do: subtitle
 
   defp ro_crate_description(_subtitle, name), do: "Exported study setup of #{name}."
-
-  defp put_language(root, language) when is_atom(language) and not is_nil(language),
-    do: Map.put(root, "inLanguage", Atom.to_string(language))
-
-  defp put_language(root, language) when is_binary(language) and language != "",
-    do: Map.put(root, "inLanguage", language)
-
-  defp put_language(root, _language), do: root
 
   defp ro_crate_file(path) do
     %{
