@@ -16,7 +16,6 @@ defmodule Next.Bundle do
             as: :auth_identify
           )
 
-          live("/user/auth/identify/:provider", Account.AuthProviderPage)
           live("/user/auth/verify", Account.AuthCodeVerifyPage)
           get("/user/session", Account.SessionController, :new)
           post("/user/session", Account.SessionController, :create)
@@ -26,6 +25,11 @@ defmodule Next.Bundle do
           pipe_through([:browser])
           get("/user/auth/redeem", Account.SessionController, :redeem_otp)
           delete("/user/session", Account.SessionController, :delete)
+        end
+
+        scope "/", Next do
+          pipe_through([:browser, :redirect_if_user_is_authenticated])
+          live("/user/auth/:provider", Account.AuthProviderPage)
         end
       end
     end

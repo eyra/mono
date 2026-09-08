@@ -34,7 +34,7 @@ defmodule Next.Account.AuthProviderPageTest do
   describe "rendering" do
     test "renders welcome and Sign in with [provider] button for known provider", %{conn: conn} do
       set_providers([:surfconext])
-      {:ok, _view, html} = live(conn, "/user/auth/identify/surfconext")
+      {:ok, _view, html} = live(conn, "/user/auth/surfconext")
 
       assert html =~ "Welcome"
       assert html =~ "Surfconext"
@@ -44,7 +44,7 @@ defmodule Next.Account.AuthProviderPageTest do
 
     test "derives name, logo, and auth_path from the provider key", %{conn: conn} do
       set_providers([:mock])
-      {:ok, _view, html} = live(conn, "/user/auth/identify/mock")
+      {:ok, _view, html} = live(conn, "/user/auth/mock")
 
       assert html =~ "Mock"
       assert html =~ "/auth/mock"
@@ -57,14 +57,14 @@ defmodule Next.Account.AuthProviderPageTest do
       set_providers([:surfconext])
 
       assert {:error, {:redirect, %{to: "/user/signin"}}} =
-               live(conn, "/user/auth/identify/unknown")
+               live(conn, "/user/auth/unknown")
     end
 
     test "redirects to signin when auth_providers is empty", %{conn: conn} do
       set_providers([])
 
       assert {:error, {:redirect, %{to: "/user/signin"}}} =
-               live(conn, "/user/auth/identify/surfconext")
+               live(conn, "/user/auth/surfconext")
     end
   end
 end

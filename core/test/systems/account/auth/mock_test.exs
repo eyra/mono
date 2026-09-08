@@ -115,14 +115,14 @@ defmodule Systems.Account.Auth.MockTest do
   end
 
   describe "ResetController" do
-    test "deletes mock user and redirects to /user/auth/identify/mock", %{conn: conn} do
+    test "deletes mock user and redirects to /user/auth/mock", %{conn: conn} do
       enable_mock()
       user = insert_mock_user()
       assert Repo.get(User, user.id)
 
       conn = conn |> get("/user/auth/mock/reset")
 
-      assert redirected_to(conn) == "/user/auth/identify/mock"
+      assert redirected_to(conn) == "/user/auth/mock"
       refute Repo.get(User, user.id)
     end
 
@@ -141,7 +141,7 @@ defmodule Systems.Account.Auth.MockTest do
       assert is_nil(Repo.get_by(User, email: "example@mock.com"))
 
       conn = conn |> get("/user/auth/mock/reset")
-      assert redirected_to(conn) == "/user/auth/identify/mock"
+      assert redirected_to(conn) == "/user/auth/mock"
     end
 
     test "returns 404 when not configured", %{conn: conn} do
