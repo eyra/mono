@@ -94,3 +94,23 @@ msgstr "Revisa las contribuciones completadas en %{name}."
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
 msgstr "Nuevas contribuciones"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.description"
+msgstr "Su contribución ha sido aceptada."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.title"
+msgstr "Contribución aceptada"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.cta"
+msgstr "Ver resultado"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.description"
+msgstr "Su contribución ha sido rechazada."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.title"
+msgstr "Contribución rechazada"
