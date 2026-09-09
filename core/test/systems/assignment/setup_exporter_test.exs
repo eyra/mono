@@ -2,6 +2,7 @@ defmodule Systems.Assignment.SetupExporterTest do
   use Core.DataCase
 
   alias Core.Factories
+  alias Systems.Account
   alias Systems.Assignment
   alias Systems.Manual
 
@@ -244,6 +245,57 @@ defmodule Systems.Assignment.SetupExporterTest do
                "study_2026/ro-crate-metadata.json",
                "study_2026/export-warnings.json"
              ]
+    end
+
+    test "credits every owner as author and names the licence and publisher" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      owner =
+        Factories.insert!(:member, %{
+          profile: %Account.UserProfileModel{fullname: "Ada Lovelace"}
+        })
+
+      :ok = Core.Authorization.assign_role(owner, assignment, :owner)
+
+      crate = crate(assignment)
+      root = entity(crate, "./")
+
+      assert root["author"] == [%{"@id" => "#author-1"}]
+      assert entity(crate, "#author-1")["name"] == "Ada Lovelace"
+      assert entity(crate, "#author-1")["@type"] == "Person"
+
+      assert root["license"] == %{
+               "@id" => "https://creativecommons.org/licenses/by/4.0/"
+             }
+
+      assert entity(crate, "https://creativecommons.org/licenses/by/4.0/")["name"] ==
+               "Creative Commons Attribution 4.0 International"
+
+      assert %{"@id" => publisher_id} = root["publisher"]
+      assert entity(crate, publisher_id)["@type"] == "Organization"
+    end
+
+    test "reaches each author through a contact point carrying their email" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+      owner = Factories.insert!(:member, %{email: "ada@example.com"})
+
+      :ok = Core.Authorization.assign_role(owner, assignment, :owner)
+
+      crate = crate(assignment)
+
+      assert entity(crate, "#author-1")["contactPoint"] == %{"@id" => "mailto:ada@example.com"}
+
+      assert entity(crate, "mailto:ada@example.com") == %{
+               "@id" => "mailto:ada@example.com",
+               "@type" => "ContactPoint",
+               "email" => "ada@example.com"
+             }
+    end
+
+    test "omits author when the study has no owner" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+
+      refute Map.has_key?(entity(crate(assignment), "./"), "author")
     end
 
     test "describes an unconfigured study with a generated description" do

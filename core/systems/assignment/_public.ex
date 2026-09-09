@@ -1119,8 +1119,8 @@ defmodule Systems.Assignment.Public do
   of the containing project. Assignment auth nodes rarely carry direct owner
   assignments; inheritance is via the project node.
   """
-  def owners(%Assignment.Model{} = assignment) do
-    auth_module().users_with_inherited_role(assignment, :owner)
+  def owners(%Assignment.Model{} = assignment, preload \\ []) do
+    auth_module().users_with_inherited_role(assignment, :owner, preload)
   end
 
   def rewarded_amount(%Assignment.Model{id: assignment_id}, %User{id: user_id}) do

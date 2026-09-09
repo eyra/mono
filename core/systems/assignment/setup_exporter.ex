@@ -19,6 +19,7 @@ defmodule Systems.Assignment.SetupExporter do
   require Logger
 
   alias Frameworks.Concept
+  alias Systems.Account
   alias Systems.Alliance
   alias Systems.Assignment
   alias Systems.Content
@@ -34,6 +35,13 @@ defmodule Systems.Assignment.SetupExporter do
   @metadata_name "next-metadata.json"
   @warnings_name "export-warnings.json"
   @ro_crate_name "ro-crate-metadata.json"
+  @license %{
+    "@id" => "https://creativecommons.org/licenses/by/4.0/",
+    "@type" => "CreativeWork",
+    "name" => "Creative Commons Attribution 4.0 International",
+    "description" =>
+      "Others may share and adapt this study setup for any purpose, provided they credit the original authors."
+  }
   @file_descriptions %{
     @metadata_name =>
       "Serialized study setup: branding, information pages, consent and workflow tasks.",
@@ -92,10 +100,11 @@ defmodule Systems.Assignment.SetupExporter do
   """
   def entries(%Assignment.Model{} = assignment, name, folder) do
     {metadata, assets} = metadata(assignment, name)
+    authors = authors(assignment)
 
     [metadata_entry(metadata, folder)] ++
       Enum.map(assets, &asset_entry(&1, folder)) ++
-      [ro_crate_entry(metadata, assets, folder), warnings_entry(folder)]
+      [ro_crate_entry(metadata, assets, authors, folder), warnings_entry(folder)]
   end
 
   @doc """
@@ -138,28 +147,69 @@ defmodule Systems.Assignment.SetupExporter do
     end
   end
 
-  defp ro_crate_entry(metadata, assets, folder) do
+  defp ro_crate_entry(metadata, assets, authors, folder) do
     [
-      source: {:dynamic, fn -> ro_crate_source(metadata, assets, folder) end},
+      source: {:dynamic, fn -> ro_crate_source(metadata, assets, authors, folder) end},
       path: "#{folder}/#{@ro_crate_name}",
       timestamp: DateTime.utc_now()
     ]
   end
 
-  defp ro_crate_source(metadata, assets, folder) do
-    {:ok, {:stream, [Jason.encode!(ro_crate(metadata, assets, folder), pretty: true)]}}
+  defp ro_crate_source(metadata, assets, authors, folder) do
+    {:ok, {:stream, [Jason.encode!(ro_crate(metadata, assets, authors, folder), pretty: true)]}}
   end
 
-  defp ro_crate(metadata, assets, folder) do
+  defp ro_crate(metadata, assets, authors, folder) do
     parts = [@metadata_name] ++ exported_asset_paths(assets, folder) ++ warnings_parts()
+    publisher = publisher()
 
     %{
       "@context" => "https://w3id.org/ro/crate/1.1/context",
       "@graph" =>
-        [ro_crate_descriptor(), ro_crate_root(metadata, parts)] ++
-          Enum.map(parts, &ro_crate_file/1)
+        [ro_crate_descriptor(), ro_crate_root(metadata, parts, authors, publisher)] ++
+          Enum.map(parts, &ro_crate_file/1) ++
+          authors ++ contact_points(authors) ++ [publisher, @license]
     }
   end
+
+  defp authors(%Assignment.Model{} = assignment) do
+    assignment
+    |> Assignment.Public.owners([:profile])
+    |> Enum.with_index(1)
+    |> Enum.map(&author/1)
+  end
+
+  defp author({%{email: email} = user, index}) do
+    %{"@id" => "#author-#{index}", "@type" => "Person", "name" => Account.User.label(user)}
+    |> put_contact_point(email)
+  end
+
+  defp put_contact_point(person, email) when is_binary(email) and email != "",
+    do: Map.put(person, "contactPoint", %{"@id" => "mailto:#{email}"})
+
+  defp put_contact_point(person, _email), do: person
+
+  defp contact_points(authors) do
+    authors
+    |> Enum.flat_map(&author_contact/1)
+    |> Enum.map(&contact_point/1)
+  end
+
+  defp author_contact(%{"contactPoint" => contact}), do: [contact]
+  defp author_contact(_author), do: []
+
+  defp contact_point(%{"@id" => "mailto:" <> email = id}),
+    do: %{"@id" => id, "@type" => "ContactPoint", "email" => email}
+
+  defp publisher do
+    %{
+      "@id" => CoreWeb.Endpoint.url(),
+      "@type" => "Organization",
+      "name" => CoreWeb.Meta.bundle_title()
+    }
+  end
+
+  defp reference(%{"@id" => id}), do: %{"@id" => id}
 
   defp exported_asset_paths(assets, folder) do
     skipped = skipped() |> Enum.map(& &1.path) |> MapSet.new()
@@ -192,7 +242,9 @@ defmodule Systems.Assignment.SetupExporter do
            language: language,
            branding: %{subtitle: subtitle}
          },
-         parts
+         parts,
+         authors,
+         publisher
        ) do
     %{
       "@id" => "./",
@@ -202,9 +254,15 @@ defmodule Systems.Assignment.SetupExporter do
       "datePublished" => DateTime.utc_now() |> DateTime.to_iso8601(),
       "identifier" => "next-assignment-#{id}",
       "inLanguage" => Atom.to_string(language),
+      "license" => reference(@license),
+      "publisher" => reference(publisher),
       "hasPart" => Enum.map(parts, &%{"@id" => &1})
     }
+    |> put_authors(authors)
   end
+
+  defp put_authors(root, []), do: root
+  defp put_authors(root, authors), do: Map.put(root, "author", Enum.map(authors, &reference/1))
 
   defp ro_crate_description(subtitle, _name) when is_binary(subtitle) and subtitle != "",
     do: subtitle
