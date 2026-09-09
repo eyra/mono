@@ -6,7 +6,17 @@ defmodule Systems.Assignment.SetupExporter do
   `next-metadata.json` contents together with the assets that contents refers
   to. Every `assets/...` path in the map originates from an entry in the asset
   list, so the two cannot drift apart.
+
+  Whether an asset can actually be fetched is only known while the zip streams,
+  so the exported documents describe the package from two angles and are
+  expected to disagree: `next-metadata.json` records the configured setup and
+  keeps referring to an asset that failed to download, while
+  `ro-crate-metadata.json` describes the files the package really contains and
+  leaves that asset out. `export-warnings.json` names every dropped asset and
+  bridges the two.
   """
+
+  require Logger
 
   alias Frameworks.Concept
   alias Systems.Alliance
@@ -21,6 +31,14 @@ defmodule Systems.Assignment.SetupExporter do
   @header_image_size {1376, 720}
   @max_asset_bytes Application.compile_env!(:core, [CoreWeb.FileUploader, :max_file_size])
   @skipped_key :setup_export_skipped
+  @metadata_name "next-metadata.json"
+  @warnings_name "export-warnings.json"
+  @ro_crate_name "ro-crate-metadata.json"
+  @file_descriptions %{
+    @metadata_name =>
+      "Serialized study setup: branding, information pages, consent and workflow tasks.",
+    @warnings_name => "Assets that could not be included in this export."
+  }
 
   def preload_graph do
     [
@@ -33,46 +51,187 @@ defmodule Systems.Assignment.SetupExporter do
   end
 
   @doc """
+  Builds the zip stream for the whole export, resetting the skipped-asset list
+  that `export-warnings.json` and the RO-Crate report on.
+
+  The caller must consume the returned stream in the calling process; see
+  `record_skipped/2`.
+  """
+  def stream(%Assignment.Model{} = assignment, name, folder) do
+    Process.delete(@skipped_key)
+
+    assignment
+    |> entries(name, folder)
+    |> Packmatic.Manifest.create()
+    |> build_stream()
+  end
+
+  defp build_stream(%{valid?: true} = manifest),
+    do: {:ok, Packmatic.build_stream(manifest, on_error: :skip, on_event: &log_skipped_entry/1)}
+
+  defp build_stream(%{valid?: false}), do: {:error, :invalid_manifest}
+
+  defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
+    case record_skipped(path, reason) do
+      :ok -> Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
+      :ignore -> :ok
+    end
+  end
+
+  defp log_skipped_entry(_event), do: :ok
+
+  @doc """
   Packmatic entries for the whole export: the metadata document, one entry per
-  configured asset and a closing `export-warnings.json`, all nested under
-  `folder`. `name` is the study name written into the metadata; `folder` is the
-  slug used for both the folder and the zip file.
+  configured asset, the RO-Crate description of the package and a closing
+  `export-warnings.json`, all nested under `folder`. `name` is the study name
+  written into the metadata; `folder` is the slug used for both the folder and
+  the zip file.
+
+  The warnings document only materializes when an asset was actually skipped;
+  a clean export carries no `export-warnings.json`.
   """
   def entries(%Assignment.Model{} = assignment, name, folder) do
     {metadata, assets} = metadata(assignment, name)
 
-    [metadata_entry(metadata, folder) | Enum.map(assets, &asset_entry(&1, folder))] ++
-      [warnings_entry(folder)]
+    [metadata_entry(metadata, folder)] ++
+      Enum.map(assets, &asset_entry(&1, folder)) ++
+      [ro_crate_entry(metadata, assets, folder), warnings_entry(folder)]
   end
 
   @doc """
   Registers an asset that Packmatic could not fetch, so `export-warnings.json`
-  can report it. Packmatic consumes the stream in the process that serves the
-  request, so the accumulated list rides along in the process dictionary.
+  can report it.
+
+  The accumulated list lives in the process dictionary and `stream/3` clears it
+  before every export. Packmatic reduces the manifest lazily, so the stream must
+  be consumed in the process that called `stream/3`; otherwise the recorded
+  failures and the dynamic sources that read them land in different processes.
+
+  Returns `:ignore` for the warnings document itself: a clean export drops that
+  entry, which Packmatic reports as a failure like any other.
   """
   def record_skipped(path, reason) do
-    Process.put(@skipped_key, skipped() ++ [%{path: path, reason: inspect(reason)}])
-    :ok
+    if warnings_document?(path) do
+      :ignore
+    else
+      Process.put(@skipped_key, skipped() ++ [%{path: path, reason: inspect(reason)}])
+      :ok
+    end
   end
+
+  defp warnings_document?(path), do: String.ends_with?(path, "/" <> @warnings_name)
 
   defp skipped, do: Process.get(@skipped_key, [])
 
   defp warnings_entry(folder) do
     [
       source: {:dynamic, &warnings_source/0},
-      path: "#{folder}/export-warnings.json",
+      path: "#{folder}/#{@warnings_name}",
       timestamp: DateTime.utc_now()
     ]
   end
 
   defp warnings_source do
-    {:ok, {:stream, [Jason.encode!(%{skipped: skipped()}, pretty: true)]}}
+    case skipped() do
+      [] -> {:error, :no_warnings}
+      skipped -> {:ok, {:stream, [Jason.encode!(%{skipped: skipped}, pretty: true)]}}
+    end
+  end
+
+  defp ro_crate_entry(metadata, assets, folder) do
+    [
+      source: {:dynamic, fn -> ro_crate_source(metadata, assets, folder) end},
+      path: "#{folder}/#{@ro_crate_name}",
+      timestamp: DateTime.utc_now()
+    ]
+  end
+
+  defp ro_crate_source(metadata, assets, folder) do
+    {:ok, {:stream, [Jason.encode!(ro_crate(metadata, assets, folder), pretty: true)]}}
+  end
+
+  defp ro_crate(metadata, assets, folder) do
+    parts = [@metadata_name] ++ exported_asset_paths(assets, folder) ++ warnings_parts()
+
+    %{
+      "@context" => "https://w3id.org/ro/crate/1.1/context",
+      "@graph" =>
+        [ro_crate_descriptor(), ro_crate_root(metadata, parts)] ++
+          Enum.map(parts, &ro_crate_file/1)
+    }
+  end
+
+  defp exported_asset_paths(assets, folder) do
+    skipped = skipped() |> Enum.map(& &1.path) |> MapSet.new()
+
+    assets
+    |> Enum.map(& &1.path)
+    |> Enum.uniq()
+    |> Enum.reject(&MapSet.member?(skipped, "#{folder}/#{&1}"))
+  end
+
+  defp warnings_parts do
+    case skipped() do
+      [] -> []
+      _skipped -> [@warnings_name]
+    end
+  end
+
+  defp ro_crate_descriptor do
+    %{
+      "@id" => @ro_crate_name,
+      "@type" => "CreativeWork",
+      "conformsTo" => %{"@id" => "https://w3id.org/ro/crate/1.1"},
+      "about" => %{"@id" => "./"}
+    }
+  end
+
+  defp ro_crate_root(
+         %{
+           assignment: %{id: id, name: name},
+           language: language,
+           branding: %{subtitle: subtitle}
+         },
+         parts
+       ) do
+    %{
+      "@id" => "./",
+      "@type" => "Dataset",
+      "name" => name,
+      "description" => ro_crate_description(subtitle, name),
+      "datePublished" => DateTime.utc_now() |> DateTime.to_iso8601(),
+      "identifier" => "next-assignment-#{id}",
+      "inLanguage" => Atom.to_string(language),
+      "hasPart" => Enum.map(parts, &%{"@id" => &1})
+    }
+  end
+
+  defp ro_crate_description(subtitle, _name) when is_binary(subtitle) and subtitle != "",
+    do: subtitle
+
+  defp ro_crate_description(_subtitle, name), do: "Exported study setup of #{name}."
+
+  defp ro_crate_file(path) do
+    %{
+      "@id" => path,
+      "@type" => "File",
+      "name" => Path.basename(path),
+      "encodingFormat" => MIME.from_path(path)
+    }
+    |> put_file_description(path)
+  end
+
+  defp put_file_description(file, path) do
+    case Map.fetch(@file_descriptions, path) do
+      {:ok, description} -> Map.put(file, "description", description)
+      :error -> file
+    end
   end
 
   defp metadata_entry(metadata, folder) do
     [
       source: {:stream, [Jason.encode!(metadata, pretty: true)]},
-      path: "#{folder}/next-metadata.json",
+      path: "#{folder}/#{@metadata_name}",
       timestamp: DateTime.utc_now()
     ]
   end

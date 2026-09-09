@@ -3,8 +3,6 @@ defmodule Systems.Assignment.Controller do
       {:controller,
        [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
 
-  require Logger
-
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
@@ -77,29 +75,11 @@ defmodule Systems.Assignment.Controller do
   end
 
   defp export_setup(conn, assignment, branch_name, folder) do
-    manifest =
-      assignment
-      |> Assignment.SetupExporter.entries(branch_name, folder)
-      |> Packmatic.Manifest.create()
-
-    case manifest do
-      %{valid?: true} -> stream_zip(conn, manifest, "#{folder}.zip")
-      %{valid?: false} -> service_unavailable(conn)
+    case Assignment.SetupExporter.stream(assignment, branch_name, folder) do
+      {:ok, stream} -> Packmatic.Conn.send_chunked(stream, conn, "#{folder}.zip")
+      {:error, :invalid_manifest} -> service_unavailable(conn)
     end
   end
-
-  defp stream_zip(conn, manifest, filename) do
-    manifest
-    |> Packmatic.build_stream(on_error: :skip, on_event: &log_skipped_entry/1)
-    |> Packmatic.Conn.send_chunked(conn, filename)
-  end
-
-  defp log_skipped_entry(%Packmatic.Event.EntryFailed{entry: %{path: path}, reason: reason}) do
-    Assignment.SetupExporter.record_skipped(path, reason)
-    Logger.warning("Setup export skipped #{path}: #{inspect(reason)}")
-  end
-
-  defp log_skipped_entry(_event), do: :ok
 
   def export_progress(conn, %{"id" => id}) do
     assignment =

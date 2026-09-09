@@ -762,4 +762,4 @@ msgstr "Terug naar startpagina"
 
 #, elixir-autogen, elixir-format
 msgid "export.setup.button"
-msgstr "Exporteer studie-opzet"
+msgstr "Exporteer"

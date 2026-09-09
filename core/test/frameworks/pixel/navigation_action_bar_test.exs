@@ -17,11 +17,11 @@ defmodule Frameworks.Pixel.NavigationActionBarTest do
     rendered_to_string(rendered)
   end
 
-  defp export_button do
+  defp menu_button do
     %{
       label: %{
-        action: %{type: :send, event: "action_click", item: :export_setup},
-        face: %{type: :plain, label: "Export study setup"}
+        action: %{type: :send, event: "action_click", item: :some_action},
+        face: %{type: :plain, label: "Menu item label"}
       }
     }
   end
@@ -34,10 +34,10 @@ defmodule Frameworks.Pixel.NavigationActionBarTest do
   end
 
   test "renders the toggle and its menu items when there are more buttons" do
-    html = render_bar([export_button()])
+    html = render_bar([menu_button()])
 
     assert html =~ ~s(id="action_menu_toggle")
     assert html =~ ~s(target="action_menu")
-    assert html =~ "Export study setup"
+    assert html =~ "Menu item label"
   end
 end
