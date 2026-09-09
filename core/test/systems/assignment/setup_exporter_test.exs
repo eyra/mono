@@ -275,6 +275,23 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert entity(crate, publisher_id)["@type"] == "Organization"
     end
 
+    test "reaches each author through a contact point carrying their email" do
+      assignment = Factories.insert!(:assignment, %{info: nil})
+      owner = Factories.insert!(:member, %{email: "ada@example.com"})
+
+      :ok = Core.Authorization.assign_role(owner, assignment, :owner)
+
+      crate = crate(assignment)
+
+      assert entity(crate, "#author-1")["contactPoint"] == %{"@id" => "mailto:ada@example.com"}
+
+      assert entity(crate, "mailto:ada@example.com") == %{
+               "@id" => "mailto:ada@example.com",
+               "@type" => "ContactPoint",
+               "email" => "ada@example.com"
+             }
+    end
+
     test "omits author when the study has no owner" do
       assignment = Factories.insert!(:assignment, %{info: nil})
 

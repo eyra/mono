@@ -167,7 +167,8 @@ defmodule Systems.Assignment.SetupExporter do
       "@context" => "https://w3id.org/ro/crate/1.1/context",
       "@graph" =>
         [ro_crate_descriptor(), ro_crate_root(metadata, parts, authors, publisher)] ++
-          Enum.map(parts, &ro_crate_file/1) ++ authors ++ [publisher, @license]
+          Enum.map(parts, &ro_crate_file/1) ++
+          authors ++ contact_points(authors) ++ [publisher, @license]
     }
   end
 
@@ -178,9 +179,27 @@ defmodule Systems.Assignment.SetupExporter do
     |> Enum.map(&author/1)
   end
 
-  defp author({user, index}) do
+  defp author({%{email: email} = user, index}) do
     %{"@id" => "#author-#{index}", "@type" => "Person", "name" => Account.User.label(user)}
+    |> put_contact_point(email)
   end
+
+  defp put_contact_point(person, email) when is_binary(email) and email != "",
+    do: Map.put(person, "contactPoint", %{"@id" => "mailto:#{email}"})
+
+  defp put_contact_point(person, _email), do: person
+
+  defp contact_points(authors) do
+    authors
+    |> Enum.flat_map(&author_contact/1)
+    |> Enum.map(&contact_point/1)
+  end
+
+  defp author_contact(%{"contactPoint" => contact}), do: [contact]
+  defp author_contact(_author), do: []
+
+  defp contact_point(%{"@id" => "mailto:" <> email = id}),
+    do: %{"@id" => id, "@type" => "ContactPoint", "email" => email}
 
   defp publisher do
     %{
