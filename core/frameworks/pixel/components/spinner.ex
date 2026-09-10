@@ -3,11 +3,11 @@ defmodule Frameworks.Pixel.Spinner do
 
   attr(:alt, :string, default: "Loading")
   attr(:size, :string, default: "")
-  attr(:color, :string, default: "primary")
+  attr(:color, :string, default: nil)
 
   def static(assigns) do
     size = Map.get(assigns, :size, "")
-    color = Map.get(assigns, :color, "primary")
+    color = Map.get(assigns, :color)
 
     size_class =
       case size do
@@ -16,27 +16,15 @@ defmodule Frameworks.Pixel.Spinner do
         _ -> ""
       end
 
-    color_class =
-      case color do
-        "white" -> "prism-spinner-white"
-        "primary" -> "prism-spinner-primary"
-        _ -> ""
-      end
-
-    assigns =
-      assign(assigns,
-        size_class: size_class,
-        color_class: color_class,
-        image_path: spinner_asset_path(color)
-      )
+    color_class = if color, do: "text-#{color}", else: ""
+    assigns = assign(assigns, size_class: size_class, color_class: color_class)
 
     ~H"""
-      <div class={"prism-spinner #{@size_class} #{@color_class}"}>
-        <img src={@image_path} alt={@alt}>
-      </div>
+    <span
+      class={"prism-spinner #{@size_class} #{@color_class}"}
+      role="status"
+      aria-label={@alt}
+    ></span>
     """
   end
-
-  defp spinner_asset_path("delete"), do: "/images/icons/spinner_static_delete@3x.png"
-  defp spinner_asset_path(color), do: "/images/icons/spinner_static_#{color}@3x.png"
 end

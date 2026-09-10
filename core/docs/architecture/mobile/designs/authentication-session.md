@@ -59,33 +59,15 @@ For a `NextApp/<version> iOS` request, Core revokes the server token, clears the
 persistent cookie, and redirects to:
 
 ```text
-/user/auth/identify?session_event=logged_out
+/user/auth/identify
 ```
 
-The first-party page asset dispatches exactly one WebKit message:
+The retained account WebView's navigation to Identify is the logout handoff. The
+native shell returns to authentication bootstrap and determines the resulting
+state through `/user/auth/status`.
 
-```json
-{ "type": "logged_out" }
-```
-
-It then removes `session_event` from the URL with `history.replaceState`, which
-prevents repeat delivery. The native shell moves to checking and reruns the
-status request.
-
-There are no other session bridge events: neither login nor startup uses the
-bridge.
-
-## WebKit bridge
-
-Core posts the logout message to:
-
-```javascript
-window.webkit.messageHandlers.Native.postMessage({ type: "logged_out" })
-```
-
-The native shell registers its `WKScriptMessageHandler` as `Native`, accepts
-messages only from the configured Next origin in the main frame, and accepts only
-the `logged_out` event.
+There is no Core-to-native bridge. Neither login, startup, nor logout posts a
+WebKit message.
 
 ## Consequences
 
@@ -93,5 +75,4 @@ the `logged_out` event.
   session is authenticated.
 - A stale, revoked, or expired cookie cannot open native tabs.
 - Native code never handles session material.
-- Login needs no custom browser-to-native protocol; logout has one explicit
-  lifecycle event because it occurs from a retained authenticated WebView.
+- Authentication lifecycle state needs no custom browser-to-native protocol.

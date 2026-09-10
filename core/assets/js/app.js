@@ -26,6 +26,7 @@ import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { AuthCodeInput } from "./auth_code_input";
 import { installAuthSessionHandlers } from "./auth_session";
+import { installButtonLoading } from "./button_loading";
 import { Wysiwyg } from "./wysiwyg";
 import { AutoSubmit } from "./auto_submit";
 import { ResetScroll } from "./reset_scroll";
@@ -68,6 +69,7 @@ let csrfToken = document
   .getAttribute("content");
 
 installAuthSessionHandlers({ csrfToken });
+installButtonLoading();
 
 let Hooks = {
   AuthCodeInput,

@@ -109,7 +109,7 @@ defmodule Next.Account.SessionControllerTest do
         |> delete("/user/session")
 
       assert %{max_age: 0} = conn.resp_cookies[@remember_me_cookie]
-      assert redirected_to(conn) == "/user/auth/identify?session_event=logged_out"
+      assert redirected_to(conn) == "/user/auth/identify"
       refute Systems.Account.Public.get_user_by_session_token(session_token)
     end
 

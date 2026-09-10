@@ -161,7 +161,7 @@ defmodule Systems.Storage.EndpointDataView do
               <Button.dynamic_bar buttons={@buttons}/>
             <% end %>
           <% else %>
-            <Spinner.static size="w-8 h-8" />
+            <Spinner.static size="w-8 h-8" color="primary" />
           <% end %>
         </div>
         <%= if @total_count do %>

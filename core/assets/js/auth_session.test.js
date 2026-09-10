@@ -12,26 +12,12 @@ describe("installAuthSessionHandlers", () => {
     vi.unstubAllGlobals();
   });
 
-  it("clears the logout event and submits the existing delete endpoint", () => {
-    const postMessage = vi.fn();
+  it("submits the existing delete endpoint", () => {
     const submit = vi
       .spyOn(HTMLFormElement.prototype, "submit")
       .mockImplementation(() => {});
 
-    vi.stubGlobal("webkit", {
-      messageHandlers: { Native: { postMessage } },
-    });
-
-    window.history.replaceState(
-      {},
-      "",
-      "/user/auth/identify?session_event=logged_out"
-    );
-
     installAuthSessionHandlers({ csrfToken: "csrf-token" });
-
-    expect(postMessage).toHaveBeenCalledWith({ type: "logged_out" });
-    expect(window.location.search).toBe("");
 
     window.dispatchEvent(
       new CustomEvent("phx:auth:signout", {

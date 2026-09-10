@@ -142,7 +142,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
                   loading: @loading
                 }
               }
-              full_width
+              full_width={true}
               testid="auth-code-verify-button"
             />
             <.spacing value="S" />

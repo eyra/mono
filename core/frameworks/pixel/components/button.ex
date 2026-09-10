@@ -16,20 +16,36 @@ defmodule Frameworks.Pixel.Button do
   attr(:testid, :string, default: nil)
 
   def dynamic(assigns) do
+    loading? = Map.has_key?(assigns.face, :loading)
+
     assigns =
       assigns
+      |> assign(:loading?, loading?)
       |> assign(
         :action,
         Map.put(assigns.action, :testid, assigns.testid)
         |> Map.put(:full_width, assigns.full_width)
       )
-      |> assign(:face, Map.put(assigns.face, :full_width, assigns.full_width))
+      |> assign(
+        :face,
+        assigns.face
+        |> Map.put(:full_width, assigns.full_width)
+        |> Map.put(:loading?, loading?)
+      )
 
     ~H"""
     <%= if @enabled? do %>
-      <.action {@action}>
-        <.face {@face} />
-      </.action>
+      <%= if @loading? do %>
+        <div data-button-loading>
+          <.action {@action}>
+            <.face {@face} />
+          </.action>
+        </div>
+      <% else %>
+        <.action {@action}>
+          <.face {@face} />
+        </.action>
+      <% end %>
     <% else %>
       <div class={"h-full #{if @full_width, do: "w-full"} opacity-30 cursor-not-allowed"} data-testid={@testid}>
         <.face {@face} />
@@ -65,7 +81,7 @@ defmodule Frameworks.Pixel.Button do
       })
 
     ~H"""
-    <div class={"h-full #{if @full_width, do: "w-full"}"}>
+    <div class={"h-full #{if @full_width, do: "w-full [&_button]:w-full [&_button>div]:w-full"}"}>
       <div class="flex flex-col h-full justify-center">
         <div class="flex-wrap">
           <.function_component function={@function} props={assigns} >

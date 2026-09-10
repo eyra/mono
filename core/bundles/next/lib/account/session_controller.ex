@@ -148,7 +148,7 @@ defmodule Next.Account.SessionController do
   def delete(conn, _params) do
     redirect_path =
       if mobile_app?(conn),
-        do: ~p"/user/auth/identify?session_event=logged_out",
+        do: ~p"/user/auth/identify",
         else: ~p"/user/signin"
 
     conn

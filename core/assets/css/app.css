@@ -2,6 +2,16 @@
 @import "@novasoftwarefoundation/prism/css/base.css";
 @import "@novasoftwarefoundation/prism/css/components.css";
 
+.prism-spinner {
+  background-color: currentColor;
+  mask: url("/images/icons/spinner.svg") center / contain no-repeat;
+  -webkit-mask: url("/images/icons/spinner.svg") center / contain no-repeat;
+}
+
+.prism-btn:not(.prism-btn-loading) .prism-spinner {
+  display: none;
+}
+
 @tailwind base;
 
 @tailwind components;

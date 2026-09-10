@@ -63,14 +63,13 @@ defmodule Next.Account.AuthCodeVerifyPageTest do
       email = "success@example.com"
       {code, auth_code} = AuthCodeModel.build(email, nil)
       Repo.insert!(auth_code)
-      {:ok, view, html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
 
-      assert html =~ "prism-btn-primary w-full"
       html = render_submit(view, "verify", %{"code" => code})
 
       assert html =~ "prism-btn-loading"
+      refute html =~ "spinner_static_white"
       refute html =~ ~r/<button[^>]*disabled/
-      assert html =~ "prism-btn-primary w-full"
 
       assert_push_event(view, "auth_code:redeem", %{url: redeem_url})
       assert URI.parse(redeem_url).path == "/user/auth/redeem"

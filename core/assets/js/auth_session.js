@@ -1,17 +1,4 @@
-import { sendNativeSessionEvent } from "./native";
-
 export const installAuthSessionHandlers = ({ csrfToken }) => {
-  const sessionEvent = new URLSearchParams(window.location.search).get(
-    "session_event"
-  );
-
-  if (sessionEvent === "logged_out") {
-    const url = new URL(window.location);
-    url.searchParams.delete("session_event");
-    window.history.replaceState({}, "", url);
-    sendNativeSessionEvent(sessionEvent);
-  }
-
   window.addEventListener("phx:auth:signout", ({ detail: { url } }) => {
     const form = document.createElement("form");
     form.method = "post";
