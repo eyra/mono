@@ -94,3 +94,23 @@ msgstr "Peržiūrėkite užbaigtus indėlius: %{name}."
 #, elixir-autogen, elixir-format
 msgid "assignment.pending_contributions.title"
 msgstr "Nauji indėliai"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.description"
+msgstr "Jūsų indėlis buvo priimtas."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.title"
+msgstr "Indėlis priimtas"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.cta"
+msgstr "Peržiūrėti rezultatą"
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.description"
+msgstr "Jūsų indėlis buvo atmestas."
+
+#, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.declined.title"
+msgstr "Indėlis atmestas"

@@ -95,21 +95,21 @@ msgid "assignment.pending_contributions.title"
 msgstr "New contributions"
 
 #, elixir-autogen, elixir-format
+msgid "assignment.contribution_reviewed.accepted.description"
+msgstr "The researcher accepted your contribution."
+
+#, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.accepted.title"
 msgstr "Contribution accepted"
 
 #, elixir-autogen, elixir-format
-msgid "assignment.contribution_reviewed.declined.title"
-msgstr "Contribution declined"
-
-#, elixir-autogen, elixir-format
-msgid "assignment.contribution_reviewed.accepted.description"
-msgstr "The researcher accepted your contribution."
+msgid "assignment.contribution_reviewed.cta"
+msgstr "View outcome"
 
 #, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.declined.description"
 msgstr "The researcher declined your contribution."
 
 #, elixir-autogen, elixir-format
-msgid "assignment.contribution_reviewed.cta"
-msgstr "View outcome"
+msgid "assignment.contribution_reviewed.declined.title"
+msgstr "Contribution declined"
