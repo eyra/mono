@@ -478,6 +478,13 @@ defmodule Systems.Account.PublicTest do
         })
       end
     end
+
+    test "generates a mobile token with separate activity", %{user: user} do
+      token = Account.Public.generate_user_session_token(user, :mobile)
+
+      assert %UserTokenModel{context: "mobile_session", last_used_at: %NaiveDateTime{}} =
+               Repo.get_by(UserTokenModel, token: token)
+    end
   end
 
   describe "get_user_by_session_token/1" do
@@ -499,6 +506,57 @@ defmodule Systems.Account.PublicTest do
     test "does not return user for expired token", %{token: token} do
       {1, nil} = Repo.update_all(UserTokenModel, set: [inserted_at: ~N[2020-01-01 00:00:00]])
       refute Account.Public.get_user_by_session_token(token)
+    end
+  end
+
+  describe "mobile session tokens" do
+    setup do
+      %{user: Factories.insert!(:member)}
+    end
+
+    test "remains valid after its creation date when recently active", %{user: user} do
+      token = Account.Public.generate_user_session_token(user, :mobile)
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      Repo.update_all(UserTokenModel,
+        set: [
+          inserted_at: NaiveDateTime.add(now, -61 * 24 * 60 * 60, :second),
+          last_used_at: NaiveDateTime.add(now, -59 * 24 * 60 * 60, :second)
+        ]
+      )
+
+      assert %{id: user_id} = Account.Public.get_user_by_session_token(token)
+      assert user_id == user.id
+    end
+
+    test "expires after sixty days without activity", %{user: user} do
+      token = Account.Public.generate_user_session_token(user, :mobile)
+
+      Repo.update_all(UserTokenModel,
+        set: [
+          last_used_at:
+            NaiveDateTime.utc_now()
+            |> NaiveDateTime.truncate(:second)
+            |> NaiveDateTime.add(-61 * 24 * 60 * 60, :second)
+        ]
+      )
+
+      refute Account.Public.get_user_by_session_token(token)
+    end
+
+    test "renews activity for a valid mobile token", %{user: user} do
+      token = Account.Public.generate_user_session_token(user, :mobile)
+
+      last_used_at =
+        NaiveDateTime.utc_now()
+        |> NaiveDateTime.truncate(:second)
+        |> NaiveDateTime.add(-30 * 24 * 60 * 60, :second)
+
+      Repo.update_all(UserTokenModel, set: [last_used_at: last_used_at])
+
+      assert Account.Public.renew_mobile_session_token(token)
+      assert %{last_used_at: renewed_at} = Repo.get_by(UserTokenModel, token: token)
+      assert NaiveDateTime.compare(renewed_at, last_used_at) == :gt
     end
   end
 

@@ -26,7 +26,7 @@ defmodule Systems.Account.ProfileView do
 
     {:ok,
      socket
-     |> assign(user: user, show_errors: false)
+     |> assign(user: user, show_errors: false, signout_loading: false)
      |> init_file_uploader(:photo)}
   end
 
@@ -48,6 +48,17 @@ defmodule Systems.Account.ProfileView do
         %{assigns: %{model: entity}} = socket
       ) do
     {:noreply, save(socket, entity, :auto_save, attrs)}
+  end
+
+  def handle_event("signout", _params, %{assigns: %{signout_loading: true}} = socket),
+    do: {:noreply, socket}
+
+  def handle_event("signout", _params, socket) do
+    {:noreply,
+     socket
+     |> assign(signout_loading: true)
+     |> update_view_model()
+     |> push_event("auth:signout", %{url: "/user/session"})}
   end
 
   defp save(socket, %Account.UserProfileEditModel{} = entity, type, attrs) do

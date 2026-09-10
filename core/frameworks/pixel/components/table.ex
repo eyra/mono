@@ -158,7 +158,7 @@ defmodule Frameworks.Pixel.Table do
 
   def content(%{type: :action, value: :spinner_static} = assigns) do
     ~H"""
-      <Spinner.static />
+      <Spinner.static color="primary" />
     """
   end
 

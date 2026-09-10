@@ -132,9 +132,16 @@ defmodule Next.Account.AuthIdentifyPage do
               <Text.body_small color="text-delete"><%= @error %></Text.body_small>
             <% end %>
             <.spacing value="M" />
-            <Button.submit_wide
-              label={dgettext("eyra-account", "auth.continue.button")}
-              bg_color="bg-grey1"
+            <Button.dynamic
+              action={%{type: :submit}}
+              face={
+                %{
+                  type: :primary,
+                  label: dgettext("eyra-account", "auth.continue.button"),
+                  bg_color: "bg-grey1"
+                }
+              }
+              full_width={true}
               testid="auth-continue-button"
             />
           </.form>

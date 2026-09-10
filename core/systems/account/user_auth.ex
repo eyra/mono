@@ -13,7 +13,7 @@ defmodule Systems.Account.UserAuth do
   # the token expiry itself in Account.UserTokenModel.
   @max_age 60 * 60 * 24 * 60
   @remember_me_cookie "_core_web_user_remember_me"
-  @remember_me_options [sign: true, max_age: @max_age, same_site: "Lax"]
+  @remember_me_options [sign: true, http_only: true, max_age: @max_age, same_site: "Lax"]
 
   @doc """
   Logs the user in.
@@ -28,7 +28,7 @@ defmodule Systems.Account.UserAuth do
   if you are not using LiveView.
   """
   def log_in_user(conn, user, first_time?, params \\ %{}) do
-    token = Account.Public.generate_user_session_token(user)
+    token = Account.Public.generate_user_session_token(user, session_type(params))
 
     # For first-time users, we always land on onboarding — but if the caller
     # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
@@ -59,6 +59,10 @@ defmodule Systems.Account.UserAuth do
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
   end
 
+  defp maybe_write_remember_me_cookie(conn, token, %{mobile_session?: true}) do
+    put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
+  end
+
   defp maybe_write_remember_me_cookie(conn, token, %{"remember_me" => "true"}) do
     put_resp_cookie(conn, @remember_me_cookie, token, @remember_me_options)
   end
@@ -66,6 +70,9 @@ defmodule Systems.Account.UserAuth do
   defp maybe_write_remember_me_cookie(conn, _token, _params) do
     conn
   end
+
+  defp session_type(%{mobile_session?: true}), do: :mobile
+  defp session_type(_params), do: :browser
 
   # This function renews the session ID and erases the whole
   # session to avoid fixation attacks. Preserves locale across
@@ -128,20 +135,33 @@ defmodule Systems.Account.UserAuth do
     {user_token, conn} = ensure_user_token(conn)
     user = user_token && Account.Public.get_user_by_session_token(user_token)
 
-    assign(conn, :current_user, user)
+    conn
+    |> maybe_renew_mobile_session(user_token, user)
+    |> assign(:current_user, user)
   end
 
   defp ensure_user_token(conn) do
+    conn = fetch_cookies(conn, signed: [@remember_me_cookie])
+
     if user_token = get_session(conn, :user_token) do
       {user_token, conn}
     else
-      conn = fetch_cookies(conn, signed: [@remember_me_cookie])
-
       if user_token = conn.cookies[@remember_me_cookie] do
         {user_token, put_session(conn, :user_token, user_token)}
       else
         {nil, conn}
       end
+    end
+  end
+
+  defp maybe_renew_mobile_session(conn, _user_token, nil), do: conn
+
+  defp maybe_renew_mobile_session(conn, user_token, _user) do
+    if Account.Public.renew_mobile_session_token(user_token) and
+         conn.cookies[@remember_me_cookie] == user_token do
+      put_resp_cookie(conn, @remember_me_cookie, user_token, @remember_me_options)
+    else
+      conn
     end
   end
 

@@ -52,6 +52,28 @@ defmodule Next.Account.AuthCodeVerifyPageTest do
       assert html =~ dgettext("eyra-account", "auth.code.invalid")
       refute html =~ dgettext("eyra-account", "auth.code.max_attempts")
       refute html =~ dgettext("eyra-account", "auth.code.expired")
+      refute html =~ "prism-btn-loading"
+    end
+  end
+
+  describe "/user/auth/verify success" do
+    test "renders the standard loading button before redeeming the OTP", %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      email = "success@example.com"
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(auth_code)
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+
+      html = render_submit(view, "verify", %{"code" => code})
+
+      assert html =~ "prism-btn-loading"
+      refute html =~ "spinner_static_white"
+      refute html =~ ~r/<button[^>]*disabled/
+
+      assert_push_event(view, "auth_code:redeem", %{url: redeem_url})
+      assert URI.parse(redeem_url).path == "/user/auth/redeem"
+      assert URI.decode_query(URI.parse(redeem_url).query)["token"]
     end
   end
 end

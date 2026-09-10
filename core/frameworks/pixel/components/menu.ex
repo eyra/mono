@@ -34,8 +34,6 @@ defmodule Frameworks.Pixel.Menu do
     """
   end
 
-  attr(:id, :string, required: true)
-  attr(:menu_id, :string, required: true)
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
 
@@ -61,15 +59,12 @@ defmodule Frameworks.Pixel.Menu do
     """
   end
 
-  attr(:id, :string, required: true)
-  attr(:menu_id, :string, required: true)
-  attr(:overlay?, :boolean, default: false)
   attr(:action, :map, required: true)
   attr(:face, :map, required: true)
 
   def item(assigns) do
     ~H"""
-    <Button.menu id={"#{@menu_id}_#{@id}"} overlay?={@overlay?} action={@action} face={@face} />
+    <Button.dynamic action={@action} face={@face} />
     """
   end
 end

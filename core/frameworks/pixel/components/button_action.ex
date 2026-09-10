@@ -151,22 +151,6 @@ defmodule Frameworks.Pixel.Button.Action do
     """
   end
 
-  attr(:testid, :string, default: nil)
-  slot(:inner_block, required: true)
-
-  def sidepanel(assigns) do
-    ~H"""
-    <div
-      id={@id}
-      phx-hook="NativeWrapper"
-      class="cursor-pointer"
-      data-testid={@testid}
-    >
-      <%= render_slot(@inner_block) %>
-    </div>
-    """
-  end
-
   attr(:to, :string, required: true)
   attr(:method, :string, required: true)
   attr(:target, :string, default: "_self")

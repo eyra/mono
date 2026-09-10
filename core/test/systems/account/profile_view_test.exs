@@ -65,6 +65,28 @@ defmodule Systems.Account.ProfileViewTest do
       # Should render signout button
       assert html =~ "Sign out" or html =~ "Uitloggen"
     end
+
+    test "shows the standard loading state before submitting sign-out", %{conn: conn, user: user} do
+      conn = conn |> Map.put(:request_path, "/user/account")
+
+      live_context =
+        LiveContext.new(%{
+          user_id: user.id,
+          show_signout_button: true,
+          show_email: true,
+          show_top_margin: false,
+          show_title: true
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Account.ProfileView, session: %{"live_context" => live_context})
+
+      html = render_click(view, "signout")
+
+      assert html =~ "prism-btn-loading"
+      refute html =~ "spinner_static_delete"
+      assert_push_event(view, "auth:signout", %{url: "/user/session"})
+    end
   end
 
   describe "form interactions" do

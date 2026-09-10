@@ -11,6 +11,7 @@ defmodule Next.Account.AuthIdentifyPageTest do
 
     assert html =~ "auth-email-input"
     refute html =~ "auth-signin-button"
+    assert html =~ "auth-continue-button"
   end
 
   test "participant entry carries its role into OTP verification", %{conn: conn} do

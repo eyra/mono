@@ -40,9 +40,9 @@ defmodule Systems.Account.ProfileViewBuilderTest do
     test "builds view model with signout button", %{entity: entity, user: user} do
       vm = Account.ProfileViewBuilder.view_model(entity, %{user: user})
 
-      assert vm.signout_button.action.type == :http_delete
-      assert vm.signout_button.action.to == "/user/session"
+      assert vm.signout_button.action == %{type: :send, event: "signout"}
       assert vm.signout_button.face.type == :secondary
+      refute vm.signout_button.face.loading
     end
 
     test "builds view model with labels", %{entity: entity, user: user} do

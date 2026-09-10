@@ -21,13 +21,13 @@ defmodule CoreWeb.Menu.Helpers do
           :narrow
         end
 
-      home_item(menu_id, id, action, size)
+      home_item(id, action, size)
     else
       nil
     end
   end
 
-  defp home_item(menu_id, id, action, size) when is_atom(id) do
+  defp home_item(id, action, size) when is_atom(id) do
     face = %{
       type: :menu_home,
       icon: id,
@@ -35,14 +35,12 @@ defmodule CoreWeb.Menu.Helpers do
     }
 
     %{
-      id: id,
-      menu_id: menu_id,
       action: action,
       face: face
     }
   end
 
-  def menu_item(menu_id, id, active?, action, %{} = opts) when is_atom(id) do
+  def menu_item(_menu_id, id, active?, action, %{} = opts) when is_atom(id) do
     face = %{
       type: :menu_item,
       active?: active?,
@@ -52,8 +50,6 @@ defmodule CoreWeb.Menu.Helpers do
     }
 
     %{
-      id: id,
-      menu_id: menu_id,
       action: action,
       face: face
     }

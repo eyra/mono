@@ -28,6 +28,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
           email: email,
           form: to_form(%{"code" => ""}),
           error: nil,
+          loading: false,
           creator?: Params.parse_creator(params),
           return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
         )
@@ -44,6 +45,9 @@ defmodule Next.Account.AuthCodeVerifyPage do
   end
 
   @impl true
+  def handle_event("verify", _params, %{assigns: %{loading: true}} = socket),
+    do: {:noreply, socket}
+
   def handle_event(
         "verify",
         %{"code" => code},
@@ -61,12 +65,16 @@ defmodule Next.Account.AuthCodeVerifyPage do
         }
 
         token = Phoenix.Token.sign(Endpoint, @token_salt, payload)
-        {:noreply, redirect(socket, to: ~p"/user/auth/redeem?token=#{token}")}
+
+        {:noreply,
+         socket
+         |> assign(loading: true, error: nil)
+         |> push_event("auth_code:redeem", %{url: ~p"/user/auth/redeem?token=#{token}"})}
 
       {:error, :invalid} ->
         {:noreply,
          socket
-         |> assign(error: dgettext("eyra-account", "auth.code.invalid"))
+         |> assign(loading: false, error: dgettext("eyra-account", "auth.code.invalid"))
          |> push_event("auth_code:clear", %{})}
 
       {:error, reason} when reason in [:max_attempts, :not_found] ->
@@ -78,6 +86,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
 
         {:noreply,
          socket
+         |> assign(loading: false)
          |> put_flash(:error, message)
          |> push_navigate(to: ~p"/user/auth/identify")}
     end
@@ -123,9 +132,17 @@ defmodule Next.Account.AuthCodeVerifyPage do
               <Text.caption color="text-warning" padding="" margin=""><%= @error %></Text.caption>
             <% end %>
             <.spacing value="M" />
-            <Button.submit_wide
-              label={dgettext("eyra-account", "auth.continue.button")}
-              bg_color="bg-grey1"
+            <Button.dynamic
+              action={%{type: :submit}}
+              face={
+                %{
+                  type: :primary,
+                  label: dgettext("eyra-account", "auth.continue.button"),
+                  bg_color: "bg-grey1",
+                  loading: @loading
+                }
+              }
+              full_width={true}
               testid="auth-code-verify-button"
             />
             <.spacing value="S" />

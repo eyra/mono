@@ -13,7 +13,7 @@ defmodule CoreWeb.UI.OldSkool do
 
   def native_web?(conn) do
     user_agent = Browser.Ua.to_ua(conn)
-    String.match?(user_agent, ~r/NativeWrapper/i)
+    String.match?(user_agent, ~r/NextApp\/[^\s]+ (?:iOS|Android)$/)
   end
 
   def mobile_web?(conn) do

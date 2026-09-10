@@ -12,12 +12,16 @@ defmodule Systems.Account.UserTokenModel do
   @change_email_validity_in_days 7
   @session_validity_in_days 60
 
+  @session_context "session"
+  @mobile_session_context "mobile_session"
+
   schema "users_tokens" do
     field(:token, :binary)
     field(:context, :string)
     field(:sent_to, :string)
     belongs_to(:user, Systems.Account.User)
 
+    field(:last_used_at, :naive_datetime)
     timestamps(updated_at: false)
   end
 
@@ -26,9 +30,25 @@ defmodule Systems.Account.UserTokenModel do
   such as session or cookie. As they are signed, those
   tokens do not need to be hashed.
   """
+  def build_session_token(user, :mobile) do
+    token = :crypto.strong_rand_bytes(@rand_size)
+
+    {token,
+     %Systems.Account.UserTokenModel{
+       token: token,
+       context: @mobile_session_context,
+       user_id: user.id,
+       last_used_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+     }}
+  end
+
+  def build_session_token(user, :browser), do: build_session_token(user)
+
   def build_session_token(user) do
     token = :crypto.strong_rand_bytes(@rand_size)
-    {token, %Systems.Account.UserTokenModel{token: token, context: "session", user_id: user.id}}
+
+    {token,
+     %Systems.Account.UserTokenModel{token: token, context: @session_context, user_id: user.id}}
   end
 
   @doc """
@@ -38,13 +58,37 @@ defmodule Systems.Account.UserTokenModel do
   """
   def verify_session_token_query(token) do
     query =
-      from(token in token_and_context_query(token, "session"),
+      from(token in session_token_query(token),
         join: user in assoc(token, :user),
-        where: token.inserted_at > ago(@session_validity_in_days, "day"),
+        where:
+          (token.context == @session_context and
+             token.inserted_at > ago(@session_validity_in_days, "day")) or
+            (token.context == @mobile_session_context and
+               token.last_used_at > ago(@session_validity_in_days, "day")),
         select: user
       )
 
     {:ok, query}
+  end
+
+  def touch_mobile_session_token(token) do
+    from(token in token_and_context_query(token, @mobile_session_context),
+      where: token.last_used_at > ago(@session_validity_in_days, "day")
+    )
+    |> Core.Repo.update_all(
+      set: [last_used_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)]
+    )
+    |> case do
+      {1, _} -> true
+      _ -> false
+    end
+  end
+
+  def session_token_query(token) do
+    from(token in __MODULE__,
+      where:
+        token.token == ^token and token.context in [@session_context, @mobile_session_context]
+    )
   end
 
   @doc """
