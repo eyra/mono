@@ -165,7 +165,7 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert %{
                "@type" => "Dataset",
                "name" => "My study",
-               "description" => "Subtitle",
+               "description" => "Exported study setup of My study.",
                "inLanguage" => "nl",
                "identifier" => identifier,
                "datePublished" => published
@@ -270,6 +270,9 @@ defmodule Systems.Assignment.SetupExporterTest do
 
       assert entity(crate, "https://creativecommons.org/licenses/by/4.0/")["name"] ==
                "Creative Commons Attribution 4.0 International"
+
+      assert entity(crate, "https://creativecommons.org/licenses/by/4.0/")["description"] =~
+               "third-party content that is not covered by the selected license"
 
       assert %{"@id" => publisher_id} = root["publisher"]
       assert entity(crate, publisher_id)["@type"] == "Organization"

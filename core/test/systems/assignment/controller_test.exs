@@ -416,6 +416,8 @@ defmodule Systems.Assignment.ControllerTest do
       assert conn.status == 200
       assert [content_type] = get_resp_header(conn, "content-type")
       assert content_type =~ "application/zip"
+      assert [disposition] = get_resp_header(conn, "content-disposition")
+      assert URI.decode(disposition) =~ ~r/assignment_#{assignment.id}_\d+\.zip/
 
       {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
       contents = Map.new(files, fn {path, data} -> {to_string(path), data} end)
@@ -431,6 +433,7 @@ defmodule Systems.Assignment.ControllerTest do
       parts = Enum.map(root["hasPart"], & &1["@id"])
       folder = Path.dirname(crate_path)
 
+      assert folder == "assignment_#{assignment.id}"
       assert crate["@context"] == "https://w3id.org/ro/crate/1.1/context"
       assert "next-metadata.json" in parts
       assert Enum.all?(parts, &Map.has_key?(contents, "#{folder}/#{&1}"))

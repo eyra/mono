@@ -68,7 +68,7 @@ defmodule Systems.Assignment.Controller do
 
     if authorized?(conn, assignment) do
       branch_name = branch_name(conn, id)
-      export_setup(conn, assignment, branch_name, export_name(branch_name))
+      export_setup(conn, assignment, branch_name, export_folder(branch_name))
     else
       forbidden(conn)
     end
@@ -76,8 +76,11 @@ defmodule Systems.Assignment.Controller do
 
   defp export_setup(conn, assignment, branch_name, folder) do
     case Assignment.SetupExporter.stream(assignment, branch_name, folder) do
-      {:ok, stream} -> Packmatic.Conn.send_chunked(stream, conn, "#{folder}.zip")
-      {:error, :invalid_manifest} -> service_unavailable(conn)
+      {:ok, stream} ->
+        Packmatic.Conn.send_chunked(stream, conn, "#{export_name(branch_name)}.zip")
+
+      {:error, :invalid_manifest} ->
+        service_unavailable(conn)
     end
   end
 
@@ -107,6 +110,8 @@ defmodule Systems.Assignment.Controller do
     |> Enum.join(" ")
     |> Slug.slugify(separator: ?_)
   end
+
+  defp export_folder(branch_name), do: Slug.slugify(branch_name, separator: ?_) || "study"
 
   defp branch_name(%{assigns: %{branch: branch}}, _id) when not is_nil(branch),
     do: Concept.Branch.name(branch, :self)
