@@ -40,7 +40,9 @@ defmodule Systems.Assignment.SetupExporter do
     "@type" => "CreativeWork",
     "name" => "Creative Commons Attribution 4.0 International",
     "description" =>
-      "Others may share and adapt this study setup for any purpose, provided they credit the original authors."
+      "Others may share and adapt this study setup for any purpose, provided they credit the original authors. " <>
+        "The license for this research object must be determined by the researcher responsible for publication. " <>
+        "Please note that included assets, such as screenshots, may contain third-party content that is not covered by the selected license."
   }
   @file_descriptions %{
     @metadata_name =>
@@ -92,8 +94,7 @@ defmodule Systems.Assignment.SetupExporter do
   Packmatic entries for the whole export: the metadata document, one entry per
   configured asset, the RO-Crate description of the package and a closing
   `export-warnings.json`, all nested under `folder`. `name` is the study name
-  written into the metadata; `folder` is the slug used for both the folder and
-  the zip file.
+  written into the metadata; `folder` is the undated root folder inside the zip.
 
   The warnings document only materializes when an asset was actually skipped;
   a clean export carries no `export-warnings.json`.
@@ -237,11 +238,7 @@ defmodule Systems.Assignment.SetupExporter do
   end
 
   defp ro_crate_root(
-         %{
-           assignment: %{id: id, name: name},
-           language: language,
-           branding: %{subtitle: subtitle}
-         },
+         %{assignment: %{id: id, name: name}, language: language},
          parts,
          authors,
          publisher
@@ -250,7 +247,7 @@ defmodule Systems.Assignment.SetupExporter do
       "@id" => "./",
       "@type" => "Dataset",
       "name" => name,
-      "description" => ro_crate_description(subtitle, name),
+      "description" => "Exported study setup of #{name}.",
       "datePublished" => DateTime.utc_now() |> DateTime.to_iso8601(),
       "identifier" => "next-assignment-#{id}",
       "inLanguage" => Atom.to_string(language),
@@ -263,11 +260,6 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp put_authors(root, []), do: root
   defp put_authors(root, authors), do: Map.put(root, "author", Enum.map(authors, &reference/1))
-
-  defp ro_crate_description(subtitle, _name) when is_binary(subtitle) and subtitle != "",
-    do: subtitle
-
-  defp ro_crate_description(_subtitle, name), do: "Exported study setup of #{name}."
 
   defp ro_crate_file(path) do
     %{
