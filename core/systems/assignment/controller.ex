@@ -52,10 +52,10 @@ defmodule Systems.Assignment.Controller do
   defp participate(conn, %Assignment.Model{} = assignment) do
     cond do
       offline?(assignment) ->
-        service_unavailable(conn)
+        Assignment.ErrorHTML.unavailable(conn)
 
       full?(assignment) and not returning_participant?(conn, assignment) ->
-        assignment_full(conn)
+        Assignment.ErrorHTML.full(conn)
 
       true ->
         start_participant(conn, assignment)
@@ -267,12 +267,6 @@ defmodule Systems.Assignment.Controller do
     |> put_status(:service_unavailable)
     |> put_view(html: CoreWeb.ErrorHTML)
     |> render(:"503")
-  end
-
-  defp assignment_full(conn) do
-    conn
-    |> put_view(html: Assignment.ErrorHTML)
-    |> render(:assignment_full)
   end
 
   defp start_participant(conn, %{id: id} = assignment) do

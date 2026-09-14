@@ -49,7 +49,7 @@ defmodule Systems.Affiliate.RecruitTest do
       assert conn.status == 404
     end
 
-    test "returns 503 for offline assignment", %{conn: conn} do
+    test "shows a friendly 'not available' page for an unpublished assignment", %{conn: conn} do
       assignment =
         Assignment.Factories.create_assignment_with_affiliate()
         |> Ecto.Changeset.change(status: :concept)
@@ -58,7 +58,7 @@ defmodule Systems.Affiliate.RecruitTest do
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
       conn = get(conn, "/r/#{sqid}")
 
-      assert conn.status == 503
+      assert html_response(conn, 200) =~ "error-assignment_unavailable"
     end
   end
 
@@ -88,6 +88,21 @@ defmodule Systems.Affiliate.RecruitTest do
       conn = get(conn, "/a/#{sqid}?p=participant-ok-1")
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}"
+    end
+
+    test "shows a friendly 'not available' page to a signed out visitor",
+         %{conn: conn, assignment: assignment} do
+      assignment
+      |> Ecto.Changeset.change(status: :concept)
+      |> Core.Repo.update!()
+
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-unavailable-1")
+
+      response = html_response(conn, 200)
+      assert response =~ "error-assignment_unavailable"
+      assert response =~ "This study is not available"
     end
   end
 
