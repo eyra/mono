@@ -6,8 +6,8 @@ defmodule CoreWeb.GettextTest do
   @key "rewards_summary.donate.button"
   @untranslated_locale "zz"
 
-  @plural_key "contributions.confirm_all.partial_error.one"
-  @plural_key_other "contributions.confirm_all.partial_error.other"
+  @plural_key "domain.match.banner.title.singular"
+  @plural_key_other "domain.match.banner.title.plural"
 
   setup do
     original = Application.get_env(:core, :gettext_fallback_locale)
@@ -19,7 +19,7 @@ defmodule CoreWeb.GettextTest do
 
   defp translate_plural(locale, count) do
     Gettext.with_locale(locale, fn ->
-      dngettext("eyra-assignment", @plural_key, @plural_key_other, count)
+      dngettext("eyra-org", @plural_key, @plural_key_other, count)
     end)
   end
 
@@ -72,10 +72,10 @@ defmodule CoreWeb.GettextTest do
 
     test "an untranslated plural string falls back in both singular and plural form" do
       assert translate_plural(@untranslated_locale, 1) ==
-               "Could not confirm 1 contribution. Please try again."
+               "1 account found on the Next platform that matches your domains"
 
       assert translate_plural(@untranslated_locale, 3) ==
-               "Could not confirm 3 contributions. Please try again."
+               "3 accounts found on the Next platform that match your domains"
     end
 
     test "an untranslated string interpolates bindings into the fallback text" do
