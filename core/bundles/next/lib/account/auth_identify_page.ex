@@ -24,7 +24,6 @@ defmodule Next.Account.AuthIdentifyPage do
         socket
         |> assign(
           form: to_form(%{"email" => ""}),
-          error: nil,
           loading: false,
           creator?: creator?,
           return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
@@ -48,22 +47,24 @@ defmodule Next.Account.AuthIdentifyPage do
     if valid_email?(email) do
       socket =
         socket
-        |> assign(loading: true, error: nil, form: to_form(%{"email" => email}))
+        |> assign(loading: true, form: to_form(%{"email" => email}))
 
       send(self(), {:route_email, email})
       {:noreply, socket}
     else
+      error = dgettext("eyra-account", "auth.email.invalid")
+
       {:noreply,
        assign(socket,
-         error: dgettext("eyra-account", "auth.email.invalid"),
-         form: to_form(%{"email" => email})
+         loading: false,
+         form: to_form(%{"email" => email}, errors: [email: {error, []}])
        )}
     end
   end
 
   @impl true
   def handle_event("change", %{"email" => email}, socket) do
-    {:noreply, assign(socket, form: to_form(%{"email" => email}), error: nil)}
+    {:noreply, assign(socket, form: to_form(%{"email" => email}))}
   end
 
   @impl true
@@ -113,25 +114,26 @@ defmodule Next.Account.AuthIdentifyPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus} centered?>
-      <div class="h-full flex flex-col justify-center pb-16">
+      <div
+        id="auth-identify-content"
+        class="h-full flex flex-col justify-center pb-16"
+        phx-hook="LiveContent"
+        data-show-errors={true}
+      >
       <Area.content>
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change">
+          <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change" novalidate>
             <.email_input
               form={@form}
               field={:email}
               label_text=""
-              reserve_error_space={false}
+              reserve_error_space={true}
               testid="auth-email-input"
               placeholder={dgettext("eyra-account", "auth.email.placeholder")}
             />
-            <%= if @error do %>
-              <.spacing value="XS" />
-              <Text.body_small color="text-delete"><%= @error %></Text.body_small>
-            <% end %>
-            <.spacing value="M" />
+            <div class="mt-[6px]" />
             <Button.dynamic
               action={%{type: :submit}}
               face={
@@ -140,6 +142,7 @@ defmodule Next.Account.AuthIdentifyPage do
                   label: dgettext("eyra-account", "auth.continue.button"),
                   bg_color: "bg-grey1"
                 }
+                |> then(fn face -> if @loading, do: Map.put(face, :loading, true), else: face end)
               }
               full_width={true}
               testid="auth-continue-button"
