@@ -85,3 +85,6 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
+
+msgid "Enter a year of birth between %{min_year} and %{max_year}."
+msgstr "Geben Sie ein Geburtsjahr zwischen %{min_year} und %{max_year} ein."

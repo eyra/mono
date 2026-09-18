@@ -109,11 +109,11 @@ msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr "Ketinate prisijungti prie %{pool_name} fondo. Kaip narys galėsite teikti paraiškas dalyvauti tyrimuose ir uždirbti atlygius."
+msgstr "%{pool_name} suartina visuomenę ir mokslą. Tapę nariu galėsite dalyvauti moksliniuose tyrimuose ir gauti atlygį už dalyvavimą."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
-msgstr ""
+msgstr "Prisijunkite"
 
 #, elixir-autogen, elixir-format
 msgid "already_member.home.button"
@@ -125,7 +125,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Prisijunk prie fondo"
+msgstr "Prisijunkite"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"

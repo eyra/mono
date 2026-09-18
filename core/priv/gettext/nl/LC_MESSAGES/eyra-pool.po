@@ -104,15 +104,15 @@ msgstr "Naam"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.accept.button"
-msgstr "Verder"
+msgstr "Ga verder"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr "Je staat op het punt om lid te worden van de %{pool_name} pool. Als lid zul je je kunnen inschrijven voor onderzoeken en beloningen verdienen."
+msgstr "%{pool_name} brengt burgers en wetenschap dichter bij elkaar. Als lid kun je meedoen aan onderzoeken en een vergoeding ontvangen voor je deelname."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
-msgstr ""
+msgstr "Meld je aan"
 
 #, elixir-autogen, elixir-format
 msgid "already_member.home.button"
@@ -124,7 +124,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Word lid van pool"
+msgstr "Meld je aan"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"

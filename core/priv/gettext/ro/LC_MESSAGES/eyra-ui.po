@@ -110,7 +110,7 @@ msgstr "Meniu"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
-msgstr "Nu a fost salvat, reîncărcați și încercați din nou"
+msgstr "Nu s-a salvat. Reîncărcați pagina și încercați din nou."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"

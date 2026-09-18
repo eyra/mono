@@ -33,11 +33,11 @@ msgstr "Moteris"
 
 #, elixir-autogen, elixir-format
 msgid "genders.non_binary"
-msgstr "Nebinaris asmuo"
+msgstr "Nebinarinė tapatybė"
 
 #, elixir-autogen, elixir-format
 msgid "genders.prefer_not_to_say"
-msgstr "Nenoriu atsakyti"
+msgstr "Nenoriu nurodyti"
 
 #, elixir-autogen, elixir-format
 msgid "themes.art"

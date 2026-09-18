@@ -120,7 +120,19 @@ defmodule Systems.Account.FeaturesViewTest do
       {:ok, view, _html} = live_isolated(conn, Account.FeaturesView, session: session)
 
       # Submit invalid birth year (too old)
-      view |> render_change("change", %{"features_model" => %{"birth_year" => "1800"}})
+      html =
+        view |> render_change("change", %{"features_model" => %{"birth_year" => "1800"}})
+
+      current_year = Date.utc_today().year
+
+      assert html =~
+               Gettext.dgettext(
+                 CoreWeb.Gettext,
+                 "errors",
+                 "Enter a year of birth between %{min_year} and %{max_year}.",
+                 min_year: current_year - 130,
+                 max_year: current_year - 8
+               )
 
       # Verify error is shown (birth year validation is in changeset)
       # The features should not be updated to 1800
