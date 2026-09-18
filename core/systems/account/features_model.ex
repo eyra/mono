@@ -55,12 +55,17 @@ defmodule Systems.Account.FeaturesModel do
   end
 
   defp validate_birth_year(changeset, min_year, max_year) do
-    changeset
-    |> validate_number(:birth_year,
-      greater_than_or_equal_to: min_year,
-      less_than_or_equal_to: max_year,
-      message: "must be between #{min_year} and #{max_year}"
-    )
+    validate_change(changeset, :birth_year, fn :birth_year, birth_year ->
+      if birth_year >= min_year and birth_year <= max_year do
+        []
+      else
+        [
+          birth_year:
+            {"Enter a year of birth between %{min_year} and %{max_year}.",
+             min_year: min_year, max_year: max_year, validation: :number}
+        ]
+      end
+    end)
   end
 
   def get_student_classes(%{study_program_codes: [_ | _] = codes}) do

@@ -64,7 +64,7 @@ msgstr "To earn credits for research participation (OP / RPR) for bedrijfskunde 
 
 #, elixir-autogen, elixir-format
 msgid "features.description"
-msgstr "A few studies use specific eligibility requirements. Selecting the optional characteristics below, allows you to participate in studies that specify your characteristics as requirements."
+msgstr "Some studies in Panl are looking for participants with certain characteristics. By providing this information, we can show you studies that may suit you. Don't want to? Just continue."
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
@@ -152,7 +152,7 @@ msgstr "Account activated successfully."
 
 #, elixir-autogen, elixir-format
 msgid "features.birthyear.title"
-msgstr "Birth year"
+msgstr "Year of birth"
 
 #, elixir-autogen, elixir-format
 msgid "profile.tab.features.title"
@@ -167,7 +167,11 @@ msgid "onboarding.continue.button"
 msgstr "Continue"
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.hero.title"
+msgid "onboarding.profile.title"
+msgstr "Complete your profile"
+
+#, elixir-autogen, elixir-format
+msgid "onboarding.activate_account.hero.title"
 msgstr "Welcome"
 
 #, elixir-autogen, elixir-format
@@ -228,11 +232,19 @@ msgstr "Add"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.body"
-msgstr "You are now signed in. Before continuing, please review our Terms and Privacy Statement."
+msgstr "We need you to agree to our Terms. View the Terms and Privacy Statement using the links below."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
-msgstr "I agree to the %{terms} and %{privacy}."
+msgstr "Yes, I agree to the %{terms} and %{privacy}."
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.terms_link"
+msgstr "Terms"
+
+#, elixir-autogen, elixir-format
+msgid "terms_and_privacy.onboarding.privacy_link"
+msgstr "Privacy Statement"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms.required"
@@ -240,7 +252,7 @@ msgstr "Please accept the terms and privacy statement to continue."
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.title"
-msgstr "Welcome"
+msgstr "Create an account"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
@@ -252,11 +264,11 @@ msgstr "Incorrect code. Please try again."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr "Too many incorrect attempts. Please request a new code."
+msgstr "You entered an incorrect code too many times. Enter your email address again."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Verify email"
+msgstr "Enter the code"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -264,19 +276,19 @@ msgstr "Continue"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr "Please enter a valid email address."
+msgstr "Enter a valid email address."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Get started"
+msgstr "Start with your email"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
-msgstr "you@example.com"
+msgstr "name@example.com"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
-msgstr "Too many requests. Please try again in a moment."
+msgstr "You requested a code too many times. Wait a moment and try again."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
@@ -394,7 +406,7 @@ msgstr "Verify bank account"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "We've emailed you a code"
+msgstr "Check your email for the code. Need help? Email support@eyra.co."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"

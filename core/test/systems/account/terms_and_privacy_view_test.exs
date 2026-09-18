@@ -31,9 +31,17 @@ defmodule Systems.Account.TermsAndPrivacyViewTest do
       {:ok, view, html} =
         live_isolated(conn, Account.TermsAndPrivacyView, session: session)
 
-      assert html =~ "Welcome"
+      assert html =~ "Create an account"
       assert view |> has_element?("[data-testid='terms-and-privacy-view']")
       assert view |> has_element?("[data-testid='terms-and-privacy-onboarding-terms']")
+      assert view |> has_element?("[data-testid='terms-and-privacy-onboarding-terms'] a", "Terms")
+
+      assert view
+             |> has_element?(
+               "[data-testid='terms-and-privacy-onboarding-terms'] a",
+               "Privacy Statement"
+             )
+
       assert view |> has_element?("[data-testid='onboarding-continue']")
     end
   end

@@ -101,7 +101,7 @@ msgstr "Menü"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
-msgstr "Nicht gespeichert. Bitte laden Sie die Seite neu und versuchen Sie es erneut"
+msgstr "Nicht gespeichert. Seite neu laden und erneut versuchen."
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "mailto.button"

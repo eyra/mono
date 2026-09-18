@@ -37,7 +37,7 @@ msgstr "Nicht-binär"
 
 #, elixir-autogen, elixir-format
 msgid "genders.prefer_not_to_say"
-msgstr "Möchte ich nicht sagen"
+msgstr "Möchte ich nicht angeben"
 
 #, elixir-autogen, elixir-format
 msgid "themes.art"

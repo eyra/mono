@@ -100,7 +100,7 @@ msgstr "Menu"
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "persister.error.flash"
-msgstr "Niet opgeslagen, herlaad en probeer het opnieuw"
+msgstr "Opslaan is niet gelukt. Herlaad de pagina en probeer het opnieuw."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"

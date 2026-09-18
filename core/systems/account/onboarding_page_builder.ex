@@ -32,7 +32,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
       end
 
     %{
-      hero_title: dgettext("eyra-account", "onboarding.hero.title"),
+      hero_title: build_hero_title(current_step),
       steps: steps,
       current_step_index: current_step_index,
       current_step: current_step,
@@ -108,6 +108,17 @@ defmodule Systems.Account.OnboardingPageBuilder do
   end
 
   defp build_step_title(_), do: nil
+
+  defp build_hero_title(:terms_and_privacy),
+    do: dgettext("eyra-account", "terms_and_privacy.onboarding.title")
+
+  defp build_hero_title(:activate_account),
+    do: dgettext("eyra-account", "onboarding.activate_account.hero.title")
+
+  defp build_hero_title(:profile),
+    do: dgettext("eyra-account", "onboarding.profile.title")
+
+  defp build_hero_title(_), do: nil
 
   defp build_step_body(:activate_account, email) do
     dgettext("eyra-account", "onboarding.activate_account.body", email: email)

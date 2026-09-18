@@ -84,3 +84,6 @@ msgstr "moet groter of gelijk aan %{number} zijn"
 
 msgid "must be equal to %{number}"
 msgstr "moet gelijk aan %{number} zijn"
+
+msgid "Enter a year of birth between %{min_year} and %{max_year}."
+msgstr "Vul een geboortejaar in tussen %{min_year} en %{max_year}."
