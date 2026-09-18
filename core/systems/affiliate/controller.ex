@@ -40,7 +40,7 @@ defmodule Systems.Affiliate.Controller do
         not_found(conn)
 
       offline?(assignment) ->
-        service_unavailable(conn)
+        Assignment.ErrorHTML.unavailable(conn)
 
       true ->
         participant_id = generate_participant_id()
@@ -114,7 +114,7 @@ defmodule Systems.Affiliate.Controller do
       # Valid participant ID -> start as participant
       valid_id?(get_participant(params)) ->
         if offline?(assignment) do
-          service_unavailable(conn)
+          Assignment.ErrorHTML.unavailable(conn)
         else
           start_participant(conn, params, assignment)
         end
@@ -185,7 +185,7 @@ defmodule Systems.Affiliate.Controller do
       |> log_in_user_without_redirect(user)
 
     if full?(assignment) and not returning_participant?(conn, assignment) do
-      assignment_full(conn)
+      Assignment.ErrorHTML.full(conn)
     else
       conn
       |> authorize_user(assignment)
@@ -210,19 +210,6 @@ defmodule Systems.Affiliate.Controller do
     |> put_status(:forbidden)
     |> put_view(html: CoreWeb.ErrorHTML)
     |> render(:"403")
-  end
-
-  defp service_unavailable(conn) do
-    conn
-    |> put_status(:service_unavailable)
-    |> put_view(html: CoreWeb.ErrorHTML)
-    |> render(:"503")
-  end
-
-  defp assignment_full(conn) do
-    conn
-    |> put_view(html: Assignment.ErrorHTML)
-    |> render(:assignment_full)
   end
 
   defp full?(%Assignment.Model{} = assignment) do

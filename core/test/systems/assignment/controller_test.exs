@@ -9,11 +9,11 @@ defmodule Systems.Assignment.ControllerTest do
   describe "invite member" do
     setup :login_as_member
 
-    test "assignment not published", %{conn: conn} do
+    test "assignment not published shows a friendly 'not available' page", %{conn: conn} do
       %{id: id} = Assignment.Factories.create_assignment(31, 0, :offline)
 
       conn = get(conn, "/assignment/#{id}/invite")
-      html_response(conn, 503)
+      assert html_response(conn, 200) =~ "error-assignment_unavailable"
     end
 
     test "assignment published", %{conn: conn} do
