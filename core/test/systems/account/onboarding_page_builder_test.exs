@@ -70,6 +70,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
 
       assert vm.current_step == :activate_account
       assert vm.step_view == nil
+
       assert vm.hero_title ==
                dgettext("eyra-account", "onboarding.activate_account.hero.title")
 
