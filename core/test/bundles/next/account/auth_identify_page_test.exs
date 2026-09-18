@@ -1,6 +1,7 @@
 defmodule Next.Account.AuthIdentifyPageTest do
   use CoreWeb.ConnCase, async: false
   use Core.FeatureFlags.Test
+  use Gettext, backend: CoreWeb.Gettext
 
   import Phoenix.LiveViewTest
 
@@ -12,6 +13,16 @@ defmodule Next.Account.AuthIdentifyPageTest do
     assert html =~ "auth-email-input"
     refute html =~ "auth-signin-button"
     assert html =~ "auth-continue-button"
+  end
+
+  test "invalid email does not show the loading spinner", %{conn: conn} do
+    set_feature_flag(:otp, true)
+
+    {:ok, view, _html} = live(conn, "/user/auth/identify/participant")
+    html = render_submit(view, "submit", %{"email" => ""})
+
+    assert html =~ dgettext("eyra-account", "auth.email.invalid")
+    refute html =~ "prism-btn-loading"
   end
 
   test "participant entry carries its role into OTP verification", %{conn: conn} do
