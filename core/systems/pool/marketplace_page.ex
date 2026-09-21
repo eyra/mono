@@ -41,7 +41,9 @@ defmodule Systems.Pool.MarketplacePage do
     ~H"""
     <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} socket={@socket}>
       <:hero>
-        <Hero.dynamic {@vm.hero} />
+        <div class="native:hidden">
+          <Hero.dynamic {@vm.hero} />
+        </div>
       </:hero>
       <div class="min-h-full">
         <div class="py-4 border-b border-grey4 native:hidden">

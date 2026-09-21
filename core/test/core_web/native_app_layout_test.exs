@@ -1,6 +1,5 @@
 defmodule CoreWeb.NativeAppLayoutTest do
   use CoreWeb.ConnCase
-  import Phoenix.ConnTest
 
   setup [:login_as_member]
 

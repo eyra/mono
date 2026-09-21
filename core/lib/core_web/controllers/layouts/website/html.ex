@@ -46,7 +46,7 @@ defmodule CoreWeb.Layouts.Website.Html do
               </div>
               <div class="flex-1 lg:relative lg:z-10">
                 <div class="flex flex-col h-full lg:shadow-prism-container">
-                  <div class="bg-white native:hidden">
+                  <div class="bg-white">
                     <%= render_slot(@hero) %>
                   </div>
                   <div class="flex-1 bg-white">
