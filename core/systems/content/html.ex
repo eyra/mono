@@ -173,14 +173,16 @@ defmodule Systems.Content.Html do
         <%= if Enum.count(@tabs) > 0 do %>
           <%!-- Breadcrumb row --%>
           <%= if Enum.count(@breadcrumbs || []) > 0 do %>
-            <div class="bg-white">
-              <Area.content>
-                <div class="py-4">
-                  <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
-                </div>
-              </Area.content>
+            <div class="native:hidden">
+              <div class="bg-white">
+                <Area.content>
+                  <div class="py-4">
+                    <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
+                  </div>
+                </Area.content>
+              </div>
+              <.line />
             </div>
-            <.line />
           <% end %>
 
           <%!-- Segmented control row --%>

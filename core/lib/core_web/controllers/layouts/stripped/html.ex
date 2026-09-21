@@ -36,10 +36,10 @@ defmodule CoreWeb.Layouts.Stripped.Html do
       <div class="flex-1">
         <div class="bg-grey5 lg:px-16">
           <div id="main-content" class={"flex flex-col w-full #{@main_height_class} lg:max-w-[1536px] lg:mx-auto"}>
-              <div class="flex-wrap lg:hidden">
+              <div class="flex-wrap lg:hidden native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <div class="flex-wrap hidden lg:flex">
+              <div class="flex-wrap hidden lg:flex native:!hidden">
                 <Navigation.desktop_navbar {@menus.desktop_navbar} />
               </div>
             <div class="flex-1 flex flex-col lg:relative lg:z-10">
@@ -55,11 +55,11 @@ defmodule CoreWeb.Layouts.Stripped.Html do
                   <Margin.y id={:page_footer_top} />
                 </div>
                 <%= if @footer? do %>
-                  <.content_footer />
+                  <div class="native:hidden"><.content_footer /></div>
                 <% end %>
               </div>
             </div>
-            <div class="bg-grey5">
+            <div class="bg-grey5 native:hidden">
               <.platform_footer privacy_text={@privacy_text} terms_text={@terms_text} />
             </div>
           </div>

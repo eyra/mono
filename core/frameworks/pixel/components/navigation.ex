@@ -84,7 +84,7 @@ defmodule Frameworks.Pixel.Navigation do
     ~H"""
     <div>
       <%= if @has_breadcrumbs do %>
-        <div class="hidden md:block">
+        <div class="hidden md:block native:!hidden">
           <div class="bg-white">
             <Area.content>
               <div class="flex items-center h-[64px]">

@@ -20,7 +20,7 @@
     />
     <script src="<%= CoreWeb.Endpoint.static_path("/assets/app.js") %>" defer></script>
   </head>
-  <body class="font-body bg-grey5 scrollbar-hidden">
+  <body class="font-body bg-grey5 scrollbar-hidden" <%= if CoreWeb.UI.OldSkool.native_web?(@conn), do: "data-native-app" %>>
     <div class="flex flex-row">
       <%= if Phoenix.Flash.get(@flash, :error) do %>
       <div

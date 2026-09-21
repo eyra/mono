@@ -159,5 +159,5 @@ module.exports = {
     },
   },
   // Utilities and font components come from Prism preset
-  plugins: [],
+  plugins: [({ addVariant }) => addVariant("native", "[data-native-app] &")],
 };
