@@ -167,11 +167,7 @@ msgid "onboarding.continue.button"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.profile.title"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
+msgid "onboarding.hero.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -236,14 +232,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
 msgstr ""
 
 #, elixir-autogen, elixir-format

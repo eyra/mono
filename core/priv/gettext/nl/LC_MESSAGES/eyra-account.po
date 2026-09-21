@@ -166,14 +166,6 @@ msgstr "Profiel"
 msgid "onboarding.continue.button"
 msgstr "Ga verder"
 
-#, elixir-autogen, elixir-format
-msgid "onboarding.profile.title"
-msgstr "Vul je profiel in"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
-msgstr "Welkom"
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Link is ongeldig of verlopen"
@@ -237,14 +229,6 @@ msgstr "We hebben je akkoord op onze voorwaarden nodig. Bekijk de voorwaarden en
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "Ja, ik ga akkoord met de %{terms} en %{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr "voorwaarden"
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
-msgstr "privacyverklaring"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"

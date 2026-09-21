@@ -18,7 +18,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     test "builds view model with hero_title", %{user: user} do
       vm = Account.OnboardingPageBuilder.view_model(user, %{current_step_index: 0})
 
-      assert vm.hero_title == dgettext("eyra-account", "onboarding.profile.title")
+      assert vm.hero_title == dgettext("eyra-account", "onboarding.hero.title")
     end
 
     test "has only the profile step", %{user: user} do
@@ -70,9 +70,6 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
 
       assert vm.current_step == :activate_account
       assert vm.step_view == nil
-      assert vm.hero_title ==
-               dgettext("eyra-account", "onboarding.activate_account.hero.title")
-
       assert vm.step_title == dgettext("eyra-account", "onboarding.activate_account.title")
       assert vm.step_body != nil
     end
@@ -107,7 +104,6 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
 
       assert vm.current_step == :terms_and_privacy
       assert hd(vm.steps) == :terms_and_privacy
-      assert vm.hero_title == dgettext("eyra-account", "terms_and_privacy.onboarding.title")
     end
 
     test "step_view is TermsAndPrivacyView", %{user: user} do
@@ -150,7 +146,6 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
 
       assert vm.current_step == :terms_and_privacy
       assert hd(vm.steps) == :terms_and_privacy
-      assert vm.hero_title == dgettext("eyra-account", "terms_and_privacy.onboarding.title")
     end
 
     test "step_view is TermsAndPrivacyView", %{user: user} do

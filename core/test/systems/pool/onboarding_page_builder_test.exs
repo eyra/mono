@@ -28,8 +28,6 @@ defmodule Systems.Pool.OnboardingPageBuilderTest do
       assert vm.current_step == :join_consent
       assert vm.step_view.implementation == Pool.JoinConsentView
       assert vm.step_view.options[:pool] == pool
-
-      assert vm.hero_title == dgettext("eyra-pool", "onboarding.hero.title")
     end
 
     test "join_consent has no continue button (view renders its own)",
@@ -59,7 +57,6 @@ defmodule Systems.Pool.OnboardingPageBuilderTest do
 
       assert vm.current_step == :features
       assert vm.step_view.implementation == Account.FeaturesView
-      assert vm.hero_title == dgettext("eyra-pool", "onboarding.hero.title")
 
       assert %LiveContext{data: %{user_id: user_id}} = vm.step_view.options[:live_context]
       assert user_id == user.id

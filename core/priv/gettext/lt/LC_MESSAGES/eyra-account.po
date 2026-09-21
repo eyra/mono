@@ -177,14 +177,6 @@ msgid "onboarding.continue.button"
 msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "onboarding.profile.title"
-msgstr "Užpildykite profilį"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
-msgstr "Sveiki"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Žetonas neteisingas arba pasibaigęs"
 
@@ -247,14 +239,6 @@ msgstr "Turite sutikti su mūsų sąlygomis. Sąlygas ir privatumo pranešimą g
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "Taip, sutinku su %{terms} ir %{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr "sąlygomis"
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
-msgstr "privatumo pranešimu"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"

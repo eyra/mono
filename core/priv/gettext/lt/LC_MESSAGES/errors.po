@@ -91,6 +91,3 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
-
-msgid "Enter a year of birth between %{min_year} and %{max_year}."
-msgstr "Įveskite gimimo metus nuo %{min_year} iki %{max_year}."

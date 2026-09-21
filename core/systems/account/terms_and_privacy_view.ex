@@ -74,8 +74,8 @@ defmodule Systems.Account.TermsAndPrivacyView do
       <div class="cursor-pointer" phx-click="toggle_terms" data-testid="terms-and-privacy-onboarding-terms">
         <SelectorItem.checkbox raw?={true} item={%{
           value: dgettext("eyra-account", "terms_and_privacy.onboarding.terms",
-            terms: ~s(<a href="#{@terms_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-account", "terms_and_privacy.onboarding.terms_link")}</a>),
-            privacy: ~s(<a href="#{@privacy_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-account", "terms_and_privacy.onboarding.privacy_link")}</a>)
+            terms: ~s(<a href="#{@terms_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "terms.link")}</a>),
+            privacy: ~s(<a href="#{@privacy_url}" target="_blank" class="text-primary underline">#{dgettext("eyra-ui", "privacy.link")}</a>)
           ),
           active: @terms_accepted
         }} />

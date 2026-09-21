@@ -177,14 +177,6 @@ msgid "onboarding.continue.button"
 msgstr "Continuați"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "onboarding.profile.title"
-msgstr "Completați-vă profilul"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
-msgstr "Bun venit"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Link nevalid sau expirat"
 
@@ -247,14 +239,6 @@ msgstr "Trebuie să acceptați Termenii noștri. Consultați Termenii și Nota d
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "Da, sunt de acord cu %{terms} și %{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr "Termenii"
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
-msgstr "Nota de informare privind protecția datelor"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"

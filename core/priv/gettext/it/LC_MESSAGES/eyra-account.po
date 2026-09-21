@@ -168,14 +168,6 @@ msgid "onboarding.continue.button"
 msgstr "Continua"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "onboarding.profile.title"
-msgstr "Completa il tuo profilo"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
-msgstr "Benvenuto"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Link non valido o scaduto"
 
@@ -238,14 +230,6 @@ msgstr "Devi accettare i nostri Termini. Consulta i Termini e l'Informativa sull
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "Sì, accetto i %{terms} e l'%{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr "Termini"
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
-msgstr "Informativa sulla privacy"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"

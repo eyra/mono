@@ -92,7 +92,3 @@ msgstr ""
 
 msgid "must be equal to %{number}"
 msgstr ""
-
-## From Systems.Account.FeaturesModel.validate_birth_year/3
-msgid "Enter a year of birth between %{min_year} and %{max_year}."
-msgstr ""

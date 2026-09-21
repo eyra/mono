@@ -167,14 +167,6 @@ msgid "onboarding.continue.button"
 msgstr "Continue"
 
 #, elixir-autogen, elixir-format
-msgid "onboarding.profile.title"
-msgstr "Complete your profile"
-
-#, elixir-autogen, elixir-format
-msgid "onboarding.activate_account.hero.title"
-msgstr "Welcome"
-
-#, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"
 msgstr "Invalid or expired link"
 
@@ -237,14 +229,6 @@ msgstr "We need you to agree to our Terms. View the Terms and Privacy Statement 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms"
 msgstr "Yes, I agree to the %{terms} and %{privacy}."
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.terms_link"
-msgstr "Terms"
-
-#, elixir-autogen, elixir-format
-msgid "terms_and_privacy.onboarding.privacy_link"
-msgstr "Privacy Statement"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "terms_and_privacy.onboarding.terms.required"
