@@ -101,7 +101,7 @@ msgstr "Menú"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
-msgstr "No se ha guardado, por favor recargue e inténtelo de nuevo"
+msgstr "No se ha guardado. Recarga la página e inténtalo de nuevo."
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "mailto.button"

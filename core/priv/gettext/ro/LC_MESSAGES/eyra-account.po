@@ -62,7 +62,7 @@ msgstr "Selectați imaginea"
 
 #, elixir-autogen, elixir-format
 msgid "choose.other.profile.photo.file"
-msgstr "Schimbă"
+msgstr "Schimbați"
 
 #, elixir-autogen, elixir-format
 msgid "professionaltitle.label"
@@ -74,11 +74,11 @@ msgstr "Pentru a obține credite pentru participarea la cercetare (OP / RPR) pen
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "features.description"
-msgstr "Câteva studii utilizează cerințe specifice de eligibilitate. Selectând caracteristicile opționale de mai jos, puteți participa la studii care specifică caracteristicile dvs. ca cerințe."
+msgstr "Unele studii din Panl caută participanți cu anumite caracteristici. Cu aceste informații, vă putem arăta studii care vi se potrivesc. Nu doriți? Continuați."
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
-msgstr "Sex"
+msgstr "Gen"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "features.title"
@@ -174,11 +174,7 @@ msgstr "Profil"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.continue.button"
-msgstr "Continuă"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "onboarding.hero.title"
-msgstr "Bun venit"
+msgstr "Continuați"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
@@ -238,11 +234,11 @@ msgstr "Pe cine doriți să adăugați?"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
-msgstr "V-ați conectat acum cu contul instituțional. Înainte de a continua, vă rugăm să examinați Termenii și Declarația de confidențialitate."
+msgstr "Trebuie să acceptați Termenii noștri. Consultați Termenii și Nota de informare privind protecția datelor folosind linkurile de mai jos."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
-msgstr "Sunt de acord cu %{terms} și %{privacy}."
+msgstr "Da, sunt de acord cu %{terms} și %{privacy}."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
@@ -250,7 +246,7 @@ msgstr "Vă rugăm să acceptați termenii și declarația de confidențialitate
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
-msgstr "Bun venit"
+msgstr "Creați un cont"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
@@ -262,31 +258,31 @@ msgstr "Cod incorect. Te rugăm să încerci din nou."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr "Prea multe încercări incorecte. Te rugăm să soliciți un cod nou."
+msgstr "Ați introdus de prea multe ori un cod incorect. Introduceți din nou adresa de e-mail."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Verifică emailul"
+msgstr "Introduceți codul"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
-msgstr "Continuă"
+msgstr "Continuați"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.invalid"
-msgstr "Te rugăm să introduci o adresă de email validă."
+msgstr "Introduceți o adresă de e-mail validă."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Să începem"
+msgstr "Începeți cu e-mailul"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
-msgstr "tu@example.com"
+msgstr "nume@exemplu.com"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
-msgstr "Prea multe solicitări. Încearcă din nou într-un moment."
+msgstr "Ați solicitat un cod de prea multe ori. Așteptați puțin și încercați din nou."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
@@ -402,7 +398,7 @@ msgstr "Verifică contul bancar"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "Ți-am trimis un cod"
+msgstr "Verificați e-mailul pentru cod. Aveți nevoie de ajutor? Scrieți la support@eyra.co."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"

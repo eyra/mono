@@ -108,11 +108,11 @@ msgstr "Continue"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr "You are about to join the %{pool_name} pool. As a member, you will be able to apply for research studies and earn rewards."
+msgstr "%{pool_name} brings citizens and science closer together. As a member, you can take part in research studies and receive compensation for your participation."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
-msgstr "Join %{pool_name}"
+msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
 msgid "already_member.home.button"
@@ -124,7 +124,7 @@ msgstr "You already joined %{pool_name}"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Join pool"
+msgstr "Sign up"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"

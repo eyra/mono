@@ -105,15 +105,15 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.accept.button"
-msgstr "Continuă"
+msgstr "Continuați"
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.body"
-msgstr "Ești pe cale să te alături grupului %{pool_name}. Ca membru, vei putea aplica la studii de cercetare și vei putea câștiga recompense."
+msgstr "%{pool_name} apropie cetățenii de știință. În calitate de membru, puteți participa la studii de cercetare și puteți primi o compensație pentru participare."
 
 #, elixir-autogen, elixir-format
 msgid "join_consent.title"
-msgstr ""
+msgstr "Înscrieți-vă"
 
 #, elixir-autogen, elixir-format
 msgid "already_member.home.button"
@@ -125,7 +125,7 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Alătură-te grupului"
+msgstr "Înscrieți-vă"
 
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"

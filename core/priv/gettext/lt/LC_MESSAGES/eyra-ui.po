@@ -110,7 +110,7 @@ msgstr "Meniu"
 
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "persister.error.flash"
-msgstr "Nesauge, prašome perkrauti ir bandyti dar kartą"
+msgstr "Neišsaugota. Įkelkite puslapį iš naujo ir bandykite vėl."
 
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "mailto.button"

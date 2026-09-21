@@ -30,7 +30,7 @@ msgstr "El. paštas"
 
 #, elixir-autogen, elixir-format
 msgid "fullname.label"
-msgstr "Pilnas vardas"
+msgstr "Vardas ir pavardė"
 
 #, elixir-autogen, elixir-format
 msgid "password.label"
@@ -74,7 +74,7 @@ msgstr "Norėdami gauti kreditų už dalyvavimą moksliniuose tyrimuose (OP / RP
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "features.description"
-msgstr "Keletas tyrimų naudoja konkrečius tinkamumo reikalavimus. Pasirinkdami žemiau pateiktas pasirinktines charakteristikas, galėsite dalyvauti tyrimuose, kuriuose jūsų charakteristikos yra nurodomos kaip reikalavimai."
+msgstr "Kai kuriems Panl tyrimams ieškoma dalyvių, turinčių tam tikrų savybių. Pateikę šiuos duomenis galėsite matyti jums tinkamus tyrimus. Nenorite? Tiesiog tęskite."
 
 #, elixir-autogen, elixir-format
 msgid "features.gender.title"
@@ -177,10 +177,6 @@ msgid "onboarding.continue.button"
 msgstr "Tęsti"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "onboarding.hero.title"
-msgstr "Sveiki"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Žetonas neteisingas arba pasibaigęs"
 
@@ -238,11 +234,11 @@ msgstr "Ką norite pridėti?"
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.body"
-msgstr "Dabar esate prisijungę naudodami savo institucinę paskyrą. Prieš tęsdami, peržiūrėkite Sąlygas ir Privatumo politiką."
+msgstr "Turite sutikti su mūsų sąlygomis. Sąlygas ir privatumo pranešimą galite peržiūrėti naudodami toliau pateiktas nuorodas."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms"
-msgstr "Sutinku su %{terms} ir %{privacy}."
+msgstr "Taip, sutinku su %{terms} ir %{privacy}."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.terms.required"
@@ -250,7 +246,7 @@ msgstr "Norėdami tęsti, sutikite su sąlygomis ir privatumo politika."
 
 #, elixir-autogen, elixir-format
 msgid "terms_and_privacy.onboarding.title"
-msgstr "Sveiki"
+msgstr "Sukurkite paskyrą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.expired"
@@ -262,11 +258,11 @@ msgstr "Neteisingas kodas. Bandykite dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.max_attempts"
-msgstr "Per daug neteisingų bandymų. Prašykite naujo kodo."
+msgstr "Per daug kartų įvestas neteisingas kodas. Dar kartą įveskite el. pašto adresą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.title"
-msgstr "Patvirtinti el. paštą"
+msgstr "Įveskite kodą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.continue.button"
@@ -278,15 +274,15 @@ msgstr "Įveskite galiojantį el. pašto adresą."
 
 #, elixir-autogen, elixir-format
 msgid "auth.title"
-msgstr "Pradėkime"
+msgstr "Įveskite el. pašto adresą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.placeholder"
-msgstr "tu@example.com"
+msgstr "vardas@pavyzdys.com"
 
 #, elixir-autogen, elixir-format
 msgid "auth.email.rate_limited"
-msgstr "Per daug užklausų. Pabandykite dar kartą po akimirkos."
+msgstr "Kodas buvo užsakytas per daug kartų. Šiek tiek palaukite ir bandykite dar kartą."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.bank.button.add"
@@ -402,7 +398,7 @@ msgstr "Patvirtinti banko sąskaitą"
 
 #, elixir-autogen, elixir-format
 msgid "auth.code.body"
-msgstr "Išsiuntėme tau kodą"
+msgstr "Patikrinkite el. paštą – ten rasite kodą. Reikia pagalbos? Rašykite support@eyra.co."
 
 #, elixir-autogen, elixir-format
 msgid "payouts.phone.error.rejected"
