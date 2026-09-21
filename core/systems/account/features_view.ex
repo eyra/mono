@@ -59,7 +59,7 @@ defmodule Systems.Account.FeaturesView do
 
       {:error, changeset} ->
         socket
-        |> assign_vm_field(:changeset, Map.put(changeset, :action, :validate))
+        |> assign_vm_field(:changeset, changeset)
         |> Flash.push_error(dgettext("eyra-ui", "persister.error.flash"))
     end
   end
