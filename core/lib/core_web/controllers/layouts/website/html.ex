@@ -38,10 +38,10 @@ defmodule CoreWeb.Layouts.Website.Html do
           </div>
           <div class="bg-grey5 lg:px-16">
             <div id="main-content" class="flex flex-col w-full h-viewport lg:max-w-[1536px] lg:mx-auto">
-              <div class="flex-wrap lg:hidden">
+              <div class="flex-wrap lg:hidden native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <div class="flex-wrap hidden lg:flex">
+              <div class="flex-wrap hidden lg:flex native:!hidden">
                 <Navigation.desktop_navbar {@menus.desktop_navbar} />
               </div>
               <div class="flex-1 lg:relative lg:z-10">
@@ -60,12 +60,12 @@ defmodule CoreWeb.Layouts.Website.Html do
                       <% end %>
                     </div>
                   </div>
-                  <div class="bg-white">
+                  <div class="bg-white native:hidden">
                     <.content_footer />
                   </div>
                 </div>
               </div>
-              <div class="bg-grey5">
+              <div class="bg-grey5 native:hidden">
                 <.platform_footer />
               </div>
             </div>

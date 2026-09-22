@@ -34,18 +34,18 @@ defmodule CoreWeb.Layouts.Workspace.Html do
         <Navigation.mobile_menu {@menus.mobile_menu} />
       </div>
       <div class="fixed full w-full h-full flex flex-row" >
-        <div class="h-full">
+        <div class="h-full native:hidden">
           <Navigation.tablet_menu {@menus.tablet_menu} />
           <Navigation.desktop_menu {@menus.desktop_menu} />
         </div>
         <div class="w-full h-full min-w-0">
           <div class="h-full w-full overflow-hidden">
             <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll">
-              <div class="flex-wrap">
+              <div class="flex-wrap native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <div class="flex-1 pt-0 md:pt-10">
-                <div class="flex flex-col h-full md:border-t md:border-l md:border-b border-grey4 bg-white">
+              <div class="flex-1 pt-0 md:pt-10 native:pt-0">
+                <div class="flex flex-col h-full md:border-t md:border-l md:border-b border-grey4 bg-white native:border-0">
                   <div class="flex-1">
                     <div class="flex flex-col h-full w-full">
                       <%= if @title do %>
@@ -65,13 +65,13 @@ defmodule CoreWeb.Layouts.Workspace.Html do
                     </div>
                   </div>
                   <%= if @footer do %>
-                    <div class="flex-none">
+                    <div class="flex-none native:hidden">
                       <.content_footer />
                     </div>
                   <% end %>
                 </div>
               </div>
-              <div class="bg-grey5">
+              <div class="bg-grey5 native:hidden">
                 <.platform_footer />
               </div>
             </div>

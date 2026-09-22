@@ -52,7 +52,9 @@ defmodule Systems.Home.Page do
     ~H"""
     <.live_website include_right_sidepadding?={@vm.include_right_sidepadding?} user={@current_user} user_agent={Browser.Ua.to_ua(@socket)} menus={@menus} modal={@modal} socket={@socket}>
       <:hero>
-        <Hero.dynamic {@vm.hero} />
+        <div class="native:hidden">
+          <Hero.dynamic {@vm.hero} />
+        </div>
       </:hero>
       <div data-testid="home-page">
         <.child name={:home_view} fabric={@fabric} />
