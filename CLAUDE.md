@@ -1,3 +1,7 @@
+## Translation guidance
+
+Use the [translating](.agents/skills/translating/SKILL.md) skill while developing code that adds or changes participant-facing copy, including Gettext translations.
+
 ## Learnings
 
 ### Bcrypt hash escaping over SSH
