@@ -44,8 +44,8 @@ defmodule CoreWeb.Layouts.Workspace.Html do
               <div class="flex-wrap native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <div class="flex-1 pt-0 md:pt-10">
-                <div class="flex flex-col h-full md:border-t md:border-l md:border-b border-grey4 bg-white">
+              <div class="flex-1 pt-0 md:pt-10 native:pt-0">
+                <div class="flex flex-col h-full md:border-t md:border-l md:border-b border-grey4 bg-white native:border-0">
                   <div class="flex-1">
                     <div class="flex flex-col h-full w-full">
                       <%= if @title do %>
