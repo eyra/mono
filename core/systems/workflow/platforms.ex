@@ -10,6 +10,7 @@ defmodule Systems.Workflow.Platforms do
       {:platforms,
        [
          :apple,
+         :chatgpt,
          :facebook,
          :google,
          :instagram,
