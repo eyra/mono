@@ -275,6 +275,10 @@ msgid "platforms.apple"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "platforms.chatgpt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "platforms.samsung"
 msgstr ""
 

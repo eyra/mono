@@ -274,6 +274,10 @@ msgstr "Data donation"
 msgid "platforms.apple"
 msgstr "Apple"
 
+#, elixir-autogen, elixir-format
+msgid "platforms.chatgpt"
+msgstr "ChatGPT"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platforms.samsung"
 msgstr "Samsung"
