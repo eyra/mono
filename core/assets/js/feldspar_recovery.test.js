@@ -161,6 +161,106 @@ describe("Feldspar tab recovery", () => {
     expect(returned.el.querySelector("iframe")).toBeNull();
   });
 
+  it("rechecks recovery on reconnect before an explicit first start", async () => {
+    const hook = await mount();
+    hook.pushEvent.mockClear();
+    hook.disconnected();
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+    expect(fetch).not.toHaveBeenCalled();
+    const attemptId = await start(hook);
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, attemptId))
+    ).not.toBeNull();
+  });
+
+  it("recovers its retained attempt on reconnect without restarting or retiring a sibling", async () => {
+    const sibling = await mount();
+    const siblingId = await start(sibling);
+    const hook = await mount();
+    const interruptedId = await start(hook);
+    const interruptedKey = markerKey(SCOPE, interruptedId);
+    hook.pushEvent.mockClear();
+    hook.disconnected();
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: true }],
+    ]);
+    expect(window.localStorage.getItem(interruptedKey)).not.toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
+    const retryId = await start(hook);
+    expect(retryId).not.toBe(interruptedId);
+    expect(window.localStorage.getItem(interruptedKey)).toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, siblingId))
+    ).not.toBeNull();
+    await navigator.locks.request(
+      markerKey(SCOPE, siblingId),
+      { ifAvailable: true },
+      (lock) => expect(lock).toBeNull()
+    );
+  });
+
+  it("retires only its own reconnected attempt when Web Locks are unavailable", async () => {
+    vi.stubGlobal("navigator", {});
+    const siblingKey = seed();
+    const hook = await mount();
+    const interruptedId = await start(hook);
+    hook.disconnected();
+    await hook.reconnected();
+    hook.disconnected();
+    await hook.reconnected();
+    const retryId = await start(hook);
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, interruptedId))
+    ).toBeNull();
+    expect(window.localStorage.getItem(siblingKey)).not.toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+  });
+
+  it("discards a recovery scan interrupted by disconnect", async () => {
+    const key = seed();
+    const hook = await mount();
+    const lock = deferred();
+    vi.spyOn(navigator.locks, "request").mockImplementationOnce(
+      async (_name, _options, callback) => {
+        await lock.promise;
+        return callback({});
+      }
+    );
+    hook.pushEvent.mockClear();
+    const staleCheck = hook.checkRecovery();
+    hook.disconnected();
+    window.localStorage.removeItem(key);
+    await hook.reconnected();
+    lock.resolve();
+    await staleCheck;
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+  });
+
+  it("lets completion override a retained attempt on reconnect", async () => {
+    const hook = await mount();
+    const attemptId = await start(hook);
+    hook.disconnected();
+    hook.el.dataset.completed = "true";
+    hook.pushEvent.mockClear();
+    await hook.reconnected();
+    await hook.events.get("feldspar:prepare")({ id: hook.el.id });
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+    expect(window.localStorage.getItem(markerKey(SCOPE, attemptId))).toBeNull();
+  });
+
   it("still starts explicitly when browser storage is denied", async () => {
     vi.spyOn(window, "localStorage", "get").mockImplementation(() => {
       throw new DOMException("Storage denied", "SecurityError");
@@ -314,6 +414,7 @@ describe("Feldspar tab recovery", () => {
     app.donations.add();
     const exiting = app.waitForDonationsAndExit({
       __type__: "CommandSystemExit",
+      code: 0,
     });
     expect(app.pushEvent).not.toHaveBeenCalled();
     expect(window.localStorage.getItem(key)).not.toBeNull();
@@ -321,11 +422,36 @@ describe("Feldspar tab recovery", () => {
     await Promise.resolve();
     expect(app.pushEvent).toHaveBeenCalledWith("feldspar_event", {
       __type__: "CommandSystemExit",
+      code: 0,
     });
     expect(window.localStorage.getItem(key)).not.toBeNull();
     ack.resolve({});
     await exiting;
     expect(window.localStorage.getItem(key)).toBeNull();
+  });
+
+  it("retains unfinished recovery after an acknowledged abnormal exit", async () => {
+    const hook = await mount();
+    const attemptId = await start(hook);
+    const key = markerKey(SCOPE, attemptId);
+    const marker = window.localStorage.getItem(key);
+    const app = mountApp(hook, attemptId);
+    const terminal = vi.fn();
+    hook.el.addEventListener("feldspar:terminal", terminal);
+    await app.waitForDonationsAndExit({
+      __type__: "CommandSystemExit",
+      code: 1,
+      info: "Processing failed",
+    });
+    expect(window.localStorage.getItem(key)).toBe(marker);
+    expect(terminal).not.toHaveBeenCalled();
+    app.destroyed();
+    hook.destroyed();
+    hook.el.remove();
+    const returned = await mount();
+    expect(returned.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: true }],
+    ]);
   });
 
   it("retains recovery after successful upload if the tab disappears before exit", async () => {
@@ -365,6 +491,7 @@ describe("Feldspar tab recovery", () => {
     );
     const exiting = app.waitForDonationsAndExit({
       __type__: "CommandSystemExit",
+      code: 0,
     });
     app.destroyed();
     hook.destroyed();
@@ -388,6 +515,7 @@ describe("Feldspar tab recovery", () => {
     );
     const exiting = app.waitForDonationsAndExit({
       __type__: "CommandSystemExit",
+      code: 0,
     });
     closeModal(hook);
     const retryId = await start(hook);

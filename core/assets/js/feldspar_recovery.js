@@ -127,17 +127,36 @@ export const FeldsparRecovery = {
     return this.checking;
   },
 
-  async checkRecovery() {
+  disconnected() {
+    this.generation++;
+    this.starting = false;
+  },
+
+  reconnected() {
+    this.generation++;
+    this.starting = false;
+    const interruptedAttemptId =
+      this.attempt?.attempt_id ||
+      this.recoveredAttempts.find((attempt) => attempt.owned)?.attempt_id;
+    this.releaseOwnedAttempt();
+    this.checking = this.checkRecovery(interruptedAttemptId);
+    return this.checking;
+  },
+
+  async checkRecovery(interruptedAttemptId) {
+    const generation = this.generation;
     const candidates =
       this.el.dataset.completed === "true" ? [] : storedAttempts(this.scope);
     const checked = await Promise.all(
       candidates.map((attempt) =>
-        withAttemptLock(attempt.key, (available) =>
-          available === false ? null : attempt
-        )
+        attempt.attempt_id === interruptedAttemptId
+          ? { ...attempt, owned: true }
+          : withAttemptLock(attempt.key, (available) =>
+              available === false ? null : attempt
+            )
       )
     );
-    if (this.disposed) return;
+    if (this.disposed || generation !== this.generation) return;
     if (this.el.dataset.completed === "true") {
       this.clearCompletedScope();
     } else {
@@ -145,7 +164,9 @@ export const FeldsparRecovery = {
     }
     try {
       await this.pushEvent("feldspar_recovery_checked", {
-        unfinished: this.recoveredAttempts.length > 0,
+        unfinished:
+          this.el.dataset.completed !== "true" &&
+          (Boolean(interruptedAttemptId) || this.recoveredAttempts.length > 0),
       });
     } catch {
       // A disconnected LiveView must not affect the persisted attempt.
@@ -156,8 +177,9 @@ export const FeldsparRecovery = {
     await Promise.all(
       attempts.map((attempt) =>
         withAttemptLock(attempt.key, (available) => {
-          // Without locks, another tab might own this marker. Preserve it.
-          if (available === true) removeKey(attempt.key, attempt.value);
+          // Only our own interrupted marker is safe to retire without Web Locks.
+          if (available === true || (available === null && attempt.owned))
+            removeKey(attempt.key, attempt.value);
         })
       )
     );
@@ -220,12 +242,16 @@ export const FeldsparRecovery = {
     } catch {
       // Retain the marker if LiveView disconnects while starting.
     } finally {
-      this.starting = false;
+      if (generation === this.generation) this.starting = false;
     }
   },
 
   clearOwnedAttempt() {
     if (this.attempt) clearFeldsparAttempt(this.scope, this.attempt.attempt_id);
+    this.releaseOwnedAttempt();
+  },
+
+  releaseOwnedAttempt() {
     this.attempt = null;
     this.releaseLock?.();
     this.releaseLock = null;

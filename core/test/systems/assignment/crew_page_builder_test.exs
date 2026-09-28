@@ -72,6 +72,38 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assert view.implementation == Assignment.FinishedView
     end
 
+    test "Back keeps a completed single task in the finished flow", %{
+      assignment: assignment,
+      user: user
+    } do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      mark_intro_visited(assignment, user)
+      task = finish_all_tasks(assignment, user)
+
+      assigns =
+        build_assigns(user, %{view: %{implementation: Assignment.FinishedView}, action: :retry})
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.FinishedView
+      unchanged_task = Repo.get!(Crew.TaskModel, task.id)
+      assert unchanged_task.status == :completed
+      assert unchanged_task.completed_at == task.completed_at
+      assert unchanged_task.updated_at == task.updated_at
+    end
+
+    test "Back still opens an unfinished single task", %{assignment: assignment, user: user} do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      mark_intro_visited(assignment, user)
+
+      assigns =
+        build_assigns(user, %{view: %{implementation: Assignment.FinishedView}, action: :retry})
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert view.implementation == Assignment.CrewWorkView
+    end
+
     test "shows participation view after rejected contribution and member expiry", %{
       assignment: assignment,
       user: user
@@ -120,7 +152,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
 
       # Simulate retry from finished view by including previous view in assigns
       previous_view = %{implementation: Assignment.FinishedView}
-      assigns = build_assigns(user, %{view: previous_view})
+      assigns = build_assigns(user, %{view: previous_view, action: :retry})
 
       %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
 

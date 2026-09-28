@@ -139,13 +139,15 @@ export const FeldsparApp = {
 
     try {
       await this.pushEvent("feldspar_event", data);
-      clearFeldsparAttempt(this.recoveryScope, this.attemptId);
-      this.recoveryRoot?.dispatchEvent(
-        new CustomEvent("feldspar:terminal", {
-          bubbles: true,
-          detail: { attempt_id: this.attemptId },
-        })
-      );
+      if (data.code === 0) {
+        clearFeldsparAttempt(this.recoveryScope, this.attemptId);
+        this.recoveryRoot?.dispatchEvent(
+          new CustomEvent("feldspar:terminal", {
+            bubbles: true,
+            detail: { attempt_id: this.attemptId },
+          })
+        );
+      }
       console.log("[Feldspar] Exit event sent");
       sendLog("info", "Exit event sent", this.getLogContext());
     } catch (error) {
