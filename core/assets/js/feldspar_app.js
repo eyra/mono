@@ -40,19 +40,19 @@ export const FeldsparApp = {
     return this.el.querySelector("iframe");
   },
 
-  setupChannel({ fromEvent }) {
-    // The legacy loading event could cause the channel to be set up twice.
-    if (fromEvent === "onload" && this.channel) {
-      return;
+  setupChannel() {
+    // Both startup signals may fire for one iframe; keep the first channel.
+    if (this.channel) {
+      return false;
     }
     this.channel = new MessageChannel();
     this.channel.port1.onmessage = (e) => {
       this.handleMessage(e);
     };
+    return true;
   },
 
   onAppLoaded({ fromEvent }) {
-    this.setupChannel({ fromEvent });
     let action = "live-init";
     let locale = this.el.dataset.locale;
 
@@ -63,6 +63,7 @@ export const FeldsparApp = {
     if (fromEvent === "app-loaded" && (!iframe || !iframe.contentWindow)) {
       return;
     }
+    if (!this.setupChannel()) return;
 
     iframe.contentWindow.postMessage({ action, locale }, "*", [
       this.channel.port2,
