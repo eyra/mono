@@ -217,13 +217,15 @@ export const FeldsparApp = {
       // LiveView's exit diff may already have destroyed this hook. The captured
       // attempt can still be cleared, unless cancellation/replacement fenced it.
       if (!session.allowExitAcknowledgment) return;
-      clearFeldsparAttempt(this.recoveryScope, this.attemptId);
-      this.recoveryRoot?.dispatchEvent(
-        new CustomEvent("feldspar:terminal", {
-          bubbles: true,
-          detail: { attempt_id: this.attemptId },
-        })
-      );
+      if (data.code === 0) {
+        clearFeldsparAttempt(this.recoveryScope, this.attemptId);
+        this.recoveryRoot?.dispatchEvent(
+          new CustomEvent("feldspar:terminal", {
+            bubbles: true,
+            detail: { attempt_id: this.attemptId },
+          })
+        );
+      }
       console.log("[Feldspar] Exit event sent");
       sendLog("info", "Exit event sent", this.getLogContext());
     } catch (error) {
