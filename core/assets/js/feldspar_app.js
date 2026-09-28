@@ -1,5 +1,6 @@
 import { WaitGroup } from "./wait_group";
-import { clearFeldsparAttempt } from "./feldspar_recovery";
+import { clearFeldsparAttempt, isFeldsparAttemptId } from "./feldspar_recovery";
+import { FeldsparLiveness } from "./feldspar_liveness";
 
 // Send logs to server for AppSignal
 function sendLog(level, message, context = {}) {
@@ -14,11 +15,16 @@ function sendLog(level, message, context = {}) {
 
 export const FeldsparApp = {
   mounted() {
-    this.donations = new WaitGroup();
     this.isDestroyed = false;
+    this.isStopped = false;
     this.recoveryRoot = this.el.closest('[phx-hook="FeldsparRecovery"]');
     this.recoveryScope = this.recoveryRoot?.dataset.recoveryScope;
     this.attemptId = this.el.dataset.attemptId;
+    this.cancelListener = (event) => {
+      if (event.detail?.attempt_id !== this.attemptId) return;
+      this.stopAttempt();
+    };
+    this.recoveryRoot?.addEventListener("feldspar:cancel", this.cancelListener);
     const iframe = this.getIframe();
 
     // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
@@ -31,13 +37,17 @@ export const FeldsparApp = {
 
     iframe.setAttribute("src", this.el.dataset.src);
 
-    const onAppLoaded = this.onAppLoaded.bind(this);
-    this.messageListener = function (event) {
-      if (event.source !== iframe.contentWindow || !event.data) return;
+    this.messageListener = (event) => {
+      if (
+        this.isStopped ||
+        event.source !== iframe.contentWindow ||
+        !event.data
+      )
+        return;
       if (event.data.action === "resize") {
         iframe.setAttribute("style", `height:${event.data.height}px`);
       } else if (event.data.action === "app-loaded") {
-        onAppLoaded({ fromEvent: "app-loaded" });
+        this.onAppLoaded({ fromEvent: "app-loaded" });
       }
     };
     window.addEventListener("message", this.messageListener);
@@ -45,18 +55,49 @@ export const FeldsparApp = {
 
   destroyed() {
     this.isDestroyed = true;
-    this.getIframe()?.removeEventListener("load", this.loadListener);
-    window.removeEventListener("message", this.messageListener);
+    this.removeListeners();
+    this.closeChannel({ preserveExitAcknowledgment: true });
+  },
+
+  stopAttempt() {
+    this.isStopped = true;
+    this.removeListeners();
     this.closeChannel();
   },
 
-  closeChannel() {
+  removeListeners() {
+    this.getIframe()?.removeEventListener("load", this.loadListener);
+    window.removeEventListener("message", this.messageListener);
+    this.recoveryRoot?.removeEventListener(
+      "feldspar:cancel",
+      this.cancelListener
+    );
+  },
+
+  closeChannel({ preserveExitAcknowledgment = false } = {}) {
+    if (this.session) {
+      this.session.active = false;
+      if (!preserveExitAcknowledgment)
+        this.session.allowExitAcknowledgment = false;
+      this.session.monitor?.stop();
+      this.session = null;
+    }
     if (this.channel) {
       this.channel.port1.onmessage = null;
       this.channel.port1.close();
       this.channel.port2.close();
       this.channel = null;
     }
+  },
+
+  isCurrentSession(session) {
+    return !this.isDestroyed && session?.active && this.session === session;
+  },
+
+  eventPayload(data) {
+    const { attempt_id: _untrustedAttempt, ...payload } = data;
+    if (this.attemptId) payload.attempt_id = this.attemptId;
+    return payload;
   },
 
   getIframe() {
@@ -69,15 +110,41 @@ export const FeldsparApp = {
       return false;
     }
     this.closeChannel();
-    this.channel = new MessageChannel();
-    this.channel.port1.onmessage = (e) => {
-      this.handleMessage(e);
+    const channel = new MessageChannel();
+    const session = {
+      channel,
+      donations: new WaitGroup(),
+      active: true,
+      exited: false,
+      allowExitAcknowledgment: true,
     };
+    this.channel = channel;
+    this.session = session;
+    if (this.recoveryScope && isFeldsparAttemptId(this.attemptId)) {
+      session.monitor = new FeldsparLiveness(
+        this.attemptId,
+        (message) => {
+          if (this.isCurrentSession(session))
+            channel.port1.postMessage(message);
+        },
+        () => {
+          if (!this.isCurrentSession(session)) return;
+          this.stopAttempt();
+          this.recoveryRoot.dispatchEvent(
+            new CustomEvent("feldspar:unresponsive", {
+              bubbles: true,
+              detail: { attempt_id: this.attemptId },
+            })
+          );
+        }
+      );
+    }
+    channel.port1.onmessage = (event) => this.handleMessage(event, session);
     return true;
   },
 
   onAppLoaded({ fromEvent }) {
-    if (this.isDestroyed) return;
+    if (this.isDestroyed || this.isStopped || this.session?.exited) return;
     let action = "live-init";
     let locale = this.el.dataset.locale;
 
@@ -90,27 +157,35 @@ export const FeldsparApp = {
     }
     if (!this.setupChannel({ fromEvent })) return;
 
-    iframe.contentWindow.postMessage({ action, locale }, "*", [
-      this.channel.port2,
-    ]);
+    const payload = { action, locale };
+    if (this.session.monitor) payload.liveness = { attempt_id: this.attemptId };
+    iframe.contentWindow.postMessage(payload, "*", [this.channel.port2]);
   },
 
-  async handleMessage(e) {
-    const type = e.data.__type__;
+  async handleMessage(event, session = this.session) {
+    if (!this.isCurrentSession(session) || session.exited) return;
+    const data = event.data;
+    if (!data || typeof data !== "object") return;
+    const type = data.__type__;
 
-    if (type === "CommandSystemLog") {
-      // Handle log messages via HTTP POST to AppSignal
-      this.handleLogCommand(e.data);
+    if (typeof type === "string" && type.startsWith("Liveness")) {
+      session.monitor?.receive(data);
+    } else if (type === "CommandSystemLog") {
+      // Handle log messages via HTTP POST to AppSignal.
+      this.handleLogCommand(data);
     } else if (type === "CommandSystemDonate") {
-      // Handle large data donations via HTTP POST instead of WebSocket
-      await this.donate_via_api(e.data);
+      // Handle large data donations via HTTP POST instead of WebSocket.
+      await this.donate_via_api(data, session);
     } else if (type === "CommandSystemExit") {
-      // Wait for pending donations before exiting
-      await this.waitForDonationsAndExit(e.data);
+      // Exit is terminal for monitoring even while uploads are still pending.
+      session.exited = true;
+      session.monitor?.stop();
+      await this.waitForDonationsAndExit(data, session);
     } else {
-      // All other events pass through to LiveView
+      if (type === "CommandSystemEvent" && data.name === "initialized")
+        session.monitor?.initialized();
       try {
-        this.pushEvent("feldspar_event", e.data);
+        this.pushEvent("feldspar_event", this.eventPayload(data));
       } catch (error) {
         console.warn(
           "[Feldspar] Could not push event (LiveView disconnected):",
@@ -120,25 +195,28 @@ export const FeldsparApp = {
     }
   },
 
-  async waitForDonationsAndExit(data) {
-    if (this.donations.count > 0) {
+  async waitForDonationsAndExit(data, session) {
+    if (session.donations.count > 0) {
       console.log(
-        `[Feldspar] Exit requested, waiting for ${this.donations.count} pending donations...`
+        `[Feldspar] Exit requested, waiting for ${session.donations.count} pending donations...`
       );
       sendLog(
         "info",
-        `Exit waiting for ${this.donations.count} donations`,
+        `Exit waiting for ${session.donations.count} donations`,
         this.getLogContext()
       );
 
-      await this.donations.wait();
+      await session.donations.wait();
 
       console.log("[Feldspar] All donations completed, proceeding with exit");
     }
-    if (this.isDestroyed) return;
+    if (!this.isCurrentSession(session)) return;
 
     try {
-      await this.pushEvent("feldspar_event", data);
+      await this.pushEvent("feldspar_event", this.eventPayload(data));
+      // LiveView's exit diff may already have destroyed this hook. The captured
+      // attempt can still be cleared, unless cancellation/replacement fenced it.
+      if (!session.allowExitAcknowledgment) return;
       clearFeldsparAttempt(this.recoveryScope, this.attemptId);
       this.recoveryRoot?.dispatchEvent(
         new CustomEvent("feldspar:terminal", {
@@ -184,17 +262,17 @@ export const FeldsparApp = {
   // - DonateSuccess: { __type__: "DonateSuccess", key: string, status: number }
   // - DonateError: { __type__: "DonateError", key: string, status: number, error: string }
   //   Note: status=0 indicates a network error (offline, timeout, CORS, etc.)
-  async donate_via_api(data) {
-    this.donations.add();
+  async donate_via_api(data, session) {
+    session.donations.add();
 
     try {
-      await this._performDonation(data);
+      await this._performDonation(data, session);
     } finally {
-      this.donations.done();
+      session.donations.done();
     }
   },
 
-  async _performDonation(data) {
+  async _performDonation(data, session) {
     const formData = new FormData();
     formData.append("key", data.key);
     formData.append("context", this.el.dataset.uploadContext || "{}");
@@ -224,12 +302,15 @@ export const FeldsparApp = {
       // Network error (offline, timeout, etc.)
       console.error("[Feldspar] Donate network error:", error.message);
       sendLog("error", `Donate network error: ${error.message}`, logContext);
-      this.sendDonateResponse({
-        __type__: "DonateError",
-        key: data.key,
-        status: 0,
-        error: `Network error: ${error.message}`,
-      });
+      this.sendDonateResponse(
+        {
+          __type__: "DonateError",
+          key: data.key,
+          status: 0,
+          error: `Network error: ${error.message}`,
+        },
+        session
+      );
       return;
     }
 
@@ -245,11 +326,14 @@ export const FeldsparApp = {
           ...logContext,
           status: response.status,
         });
-        this.sendDonateResponse({
-          __type__: "DonateSuccess",
-          key: data.key,
-          status: response.status,
-        });
+        this.sendDonateResponse(
+          {
+            __type__: "DonateSuccess",
+            key: data.key,
+            status: response.status,
+          },
+          session
+        );
       } else {
         console.error(
           "[Feldspar] Donate failed:",
@@ -260,12 +344,15 @@ export const FeldsparApp = {
           ...logContext,
           status: response.status,
         });
-        this.sendDonateResponse({
-          __type__: "DonateError",
-          key: data.key,
-          status: response.status,
-          error: result.error || "Unknown error",
-        });
+        this.sendDonateResponse(
+          {
+            __type__: "DonateError",
+            key: data.key,
+            status: response.status,
+            error: result.error || "Unknown error",
+          },
+          session
+        );
       }
     } catch (error) {
       // JSON parse error
@@ -274,18 +361,21 @@ export const FeldsparApp = {
         ...logContext,
         status: response.status,
       });
-      this.sendDonateResponse({
-        __type__: "DonateError",
-        key: data.key,
-        status: response.status,
-        error: "Invalid response from server",
-      });
+      this.sendDonateResponse(
+        {
+          __type__: "DonateError",
+          key: data.key,
+          status: response.status,
+          error: "Invalid response from server",
+        },
+        session
+      );
     }
   },
 
-  sendDonateResponse(message) {
-    if (this.channel && this.channel.port1) {
-      this.channel.port1.postMessage(message);
+  sendDonateResponse(message, session) {
+    if (this.isCurrentSession(session)) {
+      session.channel.port1.postMessage(message);
     }
   },
 };

@@ -64,6 +64,7 @@ describe("Feldspar tab recovery", () => {
     );
     vi.spyOn(console, "log").mockImplementation(() => {});
     vi.spyOn(console, "warn").mockImplementation(() => {});
+    vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
   });
 
   afterEach(() => {
@@ -76,6 +77,7 @@ describe("Feldspar tab recovery", () => {
     document.body.innerHTML = "";
     vi.restoreAllMocks();
     vi.unstubAllGlobals();
+    vi.useRealTimers();
     window.localStorage.clear();
   });
 
@@ -138,6 +140,7 @@ describe("Feldspar tab recovery", () => {
     const app = { ...FeldsparApp, el, pushEvent };
     apps.push(app);
     app.mounted();
+    app.onAppLoaded({ fromEvent: "app-loaded" });
     return app;
   }
 
@@ -311,16 +314,17 @@ describe("Feldspar tab recovery", () => {
       attemptId,
       vi.fn(() => ack.promise)
     );
-    app.donations.add();
-    const exiting = app.waitForDonationsAndExit({
-      __type__: "CommandSystemExit",
+    app.session.donations.add();
+    const exiting = app.channel.port1.onmessage({
+      data: { __type__: "CommandSystemExit" },
     });
     expect(app.pushEvent).not.toHaveBeenCalled();
     expect(window.localStorage.getItem(key)).not.toBeNull();
-    app.donations.done();
+    app.session.donations.done();
     await Promise.resolve();
     expect(app.pushEvent).toHaveBeenCalledWith("feldspar_event", {
       __type__: "CommandSystemExit",
+      attempt_id: attemptId,
     });
     expect(window.localStorage.getItem(key)).not.toBeNull();
     ack.resolve({});
@@ -332,9 +336,12 @@ describe("Feldspar tab recovery", () => {
     const hook = await mount();
     const attemptId = await start(hook);
     const app = mountApp(hook, attemptId);
-    await app.donate_via_api({
-      key: "answer",
-      json_string: '{"private":"donation"}',
+    await app.channel.port1.onmessage({
+      data: {
+        __type__: "CommandSystemDonate",
+        key: "answer",
+        json_string: '{"private":"donation"}',
+      },
     });
     expect(fetch).toHaveBeenCalledWith(
       "/api/feldspar/donate",
@@ -363,8 +370,8 @@ describe("Feldspar tab recovery", () => {
       attemptId,
       vi.fn(() => ack.promise)
     );
-    const exiting = app.waitForDonationsAndExit({
-      __type__: "CommandSystemExit",
+    const exiting = app.channel.port1.onmessage({
+      data: { __type__: "CommandSystemExit" },
     });
     app.destroyed();
     hook.destroyed();
@@ -386,8 +393,8 @@ describe("Feldspar tab recovery", () => {
       oldId,
       vi.fn(() => ack.promise)
     );
-    const exiting = app.waitForDonationsAndExit({
-      __type__: "CommandSystemExit",
+    const exiting = app.channel.port1.onmessage({
+      data: { __type__: "CommandSystemExit" },
     });
     closeModal(hook);
     const retryId = await start(hook);
@@ -425,6 +432,154 @@ describe("Feldspar tab recovery", () => {
     expect(iframe.getAttribute("style")).toBeNull();
     expect(
       window.localStorage.getItem(markerKey(SCOPE, attemptId))
+    ).not.toBeNull();
+  });
+
+  async function enableMonitor(app) {
+    await app.channel.port1.onmessage({
+      data: {
+        __type__: "LivenessReady",
+        attempt_id: app.attemptId,
+      },
+    });
+    await app.channel.port1.onmessage({
+      data: { __type__: "CommandSystemEvent", name: "initialized" },
+    });
+  }
+
+  it("keeps a timed-out marker and releases its lock for an explicit fresh retry", async () => {
+    vi.useFakeTimers();
+    vi.spyOn(performance, "now").mockImplementation(() => Date.now());
+    const hook = await mount();
+    const oldId = await start(hook);
+    const oldKey = markerKey(SCOPE, oldId);
+    const marker = window.localStorage.getItem(oldKey);
+    const app = mountApp(hook, oldId);
+    await enableMonitor(app);
+    const queued = app.channel.port1.onmessage;
+    vi.advanceTimersByTime(30000);
+    expect(hook.pushEvent).toHaveBeenCalledWith("feldspar_unresponsive", {
+      attempt_id: oldId,
+    });
+    expect(window.localStorage.getItem(oldKey)).toBe(marker);
+    await Promise.resolve();
+    expect(navigator.locks.held.has(oldKey)).toBe(false);
+    expect(
+      hook.pushEvent.mock.calls.filter(([event]) => event === "start")
+    ).toHaveLength(1);
+    const laterKey = seed(SCOPE, LATER_ATTEMPT);
+    const retryId = await start(hook);
+    expect(retryId).not.toBe(oldId);
+    expect(window.localStorage.getItem(oldKey)).toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+    expect(window.localStorage.getItem(laterKey)).not.toBeNull();
+    await queued({ data: { __type__: "CommandSystemExit" } });
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:unresponsive", {
+        detail: { attempt_id: oldId },
+      })
+    );
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:terminal", {
+        detail: { attempt_id: oldId },
+      })
+    );
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+    expect(
+      hook.pushEvent.mock.calls.filter(
+        ([event]) => event === "feldspar_unresponsive"
+      )
+    ).toHaveLength(1);
+  });
+
+  it("retires its own timed-out snapshot without Web Locks, preserving unknown siblings", async () => {
+    vi.stubGlobal("navigator", {});
+    const siblingKey = seed();
+    const hook = await mount();
+    const oldId = await start(hook);
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:unresponsive", {
+        detail: { attempt_id: oldId },
+      })
+    );
+    const retryId = await start(hook);
+    expect(window.localStorage.getItem(markerKey(SCOPE, oldId))).toBeNull();
+    expect(window.localStorage.getItem(siblingKey)).not.toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+  });
+
+  it("clears the timed-out snapshot only on explicit cancellation, not teardown", async () => {
+    const hook = await mount();
+    const attemptId = await start(hook);
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:unresponsive", {
+        detail: { attempt_id: attemptId },
+      })
+    );
+    hook.destroyed();
+    const key = markerKey(SCOPE, attemptId);
+    expect(window.localStorage.getItem(key)).not.toBeNull();
+    const returned = await mount();
+    await returned.cancelAttempt();
+    expect(window.localStorage.getItem(key)).toBeNull();
+  });
+
+  it("ignores wrong, duplicate and completed-task timeout notifications", async () => {
+    const hook = await mount();
+    const attemptId = await start(hook);
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:unresponsive", {
+        detail: { attempt_id: LOST_ATTEMPT },
+      })
+    );
+    expect(hook.pushEvent).not.toHaveBeenCalledWith(
+      "feldspar_unresponsive",
+      expect.anything()
+    );
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, attemptId))
+    ).not.toBeNull();
+    hook.el.dataset.completed = "true";
+    hook.el.dispatchEvent(
+      new CustomEvent("feldspar:unresponsive", {
+        detail: { attempt_id: attemptId },
+      })
+    );
+    await hook.prepareStart();
+    expect(hook.pushEvent).not.toHaveBeenCalledWith(
+      "feldspar_unresponsive",
+      expect.anything()
+    );
+    expect(window.localStorage.getItem(markerKey(SCOPE, attemptId))).toBeNull();
+    expect(
+      hook.pushEvent.mock.calls.filter(([event]) => event === "start")
+    ).toHaveLength(1);
+  });
+
+  it("fences an old pending exit during explicit retry without changing the replacement marker", async () => {
+    const hook = await mount();
+    const oldId = await start(hook);
+    const app = mountApp(hook, oldId);
+    const oldSession = app.session;
+    oldSession.donations.add();
+    const exiting = app.channel.port1.onmessage({
+      data: { __type__: "CommandSystemExit" },
+    });
+    closeModal(hook);
+    const retryId = await start(hook);
+    const retryApp = mountApp(hook, retryId);
+    oldSession.donations.done();
+    await exiting;
+    expect(app.pushEvent).not.toHaveBeenCalled();
+    expect(retryApp.pushEvent).not.toHaveBeenCalled();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
     ).not.toBeNull();
   });
 });

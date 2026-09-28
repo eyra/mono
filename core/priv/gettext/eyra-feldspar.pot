@@ -68,6 +68,10 @@ msgid "recovery.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
+msgid "recovery.unresponsive.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
 msgid "recovery.description"
 msgstr ""
 

@@ -21,6 +21,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       icon: normalize_icon(icon),
       description: description(recovery?, completed?),
       recovery?: recovery? and not completed?,
+      recovery_title: recovery_title(Map.get(assigns, :recovery_reason)),
       completed?: completed?,
       recovery_id: "feldspar-recovery-#{tool.id}-#{Map.get(assigns, :task_id)}",
       recovery_scope: recovery_scope(assigns),
@@ -30,6 +31,9 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       error: error
     }
   end
+
+  defp recovery_title(:iframe), do: dgettext("eyra-feldspar", "recovery.unresponsive.title")
+  defp recovery_title(_), do: dgettext("eyra-feldspar", "recovery.title")
 
   defp description(_, true), do: dgettext("eyra-feldspar", "recovery.completed")
   defp description(true, false), do: dgettext("eyra-feldspar", "recovery.description")

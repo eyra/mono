@@ -68,6 +68,10 @@ msgid "recovery.title"
 msgstr "Ihr letzter Versuch wurde nicht abgeschlossen"
 
 #, elixir-autogen, elixir-format
+msgid "recovery.unresponsive.title"
+msgstr "Die Datenspende-App reagiert nicht mehr"
+
+#, elixir-autogen, elixir-format
 msgid "recovery.description"
 msgstr "Ihr Gerät hatte möglicherweise nicht genug Speicher. Sie können es erneut versuchen oder direkt den Eyra-Support kontaktieren. Wenn Sie ein Handy nutzen, kann ein Computer helfen."
 

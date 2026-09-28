@@ -68,6 +68,10 @@ msgid "recovery.title"
 msgstr "Je vorige poging is niet afgerond"
 
 #, elixir-autogen, elixir-format
+msgid "recovery.unresponsive.title"
+msgstr "De donatie-app reageert niet meer"
+
+#, elixir-autogen, elixir-format
 msgid "recovery.description"
 msgstr "Je apparaat had mogelijk niet genoeg geheugen. Je kunt het opnieuw proberen of direct contact opnemen met Eyra support. Gebruik je een telefoon? Probeer eventueel een computer."
 

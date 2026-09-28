@@ -68,6 +68,10 @@ msgid "recovery.title"
 msgstr "Your previous attempt did not finish"
 
 #, elixir-autogen, elixir-format
+msgid "recovery.unresponsive.title"
+msgstr "The donation app stopped responding"
+
+#, elixir-autogen, elixir-format
 msgid "recovery.description"
 msgstr "Your device may not have had enough memory. You can retry or contact Eyra support without trying again. If you are using a phone, trying a computer may help."
 

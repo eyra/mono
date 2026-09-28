@@ -77,6 +77,10 @@ msgid "recovery.title"
 msgstr "Ankstesnis bandymas nebuvo baigtas"
 
 #, elixir-autogen, elixir-format
+msgid "recovery.unresponsive.title"
+msgstr "Duomenų dovanojimo programėlė nebereaguoja"
+
+#, elixir-autogen, elixir-format
 msgid "recovery.description"
 msgstr "Įrenginyje galėjo nepakakti atminties. Galima bandyti dar kartą arba iš karto kreiptis į „Eyra“ pagalbą. Jei naudojamas telefonas, gali padėti bandymas kompiuteriu."
 

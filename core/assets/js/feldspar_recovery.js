@@ -2,6 +2,10 @@ const ATTEMPT_PREFIX = "feldspar:attempt:";
 const UUID =
   /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
+export function isFeldsparAttemptId(attemptId) {
+  return typeof attemptId === "string" && UUID.test(attemptId);
+}
+
 function scopePrefix(scope) {
   return `${ATTEMPT_PREFIX}${encodeURIComponent(scope)}:`;
 }
@@ -26,7 +30,7 @@ function storedAttempts(scope) {
       if (
         !marker ||
         Object.keys(marker).length !== 2 ||
-        !UUID.test(marker.attempt_id) ||
+        !isFeldsparAttemptId(marker.attempt_id) ||
         key !== `${scopePrefix(scope)}${marker.attempt_id}` ||
         !Number.isFinite(marker.started_at)
       ) {
@@ -55,7 +59,7 @@ function removeKey(key, expectedValue) {
 // The exit acknowledgment can arrive after LiveView has removed both hooks.
 // A captured scope and unique attempt ID still allow clearing only that attempt.
 export function clearFeldsparAttempt(scope, attemptId) {
-  if (scope && UUID.test(attemptId)) {
+  if (scope && isFeldsparAttemptId(attemptId)) {
     removeKey(`${scopePrefix(scope)}${attemptId}`);
   }
 }
@@ -109,6 +113,7 @@ export const FeldsparRecovery = {
         this.clearOwnedAttempt();
       }
     };
+    this.unresponsiveListener = (event) => this.recoverUnresponsive(event);
     this.closeListener = (event) => {
       const button = event.target.closest?.('[phx-click="close_modal"]');
       if (
@@ -119,6 +124,10 @@ export const FeldsparRecovery = {
       }
     };
     this.el.addEventListener("feldspar:terminal", this.terminalListener);
+    this.el.addEventListener(
+      "feldspar:unresponsive",
+      this.unresponsiveListener
+    );
     document.addEventListener("click", this.closeListener, true);
     this.prepareRef = this.handleEvent("feldspar:prepare", ({ id }) => {
       if (id === this.el.id) return this.prepareStart();
@@ -156,8 +165,9 @@ export const FeldsparRecovery = {
     await Promise.all(
       attempts.map((attempt) =>
         withAttemptLock(attempt.key, (available) => {
-          // Without locks, another tab might own this marker. Preserve it.
-          if (available === true) removeKey(attempt.key, attempt.value);
+          // Unknown siblings remain protected when Web Locks are unavailable.
+          if (available === true || (available === null && attempt.owned))
+            removeKey(attempt.key, attempt.value);
         })
       )
     );
@@ -220,12 +230,50 @@ export const FeldsparRecovery = {
     } catch {
       // Retain the marker if LiveView disconnects while starting.
     } finally {
-      this.starting = false;
+      if (generation === this.generation) this.starting = false;
+    }
+  },
+
+  async recoverUnresponsive(event) {
+    if (
+      this.disposed ||
+      !this.attempt ||
+      this.attempt.attempt_id !== event.detail?.attempt_id
+    )
+      return;
+    if (this.el.dataset.completed === "true") {
+      this.clearCompletedScope();
+      return;
+    }
+    const attemptId = this.attempt.attempt_id;
+    this.recoveredAttempts.push({
+      key: `${scopePrefix(this.scope)}${attemptId}`,
+      value: JSON.stringify(this.attempt),
+      owned: true,
+    });
+    this.generation++;
+    this.releaseOwnedAttempt();
+    try {
+      await this.pushEvent("feldspar_unresponsive", { attempt_id: attemptId });
+    } catch {
+      // Keep the marker when LiveView disconnects during recovery.
     }
   },
 
   clearOwnedAttempt() {
-    if (this.attempt) clearFeldsparAttempt(this.scope, this.attempt.attempt_id);
+    if (this.attempt) {
+      this.el.dispatchEvent(
+        new CustomEvent("feldspar:cancel", {
+          detail: { attempt_id: this.attempt.attempt_id },
+        })
+      );
+      clearFeldsparAttempt(this.scope, this.attempt.attempt_id);
+    }
+    this.releaseOwnedAttempt();
+  },
+
+  releaseOwnedAttempt() {
+    this.starting = false;
     this.attempt = null;
     this.releaseLock?.();
     this.releaseLock = null;
@@ -254,6 +302,10 @@ export const FeldsparRecovery = {
     this.disposed = true;
     this.generation++;
     this.el.removeEventListener("feldspar:terminal", this.terminalListener);
+    this.el.removeEventListener(
+      "feldspar:unresponsive",
+      this.unresponsiveListener
+    );
     document.removeEventListener("click", this.closeListener, true);
     this.removeHandleEvent(this.prepareRef);
     this.releaseLock?.();

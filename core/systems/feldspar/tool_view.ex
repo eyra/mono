@@ -33,6 +33,7 @@ defmodule Systems.Feldspar.ToolView do
        loading: false,
        initialized: false,
        recovery: false,
+       recovery_reason: nil,
        recovery_checked: false,
        preparing: false,
        exited: false,
@@ -53,12 +54,16 @@ defmodule Systems.Feldspar.ToolView do
   @impl true
   def handle_event("feldspar_recovery_checked", %{"unfinished" => unfinished}, socket) do
     socket =
-      if socket.assigns.started do
+      if socket.assigns.started or socket.assigns.recovery_checked do
         socket
       else
         socket
         |> refresh_task_status()
-        |> assign(recovery_checked: true, recovery: unfinished == true)
+        |> assign(
+          recovery_checked: true,
+          recovery: unfinished == true,
+          recovery_reason: if(unfinished == true, do: :tab)
+        )
         |> update_view_model()
       end
 
@@ -93,7 +98,8 @@ defmodule Systems.Feldspar.ToolView do
     socket = refresh_task_status(socket)
 
     case Ecto.UUID.cast(attempt_id) do
-      {:ok, attempt_id} when socket.assigns.task_status == :pending ->
+      {:ok, attempt_id}
+      when socket.assigns.task_status == :pending and attempt_id != socket.assigns.attempt_id ->
         {:noreply,
          socket
          |> assign(
@@ -101,6 +107,7 @@ defmodule Systems.Feldspar.ToolView do
            loading: true,
            initialized: false,
            recovery: false,
+           recovery_reason: nil,
            preparing: false,
            exited: false,
            attempt_id: attempt_id
@@ -114,25 +121,57 @@ defmodule Systems.Feldspar.ToolView do
 
   def handle_event("start", _, socket), do: {:noreply, socket}
 
-  def handle_event("tool_initialized", _, socket) do
+  def handle_event(
+        "feldspar_unresponsive",
+        %{"attempt_id" => attempt_id},
+        %{assigns: %{started: true, exited: false, attempt_id: attempt_id}} = socket
+      )
+      when is_binary(attempt_id) do
+    socket = refresh_task_status(socket)
+
+    {:noreply,
+     socket
+     |> assign(
+       started: false,
+       loading: false,
+       initialized: false,
+       preparing: false,
+       recovery: socket.assigns.task_status not in Systems.Crew.TaskStatus.finished_states(),
+       recovery_reason: :iframe
+     )
+     |> update_view_model()}
+  end
+
+  def handle_event("feldspar_unresponsive", _, socket), do: {:noreply, socket}
+
+  def handle_event(
+        "feldspar_event",
+        %{"attempt_id" => attempt_id} = event,
+        %{assigns: %{started: true, exited: false, attempt_id: attempt_id}} = socket
+      )
+      when is_binary(attempt_id) do
+    socket = refresh_task_status(socket)
+
     socket =
-      socket
-      |> assign(initialized: true, loading: false)
-      |> update_view_model()
+      if socket.assigns.task_status in Systems.Crew.TaskStatus.finished_states() do
+        socket
+        |> assign(
+          started: false,
+          loading: false,
+          initialized: false,
+          preparing: false,
+          recovery: false,
+          exited: true
+        )
+        |> update_view_model()
+      else
+        handle_feldspar_event(socket, event)
+      end
 
     {:noreply, socket}
   end
 
-  @impl true
-  def handle_event("feldspar_event", _, %{assigns: %{started: false}} = socket),
-    do: {:noreply, socket}
-
-  def handle_event("feldspar_event", _, %{assigns: %{exited: true}} = socket),
-    do: {:noreply, socket}
-
-  def handle_event("feldspar_event", event, socket) do
-    {:noreply, handle_feldspar_event(socket, event)}
-  end
+  def handle_event("feldspar_event", _, socket), do: {:noreply, socket}
 
   defp handle_feldspar_event(
          socket,
@@ -142,8 +181,10 @@ defmodule Systems.Feldspar.ToolView do
            "info" => info
          }
        ) do
+    socket = assign(socket, exited: true)
+
     if code == 0 do
-      socket |> assign(exited: true) |> publish_event(:tool_completed)
+      publish_event(socket, :tool_completed)
     else
       Frameworks.Pixel.Flash.put_info(
         socket,
@@ -151,6 +192,12 @@ defmodule Systems.Feldspar.ToolView do
       )
     end
   end
+
+  defp handle_feldspar_event(
+         %{assigns: %{initialized: true}} = socket,
+         %{"__type__" => "CommandSystemEvent", "name" => "initialized"}
+       ),
+       do: socket
 
   defp handle_feldspar_event(socket, %{
          "__type__" => "CommandSystemEvent",
@@ -210,7 +257,7 @@ defmodule Systems.Feldspar.ToolView do
                 <% end %>
               </div>
               <Text.title2 align="text-center" margin="">
-                <%= if @vm.recovery?, do: dgettext("eyra-feldspar", "recovery.title"), else: @vm.title %>
+                <%= if @vm.recovery?, do: @vm.recovery_title, else: @vm.title %>
               </Text.title2>
               <Text.body align="text-center"><%= @vm.description %></Text.body>
               <div :if={@vm.recovery?} data-testid="feldspar-recovery">
