@@ -53,3 +53,7 @@ msgstr "Ik kon deze taak niet afronden. Kunnen jullie me helpen?"
 #, elixir-autogen, elixir-format
 msgid "recovery.subject"
 msgstr "Ik heb hulp nodig bij het afronden van een taak"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr "Taak: %{task_name}"

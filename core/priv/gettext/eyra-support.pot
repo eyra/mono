@@ -53,3 +53,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "recovery.subject"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr ""

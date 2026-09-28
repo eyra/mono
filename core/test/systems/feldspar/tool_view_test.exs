@@ -87,7 +87,8 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert URI.decode_query(support_uri.query) == %{
              "assignment_id" => "123",
              "context" => "feldspar_recovery",
-             "task_id" => to_string(task.id)
+             "task_id" => to_string(task.id),
+             "task_name" => "Test Feldspar App"
            }
 
     refute has_element?(view, "iframe")

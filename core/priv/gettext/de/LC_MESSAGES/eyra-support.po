@@ -54,3 +54,7 @@ msgstr "Ich konnte diese Aufgabe nicht abschließen. Können Sie mir helfen?"
 #, elixir-autogen, elixir-format
 msgid "recovery.subject"
 msgstr "Ich brauche Hilfe beim Abschließen einer Aufgabe"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr "Aufgabe: %{task_name}"

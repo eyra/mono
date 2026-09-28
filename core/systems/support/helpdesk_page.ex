@@ -72,12 +72,21 @@ defmodule Systems.Support.HelpdeskPage do
 
       %{
         initial_title: dgettext("eyra-support", "recovery.subject"),
-        initial_description: Enum.join([description | references], "\n\n")
+        initial_description:
+          [description, task_reference(params) | references]
+          |> Enum.reject(&is_nil/1)
+          |> Enum.join("\n\n")
       }
     else
       %{initial_title: "", initial_description: Enum.join(references, "\n")}
     end
   end
+
+  defp task_reference(%{"task_name" => name}) when is_binary(name) and name != "" do
+    dgettext("eyra-support", "recovery.task", task_name: name)
+  end
+
+  defp task_reference(_), do: nil
 
   @impl true
   def render(assigns) do

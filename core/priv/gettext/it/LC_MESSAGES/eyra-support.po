@@ -54,3 +54,7 @@ msgstr "Non ho potuto completare questa attività. Puoi aiutarmi?"
 #, elixir-autogen, elixir-format
 msgid "recovery.subject"
 msgstr "Ho bisogno di aiuto per completare un’attività"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr "Attività: %{task_name}"

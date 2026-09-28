@@ -26,6 +26,7 @@ defmodule Systems.Support.HelpdeskPageTest do
         context: "feldspar_recovery",
         assignment_id: "123",
         task_id: "456",
+        task_name: "Photo archive – 2026",
         title: "untrusted title",
         description: "untrusted description"
       }
@@ -51,6 +52,7 @@ defmodule Systems.Support.HelpdeskPageTest do
       refute description =~ "untrusted description"
       assert description =~ "assignment_id: 123"
       assert description =~ "task_id: 456"
+      assert description =~ params.task_name
 
       assert Support.Public.list_tickets(:open) == []
 

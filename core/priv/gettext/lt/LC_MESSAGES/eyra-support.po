@@ -54,3 +54,7 @@ msgstr "Nepavyko atlikti šios užduoties. Ar galite padėti?"
 #, elixir-autogen, elixir-format
 msgid "recovery.subject"
 msgstr "Reikia pagalbos atliekant užduotį"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr "Užduotis: %{task_name}"
