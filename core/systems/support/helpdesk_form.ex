@@ -14,6 +14,7 @@ defmodule Systems.Support.HelpdeskForm do
       socket
       |> assign(:id, id)
       |> assign(:user, user)
+      |> assign(:initial_title, Map.get(params, :initial_title, ""))
       |> assign(:initial_description, Map.get(params, :initial_description, ""))
       |> initialize()
       |> compose_child(:type_selector)
@@ -30,7 +31,12 @@ defmodule Systems.Support.HelpdeskForm do
 
   defp force_initialize(socket) do
     type = :question
-    initial_attrs = %{title: "", description: socket.assigns.initial_description, type: type}
+
+    initial_attrs = %{
+      title: socket.assigns.initial_title,
+      description: socket.assigns.initial_description,
+      type: type
+    }
 
     socket
     |> assign(

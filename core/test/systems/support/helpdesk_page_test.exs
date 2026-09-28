@@ -20,9 +20,10 @@ defmodule Systems.Support.HelpdeskPageTest do
                Support.Public.list_tickets(:open) |> Enum.find(&(&1.title == "my ticket"))
     end
 
-    test "recovery references are editable defaults, submitted normally, and reset for a new ticket",
+    test "a recovery request is ready to submit and resets for a new ticket",
          %{conn: conn} do
       params = %{
+        context: "feldspar_recovery",
         assignment_id: "123",
         task_id: "456",
         title: "untrusted title",
@@ -31,24 +32,37 @@ defmodule Systems.Support.HelpdeskPageTest do
 
       {:ok, view, _html} = live(conn, ~p"/support/helpdesk?#{params}")
 
-      assert has_element?(view, "input[name='ticket_model[title]'][value='']")
+      title =
+        view
+        |> element("input[name='ticket_model[title]']")
+        |> render()
+        |> Floki.parse_fragment!()
+        |> Floki.attribute("value")
+        |> List.first()
 
-      assert view
-             |> element("textarea[name='ticket_model[description]']")
-             |> render()
-             |> Floki.parse_fragment!()
-             |> Floki.text() == "assignment_id: 123\ntask_id: 456"
+      description =
+        view
+        |> element("textarea[name='ticket_model[description]']")
+        |> render()
+        |> Floki.parse_fragment!()
+        |> Floki.text()
+
+      refute title == "untrusted title"
+      refute description =~ "untrusted description"
+      assert description =~ "assignment_id: 123"
+      assert description =~ "task_id: 456"
 
       assert Support.Public.list_tickets(:open) == []
 
       view
-      |> form("form", ticket_model: %{title: "recovery ticket"})
+      |> form("form")
       |> render_submit()
 
-      assert [%{title: "recovery ticket", description: "assignment_id: 123\ntask_id: 456"}] =
+      assert [%{title: ^title, description: ^description}] =
                Support.Public.list_tickets(:open)
 
       render_click(view, "next")
+      assert has_element?(view, "input[name='ticket_model[title]'][value='']")
 
       assert view
              |> element("textarea[name='ticket_model[description]']")
@@ -85,7 +99,7 @@ defmodule Systems.Support.HelpdeskPageTest do
 
     test "validation does not restore references over an edited description", %{conn: conn} do
       {:ok, view, _html} =
-        live(conn, ~p"/support/helpdesk?assignment_id=123&task_id=456")
+        live(conn, ~p"/support/helpdesk?context=feldspar_recovery&assignment_id=123&task_id=456")
 
       view
       |> form("form", ticket_model: %{title: "", description: "my edited description"})

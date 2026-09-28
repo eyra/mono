@@ -46,3 +46,11 @@ msgstr "Vă mulțumim pentru mesaj. Vă vom contacta cât mai curând posibil."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
 msgstr "Trimite un alt mesaj"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "Nu am reușit să finalizez această sarcină. Mă puteți ajuta?"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.subject"
+msgstr "Am nevoie de ajutor pentru a finaliza o sarcină"

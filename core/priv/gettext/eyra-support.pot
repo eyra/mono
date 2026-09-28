@@ -45,3 +45,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "form.next.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.subject"
+msgstr ""

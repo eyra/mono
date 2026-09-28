@@ -73,10 +73,22 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='feldspar-recovery']")
     assert has_element?(view, "[phx-click='prepare_start']")
 
-    assert has_element?(
-             view,
-             "a[data-testid='feldspar-recovery-support'][href='/support/helpdesk?assignment_id=123&task_id=#{task.id}']"
-           )
+    support_uri =
+      view
+      |> element("a[data-testid='feldspar-recovery-support']")
+      |> render()
+      |> Floki.parse_fragment!()
+      |> Floki.attribute("href")
+      |> List.first()
+      |> URI.parse()
+
+    assert support_uri.path == "/support/helpdesk"
+
+    assert URI.decode_query(support_uri.query) == %{
+             "assignment_id" => "123",
+             "context" => "feldspar_recovery",
+             "task_id" => to_string(task.id)
+           }
 
     refute has_element?(view, "iframe")
     assert Repo.get!(Crew.TaskModel, task.id).status == :pending

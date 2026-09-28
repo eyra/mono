@@ -50,6 +50,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       Map.take(assigns, [:assignment_id, :task_id])
       |> Enum.filter(fn {_key, value} -> is_integer(value) end)
       |> Map.new()
+      |> Map.put(:context, "feldspar_recovery")
 
     %{
       action: %{type: :http_get, to: ~p"/support/helpdesk?#{params}"},

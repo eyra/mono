@@ -12,7 +12,7 @@ defmodule Systems.Support.HelpdeskPage do
       :ok,
       socket
       |> assign(first: true, ticket_created: false)
-      |> assign(initial_description: reference_description(params))
+      |> assign(initial_ticket(params))
       |> compose_child(:helpdesk_form)
     }
   end
@@ -22,10 +22,14 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
-  def compose(:helpdesk_form, %{vm: %{user: user}, initial_description: description}) do
+  def compose(:helpdesk_form, %{
+        vm: %{user: user},
+        initial_title: title,
+        initial_description: description
+      }) do
     %{
       module: Systems.Support.HelpdeskForm,
-      params: %{user: user, initial_description: description}
+      params: %{user: user, initial_title: title, initial_description: description}
     }
   end
 
@@ -37,6 +41,7 @@ defmodule Systems.Support.HelpdeskPage do
       |> assign(
         first: false,
         ticket_created: true,
+        initial_title: "",
         initial_description: ""
       )
       |> update_child(:helpdesk_form)
@@ -52,7 +57,7 @@ defmodule Systems.Support.HelpdeskPage do
     }
   end
 
-  defp reference_description(params) do
+  defp initial_ticket(params) do
     references =
       for key <- ["assignment_id", "task_id"],
           value = Map.get(params, key),
@@ -62,7 +67,16 @@ defmodule Systems.Support.HelpdeskPage do
         "#{key}: #{value}"
       end
 
-    Enum.join(references, "\n")
+    if params["context"] == "feldspar_recovery" do
+      description = dgettext("eyra-support", "recovery.description")
+
+      %{
+        initial_title: dgettext("eyra-support", "recovery.subject"),
+        initial_description: Enum.join([description | references], "\n\n")
+      }
+    else
+      %{initial_title: "", initial_description: Enum.join(references, "\n")}
+    end
   end
 
   @impl true

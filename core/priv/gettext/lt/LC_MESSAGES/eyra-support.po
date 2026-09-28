@@ -46,3 +46,11 @@ msgstr "Ačiū už jūsų žinutę. Susisieksime su jumis kuo greičiau."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
 msgstr "Siųsti dar vieną žinutę"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "Nepavyko atlikti šios užduoties. Ar galite padėti?"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.subject"
+msgstr "Reikia pagalbos atliekant užduotį"
