@@ -28,12 +28,14 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
     }
   end
 
-  defp build_tool_view({workflow_item, _task}, context) do
+  defp build_tool_view({workflow_item, task}, context) do
     %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item
 
     context =
       LiveContext.extend(context, %{
         workflow_item_id: workflow_item_id,
+        task_id: task.id,
+        task_status: task.status,
         title: title,
         icon: icon,
         tool_ref: tool_ref,

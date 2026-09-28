@@ -71,3 +71,23 @@ msgstr "Tęsti"
 #, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.title"
+msgstr "Ankstesnis bandymas nebuvo baigtas"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "Įrenginyje galėjo nepakakti atminties. Galima bandyti dar kartą arba iš karto kreiptis į „Eyra“ pagalbą. Jei naudojamas telefonas, gali padėti bandymas kompiuteriu."
+
+#, elixir-autogen, elixir-format
+msgid "recovery.retry"
+msgstr "Bandyti dar kartą"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.support"
+msgstr "Kreiptis į „Eyra“ pagalbą"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.completed"
+msgstr "Ši užduotis jau atlikta."

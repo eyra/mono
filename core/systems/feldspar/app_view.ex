@@ -11,7 +11,8 @@ defmodule Systems.Feldspar.AppView do
        key: key,
        url: url,
        locale: locale,
-       upload_context: upload_context
+       upload_context: upload_context,
+       attempt_id: Map.get(params, :attempt_id)
      )}
   end
 
@@ -26,6 +27,7 @@ defmodule Systems.Feldspar.AppView do
         <div phx-update="ignore" id={@key} phx-hook="FeldsparApp"
           data-locale={@locale}
           data-src={@url}
+          data-attempt-id={@attempt_id}
           data-upload-context={Jason.encode!(@upload_context)}>
           <iframe class="w-full outline-none"></iframe>
         </div>

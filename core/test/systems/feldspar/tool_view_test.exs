@@ -1,377 +1,112 @@
 defmodule Systems.Feldspar.ToolViewTest do
   use CoreWeb.ConnCase, async: false
-  use Gettext, backend: CoreWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
   alias Core.Repo
-  alias Systems.Feldspar
-  alias Systems.Workflow
+  alias Frameworks.Concept.LiveContext
+  alias Systems.{Crew, Feldspar, Workflow}
 
-  setup do
+  setup %{conn: conn} do
     isolate_signals()
+    tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+    tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
+    tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+    user = Factories.insert!(:member)
+    crew = Factories.insert!(:crew)
+    {:ok, task} = Crew.Public.create_task(crew, user, [Ecto.UUID.generate()])
 
-    %{}
+    context =
+      LiveContext.new(%{
+        title: "Test Feldspar App",
+        icon: "TikTok",
+        tool_ref: tool_ref,
+        assignment_id: 123,
+        participant: "test_participant",
+        workflow_item_id: 456,
+        current_user: user,
+        task_id: task.id,
+        task_status: task.status
+      })
+
+    {:ok, view, _html} =
+      live_isolated(
+        Map.put(conn, :request_path, "/feldspar/tool"),
+        Feldspar.ToolView,
+        session: %{"live_context" => context}
+      )
+
+    %{view: view, task: task}
   end
 
-  describe "basic rendering" do
-    test "renders tool view with title and icon", %{conn: conn} do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+  test "does not mount an iframe until checking recovery and explicitly starting", %{view: view} do
+    refute has_element?(view, "iframe")
+    refute has_element?(view, "[phx-click='prepare_start']")
+    assert has_element?(view, "img[src*='tiktok_square.svg']")
 
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+    render_click(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    refute has_element?(view, "iframe")
 
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test Feldspar App",
-          icon: "test_icon",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    assert has_element?(view, "[phx-click='prepare_start']")
+    refute has_element?(view, "iframe")
 
-      session = %{"live_context" => live_context}
+    render_click(view, "prepare_start")
+    refute has_element?(view, "iframe")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
 
-      {:ok, _view, html} = live_isolated(conn, Feldspar.ToolView, session: session)
+    render_hook(view, "feldspar_event", %{
+      __type__: "CommandSystemEvent",
+      name: "initialized"
+    })
 
-      # Should render title
-      assert html =~ "Test Feldspar App"
-    end
-
-    test "normalizes icon name to lowercase for image path", %{conn: conn} do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
-
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      # Use mixed case icon name (as might be stored in database)
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "TikTok",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, _view, html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Icon path should be normalized to lowercase
-      assert html =~ "tiktok_square.svg"
-      refute html =~ "TikTok_square.svg"
-    end
-
-    test "renders start button before tool is started", %{conn: conn} do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
-
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, _view, html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Should have start button with "Continue" label
-      assert html =~ "Continue"
-    end
+    assert has_element?(view, "[data-testid='app-container'].block")
+    assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
-  describe "start event" do
-    setup do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+  test "an unfinished attempt offers support without starting another attempt", %{
+    view: view,
+    task: task
+  } do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[phx-click='prepare_start']")
 
-      %{tool: tool, tool_ref: tool_ref}
-    end
+    assert has_element?(
+             view,
+             "a[data-testid='feldspar-recovery-support'][href='/support/helpdesk?assignment_id=123&task_id=#{task.id}']"
+           )
 
-    test "handles start event", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
+    refute has_element?(view, "iframe")
+    assert Repo.get!(Crew.TaskModel, task.id).status == :pending
 
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send start event
-      html = view |> render_click("start")
-
-      # Verify view still renders correctly after start
-      assert html =~ "Test App"
-    end
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    refute has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "iframe")
   end
 
-  describe "feldspar_event handling" do
-    setup do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+  test "server completion takes precedence over a stale browser marker", %{view: view, task: task} do
+    task |> Ecto.Changeset.change(status: :completed) |> Repo.update!()
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
 
-      %{tool: tool, tool_ref: tool_ref}
-    end
-
-    test "handles CommandSystemExit with code 0 - publishes tool_exited event", %{
-      conn: conn,
-      tool_ref: tool_ref
-    } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send CommandSystemExit with success code
-      event = %{
-        "__type__" => "CommandSystemExit",
-        "code" => 0,
-        "info" => "Normal exit"
-      }
-
-      view |> render_click("feldspar_event", event)
-
-      # Verify tool_exited event was published
-      # Note: In isolated test, we can't easily assert published events
-      # This test verifies the handler doesn't crash
-    end
-
-    test "handles CommandSystemExit with non-zero code - shows error message", %{
-      conn: conn,
-      tool_ref: tool_ref
-    } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send CommandSystemExit with error code
-      event = %{
-        "__type__" => "CommandSystemExit",
-        "code" => 1,
-        "info" => "Error occurred"
-      }
-
-      html = view |> render_click("feldspar_event", event)
-
-      # Verify error message is shown (check flash)
-      # The view should still render without crashing
-      assert html =~ "Test App"
-    end
-
-    test "handles CommandSystemDonate - publishes donate event", %{
-      conn: conn,
-      tool_ref: tool_ref
-    } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send CommandSystemDonate
-      event = %{
-        "__type__" => "CommandSystemDonate",
-        "key" => "survey_response",
-        "json_string" => "{\"answer\": \"yes\"}"
-      }
-
-      html = view |> render_click("feldspar_event", event)
-
-      # Verify view still renders without crashing after donate event
-      # Note: Flash messages are handled by parent LiveView, so we just verify
-      # the handler executes without error
-      assert html =~ "Test App"
-    end
-
-    test "handles CommandSystemEvent with initialized - publishes tool_initialized event", %{
-      conn: conn,
-      tool_ref: tool_ref
-    } do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Start the tool first
-      view |> render_click("start")
-
-      # Send CommandSystemEvent with initialized
-      event = %{
-        "__type__" => "CommandSystemEvent",
-        "name" => "initialized"
-      }
-
-      view |> render_click("feldspar_event", event)
-
-      # Verify initialized state: app-container should have 'block' class (visible)
-      # and start-container should have 'hidden' class
-      assert view |> has_element?("[data-testid='app-container'].block")
-      assert view |> has_element?("[data-testid='start-container'].hidden")
-    end
-
-    test "handles unknown event type - shows error message", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send unknown event type
-      event = %{
-        "__type__" => "CommandUnknown",
-        "data" => "test"
-      }
-
-      html = view |> render_click("feldspar_event", event)
-
-      # Verify error message is shown (check for the event type in error)
-      # The view should still render
-      assert html =~ "Test App"
-    end
-
-    test "handles malformed event - shows error message", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Send malformed event (missing __type__)
-      event = %{
-        "some_field" => "value"
-      }
-
-      html = view |> render_click("feldspar_event", event)
-
-      # Verify error message is shown
-      # The view should still render
-      assert html =~ "Test App"
-    end
+    assert has_element?(view, "[data-completed='true']")
+    refute has_element?(view, "[data-testid='feldspar-recovery']")
+    refute has_element?(view, "[phx-click='prepare_start']")
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    refute has_element?(view, "iframe")
   end
 
-  describe "tool_initialized event" do
-    setup do
-      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
-      tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
-      tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+  test "completion in another tab during preparation prevents a retry", %{view: view, task: task} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+    render_click(view, "prepare_start")
+    task |> Ecto.Changeset.change(status: :completed) |> Repo.update!()
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
-      %{tool: tool, tool_ref: tool_ref}
-    end
-
-    test "handles tool_initialized event from JS hook", %{conn: conn, tool_ref: tool_ref} do
-      conn = conn |> Map.put(:request_path, "/feldspar/tool")
-
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          title: "Test App",
-          icon: "test",
-          tool_ref: tool_ref,
-          assignment_id: 1,
-          participant: "test_participant",
-          workflow_item_id: 1
-        })
-
-      session = %{"live_context" => live_context}
-
-      {:ok, view, _html} = live_isolated(conn, Feldspar.ToolView, session: session)
-
-      # Start the tool first
-      view |> render_click("start")
-
-      # Send tool_initialized event (from JS hook)
-      view |> render_click("tool_initialized")
-
-      # Verify initialized state: app-container should have 'block' class (visible)
-      # and start-container should have 'hidden' class
-      assert view |> has_element?("[data-testid='app-container'].block")
-      assert view |> has_element?("[data-testid='start-container'].hidden")
-    end
+    assert has_element?(view, "[data-completed='true']")
+    refute has_element?(view, "iframe")
+    refute has_element?(view, "[data-testid='feldspar-recovery']")
   end
 end

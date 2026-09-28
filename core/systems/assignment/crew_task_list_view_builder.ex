@@ -51,12 +51,14 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
 
   defp find_work_item(_, _), do: nil
 
-  defp build_tool_modal({workflow_item, _task}, context) do
+  defp build_tool_modal({workflow_item, task}, context) do
     %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item
 
     task_context =
       LiveContext.extend(context, %{
         workflow_item_id: workflow_item_id,
+        task_id: task.id,
+        task_status: task.status,
         title: title,
         icon: icon,
         tool_ref: tool_ref,

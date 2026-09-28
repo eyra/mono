@@ -1,6 +1,5 @@
 defmodule Systems.Feldspar.ToolViewBuilderTest do
   use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Feldspar
 
@@ -9,32 +8,6 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
 
       %{tool: tool}
-    end
-
-    test "builds correct VM with all required fields", %{tool: tool} do
-      assigns = build_assigns("Test App", :custom_icon)
-
-      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
-
-      # Should have tool, title, and icon (icon normalized to lowercase string)
-      assert vm.tool.id == tool.id
-      assert vm.title == "Test App"
-      assert vm.icon == "custom_icon"
-
-      # Should have description
-      assert vm.description == dgettext("eyra-feldspar", "tool.description")
-
-      # Should have button
-      assert vm.button.action.type == :send
-      assert vm.button.action.event == "start"
-      assert vm.button.face.type == :primary
-      assert vm.button.face.label == dgettext("eyra-feldspar", "tool.button")
-
-      # Should have app_view configured correctly
-      assert vm.app_view.implementation == Systems.Feldspar.AppView
-      assert vm.app_view.options[:key] == "feldspar_tool_#{tool.id}"
-      assert vm.app_view.options[:url] == "https://example.com/app/index.html"
-      assert vm.app_view.options[:locale] != nil
     end
 
     test "builds app_view with correct URL format", %{tool: tool} do

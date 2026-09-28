@@ -7,11 +7,12 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     {
       :ok,
       socket
       |> assign(first: true, ticket_created: false)
+      |> assign(initial_description: reference_description(params))
       |> compose_child(:helpdesk_form)
     }
   end
@@ -21,10 +22,10 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
-  def compose(:helpdesk_form, %{vm: %{user: user}}) do
+  def compose(:helpdesk_form, %{vm: %{user: user}, initial_description: description}) do
     %{
       module: Systems.Support.HelpdeskForm,
-      params: %{user: user}
+      params: %{user: user, initial_description: description}
     }
   end
 
@@ -35,7 +36,8 @@ defmodule Systems.Support.HelpdeskPage do
       socket
       |> assign(
         first: false,
-        ticket_created: true
+        ticket_created: true,
+        initial_description: ""
       )
       |> update_child(:helpdesk_form)
     }
@@ -48,6 +50,19 @@ defmodule Systems.Support.HelpdeskPage do
       |> assign(ticket_created: false, first: true)
       |> update_child(:helpdesk_form)
     }
+  end
+
+  defp reference_description(params) do
+    references =
+      for key <- ["assignment_id", "task_id"],
+          value = Map.get(params, key),
+          is_binary(value),
+          byte_size(value) <= 19,
+          Regex.match?(~r/\A[1-9][0-9]*\z/, value) do
+        "#{key}: #{value}"
+      end
+
+    Enum.join(references, "\n")
   end
 
   @impl true
