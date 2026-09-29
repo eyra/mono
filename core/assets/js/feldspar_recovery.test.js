@@ -430,21 +430,49 @@ describe("Feldspar tab recovery", () => {
     expect(window.localStorage.getItem(key)).toBeNull();
   });
 
-  it("retains unfinished recovery after an acknowledged abnormal exit", async () => {
+  it("clears an acknowledged unsuccessful exit without offering crash recovery on return", async () => {
     const hook = await mount();
     const attemptId = await start(hook);
     const key = markerKey(SCOPE, attemptId);
-    const marker = window.localStorage.getItem(key);
-    const app = mountApp(hook, attemptId);
-    const terminal = vi.fn();
-    hook.el.addEventListener("feldspar:terminal", terminal);
+    const ack = deferred();
+    const app = mountApp(
+      hook,
+      attemptId,
+      vi.fn(() => ack.promise)
+    );
+    const exiting = app.waitForDonationsAndExit({
+      __type__: "CommandSystemExit",
+      code: 1,
+      info: "Processing failed",
+    });
+    expect(window.localStorage.getItem(key)).not.toBeNull();
+    ack.resolve({});
+    await exiting;
+    expect(window.localStorage.getItem(key)).toBeNull();
+    app.destroyed();
+    hook.destroyed();
+    hook.el.remove();
+    const returned = await mount();
+    expect(returned.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+  });
+
+  it("retains recovery when an unsuccessful exit cannot be acknowledged", async () => {
+    const hook = await mount();
+    const attemptId = await start(hook);
+    const app = mountApp(
+      hook,
+      attemptId,
+      vi.fn(async () => {
+        throw new Error("LiveView disconnected");
+      })
+    );
     await app.waitForDonationsAndExit({
       __type__: "CommandSystemExit",
       code: 1,
       info: "Processing failed",
     });
-    expect(window.localStorage.getItem(key)).toBe(marker);
-    expect(terminal).not.toHaveBeenCalled();
     app.destroyed();
     hook.destroyed();
     hook.el.remove();
