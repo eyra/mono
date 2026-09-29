@@ -741,11 +741,11 @@ msgstr "Raport privind progresele înregistrate"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.body"
-msgstr ""
+msgstr "Acest studiu nu este disponibil momentan. Contactați cercetătorul care v-a invitat."
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.title"
-msgstr ""
+msgstr "Acest studiu nu este disponibil"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "contributions.all_tasks_finished"
