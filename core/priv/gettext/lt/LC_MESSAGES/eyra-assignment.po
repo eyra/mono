@@ -741,11 +741,11 @@ msgstr "Pažangos ataskaita"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.body"
-msgstr ""
+msgstr "Šis tyrimas šiuo metu nepasiekiamas. Galima kreiptis į tyrėją, kuris atsiuntė kvietimą."
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.title"
-msgstr ""
+msgstr "Šis tyrimas nepasiekiamas"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "contributions.all_tasks_finished"
