@@ -69,7 +69,7 @@ msgstr "Il tentativo precedente non è terminato"
 
 #, elixir-autogen, elixir-format
 msgid "recovery.description"
-msgstr "Il tuo dispositivo potrebbe non aver avuto abbastanza memoria. Puoi riprovare. Se usi un telefono, provare con un computer può aiutare. Se succede di nuovo, scrivi a <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
+msgstr "Il tuo dispositivo potrebbe non aver avuto abbastanza memoria. Puoi riprovare. Se usi un telefono, provare con un computer può aiutare. Hai ancora problemi? Scrivi a <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "recovery.retry"
