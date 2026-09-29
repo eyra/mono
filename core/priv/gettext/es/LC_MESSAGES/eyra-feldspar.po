@@ -78,7 +78,3 @@ msgstr "Volver a intentar"
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Contactar con soporte de Eyra"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.completed"
-msgstr "Esta tarea ya está completada."

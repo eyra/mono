@@ -87,7 +87,3 @@ msgstr "Bandyti dar kartą"
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Kreiptis į „Eyra“ pagalbą"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.completed"
-msgstr "Ši užduotis jau atlikta."

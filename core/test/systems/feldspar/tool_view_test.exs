@@ -100,26 +100,24 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "iframe")
   end
 
-  test "server completion takes precedence over a stale browser marker", %{view: view, task: task} do
+  test "a completed task can be explicitly retried without restoring stale recovery", %{
+    view: view,
+    task: task
+  } do
     task |> Ecto.Changeset.change(status: :completed) |> Repo.update!()
     render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
 
     assert has_element?(view, "[data-completed='true']")
     refute has_element?(view, "[data-testid='feldspar-recovery']")
-    refute has_element?(view, "[phx-click='prepare_start']")
-    render_click(view, "prepare_start")
-    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
     refute has_element?(view, "iframe")
-  end
 
-  test "completion in another tab during preparation prevents a retry", %{view: view, task: task} do
-    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+    assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
     render_click(view, "prepare_start")
-    task |> Ecto.Changeset.change(status: :completed) |> Repo.update!()
+    assert has_element?(view, "[data-completed='false']")
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
-    assert has_element?(view, "[data-completed='true']")
-    refute has_element?(view, "iframe")
-    refute has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "iframe")
+    assert has_element?(view, "[data-completed='false']")
+    assert Repo.get!(Crew.TaskModel, task.id).status == :completed
   end
 end

@@ -100,12 +100,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
         participation_or_finished_view(assignment, assigns)
 
       :retry ->
-        if length(Workflow.Model.ordered_items(assignment.workflow)) == 1 and
-             tasks_finished?(assignment, assigns) do
-          participation_or_finished_view(assignment, assigns)
-        else
-          consent_or_work_view(assignment, assigns, tester?)
-        end
+        consent_or_work_view(assignment, assigns, tester?)
 
       :email_confirmed ->
         work_view(assignment, assigns)

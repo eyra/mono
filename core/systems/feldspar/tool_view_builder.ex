@@ -12,28 +12,31 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   def view_model(tool, %{title: title, icon: icon} = assigns) do
     {app_view, error} = build_app_view(tool, assigns)
     loading = Map.get(assigns, :loading, false) or Map.get(assigns, :preparing, false)
-    recovery? = Map.get(assigns, :recovery, false)
-    completed? = Map.get(assigns, :task_status) in Systems.Crew.TaskStatus.finished_states()
+
+    completed? =
+      Map.get(assigns, :task_status) in Systems.Crew.TaskStatus.finished_states() and
+        not Map.get(assigns, :preparing, false) and not Map.get(assigns, :started, false)
+
+    recovery? = Map.get(assigns, :recovery, false) and not completed?
 
     %{
       tool: tool,
       title: title,
       icon: normalize_icon(icon),
-      description: description(recovery?, completed?),
-      recovery?: recovery? and not completed?,
+      description: description(recovery?),
+      recovery?: recovery?,
       completed?: completed?,
       recovery_id: "feldspar-recovery-#{tool.id}-#{Map.get(assigns, :task_id)}",
       recovery_scope: recovery_scope(assigns),
       support_button: support_button(assigns),
-      button: build_button(loading, recovery?, completed?, assigns),
+      button: build_button(loading, recovery?, assigns),
       app_view: app_view,
       error: error
     }
   end
 
-  defp description(_, true), do: dgettext("eyra-feldspar", "recovery.completed")
-  defp description(true, false), do: dgettext("eyra-feldspar", "recovery.description")
-  defp description(false, false), do: dgettext("eyra-feldspar", "tool.description")
+  defp description(true), do: dgettext("eyra-feldspar", "recovery.description")
+  defp description(false), do: dgettext("eyra-feldspar", "tool.description")
 
   defp recovery_scope(%{
          current_user: %{id: user_id},
@@ -60,7 +63,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
     }
   end
 
-  defp build_button(loading, recovery?, completed?, assigns) do
+  defp build_button(loading, recovery?, assigns) do
     %{
       action: %{type: :send, event: "prepare_start"},
       face: %{
@@ -72,7 +75,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
           ),
         loading: loading
       },
-      enabled?: Map.get(assigns, :recovery_checked, false) and not loading and not completed?,
+      enabled?: Map.get(assigns, :recovery_checked, false) and not loading,
       testid: "feldspar-start"
     }
   end

@@ -78,7 +78,3 @@ msgstr "Opnieuw proberen"
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Contact met Eyra support"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.completed"
-msgstr "Deze taak is al afgerond."

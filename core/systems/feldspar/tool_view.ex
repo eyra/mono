@@ -70,7 +70,7 @@ defmodule Systems.Feldspar.ToolView do
 
     cond do
       socket.assigns.started or socket.assigns.preparing or
-        not socket.assigns.recovery_checked or socket.assigns.vm.completed? ->
+          not socket.assigns.recovery_checked ->
         {:noreply, socket}
 
       socket.assigns.vm.error ->
@@ -93,7 +93,7 @@ defmodule Systems.Feldspar.ToolView do
     socket = refresh_task_status(socket)
 
     case Ecto.UUID.cast(attempt_id) do
-      {:ok, attempt_id} when socket.assigns.task_status == :pending ->
+      {:ok, attempt_id} ->
         {:noreply,
          socket
          |> assign(

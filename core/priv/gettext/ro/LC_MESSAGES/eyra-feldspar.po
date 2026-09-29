@@ -87,7 +87,3 @@ msgstr "Încercați din nou"
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Contactați suportul Eyra"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.completed"
-msgstr "Această sarcină este deja finalizată."
