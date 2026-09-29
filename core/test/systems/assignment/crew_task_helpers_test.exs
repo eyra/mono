@@ -53,19 +53,4 @@ defmodule Systems.Assignment.CrewTaskHelpersTest do
       refute other_context.scope == context.scope
     end
   end
-
-  test "support link identifies the affected task and safely encodes its name",
-       %{assignment: assignment, user: user, workflow_item: workflow_item, task: task} do
-    context = Assignment.CrewTaskHelpers.recovery_context(assignment, user, {workflow_item, task})
-    uri = URI.parse(context.support_url)
-
-    assert uri.path == "/support/helpdesk"
-
-    assert URI.decode_query(uri.query) == %{
-             "context" => "feldspar_recovery",
-             "task_name" => "Task & follow-up",
-             "assignment_id" => "20",
-             "task_id" => "40"
-           }
-  end
 end

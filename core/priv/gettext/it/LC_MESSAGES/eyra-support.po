@@ -46,15 +46,3 @@ msgstr "Grazie per il suo messaggio. La ricontatteremo il prima possibile."
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
 msgstr "Invia un altro messaggio"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.description"
-msgstr "Non ho potuto completare questa attività. Puoi aiutarmi?"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.subject"
-msgstr "Ho bisogno di aiuto per completare un’attività"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.task"
-msgstr "Attività: %{task_name}"

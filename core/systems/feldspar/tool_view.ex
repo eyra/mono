@@ -208,9 +208,8 @@ defmodule Systems.Feldspar.ToolView do
               </div>
               <%= if @vm.recovery do %>
                 <Text.title2 align="text-center" margin=""><%= @vm.recovery.title %></Text.title2>
-                <Text.body align="text-center"><%= @vm.recovery.description %></Text.body>
                 <div data-testid="feldspar-recovery">
-                  <Button.dynamic {@vm.recovery.support_button} />
+                  <Text.body align="text-center"><%= Phoenix.HTML.raw(@vm.recovery.description) %></Text.body>
                 </div>
               <% else %>
                 <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>

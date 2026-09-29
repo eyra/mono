@@ -45,15 +45,3 @@ msgstr "Heb je een vraag over het platform? Of wil je ons feedback geven? Vul da
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
 msgstr "Verstuur nog een bericht"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.description"
-msgstr "Ik kon deze taak niet afronden. Kunnen jullie me helpen?"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.subject"
-msgstr "Ik heb hulp nodig bij het afronden van een taak"
-
-#, elixir-autogen, elixir-format
-msgid "recovery.task"
-msgstr "Taak: %{task_name}"
