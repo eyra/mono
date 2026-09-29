@@ -9,7 +9,15 @@ defmodule Systems.Feldspar.ToolView do
   alias Systems.Workflow
 
   def dependencies(),
-    do: [:title, :icon, :tool_ref, :assignment_id, :participant, :workflow_item_id]
+    do: [
+      :title,
+      :icon,
+      :tool_ref,
+      :assignment_id,
+      :participant,
+      :workflow_item_id,
+      :recovery
+    ]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     Workflow.ToolRefModel.tool(tool_ref)
@@ -17,7 +25,17 @@ defmodule Systems.Feldspar.ToolView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, assign(socket, started: false, loading: false, initialized: false)}
+    {:ok,
+     assign(socket,
+       started: false,
+       loading: false,
+       initialized: false,
+       unfinished_attempt?: false,
+       recovery_checked: false,
+       preparing: false,
+       exited: false,
+       attempt_id: nil
+     )}
   end
 
   @impl true
@@ -31,23 +49,52 @@ defmodule Systems.Feldspar.ToolView do
   end
 
   @impl true
-  def handle_event("start", _, %{assigns: %{initialized: true}} = socket) do
-    {:noreply, assign(socket, started: true)}
-  end
-
-  def handle_event("start", _, %{assigns: %{vm: %{error: error}}} = socket)
-      when not is_nil(error) do
-    {:noreply, socket |> Frameworks.Pixel.Flash.push_error(error)}
-  end
-
-  def handle_event("start", _, socket) do
+  def handle_event("feldspar_recovery_checked", %{"unfinished" => unfinished}, socket) do
     socket =
-      socket
-      |> assign(started: true, loading: true, initialized: false)
-      |> update_view_model()
+      if socket.assigns.started do
+        socket
+      else
+        socket
+        |> assign(recovery_checked: true, unfinished_attempt?: unfinished == true)
+        |> update_view_model()
+      end
 
     {:noreply, socket}
   end
+
+  def handle_event("prepare_start", _, socket) do
+    cond do
+      socket.assigns.started or socket.assigns.preparing or
+          not socket.assigns.recovery_checked ->
+        {:noreply, socket}
+
+      socket.assigns.vm.error ->
+        {:noreply, Frameworks.Pixel.Flash.put_error(socket, socket.assigns.vm.error)}
+
+      true ->
+        {:noreply,
+         socket
+         |> assign(preparing: true)
+         |> update_view_model()
+         |> push_event("feldspar:prepare", %{id: socket.assigns.vm.recovery_id})}
+    end
+  end
+
+  def handle_event(
+        "start",
+        %{"attempt_id" => attempt_id},
+        %{assigns: %{preparing: true}} = socket
+      ) do
+    socket =
+      case parse_attempt_id(attempt_id) do
+        {:ok, attempt_id} -> start_attempt(socket, attempt_id)
+        _ -> cancel_preparation(socket)
+      end
+
+    {:noreply, update_view_model(socket)}
+  end
+
+  def handle_event("start", _, socket), do: {:noreply, socket}
 
   def handle_event("tool_initialized", _, socket) do
     socket =
@@ -59,8 +106,34 @@ defmodule Systems.Feldspar.ToolView do
   end
 
   @impl true
+  def handle_event("feldspar_event", _, %{assigns: %{started: false}} = socket),
+    do: {:noreply, socket}
+
+  def handle_event("feldspar_event", _, %{assigns: %{exited: true}} = socket),
+    do: {:noreply, socket}
+
   def handle_event("feldspar_event", event, socket) do
     {:noreply, handle_feldspar_event(socket, event)}
+  end
+
+  defp parse_attempt_id(attempt_id) do
+    Ecto.UUID.cast(attempt_id)
+  end
+
+  defp start_attempt(socket, attempt_id) do
+    assign(socket,
+      started: true,
+      loading: true,
+      initialized: false,
+      unfinished_attempt?: false,
+      preparing: false,
+      exited: false,
+      attempt_id: attempt_id
+    )
+  end
+
+  defp cancel_preparation(socket) do
+    assign(socket, preparing: false)
   end
 
   defp handle_feldspar_event(
@@ -72,7 +145,7 @@ defmodule Systems.Feldspar.ToolView do
          }
        ) do
     if code == 0 do
-      socket |> publish_event(:tool_completed)
+      socket |> assign(exited: true) |> publish_event(:tool_completed)
     else
       Frameworks.Pixel.Flash.put_info(
         socket,
@@ -99,11 +172,22 @@ defmodule Systems.Feldspar.ToolView do
     socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
   end
 
+  defp modal_id(%{live_nest: %{modal: %{element: %{id: id}}}}), do: id
+  defp modal_id(_), do: nil
+
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="w-full h-full" data-testid="feldspar-tool-view">
-        <%= if @vm.app_view do %>
+      <div
+        id={@vm.recovery_id}
+        phx-hook="FeldsparRecovery"
+        data-recovery-scope={@vm.recovery_scope}
+        data-recovery-on-entry={@vm.recovery_on_entry}
+        data-modal-id={modal_id(assigns)}
+        class="w-full h-full"
+        data-testid="feldspar-tool-view"
+      >
+        <%= if @started and @vm.app_view do %>
           <div
             data-testid="app-container"
             class={"w-full h-full pt-2 sm:pt-4 #{if @started and @initialized, do: "block", else: "hidden"}"}
@@ -122,8 +206,16 @@ defmodule Systems.Feldspar.ToolView do
                   <Logo.platform platform={@vm.icon} variant={:square} class="w-24 h-24" />
                 <% end %>
               </div>
-              <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
-              <Text.body align="text-center"><%= @vm.description %></Text.body>
+              <%= if @vm.recovery do %>
+                <Text.title2 align="text-center" margin=""><%= @vm.recovery.title %></Text.title2>
+                <Text.body align="text-center"><%= @vm.recovery.description %></Text.body>
+                <div data-testid="feldspar-recovery">
+                  <Button.dynamic {@vm.recovery.support_button} />
+                </div>
+              <% else %>
+                <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
+                <Text.body align="text-center"><%= @vm.description %></Text.body>
+              <% end %>
               <.wrap>
                 <Button.dynamic {@vm.button} />
               </.wrap>

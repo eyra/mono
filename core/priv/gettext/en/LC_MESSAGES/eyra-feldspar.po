@@ -62,3 +62,19 @@ msgstr "Continue"
 #, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr "The Feldspar app has not been configured. Please go to the Workflow in the Assignment CMS."
+
+#, elixir-autogen, elixir-format
+msgid "recovery.title"
+msgstr "Your previous attempt did not finish"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "Your device may not have had enough memory. You can retry or contact Eyra support without trying again. If you are using a phone, trying a computer may help."
+
+#, elixir-autogen, elixir-format
+msgid "recovery.retry"
+msgstr "Retry"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.support"
+msgstr "Contact Eyra support"

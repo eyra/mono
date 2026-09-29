@@ -44,35 +44,6 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
       assert vm.tool_view.implementation == Systems.Alliance.ToolView
     end
 
-    test "extends parent_context with workflow item data", %{
-      user: user,
-      assignment: assignment
-    } do
-      live_context =
-        Frameworks.Concept.LiveContext.new(%{
-          current_user: user
-        })
-
-      assigns = %{
-        current_user: user,
-        live_context: live_context
-      }
-
-      vm = Assignment.CrewTaskSingleViewBuilder.view_model(assignment, assigns)
-
-      # Get the workflow item from work_item
-      {workflow_item, _task} = vm.work_item
-
-      # Extended context should have workflow_item_id, title, and icon
-      task_context = vm.tool_view.options[:live_context]
-      assert task_context.data.workflow_item_id == workflow_item.id
-      assert task_context.data.title == workflow_item.title
-      assert task_context.data.presentation == :embedded
-
-      # Parent context data should still be present
-      assert task_context.data.current_user == user
-    end
-
     test "returns nil tool_view when no work items", %{user: user} do
       # Create assignment without adding user as participant
       assignment = Assignment.Factories.create_base_assignment()

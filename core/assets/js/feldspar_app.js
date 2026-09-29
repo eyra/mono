@@ -1,4 +1,5 @@
 import { WaitGroup } from "./wait_group";
+import { clearFeldsparAttempt } from "./feldspar_recovery";
 
 // Send logs to server for AppSignal
 function sendLog(level, message, context = {}) {
@@ -14,19 +15,25 @@ function sendLog(level, message, context = {}) {
 export const FeldsparApp = {
   mounted() {
     this.donations = new WaitGroup();
-    const iframe = this.el.querySelector("iframe");
+    this.isDestroyed = false;
+    this.recoveryRoot = this.el.closest('[phx-hook="FeldsparRecovery"]');
+    this.recoveryScope = this.recoveryRoot?.dataset.recoveryScope;
+    this.attemptId = this.el.dataset.attemptId;
+    const iframe = this.getIframe();
 
     // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
     // should use the app-loaded event. This should be kept for backwards
     // compatibility.
-    iframe.addEventListener("load", () => {
+    this.loadListener = () => {
       this.onAppLoaded({ fromEvent: "onload" });
-    });
+    };
+    iframe.addEventListener("load", this.loadListener);
 
     iframe.setAttribute("src", this.el.dataset.src);
 
     const onAppLoaded = this.onAppLoaded.bind(this);
     this.messageListener = function (event) {
+      if (event.source !== iframe.contentWindow || !event.data) return;
       if (event.data.action === "resize") {
         iframe.setAttribute("style", `height:${event.data.height}px`);
       } else if (event.data.action === "app-loaded") {
@@ -34,6 +41,22 @@ export const FeldsparApp = {
       }
     };
     window.addEventListener("message", this.messageListener);
+  },
+
+  destroyed() {
+    this.isDestroyed = true;
+    this.getIframe()?.removeEventListener("load", this.loadListener);
+    window.removeEventListener("message", this.messageListener);
+    this.closeChannel();
+  },
+
+  closeChannel() {
+    if (this.channel) {
+      this.channel.port1.onmessage = null;
+      this.channel.port1.close();
+      this.channel.port2.close();
+      this.channel = null;
+    }
   },
 
   getIframe() {
@@ -45,6 +68,7 @@ export const FeldsparApp = {
     if (this.channel) {
       return false;
     }
+    this.closeChannel();
     this.channel = new MessageChannel();
     this.channel.port1.onmessage = (e) => {
       this.handleMessage(e);
@@ -53,6 +77,7 @@ export const FeldsparApp = {
   },
 
   onAppLoaded({ fromEvent }) {
+    if (this.isDestroyed) return;
     let action = "live-init";
     let locale = this.el.dataset.locale;
 
@@ -110,9 +135,17 @@ export const FeldsparApp = {
 
       console.log("[Feldspar] All donations completed, proceeding with exit");
     }
+    if (this.isDestroyed) return;
 
     try {
-      this.pushEvent("feldspar_event", data);
+      await this.pushEvent("feldspar_event", data);
+      clearFeldsparAttempt(this.recoveryScope, this.attemptId);
+      this.recoveryRoot?.dispatchEvent(
+        new CustomEvent("feldspar:terminal", {
+          bubbles: true,
+          detail: { attempt_id: this.attemptId },
+        })
+      );
       console.log("[Feldspar] Exit event sent");
       sendLog("info", "Exit event sent", this.getLogContext());
     } catch (error) {

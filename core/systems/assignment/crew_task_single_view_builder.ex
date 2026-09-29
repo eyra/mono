@@ -1,5 +1,6 @@
 defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
-  import Systems.Assignment.CrewTaskHelpers, only: [build_work_items: 2, get_participant: 3]
+  import Systems.Assignment.CrewTaskHelpers,
+    only: [build_work_items: 2, get_participant: 3, recovery_context: 3]
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
@@ -19,7 +20,8 @@ defmodule Systems.Assignment.CrewTaskSingleViewBuilder do
     context =
       LiveContext.extend(context, %{
         assignment_id: assignment_id,
-        participant: participant
+        participant: participant,
+        recovery: recovery_context(assignment, user, work_item)
       })
 
     %{

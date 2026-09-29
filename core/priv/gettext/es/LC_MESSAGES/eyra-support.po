@@ -46,3 +46,15 @@ msgstr "Gracias por su mensaje. Nos pondremos en contacto con usted lo antes pos
 #, elixir-autogen, elixir-format, fuzzy
 msgid "form.next.button"
 msgstr "Enviar otro mensaje"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "No pude completar esta tarea. ¿Puedes ayudarme?"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.subject"
+msgstr "Necesito ayuda para completar una tarea"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.task"
+msgstr "Tarea: %{task_name}"

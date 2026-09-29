@@ -7,11 +7,12 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(params, _session, socket) do
     {
       :ok,
       socket
       |> assign(first: true, ticket_created: false)
+      |> assign(initial_ticket(params))
       |> compose_child(:helpdesk_form)
     }
   end
@@ -21,10 +22,14 @@ defmodule Systems.Support.HelpdeskPage do
   end
 
   @impl true
-  def compose(:helpdesk_form, %{vm: %{user: user}}) do
+  def compose(:helpdesk_form, %{
+        vm: %{user: user},
+        initial_title: title,
+        initial_description: description
+      }) do
     %{
       module: Systems.Support.HelpdeskForm,
-      params: %{user: user}
+      params: %{user: user, initial_title: title, initial_description: description}
     }
   end
 
@@ -35,7 +40,9 @@ defmodule Systems.Support.HelpdeskPage do
       socket
       |> assign(
         first: false,
-        ticket_created: true
+        ticket_created: true,
+        initial_title: "",
+        initial_description: ""
       )
       |> update_child(:helpdesk_form)
     }
@@ -49,6 +56,37 @@ defmodule Systems.Support.HelpdeskPage do
       |> update_child(:helpdesk_form)
     }
   end
+
+  defp initial_ticket(params) do
+    references =
+      for key <- ["assignment_id", "task_id"],
+          value = Map.get(params, key),
+          is_binary(value),
+          byte_size(value) <= 19,
+          Regex.match?(~r/\A[1-9][0-9]*\z/, value) do
+        "#{key}: #{value}"
+      end
+
+    if params["context"] == "feldspar_recovery" do
+      description = dgettext("eyra-support", "recovery.description")
+
+      %{
+        initial_title: dgettext("eyra-support", "recovery.subject"),
+        initial_description:
+          [description, task_reference(params) | references]
+          |> Enum.reject(&is_nil/1)
+          |> Enum.join("\n\n")
+      }
+    else
+      %{initial_title: "", initial_description: Enum.join(references, "\n")}
+    end
+  end
+
+  defp task_reference(%{"task_name" => name}) when is_binary(name) and name != "" do
+    dgettext("eyra-support", "recovery.task", task_name: name)
+  end
+
+  defp task_reference(_), do: nil
 
   @impl true
   def render(assigns) do

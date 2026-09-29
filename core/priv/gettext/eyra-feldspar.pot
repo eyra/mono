@@ -62,3 +62,19 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.retry"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.support"
+msgstr ""

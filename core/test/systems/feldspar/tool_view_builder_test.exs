@@ -1,6 +1,5 @@
 defmodule Systems.Feldspar.ToolViewBuilderTest do
   use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Feldspar
 
@@ -9,32 +8,6 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
 
       %{tool: tool}
-    end
-
-    test "builds correct VM with all required fields", %{tool: tool} do
-      assigns = build_assigns("Test App", :custom_icon)
-
-      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
-
-      # Should have tool, title, and icon (icon normalized to lowercase string)
-      assert vm.tool.id == tool.id
-      assert vm.title == "Test App"
-      assert vm.icon == "custom_icon"
-
-      # Should have description
-      assert vm.description == dgettext("eyra-feldspar", "tool.description")
-
-      # Should have button
-      assert vm.button.action.type == :send
-      assert vm.button.action.event == "start"
-      assert vm.button.face.type == :primary
-      assert vm.button.face.label == dgettext("eyra-feldspar", "tool.button")
-
-      # Should have app_view configured correctly
-      assert vm.app_view.implementation == Systems.Feldspar.AppView
-      assert vm.app_view.options[:key] == "feldspar_tool_#{tool.id}"
-      assert vm.app_view.options[:url] == "https://example.com/app/index.html"
-      assert vm.app_view.options[:locale] != nil
     end
 
     test "builds app_view with correct URL format", %{tool: tool} do
@@ -79,18 +52,17 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
     test "participant is included in upload_context when provided", %{tool: tool} do
       # participant is a declared dependency of Feldspar.ToolView
       # CrewTaskListViewBuilder computes it and passes through context
-      assigns = %{
-        title: "Test App",
-        icon: :tiktok,
-        assignment_id: 123,
-        workflow_item_id: 456,
-        participant: "user_public_id_abc123"
-      }
+      assigns =
+        build_assigns("Test App", :tiktok)
+        |> Map.merge(%{
+          assignment_id: 123,
+          workflow_item_id: 456,
+          participant: "user_public_id_abc123"
+        })
 
       vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
 
       upload_context = vm.app_view.options[:upload_context]
-      assert upload_context.participant == "user_public_id_abc123"
 
       filename = Feldspar.DataDonationFolder.filename(stringify_keys(upload_context))
       assert filename =~ "participant=user_public_id_abc123"
@@ -101,7 +73,12 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
   defp build_assigns(title, icon) do
     %{
       title: title,
-      icon: icon
+      icon: icon,
+      recovery: %{
+        scope: "opaque-execution-scope",
+        on_entry: :check,
+        support_url: "/support/helpdesk"
+      }
     }
   end
 

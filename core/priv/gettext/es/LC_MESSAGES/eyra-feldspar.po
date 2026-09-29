@@ -62,3 +62,19 @@ msgstr "Continuar"
 #, elixir-autogen, elixir-format
 msgid "tool.archive.not.configured"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "recovery.title"
+msgstr "Tu intento anterior no terminó"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.description"
+msgstr "Puede que tu dispositivo no tuviera suficiente memoria. Puedes volver a intentarlo o contactar directamente con el soporte de Eyra. Si usas un móvil, probar con un ordenador puede ayudar."
+
+#, elixir-autogen, elixir-format
+msgid "recovery.retry"
+msgstr "Volver a intentar"
+
+#, elixir-autogen, elixir-format
+msgid "recovery.support"
+msgstr "Contactar con soporte de Eyra"

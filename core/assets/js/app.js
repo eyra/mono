@@ -24,6 +24,7 @@ import { LiveContent, LiveField } from "./live_content";
 import { Tab, TabBar, TabBarFit, TabContent, TabFooterItem } from "./tabbed";
 import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
+import { FeldsparRecovery } from "./feldspar_recovery";
 import { AuthCodeInput } from "./auth_code_input";
 import { installAuthSessionHandlers } from "./auth_session";
 import { installButtonLoading } from "./button_loading";
@@ -76,6 +77,7 @@ let Hooks = {
   Cell,
   Clipboard,
   FeldsparApp,
+  FeldsparRecovery,
   LiveContent,
   LiveField,
   PDFViewer,
