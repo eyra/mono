@@ -1,4 +1,6 @@
 defmodule Systems.Assignment.CrewTaskHelpers do
+  use Gettext, backend: CoreWeb.Gettext
+
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
@@ -7,6 +9,8 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   @callback handle_tool_completed(socket()) :: socket()
   @callback handle_tool_initialized(socket()) :: socket()
 
+  @support_email "support@eyra.co"
+
   def map_item({%{id: id, title: title, group: group, description: description}, task}) do
     %{id: id, title: title, description: description, group: group, status: task_status(task)}
   end
@@ -14,15 +18,37 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   def task_status(%{status: status}), do: status
   def task_status(_), do: :pending
 
-  def recovery_context(assignment, user, {_workflow_item, task}) do
+  def recovery_context(assignment, user, {workflow_item, task}) do
     %{
       scope: "#{user.id}:#{assignment.id}:#{task.id}",
       on_entry:
-        if(task.status in Crew.TaskStatus.finished_states(), do: :clear_previous, else: :check)
+        if(task.status in Crew.TaskStatus.finished_states(), do: :clear_previous, else: :check),
+      support_url: support_url(assignment, workflow_item, task)
     }
   end
 
   def recovery_context(_assignment, _user, nil), do: nil
+
+  defp support_url(assignment, workflow_item, task) do
+    body =
+      Enum.join(
+        [
+          dgettext("eyra-support", "recovery.description"),
+          dgettext("eyra-support", "recovery.task", task_name: workflow_item.title),
+          "assignment_id: #{assignment.id}",
+          "task_id: #{task.id}"
+        ],
+        "\n\n"
+      )
+
+    query =
+      URI.encode_query(
+        %{subject: dgettext("eyra-support", "recovery.subject"), body: body},
+        :rfc3986
+      )
+
+    "mailto:#{@support_email}?#{query}"
+  end
 
   def get_icon({%{group: group}, _} = _work_item) when is_binary(group) do
     String.downcase(group)

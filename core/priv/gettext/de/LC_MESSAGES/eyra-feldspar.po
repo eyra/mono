@@ -69,8 +69,8 @@ msgstr "Ihr letzter Versuch wurde nicht abgeschlossen"
 
 #, elixir-autogen, elixir-format
 msgid "recovery.description"
-msgstr "Ihr Gerät hatte möglicherweise nicht genug Speicher. Sie können es erneut versuchen. Wenn Sie ein Handy nutzen, kann ein Computer helfen. Kommen Sie nicht weiter? Dann wenden Sie sich an <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
+msgstr "Ihr Gerät hatte möglicherweise nicht genug Speicher. Wenn Sie ein Handy nutzen, kann ein Computer helfen. Wenn das weiterhin passiert, wenden Sie sich bitte an den Support."
 
 #, elixir-autogen, elixir-format
-msgid "recovery.retry"
-msgstr "Erneut versuchen"
+msgid "recovery.support"
+msgstr "Support"

@@ -53,4 +53,18 @@ defmodule Systems.Assignment.CrewTaskHelpersTest do
       refute other_context.scope == context.scope
     end
   end
+
+  test "support link opens an email that identifies the affected task",
+       %{assignment: assignment, user: user, workflow_item: workflow_item, task: task} do
+    context = Assignment.CrewTaskHelpers.recovery_context(assignment, user, {workflow_item, task})
+    uri = URI.parse(context.support_url)
+
+    assert uri.scheme == "mailto"
+    assert uri.path == "support@eyra.co"
+
+    body = URI.decode_query(uri.query)["body"]
+    assert body =~ "Task & follow-up"
+    assert body =~ "assignment_id: 20"
+    assert body =~ "task_id: 40"
+  end
 end

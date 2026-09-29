@@ -25,7 +25,8 @@ defmodule Systems.Feldspar.ToolViewTest do
         current_user: user,
         recovery: %{
           scope: "external-run/opaque-scope",
-          on_entry: Map.get(test_context, :on_entry, :check)
+          on_entry: Map.get(test_context, :on_entry, :check),
+          support_url: "mailto:support@eyra.co?subject=Help"
         }
       })
 
@@ -65,16 +66,16 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
-  test "an unfinished attempt offers the support email and keeps the recovery screen while a retry loads",
+  test "an unfinished attempt adds a recovery block to the start screen while a new attempt loads",
        %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
 
     assert has_element?(
              view,
-             "[data-testid='feldspar-recovery'] a[href='mailto:support@eyra.co']"
+             "[data-testid='feldspar-recovery'] a[data-testid='feldspar-recovery-support'][href='mailto:support@eyra.co?subject=Help']"
            )
 
-    refute has_element?(view, "[data-testid='feldspar-recovery-support']")
+    assert has_element?(view, "[data-testid='start-container']", "Test Feldspar App")
     assert has_element?(view, "[phx-click='prepare_start']")
     refute has_element?(view, "iframe")
 
