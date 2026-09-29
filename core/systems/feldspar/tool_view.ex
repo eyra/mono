@@ -200,9 +200,11 @@ defmodule Systems.Feldspar.ToolView do
           class={"w-full h-full flex-col items-center gap-8 py-8 #{if @started and @initialized, do: "hidden", else: "flex"}"}
         >
           <div :if={@vm.recovery} class="w-full" data-testid="feldspar-recovery">
-            <Area.sheet>
-              <NextAction.View.highlight {@vm.recovery} />
-            </Area.sheet>
+            <Area.content>
+              <div class="mx-auto max-w-4xl">
+                <NextAction.View.highlight {@vm.recovery} />
+              </div>
+            </Area.content>
           </div>
           <div class="w-full flex-1 flex flex-col items-center justify-center">
             <Area.sheet>
