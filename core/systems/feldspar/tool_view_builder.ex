@@ -1,75 +1,66 @@
 defmodule Systems.Feldspar.ToolViewBuilder do
   use Gettext, backend: CoreWeb.Gettext
-  use CoreWeb, :verified_routes
 
   @doc """
   Builds view model for Feldspar tool view.
 
   ## Parameters
   - tool: The Feldspar tool model
-  - assigns: Contains title and icon from CrewTaskContext
+  - assigns: Contains presentation data and an opaque recovery context from the host.
   """
-  def view_model(tool, %{title: title, icon: icon} = assigns) do
+  def view_model(
+        tool,
+        %{
+          title: title,
+          icon: icon,
+          recovery: %{scope: scope, on_entry: on_entry, support_url: support_url}
+        } = assigns
+      ) do
     {app_view, error} = build_app_view(tool, assigns)
     loading = Map.get(assigns, :loading, false) or Map.get(assigns, :preparing, false)
 
-    completed? =
-      Map.get(assigns, :task_status) in Systems.Crew.TaskStatus.finished_states() and
-        not Map.get(assigns, :preparing, false) and not Map.get(assigns, :started, false)
-
-    recovery? = Map.get(assigns, :recovery, false) and not completed?
+    unfinished_attempt? = Map.get(assigns, :unfinished_attempt?, false)
 
     %{
       tool: tool,
       title: title,
       icon: normalize_icon(icon),
-      description: description(recovery?),
-      recovery?: recovery?,
-      completed?: completed?,
-      recovery_id: "feldspar-recovery-#{tool.id}-#{Map.get(assigns, :task_id)}",
-      recovery_scope: recovery_scope(assigns),
-      support_button: support_button(assigns),
-      button: build_button(loading, recovery?, assigns),
+      description: dgettext("eyra-feldspar", "tool.description"),
+      recovery: build_recovery(unfinished_attempt?, support_url),
+      recovery_id: "feldspar-recovery-#{Base.url_encode64(scope, padding: false)}",
+      recovery_scope: scope,
+      recovery_on_entry: on_entry,
+      button: build_button(loading, unfinished_attempt?, assigns),
       app_view: app_view,
       error: error
     }
   end
 
-  defp description(true), do: dgettext("eyra-feldspar", "recovery.description")
-  defp description(false), do: dgettext("eyra-feldspar", "tool.description")
-
-  defp recovery_scope(%{
-         current_user: %{id: user_id},
-         assignment_id: assignment_id,
-         task_id: task_id
-       })
-       when is_integer(user_id) and is_integer(assignment_id) and is_integer(task_id),
-       do: "#{user_id}:#{assignment_id}:#{task_id}"
-
-  defp recovery_scope(_), do: nil
-
-  defp support_button(assigns) do
-    params =
-      Map.take(assigns, [:assignment_id, :task_id])
-      |> Enum.filter(fn {_key, value} -> is_integer(value) end)
-      |> Map.new()
-      |> Map.put(:context, "feldspar_recovery")
-      |> Map.put(:task_name, assigns.title)
-
+  defp build_recovery(true, support_url) do
     %{
-      action: %{type: :http_get, to: ~p"/support/helpdesk?#{params}"},
+      title: dgettext("eyra-feldspar", "recovery.title"),
+      description: dgettext("eyra-feldspar", "recovery.description"),
+      support_button: support_button(support_url)
+    }
+  end
+
+  defp build_recovery(false, _support_url), do: nil
+
+  defp support_button(support_url) do
+    %{
+      action: %{type: :http_get, to: support_url},
       face: %{type: :secondary, label: dgettext("eyra-feldspar", "recovery.support")},
       testid: "feldspar-recovery-support"
     }
   end
 
-  defp build_button(loading, recovery?, assigns) do
+  defp build_button(loading, unfinished_attempt?, assigns) do
     %{
       action: %{type: :send, event: "prepare_start"},
       face: %{
         type: :primary,
         label:
-          if(recovery?,
+          if(unfinished_attempt?,
             do: dgettext("eyra-feldspar", "recovery.retry"),
             else: dgettext("eyra-feldspar", "tool.button")
           ),

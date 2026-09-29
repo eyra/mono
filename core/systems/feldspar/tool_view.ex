@@ -16,9 +16,7 @@ defmodule Systems.Feldspar.ToolView do
       :assignment_id,
       :participant,
       :workflow_item_id,
-      :current_user,
-      :task_id,
-      :task_status
+      :recovery
     ]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
@@ -32,7 +30,7 @@ defmodule Systems.Feldspar.ToolView do
        started: false,
        loading: false,
        initialized: false,
-       recovery: false,
+       unfinished_attempt?: false,
        recovery_checked: false,
        preparing: false,
        exited: false,
@@ -57,8 +55,7 @@ defmodule Systems.Feldspar.ToolView do
         socket
       else
         socket
-        |> refresh_task_status()
-        |> assign(recovery_checked: true, recovery: unfinished == true)
+        |> assign(recovery_checked: true, unfinished_attempt?: unfinished == true)
         |> update_view_model()
       end
 
@@ -66,8 +63,6 @@ defmodule Systems.Feldspar.ToolView do
   end
 
   def handle_event("prepare_start", _, socket) do
-    socket = socket |> refresh_task_status() |> update_view_model()
-
     cond do
       socket.assigns.started or socket.assigns.preparing or
           not socket.assigns.recovery_checked ->
@@ -90,26 +85,13 @@ defmodule Systems.Feldspar.ToolView do
         %{"attempt_id" => attempt_id},
         %{assigns: %{preparing: true}} = socket
       ) do
-    socket = refresh_task_status(socket)
+    socket =
+      case parse_attempt_id(attempt_id) do
+        {:ok, attempt_id} -> start_attempt(socket, attempt_id)
+        _ -> cancel_preparation(socket)
+      end
 
-    case Ecto.UUID.cast(attempt_id) do
-      {:ok, attempt_id} ->
-        {:noreply,
-         socket
-         |> assign(
-           started: true,
-           loading: true,
-           initialized: false,
-           recovery: false,
-           preparing: false,
-           exited: false,
-           attempt_id: attempt_id
-         )
-         |> update_view_model()}
-
-      _ ->
-        {:noreply, socket |> assign(preparing: false) |> update_view_model()}
-    end
+    {:noreply, update_view_model(socket)}
   end
 
   def handle_event("start", _, socket), do: {:noreply, socket}
@@ -132,6 +114,26 @@ defmodule Systems.Feldspar.ToolView do
 
   def handle_event("feldspar_event", event, socket) do
     {:noreply, handle_feldspar_event(socket, event)}
+  end
+
+  defp parse_attempt_id(attempt_id) do
+    Ecto.UUID.cast(attempt_id)
+  end
+
+  defp start_attempt(socket, attempt_id) do
+    assign(socket,
+      started: true,
+      loading: true,
+      initialized: false,
+      unfinished_attempt?: false,
+      preparing: false,
+      exited: false,
+      attempt_id: attempt_id
+    )
+  end
+
+  defp cancel_preparation(socket) do
+    assign(socket, preparing: false)
   end
 
   defp handle_feldspar_event(
@@ -170,11 +172,6 @@ defmodule Systems.Feldspar.ToolView do
     socket |> Frameworks.Pixel.Flash.put_error("Unsupported event")
   end
 
-  defp refresh_task_status(%{assigns: %{task_id: task_id}} = socket) do
-    task = Systems.Crew.Public.get_task!(task_id)
-    assign(socket, task_status: task.status)
-  end
-
   defp modal_id(%{live_nest: %{modal: %{element: %{id: id}}}}), do: id
   defp modal_id(_), do: nil
 
@@ -185,7 +182,7 @@ defmodule Systems.Feldspar.ToolView do
         id={@vm.recovery_id}
         phx-hook="FeldsparRecovery"
         data-recovery-scope={@vm.recovery_scope}
-        data-completed={to_string(@vm.completed?)}
+        data-recovery-on-entry={@vm.recovery_on_entry}
         data-modal-id={modal_id(assigns)}
         class="w-full h-full"
         data-testid="feldspar-tool-view"
@@ -209,13 +206,16 @@ defmodule Systems.Feldspar.ToolView do
                   <Logo.platform platform={@vm.icon} variant={:square} class="w-24 h-24" />
                 <% end %>
               </div>
-              <Text.title2 align="text-center" margin="">
-                <%= if @vm.recovery?, do: dgettext("eyra-feldspar", "recovery.title"), else: @vm.title %>
-              </Text.title2>
-              <Text.body align="text-center"><%= @vm.description %></Text.body>
-              <div :if={@vm.recovery?} data-testid="feldspar-recovery">
-                <Button.dynamic {@vm.support_button} />
-              </div>
+              <%= if @vm.recovery do %>
+                <Text.title2 align="text-center" margin=""><%= @vm.recovery.title %></Text.title2>
+                <Text.body align="text-center"><%= @vm.recovery.description %></Text.body>
+                <div data-testid="feldspar-recovery">
+                  <Button.dynamic {@vm.recovery.support_button} />
+                </div>
+              <% else %>
+                <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
+                <Text.body align="text-center"><%= @vm.description %></Text.body>
+              <% end %>
               <.wrap>
                 <Button.dynamic {@vm.button} />
               </.wrap>

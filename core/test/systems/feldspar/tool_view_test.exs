@@ -5,16 +5,14 @@ defmodule Systems.Feldspar.ToolViewTest do
 
   alias Core.Repo
   alias Frameworks.Concept.LiveContext
-  alias Systems.{Crew, Feldspar, Workflow}
+  alias Systems.{Feldspar, Workflow}
 
-  setup %{conn: conn} do
+  setup %{conn: conn} = test_context do
     isolate_signals()
     tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
     tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
     tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
     user = Factories.insert!(:member)
-    crew = Factories.insert!(:crew)
-    {:ok, task} = Crew.Public.create_task(crew, user, [Ecto.UUID.generate()])
 
     context =
       LiveContext.new(%{
@@ -25,8 +23,11 @@ defmodule Systems.Feldspar.ToolViewTest do
         participant: "test_participant",
         workflow_item_id: 456,
         current_user: user,
-        task_id: task.id,
-        task_status: task.status
+        recovery: %{
+          scope: "external-run/opaque-scope",
+          on_entry: Map.get(test_context, :on_entry, :check),
+          support_url: "/support/helpdesk?source=external-run"
+        }
       })
 
     {:ok, view, _html} =
@@ -36,7 +37,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         session: %{"live_context" => context}
       )
 
-    %{view: view, task: task}
+    %{view: view}
   end
 
   test "does not mount an iframe until checking recovery and explicitly starting", %{view: view} do
@@ -65,34 +66,19 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
-  test "an unfinished attempt offers support without starting another attempt", %{
-    view: view,
-    task: task
+  test "an unfinished attempt offers the host support link without starting another attempt", %{
+    view: view
   } do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
     assert has_element?(view, "[data-testid='feldspar-recovery']")
     assert has_element?(view, "[phx-click='prepare_start']")
 
-    support_uri =
-      view
-      |> element("a[data-testid='feldspar-recovery-support']")
-      |> render()
-      |> Floki.parse_fragment!()
-      |> Floki.attribute("href")
-      |> List.first()
-      |> URI.parse()
-
-    assert support_uri.path == "/support/helpdesk"
-
-    assert URI.decode_query(support_uri.query) == %{
-             "assignment_id" => "123",
-             "context" => "feldspar_recovery",
-             "task_id" => to_string(task.id),
-             "task_name" => "Test Feldspar App"
-           }
+    assert has_element?(
+             view,
+             "a[data-testid='feldspar-recovery-support'][href='/support/helpdesk?source=external-run']"
+           )
 
     refute has_element?(view, "iframe")
-    assert Repo.get!(Crew.TaskModel, task.id).status == :pending
 
     render_click(view, "prepare_start")
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
@@ -100,24 +86,17 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "iframe")
   end
 
-  test "a completed task can be explicitly retried without restoring stale recovery", %{
-    view: view,
-    task: task
-  } do
-    task |> Ecto.Changeset.change(status: :completed) |> Repo.update!()
-    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+  @tag on_entry: :clear_previous
+  test "an entry that clears old recovery still allows a deliberate new attempt", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
 
-    assert has_element?(view, "[data-completed='true']")
     refute has_element?(view, "[data-testid='feldspar-recovery']")
     refute has_element?(view, "iframe")
-
     assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
+
     render_click(view, "prepare_start")
-    assert has_element?(view, "[data-completed='false']")
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
     assert has_element?(view, "iframe")
-    assert has_element?(view, "[data-completed='false']")
-    assert Repo.get!(Crew.TaskModel, task.id).status == :completed
   end
 end

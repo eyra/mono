@@ -1,4 +1,6 @@
 defmodule Systems.Assignment.CrewTaskHelpers do
+  use CoreWeb, :verified_routes
+
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
@@ -13,6 +15,24 @@ defmodule Systems.Assignment.CrewTaskHelpers do
 
   def task_status(%{status: status}), do: status
   def task_status(_), do: :pending
+
+  def recovery_context(assignment, user, {workflow_item, task}) do
+    params = %{
+      context: "feldspar_recovery",
+      task_name: workflow_item.title,
+      assignment_id: assignment.id,
+      task_id: task.id
+    }
+
+    %{
+      scope: "#{user.id}:#{assignment.id}:#{task.id}",
+      on_entry:
+        if(task.status in Crew.TaskStatus.finished_states(), do: :clear_previous, else: :check),
+      support_url: ~p"/support/helpdesk?#{params}"
+    }
+  end
+
+  def recovery_context(_assignment, _user, nil), do: nil
 
   def get_icon({%{group: group}, _} = _work_item) when is_binary(group) do
     String.downcase(group)

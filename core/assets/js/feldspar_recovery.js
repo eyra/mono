@@ -96,6 +96,11 @@ function newAttemptId() {
 export const FeldsparRecovery = {
   mounted() {
     this.scope = this.el.dataset.recoveryScope;
+    this.entryAttempts =
+      this.el.dataset.recoveryOnEntry === "clear_previous"
+        ? storedAttempts(this.scope)
+        : null;
+    this.ignoredEntryAttempts = new Map();
     this.recoveredAttempts = [];
     this.attempt = null;
     this.releaseLock = null;
@@ -145,27 +150,45 @@ export const FeldsparRecovery = {
 
   async checkRecovery(interruptedAttemptId) {
     const generation = this.generation;
-    const candidates =
-      this.el.dataset.completed === "true" ? [] : storedAttempts(this.scope);
+    const clearPrevious = this.entryAttempts !== null;
+    const candidates = (
+      this.entryAttempts || storedAttempts(this.scope)
+    ).filter(
+      (attempt) => this.ignoredEntryAttempts.get(attempt.key) !== attempt.value
+    );
     const checked = await Promise.all(
       candidates.map((attempt) =>
         attempt.attempt_id === interruptedAttemptId
           ? { ...attempt, owned: true }
-          : withAttemptLock(attempt.key, (available) =>
-              available === false ? null : attempt
-            )
+          : withAttemptLock(attempt.key, (available) => {
+              if (available === false) return null;
+              if (
+                clearPrevious &&
+                available === true &&
+                !this.disposed &&
+                generation === this.generation
+              )
+                removeKey(attempt.key, attempt.value);
+              return attempt;
+            })
       )
     );
     if (this.disposed || generation !== this.generation) return;
-    if (this.el.dataset.completed === "true") {
-      this.clearCompletedScope();
+    if (clearPrevious) {
+      // Unknown ownership cannot be retired safely, but must not revive this
+      // entry's stale recovery when the retained hook reconnects.
+      checked.filter(Boolean).forEach((attempt) => {
+        this.ignoredEntryAttempts.set(attempt.key, attempt.value);
+      });
+      this.entryAttempts = null;
+      this.recoveredAttempts = [];
     } else {
       this.recoveredAttempts = checked.filter(Boolean);
     }
     try {
       await this.pushEvent("feldspar_recovery_checked", {
         unfinished:
-          this.el.dataset.completed !== "true" &&
+          !clearPrevious &&
           (Boolean(interruptedAttemptId) || this.recoveredAttempts.length > 0),
       });
     } catch {
@@ -186,23 +209,12 @@ export const FeldsparRecovery = {
   },
 
   async prepareStart() {
-    if (
-      this.disposed ||
-      this.starting ||
-      this.attempt ||
-      this.el.dataset.completed === "true"
-    )
-      return;
+    if (this.disposed || this.starting || this.attempt) return;
     this.starting = true;
     const generation = this.generation;
     try {
       await this.checking;
-      if (
-        this.disposed ||
-        generation !== this.generation ||
-        this.el.dataset.completed === "true"
-      )
-        return;
+      if (this.disposed || generation !== this.generation) return;
       const attemptId = newAttemptId();
       const key = `${scopePrefix(this.scope)}${attemptId}`;
       const release = await new Promise((resolve) => {
@@ -212,11 +224,7 @@ export const FeldsparRecovery = {
           resolve(() => {});
         });
       });
-      if (
-        this.disposed ||
-        generation !== this.generation ||
-        this.el.dataset.completed === "true"
-      ) {
+      if (this.disposed || generation !== this.generation) {
         release();
         return;
       }
@@ -232,12 +240,7 @@ export const FeldsparRecovery = {
       this.recoveredAttempts = [];
       // Write the replacement first, so interruption during retirement stays recoverable.
       await this.retireRecoveredAttempts(recovered);
-      if (
-        this.disposed ||
-        generation !== this.generation ||
-        this.el.dataset.completed === "true"
-      )
-        return;
+      if (this.disposed || generation !== this.generation) return;
       await this.pushEvent("start", { attempt_id: attemptId });
     } catch {
       // Retain the marker if LiveView disconnects while starting.
@@ -263,17 +266,6 @@ export const FeldsparRecovery = {
     const recovered = this.recoveredAttempts;
     this.recoveredAttempts = [];
     return this.retireRecoveredAttempts(recovered);
-  },
-
-  clearCompletedScope() {
-    this.generation++;
-    this.clearOwnedAttempt();
-    this.recoveredAttempts = [];
-    attemptKeys(this.scope).forEach((key) => removeKey(key));
-  },
-
-  updated() {
-    if (this.el.dataset.completed === "true") this.clearCompletedScope();
   },
 
   destroyed() {

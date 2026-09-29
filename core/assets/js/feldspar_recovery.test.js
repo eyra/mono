@@ -88,12 +88,12 @@ describe("Feldspar tab recovery", () => {
     return key;
   }
 
-  async function mount({ scope = SCOPE, completed = false } = {}) {
+  async function mount({ scope = SCOPE, onEntry = "check" } = {}) {
     const el = document.createElement("div");
     el.id = `recovery-${recoveries.length}`;
     el.setAttribute("phx-hook", "FeldsparRecovery");
     el.dataset.recoveryScope = scope;
-    el.dataset.completed = String(completed);
+    el.dataset.recoveryOnEntry = onEntry;
     el.dataset.modalId = `modal-${recoveries.length}`;
     document.body.append(el);
     const events = new Map();
@@ -247,18 +247,33 @@ describe("Feldspar tab recovery", () => {
     ]);
   });
 
-  it("lets completion override a retained attempt on reconnect", async () => {
-    const hook = await mount();
-    const attemptId = await start(hook);
-    hook.disconnected();
-    hook.el.dataset.completed = "true";
-    hook.pushEvent.mockClear();
-    await hook.reconnected();
-    await hook.events.get("feldspar:prepare")({ id: hook.el.id });
+  it("clears previous recovery once and preserves an explicit retry through patches and reconnect", async () => {
+    const staleKey = seed();
+    const hook = await mount({ onEntry: "clear_previous" });
     expect(hook.pushEvent.mock.calls).toEqual([
       ["feldspar_recovery_checked", { unfinished: false }],
     ]);
-    expect(window.localStorage.getItem(markerKey(SCOPE, attemptId))).toBeNull();
+    expect(window.localStorage.getItem(staleKey)).toBeNull();
+
+    const attemptId = await start(hook);
+    const key = markerKey(SCOPE, attemptId);
+    hook.el.dataset.recoveryOnEntry = "clear_previous";
+    hook.updated?.();
+    expect(window.localStorage.getItem(key)).not.toBeNull();
+    hook.pushEvent.mockClear();
+    hook.disconnected();
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: true }],
+    ]);
+    expect(window.localStorage.getItem(key)).not.toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
+
+    const retryId = await start(hook);
+    expect(window.localStorage.getItem(key)).toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
   });
 
   it("still starts explicitly when browser storage is denied", async () => {
@@ -354,25 +369,88 @@ describe("Feldspar tab recovery", () => {
     expect(window.localStorage.getItem(markerKey(SCOPE, attemptId))).toBeNull();
   });
 
-  it("suppresses stale recovery for completed tasks and clears only their scope", async () => {
+  it("clears only the initial orphan snapshot without starting or touching active siblings", async () => {
+    const sibling = await mount();
+    const siblingId = await start(sibling);
     const staleKey = seed();
     const otherKey = seed("participant-2:assignment-2:task-3");
-    const hook = await mount({ completed: true });
+    const scan = deferred();
+    const request = navigator.locks.request.bind(navigator.locks);
+    vi.spyOn(navigator.locks, "request").mockImplementationOnce(
+      async (...args) => {
+        await scan.promise;
+        return request(...args);
+      }
+    );
+    const mounting = mount({ onEntry: "clear_previous" });
+    const laterKey = seed(SCOPE, LATER_ATTEMPT);
+    scan.resolve();
+    const hook = await mounting;
     expect(hook.pushEvent.mock.calls).toEqual([
       ["feldspar_recovery_checked", { unfinished: false }],
     ]);
-    await hook.events.get("feldspar:prepare")({ id: hook.el.id });
-    expect(hook.pushEvent).not.toHaveBeenCalledWith("start", expect.anything());
     expect(window.localStorage.getItem(staleKey)).toBeNull();
     expect(window.localStorage.getItem(otherKey)).not.toBeNull();
+    expect(window.localStorage.getItem(laterKey)).not.toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, siblingId))
+    ).not.toBeNull();
+    expect(fetch).not.toHaveBeenCalled();
   });
 
-  it("clears a running marker when authoritative completion arrives", async () => {
-    const hook = await mount();
+  it("suppresses unknown initial ownership without deleting it or hiding a later interrupted retry", async () => {
+    vi.stubGlobal("navigator", {});
+    const unknownKey = seed();
+    const hook = await mount({ onEntry: "clear_previous" });
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+    hook.disconnected();
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+    expect(window.localStorage.getItem(unknownKey)).not.toBeNull();
+
     const attemptId = await start(hook);
-    hook.el.dataset.completed = "true";
-    hook.updated();
+    hook.pushEvent.mockClear();
+    hook.disconnected();
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: true }],
+    ]);
+    const retryId = await start(hook);
+    expect(window.localStorage.getItem(unknownKey)).not.toBeNull();
     expect(window.localStorage.getItem(markerKey(SCOPE, attemptId))).toBeNull();
+    expect(
+      window.localStorage.getItem(markerKey(SCOPE, retryId))
+    ).not.toBeNull();
+  });
+
+  it("does not let a disconnected entry scan retire markers or consume its instruction", async () => {
+    const key = seed();
+    const scan = deferred();
+    const request = navigator.locks.request.bind(navigator.locks);
+    vi.spyOn(navigator.locks, "request").mockImplementationOnce(
+      async (...args) => {
+        await scan.promise;
+        return request(...args);
+      }
+    );
+    const mounting = mount({ onEntry: "clear_previous" });
+    const hook = recoveries.at(-1);
+    hook.disconnected();
+    scan.resolve();
+    await mounting;
+    expect(hook.pushEvent).not.toHaveBeenCalled();
+    expect(window.localStorage.getItem(key)).not.toBeNull();
+
+    await hook.reconnected();
+    expect(hook.pushEvent.mock.calls).toEqual([
+      ["feldspar_recovery_checked", { unfinished: false }],
+    ]);
+    expect(window.localStorage.getItem(key)).toBeNull();
   });
 
   it("treats only the matching modal close as explicit cancellation", async () => {
