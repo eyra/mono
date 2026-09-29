@@ -201,9 +201,7 @@ defmodule Systems.Feldspar.ToolView do
         >
           <div :if={@vm.recovery} class="w-full" data-testid="feldspar-recovery">
             <Area.sheet>
-              <div class="px-8">
-                <NextAction.View.highlight {@vm.recovery} />
-              </div>
+              <NextAction.View.highlight {@vm.recovery} />
             </Area.sheet>
           </div>
           <div class="w-full flex-1 flex flex-col items-center justify-center">
