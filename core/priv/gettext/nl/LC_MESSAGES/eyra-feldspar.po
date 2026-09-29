@@ -69,8 +69,8 @@ msgstr "Je vorige poging is niet afgerond"
 
 #, elixir-autogen, elixir-format
 msgid "recovery.description"
-msgstr "Je apparaat had mogelijk niet genoeg geheugen. Je kunt het opnieuw proberen. Gebruik je een telefoon? Probeer eventueel een computer. Kom je er niet uit? Neem dan contact op via <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
+msgstr "Je apparaat had mogelijk niet genoeg geheugen. Gebruik je een telefoon? Probeer eventueel een computer. Blijft dit gebeuren? Neem dan contact op met support."
 
 #, elixir-autogen, elixir-format
-msgid "recovery.retry"
-msgstr "Opnieuw proberen"
+msgid "recovery.support"
+msgstr "Support"

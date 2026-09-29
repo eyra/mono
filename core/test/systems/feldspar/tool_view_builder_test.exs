@@ -76,7 +76,8 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       icon: icon,
       recovery: %{
         scope: "opaque-execution-scope",
-        on_entry: :check
+        on_entry: :check,
+        support_url: "mailto:support@eyra.co"
       }
     }
   end
