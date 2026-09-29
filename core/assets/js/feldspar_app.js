@@ -21,23 +21,19 @@ export const FeldsparApp = {
     this.attemptId = this.el.dataset.attemptId;
     const iframe = this.getIframe();
 
-    // Legacy loading event from Feldspar apps. Newer apps (after 2025-04-30)
-    // should use the app-loaded event. This should be kept for backwards
-    // compatibility.
-    this.loadListener = () => {
-      this.onAppLoaded({ fromEvent: "onload" });
-    };
-    iframe.addEventListener("load", this.loadListener);
-
     iframe.setAttribute("src", this.el.dataset.src);
 
     const onAppLoaded = this.onAppLoaded.bind(this);
     this.messageListener = function (event) {
       if (event.source !== iframe.contentWindow || !event.data) return;
-      if (event.data.action === "resize") {
+      const { action } = event.data;
+      if (action === "resize") {
         iframe.setAttribute("style", `height:${event.data.height}px`);
-      } else if (event.data.action === "app-loaded") {
-        onAppLoaded({ fromEvent: "app-loaded" });
+      }
+      // Apps send app-loaded (since 2025-04-24) or, older ones, resize only once
+      // they listen for live-init. The iframe load event can fire before that.
+      if (action === "app-loaded" || action === "resize") {
+        onAppLoaded();
       }
     };
     window.addEventListener("message", this.messageListener);
@@ -45,7 +41,6 @@ export const FeldsparApp = {
 
   destroyed() {
     this.isDestroyed = true;
-    this.getIframe()?.removeEventListener("load", this.loadListener);
     window.removeEventListener("message", this.messageListener);
     this.closeChannel();
   },
@@ -64,7 +59,7 @@ export const FeldsparApp = {
   },
 
   setupChannel() {
-    // Both startup signals may fire for one iframe; keep the first channel.
+    // app-loaded and resize repeat; the first one creates the only channel.
     if (this.channel) {
       return false;
     }
@@ -76,23 +71,18 @@ export const FeldsparApp = {
     return true;
   },
 
-  onAppLoaded({ fromEvent }) {
+  onAppLoaded() {
     if (this.isDestroyed) return;
-    let action = "live-init";
-    let locale = this.el.dataset.locale;
-
     const iframe = this.getIframe();
-
-    // Only add safety check for app-loaded events (not onload)
-    // The onload event is reliable, app-loaded can fail due to modal timing
-    if (fromEvent === "app-loaded" && (!iframe || !iframe.contentWindow)) {
-      return;
-    }
+    // The iframe may not be available yet due to modal timing.
+    if (!iframe?.contentWindow) return;
     if (!this.setupChannel()) return;
 
-    iframe.contentWindow.postMessage({ action, locale }, "*", [
-      this.channel.port2,
-    ]);
+    iframe.contentWindow.postMessage(
+      { action: "live-init", locale: this.el.dataset.locale },
+      "*",
+      [this.channel.port2]
+    );
   },
 
   async handleMessage(e) {

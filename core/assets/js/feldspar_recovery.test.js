@@ -637,12 +637,11 @@ describe("Feldspar tab recovery", () => {
     const hook = await mount();
     const attemptId = await start(hook);
     const app = mountApp(hook, attemptId);
-    app.onAppLoaded({ fromEvent: "onload" });
+    app.onAppLoaded();
     const channel = channels.at(-1);
     const iframe = app.getIframe();
     app.destroyed();
     hook.destroyed();
-    iframe.dispatchEvent(new Event("load"));
     window.dispatchEvent(
       new MessageEvent("message", {
         source: iframe.contentWindow,
