@@ -76,8 +76,7 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       icon: icon,
       recovery: %{
         scope: "opaque-execution-scope",
-        on_entry: :check,
-        support_url: "/support/helpdesk"
+        on_entry: :check
       }
     }
   end

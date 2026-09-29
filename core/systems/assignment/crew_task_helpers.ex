@@ -1,6 +1,4 @@
 defmodule Systems.Assignment.CrewTaskHelpers do
-  use CoreWeb, :verified_routes
-
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Workflow
@@ -16,19 +14,11 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   def task_status(%{status: status}), do: status
   def task_status(_), do: :pending
 
-  def recovery_context(assignment, user, {workflow_item, task}) do
-    params = %{
-      context: "feldspar_recovery",
-      task_name: workflow_item.title,
-      assignment_id: assignment.id,
-      task_id: task.id
-    }
-
+  def recovery_context(assignment, user, {_workflow_item, task}) do
     %{
       scope: "#{user.id}:#{assignment.id}:#{task.id}",
       on_entry:
-        if(task.status in Crew.TaskStatus.finished_states(), do: :clear_previous, else: :check),
-      support_url: ~p"/support/helpdesk?#{params}"
+        if(task.status in Crew.TaskStatus.finished_states(), do: :clear_previous, else: :check)
     }
   end
 

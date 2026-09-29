@@ -74,7 +74,3 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "recovery.retry"
 msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "recovery.support"
-msgstr ""
