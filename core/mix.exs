@@ -91,7 +91,7 @@ defmodule Core.MixProject do
       {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
       {:ex_aws_s3, "2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
-      {:faker, "0.19.0-alpha.1"},
+      {:faker, "== 0.19.0"},
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
       {:hackney, "1.25.0"},
