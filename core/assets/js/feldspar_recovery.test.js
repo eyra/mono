@@ -633,16 +633,12 @@ describe("Feldspar tab recovery", () => {
     ).not.toBeNull();
   });
 
-  it("closes replaced channels and removes listeners without treating teardown as cancellation", async () => {
+  it("closes the channel and removes listeners without treating teardown as cancellation", async () => {
     const hook = await mount();
     const attemptId = await start(hook);
     const app = mountApp(hook, attemptId);
     app.onAppLoaded({ fromEvent: "onload" });
-    const firstChannel = channels.at(-1);
-    app.onAppLoaded({ fromEvent: "app-loaded" });
-    const lastChannel = channels.at(-1);
-    expect(firstChannel.port1.close).toHaveBeenCalledOnce();
-    expect(firstChannel.port2.close).toHaveBeenCalledOnce();
+    const channel = channels.at(-1);
     const iframe = app.getIframe();
     app.destroyed();
     hook.destroyed();
@@ -654,8 +650,8 @@ describe("Feldspar tab recovery", () => {
       })
     );
     closeModal(hook);
-    expect(lastChannel.port1.close).toHaveBeenCalledOnce();
-    expect(lastChannel.port2.close).toHaveBeenCalledOnce();
+    expect(channel.port1.close).toHaveBeenCalledOnce();
+    expect(channel.port2.close).toHaveBeenCalledOnce();
     expect(iframe.getAttribute("style")).toBeNull();
     expect(
       window.localStorage.getItem(markerKey(SCOPE, attemptId))

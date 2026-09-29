@@ -63,9 +63,9 @@ export const FeldsparApp = {
     return this.el.querySelector("iframe");
   },
 
-  setupChannel({ fromEvent }) {
-    // The legacy loading event could cause the channel to be set up twice.
-    if (fromEvent === "onload" && this.channel) {
+  setupChannel() {
+    // Both startup signals may fire for one iframe; keep the first channel.
+    if (this.channel) {
       return false;
     }
     this.closeChannel();
@@ -88,7 +88,7 @@ export const FeldsparApp = {
     if (fromEvent === "app-loaded" && (!iframe || !iframe.contentWindow)) {
       return;
     }
-    if (!this.setupChannel({ fromEvent })) return;
+    if (!this.setupChannel()) return;
 
     iframe.contentWindow.postMessage({ action, locale }, "*", [
       this.channel.port2,
