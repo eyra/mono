@@ -65,9 +65,8 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
-  test "an unfinished attempt offers the support email without starting another attempt", %{
-    view: view
-  } do
+  test "an unfinished attempt offers the support email and keeps the recovery screen while a retry loads",
+       %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
 
     assert has_element?(
@@ -81,8 +80,12 @@ defmodule Systems.Feldspar.ToolViewTest do
 
     render_click(view, "prepare_start")
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
-    refute has_element?(view, "[data-testid='feldspar-recovery']")
     assert has_element?(view, "iframe")
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'] .prism-btn-loading")
+
+    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
+    assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
   @tag on_entry: :clear_previous

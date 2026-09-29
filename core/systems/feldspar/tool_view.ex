@@ -125,7 +125,6 @@ defmodule Systems.Feldspar.ToolView do
       started: true,
       loading: true,
       initialized: false,
-      unfinished_attempt?: false,
       preparing: false,
       exited: false,
       attempt_id: attempt_id
