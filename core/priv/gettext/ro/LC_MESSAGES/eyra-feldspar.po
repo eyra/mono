@@ -78,7 +78,7 @@ msgstr "Încercarea anterioară nu s-a încheiat"
 
 #, elixir-autogen, elixir-format
 msgid "recovery.description"
-msgstr "Este posibil ca dispozitivul să nu fi avut suficientă memorie. Puteți încerca din nou sau scrie la <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>. Dacă folosiți un telefon, încercarea pe un calculator poate ajuta."
+msgstr "Este posibil ca dispozitivul să nu fi avut suficientă memorie. Puteți încerca din nou. Dacă folosiți un telefon, încercarea pe un calculator poate ajuta. Dacă problema se repetă, scrieți la <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "recovery.retry"

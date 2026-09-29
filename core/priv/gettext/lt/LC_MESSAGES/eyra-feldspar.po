@@ -78,7 +78,7 @@ msgstr "Ankstesnis bandymas nebuvo baigtas"
 
 #, elixir-autogen, elixir-format
 msgid "recovery.description"
-msgstr "Įrenginyje galėjo nepakakti atminties. Galima bandyti dar kartą arba rašyti adresu <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>. Jei naudojamas telefonas, gali padėti bandymas kompiuteriu."
+msgstr "Įrenginyje galėjo nepakakti atminties. Galima bandyti dar kartą. Jei naudojamas telefonas, gali padėti bandymas kompiuteriu. Jei tai pasikartos, galima rašyti adresu <span class=\"text-primary underline\"><a href=\"mailto:support@eyra.co\">support@eyra.co</a></span>."
 
 #, elixir-autogen, elixir-format
 msgid "recovery.retry"
