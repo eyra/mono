@@ -4,6 +4,9 @@ vi.mock("phoenix_html", () => ({}));
 vi.mock("phoenix", () => ({ Socket: class {} }));
 vi.mock("phoenix_live_view", () => ({
   LiveSocket: class {
+    constructor(_path, _socket, opts) {
+      globalThis.__liveSocketOpts = opts;
+    }
     connect() {}
   },
 }));
@@ -32,7 +35,11 @@ vi.mock("./auto_submit", () => ({ AutoSubmit: {} }));
 vi.mock("./reset_scroll", () => ({ ResetScroll: {} }));
 vi.mock("./fullscreen_image", () => ({ FullscreenImage: {} }));
 vi.mock("./blurhash", () => ({ Blurhash: {} }));
-vi.mock("./user_state", () => ({ UserState: {}, getAllUserState: () => ({}) }));
+const userState = vi.hoisted(() => ({ current: {} }));
+vi.mock("./user_state", () => ({
+  UserState: {},
+  getAllUserState: () => userState.current,
+}));
 
 describe("app entrypoint", () => {
   beforeEach(() => {
@@ -66,5 +73,20 @@ describe("app entrypoint", () => {
     expect(form.elements._method.value).toBe("delete");
     expect(form.elements._csrf_token.value).toBe("entrypoint-csrf-token");
     expect(submit).toHaveBeenCalledOnce();
+  });
+
+  it("reads user_state fresh on every LiveView (re)join", async () => {
+    userState.current = { "next://task": "1" };
+    await import("./app");
+    const { params } = globalThis.__liveSocketOpts;
+
+    expect(params().user_state).toEqual({ "next://task": "1" });
+
+    userState.current = { "next://task": "1", "next://page": "4" };
+    expect(params().user_state).toEqual({
+      "next://task": "1",
+      "next://page": "4",
+    });
+    expect(params()._csrf_token).toBe("entrypoint-csrf-token");
   });
 });

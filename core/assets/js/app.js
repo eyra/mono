@@ -104,7 +104,9 @@ let liveSocket = new LiveSocket("/live", Socket, {
       TabBar.onBeforeElUpdated(from, to);
     },
   },
-  params: {
+  // Function: LiveView calls it on every (re)join, so user_state and viewport
+  // are current after a reconnect (e.g. iOS suspending the WebSocket).
+  params: () => ({
     _csrf_token: csrfToken,
     timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
     viewport: {
@@ -112,7 +114,7 @@ let liveSocket = new LiveSocket("/live", Socket, {
       height: window.innerHeight,
     },
     user_state: getAllUserState(),
-  },
+  }),
   hooks: Hooks,
 });
 
