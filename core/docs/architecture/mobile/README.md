@@ -27,18 +27,18 @@ The architecture must allow a route's delivery level to be chosen deliberately p
 
 ## Proof of concept
 
-Before recording an architecture decision, build a small PoC around a representative journey that includes web navigation, a native-navigation transition, and—where feasible—a native-rendered route.
+The current PoC ([UC-SENSE-01](https://app.basecamp.com/5734045/buckets/35926565/todos/10268625296), scope approved 2026-09-03) evaluates Tier 1 routes: existing Phoenix LiveView pages rendered in WebViews behind a native tabbar. Native-rendered routes (Tier 3) are deferred; implementing one is not a requirement of this PoC.
 
-Candidate approaches may include a Hotwire-style native navigation model, a custom BFF for native routes, Tauri, or other viable options. These are options under evaluation, not architecture components.
+Evaluate the shell implementation against the criteria below. Broader approaches such as a Hotwire-style native navigation model, a custom BFF for native routes, or Tauri remain possible future choices, not commitments of this PoC.
 
 Evaluate each candidate against:
 
-- navigation and deep-link behaviour across web and native routes;
+- navigation and deep-link behaviour for the existing web-rendered routes;
 - LiveView compatibility and preservation of existing routes;
 - native capabilities and platform lifecycle handling;
 - authentication, external handoff, recovery, and error handling;
 - delivery and update model, observability, testability, and developer workflow;
-- cost of introducing and migrating native-rendered routes.
+- implications for future native-rendered routes, without implementing or committing to them.
 
 Record the selected approach and only the resulting commitments as ADRs after the PoC provides evidence.
 
