@@ -13,6 +13,7 @@ defmodule Next.WellKnownControllerTest do
              json_response(conn, 200)
 
     assert "XNWQJGGM96.co.eyra.next" in app_ids
+    assert "XNWQJGGM96.co.eyra.next.dev" in app_ids
     assert components == [%{"/" => "/assignment/*"}]
   end
 end
