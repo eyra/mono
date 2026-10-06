@@ -6,6 +6,15 @@ defmodule Next.Bundle do
   def routes do
     if include?() do
       quote do
+        # No pipeline: iOS fetches this without cookies and must get JSON, not a redirect.
+        scope "/", Next do
+          get(
+            "/.well-known/apple-app-site-association",
+            WellKnownController,
+            :apple_app_site_association
+          )
+        end
+
         scope "/", Next do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/signin", Account.SigninPage)
