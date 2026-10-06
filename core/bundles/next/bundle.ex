@@ -6,7 +6,6 @@ defmodule Next.Bundle do
   def routes do
     if include?() do
       quote do
-        # No pipeline: iOS fetches this without cookies and must get JSON, not a redirect.
         scope "/", Next do
           get(
             "/.well-known/apple-app-site-association",
