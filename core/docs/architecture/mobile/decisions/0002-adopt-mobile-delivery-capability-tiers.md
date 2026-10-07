@@ -16,6 +16,8 @@ A route's tier is chosen per use case. No product area is committed wholesale to
 
 Defer decisions on specific implementations until a proof of concept evaluates a representative journey. This includes, but is not limited to, a Hotwire-style navigation model, Tauri, and a custom BFF or native rendering contract.
 
+The current PoC ([UC-SENSE-01](https://app.basecamp.com/5734045/buckets/35926565/todos/10268625296), scope approved 2026-09-03) evaluates Tier 1 routes: existing Phoenix LiveView pages rendered in WebViews behind a native tabbar. Native-rendered routes (Tier 3) are deferred; this PoC does not require or commit to a native-rendered route.
+
 ## Consequences
 
 The current architecture commits to the capabilities and their technology-independent constraints, not to an implementation:
@@ -25,7 +27,7 @@ The current architecture commits to the capabilities and their technology-indepe
 - existing LiveView routes remain valid; native rendering is additive;
 - backend domain logic and authorization must not be coupled to a chosen client technology.
 
-The PoC must evaluate navigation and deep links, LiveView compatibility, native and lifecycle capabilities, authentication and recovery, delivery and update model, observability, testability, developer workflow, and migration cost. Record the selected implementation and its resulting commitments in later ADRs.
+Within that scope, the PoC must evaluate navigation and deep links, LiveView compatibility, native and lifecycle capabilities, authentication and recovery, delivery and update model, observability, testability, and developer workflow. Consider future migration implications without implementing native-rendered routes. Record the selected shell technology and its resulting commitments in later implementation ADRs.
 
 ## Alternatives considered
 

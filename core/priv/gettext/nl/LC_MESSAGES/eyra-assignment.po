@@ -730,11 +730,11 @@ msgstr "Exporteer"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.body"
-msgstr ""
+msgstr "Deze studie is momenteel niet beschikbaar. Neem contact op met de onderzoeker die je heeft uitgenodigd."
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.title"
-msgstr ""
+msgstr "Deze studie is niet beschikbaar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "contributions.all_tasks_finished"

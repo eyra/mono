@@ -8,14 +8,12 @@ defmodule Systems.Support.HelpdeskForm do
   alias Frameworks.Pixel.Selector
 
   @impl true
-  def update(%{id: id, user: user} = params, socket) do
+  def update(%{id: id, user: user}, socket) do
     {
       :ok,
       socket
       |> assign(:id, id)
       |> assign(:user, user)
-      |> assign(:initial_title, Map.get(params, :initial_title, ""))
-      |> assign(:initial_description, Map.get(params, :initial_description, ""))
       |> initialize()
       |> compose_child(:type_selector)
     }
@@ -31,16 +29,12 @@ defmodule Systems.Support.HelpdeskForm do
 
   defp force_initialize(socket) do
     type = :question
-
-    initial_attrs = %{
-      title: socket.assigns.initial_title,
-      description: socket.assigns.initial_description,
-      type: type
-    }
+    # Create a changeset with empty values to ensure form fields are reset
+    empty_attrs = %{title: "", description: "", type: type}
 
     socket
     |> assign(
-      changeset: Support.Public.prepare_ticket(initial_attrs),
+      changeset: Support.Public.prepare_ticket(empty_attrs),
       type: type,
       type_labels: Enums.TicketTypes.labels(type)
     )

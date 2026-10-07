@@ -26,7 +26,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         recovery: %{
           scope: "external-run/opaque-scope",
           on_entry: Map.get(test_context, :on_entry, :check),
-          support_url: "/support/helpdesk?source=external-run"
+          support_url: "mailto:support@eyra.co?subject=Help"
         }
       })
 
@@ -66,24 +66,27 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
-  test "an unfinished attempt offers the host support link without starting another attempt", %{
-    view: view
-  } do
+  test "an unfinished attempt adds a recovery block to the start screen while a new attempt loads",
+       %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
-    assert has_element?(view, "[data-testid='feldspar-recovery']")
-    assert has_element?(view, "[phx-click='prepare_start']")
 
     assert has_element?(
              view,
-             "a[data-testid='feldspar-recovery-support'][href='/support/helpdesk?source=external-run']"
+             "[data-testid='feldspar-recovery'] a[data-testid='feldspar-recovery-support'][href='mailto:support@eyra.co?subject=Help']"
            )
 
+    assert has_element?(view, "[data-testid='start-container']", "Test Feldspar App")
+    assert has_element?(view, "[phx-click='prepare_start']")
     refute has_element?(view, "iframe")
 
     render_click(view, "prepare_start")
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
-    refute has_element?(view, "[data-testid='feldspar-recovery']")
     assert has_element?(view, "iframe")
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'] .prism-btn-loading")
+
+    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
+    assert has_element?(view, "[data-testid='start-container'].hidden")
   end
 
   @tag on_entry: :clear_previous

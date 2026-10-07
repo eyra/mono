@@ -6,6 +6,7 @@ defmodule Systems.Feldspar.ToolView do
   require Logger
 
   alias Frameworks.Pixel.Logo
+  alias Systems.NextAction
   alias Systems.Workflow
 
   def dependencies(),
@@ -125,7 +126,6 @@ defmodule Systems.Feldspar.ToolView do
       started: true,
       loading: true,
       initialized: false,
-      unfinished_attempt?: false,
       preparing: false,
       exited: false,
       attempt_id: attempt_id
@@ -197,30 +197,31 @@ defmodule Systems.Feldspar.ToolView do
         <% end %>
         <div
           data-testid="start-container"
-          class={"w-full h-full flex-col items-center justify-center py-8 #{if @started and @initialized, do: "hidden", else: "flex"}"}
+          class={"w-full h-full flex-col items-center gap-8 py-8 #{if @started and @initialized, do: "hidden", else: "flex"}"}
         >
-          <Area.sheet>
-            <div class="flex flex-col gap-8 items-center px-8">
-              <div>
-                <%= if @vm.icon do %>
-                  <Logo.platform platform={@vm.icon} variant={:square} class="w-24 h-24" />
-                <% end %>
+          <div :if={@vm.recovery} class="w-full" data-testid="feldspar-recovery">
+            <Area.content>
+              <div class="mx-auto max-w-4xl">
+                <NextAction.View.highlight {@vm.recovery} />
               </div>
-              <%= if @vm.recovery do %>
-                <Text.title2 align="text-center" margin=""><%= @vm.recovery.title %></Text.title2>
-                <Text.body align="text-center"><%= @vm.recovery.description %></Text.body>
-                <div data-testid="feldspar-recovery">
-                  <Button.dynamic {@vm.recovery.support_button} />
+            </Area.content>
+          </div>
+          <div class="w-full flex-1 flex flex-col items-center justify-center">
+            <Area.sheet>
+              <div class="flex flex-col gap-8 items-center px-8">
+                <div>
+                  <%= if @vm.icon do %>
+                    <Logo.platform platform={@vm.icon} variant={:square} class="w-24 h-24" />
+                  <% end %>
                 </div>
-              <% else %>
                 <Text.title2 align="text-center" margin=""><%= @vm.title %></Text.title2>
                 <Text.body align="text-center"><%= @vm.description %></Text.body>
-              <% end %>
-              <.wrap>
-                <Button.dynamic {@vm.button} />
-              </.wrap>
-            </div>
-          </Area.sheet>
+                <.wrap>
+                  <Button.dynamic {@vm.button} />
+                </.wrap>
+              </div>
+            </Area.sheet>
+          </div>
         </div>
       </div>
     """

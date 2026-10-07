@@ -30,7 +30,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       recovery_id: "feldspar-recovery-#{Base.url_encode64(scope, padding: false)}",
       recovery_scope: scope,
       recovery_on_entry: on_entry,
-      button: build_button(loading, unfinished_attempt?, assigns),
+      button: build_button(loading, assigns),
       app_view: app_view,
       error: error
     }
@@ -40,32 +40,17 @@ defmodule Systems.Feldspar.ToolViewBuilder do
     %{
       title: dgettext("eyra-feldspar", "recovery.title"),
       description: dgettext("eyra-feldspar", "recovery.description"),
-      support_button: support_button(support_url)
+      cta_label: dgettext("eyra-feldspar", "recovery.support"),
+      cta_action: %{type: :http_get, to: support_url, testid: "feldspar-recovery-support"}
     }
   end
 
   defp build_recovery(false, _support_url), do: nil
 
-  defp support_button(support_url) do
-    %{
-      action: %{type: :http_get, to: support_url},
-      face: %{type: :secondary, label: dgettext("eyra-feldspar", "recovery.support")},
-      testid: "feldspar-recovery-support"
-    }
-  end
-
-  defp build_button(loading, unfinished_attempt?, assigns) do
+  defp build_button(loading, assigns) do
     %{
       action: %{type: :send, event: "prepare_start"},
-      face: %{
-        type: :primary,
-        label:
-          if(unfinished_attempt?,
-            do: dgettext("eyra-feldspar", "recovery.retry"),
-            else: dgettext("eyra-feldspar", "tool.button")
-          ),
-        loading: loading
-      },
+      face: %{type: :primary, label: dgettext("eyra-feldspar", "tool.button"), loading: loading},
       enabled?: Map.get(assigns, :recovery_checked, false) and not loading,
       testid: "feldspar-start"
     }

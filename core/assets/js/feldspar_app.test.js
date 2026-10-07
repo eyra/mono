@@ -28,8 +28,12 @@ describe("FeldsparApp", () => {
         "MessageChannel",
         class {
           constructor() {
-            this.port1 = { postMessage: vi.fn(), onmessage: null };
-            this.port2 = {};
+            this.port1 = {
+              postMessage: vi.fn(),
+              onmessage: null,
+              close: vi.fn(),
+            };
+            this.port2 = { close: vi.fn() };
           }
         }
       );
@@ -59,45 +63,39 @@ describe("FeldsparApp", () => {
       return mounted;
     }
 
-    function notify(iframe, event) {
-      if (event === "load") {
+    function notify(iframe, action) {
+      if (action === "load") {
         iframe.dispatchEvent(new Event("load"));
       } else {
         window.dispatchEvent(
           new MessageEvent("message", {
             source: iframe.contentWindow,
-            data: { action: "app-loaded" },
+            data: { action, height: 120 },
           })
         );
       }
     }
 
-    it.each([
-      ["load", "app-loaded"],
-      ["app-loaded", "load"],
-    ])("initializes once for %s followed by %s", (first, second) => {
+    it("starts the app on app-loaded, not on the iframe load event", () => {
       const { app, iframe, init } = mount();
-      notify(iframe, first);
-      const channel = app.channel;
-      notify(iframe, second);
+      notify(iframe, "load");
+      expect(init).not.toHaveBeenCalled();
+      notify(iframe, "app-loaded");
       expect(init.mock.calls).toEqual([
-        [{ action: "live-init", locale: "en" }, "*", [channel.port2]],
+        [{ action: "live-init", locale: "en" }, "*", [app.channel.port2]],
       ]);
-      expect(app.channel).toBe(channel);
     });
 
-    it.each(["load", "app-loaded"])(
-      "initializes when %s is the only startup signal",
-      (event) => {
-        const { app, iframe, init } = mount();
-        notify(iframe, event);
-        expect(init.mock.calls).toEqual([
-          [{ action: "live-init", locale: "en" }, "*", [app.channel.port2]],
-        ]);
-      }
-    );
+    it("starts an app without app-loaded on its first resize", () => {
+      const { app, iframe, init } = mount();
+      notify(iframe, "resize");
+      expect(iframe.getAttribute("style")).toBe("height:120px");
+      expect(init.mock.calls).toEqual([
+        [{ action: "live-init", locale: "en" }, "*", [app.channel.port2]],
+      ]);
+    });
 
-    it("keeps the original channel and pending donation through repeated startup signals", async () => {
+    it("keeps the confirmed channel and pending donation through repeated startup signals", async () => {
       let finishUpload;
       const upload = new Promise((resolve) => {
         finishUpload = resolve;
@@ -106,7 +104,7 @@ describe("FeldsparApp", () => {
         url === "/api/feldspar/donate" ? upload : Promise.resolve({ ok: true })
       );
       const { app, iframe, init } = mount();
-      notify(iframe, "load");
+      notify(iframe, "app-loaded");
       const channel = app.channel;
       const donating = app.handleMessage({
         data: {
@@ -115,7 +113,13 @@ describe("FeldsparApp", () => {
           json_string: '{"answer":42}',
         },
       });
-      for (const event of ["app-loaded", "load", "app-loaded", "load"]) {
+      for (const event of [
+        "app-loaded",
+        "resize",
+        "load",
+        "app-loaded",
+        "resize",
+      ]) {
         notify(iframe, event);
       }
       const exit = { __type__: "CommandSystemExit", code: 0 };
@@ -137,11 +141,11 @@ describe("FeldsparApp", () => {
 
     it("initializes a fresh retry iframe with its own channel", () => {
       const first = mount();
-      notify(first.iframe, "load");
+      notify(first.iframe, "app-loaded");
       first.app.el.remove();
       const retry = mount();
       notify(retry.iframe, "app-loaded");
-      notify(retry.iframe, "load");
+      notify(retry.iframe, "resize");
       expect(first.init).toHaveBeenCalledOnce();
       expect(retry.init.mock.calls).toEqual([
         [{ action: "live-init", locale: "en" }, "*", [retry.app.channel.port2]],
@@ -154,11 +158,11 @@ describe("FeldsparApp", () => {
       el.dataset.locale = "en";
       document.body.append(el);
       const app = { ...FeldsparApp, el };
-      app.onAppLoaded({ fromEvent: "app-loaded" });
+      app.onAppLoaded();
       const iframe = document.createElement("iframe");
       el.append(iframe);
       const init = vi.spyOn(iframe.contentWindow, "postMessage");
-      app.onAppLoaded({ fromEvent: "app-loaded" });
+      app.onAppLoaded();
       expect(init.mock.calls).toEqual([
         [{ action: "live-init", locale: "en" }, "*", [app.channel.port2]],
       ]);

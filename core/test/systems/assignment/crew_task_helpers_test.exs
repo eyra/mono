@@ -54,18 +54,17 @@ defmodule Systems.Assignment.CrewTaskHelpersTest do
     end
   end
 
-  test "support link identifies the affected task and safely encodes its name",
+  test "support link opens an email that identifies the affected task",
        %{assignment: assignment, user: user, workflow_item: workflow_item, task: task} do
     context = Assignment.CrewTaskHelpers.recovery_context(assignment, user, {workflow_item, task})
     uri = URI.parse(context.support_url)
 
-    assert uri.path == "/support/helpdesk"
+    assert uri.scheme == "mailto"
+    assert uri.path == "support@eyra.co"
 
-    assert URI.decode_query(uri.query) == %{
-             "context" => "feldspar_recovery",
-             "task_name" => "Task & follow-up",
-             "assignment_id" => "20",
-             "task_id" => "40"
-           }
+    body = URI.decode_query(uri.query)["body"]
+    assert body =~ "Task & follow-up"
+    assert body =~ "assignment_id: 20"
+    assert body =~ "task_id: 40"
   end
 end

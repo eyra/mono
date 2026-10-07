@@ -731,11 +731,11 @@ msgstr "Fortschrittsbericht"
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.body"
-msgstr ""
+msgstr "Diese Studie ist derzeit nicht verfügbar. Bitte wenden Sie sich an die Forschenden, die Sie eingeladen haben."
 
 #, elixir-autogen, elixir-format
 msgid "assignment_unavailable.title"
-msgstr ""
+msgstr "Diese Studie ist nicht verfügbar"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "contributions.all_tasks_finished"
