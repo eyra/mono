@@ -16,6 +16,7 @@ interface E2EFixtures {
   participant_email: string;
   participant_password: string;
   donate_assignment_path: string;
+  pdf_assignment_path: string;
   test_org_id?: number;
 }
 
@@ -111,6 +112,7 @@ export default async function globalSetup() {
       process.env.E2E_PARTICIPANT_EMAIL = fixtures.participant_email;
       process.env.E2E_PARTICIPANT_PASSWORD = fixtures.participant_password;
       process.env.E2E_DONATE_ASSIGNMENT_PATH = fixtures.donate_assignment_path;
+      process.env.E2E_PDF_ASSIGNMENT_PATH = fixtures.pdf_assignment_path || '';
       if (fixtures.test_org_id != null) {
         process.env.E2E_TEST_ORG_ID = String(fixtures.test_org_id);
       }
@@ -118,6 +120,7 @@ export default async function globalSetup() {
       console.log(`[GLOBAL SETUP] Fixtures ready:`);
       console.log(`  Researcher: ${fixtures.researcher_email}`);
       console.log(`  Assignment: ${fixtures.donate_assignment_path}`);
+      console.log(`  PDF assignment: ${fixtures.pdf_assignment_path}`);
     } catch (error: any) {
       console.log(`[GLOBAL SETUP] Fixture setup failed: ${error.message}`);
       console.log(`[GLOBAL SETUP] Tests requiring fixtures will use Infisical env vars`);
