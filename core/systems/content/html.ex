@@ -53,7 +53,7 @@ defmodule Systems.Content.Html do
   end
 
   attr(:socket, :map, required: true)
-  attr(:title, :string, required: true)
+  attr(:title, :string, default: nil)
   attr(:menus, :map, required: true)
   attr(:modal, :map, required: true)
   attr(:modal_toolbar_buttons, :list, default: [])
