@@ -40,6 +40,18 @@ defmodule CoreWeb.NativeAppLayoutTest do
     end
   end
 
+  describe "account page for a participant" do
+    setup [:login_as_member]
+
+    test "the NextApp user agent renders no hero", %{conn: conn} do
+      document =
+        conn |> get_html(~p"/user/account", @native_user_agent) |> Floki.parse_document!()
+
+      assert Floki.find(document, "body[data-native-app]") != []
+      assert Floki.find(document, "[data-native-title]") == []
+    end
+  end
+
   defp get_html(conn, path, user_agent) do
     conn
     |> put_req_header("user-agent", user_agent)
