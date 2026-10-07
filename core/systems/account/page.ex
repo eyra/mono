@@ -18,6 +18,7 @@ defmodule Systems.Account.Page do
   import Systems.Content.Html
 
   alias Core
+  alias Frameworks.Pixel.Hero
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
@@ -96,7 +97,12 @@ defmodule Systems.Account.Page do
 
   def render(assigns) do
     ~H"""
-    <.live_workspace title={@vm.title} menus={@menus} modal={@modal} socket={@socket}>
+    <.live_workspace menus={@menus} modal={@modal} socket={@socket}>
+      <:top_bar>
+        <div class="native:hidden">
+          <Hero.illustration2 title={@vm.title} />
+        </div>
+      </:top_bar>
       <.adaptable_layout
         socket={@socket}
         items={@vm.items}
