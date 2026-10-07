@@ -2,7 +2,7 @@ FROM elixir:1.18.4-otp-27 AS builder
 
 WORKDIR /workspace
 
-ENV NODE_MAJOR=18
+ENV NODE_MAJOR=24
 ENV MIX_ENV=prod
 ENV SSL_PROXIED=true
 

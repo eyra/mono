@@ -14,7 +14,8 @@ defmodule Frameworks.E2E.Controller do
     "researcher_password": "...",
     "participant_email": "e2e-participant@eyra.co",
     "participant_password": "...",
-    "donate_assignment_path": "/a/xyz123"
+    "donate_assignment_path": "/a/xyz123",
+    "pdf_assignment_path": "/a/pdf123"
   }
   """
   use CoreWeb, {:controller, [formats: [:json]]}
@@ -27,6 +28,7 @@ defmodule Frameworks.E2E.Controller do
   alias Systems.Advert
   alias Systems.Affiliate
   alias Systems.Assignment
+  alias Systems.Content
   alias Systems.Feldspar
   alias Systems.Org
   alias Systems.Pool
@@ -117,6 +119,7 @@ defmodule Frameworks.E2E.Controller do
       researcher_b = get_or_create_researcher_b()
       participant = get_or_create_participant()
       assignment = get_or_create_donate_assignment(researcher)
+      pdf_assignment = get_or_create_pdf_assignment(researcher)
       _panl_advert = get_or_create_panl_advert(researcher)
       test_org = get_or_create_e2e_test_org(researcher)
 
@@ -129,6 +132,7 @@ defmodule Frameworks.E2E.Controller do
          participant_email: participant.email,
          participant_password: @e2e_password,
          donate_assignment_path: assignment_path(assignment),
+         pdf_assignment_path: assignment_path(pdf_assignment),
          test_org_id: test_org.id
        }}
     rescue
@@ -304,6 +308,83 @@ defmodule Frameworks.E2E.Controller do
     Core.Authorization.assign_role(researcher, advert, :owner)
     Logger.info("[E2E] Created published PaNL advert #{advert.id}")
     advert
+  end
+
+  @pdf_assignment_title "E2E PDF Rendering"
+  @pdf_filename "pdf-viewer.pdf"
+
+  defp get_or_create_pdf_assignment(researcher) do
+    import Ecto.Query
+
+    assignment =
+      from(a in Assignment.Model,
+        join: i in assoc(a, :info),
+        where: i.title == ^@pdf_assignment_title,
+        limit: 1
+      )
+      |> Repo.one()
+
+    case assignment do
+      nil -> create_pdf_assignment(researcher)
+      assignment -> Repo.preload(assignment, Assignment.Model.preload_graph(:down))
+    end
+  end
+
+  defp create_pdf_assignment(researcher) do
+    pdf_ref =
+      :core
+      |> Application.app_dir("priv/e2e/#{@pdf_filename}")
+      |> Content.Public.store(@pdf_filename)
+      |> Content.Public.get_public_url()
+
+    auth_node = Core.Factories.insert!(:auth_node)
+    tool_auth_node = Core.Factories.insert!(:auth_node, %{parent: auth_node})
+
+    document_tool =
+      Core.Factories.insert!(:document_tool, %{
+        name: @pdf_filename,
+        ref: pdf_ref,
+        director: :assignment,
+        auth_node: tool_auth_node
+      })
+
+    tool_ref =
+      Core.Factories.insert!(:tool_ref, %{
+        document_tool: document_tool,
+        special: :download_manual
+      })
+
+    workflow = Core.Factories.insert!(:workflow, %{})
+
+    Core.Factories.insert!(:workflow_item, %{
+      workflow: workflow,
+      tool_ref: tool_ref,
+      title: "PDF rendering verification",
+      position: 0
+    })
+
+    info =
+      Core.Factories.insert!(:assignment_info, %{
+        title: @pdf_assignment_title,
+        subject_count: 100,
+        duration: "5",
+        language: :en,
+        devices: [:desktop]
+      })
+
+    assignment =
+      Core.Factories.insert!(:assignment, %{
+        info: info,
+        affiliate: Core.Factories.insert!(:affiliate, %{}),
+        workflow: workflow,
+        auth_node: auth_node,
+        special: :data_donation,
+        status: :online
+      })
+
+    Core.Authorization.assign_role(researcher, assignment, :owner)
+
+    Repo.preload(assignment, Assignment.Model.preload_graph(:down))
   end
 
   defp get_or_create_donate_assignment(researcher) do
