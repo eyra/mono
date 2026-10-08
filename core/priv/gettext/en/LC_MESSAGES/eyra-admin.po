@@ -150,7 +150,7 @@ msgstr "Last updated"
 
 #, elixir-autogen, elixir-format
 msgid "client_activity.filter.hint"
-msgstr "The client is the first owner of an assignment. This year counts assignments created this year. Published counts assignments that are not in Concept now; published assignments that were reopened are not counted."
+msgstr "The client is the creator (first owner) of the assignment's project. This year counts assignments created this year. Published counts assignments that are not in Concept now; published assignments that were reopened are not counted."
 
 #, elixir-autogen, elixir-format
 msgid "client_activity.head.assignment"

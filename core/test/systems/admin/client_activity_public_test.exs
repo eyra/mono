@@ -16,19 +16,7 @@ defmodule Systems.Admin.ClientActivityPublicTest do
   end
 
   describe "client of an assignment" do
-    test "is the fund owner, also when the project has an earlier owner" do
-      creator = Factories.insert!(:member)
-      co_owner = Factories.insert!(:member)
-
-      insert_project_assignment(
-        fund_owners: [owner(creator)],
-        project_owners: [owner(co_owner, ~N[2020-01-01 00:00:00]), owner(creator)]
-      )
-
-      assert counts([]) == %{creator.id => 1}
-    end
-
-    test "is the first project owner when the fund has no owner" do
+    test "is the first owner of the project" do
       first = Factories.insert!(:member)
       second = Factories.insert!(:member)
 
@@ -42,32 +30,37 @@ defmodule Systems.Admin.ClientActivityPublicTest do
       assert counts([]) == %{first.id => 1}
     end
 
-    test "is the first of several fund owners" do
-      first = Factories.insert!(:member)
-      second = Factories.insert!(:member)
-
-      insert_project_assignment(
-        fund_owners: [
-          owner(second, ~N[2024-02-01 00:00:00]),
-          owner(first, ~N[2024-01-01 00:00:00])
-        ]
-      )
-
-      assert counts([]) == %{first.id => 1}
-    end
-
-    test "assignments without any owner are left out" do
+    test "assignments whose project has no owner are left out" do
       insert_project_assignment([])
 
       assert counts([]) == %{}
     end
 
-    test "is the creating user for an assignment created through Projects" do
+    test "is the project creator for an assignment created through Projects" do
       creator = Factories.insert!(:member, %{creator: true})
       {:ok, %{project: project}} = Project.Assembly.create("Project", creator, :empty)
       project = Repo.preload(project, :root)
 
       {:ok, _} = Project.Assembly.create_item(:questionnaire, "Study", project.root, creator)
+
+      assert counts([]) == %{creator.id => 1}
+    end
+
+    test "stays the project creator when a co-owner creates the assignment" do
+      creator = Factories.insert!(:member, %{creator: true})
+      co_owner = Factories.insert!(:member, %{creator: true})
+      {:ok, %{project: project}} = Project.Assembly.create("Project", creator, :empty)
+      project = Repo.preload(project, :root)
+
+      Repo.update_all(
+        from(role in Core.Authorization.RoleAssignment,
+          where: role.node_id == ^project.auth_node_id
+        ),
+        set: [inserted_at: ~N[2024-01-01 00:00:00]]
+      )
+
+      {:ok, _} = Project.Public.add_owner!(project, co_owner)
+      {:ok, _} = Project.Assembly.create_item(:questionnaire, "Study", project.root, co_owner)
 
       assert counts([]) == %{creator.id => 1}
     end
@@ -79,25 +72,25 @@ defmodule Systems.Admin.ClientActivityPublicTest do
       other_client = Factories.insert!(:member)
 
       insert_project_assignment(
-        fund_owners: [owner(client)],
+        project_owners: [owner(client)],
         status: :concept,
         inserted_at: ~N[2026-03-01 10:00:00]
       )
 
       insert_project_assignment(
-        fund_owners: [owner(client)],
+        project_owners: [owner(client)],
         status: :online,
         inserted_at: ~N[2026-04-01 10:00:00]
       )
 
       insert_project_assignment(
-        fund_owners: [owner(client)],
+        project_owners: [owner(client)],
         status: :offline,
         inserted_at: ~N[2025-12-31 23:59:59]
       )
 
       insert_project_assignment(
-        fund_owners: [owner(other_client)],
+        project_owners: [owner(other_client)],
         status: :idle,
         inserted_at: ~N[2024-06-01 10:00:00]
       )
@@ -139,25 +132,25 @@ defmodule Systems.Admin.ClientActivityPublicTest do
 
       old =
         insert_project_assignment(
-          fund_owners: [owner(client)],
+          project_owners: [owner(client)],
           status: :online,
           inserted_at: ~N[2026-01-01 10:00:00]
         )
 
       new =
         insert_project_assignment(
-          fund_owners: [owner(client)],
+          project_owners: [owner(client)],
           status: :online,
           inserted_at: ~N[2026-05-01 10:00:00]
         )
 
       _concept =
         insert_project_assignment(
-          fund_owners: [owner(client)],
+          project_owners: [owner(client)],
           inserted_at: ~N[2026-06-01 10:00:00]
         )
 
-      _other = insert_project_assignment(fund_owners: [owner(other)], status: :online)
+      _other = insert_project_assignment(project_owners: [owner(other)], status: :online)
 
       assert [new.id, old.id] ==
                client.id
@@ -174,8 +167,7 @@ defmodule Systems.Admin.ClientActivityPublicTest do
       %{id: id} =
         insert_project_assignment(
           name: "My study",
-          fund_owners: [owner(client)],
-          project_owners: [owner(client), owner(teammate)]
+          project_owners: [owner(client, ~N[2024-01-01 00:00:00]), owner(teammate)]
         )
 
       assert %{name: "My study", client: %{id: client_id}, team: team} =

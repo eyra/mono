@@ -19,12 +19,11 @@ defmodule Systems.Admin.ClientActivityViewTest do
     assignment =
       insert_project_assignment(
         name: "Published study",
-        fund_owners: [owner(client)],
-        project_owners: [owner(client), owner(teammate)],
+        project_owners: [owner(client, ~N[2024-01-01 00:00:00]), owner(teammate)],
         status: :online
       )
 
-    _concept = insert_project_assignment(name: "Concept study", fund_owners: [owner(client)])
+    _concept = insert_project_assignment(name: "Concept study", project_owners: [owner(client)])
 
     context = LiveContext.new(%{current_user: admin, locale: :en, is_admin?: true})
 

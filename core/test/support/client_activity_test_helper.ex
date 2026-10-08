@@ -1,6 +1,6 @@
 defmodule Systems.Admin.ClientActivityTestHelper do
   @moduledoc """
-  Builds project assignments with explicit fund and project owners for the
+  Builds project assignments with explicit project owners for the
   Client activity tests.
   """
   alias Core.Factories
@@ -9,7 +9,7 @@ defmodule Systems.Admin.ClientActivityTestHelper do
   Inserts a project with one assignment item.
 
   Options:
-  - `:fund_owners` / `:project_owners`: list of `{user, inserted_at}` owner rows
+  - `:project_owners`: list of `{user, inserted_at}` owner rows
   - `:status`: assignment status (default `:concept`)
   - `:inserted_at`: assignment creation time (default now)
   - `:name`: project item name
@@ -21,18 +21,11 @@ defmodule Systems.Admin.ClientActivityTestHelper do
         auth_node: auth_node_with_owners(Keyword.get(opts, :project_owners, []))
       })
 
-    fund =
-      Factories.build(:fund, %{
-        name: Ecto.UUID.generate(),
-        auth_node: auth_node_with_owners(Keyword.get(opts, :fund_owners, []))
-      })
-
     assignment =
       Factories.insert!(:assignment, %{
         status: Keyword.get(opts, :status, :concept),
         inserted_at: Keyword.get(opts, :inserted_at, now()),
-        auth_node: Factories.build(:auth_node, %{parent_id: project.auth_node_id}),
-        fund: fund
+        auth_node: Factories.build(:auth_node, %{parent_id: project.auth_node_id})
       })
 
     Factories.insert!(:project_item, %{

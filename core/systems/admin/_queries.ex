@@ -5,7 +5,6 @@ defmodule Systems.Admin.Queries do
   alias Core.Authorization.RoleAssignment
   alias Systems.Account
   alias Systems.Assignment
-  alias Systems.Fund
   alias Systems.Project
 
   @doc """
@@ -14,10 +13,8 @@ defmodule Systems.Admin.Queries do
   This is the only place that decides who the client of an assignment is, so the
   Client activity tab can move from users to organisations by changing this query.
 
-  The data model has no assignment creator, so the client is approximated by:
-  1. the first owner of the assignment's fund (the fund is created with the
-     creating user as its only owner), falling back to
-  2. the first remaining owner of the assignment's project.
+  The client is the first (original) owner of the assignment's project: the
+  project's creator. Assignments whose project has no owner left are not mapped.
 
   Only items on a project's root node are counted; no code creates nested
   project nodes today.
@@ -31,17 +28,9 @@ defmodule Systems.Admin.Queries do
       on: item.assignment_id == assignment.id,
       join: project in Project.Model,
       on: project.root_id == item.node_id,
-      left_join: fund in Fund.Model,
-      on: fund.id == assignment.fund_id,
-      left_join: fund_owner in subquery(first_owner_per_node_query()),
-      on: fund_owner.node_id == fund.auth_node_id,
-      left_join: project_owner in subquery(first_owner_per_node_query()),
+      join: project_owner in subquery(first_owner_per_node_query()),
       on: project_owner.node_id == project.auth_node_id,
-      where: not is_nil(coalesce(fund_owner.principal_id, project_owner.principal_id)),
-      select: %{
-        assignment_id: assignment.id,
-        client_id: coalesce(fund_owner.principal_id, project_owner.principal_id)
-      }
+      select: %{assignment_id: assignment.id, client_id: project_owner.principal_id}
     )
     |> only_assignment(assignment_id)
   end

@@ -15,8 +15,7 @@ defmodule Systems.Admin.ClientActivityViewBuilderTest do
     published =
       insert_project_assignment(
         name: "Published study",
-        fund_owners: [owner(client)],
-        project_owners: [owner(client), owner(teammate)],
+        project_owners: [owner(client, ~N[2024-01-01 00:00:00]), owner(teammate)],
         status: :online,
         inserted_at: ~N[2026-02-01 10:00:00]
       )
@@ -24,7 +23,7 @@ defmodule Systems.Admin.ClientActivityViewBuilderTest do
     concept =
       insert_project_assignment(
         name: "Concept study",
-        fund_owners: [owner(client)],
+        project_owners: [owner(client)],
         inserted_at: ~N[2025-02-01 10:00:00]
       )
 
