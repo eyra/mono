@@ -119,3 +119,71 @@ msgstr "Admins"
 #, elixir-autogen, elixir-format
 msgid "org.panel.tag"
 msgstr "Panel"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.assignments.empty"
+msgstr "No assignments match these filters."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.assignments"
+msgstr "Assignments of %{client}"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.clients"
+msgstr "All clients"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.clients.empty"
+msgstr "No clients match these filters."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.client"
+msgstr "Client"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.id"
+msgstr "Assignment ID"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.updated"
+msgstr "Last updated"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.filter.hint"
+msgstr "The client is the first owner of an assignment. This year counts assignments created this year. Published counts assignments that are not in Concept now; published assignments that were reopened are not counted."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignment"
+msgstr "Assignment"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignments"
+msgstr "Assignments"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.client"
+msgstr "Client"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.created"
+msgstr "Created"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.email"
+msgstr "Email"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.status"
+msgstr "Status"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.client"
+msgstr "Client"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.title"
+msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.title"
+msgstr "Client activity"

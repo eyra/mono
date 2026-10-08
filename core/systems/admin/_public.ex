@@ -1,6 +1,12 @@
 defmodule Systems.Admin.Public do
   use Core, :public
 
+  import Ecto.Query, warn: false
+
+  alias Core.Repo
+  alias Systems.Account
+  alias Systems.Admin
+  alias Systems.Assignment
   alias Systems.Org
 
   # Governable entity checkers - each returns true if user owns entities of that type
@@ -76,5 +82,62 @@ defmodule Systems.Admin.Public do
 
   defp email_patterns do
     Application.get_env(:core, :admins, [])
+  end
+
+  # Client activity
+
+  @doc """
+  Clients with the number of their project assignments under the given filters,
+  ordered by assignment count (most first).
+  """
+  def list_client_activity(filters, %Date{} = today \\ Date.utc_today()) do
+    Admin.Queries.client_assignment_query(filters, today)
+    |> group_by([user: user], user.id)
+    |> select([user: user, assignment: assignment], %{
+      client: user,
+      assignment_count: count(assignment.id)
+    })
+    |> order_by([user: user, assignment: assignment],
+      desc: count(assignment.id),
+      asc: user.email
+    )
+    |> Repo.all()
+  end
+
+  @doc """
+  The client with the given id, or `nil`.
+  """
+  def get_client(client_id), do: Repo.get(Account.User, client_id)
+
+  @doc """
+  The project assignments of one client under the given filters, newest first.
+  """
+  def list_client_assignments(client_id, filters, %Date{} = today \\ Date.utc_today()) do
+    Admin.Queries.client_assignment_query(filters, today)
+    |> where([user: user], user.id == ^client_id)
+    |> order_by([assignment: assignment], desc: assignment.inserted_at, desc: assignment.id)
+    |> select([assignment: assignment, item: item], %{assignment: assignment, name: item.name})
+    |> Repo.all()
+  end
+
+  @doc """
+  One project assignment with its client and team (owners), or `nil`.
+  """
+  def get_client_assignment(assignment_id) do
+    Admin.Queries.client_assignment_query([], Date.utc_today())
+    |> where([assignment: assignment], assignment.id == ^assignment_id)
+    |> select([assignment: assignment, item: item, user: user], %{
+      assignment: assignment,
+      name: item.name,
+      client: user
+    })
+    |> Repo.one()
+    |> case do
+      nil ->
+        nil
+
+      %{assignment: assignment} = result ->
+        Map.put(result, :team, Assignment.Public.owners(assignment, [:profile]))
+    end
   end
 end

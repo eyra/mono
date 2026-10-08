@@ -45,7 +45,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   # System admins see all tabs
   defp create_tabs(%{is_admin?: true} = assigns) do
-    [:system, :account, :org, :actions]
+    [:system, :account, :org, :actions, :client_activity]
     |> Enum.map(&create_admin_tab(&1, assigns))
   end
 
@@ -143,6 +143,24 @@ defmodule Systems.Admin.ConfigPageBuilder do
       ready: false,
       show_errors: false,
       title: dgettext("eyra-admin", "actions.title"),
+      type: :fullpage,
+      element: element
+    }
+  end
+
+  defp create_admin_tab(:client_activity, %{live_context: context}) do
+    element =
+      CoreWeb.Live.Element.prepare_live_view(
+        "admin_client_activity_view",
+        Admin.ClientActivityView,
+        live_context: context
+      )
+
+    %{
+      id: :client_activity,
+      ready: false,
+      show_errors: false,
+      title: dgettext("eyra-admin", "client_activity.title"),
       type: :fullpage,
       element: element
     }

@@ -502,3 +502,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "admin_user_filters.unverified"
 msgstr "No verificado"
+
+#, elixir-autogen, elixir-format
+msgid "admin_client_activity_filters.published"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_client_activity_filters.this_year"
+msgstr ""

@@ -20,6 +20,10 @@ defmodule Systems.Admin.Presenter do
     Admin.OrgViewBuilder.view_model(model, assigns)
   end
 
+  def view_model(Admin.ClientActivityView, model, assigns) do
+    Admin.ClientActivityViewBuilder.view_model(model, assigns)
+  end
+
   def view_model(Admin.SystemView, model, assigns) do
     Admin.SystemViewBuilder.view_model(model, assigns)
   end
