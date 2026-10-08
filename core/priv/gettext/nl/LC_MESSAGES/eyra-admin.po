@@ -119,3 +119,71 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "org.panel.tag"
 msgstr "Panel"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.assignments.empty"
+msgstr "Geen opdrachten voor deze filters."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.assignments"
+msgstr "Opdrachten van %{client}"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.clients"
+msgstr "Alle klanten"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.clients.empty"
+msgstr "Geen klanten voor deze filters."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.client"
+msgstr "Klant"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.id"
+msgstr "Opdracht-ID"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.updated"
+msgstr "Laatst gewijzigd"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.filter.hint"
+msgstr "De klant is de maker (eerste eigenaar) van het project van de opdracht. Dit jaar telt opdrachten die dit jaar zijn aangemaakt. Gepubliceerd telt opdrachten die nu niet in Concept staan; gepubliceerde opdrachten die zijn heropend, tellen niet mee."
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignment"
+msgstr "Opdracht"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignments"
+msgstr "Opdrachten"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.client"
+msgstr "Klant"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.created"
+msgstr "Aangemaakt"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.email"
+msgstr "E-mail"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.status"
+msgstr "Status"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.client"
+msgstr "Klant"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.title"
+msgstr "Team"
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.title"
+msgstr "Klantactiviteit"

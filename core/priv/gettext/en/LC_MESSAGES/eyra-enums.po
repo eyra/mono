@@ -501,3 +501,11 @@ msgstr "Recent"
 #, elixir-autogen, elixir-format
 msgid "admin_user_filters.unverified"
 msgstr "Unverified"
+
+#, elixir-autogen, elixir-format
+msgid "admin_client_activity_filters.published"
+msgstr "Published"
+
+#, elixir-autogen, elixir-format
+msgid "admin_client_activity_filters.this_year"
+msgstr "This year"

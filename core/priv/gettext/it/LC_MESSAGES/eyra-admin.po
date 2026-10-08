@@ -120,3 +120,71 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "org.panel.tag"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.assignments.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.assignments"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.back.clients"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.clients.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.client"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.id"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.detail.updated"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.filter.hint"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignment"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.assignments"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.client"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.created"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.email"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.head.status"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.client"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.team.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "client_activity.title"
+msgstr ""
