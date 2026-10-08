@@ -123,9 +123,8 @@ defmodule Systems.Admin.Public do
   @doc """
   One project assignment with its client and team (owners), or `nil`.
   """
-  def get_client_assignment(assignment_id) do
-    Admin.Queries.client_assignment_query([], Date.utc_today())
-    |> where([assignment: assignment], assignment.id == ^assignment_id)
+  def get_client_assignment(assignment_id) when is_integer(assignment_id) do
+    Admin.Queries.client_assignment_query([], Date.utc_today(), assignment_id)
     |> select([assignment: assignment, item: item, user: user], %{
       assignment: assignment,
       name: item.name,

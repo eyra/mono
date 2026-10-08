@@ -18,45 +18,47 @@ defmodule Systems.Admin.Queries do
   1. the first owner of the assignment's fund (the fund is created with the
      creating user as its only owner), falling back to
   2. the first remaining owner of the assignment's project.
+
+  Only items on a project's root node are counted; no code creates nested
+  project nodes today.
+
+  Pass an assignment id to map only that assignment.
   """
-  def assignment_client_query do
+  def assignment_client_query(assignment_id \\ nil) do
     from(assignment in Assignment.Model,
       as: :assignment,
       join: item in Project.ItemModel,
       on: item.assignment_id == assignment.id,
       join: project in Project.Model,
-      as: :project,
       on: project.root_id == item.node_id,
       left_join: fund in Fund.Model,
-      as: :fund,
       on: fund.id == assignment.fund_id,
-      left_lateral_join: fund_owner in subquery(first_fund_owner_query()),
-      on: true,
-      left_lateral_join: project_owner in subquery(first_project_owner_query()),
-      on: true,
+      left_join: fund_owner in subquery(first_owner_per_node_query()),
+      on: fund_owner.node_id == fund.auth_node_id,
+      left_join: project_owner in subquery(first_owner_per_node_query()),
+      on: project_owner.node_id == project.auth_node_id,
       where: not is_nil(coalesce(fund_owner.principal_id, project_owner.principal_id)),
       select: %{
         assignment_id: assignment.id,
         client_id: coalesce(fund_owner.principal_id, project_owner.principal_id)
       }
     )
+    |> only_assignment(assignment_id)
   end
 
-  defp first_fund_owner_query do
-    from(role in RoleAssignment,
-      where: role.node_id == parent_as(:fund).auth_node_id and role.role == :owner,
-      order_by: [asc: role.inserted_at, asc: role.principal_id],
-      limit: 1,
-      select: %{principal_id: role.principal_id}
-    )
+  defp only_assignment(query, nil), do: query
+
+  defp only_assignment(query, assignment_id) when is_integer(assignment_id) do
+    where(query, [assignment: assignment], assignment.id == ^assignment_id)
   end
 
-  defp first_project_owner_query do
+  # The first owner of every auth node, in one pass over the role assignments.
+  defp first_owner_per_node_query do
     from(role in RoleAssignment,
-      where: role.node_id == parent_as(:project).auth_node_id and role.role == :owner,
-      order_by: [asc: role.inserted_at, asc: role.principal_id],
-      limit: 1,
-      select: %{principal_id: role.principal_id}
+      where: role.role == :owner,
+      distinct: [role.node_id],
+      order_by: [asc: role.node_id, asc: role.inserted_at, asc: role.principal_id],
+      select: %{node_id: role.node_id, principal_id: role.principal_id}
     )
   end
 
@@ -66,8 +68,8 @@ defmodule Systems.Admin.Queries do
 
   Bindings: `:client`, `:assignment`, `:item`, `:user`.
   """
-  def client_assignment_query(filters, %Date{} = today) do
-    from(client in subquery(assignment_client_query()),
+  def client_assignment_query(filters, %Date{} = today, assignment_id \\ nil) do
+    from(client in subquery(assignment_client_query(assignment_id)),
       as: :client,
       join: assignment in Assignment.Model,
       as: :assignment,

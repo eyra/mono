@@ -2,6 +2,8 @@ defmodule Systems.Admin.ClientActivityViewBuilder do
   @moduledoc """
   ViewBuilder for the Admin ClientActivityView.
 
+  Only builds data for system admins (`is_admin?: true`).
+
   Three levels, picked by the assigns:
   - no `client_id`: clients with their assignment count
   - `client_id`: that client's assignments
@@ -15,7 +17,7 @@ defmodule Systems.Admin.ClientActivityViewBuilder do
   alias Systems.Account
   alias Systems.Admin
 
-  def view_model(_model, assigns) do
+  def view_model(_model, %{is_admin?: true} = assigns) do
     active_filters = Map.get(assigns, :active_filters, [])
     today = Map.get(assigns, :today, Date.utc_today())
 
@@ -34,6 +36,18 @@ defmodule Systems.Admin.ClientActivityViewBuilder do
       filter_labels: Admin.ClientActivityFilters.labels(active_filters),
       filter_hint: dgettext("eyra-admin", "client_activity.filter.hint"),
       level: level
+    }
+  end
+
+  # Only system admins may see client activity, whoever embeds this view.
+  def view_model(_model, _assigns) do
+    %{
+      title: dgettext("eyra-admin", "client_activity.title"),
+      title_count: nil,
+      filter_label: nil,
+      filter_labels: [],
+      filter_hint: nil,
+      level: %{type: :forbidden}
     }
   end
 

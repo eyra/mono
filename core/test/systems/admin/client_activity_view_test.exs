@@ -66,6 +66,15 @@ defmodule Systems.Admin.ClientActivityViewTest do
     assert view |> element("[data-testid='client-count-#{client.id}']") |> render() =~ "1"
   end
 
+  test "shows no client data to a non-admin", %{conn: conn, client: client} do
+    member = Factories.insert!(:member)
+    context = LiveContext.new(%{current_user: member, locale: :en, is_admin?: false})
+    view = mount(conn, context)
+
+    assert view |> has_element?("[data-testid='client-activity-forbidden']")
+    refute view |> has_element?("[data-testid='client-row-#{client.id}']")
+  end
+
   test "selecting a client shows their assignments", %{
     conn: conn,
     context: context,

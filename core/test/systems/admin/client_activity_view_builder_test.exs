@@ -32,7 +32,18 @@ defmodule Systems.Admin.ClientActivityViewBuilderTest do
   end
 
   defp view_model(assigns) do
-    ClientActivityViewBuilder.view_model(nil, Map.put_new(assigns, :today, @today))
+    assigns =
+      assigns
+      |> Map.put_new(:today, @today)
+      |> Map.put_new(:is_admin?, true)
+
+    ClientActivityViewBuilder.view_model(nil, assigns)
+  end
+
+  describe "without system admin rights" do
+    test "builds no client data" do
+      assert %{level: %{type: :forbidden}, filter_labels: []} = view_model(%{is_admin?: false})
+    end
   end
 
   describe "clients level" do

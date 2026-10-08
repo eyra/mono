@@ -6,7 +6,7 @@ defmodule Systems.Admin.ClientActivityView do
 
   alias Systems.Observatory
 
-  def dependencies(), do: []
+  def dependencies(), do: [:is_admin?]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -72,7 +72,7 @@ defmodule Systems.Admin.ClientActivityView do
             <span class="text-primary"><%= @vm.title_count %></span>
           <% end %>
         </Text.title2>
-        <%= if @vm.level.type != :assignment do %>
+        <%= if @vm.level.type in [:clients, :client] do %>
           <div class="flex flex-row gap-3 items-center">
             <div class="font-label text-label"><%= @vm.filter_label %></div>
             <.live_component
@@ -203,6 +203,12 @@ defmodule Systems.Admin.ClientActivityView do
         </tbody>
       </table>
     </div>
+    """
+  end
+
+  defp level(%{level: %{type: :forbidden}} = assigns) do
+    ~H"""
+    <div data-testid="client-activity-forbidden"></div>
     """
   end
 
