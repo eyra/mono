@@ -18,7 +18,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
 
   def workspace(assigns) do
     ~H"""
-    <div class="w-full h-viewport">
+    <div class="w-full h-viewport native:h-auto">
       <%!-- Invisible backdrop for clicking outside menu --%>
       <div
         id="mobile-menu-backdrop"
@@ -33,18 +33,19 @@ defmodule CoreWeb.Layouts.Workspace.Html do
       >
         <Navigation.mobile_menu {@menus.mobile_menu} />
       </div>
-      <div class="fixed full w-full h-full flex flex-row" >
+      <%!-- In the app the document scrolls, so the native title and tab bar follow it. --%>
+      <div class="fixed full w-full h-full flex flex-row native:static native:h-auto" >
         <div class="h-full native:hidden">
           <Navigation.tablet_menu {@menus.tablet_menu} />
           <Navigation.desktop_menu {@menus.desktop_menu} />
         </div>
-        <div class="w-full h-full min-w-0">
-          <div class="h-full w-full overflow-hidden">
-            <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll">
+        <div class="w-full h-full min-w-0 native:h-auto">
+          <div class="h-full w-full overflow-hidden native:h-auto native:overflow-visible">
+            <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll native:h-auto native:min-h-viewport native:overflow-visible">
               <div class="flex-wrap native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>
-              <div class="flex-1 pt-0 md:pt-10 native:pt-0">
+              <div class="flex-1 pt-0 md:pt-10 native:pt-0 native:bg-white">
                 <div class="flex flex-col h-full md:border-t md:border-l md:border-b border-grey4 bg-white native:border-0">
                   <div class="flex-1">
                     <div class="flex flex-col h-full w-full">
