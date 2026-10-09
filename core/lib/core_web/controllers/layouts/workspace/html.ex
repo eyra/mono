@@ -40,7 +40,7 @@ defmodule CoreWeb.Layouts.Workspace.Html do
         </div>
         <div class="w-full h-full min-w-0 native:h-auto">
           <div class="h-full w-full overflow-hidden native:h-auto native:overflow-visible">
-            <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll native:h-auto native:min-h-viewport native:overflow-visible">
+            <div id="main-content" class="flex flex-col w-full h-full scrollbar-hidden overflow-scroll native:grid native:h-auto native:min-h-viewport native:overflow-visible">
               <div class="flex-wrap native:hidden">
                 <Navigation.mobile_navbar {@menus.mobile_navbar} />
               </div>

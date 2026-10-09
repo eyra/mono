@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="<%= if CoreWeb.UI.OldSkool.native_web?(@conn), do: "[&:has(.modal-view.block)]:overflow-hidden" %>">
   <!-- version: <%= version() %> -->
   <head>
     <title><%= Meta.bundle_title(@conn) %></title>
