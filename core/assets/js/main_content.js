@@ -1,13 +1,18 @@
+const nativeApp = () => document.body.hasAttribute("data-native-app");
+
 export const MainContent = {
   scrollToTop(from) {
-    this.getEl().scrollTo(0, 0);
+    this.scroller().scrollTo(0, 0);
   },
   bottomDistance() {
-    let el = this.getEl();
+    let el = this.scroller();
     return el.scrollHeight - el.scrollTop - window.innerHeight;
   },
   addScrollEventListener(callback) {
-    this.getEl().addEventListener("scroll", callback);
+    (nativeApp() ? window : this.getEl()).addEventListener("scroll", callback);
+  },
+  scroller() {
+    return nativeApp() ? document.scrollingElement : this.getEl();
   },
   getEl() {
     return document.getElementById("main-content");
