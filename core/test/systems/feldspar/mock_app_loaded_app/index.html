@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mock Feldspar App - App Loaded Startup</title>
+</head>
+<body>
+  <div id="status">Waiting for live-init...</div>
+
+  <script>
+    let liveInits = 0;
+
+    window.addEventListener('message', function(event) {
+      if (event.data.action !== 'live-init') return;
+
+      liveInits += 1;
+      document.getElementById('status').innerHTML =
+        '<div data-testid="live-init-count">' + liveInits + '</div>' +
+        '<div style="height: 300px"></div>';
+
+      event.ports[0].postMessage({ __type__: 'CommandSystemEvent', name: 'initialized' });
+    });
+
+    new ResizeObserver(function() {
+      const height = window.document.documentElement.getBoundingClientRect().height;
+      window.parent.postMessage({ action: 'resize', height: height }, '*');
+    }).observe(window.document.body);
+
+    window.parent.postMessage({ action: 'app-loaded' }, '*');
+  </script>
+</body>
+</html>

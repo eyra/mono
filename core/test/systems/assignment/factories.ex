@@ -313,7 +313,7 @@ defmodule Systems.Assignment.Factories do
     assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
 
-  def create_feldspar_assignment_with_affiliate do
+  def create_feldspar_assignment_with_affiliate(archive_ref \\ "https://example.com/feldspar-app") do
     affiliate = Factories.insert!(:affiliate, %{redirect_url: nil, platform_name: nil})
 
     auth_node = Factories.insert!(:auth_node)
@@ -321,7 +321,7 @@ defmodule Systems.Assignment.Factories do
 
     feldspar_tool =
       Factories.insert!(:feldspar_tool, %{
-        archive_ref: "https://example.com/feldspar-app",
+        archive_ref: archive_ref,
         auth_node: tool_auth_node
       })
 
@@ -340,7 +340,8 @@ defmodule Systems.Assignment.Factories do
         crew: crew,
         auth_node: auth_node,
         affiliate: affiliate,
-        status: :online
+        status: :online,
+        special: :data_donation
       })
 
     assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))

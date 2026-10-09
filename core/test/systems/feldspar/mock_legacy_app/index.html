@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mock Feldspar App - Legacy Startup</title>
+</head>
+<body>
+  <div id="status">Waiting for live-init...</div>
+
+  <script>
+    // Feldspar apps built before 2025-04-24 never send app-loaded; their only
+    // signal to the parent is a resize from a ResizeObserver on the body.
+    let liveInits = 0;
+
+    window.addEventListener('message', function(event) {
+      if (event.data.action !== 'live-init') return;
+
+      liveInits += 1;
+      document.getElementById('status').innerHTML =
+        '<div data-testid="live-init-count">' + liveInits + '</div>' +
+        '<div style="height: 300px"></div>';
+
+      event.ports[0].postMessage({ __type__: 'CommandSystemEvent', name: 'initialized' });
+    });
+
+    new ResizeObserver(function() {
+      const height = window.document.body.scrollHeight;
+      window.parent.postMessage({ action: 'resize', height: height }, '*');
+    }).observe(window.document.body);
+  </script>
+</body>
+</html>
