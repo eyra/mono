@@ -33,7 +33,6 @@ defmodule CoreWeb.Layouts.Workspace.Html do
       >
         <Navigation.mobile_menu {@menus.mobile_menu} />
       </div>
-      <%!-- In the app the document scrolls, so the native title and tab bar follow it. --%>
       <div class="fixed full w-full h-full flex flex-row native:static native:h-auto" >
         <div class="h-full native:hidden">
           <Navigation.tablet_menu {@menus.tablet_menu} />

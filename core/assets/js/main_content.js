@@ -1,4 +1,3 @@
-// In the native app the document scrolls instead of #main-content (workspace layout).
 const nativeApp = () => document.body.hasAttribute("data-native-app");
 
 export const MainContent = {
