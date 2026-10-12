@@ -81,6 +81,28 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert Path.basename(path) == "abc_logo.png"
     end
 
+    test "caps a remote asset at the upload limit configured at runtime" do
+      original = Application.fetch_env!(:core, CoreWeb.FileUploader)
+      on_exit(fn -> Application.put_env(:core, CoreWeb.FileUploader, original) end)
+
+      Application.put_env(
+        :core,
+        CoreWeb.FileUploader,
+        Keyword.put(original, :max_file_size, 94_371_840)
+      )
+
+      info =
+        Factories.insert!(:assignment_info, %{logo_url: "https://example.com/brand/logo.png"})
+
+      assignment = Factories.insert!(:assignment, %{info: info})
+
+      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
+      entry = Enum.find(entries, &(&1[:path] == "study_2026/assets/logo.png"))
+
+      assert {:url, {"https://example.com/brand/logo.png", [], [max_body_length: 94_371_840]}} =
+               entry[:source]
+    end
+
     test "nests every entry under the folder" do
       assignment = Factories.insert!(:assignment, %{info: nil})
 

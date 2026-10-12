@@ -184,13 +184,18 @@ defmodule Systems.Feldspar.ToolView do
         data-recovery-scope={@vm.recovery_scope}
         data-recovery-on-entry={@vm.recovery_on_entry}
         data-modal-id={modal_id(assigns)}
-        class="w-full h-full"
+        class="relative w-full h-full"
         data-testid="feldspar-tool-view"
       >
         <%= if @started and @vm.app_view do %>
+          <%!-- While starting, keep the app full size in the viewport and only make it
+          transparent: browsers stop rendering cross-site iframes that are display:none,
+          visibility:hidden or zero-sized, and legacy apps only announce that they are
+          listening through a resize. --%>
           <div
             data-testid="app-container"
-            class={"w-full h-full pt-2 sm:pt-4 #{if @started and @initialized, do: "block", else: "hidden"}"}
+            inert={not @initialized}
+            class={"w-full h-full pt-2 sm:pt-4 #{if @started and @initialized, do: "block", else: "opacity-0 pointer-events-none absolute inset-0 overflow-hidden"}"}
           >
             <.element {Map.from_struct(@vm.app_view)} socket={@socket} />
           </div>
