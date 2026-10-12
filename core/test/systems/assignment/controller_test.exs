@@ -31,26 +31,35 @@ defmodule Systems.Assignment.ControllerTest do
   end
 
   describe "invite visitor" do
+    for action <- ~w(invite apply join) do
+      test "#{action} sends the visitor to the participant entry page", %{conn: conn} do
+        %{id: id} = Assignment.Factories.create_assignment(31, 0, :online)
+        path = "/assignment/#{id}/#{unquote(action)}"
+
+        conn = get(conn, path)
+
+        assert redirected_to(conn) == participant_entry(path)
+        assert get_session(conn, :user_return_to) == path
+      end
+    end
+
     test "assignment not published", %{conn: conn} do
       %{id: id} = Assignment.Factories.create_assignment(31, 0, :offline)
 
       conn = get(conn, "/assignment/#{id}/invite")
-      response = html_response(conn, 302)
-      assert response =~ "href=\"/user/signin"
-    end
-
-    test "assignment published", %{conn: conn} do
-      %{id: id} = Assignment.Factories.create_assignment(31, 0, :online)
-
-      conn = get(conn, "/assignment/#{id}/invite")
-      response = html_response(conn, 302)
-      assert response =~ "href=\"/user/signin"
+      assert redirected_to(conn) == participant_entry("/assignment/#{id}/invite")
     end
 
     test "assignment not existing", %{conn: conn} do
       conn = get(conn, "/assignment/1/invite")
-      response = html_response(conn, 302)
-      assert response =~ "href=\"/user/signin"
+      assert redirected_to(conn) == participant_entry("/assignment/1/invite")
+    end
+
+    test "other assignment routes keep the generic sign-in page", %{conn: conn} do
+      %{id: id} = Assignment.Factories.create_assignment(31, 0, :online)
+
+      conn = get(conn, "/assignment/#{id}/landing")
+      assert redirected_to(conn) == "/user/signin"
     end
   end
 
@@ -485,4 +494,7 @@ defmodule Systems.Assignment.ControllerTest do
     %{id: id} = Factories.insert!(:assignment, %{info: info, fund: fund, status: :online})
     id
   end
+
+  defp participant_entry(path),
+    do: "/user/auth/identify/participant?return_to=#{URI.encode_www_form(path)}"
 end
