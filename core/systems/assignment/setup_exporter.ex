@@ -30,7 +30,6 @@ defmodule Systems.Assignment.SetupExporter do
 
   @format_version 1
   @header_image_size {1376, 720}
-  @max_asset_bytes Application.compile_env!(:core, [CoreWeb.FileUploader, :max_file_size])
   @skipped_key :setup_export_skipped
   @metadata_name "next-metadata.json"
   @warnings_name "export-warnings.json"
@@ -296,9 +295,16 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp asset_source(url) do
     case Content.Public.get_local_path(url) do
-      nil -> {:url, {url, [], [max_body_length: @max_asset_bytes]}}
+      nil -> {:url, {url, [], [max_body_length: max_asset_bytes()]}}
       path -> {:file, path}
     end
+  end
+
+  # Read at call time: runtime.*.exs overrides this from STORAGE_UPLOAD_MAX_SIZE.
+  defp max_asset_bytes do
+    :core
+    |> Application.fetch_env!(CoreWeb.FileUploader)
+    |> Keyword.fetch!(:max_file_size)
   end
 
   def metadata(%Assignment.Model{id: id, info: info, page_refs: page_refs} = assignment, name) do
