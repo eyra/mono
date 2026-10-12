@@ -2,10 +2,10 @@
 #
 # Usage:
 #   1. Configure env vars in Infisical (Next Load project)
-#   2. Run with: infisical run --projectId="Next Load" --env=test1 -- npm run test:quick
+#   2. Run with: infisical run --projectId="Next Load" --env=dev -- npm run test:quick
 #
 # Environment variables (configure in Infisical):
-#   LOAD_BASE_URL        - Target URL (e.g., https://eyra-next-test1.fly.dev)
+#   LOAD_BASE_URL        - Target URL (e.g., https://eyra-next-dev.fly.dev)
 #   LOAD_SERVICE_EMAIL   - Service user email (e.g., loadtest@eyra.service)
 #   LOAD_SERVICE_PASSWORD - Service user password
 #   LOAD_SERVICE_KEY     - X-Service-Key header value
