@@ -21,8 +21,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v7.0.1
-        with:
-          ref: ${{ inputs.branch || github.ref }}
 
       - name: Set TAG and VERSION
         id: vars
@@ -65,6 +63,7 @@ jobs:
       - uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64
         with:
           tag_name: "${{env.VERSION}}"
+          target_commitish: "${{ github.sha }}"
           prerelease: false
           fail_on_unmatched_files: true
           files: |
