@@ -103,8 +103,8 @@ The enabled feature set is discovered automatically via `GET /api/e2e/features` 
 # Against localhost
 E2E_BASE_URL=http://localhost:4000 npx playwright test --project=chromium
 
-# Against test environment (uses Infisical for secrets)
-infisical run --env=test1 -- npx playwright test --project=chromium
+# Against dev (uses Infisical for secrets)
+infisical run --env=dev -- npx playwright test --project=chromium
 
 # Against staging
 infisical run --env=staging -- npx playwright test --project=chromium

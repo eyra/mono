@@ -176,7 +176,7 @@ defmodule Core.MixProject do
       "test.ci": ["test.unit", "test.feature", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
       "test.smoke": "cmd ./test/smoke/run.sh",
-      # Usage: mix test.smoke dev | staging | test1 | test2 | prod
+      # Usage: mix test.smoke dev | staging | prod
       seed: "cmd ./scripts/seed",
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],

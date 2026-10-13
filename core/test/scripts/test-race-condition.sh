@@ -2,7 +2,7 @@
 # Quick race condition test - sends 5 concurrent requests to same participant URL
 # Usage: ./test-race-condition.sh <base_url> <assignment_id>
 # Example: ./test-race-condition.sh https://next.dev.eyra.co 458
-# Example: ./test-race-condition.sh https://eyra-next-test1.fly.dev 1
+# Example: ./test-race-condition.sh https://eyra-next-dev.fly.dev 1
 #
 # Expected results:
 # - Without fix: 500 200 200 200 200 (first response is the failing one, returns faster)

@@ -17,7 +17,7 @@ Configure these in Infisical (`Next Load` project) per environment:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `LOAD_BASE_URL` | Yes | Target URL (e.g., `https://eyra-next-test1.fly.dev`) |
+| `LOAD_BASE_URL` | Yes | Target URL (e.g., `https://eyra-next-dev.fly.dev`) |
 | `LOAD_SERVICE_EMAIL` | For donate | Service user email (e.g., `loadtest@eyra.service`) |
 | `LOAD_SERVICE_PASSWORD` | For donate | Service user password |
 | `LOAD_SERVICE_KEY` | For donate | X-Service-Key header value |
@@ -32,19 +32,19 @@ Configure these in Infisical (`Next Load` project) per environment:
 cd core/test/load
 
 # Donate tests
-infisical run --projectId="Next Load" --env=test1 -- npm run test:quick
-infisical run --projectId="Next Load" --env=test1 -- npm run test:volume
-infisical run --projectId="Next Load" --env=test1 -- npm run test:large
+infisical run --projectId="Next Load" --env=dev -- npm run test:quick
+infisical run --projectId="Next Load" --env=dev -- npm run test:volume
+infisical run --projectId="Next Load" --env=dev -- npm run test:large
 
 # Affiliate tests
-infisical run --projectId="Next Load" --env=test1 -- npm run test:affiliate
-infisical run --projectId="Next Load" --env=test1 -- npm run test:affiliate-race
+infisical run --projectId="Next Load" --env=dev -- npm run test:affiliate
+infisical run --projectId="Next Load" --env=dev -- npm run test:affiliate-race
 ```
 
 ### Manual (with env vars)
 
 ```bash
-export LOAD_BASE_URL=https://eyra-next-test1.fly.dev
+export LOAD_BASE_URL=https://eyra-next-dev.fly.dev
 export LOAD_SERVICE_EMAIL=loadtest@eyra.service
 export LOAD_SERVICE_PASSWORD=your_password
 export LOAD_SERVICE_KEY=your_service_key

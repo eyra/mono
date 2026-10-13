@@ -8,7 +8,7 @@ Configure these in Infisical per environment:
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `E2E_BASE_URL` | Yes | Base URL of the environment (e.g., `https://eyra-next-test1.fly.dev`) |
+| `E2E_BASE_URL` | Yes | Base URL of the environment (e.g., `https://eyra-next-dev.fly.dev`) |
 | `E2E_RESEARCHER_EMAIL` | For `panl_study_advert` | Test researcher account email |
 | `E2E_RESEARCHER_PASSWORD` | For `panl_study_advert` | Test researcher account password |
 | `E2E_DONATE_ASSIGNMENT_PATH` | For `donate` | Assignment affiliate path (e.g., `/a/GAyz7L`) |
@@ -21,23 +21,23 @@ Configure these in Infisical per environment:
 ```bash
 cd core/test/e2e
 
-# Run all tests against test1
-infisical run --projectId="Next E2E" --env=test1 -- npx playwright test
+# Run all tests against dev
+infisical run --projectId="Next E2E" --env=dev -- npx playwright test
 
 # Run specific test
-infisical run --projectId="Next E2E" --env=test1 -- npx playwright test panl_study_advert.spec.ts
+infisical run --projectId="Next E2E" --env=dev -- npx playwright test panl_study_advert.spec.ts
 
 # Run headed (visible browser)
-infisical run --projectId="Next E2E" --env=test1 -- npx playwright test --headed
+infisical run --projectId="Next E2E" --env=dev -- npx playwright test --headed
 
 # Run with specific browser
-infisical run --projectId="Next E2E" --env=test1 -- npx playwright test --project=chromium
+infisical run --projectId="Next E2E" --env=dev -- npx playwright test --project=chromium
 ```
 
 ### Manual (with env vars)
 
 ```bash
-E2E_BASE_URL=https://eyra-next-test1.fly.dev \
+E2E_BASE_URL=https://eyra-next-dev.fly.dev \
 E2E_RESEARCHER_EMAIL=test@example.com \
 E2E_RESEARCHER_PASSWORD=secret \
 npx playwright test

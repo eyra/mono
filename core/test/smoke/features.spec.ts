@@ -8,7 +8,7 @@ import { test, expect } from '@playwright/test';
  *
  * Rules:
  * - prod, staging:       must match PROD_FEATURES exactly
- * - dev, test1, test2:   must match PRE_PROD_FEATURES exactly (test2 is the reference)
+ * - dev:                 must match PRE_PROD_FEATURES exactly
  */
 
 const PROD_FEATURES = [
@@ -19,8 +19,6 @@ const PROD_FEATURES = [
   'password_sign_in',
 ].sort();
 
-// test2 is the reference for pre-prod environments.
-// dev and test1 deviating from this is a known signal.
 const PRE_PROD_FEATURES = [
   'e2e',
   'leaderboard',
@@ -35,8 +33,6 @@ const EXPECTED: Record<string, string[]> = {
   prod:    PROD_FEATURES,
   staging: [...PROD_FEATURES, 'e2e'].sort(),  // prod + e2e so E2E suite can run against staging
   dev:     PRE_PROD_FEATURES,
-  test1:   PRE_PROD_FEATURES,
-  test2:   PRE_PROD_FEATURES,
 };
 
 const env = process.env.SMOKE_ENV || 'prod';

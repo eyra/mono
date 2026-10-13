@@ -18,8 +18,6 @@ const DONATE_URLS: Record<string, string | null> = {
   prod:    '/a/Boi0rl',
   staging: null,
   dev:     null,
-  test1:   null,
-  test2:   null,
 };
 
 const env = process.env.SMOKE_ENV || 'prod';
