@@ -17,6 +17,7 @@ async function settle() {
 function fakePdf(renderedPages) {
   return {
     numPages: PAGE_COUNT,
+    destroy: vi.fn(),
     getPage(pageNum) {
       if (pageNum > PAGE_COUNT) return Promise.reject(new Error("no page"));
       // Later pages take longer, so overlapping render runs interleave.
@@ -50,6 +51,7 @@ function mountHook(width) {
   const hook = Object.create(PDFViewer);
   hook.el = el;
   hook.pdf = fakePdf(renderedPages);
+  hook.loadDocument = () => Promise.resolve(hook.pdf);
 
   return {
     hook,
@@ -71,6 +73,69 @@ describe("PDFViewer", () => {
   afterEach(() => {
     vi.restoreAllMocks();
     document.body.innerHTML = "";
+  });
+
+  describe("on resize", () => {
+    beforeEach(() => vi.useFakeTimers());
+    afterEach(() => vi.useRealTimers());
+
+    async function mountViewer(width) {
+      const viewer = mountHook(width);
+      viewer.hook.el.dataset.state = "render";
+      viewer.hook.el.dataset.notifyReady = "false";
+      viewer.hook.mounted();
+      await vi.advanceTimersByTimeAsync(1000);
+      vi.spyOn(viewer.hook, "renderPages");
+      return viewer;
+    }
+
+    const resize = () => window.dispatchEvent(new Event("resize"));
+
+    it("re-renders once, 100 ms after the last resize event", async () => {
+      const viewer = await mountViewer(800);
+
+      viewer.setWidth(500);
+      resize();
+      await vi.advanceTimersByTimeAsync(60);
+      resize();
+      await vi.advanceTimersByTimeAsync(60);
+      expect(viewer.hook.renderPages).not.toHaveBeenCalled();
+
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(viewer.hook.renderPages).toHaveBeenCalledTimes(1);
+      expect(viewer.canvases().map((c) => c.style.width)).toEqual(
+        Array(PAGE_COUNT).fill("500px")
+      );
+    });
+
+    it("does not re-render when the width did not change", async () => {
+      const viewer = await mountViewer(800);
+
+      resize();
+      await vi.advanceTimersByTimeAsync(1000);
+
+      expect(viewer.hook.renderPages).not.toHaveBeenCalled();
+    });
+
+    it("stops rendering and listening once destroyed", async () => {
+      const viewer = await mountViewer(800);
+
+      viewer.setWidth(500);
+      resize();
+      await vi.advanceTimersByTimeAsync(100);
+      const canvasCount = viewer.canvases().length;
+      viewer.hook.destroyed();
+      await vi.advanceTimersByTimeAsync(1000);
+
+      expect(viewer.canvases().length).toBe(canvasCount);
+      expect(canvasCount).toBeLessThan(PAGE_COUNT);
+      expect(viewer.hook.pdf.destroy).toHaveBeenCalled();
+
+      viewer.setWidth(300);
+      resize();
+      await vi.advanceTimersByTimeAsync(1000);
+      expect(viewer.hook.renderPages).toHaveBeenCalledTimes(1);
+    });
   });
 
   it("renders each page once, in order", async () => {

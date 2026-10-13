@@ -11,6 +11,10 @@ export const PDFViewer = {
     this.src = this.el.dataset.src;
 
     this.loadDocument().then((pdf) => {
+      if (this.isDestroyed) {
+        pdf.destroy();
+        return;
+      }
       this.pdf = pdf;
       if (this.el.dataset.notifyReady !== "false") {
         console.log("[PDFViewer] Document loaded, push event 'pdf_ready'");
@@ -36,7 +40,9 @@ export const PDFViewer = {
       window.removeEventListener("resize", this.onResize);
       this.onResize.cancel();
     }
+    this.isDestroyed = true;
     this.cancelRender();
+    this.pdf?.destroy();
   },
   loadDocument() {
     pdfjs.GlobalWorkerOptions.workerSrc = worker;
@@ -52,8 +58,8 @@ export const PDFViewer = {
       this.renderPages();
     }
   },
-  // A new render supersedes any render still in flight: it cancels the
-  // running page renders, and the superseded run stops at its next await.
+  // A new render supersedes any render still in flight: cancelRender cancels
+  // the running page renders, and the superseded run stops at its next await.
   // Pages are rendered one after another into this run's own container, so
   // each page appears once, in order, at this run's width.
   async renderPages() {
@@ -61,20 +67,28 @@ export const PDFViewer = {
 
     console.log("[PDFViewer] Render pages");
     this.cancelRender();
-    const renderId = (this.renderId = (this.renderId ?? 0) + 1);
+    const renderId = this.renderId;
     const container = this.createContainer();
     const width = this.el.getBoundingClientRect().width;
     this.renderedWidth = width;
 
-    for (let pageNum = 1; pageNum <= this.pdf.numPages; pageNum++) {
-      const page = await this.pdf.getPage(pageNum);
+    const pdf = this.pdf;
+    try {
+      for (let pageNum = 1; pageNum <= pdf.numPages; pageNum++) {
+        const page = await pdf.getPage(pageNum);
+        if (renderId != this.renderId) return;
+        await this.renderPage(page, width, container);
+        if (renderId != this.renderId) return;
+      }
+    } catch (error) {
+      // A superseded run fails with its cancelled render or destroyed document.
       if (renderId != this.renderId) return;
-      await this.renderPage(page, width, container);
-      if (renderId != this.renderId) return;
+      throw error;
     }
     console.log("[PDFViewer] end of document");
   },
   cancelRender() {
+    this.renderId = (this.renderId ?? 0) + 1;
     this.renderTasks?.forEach((task) => task.cancel());
     this.renderTasks = [];
   },
@@ -142,11 +156,7 @@ export const PDFViewer = {
       }
     });
 
-    try {
-      await renderTask.promise;
-    } catch (error) {
-      if (!(error instanceof pdfjs.RenderingCancelledException)) throw error;
-    }
+    await renderTask.promise;
   },
   createContainer() {
     if (this.container != undefined) {
