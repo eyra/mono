@@ -43,4 +43,4 @@ curl -d $'{"password":"LoadTest123!"}'
 
 - **Assignment ID for load testing:** 458
 - **Service user:** loadtest@eyra.service
-- **SERVICE_LOGIN_KEY:** 4q9GgiQw+nB9WDe6vqpUf3a7xLYkGOYCMHWJeq0YzHs=
+- **SERVICE_LOGIN_KEY:** not stored in the repo; read it from the `SERVICE_LOGIN_KEY` env var on the target server

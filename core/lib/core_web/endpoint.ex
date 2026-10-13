@@ -51,10 +51,6 @@ defmodule CoreWeb.Endpoint do
       ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
   )
 
-  if Code.ensure_loaded?(Tidewave) do
-    plug(Tidewave, team: [id: "Eyra", token: "4xfkyvio76cyuecr7eeo74lpairjg565ghqmkya"])
-  end
-
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do
