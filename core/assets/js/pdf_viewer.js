@@ -1,7 +1,9 @@
 import _ from "lodash";
 
-import * as pdfjs from "pdfjs-dist";
-import worker from "pdfjs-dist/build/pdf.worker.min.mjs";
+// The legacy build polyfills APIs that current browsers can still lack (e.g.
+// Math.sumPrecise, used in font conversion and AES-256 decryption).
+import * as pdfjs from "pdfjs-dist/legacy/build/pdf.mjs";
+import worker from "pdfjs-dist/legacy/build/pdf.worker.min.mjs";
 
 const RESIZE_DEBOUNCE_MS = 100;
 

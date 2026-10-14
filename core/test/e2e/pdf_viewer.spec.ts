@@ -103,7 +103,7 @@ test('participant reads, resizes, reopens and completes a rendered PDF', async (
     if (message.type() !== 'error' && message.type() !== 'warning') return;
     const text = `[${message.type()}] ${message.text()}`;
     browserMessages.push(text);
-    if (/setting up fake worker/i.test(text) ||
+    if (/setting up fake worker|cannot load system font|is not a function/i.test(text) ||
         (message.type() === 'error' && /pdf|worker|render|font|wasm/i.test(text))) {
       renderingErrors.push(text);
     }
