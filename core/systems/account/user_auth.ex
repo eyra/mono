@@ -186,17 +186,32 @@ defmodule Systems.Account.UserAuth do
   If you want to enforce the user email is confirmed before
   they use the application at all, here would be a good place.
   """
-  def require_authenticated_user(conn, _opts) do
+  def require_authenticated_user(conn, _opts), do: require_authenticated(conn, :user)
+
+  @doc """
+  Like `require_authenticated_user/2`, but sends signed-out visitors to the
+  participant entry page with the requested path as `return_to`. Used for
+  assignment invitation links.
+  """
+  def require_authenticated_participant(conn, _opts),
+    do: require_authenticated(conn, :participant)
+
+  defp require_authenticated(conn, entry) do
     if conn.assigns[:current_user] do
       conn
     else
       conn
       |> put_flash(:info, dgettext("eyra-ui", "authentication.required.message"))
       |> maybe_store_return_to()
-      |> redirect(to: ~p"/user/signin")
+      |> redirect(to: signin_path(conn, entry))
       |> halt()
     end
   end
+
+  defp signin_path(_conn, :user), do: ~p"/user/signin"
+
+  defp signin_path(conn, :participant),
+    do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
