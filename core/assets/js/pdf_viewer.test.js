@@ -1,7 +1,9 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-vi.mock("pdfjs-dist", () => ({ GlobalWorkerOptions: {} }));
-vi.mock("pdfjs-dist/build/pdf.worker.min.mjs", () => ({ default: "worker" }));
+vi.mock("pdfjs-dist/legacy/build/pdf.mjs", () => ({ GlobalWorkerOptions: {} }));
+vi.mock("pdfjs-dist/legacy/build/pdf.worker.min.mjs", () => ({
+  default: "worker",
+}));
 
 import { PDFViewer } from "./pdf_viewer";
 
