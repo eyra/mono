@@ -11,11 +11,16 @@ defmodule Systems.Assignment.Routes do
         live("/", CrewPage)
         live("/content", ContentPage)
         live("/landing", LandingPage)
+        get("/export", Controller, :export_setup)
+        get("/export-progress", Controller, :export_progress)
+      end
+
+      scope "/assignment/:id", Systems.Assignment do
+        pipe_through([:browser, :require_authenticated_participant, :assignment_exists])
+
         get("/invite", Controller, :invite)
         get("/apply", Controller, :apply)
         get("/join", Controller, :join)
-        get("/export", Controller, :export_setup)
-        get("/export-progress", Controller, :export_progress)
       end
 
       scope "/", Systems.Assignment do
