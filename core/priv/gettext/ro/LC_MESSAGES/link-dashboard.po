@@ -11,10 +11,6 @@ msgstr ""
 "Language: ro\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : (n==0||(n%100>0 && n%100<20)) ? 1 : 2);\n"
 
-#, elixir-autogen, elixir-format
-msgid "quick_summary.%{open_spot_count}.%{target_subject_count}"
-msgstr ""
-
 #, elixir-autogen, elixir-format, ex-autogen
 msgid "book.accounts.title"
 msgstr ""

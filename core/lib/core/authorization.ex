@@ -25,7 +25,6 @@ defmodule Core.Authorization do
 
   # Models
   grant_access(Systems.Advert.Model, [:visitor, :member])
-  grant_access(Systems.Questionnaire.ToolModel, [:owner, :participant])
   grant_access(Systems.Lab.ToolModel, [:owner, :participant])
 
   # Pages

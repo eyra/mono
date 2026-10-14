@@ -48,9 +48,7 @@ jobs:
           path: |
             core/deps
             core/_build
-            banking_proxy/deps
-            banking_proxy/_build
-          key: mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock', 'banking_proxy/mix.lock') }}
+          key: mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock') }}
           restore-keys: |
             mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-
 

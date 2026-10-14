@@ -5,7 +5,6 @@ defmodule Core.Application do
 
   use Application
 
-  alias Systems.Banking
   alias Systems.Rate
 
   def start(_type, _args) do
@@ -27,7 +26,6 @@ defmodule Core.Application do
       {Phoenix.PubSub, name: Core.PubSub},
       {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
       {Oban, oban_config()},
-      {Banking.Supervisor, [{:euro, "account-number"}]},
       CoreWeb.Endpoint,
       {Rate.Server, rate_config()}
     ]

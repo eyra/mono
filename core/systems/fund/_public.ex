@@ -18,7 +18,6 @@ defmodule Systems.Fund.Public do
 
   alias Systems.Fund
   alias Systems.Bookkeeping
-  alias Systems.Banking
   alias Systems.Payment
 
   defmodule FundError do
@@ -655,7 +654,6 @@ defmodule Systems.Fund.Public do
         %Fund.Model{
           id: fund_id,
           currency: %{
-            name: currency_name,
             bank_account: %{
               id: bank_account_id,
               account: %{
@@ -667,11 +665,6 @@ defmodule Systems.Fund.Public do
         },
         %Fund.DepositModel{amount: amount, reference: reference}
       ) do
-    if Banking.Public.is_live?(currency_name) do
-      raise FundError,
-        message: "Can not deposit money from #{bank_account}. It is connected to a real bank."
-    end
-
     amount = String.to_integer(amount)
 
     transaction = %{
