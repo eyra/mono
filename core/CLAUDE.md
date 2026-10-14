@@ -2,6 +2,15 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Nova migration
+
+This codebase is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](../docs/nova-migration/plan.md) and [design](../docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
+
+- No new PaNL, VU or other Eyra specifics in generic systems.
+- New systems use the `Core.Extension` contract once it exists (plan step 3).
+- Mica only contains code under Nova governance; custom and experimental systems start in Next.
+- One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
+
 ## CRITICAL DEBUGGING PRINCIPLE
 
 **NEVER ASSUME - ALWAYS INVESTIGATE**
