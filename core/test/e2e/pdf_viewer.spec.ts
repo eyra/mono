@@ -116,6 +116,8 @@ test('participant reads, resizes, reopens and completes a rendered PDF', async (
 
     await page.setViewportSize({ width: 390, height: 844 });
     await expectRenderedPages(page);
+    await expect.poll(() => page.locator(`${PDF_VIEWER} canvas`).first().evaluate(canvas => canvas.getBoundingClientRect().width),
+      { message: 'Pages re-render at the narrower width' }).toBeLessThanOrEqual(390);
     await testInfo.attach('pdf-narrow', { body: await page.screenshot({ fullPage: true }), contentType: 'image/png' });
 
     // Intercept only the annotation's external destination; the real PDF,

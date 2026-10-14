@@ -12,7 +12,7 @@ export const PDFViewer = {
 
     this.loadDocument().then((pdf) => {
       if (this.isDestroyed) {
-        pdf.destroy();
+        pdf.loadingTask.destroy();
         return;
       }
       this.pdf = pdf;
@@ -23,8 +23,12 @@ export const PDFViewer = {
       this.renderPagesIfNeeded();
 
       this.onResize = _.debounce(() => {
-        const width = this.el.getBoundingClientRect().width;
-        if (this.container != undefined && width != this.renderedWidth) {
+        // Compare the window, not the viewer: the rendered pages keep the viewer
+        // at its old width until they are replaced.
+        if (
+          this.container != undefined &&
+          window.innerWidth != this.renderedWindowWidth
+        ) {
           this.renderPages();
         }
       }, RESIZE_DEBOUNCE_MS);
@@ -42,7 +46,7 @@ export const PDFViewer = {
     }
     this.isDestroyed = true;
     this.cancelRender();
-    this.pdf?.destroy();
+    this.pdf?.loadingTask.destroy();
   },
   loadDocument() {
     pdfjs.GlobalWorkerOptions.workerSrc = worker;
@@ -70,7 +74,7 @@ export const PDFViewer = {
     const renderId = this.renderId;
     const container = this.createContainer();
     const width = this.el.getBoundingClientRect().width;
-    this.renderedWidth = width;
+    this.renderedWindowWidth = window.innerWidth;
 
     const pdf = this.pdf;
     try {
