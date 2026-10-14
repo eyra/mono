@@ -67,7 +67,7 @@ later once the risk of any lingering reader has passed.
 | `notifications` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | `Systems.Notification` retired in favour of `Systems.Notify` — no producer of `:new_notification` remained | FX#10204507827 |
 | `notification_boxes` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | Same as above — box was the per-user inbox for the retired system | FX#10204507827 |
 | `notification_center_logs` | `214250580` (2026-08-14) | 1 production release with the old inbox definitively unused | Same as above — dedup log for the retired system | FX#10204507827 |
-| `money_manager_transaction_marker` | (2026-10-14) | 1 production release without `Systems.Banking` | `Systems.Banking` retired; the fetcher that wrote payment cursors here is gone | FX#10403208772 |
+| `money_manager_transaction_marker` | `76e939c3d` (2026-10-14) | 1 production release without `Systems.Banking` | `Systems.Banking` retired; the fetcher that wrote payment cursors here is gone | FX#10403208772 |
 
 ## Deprecated enum values
 
