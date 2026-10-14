@@ -17,7 +17,7 @@ async function settle() {
 function fakePdf(renderedPages) {
   return {
     numPages: PAGE_COUNT,
-    destroy: vi.fn(),
+    loadingTask: { destroy: vi.fn() },
     getPage(pageNum) {
       if (pageNum > PAGE_COUNT) return Promise.reject(new Error("no page"));
       // Later pages take longer, so overlapping render runs interleave.
@@ -42,9 +42,27 @@ function fakePage(pageNum, renderedPages) {
   };
 }
 
+// Like the participant page: the viewer is as wide as the window, or as its
+// widest rendered page when that is wider.
 function mountHook(width) {
   const el = document.createElement("div");
-  el.getBoundingClientRect = () => ({ width });
+  let windowWidth;
+  const setWidth = (w) => {
+    windowWidth = w;
+    Object.defineProperty(window, "innerWidth", {
+      value: w,
+      configurable: true,
+    });
+  };
+  setWidth(width);
+  el.getBoundingClientRect = () => ({
+    width: Math.max(
+      windowWidth,
+      ...[...el.querySelectorAll("canvas")].map((c) =>
+        parseFloat(c.style.width)
+      )
+    ),
+  });
   document.body.appendChild(el);
 
   const renderedPages = new Map();
@@ -55,7 +73,7 @@ function mountHook(width) {
 
   return {
     hook,
-    setWidth: (w) => (el.getBoundingClientRect = () => ({ width: w })),
+    setWidth,
     canvases: () => [...el.querySelectorAll("canvas")],
     pageOf: (canvas) => renderedPages.get(canvas),
   };
@@ -91,7 +109,7 @@ describe("PDFViewer", () => {
 
     const resize = () => window.dispatchEvent(new Event("resize"));
 
-    it("re-renders once, 100 ms after the last resize event", async () => {
+    it("re-renders once at the narrower width, 100 ms after the last resize event", async () => {
       const viewer = await mountViewer(800);
 
       viewer.setWidth(500);
@@ -129,7 +147,7 @@ describe("PDFViewer", () => {
 
       expect(viewer.canvases().length).toBe(canvasCount);
       expect(canvasCount).toBeLessThan(PAGE_COUNT);
-      expect(viewer.hook.pdf.destroy).toHaveBeenCalled();
+      expect(viewer.hook.pdf.loadingTask.destroy).toHaveBeenCalled();
 
       viewer.setWidth(300);
       resize();
