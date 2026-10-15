@@ -250,7 +250,7 @@ defmodule Systems.Assignment.CrewPage do
   @impl true
   def render(assigns) do
     ~H"""
-      <.stripped menus={@menus} footer?={false} privacy_text={@vm.footer.privacy_text} terms_text={@vm.footer.terms_text}>
+      <.stripped menus={@menus} footer?={false} sheet_fit?={true} privacy_text={@vm.footer.privacy_text} terms_text={@vm.footer.terms_text}>
         <:header>
           <div class="h-[120px] sm:h-[180px] bg-grey5">
           <%= if @image_info do %>
