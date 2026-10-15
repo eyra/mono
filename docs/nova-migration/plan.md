@@ -174,13 +174,21 @@ Details and rationale are in [design.md](./design.md#decisions).
     - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
     - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
     - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
-  - **2b-2: devops and operations (D1–D4, in `eyra/devops`).**
-    - **D1.** Production environment parity: the few variables the merged `runtime.exs` needs on production. Additive, applied before M1 reaches production.
-    - **D2.** Docker under systemd on the existing EC2 nodes, with an env file, migrations once per deploy, and a rolling restart per node. A switch chooses between the tarball unit (default) and the container unit.
-    - **D3.** Rehearsal. There is no AWS test machine anymore, so the rehearsal runs on a new temporary Fly app next to Fly dev and staging, and is torn down afterwards. The EC2/systemd part (the unit, host volumes and file owners, clustering over the host network, the drain-aware rolling restart) cannot be fully rehearsed on Fly; the production switch keeps the tarball as its fallback for that reason.
-    - **D4.** The production switch, in a normal release slot, for a release that already ran on production as a tarball.
+    - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The promoted image runs on [`nova-mica-dev`](#step-2c--reference-deployment-nova-mica-dev) (step 2c) or on a temporary Fly app that is deleted afterwards, with the AWS-style variable names: `DB_URL`/`DB_*`, two S3 buckets, SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest, a rollback to the previous digest and a load test across a rolling deploy. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
+  - **2b-2: devops and operations (D1 and P; D1 in `eyra/devops`).** Production needs no environment variable change: the merged `runtime.exs` reads the variables production already sets.
+    - **D1. Container runtime in `eyra/devops`.**
+      - An Ansible `docker` role installs Docker CE on the existing EC2 nodes.
+      - A systemd unit, still called `next.service`, runs the image by digest with host networking, the host's `next` user and an env file that Ansible renders from the same vault variables as today's unit. Before switching, it checks that the variable names match the running unit. Logs still reach Grafana as `next.service`.
+      - An nginx drain location takes one node out of the load balancer before it restarts.
+      - The playbook pulls on both nodes, migrates once, then restarts one node at a time.
+      - A per-host switch, `next_runtime`, chooses between the tarball unit (default) and the container unit.
+    - **P. Production switch,** each part with its own go-ahead and rollback:
+      1. **Preparation**, restarting nothing: install Docker, write the env file, pull the current image, add the drain location, then test the drain alone on node 02.
+      2. **Canary on node 02**, with the release that already runs as a tarball. Drain node 02, start the container unit, check health, clustering with node 01, database TLS, mail and S3 config, the node-local Oban queue, logs and file owners while it is still drained, then undrain. Node 01 keeps the tarball of the same commit. Soak for one milestone.
+      3. **Node 01** switches the same way. From then on, migrations run through the container. The tarball is retired two milestones later.
 - **Constraints.**
-  - One runtime config file serves Fly and AWS alike. The platform behaves the same wherever it is deployed; only environment variable values differ.
+  - One runtime config file serves Fly and AWS alike (Joeri). The platform behaves the same wherever it is deployed; only environment variable values differ. What differs by design is how each platform deploys: how migrations are triggered, where secrets live, volumes, and the proxy in front. One of those affects behaviour: nginx's upload limit (`client_max_body_size` 210 MB) and its rate limit exist only on AWS, not on Fly. Keep that in mind when testing uploads on Fly.
+  - The registry is GHCR. The images `ghcr.io/eyra/next` and `ghcr.io/eyra/self` are **private**, because they are part of Eyra's devops. Production pulls with a read-only token from the vault, and Fly needs pull access as well.
   - Environment variable names and the release name `bin/core` do not change.
   - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in step 8 without carrying Eyra literals into Mica.
   - `BUNDLE` stays a build argument until step 8: one image per bundle.
@@ -188,16 +196,36 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Parallel with.** Step 3 and later steps, track F. 2b-2 is not in the same release window as step 8 or step 11: one change to the production pipeline at a time.
 - **Eyra prod impact.**
   - 2b-1: production runs the release extracted from the image staging tested, through the normal AWS flow.
-  - 2b-2: D4 is an operational cutover from the tarball to the container on the production nodes.
+  - 2b-2: P is an operational cutover from the tarball to the container, one production node at a time.
 - **Verification.**
   - The equivalence test shows only the intended config differences.
   - Fly dev and staging deploy by digest, and e2e passes.
   - A milestone ships to production as the extracted tarball without new errors in AppSignal.
-  - In the rehearsal and after D4: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
+  - In the rehearsal (R) and in each step of P: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
 - **Rollback.**
   - 2b-1: revert the PR.
-  - D4: put the tarball unit back for the same release. The tarball stays available for two milestones after the switch.
-- **Decisions/authorizations.** **The AWS production switch (D4) needs a rehearsal, a rollback to the tarball, and the user's go-ahead.**
+  - P: per host, drain, set `next_runtime` back to the tarball, start the tarball unit of the same release (still on disk) and undrain. The tarball stays available for two milestones after node 01 switches.
+- **Decisions/authorizations.** **Each part of the AWS production switch (P: preparation, canary on node 02, node 01) needs the rehearsal (R), a rollback to the tarball, and the user's go-ahead.**
+
+### Step 2c — Reference deployment `nova-mica-dev`
+
+- **Goal.** Keep the self-hosted variant verified at all times, and prove Mica's neutrality with a second live SaaS next to Next.
+- **Scope.** Tracked in the Flux issue [Reference deployment nova-mica-dev on Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10408245047).
+  - A permanent Fly app `nova-mica-dev` that runs the neutral reference SaaS `mica_saas`. The server name has no "saas", because every running service is a SaaS deployment; the code and the repository keep `mica_saas` and `mica-saas`.
+  - A Fly Postgres database and a storage bucket. Machines stop when idle.
+  - Auto-deploy from `develop`, like `eyra-next-dev`.
+  - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
+  - Neutral configuration: no Eyra branding and no Eyra secrets. The configuration is documented in `core/mica_saas/README.md`.
+- **Dependencies.** After step 2. Ideally together with 2b-1: the app then deploys the private `ghcr.io/eyra/self` image by digest. Until then, it builds from `core/Dockerfile` with `BUNDLE=self`.
+- **Parallel with.** Step 2b, step 3 and later steps, track F. It doubles as the rehearsal environment for step 2b (R).
+- **Eyra prod impact.** None. It is a separate Fly app with its own database, bucket and secrets.
+- **Risks.** `BUNDLE=self` compiles with 17 `no route path` warnings, so the first deploy may show broken Self pages. The fixes belong to steps 3–4, not to this step; the smoke test covers only the pages listed above.
+- **Verification.**
+  - A push to `develop` deploys to `nova-mica-dev`, and the smoke test passes.
+  - The deployed app shows no Eyra branding and uses no Eyra secrets.
+  - Machines stop when idle and start again on the next request.
+- **Rollback.** Stop or delete the Fly app; nothing else depends on it.
+- **Decisions/authorizations.** Creating the Fly app, its database and bucket, and their monthly cost.
 
 ---
 
@@ -534,11 +562,13 @@ Step 0 ─┬─ Step 1 ─── Step 2 ── Step 3 ─┬─ Step 3b
         │            Step 9A (after 2, final run before 10) ──────────────┘
         │            Step 9B (after 7) ───────────────────────────────────┘
         │            Step 2b (after 2, optional): 2b-1 before 3b ideally; 2b-2 before 8
+        │            Step 2c (after 2): nova-mica-dev, ideally with 2b-1; hosts 2b's rehearsal
         └─ Track F: F1 ── F2 ── F3 (own assessment; not in the step 11 window)
 ```
 
 - **Can start now:** steps 0, 1 and F1.
-- **Recommended, not blocking:** step 2b after step 2. 2b-1 ideally before step 3b and step 3's Oban-cron PR; 2b-2 before step 8, not in the release window of step 8 or 11.
+- **Recommended, not blocking:** step 2b after step 2. 2b-1 ideally before step 3b and step 3's Oban-cron PR; 2b-2 (D1, then P after the rehearsal R) before step 8, not in the release window of step 8 or 11.
+- **After step 2:** step 2c, the permanent reference deployment `nova-mica-dev`. Ideally together with 2b-1, so it deploys the `ghcr.io/eyra/self` image; it also serves as 2b's rehearsal app.
 - **Can run in parallel after step 3:** steps 4, 5 and the items of step 6.
 - **Strictly sequential:** 2 → 3, then 7 → 8 → 10 → 11.
 
