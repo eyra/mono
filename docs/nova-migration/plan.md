@@ -171,6 +171,14 @@ Details and rationale are in [design.md](./design.md#decisions).
   - One Dockerfile and one platform-neutral `runtime.exs`. One image per commit. Fly deploys it by digest. AWS production runs the same image as a container on the existing EC2 nodes. Until then, the release tarball is extracted from the image.
   - **2b-1: code in this repository (PRs M1–M4).**
     - **M1.** One platform-neutral `core/config/runtime.exs` replaces `runtime.aws.exs`, `runtime.fly.exs`, `runtime.dev.exs` and the copy steps. Environment variables choose the setup, not the platform. An equivalence test compares the old and new config with the production and Fly environments.
+      - **Variable names (decided: option a).** Where Fly and AWS use different names for the same setting (`DATABASE_URL` / `DB_URL`, `BUCKET_NAME` / `AWS_S3_BUCKET` + `PUBLIC_S3_BUCKET`), `runtime.exs` reads both names with a fixed precedence. No variable is renamed.
+      - **Required risk measures.** One file means a change made for Fly can reach production. M1 ships with all six measures:
+        1. **Config snapshot tests in CI (primary safeguard).** CI loads `runtime.exs` with fixed environment-variable fixtures per environment (prod/AWS, staging, dev) and compares the resulting config to committed snapshots. Any change to the prod snapshot fails CI until the snapshot diff is reviewed and updated. This restores what separate runtime files gave: a Fly change cannot silently reach production.
+        2. **Pre-restart check.** `predeploy` validates the config against the real production environment (required variables present, values valid) before the restart. On failure the deploy stops and the old version keeps running. Required settings use `System.fetch_env!`.
+        3. **No platform branches in code.** AWS/Fly differences are only environment values. Aliases (`DATABASE_URL || DB_URL` and the bucket names) have a fixed precedence, a test per alias, and a boot log line that names which variable was used, never its value.
+        4. **Staging runs what production runs.** Staging runs the same image and `runtime.exs` as production. A parity script compares which environment variable *names* are set on production and on staging.
+        5. **Gradual rollout.** Canary on node 02, then node 01 (P below). On a failed health check, roll back to the previous image digest.
+        6. **CODEOWNERS rule.** Changes to `runtime.exs` need approval from a code owner (for example Joeri).
     - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
     - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
     - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
@@ -199,6 +207,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - 2b-2: P is an operational cutover from the tarball to the container, one production node at a time.
 - **Verification.**
   - The equivalence test shows only the intended config differences.
+  - The six M1 risk measures are in place: config snapshots and alias tests in CI, the pre-restart check in `predeploy`, the env-name parity script, the rollback to the previous digest, and the CODEOWNERS rule for `runtime.exs`.
   - Fly dev and staging deploy by digest, and e2e passes.
   - A milestone ships to production as the extracted tarball without new errors in AppSignal.
   - In the rehearsal (R) and in each step of P: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
