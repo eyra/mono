@@ -6,7 +6,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   alias Systems.{
     Advert,
-    Promotion,
     Assignment,
     Pool,
     Fund
@@ -16,76 +15,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   def view_model(%Advert.Model{} = advert, page, assigns) do
     vm(advert, page, assigns)
-  end
-
-  defp vm(
-         %{
-           id: id,
-           submission: submission,
-           promotion: %{
-             id: promotion_id,
-             title: title,
-             image_id: image_id,
-             themes: themes,
-             marks: marks
-           },
-           assignment:
-             %{
-               info: %{
-                 duration: duration,
-                 language: language
-               }
-             } = assignment
-         },
-         {Next.Desktop, :card},
-         %{uri_path: uri_path}
-       ) do
-    duration = if duration === nil, do: 0, else: duration
-
-    reward_value_label = reward_value_label(submission, assignment)
-    reward_label = dgettext("eyra-submission", "reward.title")
-    duration_label = dgettext("eyra-promotion", "duration.title")
-
-    info1_elements = [
-      "#{duration_label}: #{duration} min.",
-      "#{reward_label}: #{reward_value_label}"
-    ]
-
-    info1_elements =
-      if language != nil do
-        language_label = language |> String.upcase(:ascii)
-        info1_elements ++ ["#{language_label}"]
-      else
-        info1_elements
-      end
-
-    info1 = Enum.join(info1_elements, " | ")
-    info = [info1]
-
-    has_open_spots? = Assignment.Public.has_open_spots?(assignment)
-
-    label =
-      if has_open_spots? do
-        nil
-      else
-        %{text: dgettext("eyra-marketplace", "assignment.status.complete.label"), type: :tertiary}
-      end
-
-    icon_url = get_card_icon_url(marks)
-    image_info = ImageHelpers.get_image_info(image_id)
-    tags = get_card_tags(themes)
-
-    %{
-      id: id,
-      path: ~p"/promotion/#{promotion_id}?back=#{uri_path}",
-      title: title,
-      image_info: image_info,
-      tags: tags,
-      duration: duration,
-      info: info,
-      icon_url: icon_url,
-      label: label
-    }
   end
 
   defp vm(
@@ -249,62 +178,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          %{
            id: id,
            updated_at: updated_at,
-           submission: submission,
-           promotion:
-             %{
-               title: title,
-               image_id: image_id
-             } = promotion,
-           assignment:
-             %{
-               info: %{
-                 subject_count: target_subject_count
-               }
-             } = assignment
-         },
-         {Next.Desktop.StartPage, :content},
-         _assigns
-       ) do
-    tag = Pool.Public.get_tag(submission)
-
-    promotion_ready? = Promotion.Public.ready?(promotion)
-
-    target_subject_count =
-      if target_subject_count == nil do
-        0
-      else
-        target_subject_count
-      end
-
-    open_spot_count = Assignment.Public.open_spot_count(assignment)
-
-    subtitle =
-      get_content_list_item_subtitle(
-        submission,
-        promotion_ready?,
-        open_spot_count,
-        target_subject_count
-      )
-
-    quick_summary = get_quick_summary(updated_at)
-    image_info = ImageHelpers.get_image_info(image_id, 120, 115)
-    image = %{type: :catalog, info: image_info}
-
-    %{
-      path: ~p"/advert/#{id}/content",
-      title: title,
-      subtitle: subtitle,
-      tag: tag,
-      level: :critical,
-      image: image,
-      quick_summary: quick_summary
-    }
-  end
-
-  defp vm(
-         %{
-           id: id,
-           updated_at: updated_at,
            promotion: %{
              title: title,
              image_id: image_id
@@ -329,15 +202,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
       image: image,
       quick_summary: quick_summary
     }
-  end
-
-  defp vm(
-         %{assignment: assignment} = advert,
-         {Next.Desktop.StartPage, :contribution},
-         user
-       ) do
-    path = ~p"/assignment/#{assignment.id}/landing"
-    vm(advert, :contribution, user, path)
   end
 
   defp vm(
@@ -465,57 +329,6 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     updated_at
     |> CoreWeb.UI.Timestamp.apply_timezone()
     |> CoreWeb.UI.Timestamp.humanize()
-  end
-
-  defp get_content_list_item_subtitle(
-         nil,
-         promotion_ready?,
-         open_spot_count,
-         target_subject_count
-       ) do
-    get_content_list_item_subtitle(
-      %{status: :idle},
-      promotion_ready?,
-      open_spot_count,
-      target_subject_count
-    )
-  end
-
-  defp get_content_list_item_subtitle(
-         submission,
-         promotion_ready?,
-         open_spot_count,
-         target_subject_count
-       ) do
-    case submission.status do
-      :idle ->
-        if promotion_ready? do
-          dgettext("eyra-submission", "ready.for.submission.message")
-        else
-          dgettext("eyra-submission", "incomplete.forms.message")
-        end
-
-      :submitted ->
-        dgettext("eyra-submission", "waiting.for.coordinator.message")
-
-      :accepted ->
-        case Pool.Public.published_status(submission) do
-          :scheduled ->
-            dgettext("eyra-submission", "accepted.scheduled.message")
-
-          :released ->
-            dgettext("link-dashboard", "quick_summary.%{open_spot_count}.%{target_subject_count}",
-              open_spot_count: open_spot_count,
-              target_subject_count: target_subject_count
-            )
-
-          :closed ->
-            dgettext("eyra-submission", "accepted.closed.message")
-        end
-
-      :completed ->
-        dgettext("eyra-submission", "submission.completed.message")
-    end
   end
 
   defp reward_value_label(

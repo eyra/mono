@@ -117,7 +117,6 @@ config :core, :policy_urls,
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
-  banking_backend: Systems.Banking.Dummy,
   payment_providers: %{
     "opp" => Systems.Payment.Provider.OPP,
     "local" => Systems.Payment.Provider.Local
@@ -253,13 +252,6 @@ config :core, :storage,
 
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
-
-config :core, BankingClient,
-  host: "localhost",
-  port: 5555,
-  cacertfile: "../banking_proxy/certs/ca_certificate.pem",
-  certfile: "../banking_proxy/certs/client_certificate.pem",
-  keyfile: "../banking_proxy/certs/client_key.pem"
 
 module =
   case Code.ensure_compiled(Bundle) do

@@ -5,7 +5,6 @@ Codebase used by the Next platform, which is also available for self hosting (se
 ## Projects
 
 * Core
-* Banking Proxy
 
 ## Core
 
@@ -13,7 +12,6 @@ Project implementing a SaaS platform based on interlinked modules called Systems
 
 ### Systems (shortlist)
 
-* Banking
 * Bookkeeping
 * Budget
 * Advert
@@ -60,10 +58,6 @@ npm run setup  # Install deps + generate test data files
 npm run test:quick  # Quick sanity check
 ```
 See [core/test/load/README.md](core/test/load/README.md) for all test configurations.
-
-## Banking Proxy
-
-Project implementing a proxy server used in Banking (core/systems/banking). It allows for a limited and secure interaction with a banking account.
 
 
 ## Using TLS between app and database

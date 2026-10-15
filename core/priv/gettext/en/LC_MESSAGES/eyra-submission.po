@@ -19,18 +19,6 @@ msgid "status.submitted.label"
 msgstr "Submitted"
 
 #, elixir-autogen, elixir-format
-msgid "incomplete.forms.message"
-msgstr "Some required fields are not filled in yet"
-
-#, elixir-autogen, elixir-format
-msgid "ready.for.submission.message"
-msgstr "All required fields are filled, you can submit this campaign"
-
-#, elixir-autogen, elixir-format
-msgid "waiting.for.coordinator.message"
-msgstr "Waiting for the pool administrator to publish your campaign in the marketplace"
-
-#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Reward"
 
@@ -98,14 +86,6 @@ msgstr "Open"
 msgid "status.accepted.scheduled.label"
 msgstr "Scheduled"
 
-#, elixir-autogen, elixir-format
-msgid "accepted.closed.message"
-msgstr "This campaign is closed"
-
-#, elixir-autogen, elixir-format
-msgid "accepted.scheduled.message"
-msgstr "This campaign is scheduled for participation"
-
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.admin.success.text"
 msgstr "This campaign is marked as finished and no longer available in the marketplace."
@@ -121,7 +101,3 @@ msgstr "Finished"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.retracted.label"
 msgstr "Withdrawn"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submission.completed.message"
-msgstr "Campaign is finished"

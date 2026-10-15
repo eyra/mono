@@ -12,10 +12,6 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #, elixir-autogen, elixir-format
-msgid "assignment.status.complete.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
 msgstr ""
 

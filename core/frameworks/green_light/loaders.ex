@@ -63,7 +63,7 @@ defmodule Frameworks.GreenLight.Loaders do
 
   It can thus be used like this:
 
-    defloader(:study, &Next.Assignment.get!/1)
+    defloader(:assignment, &Systems.Assignment.Public.get!/1)
 
   """
   defmacro defloader(key, callback) do
