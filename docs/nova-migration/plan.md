@@ -180,6 +180,7 @@ Details and rationale are in [design.md](./design.md#decisions).
     - **D3.** Rehearsal. There is no AWS test machine anymore, so the rehearsal runs on a new temporary Fly app next to Fly dev and staging, and is torn down afterwards. The EC2/systemd part (the unit, host volumes and file owners, clustering over the host network, the drain-aware rolling restart) cannot be fully rehearsed on Fly; the production switch keeps the tarball as its fallback for that reason.
     - **D4.** The production switch, in a normal release slot, for a release that already ran on production as a tarball.
 - **Constraints.**
+  - One runtime config file serves Fly and AWS alike. The platform behaves the same wherever it is deployed; only environment variable values differ.
   - Environment variable names and the release name `bin/core` do not change.
   - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in step 8 without carrying Eyra literals into Mica.
   - `BUNDLE` stays a build argument until step 8: one image per bundle.
