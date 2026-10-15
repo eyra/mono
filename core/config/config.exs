@@ -125,7 +125,7 @@ config :core,
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
 # Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per bundle (see bundles/*/config/config.exs).
+# Override per bundle (see next/bundle/config/config.exs and mica_saas/bundle/config/config.exs).
 config :core, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -265,10 +265,13 @@ module =
 
 bundle = apply(module, :name, [])
 
+bundle_dir = apply(module, :dir, [bundle])
+
 config :core, :bundle, bundle
+config :core, :bundle_dir, bundle_dir
 
 unless is_nil(bundle) do
-  import_config "../bundles/#{bundle}/config/config.exs"
+  import_config "../#{bundle_dir}/config/config.exs"
 end
 
 config :core, :zircon,

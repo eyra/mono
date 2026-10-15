@@ -1,4 +1,8 @@
-# Self hosting
+# Self: the reference SaaS on Mica
+
+Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`; its bundle is in [`bundle/`](bundle/). In step 3 of the Nova migration (`docs/nova-migration/plan.md`), `bundle/` is dissolved into `core/mica_saas/{lib,config}` when the bundle concept is replaced by `Core.Extension`.
+
+All commands below run from the `core/` folder unless stated otherwise.
 
 ## Development instructions
 
@@ -61,12 +65,12 @@
 
 ### Branding
 
-* Replace [self.svg](core/assets/static/images/icons/self.svg) and [self_wide.svg](core/assets/static/images/icons/self_wide.svg) with your icons of choice.
-* Change [footer.ex](core/lib/core_web/ui/footer.ex) to format the platform footer or remove it completely
+* Replace [self.svg](../priv/static/images/logos/products/self.svg) and [self_wide.svg](../priv/static/images/logos/products/self_wide.svg) with your icons of choice.
+* Change [footer.ex](../mica/frameworks/pixel/components/footer.ex) to format the platform footer or remove it completely
 
 ### Menu items
 
-* In [items.ex](core/bundles/self/lib/menu/items.ex) you will find all the menu items. Add custom items when required.
+* In [items.ex](bundle/lib/menu/items.ex) you will find all the menu items. Add custom items when required.
 
 Core supports the following page layouts:
 * Stripped: minimalistic page without menu
@@ -74,9 +78,9 @@ Core supports the following page layouts:
 * Workspace: menu on the left
 
 Change the menus here:
-* [Stripped](core/bundles/self/lib/layouts/stripped/menu_builder.ex)
-* [Website](core/bundles/self/lib/layouts/website/menu_builder.ex)
-* [Workspace](core/bundles/self/lib/layouts/workspace/menu_builder.ex)
+* [Stripped](bundle/lib/layouts/stripped/menu_builder.ex)
+* [Website](bundle/lib/layouts/website/menu_builder.ex)
+* [Workspace](bundle/lib/layouts/workspace/menu_builder.ex)
 
 ### Storage
 
@@ -115,7 +119,7 @@ end
 You can add your implementation in:
 
 ```
-core/systems/storage/builtin/my_backend.ex
+core/mica/systems/storage/builtin/my_backend.ex
 ```
 
 Minimal example:
@@ -160,7 +164,7 @@ Prevent any hardcoded variable but use the Elixir configuration system to retrei
 An S3 example can be found in:
 
 ```
-core/systems/storage/builtin/s3.ex
+core/mica/systems/storage/builtin/s3.ex
 ```
 Below a code snippet:
 ```elixir
@@ -177,7 +181,7 @@ end
 
 #### ⚙️ Configuration
 
-To activate and configure a storage backend, you must modify the `core/config/runtime.exs` file.
+To activate and configure a storage backend, you must modify the runtime configuration of your platform, `core/config/runtime.<platform>.exs` (copied to `config/runtime.exs` by `scripts/build-release`).
 
 The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
 `STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.
@@ -271,7 +275,7 @@ Required environment variables:
 | DB_NAME | Name of the database in the PostgreSQL| "self_prod" |
 | SECRET_KEY_BASE | 64-bit sequence of random characters | \<long-sequence-of-characters\> |
 | STATIC_PATH | Path to folder where uploaded files can be stored | "/tmp" |
-| UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "hcejpnHRuFWL-fKXLYqhGBt1Dz0_tTjeNifgD01VkGE" |
+| UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "<unsplash-access-key>" |
 | UNSPLASH_APP_NAME | Application name registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "Self" |
 | STORAGE_SERVICES | Comma seperated list of storage services | "yoda, aws, azure" |
 
@@ -280,12 +284,12 @@ Optional environment variables:
 | Variable | Description | Example value |
 |---|---|---|
 | LOG_LEVEL | Console log level  | "debug", "info", "warn", "error" |
-| SENTRY_DSN | app monitoring | https://1234febac1234365cfe2d1fad616845b@o1234721120555008.ingest.sentry.io/1235721234883520"
-| GOOGLE_SIGN_IN_CLIENT_ID | | "123466465353-mui7en8912341rpn6qaevb89rd01234.apps.googleusercontent.com" |
-| GOOGLE_SIGN_IN_CLIENT_SECRET | | "Q_lSWMy1234nPhxof1234Xyc" |
+| SENTRY_DSN | app monitoring | "https://<public-key>@<org>.ingest.sentry.io/<project-id>" |
+| GOOGLE_SIGN_IN_CLIENT_ID | | "<client-id>.apps.googleusercontent.com" |
+| GOOGLE_SIGN_IN_CLIENT_SECRET | | "<google-client-secret>" |
 | SURFCONEXT_SITE | SURFconext site | "https://connect.test.surfconext.nl" |
 | SURFCONEXT_CLIENT_ID | SURFconext client ID | "self.com" |
-| SURFCONEXT_CLIENT_SECRET | SURFconext client secret | "12343HieOjb1234hcBpL" |
+| SURFCONEXT_CLIENT_SECRET | SURFconext client secret | "<surfconext-client-secret>" |
 | STORAGE_S3_PREFIX | Prefix for S3 builtin storage objects. Without this variable "builtin" storage service will default to local filesystem | "storage" |
 | CONTENT_S3_PREFIX | Prefix for S3 content objects | "content" |
 | FELDSPAR_S3_PREFIX | Prefix for S3 feldspar objects | "feldspar" |

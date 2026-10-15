@@ -10,6 +10,8 @@ priv/static/content
 .bundle
 assets/js/_hooks/
 test
+mica/test
+next/test
 .elixir_ls
 .elixir-tools
 priv/plts

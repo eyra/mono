@@ -67,13 +67,13 @@ COPY core/assets/ ./assets/
 
 # 7) Copy other necessary files
 COPY core/priv/ ./priv/
-COPY core/bundles/ ./bundles/
-COPY core/frameworks/ ./frameworks/
-COPY core/systems/ ./systems/
-COPY core/.formatter.exs core/.credo.exs core/.bundle.ex ./
+COPY core/.formatter.exs core/.credo.exs core/.bundle.ex core/boundary_allowlist.exs ./
+COPY core/custom_credo_checks/ ./custom_credo_checks/
 
 # 8) Copy source code (this changes most frequently, so put it last)
-COPY core/lib/ ./lib/
+COPY core/mica/ ./mica/
+COPY core/next/ ./next/
+COPY core/mica_saas/ ./mica_saas/
 COPY core/test/ ./test/
 
 # 9) Build assets

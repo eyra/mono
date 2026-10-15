@@ -5,7 +5,7 @@ Status: **draft for review**. Each step gets its own issue in the Next Flux proj
 Related documents:
 - [design.md](./design.md): the design, the inventory and the decisions this plan builds on.
 
-Paths in this document are relative to the repository root and refer to the layout *before* step 8, when `core/` still exists.
+Paths in this document are relative to the repository root and refer to the layout *before* step 8, when `core/` still exists. Since step 2, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the step 2 section says which.
 
 ## Summary
 
@@ -57,7 +57,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - foreign keys point only from the SaaS to Mica
   - `workflow_tool_refs` and `project_items` become open registry references
   - at the split, the migrations are squashed into Mica and Next baselines, which are marked as applied in Eyra production after a dry run on a production snapshot
-- **Layout.** `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self becomes Mica's reference SaaS inside `mica/`. A separate `novasoftwarefoundation/mica-saas` repository is a later decision.
+- **Layout.** `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is the reference SaaS on Mica: a sibling of Next, not part of Mica (`core/mica_saas/` since step 2). A separate `novasoftwarefoundation/mica-saas` repository is a later decision.
 - **Repositories:**
   - `mica/` goes to `novasoftwarefoundation/mica` with fresh history. Its first commit points back to the `eyra/mono` commit it came from.
   - `next/` goes to `eyra/next`.
@@ -68,7 +68,7 @@ Details and rationale are in [design.md](./design.md#decisions).
 ## Rules for every step
 
 1. **Small PRs to `develop`.** Each one ships in a regular Next milestone and passes [`test.yml`](../../.github/workflows/test.yml), the smoke tests, and e2e on `eyra-next-dev` and staging. Feature work continues as usual.
-2. **The boundary check is a ratchet.** From step 2 on, CI fails on any *new* reference from Mica code to Next code, and on new PaNL/VU/Eyra hard-coding in Mica code. The allowlist of existing violations may only shrink.
+2. **The boundary check is a ratchet.** From step 2 on, CI fails on any *new* reference from Mica code to SaaS code (Next or Self), on any reference between the two SaaS, and on new PaNL/VU/Eyra hard-coding in Mica code. The allowlist of existing violations may only shrink.
 3. **Behaviour-preserving refactors prove it with snapshots:**
    - the route table (`mix phx.routes`)
    - the GreenLight permission map
@@ -136,22 +136,26 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Goal.** Make target ownership visible in the tree now and stop new coupling, while the code stays one Mix project.
 - **Scope.**
   - **Move folders with `git mv`, inside `core/`.**
-    - `core/mica/{lib,systems,frameworks}` gets everything Mica will own, including systems that are still entangled.
-    - `core/next/{lib,systems}` gets everything Next will own:
-      - `core/bundles/next`
-      - the student, citizen, graphite, zircon, paper, annotation, ontology and onyx systems
+    - `core/mica/{lib,systems,frameworks,test}` gets everything Mica will own, including systems that are still entangled.
+    - `core/next/{bundle,lib,systems,test}` gets everything Next will own:
+      - `core/bundles/next` → `core/next/bundle`
+      - the student, citizen, graphite, zircon, paper, annotation, ontology and onyx systems, with `Frameworks.Concept.ScreeningAgent` (moves with Zircon)
       - `core/lib/mix/tasks/e2e.ex`
-      - the Next fixtures of `core/frameworks/e2e`
-    - `core/bundles/self` becomes Mica's reference SaaS under `core/mica/`.
+      - the Next fixtures of `core/frameworks/e2e` (`controller.ex`; `_routes.ex` stays in Mica)
+      - the PaNL Wallaby feature tests
+    - `core/bundles/self` → `core/mica_saas/bundle`: Self is a sibling SaaS on Mica, not part of Mica (decided 2026-10-14). Bundle id `:self`, `BUNDLE=self` and the `Self.*` modules are unchanged. `SELFHOSTING.md` becomes `core/mica_saas/README.md`; the root keeps a short pointer.
+    - Both `bundle/` folders are temporary; step 3 dissolves them into `<saas>/{lib,config}`.
+    - `core/test/{e2e,smoke,load,scripts}`, `core/priv`, `core/assets`, `core/config` and the build files stay where they are until step 8.
   - **Follow-up changes:**
     - update `elixirc_paths` in [`core/mix.exs`](../../core/mix.exs) and [`core/.formatter.exs`](../../core/.formatter.exs)
     - update the Tailwind `content` globs in [`core/assets/tailwind.config.js`](../../core/assets/tailwind.config.js)
     - update the `COPY` lines in the [`Dockerfile`](../../Dockerfile) and [`core/Dockerfile`](../../core/Dockerfile)
     - update the bundle import in `config.exs`
-  - **Boundary check in CI.** A credo custom check plus a `mix xref` script that:
-    - fails when a module under `core/mica/**` references a module defined under `core/next/**`
+  - **Boundary check in CI.** A credo custom check (`core/custom_credo_checks/mica_boundary.ex`) plus a `mix xref` script (`core/scripts/boundary_check.exs`, run in `test.yml`) that:
+    - fails when code under `core/mica/**` references a module defined under `core/next/**` or `core/mica_saas/**`, or when `core/next/**` and `core/mica_saas/**` reference each other (xref references and name-only references)
     - fails on new PaNL, VU or Eyra literals under `core/mica/**`: `:panl`, `"Panl"`, `panl.nl`, `eyra.co`, `@eyra.service`, VU study codes
-    - uses a committed allowlist of today's violations (about 90 files)
+    - uses a committed allowlist of today's violations, `core/boundary_allowlist.exs`: 36 entries in 34 files at the move. It also fails on stale entries, so the list only shrinks.
+    - Run it from `core/` after `mix compile`: `elixir scripts/boundary_check.exs`.
 - **Dependencies.** Preferably after step 1.
 - **Parallel with.** Step 0, step 1, track F.
 - **Eyra prod impact.** None at runtime. The risk is breaking the build or deploy. Merge early in a milestone. The PR must build the Fly image, the AWS release tarball and both Docker images.
@@ -353,7 +357,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 
 - **Goal.** Two real Mix projects in this repository, with `core/` gone. This is the shape the repositories will have.
 - **Scope.**
-  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext, neutral static assets and the reference SaaS (Self).
+  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and neutral static assets. Where Self (`core/mica_saas/`) goes in step 8 is open question 2.
   - **`git mv core/next next/`.** This is the Phoenix app `:next`, with `{:mica, path: "../mica"}`. Next owns:
     - endpoint and router composition
     - config, including `runtime.fly.exs` and `runtime.aws.exs`

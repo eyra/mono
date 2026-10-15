@@ -521,7 +521,9 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       reference_file = Systems.Zircon.Public.insert_reference_file!(tool, "test.ris")
 
       # Update reference file to point to actual test RIS file
-      test_file_path = Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/small.ris")
+      test_file_path =
+        Path.join(File.cwd!(), "next/test/systems/zircon/screening/test_data/small.ris")
+
       reference_file = reference_file |> Core.Repo.preload(:file, force: true)
 
       Core.Repo.update!(

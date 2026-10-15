@@ -1,6 +1,6 @@
 ---
 description: Authorization rules
-globs: systems/**/*.ex, systems/**/*.exs, systems/**/*.heex
+globs: {mica,next}/systems/**/*.ex, {mica,next}/systems/**/*.exs, {mica,next}/systems/**/*.heex
 alwaysApply: false
 ---
 

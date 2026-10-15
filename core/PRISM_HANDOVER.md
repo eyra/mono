@@ -67,7 +67,7 @@ packages/prism/
 - Spacing tokens
 - Custom utilities (viewport height, safe areas, scrollbar)
 
-### Components (from `frameworks/pixel/components/`)
+### Components (from `mica/frameworks/pixel/components/`)
 - **Buttons**: primary, secondary, plain (see `button_face.ex`)
 - **Inputs**: text, email, password, number, date (see `form.ex`)
 - **Textarea**
@@ -87,11 +87,11 @@ Current styling sources in this codebase:
 - `/assets/tailwind.config.js` - All design tokens
 - `/assets/css/app.css` - Font faces, WYSIWYG styles
 - `/priv/static/fonts/` - Font files
-- `/frameworks/pixel/components/button.ex` - Button component
-- `/frameworks/pixel/components/button_face.ex` - Button styling variants
-- `/frameworks/pixel/components/form.ex` - Input components
-- `/frameworks/pixel/components/text.ex` - Typography components
-- `/frameworks/pixel/components/radio_group.ex` - Radio styling
+- `/mica/frameworks/pixel/components/button.ex` - Button component
+- `/mica/frameworks/pixel/components/button_face.ex` - Button styling variants
+- `/mica/frameworks/pixel/components/form.ex` - Input components
+- `/mica/frameworks/pixel/components/text.ex` - Typography components
+- `/mica/frameworks/pixel/components/radio_group.ex` - Radio styling
 
 ## Consumer Usage (Target)
 

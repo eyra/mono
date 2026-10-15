@@ -22,7 +22,7 @@ When any one is false, narrow is enough. Don't preemptively add coverage for bre
 
 ```bash
 mix test.feature                                       # all feature tests
-mix test.feature test/features/smoke_test.exs          # one file
+mix test.feature mica/test/features/smoke_test.exs     # one file
 WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
 ```
 

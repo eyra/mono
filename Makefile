@@ -1,4 +1,3 @@
-BUNDLES=$(wildcard core/bundles/*)
 MIX_PROJECTS=core
 
 .PHONY: all

@@ -8,7 +8,7 @@ defmodule CoreWeb.Features.FeldsparMonitorTest do
   use CoreWeb.FeatureCase
 
   @mock_app_id "mock_monitor_app"
-  @mock_app_source_path "test/systems/feldspar/mock_monitor_app"
+  @mock_app_source_path "mica/test/systems/feldspar/mock_monitor_app"
 
   setup do
     # Copy mock app to where the Feldspar plug serves static files from

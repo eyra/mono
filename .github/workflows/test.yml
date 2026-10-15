@@ -96,5 +96,8 @@ jobs:
       - name: Credo
         run: make credo
 
+      - name: Boundary check (Nova migration)
+        run: cd core && elixir scripts/boundary_check.exs
+
       - name: Dialyzer
         run: make dialyzer
