@@ -171,19 +171,30 @@ Details and rationale are in [design.md](./design.md#decisions).
   - One Dockerfile and one platform-neutral `runtime.exs`. One image per commit. Fly deploys it by digest. AWS production runs the same image as a container on the existing EC2 nodes. Until then, the release tarball is extracted from the image.
   - **2b-1: code in this repository (PRs M1–M4).**
     - **M1.** One platform-neutral `core/config/runtime.exs` replaces `runtime.aws.exs`, `runtime.fly.exs`, `runtime.dev.exs` and the copy steps. Environment variables choose the setup, not the platform. An equivalence test compares the old and new config with the production and Fly environments.
-      - **Variable names (decided: option a).** Where Fly and AWS use different names for the same setting (`DATABASE_URL` / `DB_URL`, `BUCKET_NAME` / `AWS_S3_BUCKET` + `PUBLIC_S3_BUCKET`), `runtime.exs` reads both names with a fixed precedence. No variable is renamed.
+      - **Variable names (decided: one name per setting, no aliases).** Every setting has one environment variable name in all environments from the start:
+        - `DATABASE_URL`: the database
+        - `AWS_S3_BUCKET`: the private bucket
+        - `PUBLIC_S3_BUCKET`: the public bucket
+        - `APPSIGNAL_REVISION`: the release revision, set inside the image at build time
+
+        The order:
+        1. Add the new names everywhere first. A devops PR adds `DATABASE_URL` on AWS next to `DB_URL`; Fly gets `AWS_S3_BUCKET` and `PUBLIC_S3_BUCKET` as staged secrets.
+        2. M1 reads only these names, with `System.fetch_env!` for the required ones.
+        3. Then the old names are removed: `DB_URL`, `DB_USER`/`DB_PASS`/`DB_HOST`/`DB_NAME`, and the reliance on `BUCKET_NAME`.
+
+        Database TLS SNI then comes from the URL host instead of `DB_HOST`; M1 tests this on staging first.
       - **Required risk measures.** One file means a change made for Fly can reach production. M1 ships with all six measures:
         1. **Config snapshot tests in CI (primary safeguard).** CI loads `runtime.exs` with fixed environment-variable fixtures per environment (prod/AWS, staging, dev) and compares the resulting config to committed snapshots. Any change to the prod snapshot fails CI until the snapshot diff is reviewed and updated. This restores what separate runtime files gave: a Fly change cannot silently reach production.
         2. **Pre-restart check.** `predeploy` validates the config against the real production environment (required variables present, values valid) before the restart. On failure the deploy stops and the old version keeps running. Required settings use `System.fetch_env!`.
-        3. **No platform branches in code.** AWS/Fly differences are only environment values. Aliases (`DATABASE_URL || DB_URL` and the bucket names) have a fixed precedence, a test per alias, and a boot log line that names which variable was used, never its value.
+        3. **No platform branches and no aliases.** AWS/Fly differences are only environment values, and every setting is read under one name (see above).
         4. **Staging runs what production runs.** Staging runs the same image and `runtime.exs` as production. A parity script compares which environment variable *names* are set on production and on staging.
         5. **Gradual rollout.** Canary on node 02, then node 01 (P below). On a failed health check, roll back to the previous image digest.
         6. **CODEOWNERS rule.** Changes to `runtime.exs` need approval from a code owner (for example Joeri).
     - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
     - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
     - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
-    - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The rehearsal runs on [`nova-mica-dev`](#step-2c--reference-deployment-nova-mica-dev) (step 2c), whose Self image shares the Dockerfile, `runtime.exs`, Mica helpers, release scripts and build workflow with the Next image; a temporary Fly app is the fallback if step 2c is not there yet. For one window its secrets switch to the AWS-style variable names, then back: `DB_URL`/`DB_*`, two S3 buckets, SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest and a rollback to the previous digest. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
-  - **2b-2: devops and operations (D1 and P; D1 in `eyra/devops`).** Production needs no environment variable change: the merged `runtime.exs` reads the variables production already sets.
+    - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The rehearsal runs on [`nova-mica-dev`](#step-2c--reference-deployment-nova-mica-dev) (step 2c), whose Self image shares the Dockerfile, `runtime.exs`, Mica helpers, release scripts and build workflow with the Next image; a temporary Fly app is the fallback if step 2c is not there yet. It uses the same variable names as production (`DATABASE_URL`, `AWS_S3_BUCKET`, `PUBLIC_S3_BUCKET`). For one window its secrets switch to the production setup, then back: SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest and a rollback to the previous digest. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
+  - **2b-2: devops and operations (D1 and P; D1 in `eyra/devops`).** The only production environment change is the one-name-per-setting order under M1: `DATABASE_URL` is added next to `DB_URL` before M1, and the old names are removed after it.
     - **D1. Container runtime in `eyra/devops`.**
       - An Ansible `docker` role installs Docker CE on the existing EC2 nodes.
       - A systemd unit, still called `next.service`, runs the image by digest with host networking, the host's `next` user and an env file that Ansible renders from the same vault variables as today's unit. Before switching, it checks that the variable names match the running unit. Logs still reach Grafana as `next.service`.
@@ -197,7 +208,7 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Constraints.**
   - One runtime config file serves Fly and AWS alike (Joeri). The platform behaves the same wherever it is deployed; only environment variable values differ. What differs by design is how each platform deploys: how migrations are triggered, where secrets live, volumes, and the proxy in front. One of those affects behaviour: nginx's upload limit (`client_max_body_size` 210 MB) and its rate limit exist only on AWS, not on Fly. Keep that in mind when testing uploads on Fly.
   - The registry is GHCR. The images `ghcr.io/eyra/next` and `ghcr.io/eyra/self` are **private**, because they are part of Eyra's devops. Production pulls with a read-only token from the vault. Fly deploys a byte-for-byte copy in its own registry (`registry.fly.io`), so the digest stays the same.
-  - Environment variable names and the release name `bin/core` do not change.
+  - The release name `bin/core` does not change. Environment variable names change only where one setting had two names (see M1).
   - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in step 8 without carrying Eyra literals into Mica.
   - `BUNDLE` stays a build argument until step 8: one image per bundle.
 - **Dependencies.** Step 2 (the merge freeze is over). 2b-1 ideally lands before step 3b and before step 3's Oban-cron PR, because both edit the runtime config; it is not a prerequisite for either. 2b-2 can land any time before step 8.
@@ -207,7 +218,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - 2b-2: P is an operational cutover from the tarball to the container, one production node at a time.
 - **Verification.**
   - The equivalence test shows only the intended config differences.
-  - The six M1 risk measures are in place: config snapshots and alias tests in CI, the pre-restart check in `predeploy`, the env-name parity script, the rollback to the previous digest, and the CODEOWNERS rule for `runtime.exs`.
+  - The six M1 risk measures are in place: config snapshots in CI, one name per setting with no aliases, the pre-restart check in `predeploy`, the env-name parity script, the rollback to the previous digest, and the CODEOWNERS rule for `runtime.exs`.
   - Fly dev and staging deploy by digest, and e2e passes.
   - A milestone ships to production as the extracted tarball without new errors in AppSignal.
   - In the rehearsal (R) and in each step of P: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
