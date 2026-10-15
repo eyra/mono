@@ -18,10 +18,11 @@ defmodule CoreWeb.Layouts.Stripped.Html do
   # md:h-viewport` to protect pages whose content grows past viewport on
   # mobile and relies on natural browser scroll.
   attr(:centered?, :boolean, default: false)
-  # When true, the native app (`data-native-app`) also locks `#main-content` to
-  # viewport height and keeps clear of the home indicator, so the page never
-  # scrolls as a whole; its panels scroll themselves.
-  attr(:native_fit?, :boolean, default: false)
+  # When true, a page in the Next app's sheet (`data-native-sheet`, set by the
+  # app) locks `#main-content` to viewport height, so the page never scrolls as
+  # a whole; its panels scroll themselves. The app's tabs and browsers keep the
+  # default.
+  attr(:sheet_fit?, :boolean, default: false)
 
   attr(:privacy_text, :string, default: dgettext("eyra-ui", "privacy.link"))
   attr(:terms_text, :string, default: dgettext("eyra-ui", "terms.link"))
@@ -33,11 +34,7 @@ defmodule CoreWeb.Layouts.Stripped.Html do
     assigns =
       assign_new(assigns, :main_height_class, fn ->
         height = if assigns.centered?, do: "h-viewport", else: "min-h-viewport md:h-viewport"
-
-        if assigns.native_fit?,
-          do:
-            "#{height} native:h-viewport native:pb-[env(safe-area-inset-bottom)] native:bg-white",
-          else: height
+        if assigns.sheet_fit?, do: "#{height} sheet:h-viewport", else: height
       end)
 
     ~H"""
