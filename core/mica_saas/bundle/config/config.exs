@@ -9,7 +9,7 @@ config :core,
 
 config :core, Systems.Account.UserAuth,
   creator_signed_in_page: "/project",
-  member_signed_in_page: "/console"
+  member_signed_in_page: "/"
 
 # An unconfigured flag is on (Core.FeatureFlags.conf_enabled?/1), and
 # ENABLED_APP_FEATURES can only switch flags on. The E2E API confirms accounts
