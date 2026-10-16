@@ -28,7 +28,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationCreateTest do
 
     # Create project
     session
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
 
     # Navigate into the project

@@ -5,7 +5,7 @@ Status: **draft for review**. Each step gets its own issue in the Next Flux proj
 Related documents:
 - [design.md](./design.md): the design, the inventory and the decisions this plan builds on.
 
-Paths in this document are relative to the repository root and refer to the layout *before* code-split, when `core/` still exists. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the code-layout section says which.
+Paths in this document are relative to the repository root and refer to the layout *before* code-split, when `core/` still exists. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the code-layout section says which. Module names (`Core.System`, `CoreWeb.Router`, …) are the names before [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica); from then on they are `Mica.*` and `MicaWeb.*`.
 
 ## How steps are identified
 
@@ -32,7 +32,7 @@ Paths in this document are relative to the repository root and refer to the layo
 | [ops-mica-dev](#ops-mica-dev--development-server-nova-mica-dev) | Build and development server | Eyra-internal development server `nova-mica-dev` | code-layout; ideally with build-image | next |
 | [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
 | [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
-| [code-rename](#code-rename--otp-app-rename-core--mica) | Decoupling | OTP app `:core` → `:mica` | code-systems (accessor); ideally build-image | planned |
+| [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica) | Decoupling | OTP app `:core` → `:mica`, modules `Core.*`/`CoreWeb.*` → `Mica.*`/`MicaWeb.*` | code-systems; ideally build-image; before code-split | planned |
 | [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
 | [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | planned |
 | [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-systems; code-registry for Graphite and Zircon | planned |
@@ -95,12 +95,13 @@ flowchart LR
 - **Can start now:** feldspar-protocol, and the first run of repo-assess.
 - **Recommended, not blocking:** build-image ideally before code-rename. ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
 - **Can run in parallel after code-systems:** code-brand, code-registry and the items of code-instance.
+- **Merge freeze:** code-rename, like code-layout: it touches almost every file, so every open PR has to catch up with it.
 - **Strictly sequential:** code-layout → code-systems, then data-tables → code-split → repo-create → ops-cutover.
 
 ## Summary
 
 **The two parts.** `core/` becomes:
-- **Mica**: a Mix project with OTP app `:mica`. Modules stay `Core.*`/`CoreWeb.*`. It moves to `novasoftwarefoundation/mica`.
+- **Mica**: a Mix project with OTP app `:mica` and modules `Mica.*`/`MicaWeb.*` (renamed from `Core.*`/`CoreWeb.*` in code-rename). It moves to `novasoftwarefoundation/mica`.
 - **Next**: a Phoenix app that depends on Mica through `Core.SaaS` and adds its own systems through `Core.System`. It moves to `eyra/next`.
 
 **How the work is done.** All work happens in this repository on `develop`, in normal small PRs shipped through Next's milestones. There is no long-lived branch and no copy of core.
@@ -109,7 +110,7 @@ flowchart LR
 |---|---|---|
 | Guardrails | code-guardrails, code-cleanup, code-layout | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
 | Build and development server | ops-mica-dev, build-image | Keep the Self code alive on the Eyra-internal development server `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
-| Decoupling | code-systems, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
+| Decoupling | code-systems, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app and the `Core`/`CoreWeb` namespaces to Mica, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
 | Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
 | Feldspar | feldspar-protocol, feldspar-tests, feldspar-transfer | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
 
@@ -133,7 +134,7 @@ flowchart LR
 Details and rationale are in [design.md](./design.md#decisions).
 
 - **Option A.** `eyra/next` is the root Phoenix project. Mica is a versioned Mix dependency. Every system, in Mica or in a SaaS, implements `Core.System`; the SaaS composes them through `Core.SaaS`. During the migration Next uses `path:` or branch dependencies; afterwards it pins to tags.
-- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.mica_systems()`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
+- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.systems/0`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
 - **Optional Mica building blocks:** assignment, fund, affiliate, and pool/advert/promotion.
 - **Moves to the SaaS (instance specifics):**
   - PaNL names and panl.nl URLs
@@ -141,7 +142,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - `participant?(:panl, …)` checks
   - VU student codes
 - **`banking_proxy`** is not deployed anywhere and is retired.
-- **OTP app** `:core` is renamed to `:mica` as part of the decoupling. Module names stay.
+- **Names** (revised 2026-10-16). One step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names. Modules added before code-rename (such as `Core.System`, `Core.SaaS`, `Core.Env` and `Core.systems/0`) use the `Core` name until then and move with the rest. This replaces the earlier decision that modules stay `Core.*`/`CoreWeb.*`.
 - **Database:**
   - one database per deployment
   - every table has one owner, with its migrations in the owner's repository
@@ -348,7 +349,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - admin panels and account features
 
     A system can use the extension points of other systems, so a SaaS extends Mica's systems through its own systems.
-  - **The `Core.SaaS` behaviour,** one per SaaS: `Next.SaaS` and `Self.SaaS`. `systems/0` returns Mica's systems (`Core.mica_systems()`) plus the SaaS's own. It also holds the SaaS-level config: start pages, menus, feature-flag defaults and, later, the brand (code-brand). The SaaS is selected with `config :core, saas: Next.SaaS`.
+  - **The `Core.SaaS` behaviour,** one per SaaS: `Next.SaaS` and `Self.SaaS`. `systems/0` returns Mica's systems (`Core.systems/0`) plus the SaaS's own. It also holds the SaaS-level config: start pages, menus, feature-flag defaults and, later, the brand (code-brand). The SaaS is selected with `config :core, saas: Next.SaaS`.
 
     See [design.md §3.3](./design.md#33-the-coresystem-and-coresaas-contracts).
   - **Convert.** Each Mica system gets a `Systems.X.System`; the Next and Self bundles become `Next.SaaS` and `Self.SaaS`, and the systems that live in Next get their own `Core.System` modules.
@@ -373,25 +374,46 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Rollback.** Revert. No data changes.
 - **Decisions/authorizations.** None.
 
-### code-rename — OTP app rename `:core` → `:mica`
+### code-rename — Rename the OTP app and the namespaces to Mica
 
-- **Goal.** Do the decided rename while there is still one project, as a small PR.
-- **Scope.**
-  - Set `app: :mica` in `core/mix.exs`.
-  - Rename `config :core, …` to `config :mica, …` in all config files.
-  - Update the accessor.
-  - Update the call sites that name the app: `otp_app: :core`, `app_dir(:core, …)`, `from: :core` (about 10).
-  - Update the Gettext backend and the `priv` paths.
+- **Goal.** Rename the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*` in one go, while there is still one project, so `novasoftwarefoundation/mica` is published with Mica names (decided 2026-10-16). `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names.
+- **Scope.** One scripted rename in one PR. The script is committed with the PR, so it can be re-run on the latest `develop` at the merge moment and by open PRs on their own branches.
+  - **OTP app.**
+    - Set `app: :mica` in `core/mix.exs`.
+    - Rename `config :core, …` to `config :mica, …` in all config files, including the config keys that name a module (`config :core, CoreWeb.Endpoint` becomes `config :mica, MicaWeb.Endpoint`).
+    - Update the accessor (`Core.Env`, which becomes `Mica.Env`).
+    - Update the call sites that name the app: `otp_app: :core`, `app_dir(:core, …)`, `from: :core` (about 10).
+    - Update the `priv` paths.
+  - **Modules.**
+    - `defmodule Core…`/`defmodule CoreWeb…`, aliases, imports and every other reference.
+    - `use CoreWeb, :live_view` and the other `use CoreWeb` forms, `use CoreWeb.Router`.
+    - Modules added before this step move with the rest: `Core.System`, `Core.SaaS`, `Core.Env` and `Core.systems/0` become `Mica.System`, `Mica.SaaS`, `Mica.Env` and `Mica.systems/0`.
+    - Rename the files and folders that carry the name: `core/mica/lib/core*` becomes `core/mica/lib/mica*`.
+  - **Tooling that names modules.**
+    - the Gettext backend (`CoreWeb.Gettext` becomes `MicaWeb.Gettext`) and its `otp_app`
+    - the credo config and custom checks, the boundary check (`core/scripts/boundary_check.exs`) and the module names in `core/boundary_allowlist.exs`
+    - the snapshot harness and its committed snapshots (module names in route, permission, handler and cron snapshots)
+    - test support modules (`CoreWeb.ConnCase` and the like) and the agent and developer docs that name them (`CLAUDE.md`, `core/CLAUDE.md`)
   - Keep the release binary name `core` for now (`releases: [core: …]`). [`core/scripts/predeploy`](../../core/scripts/predeploy), [`core/scripts/docker-start-app`](../../core/scripts/docker-start-app), the root `Dockerfile` entrypoint and Eyra's AWS deploy tooling (outside this repository) all call `bin/core`.
-- **Dependencies.** The accessor from code-systems. Ideally after build-image.
-- **Parallel with.** code-brand, code-registry, code-instance.
-- **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If build-image has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
+  - Environment variable names do not change.
+- **Dependencies.** After code-systems: its accessor exists and its new modules exist, so they move with the rest. Ideally after build-image. Before code-split.
+- **Parallel with.** Nothing during the merge freeze. code-brand, code-registry and code-instance continue before and after it; their open PRs catch up with it by running the rename script and merging `develop` in.
+- **Eyra prod impact.** Build-level only. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If build-image has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
+- **Risks.**
+  - **Every open PR conflicts.** Almost every file changes. As with code-layout, agree a short merge freeze with the Next team, merge at the start of a milestone, and give open PRs the rename script to run on their branches before they merge `develop` in.
+  - **Persisted module names.** Anything stored with a module name breaks after the rename: Oban job rows (`worker`), stored atoms, cached terms. Check before the merge that no stored value names a `Core.*` or `CoreWeb.*` module, or migrate those values in the same release.
+  - **Work outside this repository** that names `Core.*` or `CoreWeb.*` modules: `rpc` and remote-console snippets in runbooks and in eyra/devops, and AppSignal namespaces and dashboards.
 - **Verification.**
+  - The release contains the same set of `.beam` modules as before, modulo the rename.
+  - The route, permission, handler and cron snapshots are identical, modulo the module names.
+  - No `Core.`, `CoreWeb.` or `:core` app reference remains, apart from the release name `core`.
   - The app boots on dev and staging.
   - Smoke tests pass.
   - `predeploy` runs migrations and seeds.
 - **Rollback.** Revert the PR.
-- **Decisions/authorizations.** Whether the release binary stays `core` or becomes `next` (open question 3).
+- **Decisions/authorizations.**
+  - The merge moment and the merge freeze, agreed with the Next team.
+  - Whether the release binary stays `core` or becomes `next` (open question 3).
 
 ### code-brand — Brand and config seams
 

@@ -79,9 +79,11 @@ defmodule CoreWeb.Features.RequestPayoutTest do
     })
 
     session
+    # Participants land on the home page after sign-in. Don't visit("/") again:
+    # reloading kills the first LiveView mid-query, which drops the shared
+    # sandbox connection.
     |> sign_in(participant, password)
-    |> visit("/")
-    |> assert_has(Query.css("[data-testid='payout-button']"))
+    |> assert_connected("[data-testid='payout-button']")
     |> click(Query.css("[data-testid='payout-button']"))
     |> assert_has(Query.css("[data-testid='confirmation-modal-confirm-button']"))
     |> assert_has(Query.css("[data-testid='confirmation-modal-cancel-button']"))
