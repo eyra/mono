@@ -44,6 +44,14 @@ defmodule Credo.Check.Warning.CoreEnvAccess do
     {ast, [issue(issue_meta, meta[:line], "Application.#{fun}") | issues]}
   end
 
+  defp traverse(
+         {:|>, _, [:core, {{:., _, [{:__aliases__, _, [:Application]}, fun]}, meta, _}]} = ast,
+         issues,
+         issue_meta
+       ) do
+    {ast, [issue(issue_meta, meta[:line], "Application.#{fun}") | issues]}
+  end
+
   defp traverse(ast, issues, _issue_meta), do: {ast, issues}
 
   defp test_file?(filename), do: String.contains?(filename, "/test/")
