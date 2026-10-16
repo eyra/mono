@@ -155,7 +155,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> click(Query.css("[data-testid='signin-submit-button']"))
     |> assert_path_changed_from("/user/signin")
     |> visit("/assignment/#{assignment.id}")
-    |> assert_has(Query.css("[data-testid^='chapter-list-item-']"))
+    |> assert_connected("[data-testid^='chapter-list-item-']")
     |> click(Query.css("[data-testid^='chapter-list-item-']"))
     |> assert_has(Query.css("[data-testid='manual-chapter-done-button']"))
     |> click(Query.css("[data-testid='manual-chapter-done-button']"))

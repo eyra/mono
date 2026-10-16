@@ -44,7 +44,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
       Query.css("[data-selector-item='panl_privacy_policy_accepted'] .selector-icon-inactive")
     )
     |> click(Query.css("button[type='submit']"))
-    |> assert_has(Query.css("[data-testid='onboarding-continue']", text: "Doorgaan"))
+    |> assert_has(Query.css("[data-testid='onboarding-continue']", text: "Ga verder"))
   end
 
   @sessions [[capabilities: @nl_capabilities]]

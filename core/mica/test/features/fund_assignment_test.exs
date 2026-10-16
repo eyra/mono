@@ -72,7 +72,7 @@ defmodule CoreWeb.Features.FundAssignmentTest do
     |> fill_in(Query.css("[data-testid='signin-email-input']"), with: researcher.email)
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
@@ -83,8 +83,7 @@ defmodule CoreWeb.Features.FundAssignmentTest do
     |> click(Query.css("[data-testid='create-item-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
-    |> click(Query.css("[data-testid='assignment-tab-participants']"))
+    |> click_tab("assignment-tab-participants")
     |> assert_has(Query.css("[data-testid='pay-add-participants-button']"))
     |> click(Query.css("[data-testid='pay-add-participants-button']"))
     |> fill_in(Query.css("[data-testid='pay-in-request-form-aim-input']"),
