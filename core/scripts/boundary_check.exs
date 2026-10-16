@@ -1,4 +1,4 @@
-# Nova migration boundary check (plan step 2, rule 2).
+# Nova migration boundary check (plan step code-layout, rule 2).
 #
 # Roots: mica/ (Mica), next/ (Eyra's Next SaaS) and mica_saas/ (the Self
 # reference SaaS). Mica may not depend on any SaaS, and a SaaS may not depend on

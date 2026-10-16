@@ -5,7 +5,96 @@ Status: **draft for review**. Each step gets its own issue in the Next Flux proj
 Related documents:
 - [design.md](./design.md): the design, the inventory and the decisions this plan builds on.
 
-Paths in this document are relative to the repository root and refer to the layout *before* step 8, when `core/` still exists. Since step 2, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the step 2 section says which.
+Paths in this document are relative to the repository root and refer to the layout *before* code-split, when `core/` still exists. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the code-layout section says which.
+
+## How steps are identified
+
+- **Every step has a fixed ID**: a prefix for the kind of work plus a short name, for example `code-extension`. An ID never changes and is never reused. Issues, PRs, commits and code comments refer to steps by ID.
+- **Prefixes:**
+  - `code-`: the code structure of this repository
+  - `build-`: images, CI and the release build
+  - `ops-`: infrastructure, deploys and environments
+  - `data-`: the database and migrations
+  - `repo-`: repositories, history and transfer
+  - `feldspar-`: the Feldspar track
+- **Order and dependencies live only in this plan**: in the phases, the [dependency diagram](#dependencies) and the "Dependencies" line of each step.
+- **Inserting a step** means adding a line to the [steps table](#steps), a node to the diagram and a section in its phase. No other step is renamed.
+- Until 2026-10-16 steps had numbers (0–11, 2b, 2c, 9A/9B, F1–F3). The [old numbering](#old-numbering) table maps them to IDs, so older issues and PRs stay traceable.
+
+## Steps
+
+| ID | Phase | What | Dependencies | Status |
+|---|---|---|---|---|
+| [code-guardrails](#code-guardrails--credentials-guardrails-and-communication) | Guardrails | Plan pointers, briefing, credentials | none | done |
+| [code-cleanup](#code-cleanup--remove-dead-code-and-retire-banking) | Guardrails | Dead code, retire Banking | none | done |
+| [code-layout](#code-layout--early-visible-layout-and-the-boundary-check) | Guardrails | `core/mica`, `core/next`, `core/mica_saas` and the boundary check | code-cleanup | done |
+| [ops-mica-dev](#ops-mica-dev--reference-deployment-nova-mica-dev) | Build and reference deployment | Reference deployment `nova-mica-dev` | code-layout; ideally with build-image | next |
+| [build-image](#build-image--one-image-and-one-runtimeexs) | Build and reference deployment | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
+| [code-extension](#code-extension--coreextension-and-open-registries) | Decoupling | `Core.Extension` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
+| [code-rename](#code-rename--otp-app-rename-core--mica) | Decoupling | OTP app `:core` → `:mica` | code-extension (accessor); ideally build-image | planned |
+| [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-extension | planned |
+| [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-extension | planned |
+| [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-extension; code-registry for Graphite and Zircon | planned |
+| [data-tables](#data-tables--table-ownership-migration-paths-and-baselines) | Decoupling | Table ownership, migration paths, baselines | code-registry, code-instance | planned |
+| [ops-prod-image](#ops-prod-image--one-image-on-aws-production) | Split and cutover | One image on AWS production | ops-mica-dev, build-image | planned |
+| [code-split](#code-split--layout-split-mica-and-next-as-two-mix-projects) | Split and cutover | Separate Mix projects | code-rename, code-brand, code-instance, data-tables | planned |
+| [repo-assess](#repo-assess--pre-transfer-assessment) | Split and cutover | Pre-transfer assessment (history, secrets, permissions) | code-layout; final run before repo-create | planned |
+| [repo-create](#repo-create--create-the-repositories) | Split and cutover | Create `novasoftwarefoundation/mica` and `eyra/next` | code-split, repo-assess, data-tables | planned |
+| [ops-cutover](#ops-cutover--cutover-of-eyra-production-to-eyranext) | Split and cutover | Production cutover to `eyra/next` | repo-create | planned |
+| [feldspar-protocol](#track-feldspar-summary) | Feldspar | Mica App Protocol v1 | none | planned |
+| [feldspar-tests](#track-feldspar-summary) | Feldspar | Contract tests | feldspar-protocol | planned |
+| [feldspar-transfer](#track-feldspar-summary) | Feldspar | Transfer `eyra/feldspar` to Nova | feldspar-tests; own assessment | planned |
+
+## Dependencies
+
+An arrow points from a step to a step that depends on it. Dashed arrows are recommended orders, not prerequisites.
+
+```mermaid
+flowchart LR
+  classDef done fill:#d8f0d8,stroke:#3a7d3a
+  classDef next fill:#fff1c2,stroke:#a07800
+  classDef milestone fill:#eeeeee,stroke:#888888
+
+  code_guardrails[code-guardrails]:::done --> code_cleanup[code-cleanup]:::done --> code_layout[code-layout]:::done
+
+  m32([M32 cut, Mon 19 Oct]):::milestone -->|M1 merges after| build_image
+  code_layout --> build_image[build-image]:::next
+  code_layout --> ops_mica_dev[ops-mica-dev]:::next
+  code_layout --> code_extension[code-extension]:::next
+  code_layout --> repo_assess[repo-assess]
+
+  build_image -->|M1 before the Oban-cron PR| code_extension
+  build_image -.->|ideally before| code_rename
+  build_image --> ops_prod_image[ops-prod-image]
+  ops_mica_dev --> ops_prod_image
+  ops_prod_image -.->|before, not in the same release window| code_split
+
+  code_extension --> code_rename[code-rename]
+  code_extension --> code_brand[code-brand]
+  code_extension --> code_registry[code-registry]
+  code_extension --> code_instance[code-instance]
+  code_registry -->|Graphite and Zircon| code_instance
+  code_registry --> data_tables[data-tables]
+  code_instance --> data_tables
+
+  code_rename --> code_split[code-split]
+  code_brand --> code_split
+  data_tables --> code_split
+  code_split --> repo_create[repo-create]
+  repo_assess -->|final run| repo_create
+  data_tables -->|baselines| repo_create
+  repo_create --> ops_cutover[ops-cutover]
+
+  feldspar_protocol[feldspar-protocol] --> feldspar_tests[feldspar-tests] --> feldspar_transfer[feldspar-transfer]
+  feldspar_transfer -.-|not in the same window| ops_cutover
+```
+
+- **Done:** code-guardrails, code-cleanup, code-layout.
+- **Next, in parallel:** ops-mica-dev, build-image and code-extension. build-image M1 merges after the M32 cut on Monday 19 October; code-extension's Oban-cron PR merges after build-image M1, because both edit the runtime config.
+- **Can start now:** feldspar-protocol, and the first run of repo-assess.
+- **Recommended, not blocking:** build-image ideally before code-rename. ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
+- **Can run in parallel after code-extension:** code-brand, code-registry and the items of code-instance.
+- **Strictly sequential:** code-layout → code-extension, then data-tables → code-split → repo-create → ops-cutover.
 
 ## Summary
 
@@ -17,22 +106,23 @@ Paths in this document are relative to the repository root and refer to the layo
 
 | Phase | Steps | What happens |
 |---|---|---|
-| A. Guardrails | 0–2 | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
-| B. Decoupling | 3–7 | Open the registries (`Core.Extension`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner. |
-| C. Split | 8–11 | `git mv` into `mica/` and `next/`; assess what becomes public; squash the migration baselines (with a dry run on a production snapshot); create the repositories; cut over Eyra production. |
-| F. Feldspar | F1–F3 | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
+| Guardrails | code-guardrails, code-cleanup, code-layout | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
+| Build and reference deployment | ops-mica-dev, build-image | Run the neutral reference SaaS on `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
+| Decoupling | code-extension, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.Extension`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
+| Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
+| Feldspar | feldspar-protocol, feldspar-tests, feldspar-transfer | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
 
-**Production.** Eyra's production Next keeps running at every step. Phase B steps are invisible to users and are verified by snapshot tests. Three steps carry real operational risk, and each gets a rehearsal on dev/staging and a written rollback:
-- step 5: data migration of tool references
-- step 8: new build layout and release pipeline
-- step 11: production cutover to `eyra/next`
+**Production.** Eyra's production Next keeps running at every step. Decoupling steps are invisible to users and are verified by snapshot tests. Three steps carry real operational risk, and each gets a rehearsal on dev/staging and a written rollback:
+- code-registry: data migration of tool references
+- code-split: new build layout and release pipeline
+- ops-cutover: production cutover to `eyra/next`
 
 **Decisions and authorizations still needed:**
-- removal of `banking_proxy/` (step 1)
-- creating `novasoftwarefoundation/mica` and `eyra/next` (step 10)
-- using a production snapshot and marking the baselines as applied (steps 9 and 11)
-- the production cutover (step 11)
-- the Feldspar transfer (F3)
+- removal of `banking_proxy/` (code-cleanup)
+- creating `novasoftwarefoundation/mica` and `eyra/next` (repo-create)
+- using a production snapshot and marking the baselines as applied (data-tables and ops-cutover)
+- the production cutover (ops-cutover)
+- the Feldspar transfer (feldspar-transfer)
 - the future of `eyra/mono` after the split
 
 ---
@@ -57,7 +147,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - foreign keys point only from the SaaS to Mica
   - `workflow_tool_refs` and `project_items` become open registry references
   - at the split, the migrations are squashed into Mica and Next baselines, which are marked as applied in Eyra production after a dry run on a production snapshot
-- **Layout.** `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is the reference SaaS on Mica: a sibling of Next, not part of Mica (`core/mica_saas/` since step 2). A separate `novasoftwarefoundation/mica-saas` repository is a later decision.
+- **Layout.** `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is the reference SaaS on Mica: a sibling of Next, not part of Mica (`core/mica_saas/` since code-layout). A separate `novasoftwarefoundation/mica-saas` repository is a later decision.
 - **Repositories:**
   - `mica/` goes to `novasoftwarefoundation/mica` with fresh history. Its first commit points back to the `eyra/mono` commit it came from.
   - `next/` goes to `eyra/next`.
@@ -68,7 +158,7 @@ Details and rationale are in [design.md](./design.md#decisions).
 ## Rules for every step
 
 1. **Small PRs to `develop`.** Each one ships in a regular Next milestone and passes [`test.yml`](../../.github/workflows/test.yml), the smoke tests, and e2e on `eyra-next-dev` and staging. Feature work continues as usual.
-2. **The boundary check is a ratchet.** From step 2 on, CI fails on any *new* reference from Mica code to SaaS code (Next or Self), on any reference between the two SaaS, and on new PaNL/VU/Eyra hard-coding in Mica code. The allowlist of existing violations may only shrink.
+2. **The boundary check is a ratchet.** From code-layout on, CI fails on any *new* reference from Mica code to SaaS code (Next or Self), on any reference between the two SaaS, and on new PaNL/VU/Eyra hard-coding in Mica code. The allowlist of existing violations may only shrink.
 3. **Behaviour-preserving refactors prove it with snapshots:**
    - the route table (`mix phx.routes`)
    - the GreenLight permission map
@@ -80,9 +170,9 @@ Details and rationale are in [design.md](./design.md#decisions).
 
 ---
 
-## Phase A — Guardrails
+## Phase: Guardrails
 
-### Step 0 — Credentials, guardrails and communication
+### code-guardrails — Credentials, guardrails and communication
 
 - **Goal.** Stop credential exposure, make the rules known, and record the decisions.
 - **Credentials: done.**
@@ -100,7 +190,7 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Rollback.** Not applicable.
 - **Decisions/authorizations.** None.
 
-### Step 1 — Remove dead code and retire Banking
+### code-cleanup — Remove dead code and retire Banking
 
 - **Goal.** Carry no dead or retired code into either repository.
 - **Scope.**
@@ -122,7 +212,7 @@ Details and rationale are in [design.md](./design.md#decisions).
     - Remove [`banking_proxy/`](../../banking_proxy) and [`.github/workflows/banking_proxy_release.yml`](../../.github/workflows/banking_proxy_release.yml).
     - Put the `money_manager_transaction_marker` table on deferred drop.
 - **Dependencies.** None.
-- **Parallel with.** Step 0, step 2, track F.
+- **Parallel with.** code-guardrails, code-layout, track Feldspar.
 - **Eyra prod impact.** None expected. Production uses `Systems.Banking.Dummy`, and the removed fetcher only polled the dummy. Ships in a regular milestone.
 - **Verification.**
   - The full test suite passes.
@@ -131,7 +221,7 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Rollback.** Revert the PR. The table is dropped only in a later release.
 - **Decisions/authorizations.** Deleting `banking_proxy/` from the repository.
 
-### Step 2 — Early visible layout and the boundary check
+### code-layout — Early visible layout and the boundary check
 
 - **Goal.** Make target ownership visible in the tree now and stop new coupling, while the code stays one Mix project.
 - **Scope.**
@@ -144,8 +234,8 @@ Details and rationale are in [design.md](./design.md#decisions).
       - the Next fixtures of `core/frameworks/e2e` (`controller.ex`; `_routes.ex` stays in Mica)
       - the PaNL Wallaby feature tests
     - `core/bundles/self` → `core/mica_saas/bundle`: Self is a sibling SaaS on Mica, not part of Mica (decided 2026-10-14). Bundle id `:self`, `BUNDLE=self` and the `Self.*` modules are unchanged. `SELFHOSTING.md` becomes `core/mica_saas/README.md`; the root keeps a short pointer.
-    - Both `bundle/` folders are temporary; step 3 dissolves them into `<saas>/{lib,config}`.
-    - `core/test/{e2e,smoke,load,scripts}`, `core/priv`, `core/assets`, `core/config` and the build files stay where they are until step 8.
+    - Both `bundle/` folders are temporary; code-extension dissolves them into `<saas>/{lib,config}`.
+    - `core/test/{e2e,smoke,load,scripts}`, `core/priv`, `core/assets`, `core/config` and the build files stay where they are until code-split.
   - **Follow-up changes:**
     - update `elixirc_paths` in [`core/mix.exs`](../../core/mix.exs) and [`core/.formatter.exs`](../../core/.formatter.exs)
     - update the Tailwind `content` globs in [`core/assets/tailwind.config.js`](../../core/assets/tailwind.config.js)
@@ -156,8 +246,8 @@ Details and rationale are in [design.md](./design.md#decisions).
     - fails on new PaNL, VU or Eyra literals under `core/mica/**`: `:panl`, `"Panl"`, `panl.nl`, `eyra.co`, `@eyra.service`, VU study codes
     - uses a committed allowlist of today's violations, `core/boundary_allowlist.exs`: 36 entries in 34 files at the move. It also fails on stale entries, so the list only shrinks.
     - Run it from `core/` after `mix compile`: `elixir scripts/boundary_check.exs`.
-- **Dependencies.** Preferably after step 1.
-- **Parallel with.** Step 0, step 1, track F.
+- **Dependencies.** Preferably after code-cleanup.
+- **Parallel with.** code-guardrails, code-cleanup, track Feldspar.
 - **Eyra prod impact.** None at runtime. The risk is breaking the build or deploy. Merge early in a milestone. The PR must build the Fly image, the AWS release tarball and both Docker images.
 - **Verification.**
   - The release contains the same set of `.beam` modules as before.
@@ -166,50 +256,86 @@ Details and rationale are in [design.md](./design.md#decisions).
 - **Rollback.** Revert the move PR. Other open PRs need a rebase, so agree the merge moment with the Next team.
 - **Decisions/authorizations.** A short merge freeze around the move PR.
 
-> Why move folders now but create separate Mix projects only in step 8: a separate Mica project cannot compile while Mica code still references Next modules. Moving folders inside one project makes the boundary visible and enforceable from day one. Step 8 is then a second `git mv` plus two `mix.exs` files. `git log --follow` and blame survive both renames.
-
-### Step 2b — One build (recommended, not blocking)
-
-- **Goal.** Build one image per commit and run that same image on Fly dev, Fly staging and AWS production, so staging tests exactly what production runs. No Nova step depends on this. With 2b, steps 3b and 8 handle one runtime file, one Dockerfile and one build workflow; without it, they work as written.
-- **Scope.** Two parts that land at different times. Tracked in the Flux issue [One image for prod and Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10403641634).
-  - One Dockerfile and one platform-neutral `runtime.exs`. One image per commit. Fly deploys it by digest. AWS production runs the same image as a container on the existing EC2 nodes. Until then, the release tarball is extracted from the image.
-  - **2b-1: code in this repository (PRs M1–M4).**
-    - **M1.** One platform-neutral `core/config/runtime.exs` replaces `runtime.aws.exs`, `runtime.fly.exs`, `runtime.dev.exs` and the copy steps. Environment variables choose the setup, not the platform. An equivalence test compares the old and new config with the production and Fly environments.
-    - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
-    - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
-    - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
-  - **2b-2: devops and operations (D1–D4, in `eyra/devops`).**
-    - **D1.** Production environment parity: the few variables the merged `runtime.exs` needs on production. Additive, applied before M1 reaches production.
-    - **D2.** Docker under systemd on the existing EC2 nodes, with an env file, migrations once per deploy, and a rolling restart per node. A switch chooses between the tarball unit (default) and the container unit.
-    - **D3.** Rehearsal. There is no AWS test machine anymore, so the rehearsal runs on a new temporary Fly app next to Fly dev and staging, and is torn down afterwards. The EC2/systemd part (the unit, host volumes and file owners, clustering over the host network, the drain-aware rolling restart) cannot be fully rehearsed on Fly; the production switch keeps the tarball as its fallback for that reason.
-    - **D4.** The production switch, in a normal release slot, for a release that already ran on production as a tarball.
-- **Constraints.**
-  - One runtime config file serves Fly and AWS alike. The platform behaves the same wherever it is deployed; only environment variable values differ.
-  - Environment variable names and the release name `bin/core` do not change.
-  - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in step 8 without carrying Eyra literals into Mica.
-  - `BUNDLE` stays a build argument until step 8: one image per bundle.
-- **Dependencies.** Step 2 (the merge freeze is over). 2b-1 ideally lands before step 3b and before step 3's Oban-cron PR, because both edit the runtime config; it is not a prerequisite for either. 2b-2 can land any time before step 8.
-- **Parallel with.** Step 3 and later steps, track F. 2b-2 is not in the same release window as step 8 or step 11: one change to the production pipeline at a time.
-- **Eyra prod impact.**
-  - 2b-1: production runs the release extracted from the image staging tested, through the normal AWS flow.
-  - 2b-2: D4 is an operational cutover from the tarball to the container on the production nodes.
-- **Verification.**
-  - The equivalence test shows only the intended config differences.
-  - Fly dev and staging deploy by digest, and e2e passes.
-  - A milestone ships to production as the extracted tarball without new errors in AppSignal.
-  - In the rehearsal and after D4: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
-- **Rollback.**
-  - 2b-1: revert the PR.
-  - D4: put the tarball unit back for the same release. The tarball stays available for two milestones after the switch.
-- **Decisions/authorizations.** **The AWS production switch (D4) needs a rehearsal, a rollback to the tarball, and the user's go-ahead.**
+> Why move folders now but create separate Mix projects only in code-split: a separate Mica project cannot compile while Mica code still references Next modules. Moving folders inside one project makes the boundary visible and enforceable from day one. code-split is then a second `git mv` plus two `mix.exs` files. `git log --follow` and blame survive both renames.
 
 ---
 
-## Phase B — Decoupling (still one Mix project)
+## Phase: Build and reference deployment
 
-Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merged, step 6 fans out into parallel PRs, one per item. Every step lowers the allowlist count.
+### ops-mica-dev — Reference deployment `nova-mica-dev`
 
-### Step 3 — `Core.Extension` and open registries
+- **Goal.** Keep the self-hosted variant verified at all times, and prove Mica's neutrality with a second live SaaS next to Next.
+- **Scope.** Tracked in the Flux issue [Reference deployment nova-mica-dev on Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10408245047).
+  - A permanent Fly app `nova-mica-dev` that runs the neutral reference SaaS `mica_saas`. The server name has no "saas", because every running service is a SaaS deployment; the code and the repository keep `mica_saas` and `mica-saas`.
+  - A Fly Postgres database and a storage bucket. Machines stop when idle.
+  - Auto-deploy from `develop`, like `eyra-next-dev`.
+  - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
+  - Neutral configuration: no Eyra branding and no Eyra secrets. The configuration is documented in `core/mica_saas/README.md`.
+- **Dependencies.** After code-layout. Ideally together with build-image: the app then deploys the private `ghcr.io/eyra/self` image by digest. Until then, it builds from `core/Dockerfile` with `BUNDLE=self`.
+- **Parallel with.** build-image, code-extension and later steps, track Feldspar. It doubles as the rehearsal environment for build-image (R).
+- **Eyra prod impact.** None. It is a separate Fly app with its own database, bucket and secrets.
+- **Risks.** `BUNDLE=self` compiles with 17 `no route path` warnings, so the first deploy may show broken Self pages. The fixes belong to code-extension and code-brand, not to this step; the smoke test covers only the pages listed above.
+- **Verification.**
+  - A push to `develop` deploys to `nova-mica-dev`, and the smoke test passes.
+  - The deployed app shows no Eyra branding and uses no Eyra secrets.
+  - Machines stop when idle and start again on the next request.
+- **Rollback.** Stop or delete the Fly app; nothing else depends on it.
+- **Decisions/authorizations.** Creating the Fly app, its database and bucket, and their monthly cost.
+
+### build-image — One image and one `runtime.exs`
+
+- **Goal.** Build one image per commit and run that same image on Fly dev and Fly staging, and with ops-prod-image on AWS production, so staging tests exactly what production runs. Recommended, not blocking for the code steps: with build-image, code-rename and code-split handle one runtime file, one Dockerfile and one build workflow; without it, they work as written.
+- **Scope.** The code in this repository (PRs M1–M4 and the rehearsal R); the devops and production part is ops-prod-image. Tracked in the Flux issue [One image for prod and Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10403641634).
+  - One Dockerfile and one platform-neutral `runtime.exs`. One image per commit. Fly deploys it by digest. AWS production runs the same image as a container on the existing EC2 nodes (ops-prod-image). Until then, the release tarball is extracted from the image.
+  - **M1.** One platform-neutral `core/config/runtime.exs` replaces `runtime.aws.exs`, `runtime.fly.exs`, `runtime.dev.exs` and the copy steps. Environment variables choose the setup, not the platform. An equivalence test compares the old and new config with the production and Fly environments.
+    - **Variable names (decided: one name per setting, no aliases).** Every setting has one environment variable name in all environments from the start:
+      - `DATABASE_URL`: the database
+      - `AWS_S3_BUCKET`: the private bucket
+      - `PUBLIC_S3_BUCKET`: the public bucket
+      - `APPSIGNAL_REVISION`: the release revision, set inside the image at build time
+
+      The order:
+      1. Add the new names everywhere first. A devops PR adds `DATABASE_URL` on AWS next to `DB_URL`; Fly gets `AWS_S3_BUCKET` and `PUBLIC_S3_BUCKET` as staged secrets.
+      2. M1 reads only these names, with `System.fetch_env!` for the required ones.
+      3. Then the old names are removed: `DB_URL`, `DB_USER`/`DB_PASS`/`DB_HOST`/`DB_NAME`, and the reliance on `BUCKET_NAME`.
+
+      Database TLS SNI then comes from the URL host instead of `DB_HOST`; M1 tests this on staging first.
+    - **Required risk measures.** One file means a change made for Fly can reach production. M1 ships with all six measures:
+      1. **Config snapshot tests in CI (primary safeguard).** CI loads `runtime.exs` with fixed environment-variable fixtures per environment (prod/AWS, staging, dev) and compares the resulting config to committed snapshots. Any change to the prod snapshot fails CI until the snapshot diff is reviewed and updated. This restores what separate runtime files gave: a Fly change cannot silently reach production.
+      2. **Pre-restart check.** `predeploy` validates the config against the real production environment (required variables present, values valid) before the restart. On failure the deploy stops and the old version keeps running. Required settings use `System.fetch_env!`.
+      3. **No platform branches and no aliases.** AWS/Fly differences are only environment values, and every setting is read under one name (see above).
+      4. **Staging runs what production runs.** Staging runs the same image and `runtime.exs` as production. A parity script compares which environment variable *names* are set on production and on staging.
+      5. **Gradual rollout.** Canary on node 02, then node 01 (P in ops-prod-image). On a failed health check, roll back to the previous image digest.
+      6. **CODEOWNERS rule.** Changes to `runtime.exs` need approval from a code owner (for example Joeri).
+  - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
+  - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
+  - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
+  - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The rehearsal runs on [`nova-mica-dev`](#ops-mica-dev--reference-deployment-nova-mica-dev) (ops-mica-dev), whose Self image shares the Dockerfile, `runtime.exs`, Mica helpers, release scripts and build workflow with the Next image; a temporary Fly app is the fallback if ops-mica-dev is not there yet. It uses the same variable names as production (`DATABASE_URL`, `AWS_S3_BUCKET`, `PUBLIC_S3_BUCKET`). For one window its secrets switch to the production setup, then back: SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest and a rollback to the previous digest. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
+- **Constraints.** These also apply to ops-prod-image.
+  - One runtime config file serves Fly and AWS alike (Joeri). The platform behaves the same wherever it is deployed; only environment variable values differ. What differs by design is how each platform deploys: how migrations are triggered, where secrets live, volumes, and the proxy in front. One of those affects behaviour: nginx's upload limit (`client_max_body_size` 210 MB) and its rate limit exist only on AWS, not on Fly. Keep that in mind when testing uploads on Fly.
+  - The registry is GHCR. The images `ghcr.io/eyra/next` and `ghcr.io/eyra/self` are **private**, because they are part of Eyra's devops. Production pulls with a read-only token from the vault. Fly deploys a byte-for-byte copy in its own registry (`registry.fly.io`), so the digest stays the same.
+  - The release name `bin/core` does not change. Environment variable names change only where one setting had two names (see M1).
+  - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in code-split without carrying Eyra literals into Mica.
+  - `BUNDLE` stays a build argument until code-split: one image per bundle.
+- **Dependencies.** code-layout (the merge freeze is over). M1 merges after the M32 cut on Monday 19 October. M1 lands before code-extension's Oban-cron PR, and ideally before code-rename, because both edit the runtime config.
+- **Parallel with.** ops-mica-dev, code-extension and later steps, track Feldspar.
+- **Eyra prod impact.** Production runs the release extracted from the image staging tested, through the normal AWS flow.
+- **Verification.**
+  - The equivalence test shows only the intended config differences.
+  - The six M1 risk measures are in place: config snapshots in CI, one name per setting with no aliases, the pre-restart check in `predeploy`, the env-name parity script, the rollback to the previous digest, and the CODEOWNERS rule for `runtime.exs`.
+  - Fly dev and staging deploy by digest, and e2e passes.
+  - A milestone ships to production as the extracted tarball without new errors in AppSignal.
+  - In the rehearsal (R): clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
+- **Rollback.** Revert the PR.
+- **Decisions/authorizations.** None. The rehearsal (R) is a precondition for ops-prod-image.
+
+---
+
+## Phase: Decoupling (still one Mix project)
+
+code-extension and code-brand fix the contract, and code-registry, code-instance and data-tables build on it. Once code-extension is merged, code-instance fans out into parallel PRs, one per item. Every step lowers the allowlist count.
+
+### code-extension — `Core.Extension` and open registries
 
 - **Goal.** A SaaS, and each Mica system, can add routes, grants, handlers and so on without editing a central list.
 - **Scope.**
@@ -234,8 +360,8 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Next declares its current defaults, so the flags in effect stay identical.
     - Check production's `ENABLED_APP_FEATURES` first.
   - **Prepare the OTP rename.** Add one accessor (for example `Core.Env.get/2`) and route the roughly 66 `Application.*env(:core, …)` calls through it.
-- **Dependencies.** Step 2.
-- **Parallel with.** Step 4, track F. The conversion can be split into several PRs after the behaviour PR.
+- **Dependencies.** code-layout. The Oban-cron PR merges after build-image M1.
+- **Parallel with.** build-image, ops-mica-dev, code-brand, track Feldspar. The conversion can be split into several PRs after the behaviour PR.
 - **Eyra prod impact.** None intended. Ships over one or two milestones.
 - **Verification.**
   - The route, permission, handler and cron snapshots are identical.
@@ -243,7 +369,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 - **Rollback.** Revert. No data changes.
 - **Decisions/authorizations.** None.
 
-### Step 3b — OTP app rename `:core` → `:mica`
+### code-rename — OTP app rename `:core` → `:mica`
 
 - **Goal.** Do the decided rename while there is still one project, as a small PR.
 - **Scope.**
@@ -253,9 +379,9 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - Update the call sites that name the app: `otp_app: :core`, `app_dir(:core, …)`, `from: :core` (about 10).
   - Update the Gettext backend and the `priv` paths.
   - Keep the release binary name `core` for now (`releases: [core: …]`). [`core/scripts/predeploy`](../../core/scripts/predeploy), [`core/scripts/docker-start-app`](../../core/scripts/docker-start-app), the root `Dockerfile` entrypoint and Eyra's AWS deploy tooling (outside this repository) all call `bin/core`.
-- **Dependencies.** The accessor from step 3.
-- **Parallel with.** Steps 4–6.
-- **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If step 2b-1 has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
+- **Dependencies.** The accessor from code-extension. Ideally after build-image.
+- **Parallel with.** code-brand, code-registry, code-instance.
+- **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If build-image has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
 - **Verification.**
   - The app boots on dev and staging.
   - Smoke tests pass.
@@ -263,7 +389,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 - **Rollback.** Revert the PR.
 - **Decisions/authorizations.** Whether the release binary stays `core` or becomes `next` (open question 3).
 
-### Step 4 — Brand and config seams
+### code-brand — Brand and config seams
 
 - **Goal.** Mica code contains no Eyra or Next branding and no instance config, and Next reproduces today's output exactly.
 - **Scope.**
@@ -283,8 +409,8 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Replace brand words in msgstrs with brand interpolation.
     - Give Next its own Gettext backend for the `eyra-next` and PaNL copy.
   - **De-brand Pixel:** the footer, the logo catalogue and the `__eyra_field_*` attributes.
-- **Dependencies.** Step 3.
-- **Parallel with.** Steps 5 and 6, track F. Schedule the gettext rename at a quiet moment, because it touches every `dgettext` call.
+- **Dependencies.** code-extension.
+- **Parallel with.** code-registry and code-instance, track Feldspar. Schedule the gettext rename at a quiet moment, because it touches every `dgettext` call.
 - **Eyra prod impact.** None visible.
 - **Verification.**
   - Snapshot tests of every email template and of the app, workspace and website layouts for Next.
@@ -293,7 +419,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 - **Rollback.** Revert.
 - **Decisions/authorizations.** Whether Mica shows "Powered by Mica / Nova" by default (open question 7).
 
-### Step 5 — Open tool and item registry (data migration)
+### code-registry — Open tool and item registry (data migration)
 
 - **Goal.** Next, and later anyone, can add tools and project items without a Mica migration. This is required before Graphite and Zircon can live in Next.
 - **Scope.**
@@ -305,8 +431,8 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - **Directors** become registry-validated strings instead of compile-time `Ecto.Enum` values.
   - **Assignment and Workflow** lose their hard-wired Zircon/Lab/Feldspar handling.
   - **`Workflow.Platforms`** moves to the Feldspar side.
-- **Dependencies.** Step 3.
-- **Parallel with.** Step 4, the parts of step 6 that don't touch tools, track F.
+- **Dependencies.** code-extension.
+- **Parallel with.** code-brand, the parts of code-instance that don't touch tools, track Feldspar.
 - **Eyra prod impact.** **A data migration on live tables**, in three releases:
   1. Add the columns, backfill and dual-write.
   2. Switch reads.
@@ -321,7 +447,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 - **Rollback.** For releases 1 and 2, revert the code; the old columns are still in sync. Release 3 happens only after a full milestone without issues.
 - **Decisions/authorizations.** The user approves the data migration plan before release 1.
 
-### Step 6 — Move instance specifics out of Mica (fan-out)
+### code-instance — Move instance specifics out of Mica (fan-out)
 
 - **Goal.** Remove the remaining boundary violations, so Mica code uses only the contract.
 - **Scope.** One PR series per item. Each moves code to `core/next/**` behind an extension point and lowers the allowlist.
@@ -352,7 +478,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Account ↔ Fund/Payment
     - Assignment ↔ Pool/Advert
     - Fund ↔ Advert/Pool
-- **Dependencies.** Step 3. Graphite and Zircon also need step 5.
+- **Dependencies.** code-extension. Graphite and Zircon also need code-registry.
 - **Parallel with.** Most items run in parallel, each with its own Flux issue and worktree. Coordinate with ongoing Next feature work in the same systems.
 - **Eyra prod impact.** None visible per PR. Ships continuously over several milestones.
 - **Verification.**
@@ -365,34 +491,64 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - the allowlist is empty
   - `core/mica/**` compiles without `core/next/**` (a CI job does exactly this)
 
-### Step 7 — Table ownership and migration paths
+### data-tables — Table ownership, migration paths and baselines
 
-- **Goal.** Every table has one owner, migrations live with that owner, and foreign keys point only from the SaaS to Mica.
+- **Goal.** Every table has one owner, migrations live with that owner, and foreign keys point only from the SaaS to Mica. The squashed Mica and Next baselines are ready and rehearsed for repo-create and ops-cutover.
 - **Scope.**
   - **Ownership manifest:** each table mapped to its owner, generated from the Ecto schemas in each folder and checked in CI.
-  - **CI check:** no foreign key from a Mica table to a Next table. Fix any violations found; step 5 resolves most of them.
+  - **CI check:** no foreign key from a Mica table to a Next table. Fix any violations found; code-registry resolves most of them.
   - **Split the migrations.** Divide `core/priv/repo/migrations` into a Mica path and a Next path by owner. Filenames and versions stay unchanged.
   - **Run both paths.** `Core.Release.migrate/0` and `mix ecto.migrate` run the Mica path plus the extension paths.
-  - **Mixed migrations.** Historical migrations that touch both owners stay in Mica's path until the squash in step 9.
+  - **Mixed migrations.** Historical migrations that touch both owners stay in Mica's path until the baseline squash below.
   - **Seeds** are declared per extension.
-- **Dependencies.** Steps 5 and 6.
-- **Parallel with.** Rest of step 4, track F, step 9 (part A).
-- **Eyra prod impact.** None. These are the same migration versions, already applied.
+  - **Baselines,** after the migration split:
+    - Generate a Mica baseline and a Next baseline migration.
+    - Write the script that inserts their versions into `schema_migrations`.
+    - Dry run on a restored production snapshot in an isolated environment:
+      - nothing is pending
+      - the schema dump is unchanged
+      - a fresh database built from the baselines matches production's schema
+    - Also test the rollback script, which deletes the inserted rows.
+- **Dependencies.** code-registry and code-instance.
+- **Parallel with.** Rest of code-brand, track Feldspar, repo-assess. The baselines run in parallel with code-split.
+- **Eyra prod impact.** None. These are the same migration versions, already applied. The production snapshot contains personal data, so handle it with the same controls as backups.
 - **Verification.**
   - A fresh database built from both paths matches today's [`core/priv/repo/structure.sql`](../../core/priv/repo/structure.sql).
   - On a production snapshot, nothing is pending.
+  - The baseline dry-run evidence (schema diffs, pending-migrations output) goes on the Flux issue.
 - **Rollback.** Revert the file moves.
-- **Decisions/authorizations.** None.
+- **Decisions/authorizations.** Using a production snapshot.
 
 ---
 
-## Phase C — Split and cutover
+## Phase: Split and cutover
 
-### Step 8 — Layout split: `mica/` and `next/` as two Mix projects
+### ops-prod-image — One image on AWS production
+
+- **Goal.** AWS production runs the same image as Fly dev and staging, as a container on the existing EC2 nodes, instead of the release tarball.
+- **Scope.** D1 and P; D1 in `eyra/devops`. Tracked in the Flux issue [One image for prod and Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10403641634). The only production environment change is the one-name-per-setting order under build-image M1: `DATABASE_URL` is added next to `DB_URL` before M1, and the old names are removed after it. The constraints of build-image apply.
+  - **D1. Container runtime in `eyra/devops`.**
+    - An Ansible `docker` role installs Docker CE on the existing EC2 nodes.
+    - A systemd unit, still called `next.service`, runs the image by digest with host networking, the host's `next` user and an env file that Ansible renders from the same vault variables as today's unit. Before switching, it checks that the variable names match the running unit. Logs still reach Grafana as `next.service`.
+    - An nginx drain location takes one node out of the load balancer before it restarts.
+    - The playbook pulls on both nodes, migrates once, then restarts one node at a time.
+    - A per-host switch, `next_runtime`, chooses between the tarball unit (default) and the container unit.
+  - **P. Production switch,** each part with its own go-ahead and rollback:
+    1. **Preparation**, restarting nothing: install Docker, write the env file, pull the current image, add the drain location, then test the drain alone on node 02.
+    2. **Canary on node 02**, with the release that already runs as a tarball. Drain node 02, start the container unit, check health, clustering with node 01, database TLS, mail and S3 config, the node-local Oban queue, logs and file owners while it is still drained, then undrain. Node 01 keeps the tarball of the same commit. Soak for one milestone.
+    3. **Node 01** switches the same way. From then on, migrations run through the container. The tarball is retired two milestones later.
+- **Dependencies.** build-image (the images from M4 and the rehearsal R) and ops-mica-dev (hosts R). Recommended, not blocking: lands any time before code-split.
+- **Parallel with.** The decoupling steps, track Feldspar. Not in the same release window as code-split or ops-cutover: one change to the production pipeline at a time.
+- **Eyra prod impact.** P is an operational cutover from the tarball to the container, one production node at a time.
+- **Verification.** In each step of P: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
+- **Rollback.** Per host: drain, set `next_runtime` back to the tarball, start the tarball unit of the same release (still on disk) and undrain. The tarball stays available for two milestones after node 01 switches.
+- **Decisions/authorizations.** **Each part of the AWS production switch (P: preparation, canary on node 02, node 01) needs the rehearsal (R), a rollback to the tarball, and the user's go-ahead.**
+
+### code-split — Layout split: `mica/` and `next/` as two Mix projects
 
 - **Goal.** Two real Mix projects in this repository, with `core/` gone. This is the shape the repositories will have.
 - **Scope.**
-  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and neutral static assets. Where Self (`core/mica_saas/`) goes in step 8 is open question 2.
+  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and neutral static assets. Where Self (`core/mica_saas/`) goes in code-split is open question 2.
   - **`git mv core/next next/`.** This is the Phoenix app `:next`, with `{:mica, path: "../mica"}`. Next owns:
     - endpoint and router composition
     - config, including `runtime.fly.exs` and `runtime.aws.exs`
@@ -404,12 +560,12 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`.
     - Add a Mica CI job that builds and tests `mica/` on its own.
     - The `BUNDLE` build argument disappears.
-    - If step 2b-1 has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
-  - **Self.** Self deployments keep building from a pinned pre-step-8 tag of this repository, unless the reference SaaS is made deployable for them first (open question 2).
-- **Dependencies.** Steps 3–7: the allowlist is empty and the standalone compile job is green.
-- **Parallel with.** Step 9, track F.
+    - If build-image has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
+  - **Self.** Self deployments keep building from a pinned tag of this repository from before code-split, unless the reference SaaS is made deployable for them first (open question 2).
+- **Dependencies.** code-extension, code-rename, code-brand, code-registry, code-instance and data-tables: the allowlist is empty and the standalone compile job is green.
+- **Parallel with.** repo-assess, the data-tables baselines, track Feldspar.
 - **Eyra prod impact.** The build and release pipeline changes; runtime behaviour must not. Rollout:
-  1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests. If step 2b has landed, build the one image instead.
+  1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests. If build-image has landed, build the one image instead.
   2. Merge at the start of a milestone.
   3. Run the full e2e on staging.
   4. Ship to production through the normal AWS release flow. The binary name is unchanged.
@@ -419,10 +575,10 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 - **Rollback.** Redeploy the previous release artifact. Reverting the move itself is possible but heavy.
 - **Decisions/authorizations.** The merge moment, agreed with the Next team. The user decides the Self strategy.
 
-### Step 9 — Pre-transfer assessment and migration baselines
+### repo-assess — Pre-transfer assessment
 
-- **Goal.** Know exactly what becomes public or accessible under `novasoftwarefoundation`, and prepare the database baselines.
-- **Part A: assessment.** A read-only report covering:
+- **Goal.** Know exactly what becomes public or accessible under `novasoftwarefoundation`. The database baselines are part of data-tables.
+- **Scope.** A read-only report covering:
   - **Content of `mica/`:**
     - a secrets scan of the tree (for example gitleaks)
     - Eyra-private material: customer names, internal hosts, fixtures with real e-mail domains
@@ -438,26 +594,16 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Renovate
     - the docs site ([`docs.yml`](../../.github/workflows/docs.yml))
     - the [`SECURITY.md`](../../SECURITY.md) contact
-- **Part B: baselines.**
-  - Generate a Mica baseline and a Next baseline migration.
-  - Write the script that inserts their versions into `schema_migrations`.
-  - Dry run on a restored production snapshot in an isolated environment:
-    - nothing is pending
-    - the schema dump is unchanged
-    - a fresh database built from the baselines matches production's schema
-  - Also test the rollback script, which deletes the inserted rows.
-- **Dependencies.** Part A can start after step 2 and is re-run on the final tree before step 10. Part B needs step 7.
-- **Parallel with.** Step 8, track F.
-- **Eyra prod impact.** None. The snapshot contains personal data, so handle it with the same controls as backups.
-- **Verification.** The user reviews the report. The dry-run evidence (schema diffs, pending-migrations output) goes on the Flux issue.
+- **Dependencies.** Can start after code-layout and is re-run on the final tree before repo-create.
+- **Parallel with.** code-split, data-tables, track Feldspar.
+- **Eyra prod impact.** None.
+- **Verification.** The user reviews the report.
 - **Rollback.** Not applicable.
-- **Decisions/authorizations.**
-  - Using a production snapshot.
-  - Accepting the assessment, including the licence answer, before step 10.
+- **Decisions/authorizations.** Accepting the assessment, including the licence answer, before repo-create.
 
-### Step 10 — Create the repositories
+### repo-create — Create the repositories
 
-- **Goal.** `novasoftwarefoundation/mica` and `eyra/next` exist and build. `eyra/mono` remains the source of truth until step 11.
+- **Goal.** `novasoftwarefoundation/mica` and `eyra/next` exist and build. `eyra/mono` remains the source of truth until ops-cutover.
 - **Scope.**
   - **`novasoftwarefoundation/mica`:**
     - fresh history; the first commit is `mica/` at `eyra/mono` commit X, with a message pointing to `eyra/mono@X`
@@ -469,8 +615,8 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - `{:mica, github: "novasoftwarefoundation/mica", tag: "v0.1.0"}`
     - the Next baseline, workflows and Fly config; secrets are re-created in the new repository
   - **Sync window.** Changes on `eyra/mono` after X are replayed, or development pauses briefly. Keep the window to days.
-- **Dependencies.** Steps 8 and 9.
-- **Parallel with.** Track F.
+- **Dependencies.** code-split, repo-assess and the data-tables baselines.
+- **Parallel with.** Track Feldspar.
 - **Eyra prod impact.** None yet. `eyra/next` deploys only to `eyra-next-dev`.
 - **Verification.**
   - Mica CI is green on its own.
@@ -481,7 +627,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - **The user authorizes creating `novasoftwarefoundation/mica` (public) and `eyra/next`.**
   - The user decides who gets admin rights on the Nova repository.
 
-### Step 11 — Cutover of Eyra production to `eyra/next`
+### ops-cutover — Cutover of Eyra production to `eyra/next`
 
 - **Goal.** Eyra's production Next is built and released from `eyra/next`, with Mica as a tagged dependency.
 - **Migration plan.**
@@ -489,7 +635,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   2. Deploy `eyra/next` to staging and run the full e2e.
   3. In a maintenance window on production:
      - take a backup
-     - run the baseline-marking script (rehearsed in step 9)
+     - run the baseline-marking script (rehearsed in data-tables)
      - deploy the `eyra/next` release through the normal AWS flow
      - run `predeploy`; nothing should be pending
      - run the smoke tests
@@ -499,8 +645,8 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - Before the baseline marking: abort and keep `eyra/mono`.
   - After the marking: the marking only *adds* `schema_migrations` rows, so the previous `eyra/mono` release still runs. Redeploy it, and if needed remove the inserted rows with the tested script.
   - The cutover release contains no destructive schema change.
-- **Dependencies.** Step 10 is verified.
-- **Parallel with.** Track F, but not the Feldspar transfer in the same window.
+- **Dependencies.** repo-create is verified.
+- **Parallel with.** Track Feldspar, but not feldspar-transfer in the same window.
 - **Eyra prod impact.** One planned release with a short maintenance window.
 - **Verification.**
   - Smoke and e2e pass on production, and nothing is pending.
@@ -512,44 +658,54 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
 
 ---
 
-## Track F — Feldspar (summary)
+## Track: Feldspar (summary)
 
 Full plan: [eyra/feldspar `doc/nova-migration/plan.md`](https://github.com/eyra/feldspar/blob/develop/doc/nova-migration/plan.md). Tracked in the Feldspar Flux project.
 
-- **F1 — Mica App Protocol v1.**
+- **feldspar-protocol — Mica App Protocol v1.**
   - Write down the current postMessage/MessagePort and HTTP protocol as a versioned spec in Mica's docs.
   - Add a backward-compatible version handshake.
   - Tighten the origin checks on both sides.
   - The host side lives in [`core/assets/js/feldspar_app.js`](../../core/assets/js/feldspar_app.js) and [`core/systems/feldspar`](../../core/systems/feldspar).
   - Can start now.
-- **F2 — Contract tests.** Shared fixtures run in both CIs.
-- **F3 — Transfer `eyra/feldspar` to `novasoftwarefoundation/feldspar`.**
+- **feldspar-tests — Contract tests.** Shared fixtures run in both CIs. Depends on feldspar-protocol.
+- **feldspar-transfer — Transfer `eyra/feldspar` to `novasoftwarefoundation/feldspar`.**
   - It is a GitHub transfer, so the full history moves. It needs its own pre-transfer assessment and the user's authorization.
   - After the transfer, update the Feldspar release URL in `core/frameworks/e2e/controller.ex`.
-  - Not in the same window as step 11.
+  - Not in the same window as ops-cutover.
 
-## Order at a glance
+## Old numbering
 
-```
-Step 0 ─┬─ Step 1 ─── Step 2 ── Step 3 ─┬─ Step 3b
-        │                               ├─ Step 4
-        │                               ├─ Step 5 ──┐
-        │                               └─ Step 6 ──┴─ Step 7 ── Step 8 ── Step 10 ── Step 11
-        │            Step 9A (after 2, final run before 10) ──────────────┘
-        │            Step 9B (after 7) ───────────────────────────────────┘
-        │            Step 2b (after 2, optional): 2b-1 before 3b ideally; 2b-2 before 8
-        └─ Track F: F1 ── F2 ── F3 (own assessment; not in the step 11 window)
-```
+Until 2026-10-16 steps had numbers. Issues, PRs and commits from before then use them.
 
-- **Can start now:** steps 0, 1 and F1.
-- **Recommended, not blocking:** step 2b after step 2. 2b-1 ideally before step 3b and step 3's Oban-cron PR; 2b-2 before step 8, not in the release window of step 8 or 11.
-- **Can run in parallel after step 3:** steps 4, 5 and the items of step 6.
-- **Strictly sequential:** 2 → 3, then 7 → 8 → 10 → 11.
+| Old number | ID |
+|---|---|
+| Step 0 | code-guardrails |
+| Step 1 | code-cleanup |
+| Step 2 | code-layout |
+| Step 2b (whole step) | build-image and ops-prod-image |
+| Step 2b-1 (M1–M4, R) | build-image |
+| Step 2b-2 (D1, P) | ops-prod-image |
+| Step 2c | ops-mica-dev |
+| Step 3 | code-extension |
+| Step 3b | code-rename |
+| Step 4 | code-brand |
+| Step 5 | code-registry |
+| Step 6 | code-instance |
+| Step 7 | data-tables |
+| Step 8 | code-split |
+| Step 9, part A (9A) | repo-assess |
+| Step 9, part B (9B, baselines) | data-tables |
+| Step 10 | repo-create |
+| Step 11 | ops-cutover |
+| F1 | feldspar-protocol |
+| F2 | feldspar-tests |
+| F3 | feldspar-transfer |
 
 ## Open questions
 
 1. **`eyra/mono` after the split.** Read-only/archived, or security fixes for the Self deployments that use it? If fixes: who backports them, and for how long? Should Self move to Mica's reference SaaS (or `novasoftwarefoundation/mica-saas`) instead, and when?
-2. **Self during step 8.** Do Self deployments pin to a pre-split tag, or must the reference SaaS be deployable for them first?
+2. **Self during code-split.** Do Self deployments pin to a pre-split tag, or must the reference SaaS be deployable for them first?
 3. **Release binary name.** Keep `bin/core` through the cutover, or rename to `next`? Renaming requires changing Eyra's AWS deploy tooling.
 4. **`eyra/next` history.** Fresh start with a pointer (like Mica), or filtered full history?
 5. **Integrations** (OPP, Yoda, SURFconext, Centerdata). Mica building blocks under Nova governance, separate Nova-owned packages, or Next?
@@ -559,4 +715,4 @@ Step 0 ─┬─ Step 1 ─── Step 2 ── Step 3 ─┬─ Step 3b
 9. **Licence and copyright.** Copyright holder for Mica and Feldspar after the move, and the AGPL-3.0 consequences for operators. This needs legal input.
 10. **Translation overrides.** Do SaaS repositories need to override Mica's UI copy?
 
-<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001).</sub>
+<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; step IDs by t-0016).</sub>

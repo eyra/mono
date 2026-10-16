@@ -2,7 +2,7 @@
 
 Status: **design approved in outline (Option A); details and open questions below.** The step-by-step execution is in [plan.md](./plan.md).
 
-Paths are relative to the repository root and describe the layout of `develop` at 3b560a9c0 (2026-10-11), before the migration. Since step 2, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; see the step 2 section of [plan.md](./plan.md).
+Paths are relative to the repository root and describe the layout of `develop` at 3b560a9c0 (2026-10-11), before the migration. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; see the code-layout section of [plan.md](./plan.md).
 
 ## Contents
 
@@ -42,7 +42,7 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
 | D8 | Database | One database per deployment. Every table has one owner (Mica or the SaaS), with migrations in the owner's repository. Foreign keys point only from the SaaS to Mica. `workflow_tool_refs` and `project_items` become open registry references. Historical migrations are squashed into a Mica baseline and a SaaS baseline, which are marked as applied in Eyra production after a dry run on a production snapshot. Separate Postgres schemas per owner remain an option for later. |
 | D9 | History | `novasoftwarefoundation/mica` starts with fresh git history. Its first commit points back to the `eyra/mono` commit it came from. `eyra/mono` is not deleted; Self deployments use it. |
 | D10 | Approach | Incremental, inside `eyra/mono` `develop`, in normal small PRs shipped through Next's milestones. No big-bang migration and no copy of core. Guardrails: an early visible layout, a CI boundary check that blocks Mica → Next references and new `:panl` hard-coding, and the rules communicated to the Next and Feldspar teams. |
-| D11 | Layout | `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). `core/` disappears. Self is the reference SaaS on Mica, a sibling of Next and not part of Mica: since step 2 it lives in `core/mica_saas/` (decided 2026-10-14). It may later get its own repository, `novasoftwarefoundation/mica-saas` (deferred). |
+| D11 | Layout | `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). `core/` disappears. Self is the reference SaaS on Mica, a sibling of Next and not part of Mica: since code-layout it lives in `core/mica_saas/` (decided 2026-10-14). It may later get its own repository, `novasoftwarefoundation/mica-saas` (deferred). |
 | D12 | Repositories | `mica/` → `novasoftwarefoundation/mica`; `next/` → `eyra/next`; `eyra/feldspar` → `novasoftwarefoundation/feldspar` (Feldspar Flux project). The Mica–Feldspar protocol becomes a versioned public contract. Prism already lives at `novasoftwarefoundation/prism`. |
 | D13 | Deployment model | One SaaS per deployment. Each operator builds and runs its own SaaS on Mica; multi-tenancy is out of scope. |
 

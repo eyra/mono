@@ -1,6 +1,6 @@
 # Self: the reference SaaS on Mica
 
-Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`; its bundle is in `bundle/`. In step 3 of the Nova migration (`docs/nova-migration/plan.md`), `bundle/` is dissolved into `core/mica_saas/{lib,config}` when the bundle concept is replaced by `Core.Extension`.
+Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`; its bundle is in `bundle/`. In Nova migration step code-extension (`docs/nova-migration/plan.md`), `bundle/` is dissolved into `core/mica_saas/{lib,config}` when the bundle concept is replaced by `Core.Extension`.
 
 All commands below run from the `core/` folder unless stated otherwise.
 
