@@ -8,8 +8,9 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   Data donation files live on each node's local filesystem, but Oban's Cron plugin only
   inserts jobs on the leader node. A job without a `"node"` arg (from cron or the admin
   Actions tab) therefore fans out: it inserts one job per connected node into that node's
-  local storage delivery queue. A job with a `"node"` arg cleans the folder of the node
-  it runs on. A node that is disconnected during the fan-out is cleaned on the next run.
+  local storage delivery queue. A job with a `"node"` arg cleans the local folder when it
+  runs on that node, and is cancelled on any other node. A node that is disconnected
+  during the fan-out is cleaned on the next run.
   """
   use Oban.Worker,
     priority: 3,
@@ -24,17 +25,16 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   @unique_period_seconds 50 * 60
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: %{"node" => _} = args}) do
-    retention_hours = get_retention_hours(args)
-    deleted_count = Feldspar.DataDonationFolder.cleanup_older_than(retention_hours)
-
-    if deleted_count > 0 do
-      Logger.info(
-        "[Feldspar.DataDonationCleanupWorker] Deleted #{deleted_count} files older than #{retention_hours}h"
+  def perform(%Oban.Job{args: %{"node" => node} = args}) do
+    if node == to_string(Node.self()) do
+      cleanup(args)
+    else
+      Logger.warning(
+        "[Feldspar.DataDonationCleanupWorker] Cancelled cleanup for #{node} on #{Node.self()}"
       )
-    end
 
-    :ok
+      {:cancel, "wrong node"}
+    end
   end
 
   def perform(%Oban.Job{args: args}) do
@@ -49,6 +49,19 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     Enum.each(nodes, fn node ->
       {:ok, _} = node |> node_job(args) |> Oban.insert()
     end)
+  end
+
+  defp cleanup(args) do
+    retention_hours = get_retention_hours(args)
+    deleted_count = Feldspar.DataDonationFolder.cleanup_older_than(retention_hours)
+
+    if deleted_count > 0 do
+      Logger.info(
+        "[Feldspar.DataDonationCleanupWorker] Deleted #{deleted_count} files older than #{retention_hours}h"
+      )
+    end
+
+    :ok
   end
 
   defp node_job(node, args) do

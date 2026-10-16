@@ -81,5 +81,20 @@ defmodule Systems.Feldspar.DataDonationCleanupWorkerTest do
       refute "cleanup-old" in ids
       assert "cleanup-new" in ids
     end
+
+    test "cancels without deleting when it runs on another node", %{folder: folder} do
+      {:ok, _} = DataDonationFolder.store("old", "cleanup-old")
+
+      two_hours_ago = System.os_time(:second) - 2 * 3600
+      File.touch!(Path.join(folder, "cleanup-old.dat"), two_hours_ago)
+
+      assert {:cancel, "wrong node"} =
+               perform_job(DataDonationCleanupWorker, %{
+                 "node" => "core@other-node",
+                 "retention_hours" => 1
+               })
+
+      assert "cleanup-old" in (DataDonationFolder.list_all() |> Enum.map(& &1.id))
+    end
   end
 end
