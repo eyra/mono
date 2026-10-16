@@ -255,9 +255,8 @@ Self runs as a Fly.io app. Eyra runs nova-mica-dev, an internal development serv
 purpose is to keep this code alive; it is not a service for others or a public demo.
 [`fly.mica-dev.toml`](../fly.mica-dev.toml) holds its configuration, and
 [`fly-deploy-mica-dev.yml`](../../.github/workflows/fly-deploy-mica-dev.yml) deploys every push
-to `develop` and then smoke tests the start page, `/user/signin`, `/.status/health` and the
-OTP sign-in form at `/user/auth/identify`. You can use both files as a template for your own
-deployment. Machines stop when idle and start on the next
+to `develop` and then smoke tests the start page, `/user/signin` and `/.status/health`. You can
+use both files as a template for your own deployment. Machines stop when idle and start on the next
 request. For a while, nova-mica-dev also serves as the rehearsal environment for the container
 image build (step `build-image` in `docs/nova-migration/plan.md`).
 

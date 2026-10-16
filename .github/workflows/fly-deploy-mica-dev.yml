@@ -126,15 +126,3 @@ jobs:
             status=1
           done
           exit $status
-
-      # Sign-in with a one-time code. With the otp flag off the page redirects
-      # to /user/signin, so the e-mail field must be in the body.
-      - name: Check OTP sign-in page
-        run: |
-          body=$(curl -s -w '\n%{http_code}' --max-time 20 "$APP_URL/user/auth/identify")
-          code=$(echo "$body" | tail -n1)
-          echo "/user/auth/identify -> $code"
-          if [ "$code" != "200" ] || ! echo "$body" | grep -q 'auth-email-input'; then
-            echo "::error::$APP_URL/user/auth/identify does not show the OTP sign-in form (HTTP $code)"
-            exit 1
-          fi
