@@ -1,6 +1,4 @@
-# Changes to these paths need a review from one of their owners once a
-# ruleset on develop requires code owner review. One owner's approval is
-# enough.
+# GitHub asks these owners to review pull requests that change their paths.
 
 # Runtime and build-time config: what every deployment runs with, including
 # production (Nova build-image, measure 6).
