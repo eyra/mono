@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This codebase is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](../docs/nova-migration/plan.md) and [design](../docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
 
 - No new PaNL, VU or other Eyra specifics in generic systems.
-- New systems use the `Core.Extension` contract once it exists (plan step code-extension).
+- New systems use `Core.System` once it exists (plan step code-systems): one `Systems.X.System` per system; the SaaS composes them through `Core.SaaS`.
 - Mica only contains code under Nova governance; custom and experimental systems start in Next.
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `mica/`, `next/`, or `mica_saas/` for the Self reference SaaS. Code under `mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `next/` and `mica_saas/` must not name each other's modules. CI enforces this with `scripts/boundary_check.exs` and `boundary_allowlist.exs`; the allowlist may only shrink.
@@ -535,7 +535,7 @@ The application supports different "bundles" (configurations):
 - Bundle selection via `.bundle.ex` file in root
 - Bundle-specific config in `next/bundle/config/` (Next) and `mica_saas/bundle/config/` (Self, the reference SaaS on Mica)
 - Current bundles: `next`, `self`
-- Both `bundle/` folders are temporary: Nova migration step code-extension dissolves them into `<saas>/{lib,config}`
+- Both `bundle/` folders are temporary: Nova migration step code-systems dissolves them into `<saas>/{lib,config}`
 
 ## Build Warning Fix Rule
 **CRITICAL**: When fixing compiler warnings, ALWAYS target the **exact line numbers** specified in the warning message. Never use find-and-replace-all approaches. Be surgical and precise - fix only the problematic lines mentioned in the compiler output.
