@@ -1,0 +1,7 @@
+# Changes to these paths need a review from one of their owners once a
+# ruleset on develop requires code owner review. One owner's approval is
+# enough.
+
+# Runtime and build-time config: what every deployment runs with, including
+# production (Nova build-image, measure 6).
+/core/config/ @mellelieuwes @JoeriDijkstra
