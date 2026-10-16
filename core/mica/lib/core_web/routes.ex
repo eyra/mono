@@ -79,8 +79,8 @@ defmodule CoreWeb.Routes do
 
       CoreWeb.Live.Routes.routes()
 
-      require Systems.Routes
-      Systems.Routes.routes()
+      require Core.SaaS
+      Core.SaaS.routes()
 
       scope "/", CoreWeb do
         pipe_through(:browser_unprotected)

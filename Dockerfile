@@ -67,7 +67,7 @@ COPY core/assets/ ./assets/
 
 # 7) Copy other necessary files
 COPY core/priv/ ./priv/
-COPY core/.formatter.exs core/.credo.exs core/.bundle.ex core/boundary_allowlist.exs ./
+COPY core/.formatter.exs core/.credo.exs core/boundary_allowlist.exs ./
 COPY core/custom_credo_checks/ ./custom_credo_checks/
 
 # 8) Copy source code (this changes most frequently, so put it last)

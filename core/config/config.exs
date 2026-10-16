@@ -125,7 +125,7 @@ config :core,
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
 # Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per bundle (see next/bundle/config/config.exs and mica_saas/bundle/config/config.exs).
+# Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
 config :core, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -253,26 +253,19 @@ config :core, :storage,
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
-module =
-  case Code.ensure_compiled(Bundle) do
-    {:module, module} ->
-      module
-
-    _ ->
-      [{module, _binary}] = Code.compile_file(".bundle.ex")
-      module
+# The SaaS config, which names the SaaS module (`config :core, saas:`). The
+# BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
+# code-split.
+default_bundle =
+  case File.read(".bundle") do
+    {:ok, bundle} -> String.trim(bundle)
+    {:error, _} -> "next"
   end
 
-bundle = apply(module, :name, [])
+saas_dir =
+  Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, System.get_env("BUNDLE", default_bundle))
 
-bundle_dir = apply(module, :dir, [bundle])
-
-config :core, :bundle, bundle
-config :core, :bundle_dir, bundle_dir
-
-unless is_nil(bundle) do
-  import_config "../#{bundle_dir}/config/config.exs"
-end
+import_config "../#{saas_dir}/config/config.exs"
 
 config :core, :zircon,
   screening: [

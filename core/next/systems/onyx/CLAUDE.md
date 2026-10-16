@@ -174,8 +174,13 @@ live("/onyx", Systems.Onyx.LandingPage)
 
 ### Route Registration
 ```elixir
-# In core/mica/systems/routes.ex
-use Systems.Subroutes, [:onyx, ...]
+# core/next/systems/onyx/_system.ex, listed in Next.SaaS.systems/0
+def routes do
+  quote do
+    require Systems.Onyx.Routes
+    Systems.Onyx.Routes.routes()
+  end
+end
 ```
 
 ### Internationalization

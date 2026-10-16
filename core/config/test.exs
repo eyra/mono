@@ -129,8 +129,8 @@ config :core, Systems.Account.Auth.Surfconext,
 config :core, Systems.Account.Auth.Centerdata,
   oidc_module: Systems.Account.Auth.Centerdata.FakeOIDC
 
-# Tests always use the next bundle
-config :core, :bundle, :next
+# Tests always build Next
+config :core, saas: Next.SaaS
 
 config :core, :content, backend: Systems.Content.LocalFS
 

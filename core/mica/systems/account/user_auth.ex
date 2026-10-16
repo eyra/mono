@@ -228,19 +228,6 @@ defmodule Systems.Account.UserAuth do
 
   defp onboarding_path(_), do: nil
 
-  def signed_in_path(%{creator: false}),
-    do: path(:member_signed_in_page)
-
-  def signed_in_path(%{creator: true}),
-    do: path(:creator_signed_in_page)
-
-  def signed_in_path(_user),
-    do: path(:member_signed_in_page)
-
-  defp path(key), do: auth_config(key)
-
-  defp auth_config(key) when is_atom(key) do
-    Application.get_env(:core, Systems.Account.UserAuth, [])
-    |> Keyword.get(key)
-  end
+  def signed_in_path(%{creator: true}), do: Core.SaaS.module().signed_in_page(:creator)
+  def signed_in_path(_user), do: Core.SaaS.module().signed_in_page(:member)
 end
