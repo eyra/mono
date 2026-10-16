@@ -14,7 +14,7 @@ defmodule Core.SaaS do
   when it differs from the compiled value.
   """
 
-  @doc "The systems the SaaS is made of: `Core.SaaS.mica_systems() ++` its own systems."
+  @doc "The systems the SaaS is made of: `Core.systems() ++` its own systems."
   @callback systems() :: [module()]
 
   @doc "The `CoreWeb.StartPageProvider` implementation."
@@ -50,40 +50,12 @@ defmodule Core.SaaS do
               "mica_saas/config/config.exs) names the SaaS module"
           )
 
+  # Core.systems/0, by path: naming Core here would make it a dependency of the callers.
+  @core_systems_source Path.expand("../core.ex", __DIR__)
+
   # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
   # changed the value; this recompiles Core.SaaS and so the router and authorization.
   def __mix_recompile__?, do: Application.get_env(:core, :saas) != @saas
-
-  @doc """
-  Mica's own systems, the start of every `c:systems/0`. Routes are spliced in
-  this order. Keep it a literal list. It lives here and not in `Core`, which
-  hundreds of modules `use`: they would all recompile when a system module changes.
-  """
-  def mica_systems do
-    [
-      Systems.Admin.System,
-      Systems.Advert.System,
-      Systems.Affiliate.System,
-      Systems.Alliance.System,
-      Systems.Assignment.System,
-      Systems.Fund.System,
-      Systems.Desktop.System,
-      Systems.Document.System,
-      Systems.Feldspar.System,
-      Systems.Home.System,
-      Systems.Lab.System,
-      Systems.Manual.System,
-      Systems.NextAction.System,
-      Systems.Payment.System,
-      Systems.Org.System,
-      Systems.Pool.System,
-      Systems.Project.System,
-      Systems.Promotion.System,
-      Systems.Storage.System,
-      Systems.Support.System,
-      Systems.Account.System
-    ]
-  end
 
   @doc "The configured SaaS module."
   def module, do: @saas
@@ -153,10 +125,12 @@ defmodule Core.SaaS do
   # without connecting the caller to everything the SaaS module names (start
   # pages, menus).
   defp external_resources(systems) do
-    for module <- [module() | systems] do
-      source = module.module_info(:compile) |> Keyword.fetch!(:source) |> to_string()
-      quote do: @external_resource(unquote(source))
-    end
+    sources =
+      for module <- [module() | systems],
+          do: module.module_info(:compile) |> Keyword.fetch!(:source) |> to_string()
+
+    for source <- [@core_systems_source | sources],
+        do: quote(do: @external_resource(unquote(source)))
   end
 
   @doc false

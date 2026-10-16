@@ -37,7 +37,7 @@ defmodule Core.SaaSTest do
 
   test "the configured SaaS lists Mica's systems first" do
     assert Core.SaaS.module() == Next.SaaS
-    assert List.starts_with?(Core.SaaS.systems(), Core.SaaS.mica_systems())
+    assert List.starts_with?(Core.SaaS.systems(), Core.systems())
     assert Core.SaaS.checked_systems(Next.SaaS) == Next.SaaS.systems()
   end
 

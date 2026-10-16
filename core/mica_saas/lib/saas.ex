@@ -4,7 +4,7 @@ defmodule Self.SaaS do
 
   @impl true
   def systems do
-    Core.SaaS.mica_systems() ++
+    Core.systems() ++
       [
         Self.Account.System,
         # Mica code still links to Graphite and Onyx pages, until steps

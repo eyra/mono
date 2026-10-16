@@ -34,7 +34,7 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
 |---|---|---|
 | D1 | Packaging | **Option A.** The SaaS (`eyra/next`) is the root Phoenix project. Mica is a versioned Mix dependency (`{:mica, …}`). Mica provides the router, authorization, endpoint building blocks, supervisor children, migrations, JS hooks and the `Core.System` and `Core.SaaS` contracts. Mica's own systems implement `Core.System` too. During the migration Next may use a `path:` or branch dependency; afterwards it pins to tags. Options B and C are not pursued (see [§3.2](#32-packaging-options)). |
 | D2 | Governance | Mica contains only code under Nova governance. |
-| D3 | Graduation | Custom or experimental systems and frameworks live in the SaaS repository on Mica's contracts (`Core.System`/`Core.Tool`). Mature, generic ones can move into Mica later, by moving from the SaaS's list of systems into `Core.SaaS.mica_systems()`, as optional building blocks, under Mica's stability promise and Nova governance. Quick third-party experiments use Feldspar. |
+| D3 | Graduation | Custom or experimental systems and frameworks live in the SaaS repository on Mica's contracts (`Core.System`/`Core.Tool`). Mature, generic ones can move into Mica later, by moving from the SaaS's list of systems into `Core.systems()`, as optional building blocks, under Mica's stability promise and Nova governance. Quick third-party experiments use Feldspar. |
 | D4 | Graphite, Zircon | Graphite and Zircon, together with Paper, Annotation, Ontology and Onyx, start outside Mica, in Next. They are the proof that the `Core.System` contract works. |
 | D5 | Recruitment and rewards | Pool, advert and promotion (the recruitment machinery behind PaNL), together with assignment, fund and affiliate, go to Mica as **optional building blocks**. Instance specifics move to the SaaS: the PaNL name, panl.nl terms and privacy URLs, seeds such as the always-created `:panl` pool, hard-coded `participant?(:panl, …)` checks, and VU student codes. |
 | D6 | Banking proxy | `banking_proxy` is not deployed anywhere. It is retired, not ported. |
@@ -283,7 +283,7 @@ defmodule Core.System do
 end
 
 defmodule Core.SaaS do
-  @callback systems() :: [module()]         # Core.SaaS.mica_systems() ++ the SaaS's own systems
+  @callback systems() :: [module()]         # Core.systems() ++ the SaaS's own systems
   @callback start_pages() :: map()
   @callback menus() :: module()             # menu items provider and builder
   @callback feature_flag_defaults() :: keyword()
@@ -309,24 +309,24 @@ end
 
 defmodule Next.SaaS do
   @behaviour Core.SaaS
-  def systems, do: Core.SaaS.mica_systems() ++ [Systems.Citizen.System, Systems.Graphite.System, …]
+  def systems, do: Core.systems() ++ [Systems.Citizen.System, Systems.Graphite.System, …]
   # start pages, menus, feature-flag defaults
 end
 
 defmodule Self.SaaS do
   @behaviour Core.SaaS
-  def systems, do: Core.SaaS.mica_systems()
+  def systems, do: Core.systems()
 end
 
 # config/config.exs of the SaaS
 config :core, saas: Next.SaaS              # `config :mica, …` after code-rename
 ```
 
-- **One system, one `Systems.X.System`.** Each system, in Mica or in a SaaS, has its `Systems.X.System` module in a `_system.ex` file in its folder. Mica's systems (Assignment, Feldspar, Manual, …) are listed in `Core.SaaS.mica_systems()`.
+- **One system, one `Systems.X.System`.** Each system, in Mica or in a SaaS, has its `Systems.X.System` module in a `_system.ex` file in its folder. Mica's systems (Assignment, Feldspar, Manual, …) are listed in `Core.systems()`.
 - **Systems extend systems.** A system can use the extension points of other systems: Citizen registers a pool director with Pool, Zircon registers a tool with Workflow. A SaaS therefore extends Mica's systems through its own systems, not through SaaS-level hooks.
 - **How the SaaS composes.** Config names one `Core.SaaS` module. Its `systems/0` returns Mica's systems plus its own. The router and authorization macros read that list at compile time, as `Core.BundleOverrides` does today. There is no runtime cost, and verified routes keep working.
 - **SaaS-level config** lives in `Core.SaaS`: start pages, menus, feature-flag defaults and, from code-brand, the brand. The existing `CoreWeb.StartPageProvider`, `CoreWeb.Menu.ItemsProvider` and `CoreWeb.Menu.Builder` are reached through it.
-- **Graduation** (D3) moves a system from a SaaS's `systems/0` into `Core.SaaS.mica_systems()`, together with its code.
+- **Graduation** (D3) moves a system from a SaaS's `systems/0` into `Core.systems()`, together with its code.
 - **Reference SaaS.** Mica keeps a small reference SaaS (Self, `Self.SaaS`) for its CI, its e2e tests and as operator documentation.
 
 ### 3.4 Tool and item registry

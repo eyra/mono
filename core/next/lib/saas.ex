@@ -4,7 +4,7 @@ defmodule Next.SaaS do
 
   @impl true
   def systems do
-    Core.SaaS.mica_systems() ++
+    Core.systems() ++
       [
         Next.WellKnown.System,
         Next.Account.System,
