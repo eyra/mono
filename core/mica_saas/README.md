@@ -297,13 +297,13 @@ Required:
 | `AWS_S3_BUCKET` | secret | Bucket for platform storage | `nova-mica-dev-storage` |
 | `PUBLIC_S3_BUCKET` | secret | Bucket for public content | `nova-mica-dev-storage` |
 | `BUCKET_NAME` | secret | Set by `flyctl storage create`; still read by `runtime.fly.exs` until it moves to `AWS_S3_BUCKET` | `nova-mica-dev-storage` |
-| `APP_NAME` | env | Name shown in the UI and in mail | `Self [dev]` |
+| `APP_NAME` | env | Name shown in the UI and in mail | `Mica [dev]` |
 | `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
 | `PHX_HOST` | env | Same as `APP_DOMAIN` | `nova-mica-dev.fly.dev` |
-| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address | `nova-mica-dev.fly.dev` |
+| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `eyra.dev` (Next dev's Mailgun domain, until Nova has its own) |
 | `DEPLOY_ENV` | env | Selects the seeds: `dev`, `test`, `staging` or `prod`. Anything but `prod` also enables mock sign-in | `dev` |
 | `PAYMENT_PROVIDER` | env | `local` (logs only, no real payments) or `opp` | `local` |
-| `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self needs `password_sign_in` | `password_sign_in` |
+| `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self uses `password_sign_in` and `otp` (sign-in with a one-time code by e-mail, at `/user/auth/identify`) | `password_sign_in, otp` |
 | `HTTP_PORT` | env | Port the app listens on | `8000` |
 | `ECTO_IPV6` | env | `true` on Fly, for `.internal` DNS | `true` |
 | `UPLOAD_PATH`, `STATIC_PATH` | env | Upload folder on the mounted volume | `/app/data/uploads` |
@@ -314,7 +314,7 @@ Optional:
 | Variable | Kind | Description | Reference value |
 |---|---|---|---|
 | `APP_ADMINS` | env or secret | Space-separated e-mail addresses of system admins; wildcards like `*@example.org` work | unset |
-| `MAILGUN_API_KEY` | secret | Sends mail through Mailgun (EU). Without it no mail leaves the app, so sign-up confirmation mails do not arrive | unset |
+| `MAILGUN_API_KEY` | secret | Sends mail through Mailgun (EU). Without it no mail leaves the app, so sign-up confirmation and sign-in code mails do not arrive | Next dev's Mailgun key, for now |
 | `STORAGE_SERVICES` | env | Comma-separated storage services | `builtin` |
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
@@ -327,5 +327,6 @@ Optional:
 | `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
-nova-mica-dev uses no Eyra secrets or OAuth clients: every integration above that is
-unset stays disabled.
+nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
+disabled. For now it sends mail with Next dev's Mailgun key and the `eyra.dev` sender domain; a
+neutral Nova mail domain replaces both later.
