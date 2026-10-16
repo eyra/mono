@@ -92,8 +92,7 @@ if config_env() == :prod do
 
             {Oban.Plugins.Cron,
              crontab: [
-               {cleanup_schedule, Systems.Feldspar.DataDonationCleanupWorker,
-                queue: storage_delivery_queue}
+               {cleanup_schedule, Systems.Feldspar.DataDonationCleanupWorker}
              ]}
 
           "pay_in_expiration" ->

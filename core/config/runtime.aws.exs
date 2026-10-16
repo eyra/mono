@@ -89,8 +89,7 @@ if config_env() == :prod do
           "data_donation_cleanup" ->
             {Oban.Plugins.Cron,
              crontab: [
-               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
-                queue: storage_delivery_queue}
+               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}
              ]}
 
           "payment_reconciliation" ->

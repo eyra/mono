@@ -127,7 +127,7 @@ defmodule Systems.Feldspar.DataDonationFolder do
           id: file_id,
           path: path,
           size: stat.size,
-          created_at: DateTime.from_unix!(stat.ctime)
+          created_at: DateTime.from_unix!(stat.mtime)
         }
 
       {:error, _} ->
