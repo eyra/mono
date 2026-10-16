@@ -170,10 +170,8 @@ defmodule Systems.Account.UserAuth do
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if user = conn.assigns[:current_user] do
-      path = signed_in_path(user) || Account.Public.start_page_path(user)
-
       conn
-      |> redirect(to: path)
+      |> redirect(to: signed_in_path(user))
       |> halt()
     else
       conn
@@ -222,8 +220,7 @@ defmodule Systems.Account.UserAuth do
   defp redirect_path_after_signin(conn, user) do
     onboarding_path(user) ||
       get_session(conn, :user_return_to) ||
-      signed_in_path(user) ||
-      Account.Public.start_page_path(user)
+      signed_in_path(user)
   end
 
   defp onboarding_path(_), do: nil
