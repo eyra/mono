@@ -121,7 +121,10 @@
         #
         {Credo.Check.Consistency.MultiAliasImportRequireUse, false},
         {Credo.Check.Consistency.UnusedVariableNames, false},
-        {Credo.Check.Design.DuplicatedCode, []},
+        # Self copies Next's OTP sign-in screens on purpose; whether they move into Mica is
+        # decided in Nova migration step code-brand.
+        {Credo.Check.Design.DuplicatedCode,
+         [files: %{excluded: [~r"/mica_saas/bundle/lib/account/auth_"]}]},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.BlockPipe, false},
         {Credo.Check.Readability.ImplTrue, false},

@@ -34,6 +34,28 @@ defmodule Next.Account.AuthCodeVerifyPageTest do
       refute html =~ dgettext("eyra-account", "auth.code.expired")
     end
 
+    test "a participant at the limit returns to the participant entry with its return_to",
+         %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      email = "participant-limited@example.com"
+      {_code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 5})
+
+      {:ok, view, _html} =
+        live(
+          conn,
+          ~p"/user/auth/verify?email=#{email}&creator=false&return_to=/assignment/1/invite"
+        )
+
+      result = render_submit(view, "verify", %{"code" => "999999"})
+
+      assert {:error,
+              {:live_redirect,
+               %{to: "/user/auth/identify/participant?return_to=%2Fassignment%2F1%2Finvite"}}} =
+               result
+    end
+
     test "with attempts: 4, a wrong code stays on the page with the invalid message",
          %{conn: conn} do
       # Pins the boundary the other way: the user still has one attempt on
