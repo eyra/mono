@@ -2,7 +2,7 @@
 
 Status: **design approved in outline (Option A); details and open questions below.** The step-by-step execution is in [plan.md](./plan.md).
 
-Paths are relative to the repository root and describe the layout of `develop` at 3b560a9c0 (2026-10-11), before the migration. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; see the code-layout section of [plan.md](./plan.md).
+Paths are relative to the repository root and describe the layout of `develop` at 3b560a9c0 (2026-10-11), before the migration. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; see the code-layout section of [plan.md](./plan.md). Module names in this document (`Core.System`, `Core.SaaS`, `CoreWeb.Router`, …) are the names before code-rename; from then on they are `Mica.*` and `MicaWeb.*` (D7).
 
 ## Contents
 
@@ -38,7 +38,7 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
 | D4 | Graphite, Zircon | Graphite and Zircon, together with Paper, Annotation, Ontology and Onyx, start outside Mica, in Next. They are the proof that the `Core.System` contract works. |
 | D5 | Recruitment and rewards | Pool, advert and promotion (the recruitment machinery behind PaNL), together with assignment, fund and affiliate, go to Mica as **optional building blocks**. Instance specifics move to the SaaS: the PaNL name, panl.nl terms and privacy URLs, seeds such as the always-created `:panl` pool, hard-coded `participant?(:panl, …)` checks, and VU student codes. |
 | D6 | Banking proxy | `banking_proxy` is not deployed anywhere. It is retired, not ported. |
-| D7 | Names | The Elixir modules keep `Core.*`/`CoreWeb.*`. The OTP app is renamed from `:core` to `:mica` as part of the decoupling steps, not as a separate big-bang change. |
+| D7 | Names | Revised 2026-10-16. One decoupling step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. Modules added before then (`Core.System`, `Core.SaaS`, `Core.Env`, `Core.systems/0`) move with the rest: `Core.systems/0` becomes `Mica.systems/0`. `Systems.*` and `Frameworks.*` keep their names. This replaces the earlier decision that the modules keep `Core.*`/`CoreWeb.*`. |
 | D8 | Database | One database per deployment. Every table has one owner (Mica or the SaaS), with migrations in the owner's repository. Foreign keys point only from the SaaS to Mica. `workflow_tool_refs` and `project_items` become open registry references. Historical migrations are squashed into a Mica baseline and a SaaS baseline, which are marked as applied in Eyra production after a dry run on a production snapshot. Separate Postgres schemas per owner remain an option for later. |
 | D9 | History | `novasoftwarefoundation/mica` starts with fresh git history. Its first commit points back to the `eyra/mono` commit it came from. `eyra/mono` is not deleted; Self deployments use it. |
 | D10 | Approach | Incremental, inside `eyra/mono` `develop`, in normal small PRs shipped through Next's milestones. No big-bang migration and no copy of core. Guardrails: an early visible layout, a CI boundary check that blocks Mica → Next references and new `:panl` hard-coding, and the rules communicated to the Next and Feldspar teams. |
@@ -229,8 +229,8 @@ Classes:
 4. **Safe defaults.** Unknown feature flags are off. Mica ships neutral defaults for branding, home, sign-in and policy pages.
 5. **Versioned public contracts.** `Core.System`, `Core.SaaS`, `Core.Tool`, `Core.Brand`, the integration behaviours and the Mica App Protocol are documented, semver'd and covered by contract tests.
 6. **Names.**
-   - Mica keeps `Core`, `CoreWeb`, `Systems` and `Frameworks` (D7).
-   - SaaS code uses its own top-level namespace (`Next.*`) to avoid module collisions across packages. Systems that move to Next are renamed accordingly; Mica's modules are not.
+   - Mica uses `Mica`, `MicaWeb`, `Systems` and `Frameworks`. `Core` and `CoreWeb` become `Mica` and `MicaWeb` in code-rename (D7).
+   - SaaS code uses its own top-level namespace (`Next.*`) to avoid module collisions across packages. Systems that move to Next are renamed accordingly; Mica's `Systems.*` and `Frameworks.*` modules are not.
 
 ### 3.2 Packaging options
 
@@ -245,7 +245,7 @@ Target shape of `eyra/next`:
 ```
 eyra/next (Phoenix project, OTP app :next)
 ├── mix.exs           deps: {:mica, github: "novasoftwarefoundation/mica", tag: "v…"} (path: during migration)
-├── lib/next/…        Next.Router (use CoreWeb.Router), Next.SaaS, Next.Brand
+├── lib/next/…        Next.Router (use MicaWeb.Router), Next.SaaS, Next.Brand
 ├── lib/next/systems  pool directors (citizen, student), home, graphite, zircon, …
 ├── config/           Eyra config, feature flags, hosts, runtime.aws.exs / runtime.fly.exs
 ├── priv/repo/migrations, priv/gettext, priv/static (logos, favicons, manifest)
@@ -319,7 +319,7 @@ defmodule Self.SaaS do
 end
 
 # config/config.exs of the SaaS
-config :core, saas: Next.SaaS              # `config :mica, …` after code-rename
+config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` after code-rename
 ```
 
 - **One system, one `Systems.X.System`.** Each system, in Mica or in a SaaS, has its `Systems.X.System` module in a `_system.ex` file in its folder. Mica's systems (Assignment, Feldspar, Manual, …) are listed in `Core.mica_systems()`.
@@ -349,9 +349,9 @@ config :core, saas: Next.SaaS              # `config :mica, …` after code-rena
 | Config | `config :mica, …` (D7). One accessor wraps all reads. SaaS config lives in the SaaS. Mica ships a documented runtime example plus helpers, so operators don't copy 280 lines of `runtime.*.exs`. |
 | Migrations | Ecto runs several migration paths. `Core.Release.migrate/0` runs Mica's path plus each system's and the SaaS's path, in timestamp order. Table ownership and baselines follow D8. |
 | Repo | One `Core.Repo` per deployment, configured by the SaaS. SaaS schemas use it too. |
-| Translations | Mica keeps `CoreWeb.Gettext` with its own `priv/gettext`. The SaaS has its own backend for its own domains. Mica's `eyra-*` domains are renamed to neutral names, and brand words become `Core.Brand` interpolations. Whether SaaS repos can override Mica copy is an open question. |
+| Translations | Mica keeps its own Gettext backend (`CoreWeb.Gettext`, `MicaWeb.Gettext` after code-rename) with its own `priv/gettext`. The SaaS has its own backend for its own domains. Mica's `eyra-*` domains are renamed to neutral names, and brand words become `Core.Brand` interpolations. Whether SaaS repos can override Mica copy is an open question. |
 | Assets | Mica's JS hooks are resolvable from `deps/mica/assets`. The SaaS `app.js` merges them with its own hooks. Tailwind `content` includes `deps/mica`. Prism stays an npm dependency of both. Mica ships neutral icons; the SaaS serves its own logos, favicons and manifest. |
-| Routing | `Next.Router` does `use CoreWeb.Router` and calls the Mica route macro. Overriding routes by shadowing them is the exception; prefer extension points (start pages, the sign-in page). |
+| Routing | `Next.Router` does `use MicaWeb.Router` and calls the Mica route macro. Overriding routes by shadowing them is the exception; prefer extension points (start pages, the sign-in page). |
 | Menus, start pages | Systems contribute menu items. `Core.SaaS` sets the start pages, and the SaaS's builder decides layout and order. |
 | Auth providers | Email, password and OTP sign-in are Mica core. Google and Apple are M-opt behind a provider behaviour. SURFconext and Centerdata are integrations that contribute their own routes. |
 | Seeds, supervision | Seeds and supervisor children are declared per system (`Core.children/1` plus `Systems.X.System.children/1`). |
