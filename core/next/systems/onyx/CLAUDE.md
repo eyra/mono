@@ -174,7 +174,7 @@ live("/onyx", Systems.Onyx.LandingPage)
 
 ### Route Registration
 ```elixir
-# In systems/routes.ex
+# In core/mica/systems/routes.ex
 use Systems.Subroutes, [:onyx, ...]
 ```
 

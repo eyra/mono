@@ -30,7 +30,7 @@ Primary bundle with all features available. Next is configured and hosted by Eyr
 * Self
 
 Customizable bundle that can be used to run Core on one of your own servers.
-See [SELFHOSTING.md](SELFHOSTING.md) for detailed instructions.
+See [core/mica_saas/README.md](core/mica_saas/README.md) for detailed instructions.
 
 
 ## Testing

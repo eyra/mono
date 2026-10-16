@@ -1,6 +1,6 @@
 ---
 description: System Architecture Rules
-globs: systems/*
+globs: {mica,next}/systems/*
 alwaysApply: false
 ---
 # Systems

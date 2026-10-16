@@ -25,7 +25,8 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create reference file
       # Use the small.ris test file
-      test_file_path = Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/small.ris")
+      test_file_path =
+        Path.join(File.cwd!(), "next/test/systems/zircon/screening/test_data/small.ris")
 
       reference_file =
         Factories.insert!(:paper_reference_file, %{
@@ -239,7 +240,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
     } do
       # Use twelve_papers.ris to test progress tracking
       test_file_path =
-        Path.join(File.cwd!(), "test/systems/zircon/screening/test_data/twelve_papers.ris")
+        Path.join(File.cwd!(), "next/test/systems/zircon/screening/test_data/twelve_papers.ris")
 
       reference_file =
         Factories.insert!(:paper_reference_file, %{

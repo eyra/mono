@@ -312,7 +312,7 @@ end
 ### Integration Tests
 For complex signal flows, create focused integration tests:
 ```elixir
-# test/systems/zircon/screening/abort_prompting_integration_test.exs
+# core/next/test/systems/zircon/screening/abort_prompting_integration_test.exs
 defmodule Systems.Zircon.Screening.AbortPromptingIntegrationTest do
   use CoreWeb.ConnCase, async: false  # async: false for signal tests
 
@@ -337,12 +337,12 @@ Eyra has four test categories. They live in different directories, have differen
 
 | Category | Directory | What it answers | Speed | External systems |
 |---|---|---|---|---|
-| **Unit** | `test/systems/...`, `test/core_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
-| **Feature (Wallaby)** | `test/features/` | "Does this user journey work end-to-end through the UI, happy path?" | seconds | mocked via Mox |
-| **E2E (Playwright)** | `test/e2e/` | "Does the deployed system work in a real browser, with real external integrations (real OPP sandbox, real Feldspar, real storage)?" | tens of seconds | real |
-| **Smoke (Playwright)** | `test/smoke/` | "Did the latest deploy survive its own boot? Are the critical endpoints reachable?" | seconds | real |
+| **Unit** | `core/{mica,next}/test/systems/...`, `core/mica/test/core_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
+| **Feature (Wallaby)** | `core/{mica,next}/test/features/` | "Does this user journey work end-to-end through the UI, happy path?" | seconds | mocked via Mox |
+| **E2E (Playwright)** | `core/test/e2e/` | "Does the deployed system work in a real browser, with real external integrations (real OPP sandbox, real Feldspar, real storage)?" | tens of seconds | real |
+| **Smoke (Playwright)** | `core/test/smoke/` | "Did the latest deploy survive its own boot? Are the critical endpoints reachable?" | seconds | real |
 
-### Unit (`test/systems/...`)
+### Unit (`core/{mica,next}/test/systems/...`)
 
 Use for:
 - State-machine clause coverage (each `when` guard, each branch)
@@ -354,7 +354,7 @@ Use for:
 If the question is "what does function X return when input is Y?" — unit.
 If the question is "what does the LV render when assigns look like Z?" — `live_isolated` LV test.
 
-### Feature (`test/features/`)
+### Feature (`core/{mica,next}/test/features/`)
 
 Use for:
 - One *user journey* walked end-to-end through the UI, happy path only
@@ -365,9 +365,9 @@ Use for:
 
 If the question is "does the user journey from signin → action → result work?" — feature.
 
-Mechanics, scope, multi-session, testids, waiting: `test/features/CLAUDE.md`.
+Mechanics, scope, multi-session, testids, waiting: `core/mica/test/features/CLAUDE.md`.
 
-### E2E (`test/e2e/`)
+### E2E (`core/test/e2e/`)
 
 Use for:
 - Verifying the *deployed system* works against real external dependencies (OPP sandbox, Feldspar storage backends, real Phoenix runtime)
@@ -375,9 +375,9 @@ Use for:
 
 If the journey can be mocked via Mox without losing what you're testing → feature, not E2E. E2E is for the "real integrations" bucket; if it doesn't exercise a real external system, it's a feature test in disguise.
 
-Mechanics: `test/e2e/CLAUDE.md`.
+Mechanics: `core/test/e2e/CLAUDE.md`.
 
-### Smoke (`test/smoke/`)
+### Smoke (`core/test/smoke/`)
 
 Use for:
 - Post-deploy verification — does the env at URL X respond to GET /, do the auth endpoints return their expected shape, does Feldspar load

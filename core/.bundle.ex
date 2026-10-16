@@ -10,4 +10,8 @@ defmodule Bundle do
 
     System.get_env("BUNDLE", default_bundle) |> String.to_atom()
   end
+
+  @doc "Directory of a bundle, relative to core/."
+  def dir(:next), do: "next/bundle"
+  def dir(:self), do: "mica_saas/bundle"
 end

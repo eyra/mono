@@ -172,7 +172,7 @@ This rule:
 
 2. System Factories:
    - Each system has its own Factories module (e.g., `Systems.Userflow.Factories`)
-   - Located in `test/systems/[system]/factories.ex`
+   - Located in `{mica,next}/test/systems/[system]/factories.ex`
    - Provides system-specific factory functions
    - Uses `Core.Factories` for basic model creation
    - Example: `Userflow.Factories.create_step()`

@@ -29,15 +29,15 @@ Ask (if not given): what is the scope?
 Before judging, **first read** the current test conventions in mono. Do a find — paths can shift:
 
 ```bash
-find core/test -maxdepth 4 -name CLAUDE.md
-find core/test -maxdepth 4 -name AGENTS.md
+find core/test core/mica/test core/next/test -maxdepth 4 -name CLAUDE.md
+find core/test core/mica/test core/next/test -maxdepth 4 -name AGENTS.md
 ```
 
 ## Step 3 — List code
 
 ```bash
-git diff develop..HEAD --stat -- 'core/lib/**' 'core/systems/**' 'core/frameworks/**'
-git diff develop..HEAD --stat -- 'core/test/**'
+git diff develop..HEAD --stat -- 'core/mica/**' 'core/next/**' 'core/mica_saas/**' ':!core/*/test/**'
+git diff develop..HEAD --stat -- 'core/mica/test/**' 'core/next/test/**' 'core/test/**'
 ```
 
 Make two lists:
@@ -48,11 +48,12 @@ Make two lists:
 
 For each production module:
 
-1. Does a `*_test.exs` exist at the mirrored path in `core/test/`?
-   - E.g. `core/systems/foo/bar.ex` → `core/test/systems/foo/bar_test.exs`
+1. Does a `*_test.exs` exist at the mirrored path in `core/mica/test/` or `core/next/test/`?
+   - E.g. `core/mica/systems/foo/bar.ex` → `core/mica/test/systems/foo/bar_test.exs`
+   - E.g. `core/next/systems/foo/bar.ex` → `core/next/test/systems/foo/bar_test.exs`
 2. Count atomic tests:
    ```bash
-   grep -c "^    test " core/test/systems/foo/bar_test.exs
+   grep -c "^    test " core/mica/test/systems/foo/bar_test.exs
    ```
 3. **LiveView?** (grep for `use Phoenix.LiveView`)
    - Check whether the test uses `live_isolated`. If not → flag this specifically; LiveView
@@ -60,7 +61,7 @@ For each production module:
 4. **Public functions without guards?** Flag it, since rule 3 says: guards first, with tests.
 5. **Coverage number** for the touched paths:
    ```bash
-   cd core && mix test --cover test/systems/foo
+   cd core && mix test --cover mica/test/systems/foo
    ```
    (Only run this if the branch is checked out locally and the DB is ready — `mix ecto.migrate`
    in `core/` if in doubt.)
@@ -84,7 +85,7 @@ The default for UI work is **unit** via `live_isolated`, not feature. Feature is
 - Two users genuinely participate at the same time (`@sessions 2` in Wallaby), or
 - JavaScript hooks that you can't replicate in `live_isolated`.
 
-For the PR scope: check `core/test/features/` to see whether a relevant flow test already exists.
+For the PR scope: check `core/mica/test/features/` and `core/next/test/features/` to see whether a relevant flow test already exists.
 If the PR adds such a flow, ask yourself whether it really can't be covered at the unit layer —
 flag that in your advice if the choice isn't obvious.
 
