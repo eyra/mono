@@ -114,10 +114,10 @@
     {:oban_unknown_plugins, ["job_data_cleanup"]},
     {:paper,
      [
-       import_batch_size: 100,
-       import_batch_timeout: 30000,
-       ris_max_file_size: 157_286_400,
-       ris_stream_chunk_size: 65536
+       import_batch_size: 101,
+       import_batch_timeout: 30001,
+       ris_max_file_size: 157_286_401,
+       ris_stream_chunk_size: 65537
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
     {:rate,
