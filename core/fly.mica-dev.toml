@@ -1,0 +1,89 @@
+# Fly.io configuration for nova-mica-dev: the neutral reference SaaS (Self,
+# core/mica_saas) on Mica. See core/mica_saas/README.md for the configuration
+# and https://fly.io/docs/reference/configuration/ for all options.
+#
+# Secrets (set with `flyctl secrets set`, never in this file):
+#   SECRET_KEY_BASE, DATABASE_URL (set by `flyctl postgres attach`),
+#   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL_S3, AWS_REGION,
+#   BUCKET_NAME (set by `flyctl storage create`), AWS_S3_BUCKET, PUBLIC_S3_BUCKET
+
+app = 'nova-mica-dev'
+primary_region = 'ams'
+org = 'eyra'
+
+[build]
+  dockerfile = 'Dockerfile'
+  [build.args]
+    # VERSION, PLATFORM and GIT_COMMIT are passed from the GitHub Actions workflow
+    BUNDLE = 'self'
+    FORCE_SSL = 'false'
+
+[env]
+  # Phoenix configuration
+  HTTP_PORT = '8000'
+  PHX_HOST = 'nova-mica-dev.fly.dev'
+
+  # Fly.io IPv6 networking (required for .internal DNS resolution)
+  ECTO_IPV6 = 'true'
+
+  # App configuration
+  APP_NAME = 'Self [dev]'
+  APP_DOMAIN = 'nova-mica-dev.fly.dev'
+  APP_MAIL_DOMAIN = 'nova-mica-dev.fly.dev'
+  DEPLOY_ENV = 'dev'
+
+  # Self signs in with email and password only
+  ENABLED_APP_FEATURES = 'password_sign_in'
+
+  # Storage paths (using Fly volume mounted at /app/data)
+  UPLOAD_PATH = '/app/data/uploads'
+  STATIC_PATH = '/app/data/uploads'
+  FELDSPAR_DATA_DONATION_PATH = '/app/data/datadonation'
+  FELDSPAR_DATA_DONATION_RETENTION = '336'
+
+  # No real payments: the local provider only logs
+  PAYMENT_PROVIDER = 'local'
+
+  # Oban plugins
+  ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
+
+  # Storage services (S3/Tigris)
+  STORAGE_SERVICES = 'builtin'
+  STORAGE_S3_PREFIX = 'storage'
+  CONTENT_S3_PREFIX = 'content'
+  FELDSPAR_S3_PREFIX = 'feldspar'
+  PUBLIC_S3_URL = 'https://fly.storage.tigris.dev/nova-mica-dev-storage'
+
+[http_service]
+  internal_port = 8000
+  force_https = true
+  auto_stop_machines = 'stop'
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ['app']
+
+  [http_service.concurrency]
+    type = 'connections'
+    hard_limit = 1000
+    soft_limit = 1000
+
+  [[http_service.checks]]
+    interval = '15s'
+    timeout = '5s'
+    grace_period = '30s'
+    method = 'GET'
+    path = '/.status/health'
+
+[[vm]]
+  memory = '1gb'
+  cpu_kind = 'shared'
+  cpus = 1
+
+[mounts]
+  source = 'data'
+  destination = '/app/data'
+  initial_size = '1gb'
+
+[deploy]
+  strategy = 'rolling'
+  release_command = '/opt/app/bin/predeploy'

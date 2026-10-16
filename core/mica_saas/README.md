@@ -249,52 +249,83 @@ config :core, :rate,
   ]
 ```
 
-## Release instructions
+## Deploying on Fly.io
 
-1. Create a Docker image
+Self runs as a Fly.io app. The reference deployment is
+[nova-mica-dev](https://nova-mica-dev.fly.dev): [`fly.mica-dev.toml`](../fly.mica-dev.toml)
+holds its configuration, and
+[`fly-deploy-mica-dev.yml`](../../.github/workflows/fly-deploy-mica-dev.yml) deploys every push
+to `develop` and then smoke tests the start page, `/user/signin` and `/.status/health`. Use
+both as a template for your own deployment. Machines stop when idle and start on the next
+request. For a while, nova-mica-dev also serves as the rehearsal environment for the container
+image build (step `build-image` in `docs/nova-migration/plan.md`).
+
+The image is built from [`core/Dockerfile`](../Dockerfile) with the build arguments
+`BUNDLE=self`, `PLATFORM=fly` (selects `config/runtime.fly.exs`), `VERSION` and `GIT_COMMIT`.
+Set `FORCE_SSL=false` on Fly: the proxy terminates TLS and the health checks use HTTP.
+
+### One-time setup
+
+Run from the `core/` folder, with your own app name instead of `my-self`:
 
 ```sh
-$ cd core
-$ docker build  --build-arg VERSION=1.0.0 --build-arg BUNDLE=self . -t self:latest
-$ docker image save self -o self.zip
+flyctl apps create my-self
+flyctl postgres create --name my-self-db --region ams --vm-size shared-cpu-1x --volume-size 1 --initial-cluster-size 1
+flyctl postgres attach my-self-db --app my-self               # sets DATABASE_URL
+flyctl storage create --app my-self --name my-self-storage --public   # sets AWS_* and BUCKET_NAME
+flyctl secrets set --app my-self --stage \
+  SECRET_KEY_BASE="$(openssl rand -base64 64 | tr -d '\n')" \
+  AWS_S3_BUCKET=my-self-storage PUBLIC_S3_BUCKET=my-self-storage
+flyctl deploy --remote-only -c fly.my-self.toml --build-arg VERSION=1.0.0 --build-arg PLATFORM=fly
 ```
 
-2. Run the Docker image
+For automatic deploys, create a deploy token with `flyctl tokens create deploy --app my-self` and
+store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for the reference deployment).
 
-Required environment variables:
+### Configuration
 
-| Variable | Description | Example value |
-|---|---|---|
-| APP_NAME | Core app name | "Self" |
-| APP_DOMAIN | domain where the Core app is hosted | "my.server.com" |
-| APP_MAIL_DOMAIN | Domain of your email (after the @) | "self.com" |
-| APP_ADMINS | String with space seperated email adresses of the system admins, supports wildcards | "person1@self.com person2@self.com" |
-| DB_USER | Username | \<my-username\> |
-| DB_PASS | Password | \<my-password\> |
-| DB_HOST | Hostname | "domain.where.database.lives" |
-| DB_NAME | Name of the database in the PostgreSQL| "self_prod" |
-| SECRET_KEY_BASE | 64-bit sequence of random characters | \<long-sequence-of-characters\> |
-| STATIC_PATH | Path to folder where uploaded files can be stored | "/tmp" |
-| UNSPLASH_ACCESS_KEY | Application access key registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "<unsplash-access-key>" |
-| UNSPLASH_APP_NAME | Application name registered on [Unsplash](https://unsplash.com/) (Image Catalog) | "Self" |
-| STORAGE_SERVICES | Comma seperated list of storage services | "yoda, aws, azure" |
+Each setting has one name. Secrets are set with `flyctl secrets set`; everything else goes in
+the `[env]` section of the Fly config.
 
-Optional environment variables:
+Required:
 
-| Variable | Description | Example value |
-|---|---|---|
-| LOG_LEVEL | Console log level  | "debug", "info", "warn", "error" |
-| SENTRY_DSN | app monitoring | "https://<public-key>@<org>.ingest.sentry.io/<project-id>" |
-| GOOGLE_SIGN_IN_CLIENT_ID | | "<client-id>.apps.googleusercontent.com" |
-| GOOGLE_SIGN_IN_CLIENT_SECRET | | "<google-client-secret>" |
-| SURFCONEXT_SITE | SURFconext site | "https://connect.test.surfconext.nl" |
-| SURFCONEXT_CLIENT_ID | SURFconext client ID | "self.com" |
-| SURFCONEXT_CLIENT_SECRET | SURFconext client secret | "<surfconext-client-secret>" |
-| STORAGE_S3_PREFIX | Prefix for S3 builtin storage objects. Without this variable "builtin" storage service will default to local filesystem | "storage" |
-| CONTENT_S3_PREFIX | Prefix for S3 content objects | "content" |
-| FELDSPAR_S3_PREFIX | Prefix for S3 feldspar objects | "feldspar" |
-| PUBLIC_S3_URL | Public accessable url of an S3 service | "https://self-public.s3.eu-central-1.amazonaws.com" |
-| PUBLIC_S3_BUCKET | Name of the bucket on the S3 service | "self-prod" |
-| DIST_HOSTS | Comma seperated list of hosts in the cluster, see: [OTP Distribution](https://elixirschool.com/en/lessons/advanced/otp_distribution) | "one, two" |
-| ENABLED_OBAN_PLUGINS | Comma seperated list of Oban plugins to enable, only pruner and lifeline supported | "pruner, lifeline"
-| GETTEXT_FALLBACK_LOCALE | Locale used to render strings that are untranslated in the requested locale. Leave unset or empty to render the raw translation keys instead, which makes missing translations visible | "en" |
+| Variable | Kind | Description | Reference value |
+|---|---|---|---|
+| `DATABASE_URL` | secret | PostgreSQL connection URL; set by `flyctl postgres attach` | |
+| `SECRET_KEY_BASE` | secret | Random string of at least 64 characters | `openssl rand -base64 64` |
+| `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` | secret | S3 credentials and endpoint; set by `flyctl storage create` | |
+| `AWS_S3_BUCKET` | secret | Bucket for platform storage | `nova-mica-dev-storage` |
+| `PUBLIC_S3_BUCKET` | secret | Bucket for public content | `nova-mica-dev-storage` |
+| `BUCKET_NAME` | secret | Set by `flyctl storage create`; still read by `runtime.fly.exs` until it moves to `AWS_S3_BUCKET` | `nova-mica-dev-storage` |
+| `APP_NAME` | env | Name shown in the UI and in mail | `Self [dev]` |
+| `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
+| `PHX_HOST` | env | Same as `APP_DOMAIN` | `nova-mica-dev.fly.dev` |
+| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address | `nova-mica-dev.fly.dev` |
+| `DEPLOY_ENV` | env | Selects the seeds: `dev`, `test`, `staging` or `prod`. Anything but `prod` also enables mock sign-in | `dev` |
+| `PAYMENT_PROVIDER` | env | `local` (logs only, no real payments) or `opp` | `local` |
+| `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self needs `password_sign_in` | `password_sign_in` |
+| `HTTP_PORT` | env | Port the app listens on | `8000` |
+| `ECTO_IPV6` | env | `true` on Fly, for `.internal` DNS | `true` |
+| `UPLOAD_PATH`, `STATIC_PATH` | env | Upload folder on the mounted volume | `/app/data/uploads` |
+| `FELDSPAR_DATA_DONATION_PATH` | env | Data donation folder on the mounted volume | `/app/data/datadonation` |
+
+Optional:
+
+| Variable | Kind | Description | Reference value |
+|---|---|---|---|
+| `APP_ADMINS` | env or secret | Space-separated e-mail addresses of system admins; wildcards like `*@example.org` work | unset |
+| `MAILGUN_API_KEY` | secret | Sends mail through Mailgun (EU). Without it no mail leaves the app, so sign-up confirmation mails do not arrive | unset |
+| `STORAGE_SERVICES` | env | Comma-separated storage services | `builtin` |
+| `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
+| `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
+| `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |
+| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` and others in `runtime.fly.exs` | `pruner, lifeline` |
+| `GOOGLE_SIGN_IN_CLIENT_ID`, `GOOGLE_SIGN_IN_CLIENT_SECRET` | secret | Your own Google OAuth client | unset |
+| `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
+| `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
+| `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
+| `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
+
+The reference deployment uses no Eyra secrets or OAuth clients: every integration above that is
+unset stays disabled.
