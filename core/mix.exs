@@ -29,7 +29,7 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "priv/static/images/icons/next.svg",
+        logo: "priv/static/images/logos/products/next.svg",
         extras: [
           {"mica_saas/README.md", filename: "selfhosting", title: "Self hosting"},
           "../README.md",
@@ -72,7 +72,7 @@ defmodule Core.MixProject do
 
   # Specifies which paths to compile per environment.
   # Mica, the Next SaaS and the Self reference SaaS (mica_saas) live side by side
-  # in one Mix project until Nova migration step 8.
+  # in one Mix project until Nova migration step code-split.
   @source_paths ~w(mica/lib mica/systems mica/frameworks next/bundle next/lib next/systems mica_saas/bundle)
 
   defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test"]
