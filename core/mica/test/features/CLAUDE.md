@@ -28,7 +28,13 @@ WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
 
 `mix test.feature` runs `test --only feature`.
 `mix test.unit` runs `test --exclude feature`.
-`mix test.ci` runs both halves + JS.
+`mix test.ci` runs both halves + JS, each in its own Mix invocation (Mix runs `test` only once per invocation).
+
+Chrome and chromedriver must have the same major version. When they don't (e.g. brew's chromedriver lags Chrome), download a matching pair from Chrome for Testing and point Wallaby at it with `CHROMEDRIVER_PATH=<path>` and, if needed, `CHROME_BINARY=<path>`. CI does the same.
+
+LiveView drops `phx-click` events (and `JS` commands) until the page's WebSocket has connected. Before the first click on such an element on a freshly loaded page, wait with `assert_connected(session, "[data-testid='…']")`: the element inside a connected LiveView. This is a pre-click wait on the destination, not the post-navigation `.phx-connected` wait that rule 2 below forbids.
+
+Content-page tab bars collapse into a dropdown when their tabs don't fit the window. Open a tab with `click_tab(session, "<tab-testid>")`, which handles both layouts; wait for the editor with `assert_has(css("[data-tab-fit]"))`.
 
 ## Key principles
 

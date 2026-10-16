@@ -59,7 +59,7 @@ defmodule Systems.Account.Auth.Mock.SigninPage do
                   label_text=""
                   testid="mock-auth-email-input"
                 />
-                <Button.submit_wide label="Sign in" />
+                <Button.submit_wide label="Sign in" testid="mock-auth-submit-button" />
               </.form>
             </div>
           </Area.form>

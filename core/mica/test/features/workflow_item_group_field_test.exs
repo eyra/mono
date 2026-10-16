@@ -63,7 +63,7 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
 
   defp create_project(session) do
     session
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
@@ -83,13 +83,12 @@ defmodule CoreWeb.Features.WorkflowItemGroupFieldTest do
     session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='assignment-tab-workflow']"))
+    |> assert_has(Query.css("[data-tab-fit]"))
   end
 
   defp open_workflow_tab(session) do
     session
-    |> assert_has(Query.css("[data-testid='assignment-tab-workflow']"))
-    |> click(Query.css("[data-testid='assignment-tab-workflow']"))
+    |> click_tab("assignment-tab-workflow")
     |> assert_has(Query.css("[data-testid^='add-library-item-']", count: :any))
   end
 

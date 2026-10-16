@@ -58,7 +58,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
 
     # Create project
     researcher_session
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
 
     # Navigate into the project
@@ -79,12 +79,11 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
     researcher_session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
+    |> assert_has(Query.css("[data-tab-fit]"))
 
     # Navigate to participants tab
     researcher_session
-    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
-    |> click(Query.css("[data-testid='assignment-tab-participants']"))
+    |> click_tab("assignment-tab-participants")
     |> assert_has(Query.css("[data-testid='create-advert-button']"))
 
     # For PaNL studies, subject_count is managed via the Payment tab (slot purchasing).

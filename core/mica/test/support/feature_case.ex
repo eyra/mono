@@ -109,6 +109,47 @@ defmodule CoreWeb.FeatureCase do
   end
 
   @doc """
+  Waits until an element matching `selector` is visible and every LiveView on
+  the page, including nested ones, has connected.
+
+  Use it before the first click on a `phx-click` element of a freshly loaded
+  page: until its LiveView has connected, LiveView drops such clicks.
+  """
+  def assert_connected(session, selector, opts \\ []) do
+    import Wallaby.Browser
+    import Wallaby.Query
+
+    all_connected =
+      "[data-phx-main].phx-connected:not(:has([data-phx-session]:not(.phx-connected)))"
+
+    assert_has(session, css("#{all_connected} #{selector}", opts))
+  end
+
+  @doc """
+  Clicks the tab with the given `data-testid` in a fitting tab bar
+  (`Pixel.Tabbed` with the `TabBarFit` hook).
+
+  The bar collapses into a dropdown when its tabs don't fit the window, so
+  this waits until the hook has measured the bar (`data-tab-fit`) and opens
+  the dropdown first when it is collapsed.
+  """
+  def click_tab(session, testid) do
+    import Wallaby.Browser
+    import Wallaby.Query
+
+    fit =
+      do_retry_stale(fn ->
+        session
+        |> find(css("[data-tab-fit]"))
+        |> Wallaby.Element.attr("data-tab-fit")
+      end)
+
+    if fit == "narrow", do: click(session, css("#tabbar_narrow"))
+
+    click(session, css("[data-testid='#{testid}']"))
+  end
+
+  @doc """
   Creates a confirmed user and signs them in.
   Returns the session and the user.
   """

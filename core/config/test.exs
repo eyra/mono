@@ -104,9 +104,15 @@ config :wallaby,
   # *actually* hung chromedriver still fails fast via the
   # `wait_until_ready` + ExUnit test timeout.
   hackney_options: [recv_timeout: :infinity, hackney: [pool: :wallaby_pool]],
-  chromedriver: [
-    headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
-  ]
+  # CHROME_BINARY / CHROMEDRIVER_PATH select a matching Chrome for Testing pair
+  # (CI, or a local Chrome that is ahead of brew's chromedriver).
+  chromedriver:
+    [
+      headless: System.get_env("WALLABY_HEADLESS", "true") == "true",
+      binary: System.get_env("CHROME_BINARY"),
+      path: System.get_env("CHROMEDRIVER_PATH")
+    ]
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
 
 config :core, :features,
   member_google_sign_in: true,
