@@ -168,6 +168,41 @@ Details and rationale are in [design.md](./design.md#decisions).
 
 > Why move folders now but create separate Mix projects only in step 8: a separate Mica project cannot compile while Mica code still references Next modules. Moving folders inside one project makes the boundary visible and enforceable from day one. Step 8 is then a second `git mv` plus two `mix.exs` files. `git log --follow` and blame survive both renames.
 
+### Step 2b — One build (recommended, not blocking)
+
+- **Goal.** Build one image per commit and run that same image on Fly dev, Fly staging and AWS production, so staging tests exactly what production runs. No Nova step depends on this. With 2b, steps 3b and 8 handle one runtime file, one Dockerfile and one build workflow; without it, they work as written.
+- **Scope.** Two parts that land at different times. Tracked in the Flux issue [One image for prod and Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10403641634).
+  - One Dockerfile and one platform-neutral `runtime.exs`. One image per commit. Fly deploys it by digest. AWS production runs the same image as a container on the existing EC2 nodes. Until then, the release tarball is extracted from the image.
+  - **2b-1: code in this repository (PRs M1–M4).**
+    - **M1.** One platform-neutral `core/config/runtime.exs` replaces `runtime.aws.exs`, `runtime.fly.exs`, `runtime.dev.exs` and the copy steps. Environment variables choose the setup, not the platform. An equivalence test compares the old and new config with the production and Fly environments.
+    - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
+    - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
+    - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
+  - **2b-2: devops and operations (D1–D4, in `eyra/devops`).**
+    - **D1.** Production environment parity: the few variables the merged `runtime.exs` needs on production. Additive, applied before M1 reaches production.
+    - **D2.** Docker under systemd on the existing EC2 nodes, with an env file, migrations once per deploy, and a rolling restart per node. A switch chooses between the tarball unit (default) and the container unit.
+    - **D3.** Rehearsal. There is no AWS test machine anymore, so the rehearsal runs on a new temporary Fly app next to Fly dev and staging, and is torn down afterwards. The EC2/systemd part (the unit, host volumes and file owners, clustering over the host network, the drain-aware rolling restart) cannot be fully rehearsed on Fly; the production switch keeps the tarball as its fallback for that reason.
+    - **D4.** The production switch, in a normal release slot, for a release that already ran on production as a tarball.
+- **Constraints.**
+  - One runtime config file serves Fly and AWS alike. The platform behaves the same wherever it is deployed; only environment variable values differ.
+  - Environment variable names and the release name `bin/core` do not change.
+  - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in step 8 without carrying Eyra literals into Mica.
+  - `BUNDLE` stays a build argument until step 8: one image per bundle.
+- **Dependencies.** Step 2 (the merge freeze is over). 2b-1 ideally lands before step 3b and before step 3's Oban-cron PR, because both edit the runtime config; it is not a prerequisite for either. 2b-2 can land any time before step 8.
+- **Parallel with.** Step 3 and later steps, track F. 2b-2 is not in the same release window as step 8 or step 11: one change to the production pipeline at a time.
+- **Eyra prod impact.**
+  - 2b-1: production runs the release extracted from the image staging tested, through the normal AWS flow.
+  - 2b-2: D4 is an operational cutover from the tarball to the container on the production nodes.
+- **Verification.**
+  - The equivalence test shows only the intended config differences.
+  - Fly dev and staging deploy by digest, and e2e passes.
+  - A milestone ships to production as the extracted tarball without new errors in AppSignal.
+  - In the rehearsal and after D4: clustering, the node-local Oban queue, upload and donation file owners, database TLS, mail, S3, login and the AppSignal revision.
+- **Rollback.**
+  - 2b-1: revert the PR.
+  - D4: put the tarball unit back for the same release. The tarball stays available for two milestones after the switch.
+- **Decisions/authorizations.** **The AWS production switch (D4) needs a rehearsal, a rollback to the tarball, and the user's go-ahead.**
+
 ---
 
 ## Phase B — Decoupling (still one Mix project)
@@ -220,7 +255,7 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
   - Keep the release binary name `core` for now (`releases: [core: …]`). [`core/scripts/predeploy`](../../core/scripts/predeploy), [`core/scripts/docker-start-app`](../../core/scripts/docker-start-app), the root `Dockerfile` entrypoint and Eyra's AWS deploy tooling (outside this repository) all call `bin/core`.
 - **Dependencies.** The accessor from step 3.
 - **Parallel with.** Steps 4–6.
-- **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build.
+- **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If step 2b-1 has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
 - **Verification.**
   - The app boots on dev and staging.
   - Smoke tests pass.
@@ -369,11 +404,12 @@ Steps 3 and 4 fix the contract, and steps 5–7 build on it. Once step 3 is merg
     - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`.
     - Add a Mica CI job that builds and tests `mica/` on its own.
     - The `BUNDLE` build argument disappears.
+    - If step 2b-1 has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
   - **Self.** Self deployments keep building from a pinned pre-step-8 tag of this repository, unless the reference SaaS is made deployable for them first (open question 2).
 - **Dependencies.** Steps 3–7: the allowlist is empty and the standalone compile job is green.
 - **Parallel with.** Step 9, track F.
 - **Eyra prod impact.** The build and release pipeline changes; runtime behaviour must not. Rollout:
-  1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests.
+  1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests. If step 2b has landed, build the one image instead.
   2. Merge at the start of a milestone.
   3. Run the full e2e on staging.
   4. Ship to production through the normal AWS release flow. The binary name is unchanged.
@@ -501,10 +537,12 @@ Step 0 ─┬─ Step 1 ─── Step 2 ── Step 3 ─┬─ Step 3b
         │                               └─ Step 6 ──┴─ Step 7 ── Step 8 ── Step 10 ── Step 11
         │            Step 9A (after 2, final run before 10) ──────────────┘
         │            Step 9B (after 7) ───────────────────────────────────┘
+        │            Step 2b (after 2, optional): 2b-1 before 3b ideally; 2b-2 before 8
         └─ Track F: F1 ── F2 ── F3 (own assessment; not in the step 11 window)
 ```
 
 - **Can start now:** steps 0, 1 and F1.
+- **Recommended, not blocking:** step 2b after step 2. 2b-1 ideally before step 3b and step 3's Oban-cron PR; 2b-2 before step 8, not in the release window of step 8 or 11.
 - **Can run in parallel after step 3:** steps 4, 5 and the items of step 6.
 - **Strictly sequential:** 2 → 3, then 7 → 8 → 10 → 11.
 
