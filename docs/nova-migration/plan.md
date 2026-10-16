@@ -9,7 +9,7 @@ Paths in this document are relative to the repository root and refer to the layo
 
 ## How steps are identified
 
-- **Every step has a fixed ID**: a prefix for the kind of work plus a short name, for example `code-extension`. An ID never changes and is never reused. Issues, PRs, commits and code comments refer to steps by ID.
+- **Every step has a fixed ID**: a prefix for the kind of work plus a short name, for example `code-systems`. An ID never changes and is never reused. Issues, PRs, commits and code comments refer to steps by ID.
 - **Prefixes:**
   - `code-`: the code structure of this repository
   - `build-`: images, CI and the release build
@@ -20,6 +20,7 @@ Paths in this document are relative to the repository root and refer to the layo
 - **Order and dependencies live only in this plan**: in the phases, the [dependency diagram](#dependencies) and the "Dependencies" line of each step.
 - **Inserting a step** means adding a line to the [steps table](#steps), a node to the diagram and a section in its phase. No other step is renamed.
 - Until 2026-10-16 steps had numbers (0–11, 2b, 2c, 9A/9B, F1–F3). The [old numbering](#old-numbering) table maps them to IDs, so older issues and PRs stay traceable.
+- One ID was renamed once, before any build work on it: `code-extension` became `code-systems` (2026-10-16). See [old numbering](#old-numbering).
 
 ## Steps
 
@@ -30,11 +31,11 @@ Paths in this document are relative to the repository root and refer to the layo
 | [code-layout](#code-layout--early-visible-layout-and-the-boundary-check) | Guardrails | `core/mica`, `core/next`, `core/mica_saas` and the boundary check | code-cleanup | done |
 | [ops-mica-dev](#ops-mica-dev--reference-deployment-nova-mica-dev) | Build and reference deployment | Reference deployment `nova-mica-dev` | code-layout; ideally with build-image | next |
 | [build-image](#build-image--one-image-and-one-runtimeexs) | Build and reference deployment | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
-| [code-extension](#code-extension--coreextension-and-open-registries) | Decoupling | `Core.Extension` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
-| [code-rename](#code-rename--otp-app-rename-core--mica) | Decoupling | OTP app `:core` → `:mica` | code-extension (accessor); ideally build-image | planned |
-| [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-extension | planned |
-| [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-extension | planned |
-| [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-extension; code-registry for Graphite and Zircon | planned |
+| [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
+| [code-rename](#code-rename--otp-app-rename-core--mica) | Decoupling | OTP app `:core` → `:mica` | code-systems (accessor); ideally build-image | planned |
+| [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
+| [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | planned |
+| [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-systems; code-registry for Graphite and Zircon | planned |
 | [data-tables](#data-tables--table-ownership-migration-paths-and-baselines) | Decoupling | Table ownership, migration paths, baselines | code-registry, code-instance | planned |
 | [ops-prod-image](#ops-prod-image--one-image-on-aws-production) | Split and cutover | One image on AWS production | ops-mica-dev, build-image | planned |
 | [code-split](#code-split--layout-split-mica-and-next-as-two-mix-projects) | Split and cutover | Separate Mix projects | code-rename, code-brand, code-instance, data-tables | planned |
@@ -60,19 +61,19 @@ flowchart LR
   m32([M32 cut, Mon 19 Oct]):::milestone -->|M1 merges after| build_image
   code_layout --> build_image[build-image]:::next
   code_layout --> ops_mica_dev[ops-mica-dev]:::next
-  code_layout --> code_extension[code-extension]:::next
+  code_layout --> code_systems[code-systems]:::next
   code_layout --> repo_assess[repo-assess]
 
-  build_image -->|M1 before the Oban-cron PR| code_extension
+  build_image -->|M1 before the Oban-cron PR| code_systems
   build_image -.->|ideally before| code_rename
   build_image --> ops_prod_image[ops-prod-image]
   ops_mica_dev --> ops_prod_image
   ops_prod_image -.->|before, not in the same release window| code_split
 
-  code_extension --> code_rename[code-rename]
-  code_extension --> code_brand[code-brand]
-  code_extension --> code_registry[code-registry]
-  code_extension --> code_instance[code-instance]
+  code_systems --> code_rename[code-rename]
+  code_systems --> code_brand[code-brand]
+  code_systems --> code_registry[code-registry]
+  code_systems --> code_instance[code-instance]
   code_registry -->|Graphite and Zircon| code_instance
   code_registry --> data_tables[data-tables]
   code_instance --> data_tables
@@ -90,17 +91,17 @@ flowchart LR
 ```
 
 - **Done:** code-guardrails, code-cleanup, code-layout.
-- **Next, in parallel:** ops-mica-dev, build-image and code-extension. build-image M1 merges after the M32 cut on Monday 19 October; code-extension's Oban-cron PR merges after build-image M1, because both edit the runtime config.
+- **Next, in parallel:** ops-mica-dev, build-image and code-systems. build-image M1 merges after the M32 cut on Monday 19 October; the code-systems Oban-cron PR merges after build-image M1, because both edit the runtime config.
 - **Can start now:** feldspar-protocol, and the first run of repo-assess.
 - **Recommended, not blocking:** build-image ideally before code-rename. ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
-- **Can run in parallel after code-extension:** code-brand, code-registry and the items of code-instance.
-- **Strictly sequential:** code-layout → code-extension, then data-tables → code-split → repo-create → ops-cutover.
+- **Can run in parallel after code-systems:** code-brand, code-registry and the items of code-instance.
+- **Strictly sequential:** code-layout → code-systems, then data-tables → code-split → repo-create → ops-cutover.
 
 ## Summary
 
 **The two parts.** `core/` becomes:
 - **Mica**: a Mix project with OTP app `:mica`. Modules stay `Core.*`/`CoreWeb.*`. It moves to `novasoftwarefoundation/mica`.
-- **Next**: a Phoenix app that depends on Mica through the `Core.Extension` contract. It moves to `eyra/next`.
+- **Next**: a Phoenix app that depends on Mica through `Core.SaaS` and adds its own systems through `Core.System`. It moves to `eyra/next`.
 
 **How the work is done.** All work happens in this repository on `develop`, in normal small PRs shipped through Next's milestones. There is no long-lived branch and no copy of core.
 
@@ -108,7 +109,7 @@ flowchart LR
 |---|---|---|
 | Guardrails | code-guardrails, code-cleanup, code-layout | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
 | Build and reference deployment | ops-mica-dev, build-image | Run the neutral reference SaaS on `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
-| Decoupling | code-extension, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.Extension`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
+| Decoupling | code-systems, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
 | Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
 | Feldspar | feldspar-protocol, feldspar-tests, feldspar-transfer | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
 
@@ -131,8 +132,8 @@ flowchart LR
 
 Details and rationale are in [design.md](./design.md#decisions).
 
-- **Option A.** `eyra/next` is the root Phoenix project. Mica is a versioned Mix dependency. Mica's own systems are extensions on the same `Core.Extension` contract. During the migration Next uses `path:` or branch dependencies; afterwards it pins to tags.
-- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS on the extension contract and can graduate to Mica later. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
+- **Option A.** `eyra/next` is the root Phoenix project. Mica is a versioned Mix dependency. Every system, in Mica or in a SaaS, implements `Core.System`; the SaaS composes them through `Core.SaaS`. During the migration Next uses `path:` or branch dependencies; afterwards it pins to tags.
+- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.mica_systems()`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
 - **Optional Mica building blocks:** assignment, fund, affiliate, and pool/advert/promotion.
 - **Moves to the SaaS (instance specifics):**
   - PaNL names and panl.nl URLs
@@ -234,7 +235,7 @@ Details and rationale are in [design.md](./design.md#decisions).
       - the Next fixtures of `core/frameworks/e2e` (`controller.ex`; `_routes.ex` stays in Mica)
       - the PaNL Wallaby feature tests
     - `core/bundles/self` → `core/mica_saas/bundle`: Self is a sibling SaaS on Mica, not part of Mica (decided 2026-10-14). Bundle id `:self`, `BUNDLE=self` and the `Self.*` modules are unchanged. `SELFHOSTING.md` becomes `core/mica_saas/README.md`; the root keeps a short pointer.
-    - Both `bundle/` folders are temporary; code-extension dissolves them into `<saas>/{lib,config}`.
+    - Both `bundle/` folders are temporary; code-systems dissolves them into `<saas>/{lib,config}`.
     - `core/test/{e2e,smoke,load,scripts}`, `core/priv`, `core/assets`, `core/config` and the build files stay where they are until code-split.
   - **Follow-up changes:**
     - update `elixirc_paths` in [`core/mix.exs`](../../core/mix.exs) and [`core/.formatter.exs`](../../core/.formatter.exs)
@@ -272,9 +273,9 @@ Details and rationale are in [design.md](./design.md#decisions).
   - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
   - Neutral configuration: no Eyra branding and no Eyra secrets. The configuration is documented in `core/mica_saas/README.md`.
 - **Dependencies.** After code-layout. Ideally together with build-image: the app then deploys the private `ghcr.io/eyra/self` image by digest. Until then, it builds from `core/Dockerfile` with `BUNDLE=self`.
-- **Parallel with.** build-image, code-extension and later steps, track Feldspar. It doubles as the rehearsal environment for build-image (R).
+- **Parallel with.** build-image, code-systems and later steps, track Feldspar. It doubles as the rehearsal environment for build-image (R).
 - **Eyra prod impact.** None. It is a separate Fly app with its own database, bucket and secrets.
-- **Risks.** `BUNDLE=self` compiles with 17 `no route path` warnings, so the first deploy may show broken Self pages. The fixes belong to code-extension and code-brand, not to this step; the smoke test covers only the pages listed above.
+- **Risks.** `BUNDLE=self` compiles with 17 `no route path` warnings, so the first deploy may show broken Self pages. The fixes belong to code-systems and code-brand, not to this step; the smoke test covers only the pages listed above.
 - **Verification.**
   - A push to `develop` deploys to `nova-mica-dev`, and the smoke test passes.
   - The deployed app shows no Eyra branding and uses no Eyra secrets.
@@ -317,8 +318,8 @@ Details and rationale are in [design.md](./design.md#decisions).
   - The release name `bin/core` does not change. Environment variable names change only where one setting had two names (see M1).
   - `runtime.exs` is written as Next's config on generic helpers, so it can move to `next/` in code-split without carrying Eyra literals into Mica.
   - `BUNDLE` stays a build argument until code-split: one image per bundle.
-- **Dependencies.** code-layout (the merge freeze is over). M1 merges after the M32 cut on Monday 19 October. M1 lands before code-extension's Oban-cron PR, and ideally before code-rename, because both edit the runtime config.
-- **Parallel with.** ops-mica-dev, code-extension and later steps, track Feldspar.
+- **Dependencies.** code-layout (the merge freeze is over). M1 merges after the M32 cut on Monday 19 October. M1 lands before the code-systems Oban-cron PR, and ideally before code-rename, because both edit the runtime config.
+- **Parallel with.** ops-mica-dev, code-systems and later steps, track Feldspar.
 - **Eyra prod impact.** Production runs the release extracted from the image staging tested, through the normal AWS flow.
 - **Verification.**
   - The equivalence test shows only the intended config differences.
@@ -333,28 +334,31 @@ Details and rationale are in [design.md](./design.md#decisions).
 
 ## Phase: Decoupling (still one Mix project)
 
-code-extension and code-brand fix the contract, and code-registry, code-instance and data-tables build on it. Once code-extension is merged, code-instance fans out into parallel PRs, one per item. Every step lowers the allowlist count.
+code-systems and code-brand fix the contract, and code-registry, code-instance and data-tables build on it. Once code-systems is merged, code-instance fans out into parallel PRs, one per item. Every step lowers the allowlist count.
 
-### code-extension — `Core.Extension` and open registries
+### code-systems — `Core.System`, `Core.SaaS` and open registries
 
 - **Goal.** A SaaS, and each Mica system, can add routes, grants, handlers and so on without editing a central list.
 - **Scope.**
-  - **The `Core.Extension` behaviour.** It covers:
+  - **The `Core.System` behaviour,** one per system: `Systems.X.System` in the system's `_system.ex`. It covers:
     - routes, grants, signal handlers, notifiers and notify channels
     - supervisor children, Oban queues and crons, rate quotas
     - seeds and the migrations path
     - feature flags (declared, default off)
     - admin panels and account features
 
-    See [design.md §3.3](./design.md#33-the-coreextension-contract).
-  - **Convert the extensions.** Each Mica system becomes a `Systems.X.Extension`; the Next bundle becomes `Next.Extension`.
+    A system can use the extension points of other systems, so a SaaS extends Mica's systems through its own systems.
+  - **The `Core.SaaS` behaviour,** one per SaaS: `Next.SaaS` and `Self.SaaS`. `systems/0` returns Mica's systems (`Core.mica_systems()`) plus the SaaS's own. It also holds the SaaS-level config: start pages, menus, feature-flag defaults and, later, the brand (code-brand). The SaaS is selected with `config :core, saas: Next.SaaS`.
+
+    See [design.md §3.3](./design.md#33-the-coresystem-and-coresaas-contracts).
+  - **Convert.** Each Mica system gets a `Systems.X.System`; the Next and Self bundles become `Next.SaaS` and `Self.SaaS`, and the systems that live in Next get their own `Core.System` modules.
   - **Replace the hand-maintained lists:**
     - [`core/systems/routes.ex`](../../core/systems/routes.ex)
     - the static grants in [`core/lib/core/authorization.ex`](../../core/lib/core/authorization.ex)
     - the `:signal` handler list and the `Systems.Notify` notifier list in [`core/config/config.exs`](../../core/config/config.exs)
     - [`core/lib/core/bundle_overrides.ex`](../../core/lib/core/bundle_overrides.ex)
-    - the `core/.bundle.ex` selection; instead, the SaaS lists its extensions in config
-  - **Oban crons.** Move them into extension declarations, keeping the environment toggles from `runtime.*.exs`.
+    - the `core/.bundle.ex` selection; instead, config names the SaaS module
+  - **Oban crons.** Move them into the `Core.System` declarations, keeping the environment toggles from `runtime.*.exs`.
   - **Feature flags.**
     - Declared flags default to *off*. [`core/lib/core/feature_flags.ex`](../../core/lib/core/feature_flags.ex) treats an unconfigured flag as on today.
     - Next declares its current defaults, so the flags in effect stay identical.
@@ -379,7 +383,7 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
   - Update the call sites that name the app: `otp_app: :core`, `app_dir(:core, …)`, `from: :core` (about 10).
   - Update the Gettext backend and the `priv` paths.
   - Keep the release binary name `core` for now (`releases: [core: …]`). [`core/scripts/predeploy`](../../core/scripts/predeploy), [`core/scripts/docker-start-app`](../../core/scripts/docker-start-app), the root `Dockerfile` entrypoint and Eyra's AWS deploy tooling (outside this repository) all call `bin/core`.
-- **Dependencies.** The accessor from code-extension. Ideally after build-image.
+- **Dependencies.** The accessor from code-systems. Ideally after build-image.
 - **Parallel with.** code-brand, code-registry, code-instance.
 - **Eyra prod impact.** Build-level only. Environment variable names do not change. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If build-image has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
 - **Verification.**
@@ -409,7 +413,7 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
     - Replace brand words in msgstrs with brand interpolation.
     - Give Next its own Gettext backend for the `eyra-next` and PaNL copy.
   - **De-brand Pixel:** the footer, the logo catalogue and the `__eyra_field_*` attributes.
-- **Dependencies.** code-extension.
+- **Dependencies.** code-systems.
 - **Parallel with.** code-registry and code-instance, track Feldspar. Schedule the gettext rename at a quiet moment, because it touches every `dgettext` call.
 - **Eyra prod impact.** None visible.
 - **Verification.**
@@ -431,7 +435,7 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
   - **Directors** become registry-validated strings instead of compile-time `Ecto.Enum` values.
   - **Assignment and Workflow** lose their hard-wired Zircon/Lab/Feldspar handling.
   - **`Workflow.Platforms`** moves to the Feldspar side.
-- **Dependencies.** code-extension.
+- **Dependencies.** code-systems.
 - **Parallel with.** code-brand, the parts of code-instance that don't touch tools, track Feldspar.
 - **Eyra prod impact.** **A data migration on live tables**, in three releases:
   1. Add the columns, backfill and dual-write.
@@ -465,20 +469,20 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
     - `VUDaySchedule`, which becomes Lab config supplied by Next
     - the student promotion next action
   - **Pool directors.** Citizen and Student register as pool directors from Next.
-  - **Admin and Org.** The citizen/pool admin settings and the Org pools tab become panels contributed by Next through the extension contract.
+  - **Admin and Org.** The citizen/pool admin settings and the Org pools tab become panels contributed by Next systems through Mica's extension points.
   - **Home.** Mica gets a minimal default home. Next's current home moves to Next and is set through start pages.
   - **Eyra-domain synthetic accounts.** The `@eyra.service`, `external+…@eyra.co` and `@next.eyra.co` addresses become config with Next's values.
   - **External panel ids.** `liss` and `ioresearch` become Next config. Mica keeps `generic`.
   - **Integrations.** SURFconext and Centerdata auth, the OPP payment provider and Yoda storage move behind their behaviours. They go to `core/next/integrations` until their owner is decided (open question 5). Only Nova-governed code goes into Mica; they can graduate later.
   - **Graphite and Zircon** (with Paper, Annotation, Ontology, Onyx):
-    - depend only on `Core.Tool` and `Core.Extension`
+    - depend only on `Core.Tool` and `Core.System`
     - the screening agent concept moves with Zircon
-    - the Paper registry moves from `Core.Application` into Zircon's extension children
+    - the Paper registry moves from `Core.Application` into Zircon's system children
   - **Remaining dependency cycles** are broken with signals or behaviours where the direction would otherwise be Mica → Next:
     - Account ↔ Fund/Payment
     - Assignment ↔ Pool/Advert
     - Fund ↔ Advert/Pool
-- **Dependencies.** code-extension. Graphite and Zircon also need code-registry.
+- **Dependencies.** code-systems. Graphite and Zircon also need code-registry.
 - **Parallel with.** Most items run in parallel, each with its own Flux issue and worktree. Coordinate with ongoing Next feature work in the same systems.
 - **Eyra prod impact.** None visible per PR. Ships continuously over several milestones.
 - **Verification.**
@@ -498,9 +502,9 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
   - **Ownership manifest:** each table mapped to its owner, generated from the Ecto schemas in each folder and checked in CI.
   - **CI check:** no foreign key from a Mica table to a Next table. Fix any violations found; code-registry resolves most of them.
   - **Split the migrations.** Divide `core/priv/repo/migrations` into a Mica path and a Next path by owner. Filenames and versions stay unchanged.
-  - **Run both paths.** `Core.Release.migrate/0` and `mix ecto.migrate` run the Mica path plus the extension paths.
+  - **Run both paths.** `Core.Release.migrate/0` and `mix ecto.migrate` run the Mica path plus the migration paths the SaaS and its systems declare.
   - **Mixed migrations.** Historical migrations that touch both owners stay in Mica's path until the baseline squash below.
-  - **Seeds** are declared per extension.
+  - **Seeds** are declared per system.
   - **Baselines,** after the migration split:
     - Generate a Mica baseline and a Next baseline migration.
     - Write the script that inserts their versions into `schema_migrations`.
@@ -562,7 +566,7 @@ code-extension and code-brand fix the contract, and code-registry, code-instance
     - The `BUNDLE` build argument disappears.
     - If build-image has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
   - **Self.** Self deployments keep building from a pinned tag of this repository from before code-split, unless the reference SaaS is made deployable for them first (open question 2).
-- **Dependencies.** code-extension, code-rename, code-brand, code-registry, code-instance and data-tables: the allowlist is empty and the standalone compile job is green.
+- **Dependencies.** code-systems, code-rename, code-brand, code-registry, code-instance and data-tables: the allowlist is empty and the standalone compile job is green.
 - **Parallel with.** repo-assess, the data-tables baselines, track Feldspar.
 - **Eyra prod impact.** The build and release pipeline changes; runtime behaviour must not. Rollout:
   1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests. If build-image has landed, build the one image instead.
@@ -687,7 +691,7 @@ Until 2026-10-16 steps had numbers. Issues, PRs and commits from before then use
 | Step 2b-1 (M1–M4, R) | build-image |
 | Step 2b-2 (D1, P) | ops-prod-image |
 | Step 2c | ops-mica-dev |
-| Step 3 | code-extension |
+| Step 3 | code-systems |
 | Step 3b | code-rename |
 | Step 4 | code-brand |
 | Step 5 | code-registry |
@@ -701,6 +705,12 @@ Until 2026-10-16 steps had numbers. Issues, PRs and commits from before then use
 | F1 | feldspar-protocol |
 | F2 | feldspar-tests |
 | F3 | feldspar-transfer |
+
+One step ID was renamed, on 2026-10-16, before any build work on that step had started. It is the only rename; IDs do not change once work refers to them.
+
+| Old ID | ID |
+|---|---|
+| code-extension | code-systems |
 
 ## Open questions
 
