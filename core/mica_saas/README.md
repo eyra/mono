@@ -251,12 +251,12 @@ config :core, :rate,
 
 ## Deploying on Fly.io
 
-Self runs as a Fly.io app. The reference deployment is
-[nova-mica-dev](https://nova-mica-dev.fly.dev): [`fly.mica-dev.toml`](../fly.mica-dev.toml)
-holds its configuration, and
+Self runs as a Fly.io app. Eyra runs nova-mica-dev, an internal development server whose only
+purpose is to keep this code alive; it is not a service for others or a public demo.
+[`fly.mica-dev.toml`](../fly.mica-dev.toml) holds its configuration, and
 [`fly-deploy-mica-dev.yml`](../../.github/workflows/fly-deploy-mica-dev.yml) deploys every push
-to `develop` and then smoke tests the start page, `/user/signin` and `/.status/health`. Use
-both as a template for your own deployment. Machines stop when idle and start on the next
+to `develop` and then smoke tests the start page, `/user/signin` and `/.status/health`. You can
+use both files as a template for your own deployment. Machines stop when idle and start on the next
 request. For a while, nova-mica-dev also serves as the rehearsal environment for the container
 image build (step `build-image` in `docs/nova-migration/plan.md`).
 
@@ -280,7 +280,7 @@ flyctl deploy --remote-only -c fly.my-self.toml --build-arg VERSION=1.0.0 --buil
 ```
 
 For automatic deploys, create a deploy token with `flyctl tokens create deploy --app my-self` and
-store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for the reference deployment).
+store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for nova-mica-dev).
 
 ### Configuration
 
@@ -327,5 +327,5 @@ Optional:
 | `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
-The reference deployment uses no Eyra secrets or OAuth clients: every integration above that is
+nova-mica-dev uses no Eyra secrets or OAuth clients: every integration above that is
 unset stays disabled.

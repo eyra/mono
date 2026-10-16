@@ -29,8 +29,8 @@ Paths in this document are relative to the repository root and refer to the layo
 | [code-guardrails](#code-guardrails--credentials-guardrails-and-communication) | Guardrails | Plan pointers, briefing, credentials | none | done |
 | [code-cleanup](#code-cleanup--remove-dead-code-and-retire-banking) | Guardrails | Dead code, retire Banking | none | done |
 | [code-layout](#code-layout--early-visible-layout-and-the-boundary-check) | Guardrails | `core/mica`, `core/next`, `core/mica_saas` and the boundary check | code-cleanup | done |
-| [ops-mica-dev](#ops-mica-dev--reference-deployment-nova-mica-dev) | Build and reference deployment | Reference deployment `nova-mica-dev` | code-layout; ideally with build-image | next |
-| [build-image](#build-image--one-image-and-one-runtimeexs) | Build and reference deployment | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
+| [ops-mica-dev](#ops-mica-dev--development-server-nova-mica-dev) | Build and development server | Eyra-internal development server `nova-mica-dev` | code-layout; ideally with build-image | next |
+| [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
 | [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
 | [code-rename](#code-rename--otp-app-rename-core--mica) | Decoupling | OTP app `:core` → `:mica` | code-systems (accessor); ideally build-image | planned |
 | [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
@@ -108,7 +108,7 @@ flowchart LR
 | Phase | Steps | What happens |
 |---|---|---|
 | Guardrails | code-guardrails, code-cleanup, code-layout | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
-| Build and reference deployment | ops-mica-dev, build-image | Run the neutral reference SaaS on `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
+| Build and development server | ops-mica-dev, build-image | Keep the Self code alive on the Eyra-internal development server `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
 | Decoupling | code-systems, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
 | Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
 | Feldspar | feldspar-protocol, feldspar-tests, feldspar-transfer | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
@@ -261,13 +261,13 @@ Details and rationale are in [design.md](./design.md#decisions).
 
 ---
 
-## Phase: Build and reference deployment
+## Phase: Build and development server
 
-### ops-mica-dev — Reference deployment `nova-mica-dev`
+### ops-mica-dev — Development server `nova-mica-dev`
 
-- **Goal.** Keep the self-hosted variant verified at all times, and prove Mica's neutrality with a second live SaaS next to Next.
-- **Scope.** Tracked in the Flux issue [Reference deployment nova-mica-dev on Fly](https://app.basecamp.com/5734045/buckets/35926565/todos/10408245047).
-  - A permanent Fly app `nova-mica-dev` that runs the neutral reference SaaS `mica_saas`. The server name has no "saas", because every running service is a SaaS deployment; the code and the repository keep `mica_saas` and `mica-saas`.
+- **Goal.** An Eyra-internal development server whose only purpose is to keep the `mica_saas` code alive: it builds, deploys and runs on every push to `develop`. It is not exposed to others and not promised to third parties.
+- **Scope.** Tracked in [its Flux issue](https://app.basecamp.com/5734045/buckets/35926565/todos/10408245047).
+  - A permanent Fly app `nova-mica-dev` that runs the Self code from `core/mica_saas`. The server name has no "saas", because every running service is a SaaS deployment; the code and the repository keep `mica_saas` and `mica-saas`.
   - A Fly Postgres database and a storage bucket. Machines stop when idle.
   - Auto-deploy from `develop`, like `eyra-next-dev`.
   - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
@@ -311,7 +311,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
   - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
   - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
-  - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The rehearsal runs on [`nova-mica-dev`](#ops-mica-dev--reference-deployment-nova-mica-dev) (ops-mica-dev), whose Self image shares the Dockerfile, `runtime.exs`, Mica helpers, release scripts and build workflow with the Next image; a temporary Fly app is the fallback if ops-mica-dev is not there yet. It uses the same variable names as production (`DATABASE_URL`, `AWS_S3_BUCKET`, `PUBLIC_S3_BUCKET`). For one window its secrets switch to the production setup, then back: SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest and a rollback to the previous digest. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
+  - **R. Rehearsal on Fly.** There is no AWS test machine anymore. The rehearsal runs on [`nova-mica-dev`](#ops-mica-dev--development-server-nova-mica-dev) (ops-mica-dev), whose Self image shares the Dockerfile, `runtime.exs`, Mica helpers, release scripts and build workflow with the Next image; a temporary Fly app is the fallback if ops-mica-dev is not there yet. It uses the same variable names as production (`DATABASE_URL`, `AWS_S3_BUCKET`, `PUBLIC_S3_BUCKET`). For one window its secrets switch to the production setup, then back: SES selected instead of Mailgun, the Yoda storage default. It covers two machines, rolling deploys by digest and a rollback to the previous digest. A container smoke job in CI (M4) also runs every image the way production will: non-root user, bind mounts, database TLS, two clustered containers.
 - **Constraints.** These also apply to ops-prod-image.
   - One runtime config file serves Fly and AWS alike (Joeri). The platform behaves the same wherever it is deployed; only environment variable values differ. What differs by design is how each platform deploys: how migrations are triggered, where secrets live, volumes, and the proxy in front. One of those affects behaviour: nginx's upload limit (`client_max_body_size` 210 MB) and its rate limit exist only on AWS, not on Fly. Keep that in mind when testing uploads on Fly.
   - The registry is GHCR. The images `ghcr.io/eyra/next` and `ghcr.io/eyra/self` are **private**, because they are part of Eyra's devops. Production pulls with a read-only token from the vault. Fly deploys a byte-for-byte copy in its own registry (`registry.fly.io`), so the digest stays the same.
