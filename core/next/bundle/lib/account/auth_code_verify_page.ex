@@ -84,11 +84,14 @@ defmodule Next.Account.AuthCodeVerifyPage do
             :not_found -> dgettext("eyra-account", "auth.code.expired")
           end
 
+        identify =
+          if creator?, do: ~p"/user/auth/identify", else: ~p"/user/auth/identify/participant"
+
         {:noreply,
          socket
          |> assign(loading: false)
          |> put_flash(:error, message)
-         |> push_navigate(to: ~p"/user/auth/identify")}
+         |> push_navigate(to: ReturnTo.append(identify, return_to))}
     end
   end
 
