@@ -99,7 +99,7 @@ defmodule Systems.Project.Model do
 
     defp tag(item) do
       if template = Project.Assembly.template(item) do
-        Project.ItemTemplates.translate(template)
+        Project.ItemTemplates.name(template)
       else
         nil
       end
