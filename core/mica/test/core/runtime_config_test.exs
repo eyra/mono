@@ -124,21 +124,11 @@ defmodule Core.RuntimeConfigTest do
     end
 
     test "uses SES otherwise" do
-      env = %{
-        "AWS_REGION" => "eu-central-1",
-        "AWS_ACCESS_KEY_ID" => "id",
-        "AWS_SECRET_ACCESS_KEY" => "secret"
-      }
-
-      assert RuntimeConfig.mailer(env, @opts) == [
+      assert RuntimeConfig.mailer(%{}, @opts) == [
                adapter: Bamboo.SesAdapter,
                domain: "app.example.org",
                default_from_email: {"App", "no-reply@mail.example.org"}
              ]
-    end
-
-    test "requires the AWS region and keys for SES" do
-      assert_raise System.EnvError, ~r/AWS_REGION/, fn -> RuntimeConfig.mailer(%{}, @opts) end
     end
   end
 

@@ -24,6 +24,7 @@ defmodule Mix.Tasks.Config.Snapshot do
   @fixtures [
     {"prod", :prod},
     {"prod-all-oban-plugins", :prod},
+    {"prod-migrate", :prod},
     {"staging", :prod},
     {"dev", :prod},
     {"local", :dev}

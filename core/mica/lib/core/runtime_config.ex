@@ -78,7 +78,7 @@ defmodule Core.RuntimeConfig do
 
   @doc """
   Mailer options: Mailgun when `MAILGUN_API_KEY` is set, otherwise Amazon SES
-  (which then requires `AWS_REGION` and the AWS keys).
+  (with the keys and region from `s3/1`).
 
   Options: `:name` and `:domain` of the app, `:mail_domain` to send from and
   `:mailgun_base_uri`.
@@ -89,8 +89,6 @@ defmodule Core.RuntimeConfig do
 
     case env["MAILGUN_API_KEY"] do
       nil ->
-        Enum.each(~w(AWS_REGION AWS_ACCESS_KEY_ID AWS_SECRET_ACCESS_KEY), &fetch!(env, &1))
-
         [
           adapter: Bamboo.SesAdapter,
           domain: Keyword.fetch!(opts, :domain),
