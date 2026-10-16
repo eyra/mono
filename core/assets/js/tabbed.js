@@ -212,9 +212,13 @@ export const TabBarFit = {
     const barRight = wideBar.getBoundingClientRect().right;
     const lastRight = lastTab.getBoundingClientRect().right;
 
+    // Exposes the chosen view, so feature tests know whether tabs sit in the dropdown.
     if (lastRight > barRight + 1) {
       wide.classList.add("hidden");
       narrow.classList.remove("hidden");
+      this.el.dataset.tabFit = "narrow";
+    } else {
+      this.el.dataset.tabFit = "wide";
     }
   },
 };
