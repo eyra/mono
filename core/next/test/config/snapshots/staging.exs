@@ -15,7 +15,6 @@
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
     {Core.Repo,
      [
-       idle_interval: 1000,
        socket_options: [:inet6],
        url:
          "postgres://DB_USER:DB_PASS@eyra-next-staging-db.flycast:5432/eyra_next_staging?sslmode=disable"
@@ -120,6 +119,7 @@
     {:feldspar_data_donation, [path: "/app/data/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "Next [staging]"},
+    {:oban_unknown_plugins, []},
     {:paper,
      [
        import_batch_size: 100,

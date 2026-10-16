@@ -27,7 +27,7 @@
     {CoreWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
-       http: [port: 8080],
+       http: [ip: {0, 0, 0, 0}, port: 8080],
        secret_key_base: "SECRET_KEY_BASE",
        server: true,
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
@@ -111,6 +111,7 @@
     {:feldspar_data_donation, [path: "/home/next/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "APP_NAME"},
+    {:oban_unknown_plugins, ["job_data_cleanup"]},
     {:paper,
      [
        import_batch_size: 100,

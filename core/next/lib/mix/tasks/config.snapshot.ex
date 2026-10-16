@@ -20,29 +20,28 @@ defmodule Mix.Tasks.Config.Snapshot do
 
   @dir "next/test/config"
 
-  # {snapshot name, fixture, config env, runtime file}
+  # {fixture and snapshot name, config env}
   @fixtures [
-    {"prod", "prod", :prod, "config/runtime.aws.exs"},
-    {"prod-all-oban-plugins", "prod-all-oban-plugins", :prod, "config/runtime.aws.exs"},
-    {"staging", "staging", :prod, "config/runtime.fly.exs"},
-    {"dev", "dev", :prod, "config/runtime.fly.exs"},
-    {"local", "local", :dev, "config/runtime.dev.exs"}
+    {"prod", :prod},
+    {"prod-all-oban-plugins", :prod},
+    {"staging", :prod},
+    {"dev", :prod},
+    {"local", :dev}
   ]
 
   def fixtures do
-    Enum.map(@fixtures, fn {name, fixture, config_env, runtime} ->
+    Enum.map(@fixtures, fn {name, config_env} ->
       %{
         name: name,
-        env_file: Path.join([@dir, "env", "#{fixture}.env"]),
+        env_file: Path.join([@dir, "env", "#{name}.env"]),
         snapshot: Path.join([@dir, "snapshots", "#{name}.exs"]),
-        config_env: config_env,
-        runtime: runtime
+        config_env: config_env
       }
     end)
   end
 
-  def render(%{env_file: env_file, config_env: config_env, runtime: runtime}) do
-    runtime
+  def render(%{env_file: env_file, config_env: config_env}) do
+    "config/runtime.exs"
     |> Snapshot.evaluate(Snapshot.read_env_file(env_file), config_env)
     |> Snapshot.render()
   end

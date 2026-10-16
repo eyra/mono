@@ -28,7 +28,6 @@ jobs:
           flyctl deploy --remote-only -c fly.staging.toml \
             --app eyra-next-staging \
             --build-arg VERSION=${{ env.VERSION }} \
-            --build-arg PLATFORM=fly \
             --build-arg GIT_COMMIT=${{ github.sha }}
         working-directory: core
         env:

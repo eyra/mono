@@ -27,7 +27,7 @@
     {CoreWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
-       http: [port: 8080],
+       http: [ip: {0, 0, 0, 0}, port: 8080],
        secret_key_base: "SECRET_KEY_BASE",
        server: true,
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
@@ -39,17 +39,18 @@
        plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
          {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
-         {Oban.Plugins.Cron, [crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]]},
          {Oban.Plugins.Cron,
           [
             crontab: [
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
-               [queue: :storage_delivery_local_nonode@nohost]}
+               [queue: :storage_delivery_local_nonode@nohost]},
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker}
             ]
-          ]},
-         {Oban.Plugins.Cron, [crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]]},
-         {Oban.Plugins.Cron, [crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]]},
-         {Oban.Plugins.Cron, [crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]]}
+          ]}
        ],
        queues: [
          default: 5,
@@ -122,6 +123,7 @@
     {:feldspar_data_donation, [path: "/home/next/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "APP_NAME"},
+    {:oban_unknown_plugins, []},
     {:paper,
      [
        import_batch_size: 100,
