@@ -36,7 +36,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
 
     # Step 2: Create project
     researcher
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
 
     researcher
@@ -55,8 +55,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     researcher
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='assignment-tab-participants']"))
-    |> click(Query.css("[data-testid='assignment-tab-participants']"))
+    |> click_tab("assignment-tab-participants")
     |> assert_has(Query.css("[data-testid='copy-affiliate-url-button']"))
 
     affiliate_url =
@@ -82,10 +81,11 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> visit("/project")
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
+    |> assert_path_changed_from("/project")
 
-    # Wait for project node page to be fully connected
+    # Show more is a JS command (`phx-click={JS.show(...)}`)
     researcher
-    |> assert_has(Query.css("[data-testid^='show_more__action__card_']", count: :any))
+    |> assert_connected("[data-testid^='show_more__action__card_']", count: :any)
 
     # Use retry_stale to handle DOM morphing between find and click
     retry_stale do

@@ -270,7 +270,8 @@ defmodule Frameworks.E2E.Controller do
     panl_pool = Pool.Assembly.get_or_create_panl()
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    promotion = Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study"})
+    promotion =
+      Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study", director: :advert})
 
     submission =
       Core.Factories.insert!(:pool_submission, %{
