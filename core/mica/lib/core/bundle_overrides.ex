@@ -1,16 +1,14 @@
 defmodule Core.BundleOverrides do
   defmacro __using__(_opts \\ []) do
-    bundle = Application.fetch_env!(:core, :bundle)
-    bundle_dir = Application.fetch_env!(:core, :bundle_dir)
+    bundle = Core.Env.fetch!(:bundle)
+    bundle_dir = Core.Env.fetch!(:bundle_dir)
     bundle_info = Mix.Utils.last_modified_and_size("#{bundle_dir}/bundle.ex")
 
     quote bind_quoted: [bundle: bundle, bundle_info: bundle_info] do
       @bundle bundle
       @bundle_info bundle_info
       def __mix_recompile__? do
-        Mix.Utils.last_modified_and_size(
-          "#{Application.fetch_env!(:core, :bundle_dir)}/bundle.ex"
-        ) !=
+        Mix.Utils.last_modified_and_size("#{Core.Env.fetch!(:bundle_dir)}/bundle.ex") !=
           @bundle_info
       end
     end
@@ -36,7 +34,7 @@ defmodule Core.BundleOverrides do
   end
 
   defp bundle_module do
-    bundle = Application.fetch_env!(:core, :bundle)
+    bundle = Core.Env.fetch!(:bundle)
     bundle_module_string = bundle |> Atom.to_string() |> String.capitalize()
 
     "Elixir.#{bundle_module_string}.Bundle"

@@ -1939,7 +1939,7 @@ defmodule Systems.Fund.Public do
   end
 
   defp generate_invoice_id do
-    env_id = Application.get_env(:core, :invoice_environment, "DEV")
+    env_id = Core.Env.get(:invoice_environment, "DEV")
     %{rows: [[number]]} = Repo.query!("SELECT nextval('invoice_number_seq')")
     padded = number |> Integer.to_string() |> String.pad_leading(4, "0")
     "NEXT-#{env_id}-#{padded}"
@@ -1947,8 +1947,8 @@ defmodule Systems.Fund.Public do
 
   defp return_url(%Assignment.Model{id: assignment_id}) do
     base_url =
-      Application.get_env(:core, :payment_webhook_base_url) ||
-        Application.fetch_env!(:core, :base_url)
+      Core.Env.get(:payment_webhook_base_url) ||
+        Core.Env.fetch!(:base_url)
 
     "#{base_url}/assignment/#{assignment_id}/content"
   end

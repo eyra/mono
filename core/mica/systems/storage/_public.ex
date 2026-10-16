@@ -196,7 +196,7 @@ defmodule Systems.Storage.Public do
   end
 
   defp temp_file_store do
-    Application.get_env(:core, :temp_file_store)[:module]
+    Core.Env.get(:temp_file_store)[:module]
   end
 
   @doc """

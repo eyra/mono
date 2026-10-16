@@ -119,7 +119,7 @@ defmodule Systems.Payment.Reconciliation do
   end
 
   defp backoff_ms(attempt) do
-    base = Application.get_env(:core, :reconciliation, [])[:backoff_ms] || 200
+    base = Core.Env.get(:reconciliation, [])[:backoff_ms] || 200
     base * attempt
   end
 

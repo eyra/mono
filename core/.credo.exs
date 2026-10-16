@@ -13,7 +13,8 @@
       plugins: [],
       requires: [
         "./custom_credo_checks/no_repo_transaction.ex",
-        "./custom_credo_checks/mica_boundary.ex"
+        "./custom_credo_checks/mica_boundary.ex",
+        "./custom_credo_checks/core_env_access.ex"
       ],
       strict: false,
       parse_timeout: 5000,
@@ -24,6 +25,7 @@
         #
         {Credo.Check.Warning.NoRepoTransaction, []},
         {Credo.Check.Warning.MicaBoundary, []},
+        {Credo.Check.Warning.CoreEnvAccess, []},
 
         #
         ## Consistency Checks

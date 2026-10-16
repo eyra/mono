@@ -15,7 +15,8 @@ defmodule Systems.Account.TermsAndPrivacyView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  @policy_urls Application.compile_env(:core, :policy_urls)
+  require Core.Env
+  @policy_urls Core.Env.compile_env(:policy_urls)
 
   defp policy_url(key), do: @policy_urls[key]
 

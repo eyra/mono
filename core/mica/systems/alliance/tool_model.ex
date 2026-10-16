@@ -14,7 +14,8 @@ defmodule Systems.Alliance.ToolModel do
   alias Systems.Workflow
   alias Systems.Alliance.VariableParser
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  require Core.Env
+  @tool_directors Core.Env.compile_env(:tool_directors)
 
   schema "alliance_tools" do
     field(:url, :string)

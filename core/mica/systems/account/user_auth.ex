@@ -240,7 +240,7 @@ defmodule Systems.Account.UserAuth do
   defp path(key), do: auth_config(key)
 
   defp auth_config(key) when is_atom(key) do
-    Application.get_env(:core, Systems.Account.UserAuth, [])
+    Core.Env.get(Systems.Account.UserAuth, [])
     |> Keyword.get(key)
   end
 end

@@ -96,7 +96,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
   defp base_url, do: config(:base_url, "https://api.usercheck.com")
 
   defp config(key, default \\ nil) do
-    Application.get_env(:core, Frameworks.UserCheck, [])
+    Core.Env.get(Frameworks.UserCheck, [])
     |> Keyword.get(key, default)
   end
 end

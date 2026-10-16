@@ -114,10 +114,10 @@ defmodule Systems.Payment.Provider.OPP.HTTP do
   defp strip_query(path), do: hd(String.split(path, "?"))
 
   defp base_url do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:base_url)
+    Core.Env.fetch!(Systems.Payment.Provider.OPP) |> Keyword.fetch!(:base_url)
   end
 
   defp api_key do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP) |> Keyword.fetch!(:api_key)
+    Core.Env.fetch!(Systems.Payment.Provider.OPP) |> Keyword.fetch!(:api_key)
   end
 end

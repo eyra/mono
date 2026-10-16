@@ -17,7 +17,7 @@ defmodule Frameworks.UserState.Storage do
   Returns the configured storage backend module.
   """
   def backend do
-    Application.get_env(:core, :user_state_storage, Frameworks.UserState.LocalStorage)
+    Core.Env.get(:user_state_storage, Frameworks.UserState.LocalStorage)
   end
 
   @doc """

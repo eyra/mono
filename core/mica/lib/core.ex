@@ -10,7 +10,7 @@ defmodule Core do
   def auth do
     quote do
       def auth_module() do
-        Application.get_env(:core, :greenlight_auth_module)
+        Core.Env.get(:greenlight_auth_module)
       end
 
       def print_auth_roles(term) do

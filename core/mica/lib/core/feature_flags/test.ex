@@ -2,10 +2,10 @@ defmodule Core.FeatureFlags.Test do
   defmacro __using__(_opts \\ []) do
     quote do
       setup do
-        features = Application.get_env(:core, :features, [])
+        features = Core.Env.get(:features, [])
 
         on_exit(fn ->
-          Application.put_env(:core, :features, features)
+          Core.Env.put(:features, features)
         end)
       end
 
@@ -14,10 +14,9 @@ defmodule Core.FeatureFlags.Test do
   end
 
   def set_feature_flag(feature, flag) do
-    current_env = Application.get_env(:core, :features, [])
+    current_env = Core.Env.get(:features, [])
 
-    Application.put_env(
-      :core,
+    Core.Env.put(
       :features,
       Keyword.put(current_env, feature, flag)
     )

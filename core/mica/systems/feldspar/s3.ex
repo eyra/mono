@@ -75,7 +75,7 @@ defmodule Systems.Feldspar.S3 do
   end
 
   defp s3_settings do
-    Application.fetch_env!(:core, :feldspar)
+    Core.Env.fetch!(:feldspar)
   end
 
   defp backend do

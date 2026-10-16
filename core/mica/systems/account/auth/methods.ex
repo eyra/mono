@@ -2,7 +2,7 @@ defmodule Systems.Account.Auth.Methods do
   alias Frameworks.Utility
 
   def methods do
-    Application.fetch_env!(:core, :account)
+    Core.Env.fetch!(:account)
     |> Keyword.fetch!(:auth_methods)
   end
 

@@ -258,6 +258,6 @@ defmodule Systems.Affiliate.Public do
   end
 
   defp get_base_url do
-    Application.get_env(:core, :base_url)
+    Core.Env.get(:base_url)
   end
 end
