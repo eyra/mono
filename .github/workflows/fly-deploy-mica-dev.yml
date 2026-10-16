@@ -105,17 +105,24 @@ jobs:
           exit $status
 
       # The E2E API hands out a service password and confirms any account; it
-      # must be off (403) or not routed (404) on this public app.
+      # must be off (403) or not routed (404) on this public app. An open
+      # activate_user also answers 404 for an unknown email ("User not
+      # found"), so a 404 only counts when that message is absent.
       - name: Check E2E API is closed
         run: |
           status=0
           for path in /api/e2e/bootstrap /api/e2e/activate_user; do
-            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 \
-              -X POST -H 'content-type: application/json' -d '{}' "$APP_URL$path")
+            body=$(curl -s -w '\n%{http_code}' --max-time 20 -X POST \
+              -H 'content-type: application/json' \
+              -d '{"email":"smoke-nobody@example.org"}' "$APP_URL$path")
+            code=$(echo "$body" | tail -n1)
             echo "$path -> $code"
-            if [ "$code" != "403" ] && [ "$code" != "404" ]; then
-              echo "::error::$APP_URL$path returned $code, expected 403 or 404"
-              status=1
+            if [ "$code" = "403" ]; then
+              continue
+            elif [ "$code" = "404" ] && ! echo "$body" | grep -q "User not found"; then
+              continue
             fi
+            echo "::error::$APP_URL$path is open (HTTP $code)"
+            status=1
           done
           exit $status
