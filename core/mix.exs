@@ -22,7 +22,7 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "priv/static/images/icons/next.svg",
+        logo: "priv/static/images/logos/products/next.svg",
         extras: [
           {"mica_saas/README.md", filename: "selfhosting", title: "Self hosting"},
           "../README.md",
