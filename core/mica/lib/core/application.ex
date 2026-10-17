@@ -12,6 +12,8 @@ defmodule Core.Application do
 
     Core.AppSignal.TelemetryHandler.attach()
 
+    Core.RuntimeConfig.log_choices()
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
