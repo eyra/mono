@@ -302,8 +302,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   # Read at call time: runtime.*.exs overrides this from STORAGE_UPLOAD_MAX_SIZE.
   defp max_asset_bytes do
-    :core
-    |> Application.fetch_env!(CoreWeb.FileUploader)
+    Core.Env.fetch!(CoreWeb.FileUploader)
     |> Keyword.fetch!(:max_file_size)
   end
 

@@ -53,7 +53,7 @@ defmodule CoreWeb.Gettext do
   end
 
   defp fallback_locale(locale) do
-    case Application.get_env(:core, :gettext_fallback_locale) do
+    case Core.Env.get(:gettext_fallback_locale) do
       ^locale -> nil
       "" -> nil
       fallback -> fallback

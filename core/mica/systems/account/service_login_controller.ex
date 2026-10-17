@@ -39,7 +39,7 @@ defmodule Systems.Account.ServiceLoginController do
   end
 
   defp verify_service_key(conn) do
-    expected_key = Application.get_env(:core, :service_login, [])[:key]
+    expected_key = Core.Env.get(:service_login, [])[:key]
     provided_key = get_req_header(conn, "x-service-key") |> List.first()
 
     cond do

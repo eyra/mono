@@ -12,7 +12,7 @@ defmodule Systems.Graphite.Gen do
   number.
   """
   def create_submissions(leaderboard_id, amount, prefix) do
-    Application.ensure_all_started(:core)
+    Application.ensure_all_started(Core.Env.app())
 
     leaderboard = Graphite.Public.get_leaderboard!(leaderboard_id, [{:tool, :auth_node}])
 
@@ -80,7 +80,7 @@ defmodule Systems.Graphite.Gen do
   with `prefix`.
   """
   def delete_submissions(prefix) do
-    Application.ensure_all_started(:core)
+    Application.ensure_all_started(Core.Env.app())
 
     submissions_to_delete = Graphite.Queries.submissions_by_prefix(:description, prefix)
     scores_to_delete = Graphite.Queries.scores_by_submissions(submissions_to_delete)

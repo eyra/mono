@@ -43,6 +43,6 @@ defmodule Core.Seeds do
   end
 
   defp deploy_env do
-    Application.fetch_env!(:core, :deploy_env)
+    Core.Env.fetch!(:deploy_env)
   end
 end

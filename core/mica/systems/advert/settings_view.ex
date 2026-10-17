@@ -42,7 +42,7 @@ defmodule Systems.Advert.SettingsView do
 
   defp assign_invite_url(%{assigns: %{advert: %{promotion_id: promotion_id}}} = socket) do
     path = ~p"/promotion/#{promotion_id}"
-    url = (Application.get_env(:core, :base_url) || "") <> path
+    url = (Core.Env.get(:base_url) || "") <> path
 
     assign(socket,
       invite_title: dgettext("eyra-advert", "settings.invite.title"),

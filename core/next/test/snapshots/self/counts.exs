@@ -3,6 +3,7 @@
   boundary_allowlist: 37,
   no_route_path_warnings: 1,
   router_compile_connected: [
+    "mica/lib/core/saas.ex",
     "mica/lib/core_web.ex",
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",

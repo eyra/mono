@@ -253,7 +253,7 @@ defmodule CoreWeb do
       alias Frameworks.Utility.ViewModelBuilder
 
       def version do
-        unquote(Application.fetch_env!(:core, :version))
+        unquote(Core.Env.fetch!(:version))
       end
     end
   end

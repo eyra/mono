@@ -29,7 +29,7 @@ defmodule Systems.Payment.Webhook do
 
   @spec handler(String.t()) :: {:ok, module()} | {:error, :unknown_provider}
   def handler(provider_name) do
-    providers = Application.fetch_env!(:core, :payment_providers)
+    providers = Core.Env.fetch!(:payment_providers)
 
     case Map.fetch(providers, provider_name) do
       {:ok, base_module} -> {:ok, Module.concat(base_module, Webhook)}

@@ -41,8 +41,6 @@ RUN mix deps.get
 
 COPY . .
 RUN scripts/build-frontend
-# Fixed in the release as APPSIGNAL_REVISION (rel/env.sh.eex).
-ARG GIT_COMMIT
 RUN scripts/build-release
 
 FROM debian:bookworm-slim

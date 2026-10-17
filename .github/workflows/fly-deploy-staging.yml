@@ -19,6 +19,9 @@ jobs:
         run: |
           VERSION="${{ github.ref_name }}_$(date +%F)_${{ github.run_number }}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # AppSignal revision, set per deploy (never baked into the image):
+          # milestone-<N>_<short sha> for a milestone/<N> branch.
+          echo "APPSIGNAL_REVISION=${GITHUB_REF_NAME//\//-}_${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Setup Fly CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
@@ -27,6 +30,7 @@ jobs:
         run: |
           flyctl deploy --remote-only -c fly.staging.toml \
             --app eyra-next-staging \
+            --env APPSIGNAL_REVISION=${{ env.APPSIGNAL_REVISION }} \
             --build-arg VERSION=${{ env.VERSION }} \
             --build-arg GIT_COMMIT=${{ github.sha }}
         working-directory: core

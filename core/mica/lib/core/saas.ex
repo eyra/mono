@@ -44,7 +44,9 @@ defmodule Core.SaaS do
     end
   end
 
-  @saas Application.compile_env(:core, :saas) ||
+  require Core.Env
+
+  @saas Core.Env.compile_env(:saas) ||
           raise(
             "config :core, saas: is not set; the SaaS config (next/config/config.exs, " <>
               "mica_saas/config/config.exs) names the SaaS module"
@@ -55,7 +57,7 @@ defmodule Core.SaaS do
 
   # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
   # changed the value; this recompiles Core.SaaS and so the router and authorization.
-  def __mix_recompile__?, do: Application.get_env(:core, :saas) != @saas
+  def __mix_recompile__?, do: Core.Env.get(:saas) != @saas
 
   @doc "The configured SaaS module."
   def module, do: @saas

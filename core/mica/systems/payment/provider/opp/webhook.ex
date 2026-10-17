@@ -29,7 +29,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp verify_signature(conn, body) do
-    if Application.get_env(:core, :skip_webhook_verification, false) do
+    if Core.Env.get(:skip_webhook_verification, false) do
       Logger.warning("[OPP.Webhook] Skipping signature verification (dev mode)")
       :ok
     else
@@ -213,7 +213,7 @@ defmodule Systems.Payment.Provider.OPP.Webhook do
   end
 
   defp notification_secret do
-    Application.fetch_env!(:core, Systems.Payment.Provider.OPP)
+    Core.Env.fetch!(Systems.Payment.Provider.OPP)
     |> Keyword.fetch!(:notification_secret)
   end
 end

@@ -2,6 +2,7 @@ defmodule CoreWeb.Router do
   use CoreWeb, :router
 
   require Core.SaaS
+  require Core.Env
   require Systems.Account.Auth.Surfconext
   require Systems.Account.Auth.Centerdata
   require CoreWeb.Routes
@@ -32,7 +33,7 @@ defmodule CoreWeb.Router do
     get("/uploads/:filename", UploadedFileController, :get)
   end
 
-  if Application.compile_env(:core, :enable_e2e_support, false) do
+  if Core.Env.compile_env(:enable_e2e_support, false) do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
 end
