@@ -49,6 +49,9 @@ defmodule Systems.Account.PageBuilder do
     )
   end
 
+  @doc "Keys of all account tabs in display order, before visibility filtering."
+  def tab_keys, do: Enum.map(@tabs, & &1.key())
+
   def tab_keys(user) do
     visible_tabs(user)
     |> Enum.map(& &1.key())

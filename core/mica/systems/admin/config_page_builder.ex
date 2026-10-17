@@ -8,6 +8,12 @@ defmodule Systems.Admin.ConfigPageBuilder do
   alias Systems.Org
   alias Systems.Pool
 
+  @admin_tabs [:system, :account, :org, :actions, :client_activity]
+  @org_admin_tabs [:org]
+
+  @doc "Tab ids in display order, for system admins and for org admins."
+  def tab_ids, do: %{admin: @admin_tabs, org_admin: @org_admin_tabs}
+
   def view_model(%{id: :singleton}, %{current_user: user} = assigns) do
     locale = Map.get(assigns, :locale, :en)
     is_admin? = Admin.Public.admin?(user)
@@ -45,15 +51,14 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   # System admins see all tabs
   defp create_tabs(%{is_admin?: true} = assigns) do
-    [:system, :account, :org, :actions, :client_activity]
-    |> Enum.map(&create_admin_tab(&1, assigns))
+    Enum.map(@admin_tabs, &create_admin_tab(&1, assigns))
   end
 
   # Org admins see group tabs (e.g., Organisations)
   # Currently only Organisations group exists for non-admins
   defp create_tabs(%{governable_orgs: orgs} = assigns) when length(orgs) > 0 do
     # Show the Organisations group tab (same as admin :org tab)
-    [create_admin_tab(:org, assigns)]
+    Enum.map(@org_admin_tabs, &create_admin_tab(&1, assigns))
   end
 
   # No access - return empty tabs

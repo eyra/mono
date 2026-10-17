@@ -8,7 +8,7 @@ org = 'eyra'
 [build]
   dockerfile = 'Dockerfile'
   [build.args]
-    # VERSION and PLATFORM are passed from GitHub Actions workflow
+    # VERSION and GIT_COMMIT are passed from GitHub Actions workflow
     BUNDLE = 'next'
     FORCE_SSL = 'false'
     # Compile in E2E support facilities (e.g. the local payment simulator) so
