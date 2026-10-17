@@ -36,7 +36,7 @@ defmodule Systems.Storage.BuiltIn.Backend do
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp settings do
-    Application.fetch_env!(:core, Systems.Storage.BuiltIn)
+    Core.Env.fetch!(Systems.Storage.BuiltIn)
   end
 
   defp special do

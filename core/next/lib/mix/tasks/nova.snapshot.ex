@@ -86,7 +86,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
 
   @doc "The SaaS the current build is for. Raises when config and `BUNDLE` disagree."
   def saas! do
-    configured = Application.fetch_env!(:core, :bundle)
+    configured = Core.Env.fetch!(:bundle)
     requested = requested_bundle()
 
     if configured != requested do

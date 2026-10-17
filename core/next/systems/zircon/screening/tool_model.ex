@@ -9,7 +9,8 @@ defmodule Systems.Zircon.Screening.ToolModel do
   alias Systems.Zircon.Screening
   alias Systems.Annotation
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  require Core.Env
+  @tool_directors Core.Env.compile_env(:tool_directors)
 
   schema "zircon_screening_tool" do
     field(:director, Ecto.Enum, values: @tool_directors)

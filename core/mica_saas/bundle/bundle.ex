@@ -1,6 +1,6 @@
 defmodule Self.Bundle do
   defp include?() do
-    Application.fetch_env!(:core, :bundle) == :self
+    Core.Env.fetch!(:bundle) == :self
   end
 
   def routes do

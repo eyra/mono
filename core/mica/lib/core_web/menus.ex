@@ -13,6 +13,6 @@ defmodule CoreWeb.Menus do
   end
 
   def menu_builder_module(menu_builder) do
-    Application.fetch_env!(:core, menu_builder)
+    Core.Env.fetch!(menu_builder)
   end
 end

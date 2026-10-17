@@ -81,7 +81,7 @@ defmodule Systems.Admin.Public do
   def admin?(_), do: false
 
   defp email_patterns do
-    Application.get_env(:core, :admins, [])
+    Core.Env.get(:admins, [])
   end
 
   # Client activity

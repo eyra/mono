@@ -18,7 +18,7 @@ defmodule CoreWeb.FileUploader do
       throw(:invalid_filename)
     end
 
-    root = Application.get_env(:core, :upload_path, "priv/static/uploads")
+    root = Core.Env.get(:upload_path, "priv/static/uploads")
     Path.join(root, filename)
   end
 
@@ -45,7 +45,7 @@ defmodule CoreWeb.FileUploader do
       end
 
       def get_max_file_size() do
-        config = Application.fetch_env!(:core, CoreWeb.FileUploader)
+        config = Core.Env.fetch!(CoreWeb.FileUploader)
         Keyword.fetch!(config, :max_file_size)
       end
 

@@ -4,10 +4,12 @@
   no_route_path_warnings: 0,
   router_compile_connected: [
     "mica/frameworks/pixel/flash.ex",
+    "mica/lib/core/bundle_overrides.ex",
     "mica/lib/core/persister.ex",
     "mica/lib/core_web.ex",
     "mica/lib/core_web/cldr.ex",
     "mica/lib/core_web/controllers/layouts.ex",
+    "mica/lib/core_web/gettext.ex",
     "mica/lib/core_web/live/hook/locale.ex",
     "mica/lib/core_web/live/hook/remote_ip.ex",
     "mica/lib/core_web/resource_exists_plug.ex",

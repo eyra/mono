@@ -36,7 +36,7 @@ defmodule Core.FeatureFlags do
   end
 
   def conf_enabled?(feature_id) do
-    Application.get_env(:core, :features, [])
+    Core.Env.get(:features, [])
     |> Keyword.get(feature_id, true)
   end
 end

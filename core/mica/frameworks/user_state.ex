@@ -86,7 +86,7 @@ defmodule Frameworks.UserState do
   Returns the domain for storage keys.
   """
   def domain do
-    Application.get_env(:core, :domain, "localhost")
+    Core.Env.get(:domain, "localhost")
   end
 
   @doc """

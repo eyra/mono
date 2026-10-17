@@ -60,6 +60,6 @@ defmodule Frameworks.Signal.Private do
   end
 
   defp config do
-    Application.get_env(:core, :signal)
+    Core.Env.get(:signal)
   end
 end

@@ -58,7 +58,7 @@ defmodule Systems.Content.S3 do
   end
 
   defp s3_settings do
-    Application.fetch_env!(:core, :content)
+    Core.Env.fetch!(:content)
   end
 
   defp backend do
@@ -100,7 +100,7 @@ defmodule Systems.Content.S3 do
   end
 
   defp get_stream_chunk_size do
-    Application.fetch_env!(:core, :paper)
+    Core.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

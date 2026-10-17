@@ -10,7 +10,7 @@ defmodule Systems.Email.Public do
   def base_email do
     new_email()
     |> from(
-      Application.fetch_env!(:core, Systems.Email.Mailer)
+      Core.Env.fetch!(Systems.Email.Mailer)
       |> Keyword.fetch!(:default_from_email)
     )
     |> put_layout({Systems.Email.EmailLayoutHTML, :email})

@@ -76,7 +76,7 @@ defmodule Core.ImageCatalog.Local do
   end
 
   defp root_dir do
-    Application.app_dir(:core, "priv/static/image_catalog")
+    Application.app_dir(Core.Env.app(), "priv/static/image_catalog")
   end
 
   defp list_files do

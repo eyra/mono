@@ -168,7 +168,7 @@ defmodule Systems.Assignment.Private do
   end
 
   defp config() do
-    Application.get_env(:core, :assignment)
+    Core.Env.get(:assignment)
   end
 
   def connector_popup_module(:storage), do: Assignment.ConnectorPopupStorage

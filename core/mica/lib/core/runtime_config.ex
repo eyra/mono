@@ -155,8 +155,8 @@ defmodule Core.RuntimeConfig do
   adapter, S3 endpoint and cluster size. Warns about unknown Oban plugin names.
   """
   def log_choices do
-    repo = Application.get_env(:core, Core.Repo, [])
-    mailer = Application.get_env(:core, Systems.Email.Mailer, [])
+    repo = Core.Env.get(Core.Repo, [])
+    mailer = Core.Env.get(Systems.Email.Mailer, [])
     s3 = Application.get_env(:ex_aws, :s3, [])
 
     Logger.info(
@@ -164,10 +164,10 @@ defmodule Core.RuntimeConfig do
         "db_tls=#{if repo[:ssl], do: "on", else: "off"} " <>
         "mail=#{inspect(mailer[:adapter])} " <>
         "s3_endpoint=#{if s3[:host], do: "custom", else: "default"} " <>
-        "cluster_hosts=#{length(Application.get_env(:core, :dist_hosts, []))}"
+        "cluster_hosts=#{length(Core.Env.get(:dist_hosts, []))}"
     )
 
-    case Application.get_env(:core, :oban_unknown_plugins, []) do
+    case Core.Env.get(:oban_unknown_plugins, []) do
       [] ->
         :ok
 

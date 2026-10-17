@@ -333,7 +333,7 @@ defmodule Frameworks.E2E.Controller do
 
   defp create_pdf_assignment(researcher) do
     pdf_ref =
-      :core
+      Core.Env.app()
       |> Application.app_dir("priv/e2e/#{@pdf_filename}")
       |> Content.Public.store(@pdf_filename)
       |> Content.Public.get_public_url()
