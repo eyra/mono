@@ -29,6 +29,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     |> sign_in(user, password)
     |> visit("/user/onboarding?return_to=/pool/panl/join")
     |> assert_has(Query.css("[data-testid='profile-view']"))
+    |> assert_connected("[phx-click='continue']")
     |> click(Query.css("[phx-click='continue']"))
     |> assert_has(Query.css("[data-testid='pool-join-consent-view']"))
     |> click(Query.css("[data-testid='pool-join-consent-accept-button']"))
@@ -68,10 +69,10 @@ defmodule CoreWeb.Features.OnboardingTest do
     session
     |> sign_in(user, password)
     |> visit("/user/onboarding")
-    |> assert_has(Query.css("[data-testid='profile-view']"))
     # For non-PANL confirmed user, profile is the only step
-    # Clicking continue should redirect to home — `body` polls.
+    |> assert_has(Query.css("[data-testid='profile-view']"))
+    |> assert_connected("[phx-click='continue']")
     |> click(Query.css("[phx-click='continue']"))
-    |> assert_has(Query.css("body"))
+    |> assert_has(Query.css("[data-testid='home-logged-in-view']"))
   end
 end
