@@ -150,6 +150,29 @@ defmodule CoreWeb.FeatureCase do
   end
 
   @doc """
+  Opens the assignment's affiliate link as participant `participant_id`, the
+  way panel participants enter a study. The affiliate controller signs them in
+  and redirects to the assignment's crew page.
+
+  Affiliate users can't be signed in through `sign_in/3`: `Systems.Account.Plug`
+  signs them off on any page outside their assignment, including the landing
+  page after sign-in.
+  """
+  def visit_affiliate_link(session, assignment, participant_id) do
+    import Wallaby.Browser
+    import Wallaby.Query
+
+    %URI{path: path} =
+      assignment
+      |> Systems.Affiliate.Public.url_for_resource()
+      |> URI.parse()
+
+    session
+    |> visit("#{path}?p=#{participant_id}")
+    |> assert_has(css("[id='crew_page']"))
+  end
+
+  @doc """
   Creates a confirmed user and signs them in.
   Returns the session and the user.
   """

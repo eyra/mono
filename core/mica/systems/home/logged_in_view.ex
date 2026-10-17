@@ -17,7 +17,7 @@ defmodule Systems.Home.LoggedInView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="home-logged-in-view">
       <div class="px-6 lg:px-8 py-6 lg:py-8">
         <div class="space-y-6">
           <%= for {name, _} <- @blocks do %>

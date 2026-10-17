@@ -220,21 +220,13 @@ defmodule Systems.Assignment.Factories do
         existing_member -> existing_member |> Core.Repo.preload([:user])
       end
 
-    # Build task identifier based on workflow item
-    identifier = [
-      "assignment",
-      "#{assignment.id}",
-      "item",
-      "#{item.id}",
-      "member",
-      "#{member.id}"
-    ]
+    identifier = Systems.Assignment.Private.task_identifier(assignment, item, member)
 
     # Create completed task using Factory helper
     Systems.Crew.Factories.create_task(crew, member, identifier, status: :completed)
   end
 
-  def create_questionnaire_assignment do
+  def create_questionnaire_assignment(attrs \\ %{}) do
     auth_node = Factories.insert!(:auth_node)
     tool_auth_node = Factories.insert!(:auth_node, %{parent: auth_node})
 
@@ -246,15 +238,21 @@ defmodule Systems.Assignment.Factories do
     crew = Factories.insert!(:crew)
 
     assignment =
-      Factories.insert!(:assignment, %{
-        info: info,
-        consent_agreement: nil,
-        workflow: workflow,
-        crew: crew,
-        auth_node: auth_node,
-        special: :questionnaire,
-        status: :online
-      })
+      Factories.insert!(
+        :assignment,
+        Map.merge(
+          %{
+            info: info,
+            consent_agreement: nil,
+            workflow: workflow,
+            crew: crew,
+            auth_node: auth_node,
+            special: :questionnaire,
+            status: :online
+          },
+          attrs
+        )
+      )
 
     assignment |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
