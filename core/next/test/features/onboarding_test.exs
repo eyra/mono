@@ -73,6 +73,6 @@ defmodule CoreWeb.Features.OnboardingTest do
     |> assert_has(Query.css("[data-testid='profile-view']"))
     |> assert_connected("[phx-click='continue']")
     |> click(Query.css("[phx-click='continue']"))
-    |> assert_path_changed_from("/user/onboarding")
+    |> assert_has(Query.css("[data-testid='home-logged-in-view']"))
   end
 end
