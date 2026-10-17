@@ -18,7 +18,7 @@ defmodule Frameworks.UserCheck do
       config :core, Frameworks.UserCheck,
         client: Frameworks.UserCheck.MockClient
 
-      # runtime.aws.exs / runtime.fly.exs
+      # runtime.exs
       config :core, Frameworks.UserCheck,
         api_key: System.get_env("USERCHECK_API_KEY")
 

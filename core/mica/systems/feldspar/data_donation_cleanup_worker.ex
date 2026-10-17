@@ -8,8 +8,8 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   Data donation files live on each node's local filesystem, but Oban's Cron plugin only
   inserts jobs on the leader node. A job without a `"node"` arg (from cron or the admin
   Actions tab) therefore fans out: it inserts one job per connected node into that node's
-  local storage delivery queue. A job with a `"node"` arg cleans the local folder when it
-  runs on that node, and is cancelled on any other node. A node that is disconnected
+  local storage delivery queue. The `"node"` arg only selects that queue, so a node job
+  always runs on its own node and cleans its local folder. A node that is disconnected
   during the fan-out is cleaned on the next run.
   """
   use Oban.Worker,
@@ -25,17 +25,7 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   @unique_period_seconds 50 * 60
 
   @impl Oban.Worker
-  def perform(%Oban.Job{args: %{"node" => node} = args}) do
-    if node == to_string(Node.self()) do
-      cleanup(args)
-    else
-      Logger.warning(
-        "[Feldspar.DataDonationCleanupWorker] Cancelled cleanup for #{node} on #{Node.self()}"
-      )
-
-      {:cancel, "wrong node"}
-    end
-  end
+  def perform(%Oban.Job{args: %{"node" => _} = args}), do: cleanup(args)
 
   def perform(%Oban.Job{args: args}) do
     fan_out(args, [Node.self() | Node.list()])

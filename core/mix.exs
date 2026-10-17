@@ -2,7 +2,14 @@ defmodule Core.MixProject do
   use Mix.Project
 
   def cli do
-    [preferred_envs: ["test.ci": :test, "test.unit": :test, "test.feature": :test]]
+    [
+      preferred_envs: [
+        "test.ci": :test,
+        "test.unit": :test,
+        "test.feature": :test,
+        "config.snapshot": :test
+      ]
+    ]
   end
 
   def project do

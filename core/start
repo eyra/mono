@@ -1,4 +1,3 @@
 #!/bin/bash
 eval "$(infisical export --env=local --format=dotenv-export)"
-cp config/runtime.dev.exs config/runtime.exs
 exec iex -S mix phx.server

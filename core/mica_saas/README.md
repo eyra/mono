@@ -181,7 +181,7 @@ end
 
 #### ⚙️ Configuration
 
-To activate and configure a storage backend, you must modify the runtime configuration of your platform, `core/config/runtime.<platform>.exs` (copied to `config/runtime.exs` by `scripts/build-release`).
+To activate and configure a storage backend, you must modify the runtime configuration, `core/config/runtime.exs`.
 
 The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
 `STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.

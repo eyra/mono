@@ -1,10 +1,71 @@
+# Runtime configuration for every deployment (AWS, Fly) and for local
+# development. Environment variable values choose the setup, never the
+# platform: each setting is read under one name everywhere.
+#
+# What each environment gets is pinned by the snapshots in
+# next/test/config/snapshots/. After a change here, review and update them with
+# `mix config.snapshot --update`.
 import Config
 
+alias Core.RuntimeConfig
+
+if config_env() == :dev do
+  env_file = Path.expand("../.env", __DIR__)
+
+  if File.exists?(env_file) do
+    env_file
+    |> File.stream!()
+    |> Stream.map(&String.trim/1)
+    |> Stream.reject(&(&1 == "" or String.starts_with?(&1, "#")))
+    |> Stream.map(fn line ->
+      line
+      |> String.replace_prefix("export ", "")
+      |> String.split("=", parts: 2)
+    end)
+    |> Enum.each(fn
+      [key, value] ->
+        unquoted =
+          value
+          |> String.trim()
+          |> String.trim_leading(~s("))
+          |> String.trim_trailing(~s("))
+          |> String.trim_leading("'")
+          |> String.trim_trailing("'")
+
+        System.put_env(key, unquoted)
+
+      _ ->
+        :ok
+    end)
+  end
+
+  config :core, base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000"
+
+  config :core, :payment_webhook_base_url, System.get_env("PAYMENT_WEBHOOK_BASE_URL")
+
+  config :core, Systems.Payment.Provider.OPP,
+    base_url: System.get_env("OPP_BASE_URL") || "https://api-sandbox.onlinebetaalplatform.nl/v1",
+    api_key: System.get_env("OPP_API_KEY"),
+    notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
+    merchant_uid: System.get_env("OPP_MERCHANT_UID"),
+    partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
+
+  # Without PAYMENT_PROVIDER, dev.exs keeps payments on the local provider.
+  if System.get_env("PAYMENT_PROVIDER") do
+    config :core, payment_provider: Core.Config.payment_provider()
+  end
+
+  # Unset means no fallback: an untranslated string renders its msgid, which in
+  # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
+  config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
+end
+
 if config_env() == :prod do
+  env = System.get_env()
+
   app_name = System.fetch_env!("APP_NAME")
   app_domain = System.fetch_env!("APP_DOMAIN")
   app_mail_domain = System.fetch_env!("APP_MAIL_DOMAIN")
-  app_mail_noreply = "no-reply@#{app_mail_domain}"
   upload_path = System.fetch_env!("UPLOAD_PATH")
 
   scheme = "https"
@@ -17,26 +78,15 @@ if config_env() == :prod do
     upload_path: upload_path
 
   # Deployment environment for seed modules. Defaults to :prod for safety.
-  config :core,
-         :deploy_env,
-         System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
+  deploy_env = System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
+  config :core, :deploy_env, deploy_env
 
   # UserCheck email validation API key
   if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
     config :core, Frameworks.UserCheck, api_key: usercheck_api_key
   end
 
-  # Allow enabling of features from an environment variable.
-  # :e2e is explicitly excluded on prod — it gates test-only endpoints
-  # (/api/e2e/bootstrap, /api/e2e/setup, /api/e2e/activate_user) that must
-  # never be reachable on production.
-  config :core,
-         :features,
-         System.get_env("ENABLED_APP_FEATURES", "")
-         |> String.split(~r"\s*,\s*")
-         |> Enum.map(&String.to_atom/1)
-         |> Enum.reject(&(&1 == :e2e))
-         |> Enum.map(&{&1, true})
+  config :core, :features, RuntimeConfig.features(env, deploy_env)
 
   config :core,
          :admins,
@@ -48,6 +98,7 @@ if config_env() == :prod do
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
     url: [host: app_domain, scheme: scheme, port: 443],
     http: [
+      ip: {0, 0, 0, 0},
       port: String.to_integer(System.get_env("HTTP_PORT", "8000"))
     ]
 
@@ -62,9 +113,22 @@ if config_env() == :prod do
   # This duplication is required because config runs before modules are loaded.
   storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
 
-  oban_plugins =
-    System.get_env("ENABLED_OBAN_PLUGINS", "")
-    |> String.split(~r"\s*,\s*")
+  # The names that ENABLED_OBAN_PLUGINS can switch on. All enabled cron names
+  # share one Oban.Plugins.Cron.
+  {oban_plugins, oban_unknown_plugins} =
+    RuntimeConfig.oban_plugins(env, [
+      {"pruner", {:plugin, {Oban.Plugins.Pruner, max_age: 60 * 60}}},
+      {"lifeline", {:plugin, {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)}}},
+      {"advert_expiration", {:cron, {"*/5 * * * *", Systems.Advert.ExpirationWorker}}},
+      {"data_donation_cleanup",
+       {:cron,
+        {System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *"),
+         Systems.Feldspar.DataDonationCleanupWorker}}},
+      {"pay_in_expiration", {:cron, {"* * * * *", Systems.Fund.PayInExpirationWorker}}},
+      {"payment_reconciliation", {:cron, {"0 3 * * *", Systems.Payment.ReconciliationWorker}}},
+      {"auth_code_cleanup", {:cron, {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}}},
+      {"auto_approve", {:cron, {"0 * * * *", Systems.Fund.AutoApproveWorker}}}
+    ])
 
   config :core, Oban,
     queues: [
@@ -74,66 +138,29 @@ if config_env() == :prod do
       email_delivery: 1,
       ris_import: 1
     ],
-    plugins:
-      Enum.map(oban_plugins, fn plugin ->
-        case plugin do
-          "pruner" ->
-            {Oban.Plugins.Pruner, max_age: 60 * 60}
+    plugins: oban_plugins
 
-          "lifeline" ->
-            {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)}
-
-          "advert_expiration" ->
-            {Oban.Plugins.Cron, crontab: [{"*/5 * * * *", Systems.Advert.ExpirationWorker}]}
-
-          "data_donation_cleanup" ->
-            {Oban.Plugins.Cron,
-             crontab: [
-               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}
-             ]}
-
-          "payment_reconciliation" ->
-            {Oban.Plugins.Cron, crontab: [{"0 3 * * *", Systems.Payment.ReconciliationWorker}]}
-
-          "auth_code_cleanup" ->
-            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]}
-
-          "auto_approve" ->
-            {Oban.Plugins.Cron, crontab: [{"0 * * * *", Systems.Fund.AutoApproveWorker}]}
-
-          _ ->
-            nil
-        end
-      end)
-      |> Enum.reject(&is_nil/1)
+  # Logged at boot by Core.Application.
+  config :core, :oban_unknown_plugins, oban_unknown_plugins
 
   # RATE LIMITER
 
   config :core, :rate, quotas: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
-  # MAILGUN
+  # MAIL: Mailgun when MAILGUN_API_KEY is set, otherwise Amazon SES.
 
-  if mailgun_api_key = System.get_env("MAILGUN_API_KEY") do
-    config :core, Systems.Email.Mailer,
-      adapter: Bamboo.MailgunAdapter,
-      base_uri: "https://api.eu.mailgun.net/v2",
-      api_key: mailgun_api_key,
-      domain: app_domain,
-      default_from_email: "#{app_name} <#{app_mail_noreply}>",
-      hackney_opts: [recv_timeout: :timer.minutes(1)]
-  end
+  config :core,
+         Systems.Email.Mailer,
+         RuntimeConfig.mailer(env,
+           name: app_name,
+           domain: app_domain,
+           mail_domain: app_mail_domain,
+           mailgun_base_uri: "https://api.eu.mailgun.net/v2"
+         )
 
-  # EX AWS
-  config :ex_aws,
-    access_key_id: System.get_env("AWS_ACCESS_KEY_ID"),
-    secret_access_key: System.get_env("AWS_SECRET_ACCESS_KEY"),
-    region: System.get_env("AWS_REGION")
+  # EX AWS: AWS S3 and SES, or an S3-compatible store via AWS_ENDPOINT_URL_S3.
 
-  # AWS SES
-  config :core, Systems.Email.Mailer,
-    adapter: Bamboo.SesAdapter,
-    domain: app_domain,
-    default_from_email: {app_name, app_mail_noreply}
+  config :ex_aws, RuntimeConfig.s3(env)
 
   # AZURE BLOB
 
@@ -149,41 +176,9 @@ if config_env() == :prod do
     config :core, :azure_storage_backend, sas_token: sas_token
   end
 
-  # DATABASE
-  cacertfile = System.get_env("DB_CA_PATH")
+  # DATABASE: DATABASE_URL; TLS when DB_CA_PATH is set.
 
-  verify_mode =
-    case System.get_env("DB_TLS_VERIFY") do
-      "verify_peer" -> :verify_peer
-      "verify_none" -> :verify_none
-      _ -> :verify_peer
-    end
-
-  database_url = System.get_env("DB_URL")
-  db_host = System.fetch_env!("DB_HOST")
-
-  if database_url do
-    config :core, Core.Repo,
-      url: database_url,
-      ssl: [
-        cacertfile: cacertfile,
-        verify: verify_mode,
-        server_name_indication: to_charlist(db_host)
-      ]
-  else
-    config :core, Core.Repo,
-      username: System.get_env("DB_USER"),
-      password: System.get_env("DB_PASS"),
-      database: System.get_env("DB_NAME"),
-      hostname: System.get_env("DB_HOST"),
-      ssl: [
-        cacertfile: cacertfile,
-        verify: verify_mode,
-        server_name_indication: to_charlist(db_host)
-      ]
-  end
-
-  # END DATABASE
+  config :core, Core.Repo, RuntimeConfig.repo(env)
 
   config :core, Systems.Account.Auth.Google,
     redirect_uri: "#{base_url}/auth/google/callback",
@@ -219,18 +214,19 @@ if config_env() == :prod do
       active: true
   end
 
+  # STORAGE BACKENDS
+
   config :core, :storage,
     services:
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
-      |> String.split(",", trim: true)
-      |> Enum.map(&String.trim/1)
+      |> RuntimeConfig.list()
       |> Enum.map(&String.to_atom/1)
 
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
     config :core, Systems.Storage.BuiltIn.S3,
-      bucket: System.get_env("AWS_S3_BUCKET"),
+      bucket: System.fetch_env!("AWS_S3_BUCKET"),
       prefix: storage_s3_prefix
   else
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
@@ -239,8 +235,8 @@ if config_env() == :prod do
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do
     config :core, :content,
       backend: Systems.Content.S3,
-      bucket: System.get_env("PUBLIC_S3_BUCKET"),
-      public_url: System.get_env("PUBLIC_S3_URL"),
+      bucket: System.fetch_env!("PUBLIC_S3_BUCKET"),
+      public_url: System.fetch_env!("PUBLIC_S3_URL"),
       prefix: content_s3_prefix
   else
     config :core, :content, backend: Systems.Content.LocalFS
@@ -249,10 +245,10 @@ if config_env() == :prod do
   if feldspar_s3_prefix = System.get_env("FELDSPAR_S3_PREFIX") do
     config :core, :feldspar,
       backend: Systems.Feldspar.S3,
-      bucket: System.get_env("PUBLIC_S3_BUCKET"),
+      bucket: System.fetch_env!("PUBLIC_S3_BUCKET"),
       # The public URL must point to the root's (bucket) publicly accessible URL.
       # It should have a policy that allows anonymous users to read all files.
-      public_url: System.get_env("PUBLIC_S3_URL"),
+      public_url: System.fetch_env!("PUBLIC_S3_URL"),
       prefix: feldspar_s3_prefix
   else
     config :core, :feldspar, backend: Systems.Feldspar.LocalFS
@@ -280,15 +276,7 @@ if config_env() == :prod do
     retention_hours:
       System.get_env("FELDSPAR_DATA_DONATION_RETENTION", "336") |> String.to_integer()
 
-  config :core,
-         :dist_hosts,
-         "DIST_HOSTS"
-         |> System.get_env("")
-         |> String.split(",")
-         |> Enum.map(&String.trim/1)
-         |> Enum.reject(&(&1 == ""))
-         |> Enum.map(&"core@#{&1}")
-         |> Enum.map(&String.to_atom/1)
+  config :core, :dist_hosts, RuntimeConfig.dist_hosts(env)
 
   config :core, Systems.Payment.Provider.OPP,
     base_url: System.get_env("OPP_BASE_URL"),
@@ -311,4 +299,14 @@ if config_env() == :prod do
   # Unset means no fallback: an untranslated string renders its msgid, which in
   # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
   config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
+
+  # Mock sign-in for test environments; never on production.
+  if deploy_env != :prod do
+    auth_methods =
+      Application.get_env(:core, :account, [])
+      |> Keyword.get(:auth_methods, %{})
+      |> Map.put(:mock, %{provider: true, satellite: false})
+
+    config :core, :account, auth_methods: auth_methods
+  end
 end
