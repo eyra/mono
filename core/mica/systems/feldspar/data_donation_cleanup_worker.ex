@@ -3,12 +3,15 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   Scheduled Oban worker that cleans up old data donation files.
 
   Deletes files that are older than the configured retention period (default 2 weeks).
-  This provides a safety net for orphaned files while eventually freeing up disk space.
+  This is the only mechanism that deletes local data donation files; delivery keeps them.
 
-  Can also be triggered manually via the admin Actions tab.
+  Data donation files live on each node's local filesystem, but Oban's Cron plugin only
+  inserts jobs on the leader node. A job without a `"node"` arg (from cron or the admin
+  Actions tab) therefore fans out: it inserts one job per connected node into that node's
+  local storage delivery queue. The `"node"` arg only selects that queue, so a node job
+  always runs on its own node and cleans its local folder. A node that is disconnected
+  during the fan-out is cleaned on the next run.
   """
-  # Queue is set dynamically via Storage.Private.storage_delivery_queue() in cron config (runtime.exs)
-  # This ensures cleanup runs on the node that has the local files
   use Oban.Worker,
     priority: 3,
     max_attempts: 1
@@ -16,9 +19,29 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   require Logger
 
   alias Systems.Feldspar
+  alias Systems.Storage
+
+  # Shorter than the hourly schedule, so overlapping fan-outs don't pile up per node.
+  @unique_period_seconds 50 * 60
 
   @impl Oban.Worker
+  def perform(%Oban.Job{args: %{"node" => _} = args}), do: cleanup(args)
+
   def perform(%Oban.Job{args: args}) do
+    fan_out(args, [Node.self() | Node.list()])
+  end
+
+  @doc """
+  Inserts a cleanup job for each of `nodes` into that node's local storage delivery queue.
+  """
+  def fan_out(args, nodes) do
+    # Oban.insert_all/1 ignores `unique` on the Basic engine, so insert one by one.
+    Enum.each(nodes, fn node ->
+      {:ok, _} = node |> node_job(args) |> Oban.insert()
+    end)
+  end
+
+  defp cleanup(args) do
     retention_hours = get_retention_hours(args)
     deleted_count = Feldspar.DataDonationFolder.cleanup_older_than(retention_hours)
 
@@ -29,6 +52,16 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     end
 
     :ok
+  end
+
+  defp node_job(node, args) do
+    args
+    |> Map.take(["retention_hours"])
+    |> Map.put("node", to_string(node))
+    |> new(
+      queue: Storage.Public.storage_delivery_queue(node),
+      unique: [period: @unique_period_seconds, keys: [:node]]
+    )
   end
 
   defp get_retention_hours(args) do

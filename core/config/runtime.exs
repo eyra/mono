@@ -123,7 +123,7 @@ if config_env() == :prod do
       {"data_donation_cleanup",
        {:cron,
         {System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *"),
-         Systems.Feldspar.DataDonationCleanupWorker, queue: storage_delivery_queue}}},
+         Systems.Feldspar.DataDonationCleanupWorker}}},
       {"pay_in_expiration", {:cron, {"* * * * *", Systems.Fund.PayInExpirationWorker}}},
       {"payment_reconciliation", {:cron, {"0 3 * * *", Systems.Payment.ReconciliationWorker}}},
       {"auth_code_cleanup", {:cron, {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}}},
