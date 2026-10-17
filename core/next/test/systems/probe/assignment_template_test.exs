@@ -57,7 +57,7 @@ defmodule Systems.Probe.AssignmentTemplateTest do
     end
 
     test "is off in the Next bundle config by default" do
-      assert Application.get_env(:core, :features)[:probe] == false
+      assert Core.Env.get(:features)[:probe] == false
     end
   end
 

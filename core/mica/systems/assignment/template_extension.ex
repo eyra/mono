@@ -25,7 +25,7 @@ defmodule Systems.Assignment.TemplateExtension do
   """
   @callback tool_description(special :: atom()) :: binary() | nil
 
-  def all, do: Application.get_env(:core, :assignment_templates, [])
+  def all, do: Core.Env.get(:assignment_templates, [])
 
   def enabled, do: Enum.filter(all(), & &1.enabled?())
 
