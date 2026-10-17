@@ -216,7 +216,7 @@ defmodule Systems.Assignment.Private do
   def workflow_item_id(%Crew.TaskModel{identifier: identifier}),
     do: Identifier.get_attribute(identifier, "item")
 
-  def task_template(%{special: :data_donation}, %Workflow.ItemModel{id: item_id}) do
+  def task_template(%Assignment.Model{}, %Workflow.ItemModel{id: item_id}) do
     ["item=#{item_id}"]
   end
 

@@ -178,7 +178,7 @@ defmodule Systems.Assignment.Switch do
       ) do
     if assignment = Assignment.Public.get_by(workflow, Assignment.Model.preload_graph(:down)) do
       with {:workflow_item, :deleted} <- event do
-        delete_crew_tasks(message)
+        expire_crew_tasks(assignment, message)
       end
 
       case event do
@@ -414,20 +414,13 @@ defmodule Systems.Assignment.Switch do
     Assignment.Public.get!(assignment_id, Assignment.Model.preload_graph(:down))
   end
 
-  defp delete_crew_tasks(%{
-         assignment: %Assignment.Model{crew: crew} = assignment,
-         workflow_item: %Workflow.ItemModel{} = workflow_item
-       }) do
-    Assignment.Private.task_template(assignment, workflow_item)
-    |> then(&Crew.Public.list_tasks_by_template(crew, &1))
-    |> delete_crew_tasks()
+  defp expire_crew_tasks(
+         %Assignment.Model{crew: crew} = assignment,
+         %{workflow_item: %Workflow.ItemModel{} = workflow_item}
+       ) do
+    task_template = Assignment.Private.task_template(assignment, workflow_item)
+    Crew.Public.expire_tasks_by_template(crew, task_template)
   end
-
-  defp delete_crew_tasks([_ | _] = tasks) do
-    Enum.each(tasks, &Crew.Public.delete_task/1)
-  end
-
-  defp delete_crew_tasks(_), do: nil
 
   defp update_content_page(model, from_pid) do
     dispatch!({:page, Assignment.ContentPage}, %{id: model.id, model: model, from_pid: from_pid})

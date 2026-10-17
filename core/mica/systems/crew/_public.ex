@@ -94,11 +94,17 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def list_tasks_by_template(crew, task_template, order_by \\ {:desc, :id}) do
-    from(t in task_query_by_template(crew, task_template),
-      order_by: ^order_by
-    )
-    |> Repo.all()
+  @doc """
+  Expires all tasks of the crew whose identifier contains every element of
+  `task_template`. Returns the number of expired tasks.
+  """
+  def expire_tasks_by_template(crew, [_ | _] = task_template) do
+    {count, _} =
+      task_query_by_template(crew, task_template)
+      |> where([task: t], t.expired == false)
+      |> Repo.update_all(set: [expired: true, updated_at: Timestamp.naive_now()])
+
+    count
   end
 
   def list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id}) do
