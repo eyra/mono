@@ -44,7 +44,7 @@ defmodule Core.ImageCatalog.Unsplash.HTTP do
   # 500, 503 	Something went wrong on our end
   #   "errors": ["Username is missing", "Password cannot be blank"]
   #
-  defp endpoint, do: Application.get_env(:core, :unsplash_endpoint, "https://api.unsplash.com")
+  defp endpoint, do: Core.Env.get(:unsplash_endpoint, "https://api.unsplash.com")
 end
 
 defmodule Core.ImageCatalog.Unsplash do
@@ -164,9 +164,9 @@ defmodule Core.ImageCatalog.Unsplash do
   end
 
   @spec conf() :: %{access_key: binary(), app_name: binary()}
-  defp conf, do: Application.fetch_env!(:core, __MODULE__) |> Enum.into(%{})
+  defp conf, do: Core.Env.fetch!(__MODULE__) |> Enum.into(%{})
 
   defp client do
-    Application.get_env(:core, :unsplash_client, Core.ImageCatalog.Unsplash.HTTP)
+    Core.Env.get(:unsplash_client, Core.ImageCatalog.Unsplash.HTTP)
   end
 end

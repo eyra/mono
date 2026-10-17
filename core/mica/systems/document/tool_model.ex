@@ -7,7 +7,8 @@ defmodule Systems.Document.ToolModel do
 
   alias Systems.Workflow
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  require Core.Env
+  @tool_directors Core.Env.compile_env(:tool_directors)
 
   schema "document_tools" do
     field(:name, :string)

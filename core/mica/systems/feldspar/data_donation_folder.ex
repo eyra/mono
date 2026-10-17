@@ -174,7 +174,7 @@ defmodule Systems.Feldspar.DataDonationFolder do
   end
 
   defp data_donation_path do
-    Application.get_env(:core, :feldspar_data_donation)[:path] ||
+    Core.Env.get(:feldspar_data_donation)[:path] ||
       raise "FELDSPAR_DATA_DONATION_PATH not configured"
   end
 

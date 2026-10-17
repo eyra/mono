@@ -44,7 +44,9 @@ defmodule Frameworks.Pixel.Logo do
   # not listed so callers can omit the icon slot instead of rendering
   # a broken image. Compile-time list so we don't stat the filesystem
   # on every render.
-  @pool_assets Application.compile_env(:core, [:pixel, :pool_assets], [])
+  require Core.Env
+
+  @pool_assets Core.Env.compile_env([:pixel, :pool_assets], [])
                |> Enum.map(&to_string/1)
 
   defp pool_path(name, variant) do

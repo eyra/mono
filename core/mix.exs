@@ -2,7 +2,14 @@ defmodule Core.MixProject do
   use Mix.Project
 
   def cli do
-    [preferred_envs: ["test.ci": :test, "test.unit": :test, "test.feature": :test]]
+    [
+      preferred_envs: [
+        "test.ci": :test,
+        "test.unit": :test,
+        "test.feature": :test,
+        "config.snapshot": :test
+      ]
+    ]
   end
 
   def project do
@@ -173,7 +180,8 @@ defmodule Core.MixProject do
       "test.unit": ["ecto.create --quiet", "ecto.migrate", "test --exclude feature"],
       "test.feature": ["ecto.create --quiet", "ecto.migrate", "test --only feature"],
       "test.js": "cmd cd ./assets && npm test",
-      "test.ci": ["test.unit", "test.feature", "test.js"],
+      # Mix runs the `test` task once per invocation, so each half needs its own.
+      "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
       "test.smoke": "cmd ./test/smoke/run.sh",
       # Usage: mix test.smoke dev | staging | prod

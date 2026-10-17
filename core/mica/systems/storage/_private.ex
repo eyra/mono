@@ -6,7 +6,7 @@ defmodule Systems.Storage.Private do
   end
 
   defp config() do
-    Application.get_env(:core, :storage)
+    Core.Env.get(:storage)
   end
 
   def build_special(:builtin), do: %Storage.BuiltIn.EndpointModel{}

@@ -12,6 +12,8 @@ defmodule Core.Application do
 
     Core.AppSignal.TelemetryHandler.attach()
 
+    Core.RuntimeConfig.log_choices()
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -39,14 +41,14 @@ defmodule Core.Application do
   end
 
   defp oban_config do
-    Application.fetch_env!(:core, Oban)
+    Core.Env.fetch!(Oban)
   end
 
   defp rate_config do
-    Application.fetch_env!(:core, :rate)
+    Core.Env.fetch!(:rate)
   end
 
   defp dist_hosts do
-    Application.get_env(:core, :dist_hosts, [])
+    Core.Env.get(:dist_hosts, [])
   end
 end

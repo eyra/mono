@@ -24,6 +24,8 @@ jobs:
         run: |
           VERSION="next_$(date +%F)_${{ github.run_number }}"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
+          # AppSignal revision, set per deploy (never baked into the image).
+          echo "APPSIGNAL_REVISION=develop_${GITHUB_SHA::7}" >> $GITHUB_ENV
 
       - name: Setup Fly CLI
         uses: superfly/flyctl-actions/setup-flyctl@master
@@ -39,8 +41,8 @@ jobs:
       - name: Deploy to Fly.io
         run: |
           flyctl deploy --remote-only -c fly.dev.toml \
+            --env APPSIGNAL_REVISION=${{ env.APPSIGNAL_REVISION }} \
             --build-arg VERSION=${{ env.VERSION }} \
-            --build-arg PLATFORM=fly \
             --build-arg GIT_COMMIT=${{ github.sha }}
         working-directory: core
         env:

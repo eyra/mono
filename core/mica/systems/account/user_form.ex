@@ -6,7 +6,8 @@ defmodule Systems.Account.UserForm do
 
   alias Frameworks.Pixel.AlertBanner
 
-  @policy_urls Application.compile_env(:core, :policy_urls)
+  require Core.Env
+  @policy_urls Core.Env.compile_env(:policy_urls)
 
   defp policy_link(key, label) when is_atom(key) do
     url = @policy_urls[key]

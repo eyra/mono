@@ -90,8 +90,33 @@ jobs:
           cd core/assets && npm install
           cd .. && mix assets.build
 
-      - name: Test
-        run: make test
+      - name: Unit tests
+        run: cd core && mix test.unit
+
+      # Wallaby needs a chromedriver whose major version matches Chrome.
+      - id: setup-chrome
+        uses: browser-actions/setup-chrome@v2.2.0
+        with:
+          chrome-version: "155"
+          install-chromedriver: true
+          install-dependencies: true
+
+      - name: Feature tests
+        run: cd core && mix test.feature
+        env:
+          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+
+      - name: Upload Wallaby screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: wallaby-screenshots
+          path: core/tmp/wallaby_screenshots
+          if-no-files-found: ignore
+
+      - name: JS tests
+        run: cd core && mix test.js
 
       - name: Credo
         run: make credo
@@ -99,5 +124,42 @@ jobs:
       - name: Boundary check (Nova migration)
         run: cd core && elixir scripts/boundary_check.exs
 
+      # Routes, grants, handlers, SaaS config and counts of the Next build.
+      - name: Nova snapshots (Next)
+        run: cd core && mix nova.snapshot
+
       - name: Dialyzer
         run: make dialyzer
+
+  # The Self build (BUNDLE=self) against its Nova snapshots. MIX_ENV=dev, because
+  # config/test.exs pins the bundle to Next. No database needed.
+  snapshot-self:
+    runs-on: ubuntu-26.04
+    env:
+      MIX_ENV: dev
+      BUNDLE: self
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - id: setup-elixir
+        uses: erlef/setup-elixir@v1.24.1
+        with:
+          otp-version: "27.3.4"
+          elixir-version: "1.17.0-otp-27"
+
+      - name: Cache mix deps + build
+        uses: actions/cache@v6.1.0
+        with:
+          path: |
+            core/deps
+            core/_build
+          key: mix-self-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock') }}
+          restore-keys: |
+            mix-self-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-
+
+      - name: Setup the Elixir project
+        run: make deps
+
+      - name: Nova snapshots (Self)
+        run: cd core && mix nova.snapshot

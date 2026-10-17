@@ -46,7 +46,9 @@ defmodule CoreWeb.Live.User.Routes do
         live("/:idp/transfer", IdentityProviderTransferPage)
       end
 
-      if Application.compile_env(:core, :enable_e2e_support, false) do
+      require Core.Env
+
+      if Core.Env.compile_env(:enable_e2e_support, false) do
         scope "/auth", Systems.Account.Auth.Mock do
           pipe_through([:browser])
           live("/mock", SigninPage)

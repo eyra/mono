@@ -11,6 +11,6 @@ defmodule Systems.Storage.JobScheduler do
   end
 
   defp impl do
-    Application.get_env(:core, :storage)[:job_scheduler]
+    Core.Env.get(:storage)[:job_scheduler]
   end
 end

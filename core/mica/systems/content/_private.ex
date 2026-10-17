@@ -1,7 +1,6 @@
 defmodule Systems.Content.Private do
   def get_backend do
-    :core
-    |> Application.fetch_env!(:content)
+    Core.Env.fetch!(:content)
     |> Access.fetch!(:backend)
   end
 

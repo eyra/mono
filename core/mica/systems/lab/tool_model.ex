@@ -11,7 +11,8 @@ defmodule Systems.Lab.ToolModel do
   alias Systems.Lab
   alias Systems.Workflow
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  require Core.Env
+  @tool_directors Core.Env.compile_env(:tool_directors)
 
   schema "lab_tools" do
     belongs_to(:auth_node, Core.Authorization.Node)

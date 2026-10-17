@@ -32,6 +32,6 @@ defmodule Systems.Feldspar.LocalFS do
   end
 
   def get_root_path do
-    Application.get_env(:core, :upload_path)
+    Core.Env.get(:upload_path)
   end
 end

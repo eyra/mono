@@ -44,6 +44,6 @@ defmodule Core.ImageCatalog do
   @doc "Returns the URLs for the given image (if available)"
   @callback info(image :: image_id, opts :: url_opts) :: image_info | nil
   def image_catalog do
-    Application.get_env(:core, :image_catalog, Core.ImageCatalog.Local)
+    Core.Env.get(:image_catalog, Core.ImageCatalog.Local)
   end
 end

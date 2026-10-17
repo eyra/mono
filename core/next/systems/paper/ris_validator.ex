@@ -67,7 +67,7 @@ defmodule Systems.Paper.RISValidator do
   end
 
   defp get_max_file_size do
-    Application.fetch_env!(:core, :paper)
+    Core.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_max_file_size)
   end
 

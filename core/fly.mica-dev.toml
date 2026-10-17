@@ -5,7 +5,8 @@
 # Secrets (set with `flyctl secrets set`, never in this file):
 #   SECRET_KEY_BASE, DATABASE_URL (set by `flyctl postgres attach`),
 #   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL_S3, AWS_REGION,
-#   BUCKET_NAME (set by `flyctl storage create`), AWS_S3_BUCKET, PUBLIC_S3_BUCKET
+#   BUCKET_NAME (set by `flyctl storage create`), AWS_S3_BUCKET, PUBLIC_S3_BUCKET,
+#   MAILGUN_API_KEY (for now the same Mailgun key and eyra.dev domain as eyra-next-dev)
 
 app = 'nova-mica-dev'
 primary_region = 'ams'
@@ -27,13 +28,13 @@ org = 'eyra'
   ECTO_IPV6 = 'true'
 
   # App configuration
-  APP_NAME = 'Self [dev]'
+  APP_NAME = 'Mica [dev]'
   APP_DOMAIN = 'nova-mica-dev.fly.dev'
-  APP_MAIL_DOMAIN = 'nova-mica-dev.fly.dev'
+  APP_MAIL_DOMAIN = 'eyra.dev'
   DEPLOY_ENV = 'dev'
 
-  # Self signs in with email and password only
-  ENABLED_APP_FEATURES = 'password_sign_in'
+  # Sign-in with a one-time code by e-mail, and with e-mail and password
+  ENABLED_APP_FEATURES = 'password_sign_in, otp'
 
   # Storage paths (using Fly volume mounted at /app/data)
   UPLOAD_PATH = '/app/data/uploads'

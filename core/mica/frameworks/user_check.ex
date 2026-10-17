@@ -18,7 +18,7 @@ defmodule Frameworks.UserCheck do
       config :core, Frameworks.UserCheck,
         client: Frameworks.UserCheck.MockClient
 
-      # runtime.aws.exs / runtime.fly.exs
+      # runtime.exs
       config :core, Frameworks.UserCheck,
         api_key: System.get_env("USERCHECK_API_KEY")
 
@@ -46,7 +46,7 @@ defmodule Frameworks.UserCheck do
   end
 
   defp client do
-    Application.get_env(:core, __MODULE__, [])
+    Core.Env.get(__MODULE__, [])
     |> Keyword.get(:client, Frameworks.UserCheck.HTTPClient)
   end
 end

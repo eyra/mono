@@ -166,7 +166,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp return_url do
-    base_url = Application.fetch_env!(:core, :base_url)
+    base_url = Core.Env.fetch!(:base_url)
     "#{base_url}/user/account?tab=payouts"
   end
 
@@ -370,14 +370,14 @@ defmodule Systems.Payment.Public do
   """
   @spec platform_merchant_uid() :: String.t() | nil
   def platform_merchant_uid do
-    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    Core.Env.get(Systems.Payment.Provider.OPP, [])
     |> Keyword.get(:merchant_uid)
   end
 
   def webhook_url do
     base_url =
-      Application.get_env(:core, :payment_webhook_base_url) ||
-        Application.fetch_env!(:core, :base_url)
+      Core.Env.get(:payment_webhook_base_url) ||
+        Core.Env.fetch!(:base_url)
 
     "#{base_url}/api/payment/webhook/#{provider_name()}"
   end
@@ -388,7 +388,7 @@ defmodule Systems.Payment.Public do
   """
   @spec partner_fee_percentage() :: non_neg_integer()
   def partner_fee_percentage do
-    Application.get_env(:core, Systems.Payment.Provider.OPP, [])
+    Core.Env.get(Systems.Payment.Provider.OPP, [])
     |> Keyword.get(:partner_fee_percentage, 0)
   end
 
@@ -401,7 +401,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp provider do
-    Application.fetch_env!(:core, :payment_provider)
+    Core.Env.fetch!(:payment_provider)
   end
 
   defp provider_name do

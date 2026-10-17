@@ -28,7 +28,7 @@ defmodule Systems.Paper.RISFetcherBackendStream do
 
   # Get the configured content backend module
   defp get_content_backend do
-    config = Application.fetch_env!(:core, :content)
+    config = Core.Env.fetch!(:content)
     Keyword.fetch!(config, :backend)
   end
 end
