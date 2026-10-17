@@ -133,6 +133,48 @@ defmodule Systems.Assignment.SwitchTest do
     end
   end
 
+  describe "workflow_item deleted" do
+    setup do
+      isolate_signals(except: [Systems.Workflow.Switch, Systems.Assignment.Switch])
+      :ok
+    end
+
+    for special <- [:questionnaire, :data_donation, :benchmark_challenge, :paper_screening] do
+      @special special
+
+      test "expires the crew tasks of the deleted item only (#{special})" do
+        workflow = Factories.insert!(:workflow, %{})
+        deleted_item = Factories.insert!(:workflow_item, %{workflow: workflow, position: 0})
+        kept_item = Factories.insert!(:workflow_item, %{workflow: workflow, position: 1})
+        crew = Factories.insert!(:crew)
+
+        assignment =
+          Factories.insert!(:assignment, %{special: @special, workflow: workflow, crew: crew})
+
+        tasks =
+          for status <- [:pending, :completed], item <- [deleted_item, kept_item] do
+            user = Factories.insert!(:member)
+            member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+            Factories.insert!(:crew_task, %{
+              identifier: Assignment.Private.task_identifier(assignment, item, member),
+              crew: crew,
+              auth_node: %Core.Authorization.Node{},
+              status: status
+            })
+          end
+
+        assert {:ok, _} = Systems.Workflow.Public.delete(deleted_item)
+
+        for task <- tasks do
+          %{expired: expired} = Core.Repo.reload!(task)
+          deleted? = Assignment.Private.workflow_item_id(task) == "#{deleted_item.id}"
+          assert expired == deleted?
+        end
+      end
+    end
+  end
+
   describe "assignment events" do
     setup do
       isolate_signals(except: [Systems.Assignment.Switch])
