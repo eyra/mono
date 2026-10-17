@@ -11,5 +11,6 @@
   panl: true,
   panl_post_launch: false,
   password_sign_in: true,
+  probe: false,
   surfconext_sign_in: false
 ]
