@@ -41,7 +41,10 @@ defmodule Systems.Project.CreateItemView do
       Systems.Project.ItemTemplates.values()
       |> Enum.filter(&include?/1)
 
-    template_labels = Project.ItemTemplates.labels(selected_template, filter)
+    template_labels =
+      Project.ItemTemplates.labels(selected_template, filter) ++
+        Project.ItemTemplates.extension_labels()
+
     socket |> assign(template_labels: template_labels, selected_template: selected_template)
   end
 
@@ -92,7 +95,7 @@ defmodule Systems.Project.CreateItemView do
   end
 
   defp create_item(%{assigns: %{node: node, user: user}}, template) do
-    default_name = Project.ItemTemplates.translate(template)
+    default_name = Project.ItemTemplates.name(template)
     name = Project.Public.new_item_name(node, default_name)
     Project.Assembly.create_item(template, name, node, user)
   end

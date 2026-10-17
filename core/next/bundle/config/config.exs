@@ -5,7 +5,8 @@ config :core,
   menu_items: Next.Menu.Items,
   workspace_menu_builder: Next.Layouts.Workspace.MenuBuilder,
   website_menu_builder: Next.Layouts.Website.MenuBuilder,
-  stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder
+  stripped_menu_builder: Next.Layouts.Stripped.MenuBuilder,
+  assignment_templates: [Systems.Probe.AssignmentTemplate]
 
 config :core, Systems.Account.UserAuth,
   creator_signed_in_page: "/project",
@@ -26,6 +27,7 @@ config :core, :features,
   opp_phase_3: false,
   onyx: false,
   otp: false,
+  probe: false,
   e2e: false
 
 config :core, :meta,
