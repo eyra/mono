@@ -10,7 +10,7 @@ defmodule Systems.Home.GuestView do
   @impl true
   def render(assigns) do
     ~H"""
-    <div>
+    <div data-testid="home-guest-view">
       <div class="bg-grey6">
         <.intro />
         <.steps />

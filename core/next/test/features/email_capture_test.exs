@@ -1,79 +1,51 @@
 defmodule CoreWeb.Features.EmailCaptureTest do
   @moduledoc """
-  Feature test for the email capture flow on the finished screen.
+  Feature test for the pre-launch email capture flow on the finished screen.
 
-  Tests the participant experience: after completing a questionnaire assignment,
-  the participant sees an email capture form on the finished screen, submits
-  their email, and sees a success message.
+  Tests the participant experience: an affiliate participant who completed a
+  questionnaire assignment sees an email capture form on the finished screen,
+  submits their email, and sees the submitted state.
   """
   use CoreWeb.FeatureCase
+  use Core.FeatureFlags.Test
 
-  alias Systems.Pool
+  alias Systems.Account
+  alias Systems.Affiliate
   alias Systems.Assignment
-  alias Systems.Crew
+  alias Systems.Pool
+
+  setup do
+    set_feature_flag(:panl, true)
+    set_feature_flag(:panl_post_launch, false)
+    :ok
+  end
 
   @tag :feature
-  @tag :skip
   feature "participant sees email capture form and submits email", %{session: session} do
     _panl_pool = Pool.Assembly.get_or_create_panl()
 
-    password = Factories.valid_user_password()
+    affiliate = Factories.insert!(:affiliate)
+    assignment = Assignment.Factories.create_questionnaire_assignment(%{affiliate: affiliate})
+    %{user: participant} = Affiliate.Public.obtain_user!("test_participant", affiliate)
 
-    participant =
-      Factories.insert!(:member, %{
-        password: password,
-        confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        creator: false
-      })
+    assignment
+    |> Assignment.Factories.add_participant(participant)
+    |> Assignment.Factories.finish_all_tasks(participant)
 
-    # Create a questionnaire assignment with affiliate, add participant
-    assignment = Assignment.Factories.create_questionnaire_assignment()
-    assignment = Assignment.Factories.add_participant(assignment, participant)
-
-    # Create affiliate user (required for email capture guard)
-    Factories.insert!(:affiliate_user, %{user: participant, identifier: "test_participant"})
-
-    # Mark task as completed using the correct identifier format
-    %{crew: crew, workflow: workflow} = assignment
-    %{items: [item]} = workflow |> Repo.preload([:items])
-    member = Crew.Public.get_member(crew, participant) |> Repo.preload([:user])
-    identifier = Assignment.Private.task_identifier(assignment, item, member)
-    Crew.Factories.create_task(crew, member, identifier, status: :completed)
-
-    # Login as participant
-    session
-    |> visit("/user/signin")
-    |> assert_has(Query.css("[data-testid='signin-email-input']"))
-    |> fill_in(Query.css("[data-testid='signin-email-input']"), with: participant.email)
-    |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
-    |> click(Query.css("[data-testid='signin-submit-button']"))
-    |> assert_has(Query.css("[data-testid='home-page']"))
-
-    # Verify we're logged in by checking home page loaded
-    session
-    |> visit("/")
-    |> assert_has(Query.css("[data-testid='home-page']"))
-
-    # Navigate to the assignment — should show finished view
-    session
-    |> visit("/assignment/#{assignment.id}")
-    |> assert_has(Query.css("[data-testid='email-capture-block']"))
-
-    # Should see the email capture form
-    session
-    |> assert_has(Query.css("[data-testid='email-capture-input']"))
-    |> assert_has(Query.css("[data-testid='email-capture-submit']"))
-
-    # Submit email
     new_email = "panl-capture-#{System.unique_integer([:positive])}@example.com"
 
     session
+    |> visit_affiliate_link(assignment, "test_participant")
+    |> assert_connected("[data-testid='email-capture-input']")
     |> fill_in(Query.css("[data-testid='email-capture-input']"), with: new_email)
     |> click(Query.css("[data-testid='email-capture-submit']"))
+    |> assert_has(
+      Query.css(
+        "[data-testid='email-capture-block']:not(:has([data-testid='email-capture-input']))"
+      )
+    )
 
-    # Should see success state
-    session
-    |> assert_has(Query.css("[data-testid='email-capture-success']"))
+    assert %{email: ^new_email} = Account.Public.get!(participant.id)
+    assert Pool.Public.participant?(:panl, participant)
   end
 end

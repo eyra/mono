@@ -34,6 +34,12 @@ Chrome and chromedriver must have the same major version. When they don't (e.g. 
 
 LiveView drops `phx-click` events (and `JS` commands) until the page's WebSocket has connected. Before the first click on such an element on a freshly loaded page, wait with `assert_connected(session, "[data-testid='…']")`: the element inside a connected LiveView. This is a pre-click wait on the destination, not the post-navigation `.phx-connected` wait that rule 2 below forbids.
 
+`refute_has` does not wait for an element to disappear: it fails at once while the element is still there. After an action, wait for the new state with `assert_has` (e.g. `:not(:has(…))`) instead.
+
+`visit` returns only after the page's `load` event, so test data must not point at external URLs (images, scripts): a slow external host stalls `visit` up to the test timeout.
+
+Affiliate participants enter a study through `visit_affiliate_link/3`, not `sign_in/3`: `Systems.Account.Plug` signs them off outside their assignment.
+
 Content-page tab bars collapse into a dropdown when their tabs don't fit the window. Open a tab with `click_tab(session, "<tab-testid>")`, which handles both layouts; wait for the editor with `assert_has(css("[data-tab-fit]"))`.
 
 ## Key principles
