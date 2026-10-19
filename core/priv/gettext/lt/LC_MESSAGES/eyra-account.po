@@ -176,6 +176,10 @@ msgstr "Paskyra"
 msgid "onboarding.continue.button"
 msgstr "Tęsti"
 
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Sveiki atvykę"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Žetonas neteisingas arba pasibaigęs"
