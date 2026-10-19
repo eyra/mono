@@ -9,6 +9,10 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#31.1 2026-10-19
+
+* Security - Storage export now checks endpoint access before streaming. `GET /storage/endpoint/:id/export` previously streamed a storage endpoint's full donation archive to any signed-in user without verifying rights on that endpoint; it now returns 403 unless the user may access the endpoint (the same check the endpoint content page uses). The Graphite submissions export (`GET /graphite/:id/export/submissions`) had the same gap and received the same check. Self-hosters using built-in (S3-backed) storage should upgrade. Also fixes a crash exporting an endpoint that is not part of a project.
+
 ## \#29 2026-09-02
 
 * Added - Identity-provider account transfer: users can move an existing account to a different sign-in provider without losing access
