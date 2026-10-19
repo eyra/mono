@@ -8,11 +8,20 @@ defmodule Systems.Graphite.ExportController do
   }
 
   def submissions(conn, %{"id" => id}) do
-    submissions =
-      Graphite.Public.get_leaderboard!(id)
-      |> Graphite.Public.list_submissions()
+    leaderboard = Graphite.Public.get_leaderboard!(id)
 
-    csv_data = export(submissions)
+    if authorized?(conn, leaderboard) do
+      submissions(conn, leaderboard, id)
+    else
+      forbidden(conn)
+    end
+  end
+
+  defp submissions(conn, leaderboard, id) do
+    csv_data =
+      leaderboard
+      |> Graphite.Public.list_submissions()
+      |> export()
 
     filename = "graphite-#{id}-submissions.csv"
 
@@ -20,6 +29,16 @@ defmodule Systems.Graphite.ExportController do
     |> put_resp_content_type("text/csv")
     |> put_resp_header("content-disposition", "attachment; filename=\"#{filename}\"")
     |> send_resp(200, csv_data)
+  end
+
+  defp authorized?(%{assigns: %{current_user: user}}, leaderboard),
+    do: Core.Authorization.can_access?(user, leaderboard, Graphite.LeaderboardContentPage)
+
+  defp forbidden(conn) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"403")
   end
 
   def export(submissions) when is_list(submissions) do
