@@ -26,6 +26,14 @@ defmodule Next.Config.RuntimeSnapshotTest do
     assert_raise RuntimeError, ~r/STORAGE_PATH .* must not be inside UPLOAD_PATH/, fn ->
       RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
     end
+
+    assert_raise RuntimeError, ~r/STORAGE_PATH .* must not be inside UPLOAD_PATH/, fn ->
+      RuntimeConfig.Snapshot.evaluate(
+        "config/runtime.exs",
+        %{env | "UPLOAD_PATH" => "/", "STORAGE_PATH" => "/home/next/storage"},
+        :prod
+      )
+    end
   end
 
   test "every Oban plugin name enabled at once gives a valid Oban config with one Cron plugin" do

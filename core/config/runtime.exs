@@ -240,7 +240,7 @@ if config_env() == :prod do
       System.get_env("STORAGE_PATH", Path.join(Path.dirname(upload_path), "storage"))
       |> Path.expand()
 
-    if storage_path == upload_path or String.starts_with?(storage_path, upload_path <> "/") do
+    if RuntimeConfig.inside?(storage_path, upload_path) do
       raise "STORAGE_PATH (#{storage_path}) must not be inside UPLOAD_PATH (#{upload_path})"
     end
 
