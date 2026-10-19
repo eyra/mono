@@ -6,7 +6,8 @@ defmodule Systems.Feldspar.ToolViewBuilder do
 
   ## Parameters
   - tool: The Feldspar tool model
-  - assigns: Contains presentation data and an opaque recovery context from the host.
+  - assigns: Contains presentation data, an opaque recovery context and an optional
+    start screen description from the host.
   """
   def view_model(
         tool,
@@ -25,7 +26,8 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       tool: tool,
       title: title,
       icon: normalize_icon(icon),
-      description: dgettext("eyra-feldspar", "tool.description"),
+      description:
+        Map.get(assigns, :description) || dgettext("eyra-feldspar", "tool.description"),
       recovery: build_recovery(unfinished_attempt?, support_url),
       recovery_id: "feldspar-recovery-#{Base.url_encode64(scope, padding: false)}",
       recovery_scope: scope,

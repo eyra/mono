@@ -48,6 +48,7 @@ config :core, :features,
   panl: true,
   panl_post_launch: true,
   password_sign_in: true,
+  probe: true,
   surfconext_sign_in: true
 
 # Only in tests, remove the complexity from the password hashing algorithm
