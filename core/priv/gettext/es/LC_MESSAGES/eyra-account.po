@@ -167,6 +167,10 @@ msgstr "Perfil"
 msgid "onboarding.continue.button"
 msgstr "Continuar"
 
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Bienvenido"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Enlace no válido o caducado"
