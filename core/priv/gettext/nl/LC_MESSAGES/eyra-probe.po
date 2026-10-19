@@ -1,0 +1,28 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: nl\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "template.title"
+msgstr "Cognitieve screening"
+
+#, elixir-autogen, elixir-format
+msgid "tool.description"
+msgstr "Je staat op het punt om een test te starten. Volg de instructies op het scherm. Het laden van de pagina kan even duren — bedankt voor je geduld."
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.probe.description"
+msgstr "Upload het zip-bestand van een Probe-tool. Deelnemers doen de test in hun browser."
+
+#, elixir-autogen, elixir-format
+msgid "workflow_item.probe.title"
+msgstr "Cognitieve test"

@@ -27,11 +27,11 @@ defmodule Systems.Content.LocalFS do
   end
 
   def get_root_path do
-    Application.get_env(:core, :upload_path)
+    Core.Env.get(:upload_path)
   end
 
   def get_base_url do
-    Application.get_env(:core, :base_url)
+    Core.Env.get(:base_url)
   end
 
   def remove(path) do
@@ -86,7 +86,7 @@ defmodule Systems.Content.LocalFS do
   end
 
   defp get_stream_chunk_size do
-    Application.fetch_env!(:core, :paper)
+    Core.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

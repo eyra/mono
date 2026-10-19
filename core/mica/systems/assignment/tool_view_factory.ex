@@ -22,7 +22,7 @@ defmodule Systems.Assignment.ToolViewFactory do
   def prepare(tool_ref, task_context) do
     tool = Workflow.ToolRefModel.tool(tool_ref)
     view_module = tool_model_to_view_module(tool.__struct__)
-    task_context = extend_context_for_tool(tool, task_context)
+    task_context = extend_context_for_tool(tool, tool_ref, task_context)
 
     CoreWeb.Live.Element.prepare_live_view(
       "tool_view",
@@ -37,7 +37,7 @@ defmodule Systems.Assignment.ToolViewFactory do
   def prepare_modal(tool_ref, task_context, modal_id) do
     tool = Workflow.ToolRefModel.tool(tool_ref)
     view_module = tool_model_to_view_module(tool.__struct__)
-    task_context = extend_context_for_tool(tool, task_context)
+    task_context = extend_context_for_tool(tool, tool_ref, task_context)
 
     LiveNest.Modal.prepare_live_view(
       modal_id,
@@ -56,7 +56,7 @@ defmodule Systems.Assignment.ToolViewFactory do
   end
 
   # Alliance tool: add url (with participant) and description
-  defp extend_context_for_tool(%Systems.Alliance.ToolModel{url: base_url}, context) do
+  defp extend_context_for_tool(%Systems.Alliance.ToolModel{url: base_url}, _tool_ref, context) do
     participant = context.data[:participant] || ""
 
     url = build_alliance_url(base_url, participant)
@@ -65,8 +65,14 @@ defmodule Systems.Assignment.ToolViewFactory do
     LiveContext.extend(context, %{url: url, description: description})
   end
 
+  # Feldspar tool: start screen description of a template added by the SaaS, nil for the default
+  defp extend_context_for_tool(%Systems.Feldspar.ToolModel{}, %{special: special}, context) do
+    description = Systems.Assignment.TemplateExtension.tool_description(special)
+    LiveContext.extend(context, %{description: description})
+  end
+
   # Other tools: no additional context needed
-  defp extend_context_for_tool(_tool, context), do: context
+  defp extend_context_for_tool(_tool, _tool_ref, context), do: context
 
   defp build_alliance_url(base_url, ""), do: base_url
 

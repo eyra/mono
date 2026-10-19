@@ -1,6 +1,6 @@
 defmodule Next.Bundle do
   defp include?() do
-    Application.fetch_env!(:core, :bundle) == :next
+    Core.Env.fetch!(:bundle) == :next
   end
 
   def routes do

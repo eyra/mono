@@ -53,6 +53,8 @@ defmodule Systems.Assignment.Private do
   def get_template(:questionnaire),
     do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 
+  def get_template(special), do: Assignment.TemplateExtension.template!(special)
+
   def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
 
   def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
@@ -168,7 +170,7 @@ defmodule Systems.Assignment.Private do
   end
 
   defp config() do
-    Application.get_env(:core, :assignment)
+    Core.Env.get(:assignment)
   end
 
   def connector_popup_module(:storage), do: Assignment.ConnectorPopupStorage
@@ -228,35 +230,7 @@ defmodule Systems.Assignment.Private do
     task_identifier(assignment, workflow_item, member_id)
   end
 
-  def task_identifier(
-        %{special: :data_donation},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :benchmark_challenge},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :questionnaire},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :paper_screening},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: _special}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 end

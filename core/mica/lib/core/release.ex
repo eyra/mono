@@ -1,5 +1,5 @@
 defmodule Core.Release do
-  @app :core
+  @app Core.Env.app()
 
   def migrate do
     load_app()

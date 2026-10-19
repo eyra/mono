@@ -108,7 +108,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
   defp content_type(name), do: MIME.from_path(name)
 
   defp settings do
-    Application.fetch_env!(:core, Systems.Storage.BuiltIn.S3)
+    Core.Env.fetch!(Systems.Storage.BuiltIn.S3)
   end
 
   defp backend do

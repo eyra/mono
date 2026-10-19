@@ -5,7 +5,8 @@ defmodule Systems.Manual.ToolModel do
   import Ecto.Changeset
   use Gettext, backend: CoreWeb.Gettext
 
-  @tool_directors Application.compile_env(:core, :tool_directors)
+  require Core.Env
+  @tool_directors Core.Env.compile_env(:tool_directors)
 
   alias Systems.Manual
 

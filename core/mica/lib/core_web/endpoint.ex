@@ -51,8 +51,9 @@ defmodule CoreWeb.Endpoint do
   plug(Plug.RequestId)
   plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
 
-  @http_body_max_size Application.compile_env(
-                        :core,
+  require Core.Env
+
+  @http_body_max_size Core.Env.compile_env(
                         [CoreWeb.Endpoint, :http_body_max_size],
                         210_000_000
                       )

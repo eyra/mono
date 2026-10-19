@@ -106,33 +106,9 @@ defmodule Systems.Project.Assembly do
     Project.Public.prepare(%{name: name}, items, user)
   end
 
-  defp prepare_item(:benchmark_challenge, name, user) do
+  defp prepare_item(template, name, user) when is_atom(template) do
     {:ok, assignment} =
-      Assignment.Assembly.prepare(:benchmark_challenge, :project, user)
-      |> Changeset.apply_action(:prepare)
-
-    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
-  end
-
-  defp prepare_item(:data_donation, name, user) do
-    {:ok, assignment} =
-      Assignment.Assembly.prepare(:data_donation, :project, user)
-      |> Changeset.apply_action(:prepare)
-
-    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
-  end
-
-  defp prepare_item(:questionnaire, name, user) do
-    {:ok, assignment} =
-      Assignment.Assembly.prepare(:questionnaire, :project, user)
-      |> Changeset.apply_action(:prepare)
-
-    Project.Public.prepare_item(%{name: name, project_path: []}, assignment)
-  end
-
-  defp prepare_item(:paper_screening, name, user) do
-    {:ok, assignment} =
-      Assignment.Assembly.prepare(:paper_screening, :project, user)
+      Assignment.Assembly.prepare(template, :project, user)
       |> Changeset.apply_action(:prepare)
 
     Project.Public.prepare_item(%{name: name, project_path: []}, assignment)

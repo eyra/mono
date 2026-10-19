@@ -12,7 +12,7 @@ defmodule CoreWeb.Meta do
     |> assign(:bundle, bundle)
   end
 
-  defp config, do: Application.get_env(:core, :meta, [])
+  defp config, do: Core.Env.get(:meta, [])
 
   def bundle_title(%{assigns: %{bundle_title: bundle_title}} = _conn) do
     bundle_title

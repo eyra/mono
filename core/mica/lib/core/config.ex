@@ -16,7 +16,7 @@ defmodule Core.Config do
           """
       end
 
-    providers = Application.fetch_env!(:core, :payment_providers)
+    providers = Core.Env.fetch!(:payment_providers)
     Map.fetch!(providers, name)
   end
 end

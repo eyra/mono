@@ -22,6 +22,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         assignment_id: 123,
         participant: "test_participant",
         workflow_item_id: 456,
+        description: Map.get(test_context, :description),
         current_user: user,
         recovery: %{
           scope: "external-run/opaque-scope",
@@ -101,5 +102,15 @@ defmodule Systems.Feldspar.ToolViewTest do
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
     assert has_element?(view, "iframe")
+  end
+
+  test "the start screen shows the default description", %{view: view} do
+    assert has_element?(view, "[data-testid='start-container']", "donate your data")
+  end
+
+  @tag description: "You are about to start a test."
+  test "the start screen shows the description from the host", %{view: view} do
+    assert has_element?(view, "[data-testid='start-container']", "You are about to start a test.")
+    refute has_element?(view, "[data-testid='start-container']", "donate your data")
   end
 end

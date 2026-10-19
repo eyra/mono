@@ -66,7 +66,7 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
 
   defp get_retention_hours(args) do
     Map.get(args, "retention_hours") ||
-      Application.get_env(:core, :feldspar_data_donation)[:retention_hours] ||
+      Core.Env.get(:feldspar_data_donation)[:retention_hours] ||
       336
   end
 end

@@ -15,7 +15,7 @@ defmodule Systems.Fund.AutoApproveWorker do
   @impl Oban.Worker
   def perform(%Oban.Job{}) do
     started = System.monotonic_time()
-    approve_timeout = Application.get_env(:core, :auto_approve_timeout, 14)
+    approve_timeout = Core.Env.get(:auto_approve_timeout, 14)
 
     results =
       NaiveDateTime.utc_now()

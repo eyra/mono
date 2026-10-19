@@ -49,7 +49,7 @@ defmodule Core.Factories do
       confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
       profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
-        photo_url: Faker.Avatar.image_url()
+        photo_url: "/images/profile_photo_default.svg"
       },
       features: %Account.FeaturesModel{
         gender: :man
@@ -63,7 +63,7 @@ defmodule Core.Factories do
     |> struct!(%{
       profile: %Account.UserProfileModel{
         fullname: Faker.Person.name(),
-        photo_url: Faker.Avatar.image_url()
+        photo_url: "/images/profile_photo_default.svg"
       }
     })
   end

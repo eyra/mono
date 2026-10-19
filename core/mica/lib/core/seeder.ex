@@ -1,5 +1,5 @@
 defmodule Core.Seeder do
-  @app :core
+  @app Core.Env.app()
 
   def run(names) when is_list(names) do
     Enum.each(names, &run/1)
