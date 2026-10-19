@@ -169,7 +169,7 @@ msgstr "Continua"
 
 #, elixir-autogen, elixir-format
 msgid "onboarding.hero.title"
-msgstr "Ti diamo il benvenuto"
+msgstr "Benvenuto"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
