@@ -273,11 +273,17 @@ flyctl apps create my-self
 flyctl postgres create --name my-self-db --region ams --vm-size shared-cpu-1x --volume-size 1 --initial-cluster-size 1
 flyctl postgres attach my-self-db --app my-self               # sets DATABASE_URL
 flyctl storage create --app my-self --name my-self-storage --public   # sets AWS_* and BUCKET_NAME
+flyctl storage create --name my-self-donations                       # private, for donations
 flyctl secrets set --app my-self --stage \
   SECRET_KEY_BASE="$(openssl rand -base64 64 | tr -d '\n')" \
-  AWS_S3_BUCKET=my-self-storage PUBLIC_S3_BUCKET=my-self-storage
+  AWS_S3_BUCKET=my-self-donations PUBLIC_S3_BUCKET=my-self-storage
 flyctl deploy --remote-only -c fly.my-self.toml --build-arg VERSION=1.0.0 --build-arg PLATFORM=fly
 ```
+
+Donations must go to a private bucket, separate from the public one: anyone can read objects in
+`PUBLIC_S3_BUCKET`, and the app refuses to start when `AWS_S3_BUCKET` is the same bucket. The access
+key that `flyctl storage create --app` sets must also be allowed to read and write the donations
+bucket; grant that in the Tigris dashboard (`flyctl storage dashboard`).
 
 For automatic deploys, create a deploy token with `flyctl tokens create deploy --app my-self` and
 store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for nova-mica-dev).
@@ -294,8 +300,8 @@ Required:
 | `DATABASE_URL` | secret | PostgreSQL connection URL; set by `flyctl postgres attach` | |
 | `SECRET_KEY_BASE` | secret | Random string of at least 64 characters | `openssl rand -base64 64` |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` | secret | S3 credentials and endpoint; set by `flyctl storage create` | |
-| `AWS_S3_BUCKET` | secret | Bucket for platform storage | `nova-mica-dev-storage` |
-| `PUBLIC_S3_BUCKET` | secret | Bucket for public content | `nova-mica-dev-storage` |
+| `AWS_S3_BUCKET` | secret | Private bucket for donations; must not be `PUBLIC_S3_BUCKET` | `nova-mica-dev-donations` |
+| `PUBLIC_S3_BUCKET` | secret | Public bucket for content and Feldspar apps | `nova-mica-dev-storage` |
 | `BUCKET_NAME` | secret | Set by `flyctl storage create`; still read by `runtime.fly.exs` until it moves to `AWS_S3_BUCKET` | `nova-mica-dev-storage` |
 | `APP_NAME` | env | Name shown in the UI and in mail | `Mica [dev]` |
 | `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
