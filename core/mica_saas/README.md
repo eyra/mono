@@ -184,7 +184,13 @@ end
 To activate and configure a storage backend, you must modify the runtime configuration, `core/config/runtime.exs`.
 
 The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
-`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.
+`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`, which
+stores donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`). Researchers download
+them through the endpoint export, which checks access. `STORAGE_PATH` must not be inside `UPLOAD_PATH`: that
+folder is served without authentication, and the app refuses to start with such a setting.
+
+Upgrading from a version that stored donations in `UPLOAD_PATH`: move the endpoint folders (named
+`project_node=<id>`) from `UPLOAD_PATH` to `STORAGE_PATH`.
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
@@ -316,6 +322,7 @@ Optional:
 | `APP_ADMINS` | env or secret | Space-separated e-mail addresses of system admins; wildcards like `*@example.org` work | unset |
 | `MAILGUN_API_KEY` | secret | Sends mail through Mailgun (EU). Without it no mail leaves the app, so sign-up confirmation and sign-in code mails do not arrive | Next dev's Mailgun key, for now |
 | `STORAGE_SERVICES` | env | Comma-separated storage services | `builtin` |
+| `STORAGE_PATH` | env | Donation folder when `STORAGE_S3_PREFIX` is unset; must not be inside `UPLOAD_PATH` | next to `UPLOAD_PATH` (`/app/data/storage`) |
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
 | `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |

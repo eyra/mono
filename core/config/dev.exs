@@ -7,6 +7,12 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+storage_path =
+  File.cwd!()
+  |> Path.join("priv")
+  |> Path.join("storage")
+  |> tap(&File.mkdir_p!/1)
+
 feldspar_data_donation_path =
   File.cwd!()
   |> Path.join("priv")
@@ -33,6 +39,8 @@ config :core,
 # `mix phx.server` does not load a runtime config. Keep development payment
 # flows local unless `core/start` explicitly selects a configured provider.
 config :core, payment_provider: Systems.Payment.Provider.Local
+
+config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
 
 config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,

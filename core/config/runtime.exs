@@ -230,6 +230,21 @@ if config_env() == :prod do
       prefix: storage_s3_prefix
   else
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
+    # Donations must stay out of UPLOAD_PATH: that folder is served without
+    # authentication at /uploads and /feldspar/apps. Defaults to a `storage`
+    # folder next to it.
+    upload_path = Path.expand(upload_path)
+
+    storage_path =
+      System.get_env("STORAGE_PATH", Path.join(Path.dirname(upload_path), "storage"))
+      |> Path.expand()
+
+    if storage_path == upload_path or String.starts_with?(storage_path, upload_path <> "/") do
+      raise "STORAGE_PATH (#{storage_path}) must not be inside UPLOAD_PATH (#{upload_path})"
+    end
+
+    config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
   end
 
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do

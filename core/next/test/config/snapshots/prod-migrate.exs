@@ -67,6 +67,7 @@
        partner_fee_percentage: 0
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.LocalFS]},
+    {Systems.Storage.BuiltIn.LocalFS, [root_path: "/home/next/storage"]},
     {:admins, ~r/^$/},
     {:auto_approve_timeout, 14},
     {:base_url, "https://APP_DOMAIN"},

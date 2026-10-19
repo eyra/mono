@@ -142,6 +142,9 @@ config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
 
+config :core, Systems.Storage.BuiltIn.LocalFS,
+  root_path: Path.expand("../tmp/storage_test", __DIR__)
+
 # Feldspar data donation file storage for tests
 config :core, :feldspar_data_donation,
   path: "/tmp/data_donations_test",

@@ -39,7 +39,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
           _ -> nil
         end
 
-      %{path: path, size: String.to_integer(size), timestamp: timestamp, url: url}
+      %{path: path, size: String.to_integer(size), timestamp: timestamp, source: {:url, url}}
     end)
   end
 

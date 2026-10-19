@@ -1,11 +1,17 @@
 defmodule Systems.Storage.BuiltIn.LocalFS do
+  @moduledoc """
+  Stores donations on the local filesystem under the configured `root_path`.
+
+  The root must not be a statically served folder (such as `upload_path`):
+  donations are only handed out through `Systems.Storage.Controller`, which
+  checks access to the endpoint.
+  """
   @behaviour Systems.Storage.BuiltIn.Special
-  use CoreWeb, :verified_routes
 
   @impl true
   def store(folder, filename, data) do
     folder_path = get_full_path(folder)
-    File.mkdir(folder_path)
+    File.mkdir_p(folder_path)
     file_path = Path.join(folder_path, filename)
 
     case File.write(file_path, data) do
@@ -17,7 +23,7 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
   @impl true
   def list_files(folder) do
     folder_path = get_full_path(folder)
-    File.mkdir(folder_path)
+    File.mkdir_p(folder_path)
 
     File.ls!(folder_path)
     |> Enum.map(fn filename ->
@@ -30,9 +36,10 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
         |> DateTime.from_naive!("Etc/UTC")
 
       %{
-        path: file_path,
+        path: filename,
         size: size,
-        timestamp: datetime
+        timestamp: datetime,
+        source: {:file, file_path}
       }
     end)
   end
@@ -49,6 +56,6 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
   end
 
   def get_root_path do
-    Core.Env.get(:upload_path)
+    Core.Env.fetch!(__MODULE__) |> Keyword.fetch!(:root_path)
   end
 end
