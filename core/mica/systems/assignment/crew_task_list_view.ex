@@ -38,7 +38,8 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> present_modal(tool_modal)
   end
 
-  # The open task's workflow item was deleted: close its modal
+  # The open task left the participant's task list (its workflow item was deleted
+  # or the assignment went offline): close its modal
   def handle_view_model_updated(%{assigns: %{tool_modal: tool_modal}} = socket)
       when not is_nil(tool_modal) do
     socket
@@ -69,7 +70,7 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> complete_task(task)
   end
 
-  # The task's workflow item was deleted while the tool was open
+  # The task left the participant's task list while the tool was open
   def handle_tool_completed(socket), do: close_tool_modal(socket)
 
   @impl true
