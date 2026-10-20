@@ -1,0 +1,20 @@
+{
+  "name": "eyra",
+  "model": ".archplan/model.archmodel.json",
+  "export": "archplan export-elixir -C core -o .archplan/model.archmodel.json",
+  "port": 8770,
+  "detectors": {
+    "security.unchecked_entry": {
+      "params": {
+        "hooks": [
+          "get_authorization_context"
+        ]
+      }
+    },
+    "security.unguarded_entry": {
+      "params": {
+        "report_undeclared": false
+      }
+    }
+  }
+}

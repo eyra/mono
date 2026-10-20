@@ -1,0 +1,19 @@
+{
+  "components": [
+    {"prefix": "Next", "id": "Next"},
+    {"prefix": "Self", "id": "Self"},
+    {"prefix": "Fabric", "id": "Frameworks.Fabric"},
+    {"prefix": "BankingClient", "id": "BankingClient"},
+    {"prefix": "Ecto.Atom", "id": "Core"},
+    {"prefix": "Eyra", "id": "Core"},
+    {"prefix": "Browser", "id": "CoreWeb"}
+  ],
+  "layers": [
+    {"id": "bundles", "name": "Bundles", "components": ["Next", "Self"]},
+    {"id": "web", "name": "Web", "components": ["CoreWeb"]},
+    {"id": "systems", "name": "Systems", "components": ["Systems"]},
+    {"id": "frameworks", "name": "Frameworks", "components": ["Frameworks"]},
+    {"id": "core", "name": "Core", "components": ["Core", "BankingClient"]}
+  ],
+  "trace": {"exclude_modules": ["CoreWeb.Gettext", "CoreWeb.Cldr"]}
+}
