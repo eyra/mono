@@ -21,7 +21,8 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
   alias Systems.Feldspar
   alias Systems.Storage
 
-  # Shorter than the hourly schedule, so overlapping fan-outs don't pile up per node.
+  # Only queued or running node jobs count, so overlapping fan-outs don't pile up per node,
+  # while a completed run never blocks a new one (e.g. the admin trigger after the hourly run).
   @unique_period_seconds 50 * 60
 
   @impl Oban.Worker
@@ -60,7 +61,7 @@ defmodule Systems.Feldspar.DataDonationCleanupWorker do
     |> Map.put("node", to_string(node))
     |> new(
       queue: Storage.Public.storage_delivery_queue(node),
-      unique: [period: @unique_period_seconds, keys: [:node]]
+      unique: [period: @unique_period_seconds, keys: [:node], states: :incomplete]
     )
   end
 
