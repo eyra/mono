@@ -10,6 +10,8 @@ defmodule Systems.Storage.Public do
   alias Systems.Storage
   alias Systems.Monitor
 
+  defdelegate storage_delivery_queue(node), to: Storage.Private
+
   def get_endpoint!(id, preload \\ []) do
     Repo.get!(Storage.EndpointModel, id)
     |> Repo.preload(preload)

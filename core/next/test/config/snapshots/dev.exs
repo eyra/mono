@@ -38,8 +38,7 @@
           [
             crontab: [
               {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker,
-               [queue: :storage_delivery_local_nonode@nohost]},
+              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker},
               {"* * * * *", Systems.Fund.PayInExpirationWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
               {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},

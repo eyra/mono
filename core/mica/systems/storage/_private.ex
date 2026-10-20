@@ -35,7 +35,7 @@ defmodule Systems.Storage.Private do
 
   Uses the same naming scheme as runtime.exs configuration.
   """
-  def storage_delivery_queue do
-    :"storage_delivery_local_#{Node.self()}"
+  def storage_delivery_queue(node \\ Node.self()) do
+    :"storage_delivery_local_#{node}"
   end
 end
