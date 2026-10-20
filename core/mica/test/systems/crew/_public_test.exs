@@ -114,6 +114,19 @@ defmodule Systems.Crew.PublicTest do
       assert %{expired: false} = member2
     end
 
+    test "reset_member/3 with revive? keeps the tasks it rejects expired" do
+      user = Factories.insert!(:member)
+      crew = Factories.insert!(:crew)
+
+      {:ok, %{member: member}} = Crew.Public.apply_member(crew, user, ["task1"], expire_at(-1))
+      Crew.Public.create_task!(crew, [user], ["task2"], expire_at(-1))
+      Crew.Public.mark_expired()
+
+      Crew.Public.reset_member(member, expire_at(1), revive?: &(&1.identifier == ["task1"]))
+
+      assert [%{identifier: ["task1"]}] = Crew.Public.list_tasks_for_user(crew, user)
+    end
+
     test "list_members/1 lists only members from that crew" do
       user = Factories.insert!(:member)
 

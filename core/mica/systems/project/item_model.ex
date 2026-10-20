@@ -173,6 +173,8 @@ defmodule Systems.Project.ItemModel do
       image_info(assignment(struct))
     end
 
+    defp image_info(nil), do: nil
+
     defp image_info(image_id) do
       ImageHelpers.get_image_info(image_id, 400, 200)
     end
@@ -224,5 +226,6 @@ defmodule Systems.Project.ItemModel do
 
     defp assignment(%Advert.Model{assignment: assignment}), do: assignment
     defp assignment(%Assignment.Model{} = assignment), do: assignment
+    defp assignment(nil), do: nil
   end
 end

@@ -40,6 +40,23 @@ defmodule Systems.Assignment.PrivateTest do
               }} = Assignment.Private.get_workflow_item(task, [])
     end
 
+    test "get_workflow_item/2 for a deleted item" do
+      %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
+      %{items: [item]} = workflow |> Core.Repo.preload([:items])
+
+      user = Factories.insert!(:member)
+      member = Crew.Factories.create_member(crew, user)
+
+      task =
+        Crew.Factories.create_task(crew, member, ["item=#{item.id}", "member=#{member.id}"],
+          expired: false
+        )
+
+      Core.Repo.delete!(item)
+
+      assert {:error, :not_found} = Assignment.Private.get_workflow_item(task, [])
+    end
+
     test "get_crew_member/2" do
       %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
       %{items: [%{id: item_id}]} = workflow |> Core.Repo.preload([:items])
