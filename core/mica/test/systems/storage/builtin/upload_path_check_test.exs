@@ -57,11 +57,28 @@ defmodule Systems.Storage.BuiltIn.UploadPathCheckTest do
 
       error = assert_raise RuntimeError, fn -> Backend.check_upload_path!() end
 
-      assert error.message =~ Path.join(upload_path, "project_node=1")
-      assert error.message =~ Path.join(upload_path, "project_node=2")
+      folder_1 = Path.join(upload_path, "project_node=1")
+      folder_2 = Path.join(upload_path, "project_node=2")
+
+      assert error.message =~ "    #{folder_1}\n"
+      assert error.message =~ "    #{folder_2}\n"
       assert error.message =~ "STORAGE_PATH (#{storage_path})"
       assert error.message =~ "mkdir -p #{storage_path}\n"
-      assert error.message =~ "mv #{upload_path}/project_node=* #{storage_path}/\n"
+      assert error.message =~ "mv #{folder_1} #{folder_2} #{storage_path}/\n"
+    end
+
+    test "refuses to start while assignment donation folders are in the upload folder", %{
+      upload_path: upload_path,
+      storage_path: storage_path
+    } do
+      File.mkdir_p!(Path.join(upload_path, "assignment=1"))
+
+      error = assert_raise RuntimeError, fn -> Backend.check_upload_path!() end
+
+      folder = Path.join(upload_path, "assignment=1")
+
+      assert error.message =~ "    #{folder}\n"
+      assert error.message =~ "mv #{folder} #{storage_path}/\n"
     end
 
     test "quotes paths in the move command when the shell needs it", %{tmp_dir: tmp_dir} do
@@ -73,7 +90,7 @@ defmodule Systems.Storage.BuiltIn.UploadPathCheckTest do
         assert_raise RuntimeError, fn -> LocalFS.check_upload_path!(upload_path, storage_path) end
 
       assert error.message =~
-               "mv '#{upload_path}'/project_node=* '#{String.replace(storage_path, "'", "'\\''")}'/"
+               "mv '#{upload_path}/project_node=1' '#{String.replace(storage_path, "'", "'\\''")}'/"
     end
   end
 

@@ -59,10 +59,11 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     Core.Env.fetch!(__MODULE__) |> Keyword.fetch!(:root_path)
   end
 
-  @legacy_folder_prefix "project_node="
+  @legacy_folder_prefixes ["project_node=", "assignment="]
 
   @doc """
-  Raises when `upload_path` still holds endpoint folders (`project_node=<id>`).
+  Raises when `upload_path` still holds endpoint folders (`project_node=<id>`,
+  or `assignment=<id>` for endpoints created before storage moved to projects).
 
   Earlier versions stored donations there, where they are served without
   authentication and left out of the export. Files are never moved in code:
@@ -81,7 +82,7 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     case File.ls(upload_path) do
       {:ok, names} ->
         names
-        |> Enum.filter(&String.starts_with?(&1, @legacy_folder_prefix))
+        |> Enum.filter(&String.starts_with?(&1, @legacy_folder_prefixes))
         |> Enum.map(&Path.join(upload_path, &1))
         |> Enum.filter(&File.dir?/1)
         |> Enum.sort()
@@ -104,7 +105,7 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     Stop every node of this app and move these folders to STORAGE_PATH (#{root_path}):
 
         mkdir -p #{shell_quote(root_path)}
-        mv #{shell_quote(upload_path)}/#{@legacy_folder_prefix}* #{shell_quote(root_path)}/
+        mv #{Enum.map_join(folders, " ", &shell_quote(Path.expand(&1)))} #{shell_quote(root_path)}/
 
     Then start the app again.
     """
