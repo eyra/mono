@@ -33,7 +33,18 @@
      [
        plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker},
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker}
+            ]
+          ]}
        ],
        queues: [
          default: 5,

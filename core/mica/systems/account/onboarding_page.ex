@@ -98,7 +98,7 @@ defmodule Systems.Account.OnboardingPage do
   def render(assigns) do
     ~H"""
     <.stripped menus={@menus}>
-      <Area.content>
+      <Area.content class="pt-[env(safe-area-inset-top)]">
         <Margin.y id={:page_top} />
 
         <Area.sheet>

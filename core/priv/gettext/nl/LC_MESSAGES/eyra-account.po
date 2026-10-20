@@ -166,6 +166,10 @@ msgstr "Profiel"
 msgid "onboarding.continue.button"
 msgstr "Ga verder"
 
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Welkom"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Link is ongeldig of verlopen"

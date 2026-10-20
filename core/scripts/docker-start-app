@@ -10,6 +10,10 @@ if [ -n "$UPLOAD_PATH" ]; then
   mkdir -p "$UPLOAD_PATH"
 fi
 
+if [ -n "$STORAGE_PATH" ]; then
+  mkdir -p "$STORAGE_PATH"
+fi
+
 if [ -n "$FELDSPAR_DATA_DONATION_PATH" ]; then
   mkdir -p "$FELDSPAR_DATA_DONATION_PATH"
 fi

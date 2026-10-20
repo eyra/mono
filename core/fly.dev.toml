@@ -39,7 +39,7 @@ org = 'eyra'
   OPP_BASE_URL = 'https://api-sandbox.onlinebetaalplatform.nl/v1'
 
   # Oban plugins
-  ENABLED_OBAN_PLUGINS = 'pruner, lifeline'
+  ENABLED_OBAN_PLUGINS = 'pruner, lifeline, advert_expiration, data_donation_cleanup, pay_in_expiration, payment_reconciliation, auth_code_cleanup, auto_approve'
 
   # Storage services (S3/Tigris)
   STORAGE_SERVICES = 'builtin'

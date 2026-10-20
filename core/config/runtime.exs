@@ -123,7 +123,7 @@ if config_env() == :prod do
       {"data_donation_cleanup",
        {:cron,
         {System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *"),
-         Systems.Feldspar.DataDonationCleanupWorker, queue: storage_delivery_queue}}},
+         Systems.Feldspar.DataDonationCleanupWorker}}},
       {"pay_in_expiration", {:cron, {"* * * * *", Systems.Fund.PayInExpirationWorker}}},
       {"payment_reconciliation", {:cron, {"0 3 * * *", Systems.Payment.ReconciliationWorker}}},
       {"auth_code_cleanup", {:cron, {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}}},
@@ -237,6 +237,21 @@ if config_env() == :prod do
       prefix: storage_s3_prefix
   else
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
+    # Donations must stay out of UPLOAD_PATH: that folder is served without
+    # authentication at /uploads and /feldspar/apps. Defaults to a `storage`
+    # folder next to it.
+    upload_path = Path.expand(upload_path)
+
+    storage_path =
+      System.get_env("STORAGE_PATH", Path.join(Path.dirname(upload_path), "storage"))
+      |> Path.expand()
+
+    if RuntimeConfig.inside?(storage_path, upload_path) do
+      raise "STORAGE_PATH (#{storage_path}) must not be inside UPLOAD_PATH (#{upload_path})"
+    end
+
+    config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
   end
 
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do

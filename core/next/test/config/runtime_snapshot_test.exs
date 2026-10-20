@@ -28,6 +28,27 @@ defmodule Next.Config.RuntimeSnapshotTest do
     end
   end
 
+  test "refuses a local storage path inside the statically served upload path" do
+    %{env_file: env_file} = Enum.find(Snapshot.fixtures(), &(&1.name == "prod-migrate"))
+
+    env =
+      env_file
+      |> RuntimeConfig.Snapshot.read_env_file()
+      |> Map.put("STORAGE_PATH", "/home/next/uploads/storage")
+
+    assert_raise RuntimeError, ~r/STORAGE_PATH .* must not be inside UPLOAD_PATH/, fn ->
+      RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
+    end
+
+    assert_raise RuntimeError, ~r/STORAGE_PATH .* must not be inside UPLOAD_PATH/, fn ->
+      RuntimeConfig.Snapshot.evaluate(
+        "config/runtime.exs",
+        %{env | "UPLOAD_PATH" => "/", "STORAGE_PATH" => "/home/next/storage"},
+        :prod
+      )
+    end
+  end
+
   test "every Oban plugin name enabled at once gives a valid Oban config with one Cron plugin" do
     %{env_file: env_file} =
       Enum.find(Snapshot.fixtures(), &(&1.name == "prod-all-oban-plugins"))

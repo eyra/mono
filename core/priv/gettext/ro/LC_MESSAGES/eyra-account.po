@@ -176,6 +176,10 @@ msgstr "Profil"
 msgid "onboarding.continue.button"
 msgstr "Continuați"
 
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Bun venit"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Link nevalid sau expirat"

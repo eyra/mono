@@ -1,5 +1,6 @@
 defmodule Systems.Admin.ActionsViewTest do
   use CoreWeb.ConnCase, async: false
+  use Oban.Testing, repo: Core.Repo
   import Phoenix.LiveViewTest
 
   alias Systems.Admin
@@ -89,6 +90,19 @@ defmodule Systems.Admin.ActionsViewTest do
 
       # View should still be rendered
       assert view |> has_element?("[data-testid='actions-view']")
+    end
+
+    test "data_donation_cleanup event enqueues a fan-out cleanup job", %{conn: conn} do
+      conn = conn |> Map.put(:request_path, "/admin/actions")
+
+      {:ok, view, _html} = live_isolated(conn, Admin.ActionsView, session: %{})
+
+      view |> render_click("data_donation_cleanup")
+
+      assert [%{queue: "default", args: args}] =
+               all_enqueued(worker: Systems.Feldspar.DataDonationCleanupWorker)
+
+      refute Map.has_key?(args, "node")
     end
 
     # Note: The crash button intentionally raises an exception for testing purposes.
