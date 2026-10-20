@@ -40,7 +40,7 @@ defmodule Systems.Storage.ControllerTest do
       expect(MockSpecial, :list_files, fn "export_test" ->
         [
           %{
-            url: "http://localhost:#{bypass.port}/donation.json",
+            source: {:url, "http://localhost:#{bypass.port}/donation.json"},
             path: "donation.json",
             size: 2,
             timestamp: DateTime.utc_now()

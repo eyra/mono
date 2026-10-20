@@ -3,6 +3,7 @@ tmp/
 priv/static/content
 priv/static/uploads
 priv/static/donations
+priv/storage
 priv/cldr
 .bundle
 deps/

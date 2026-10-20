@@ -40,8 +40,8 @@ defmodule Systems.Storage.Controller do
     builtin
     |> Storage.BuiltIn.Backend.list_files()
     |> request_permission(remote_ip)
-    |> Enum.map(fn %{url: url, path: path, timestamp: timestamp} ->
-      [source: {:url, url}, path: "#{export_name}/#{path}", timestamp: timestamp]
+    |> Enum.map(fn %{source: source, path: path, timestamp: timestamp} ->
+      [source: source, path: "#{export_name}/#{path}", timestamp: timestamp]
     end)
     |> Packmatic.build_stream()
     |> Packmatic.Conn.send_chunked(conn, "#{export_name}.zip")
