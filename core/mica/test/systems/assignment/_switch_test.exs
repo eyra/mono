@@ -114,6 +114,26 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
+    for event <- [:started, :completed] do
+      @event event
+
+      test "crew_task #{event} after its workflow item was deleted", %{
+        user: user,
+        crew: crew,
+        crew_task: crew_task
+      } do
+        {:ok, item} = Assignment.Private.get_workflow_item(crew_task)
+        Core.Repo.delete!(item)
+
+        message = %{crew: crew, crew_task: crew_task, from_pid: self()}
+        assert :ok = Switch.intercept({:crew_task, @event}, message)
+
+        refute_signal_dispatched({:assignment, :monitor_event})
+        message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
+        assert message.user_id == user.id
+      end
+    end
+
     test "crew_task completed", %{user: user, crew: crew, crew_task: crew_task} do
       message = %{crew: crew, crew_task: crew_task, from_pid: self()}
       assert :ok = Switch.intercept({:crew_task, :completed}, message)

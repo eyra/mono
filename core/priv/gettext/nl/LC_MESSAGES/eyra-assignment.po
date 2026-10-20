@@ -793,3 +793,15 @@ msgstr "Bedankt!"
 #, elixir-autogen, elixir-format
 msgid "participation.title.rejected"
 msgstr "Je bijdrage is afgewezen"
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.body"
+msgstr "Deze taak is uit de studie verwijderd. Heb je vragen? Neem dan contact op met de onderzoeker die je heeft uitgenodigd."
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.title"
+msgstr "Deze taak is niet meer beschikbaar"
+
+#, elixir-autogen, elixir-format
+msgid "work.empty.message"
+msgstr "Deze studie heeft geen taken."

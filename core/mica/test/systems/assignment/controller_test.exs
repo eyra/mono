@@ -30,6 +30,19 @@ defmodule Systems.Assignment.ControllerTest do
     end
   end
 
+  describe "callback" do
+    setup :login_as_member
+
+    test "task removed by the researcher shows a friendly page", %{conn: conn} do
+      %{workflow: workflow} = Assignment.Factories.create_assignment(31, 1, :online)
+      %{items: [item]} = Core.Repo.preload(workflow, :items)
+      Core.Repo.delete!(item)
+
+      conn = get(conn, "/assignment/callback/#{item.id}")
+      assert html_response(conn, 200) =~ "error-task_unavailable"
+    end
+  end
+
   describe "invite visitor" do
     for action <- ~w(invite apply join) do
       test "#{action} sends the visitor to the participant entry page", %{conn: conn} do

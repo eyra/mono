@@ -793,3 +793,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "participation.title.rejected"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.body"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "work.empty.message"
+msgstr ""

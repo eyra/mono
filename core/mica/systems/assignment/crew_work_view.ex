@@ -4,6 +4,7 @@ defmodule Systems.Assignment.CrewWorkView do
 
   require Logger
 
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment
   alias Systems.Consent
   alias Systems.Content
@@ -156,6 +157,11 @@ defmodule Systems.Assignment.CrewWorkView do
           <%= if @vm.task_view do %>
             <.element {Map.from_struct(@vm.task_view)} socket={@socket} />
           <% end %>
+          <div :if={@vm.empty_message} class="flex flex-col items-center justify-center w-full h-full px-6">
+            <Text.body_large align="text-center" testid="crew-work-view-empty">
+              <%= @vm.empty_message %>
+            </Text.body_large>
+          </div>
         </div>
 
         <%!-- floating button --%>
