@@ -998,10 +998,29 @@ defmodule Systems.Assignment.PublicTest do
           Crew.Public.create_task!(crew, [user], identifier)
         end
 
+      non_item_task = Crew.Public.create_task!(crew, [user], ["task1"])
+
       {:ok, _} = Ecto.Multi.new() |> Crew.Public.expire_member(member) |> Repo.commit()
       Repo.delete!(deleted_item)
 
-      {:ok, user: user, assignment: assignment, deleted_task: deleted_task, kept_task: kept_task}
+      {:ok,
+       user: user,
+       assignment: assignment,
+       deleted_task: deleted_task,
+       kept_task: kept_task,
+       non_item_task: non_item_task}
+    end
+
+    test "reset_member/3 revives a task without an item id", %{
+      user: user,
+      assignment: assignment,
+      non_item_task: non_item_task
+    } do
+      assert %{expired: true} = Repo.reload!(non_item_task)
+
+      Assignment.Public.reset_member(assignment, user)
+
+      assert %{expired: false} = Repo.reload!(non_item_task)
     end
 
     test "reset_member/3 keeps the deleted task expired", %{

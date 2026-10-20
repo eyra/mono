@@ -689,9 +689,12 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  # Tasks of deleted workflow items are expired and must stay expired when the
-  # member is reset, otherwise the participant can never finish again.
-  defp reset_opts(%Assignment.Model{workflow_id: workflow_id}) do
+  @doc """
+  Options for resetting a member of the assignment's crew. Tasks of deleted
+  workflow items are expired and must stay expired when the member is reset,
+  otherwise the participant can never finish again.
+  """
+  def reset_opts(%Assignment.Model{workflow_id: workflow_id}) do
     item_ids = workflow_id |> Workflow.Public.list_items() |> Enum.map(&"#{&1.id}")
     [revive?: &(Assignment.Private.workflow_item_id(&1) in [nil | item_ids])]
   end
