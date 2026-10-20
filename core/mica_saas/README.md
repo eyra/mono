@@ -189,8 +189,17 @@ stores donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_
 them through the endpoint export, which checks access. `STORAGE_PATH` must not be inside `UPLOAD_PATH`: that
 folder is served without authentication, and the app refuses to start with such a setting.
 
-Upgrading from a version that stored donations in `UPLOAD_PATH`: move the endpoint folders (named
-`project_node=<id>`) from `UPLOAD_PATH` to `STORAGE_PATH`.
+Upgrading from a version that stored donations in `UPLOAD_PATH`: the app refuses to start while `UPLOAD_PATH`
+still holds endpoint folders (named `project_node=<id>`), because they would stay public and researchers could not
+export them. The error lists the folders and the command to move them, with the actual paths filled in. Stop the
+app on every node, run that command, then start the app again. With both variables set it is:
+
+```sh
+mkdir -p "$STORAGE_PATH"
+mv "$UPLOAD_PATH"/project_node=* "$STORAGE_PATH"/
+```
+
+The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do

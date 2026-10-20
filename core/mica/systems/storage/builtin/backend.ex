@@ -39,6 +39,20 @@ defmodule Systems.Storage.BuiltIn.Backend do
     Core.Env.fetch!(Systems.Storage.BuiltIn)
   end
 
+  @doc """
+  Refuses to start while LocalFS donations from an earlier version are still in
+  `upload_path` (see `BuiltIn.LocalFS.check_upload_path!/2`). Runs at application
+  start, not in the runtime config: `prod-migrate` evaluates that config without
+  the S3 settings, so it would look like LocalFS.
+  """
+  def check_upload_path! do
+    if special() == BuiltIn.LocalFS do
+      BuiltIn.LocalFS.check_upload_path!(Core.Env.get(:upload_path))
+    end
+
+    :ok
+  end
+
   defp special do
     # Allow mocking
     Access.get(settings(), :special, BuiltIn.LocalFS)
