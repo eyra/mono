@@ -56,6 +56,23 @@ defmodule Systems.Feldspar.DataDonationCleanupWorkerTest do
 
       assert length(all_enqueued(worker: DataDonationCleanupWorker)) == 2
     end
+
+    test "a completed node job does not block the admin trigger" do
+      assert :ok = DataDonationCleanupWorker.fan_out(%{}, [Node.self()])
+
+      Repo.update_all(Oban.Job,
+        set: [state: "completed", completed_at: DateTime.utc_now()]
+      )
+
+      assert :ok = perform_job(DataDonationCleanupWorker, %{})
+
+      assert [_] =
+               all_enqueued(
+                 worker: DataDonationCleanupWorker,
+                 queue: @node_queue,
+                 args: %{"node" => to_string(Node.self())}
+               )
+    end
   end
 
   describe "node job" do
