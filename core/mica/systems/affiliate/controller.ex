@@ -142,18 +142,9 @@ defmodule Systems.Affiliate.Controller do
     |> halt()
   end
 
-  defp tester?(assignment, user), do: Assignment.Public.tester?(assignment, user)
-
   defp preview_access?(assignment, %{assigns: %{current_user: %{} = user}}) do
-    if Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) do
-      unless tester?(assignment, user) do
-        Core.Authorization.assign_role(user, assignment.crew, :tester)
-      end
-
-      tester?(assignment, user)
-    else
-      false
-    end
+    Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
+      match?({:ok, _}, Assignment.Public.ensure_tester(assignment, user))
   end
 
   defp preview_access?(_, _), do: false

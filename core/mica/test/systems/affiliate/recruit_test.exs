@@ -1,5 +1,6 @@
 defmodule Systems.Affiliate.RecruitTest do
   use CoreWeb.ConnCase, async: false
+  import Phoenix.LiveViewTest
 
   @moduletag :capture_log
 
@@ -118,6 +119,18 @@ defmodule Systems.Affiliate.RecruitTest do
 
       assert redirected_to(conn) == "/assignment/#{assignment.id}"
       assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "an owner who never opened the CMS page sees the tasks in the preview",
+         %{conn: conn, user: user} do
+      assignment = unpublished_assignment()
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+      {:ok, _view, html} = live(conn, redirected_to(conn))
+
+      assert html =~ "Test Task"
     end
 
     test "an owner who is already a crew member can preview without the tester role",
