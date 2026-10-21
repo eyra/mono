@@ -15,6 +15,19 @@ defmodule Next.Config.RuntimeSnapshotTest do
     end
   end
 
+  test "refuses donations in the public bucket" do
+    %{env_file: env_file} = Enum.find(Snapshot.fixtures(), &(&1.name == "dev"))
+
+    env =
+      env_file
+      |> RuntimeConfig.Snapshot.read_env_file()
+      |> Map.put("AWS_S3_BUCKET", "eyra-next-dev-storage")
+
+    assert_raise RuntimeError, ~r/AWS_S3_BUCKET .* must be a private bucket/, fn ->
+      RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
+    end
+  end
+
   test "refuses a local storage path inside the statically served upload path" do
     %{env_file: env_file} = Enum.find(Snapshot.fixtures(), &(&1.name == "prod-migrate"))
 

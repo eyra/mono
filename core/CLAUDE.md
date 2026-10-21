@@ -112,6 +112,13 @@ fly storage update <app-name>-storage --public --yes
 ```
 Verify with: `fly storage status <app-name>-storage` → should show `Public = True`
 
+### 3b. Create a Private Bucket for Donations
+```bash
+fly storage create --name <app-name>-donations --org eyra --yes
+```
+Keep it private: donations must never share the public bucket. Give the app's access key
+access to this bucket in the Tigris dashboard (`fly storage dashboard`).
+
 ### 4. Set Required Secrets
 ```bash
 # Database
@@ -122,6 +129,9 @@ fly secrets set SECRET_KEY_BASE="$(mix phx.gen.secret)" -a <app-name>
 
 # CRITICAL: Use t3.storage.dev domain (no hyphens)
 fly secrets set PUBLIC_S3_URL="https://<app-name>-storage.t3.storage.dev" -a <app-name>
+
+# Donations go to the private bucket; the app refuses to start when it is the public one
+fly secrets set AWS_S3_BUCKET="<app-name>-donations" PUBLIC_S3_BUCKET="<app-name>-storage" -a <app-name>
 
 # Other required secrets
 fly secrets set APP_ADMINS="admin@example.com" -a <app-name>
