@@ -178,7 +178,14 @@ defmodule Core.MixProject do
       ],
       "lfs.pull": "cmd git lfs pull",
       "test.unit": ["ecto.create --quiet", "ecto.migrate", "test --exclude feature"],
-      "test.feature": ["ecto.create --quiet", "ecto.migrate", "test --only feature"],
+      # Feature tests drive the browser against priv/static/assets: without a
+      # fresh build the pages lack (current) CSS and JS and the features fail.
+      "test.feature": [
+        "ecto.create --quiet",
+        "ecto.migrate",
+        "assets.build",
+        "test --only feature"
+      ],
       "test.js": "cmd cd ./assets && npm test",
       # Mix runs the `test` task once per invocation, so each half needs its own.
       "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
