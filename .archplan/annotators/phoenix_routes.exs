@@ -19,6 +19,7 @@ params = ctx["params"] || %{}
 router = Module.concat([params["router"] || "CoreWeb.Router"])
 authn = MapSet.new(params["authn_pipelines"] || ["require_authenticated_user"])
 unscoped = MapSet.new(params["unscoped_params"] || [])
+
 overrides =
   for o <- params["overrides"] || [], into: %{} do
     [key, value] = String.split(o, "=", parts: 2)
@@ -40,7 +41,11 @@ locate = fn mod, name ->
   with false <- rel == source,
        {:ok, text} <- File.read(source),
        lines = String.split(text, "\n"),
-       [i | _] = defs <- lines |> Enum.with_index() |> Enum.filter(&Regex.match?(rx, elem(&1, 0))) |> Enum.map(&elem(&1, 1)) do
+       [i | _] = defs <-
+         lines
+         |> Enum.with_index()
+         |> Enum.filter(&Regex.match?(rx, elem(&1, 0)))
+         |> Enum.map(&elem(&1, 1)) do
     {rel, i + 1, not Enum.all?(defs, &Regex.match?(ignored, Enum.at(lines, &1)))}
   else
     _ -> nil
@@ -76,7 +81,9 @@ entries =
     scoped = Enum.reject(names, &MapSet.member?(unscoped, &1))
     {file, line, uses} = at
     value = overrides[key] || if(scoped == [] or not uses, do: "required", else: "authz")
-    {key, {file, line}, value, "#{route.verb |> to_string() |> String.upcase()} #{route.path} (#{Enum.join(pipes, " ")})"}
+
+    {key, {file, line}, value,
+     "#{route.verb |> to_string() |> String.upcase()} #{route.path} (#{Enum.join(pipes, " ")})"}
   end
 
 rank = %{"none" => 0, "required" => 1, "authz" => 2}
