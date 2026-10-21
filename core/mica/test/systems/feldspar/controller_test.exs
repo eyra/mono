@@ -396,7 +396,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
       IO.puts("Successes: #{length(successes)}/#{num_requests}")
 
-      if length(failures) > 0 do
+      if failures != [] do
         IO.puts("\nFailures:")
 
         Enum.each(failures, fn {i, status, body} ->

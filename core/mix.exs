@@ -152,7 +152,7 @@ defmodule Core.MixProject do
       {:mock, "0.3.9", only: :test},
       {:wallaby, "0.30.9", only: :test, runtime: false},
       {:phoenix_live_reload, "1.6.1", only: :dev},
-      {:credo, "1.7.12", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.19", only: [:dev, :test], runtime: false},
       {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
       {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},

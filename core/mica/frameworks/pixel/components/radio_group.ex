@@ -5,10 +5,9 @@ defmodule Frameworks.Pixel.RadioGroup do
   @impl true
   def update(%{items: items}, socket) do
     value =
-      if active_item = items |> Enum.find(& &1.active) do
-        "#{active_item.id}"
-      else
-        ""
+      case Enum.find(items, & &1.active) do
+        nil -> ""
+        active_item -> "#{active_item.id}"
       end
 
     form = to_form(%{"radio-group" => value})

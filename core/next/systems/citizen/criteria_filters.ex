@@ -16,7 +16,7 @@ defmodule Systems.Citizen.CriteriaFilters do
   end
 
   def include?(items, filter) when is_list(items) do
-    Enum.count(items, &include?(&1, filter)) > 0
+    Enum.any?(items, &include?(&1, filter))
   end
 
   def include?(item, filter) when is_atom(item), do: item == filter

@@ -64,11 +64,9 @@ defmodule Systems.Zircon.Screening.CriteriaView do
         %{"item" => dimension_phrase},
         %{assigns: %{vm: %{dimension_list: dimension_list}}} = socket
       ) do
-    if dimension =
-         dimension_list |> Enum.find(fn dimension -> dimension.phrase == dimension_phrase end) do
-      insert_criterion(dimension, socket)
-    else
-      Logger.error("Dimension '#{dimension_phrase}' not found in local dimension list")
+    case Enum.find(dimension_list, &(&1.phrase == dimension_phrase)) do
+      nil -> Logger.error("Dimension '#{dimension_phrase}' not found in local dimension list")
+      dimension -> insert_criterion(dimension, socket)
     end
 
     {:noreply, socket}

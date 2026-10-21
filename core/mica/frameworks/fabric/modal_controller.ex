@@ -25,7 +25,6 @@ defmodule Fabric.ModalController do
         Logger.debug("already prepared modal style #{prepared_modal_style} for #{child_name}")
         context
       else
-        child |> Map.put(child, prepared_modal_style: modal_style)
         prepare_modal(context, child, modal_style)
       end
     else

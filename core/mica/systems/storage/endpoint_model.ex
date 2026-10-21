@@ -97,12 +97,15 @@ defmodule Systems.Storage.EndpointModel do
     end
 
     def status(%Storage.EndpointModel{} = endpoint) do
-      status(Storage.EndpointModel.special(endpoint))
+      endpoint
+      |> Storage.EndpointModel.special()
+      |> special_status()
     end
 
-    def status(%Storage.BuiltIn.EndpointModel{}), do: %Concept.Leaf.Status{value: :online}
+    defp special_status(%Storage.BuiltIn.EndpointModel{}),
+      do: %Concept.Leaf.Status{value: :online}
 
-    def status(special) do
+    defp special_status(special) do
       sum =
         {special, :connected}
         |> Monitor.Public.event()
