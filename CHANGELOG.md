@@ -16,7 +16,7 @@
 * Changed - Code moved into `core/mica`, `core/next` and `core/mica_saas` (Nova migration), with a CI boundary check; no intended functional change. Self-hosters building their own image need the updated root `Dockerfile`
 * Removed - Banking, which was unused; its `money_manager_transaction_marker` table stays behind under the deferred-drop pattern
 * Fixed - PDF viewer: pages no longer appear out of order or duplicated after resizing, and documents keep their own fonts
-* Security - The service login key is no longer stored in the repository; it is read only from `SERVICE_LOGIN_KEY`
+* Security - The shared service login key was removed from the repository's docs and scripts. Service login still reads it from `SERVICE_LOGIN_KEY` and stays off (503) when that is unset
 * Security - Includes the 31.1 storage export access check
 
 ## \#31.1 2026-10-19
