@@ -22,7 +22,7 @@ feature_test_db_suffix =
 config :core,
   name: "Next [test]",
   base_url: feature_test_base_url,
-  upload_path: "/tmp"
+  upload_path: Path.expand("../tmp/uploads_test", __DIR__) |> tap(&File.mkdir_p!/1)
 
 config :core,
   payment_provider: Systems.Payment.ProviderMock

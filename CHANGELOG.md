@@ -9,6 +9,10 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## Unreleased
+
+* Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` commands that move them to `STORAGE_PATH`. Installations on S3 storage are not affected.
+
 ## \#31.1 2026-10-19
 
 * Security - Storage export now checks endpoint access before streaming. `GET /storage/endpoint/:id/export` previously streamed a storage endpoint's full donation archive to any signed-in user without verifying rights on that endpoint; it now returns 403 unless the user may access the endpoint (the same check the endpoint content page uses). The Graphite submissions export (`GET /graphite/:id/export/submissions`) had the same gap and received the same check. Self-hosters using built-in (S3-backed) storage should upgrade. Also fixes a crash exporting an endpoint that is not part of a project.

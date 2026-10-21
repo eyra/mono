@@ -805,3 +805,15 @@ msgstr "Ačiū!"
 #, elixir-autogen, elixir-format
 msgid "participation.title.rejected"
 msgstr "Jūsų indėlis buvo atmestas"
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.body"
+msgstr "Ši užduotis pašalinta iš tyrimo. Kilus klausimų, galima kreiptis į tyrėją, kuris atsiuntė kvietimą."
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.title"
+msgstr "Ši užduotis nebepasiekiama"
+
+#, elixir-autogen, elixir-format
+msgid "work.empty.message"
+msgstr "Šiame tyrime nėra užduočių."

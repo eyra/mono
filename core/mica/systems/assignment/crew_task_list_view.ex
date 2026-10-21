@@ -38,6 +38,15 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> present_modal(tool_modal)
   end
 
+  # The open task left the participant's task list (its workflow item was deleted
+  # or the assignment went offline): close its modal
+  def handle_view_model_updated(%{assigns: %{tool_modal: tool_modal}} = socket)
+      when not is_nil(tool_modal) do
+    socket
+    |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
+  end
+
   def handle_view_model_updated(socket), do: assign(socket, tool_modal: nil)
 
   # Behaviours
@@ -61,6 +70,9 @@ defmodule Systems.Assignment.CrewTaskListView do
     |> complete_task(task)
   end
 
+  # The task left the participant's task list while the tool was open
+  def handle_tool_completed(socket), do: close_tool_modal(socket)
+
   @impl true
   def handle_tool_initialized(socket) do
     # Tool initialized - no specific action needed for list view
@@ -80,7 +92,7 @@ defmodule Systems.Assignment.CrewTaskListView do
 
   # Called by LiveNest Modal Presenter when modal is closed
   def consume_event(%{name: :modal_closed, payload: %{modal_id: _modal_id}}, socket) do
-    {:stop, socket |> clear_task()}
+    {:stop, socket |> assign(tool_modal: nil) |> clear_task()}
   end
 
   # Private

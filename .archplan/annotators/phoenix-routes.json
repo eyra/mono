@@ -1,0 +1,24 @@
+{
+  "id": "phoenix-routes",
+  "name": "Entry points from the Phoenix router",
+  "keys": [
+    "entrypoint.auth"
+  ],
+  "read": "sh .archplan/annotators/phoenix_routes.sh .archplan/annotators/phoenix_routes.exs {ctx}",
+  "params": {
+    "router": "CoreWeb.Router",
+    "authn_pipelines": [
+      "require_authenticated_user"
+    ],
+    "unscoped_params": [
+      "token"
+    ],
+    "overrides": [
+      "Systems.Assignment.Controller.apply=required",
+      "Systems.Assignment.Controller.invite=required",
+      "Systems.Assignment.Controller.join=required",
+      "Systems.Pool.Controller.join=required"
+    ]
+  },
+  "timeout": 300
+}

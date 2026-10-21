@@ -13,7 +13,7 @@ defmodule CoreWeb.FileUploader.Test do
 
     test "return path for valid filename" do
       assert FileUploader.get_upload_path("f94eae50-5bad-4c50-82ad-f0cf067394c1.jpg") ==
-               "/tmp/f94eae50-5bad-4c50-82ad-f0cf067394c1.jpg"
+               Path.join(Core.Env.get(:upload_path), "f94eae50-5bad-4c50-82ad-f0cf067394c1.jpg")
     end
   end
 end

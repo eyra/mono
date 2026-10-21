@@ -19,8 +19,13 @@ defmodule Systems.Assignment.Controller do
   @progress_no dgettext("eyra-assignment", "progress.no")
 
   def callback(%{assigns: %{current_user: user}} = conn, %{"workflow_item_id" => item_id}) do
-    %{workflow_id: workflow_id} = item = Workflow.Public.get_item!(String.to_integer(item_id))
+    case Workflow.Public.get_item(String.to_integer(item_id)) do
+      %Workflow.ItemModel{} = item -> callback(conn, user, item)
+      nil -> Assignment.ErrorHTML.task_unavailable(conn)
+    end
+  end
 
+  defp callback(conn, user, %Workflow.ItemModel{workflow_id: workflow_id} = item) do
     %{id: id, crew: crew} =
       assignment = Assignment.Public.get_by(:workflow_id, workflow_id, [:crew])
 

@@ -27,9 +27,13 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
       intro_page_ref: intro_page_ref,
       support_page_ref: support_page_ref,
       user: user,
-      task_view: task_view(item_count, assignment_id, user_state, context)
+      task_view: task_view(item_count, assignment_id, user_state, context),
+      empty_message: empty_message(item_count)
     }
   end
+
+  defp empty_message(0), do: dgettext("eyra-assignment", "work.empty.message")
+  defp empty_message(_item_count), do: nil
 
   defp build_context_menu_items(assignment) do
     [:assignment_information, :privacy, :consent, :assignment_helpdesk]

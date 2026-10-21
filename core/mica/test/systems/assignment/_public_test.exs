@@ -984,6 +984,76 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "resetting an expired member after a task was deleted" do
+    setup do
+      user = Factories.insert!(:member)
+      %{crew: crew} = assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      [deleted_item, kept_item] = Systems.Workflow.Model.ordered_items(assignment.workflow)
+
+      {:ok, %{member: member}} = Assignment.Public.add_participant!(assignment, user)
+
+      [deleted_task, kept_task] =
+        for item <- [deleted_item, kept_item] do
+          identifier = Assignment.Private.task_identifier(assignment, item, member)
+          Crew.Public.create_task!(crew, [user], identifier)
+        end
+
+      non_item_task = Crew.Public.create_task!(crew, [user], ["task1"])
+
+      {:ok, _} = Ecto.Multi.new() |> Crew.Public.expire_member(member) |> Repo.commit()
+      Repo.delete!(deleted_item)
+
+      {:ok,
+       user: user,
+       assignment: assignment,
+       deleted_task: deleted_task,
+       kept_task: kept_task,
+       non_item_task: non_item_task}
+    end
+
+    test "reset_member/3 revives a task without an item id", %{
+      user: user,
+      assignment: assignment,
+      non_item_task: non_item_task
+    } do
+      assert %{expired: true} = Repo.reload!(non_item_task)
+
+      Assignment.Public.reset_member(assignment, user)
+
+      assert %{expired: false} = Repo.reload!(non_item_task)
+    end
+
+    test "reset_member/3 keeps the deleted task expired", %{
+      user: user,
+      assignment: assignment,
+      deleted_task: deleted_task
+    } do
+      Assignment.Public.reset_member(assignment, user)
+
+      assert %{expired: true} = Repo.reload!(deleted_task)
+    end
+
+    test "reset_member/3 revives the remaining task", %{
+      user: user,
+      assignment: assignment,
+      kept_task: kept_task
+    } do
+      Assignment.Public.reset_member(assignment, user)
+
+      assert %{expired: false} = Repo.reload!(kept_task)
+    end
+
+    test "rejoining keeps the deleted task expired", %{
+      user: user,
+      assignment: assignment,
+      deleted_task: deleted_task
+    } do
+      Assignment.Public.add_participant!(assignment, user)
+
+      assert %{expired: true} = Repo.reload!(deleted_task)
+    end
+  end
+
   describe "add_participant!/2 reserves reward at join" do
     setup do
       user = Factories.insert!(:member)

@@ -793,3 +793,15 @@ msgstr "Thank you!"
 #, elixir-autogen, elixir-format
 msgid "participation.title.rejected"
 msgstr "Your contribution was declined"
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.body"
+msgstr "This task was removed from the study. If you have questions, please contact the researcher who invited you."
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.title"
+msgstr "This task is no longer available"
+
+#, elixir-autogen, elixir-format
+msgid "work.empty.message"
+msgstr "This study has no tasks."

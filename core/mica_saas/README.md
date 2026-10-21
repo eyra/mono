@@ -189,8 +189,30 @@ stores donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_
 them through the endpoint export, which checks access. `STORAGE_PATH` must not be inside `UPLOAD_PATH`: that
 folder is served without authentication, and the app refuses to start with such a setting.
 
-Upgrading from a version that stored donations in `UPLOAD_PATH`: move the endpoint folders (named
-`project_node=<id>`) from `UPLOAD_PATH` to `STORAGE_PATH`.
+Upgrading from a version that stored donations in `UPLOAD_PATH`: the app refuses to start while `UPLOAD_PATH`
+still holds endpoint folders (named `project_node=<id>`, or `assignment=<id>` for endpoints created before storage
+moved to projects in mid-2024), because they would stay public and researchers could not export them. The error lists
+the first folders (with the total) and the commands that move them, with the actual paths filled in: one `mv`
+per prefix that has folders, so the commands stay short however many folders there are. For example:
+
+```sh
+mkdir -p /home/next/storage
+mv /home/next/uploads/assignment=*/ /home/next/storage/
+mv /home/next/uploads/project_node=*/ /home/next/storage/
+```
+
+Stop the app on every node, run those commands, then start the app again.
+
+With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped, so the app also writes it
+to stderr once as plain text, just before it stops. Copy the commands from there.
+
+A donation folder that is a symlink to a folder elsewhere gets its own `mv` without the trailing slash, for example
+`mv /home/next/uploads/project_node=34 /home/next/storage/`, listed before the prefix globs so they no longer match
+it. With more than 10 such links, one `for` loop per prefix moves them all instead. The link itself moves, its target
+stays where it is: check targets first. A relative target must still resolve from `STORAGE_PATH`, and a target inside
+`UPLOAD_PATH` stays public and is not checked again, so replace such a link with the folder it points to.
+
+The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do

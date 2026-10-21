@@ -24,6 +24,19 @@ defmodule Systems.Assignment.CrewWorkViewTest do
     end
   end
 
+  describe "assignment without tasks" do
+    test "tells the participant there are no tasks", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_base_assignment()
+      Enum.each(assignment.workflow.items, &Repo.delete!/1)
+
+      {_assignment, view, _html} =
+        setup_and_mount_view(conn, user, assignment: assignment, user_state: %{})
+
+      assert view |> element("[data-testid='crew-work-view-empty']") |> render() =~
+               "This study has no tasks."
+    end
+  end
+
   describe "Observatory pattern integration" do
     test "view model rebuilds when assignment updates", %{conn: conn, user: user} do
       {_assignment, view, _html} = setup_and_mount_view(conn, user, user_state: %{})
