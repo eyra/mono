@@ -9,13 +9,14 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## \#32 2026-10-21
+## \#32 2026-10-22
 
 * Changed - Signed-out visitors who open a study invitation land on the participant sign-in page, and a wrong or expired code keeps them on that path back to the study (behind `:otp`)
 * Changed - Native app: the assignment page fits the viewport, and other app pages scroll as one page
 * Changed - Code moved into `core/mica`, `core/next` and `core/mica_saas` (Nova migration), with a CI boundary check; no intended functional change. Self-hosters building their own image need the updated root `Dockerfile`
 * Removed - Banking, which was unused; its `money_manager_transaction_marker` table stays behind under the deferred-drop pattern
 * Fixed - PDF viewer: pages no longer appear out of order or duplicated after resizing, and documents keep their own fonts
+* Fixed - Owners can preview an unpublished study
 * Security - The shared service login key was removed from the repository's docs and scripts. Service login still reads it from `SERVICE_LOGIN_KEY` and stays off (503) when that is unset
 * Security - Includes the 31.1 storage export access check
 
