@@ -20,6 +20,23 @@ defmodule Systems.Assignment.SetupExporterTest do
     |> Enum.sort()
   end
 
+  defp put_max_file_size(bytes) do
+    original = Application.fetch_env!(:core, CoreWeb.FileUploader)
+    on_exit(fn -> Application.put_env(:core, CoreWeb.FileUploader, original) end)
+    Application.put_env(:core, CoreWeb.FileUploader, Keyword.put(original, :max_file_size, bytes))
+  end
+
+  defp assignment_with_logo(%Bypass{port: port}) do
+    info = Factories.insert!(:assignment_info, %{logo_url: "http://localhost:#{port}/logo.png"})
+    Factories.insert!(:assignment, %{info: info})
+  end
+
+  defp export_files(assignment) do
+    {:ok, stream} = assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
+    {:ok, files} = stream |> Enum.to_list() |> IO.iodata_to_binary() |> :zip.extract([:memory])
+    Map.new(files, fn {name, data} -> {to_string(name), data} end)
+  end
+
   describe "metadata/2 - asset invariant" do
     test "every assets/ path in the metadata has a matching asset entry, and vice versa" do
       info =
@@ -81,26 +98,36 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert Path.basename(path) == "abc_logo.png"
     end
 
-    test "caps a remote asset at the upload limit configured at runtime" do
-      original = Application.fetch_env!(:core, CoreWeb.FileUploader)
-      on_exit(fn -> Application.put_env(:core, CoreWeb.FileUploader, original) end)
+    test "skips a remote asset over the upload limit and reports it" do
+      put_max_file_size(1_024)
+      bypass = Bypass.open()
+      Bypass.stub(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 200, :binary.copy("x", 4_096)))
 
-      Application.put_env(
-        :core,
-        CoreWeb.FileUploader,
-        Keyword.put(original, :max_file_size, 94_371_840)
+      files = bypass |> assignment_with_logo() |> export_files()
+
+      refute Map.has_key?(files, "study_2026/assets/logo.png")
+
+      assert %{"skipped" => [%{"path" => "study_2026/assets/logo.png", "reason" => reason}]} =
+               Jason.decode!(files["study_2026/export-warnings.json"])
+
+      assert reason =~ "too_large"
+    end
+
+    test "includes a remote asset within the upload limit" do
+      put_max_file_size(4_096)
+      bypass = Bypass.open()
+
+      Bypass.expect_once(
+        bypass,
+        "GET",
+        "/logo.png",
+        &Plug.Conn.resp(&1, 200, :binary.copy("x", 4_096))
       )
 
-      info =
-        Factories.insert!(:assignment_info, %{logo_url: "https://example.com/brand/logo.png"})
+      files = bypass |> assignment_with_logo() |> export_files()
 
-      assignment = Factories.insert!(:assignment, %{info: info})
-
-      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
-      entry = Enum.find(entries, &(&1[:path] == "study_2026/assets/logo.png"))
-
-      assert {:url, {"https://example.com/brand/logo.png", [], [max_body_length: 94_371_840]}} =
-               entry[:source]
+      assert files["study_2026/assets/logo.png"] == :binary.copy("x", 4_096)
+      refute Map.has_key?(files, "study_2026/export-warnings.json")
     end
 
     test "nests every entry under the folder" do

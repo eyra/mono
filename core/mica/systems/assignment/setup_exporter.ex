@@ -295,7 +295,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp asset_source(url) do
     case Content.Public.get_local_path(url) do
-      nil -> {:url, {url, [], [max_body_length: max_asset_bytes()]}}
+      nil -> {Assignment.SetupExporter.URLSource, {url, max_asset_bytes()}}
       path -> {:file, path}
     end
   end

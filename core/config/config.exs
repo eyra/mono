@@ -156,11 +156,6 @@ config :core, Oban,
   repo: Core.Repo,
   queues: false
 
-config :packmatic, Packmatic.Source.URL,
-  hackney: [
-    pool: :default
-  ]
-
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
   quotas: [
