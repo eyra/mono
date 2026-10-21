@@ -6,7 +6,7 @@
 #   SECRET_KEY_BASE, DATABASE_URL (set by `flyctl postgres attach`),
 #   AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY, AWS_ENDPOINT_URL_S3, AWS_REGION,
 #   BUCKET_NAME (set by `flyctl storage create`), AWS_S3_BUCKET, PUBLIC_S3_BUCKET,
-#   MAILGUN_API_KEY (for now the same Mailgun key and eyra.dev domain as eyra-next-dev)
+#   MAILGUN_API_KEY (for now the same Mailgun key and mail domain as eyra-next-dev)
 
 app = 'nova-mica-dev'
 primary_region = 'ams'
@@ -30,7 +30,9 @@ org = 'eyra'
   # App configuration
   APP_NAME = 'Mica [dev]'
   APP_DOMAIN = 'nova-mica-dev.fly.dev'
-  APP_MAIL_DOMAIN = 'eyra.dev'
+  # Must be a domain of the Mailgun account behind MAILGUN_API_KEY, or Mailgun
+  # rejects every mail. Borrowed from eyra-next-dev until Nova has its own.
+  APP_MAIL_DOMAIN = 'next.dev.eyra.co'
   DEPLOY_ENV = 'dev'
 
   # Sign-in with a one-time code by e-mail, and with e-mail and password
