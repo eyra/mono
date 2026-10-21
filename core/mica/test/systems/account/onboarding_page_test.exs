@@ -3,6 +3,8 @@ defmodule Systems.Account.OnboardingPageTest do
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
+  alias Systems.Account
+
   # `:features` has moved to the Pool-scoped onboarding, so a confirmed
   # user's account onboarding is now just `:profile` (with an optional
   # `:activate_account` step for unconfirmed users, and a leading
@@ -73,6 +75,35 @@ defmodule Systems.Account.OnboardingPageTest do
       # Navigate through: profile -> activate_account -> home
       view |> render_click("continue")
       assert {:error, {:live_redirect, %{to: "/"}}} = view |> render_click("continue")
+    end
+  end
+
+  describe "terms step for a passwordless user" do
+    test "clears the terms error once the terms are accepted", %{conn: conn} do
+      {:ok, user} =
+        %Account.User{}
+        |> Account.User.sso_changeset(%{
+          email: "sso-#{System.unique_integer([:positive])}@example.com",
+          displayname: "SSO User",
+          creator: true,
+          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        })
+        |> Core.Repo.insert()
+
+      {:ok, conn: logged_in_conn, user: _user} = login(user, %{conn: conn})
+      {:ok, view, _html} = live(logged_in_conn, "/user/onboarding")
+
+      [terms_view] = live_children(view)
+      error = "Please accept the terms and privacy statement to continue."
+
+      render_click(terms_view, "continue")
+      assert render(view) =~ error
+
+      render_click(terms_view, "toggle_terms")
+      render_click(terms_view, "continue")
+
+      assert view |> has_element?("[data-testid='profile-view']")
+      refute render(view) =~ error
     end
   end
 end

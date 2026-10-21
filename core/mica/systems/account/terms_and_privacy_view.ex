@@ -61,7 +61,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
       |> Account.User.confirm_changeset()
       |> Core.Repo.update()
 
-    {:noreply, socket |> publish_event(:terms_completed)}
+    {:noreply, socket |> Flash.push_hide() |> publish_event(:terms_completed)}
   end
 
   @impl true
