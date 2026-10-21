@@ -192,14 +192,23 @@ folder is served without authentication, and the app refuses to start with such 
 Upgrading from a version that stored donations in `UPLOAD_PATH`: the app refuses to start while `UPLOAD_PATH`
 still holds endpoint folders (named `project_node=<id>`, or `assignment=<id>` for endpoints created before storage
 moved to projects in mid-2024), because they would stay public and researchers could not export them. The error lists
-the folders and the commands that move exactly those folders, with the actual paths filled in, for example:
+the first folders (with the total) and the commands that move them, with the actual paths filled in: one `mv`
+per prefix that has folders, so the commands stay short however many folders there are. For example:
 
 ```sh
 mkdir -p /home/next/storage
-mv /home/next/uploads/assignment=12 /home/next/uploads/project_node=34 /home/next/storage/
+mv /home/next/uploads/assignment=*/ /home/next/storage/
+mv /home/next/uploads/project_node=*/ /home/next/storage/
 ```
 
 Stop the app on every node, run those commands, then start the app again.
+
+With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped. To get the commands as plain
+text, pipe that line through `jq -r .message`.
+
+The `mv` commands do not move symlinks, because of the trailing slash: if a donation folder in `UPLOAD_PATH`
+is a symlink to a folder elsewhere, `mv` fails on it with "Not a directory" and the next start lists it again.
+Move such a link without the trailing slash, for example `mv /home/next/uploads/project_node=34 /home/next/storage/`.
 
 The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
