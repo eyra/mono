@@ -203,12 +203,14 @@ mv /home/next/uploads/project_node=*/ /home/next/storage/
 
 Stop the app on every node, run those commands, then start the app again.
 
-With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped. To get the commands as plain
-text, pipe that line through `jq -r .message`.
+With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped, so the app also writes it
+to stderr once as plain text, just before it stops. Copy the commands from there.
 
-The `mv` commands do not move symlinks, because of the trailing slash: if a donation folder in `UPLOAD_PATH`
-is a symlink to a folder elsewhere, `mv` fails on it with "Not a directory" and the next start lists it again.
-Move such a link without the trailing slash, for example `mv /home/next/uploads/project_node=34 /home/next/storage/`.
+A donation folder that is a symlink to a folder elsewhere gets its own `mv` without the trailing slash, for example
+`mv /home/next/uploads/project_node=34 /home/next/storage/`, listed before the prefix globs so they no longer match
+it. With more than 10 such links, one `for` loop per prefix moves them all instead. The link itself moves, its target
+stays where it is: check targets first. A relative target must still resolve from `STORAGE_PATH`, and a target inside
+`UPLOAD_PATH` stays public and is not checked again, so replace such a link with the folder it points to.
 
 The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
