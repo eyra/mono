@@ -382,7 +382,7 @@ defmodule Systems.Org.PublicTest do
       next_actions =
         NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
 
-      assert length(next_actions) >= 1
+      assert next_actions != []
     end
 
     test "assign_owner/2 does not create NextAction when no domain-matched users exist" do
@@ -416,12 +416,11 @@ defmodule Systems.Org.PublicTest do
 
       :ok = Public.assign_owner(org, owner)
 
-      assert length(
+      assert [_ | _] =
                NextAction.Public.list_next_actions_by_type(
                  owner,
                  Org.NextActions.AddDomainMembers
                )
-             ) >= 1
 
       :ok = Public.revoke_owner(org, owner)
 
@@ -449,19 +448,17 @@ defmodule Systems.Org.PublicTest do
       :ok = Public.assign_owner(org, owner1)
       :ok = Public.assign_owner(org, owner2)
 
-      assert length(
+      assert [_ | _] =
                NextAction.Public.list_next_actions_by_type(
                  owner1,
                  Org.NextActions.AddDomainMembers
                )
-             ) >= 1
 
-      assert length(
+      assert [_ | _] =
                NextAction.Public.list_next_actions_by_type(
                  owner2,
                  Org.NextActions.AddDomainMembers
                )
-             ) >= 1
 
       :ok = Public.revoke_owner(org, owner1)
 
@@ -472,12 +469,11 @@ defmodule Systems.Org.PublicTest do
                )
              )
 
-      assert length(
+      assert [_ | _] =
                NextAction.Public.list_next_actions_by_type(
                  owner2,
                  Org.NextActions.AddDomainMembers
                )
-             ) >= 1
     end
 
     test "owns_any?/1 returns true when user owns at least one org" do
@@ -650,7 +646,7 @@ defmodule Systems.Org.PublicTest do
       next_actions =
         NextAction.Public.list_next_actions_by_type(owner, Org.NextActions.AddDomainMembers)
 
-      assert length(next_actions) >= 1
+      assert next_actions != []
     end
 
     test "does not create NextAction when new user's domain doesn't match" do
@@ -705,8 +701,8 @@ defmodule Systems.Org.PublicTest do
       next_actions2 =
         NextAction.Public.list_next_actions_by_type(owner2, Org.NextActions.AddDomainMembers)
 
-      assert length(next_actions1) >= 1
-      assert length(next_actions2) >= 1
+      assert next_actions1 != []
+      assert next_actions2 != []
     end
   end
 end

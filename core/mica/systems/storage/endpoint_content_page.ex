@@ -29,8 +29,9 @@ defmodule Systems.Storage.EndpointContentPage do
   end
 
   def handle_view_model_updated(%{assigns: %{vm: vm}} = socket) do
-    if tab = Enum.find(vm.tabs, &(&1.id == :data_view)) do
-      Fabric.send_event(tab.child.ref, %{name: "update_files", payload: %{}})
+    case Enum.find(vm.tabs, &(&1.id == :data_view)) do
+      nil -> nil
+      tab -> Fabric.send_event(tab.child.ref, %{name: "update_files", payload: %{}})
     end
 
     socket

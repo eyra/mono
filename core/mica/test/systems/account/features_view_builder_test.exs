@@ -56,7 +56,7 @@ defmodule Systems.Account.FeaturesViewBuilderTest do
 
       # Gender selector should have items with man selected
       expected_labels = Genders.labels(:man)
-      assert length(expected_labels) > 0
+      assert expected_labels != []
       assert vm.gender_selector != nil
     end
   end

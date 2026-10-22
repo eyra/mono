@@ -129,20 +129,20 @@ defmodule Systems.Alliance.ToolModel do
     |> Map.update!(:query, fn query ->
       query
       |> URI.query_decoder()
-      |> Enum.map(fn {name, value} ->
-        with {:ok, parsed, _, _, _, _} <- VariableParser.parse(value),
-             {:ok, [variable]} <- Keyword.fetch(parsed, :variable),
-             {:ok, replacement} <-
-               Map.fetch(replacements, variable) do
-          {name, to_string(replacement)}
-        else
-          _ ->
-            {name, value}
-        end
-      end)
+      |> Enum.map(fn {name, value} -> {name, replace_variable(value, replacements)} end)
       |> URI.encode_query()
     end)
     |> to_string()
+  end
+
+  defp replace_variable(value, replacements) do
+    with {:ok, parsed, _, _, _, _} <- VariableParser.parse(value),
+         {:ok, [variable]} <- Keyword.fetch(parsed, :variable),
+         {:ok, replacement} <- Map.fetch(replacements, variable) do
+      to_string(replacement)
+    else
+      _ -> value
+    end
   end
 
   def external_path(%{url: url}, next_id)

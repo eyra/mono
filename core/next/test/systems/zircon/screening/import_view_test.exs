@@ -343,7 +343,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
         )
         |> Core.Repo.all()
 
-      assert length(import_jobs) > 0, "Import job should have been enqueued"
+      assert import_jobs != [], "Import job should have been enqueued"
 
       # Success! We've verified the complete import workflow:
       # File upload → process_file callback → reference file creation → import session → background job

@@ -84,7 +84,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Check nested blocks in import_section stack
       # Should have both file selector and import buttons when no session and no file
-      assert length(import_section_assigns.stack) >= 1
+      assert import_section_assigns.stack != []
 
       # Check file selector exists
       {file_selector_type, _file_selector_assigns} =
