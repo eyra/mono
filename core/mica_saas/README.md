@@ -359,7 +359,7 @@ Optional:
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
 | `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
-| `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (`config/config.exs`) of the services it lists; the other services keep their defaults | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
