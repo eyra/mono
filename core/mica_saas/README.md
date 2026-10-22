@@ -334,7 +334,7 @@ Required:
 | `APP_NAME` | env | Name shown in the UI and in mail | `Mica [dev]` |
 | `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
 | `PHX_HOST` | env | Same as `APP_DOMAIN` | `nova-mica-dev.fly.dev` |
-| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `eyra.dev` (Next dev's Mailgun domain, until Nova has its own) |
+| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `next.dev.eyra.co` (Next dev's Mailgun domain, until Nova has its own) |
 | `DEPLOY_ENV` | env | Selects the seeds: `dev`, `test`, `staging` or `prod`. Anything but `prod` also enables mock sign-in | `dev` |
 | `PAYMENT_PROVIDER` | env | `local` (logs only, no real payments) or `opp` | `local` |
 | `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self uses `password_sign_in` and `otp` (sign-in with a one-time code by e-mail, at `/user/auth/identify`) | `password_sign_in, otp` |
@@ -363,5 +363,5 @@ Optional:
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
-disabled. For now it sends mail with Next dev's Mailgun key and the `eyra.dev` sender domain; a
+disabled. For now it sends mail with Next dev's Mailgun key and the `next.dev.eyra.co` sender domain; a
 neutral Nova mail domain replaces both later.
