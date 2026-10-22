@@ -27,13 +27,15 @@ defmodule Systems.Feldspar.Controller do
 
   Expects multipart/form-data with:
   - key: Identifier key for the data
-  - context: JSON string containing assignment_id, task, participant, group, panel_info
+  - context: JSON string containing assignment_id, task, group. The participant and
+    panel info are taken from the user's own participation, not from the context.
   - data: File upload containing the data
 
   Returns:
   - 200 with {status: "ok"} on success
   - 400 if missing required fields (key, data, context) or invalid context
   - 401 if user not authenticated
+  - 403 if user is not a participant or tester of the assignment
   - 422 if storage/delivery fails
   - 429 if rate limited
   """
@@ -66,11 +68,14 @@ defmodule Systems.Feldspar.Controller do
 
     log_message("Server", "info", "Donation request, key=#{key}", context)
 
-    with {:ok, _user} <- get_current_user(conn),
+    with {:ok, user} <- get_current_user(conn),
          {:ok, data} <- read_upload(upload),
+         :ok <- check_rate_limit(:feldspar_data_donation, get_remote_ip(conn), byte_size(data)),
+         {:ok, assignment} <- get_assignment(context),
+         {:ok, participant} <- get_participant(conn, assignment, user),
+         {:ok, storage_endpoint} <- get_storage_endpoint(assignment),
+         context <- Map.put(context, "participant", participant),
          meta_data <- build_meta_data(conn, key, context),
-         :ok <- check_rate_limit(:feldspar_data_donation, meta_data.remote_ip, byte_size(data)),
-         {:ok, storage_endpoint} <- get_storage_endpoint(context),
          file_id <- Feldspar.DataDonationFolder.filename(context),
          {:ok, %{id: ^file_id}} <- Feldspar.DataDonationFolder.store(data, file_id),
          :ok <- schedule_delivery(storage_endpoint, file_id, meta_data) do
@@ -120,6 +125,20 @@ defmodule Systems.Feldspar.Controller do
         conn
         |> put_status(:too_many_requests)
         |> json(%{error: "Rate limited: #{reason}"})
+
+      {:error, :not_participant} ->
+        emit_telemetry_exception(
+          [:feldspar, :donate],
+          start_time,
+          :not_participant,
+          telemetry_metadata
+        )
+
+        log_message("Server", "warn", "Donation refused: not a participant", context)
+
+        conn
+        |> put_status(:forbidden)
+        |> json(%{error: "Not a participant of this assignment"})
 
       {:error, :no_storage_endpoint} ->
         emit_telemetry_exception(
@@ -275,18 +294,26 @@ defmodule Systems.Feldspar.Controller do
     end
   end
 
-  defp get_storage_endpoint(context) do
-    assignment_id = context["assignment_id"]
+  defp get_storage_endpoint(assignment) do
+    case Project.Public.get_storage_endpoint_by(assignment) do
+      {:ok, endpoint} -> {:ok, endpoint}
+      {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
+    end
+  end
 
-    if assignment_id && assignment_id != "" do
-      with {:ok, assignment} <- get_assignment(assignment_id) do
-        case Project.Public.get_storage_endpoint_by(assignment) do
-          {:ok, endpoint} -> {:ok, endpoint}
-          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
-        end
-      end
-    else
-      {:error, :no_storage_endpoint}
+  # Only crew members (participants and testers) donate to an assignment, and always
+  # as themselves: the panel's participant id from the session, else their member id.
+  defp get_participant(conn, assignment, user) do
+    case Assignment.Public.participant_id(assignment, user) do
+      {:ok, public_id} -> {:ok, panel_participant(conn) || public_id}
+      :error -> {:error, :not_participant}
+    end
+  end
+
+  defp panel_participant(conn) do
+    case get_session(conn, :panel_info) do
+      %{participant: participant} -> participant
+      _ -> nil
     end
   end
 
@@ -297,12 +324,15 @@ defmodule Systems.Feldspar.Controller do
     end
   end
 
-  defp get_assignment(assignment_id) do
+  defp get_assignment(%{"assignment_id" => assignment_id})
+       when assignment_id not in [nil, ""] do
     case Assignment.Public.get(assignment_id, Assignment.Model.preload_graph(:down)) do
       nil -> {:error, :assignment_not_found}
       assignment -> {:ok, assignment}
     end
   end
+
+  defp get_assignment(_context), do: {:error, :no_storage_endpoint}
 
   defp parse_context(nil), do: {:error, :invalid_context}
   defp parse_context(""), do: {:error, :invalid_context}
@@ -318,7 +348,7 @@ defmodule Systems.Feldspar.Controller do
   defp build_meta_data(conn, key, context) do
     %{
       remote_ip: get_remote_ip(conn),
-      panel_info: context["panel_info"] || %{},
+      panel_info: get_session(conn, :panel_info) || %{},
       identifier: [
         [:assignment, context["assignment_id"] || ""],
         [:task, context["task"] || ""],
