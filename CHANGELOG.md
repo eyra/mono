@@ -20,6 +20,17 @@
 * Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` commands that move them to `STORAGE_PATH`. Installations on S3 storage are not affected.
 * Security - Built-in storage on S3 (`STORAGE_S3_PREFIX` set) must keep donations in a private bucket, separate from the public bucket for content and Feldspar apps. Objects in `PUBLIC_S3_BUCKET` are readable by anyone who knows their URL, and the old setup docs used one bucket for both. Upgrading: the app refuses to start when `AWS_S3_BUCKET` equals `PUBLIC_S3_BUCKET`. Create a separate private bucket, move the existing `storage/` objects (the `STORAGE_S3_PREFIX` folder) there, and set `AWS_S3_BUCKET` to it; the app's access key needs read and write access to both buckets. Installations on the local filesystem are not affected.
 
+## \#32 2026-10-22
+
+* Changed - Signed-out visitors who open a study invitation land on the participant sign-in page, and a wrong or expired code keeps them on that path back to the study (behind `:otp`)
+* Changed - Native app: the assignment page fits the viewport, and other app pages scroll as one page
+* Changed - Code moved into `core/mica`, `core/next` and `core/mica_saas` (Nova migration), with a CI boundary check; no intended functional change. Self-hosters building their own image need the updated root `Dockerfile`
+* Removed - Banking, which was unused; its `money_manager_transaction_marker` table stays behind under the deferred-drop pattern
+* Fixed - PDF viewer: pages no longer appear out of order or duplicated after resizing, and documents keep their own fonts
+* Fixed - Owners can preview an unpublished study
+* Security - The shared service login key was removed from the repository's docs and scripts. Service login still reads it from `SERVICE_LOGIN_KEY` and stays off (503) when that is unset
+* Security - Includes the 31.1 storage export access check
+
 ## \#31.1 2026-10-19
 
 * Security - Storage export now checks endpoint access before streaming. `GET /storage/endpoint/:id/export` previously streamed a storage endpoint's full donation archive to any signed-in user without verifying rights on that endpoint; it now returns 403 unless the user may access the endpoint (the same check the endpoint content page uses). The Graphite submissions export (`GET /graphite/:id/export/submissions`) had the same gap and received the same check. Self-hosters using built-in (S3-backed) storage should upgrade. Also fixes a crash exporting an endpoint that is not part of a project.
