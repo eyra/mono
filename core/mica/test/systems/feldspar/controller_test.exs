@@ -105,6 +105,24 @@ defmodule Systems.Feldspar.ControllerTest do
       assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
     end
 
+    test "returns 400 when context is a JSON array", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("[]"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is JSON null", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("null"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is a JSON number", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("5"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
     test "returns 400 when context is invalid JSON", %{conn: conn} do
       upload = %Plug.Upload{
         path: create_temp_file("test data"),
@@ -784,6 +802,18 @@ defmodule Systems.Feldspar.ControllerTest do
     File.write!(path, content)
     on_exit(fn -> File.rm(path) end)
     path
+  end
+
+  defp donate_params(context_json) do
+    %{
+      "key" => "test-key",
+      "data" => %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      },
+      "context" => context_json
+    }
   end
 
   defp post_donation(conn, context) do

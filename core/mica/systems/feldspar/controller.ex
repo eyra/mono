@@ -378,9 +378,8 @@ defmodule Systems.Feldspar.Controller do
 
   defp parse_context(json) when is_binary(json) do
     case Jason.decode(json) do
-      {:ok, map} when map == %{} -> {:error, :invalid_context}
-      {:ok, map} -> {:ok, map}
-      {:error, _} -> {:error, :invalid_context}
+      {:ok, %{} = map} when map_size(map) > 0 -> {:ok, map}
+      _ -> {:error, :invalid_context}
     end
   end
 
