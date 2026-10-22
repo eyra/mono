@@ -24,12 +24,17 @@ defmodule Systems.Rate.Server do
     prune_interval = Keyword.get(args, :prune_interval, 60 * 60 * 1000)
 
     quotas =
-      Keyword.get(args, :quotas, [])
-      |> Enum.map(&Quota.init(&1))
+      Quota.merge(init_quotas(args, :quotas), init_quotas(args, :quota_overrides))
 
     Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
     {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
+  end
+
+  defp init_quotas(args, key) do
+    args
+    |> Keyword.get(key, [])
+    |> Enum.map(&Quota.init/1)
   end
 
   @impl true

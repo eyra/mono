@@ -161,14 +161,25 @@ config :packmatic, Packmatic.Source.URL,
     pool: :default
   ]
 
+# Default quotas. `quota_overrides` (RATE_QUOTAS in releases) replaces the
+# quotas of the services it lists; the other services keep these.
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
   quotas: [
     [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
     [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
     [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
-    [service: :feldspar_data_donation, limit: 1, unit: :byte, window: :day, scope: :local],
+    [service: :storage_export, limit: 6, unit: :call, window: :minute, scope: :local],
+    [service: :storage_export, limit: 25, unit: :call, window: :minute, scope: :global],
+    [service: :storage_export, limit: 21_474_836_480, unit: :byte, window: :day, scope: :local],
+    [service: :storage_export, limit: 107_374_182_400, unit: :byte, window: :day, scope: :global],
+    [
+      service: :feldspar_data_donation,
+      limit: 1_000_000_000,
+      unit: :byte,
+      window: :hour,
+      scope: :local
+    ],
     [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
     [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
     [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local],
