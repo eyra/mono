@@ -107,93 +107,110 @@ defmodule Systems.Assignment.CrewPageTest do
 
   describe "participant id in stored data" do
     setup %{user: user} do
-      # Study B, joined by the user and by another participant
-      study_b =
+      study =
         Assignment.Factories.create_assignment_with_affiliate()
         |> Ecto.Changeset.change(special: :data_donation)
         |> Core.Repo.update!()
         |> Project.Factories.link_storage_endpoint()
 
       other = Factories.insert!(:member)
-      Assignment.Public.add_participant!(study_b, other)
-      {:ok, other_id} = Assignment.Public.participant_id(study_b, other)
+      Assignment.Public.add_participant!(study, other)
+      {:ok, other_id} = Assignment.Public.participant_id(study, other)
 
-      {:ok, study_b: study_b, other_id: other_id, user: user}
+      {:ok, study: study, other_id: other_id, user: user}
     end
 
-    test "stores the consent record under the user's own id, not another study's panel id", %{
+    test "stores the consent record under the study's own participant id", %{
       conn: conn,
-      study_b: study_b,
+      study: study,
       other_id: other_id,
       user: user
     } do
-      Assignment.Public.add_participant!(study_b, user)
-      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
 
-      view = open_crew_page(conn, study_b, to_string(other_id))
+      view = open_crew_page(conn, study, to_string(other_id))
       send_event(view, :accept, %{})
 
       assert delivered_participant() == own_id
     end
 
-    test "stores task data under the user's own id, not another study's panel id", %{
+    test "stores task data under the study's own participant id", %{
       conn: conn,
-      study_b: study_b,
+      study: study,
       other_id: other_id,
       user: user
     } do
-      Assignment.Public.add_participant!(study_b, user)
-      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
 
-      view = open_crew_page(conn, study_b, to_string(other_id))
+      view = open_crew_page(conn, study, to_string(other_id))
       send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
 
       assert delivered_participant() == own_id
     end
 
-    test "delivers a file under the user's own id, not another study's panel id", %{
+    test "delivers a file under the study's own participant id", %{
       conn: conn,
-      study_b: study_b,
+      study: study,
       other_id: other_id,
       user: user
     } do
-      Assignment.Public.add_participant!(study_b, user)
-      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
 
-      view = open_crew_page(conn, study_b, to_string(other_id))
+      view = open_crew_page(conn, study, to_string(other_id))
       send_event(view, :deliver_blob, %{task: "1", key: "k", group: "g", blob_id: "blob"})
 
       assert delivered_participant() == own_id
     end
 
-    test "does not deliver the session's panel info", %{conn: conn, study_b: study_b, user: user} do
-      Assignment.Public.add_participant!(study_b, user)
+    test "stores task data without the session's panel info", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
 
-      view = open_crew_page(conn, study_b, "ext_a")
+      view = open_crew_page(conn, study, "ext_a")
       send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
 
       [%{args: %{"meta_data" => meta_data}}] = all_enqueued(worker: Storage.Delivery)
       refute Map.has_key?(meta_data, "panel_info")
     end
 
-    test "keeps the panel participant's identifier at this study's affiliate", %{
+    test "delivers a file without the session's panel info", %{
       conn: conn,
-      study_b: study_b,
+      study: study,
       user: user
     } do
-      Assignment.Public.add_participant!(study_b, user)
-      Assignment.Factories.add_affiliate_user(study_b, user, "ext_b")
+      Assignment.Public.add_participant!(study, user)
 
-      view = open_crew_page(conn, study_b, "ext_b")
+      view = open_crew_page(conn, study, "ext_a")
+      send_event(view, :deliver_blob, %{task: "1", key: "k", group: "g", blob_id: "blob"})
+
+      [%{args: %{"meta_data" => meta_data}}] = all_enqueued(worker: Storage.Delivery)
+      refute Map.has_key?(meta_data, "panel_info")
+    end
+
+    test "stores a panel participant's data under their identifier at the study's affiliate", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      Assignment.Factories.add_affiliate_user(study, user, "ext_b")
+
+      view = open_crew_page(conn, study, "ext_b")
       send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
 
       assert delivered_participant() == "ext_b"
     end
 
-    test "stores a tester's preview as preview", %{conn: conn, study_b: study_b, user: user} do
-      Crew.Public.apply_member_with_role(study_b.crew, user, :tester)
+    test "stores a tester's preview as preview", %{conn: conn, study: study, user: user} do
+      Crew.Public.apply_member_with_role(study.crew, user, :tester)
 
-      view = open_crew_page(conn, study_b, "preview")
+      view = open_crew_page(conn, study, "preview")
       send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
 
       assert delivered_participant() == "preview"
@@ -201,13 +218,13 @@ defmodule Systems.Assignment.CrewPageTest do
 
     test "stores a participant's data under their own id in preview mode", %{
       conn: conn,
-      study_b: study_b,
+      study: study,
       user: user
     } do
-      Assignment.Public.add_participant!(study_b, user)
-      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
 
-      view = open_crew_page(conn, study_b, "preview")
+      view = open_crew_page(conn, study, "preview")
       send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
 
       assert delivered_participant() == own_id
