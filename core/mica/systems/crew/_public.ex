@@ -312,6 +312,25 @@ defmodule Systems.Crew.Public do
     end
   end
 
+  @doc """
+  Makes the user an active member of the crew with the given role. Safe to call
+  repeatedly and concurrently: existing rows are kept as they are.
+  """
+  def ensure_member_with_role(%Crew.Model{} = crew, %User{} = user, role, reset_opts \\ []) do
+    membership =
+      if get_member(crew, user) do
+        {:ok, %{}}
+      else
+        apply_member_with_role(crew, user, role, nil, reset_opts)
+      end
+
+    with {:ok, _} <- membership do
+      Multi.new()
+      |> insert(:role_assignment, crew, user, role)
+      |> Repo.commit()
+    end
+  end
+
   def expire_member(
         %Multi{} = multi,
         %Crew.MemberModel{crew: %Ecto.Association.NotLoaded{}} = member
