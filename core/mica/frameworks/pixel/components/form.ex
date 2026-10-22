@@ -43,7 +43,7 @@ defmodule Frameworks.Pixel.Form do
   slot(:inner_block, required: true)
 
   def field(%{field: field, errors: errors} = assigns) do
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
 
     error_space_id = field_item_id(field, @error_space)
     error_message_id = field_item_id(field, @error_message)
@@ -138,7 +138,7 @@ defmodule Frameworks.Pixel.Form do
 
     input_dynamic_class = "border-grey3"
     active_color = active_input_color(assigns)
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
 
     assigns =
       assign(assigns, %{
@@ -220,7 +220,7 @@ defmodule Frameworks.Pixel.Form do
 
     wrapper_dynamic_class = "border-grey3"
     active_color = active_input_color(assigns)
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
 
     assigns =
       assign(assigns, %{
@@ -538,7 +538,7 @@ defmodule Frameworks.Pixel.Form do
 
   def text_area(%{form: form, field: field, height: height} = assigns) do
     errors = guarded_errors(form, field)
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
     field_id = String.to_atom(input_id(form, field))
 
     input_static_class =
@@ -599,7 +599,7 @@ defmodule Frameworks.Pixel.Form do
 
   def wysiwyg_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
     field_id = String.to_atom(input_id(form, field))
 
     input_static_class =
@@ -822,7 +822,7 @@ defmodule Frameworks.Pixel.Form do
 
     input_dynamic_class = "border-grey3"
     active_color = active_input_color(assigns)
-    has_errors = Enum.count(errors) > 0
+    has_errors = not Enum.empty?(errors)
 
     js_click =
       JS.focus(to: "##{field_id}")

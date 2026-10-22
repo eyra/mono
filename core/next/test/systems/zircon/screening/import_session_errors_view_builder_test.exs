@@ -321,7 +321,7 @@ defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
 
       assert is_list(result.filtered_errors)
       # First error should match the query "error"
-      assert length(result.filtered_errors) >= 1
+      assert result.filtered_errors != []
     end
 
     test "calculates correct page count for exact page boundary" do

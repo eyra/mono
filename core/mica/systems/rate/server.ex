@@ -49,7 +49,7 @@ defmodule Systems.Rate.Server do
   end
 
   defp schedule_prune(%State{prune_interval: prune_interval, quotas: quotas} = state) do
-    if Enum.count(quotas) > 0 do
+    if not Enum.empty?(quotas) do
       Process.send_after(self(), :prune, prune_interval)
     end
 

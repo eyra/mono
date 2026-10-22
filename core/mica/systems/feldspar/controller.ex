@@ -280,10 +280,7 @@ defmodule Systems.Feldspar.Controller do
 
     if assignment_id && assignment_id != "" do
       with {:ok, assignment} <- get_assignment(assignment_id) do
-        case Project.Public.get_storage_endpoint_by(assignment) do
-          {:ok, endpoint} -> {:ok, endpoint}
-          {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
-        end
+        assignment_storage_endpoint(assignment)
       end
     else
       {:error, :no_storage_endpoint}
@@ -294,6 +291,13 @@ defmodule Systems.Feldspar.Controller do
     case Storage.Public.deliver_file(storage_endpoint, file_id, meta_data) do
       {:ok, _} -> :ok
       {:error, step, reason, _} -> {:error, {:scheduling_failed, step, reason}}
+    end
+  end
+
+  defp assignment_storage_endpoint(assignment) do
+    case Project.Public.get_storage_endpoint_by(assignment) do
+      {:ok, endpoint} -> {:ok, endpoint}
+      {:error, {:storage_endpoint, :not_available}} -> {:error, :no_storage_endpoint}
     end
   end
 

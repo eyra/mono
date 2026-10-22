@@ -38,7 +38,7 @@ jobs:
         uses: erlef/setup-elixir@v1.24.1
         with:
           otp-version: "27.3.4"
-          elixir-version: "1.17.0-otp-27"
+          elixir-version: "1.19.6-otp-27"
 
       # Cache Mix deps + build artifacts. Key is scoped to OTP/Elixir + mix.lock;
       # restore-keys let us reuse a stale-lock build as a warm start.
@@ -146,7 +146,7 @@ jobs:
         uses: erlef/setup-elixir@v1.24.1
         with:
           otp-version: "27.3.4"
-          elixir-version: "1.17.0-otp-27"
+          elixir-version: "1.19.6-otp-27"
 
       - name: Cache mix deps + build
         uses: actions/cache@v6.1.0

@@ -80,12 +80,13 @@ defmodule Systems.Storage.EndpointForm.Helper do
       end
 
       defp validate(%{assigns: %{entity: entity}} = socket) do
-        changeset =
+        %Ecto.Changeset{} =
+          changeset =
           entity
           |> Model.changeset(%{})
           |> Model.validate()
 
-        assign(socket, changeset: %Ecto.Changeset{changeset | action: :update})
+        assign(socket, changeset: %{changeset | action: :update})
       end
 
       defp test_connection(%{assigns: %{changeset: changeset, entity: entity}} = socket) do
