@@ -64,6 +64,17 @@ defmodule Systems.Feldspar.LocalFSTest do
     end
 
     @tag :tmp_dir
+    test "refuses a zip whose data doesn't match its checksum and leaves no app folder",
+         %{tmp_dir: tmp_dir} do
+      name = "broken_#{System.unique_integer([:positive])}"
+      zip = create_zip(tmp_dir, [{"index.html", "app"}])
+      break_first_checksum(zip)
+
+      assert {:error, :invalid_zip} = LocalFS.store(zip, "#{name}.zip")
+      assert Path.wildcard(Path.join(LocalFS.get_root_path(), "*_#{name}")) == []
+    end
+
+    @tag :tmp_dir
     test "refuses a file that is not a zip", %{tmp_dir: tmp_dir} do
       file = Path.join(tmp_dir, "app.zip")
       File.write!(file, "not a zip")
@@ -100,6 +111,12 @@ defmodule Systems.Feldspar.LocalFSTest do
     path = Path.join(dir, "app.zip")
     File.write!(path, zip)
     path
+  end
+
+  # Bytes 14-17 of a local file header hold the entry's CRC-32.
+  defp break_first_checksum(path) do
+    <<header::binary-size(14), crc::little-32, rest::binary>> = File.read!(path)
+    File.write!(path, <<header::binary, Bitwise.bxor(crc, 1)::little-32, rest::binary>>)
   end
 
   # The central directory comes last, so its copy of the name is the last match.

@@ -11,8 +11,8 @@ defmodule Systems.Feldspar.LocalFS do
 
   @doc """
   Extracts the zip into a new app folder and returns the folder name, or
-  `{:error, :invalid_zip}` when the file is no zip or has an entry that would
-  be written outside the app folder.
+  `{:error, :invalid_zip}` when the file is no zip, has an entry that would
+  be written outside the app folder, or can't be extracted.
   """
   def store(zip_file, original_filename) do
     uuid = Ecto.UUID.generate()
@@ -21,11 +21,22 @@ defmodule Systems.Feldspar.LocalFS do
     path = get_path(folder)
 
     if valid_zip?(zip_file, path) do
-      File.mkdir!(path)
-      {:ok, _} = :zip.unzip(to_charlist(zip_file), cwd: to_charlist(path))
-      folder
+      extract(zip_file, path, folder)
     else
       {:error, :invalid_zip}
+    end
+  end
+
+  defp extract(zip_file, path, folder) do
+    File.mkdir!(path)
+
+    case :zip.unzip(to_charlist(zip_file), cwd: to_charlist(path)) do
+      {:ok, _} ->
+        folder
+
+      {:error, _} ->
+        File.rm_rf!(path)
+        {:error, :invalid_zip}
     end
   end
 
