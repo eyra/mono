@@ -83,3 +83,7 @@ msgstr "Este posibil ca dispozitivul să nu fi avut suficientă memorie. Dacă f
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Suport"
+
+#, elixir-autogen, elixir-format
+msgid "zip-invalid"
+msgstr "Fișierul selectat nu este o arhivă ZIP de aplicație validă"

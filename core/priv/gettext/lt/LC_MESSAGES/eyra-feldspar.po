@@ -83,3 +83,7 @@ msgstr "Įrenginyje galėjo nepakakti atminties. Jei naudojamas telefonas, gali 
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Pagalba"
+
+#, elixir-autogen, elixir-format
+msgid "zip-invalid"
+msgstr "Pasirinkta byla nėra tinkamas programėlės ZIP failas"

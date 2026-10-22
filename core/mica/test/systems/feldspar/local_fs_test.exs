@@ -24,7 +24,7 @@ defmodule Systems.Feldspar.LocalFSTest do
       outside = "outside_#{System.unique_integer([:positive])}"
       zip = create_zip(tmp_dir, [{"index.html", "app"}, {"../#{outside}/x.json", "x"}])
 
-      assert_raise ArgumentError, fn -> LocalFS.store(zip, "app.zip") end
+      assert {:error, :invalid_zip} = LocalFS.store(zip, "app.zip")
       refute File.exists?(Path.join(LocalFS.get_root_path(), outside))
     end
 
@@ -33,7 +33,7 @@ defmodule Systems.Feldspar.LocalFSTest do
       outside = "outside_#{System.unique_integer([:positive])}"
       zip = create_zip(tmp_dir, [{"assets/../../#{outside}/x.json", "x"}])
 
-      assert_raise ArgumentError, fn -> LocalFS.store(zip, "app.zip") end
+      assert {:error, :invalid_zip} = LocalFS.store(zip, "app.zip")
       refute File.exists?(Path.join(LocalFS.get_root_path(), outside))
     end
 
@@ -42,8 +42,33 @@ defmodule Systems.Feldspar.LocalFSTest do
       name = "refused_#{System.unique_integer([:positive])}"
       zip = create_zip(tmp_dir, [{"../x/x.json", "x"}])
 
-      assert_raise ArgumentError, fn -> LocalFS.store(zip, "#{name}.zip") end
+      assert {:error, :invalid_zip} = LocalFS.store(zip, "#{name}.zip")
       assert Path.wildcard(Path.join(LocalFS.get_root_path(), "*_#{name}")) == []
+    end
+
+    @tag :tmp_dir
+    test "refuses a zip whose local entry name differs from its central directory name",
+         %{tmp_dir: tmp_dir} do
+      outside = "outside_#{System.unique_integer([:positive])}"
+      name = "../#{outside}/x.json"
+      zip = create_zip(tmp_dir, [{name, "x"}])
+
+      rename_in_central_directory(
+        zip,
+        name,
+        String.duplicate("a", byte_size(name) - 7) <> "/x.json"
+      )
+
+      assert {:error, :invalid_zip} = LocalFS.store(zip, "app.zip")
+      refute File.exists?(Path.join(LocalFS.get_root_path(), outside))
+    end
+
+    @tag :tmp_dir
+    test "refuses a file that is not a zip", %{tmp_dir: tmp_dir} do
+      file = Path.join(tmp_dir, "app.zip")
+      File.write!(file, "not a zip")
+
+      assert {:error, :invalid_zip} = LocalFS.store(file, "app.zip")
     end
 
     # TODO
@@ -75,5 +100,18 @@ defmodule Systems.Feldspar.LocalFSTest do
     path = Path.join(dir, "app.zip")
     File.write!(path, zip)
     path
+  end
+
+  # The central directory comes last, so its copy of the name is the last match.
+  defp rename_in_central_directory(path, name, new_name)
+       when byte_size(name) == byte_size(new_name) do
+    zip = File.read!(path)
+    {offset, length} = zip |> :binary.matches(name) |> List.last()
+
+    File.write!(
+      path,
+      binary_part(zip, 0, offset) <>
+        new_name <> binary_part(zip, offset + length, byte_size(zip) - offset - length)
+    )
   end
 end
