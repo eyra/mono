@@ -18,6 +18,17 @@ defmodule Systems.Feldspar.Controller do
 
   @valid_log_levels ~w(debug info warn error)
 
+  # Context keys copied to the Logger metadata; any other key only shows up in the message.
+  @context_metadata_keys %{
+    "assignment_id" => :feldspar_assignment_id,
+    "task" => :feldspar_task,
+    "participant" => :feldspar_participant,
+    "group" => :feldspar_group,
+    "key" => :feldspar_key,
+    "dataSize" => :feldspar_dataSize,
+    "status" => :feldspar_status
+  }
+
   # ============================================================================
   # Donate endpoint
   # ============================================================================
@@ -64,9 +75,8 @@ defmodule Systems.Feldspar.Controller do
     telemetry_metadata = telemetry_metadata(context)
     start_time = emit_telemetry_start([:feldspar, :donate], telemetry_metadata)
 
-    log_message("Server", "info", "Donation request, key=#{key}", context)
-
     with {:ok, _user} <- get_current_user(conn),
+         log_message("Server", "info", "Donation request, key=#{key}", context),
          {:ok, data} <- read_upload(upload),
          meta_data <- build_meta_data(conn, key, context),
          :ok <- check_rate_limit(:feldspar_data_donation, meta_data.remote_ip, byte_size(data)),
@@ -183,7 +193,7 @@ defmodule Systems.Feldspar.Controller do
   - 429 if rate limited
   """
   def log(conn, %{"level" => level, "message" => message} = params) do
-    context = params["context"] || %{}
+    context = log_context(params["context"])
     telemetry_metadata = telemetry_metadata(context) |> Map.put(:level, level)
     start_time = emit_telemetry_start([:feldspar, :log], telemetry_metadata)
 
@@ -333,6 +343,9 @@ defmodule Systems.Feldspar.Controller do
   # Log-specific private functions
   # ============================================================================
 
+  defp log_context(%{} = context), do: context
+  defp log_context(_), do: %{}
+
   defp validate_log_level(level) when level in @valid_log_levels, do: :ok
   defp validate_log_level(_), do: {:error, :invalid_level}
 
@@ -354,11 +367,16 @@ defmodule Systems.Feldspar.Controller do
 
   defp set_appsignal_attributes(context) do
     metadata =
-      context
-      |> Enum.map(fn {k, v} -> {String.to_atom("feldspar_#{k}"), to_string(v)} end)
+      for {key, value} <- context, Map.has_key?(@context_metadata_keys, key) do
+        {Map.fetch!(@context_metadata_keys, key), metadata_value(value)}
+      end
 
     Logger.metadata(metadata)
   end
+
+  defp metadata_value(value) when is_binary(value), do: value
+  defp metadata_value(value) when is_number(value) or is_atom(value), do: to_string(value)
+  defp metadata_value(value), do: inspect(value)
 
   defp format_log_context(context) when context == %{}, do: ""
 

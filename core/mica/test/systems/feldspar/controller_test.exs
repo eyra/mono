@@ -144,6 +144,40 @@ defmodule Systems.Feldspar.ControllerTest do
     end
   end
 
+  describe "donate/2 - context keys" do
+    test "refuses an unauthenticated request before reading its context", %{conn: conn} do
+      keys = unique_keys()
+
+      conn = post_donation(conn, context_with_keys(keys) |> Map.put("assignment_id", 1))
+
+      assert json_response(conn, 401) == %{"error" => "Not authenticated"}
+      refute Keyword.has_key?(Logger.metadata(), :feldspar_assignment_id)
+      refute_atoms(keys)
+    end
+
+    test "creates no atoms from unknown context keys", %{conn: conn} do
+      {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+      keys = unique_keys()
+      atom_count = :erlang.system_info(:atom_count)
+
+      post_donation(conn, context_with_keys(keys))
+
+      refute_atoms(keys)
+      assert :erlang.system_info(:atom_count) - atom_count < length(keys)
+    end
+
+    test "keeps known context keys in the log metadata", %{conn: conn} do
+      {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+
+      post_donation(conn, %{assignment_id: 123, participant: %{"nested" => true}, group: "x"})
+
+      metadata = Logger.metadata()
+      assert metadata[:feldspar_assignment_id] == "123"
+      assert metadata[:feldspar_participant] == ~s(%{"nested" => true})
+      assert metadata[:feldspar_group] == "x"
+    end
+  end
+
   describe "donate/2 - no storage endpoint" do
     setup :login_as_member
 
@@ -546,6 +580,35 @@ defmodule Systems.Feldspar.ControllerTest do
     end
   end
 
+  describe "log/2 - context keys" do
+    setup :login_as_member
+
+    test "creates no atoms from unknown context keys", %{conn: conn} do
+      keys = unique_keys()
+
+      conn =
+        post(conn, "/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with unknown context keys",
+          "context" => context_with_keys(keys)
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      refute_atoms(keys)
+    end
+
+    test "accepts a context that is not an object", %{conn: conn} do
+      conn =
+        post(conn, "/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with a string context",
+          "context" => "not an object"
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+  end
+
   describe "log/2 - rate limiting" do
     @describetag :rate_limit_test
 
@@ -606,6 +669,32 @@ defmodule Systems.Feldspar.ControllerTest do
     File.write!(path, content)
     on_exit(fn -> File.rm(path) end)
     path
+  end
+
+  defp post_donation(conn, context) do
+    upload = %Plug.Upload{
+      path: create_temp_file("{\"test\": \"data\"}"),
+      filename: "data.json",
+      content_type: "application/json"
+    }
+
+    post(conn, "/api/feldspar/donate", %{
+      "key" => "test-key",
+      "data" => upload,
+      "context" => Jason.encode!(context)
+    })
+  end
+
+  defp unique_keys do
+    for _ <- 1..100, do: "unknown_#{System.unique_integer([:positive])}"
+  end
+
+  defp context_with_keys(keys), do: Map.new(keys, &{&1, "value"})
+
+  defp refute_atoms(keys) do
+    for key <- keys, name <- [key, "feldspar_#{key}"] do
+      assert_raise ArgumentError, fn -> String.to_existing_atom(name) end
+    end
   end
 
   defp create_large_json_content(line_count) do
