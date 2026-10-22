@@ -26,7 +26,7 @@ mix test.feature mica/test/features/smoke_test.exs     # one file
 WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
 ```
 
-`mix test.feature` runs `test --only feature`.
+`mix test.feature` runs `test --only feature` after `assets.build` (the browser needs current CSS and JS; run `npm ci` in `core/assets` once per worktree).
 `mix test.unit` runs `test --exclude feature`.
 `mix test.ci` runs both halves + JS, each in its own Mix invocation (Mix runs `test` only once per invocation).
 
