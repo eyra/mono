@@ -87,6 +87,74 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
     end
   end
 
+  describe "open task deleted" do
+    setup %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      [deleted_item | _] = Systems.Workflow.Model.ordered_items(assignment.workflow)
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user,
+          user_state: %{task: deleted_item.id},
+          panel_info: nil
+        })
+
+      {:ok, view, _html} =
+        conn
+        |> Map.put(:request_path, "/assignment/tasks")
+        |> live_isolated(Assignment.CrewTaskListView,
+          session: %{"live_context" => live_context}
+        )
+
+      %{assignment: assignment, deleted_item: deleted_item, view: view}
+    end
+
+    test "closes the tool modal of the deleted task", %{
+      assignment: assignment,
+      deleted_item: deleted_item,
+      view: view
+    } do
+      assert %{tool_modal: %{} = tool_modal} = :sys.get_state(view.pid).socket.assigns
+      :erlang.trace(view.pid, true, [:receive])
+
+      Repo.delete!(deleted_item)
+      send_model_update(view, assignment)
+
+      assert_receive {:trace, _, :receive,
+                      {:live_nest_event,
+                       %LiveNest.Event{name: :hide_modal, payload: %{modal: ^tool_modal}}}}
+    end
+
+    test "survives a completion from the deleted task's tool", %{
+      assignment: assignment,
+      deleted_item: deleted_item,
+      view: view
+    } do
+      Repo.delete!(deleted_item)
+      send_model_update(view, assignment)
+
+      send(view.pid, {:live_nest_event, %LiveNest.Event{name: :tool_completed, payload: %{}}})
+
+      assert render(view) =~ "crew-task-list-view"
+    end
+  end
+
+  defp send_model_update(view, %{id: assignment_id}) do
+    model =
+      Assignment.Public.get!(assignment_id, [
+        :crew,
+        workflow: [items: [tool_ref: Systems.Workflow.ToolRefModel.preload_graph(:tool)]]
+      ])
+
+    send(view.pid, %Phoenix.Socket.Broadcast{
+      topic: "test",
+      event: "test",
+      payload: {:test, %{model: model, from_pid: self()}}
+    })
+  end
+
   describe "BUG: participant missing in upload_context" do
     setup %{user: user} do
       # Create assignment with Feldspar tool

@@ -74,3 +74,7 @@ msgstr "Puede que tu dispositivo no tuviera suficiente memoria. Si usas un móvi
 #, elixir-autogen, elixir-format
 msgid "recovery.support"
 msgstr "Soporte"
+
+#, elixir-autogen, elixir-format
+msgid "zip-invalid"
+msgstr "El archivo seleccionado no es un ZIP de aplicación válido"

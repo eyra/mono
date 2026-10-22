@@ -14,6 +14,8 @@ defmodule Core.Application do
 
     Core.RuntimeConfig.log_choices()
 
+    Systems.Storage.BuiltIn.Backend.check_upload_path!()
+
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,

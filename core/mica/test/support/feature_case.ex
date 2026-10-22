@@ -22,6 +22,12 @@ defmodule CoreWeb.FeatureCase do
 
       # Run with visible browser for debugging
       WALLABY_HEADLESS=false mix test test/features
+
+  The browser loads the CSS and JS from `priv/static/assets`. `mix test.feature`
+  builds them first; before running feature files with plain `mix test`, run
+  `npm ci` in `assets/` once and `mix assets.build` after every JS or CSS change.
+  Without current assets the features fail, e.g. with both sign-in tabs visible
+  or `.phx-connected` never appearing.
   """
 
   use ExUnit.CaseTemplate

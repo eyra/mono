@@ -25,7 +25,7 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
     online? = Graphite.LeaderboardModel.online?(leaderboard)
     owner? = auth_module().roles_intersect?(user, leaderboard, [:owner])
 
-    %{info: info} = Graphite.Public.get_challenge(leaderboard, [:info])
+    info = challenge_info(Graphite.Public.get_challenge(leaderboard, [:info]))
 
     if online? or owner? do
       %{
@@ -50,6 +50,11 @@ defmodule Systems.Graphite.LeaderboardPageBuilder do
       }
     end
   end
+
+  # The challenge is found through its workflow item, so it is gone once the
+  # researcher deletes that item; the leaderboard then shows without a banner.
+  defp challenge_info(%{info: info}), do: info
+  defp challenge_info(nil), do: nil
 
   defp highlights(leaderboard) do
     [

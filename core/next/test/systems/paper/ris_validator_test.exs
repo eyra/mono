@@ -168,8 +168,7 @@ defmodule Systems.Paper.RISValidatorTest do
       # Simulate a real image file (first 1KB of a JPEG)
       fake_ris =
         <<0xFF, 0xD8, 0xFF, 0xE0, 0x00, 0x10, 0x4A, 0x46, 0x49, 0x46, 0x00, 0x01, 0x01, 0x01,
-          0x00,
-          0x48>> <>
+          0x00, 0x48>> <>
           String.duplicate(<<0xFF, 0xD9>>, 500)
 
       assert {:error, message} = RISValidator.validate_content(fake_ris)

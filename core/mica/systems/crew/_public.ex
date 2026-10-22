@@ -94,11 +94,17 @@ defmodule Systems.Crew.Public do
     |> Repo.all()
   end
 
-  def list_tasks_by_template(crew, task_template, order_by \\ {:desc, :id}) do
-    from(t in task_query_by_template(crew, task_template),
-      order_by: ^order_by
-    )
-    |> Repo.all()
+  @doc """
+  Expires all tasks of the crew whose identifier contains every element of
+  `task_template`. Returns the number of expired tasks.
+  """
+  def expire_tasks_by_template(crew, [_ | _] = task_template) do
+    {count, _} =
+      task_query_by_template(crew, task_template)
+      |> where([task: t], t.expired == false)
+      |> Repo.update_all(set: [expired: true, updated_at: Timestamp.naive_now()])
+
+    count
   end
 
   def list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id}) do
@@ -265,9 +271,15 @@ defmodule Systems.Crew.Public do
     |> Repo.preload(preload)
   end
 
-  def apply_member(%Crew.Model{} = crew, %User{} = user, [_ | _] = identifier, expire_at \\ nil) do
+  def apply_member(
+        %Crew.Model{} = crew,
+        %User{} = user,
+        [_ | _] = identifier,
+        expire_at \\ nil,
+        reset_opts \\ []
+      ) do
     if member = get_expired_member(crew, user, [:crew]) do
-      member = reset_member!(member, expire_at, dispatch: true)
+      member = reset_member!(member, expire_at, Keyword.put(reset_opts, :dispatch, true))
       {:ok, %{member: member}}
     else
       Multi.new()
@@ -286,14 +298,34 @@ defmodule Systems.Crew.Public do
         %Crew.Model{} = crew,
         %User{} = user,
         role \\ :participant,
-        expire_at \\ nil
+        expire_at \\ nil,
+        reset_opts \\ []
       ) do
     if member = get_expired_member(crew, user, [:crew]) do
-      member = reset_member!(member, expire_at, dispatch: true)
+      member = reset_member!(member, expire_at, Keyword.put(reset_opts, :dispatch, true))
       {:ok, %{member: member}}
     else
       Multi.new()
       |> insert(:member, crew, user, %{expire_at: expire_at})
+      |> insert(:role_assignment, crew, user, role)
+      |> Repo.commit()
+    end
+  end
+
+  @doc """
+  Makes the user an active member of the crew with the given role. Safe to call
+  repeatedly and concurrently: existing rows are kept as they are.
+  """
+  def ensure_member_with_role(%Crew.Model{} = crew, %User{} = user, role, reset_opts \\ []) do
+    membership =
+      if get_member(crew, user) do
+        {:ok, %{}}
+      else
+        apply_member_with_role(crew, user, role, nil, reset_opts)
+      end
+
+    with {:ok, _} <- membership do
+      Multi.new()
       |> insert(:role_assignment, crew, user, role)
       |> Repo.commit()
     end
@@ -405,10 +437,16 @@ defmodule Systems.Crew.Public do
     reset_member(multi, Repo.preload(member, [:crew]), expire_at, opts)
   end
 
+  @doc """
+  Resets an (expired) member and revives its expired tasks.
+
+  Pass `revive?:`, a function that gets each expired task, to revive only the
+  tasks it returns true for; the others stay expired.
+  """
   def reset_member(%Multi{} = multi, %Crew.MemberModel{crew: crew} = member, expire_at, opts) do
     member_changeset = Crew.MemberModel.reset(member, expire_at)
     task_attrs = Crew.TaskModel.reset_attrs(expire_at)
-    task_query = task_query(crew, member, true)
+    task_query = reset_task_query(crew, member, opts[:revive?])
 
     multi =
       multi
@@ -420,6 +458,18 @@ defmodule Systems.Crew.Public do
     else
       multi
     end
+  end
+
+  defp reset_task_query(crew, member, nil), do: task_query(crew, member, true)
+
+  defp reset_task_query(crew, member, revive?) when is_function(revive?, 1) do
+    task_ids =
+      task_query(crew, member, true)
+      |> Repo.all()
+      |> Enum.filter(revive?)
+      |> Enum.map(& &1.id)
+
+    from(task in Crew.TaskModel, where: task.id in ^task_ids)
   end
 
   def member(crew, user_ref) do

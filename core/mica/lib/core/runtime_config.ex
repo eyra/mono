@@ -123,6 +123,39 @@ defmodule Core.RuntimeConfig do
     |> Enum.map(&{&1, true})
   end
 
+  @max_links 40
+
+  @doc """
+  Whether `path` is `root` or lies inside it, after expanding both and
+  resolving symbolic links in their existing parts.
+  """
+  def inside?(path, root) do
+    path = real_path(path)
+    Path.relative_to(path, real_path(root)) != path
+  end
+
+  defp real_path(path) do
+    path
+    |> Path.expand()
+    |> Path.split()
+    |> resolve(nil, 0)
+  end
+
+  defp resolve(_parts, _current, links) when links > @max_links,
+    do: raise(ArgumentError, "too many symbolic links")
+
+  defp resolve([], current, _links), do: current
+  defp resolve([root | rest], nil, links), do: resolve(rest, root, links)
+
+  defp resolve([part | rest], current, links) do
+    candidate = Path.join(current, part)
+
+    case File.read_link(candidate) do
+      {:ok, target} -> resolve(Path.split(Path.expand(target, current)) ++ rest, nil, links + 1)
+      {:error, _} -> resolve(rest, candidate, links)
+    end
+  end
+
   @doc "Erlang node names (`core@<host>`) for the hosts in `DIST_HOSTS`."
   def dist_hosts(env) do
     env["DIST_HOSTS"]

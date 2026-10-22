@@ -805,3 +805,15 @@ msgstr "Îți mulțumim!"
 #, elixir-autogen, elixir-format
 msgid "participation.title.rejected"
 msgstr "Contribuția ta a fost respinsă"
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.body"
+msgstr "Această sarcină a fost eliminată din studiu. Dacă aveți întrebări, contactați cercetătorul care v-a invitat."
+
+#, elixir-autogen, elixir-format
+msgid "task_unavailable.title"
+msgstr "Această sarcină nu mai este disponibilă"
+
+#, elixir-autogen, elixir-format
+msgid "work.empty.message"
+msgstr "Acest studiu nu are sarcini."

@@ -56,7 +56,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   # Org admins see group tabs (e.g., Organisations)
   # Currently only Organisations group exists for non-admins
-  defp create_tabs(%{governable_orgs: orgs} = assigns) when length(orgs) > 0 do
+  defp create_tabs(%{governable_orgs: [_ | _]} = assigns) do
     # Show the Organisations group tab (same as admin :org tab)
     Enum.map(@org_admin_tabs, &create_admin_tab(&1, assigns))
   end

@@ -26,6 +26,42 @@ defmodule Core.RuntimeConfigTest do
     end
   end
 
+  describe "inside?/2" do
+    test "is true for the root itself and paths below it" do
+      assert RuntimeConfig.inside?("/srv/uploads", "/srv/uploads")
+      assert RuntimeConfig.inside?("/srv/uploads/storage", "/srv/uploads/")
+      assert RuntimeConfig.inside?("/srv/uploads/../uploads/storage", "/srv/uploads")
+    end
+
+    test "is false for siblings, including ones sharing a name prefix" do
+      refute RuntimeConfig.inside?("/srv/storage", "/srv/uploads")
+      refute RuntimeConfig.inside?("/srv/uploads-storage", "/srv/uploads")
+    end
+
+    test "treats every path as inside /" do
+      assert RuntimeConfig.inside?("/srv/storage", "/")
+      assert RuntimeConfig.inside?("/", "/")
+    end
+
+    @tag :tmp_dir
+    test "resolves symbolic links", %{tmp_dir: tmp_dir} do
+      uploads = Path.join(tmp_dir, "uploads")
+      File.mkdir_p!(Path.join(uploads, "storage"))
+      File.ln_s!(Path.join(uploads, "storage"), Path.join(tmp_dir, "storage"))
+      File.ln_s!("uploads", Path.join(tmp_dir, "uploads-link"))
+
+      assert RuntimeConfig.inside?(Path.join(tmp_dir, "storage"), uploads)
+      assert RuntimeConfig.inside?(Path.join(tmp_dir, "storage/donations"), uploads)
+
+      assert RuntimeConfig.inside?(
+               Path.join(uploads, "storage"),
+               Path.join(tmp_dir, "uploads-link")
+             )
+
+      refute RuntimeConfig.inside?(tmp_dir, uploads)
+    end
+  end
+
   describe "repo/1" do
     test "requires DATABASE_URL" do
       assert_raise System.EnvError, ~r/DATABASE_URL/, fn -> RuntimeConfig.repo(%{}) end

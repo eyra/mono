@@ -52,71 +52,59 @@ defmodule Frameworks.Pixel.ViewModel.Test do
 
   describe("defgetter/2") do
     test "handles short path properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefGetterShortPath do
           defgetter([:prop], nil)
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "[prop: 2]"
+      assert function_exported?(module, :prop, 2)
     end
 
     test "handles longer path properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefGetterLongerPath do
           defgetter([:parent, :child, :grandchild], nil)
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "[parent_child_grandchild: 2]"
+      assert function_exported?(module, :parent_child_grandchild, 2)
     end
 
     test "handles short path boolean properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefGetterShortPathBoolean do
           defgetter([:prop?], true)
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "[prop?: 2]"
+      assert function_exported?(module, :prop?, 2)
     end
   end
 
   describe("defhas/1") do
     test "handles short path properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefHasShortPath do
           defhas([:prop])
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "{:has_prop?, 1}"
+      assert function_exported?(module, :has_prop?, 1)
     end
 
     test "handles longer path properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefHasLongerPath do
           defhas([:parent, :child, :grandchild])
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "{:has_parent_child_grandchild?, 1}"
+      assert function_exported?(module, :has_parent_child_grandchild?, 1)
     end
 
     test "handles short path boolean properly" do
-      expr =
+      {:module, module, _, _} =
         defmodule DefHasShortPathBoolean do
           defhas([:prop?])
         end
 
-      string = expr |> Macro.expand(__ENV__) |> Macro.to_string()
-
-      assert string =~ "{:has_prop?, 1}"
+      assert function_exported?(module, :has_prop?, 1)
     end
   end
 end

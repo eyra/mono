@@ -63,6 +63,17 @@ defmodule Systems.Content.Public do
 
   defp get_local_path(_backend, _path), do: nil
 
+  @doc """
+  True when `url` points at content stored through our own content backend.
+  Anything else is a URL from outside and must not be fetched by the server.
+  """
+  def stored_url?(url) when is_binary(url) do
+    case Content.Private.get_backend() do
+      Content.S3 -> Content.S3.stored_url?(url)
+      _backend -> get_local_path(url) != nil
+    end
+  end
+
   def get_text_item!(id, preload \\ []) do
     from(t in TextItem, preload: ^preload)
     |> Repo.get!(id)

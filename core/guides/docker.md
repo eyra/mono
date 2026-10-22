@@ -12,5 +12,6 @@ Several environment variables are required for proper functioning:
     DB_HOST=<db-host>
     DB_NAME=<db-name>
     UPLOAD_PATH=/static/uploads
+    STORAGE_PATH=/static/storage
     FELDSPAR_DATA_DONATION_PATH=/static/donations
     SECRET_KEY_BASE=<a-random-sequence-of-letters-and-numbers>

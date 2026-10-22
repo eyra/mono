@@ -84,7 +84,7 @@
        partner_fee_percentage: 0
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
-    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-staging-storage", prefix: "storage"]},
+    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-staging-donations", prefix: "storage"]},
     {:account,
      [
        auth_methods: %{
@@ -128,7 +128,7 @@
        ris_stream_chunk_size: 65536
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
-    {:rate, [quotas: []]},
+    {:rate, [quota_overrides: []]},
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}

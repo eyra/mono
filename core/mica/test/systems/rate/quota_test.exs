@@ -162,4 +162,29 @@ defmodule Systems.Rate.QuotaTest do
              } = Quota.init(json)
     end
   end
+
+  describe "merge/2" do
+    test "keeps the defaults of services without an override" do
+      otp = quota(:otp_request, 3)
+
+      assert Quota.merge([otp], [quota(:signup, 5)]) == [otp, quota(:signup, 5)]
+    end
+
+    test "replaces all defaults of a service that has an override" do
+      defaults = [quota(:storage_export, 1), quota(:storage_export, 2, :global)]
+      override = quota(:storage_export, 6)
+
+      assert Quota.merge(defaults, [override]) == [override]
+    end
+
+    test "keeps the defaults when there are no overrides" do
+      defaults = [quota(:otp_request, 3), quota(:signup, 5)]
+
+      assert Quota.merge(defaults, []) == defaults
+    end
+  end
+
+  defp quota(service, limit, scope \\ :local) do
+    Quota.init(service: service, limit: limit, unit: :call, window: :minute, scope: scope)
+  end
 end

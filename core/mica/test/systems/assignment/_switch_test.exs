@@ -114,6 +114,26 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
     end
 
+    for event <- [:started, :completed] do
+      @event event
+
+      test "crew_task #{event} after its workflow item was deleted", %{
+        user: user,
+        crew: crew,
+        crew_task: crew_task
+      } do
+        {:ok, item} = Assignment.Private.get_workflow_item(crew_task)
+        Core.Repo.delete!(item)
+
+        message = %{crew: crew, crew_task: crew_task, from_pid: self()}
+        assert :ok = Switch.intercept({:crew_task, @event}, message)
+
+        refute_signal_dispatched({:assignment, :monitor_event})
+        message = assert_signal_dispatched({:page, Systems.Assignment.CrewPage})
+        assert message.user_id == user.id
+      end
+    end
+
     test "crew_task completed", %{user: user, crew: crew, crew_task: crew_task} do
       message = %{crew: crew, crew_task: crew_task, from_pid: self()}
       assert :ok = Switch.intercept({:crew_task, :completed}, message)
@@ -130,6 +150,48 @@ defmodule Systems.Assignment.SwitchTest do
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.OnboardingConsentView})
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.CrewWorkView})
       assert_signal_dispatched({:embedded_live_view, Systems.Assignment.FinishedView})
+    end
+  end
+
+  describe "workflow_item deleted" do
+    setup do
+      isolate_signals(except: [Systems.Workflow.Switch, Systems.Assignment.Switch])
+      :ok
+    end
+
+    for special <- [:questionnaire, :data_donation, :benchmark_challenge, :paper_screening] do
+      @special special
+
+      test "expires the crew tasks of the deleted item only (#{special})" do
+        workflow = Factories.insert!(:workflow, %{})
+        deleted_item = Factories.insert!(:workflow_item, %{workflow: workflow, position: 0})
+        kept_item = Factories.insert!(:workflow_item, %{workflow: workflow, position: 1})
+        crew = Factories.insert!(:crew)
+
+        assignment =
+          Factories.insert!(:assignment, %{special: @special, workflow: workflow, crew: crew})
+
+        tasks =
+          for status <- [:pending, :completed], item <- [deleted_item, kept_item] do
+            user = Factories.insert!(:member)
+            member = Factories.insert!(:crew_member, %{crew: crew, user: user})
+
+            Factories.insert!(:crew_task, %{
+              identifier: Assignment.Private.task_identifier(assignment, item, member),
+              crew: crew,
+              auth_node: %Core.Authorization.Node{},
+              status: status
+            })
+          end
+
+        assert {:ok, _} = Systems.Workflow.Public.delete(deleted_item)
+
+        for task <- tasks do
+          %{expired: expired} = Core.Repo.reload!(task)
+          deleted? = Assignment.Private.workflow_item_id(task) == "#{deleted_item.id}"
+          assert expired == deleted?
+        end
+      end
     end
   end
 

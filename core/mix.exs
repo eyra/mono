@@ -112,8 +112,7 @@ defmodule Core.MixProject do
       {:nimble_parsec, "1.4.2"},
       {:nimble_options, "1.1.1"},
       {:oban, "2.20.1"},
-      # Fork supports elixir 1.18.4
-      {:packmatic, github: "eyra/packmatic", ref: "2774fb9cc545b4c3c096a1c0acb8e073efa43e39"},
+      {:packmatic, "2.1.0"},
       {:phoenix_ecto, "4.6.5"},
       {:phoenix_html, "4.3.0"},
       {:phoenix_html_helpers, "1.0.1"},
@@ -152,7 +151,7 @@ defmodule Core.MixProject do
       {:mock, "0.3.9", only: :test},
       {:wallaby, "0.30.9", only: :test, runtime: false},
       {:phoenix_live_reload, "1.6.1", only: :dev},
-      {:credo, "1.7.12", only: [:dev, :test], runtime: false},
+      {:credo, "1.7.19", only: [:dev, :test], runtime: false},
       {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
       {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},
@@ -178,8 +177,15 @@ defmodule Core.MixProject do
       ],
       "lfs.pull": "cmd git lfs pull",
       "test.unit": ["ecto.create --quiet", "ecto.migrate", "test --exclude feature"],
-      "test.feature": ["ecto.create --quiet", "ecto.migrate", "test --only feature"],
-      "test.js": "cmd cd ./assets && npm test",
+      # Feature tests drive the browser against priv/static/assets: without a
+      # fresh build the pages lack (current) CSS and JS and the features fail.
+      "test.feature": [
+        "ecto.create --quiet",
+        "ecto.migrate",
+        "assets.build",
+        "test --only feature"
+      ],
+      "test.js": "cmd --cd assets npm test",
       # Mix runs the `test` task once per invocation, so each half needs its own.
       "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
@@ -196,7 +202,7 @@ defmodule Core.MixProject do
       clean: ["cmd rm -rf deps", "cmd rm -rf _build", "cmd rm -rf priv/cldr"],
       "prettier.fix": "cmd ./assets/node_modules/.bin/prettier --color -w ./assets/js",
       "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
-      "assets.install": "cmd cd ./assets && npm install",
+      "assets.install": "cmd --cd assets npm install",
       "assets.build": ["tailwind default", "esbuild default"],
       "assets.deploy": [
         "tailwind default --minify",
@@ -204,15 +210,14 @@ defmodule Core.MixProject do
         "phx.digest"
       ],
       run: "phx.server",
-      github_release:
-        "cmd gh workflow run Release --repo eyra/mono --ref $(git rev-parse --abbrev-ref HEAD) -f bundle=next && sleep 2 && NUM=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json number --jq '.[0].number') && URL=$(gh run list --repo eyra/mono --workflow Release --limit 1 --json url --jq '.[0].url') && echo \"Build tag: next_$(date +%F)_$NUM\" && echo \"URL: $URL\"",
-      precommit: "cmd cd .. && pre-commit run --all-files",
+      github_release: "cmd ./scripts/github-release",
+      precommit: "cmd --cd .. pre-commit run --all-files",
       "test.e2e":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1",
+        "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1",
       "test.e2e.debug":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
+        "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
       "test.e2e.headed":
-        "cmd cd test/e2e && npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
+        "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
   end
 end

@@ -43,8 +43,7 @@
           [
             crontab: [
               {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker,
-               [queue: :storage_delivery_local_nonode@nohost]},
+              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"* * * * *", Systems.Fund.PayInExpirationWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
               {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
@@ -134,7 +133,7 @@
     {:payment_provider, Systems.Payment.Provider.OPP},
     {:rate,
      [
-       quotas: [
+       quota_overrides: [
          %{
            "limit" => 1,
            "scope" => "local",

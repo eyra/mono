@@ -7,6 +7,12 @@ upload_path =
   |> Path.join("uploads")
   |> tap(&File.mkdir_p!/1)
 
+storage_path =
+  File.cwd!()
+  |> Path.join("priv")
+  |> Path.join("storage")
+  |> tap(&File.mkdir_p!/1)
+
 feldspar_data_donation_path =
   File.cwd!()
   |> Path.join("priv")
@@ -34,6 +40,8 @@ config :core,
 # flows local unless `core/start` explicitly selects a configured provider.
 config :core, payment_provider: Systems.Payment.Provider.Local
 
+config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
+
 config :core, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336
@@ -48,6 +56,7 @@ config :core, :features,
   panl: true,
   panl_post_launch: true,
   password_sign_in: true,
+  probe: true,
   surfconext_sign_in: true
 
 # Only in tests, remove the complexity from the password hashing algorithm
@@ -149,7 +158,7 @@ config :core, :account,
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
-  quotas: [
+  quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
     # Higher limit for E2E testing - 100MB per hour
     [

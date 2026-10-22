@@ -77,12 +77,13 @@ defmodule Systems.Assignment.GeneralForm do
     }
   end
 
+  # Only the fields this form shows; other info fields have their own forms.
   @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, Map.take(attrs, ["subject_count", "language"]))
     }
   end
 

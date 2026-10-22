@@ -167,6 +167,10 @@ msgid "onboarding.continue.button"
 msgstr "Continue"
 
 #, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Welcome"
+
+#, elixir-autogen, elixir-format
 msgid "onboarding.token.invalid"
 msgstr "Invalid or expired link"
 

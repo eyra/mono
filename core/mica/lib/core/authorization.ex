@@ -182,6 +182,7 @@ defmodule Core.Authorization do
     roles_intersect?(principal, entity, roles_with_permission)
   end
 
+  # archplan: guard=authz reason="checks the permission for a page module"
   def can_access?(principal, module) when is_atom(module) do
     permission = GreenLight.Permissions.access_permission(module)
     can?(principal, permission)
@@ -259,6 +260,7 @@ defmodule Core.Authorization do
     |> Core.Repo.all()
   end
 
+  # archplan: guard=authz reason="checks a role on an entity"
   def user_has_role?(%{id: user_id}, entity, role) do
     user_has_role?(user_id, entity, role)
   end

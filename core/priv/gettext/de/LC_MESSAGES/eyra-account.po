@@ -167,6 +167,10 @@ msgstr "Konto"
 msgid "onboarding.continue.button"
 msgstr "Weiter"
 
+#, elixir-autogen, elixir-format
+msgid "onboarding.hero.title"
+msgstr "Willkommen"
+
 #, elixir-autogen, elixir-format, fuzzy
 msgid "onboarding.token.invalid"
 msgstr "Ungültiger oder abgelaufener Link"

@@ -34,6 +34,11 @@ defmodule Systems.Content.S3 do
     "#{public_url}/#{object_key(filename)}"
   end
 
+  @doc """
+  True when `url` is the public URL of an object stored through this backend.
+  """
+  def stored_url?(url) when is_binary(url), do: String.starts_with?(url, get_public_url(""))
+
   defp upload_file(file, filename, bucket) do
     {:ok, data} = File.read(file)
     object_key = "#{object_key(filename)}"

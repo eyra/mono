@@ -98,8 +98,10 @@ defmodule Systems.Assignment.Public do
   end
 
   def get_by_workflow_item_id(workflow_item_id, preload \\ []) do
-    %{workflow_id: workflow_id} = Workflow.Public.get_item!(String.to_integer(workflow_item_id))
-    Assignment.Public.get_by(:workflow_id, workflow_id, preload)
+    case Workflow.Public.get_item(String.to_integer(workflow_item_id)) do
+      %{workflow_id: workflow_id} -> Assignment.Public.get_by(:workflow_id, workflow_id, preload)
+      nil -> nil
+    end
   end
 
   def get_by_tool_ref(workflow, preload \\ [])
@@ -473,7 +475,13 @@ defmodule Systems.Assignment.Public do
       ])
 
     {:ok, %{member: member}} =
-      Crew.Public.apply_member_with_role(assignment.crew, user, :participant)
+      Crew.Public.apply_member_with_role(
+        assignment.crew,
+        user,
+        :participant,
+        nil,
+        reset_opts(assignment)
+      )
 
     reserve_reward!(assignment, user)
 
@@ -611,6 +619,15 @@ defmodule Systems.Assignment.Public do
 
   def tester?(_, _), do: false
 
+  @doc """
+  Makes the user a tester of the assignment: a crew member with the tester role,
+  so that previewing the study shows its tasks. Safe to call repeatedly and
+  concurrently.
+  """
+  def ensure_tester(%Assignment.Model{crew: crew} = assignment, %User{} = user) do
+    Crew.Public.ensure_member_with_role(crew, user, :tester, reset_opts(assignment))
+  end
+
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])
     |> apply_member(user, identifier, reward_amount)
@@ -627,7 +644,7 @@ defmodule Systems.Assignment.Public do
         run_create_reward(assignment, user, reward_amount)
       end)
       |> Multi.run(:member, fn _, _ ->
-        run_apply_member(crew, user, identifier, expire_at)
+        run_apply_member(crew, user, identifier, expire_at, reset_opts(assignment))
       end)
       |> Repo.commit()
     end
@@ -664,8 +681,8 @@ defmodule Systems.Assignment.Public do
     end
   end
 
-  def run_apply_member(%Crew.Model{} = crew, user, identifier, expire_at) do
-    case Crew.Public.apply_member(crew, user, identifier, expire_at) do
+  def run_apply_member(%Crew.Model{} = crew, user, identifier, expire_at, reset_opts) do
+    case Crew.Public.apply_member(crew, user, identifier, expire_at, reset_opts) do
       {:ok, %{member: member}} -> {:ok, member}
       {:error, error} -> {:error, error}
     end
@@ -675,10 +692,20 @@ defmodule Systems.Assignment.Public do
     # get member regardless expired state
     if member = Crew.Public.get_member_including_expired(crew, user, [:crew]) do
       expire_at = expiration_timestamp(assignment)
-      Crew.Public.reset_member!(member, expire_at, opts)
+      Crew.Public.reset_member!(member, expire_at, Keyword.merge(opts, reset_opts(assignment)))
     else
       Logger.warning("Can not reset member for unknown user=#{user.id} in crew=#{crew.id}")
     end
+  end
+
+  @doc """
+  Options for resetting a member of the assignment's crew. Tasks of deleted
+  workflow items are expired and must stay expired when the member is reset,
+  otherwise the participant can never finish again.
+  """
+  def reset_opts(%Assignment.Model{workflow_id: workflow_id}) do
+    item_ids = workflow_id |> Workflow.Public.list_items() |> Enum.map(&"#{&1.id}")
+    [revive?: &(Assignment.Private.workflow_item_id(&1) in [nil | item_ids])]
   end
 
   def cancel(%Assignment.Model{crew: crew} = assignment, user) do

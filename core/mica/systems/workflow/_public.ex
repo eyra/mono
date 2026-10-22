@@ -35,6 +35,11 @@ defmodule Systems.Workflow.Public do
     |> Repo.get!(id)
   end
 
+  def get_item(id, preload \\ []) do
+    from(item in Workflow.ItemModel, preload: ^preload)
+    |> Repo.get(id)
+  end
+
   def get_item!(id, preload \\ []) do
     from(item in Workflow.ItemModel, preload: ^preload)
     |> Repo.get!(id)

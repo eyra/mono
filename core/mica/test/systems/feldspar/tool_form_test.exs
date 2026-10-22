@@ -22,6 +22,56 @@ defmodule Systems.Feldspar.ToolFormTest do
     end
   end
 
+  defmodule OneToolFormView do
+    use Phoenix.LiveView
+
+    def mount(_params, %{"tool" => tool}, socket) do
+      {:ok, assign(socket, tool: tool, flash_message: nil)}
+    end
+
+    def handle_info({:show_flash, %{message: message}}, socket) do
+      {:noreply, assign(socket, flash_message: message)}
+    end
+
+    def render(assigns) do
+      ~H"""
+      <div id="flash-message">{@flash_message}</div>
+      <.live_component module={Feldspar.ToolForm} id="form_1" entity={@tool} />
+      """
+    end
+  end
+
+  describe "uploading a zip" do
+    test "shows an error for a zip with an entry outside the app folder", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"../outside/x.json", "x"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert view |> element("#flash-message") |> render() =~
+               "The selected file is not a valid app zip"
+
+      assert Core.Repo.reload!(tool).archive_ref == tool.archive_ref
+    end
+  end
+
+  defp zip_upload(entries) do
+    {:ok, {_, zip}} = :zip.create(~c"app.zip", entries, [:memory])
+
+    %{
+      last_modified: 1_594_171_879_000,
+      name: "app.zip",
+      content: zip,
+      size: byte_size(zip),
+      type: "application/zip"
+    }
+  end
+
   describe "multiple ToolForm components in the same LiveView" do
     test "two instances with different ids render without crashing", %{conn: conn} do
       tool1 = Factories.insert!(:feldspar_tool)

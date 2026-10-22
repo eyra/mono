@@ -42,25 +42,7 @@ defmodule Systems.Assignment.Assembly do
     )
   end
 
-  defp prepare_workflow(:questionnaire = special, %{} = auth_node, user) do
-    template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node, user)
-    prepare_workflow(special, initial_items, auth_node)
-  end
-
-  defp prepare_workflow(:data_donation = special, %{} = auth_node, user) do
-    template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node, user)
-    prepare_workflow(special, initial_items, auth_node)
-  end
-
-  defp prepare_workflow(:benchmark_challenge = special, %{} = auth_node, user) do
-    template = Assignment.Private.get_template(special)
-    initial_items = prepare_initial_items(template, auth_node, user)
-    prepare_workflow(special, initial_items, auth_node)
-  end
-
-  defp prepare_workflow(:paper_screening = special, %{} = auth_node, user) do
+  defp prepare_workflow(special, %{} = auth_node, user) do
     template = Assignment.Private.get_template(special)
     initial_items = prepare_initial_items(template, auth_node, user)
     prepare_workflow(special, initial_items, auth_node)

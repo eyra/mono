@@ -178,6 +178,7 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
+  # archplan: guard=authn
   @doc """
   Used for routes that require the user to be authenticated.
 

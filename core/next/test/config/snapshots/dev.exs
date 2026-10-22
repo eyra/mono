@@ -33,7 +33,18 @@
      [
        plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker},
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker}
+            ]
+          ]}
        ],
        queues: [
          default: 5,
@@ -84,7 +95,7 @@
        partner_fee_percentage: 10
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
-    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-storage", prefix: "storage"]},
+    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-donations", prefix: "storage"]},
     {:account,
      [
        auth_methods: %{
@@ -128,7 +139,7 @@
        ris_stream_chunk_size: 65536
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
-    {:rate, [quotas: []]},
+    {:rate, [quota_overrides: []]},
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}

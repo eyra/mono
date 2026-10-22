@@ -1,0 +1,7 @@
+# Local runtime files. Commit the rest to share the target, plan and threads.
+server.json
+server.log
+.hook-seen.json
+*.tmp
+.*.lock
+vocab-cache.json

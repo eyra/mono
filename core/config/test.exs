@@ -22,7 +22,7 @@ feature_test_db_suffix =
 config :core,
   name: "Next [test]",
   base_url: feature_test_base_url,
-  upload_path: "/tmp"
+  upload_path: Path.expand("../tmp/uploads_test", __DIR__) |> tap(&File.mkdir_p!/1)
 
 config :core,
   payment_provider: Systems.Payment.ProviderMock
@@ -141,6 +141,9 @@ config :core, saas: Next.SaaS
 config :core, :content, backend: Systems.Content.LocalFS
 
 config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+
+config :core, Systems.Storage.BuiltIn.LocalFS,
+  root_path: Path.expand("../tmp/storage_test", __DIR__)
 
 # Feldspar data donation file storage for tests
 config :core, :feldspar_data_donation,

@@ -123,7 +123,7 @@ if config_env() == :prod do
       {"data_donation_cleanup",
        {:cron,
         {System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *"),
-         Systems.Feldspar.DataDonationCleanupWorker, queue: storage_delivery_queue}}},
+         Systems.Feldspar.DataDonationCleanupWorker}}},
       {"pay_in_expiration", {:cron, {"* * * * *", Systems.Fund.PayInExpirationWorker}}},
       {"payment_reconciliation", {:cron, {"0 3 * * *", Systems.Payment.ReconciliationWorker}}},
       {"auth_code_cleanup", {:cron, {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}}},
@@ -143,9 +143,10 @@ if config_env() == :prod do
   # Logged at boot by Core.Application.
   config :core, :oban_unknown_plugins, oban_unknown_plugins
 
-  # RATE LIMITER
+  # RATE LIMITER: RATE_QUOTAS replaces the default quotas (config.exs) of the
+  # services it lists; the other services keep their defaults.
 
-  config :core, :rate, quotas: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
+  config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
   # MAIL: Mailgun when MAILGUN_API_KEY is set, otherwise Amazon SES.
 
@@ -225,11 +226,33 @@ if config_env() == :prod do
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
+    storage_s3_bucket = System.fetch_env!("AWS_S3_BUCKET")
+
+    # Donations need a private bucket: PUBLIC_S3_BUCKET is publicly readable.
+    if storage_s3_bucket == System.get_env("PUBLIC_S3_BUCKET") do
+      raise "AWS_S3_BUCKET (#{storage_s3_bucket}) must be a private bucket, not PUBLIC_S3_BUCKET"
+    end
+
     config :core, Systems.Storage.BuiltIn.S3,
-      bucket: System.fetch_env!("AWS_S3_BUCKET"),
+      bucket: storage_s3_bucket,
       prefix: storage_s3_prefix
   else
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
+    # Donations must stay out of UPLOAD_PATH: that folder is served without
+    # authentication at /uploads and /feldspar/apps. Defaults to a `storage`
+    # folder next to it.
+    upload_path = Path.expand(upload_path)
+
+    storage_path =
+      System.get_env("STORAGE_PATH", Path.join(Path.dirname(upload_path), "storage"))
+      |> Path.expand()
+
+    if RuntimeConfig.inside?(storage_path, upload_path) do
+      raise "STORAGE_PATH (#{storage_path}) must not be inside UPLOAD_PATH (#{upload_path})"
+    end
+
+    config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
   end
 
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do

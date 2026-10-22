@@ -184,7 +184,35 @@ end
 To activate and configure a storage backend, you must modify the runtime configuration, `core/config/runtime.exs`.
 
 The current default runtime configuration is to use `Systems.Storage.BuiltIn.S3` when there is a
-`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`.
+`STORAGE_S3_PREFIX` environment variable configurated. Fallback storage is `Systems.Storage.BuiltIn.LocalFS`, which
+stores donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`). Researchers download
+them through the endpoint export, which checks access. `STORAGE_PATH` must not be inside `UPLOAD_PATH`: that
+folder is served without authentication, and the app refuses to start with such a setting.
+
+Upgrading from a version that stored donations in `UPLOAD_PATH`: the app refuses to start while `UPLOAD_PATH`
+still holds endpoint folders (named `project_node=<id>`, or `assignment=<id>` for endpoints created before storage
+moved to projects in mid-2024), because they would stay public and researchers could not export them. The error lists
+the first folders (with the total) and the commands that move them, with the actual paths filled in: one `mv`
+per prefix that has folders, so the commands stay short however many folders there are. For example:
+
+```sh
+mkdir -p /home/next/storage
+mv /home/next/uploads/assignment=*/ /home/next/storage/
+mv /home/next/uploads/project_node=*/ /home/next/storage/
+```
+
+Stop the app on every node, run those commands, then start the app again.
+
+With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped, so the app also writes it
+to stderr once as plain text, just before it stops. Copy the commands from there.
+
+A donation folder that is a symlink to a folder elsewhere gets its own `mv` without the trailing slash, for example
+`mv /home/next/uploads/project_node=34 /home/next/storage/`, listed before the prefix globs so they no longer match
+it. With more than 10 such links, one `for` loop per prefix moves them all instead. The link itself moves, its target
+stays where it is: check targets first. A relative target must still resolve from `STORAGE_PATH`, and a target inside
+`UPLOAD_PATH` stays public and is not checked again, so replace such a link with the folder it points to.
+
+The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
@@ -226,28 +254,29 @@ We plan to support file transfer from the built-in storage to external systems (
 
 ### Rate limiters
 
-To prevent users from exhausting resources on external services, Core uses rate limiters. The local configuration of rate limiters can be found in `core/config/dev.exs`:
+To prevent users from exhausting resources, Core uses rate limiters. The default quotas are in
+`core/config/config.exs` (`config :core, :rate, quotas: [...]`). A service without any quota is not
+limited.
+
+Overrides replace the default quotas of the services they list; the other services keep their
+defaults. In a release, set them with the `RATE_QUOTAS` environment variable, a JSON list:
+
+```bash
+RATE_QUOTAS='[{"service": "signup", "limit": 10, "unit": "call", "window": "minute", "scope": "local"}]'
+```
+
+Locally, `core/config/dev.exs` sets them with `quota_overrides:`:
 
 ```Elixir
 config :core, :rate,
-  prune_interval: 5 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
-    [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
+  prune_interval: 5 * 60 * 1000,
+  quota_overrides: [
+    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
   ]
 ```
 
-.. and the production configuration can be found in `core/config/config.exs`:
-
-```Elixir
-config :core, :rate,
-  prune_interval: 60 * 60 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
-    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
-  ]
-```
+Setting `quotas:` in an environment config replaces all defaults (`test.exs` does this on purpose),
+and every service it leaves out is no longer limited.
 
 ## Deploying on Fly.io
 
@@ -273,11 +302,17 @@ flyctl apps create my-self
 flyctl postgres create --name my-self-db --region ams --vm-size shared-cpu-1x --volume-size 1 --initial-cluster-size 1
 flyctl postgres attach my-self-db --app my-self               # sets DATABASE_URL
 flyctl storage create --app my-self --name my-self-storage --public   # sets AWS_* and BUCKET_NAME
+flyctl storage create --name my-self-donations                       # private, for donations
 flyctl secrets set --app my-self --stage \
   SECRET_KEY_BASE="$(openssl rand -base64 64 | tr -d '\n')" \
-  AWS_S3_BUCKET=my-self-storage PUBLIC_S3_BUCKET=my-self-storage
+  AWS_S3_BUCKET=my-self-donations PUBLIC_S3_BUCKET=my-self-storage
 flyctl deploy --remote-only -c fly.my-self.toml --build-arg VERSION=1.0.0 --build-arg PLATFORM=fly
 ```
+
+Donations must go to a private bucket, separate from the public one: anyone can read objects in
+`PUBLIC_S3_BUCKET`, and the app refuses to start when `AWS_S3_BUCKET` is the same bucket. The access
+key that `flyctl storage create --app` sets must also be allowed to read and write the donations
+bucket; grant that in the Tigris dashboard (`flyctl storage dashboard`).
 
 For automatic deploys, create a deploy token with `flyctl tokens create deploy --app my-self` and
 store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for nova-mica-dev).
@@ -294,13 +329,13 @@ Required:
 | `DATABASE_URL` | secret | PostgreSQL connection URL; set by `flyctl postgres attach` | |
 | `SECRET_KEY_BASE` | secret | Random string of at least 64 characters | `openssl rand -base64 64` |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` | secret | S3 credentials and endpoint; set by `flyctl storage create` | |
-| `AWS_S3_BUCKET` | secret | Bucket for platform storage | `nova-mica-dev-storage` |
-| `PUBLIC_S3_BUCKET` | secret | Bucket for public content | `nova-mica-dev-storage` |
+| `AWS_S3_BUCKET` | secret | Private bucket for donations; must not be `PUBLIC_S3_BUCKET` | `nova-mica-dev-donations` |
+| `PUBLIC_S3_BUCKET` | secret | Public bucket for content and Feldspar apps | `nova-mica-dev-storage` |
 | `BUCKET_NAME` | secret | Set by `flyctl storage create`; still read by `runtime.fly.exs` until it moves to `AWS_S3_BUCKET` | `nova-mica-dev-storage` |
 | `APP_NAME` | env | Name shown in the UI and in mail | `Mica [dev]` |
 | `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
 | `PHX_HOST` | env | Same as `APP_DOMAIN` | `nova-mica-dev.fly.dev` |
-| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `eyra.dev` (Next dev's Mailgun domain, until Nova has its own) |
+| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `next.dev.eyra.co` (Next dev's Mailgun domain, until Nova has its own) |
 | `DEPLOY_ENV` | env | Selects the seeds: `dev`, `test`, `staging` or `prod`. Anything but `prod` also enables mock sign-in | `dev` |
 | `PAYMENT_PROVIDER` | env | `local` (logs only, no real payments) or `opp` | `local` |
 | `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self uses `password_sign_in` and `otp` (sign-in with a one-time code by e-mail, at `/user/auth/identify`) | `password_sign_in, otp` |
@@ -316,6 +351,7 @@ Optional:
 | `APP_ADMINS` | env or secret | Space-separated e-mail addresses of system admins; wildcards like `*@example.org` work | unset |
 | `MAILGUN_API_KEY` | secret | Sends mail through Mailgun (EU). Without it no mail leaves the app, so sign-up confirmation and sign-in code mails do not arrive | Next dev's Mailgun key, for now |
 | `STORAGE_SERVICES` | env | Comma-separated storage services | `builtin` |
+| `STORAGE_PATH` | env | Donation folder when `STORAGE_S3_PREFIX` is unset; must not be inside `UPLOAD_PATH` | next to `UPLOAD_PATH` (`/app/data/storage`) |
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
 | `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |
@@ -324,9 +360,9 @@ Optional:
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
 | `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
-| `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (`config/config.exs`) of the services it lists; the other services keep their defaults | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
-disabled. For now it sends mail with Next dev's Mailgun key and the `eyra.dev` sender domain; a
+disabled. For now it sends mail with Next dev's Mailgun key and the `next.dev.eyra.co` sender domain; a
 neutral Nova mail domain replaces both later.

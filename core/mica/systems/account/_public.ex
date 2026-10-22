@@ -225,9 +225,9 @@ defmodule Systems.Account.Public do
   """
   def get_user_by_email_and_password(email, password)
       when is_binary(email) and is_binary(password) do
-    if user =
-         from(u in User, where: u.email == ^email and not is_nil(u.confirmed_at)) |> Repo.one() do
-      User.valid_password?(user, password) && user
+    case from(u in User, where: u.email == ^email and not is_nil(u.confirmed_at)) |> Repo.one() do
+      nil -> nil
+      user -> User.valid_password?(user, password) && user
     end
   end
 

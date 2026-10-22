@@ -53,6 +53,8 @@ defmodule Systems.Assignment.Private do
   def get_template(:questionnaire),
     do: %Assignment.TemplateQuestionnaire{id: :questionnaire}
 
+  def get_template(special), do: Assignment.TemplateExtension.template!(special)
+
   def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
 
   def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
@@ -77,15 +79,15 @@ defmodule Systems.Assignment.Private do
   end
 
   def send_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
-    %{user: user} = Assignment.Public.get_member_by_task(crew_task, [:user])
-    {:ok, %{title: title, position: position}} = get_workflow_item(crew_task)
-    task_slug = title |> slugify()
+    with {:ok, %{title: title, position: position}} <- get_workflow_item(crew_task) do
+      %{user: user} = Assignment.Public.get_member_by_task(crew_task, [:user])
 
-    Affiliate.Public.send_event(
-      assignment,
-      %{task_nr: position + 1, task_slug: task_slug, progress: event},
-      user
-    )
+      Affiliate.Public.send_event(
+        assignment,
+        %{task_nr: position + 1, task_slug: slugify(title), progress: event},
+        user
+      )
+    end
   end
 
   def slugify(nil), do: "?"
@@ -188,14 +190,17 @@ defmodule Systems.Assignment.Private do
 
   # Crew Task & Workflow Item mapping
 
+  @doc """
+  The workflow item of a crew task. Returns `{:error, :not_found}` when the item
+  has been deleted, which leaves its tasks orphaned.
+  """
   def get_workflow_item(%Crew.TaskModel{} = task, preload \\ []) do
-    if item_id = workflow_item_id(task) do
-      {:ok,
-       item_id
-       |> String.to_integer()
-       |> Workflow.Public.get_item!(preload)}
+    with item_id when not is_nil(item_id) <- workflow_item_id(task),
+         %Workflow.ItemModel{} = item <-
+           Workflow.Public.get_item(String.to_integer(item_id), preload) do
+      {:ok, item}
     else
-      {:error, nil}
+      nil -> {:error, :not_found}
     end
   end
 
@@ -216,7 +221,7 @@ defmodule Systems.Assignment.Private do
   def workflow_item_id(%Crew.TaskModel{identifier: identifier}),
     do: Identifier.get_attribute(identifier, "item")
 
-  def task_template(%{special: :data_donation}, %Workflow.ItemModel{id: item_id}) do
+  def task_template(%Assignment.Model{}, %Workflow.ItemModel{id: item_id}) do
     ["item=#{item_id}"]
   end
 
@@ -228,35 +233,7 @@ defmodule Systems.Assignment.Private do
     task_identifier(assignment, workflow_item, member_id)
   end
 
-  def task_identifier(
-        %{special: :data_donation},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :benchmark_challenge},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :questionnaire},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
-    ["item=#{item_id}", "member=#{member_id}"]
-  end
-
-  def task_identifier(
-        %{special: :paper_screening},
-        %Workflow.ItemModel{id: item_id},
-        member_id
-      ) do
+  def task_identifier(%{special: _special}, %Workflow.ItemModel{id: item_id}, member_id) do
     ["item=#{item_id}", "member=#{member_id}"]
   end
 end
