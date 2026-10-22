@@ -92,8 +92,7 @@ config :core, CoreWeb.Endpoint,
       ~r"systems/*/templates/.*(eex)$",
       ~r"frameworks/*/.*(ex)$",
       ~r"frameworks/*/templates/.*(eex)$",
-      ~r"bundles/*/.*(ex)$",
-      ~r"bundles/*/templates/.*(eex)$"
+      ~r"(next|mica_saas)/bundle/.*(ex)$"
     ]
   ],
   watchers: [

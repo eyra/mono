@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   test:
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     services:
       postgres:
@@ -48,9 +48,7 @@ jobs:
           path: |
             core/deps
             core/_build
-            banking_proxy/deps
-            banking_proxy/_build
-          key: mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock', 'banking_proxy/mix.lock') }}
+          key: mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-${{ hashFiles('core/mix.lock') }}
           restore-keys: |
             mix-${{ runner.os }}-otp-${{ steps.setup-elixir.outputs.otp-version }}-elixir-${{ steps.setup-elixir.outputs.elixir-version }}-
 
@@ -92,11 +90,39 @@ jobs:
           cd core/assets && npm install
           cd .. && mix assets.build
 
-      - name: Test
-        run: make test
+      - name: Unit tests
+        run: cd core && mix test.unit
+
+      # Wallaby needs a chromedriver whose major version matches Chrome.
+      - id: setup-chrome
+        uses: browser-actions/setup-chrome@v2.2.0
+        with:
+          chrome-version: "155"
+          install-chromedriver: true
+          install-dependencies: true
+
+      - name: Feature tests
+        run: cd core && mix test.feature
+        env:
+          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+
+      - name: Upload Wallaby screenshots
+        if: failure()
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: wallaby-screenshots
+          path: core/tmp/wallaby_screenshots
+          if-no-files-found: ignore
+
+      - name: JS tests
+        run: cd core && mix test.js
 
       - name: Credo
         run: make credo
+
+      - name: Boundary check (Nova migration)
+        run: cd core && elixir scripts/boundary_check.exs
 
       - name: Dialyzer
         run: make dialyzer

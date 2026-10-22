@@ -7,7 +7,7 @@ export default defineConfig({
   timeout: 30000,  // 30s max per test - fail fast
   globalSetup: './global-setup.ts',
   use: {
-    baseURL: process.env.E2E_BASE_URL || 'https://eyra-next-test1.fly.dev',
+    baseURL: process.env.E2E_BASE_URL || 'https://eyra-next-dev.fly.dev',
     viewport: { width: 1280, height: 720 },
     video: 'on-first-retry',
   },

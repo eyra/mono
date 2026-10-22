@@ -1,13 +1,13 @@
 ---
 description: System Factory Guidelines
-globs: test/systems/**/factories.ex
+globs: {mica,next}/test/systems/**/factories.ex
 alwaysApply: false
 ---
 # System Factory Guidelines
 
 ## Factory Organization
 
-1. Each system should have its own factory module in `test/systems/[system]/factory.ex`
+1. Each system should have its own factory module in `{mica,next}/test/systems/[system]/factory.ex`
 2. Use ExMachina.Ecto as the factory framework:
    ```elixir
    defmodule Systems.YourSystem.Factory do

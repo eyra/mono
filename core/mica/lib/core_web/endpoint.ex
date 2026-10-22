@@ -1,0 +1,73 @@
+defmodule CoreWeb.Endpoint do
+  use Phoenix.Endpoint, otp_app: :core
+
+  require Systems.Content.Plug
+  require Systems.Feldspar.Plug
+
+  # The session will be stored in the cookie and signed,
+  # this means its contents can be read but not tampered with.
+  # Set :encryption_salt if you would also like to encrypt it.
+  @session_options [
+    store: :cookie,
+    key: "_core_key",
+    signing_salt: "3oh1/4M5"
+  ]
+
+  socket("/socket", Systems.Account.UserSocket,
+    websocket: true,
+    longpoll: false
+  )
+
+  plug(CoreWeb.WWWRedirect)
+
+  socket("/live", Phoenix.LiveView.Socket,
+    websocket: [connect_info: [:user_agent, session: @session_options]]
+  )
+
+  Systems.Content.Plug.setup()
+  Systems.Feldspar.Plug.setup()
+
+  # Serve at "/" the static files from "priv/static" directory.
+  #
+  # You should set gzip to true if you are running phx.digest
+  # when deploying your static files in production.
+  plug(Plug.Static,
+    at: "/",
+    from: :core,
+    gzip: false,
+    only_matching:
+      ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
+  )
+
+  # Code reloading can be explicitly enabled under the
+  # :code_reloader configuration of your endpoint.
+  if code_reloading? do
+    socket("/phoenix/live_reload/socket", Phoenix.LiveReloader.Socket)
+    plug(Phoenix.LiveReloader)
+    plug(Phoenix.CodeReloader)
+    plug(Phoenix.Ecto.CheckRepoStatus, otp_app: :core)
+  end
+
+  plug(Plug.RequestId)
+  plug(Plug.Telemetry, event_prefix: [:phoenix, :endpoint])
+
+  @http_body_max_size Application.compile_env(
+                        :core,
+                        [CoreWeb.Endpoint, :http_body_max_size],
+                        210_000_000
+                      )
+
+  plug(Plug.Parsers,
+    parsers: [:urlencoded, :multipart, :json],
+    pass: ["*/*"],
+    json_decoder: Phoenix.json_library(),
+    body_reader: {Systems.Payment.Plug, :cache_body_reader, []},
+    # Allow large uploads for data donation (configurable via HTTP_BODY_MAX_SIZE env var)
+    length: @http_body_max_size
+  )
+
+  plug(Plug.MethodOverride)
+  plug(Plug.Head)
+  plug(Plug.Session, @session_options)
+  plug(CoreWeb.Router)
+end

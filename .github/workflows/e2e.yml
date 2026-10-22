@@ -21,7 +21,8 @@ on:
 jobs:
   e2e:
     name: E2E Tests (${{ inputs.app_name }})
-    runs-on: ubuntu-latest
+    # Playwright 1.58 has no chromium build for Ubuntu 26.04 (needs >= 1.61).
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout
@@ -30,7 +31,7 @@ jobs:
           lfs: true
 
       - name: Setup Node.js
-        uses: actions/setup-node@v7.0.0
+        uses: actions/setup-node@v7.1.0
         with:
           node-version: '24.15.0'
 
@@ -50,7 +51,7 @@ jobs:
         run: npm run e2e
 
       - name: Upload test results
-        uses: actions/upload-artifact@v7.0.1
+        uses: actions/upload-artifact@v7.0.2
         if: failure()
         with:
           name: test-results-${{ inputs.app_name }}

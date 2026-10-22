@@ -34,7 +34,7 @@
 #   export BASE_URL=https://next.dev.eyra.co
 #   export SERVICE_EMAIL=loadtest@eyra.service
 #   export SERVICE_PASSWORD=$'LoadTest123!'
-#   export SERVICE_KEY='4q9GgiQw+nB9WDe6vqpUf3a7xLYkGOYCMHWJeq0YzHs='
+#   export SERVICE_KEY=<SERVICE_LOGIN_KEY env var on the target server>
 #   export ASSIGNMENT_ID=458
 #   export PLATFORM=aws
 #   ./run-load-and-verify.sh [quick|volume|large|xlarge]

@@ -1,6 +1,6 @@
 ---
 description: Signal Architecture Rules
-globs: frameworks/signal/*
+globs: mica/frameworks/signal/*
 alwaysApply: false
 ---
 # Signal

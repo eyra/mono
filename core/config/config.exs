@@ -117,7 +117,6 @@ config :core, :policy_urls,
 config :core,
   greenlight_auth_module: Core.Authorization,
   image_catalog: Core.ImageCatalog.Unsplash,
-  banking_backend: Systems.Banking.Dummy,
   payment_providers: %{
     "opp" => Systems.Payment.Provider.OPP,
     "local" => Systems.Payment.Provider.Local
@@ -126,7 +125,7 @@ config :core,
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
 # Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per bundle (see bundles/*/config/config.exs).
+# Override per bundle (see next/bundle/config/config.exs and mica_saas/bundle/config/config.exs).
 config :core, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -254,13 +253,6 @@ config :core, :storage,
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
-config :core, BankingClient,
-  host: "localhost",
-  port: 5555,
-  cacertfile: "../banking_proxy/certs/ca_certificate.pem",
-  certfile: "../banking_proxy/certs/client_certificate.pem",
-  keyfile: "../banking_proxy/certs/client_key.pem"
-
 module =
   case Code.ensure_compiled(Bundle) do
     {:module, module} ->
@@ -273,10 +265,13 @@ module =
 
 bundle = apply(module, :name, [])
 
+bundle_dir = apply(module, :dir, [bundle])
+
 config :core, :bundle, bundle
+config :core, :bundle_dir, bundle_dir
 
 unless is_nil(bundle) do
-  import_config "../bundles/#{bundle}/config/config.exs"
+  import_config "../#{bundle_dir}/config/config.exs"
 end
 
 config :core, :zircon,

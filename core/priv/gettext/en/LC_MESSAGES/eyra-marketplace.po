@@ -11,10 +11,6 @@ msgstr ""
 "Language: en\n"
 
 #, elixir-autogen, elixir-format
-msgid "assignment.status.complete.label"
-msgstr "Closed"
-
-#, elixir-autogen, elixir-format
 msgid "assignment.status.completed.label"
 msgstr "Finished"
 

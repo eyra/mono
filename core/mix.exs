@@ -12,6 +12,7 @@ defmodule Core.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
+      test_paths: ["mica/test", "next/test"],
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
@@ -21,9 +22,9 @@ defmodule Core.MixProject do
       # The main page in the docs
       docs: [
         main: "readme",
-        logo: "priv/static/images/icons/next.svg",
+        logo: "priv/static/images/logos/products/next.svg",
         extras: [
-          "../SELFHOSTING.md",
+          {"mica_saas/README.md", filename: "selfhosting", title: "Self hosting"},
           "../README.md",
           "../guides/development_setup.md",
           "../guides/authorization.md"
@@ -63,13 +64,12 @@ defmodule Core.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test),
-    do: ["bundles", "apps", "systems", "frameworks", "lib", "test", "test/support"]
+  # Mica, the Next SaaS and the Self reference SaaS (mica_saas) live side by side
+  # in one Mix project until Nova migration step code-split.
+  @source_paths ~w(mica/lib mica/systems mica/frameworks next/bundle next/lib next/systems mica_saas/bundle)
 
-  defp elixirc_paths(:dev),
-    do: ["bundles", "apps", "systems", "frameworks", "lib"]
-
-  defp elixirc_paths(_), do: ["bundles", "apps", "systems", "frameworks", "lib"]
+  defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test"]
+  defp elixirc_paths(_), do: @source_paths
 
   # Specifies your project dependencies.
   #
@@ -149,8 +149,7 @@ defmodule Core.MixProject do
       {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
       {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},
-      {:browser, "0.5.5"},
-      {:tidewave, "0.5.2", only: :dev}
+      {:browser, "0.5.5"}
     ]
   end
 
@@ -174,10 +173,11 @@ defmodule Core.MixProject do
       "test.unit": ["ecto.create --quiet", "ecto.migrate", "test --exclude feature"],
       "test.feature": ["ecto.create --quiet", "ecto.migrate", "test --only feature"],
       "test.js": "cmd cd ./assets && npm test",
-      "test.ci": ["test.unit", "test.feature", "test.js"],
+      # Mix runs the `test` task once per invocation, so each half needs its own.
+      "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
       "test.smoke": "cmd ./test/smoke/run.sh",
-      # Usage: mix test.smoke dev | staging | test1 | test2 | prod
+      # Usage: mix test.smoke dev | staging | prod
       seed: "cmd ./scripts/seed",
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],

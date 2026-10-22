@@ -28,10 +28,7 @@ cd ../mono-worktree/$1
 
 git checkout feature/$1
 
-cd banking_proxy
-mix deps.get
-
-cd ../core
+cd core
 mix deps.get
 
 echo "Worktree $1 added successfully to mono-worktree"

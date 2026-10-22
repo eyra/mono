@@ -1,0 +1,128 @@
+name: Deploy to Fly.io (nova-mica-dev)
+
+# The neutral reference SaaS (Self, BUNDLE=self) on Mica. See
+# core/mica_saas/README.md.
+
+on:
+  push:
+    branches:
+      - develop
+  workflow_dispatch:
+
+# One deploy and smoke test at a time; a newer deploy waits for the running one.
+concurrency:
+  group: fly-deploy-mica-dev
+  cancel-in-progress: false
+
+env:
+  FLY_APP: nova-mica-dev
+  APP_URL: https://nova-mica-dev.fly.dev
+
+jobs:
+  deploy:
+    name: Deploy to Fly.io (nova-mica-dev)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - name: Set VERSION
+        run: |
+          VERSION="self_$(date +%F)_${{ github.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Destroy stopped release machines
+        run: |
+          flyctl machines list --app "$FLY_APP" --json \
+            | jq -r '.[] | select(.state == "stopped") | select(.config.metadata.fly_release_command == "1") | .id' \
+            | xargs -r -I {} flyctl machines destroy {} --app "$FLY_APP" --force
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_MICA_DEV }}
+
+      # Remote Fly build of core/Dockerfile with BUNDLE=self (set in
+      # fly.mica-dev.toml). To be replaced by a deploy of the prebuilt
+      # ghcr.io/eyra/self image by digest (`flyctl deploy --image ...`).
+      - name: Deploy to Fly.io
+        run: |
+          flyctl deploy --remote-only -c fly.mica-dev.toml \
+            --build-arg VERSION=${{ env.VERSION }} \
+            --build-arg PLATFORM=fly \
+            --build-arg GIT_COMMIT=${{ github.sha }}
+        working-directory: core
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_MICA_DEV }}
+
+  smoke:
+    name: Smoke test (nova-mica-dev)
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup Fly CLI
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      # Machines stop when idle; the first request starts one.
+      - name: Wait for health
+        run: |
+          deadline=$((SECONDS + 180))
+          until curl -fsS --max-time 20 "$APP_URL/.status/health"; do
+            if [ "$SECONDS" -ge "$deadline" ]; then
+              echo "::error::$APP_URL/.status/health did not become healthy within 180s"
+              exit 1
+            fi
+            sleep 5
+          done
+
+      - name: Check deployed commit
+        run: |
+          revisions=$(flyctl machines list --app "$FLY_APP" --json \
+            | jq -r '[.[] | select(.config.metadata.fly_process_group == "app")
+                      | .image_ref.labels["org.opencontainers.image.revision"] // "unknown"]
+                     | unique | join(" ")')
+          echo "Deployed revision(s): ${revisions:-none}"
+          if [ "$revisions" != "${{ github.sha }}" ]; then
+            echo "::error::$FLY_APP runs ${revisions:-no machines}, expected ${{ github.sha }}"
+            exit 1
+          fi
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_MICA_DEV }}
+
+      - name: Check pages
+        run: |
+          status=0
+          for path in / /user/signin /.status/health; do
+            code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 20 "$APP_URL$path")
+            echo "$path -> $code"
+            if [ "$code" != "200" ]; then
+              echo "::error::$APP_URL$path returned $code"
+              status=1
+            fi
+          done
+          exit $status
+
+      # The E2E API hands out a service password and confirms any account; it
+      # must be off (403) or not routed (404) on this public app. An open
+      # activate_user also answers 404 for an unknown email ("User not
+      # found"), so a 404 only counts when that message is absent.
+      - name: Check E2E API is closed
+        run: |
+          status=0
+          for path in /api/e2e/bootstrap /api/e2e/activate_user; do
+            body=$(curl -s -w '\n%{http_code}' --max-time 20 -X POST \
+              -H 'content-type: application/json' \
+              -d '{"email":"smoke-nobody@example.org"}' "$APP_URL$path")
+            code=$(echo "$body" | tail -n1)
+            echo "$path -> $code"
+            if [ "$code" = "403" ]; then
+              continue
+            elif [ "$code" = "404" ] && ! echo "$body" | grep -q "User not found"; then
+              continue
+            fi
+            echo "::error::$APP_URL$path is open (HTTP $code)"
+            status=1
+          done
+          exit $status

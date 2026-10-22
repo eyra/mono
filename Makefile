@@ -1,5 +1,4 @@
-BUNDLES=$(wildcard core/bundles/*)
-MIX_PROJECTS=core banking_proxy
+MIX_PROJECTS=core
 
 .PHONY: all
 all: test format compile credo deps
@@ -29,11 +28,9 @@ dialyzer: FORCE
 	cd core && mix dialyzer --force-check --format short
 
 .PHONY: test
-test: test/core test/banking_proxy
+test: test/core
 test/core: FORCE
 	cd core && $(if $(FEATURE_TEST_SESSION),FEATURE_TEST_SESSION=$(FEATURE_TEST_SESSION),) mix test.ci
-test/banking_proxy: FORCE
-	cd banking_proxy && mix test
 
 .PHONY: format
 format: ${MIX_PROJECTS:%=format/%}

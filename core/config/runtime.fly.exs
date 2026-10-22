@@ -4,7 +4,7 @@
 import Config
 
 if config_env() == :prod do
-  # FLY_APP_NAME is set automatically by Fly.io (e.g., "eyra-next-test1")
+  # FLY_APP_NAME is set automatically by Fly.io (e.g., "eyra-next-dev")
   fly_app_name = System.fetch_env!("FLY_APP_NAME")
 
   # Derive defaults from FLY_APP_NAME, allow overrides via env vars

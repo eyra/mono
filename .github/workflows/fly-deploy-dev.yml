@@ -5,6 +5,12 @@ on:
     branches:
       - develop
 
+# One deploy or E2E run at a time: a newer deploy must not restart the app
+# under a running E2E job or finish before an older one.
+concurrency:
+  group: fly-deploy-dev
+  cancel-in-progress: false
+
 jobs:
   deploy:
     name: Deploy to Fly.io (dev)
@@ -39,3 +45,12 @@ jobs:
         working-directory: core
         env:
           FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN_DEV }}
+
+  e2e:
+    name: E2E Tests (dev)
+    needs: deploy
+    uses: ./.github/workflows/e2e.yml
+    with:
+      app_name: eyra-next-dev
+    secrets:
+      SERVICE_LOGIN_KEY: ${{ secrets.SERVICE_LOGIN_KEY }}

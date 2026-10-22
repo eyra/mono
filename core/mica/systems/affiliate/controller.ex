@@ -1,0 +1,292 @@
+defmodule Systems.Affiliate.Controller do
+  use Systems.Affiliate.Constants
+
+  use CoreWeb,
+      {:controller,
+       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+
+  import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
+
+  alias Systems.Assignment
+  alias Systems.Affiliate
+  alias Systems.Rate
+
+  require Logger
+
+  @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
+  @id_max_lenght 64
+
+  # Recruit action: generates a participant ID on the fly for organic recruitment
+  def recruit(conn, %{"sqid" => sqid}) do
+    with :ok <- check_rate_limit(conn),
+         {:ok, numbers} <- numbers(sqid) do
+      do_recruit(conn, sqid, numbers)
+    else
+      {:error, :rate_limited} ->
+        too_many_requests(conn)
+
+      {:error, _} ->
+        Logger.error("Invalid recruit sqid=#{sqid}")
+        forbidden(conn)
+    end
+  end
+
+  defp do_recruit(conn, sqid, [@annotation_resource_id, assignment_id]) do
+    assignment =
+      Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
+
+    cond do
+      deleted?(assignment) ->
+        not_found(conn)
+
+      offline?(assignment) ->
+        Assignment.ErrorHTML.unavailable(conn)
+
+      true ->
+        participant_id = generate_participant_id()
+        redirect(conn, to: "/a/#{sqid}?p=#{participant_id}")
+    end
+  end
+
+  defp do_recruit(conn, _sqid, _numbers), do: forbidden(conn)
+
+  defp generate_participant_id do
+    random =
+      :crypto.strong_rand_bytes(6)
+      |> Base.url_encode64(padding: false)
+
+    "R_#{random}"
+  end
+
+  defp check_rate_limit(conn) do
+    remote_ip =
+      conn.remote_ip
+      |> :inet.ntoa()
+      |> to_string()
+
+    Rate.Public.request_permission(:recruit, remote_ip, 1)
+    :ok
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  defp too_many_requests(conn) do
+    conn
+    |> put_status(:too_many_requests)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"429")
+  end
+
+  def create(conn, %{"sqid" => sqid} = params) do
+    case numbers(sqid) do
+      {:ok, numbers} ->
+        start(conn, params, numbers)
+
+      {:error, error} ->
+        Logger.error("#{inspect(error)}, someone is trying to hack us, params=#{inspect(params)}")
+        forbidden(conn)
+    end
+  end
+
+  defp numbers(sqid) do
+    numbers = Affiliate.Sqids.decode!(sqid)
+
+    if Affiliate.Sqids.encode!(numbers) == sqid do
+      {:ok, numbers}
+    else
+      {:error, "Invalid sqid #{sqid}"}
+    end
+  end
+
+  defp start(conn, params, [@annotation_resource_id, assignment_id]) do
+    assignment =
+      Assignment.Public.get!(assignment_id, [:info, :affiliate, :workflow, :crew, :auth_node])
+
+    cond do
+      # Soft-deleted assignment (project item was deleted)
+      deleted?(assignment) ->
+        not_found(conn)
+
+      # Preview mode: a user who can access the CMS may preview the study.
+      preview?(params) and preview_access?(assignment, conn) ->
+        start_tester(conn, params, assignment)
+
+      # Valid participant ID -> start as participant
+      valid_id?(get_participant(params)) ->
+        if offline?(assignment) do
+          Assignment.ErrorHTML.unavailable(conn)
+        else
+          start_participant(conn, params, assignment)
+        end
+
+      # Invalid ID and not a tester -> forbidden
+      true ->
+        Logger.error("Access denied invalid id #{inspect(params)}")
+        forbidden(conn)
+    end
+  end
+
+  defp start(conn, params, numbers) do
+    Logger.error("Access denied params=#{inspect(params)} numbers=#{inspect(numbers)}")
+    forbidden(conn)
+  end
+
+  @doc """
+  Controller level callback for handling path parameter type validation errors.
+  """
+  def validation_error_callback(conn, _errors) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"400")
+    |> halt()
+  end
+
+  defp tester?(assignment, user), do: Assignment.Public.tester?(assignment, user)
+
+  defp preview_access?(assignment, %{assigns: %{current_user: %{} = user}}) do
+    if Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) do
+      unless tester?(assignment, user) do
+        Core.Authorization.assign_role(user, assignment.crew, :tester)
+      end
+
+      tester?(assignment, user)
+    else
+      false
+    end
+  end
+
+  defp preview_access?(_, _), do: false
+
+  defp preview?(params), do: get_participant(params) == "preview"
+
+  defp deleted?(%{status: :idle}), do: true
+  defp deleted?(_), do: false
+
+  defp offline?(%{status: status}) do
+    status != :online
+  end
+
+  def valid_id?(nil), do: false
+  def valid_id?("participant_id"), do: false
+  def valid_id?("null"), do: false
+  def valid_id?("undefined"), do: false
+
+  def valid_id?(id) do
+    String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
+  end
+
+  defp start_tester(conn, params, %{affiliate: affiliate} = assignment) do
+    redirect_url = Affiliate.Public.get_redirect_url(affiliate)
+
+    conn
+    |> obtain_participation(assignment)
+    |> add_panel_info(get_participant(params), redirect_url)
+    |> redirect(to: path(assignment))
+  end
+
+  defp start_participant(conn, params, %{affiliate: affiliate} = assignment) do
+    participant_id = get_participant(params)
+    %{user: user} = affiliate_user = Affiliate.Public.obtain_user!(participant_id, affiliate)
+
+    conn =
+      conn
+      |> assign(:current_user, user)
+      |> log_in_user_without_redirect(user)
+
+    if full?(assignment) and not returning_participant?(conn, assignment) do
+      Assignment.ErrorHTML.full(conn)
+    else
+      conn
+      |> authorize_user(assignment)
+      |> ensure_user_info(params, affiliate_user)
+      |> obtain_participation(assignment)
+      |> add_panel_info_for_participant(params, affiliate, affiliate_user)
+      |> redirect(to: path(assignment))
+    end
+  end
+
+  defp path(%{id: id}), do: "/assignment/#{id}"
+
+  defp not_found(conn) do
+    conn
+    |> put_status(:not_found)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"404")
+  end
+
+  defp forbidden(conn) do
+    conn
+    |> put_status(:forbidden)
+    |> put_view(html: CoreWeb.ErrorHTML)
+    |> render(:"403")
+  end
+
+  defp full?(%Assignment.Model{} = assignment) do
+    not Assignment.Public.has_budget_capacity?(assignment)
+  end
+
+  defp returning_participant?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment) do
+    Assignment.Public.member?(assignment, user)
+  end
+
+  defp authorize_user(%{assigns: %{current_user: user}} = conn, assignment) do
+    Assignment.Public.add_participant!(assignment, user)
+    conn
+  end
+
+  defp ensure_user_info(conn, params, affiliate_user) do
+    info = strip_query_string(params)
+    user_info = Affiliate.Public.obtain_user_info!(affiliate_user, info)
+
+    Logger.debug(
+      "Obtained user info for affiliate user #{affiliate_user.id}; info=#{inspect(user_info)}"
+    )
+
+    conn
+  end
+
+  defp obtain_participation(%{assigns: %{current_user: user}} = conn, assignment) do
+    participation = Assignment.Public.obtain_participation!(assignment, user)
+
+    Logger.debug(
+      "Starting session for assignment #{assignment.id} with participation #{participation.id}"
+    )
+
+    conn
+  end
+
+  defp add_panel_info(conn, participant, redirect_url) do
+    panel_info = %{
+      panel: :affiliate,
+      redirect_url: redirect_url,
+      participant: participant
+    }
+
+    conn |> put_session(:panel_info, panel_info)
+  end
+
+  defp add_panel_info_for_participant(conn, params, affiliate, affiliate_user) do
+    participant = get_participant(params)
+    redirect_url = get_merged_redirect_url(affiliate, affiliate_user)
+    add_panel_info(conn, participant, redirect_url)
+  end
+
+  defp get_merged_redirect_url(affiliate, affiliate_user) do
+    case Affiliate.Public.redirect_url(affiliate, affiliate_user) do
+      {:ok, url} -> url
+      {:error, _} -> nil
+    end
+  end
+
+  # Param Mappings
+
+  defp get_participant(%{"p" => participant}), do: participant
+
+  defp get_participant(_), do: nil
+
+  defp strip_query_string(params) do
+    params
+    |> Map.delete("sqid")
+  end
+end

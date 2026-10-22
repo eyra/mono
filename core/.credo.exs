@@ -4,18 +4,17 @@
       name: "default",
       files: %{
         included: [
-          "apps",
-          "systems/",
-          "frameworks/",
-          "lib/",
-          "src/",
-          "test/",
-          "web/"
+          "mica/",
+          "mica_saas/",
+          "next/"
         ],
         excluded: [~r"/_build/", ~r"/deps/", ~r"/node_modules/"]
       },
       plugins: [],
-      requires: ["./custom_credo_checks/no_repo_transaction.ex"],
+      requires: [
+        "./custom_credo_checks/no_repo_transaction.ex",
+        "./custom_credo_checks/mica_boundary.ex"
+      ],
       strict: false,
       parse_timeout: 5000,
       color: true,
@@ -24,6 +23,7 @@
         ## Custom Checks
         #
         {Credo.Check.Warning.NoRepoTransaction, []},
+        {Credo.Check.Warning.MicaBoundary, []},
 
         #
         ## Consistency Checks
@@ -119,7 +119,10 @@
         #
         {Credo.Check.Consistency.MultiAliasImportRequireUse, false},
         {Credo.Check.Consistency.UnusedVariableNames, false},
-        {Credo.Check.Design.DuplicatedCode, []},
+        # Self copies Next's OTP sign-in screens on purpose; whether they move into Mica is
+        # decided in Nova migration step code-brand.
+        {Credo.Check.Design.DuplicatedCode,
+         [files: %{excluded: [~r"/mica_saas/bundle/lib/account/auth_"]}]},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.BlockPipe, false},
         {Credo.Check.Readability.ImplTrue, false},

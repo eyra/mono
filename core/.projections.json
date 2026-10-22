@@ -7,9 +7,9 @@
     "type": "text-email",
     "alternate": "{dirname}/email/{basename}.html.eex"
   },
-  "test/systems/*_test.exs": {
+  "mica/test/systems/*_test.exs": {
     "type": "test",
-    "alternate": "systems/{}.ex",
+    "alternate": "mica/systems/{}.ex",
     "template": [
       "defmodule Systems.{camelcase|capitalize|dot}Test do",
       "  use Core.DataCase, async: true",
@@ -23,9 +23,25 @@
       "end"
     ]
   },
-  "test/*_test.exs": {
+  "next/test/systems/*_test.exs": {
     "type": "test",
-    "alternate": "lib/{}.ex",
+    "alternate": "next/systems/{}.ex",
+    "template": [
+      "defmodule Systems.{camelcase|capitalize|dot}Test do",
+      "  use Core.DataCase, async: true",
+      "  alias Core.Factories",
+      "  alias {camelcase|capitalize|dot}",
+      "",
+      "  describe \"\" do",
+      "    test \"\" do",
+      "    end",
+      "  end",
+      "end"
+    ]
+  },
+  "mica/test/*_test.exs": {
+    "type": "test",
+    "alternate": "mica/lib/{}.ex",
     "template": [
       "defmodule {camelcase|capitalize|dot}Test do",
       "  use Core.DataCase, async: true",
@@ -39,15 +55,19 @@
       "end"
     ]
   },
-  "systems/*.ex": {
+  "mica/systems/*.ex": {
     "type": "code",
-    "alternate": "test/systems/{}_test.exs"
+    "alternate": "mica/test/systems/{}_test.exs"
   },
-  "lib/*.ex": {
+  "next/systems/*.ex": {
     "type": "code",
-    "alternate": "test/{}_test.exs"
+    "alternate": "next/test/systems/{}_test.exs"
   },
-  "lib/*.html.eex": {
+  "mica/lib/*.ex": {
+    "type": "code",
+    "alternate": "mica/test/{}_test.exs"
+  },
+  "mica/lib/*.html.eex": {
     "type": "template"
   },
   "priv/**/migrations/*.exs": {

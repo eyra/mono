@@ -24,11 +24,7 @@ config :core,
   base_url: feature_test_base_url,
   upload_path: "/tmp"
 
-# Selectical test configuration
 config :core,
-  selectical_base_url: "https://jkntvyihutapdkdsoleo.supabase.co",
-  selectical_api_key:
-    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImprbnR2eWlodXRhcGRrZHNvbGVvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1ODk2NzksImV4cCI6MjAzMTE2NTY3OX0.zTsZmd3EdKFGof1gxI0LxD2aws2BGb2rboFybC_26Gk",
   payment_provider: Systems.Payment.ProviderMock
 
 config :core, Systems.Payment.Provider.OPP,
@@ -108,9 +104,15 @@ config :wallaby,
   # *actually* hung chromedriver still fails fast via the
   # `wait_until_ready` + ExUnit test timeout.
   hackney_options: [recv_timeout: :infinity, hackney: [pool: :wallaby_pool]],
-  chromedriver: [
-    headless: System.get_env("WALLABY_HEADLESS", "true") == "true"
-  ]
+  # CHROME_BINARY / CHROMEDRIVER_PATH select a matching Chrome for Testing pair
+  # (CI, or a local Chrome that is ahead of brew's chromedriver).
+  chromedriver:
+    [
+      headless: System.get_env("WALLABY_HEADLESS", "true") == "true",
+      binary: System.get_env("CHROME_BINARY"),
+      path: System.get_env("CHROMEDRIVER_PATH")
+    ]
+    |> Enum.reject(fn {_key, value} -> is_nil(value) end)
 
 config :core, :features,
   member_google_sign_in: true,
@@ -135,8 +137,6 @@ config :core, Systems.Account.Auth.Centerdata,
 
 # Tests always use the next bundle
 config :core, :bundle, :next
-
-config :core, :banking_backend, Systems.Banking.Dummy
 
 config :core, :content, backend: Systems.Content.LocalFS
 

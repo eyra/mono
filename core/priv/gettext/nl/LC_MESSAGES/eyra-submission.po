@@ -19,18 +19,6 @@ msgid "status.submitted.label"
 msgstr "Ingediend"
 
 #, elixir-autogen, elixir-format
-msgid "incomplete.forms.message"
-msgstr "Sommige verplichte velden zijn nog niet ingevuld"
-
-#, elixir-autogen, elixir-format
-msgid "ready.for.submission.message"
-msgstr "Alle verplichte velden zijn gevuld, je kunt deze campagne indienen"
-
-#, elixir-autogen, elixir-format
-msgid "waiting.for.coordinator.message"
-msgstr "Jouw campagne staat in de wachtrij om door de poolbeheerder in de marktplaats gezet te worden"
-
-#, elixir-autogen, elixir-format
 msgid "reward.title"
 msgstr "Beloning"
 
@@ -98,14 +86,6 @@ msgstr "Open"
 msgid "status.accepted.scheduled.label"
 msgstr "Ingepland"
 
-#, elixir-autogen, elixir-format
-msgid "accepted.closed.message"
-msgstr "Deze campagne is afgerond"
-
-#, elixir-autogen, elixir-format
-msgid "accepted.scheduled.message"
-msgstr "Deze campagne staat ingepland voor deelname "
-
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "complete.admin.success.text"
 msgstr "Deze campagne is gemarkeerd als afgerond en niet meer beschikbaar in de marktplaats."
@@ -121,7 +101,3 @@ msgstr "Afgerond"
 #, elixir-autogen, elixir-format, ex-autogen, fuzzy
 msgid "status.retracted.label"
 msgstr "Ingetrokken"
-
-#, elixir-autogen, elixir-format, ex-autogen, fuzzy
-msgid "submission.completed.message"
-msgstr "Campagne is afgerond"
