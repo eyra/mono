@@ -89,7 +89,7 @@
        ris_stream_chunk_size: 65536
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
-    {:rate, [quotas: []]},
+    {:rate, [quota_overrides: []]},
     {:storage, [services: [:builtin, :yoda]]},
     {:upload_path, "/home/next/uploads"}
   ],

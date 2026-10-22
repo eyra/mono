@@ -19,6 +19,7 @@ defmodule Systems.Assignment.SetupExporter do
   require Logger
 
   alias Frameworks.Concept
+  alias Frameworks.Utility.PackmaticURLSource
   alias Systems.Account
   alias Systems.Alliance
   alias Systems.Assignment
@@ -300,11 +301,12 @@ defmodule Systems.Assignment.SetupExporter do
     end
   end
 
-  # Only content from our own storage is downloaded. Any other URL is skipped
-  # unfetched, so it ends up in export-warnings.json.
+  # Only content from our own storage is downloaded (without redirects, see
+  # PackmaticURLSource). Any other URL is skipped unfetched, so it ends up in
+  # export-warnings.json.
   defp remote_asset_source(url) do
     if Content.Public.stored_url?(url) do
-      {:url, {url, [], [max_body_length: max_asset_bytes(), follow_redirect: false]}}
+      {PackmaticURLSource, {url, max_bytes: max_asset_bytes()}}
     else
       {:dynamic, fn -> {:error, :external_url} end}
     end

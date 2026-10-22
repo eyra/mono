@@ -122,7 +122,7 @@
     {:payment_provider, Systems.Payment.Provider.OPP},
     {:rate,
      [
-       quotas: [
+       quota_overrides: [
          %{
            "limit" => 1,
            "scope" => "local",

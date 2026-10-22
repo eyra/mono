@@ -20,6 +20,10 @@ defmodule Systems.Affiliate.ControllerTest do
       refute Controller.valid_id?("undefined")
     end
 
+    test "rejects \"preview\"" do
+      refute Controller.valid_id?("preview")
+    end
+
     test "rejects empty string" do
       refute Controller.valid_id?("")
     end

@@ -254,28 +254,29 @@ We plan to support file transfer from the built-in storage to external systems (
 
 ### Rate limiters
 
-To prevent users from exhausting resources on external services, Core uses rate limiters. The local configuration of rate limiters can be found in `core/config/dev.exs`:
+To prevent users from exhausting resources, Core uses rate limiters. The default quotas are in
+`core/config/config.exs` (`config :core, :rate, quotas: [...]`). A service without any quota is not
+limited.
+
+Overrides replace the default quotas of the services they list; the other services keep their
+defaults. In a release, set them with the `RATE_QUOTAS` environment variable, a JSON list:
+
+```bash
+RATE_QUOTAS='[{"service": "signup", "limit": 10, "unit": "call", "window": "minute", "scope": "local"}]'
+```
+
+Locally, `core/config/dev.exs` sets them with `quota_overrides:`:
 
 ```Elixir
 config :core, :rate,
-  prune_interval: 5 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1, unit: :call, window: :second, scope: :local],
-    [service: :azure_blob, limit: 100, unit: :byte, window: :second, scope: :local]
+  prune_interval: 5 * 60 * 1000,
+  quota_overrides: [
+    [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
   ]
 ```
 
-.. and the production configuration can be found in `core/config/config.exs`:
-
-```Elixir
-config :core, :rate,
-  prune_interval: 60 * 60 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
-    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global]
-  ]
-```
+Setting `quotas:` in an environment config replaces all defaults (`test.exs` does this on purpose),
+and every service it leaves out is no longer limited.
 
 ## Deploying on Fly.io
 
@@ -359,7 +360,7 @@ Optional:
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
 | `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
-| `RATE_QUOTAS` | env | JSON list of rate limiter quotas | `[]` |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (`config/config.exs`) of the services it lists; the other services keep their defaults | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
