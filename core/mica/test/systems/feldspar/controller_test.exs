@@ -1,9 +1,11 @@
 defmodule Systems.Feldspar.ControllerTest do
   use CoreWeb.ConnCase, async: false
+  use Oban.Testing, repo: Core.Repo
 
   @moduletag :capture_log
 
   alias Systems.Assignment
+  alias Systems.Crew
   alias Systems.Storage
 
   # ============================================================================
@@ -169,11 +171,11 @@ defmodule Systems.Feldspar.ControllerTest do
     test "keeps known context keys in the log metadata", %{conn: conn} do
       {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
 
-      post_donation(conn, %{assignment_id: 123, participant: %{"nested" => true}, group: "x"})
+      post_donation(conn, %{assignment_id: 123, task: %{"nested" => true}, group: "x"})
 
       metadata = Logger.metadata()
       assert metadata[:feldspar_assignment_id] == "123"
-      assert metadata[:feldspar_participant] == ~s(%{"nested" => true})
+      assert metadata[:feldspar_task] == ~s(%{"nested" => true})
       assert metadata[:feldspar_group] == "x"
     end
 
@@ -190,8 +192,9 @@ defmodule Systems.Feldspar.ControllerTest do
   describe "donate/2 - no storage endpoint" do
     setup :login_as_member
 
-    test "returns 422 when assignment has no storage endpoint", %{conn: conn} do
+    test "returns 422 when assignment has no storage endpoint", %{conn: conn, user: user} do
       assignment = Assignment.Factories.create_assignment(31, 0, :online)
+      Assignment.Public.add_participant!(assignment, user)
 
       upload = %Plug.Upload{
         path: create_temp_file("test data"),
@@ -222,8 +225,9 @@ defmodule Systems.Feldspar.ControllerTest do
   describe "donate/2 - success" do
     setup :login_as_member
 
-    test "returns 200 when all inputs are valid", %{conn: conn, user: _user} do
+    test "returns 200 when all inputs are valid", %{conn: conn, user: user} do
       assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
 
       upload = %Plug.Upload{
         path: create_temp_file("{\"test\": \"data\"}"),
@@ -251,7 +255,7 @@ defmodule Systems.Feldspar.ControllerTest do
       assert response["status"] == "ok"
     end
 
-    test "returns 422 without assignment_id in context", %{conn: conn} do
+    test "returns 400 without assignment_id in context", %{conn: conn} do
       upload = %Plug.Upload{
         path: create_temp_file("{\"test\": \"data\"}"),
         filename: "data.json",
@@ -273,8 +277,180 @@ defmodule Systems.Feldspar.ControllerTest do
           "context" => context
         })
 
-      response = json_response(conn, 422)
-      assert response["error"] == "No storage endpoint configured"
+      response = json_response(conn, 400)
+      assert response["error"] == "Missing or invalid assignment_id"
+    end
+
+    test "returns 400 for an assignment_id that is not an id", %{conn: conn} do
+      for assignment_id <- ["abc", "1abc", -1, 0, 1.5, 9_223_372_036_854_775_808] do
+        response =
+          conn
+          |> post_donation(%{assignment_id: assignment_id})
+          |> json_response(400)
+
+        assert response["error"] == "Missing or invalid assignment_id"
+      end
+
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+  end
+
+  describe "donate/2 - participation" do
+    setup :login_as_member
+
+    test "refuses a user who does not participate in the assignment", %{conn: conn} do
+      assignment = create_assignment_with_storage()
+      other = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, other)
+      {:ok, other_id} = Assignment.Public.participant_id(assignment, other)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: other_id})
+
+      assert json_response(conn, 403) == %{"error" => "Not a participant of this assignment"}
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+
+    test "refuses an unknown assignment", %{conn: conn} do
+      conn = post_donation(conn, %{assignment_id: 999_999_999, participant: "p1"})
+
+      assert json_response(conn, 403) == %{"error" => "Not a participant of this assignment"}
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+
+    test "accepts the assignment_id as a numeric string", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: to_string(assignment.id)})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "delivers a participant's donation with the participant's own id", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      # Same shape as the context the Feldspar tool view hands to the client
+      context = %{
+        assignment_id: assignment.id,
+        task: 9,
+        participant: public_id,
+        group: "tiktok",
+        panel_info: nil
+      }
+
+      conn = post_donation(conn, context)
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "ignores a participant id sent by the client", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: "someone_else"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "uses the participant's identifier at the study's affiliate", %{conn: conn, user: user} do
+      assignment =
+        create_assignment_with_storage(Assignment.Factories.create_assignment_with_affiliate())
+
+      Assignment.Public.add_participant!(assignment, user)
+      Assignment.Factories.add_affiliate_user(assignment, user, "ext_b")
+
+      conn =
+        conn
+        |> put_panel_participant("ext_a")
+        |> post_donation(%{assignment_id: assignment.id, participant: "ext_a"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == "ext_b"
+    end
+
+    test "ignores a panel participant id left in the session by another study", %{
+      conn: conn,
+      user: user
+    } do
+      # Entered study A through its panel link as participant "<id>", then joined study B,
+      # where "<id>" is the crew id of another participant
+      study_b = create_assignment_with_storage()
+      other = Factories.insert!(:member)
+      Assignment.Public.add_participant!(study_b, other)
+      Assignment.Public.add_participant!(study_b, user)
+      {:ok, other_id} = Assignment.Public.participant_id(study_b, other)
+      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+
+      conn =
+        conn
+        |> put_panel_participant(to_string(other_id))
+        |> post_donation(%{assignment_id: study_b.id, participant: other_id})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == own_id
+    end
+
+    test "delivers a tester's preview donation as preview", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Crew.Public.apply_member_with_role(assignment.crew, user, :tester)
+
+      conn =
+        conn
+        |> put_panel_participant("preview")
+        |> post_donation(%{assignment_id: assignment.id, participant: "preview"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == "preview"
+    end
+
+    test "delivers a participant's donation under their own id in preview mode", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn =
+        conn
+        |> put_panel_participant("preview")
+        |> post_donation(%{assignment_id: assignment.id, participant: "preview"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "reports the participant's own id in telemetry", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+      attach_telemetry([[:feldspar, :donate, :start], [:feldspar, :donate, :stop]])
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: "someone_else"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert_received {:telemetry, [:feldspar, :donate, :start], %{participant: nil}}
+      assert_received {:telemetry, [:feldspar, :donate, :stop], %{participant: participant}}
+      assert to_string(participant) == to_string(public_id)
+    end
+
+    test "accepts a donation from a tester", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Crew.Public.apply_member_with_role(assignment.crew, user, :tester)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: public_id})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
     end
   end
 
@@ -322,10 +498,11 @@ defmodule Systems.Feldspar.ControllerTest do
       :ok
     end
 
-    test "returns 422 when job scheduling fails", %{conn: conn} do
+    test "returns 422 when job scheduling fails", %{conn: conn, user: user} do
       import Mox
 
       assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
 
       upload = %Plug.Upload{
         path: create_temp_file("{\"test\": \"data\"}"),
@@ -374,8 +551,9 @@ defmodule Systems.Feldspar.ControllerTest do
 
     @tag timeout: 120_000
     @tag :slow
-    test "concurrent large file uploads all succeed", %{conn: conn} do
+    test "concurrent large file uploads all succeed", %{conn: conn, user: user} do
       assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
       num_requests = 20
       line_count = 50_000
 
@@ -713,6 +891,16 @@ defmodule Systems.Feldspar.ControllerTest do
     end
   end
 
+  defp delivered_participant do
+    [%{args: %{"meta_data" => %{"identifier" => identifier}}}] =
+      all_enqueued(worker: Storage.Delivery)
+
+    Enum.find_value(identifier, fn
+      ["participant", participant] -> participant
+      _ -> nil
+    end)
+  end
+
   defp create_large_json_content(line_count) do
     entries =
       Enum.map_join(1..line_count, ",\n", fn i ->
@@ -722,10 +910,33 @@ defmodule Systems.Feldspar.ControllerTest do
     "[#{entries}]"
   end
 
-  defp create_assignment_with_storage do
-    # Create assignment first
-    assignment = Assignment.Factories.create_assignment(31, 0, :online)
+  defp put_panel_participant(conn, participant) do
+    Plug.Conn.put_session(conn, :panel_info, %{
+      panel: :affiliate,
+      redirect_url: nil,
+      participant: participant
+    })
+  end
 
+  defp attach_telemetry(events) do
+    handler_id = "feldspar-controller-test-#{System.unique_integer([:positive])}"
+    test_pid = self()
+
+    :telemetry.attach_many(
+      handler_id,
+      events,
+      fn event, _measurements, metadata, _config ->
+        send(test_pid, {:telemetry, event, metadata})
+      end,
+      nil
+    )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+  end
+
+  defp create_assignment_with_storage(
+         assignment \\ Assignment.Factories.create_assignment(31, 0, :online)
+       ) do
     # Create project node with required name field
     project_node =
       Factories.insert!(:project_node, %{
