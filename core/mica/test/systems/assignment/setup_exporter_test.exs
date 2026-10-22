@@ -26,8 +26,15 @@ defmodule Systems.Assignment.SetupExporterTest do
     Application.put_env(:core, CoreWeb.FileUploader, Keyword.put(original, :max_file_size, bytes))
   end
 
+  # A logo in our S3 content storage, served by the Bypass server.
   defp assignment_with_logo(%Bypass{port: port}) do
-    info = Factories.insert!(:assignment_info, %{logo_url: "http://localhost:#{port}/logo.png"})
+    use_s3_content("http://localhost:#{port}")
+
+    info =
+      Factories.insert!(:assignment_info, %{
+        logo_url: "http://localhost:#{port}/content/logo.png"
+      })
+
     Factories.insert!(:assignment, %{info: info})
   end
 
@@ -35,6 +42,33 @@ defmodule Systems.Assignment.SetupExporterTest do
     {:ok, stream} = assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
     {:ok, files} = stream |> Enum.to_list() |> IO.iodata_to_binary() |> :zip.extract([:memory])
     Map.new(files, fn {name, data} -> {to_string(name), data} end)
+  end
+
+  defp logo_source(assignment) do
+    assignment
+    |> load()
+    |> Assignment.SetupExporter.entries("study", "study_2026")
+    |> Enum.find(&(&1[:path] == "study_2026/assets/logo.png"))
+    |> Keyword.fetch!(:source)
+  end
+
+  defp assert_skipped_logo(logo_url) do
+    info = Factories.insert!(:assignment_info, %{logo_url: logo_url})
+    assignment = Factories.insert!(:assignment, %{info: info})
+
+    assert {:dynamic, resolve} = logo_source(assignment)
+    assert resolve.() == {:error, :external_url}
+  end
+
+  defp use_s3_content(public_url \\ "https://cdn.test") do
+    original = Application.fetch_env!(:core, :content)
+    on_exit(fn -> Application.put_env(:core, :content, original) end)
+
+    Application.put_env(:core, :content,
+      backend: Systems.Content.S3,
+      public_url: public_url,
+      prefix: "content"
+    )
   end
 
   describe "metadata/2 - asset invariant" do
@@ -101,7 +135,10 @@ defmodule Systems.Assignment.SetupExporterTest do
     test "skips a remote asset over the upload limit and reports it" do
       put_max_file_size(1_024)
       bypass = Bypass.open()
-      Bypass.stub(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 200, :binary.copy("x", 4_096)))
+
+      Bypass.stub(bypass, "GET", "/content/logo.png", fn conn ->
+        Plug.Conn.resp(conn, 200, :binary.copy("x", 4_096))
+      end)
 
       files = bypass |> assignment_with_logo() |> export_files()
 
@@ -120,7 +157,7 @@ defmodule Systems.Assignment.SetupExporterTest do
       Bypass.expect_once(
         bypass,
         "GET",
-        "/logo.png",
+        "/content/logo.png",
         &Plug.Conn.resp(&1, 200, :binary.copy("x", 4_096))
       )
 
@@ -132,7 +169,7 @@ defmodule Systems.Assignment.SetupExporterTest do
 
     test "includes an empty remote asset" do
       bypass = Bypass.open()
-      Bypass.expect_once(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 200, ""))
+      Bypass.expect_once(bypass, "GET", "/content/logo.png", &Plug.Conn.resp(&1, 200, ""))
 
       files = bypass |> assignment_with_logo() |> export_files()
 
@@ -142,7 +179,7 @@ defmodule Systems.Assignment.SetupExporterTest do
 
     test "skips a remote asset that answers with an empty error response" do
       bypass = Bypass.open()
-      Bypass.expect_once(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 404, ""))
+      Bypass.expect_once(bypass, "GET", "/content/logo.png", &Plug.Conn.resp(&1, 404, ""))
 
       files = bypass |> assignment_with_logo() |> export_files()
 
@@ -157,7 +194,7 @@ defmodule Systems.Assignment.SetupExporterTest do
     test "does not follow a redirect from a remote asset" do
       bypass = Bypass.open()
 
-      Bypass.expect_once(bypass, "GET", "/logo.png", fn conn ->
+      Bypass.expect_once(bypass, "GET", "/content/logo.png", fn conn ->
         conn
         |> Plug.Conn.put_resp_header("location", "http://localhost:#{bypass.port}/elsewhere.png")
         |> Plug.Conn.resp(302, "")
@@ -171,6 +208,45 @@ defmodule Systems.Assignment.SetupExporterTest do
                Jason.decode!(files["study_2026/export-warnings.json"])
 
       assert reason =~ "302"
+    end
+
+    test "skips an asset outside our content storage without fetching it" do
+      assert_skipped_logo("https://example.com/brand/logo.png")
+    end
+
+    test "skips an asset on another host with our S3 content path" do
+      use_s3_content()
+      assert_skipped_logo("https://example.com/content/abc.png")
+    end
+
+    test "skips an asset on our S3 host outside the content prefix" do
+      use_s3_content()
+      assert_skipped_logo("https://cdn.test/content-other/abc.png")
+    end
+
+    test "skips an asset on a host that starts with our S3 host" do
+      use_s3_content()
+      assert_skipped_logo("https://cdn.test.example.com/content/abc.png")
+    end
+
+    test "lists a skipped external asset in export-warnings.json and leaves it out of the zip" do
+      info = Factories.insert!(:assignment_info, %{logo_url: "http://127.0.0.1:1/logo.png"})
+      assignment = Factories.insert!(:assignment, %{info: info})
+
+      {:ok, stream} =
+        assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
+
+      {:ok, files} = stream |> Enum.to_list() |> IO.iodata_to_binary() |> :zip.unzip([:memory])
+      files = Map.new(files, fn {name, content} -> {to_string(name), content} end)
+
+      refute Map.has_key?(files, "study_2026/assets/logo.png")
+
+      assert %{
+               "skipped" => [
+                 %{"path" => "study_2026/assets/logo.png", "reason" => ":external_url"}
+               ]
+             } =
+               Jason.decode!(files["study_2026/export-warnings.json"])
     end
 
     test "nests every entry under the folder" do
