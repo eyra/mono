@@ -156,10 +156,7 @@ config :core, Oban,
   repo: Core.Repo,
   queues: false
 
-config :packmatic, Packmatic.Source.URL,
-  hackney: [
-    pool: :default
-  ]
+config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
