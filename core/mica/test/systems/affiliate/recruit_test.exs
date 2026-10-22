@@ -156,6 +156,39 @@ defmodule Systems.Affiliate.RecruitTest do
 
       assert html_response(conn, 200) =~ "This study is not available"
     end
+
+    test "a user without access cannot join a live study through the preview link",
+         %{conn: conn, user: user} do
+      assignment = live_assignment()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+
+      assert html_response(conn, 200) =~ "This study is not available"
+      assert conn.assigns.current_user.id == user.id
+      refute Assignment.Public.member?(assignment, user)
+      refute Assignment.Public.tester?(assignment, user)
+      assert Affiliate.Public.get_user(assignment.affiliate, "preview") == nil
+    end
+  end
+
+  describe "GET /a/:sqid?p=preview (signed out)" do
+    test "a visitor cannot join a live study through the preview link", %{conn: conn} do
+      assignment = live_assignment()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+
+      assert html_response(conn, 200) =~ "This study is not available"
+      assert get_session(conn, :user_token) == nil
+      assert Affiliate.Public.get_user(assignment.affiliate, "preview") == nil
+    end
+  end
+
+  defp live_assignment do
+    assignment = Assignment.Factories.create_assignment_with_affiliate()
+    assert assignment.status == :online
+    assignment
   end
 
   defp unpublished_assignment do

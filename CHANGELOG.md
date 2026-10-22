@@ -11,6 +11,7 @@
 
 ## Unreleased
 
+* Fixed - A study's preview link (`/a/<id>?p=preview`) only opens the study for people who can edit it. Anyone else sees the "not available" page, also while the study is online; `preview` is no longer accepted as a participant id.
 * Security - The study setup export only includes assets from the installation's own content storage; any other asset URL is skipped and listed in `export-warnings.json`. The study settings and manual page forms only save the fields they show, so image URLs can't be set from the browser; images are set through their uploaders only. Upgrading: no action needed.
 * Changed - Elixir 1.19.6 in development, CI, the Fly image and the release image (was 1.18.4, and 1.17.0 in CI). OTP stays 27 on Fly and in CI, and 28 in the release image.
 * Changed - The zip exports (study setup and storage) use packmatic 2.1 from Hex instead of a pinned fork of 1.2: correct Zip64 offsets for large archives and UTF-8 download file names. Downloads into the zip don't follow redirects; an empty file is included as an empty file, and an asset that answers with an error is left out of the study setup export and listed in `export-warnings.json`, as is an asset larger than the upload limit.
