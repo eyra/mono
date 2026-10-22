@@ -107,8 +107,8 @@ defmodule Systems.Affiliate.Controller do
       deleted?(assignment) ->
         not_found(conn)
 
-      # Preview mode: tester with ?p=preview from CMS
-      preview?(params) and tester?(assignment, conn) ->
+      # Preview mode: a user who can access the CMS may preview the study.
+      preview?(params) and preview_access?(assignment, conn) ->
         start_tester(conn, params, assignment)
 
       # Valid participant ID -> start as participant
@@ -142,11 +142,12 @@ defmodule Systems.Affiliate.Controller do
     |> halt()
   end
 
-  defp tester?(assignment, %{assigns: %{current_user: %{} = user}}) do
-    Assignment.Public.tester?(assignment, user)
+  defp preview_access?(assignment, %{assigns: %{current_user: %{} = user}}) do
+    Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
+      match?({:ok, _}, Assignment.Public.ensure_tester(assignment, user))
   end
 
-  defp tester?(_, _), do: false
+  defp preview_access?(_, _), do: false
 
   defp preview?(params), do: get_participant(params) == "preview"
 

@@ -2,7 +2,6 @@ defmodule Systems.Assignment.ContentPage do
   use Systems.Content.Composer, :management_page
 
   alias Systems.Assignment
-  alias Systems.Crew
 
   @impl true
   def get_authorization_context(params, session, socket) do
@@ -28,14 +27,8 @@ defmodule Systems.Assignment.ContentPage do
     }
   end
 
-  defp ensure_tester_role(
-         %{assigns: %{current_user: user, model: %{crew: crew} = assignment}} = socket
-       ) do
-    if Crew.Public.get_member(crew, user) == nil do
-      reset_opts = Assignment.Public.reset_opts(assignment)
-      Crew.Public.apply_member_with_role(crew, user, :tester, nil, reset_opts)
-    end
-
+  defp ensure_tester_role(%{assigns: %{current_user: user, model: assignment}} = socket) do
+    Assignment.Public.ensure_tester(assignment, user)
     socket
   end
 

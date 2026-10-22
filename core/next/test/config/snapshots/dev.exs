@@ -95,7 +95,7 @@
        partner_fee_percentage: 10
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
-    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-storage", prefix: "storage"]},
+    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-donations", prefix: "storage"]},
     {:account,
      [
        auth_methods: %{

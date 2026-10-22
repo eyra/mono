@@ -1,5 +1,6 @@
 defmodule Systems.Affiliate.RecruitTest do
   use CoreWeb.ConnCase, async: false
+  import Phoenix.LiveViewTest
 
   @moduletag :capture_log
 
@@ -104,6 +105,64 @@ defmodule Systems.Affiliate.RecruitTest do
       assert response =~ "error-assignment_unavailable"
       assert response =~ "This study is not available"
     end
+  end
+
+  describe "GET /a/:sqid (study preview)" do
+    setup :login_as_member
+
+    test "an owner can preview a new unpublished assignment", %{conn: conn, user: user} do
+      assignment = unpublished_assignment()
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "an owner who never opened the CMS page sees the tasks in the preview",
+         %{conn: conn, user: user} do
+      assignment = unpublished_assignment()
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+      {:ok, _view, html} = live(conn, redirected_to(conn))
+
+      assert html =~ "Test Task"
+    end
+
+    test "an owner who is already a crew member can preview without the tester role",
+         %{conn: conn, user: user} do
+      assignment = unpublished_assignment()
+      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      Systems.Crew.Factories.create_member(assignment.crew, user)
+      refute Assignment.Public.tester?(assignment, user)
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "a user without access still sees that the assignment is unavailable",
+         %{conn: conn} do
+      assignment = unpublished_assignment()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=preview")
+
+      assert html_response(conn, 200) =~ "This study is not available"
+    end
+  end
+
+  defp unpublished_assignment do
+    Assignment.Factories.create_assignment_with_affiliate()
+    |> Ecto.Changeset.change(status: :concept)
+    |> Core.Repo.update!()
+    |> Core.Repo.preload([:crew], force: true)
   end
 
   defp make_paid(%{info: info} = assignment, subject_reward) do

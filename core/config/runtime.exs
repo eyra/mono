@@ -225,8 +225,15 @@ if config_env() == :prod do
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
+    storage_s3_bucket = System.fetch_env!("AWS_S3_BUCKET")
+
+    # Donations need a private bucket: PUBLIC_S3_BUCKET is publicly readable.
+    if storage_s3_bucket == System.get_env("PUBLIC_S3_BUCKET") do
+      raise "AWS_S3_BUCKET (#{storage_s3_bucket}) must be a private bucket, not PUBLIC_S3_BUCKET"
+    end
+
     config :core, Systems.Storage.BuiltIn.S3,
-      bucket: System.fetch_env!("AWS_S3_BUCKET"),
+      bucket: storage_s3_bucket,
       prefix: storage_s3_prefix
   else
     config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS

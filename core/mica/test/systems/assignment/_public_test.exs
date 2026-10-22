@@ -1054,6 +1054,43 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "ensure_tester/2" do
+    setup do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+
+      {:ok, user: user, assignment: assignment}
+    end
+
+    test "makes the user a crew member with the tester role", %{
+      user: user,
+      assignment: assignment
+    } do
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert Crew.Public.get_member(assignment.crew, user)
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "adds the tester role to an existing crew member", %{
+      user: user,
+      assignment: assignment
+    } do
+      Crew.Factories.create_member(assignment.crew, user)
+
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "can be called again without adding rows", %{user: user, assignment: assignment} do
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert [_] = Crew.Public.list_members(assignment.crew)
+    end
+  end
+
   describe "add_participant!/2 reserves reward at join" do
     setup do
       user = Factories.insert!(:member)

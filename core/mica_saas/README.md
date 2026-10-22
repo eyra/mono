@@ -203,12 +203,14 @@ mv /home/next/uploads/project_node=*/ /home/next/storage/
 
 Stop the app on every node, run those commands, then start the app again.
 
-With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped. To get the commands as plain
-text, pipe that line through `jq -r .message`.
+With `MIX_ENV=prod` the error is logged as one JSON line, with its line breaks escaped, so the app also writes it
+to stderr once as plain text, just before it stops. Copy the commands from there.
 
-The `mv` commands do not move symlinks, because of the trailing slash: if a donation folder in `UPLOAD_PATH`
-is a symlink to a folder elsewhere, `mv` fails on it with "Not a directory" and the next start lists it again.
-Move such a link without the trailing slash, for example `mv /home/next/uploads/project_node=34 /home/next/storage/`.
+A donation folder that is a symlink to a folder elsewhere gets its own `mv` without the trailing slash, for example
+`mv /home/next/uploads/project_node=34 /home/next/storage/`, listed before the prefix globs so they no longer match
+it. With more than 10 such links, one `for` loop per prefix moves them all instead. The link itself moves, its target
+stays where it is: check targets first. A relative target must still resolve from `STORAGE_PATH`, and a target inside
+`UPLOAD_PATH` stays public and is not checked again, so replace such a link with the folder it points to.
 
 The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_PREFIX` set) are not checked.
 
@@ -299,11 +301,17 @@ flyctl apps create my-self
 flyctl postgres create --name my-self-db --region ams --vm-size shared-cpu-1x --volume-size 1 --initial-cluster-size 1
 flyctl postgres attach my-self-db --app my-self               # sets DATABASE_URL
 flyctl storage create --app my-self --name my-self-storage --public   # sets AWS_* and BUCKET_NAME
+flyctl storage create --name my-self-donations                       # private, for donations
 flyctl secrets set --app my-self --stage \
   SECRET_KEY_BASE="$(openssl rand -base64 64 | tr -d '\n')" \
-  AWS_S3_BUCKET=my-self-storage PUBLIC_S3_BUCKET=my-self-storage
+  AWS_S3_BUCKET=my-self-donations PUBLIC_S3_BUCKET=my-self-storage
 flyctl deploy --remote-only -c fly.my-self.toml --build-arg VERSION=1.0.0 --build-arg PLATFORM=fly
 ```
+
+Donations must go to a private bucket, separate from the public one: anyone can read objects in
+`PUBLIC_S3_BUCKET`, and the app refuses to start when `AWS_S3_BUCKET` is the same bucket. The access
+key that `flyctl storage create --app` sets must also be allowed to read and write the donations
+bucket; grant that in the Tigris dashboard (`flyctl storage dashboard`).
 
 For automatic deploys, create a deploy token with `flyctl tokens create deploy --app my-self` and
 store it as a GitHub Actions secret (`FLY_API_TOKEN_MICA_DEV` for nova-mica-dev).
@@ -320,13 +328,13 @@ Required:
 | `DATABASE_URL` | secret | PostgreSQL connection URL; set by `flyctl postgres attach` | |
 | `SECRET_KEY_BASE` | secret | Random string of at least 64 characters | `openssl rand -base64 64` |
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, `AWS_ENDPOINT_URL_S3`, `AWS_REGION` | secret | S3 credentials and endpoint; set by `flyctl storage create` | |
-| `AWS_S3_BUCKET` | secret | Bucket for platform storage | `nova-mica-dev-storage` |
-| `PUBLIC_S3_BUCKET` | secret | Bucket for public content | `nova-mica-dev-storage` |
+| `AWS_S3_BUCKET` | secret | Private bucket for donations; must not be `PUBLIC_S3_BUCKET` | `nova-mica-dev-donations` |
+| `PUBLIC_S3_BUCKET` | secret | Public bucket for content and Feldspar apps | `nova-mica-dev-storage` |
 | `BUCKET_NAME` | secret | Set by `flyctl storage create`; still read by `runtime.fly.exs` until it moves to `AWS_S3_BUCKET` | `nova-mica-dev-storage` |
 | `APP_NAME` | env | Name shown in the UI and in mail | `Mica [dev]` |
 | `APP_DOMAIN` | env | Public host name | `nova-mica-dev.fly.dev` |
 | `PHX_HOST` | env | Same as `APP_DOMAIN` | `nova-mica-dev.fly.dev` |
-| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `eyra.dev` (Next dev's Mailgun domain, until Nova has its own) |
+| `APP_MAIL_DOMAIN` | env | Domain of the no-reply sender address; must be a domain of your Mailgun account | `next.dev.eyra.co` (Next dev's Mailgun domain, until Nova has its own) |
 | `DEPLOY_ENV` | env | Selects the seeds: `dev`, `test`, `staging` or `prod`. Anything but `prod` also enables mock sign-in | `dev` |
 | `PAYMENT_PROVIDER` | env | `local` (logs only, no real payments) or `opp` | `local` |
 | `ENABLED_APP_FEATURES` | env | Comma-separated feature flags. Self uses `password_sign_in` and `otp` (sign-in with a one-time code by e-mail, at `/user/auth/identify`) | `password_sign_in, otp` |
@@ -355,5 +363,5 @@ Optional:
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays
-disabled. For now it sends mail with Next dev's Mailgun key and the `eyra.dev` sender domain; a
+disabled. For now it sends mail with Next dev's Mailgun key and the `next.dev.eyra.co` sender domain; a
 neutral Nova mail domain replaces both later.

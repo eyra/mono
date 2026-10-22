@@ -619,6 +619,15 @@ defmodule Systems.Assignment.Public do
 
   def tester?(_, _), do: false
 
+  @doc """
+  Makes the user a tester of the assignment: a crew member with the tester role,
+  so that previewing the study shows its tasks. Safe to call repeatedly and
+  concurrently.
+  """
+  def ensure_tester(%Assignment.Model{crew: crew} = assignment, %User{} = user) do
+    Crew.Public.ensure_member_with_role(crew, user, :tester, reset_opts(assignment))
+  end
+
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])
     |> apply_member(user, identifier, reward_amount)
