@@ -200,7 +200,7 @@ defmodule Systems.Feldspar.ControllerTest do
     test "keeps the AppSignal telemetry handler attached for non-string values", %{conn: conn} do
       {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
 
-      post_donation(conn, %{participant: %{"nested" => true}, group: [1], task: 1.5})
+      post_donation(conn, %{task: %{"nested" => true}, group: "x"})
 
       handlers = :telemetry.list_handlers([:feldspar, :donate, :exception])
       assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
