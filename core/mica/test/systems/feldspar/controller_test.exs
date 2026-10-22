@@ -165,7 +165,7 @@ defmodule Systems.Feldspar.ControllerTest do
   end
 
   describe "donate/2 - context keys" do
-    test "refuses an unauthenticated request before reading its context", %{conn: conn} do
+    test "refuses an unauthenticated request before logging its context", %{conn: conn} do
       keys = unique_keys()
 
       conn = post_donation(conn, context_with_keys(keys) |> Map.put("assignment_id", 1))
