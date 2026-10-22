@@ -166,7 +166,7 @@ defmodule Systems.Feldspar.ControllerTest do
   end
 
   describe "donate/2 - context keys" do
-    test "refuses an unauthenticated request before reading its context", %{conn: conn} do
+    test "refuses an unauthenticated request before logging its context", %{conn: conn} do
       keys = unique_keys()
 
       conn = post_donation(conn, context_with_keys(keys) |> Map.put("assignment_id", 1))
@@ -395,23 +395,21 @@ defmodule Systems.Feldspar.ControllerTest do
       assert delivered_participant() == "ext_b"
     end
 
-    test "ignores a panel participant id left in the session by another study", %{
+    test "stores under the study's own participant id, not the session's panel id", %{
       conn: conn,
       user: user
     } do
-      # Entered study A through its panel link as participant "<id>", then joined study B,
-      # where "<id>" is the crew id of another participant
-      study_b = create_assignment_with_storage()
+      assignment = create_assignment_with_storage()
       other = Factories.insert!(:member)
-      Assignment.Public.add_participant!(study_b, other)
-      Assignment.Public.add_participant!(study_b, user)
-      {:ok, other_id} = Assignment.Public.participant_id(study_b, other)
-      {:ok, own_id} = Assignment.Public.participant_id(study_b, user)
+      Assignment.Public.add_participant!(assignment, other)
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, other_id} = Assignment.Public.participant_id(assignment, other)
+      {:ok, own_id} = Assignment.Public.participant_id(assignment, user)
 
       conn =
         conn
         |> put_panel_participant(to_string(other_id))
-        |> post_donation(%{assignment_id: study_b.id, participant: other_id})
+        |> post_donation(%{assignment_id: assignment.id, participant: other_id})
 
       assert json_response(conn, 200) == %{"status" => "ok"}
       assert delivered_participant() == own_id
