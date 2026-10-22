@@ -5,7 +5,6 @@
   router_compile_connected: [
     "mica/frameworks/pixel/flash.ex",
     "mica/lib/core/bundle_overrides.ex",
-    "mica/lib/core/persister.ex",
     "mica/lib/core_web.ex",
     "mica/lib/core_web/cldr.ex",
     "mica/lib/core_web/controllers/layouts.ex",
