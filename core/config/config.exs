@@ -156,6 +156,8 @@ config :core, Oban,
   repo: Core.Repo,
   queues: false
 
+config :assent, http_adapter: Assent.HTTPAdapter.Httpc
+
 config :core, :rate,
   prune_interval: 60 * 60 * 1000,
   quotas: [
