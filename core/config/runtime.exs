@@ -143,9 +143,10 @@ if config_env() == :prod do
   # Logged at boot by Core.Application.
   config :core, :oban_unknown_plugins, oban_unknown_plugins
 
-  # RATE LIMITER
+  # RATE LIMITER: RATE_QUOTAS replaces the default quotas (config.exs) of the
+  # services it lists; the other services keep their defaults.
 
-  config :core, :rate, quotas: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
+  config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
   # MAIL: Mailgun when MAILGUN_API_KEY is set, otherwise Amazon SES.
 

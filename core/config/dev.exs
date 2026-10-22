@@ -158,7 +158,7 @@ config :core, :account,
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
-  quotas: [
+  quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
     # Higher limit for E2E testing - 100MB per hour
     [

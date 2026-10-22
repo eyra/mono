@@ -139,7 +139,7 @@
        ris_stream_chunk_size: 65536
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
-    {:rate, [quotas: []]},
+    {:rate, [quota_overrides: []]},
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}
