@@ -214,6 +214,30 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert_skipped_logo("https://example.com/brand/logo.png")
     end
 
+    test "lists an external privacy statement in export-warnings.json and leaves it out of the zip" do
+      privacy_doc =
+        Factories.insert!(:content_file, %{name: "p.pdf", ref: "https://example.com/p.pdf"})
+
+      assignment = Factories.insert!(:assignment, %{info: nil, privacy_doc: privacy_doc})
+
+      {:ok, stream} =
+        assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
+
+      {:ok, files} = stream |> Enum.to_list() |> IO.iodata_to_binary() |> :zip.unzip([:memory])
+      files = Map.new(files, fn {name, content} -> {to_string(name), content} end)
+
+      refute Map.has_key?(files, "study_2026/assets/privacy-statement.pdf")
+
+      assert %{
+               "skipped" => [
+                 %{
+                   "path" => "study_2026/assets/privacy-statement.pdf",
+                   "reason" => ":external_url"
+                 }
+               ]
+             } = Jason.decode!(files["study_2026/export-warnings.json"])
+    end
+
     test "skips an asset on another host with our S3 content path" do
       use_s3_content()
       assert_skipped_logo("https://example.com/content/abc.png")
