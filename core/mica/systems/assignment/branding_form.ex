@@ -136,12 +136,14 @@ defmodule Systems.Assignment.BrandingForm do
     {:noreply, socket |> hide_modal(:image_picker)}
   end
 
+  # The logo and header image are set through the uploader and image picker,
+  # never from the form's own params.
   @impl true
   def handle_event("save", %{"info_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
     {
       :noreply,
       socket
-      |> save(entity, :auto_save, attrs)
+      |> save(entity, :auto_save, Map.take(attrs, ["title", "subtitle"]))
     }
   end
 

@@ -83,9 +83,10 @@ defmodule Systems.Manual.Builder.PageForm do
     }
   end
 
+  # The image is set through the uploader, never from the form's own params.
   @impl true
   def handle_event("save", %{"page_model" => attrs}, %{assigns: %{entity: entity}} = socket) do
-    changeset = Manual.PageModel.changeset(entity, attrs)
+    changeset = Manual.PageModel.changeset(entity, Map.take(attrs, ["title"]))
 
     {
       :noreply,

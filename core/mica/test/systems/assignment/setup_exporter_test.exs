@@ -20,6 +20,33 @@ defmodule Systems.Assignment.SetupExporterTest do
     |> Enum.sort()
   end
 
+  defp logo_source(assignment) do
+    assignment
+    |> load()
+    |> Assignment.SetupExporter.entries("study", "study_2026")
+    |> Enum.find(&(&1[:path] == "study_2026/assets/logo.png"))
+    |> Keyword.fetch!(:source)
+  end
+
+  defp assert_skipped_logo(logo_url) do
+    info = Factories.insert!(:assignment_info, %{logo_url: logo_url})
+    assignment = Factories.insert!(:assignment, %{info: info})
+
+    assert {:dynamic, resolve} = logo_source(assignment)
+    assert resolve.() == {:error, :external_url}
+  end
+
+  defp use_s3_content do
+    original = Application.fetch_env!(:core, :content)
+    on_exit(fn -> Application.put_env(:core, :content, original) end)
+
+    Application.put_env(:core, :content,
+      backend: Systems.Content.S3,
+      public_url: "https://cdn.test",
+      prefix: "content"
+    )
+  end
+
   describe "metadata/2 - asset invariant" do
     test "every assets/ path in the metadata has a matching asset entry, and vice versa" do
       info =
@@ -81,7 +108,8 @@ defmodule Systems.Assignment.SetupExporterTest do
       assert Path.basename(path) == "abc_logo.png"
     end
 
-    test "caps a remote asset at the upload limit configured at runtime" do
+    test "downloads an asset from our S3 content storage, capped at the runtime upload limit" do
+      use_s3_content()
       original = Application.fetch_env!(:core, CoreWeb.FileUploader)
       on_exit(fn -> Application.put_env(:core, CoreWeb.FileUploader, original) end)
 
@@ -91,16 +119,51 @@ defmodule Systems.Assignment.SetupExporterTest do
         Keyword.put(original, :max_file_size, 94_371_840)
       )
 
-      info =
-        Factories.insert!(:assignment_info, %{logo_url: "https://example.com/brand/logo.png"})
-
+      logo_url = "https://cdn.test/content/abc.png"
+      info = Factories.insert!(:assignment_info, %{logo_url: logo_url})
       assignment = Factories.insert!(:assignment, %{info: info})
 
-      entries = assignment |> load() |> Assignment.SetupExporter.entries("study", "study_2026")
-      entry = Enum.find(entries, &(&1[:path] == "study_2026/assets/logo.png"))
+      assert {:url, {^logo_url, [], [max_body_length: 94_371_840, follow_redirect: false]}} =
+               logo_source(assignment)
+    end
 
-      assert {:url, {"https://example.com/brand/logo.png", [], [max_body_length: 94_371_840]}} =
-               entry[:source]
+    test "skips an asset outside our content storage without fetching it" do
+      assert_skipped_logo("http://169.254.169.254/latest/logo.png")
+    end
+
+    test "skips an asset on another host with our S3 content path" do
+      use_s3_content()
+      assert_skipped_logo("https://example.com/content/abc.png")
+    end
+
+    test "skips an asset on our S3 host outside the content prefix" do
+      use_s3_content()
+      assert_skipped_logo("https://cdn.test/content-other/abc.png")
+    end
+
+    test "skips an asset on a host that starts with our S3 host" do
+      use_s3_content()
+      assert_skipped_logo("https://cdn.test.example.com/content/abc.png")
+    end
+
+    test "lists a skipped external asset in export-warnings.json and leaves it out of the zip" do
+      info = Factories.insert!(:assignment_info, %{logo_url: "http://127.0.0.1:1/logo.png"})
+      assignment = Factories.insert!(:assignment, %{info: info})
+
+      {:ok, stream} =
+        assignment |> load() |> Assignment.SetupExporter.stream("study", "study_2026")
+
+      {:ok, files} = stream |> Enum.to_list() |> IO.iodata_to_binary() |> :zip.unzip([:memory])
+      files = Map.new(files, fn {name, content} -> {to_string(name), content} end)
+
+      refute Map.has_key?(files, "study_2026/assets/logo.png")
+
+      assert %{
+               "skipped" => [
+                 %{"path" => "study_2026/assets/logo.png", "reason" => ":external_url"}
+               ]
+             } =
+               Jason.decode!(files["study_2026/export-warnings.json"])
     end
 
     test "nests every entry under the folder" do
