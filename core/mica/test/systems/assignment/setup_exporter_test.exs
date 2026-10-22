@@ -128,7 +128,7 @@ defmodule Systems.Assignment.SetupExporterTest do
     end
 
     test "skips an asset outside our content storage without fetching it" do
-      assert_skipped_logo("http://169.254.169.254/latest/logo.png")
+      assert_skipped_logo("https://example.com/brand/logo.png")
     end
 
     test "skips an asset on another host with our S3 content path" do

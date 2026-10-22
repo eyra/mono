@@ -33,7 +33,7 @@ defmodule Systems.Manual.Builder.PageFormTest do
     view
     |> element("#page_title_form")
     |> render_change(%{
-      "page_model" => %{"title" => "New title", "image" => "http://169.254.169.254/x.png"}
+      "page_model" => %{"title" => "New title", "image" => "https://example.com/x.png"}
     })
 
     assert %{title: "New title", image: "Page image"} = Repo.get!(Manual.PageModel, page.id)

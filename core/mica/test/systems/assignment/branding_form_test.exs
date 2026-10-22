@@ -60,7 +60,7 @@ defmodule Systems.Assignment.BrandingFormTest do
       |> render_change(%{
         "info_model" => %{
           "title" => "New title",
-          "logo_url" => "http://169.254.169.254/latest/meta-data/",
+          "logo_url" => "https://example.com/logo.png",
           "image_id" => "other"
         }
       })
