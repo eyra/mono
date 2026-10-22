@@ -156,10 +156,7 @@ config :core, Oban,
   repo: Core.Repo,
   queues: false
 
-config :packmatic, Packmatic.Source.URL,
-  hackney: [
-    pool: :default
-  ]
+config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 
 # Default quotas. `quota_overrides` (RATE_QUOTAS in releases) replaces the
 # quotas of the services it lists; the other services keep these. A service
