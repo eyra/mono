@@ -13,7 +13,7 @@ defmodule Systems.Assignment.SetupExporter do
   keeps referring to an asset that failed to download, while
   `ro-crate-metadata.json` describes the files the package really contains and
   leaves that asset out. `export-warnings.json` names every dropped asset and
-  bridges the two.
+  bridges the two. Assets outside our own content storage are always dropped.
   """
 
   require Logger
@@ -295,8 +295,18 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp asset_source(url) do
     case Content.Public.get_local_path(url) do
-      nil -> {:url, {url, [], [max_body_length: max_asset_bytes()]}}
+      nil -> remote_asset_source(url)
       path -> {:file, path}
+    end
+  end
+
+  # Only content from our own storage is downloaded. Any other URL is skipped
+  # unfetched, so it ends up in export-warnings.json.
+  defp remote_asset_source(url) do
+    if Content.Public.stored_url?(url) do
+      {:url, {url, [], [max_body_length: max_asset_bytes(), follow_redirect: false]}}
+    else
+      {:dynamic, fn -> {:error, :external_url} end}
     end
   end
 
