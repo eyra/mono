@@ -19,6 +19,7 @@ defmodule Systems.Assignment.SetupExporter do
   require Logger
 
   alias Frameworks.Concept
+  alias Frameworks.Utility.PackmaticURLSource
   alias Systems.Account
   alias Systems.Alliance
   alias Systems.Assignment
@@ -295,7 +296,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp asset_source(url) do
     case Content.Public.get_local_path(url) do
-      nil -> {Assignment.SetupExporter.URLSource, {url, max_asset_bytes()}}
+      nil -> {PackmaticURLSource, {url, max_bytes: max_asset_bytes()}}
       path -> {:file, path}
     end
   end

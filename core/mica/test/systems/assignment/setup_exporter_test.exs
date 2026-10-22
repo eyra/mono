@@ -130,6 +130,49 @@ defmodule Systems.Assignment.SetupExporterTest do
       refute Map.has_key?(files, "study_2026/export-warnings.json")
     end
 
+    test "includes an empty remote asset" do
+      bypass = Bypass.open()
+      Bypass.expect_once(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 200, ""))
+
+      files = bypass |> assignment_with_logo() |> export_files()
+
+      assert files["study_2026/assets/logo.png"] == ""
+      refute Map.has_key?(files, "study_2026/export-warnings.json")
+    end
+
+    test "skips a remote asset that answers with an empty error response" do
+      bypass = Bypass.open()
+      Bypass.expect_once(bypass, "GET", "/logo.png", &Plug.Conn.resp(&1, 404, ""))
+
+      files = bypass |> assignment_with_logo() |> export_files()
+
+      refute Map.has_key?(files, "study_2026/assets/logo.png")
+
+      assert %{"skipped" => [%{"path" => "study_2026/assets/logo.png", "reason" => reason}]} =
+               Jason.decode!(files["study_2026/export-warnings.json"])
+
+      assert reason =~ "404"
+    end
+
+    test "does not follow a redirect from a remote asset" do
+      bypass = Bypass.open()
+
+      Bypass.expect_once(bypass, "GET", "/logo.png", fn conn ->
+        conn
+        |> Plug.Conn.put_resp_header("location", "http://localhost:#{bypass.port}/elsewhere.png")
+        |> Plug.Conn.resp(302, "")
+      end)
+
+      files = bypass |> assignment_with_logo() |> export_files()
+
+      refute Map.has_key?(files, "study_2026/assets/logo.png")
+
+      assert %{"skipped" => [%{"path" => "study_2026/assets/logo.png", "reason" => reason}]} =
+               Jason.decode!(files["study_2026/export-warnings.json"])
+
+      assert reason =~ "302"
+    end
+
     test "nests every entry under the folder" do
       assignment = Factories.insert!(:assignment, %{info: nil})
 
