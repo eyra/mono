@@ -11,7 +11,7 @@
 
 ## Unreleased
 
-* Changed - Elixir 1.19.6 in development, CI, the Fly image and the release image (was 1.18.4, and 1.17.0 in CI).
+* Changed - Elixir 1.19.6 in development, CI, the Fly image and the release image (was 1.18.4, and 1.17.0 in CI). OTP stays 27 on Fly and in CI, and 28 in the release image.
 * Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` commands that move them to `STORAGE_PATH`. Installations on S3 storage are not affected.
 
 ## \#31.1 2026-10-19
