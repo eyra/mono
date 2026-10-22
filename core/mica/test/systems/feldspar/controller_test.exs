@@ -395,7 +395,8 @@ defmodule Systems.Feldspar.ControllerTest do
 
       assert json_response(conn, 200) == %{"status" => "ok"}
       assert_received {:telemetry, [:feldspar, :donate, :start], %{participant: nil}}
-      assert_received {:telemetry, [:feldspar, :donate, :stop], %{participant: ^public_id}}
+      assert_received {:telemetry, [:feldspar, :donate, :stop], %{participant: participant}}
+      assert to_string(participant) == to_string(public_id)
     end
 
     test "accepts a donation from a tester", %{conn: conn, user: user} do
