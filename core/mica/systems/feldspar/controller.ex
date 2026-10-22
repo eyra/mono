@@ -194,7 +194,7 @@ defmodule Systems.Feldspar.Controller do
   """
   def log(conn, %{"level" => level, "message" => message} = params) do
     context = log_context(params["context"])
-    telemetry_metadata = telemetry_metadata(context) |> Map.put(:level, level)
+    telemetry_metadata = telemetry_metadata(context) |> Map.put(:level, telemetry_value(level))
     start_time = emit_telemetry_start([:feldspar, :log], telemetry_metadata)
 
     with {:ok, _user} <- get_current_user(conn),
@@ -391,12 +391,16 @@ defmodule Systems.Feldspar.Controller do
 
   defp telemetry_metadata(context) do
     %{
-      assignment_id: context["assignment_id"],
-      participant: context["participant"],
-      group: context["group"],
-      task: context["task"]
+      assignment_id: telemetry_value(context["assignment_id"]),
+      participant: telemetry_value(context["participant"]),
+      group: telemetry_value(context["group"]),
+      task: telemetry_value(context["task"])
     }
   end
+
+  # Telemetry handlers turn metadata values into tags with to_string/1
+  defp telemetry_value(nil), do: nil
+  defp telemetry_value(value), do: metadata_value(value)
 
   defp emit_telemetry_start(event_prefix, metadata) do
     start_time = System.monotonic_time()
