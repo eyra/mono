@@ -12,8 +12,7 @@ defmodule Storybook.Systems.Graphite.SubmissionView.Panel do
           description: "Gradient boosted trees",
           updated_at: ~N[2026-10-20 14:32:00],
           timezone: "Europe/Amsterdam",
-          github_commit_url:
-            "https://github.com/eyra/fertility-prediction-challenge/commit/3f2a9c1"
+          github_commit_url: "https://example.org/fertility-prediction-challenge/commit/3f2a9c1"
         }
       },
       %Variation{
@@ -23,8 +22,7 @@ defmodule Storybook.Systems.Graphite.SubmissionView.Panel do
           description: "Gradient boosted trees",
           updated_at: nil,
           timezone: nil,
-          github_commit_url:
-            "https://github.com/eyra/fertility-prediction-challenge/commit/3f2a9c1"
+          github_commit_url: "https://example.org/fertility-prediction-challenge/commit/3f2a9c1"
         }
       }
     ]

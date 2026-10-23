@@ -74,7 +74,8 @@ stories:
 - Curating means editing the generated file. The generator never overwrites a file.
 - `mix storybook.check` fails when a public component has no story; it runs in CI.
 - `mica/test/core_web/storybook_test.exs` and `next/test/storybook_test.exs` render every story,
-  so a component change that breaks its story fails the suite.
+  so a component change that breaks its story fails the suite, and check the guard on each route.
+  `mica/test/mix/tasks/storybook_gen_test.exs` covers the generator and `--check`.
 
 LiveViews and live components are skipped by the generator: their components render with the
 state of the process. Their stories are written by hand when needed.
@@ -93,16 +94,20 @@ state of the process. Their stories are written by hand when needed.
 
 ```elixir
 scope "/" do
+  pipe_through [:browser_unprotected, CoreWeb.StorybookGuard]
   storybook_assets()
 end
 
 scope "/" do
-  pipe_through [:browser, :storybook_guard]
-  live_storybook "/admin/storybook", backend_module: CoreWeb.Storybook
+  pipe_through [:browser, CoreWeb.StorybookGuard]
+  live_storybook "/admin/storybook", backend_module: :"Elixir.CoreWeb.Storybook"
 end
 ```
 
-`:storybook_guard` is one plug:
+The backend is an atom, not an alias: an alias makes the router, and every file compile-connected
+to it, recompile whenever a story is added or removed.
+
+`CoreWeb.StorybookGuard` is one plug, on the pages and on the assets:
 - the `:storybook` feature is off → 404. Feature flags are read at runtime through
   `Core.FeatureFlags`, the same way `:e2e` works; prod never enables it
   (`RuntimeConfig.features/2` gets the same reject rule as `:e2e`).

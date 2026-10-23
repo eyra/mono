@@ -18,7 +18,7 @@ defmodule Storybook.Systems.Graphite.SubmissionView.ListItem do
           team: "Team Tilburg",
           description: "Gradient boosted trees",
           summary: "Submitted yesterday at 14:32",
-          url: "https://github.com/eyra/fertility-prediction-challenge/commit/3f2a9c1",
+          url: "https://example.org/fertility-prediction-challenge/commit/3f2a9c1",
           buttons: []
         }
       },
@@ -28,7 +28,7 @@ defmodule Storybook.Systems.Graphite.SubmissionView.ListItem do
         attributes: %{
           description: "Logistic regression",
           summary: "Submitted Monday at 09:15",
-          url: "https://github.com/eyra/fertility-prediction-challenge/commit/b71e04d",
+          url: "https://example.org/fertility-prediction-challenge/commit/b71e04d",
           buttons: [
             %{action: %{type: :send, event: "edit"}, face: %{type: :icon, icon: :edit}},
             %{action: %{type: :send, event: "remove"}, face: %{type: :icon, icon: :delete}}

@@ -22,7 +22,9 @@ defmodule CoreWeb.Router do
   CoreWeb.LocalImageCatalogPlug.routes()
   Frameworks.E2E.Routes.routes()
 
+  # Assets get the guard too, so nothing of the storybook is served where it is off (prod).
   scope "/" do
+    pipe_through([:browser_unprotected, CoreWeb.StorybookGuard])
     PhoenixStorybook.Router.storybook_assets()
   end
 

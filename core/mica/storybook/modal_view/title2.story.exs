@@ -18,8 +18,11 @@ defmodule Storybook.Frameworks.Pixel.ModalView.Title2 do
     ]
   end
 
+  # The title component only reads the :title option; the element's function is never called.
   defp modal(title) do
-    element = LiveNest.Element.prepare_component(:storybook_modal, nil, title: title)
+    element =
+      LiveNest.Element.prepare_component(:storybook_modal, fn _assigns -> nil end, title: title)
+
     %LiveNest.Modal{style: :page, visible: true, element: element, options: []}
   end
 end

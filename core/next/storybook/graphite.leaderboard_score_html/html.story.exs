@@ -13,19 +13,19 @@ defmodule Storybook.Systems.Graphite.LeaderboardScoreHTML.Html do
             %{
               team: "Team Tilburg",
               description: "Gradient boosted trees on household panel",
-              url: "https://github.com/eyra/fertility-prediction-challenge/commit/3f2a9c1",
+              url: "https://example.org/fertility-prediction-challenge/commit/3f2a9c1",
               value: 0.812
             },
             %{
               team: "Utrecht Data School",
               description: "Logistic regression with feature selection",
-              url: "https://github.com/eyra/fertility-prediction-challenge/commit/b71e04d",
+              url: "https://example.org/fertility-prediction-challenge/commit/b71e04d",
               value: 0.794
             },
             %{
               team: "VU Amsterdam",
               description: "Random forest baseline",
-              url: "https://github.com/eyra/fertility-prediction-challenge/commit/9c0d5ea",
+              url: "https://example.org/fertility-prediction-challenge/commit/9c0d5ea",
               value: 0.751
             }
           ]

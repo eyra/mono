@@ -1,20 +1,15 @@
 defmodule CoreWeb.StorybookTest do
   use CoreWeb.ConnCase, async: false
+  use Core.FeatureFlags.Test
 
   setup do
-    features = Application.fetch_env!(:core, :features)
-    Application.put_env(:core, :features, Keyword.put(features, :storybook, true))
-    on_exit(fn -> Application.put_env(:core, :features, features) end)
+    set_feature_flag(:storybook, true)
+    :ok
   end
 
   describe "access" do
     test "is not found while the feature is off", %{conn: conn} do
-      Application.put_env(
-        :core,
-        :features,
-        Keyword.put(Application.fetch_env!(:core, :features), :storybook, false)
-      )
-
+      set_feature_flag(:storybook, false)
       {:ok, conn: conn, user: _} = login_as_admin(%{conn: conn})
 
       assert conn |> get("/admin/storybook") |> response(404)
@@ -28,6 +23,11 @@ defmodule CoreWeb.StorybookTest do
       {:ok, ctx} = login_as_member(%{conn: conn})
 
       assert ctx[:conn] |> get("/admin/storybook") |> redirected_to() == "/access_denied"
+    end
+
+    test "serves its assets only to admins", %{conn: conn} do
+      assert conn |> get("/storybook/assets/css/app.css") |> redirected_to() ==
+               "/access_denied"
     end
   end
 

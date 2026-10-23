@@ -78,7 +78,7 @@ defmodule Mix.Tasks.Storybook.Gen do
   end
 
   defp modules(source_dir) do
-    {:ok, modules} = :application.get_key(:core, :modules)
+    {:ok, modules} = :application.get_key(Core.Env.app(), :modules)
 
     Enum.filter(modules, fn module ->
       Code.ensure_loaded!(module)
@@ -133,7 +133,7 @@ defmodule Mix.Tasks.Storybook.Gen do
   defp placeholder(_), do: nil
 
   defp slot_examples(slots) do
-    for %{name: slot} = spec <- slots, slot == :inner_block or spec.required do
+    for %{name: slot, required: required} <- slots, slot == :inner_block or required do
       if slot == :inner_block, do: "Lorem ipsum", else: "<:#{slot}>Lorem ipsum</:#{slot}>"
     end
   end
