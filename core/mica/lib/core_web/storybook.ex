@@ -1,6 +1,6 @@
 defmodule CoreWeb.Storybook do
   @moduledoc """
-  Component storybook for Pixel, served at `/storybook`.
+  Component storybook for Pixel, served at `/admin/storybook`.
 
   Stories live in `mica/storybook`; `mix storybook.gen` writes one for every component that lacks
   it. Access goes through `CoreWeb.StorybookGuard`.

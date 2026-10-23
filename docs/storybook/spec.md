@@ -48,7 +48,7 @@ Next/Self modules or Eyra specifics; `boundary_check.exs` covers both folders.
 | Piece | Mica (Pixel) | Next |
 |---|---|---|
 | Backend module | `CoreWeb.Storybook` in `mica/lib/core_web/storybook.ex` | `Next.Storybook` in `next/lib/storybook.ex` |
-| Route | `/storybook` in `CoreWeb.Router` | `/storybook-next` from the Next routes, `session_name: :next_storybook`, `pipeline: false` |
+| Route | `/admin/storybook` in `CoreWeb.Router` | `/admin/storybook-next` from the Next routes, `session_name: :next_storybook`, `pipeline: false` |
 | Stories | `mica/storybook/**/*.story.exs` | `next/storybook/**/*.story.exs` |
 
 Shared: the story generator `mix storybook.gen SOURCE CONTENT [--prefix MODULE] [--check]`
@@ -98,7 +98,7 @@ end
 
 scope "/" do
   pipe_through [:browser, :storybook_guard]
-  live_storybook "/storybook", backend_module: CoreWeb.Storybook
+  live_storybook "/admin/storybook", backend_module: CoreWeb.Storybook
 end
 ```
 
@@ -149,7 +149,7 @@ are empty. Set `compilation_mode: :eager` outside dev (that is the library defau
 
 ## Acceptance
 
-- `/storybook` (Pixel) and `/storybook-next` (Next) in dev list every public component; each
+- `/admin/storybook` (Pixel) and `/admin/storybook-next` (Next) in dev list every public component; each
   one renders its `:default` variation and shows its attribute docs and playground.
 - On testing (flag on) an admin can open both; a non-admin gets `/access_denied`; with the flag
   off the routes return 404. On prod the flag can't be turned on.

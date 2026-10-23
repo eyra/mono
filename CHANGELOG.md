@@ -11,7 +11,7 @@
 
 ## Unreleased
 
-* Added - Component storybook (`phoenix_storybook`): Pixel components at `/storybook`, Next components at `/storybook-next`, with docs, variations and a playground per component. Only admins can open it, and only while the `:storybook` feature is on; prod never turns it on. `mix storybook.stories` writes a story for every function component that lacks one, and CI fails (`mix storybook.check`) when one is missing. Upgrading: add `storybook` to `ENABLED_APP_FEATURES` on environments that should serve it.
+* Added - Component storybook (`phoenix_storybook`): Pixel components at `/admin/storybook`, Next components at `/admin/storybook-next`, with docs, variations and a playground per component. Only admins can open it, and only while the `:storybook` feature is on; prod never turns it on. `mix storybook.stories` writes a story for every function component that lacks one, and CI fails (`mix storybook.check`) when one is missing. Upgrading: add `storybook` to `ENABLED_APP_FEATURES` on environments that should serve it.
 * Changed - Phoenix LiveView 1.1.33 (was 1.1.13), with cowboy 2.20, plug 1.20 and phoenix_pubsub 2.4.
 * Removed - The admin typography page (`/admin/typography`), now the Typography page in the storybook, and the dev-only `/component_test` page.
 * Fixed - Feldspar app uploads on the local filesystem (no S3) refuse a zip with an entry that resolves outside the app's own folder, such as `../other/file`, or whose entry names differ between the zip's index and its file headers, instead of extracting it. The upload form then shows "The selected file is not a valid app zip", also for a file that isn't a zip or a zip that can't be extracted, instead of failing without a message. Upgrading: no action needed.

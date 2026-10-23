@@ -46,7 +46,7 @@ defmodule Next.Bundle do
 
           # The Pixel storybook in CoreWeb.Router defines the shared :storybook_browser pipeline;
           # the backend is an atom for the same reason as there.
-          PhoenixStorybook.Router.live_storybook("/storybook-next",
+          PhoenixStorybook.Router.live_storybook("/admin/storybook-next",
             backend_module: :"Elixir.Next.Storybook",
             session_name: :next_storybook,
             as: :next_storybook,

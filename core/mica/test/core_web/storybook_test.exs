@@ -17,17 +17,17 @@ defmodule CoreWeb.StorybookTest do
 
       {:ok, conn: conn, user: _} = login_as_admin(%{conn: conn})
 
-      assert conn |> get("/storybook") |> response(404)
+      assert conn |> get("/admin/storybook") |> response(404)
     end
 
     test "is denied to visitors", %{conn: conn} do
-      assert conn |> get("/storybook") |> redirected_to() == "/access_denied"
+      assert conn |> get("/admin/storybook") |> redirected_to() == "/access_denied"
     end
 
     test "is denied to members", %{conn: conn} do
       {:ok, ctx} = login_as_member(%{conn: conn})
 
-      assert ctx[:conn] |> get("/storybook") |> redirected_to() == "/access_denied"
+      assert ctx[:conn] |> get("/admin/storybook") |> redirected_to() == "/access_denied"
     end
   end
 
@@ -37,7 +37,7 @@ defmodule CoreWeb.StorybookTest do
     test "every story renders", %{conn: conn} do
       for %{path: path} <- CoreWeb.Storybook.leaves() do
         try do
-          conn |> get("/storybook" <> path) |> html_response(200)
+          conn |> get("/admin/storybook" <> path) |> html_response(200)
         rescue
           error -> flunk("story #{path} does not render: #{Exception.message(error)}")
         end

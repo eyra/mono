@@ -31,7 +31,7 @@ defmodule CoreWeb.Router do
 
     # An atom, not an alias: an alias makes the router (and every file compile-connected to it)
     # recompile whenever a story is added or removed.
-    PhoenixStorybook.Router.live_storybook("/storybook",
+    PhoenixStorybook.Router.live_storybook("/admin/storybook",
       backend_module: :"Elixir.CoreWeb.Storybook"
     )
   end

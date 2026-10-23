@@ -1,6 +1,6 @@
 defmodule Next.Storybook do
   @moduledoc """
-  Component storybook for Next-owned components, served at `/storybook-next`.
+  Component storybook for Next-owned components, served at `/admin/storybook-next`.
 
   Stories live in `next/storybook`; `mix storybook.gen` writes one for every component that lacks
   it. Access goes through `CoreWeb.StorybookGuard`.

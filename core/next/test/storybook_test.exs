@@ -12,7 +12,7 @@ defmodule Next.StorybookTest do
   test "every story renders", %{conn: conn} do
     for %{path: path} <- Next.Storybook.leaves() do
       try do
-        conn |> get("/storybook-next" <> path) |> html_response(200)
+        conn |> get("/admin/storybook-next" <> path) |> html_response(200)
       rescue
         error -> flunk("story #{path} does not render: #{Exception.message(error)}")
       end
