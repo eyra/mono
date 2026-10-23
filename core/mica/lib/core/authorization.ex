@@ -44,7 +44,6 @@ defmodule Core.Authorization do
   grant_access(Systems.Admin.ConfigPage, [:admin])
   grant_access(Systems.Admin.ImportRewardsPage, [:admin])
   grant_access(Systems.Admin.LoginPage, [:visitor, :member])
-  grant_access(Systems.Admin.TypographyPage, [:admin])
   grant_access(Systems.Advert.ContentPage, [:owner])
   grant_access(Systems.Alliance.CallbackPage, [:owner])
   grant_access(Systems.Assignment.ContentPage, [:owner])

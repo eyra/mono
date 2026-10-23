@@ -40,6 +40,19 @@ defmodule Next.Bundle do
           pipe_through([:browser, :redirect_if_user_is_authenticated])
           live("/user/auth/:provider", Account.AuthProviderPage)
         end
+
+        scope "/" do
+          pipe_through([:browser, CoreWeb.StorybookGuard])
+
+          # The Pixel storybook in CoreWeb.Router defines the shared :storybook_browser pipeline;
+          # the backend is an atom for the same reason as there.
+          PhoenixStorybook.Router.live_storybook("/storybook-next",
+            backend_module: :"Elixir.Next.Storybook",
+            session_name: :next_storybook,
+            as: :next_storybook,
+            pipeline: false
+          )
+        end
       end
     end
   end

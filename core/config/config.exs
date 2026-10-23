@@ -42,7 +42,7 @@ config :esbuild,
   version: "0.17.11",
   default: [
     args:
-      ~w(js/app.js --bundle --target=es2017 --outdir=../priv/static/assets --loader:.worker.min.mjs=file --public-path=/assets --external:/fonts/* --external:/images/*),
+      ~w(js/app.js js/storybook.js --bundle --target=es2017 --outdir=../priv/static/assets --loader:.worker.min.mjs=file --public-path=/assets --external:/fonts/* --external:/images/*),
     cd: Path.expand("../assets", __DIR__),
     env: %{"NODE_PATH" => Path.expand("../deps", __DIR__)}
   ]
@@ -138,7 +138,7 @@ config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false")
 # Feature flag defaults. Override per environment in dev.secret.exs, test.exs,
 # or via ENABLED_APP_FEATURES at runtime. Use safe-by-default (false) for any
 # feature that exposes routes or UI to users until the epic is fully shipped.
-config :core, :features, otp: false, opp_phase_3: false
+config :core, :features, otp: false, opp_phase_3: false, storybook: false
 
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",

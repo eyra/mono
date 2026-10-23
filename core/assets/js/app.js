@@ -8,7 +8,6 @@
 //     import socket from "./socket"
 //
 
-import { PDFViewer } from "./pdf_viewer";
 import "phoenix_html";
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
@@ -16,24 +15,13 @@ import { decode } from "blurhash";
 import { urlBase64ToUint8Array } from "./tools";
 import { registerAPNSDeviceToken } from "./apns";
 import "./100vh-fix";
+import { Hooks } from "./hooks";
 import { Viewport } from "./viewport";
-import { SidePanel } from "./side_panel";
-import { Toggle } from "./toggle";
-import { Cell } from "./cell";
-import { LiveContent, LiveField } from "./live_content";
-import { Tab, TabBar, TabBarFit, TabContent, TabFooterItem } from "./tabbed";
-import { Clipboard } from "./clipboard";
-import { FeldsparApp } from "./feldspar_app";
-import { FeldsparRecovery } from "./feldspar_recovery";
-import { AuthCodeInput } from "./auth_code_input";
+import { LiveContent } from "./live_content";
+import { TabBar } from "./tabbed";
 import { installAuthSessionHandlers } from "./auth_session";
 import { installButtonLoading } from "./button_loading";
-import { Wysiwyg } from "./wysiwyg";
-import { AutoSubmit } from "./auto_submit";
-import { ResetScroll } from "./reset_scroll";
-import { FullscreenImage } from "./fullscreen_image";
-import { Blurhash } from "./blurhash";
-import { UserState, getAllUserState } from "./user_state";
+import { getAllUserState } from "./user_state";
 window.registerAPNSDeviceToken = registerAPNSDeviceToken;
 
 // Force the active state on iOS touch devices by adding a touchstart
@@ -71,31 +59,6 @@ let csrfToken = document
 
 installAuthSessionHandlers({ csrfToken });
 installButtonLoading();
-
-let Hooks = {
-  AuthCodeInput,
-  Cell,
-  Clipboard,
-  FeldsparApp,
-  FeldsparRecovery,
-  LiveContent,
-  LiveField,
-  PDFViewer,
-  SidePanel,
-  Toggle,
-  Tab,
-  TabBar,
-  TabBarFit,
-  TabContent,
-  TabFooterItem,
-  Viewport,
-  Wysiwyg,
-  AutoSubmit,
-  ResetScroll,
-  FullscreenImage,
-  Blurhash,
-  UserState, // Deprecated: Use new user_state architecture (LiveSocket params + event bubbling)
-};
 
 let liveSocket = new LiveSocket("/live", Socket, {
   dom: {

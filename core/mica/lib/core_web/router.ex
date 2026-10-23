@@ -8,6 +8,7 @@ defmodule CoreWeb.Router do
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
   require Frameworks.E2E.Routes
+  require PhoenixStorybook.Router
 
   Core.BundleOverrides.routes()
 
@@ -20,6 +21,20 @@ defmodule CoreWeb.Router do
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
   Frameworks.E2E.Routes.routes()
+
+  scope "/" do
+    PhoenixStorybook.Router.storybook_assets()
+  end
+
+  scope "/" do
+    pipe_through([:browser, CoreWeb.StorybookGuard])
+
+    # An atom, not an alias: an alias makes the router (and every file compile-connected to it)
+    # recompile whenever a story is added or removed.
+    PhoenixStorybook.Router.live_storybook("/storybook",
+      backend_module: :"Elixir.CoreWeb.Storybook"
+    )
+  end
 
   scope "/", CoreWeb do
     pipe_through([:browser_base])
