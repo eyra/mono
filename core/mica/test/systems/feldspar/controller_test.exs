@@ -6,6 +6,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
   alias Systems.Assignment
   alias Systems.Crew
+  alias Systems.Project
   alias Systems.Storage
 
   # ============================================================================
@@ -965,34 +966,6 @@ defmodule Systems.Feldspar.ControllerTest do
   defp create_assignment_with_storage(
          assignment \\ Assignment.Factories.create_assignment(31, 0, :online)
        ) do
-    # Create project node with required name field
-    project_node =
-      Factories.insert!(:project_node, %{
-        name: "test_node",
-        project_path: []
-      })
-
-    # Create storage endpoint using Storage.Public.prepare_endpoint
-    storage_endpoint =
-      Storage.Public.prepare_endpoint(:builtin, %{key: "test_key_#{:erlang.unique_integer()}"})
-      |> Core.Repo.insert!()
-
-    # Create project_item linking assignment to the node
-    Factories.insert!(:project_item, %{
-      name: "assignment_item",
-      project_path: [],
-      node_id: project_node.id,
-      assignment_id: assignment.id
-    })
-
-    # Create project_item linking storage endpoint to the same node
-    Factories.insert!(:project_item, %{
-      name: "storage_item",
-      project_path: [],
-      node_id: project_node.id,
-      storage_endpoint_id: storage_endpoint.id
-    })
-
-    assignment
+    Project.Factories.link_storage_endpoint(assignment)
   end
 end

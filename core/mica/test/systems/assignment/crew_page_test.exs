@@ -1,10 +1,14 @@
 defmodule Systems.Assignment.CrewPageTest do
   use CoreWeb.ConnCase
+  use Oban.Testing, repo: Core.Repo
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
   alias Systems.Assignment
+  alias Systems.Crew
   alias Systems.Manual
+  alias Systems.Project
+  alias Systems.Storage
 
   setup :login_as_member
 
@@ -99,5 +103,156 @@ defmodule Systems.Assignment.CrewPageTest do
 
       assert html =~ "crew_page"
     end
+  end
+
+  describe "participant id in stored data" do
+    setup %{user: user} do
+      study =
+        Assignment.Factories.create_assignment_with_affiliate()
+        |> Ecto.Changeset.change(special: :data_donation)
+        |> Core.Repo.update!()
+        |> Project.Factories.link_storage_endpoint()
+
+      other = Factories.insert!(:member)
+      Assignment.Public.add_participant!(study, other)
+      {:ok, other_id} = Assignment.Public.participant_id(study, other)
+
+      {:ok, study: study, other_id: other_id, user: user}
+    end
+
+    test "stores the consent record under the study's own participant id", %{
+      conn: conn,
+      study: study,
+      other_id: other_id,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
+
+      view = open_crew_page(conn, study, to_string(other_id))
+      send_event(view, :accept, %{})
+
+      assert delivered_participant() == own_id
+    end
+
+    test "stores task data under the study's own participant id", %{
+      conn: conn,
+      study: study,
+      other_id: other_id,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
+
+      view = open_crew_page(conn, study, to_string(other_id))
+      send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
+
+      assert delivered_participant() == own_id
+    end
+
+    test "delivers a file under the study's own participant id", %{
+      conn: conn,
+      study: study,
+      other_id: other_id,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
+
+      view = open_crew_page(conn, study, to_string(other_id))
+      send_event(view, :deliver_blob, %{task: "1", key: "k", group: "g", blob_id: "blob"})
+
+      assert delivered_participant() == own_id
+    end
+
+    test "stores task data without the session's panel info", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+
+      view = open_crew_page(conn, study, "ext_a")
+      send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
+
+      [%{args: %{"meta_data" => meta_data}}] = all_enqueued(worker: Storage.Delivery)
+      refute Map.has_key?(meta_data, "panel_info")
+    end
+
+    test "delivers a file without the session's panel info", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+
+      view = open_crew_page(conn, study, "ext_a")
+      send_event(view, :deliver_blob, %{task: "1", key: "k", group: "g", blob_id: "blob"})
+
+      [%{args: %{"meta_data" => meta_data}}] = all_enqueued(worker: Storage.Delivery)
+      refute Map.has_key?(meta_data, "panel_info")
+    end
+
+    test "stores a panel participant's data under their identifier at the study's affiliate", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      Assignment.Factories.add_affiliate_user(study, user, "ext_b")
+
+      view = open_crew_page(conn, study, "ext_b")
+      send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
+
+      assert delivered_participant() == "ext_b"
+    end
+
+    test "stores a tester's preview as preview", %{conn: conn, study: study, user: user} do
+      Crew.Public.apply_member_with_role(study.crew, user, :tester)
+
+      view = open_crew_page(conn, study, "preview")
+      send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
+
+      assert delivered_participant() == "preview"
+    end
+
+    test "stores a participant's data under their own id in preview mode", %{
+      conn: conn,
+      study: study,
+      user: user
+    } do
+      Assignment.Public.add_participant!(study, user)
+      {:ok, own_id} = Assignment.Public.participant_id(study, user)
+
+      view = open_crew_page(conn, study, "preview")
+      send_event(view, :store, %{task: "1", key: "k", group: "g", data: "{}"})
+
+      assert delivered_participant() == own_id
+    end
+  end
+
+  defp open_crew_page(conn, assignment, panel_participant) do
+    panel_info = %{panel: :affiliate, redirect_url: nil, participant: panel_participant}
+
+    {:ok, view, _html} =
+      conn |> put_session(:panel_info, panel_info) |> live(~p"/assignment/#{assignment.id}")
+
+    view
+  end
+
+  defp send_event(view, name, payload) do
+    send(view.pid, {:live_nest_event, %LiveNest.Event{name: name, payload: payload}})
+    # Wait until the page has handled the event
+    render(view)
+  end
+
+  defp delivered_participant do
+    [%{args: %{"meta_data" => %{"identifier" => identifier}}}] =
+      all_enqueued(worker: Storage.Delivery)
+
+    Enum.find_value(identifier, fn
+      ["participant", participant] -> participant
+      _ -> nil
+    end)
   end
 end
