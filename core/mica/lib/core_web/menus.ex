@@ -12,7 +12,9 @@ defmodule CoreWeb.Menus do
     menu_builder_module(menu_builder).build_menu(menu_item, active_menu_item, user, uri)
   end
 
-  def menu_builder_module(menu_builder) do
-    Core.Env.fetch!(menu_builder)
-  end
+  def menu_builder_module(:workspace_menu_builder),
+    do: Core.SaaS.module().menu_builder(:workspace)
+
+  def menu_builder_module(:website_menu_builder), do: Core.SaaS.module().menu_builder(:website)
+  def menu_builder_module(:stripped_menu_builder), do: Core.SaaS.module().menu_builder(:stripped)
 end
