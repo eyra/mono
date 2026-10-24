@@ -19,7 +19,6 @@
   {"access/systems/admin/config_page", [:admin]},
   {"access/systems/admin/import_rewards_page", [:admin]},
   {"access/systems/admin/login_page", [:member, :visitor]},
-  {"access/systems/admin/typography_page", [:admin]},
   {"access/systems/advert/content_page", [:owner]},
   {"access/systems/advert/model", [:member, :visitor]},
   {"access/systems/alliance/callback_page", [:owner]},

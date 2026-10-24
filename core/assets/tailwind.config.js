@@ -6,6 +6,7 @@ module.exports = {
     "../**/*.html.eex",
     "../**/*.html.leex",
     "../**/*.ex",
+    "../**/*.story.exs",
     "./js/**/*.js",
   ],
   safelist: [

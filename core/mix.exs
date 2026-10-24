@@ -26,6 +26,8 @@ defmodule Core.MixProject do
       aliases: aliases(),
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
+      # The storybook reads component docs from the Docs chunks.
+      releases: [core: [strip_beams: [keep: ["Docs"]]]],
       # The main page in the docs
       docs: [
         main: "readme",
@@ -117,7 +119,8 @@ defmodule Core.MixProject do
       {:phoenix_html, "4.3.0"},
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
-      {:phoenix_live_view, "1.1.13"},
+      {:phoenix_live_view, "1.1.33"},
+      {:phoenix_storybook, "1.5.0"},
       {:phoenix_view, "2.0.4"},
       {:phoenix, "1.8.1"},
       {:plug_cowboy, "2.7.4"},
@@ -208,6 +211,15 @@ defmodule Core.MixProject do
         "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
+      ],
+      # One story per function component; the check fails CI when one is missing.
+      "storybook.stories": [
+        "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel",
+        "storybook.gen next next/storybook --prefix Systems"
+      ],
+      "storybook.check": [
+        "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel --check",
+        "storybook.gen next next/storybook --prefix Systems --check"
       ],
       run: "phx.server",
       github_release: "cmd ./scripts/github-release",

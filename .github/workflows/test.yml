@@ -124,6 +124,10 @@ jobs:
       - name: Boundary check (Nova migration)
         run: cd core && elixir scripts/boundary_check.exs
 
+      # Every function component has a story (`mix storybook.stories` writes missing ones).
+      - name: Storybook stories
+        run: cd core && mix storybook.check
+
       # Routes, grants, handlers, SaaS config and counts of the Next build.
       - name: Nova snapshots (Next)
         run: cd core && mix nova.snapshot

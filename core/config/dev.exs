@@ -57,6 +57,7 @@ config :core, :features,
   panl_post_launch: true,
   password_sign_in: true,
   probe: true,
+  storybook: true,
   surfconext_sign_in: true
 
 # Only in tests, remove the complexity from the password hashing algorithm
@@ -101,7 +102,8 @@ config :core, CoreWeb.Endpoint,
       ~r"systems/*/templates/.*(eex)$",
       ~r"frameworks/*/.*(ex)$",
       ~r"frameworks/*/templates/.*(eex)$",
-      ~r"(next|mica_saas)/bundle/.*(ex)$"
+      ~r"(next|mica_saas)/bundle/.*(ex)$",
+      ~r"(mica|next)/storybook/.*(exs)$"
     ]
   ],
   watchers: [

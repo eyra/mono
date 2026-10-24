@@ -174,9 +174,10 @@ defmodule Core.RuntimeConfigTest do
       assert RuntimeConfig.features(env, :staging) == [debug: true, e2e: true]
     end
 
-    test "never enables :e2e on prod" do
-      env = %{"ENABLED_APP_FEATURES" => "debug, e2e"}
+    test "never enables :e2e or :storybook on prod" do
+      env = %{"ENABLED_APP_FEATURES" => "debug, e2e, storybook"}
       assert RuntimeConfig.features(env, :prod) == [debug: true]
+      assert RuntimeConfig.features(env, :staging) == [debug: true, e2e: true, storybook: true]
     end
 
     test "keeps empty items, as the parser always did" do
