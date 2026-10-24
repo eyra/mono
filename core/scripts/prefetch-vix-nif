@@ -1,0 +1,40 @@
+#!/bin/bash
+# Downloads vix's precompiled NIF into elixir_make's cache with curl, so that
+# compiling vix finds it there instead of downloading it with :httpc.
+#
+# GitHub's release-download redirects send more response headers than the
+# 10240 bytes :httpc accepts, so elixir_make's own download fails with
+# {:header_too_long, {:max, 10240}} (https://github.com/akash-akya/vix/issues/224).
+# elixir_make still verifies the cached file against vix's checksums.
+
+set -euo pipefail
+
+if [ "$(uname -s)" != "Linux" ]; then
+    exit 0
+fi
+
+cd "$(dirname "$0")/.."
+
+version=$(sed -n 's/^  "vix": {:hex, :vix, "\([^"]*\)".*/\1/p' mix.lock)
+if [ -z "${version}" ]; then
+    echo "prefetch-vix-nif: vix not found in mix.lock"
+    exit 1
+fi
+
+nif_version=$(erl -noshell -eval 'io:put_chars(erlang:system_info(nif_version)), halt().')
+cache_dir=${ELIXIR_MAKE_CACHE_DIR:-$(erl -noshell -eval 'io:put_chars(filename:basedir(user_cache, "elixir_make")), halt().')}
+file="vix-nif-${nif_version}-$(uname -m)-linux-gnu-${version}.tar.gz"
+
+if [ -f "${cache_dir}/${file}" ]; then
+    exit 0
+fi
+
+mkdir -p "${cache_dir}"
+if curl -fsSL --retry 3 -o "${cache_dir}/${file}.tmp" \
+    "https://github.com/akash-akya/vix/releases/download/v${version}/${file}"; then
+    mv "${cache_dir}/${file}.tmp" "${cache_dir}/${file}"
+    echo "prefetch-vix-nif: cached ${file}"
+else
+    rm -f "${cache_dir}/${file}.tmp"
+    echo "prefetch-vix-nif: could not download ${file}; elixir_make will try itself"
+fi
