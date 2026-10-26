@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - master
+  # Build-only check for changes to the docs pipeline; publishing stays on master.
+  pull_request:
+    paths:
+      - .github/workflows/docs.yml
+      - Makefile
 
 jobs:
   docs:
@@ -26,6 +31,7 @@ jobs:
         run: make docs
 
       - name: Publish documentation
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
