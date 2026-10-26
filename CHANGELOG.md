@@ -9,6 +9,11 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## \#32.1 2026-10-23
+
+* Fixed - Data donation: a donation is only accepted for the signed-in user's own participation in that study, and the donation context keys stay strings
+* Fixed - Study page: consent, task data and files are stored under the participant id this study uses
+
 ## \#32 2026-10-22
 
 * Changed - Signed-out visitors who open a study invitation land on the participant sign-in page, and a wrong or expired code keeps them on that path back to the study (behind `:otp`)

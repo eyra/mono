@@ -160,9 +160,11 @@ Artillery-based load tests for the data donation API are located in `core/test/l
    - Set a strong password
    - The service user authenticates via `/api/service/login`
 
-2. **Ensure assignment has storage endpoint**: The target assignment must have a storage endpoint configured for data donations.
+2. **Add the service user to the study's crew**: the donate endpoint only accepts donations from a participant or tester of the assignment, otherwise it returns 403. Add the service user as a tester (`Systems.Crew.Public.apply_member_with_role(crew, user, :tester)`, see `core/test/load/README.md`).
 
-3. **Setup load test environment**:
+3. **Ensure assignment has storage endpoint**: The target assignment must have a storage endpoint configured for data donations.
+
+4. **Setup load test environment**:
 ```bash
 cd core/test/load
 npm run setup  # Installs deps and auto-generates test data files (1MB, 10MB, 100MB, 200MB)
@@ -217,6 +219,7 @@ Use the verification script to count files on Fly machines before/after:
 | Issue | Cause | Fix |
 |-------|-------|-----|
 | 401 Unauthorized | Invalid service credentials | Verify service user exists and password is correct |
+| 403 Forbidden | Service user is not in the study's crew | Add it as a tester (see Prerequisites) |
 | 413 Payload Too Large | File exceeds Phoenix limit | Use FILE_SIZE_MB=100 or less, check `STORAGE_UPLOAD_MAX_SIZE` |
 | Timeout errors | Slow network/processing | Increase timeout in `donate.yml` (default 300s) |
 | Files not appearing | Wrong assignment ID | Verify ASSIGNMENT_ID has storage endpoint configured |

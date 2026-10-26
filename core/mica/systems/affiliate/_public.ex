@@ -147,6 +147,18 @@ defmodule Systems.Affiliate.Public do
     end
   end
 
+  @doc """
+  The identifier the affiliate knows the user by, or nil.
+  """
+  def get_identifier(%Affiliate.Model{id: affiliate_id}, %Account.User{id: user_id}) do
+    from(au in Affiliate.User,
+      where: au.affiliate_id == ^affiliate_id and au.user_id == ^user_id,
+      select: au.identifier,
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def get_user(_affiliate, _identifier, preload \\ [])
 
   def get_user(_, nil, _preload), do: nil

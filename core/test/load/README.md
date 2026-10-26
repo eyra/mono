@@ -72,6 +72,18 @@ fly ssh console -a <app> -C '/opt/app/bin/core rpc "
 
 The `@eyra.service` domain is required for service login. The `LOAD_SERVICE_KEY` must match the server's `SERVICE_LOGIN_KEY` secret.
 
+The donate endpoint only accepts donations from a member of the study's crew, so add the service user to the crew of the assignment you test against (`ASSIGNMENT_ID`). As a tester it reserves no reward:
+
+```bash
+fly ssh console -a <app> -C '/opt/app/bin/core rpc "
+  user = Systems.Account.Public.get_user_by_email(\"loadtest@eyra.service\")
+  %{crew: crew} = Systems.Assignment.Public.get!(<ASSIGNMENT_ID>, [:crew])
+  Systems.Crew.Public.apply_member_with_role(crew, user, :tester)
+"'
+```
+
+Without this, every donation gets `403 Not a participant of this assignment`.
+
 ## Test Configurations
 
 ### Donate Tests
