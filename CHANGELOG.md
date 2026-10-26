@@ -9,8 +9,9 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
-## Unreleased
+## \#33 2026-10-28
 
+* Fixed - Building the Fly image no longer fails to download vix's precompiled NIF and the tailwind binary from GitHub, whose release redirects can exceed the response-header limit of recent OTP 27 patch releases.
 * Fixed - Feldspar app uploads on the local filesystem (no S3) refuse a zip with an entry that resolves outside the app's own folder, such as `../other/file`, or whose entry names differ between the zip's index and its file headers, instead of extracting it. The upload form then shows "The selected file is not a valid app zip", also for a file that isn't a zip or a zip that can't be extracted, instead of failing without a message. Upgrading: no action needed.
 * Changed - `RATE_QUOTAS` now only replaces the default rate limits of the services it lists; every other service keeps its default from `config/config.exs` (before, it replaced all defaults, and services it left out had no limit). A release without `RATE_QUOTAS` (such as the Fly deployments and Self) had no rate limits at all; it now gets every default: sign-up, recruitment links, storage export, email sign-in code requests (3 per minute per email address) and provider reconciliation. A release with `RATE_QUOTAS` now also keeps the defaults of the services it doesn't list, such as the email sign-in code limit. The defaults for storage exports, sign-ups and recruitment links match the production values. The Feldspar donate and log API has no default limit, as before. Upgrading: no action needed; an installation that relied on a service being unlimited sets a higher limit for it in `RATE_QUOTAS`.
 * Fixed - A study's preview link (`/a/<id>?p=preview`) only opens the study for people who can edit it. Anyone else sees the "not available" page, also while the study is online; `preview` is no longer accepted as a participant id.
