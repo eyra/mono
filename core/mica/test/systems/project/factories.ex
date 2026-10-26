@@ -4,6 +4,35 @@ defmodule Systems.Project.Factories do
   alias Systems.Alliance
   alias Systems.Assignment
   alias Systems.Graphite
+  alias Systems.Storage
+
+  @doc """
+  Puts the assignment in a project node next to a new builtin storage endpoint, so
+  data donated to the assignment has somewhere to go.
+  """
+  def link_storage_endpoint(%Assignment.Model{id: assignment_id} = assignment) do
+    project_node = Factories.insert!(:project_node, %{name: "test_node", project_path: []})
+
+    storage_endpoint =
+      Storage.Public.prepare_endpoint(:builtin, %{key: "test_key_#{:erlang.unique_integer()}"})
+      |> Core.Repo.insert!()
+
+    Factories.insert!(:project_item, %{
+      name: "assignment_item",
+      project_path: [],
+      node_id: project_node.id,
+      assignment_id: assignment_id
+    })
+
+    Factories.insert!(:project_item, %{
+      name: "storage_item",
+      project_path: [],
+      node_id: project_node.id,
+      storage_endpoint_id: storage_endpoint.id
+    })
+
+    assignment
+  end
 
   def build_project() do
     Factories.build(:project, %{name: "project"})

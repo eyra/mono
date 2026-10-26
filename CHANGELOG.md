@@ -21,6 +21,11 @@
 * Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` commands that move them to `STORAGE_PATH`. Installations on S3 storage are not affected.
 * Security - Built-in storage on S3 (`STORAGE_S3_PREFIX` set) must keep donations in a private bucket, separate from the public bucket for content and Feldspar apps. Objects in `PUBLIC_S3_BUCKET` are readable by anyone who knows their URL, and the old setup docs used one bucket for both. Upgrading: the app refuses to start when `AWS_S3_BUCKET` equals `PUBLIC_S3_BUCKET`. Create a separate private bucket, move the existing `storage/` objects (the `STORAGE_S3_PREFIX` folder) there, and set `AWS_S3_BUCKET` to it; the app's access key needs read and write access to both buckets. Installations on the local filesystem are not affected.
 
+## \#32.1 2026-10-23
+
+* Fixed - Data donation: a donation is only accepted for the signed-in user's own participation in that study, and the donation context keys stay strings
+* Fixed - Study page: consent, task data and files are stored under the participant id this study uses
+
 ## \#32 2026-10-22
 
 * Changed - Signed-out visitors who open a study invitation land on the participant sign-in page, and a wrong or expired code keeps them on that path back to the study (behind `:otp`)
