@@ -107,9 +107,11 @@ defmodule Core.RuntimeConfig do
     end
   end
 
+  @never_on_prod [:e2e, :storybook]
+
   @doc """
-  Feature flags from `ENABLED_APP_FEATURES`. `:e2e` gates test-only endpoints
-  and is never enabled when `deploy_env` is `:prod`.
+  Feature flags from `ENABLED_APP_FEATURES`. `:e2e` gates test-only endpoints and
+  `:storybook` the component catalog; neither is ever enabled when `deploy_env` is `:prod`.
 
   The list can only switch flags on; a flag is off only through config. Parsing
   is kept exactly as before, empty items included (they become the flag `:""`).
@@ -119,7 +121,7 @@ defmodule Core.RuntimeConfig do
     |> Map.get("ENABLED_APP_FEATURES", "")
     |> String.split(~r"\s*,\s*")
     |> Enum.map(&String.to_atom/1)
-    |> Enum.reject(&(&1 == :e2e and deploy_env == :prod))
+    |> Enum.reject(&(&1 in @never_on_prod and deploy_env == :prod))
     |> Enum.map(&{&1, true})
   end
 

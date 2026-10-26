@@ -12,5 +12,6 @@
   panl_post_launch: false,
   password_sign_in: true,
   probe: false,
+  storybook: false,
   surfconext_sign_in: false
 ]

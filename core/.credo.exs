@@ -128,9 +128,10 @@
         {Credo.Check.Consistency.MultiAliasImportRequireUse, false},
         {Credo.Check.Consistency.UnusedVariableNames, false},
         # Self copies Next's OTP sign-in screens on purpose; whether they move into Mica is
-        # decided in Nova migration step code-brand.
+        # decided in Nova migration step code-brand. Storybook stories are fixture files; their
+        # small per-story helpers stay local on purpose.
         {Credo.Check.Design.DuplicatedCode,
-         [files: %{excluded: [~r"/mica_saas/bundle/lib/account/auth_"]}]},
+         [files: %{excluded: [~r"/mica_saas/bundle/lib/account/auth_", ~r"/storybook/"]}]},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.BlockPipe, false},
         {Credo.Check.Readability.ImplTrue, false},

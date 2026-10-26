@@ -23,9 +23,10 @@ install_hooks:
 .PHONY: prepare
 prepare: test format compile credo
 
+# MIX_ENV=test, as in CI: only that build compiles the storybook stories into modules.
 .PHONY: dialyzer
 dialyzer: FORCE
-	cd core && mix dialyzer --force-check --format short
+	cd core && MIX_ENV=test mix dialyzer --force-check --format short
 
 .PHONY: test
 test: test/core

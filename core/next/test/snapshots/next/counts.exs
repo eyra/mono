@@ -12,6 +12,7 @@
     "mica/lib/core_web/live/hook/locale.ex",
     "mica/lib/core_web/live/hook/remote_ip.ex",
     "mica/lib/core_web/resource_exists_plug.ex",
+    "mica/lib/core_web/storybook_guard.ex",
     "mica/lib/core_web/validator/plug.ex",
     "mica/systems/account/_plug.ex",
     "mica/systems/account/auth/centerdata.ex",
