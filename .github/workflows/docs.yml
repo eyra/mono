@@ -22,6 +22,10 @@ jobs:
       - name: Setup the Elixir project
         run: make deps
 
+      # elixir_make's :httpc download can fail on GitHub's redirects; see the script.
+      - name: Prefetch precompiled NIFs
+        run: core/scripts/prefetch-nifs
+
       - name: Generate the docs
         run: make docs
 

@@ -1,0 +1,68 @@
+#!/bin/bash
+# Downloads the precompiled NIFs of vix and lazy_html into elixir_make's cache
+# with curl, so that compiling them finds them there instead of downloading
+# them with :httpc.
+#
+# GitHub's release-download redirects can send more response headers than the
+# 10240 bytes :httpc accepts on OTP 27 (they did from 24 October 2026), and
+# elixir_make's own download then fails with {:header_too_long, {:max, 10240}}
+# (https://github.com/akash-akya/vix/issues/224).
+# elixir_make still verifies the cached files against the packages' checksums.
+#
+# Run it after `mix deps.get`: the file names come from each package's
+# checksum.exs. Like elixir_make, it takes the closest NIF version a package
+# publishes that is not newer than the runtime's.
+
+set -euo pipefail
+
+if [ "$(uname -s)" != "Linux" ]; then
+    exit 0
+fi
+
+cd "$(dirname "$0")/.."
+
+nif_version=$(erl -noshell -eval 'io:put_chars(erlang:system_info(nif_version)), halt().')
+cache_dir=${ELIXIR_MAKE_CACHE_DIR:-$(erl -noshell -eval 'io:put_chars(filename:basedir(user_cache, "elixir_make")), halt().')}
+target="$(uname -m)-linux-gnu"
+
+prefetch() {
+    local app=$1 repo=$2
+    local checksums="deps/${app}/checksum.exs"
+
+    if [ ! -f "${checksums}" ]; then
+        echo "prefetch-nifs: ${checksums} not found; run mix deps.get first"
+        exit 1
+    fi
+
+    local file
+    file=$(grep -o "${app}-nif-[0-9]*\.[0-9]*-${target}-[^\"]*\.tar\.gz" "${checksums}" |
+        sed -n "s/^${app}-nif-\([0-9]*\)\.\([0-9]*\)-.*/\1 \2 &/p" |
+        awk -v major="${nif_version%%.*}" -v minor="${nif_version#*.}" \
+            '$1 == major && $2 <= minor' |
+        sort -n -k2 | tail -n 1 | cut -d' ' -f3)
+
+    if [ -z "${file}" ]; then
+        echo "prefetch-nifs: ${app} publishes no NIF for ${target} and NIF ${nif_version}"
+        return
+    fi
+
+    if [ -f "${cache_dir}/${file}" ]; then
+        return
+    fi
+
+    local version=${file#"${app}-nif-"*"-${target}-"}
+    version=${version%.tar.gz}
+
+    mkdir -p "${cache_dir}"
+    if curl -fsSL --retry 3 -o "${cache_dir}/${file}.tmp" \
+        "https://github.com/${repo}/releases/download/v${version}/${file}"; then
+        mv "${cache_dir}/${file}.tmp" "${cache_dir}/${file}"
+        echo "prefetch-nifs: cached ${file}"
+    else
+        rm -f "${cache_dir}/${file}.tmp"
+        echo "prefetch-nifs: could not download ${file}; elixir_make will try itself"
+    fi
+}
+
+prefetch vix akash-akya/vix
+prefetch lazy_html dashbitco/lazy_html
