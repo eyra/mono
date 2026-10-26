@@ -35,7 +35,7 @@ prefetch() {
     fi
 
     local file
-    file=$(grep -o "${app}-nif-[0-9]*\.[0-9]*-${target}-[^\"]*\.tar\.gz" "${checksums}" |
+    file=$({ grep -o "${app}-nif-[0-9]*\.[0-9]*-${target}-[^\"]*\.tar\.gz" "${checksums}" || true; } |
         sed -n "s/^${app}-nif-\([0-9]*\)\.\([0-9]*\)-.*/\1 \2 &/p" |
         awk -v major="${nif_version%%.*}" -v minor="${nif_version#*.}" \
             '$1 == major && $2 <= minor' |
