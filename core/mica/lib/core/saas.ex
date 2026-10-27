@@ -87,12 +87,14 @@ defmodule Core.SaaS do
 
   @doc false
   def collect_notify_channels(systems) do
-    for system <- systems, reduce: %{} do
+    for system <- systems, {name, channel} <- system.notify_channels(), reduce: %{} do
       channels ->
-        Map.merge(channels, system.notify_channels(), fn name, _, _ ->
+        if Map.has_key?(channels, name) do
           raise ArgumentError,
                 "notify channel #{inspect(name)} is declared by more than one system"
-        end)
+        end
+
+        Map.put(channels, name, channel)
     end
   end
 
