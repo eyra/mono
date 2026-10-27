@@ -17,12 +17,12 @@ msgstr "Screening cognitiv"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Urmează să începeți un test. Urmați instrucțiunile de pe ecran. Pagina poate dura câteva momente pentru a se încărca — vă mulțumim pentru răbdare."
+msgstr "Urmează să începeți o sarcină. Urmați instrucțiunile de pe ecran. Pagina poate dura câteva momente pentru a se încărca — vă mulțumim pentru răbdare."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Încărcați fișierul zip al unui instrument Probe. Participanții susțin testul în browser."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Încărcați fișierul zip al unui instrument cognitiv. Participanții efectuează sarcina în browser."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Test cognitiv"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Sarcină cognitivă"

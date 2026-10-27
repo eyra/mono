@@ -1,9 +1,9 @@
 defmodule Systems.Probe.AssignmentTemplate do
   @moduledoc """
-  Assignment template for Probe tools: zip apps that run like Feldspar apps but
-  are tests, not data donations. Consent, storage of results and completion are
-  those of the Feldspar tool, as in the Data donation template; only the texts
-  differ. Behind the `:probe` feature flag.
+  Assignment template for cognitive tools: zip apps that run like Feldspar apps
+  but are cognitive tasks, not data donations. Consent, storage of results and
+  completion are those of the Feldspar tool, as in the Data donation template;
+  only the texts differ. Behind the `:probe` feature flag.
   """
   @behaviour Systems.Assignment.TemplateExtension
 
@@ -19,7 +19,7 @@ defmodule Systems.Probe.AssignmentTemplate do
   def enabled?, do: feature_enabled?(:probe)
 
   @impl true
-  def tool_description(:probe), do: dgettext("eyra-probe", "tool.description")
+  def tool_description(:cognitive_tool), do: dgettext("eyra-probe", "tool.description")
   def tool_description(_special), do: nil
 
   defimpl Systems.Assignment.Template do
@@ -77,10 +77,10 @@ defmodule Systems.Probe.AssignmentTemplate do
         library: %Builder.LibraryModel{
           items: [
             %Builder.LibraryItemModel{
-              id: :probe,
+              id: :cognitive_tool,
               type: :feldspar_tool,
-              title: dgettext("eyra-probe", "workflow_item.probe.title"),
-              description: dgettext("eyra-probe", "workflow_item.probe.description")
+              title: dgettext("eyra-probe", "workflow_item.cognitive_tool.title"),
+              description: dgettext("eyra-probe", "workflow_item.cognitive_tool.description")
             },
             %Builder.LibraryItemModel{
               id: :manual,

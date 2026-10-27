@@ -13,10 +13,10 @@ defmodule Systems.Probe.ToolViewTest do
     %{user: Factories.insert!(:member)}
   end
 
-  test "a Probe task's start screen presents a test", %{conn: conn, user: user} do
-    html = render_start_screen(conn, user, :probe)
+  test "a cognitive task's start screen presents a task", %{conn: conn, user: user} do
+    html = render_start_screen(conn, user, :cognitive_tool)
 
-    assert html =~ "You are about to start a test."
+    assert html =~ "You are about to start a task."
     refute html =~ "donate your data"
   end
 

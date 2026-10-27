@@ -17,12 +17,12 @@ msgstr "Cribado cognitivo"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Vas a empezar una prueba. Sigue las instrucciones en pantalla. La página puede tardar un poco en cargar — gracias por esperar."
+msgstr "Vas a empezar una tarea. Sigue las instrucciones en pantalla. La página puede tardar un poco en cargar — gracias por esperar."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Sube el archivo zip de una herramienta Probe. Los participantes hacen la prueba en su navegador."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Sube el archivo zip de una herramienta cognitiva. Los participantes realizan la tarea en su navegador."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Prueba cognitiva"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Tarea cognitiva"

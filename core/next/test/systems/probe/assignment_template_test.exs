@@ -32,12 +32,12 @@ defmodule Systems.Probe.AssignmentTemplateTest do
   end
 
   describe "workflow library" do
-    test "offers the Probe task as a Feldspar zip tool" do
+    test "offers the cognitive task as a Feldspar zip tool" do
       %{library: %{items: items}} =
         Assignment.Template.workflow_config(Assignment.Private.get_template(:probe))
 
-      assert %Builder.LibraryItemModel{type: :feldspar_tool, title: "Cognitive test"} =
-               Enum.find(items, &(&1.id == :probe))
+      assert %Builder.LibraryItemModel{type: :feldspar_tool, title: "Cognitive task"} =
+               Enum.find(items, &(&1.id == :cognitive_tool))
 
       refute Enum.any?(items, &(&1.id == :donate))
     end
@@ -62,11 +62,31 @@ defmodule Systems.Probe.AssignmentTemplateTest do
   end
 
   describe "start screen text" do
-    test "presents the Probe task as a test, not a data donation" do
-      description = Probe.AssignmentTemplate.tool_description(:probe)
+    test "presents the cognitive task as a task, not a data donation" do
+      description = Probe.AssignmentTemplate.tool_description(:cognitive_tool)
 
-      assert description =~ "start a test"
+      assert description =~ "start a task"
       refute description =~ "donat"
+    end
+
+    test "names the task without the word test in English and Dutch" do
+      for {locale, title} <- [{"en", "Cognitive task"}, {"nl", "Cognitieve taak"}] do
+        Gettext.with_locale(CoreWeb.Gettext, locale, fn ->
+          %{library: %{items: items}} =
+            Assignment.Template.workflow_config(Assignment.Private.get_template(:probe))
+
+          item = Enum.find(items, &(&1.id == :cognitive_tool))
+
+          texts = [
+            item.title,
+            item.description,
+            Probe.AssignmentTemplate.tool_description(:cognitive_tool)
+          ]
+
+          assert item.title == title
+          refute Enum.any?(texts, &(&1 =~ ~r/test|toets/i))
+        end)
+      end
     end
 
     test "leaves other tasks to their default text" do
