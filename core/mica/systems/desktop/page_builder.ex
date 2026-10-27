@@ -21,7 +21,8 @@ defmodule Systems.Desktop.PageBuilder do
       title: dgettext("eyra-desktop", "title"),
       active_menu_item: :desktop,
       content_items: content_items,
-      next_best_action: next_best_action
+      next_best_action: next_best_action,
+      sections: sections(user, assigns)
     }
   end
 
@@ -32,5 +33,18 @@ defmodule Systems.Desktop.PageBuilder do
     |> Enum.reject(&(&1.name == "Data"))
     |> Enum.sort_by(& &1.updated_at, {:desc, NaiveDateTime})
     |> Enum.take(@recent_items_limit)
+  end
+
+  defp sections(user, assigns) do
+    for section <- section_modules(), vm = section.view_model(user, assigns), vm != nil do
+      %{id: section.id(), title: section.title(), module: section, vm: vm}
+    end
+  end
+
+  # The SaaS's sections, unless a test overrides them with
+  # `config :core, Systems.Desktop, sections: [...]`.
+  defp section_modules do
+    Core.Env.get(Systems.Desktop, [])
+    |> Keyword.get_lazy(:sections, &Core.SaaS.desktop_sections/0)
   end
 end

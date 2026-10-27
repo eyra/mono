@@ -79,6 +79,9 @@ defmodule Core.SaaS do
   @doc "The account tabs of all systems, in `systems/0` order."
   def account_tabs, do: Enum.flat_map(systems(), & &1.account_tabs())
 
+  @doc "The Desktop sections of all systems, in `systems/0` order. Raises when two sections have the same id."
+  def desktop_sections, do: collect_desktop_sections(systems())
+
   @doc "The children of all systems, in `systems/0` order."
   def children, do: Enum.flat_map(systems(), & &1.children())
 
@@ -87,6 +90,19 @@ defmodule Core.SaaS do
 
   @doc "The default rate quotas of all systems, in `systems/0` order."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
+
+  @doc false
+  def collect_desktop_sections(systems) do
+    for system <- systems, section <- system.desktop_sections(), reduce: [] do
+      sections ->
+        if Enum.any?(sections, &(&1.id() == section.id())) do
+          raise ArgumentError,
+                "Desktop section id #{inspect(section.id())} is declared by more than one section"
+        end
+
+        sections ++ [section]
+    end
+  end
 
   @doc false
   def collect_oban_queues(systems) do

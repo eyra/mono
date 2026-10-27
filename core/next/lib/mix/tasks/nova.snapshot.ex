@@ -194,7 +194,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       Enum.map([:account, :pixel], &{&1, Keyword.get(prod, &1)}) ++
       [
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
-        admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids()
+        admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids(),
+        desktop_sections: Enum.map(Core.SaaS.desktop_sections(), & &1.id())
       ]
   end
 
