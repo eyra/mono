@@ -38,21 +38,24 @@ defmodule Core.Application do
       {Cluster.Supervisor, [topologies, [name: MyApp.ClusterSupervisor]]},
       Core.Repo,
       CoreWeb.Telemetry,
-      {Phoenix.PubSub, name: Core.PubSub},
-      {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
-      {Oban, oban_config(Core.Env.fetch!(Oban))},
-      CoreWeb.Endpoint,
-      {Rate.Server, rate_config(Core.Env.fetch!(:rate))}
-    ]
+      {Phoenix.PubSub, name: Core.PubSub}
+    ] ++
+      Core.SaaS.children() ++
+      [
+        {Oban, oban_config(Core.Env.fetch!(Oban))},
+        CoreWeb.Endpoint,
+        {Rate.Server, rate_config(Core.Env.fetch!(:rate))}
+      ]
   end
 
   @doc false
-  # The Oban config started from `config :core, Oban`. Public for `mix nova.snapshot`.
-  def oban_config(config), do: config
+  # `config :core, Oban` with Mica's and the systems' queues. Public for `mix nova.snapshot`.
+  def oban_config(config), do: Core.ObanConfig.config(config, Core.SaaS.oban_queues())
 
   @doc false
-  # The rate server config started from `config :core, :rate`. Public for `mix nova.snapshot`.
-  def rate_config(config), do: config
+  # `config :core, :rate`, with the systems' quotas unless it sets `quotas:` itself
+  # (tests do). Public for `mix nova.snapshot`.
+  def rate_config(config), do: Keyword.put_new_lazy(config, :quotas, &Core.SaaS.rate_quotas/0)
 
   defp dist_hosts do
     Core.Env.get(:dist_hosts, [])

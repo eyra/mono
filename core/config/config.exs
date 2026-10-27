@@ -117,32 +117,19 @@ config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
 
-config :core, Oban,
-  repo: Core.Repo,
-  queues: false
+# Queues: Mica's and the systems' (Core.ObanConfig); a queue listed under
+# `queues:` keeps the limit set here, and `queues: false` turns them all off.
+config :core, Oban, repo: Core.Repo
 
 config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 
-# Default quotas. `quota_overrides` (RATE_QUOTAS in releases) replaces the
-# quotas of the services it lists; the other services keep these. A service
-# without any quota is not limited. The Feldspar donate and log API has none:
-# its requests come through the proxy, so a per-IP limit would cover every
-# participant on a node.
-config :core, :rate,
-  prune_interval: 60 * 60 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
-    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 6, unit: :call, window: :minute, scope: :local],
-    [service: :storage_export, limit: 25, unit: :call, window: :minute, scope: :global],
-    [service: :storage_export, limit: 21_474_836_480, unit: :byte, window: :day, scope: :local],
-    [service: :storage_export, limit: 107_374_182_400, unit: :byte, window: :day, scope: :global],
-    [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local],
-    [service: :provider_reconcile, limit: 300, unit: :call, window: :minute, scope: :global]
-  ]
+# Default quotas come from the systems (rate_quotas/0). `quota_overrides`
+# (RATE_QUOTAS in releases) replaces the quotas of the services it lists; the
+# other services keep their defaults. Setting `quotas:` here replaces all
+# defaults. A service without any quota is not limited. The Feldspar donate and
+# log API has none: its requests come through the proxy, so a per-IP limit
+# would cover every participant on a node.
+config :core, :rate, prune_interval: 60 * 60 * 1000
 
 # Reconciliation sweep: base back-off (ms) for provider retries/throttle waits.
 config :core, :reconciliation, backoff_ms: 200

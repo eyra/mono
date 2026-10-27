@@ -254,9 +254,9 @@ We plan to support file transfer from the built-in storage to external systems (
 
 ### Rate limiters
 
-To prevent users from exhausting resources, Core uses rate limiters. The default quotas are in
-`core/config/config.exs` (`config :core, :rate, quotas: [...]`). A service without any quota is not
-limited.
+To prevent users from exhausting resources, Core uses rate limiters. The systems declare the default
+quotas of the services they limit (`rate_quotas/0` in their `_system.ex`). A service without any
+quota is not limited.
 
 Overrides replace the default quotas of the services they list; the other services keep their
 defaults. In a release, set them with the `RATE_QUOTAS` environment variable, a JSON list:
@@ -360,7 +360,7 @@ Optional:
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
 | `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
-| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (`config/config.exs`) of the services it lists; the other services keep their defaults | `[]` |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (the systems' `rate_quotas/0`) of the services it lists; the other services keep their defaults | `[]` |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays

@@ -19,6 +19,7 @@ defmodule Core.Systems do
       Systems.Fund.System,
       Systems.Desktop.System,
       Systems.Document.System,
+      Systems.Email.System,
       Systems.Feldspar.System,
       Systems.Home.System,
       Systems.Lab.System,

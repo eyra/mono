@@ -12,7 +12,9 @@ defmodule Self.SaaS do
         Systems.Graphite.System,
         Systems.Onyx.System,
         Systems.Student.System,
-        Systems.Zircon.System
+        Systems.Zircon.System,
+        # Zircon's RIS import runs on Paper's registry and queue.
+        Systems.Paper.System
       ]
   end
 

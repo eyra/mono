@@ -69,6 +69,21 @@ defmodule Core.System do
   @doc "The notification channels the system delivers: name to `Systems.Notify.Channel` module."
   @callback notify_channels() :: %{atom() => module()}
 
+  @doc """
+  Processes the system needs, started under `Core.Supervisor` after
+  `Phoenix.PubSub` and before Oban, in `c:Core.SaaS.systems/0` order.
+  """
+  @callback children() :: [Supervisor.child_spec() | {module(), term()} | module()]
+
+  @doc "The Oban queues the system's workers use, with their limits: `[email_delivery: 1]`."
+  @callback oban_queues() :: keyword(pos_integer())
+
+  @doc """
+  The default `Systems.Rate` quotas of the services the system limits, as keyword
+  lists: `[service: :signup, limit: 5, unit: :call, window: :minute, scope: :local]`.
+  """
+  @callback rate_quotas() :: [keyword()]
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Core.System
@@ -79,6 +94,9 @@ defmodule Core.System do
       def signal_handlers, do: []
       def notifiers, do: []
       def notify_channels, do: %{}
+      def children, do: []
+      def oban_queues, do: []
+      def rate_quotas, do: []
 
       defoverridable Core.System
     end

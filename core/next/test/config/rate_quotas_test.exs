@@ -27,7 +27,7 @@ defmodule Next.Config.RateQuotasTest do
         RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
       )
 
-    {:ok, state} = Rate.Server.init(config[:core][:rate])
+    {:ok, state} = config[:core][:rate] |> Core.Application.rate_config() |> Rate.Server.init()
     %{quotas: Enum.map(state.quotas, &{&1.service, &1.limit, &1.unit, &1.window, &1.scope})}
   end
 

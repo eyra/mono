@@ -33,7 +33,7 @@ defmodule Systems.Storage.Private do
   The queue name is derived from Node.self() to ensure jobs are processed
   only by the node that has access to the local filesystem.
 
-  Uses the same naming scheme as runtime.exs configuration.
+  `Core.ObanConfig` starts this node's queue.
   """
   def storage_delivery_queue(node \\ Node.self()) do
     :"storage_delivery_local_#{node}"

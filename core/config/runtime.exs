@@ -107,11 +107,7 @@ if config_env() == :prod do
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
-  # OBAN
-  # Node-local queue for storage delivery (data donation files are on local filesystem)
-  # IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
-  # This duplication is required because config runs before modules are loaded.
-  storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
+  # OBAN: the queues come from Mica and the systems (Core.ObanConfig).
 
   # The names that ENABLED_OBAN_PLUGINS can switch on. All enabled cron names
   # share one Oban.Plugins.Cron.
@@ -130,21 +126,13 @@ if config_env() == :prod do
       {"auto_approve", {:cron, {"0 * * * *", Systems.Fund.AutoApproveWorker}}}
     ])
 
-  config :core, Oban,
-    queues: [
-      {storage_delivery_queue, 1},
-      default: 5,
-      email_dispatchers: 1,
-      email_delivery: 1,
-      ris_import: 1
-    ],
-    plugins: oban_plugins
+  config :core, Oban, plugins: oban_plugins
 
   # Logged at boot by Core.Application.
   config :core, :oban_unknown_plugins, oban_unknown_plugins
 
-  # RATE LIMITER: RATE_QUOTAS replaces the default quotas (config.exs) of the
-  # services it lists; the other services keep their defaults.
+  # RATE LIMITER: RATE_QUOTAS replaces the default quotas (the systems'
+  # rate_quotas/0) of the services it lists; the other services keep their defaults.
 
   config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 

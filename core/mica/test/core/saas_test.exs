@@ -18,6 +18,16 @@ defmodule Core.SaaSTest do
     def notify_channels, do: %{email: Core.SaaSTest.OtherEmailChannel}
   end
 
+  defmodule QueueSystem do
+    use Core.System
+    def oban_queues, do: [imports: 1]
+  end
+
+  defmodule OtherQueueSystem do
+    use Core.System
+    def oban_queues, do: [exports: 2, imports: 3]
+  end
+
   defmodule DuplicateSaaS do
     use Core.SaaS
     def systems, do: [GoodSystem, GoodSystem]
@@ -98,5 +108,25 @@ defmodule Core.SaaSTest do
     assert_raise ArgumentError,
                  "notify channel :email is declared by more than one system",
                  fn -> Core.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
+  end
+
+  test "Oban queues are collected in system order" do
+    assert Core.SaaS.collect_oban_queues([OtherQueueSystem, GoodSystem]) == [
+             exports: 2,
+             imports: 3
+           ]
+  end
+
+  test "an Oban queue declared by two systems is an error" do
+    assert_raise ArgumentError,
+                 "Oban queue :imports is declared by more than one system",
+                 fn -> Core.SaaS.collect_oban_queues([QueueSystem, OtherQueueSystem]) end
+  end
+
+  test "the Paper registry is a child and the systems declare their queues and quotas" do
+    assert {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry} in Core.SaaS.children()
+    assert Core.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
+
+    assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
   end
 end
