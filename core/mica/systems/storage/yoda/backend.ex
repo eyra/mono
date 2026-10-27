@@ -15,8 +15,7 @@ defmodule Systems.Storage.Yoda.Backend do
         data,
         %{"identifier" => identifier}
       ) do
-    filename = filename(identifier)
-    file_url = url([yoda_url, filename])
+    file_url = file_url(yoda_url, identifier)
 
     case Yoda.Client.upload_file(username, password, file_url, data) do
       {:ok, _} -> :ok
@@ -68,7 +67,8 @@ defmodule Systems.Storage.Yoda.Backend do
   @impl true
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
-  defp url(components) do
-    Enum.join(components, "/")
+  def file_url(yoda_url, identifier) do
+    filename = identifier |> filename() |> Systems.Storage.Filename.url_segment()
+    Enum.join([yoda_url, filename], "/")
   end
 end

@@ -13,7 +13,7 @@ defmodule Systems.Affiliate.Controller do
 
   require Logger
 
-  @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
+  @id_valid_regex ~r/\A[A-Za-z0-9_-]+\z/
   @id_max_lenght 64
 
   # Recruit action: generates a participant ID on the fly for organic recruitment
