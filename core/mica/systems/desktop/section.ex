@@ -33,6 +33,10 @@ defmodule Systems.Desktop.Section do
         end
       end
 
+  Sections are display-only: they render inside `Systems.Desktop.View`, which
+  handles none of their events, so a `phx-click` in a section crashes the view.
+  Links to other pages work.
+
   The page builds the section's view model with the page's, so a section
   refreshes when the page does. To refresh it live, the section's system has
   its own Switch that intercepts the signals of its data and calls
