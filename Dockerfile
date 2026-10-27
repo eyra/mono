@@ -51,9 +51,8 @@ COPY core/mix.exs core/mix.lock ./
 
 # 2) Install and compile dependencies (cached until mix files change)
 RUN mix deps.get
-COPY core/scripts/prefetch-vix-nif ./scripts/
-RUN scripts/prefetch-vix-nif
-RUN mix deps.compile
+COPY core/scripts/prefetch-nifs ./scripts/
+RUN scripts/prefetch-nifs && mix deps.compile
 
 # 3) Copy asset dependency files
 COPY core/assets/package.json core/assets/package-lock.json ./assets/
