@@ -697,7 +697,7 @@ Full plan: [eyra/feldspar `doc/nova-migration/plan.md`](https://github.com/eyra/
 - **feldspar-tests — Contract tests.** Shared fixtures run in both CIs. Depends on feldspar-protocol.
 - **feldspar-transfer — Transfer `eyra/feldspar` to `novasoftwarefoundation/feldspar`.**
   - It is a GitHub transfer, so the full history moves. It needs its own pre-transfer assessment and the user's authorization.
-  - After the transfer, update the Feldspar release URL in `core/frameworks/e2e/controller.ex`.
+  - After the transfer, update the Feldspar release URL in `core/next/systems/e2e/controller.ex`.
   - Not in the same window as ops-cutover.
 
 ## Old numbering
