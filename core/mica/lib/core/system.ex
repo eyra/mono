@@ -32,7 +32,8 @@ defmodule Core.System do
   compile time, so these return quoted code. `grants/0` is quoted too: a module
   name used as a value is a runtime dependency, and that would make the router
   recompile whenever any granted page changes. The other callbacks return plain
-  values, which `Core.SaaS` collects at runtime.
+  values, which `Core.SaaS` collects (`notify_channels/0` also at compile time,
+  for the `Systems.Notify.MessageModel` enum).
 
   A SaaS extends Mica's systems only through its own systems, for example by
   shadowing Mica's sign-in routes with `override_routes/0`.

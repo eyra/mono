@@ -75,7 +75,9 @@ defmodule Core.SaaS do
 
   @doc """
   The channel names of `notify_channels/0`, sorted, for use at compile time (an
-  `Ecto.Enum`). Editing a system recompiles the caller.
+  `Ecto.Enum`). Editing a system recompiles the caller. Like the route and grant
+  macros, it compiles the SaaS module and its systems first, so they must not
+  depend on the caller at compile time.
   """
   defmacro notify_channel_names do
     systems = checked_systems(module())
