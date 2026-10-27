@@ -6,6 +6,10 @@
     "group:allNonMajor"
   ],
   "timezone": "Europe/Amsterdam",
+  "constraints": {
+    "erlang": "^28",
+    "elixir": "1.19.6"
+  },
   "ignoreDeps": [
     "bamboo_phoenix",
     "bamboo_ses",
@@ -33,6 +37,11 @@
       "matchPackageNames": ["hackney"],
       "matchUpdateTypes": ["major"],
       "enabled": false
+    },
+    {
+      "description": "phoenix_live_view 1.2+ blocked by live_nest requiring ~> 1.1.10, until live_nest supports LiveView 1.2",
+      "matchPackageNames": ["phoenix_live_view"],
+      "allowedVersions": "<1.2"
     },
     {
       "description": "Debian major bumps break AWS prod (Ubuntu 20.04 / glibc 2.31) — keep on debian:12 until prod is upgraded",
