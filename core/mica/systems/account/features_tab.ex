@@ -3,7 +3,7 @@ defmodule Systems.Account.FeaturesTab do
   Features tab implementation.
   This tab is only visible for PANL participants.
   """
-  @behaviour Systems.Account.Page.Tab
+  @behaviour Systems.Account.Tab
 
   use Gettext, backend: CoreWeb.Gettext
 

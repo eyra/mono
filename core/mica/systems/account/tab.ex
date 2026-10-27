@@ -1,6 +1,9 @@
-defmodule Systems.Account.Page.Tab do
+defmodule Systems.Account.Tab do
   @moduledoc """
-  Behaviour for tabs hosted by `Systems.Account.Page` (Profile, Features, …).
+  A tab on the account page (`Systems.Account.Page`): Profile, Payouts, Features, ….
+
+  Systems contribute tabs with `c:Core.System.account_tabs/0`; the page shows
+  the visible ones in `c:Core.SaaS.systems/0` order.
 
   Each tab module must implement:
   - key/0: Returns the unique key for this tab

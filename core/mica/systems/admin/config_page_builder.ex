@@ -3,16 +3,19 @@ defmodule Systems.Admin.ConfigPageBuilder do
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
-  alias Systems.Fund
-  alias Systems.Citizen
   alias Systems.Org
-  alias Systems.Pool
-
-  @admin_tabs [:system, :account, :org, :actions, :client_activity]
-  @org_admin_tabs [:org]
 
   @doc "Tab ids in display order, for system admins and for org admins."
-  def tab_ids, do: %{admin: @admin_tabs, org_admin: @org_admin_tabs}
+  def tab_ids do
+    %{
+      admin: Enum.map(panels(:admin), & &1.id()),
+      org_admin: Enum.map(panels(:org_admin), & &1.id())
+    }
+  end
+
+  @doc "The panels `viewer` sees, in `Core.SaaS.admin_panels/0` order."
+  def panels(viewer),
+    do: Enum.filter(Core.SaaS.admin_panels(), &Admin.Panel.shown_to?(&1, viewer))
 
   def view_model(%{id: :singleton}, %{current_user: user} = assigns) do
     locale = Map.get(assigns, :locale, :en)
@@ -30,192 +33,45 @@ defmodule Systems.Admin.ConfigPageBuilder do
         governable_orgs: governable_orgs
       })
 
-    assigns_with_context =
-      assigns
-      |> Map.put(:live_context, live_context)
-      |> Map.put(:locale, locale)
-      |> Map.put(:is_admin?, is_admin?)
-      |> Map.put(:governable_orgs, governable_orgs)
-
     %{
       tabbar_id: "admin_config",
       title: get_title(is_admin?, governable_orgs),
       active_menu_item: :admin,
       show_errors: false,
-      tabs: create_tabs(assigns_with_context)
+      tabs: create_tabs(viewer(is_admin?, governable_orgs), live_context)
     }
   end
 
   # Page title is always "Admin" (matches menu item)
   defp get_title(_, _), do: dgettext("eyra-admin", "config.title")
 
-  # System admins see all tabs
-  defp create_tabs(%{is_admin?: true} = assigns) do
-    Enum.map(@admin_tabs, &create_admin_tab(&1, assigns))
+  defp viewer(true, _governable_orgs), do: :admin
+  defp viewer(false, [_ | _]), do: :org_admin
+  defp viewer(_is_admin?, _governable_orgs), do: nil
+
+  defp create_tabs(nil, _live_context), do: []
+
+  defp create_tabs(viewer, live_context) do
+    Enum.map(panels(viewer), &create_tab(&1, live_context))
   end
 
-  # Org admins see group tabs (e.g., Organisations)
-  # Currently only Organisations group exists for non-admins
-  defp create_tabs(%{governable_orgs: [_ | _]} = assigns) do
-    # Show the Organisations group tab (same as admin :org tab)
-    Enum.map(@org_admin_tabs, &create_admin_tab(&1, assigns))
-  end
-
-  # No access - return empty tabs
-  defp create_tabs(_assigns), do: []
-
-  # Admin tabs (system, account, org list, actions)
-
-  defp create_admin_tab(:system, %{live_context: context} = assigns) do
-    child_context =
-      LiveContext.extend(context, %{
-        bank_accounts: get_bank_accounts(),
-        bank_account_items: get_bank_account_items(assigns),
-        citizen_pools: get_citizen_pools(),
-        citizen_pool_items: get_citizen_pool_items(assigns)
-      })
+  defp create_tab(panel, live_context) do
+    id = panel.id()
 
     element =
       CoreWeb.Live.Element.prepare_live_view(
-        "admin_system_view",
-        Admin.SystemView,
-        live_context: child_context
+        "admin_#{id}_view",
+        panel.live_view(),
+        live_context: panel.live_context(live_context)
       )
 
     %{
-      id: :system,
+      id: id,
       ready: false,
       show_errors: false,
-      title: dgettext("eyra-admin", "system.title"),
+      title: panel.title(),
       type: :fullpage,
       element: element
-    }
-  end
-
-  defp create_admin_tab(:account, %{live_context: context}) do
-    creators = Systems.Account.Public.list_creators()
-
-    child_context =
-      LiveContext.extend(context, %{
-        creators: creators
-      })
-
-    element =
-      CoreWeb.Live.Element.prepare_live_view(
-        "admin_account_view",
-        Admin.AccountView,
-        live_context: child_context
-      )
-
-    %{
-      id: :account,
-      ready: false,
-      show_errors: false,
-      title: dgettext("eyra-admin", "account.title"),
-      type: :fullpage,
-      element: element
-    }
-  end
-
-  defp create_admin_tab(:org, %{live_context: context}) do
-    element =
-      CoreWeb.Live.Element.prepare_live_view(
-        "admin_org_view",
-        Admin.OrgView,
-        live_context: context
-      )
-
-    %{
-      id: :org,
-      ready: false,
-      show_errors: false,
-      title: dgettext("eyra-admin", "org.content.title"),
-      type: :fullpage,
-      element: element
-    }
-  end
-
-  defp create_admin_tab(:actions, %{live_context: context}) do
-    element =
-      CoreWeb.Live.Element.prepare_live_view(
-        "admin_actions_view",
-        Admin.ActionsView,
-        live_context: context
-      )
-
-    %{
-      id: :actions,
-      ready: false,
-      show_errors: false,
-      title: dgettext("eyra-admin", "actions.title"),
-      type: :fullpage,
-      element: element
-    }
-  end
-
-  defp create_admin_tab(:client_activity, %{live_context: context}) do
-    element =
-      CoreWeb.Live.Element.prepare_live_view(
-        "admin_client_activity_view",
-        Admin.ClientActivityView,
-        live_context: context
-      )
-
-    %{
-      id: :client_activity,
-      ready: false,
-      show_errors: false,
-      title: dgettext("eyra-admin", "client_activity.title"),
-      type: :fullpage,
-      element: element
-    }
-  end
-
-  # Helper functions
-
-  defp get_bank_accounts do
-    Fund.Public.list_bank_accounts(Fund.BankAccountModel.preload_graph(:full))
-  end
-
-  defp get_bank_account_items(%{locale: locale}) do
-    get_bank_accounts()
-    |> Enum.map(&to_view_model(&1, locale))
-  end
-
-  defp get_citizen_pools do
-    Citizen.Public.list_pools(currency: Fund.CurrencyModel.preload_graph(:full))
-  end
-
-  defp get_citizen_pool_items(%{locale: locale}) do
-    get_citizen_pools()
-    |> Enum.map(&to_view_model(&1, locale))
-  end
-
-  defp to_view_model(
-         %Fund.BankAccountModel{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
-    subtitle = Fund.CurrencyModel.title(currency, locale)
-
-    %{
-      icon: icon,
-      title: name,
-      subtitle: subtitle,
-      action: %{type: :send, event: "edit_bank_account", item: id}
-    }
-  end
-
-  defp to_view_model(
-         %Pool.Model{id: id, name: name, icon: icon, currency: currency},
-         locale
-       ) do
-    subtitle = Fund.CurrencyModel.title(currency, locale)
-
-    %{
-      icon: icon,
-      title: name,
-      subtitle: subtitle,
-      action: %{type: :send, event: "edit_citizen_pool", item: id}
     }
   end
 end
