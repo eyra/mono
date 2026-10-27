@@ -136,6 +136,25 @@ if config_env() == :prod do
 
   config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
+  # SIGN-IN CODES: AUTH_CODE_LIMITS replaces the default limits
+  # (Systems.Account.AuthCodeLimits) of the action and count it lists.
+
+  if auth_code_limits = System.get_env("AUTH_CODE_LIMITS") do
+    config :core, :auth_code_limits,
+      overrides:
+        auth_code_limits |> Jason.decode!() |> Systems.Account.AuthCodeLimits.overrides!()
+  end
+
+  # CLIENT ADDRESS: TRUSTED_PROXIES lists the proxies (addresses or CIDR ranges)
+  # whose X-Forwarded-For gives the client's address. Unset: the loopback and
+  # private ranges.
+
+  if trusted_proxies = System.get_env("TRUSTED_PROXIES") do
+    config :core, CoreWeb.Plug.RemoteIp,
+      trusted_proxies:
+        trusted_proxies |> RuntimeConfig.list() |> CoreWeb.Plug.RemoteIp.trusted_proxies!()
+  end
+
   # MAIL: Mailgun when MAILGUN_API_KEY is set, otherwise Amazon SES.
 
   config :core,

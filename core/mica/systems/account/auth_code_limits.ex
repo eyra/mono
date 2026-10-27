@@ -6,6 +6,7 @@ defmodule Systems.Account.AuthCodeLimits do
   nodes share them and restarts don't reset them. Windows are fixed: a refused
   address or network is allowed again when the window ends.
 
+  The default limits:
   - Requesting a code: 10 per email address per hour, 200 per network address
     per hour.
   - Checking a code: 10 per email address per hour and 30 per day, 200 per
@@ -15,23 +16,24 @@ defmodule Systems.Account.AuthCodeLimits do
   An IPv6 client counts by its /64 network, which one connection usually owns
   as a whole. The network address limits leave room for many people behind
   one address, such as a university network or a mobile carrier.
+
+  The `AUTH_CODE_LIMITS` environment variable replaces the default limits of
+  the action and count it lists (`overrides!/1`).
   """
+
+  import Frameworks.Utility.ConfigHelpers
 
   alias Systems.Rate
 
-  @hour 60 * 60
-  @day 24 * @hour
+  @windows %{minute: 60, hour: 60 * 60, day: 24 * 60 * 60}
 
-  # {counted by, limit, window in seconds}
-  @request_limits [
-    {:email, 10, @hour},
-    {:network, 200, @hour}
-  ]
-
-  @check_limits [
-    {:email, 10, @hour},
-    {:email, 30, @day},
-    {:network, 200, @hour}
+  # {action, counted by, limit, window}
+  @default_limits [
+    {:request, :email, 10, :hour},
+    {:request, :network, 200, :hour},
+    {:check, :email, 10, :hour},
+    {:check, :email, 30, :day},
+    {:check, :network, 200, :hour}
   ]
 
   @doc """
@@ -39,7 +41,7 @@ defmodule Systems.Account.AuthCodeLimits do
   a limit refuses it.
   """
   def allow_request?(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
-    checks_allowed?(email) and allow?(:request, @request_limits, email, remote_ip)
+    checks_allowed?(email) and allow?(:request, email, remote_ip)
   end
 
   @doc """
@@ -47,20 +49,53 @@ defmodule Systems.Account.AuthCodeLimits do
   when a limit refuses it.
   """
   def allow_check?(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
-    allow?(:check, @check_limits, email, remote_ip)
+    allow?(:check, email, remote_ip)
   end
 
-  defp checks_allowed?(email) do
-    @check_limits
-    |> Enum.filter(fn {by, _, _} -> by == :email end)
-    |> Enum.all?(fn {by, limit, window} ->
-      Rate.Public.counter(key(:check, by, email, nil), window) < limit
+  @doc """
+  The limits in force: the defaults, of which the configured overrides
+  (`config :core, :auth_code_limits, overrides: …`) replace those of each
+  action and count they list.
+  """
+  def limits do
+    overrides = Core.Env.get(:auth_code_limits, []) |> Keyword.get(:overrides, [])
+    overridden = MapSet.new(overrides, fn {action, by, _, _} -> {action, by} end)
+
+    Enum.reject(@default_limits, fn {action, by, _, _} ->
+      MapSet.member?(overridden, {action, by})
+    end) ++ overrides
+  end
+
+  @doc """
+  Parses the decoded JSON of `AUTH_CODE_LIMITS`, a list of limits such as
+  `{"action": "check", "by": "email", "limit": 20, "window": "hour"}`:
+  `action` is `request` or `check`, `by` is `email` or `network`, `window` is
+  `minute`, `hour` or `day`. Raises on an invalid entry.
+  """
+  def overrides!(limits) when is_list(limits) do
+    Enum.map(limits, fn limit ->
+      {
+        get!(:atom, limit, :action, [:request, :check]),
+        get!(:atom, limit, :by, [:email, :network]),
+        get!(:integer, limit, :limit),
+        get!(:atom, limit, :window, Map.keys(@windows))
+      }
     end)
   end
 
-  defp allow?(action, limits, email, remote_ip) do
-    Enum.all?(limits, fn {by, limit, window} ->
-      Rate.Public.increment_counter(key(action, by, email, remote_ip), window) <= limit
+  defp checks_allowed?(email) do
+    limits()
+    |> Enum.filter(&match?({:check, :email, _, _}, &1))
+    |> Enum.all?(fn {:check, :email, limit, window} ->
+      Rate.Public.counter(key(:check, :email, email, nil), @windows[window]) < limit
+    end)
+  end
+
+  defp allow?(action, email, remote_ip) do
+    limits()
+    |> Enum.filter(&match?({^action, _, _, _}, &1))
+    |> Enum.all?(fn {^action, by, limit, window} ->
+      Rate.Public.increment_counter(key(action, by, email, remote_ip), @windows[window]) <= limit
     end)
   end
 
