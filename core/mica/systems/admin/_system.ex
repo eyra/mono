@@ -20,4 +20,14 @@ defmodule Systems.Admin.System do
   end
 
   def signal_handlers, do: [Systems.Admin.Switch]
+
+  def admin_panels do
+    [
+      Systems.Admin.SystemPanel,
+      Systems.Admin.AccountPanel,
+      Systems.Admin.OrgPanel,
+      Systems.Admin.ActionsPanel,
+      Systems.Admin.ClientActivityPanel
+    ]
+  end
 end

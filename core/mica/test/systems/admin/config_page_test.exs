@@ -66,5 +66,13 @@ defmodule Systems.Admin.ConfigPageTest do
       assert find_live_child(view, "admin_org_view")
       refute find_live_child(view, "admin_client_activity_view")
     end
+
+    test "does not show the system admin tabs", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/admin/config")
+
+      for id <- ["admin_system_view", "admin_account_view", "admin_actions_view"] do
+        refute find_live_child(view, id)
+      end
+    end
   end
 end

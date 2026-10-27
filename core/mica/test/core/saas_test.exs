@@ -129,4 +129,20 @@ defmodule Core.SaaSTest do
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
   end
+
+  test "the Admin and Account systems declare the admin panels and account tabs, in order" do
+    assert Core.SaaS.admin_panels() == [
+             Systems.Admin.SystemPanel,
+             Systems.Admin.AccountPanel,
+             Systems.Admin.OrgPanel,
+             Systems.Admin.ActionsPanel,
+             Systems.Admin.ClientActivityPanel
+           ]
+
+    assert Core.SaaS.account_tabs() == [
+             Systems.Account.ProfileTab,
+             Systems.Account.PayoutsTab,
+             Systems.Account.FeaturesTab
+           ]
+  end
 end

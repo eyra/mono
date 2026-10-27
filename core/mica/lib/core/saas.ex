@@ -73,6 +73,12 @@ defmodule Core.SaaS do
   @doc "The notification channels of all systems. Raises when two systems name the same channel."
   def notify_channels, do: collect_notify_channels(systems())
 
+  @doc "The admin panels of all systems, in `systems/0` order."
+  def admin_panels, do: Enum.flat_map(systems(), & &1.admin_panels())
+
+  @doc "The account tabs of all systems, in `systems/0` order."
+  def account_tabs, do: Enum.flat_map(systems(), & &1.account_tabs())
+
   @doc "The children of all systems, in `systems/0` order."
   def children, do: Enum.flat_map(systems(), & &1.children())
 

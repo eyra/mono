@@ -270,7 +270,7 @@ defmodule Core.System do
   @callback project_items() :: [module()]
   @callback pool_directors() :: [module()]
   @callback admin_panels() :: [module()]
-  @callback account_features() :: [module()]
+  @callback account_tabs() :: [module()]
   # Runtime
   @callback children(opts) :: [Supervisor.child_spec()]
   @callback oban_queues() :: keyword()
