@@ -5,6 +5,7 @@ defmodule Next.Account.SessionController do
 
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.ReturnTo
   alias Next.Account.NativeApp
   alias Systems.Account
   alias Frameworks.Utility.Params
@@ -80,8 +81,12 @@ defmodule Next.Account.SessionController do
   # `redirect_path_after_signin/2`) before renewing the session, so
   # placing it here honours the caller's intent for both new users
   # (falls back to onboarding) and existing users (honoured).
-  defp stash_return_to(conn, %{return_to: "/" <> _rest = path}),
-    do: put_session(conn, :user_return_to, path)
+  defp stash_return_to(conn, %{return_to: return_to}) do
+    case ReturnTo.sanitize(return_to) do
+      nil -> conn
+      path -> put_session(conn, :user_return_to, path)
+    end
+  end
 
   defp stash_return_to(conn, _payload), do: conn
 

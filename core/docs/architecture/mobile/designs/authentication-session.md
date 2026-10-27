@@ -112,7 +112,10 @@ POST /user/auth/native/code
 {"email": "participant@example.com", "return_to": "/assignment/1"}
 ```
 
-`return_to` is optional and only kept when it is a same-origin path.
+`return_to` is optional. Core keeps it only when it is a same-site path: it
+starts with a single `/` (not `//` or `/\`) and has no control characters.
+Any other value is dropped, as if no `return_to` was sent. The same rule applies
+in the web flow.
 
 | Status | Body | Meaning |
 | --- | --- | --- |
@@ -136,10 +139,12 @@ POST /user/auth/native/verify
 | `422` | `{"error": "invalid_code"}` | Wrong code; the attempt is counted. The user may try again. |
 | `422` | `{"error": "code_expired"}` | No valid code for this email (expired, used, or never requested). Request a new one. |
 | `422` | `{"error": "too_many_attempts"}` | The code is locked after too many wrong attempts. Request a new one. |
+| `422` | `{"error": "invalid_email"}` | The code was right, but no account could be created for the email (for example, another sign-in registered it in the meantime). Request a new code. |
 
-`redirect_to` is `/user/onboarding` (with the `return_to` appended) for a new
-user, the `return_to` for an existing user, or `null` when there is nowhere to go
-but the native tabs. After a `200` the app reruns `GET /user/auth/status`, as at
+`redirect_to` is `/user/onboarding` (with the kept `return_to` appended) for a
+new user, the kept `return_to` for an existing user, or `null` when there is
+nowhere to go but the native tabs. It is always a same-site path, so the app
+resolves it against Core's origin. After a `200` the app reruns `GET /user/auth/status`, as at
 startup, and only that `204` opens the native shell.
 
 ### Errors shared by both calls
@@ -151,6 +156,10 @@ startup, and only that `204` opens the native shell.
 | `415` | `{"error": "unsupported_media_type"}` | Not `application/json`. |
 | `403` | `{"error": "unsupported_client"}` | No `NextApp/<version> iOS` or `Android` user agent. |
 | `404` | `{"error": "unavailable"}` | OTP sign-in (`otp` feature) is off. |
+
+A body that is not valid JSON is rejected before these checks with a plain
+`400`. With `Accept: application/json` its body is `{"error": "Bad Request"}`;
+the app can treat it like `invalid_request`.
 
 ### Session and cookie
 
@@ -199,8 +208,11 @@ Both flows use the same code and session functions, so they cannot drift apart:
   about an email than the web flow (which also redirects identity-provider
   accounts to their provider).
 - Users: unknown emails are registered as participants (`creator: false`); a
-  provisional affiliate user signed in on the same session gets the email linked
-  instead (`Next.Account.OtpSignin`).
+  provisional user (one that never had a real email) signed in on the same
+  session gets the email linked instead (`Next.Account.OtpSignin`). External and
+  affiliate sessions are signed out first (`Systems.Account.Plug`), as on the
+  web, so the email is never linked into them.
+- `return_to`: same-site paths only (`CoreWeb.ReturnTo.sanitize/1`).
 - The code email is the web flow's, in the locale from the session or
   `Accept-Language`.
 

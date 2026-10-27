@@ -187,6 +187,23 @@ defmodule Next.Account.NativeSigninControllerTest do
       assert conn.resp_cookies[@remember_me_cookie]
     end
 
+    test "signs out a restricted session first, like the web flow", %{conn: conn} do
+      {:ok, external_user} =
+        Account.Auth.External.register_user(:org, "native-#{System.unique_integer([:positive])}")
+
+      {:ok, conn: conn, user: _} = login(external_user, %{conn: conn})
+
+      email = unique_email("after-external")
+
+      conn =
+        post_json(conn, "/user/auth/native/verify", %{email: email, code: issue_code(email, nil)})
+
+      assert %{"onboarding" => true} = json_response(conn, 200)
+      assert %{id: new_user_id} = Account.Public.get_user_by_email(email)
+      assert new_user_id != external_user.id
+      assert Account.Public.get_user!(external_user.id).email == external_user.email
+    end
+
     test "carries return_to into onboarding for a new user", %{conn: conn} do
       email = unique_email("fresh-return")
       code = issue_code(email, nil)
@@ -222,6 +239,32 @@ defmodule Next.Account.NativeSigninControllerTest do
         })
 
       assert %{"redirect_to" => nil} = json_response(conn_with_url, 200)
+    end
+
+    test "return_to accepts only same-site paths", %{conn: conn} do
+      user = Factories.insert!(:member)
+
+      for return_to <- ["//example.org/x", "/\\example.org"] do
+        conn =
+          post_json(conn, "/user/auth/native/verify", %{
+            email: user.email,
+            code: issue_code(user.email, user.id),
+            return_to: return_to
+          })
+
+        assert %{"redirect_to" => nil} = json_response(conn, 200)
+      end
+
+      email = unique_email("fresh-same-site")
+
+      conn =
+        post_json(conn, "/user/auth/native/verify", %{
+          email: email,
+          code: issue_code(email, nil),
+          return_to: "//example.org/x"
+        })
+
+      assert %{"redirect_to" => "/user/onboarding"} = json_response(conn, 200)
     end
 
     test "rejects a wrong code and counts the attempt", %{conn: conn} do
@@ -271,6 +314,17 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn = post_json(conn, "/user/auth/native/verify", %{email: unique_email("no-code")})
 
       assert json_response(conn, 400) == %{"error" => "invalid_request"}
+    end
+  end
+
+  describe "malformed body" do
+    test "a body that is not JSON gets a plain 400", %{conn: conn} do
+      conn = put_req_header(conn, "accept", "application/json")
+
+      assert {400, _headers, body} =
+               assert_error_sent(400, fn -> post(conn, "/user/auth/native/code", "{not json") end)
+
+      assert Jason.decode!(body) == %{"error" => "Bad Request"}
     end
   end
 

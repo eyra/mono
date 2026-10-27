@@ -34,6 +34,7 @@ defmodule Next.Bundle do
         pipeline :native_signin do
           plug(:accepts, ["json"])
           plug(:fetch_session)
+          plug(Systems.Account.Plug)
 
           plug(Cldr.Plug.PutLocale,
             apps: [cldr: CoreWeb.Cldr, gettext: :global, gettext: CoreWeb.Gettext],
