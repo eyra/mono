@@ -31,7 +31,6 @@ defmodule CoreWeb.Routes do
 
         plug(CoreWeb.Plug.PersistLocale)
 
-        plug(RemoteIp)
         plug(CoreWeb.Plug.RemoteIp)
 
         plug(:fetch_live_flash)

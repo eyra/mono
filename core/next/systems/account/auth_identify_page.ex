@@ -3,6 +3,7 @@ defmodule Next.Account.AuthIdentifyPage do
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
 
   import CoreWeb.Layouts.Stripped.Html
@@ -70,7 +71,7 @@ defmodule Next.Account.AuthIdentifyPage do
   @impl true
   def handle_info(
         {:route_email, email},
-        %{assigns: %{return_to: return_to, creator?: creator?}} = socket
+        %{assigns: %{return_to: return_to, creator?: creator?, remote_ip: remote_ip}} = socket
       ) do
     case Account.EmailRouter.route(email) do
       :google ->
@@ -86,15 +87,17 @@ defmodule Next.Account.AuthIdentifyPage do
          )}
 
       :otp ->
-        case Account.Public.generate_otp(email) do
+        case Account.Public.generate_otp(email, remote_ip) do
           :ok ->
             {:noreply, push_navigate(socket, to: verify_url(email, return_to, creator?))}
 
           {:error, :rate_limited} ->
+            error = dgettext("eyra-account", "auth.email.rate_limited")
+
             {:noreply,
              assign(socket,
                loading: false,
-               error: dgettext("eyra-account", "auth.email.rate_limited")
+               form: to_form(%{"email" => email}, errors: [email: {error, []}])
              )}
         end
     end

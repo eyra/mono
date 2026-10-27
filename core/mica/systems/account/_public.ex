@@ -491,10 +491,23 @@ defmodule Systems.Account.Public do
 
   ## OTP
 
-  def generate_otp(email) when is_binary(email) do
+  @doc """
+  Emails a new sign-in code to `email`, replacing any earlier code for it.
+  `remote_ip` is the client's address (`CoreWeb.Plug.RemoteIp`), which the
+  limits of `Account.AuthCodeLimits` count by.
+  """
+  def generate_otp(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
     email = Account.AuthCodeModel.normalize_email(email)
     Rate.Public.request_permission(:otp_request, email, 1)
 
+    if Account.AuthCodeLimits.allow_request?(email, remote_ip),
+      do: send_otp(email),
+      else: {:error, :rate_limited}
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  defp send_otp(email) do
     Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
 
     user = get_user_by_email(email)
@@ -503,8 +516,6 @@ defmodule Systems.Account.Public do
 
     Account.UserNotifier.deliver_otp(email, code)
     :ok
-  rescue
-    Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
 
   @doc """
@@ -518,12 +529,23 @@ defmodule Systems.Account.Public do
     deleted_count
   end
 
-  def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+  @doc """
+  Checks `code` against the active sign-in code of `email`. When a limit of
+  `Account.AuthCodeLimits` refuses the check, the result is
+  `{:error, :max_attempts}` and the code's own attempts stay unused.
+  """
+  def verify_otp(email, code, remote_ip)
+      when is_binary(email) and is_binary(code) and is_binary(remote_ip) do
     email = Account.AuthCodeModel.normalize_email(email)
 
     case Account.AuthCodeModel.active_query(email) |> Repo.one() do
-      nil -> {:error, :not_found}
-      %{id: id} -> verify_otp_attempt(id, code)
+      nil ->
+        {:error, :not_found}
+
+      %{id: id} ->
+        if Account.AuthCodeLimits.allow_check?(email, remote_ip),
+          do: verify_otp_attempt(id, code),
+          else: {:error, :max_attempts}
     end
   end
 
