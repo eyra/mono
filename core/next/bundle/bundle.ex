@@ -29,6 +29,28 @@ defmodule Next.Bundle do
           post("/user/session", Account.SessionController, :create)
         end
 
+        import Systems.Account.UserAuth, only: [fetch_current_user: 2]
+
+        pipeline :native_signin do
+          plug(:accepts, ["json"])
+          plug(:fetch_session)
+
+          plug(Cldr.Plug.PutLocale,
+            apps: [cldr: CoreWeb.Cldr, gettext: :global, gettext: CoreWeb.Gettext],
+            from: [:session, :accept_language],
+            default: "en"
+          )
+
+          plug(:put_secure_browser_headers)
+          plug(:fetch_current_user)
+        end
+
+        scope "/", Next do
+          pipe_through([:native_signin])
+          post("/user/auth/native/code", Account.NativeSigninController, :request_code)
+          post("/user/auth/native/verify", Account.NativeSigninController, :verify_code)
+        end
+
         scope "/", Next do
           pipe_through([:browser])
           get("/user/auth/redeem", Account.SessionController, :redeem_otp)
