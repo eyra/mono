@@ -23,4 +23,30 @@ defmodule Systems.Storage.Filename do
     timestamp = System.system_time(:millisecond)
     String.replace(base, ".json", "_#{timestamp}.json")
   end
+
+  @doc """
+  Returns false when an identifier value contains a control character
+  (such as CR, LF or NUL). Donation keys, tasks and sources never need them.
+  """
+  def valid_identifier?(identifier) do
+    Enum.all?(identifier, fn [_key, value] -> valid_value?(value) end)
+  end
+
+  @doc """
+  Turns a filename into a single URL path segment: `/` and `\\` become `_`, so
+  the file stays in the endpoint's folder, and every character outside RFC 3986
+  `pchar` is percent-encoded. The server decodes it back to the same name.
+  """
+  def url_segment(filename) when is_binary(filename) do
+    filename
+    |> String.replace(["/", "\\"], "_")
+    |> URI.encode(&path_char?/1)
+  end
+
+  defp valid_value?(value) when is_binary(value),
+    do: not String.match?(value, ~r/[\x00-\x1F\x7F]/)
+
+  defp valid_value?(_value), do: true
+
+  defp path_char?(char), do: URI.char_unreserved?(char) or char in ~c"!$&'()*+,;=:@"
 end

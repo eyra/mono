@@ -55,11 +55,19 @@ defmodule Systems.Storage.Public do
   Schedules delivery of a file to a storage endpoint.
   The file_id refers to a file in the configured temp file store.
   """
-  def deliver_file(
-        %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        file_id,
-        meta_data
-      ) do
+  def deliver_file(endpoint, file_id, %{identifier: identifier} = meta_data) do
+    if Storage.Filename.valid_identifier?(identifier) do
+      deliver_valid_file(endpoint, file_id, meta_data)
+    else
+      invalid_identifier("deliver_file")
+    end
+  end
+
+  defp deliver_valid_file(
+         %Storage.EndpointModel{id: endpoint_id} = endpoint,
+         file_id,
+         meta_data
+       ) do
     %{backend: backend, special: special} = storage_info(endpoint)
 
     result =
@@ -95,12 +103,20 @@ defmodule Systems.Storage.Public do
     result
   end
 
-  def store(
-        %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        %{key: key, backend: backend, special: special},
-        data,
-        %{remote_ip: remote_ip, identifier: identifier} = meta_data
-      ) do
+  def store(endpoint, storage_info, data, %{identifier: identifier} = meta_data) do
+    if Storage.Filename.valid_identifier?(identifier) do
+      store_valid(endpoint, storage_info, data, meta_data)
+    else
+      invalid_identifier("store")
+    end
+  end
+
+  defp store_valid(
+         %Storage.EndpointModel{id: endpoint_id} = endpoint,
+         %{key: key, backend: backend, special: special},
+         data,
+         %{remote_ip: remote_ip, identifier: identifier} = meta_data
+       ) do
     packet_size = byte_size(data)
 
     # raises error when request is denied
@@ -150,6 +166,11 @@ defmodule Systems.Storage.Public do
         Logger.error("[Storage.Public.store] FAILED to store file: #{inspect(reason)}")
         {:error, :file_storage, reason, %{}}
     end
+  end
+
+  defp invalid_identifier(function) do
+    Logger.error("[Storage.Public.#{function}] Identifier contains a control character")
+    {:error, :identifier, :invalid, %{}}
   end
 
   def list_files(endpoint) do

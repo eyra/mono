@@ -459,6 +459,21 @@ defmodule Systems.Feldspar.ControllerTest do
       assert to_string(participant) == to_string(public_id)
     end
 
+    test "delivers the key, task and group as sent", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      context = %{assignment_id: assignment.id, task: 9, group: "whatsapp group chat"}
+
+      conn = post_donation(conn, context, "1761568123456-it's (a), b/c: {d} é")
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+
+      identifier = delivered_identifier()
+      assert ["task", 9] in identifier
+      assert ["source", "whatsapp group chat"] in identifier
+      assert ["key", "1761568123456-it's (a), b/c: {d} é"] in identifier
+    end
+
     test "accepts a donation from a tester", %{conn: conn, user: user} do
       assignment = create_assignment_with_storage()
       Crew.Public.apply_member_with_role(assignment.crew, user, :tester)
@@ -468,6 +483,40 @@ defmodule Systems.Feldspar.ControllerTest do
 
       assert json_response(conn, 200) == %{"status" => "ok"}
       assert delivered_participant() == public_id
+    end
+  end
+
+  describe "donate/2 - control characters" do
+    setup :login_as_member
+
+    test "returns 400 when the key contains a line break", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9}, "test-key\r\nx")
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the task contains a line break", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: "9\n"})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the group contains a NUL byte", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9, group: "tik\0tok"})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
     end
   end
 
@@ -894,7 +943,7 @@ defmodule Systems.Feldspar.ControllerTest do
     }
   end
 
-  defp post_donation(conn, context) do
+  defp post_donation(conn, context, key \\ "test-key") do
     upload = %Plug.Upload{
       path: create_temp_file("{\"test\": \"data\"}"),
       filename: "data.json",
@@ -902,7 +951,7 @@ defmodule Systems.Feldspar.ControllerTest do
     }
 
     post(conn, "/api/feldspar/donate", %{
-      "key" => "test-key",
+      "key" => key,
       "data" => upload,
       "context" => Jason.encode!(context)
     })
@@ -921,13 +970,17 @@ defmodule Systems.Feldspar.ControllerTest do
   end
 
   defp delivered_participant do
-    [%{args: %{"meta_data" => %{"identifier" => identifier}}}] =
-      all_enqueued(worker: Storage.Delivery)
-
-    Enum.find_value(identifier, fn
+    Enum.find_value(delivered_identifier(), fn
       ["participant", participant] -> participant
       _ -> nil
     end)
+  end
+
+  defp delivered_identifier do
+    [%{args: %{"meta_data" => %{"identifier" => identifier}}}] =
+      all_enqueued(worker: Storage.Delivery)
+
+    identifier
   end
 
   defp create_large_json_content(line_count) do

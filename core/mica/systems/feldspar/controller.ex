@@ -46,21 +46,27 @@ defmodule Systems.Feldspar.Controller do
 
   Returns:
   - 200 with {status: "ok"} on success
-  - 400 if missing required fields (key, data, context), invalid context or assignment_id
+  - 400 if missing required fields (key, data, context), invalid context or assignment_id,
+    or a control character (CR, LF, NUL, ...) in the key, task or group
   - 401 if user not authenticated
   - 403 if user is not a participant or tester of the assignment
   - 422 if storage/delivery fails
   - 429 if rate limited
   """
   def donate(conn, %{"key" => key, "data" => %Plug.Upload{} = upload, "context" => context_json}) do
-    case parse_context(context_json) do
-      {:ok, context} ->
-        do_donate(conn, key, upload, context)
-
+    with {:ok, context} <- parse_context(context_json),
+         :ok <- validate_identifier(key, context) do
+      do_donate(conn, key, upload, context)
+    else
       {:error, :invalid_context} ->
         conn
         |> put_status(:bad_request)
         |> json(%{error: "Missing or invalid context"})
+
+      {:error, :invalid_identifier} ->
+        conn
+        |> put_status(:bad_request)
+        |> json(%{error: "Invalid key or context"})
     end
   end
 
@@ -391,6 +397,15 @@ defmodule Systems.Feldspar.Controller do
       {:ok, %{} = map} when map_size(map) > 0 -> {:ok, map}
       _ -> {:error, :invalid_context}
     end
+  end
+
+  # Task, group and key reach the storage file name as the client sent them.
+  defp validate_identifier(key, context) do
+    client_values = [[:task, context["task"]], [:source, context["group"]], [:key, key]]
+
+    if Storage.Filename.valid_identifier?(client_values),
+      do: :ok,
+      else: {:error, :invalid_identifier}
   end
 
   defp build_meta_data(conn, key, context) do
