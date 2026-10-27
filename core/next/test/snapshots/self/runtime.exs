@@ -33,6 +33,14 @@
          {"storage_export", 25, :call, :minute, :global},
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
+       ],
+       features: [
+         debug: true,
+         debug_expire_force: false,
+         e2e: false,
+         leaderboard: true,
+         opp_phase_3: false,
+         otp: false
        ]
      ]},
     {"prod-all-oban-plugins",
@@ -57,6 +65,14 @@
          {"storage_export", 25, :call, :minute, :global},
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
+       ],
+       features: [
+         debug: true,
+         debug_expire_force: false,
+         e2e: false,
+         leaderboard: true,
+         opp_phase_3: false,
+         otp: false
        ]
      ]},
     {"prod-migrate",
@@ -80,7 +96,8 @@
          {"storage_export", 25, :call, :minute, :global},
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
-       ]
+       ],
+       features: ["": true, debug_expire_force: false, e2e: false, opp_phase_3: false, otp: false]
      ]},
     {"staging",
      [
@@ -103,6 +120,15 @@
          {"storage_export", 25, :call, :minute, :global},
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
+       ],
+       features: [
+         debug: true,
+         debug_expire_force: false,
+         e2e: false,
+         leaderboard: true,
+         opp_phase_3: false,
+         otp: false,
+         panl: true
        ]
      ]},
     {"dev",
@@ -126,6 +152,15 @@
          {"storage_export", 25, :call, :minute, :global},
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
+       ],
+       features: [
+         debug: true,
+         debug_expire_force: false,
+         e2e: true,
+         leaderboard: true,
+         opp_phase_3: false,
+         otp: false,
+         panl: true
        ]
      ]},
     {"local",
@@ -147,6 +182,20 @@
          {"recruit", 5, :call, :minute, :local},
          {"signup", 5, :call, :minute, :local},
          {"storage_export", 1, :call, :hour, :local}
+       ],
+       features: [
+         debug_expire_force: false,
+         e2e: true,
+         leaderboard: true,
+         member_google_sign_in: true,
+         onyx: true,
+         opp_phase_3: true,
+         otp: true,
+         panl: true,
+         panl_post_launch: true,
+         password_sign_in: true,
+         probe: true,
+         surfconext_sign_in: true
        ]
      ]}
   ]
