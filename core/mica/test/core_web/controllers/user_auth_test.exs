@@ -12,12 +12,6 @@ defmodule Systems.Account.UserAuthTest do
       |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
       |> init_test_session(%{})
 
-    conf = Application.get_env(:core, Systems.Account.UserAuth, [])
-
-    on_exit(fn ->
-      Application.put_env(:core, Systems.Account.UserAuth, conf)
-    end)
-
     %{user: Core.Factories.insert!(:member), conn: conn}
   end
 

@@ -45,13 +45,6 @@
               {"0 * * * *", Systems.Fund.AutoApproveWorker}
             ]
           ]}
-       ],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
        ]
      ]},
     {Systems.Account.Auth.Centerdata,
@@ -95,7 +88,7 @@
        partner_fee_percentage: 10
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
-    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-storage", prefix: "storage"]},
+    {Systems.Storage.BuiltIn.S3, [bucket: "eyra-next-dev-donations", prefix: "storage"]},
     {:account,
      [
        auth_methods: %{
@@ -139,7 +132,7 @@
        ris_stream_chunk_size: 65536
      ]},
     {:payment_provider, Systems.Payment.Provider.OPP},
-    {:rate, [quotas: []]},
+    {:rate, [quota_overrides: []]},
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}

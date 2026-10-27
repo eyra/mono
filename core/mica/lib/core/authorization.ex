@@ -10,7 +10,7 @@ defmodule Core.Authorization do
     roles: [:visitor, :member, :creator, :owner, :participant, :admin],
     role_assignment_schema: Core.Authorization.RoleAssignment
 
-  use Core.BundleOverrides
+  require Core.SaaS
 
   require Logger
 
@@ -21,60 +21,9 @@ defmodule Core.Authorization do
 
   Frameworks.GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
 
-  Core.BundleOverrides.grants()
+  Core.SaaS.grants()
 
-  # Models
-  grant_access(Systems.Advert.Model, [:visitor, :member])
-  grant_access(Systems.Lab.ToolModel, [:owner, :participant])
-
-  # Pages
   grant_access(CoreWeb.FakeQualtrics, [:member])
-  grant_access(Systems.Account.AwaitConfirmation, [:visitor])
-  grant_access(Systems.Account.ConfirmToken, [:visitor])
-  grant_access(Systems.Account.Auth.IdentityProviderTransferPage, [:visitor])
-  grant_access(Systems.Account.Auth.Mock.SigninPage, [:visitor])
-  grant_access(Systems.Account.ResetPassword, [:visitor])
-  grant_access(Systems.Account.ResetPasswordToken, [:visitor])
-  grant_access(Systems.Account.SignupPage, [:visitor])
-  grant_access(Systems.Account.Page, [:member])
-  grant_access(Systems.Account.OnboardingPage, [:member])
-  grant_access(Systems.Account.UserSecuritySettings, [:member])
-  grant_access(Systems.Account.UserSettings, [:member])
-  grant_access(Systems.Account.UserSignin, [:visitor])
-  grant_access(Systems.Admin.ConfigPage, [:admin])
-  grant_access(Systems.Admin.ImportRewardsPage, [:admin])
-  grant_access(Systems.Admin.LoginPage, [:visitor, :member])
-  grant_access(Systems.Admin.TypographyPage, [:admin])
-  grant_access(Systems.Advert.ContentPage, [:owner])
-  grant_access(Systems.Alliance.CallbackPage, [:owner])
-  grant_access(Systems.Assignment.ContentPage, [:owner])
-  grant_access(Systems.Assignment.CrewPage, [:participant, :tester])
-  grant_access(Systems.Assignment.LandingPage, [:participant, :tester])
-  grant_access(Systems.Fund.FundingPage, [:admin, :creator])
-  grant_access(Systems.Desktop.Page, [:creator])
-  grant_access(Systems.Feldspar.AppPage, [:visitor, :member])
-  grant_access(Systems.Graphite.LeaderboardContentPage, [:owner])
-  grant_access(Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester])
-  grant_access(Systems.Home.Page, [:visitor, :member, :creator])
-  grant_access(Systems.Lab.PublicPage, [:member])
-  grant_access(Systems.Manual.Builder.PublicPage, [:creator])
-  grant_access(Systems.NextAction.OverviewPage, [:member])
-  grant_access(Systems.Onyx.LandingPage, [:admin])
-  grant_access(Systems.Org.ContentPage, [:admin])
-  grant_access(Systems.Pool.ContentPage, [:admin])
-  grant_access(Systems.Pool.DetailPage, [:creator])
-  grant_access(Systems.Pool.LandingPage, [:visitor, :member, :owner])
-  grant_access(Systems.Pool.MarketplacePage, [:visitor, :member, :owner])
-  grant_access(Systems.Pool.OnboardingPage, [:member])
-  grant_access(Systems.Pool.ParticipantPage, [:creator])
-  grant_access(Systems.Pool.SubmissionPage, [:creator])
-  grant_access(Systems.Project.NodePage, [:owner])
-  grant_access(Systems.Project.OverviewPage, [:admin, :creator])
-  grant_access(Systems.Promotion.LandingPage, [:visitor, :member])
-  grant_access(Systems.Storage.EndpointContentPage, [:owner])
-  grant_access(Systems.Support.HelpdeskPage, [:member])
-  grant_access(Systems.Support.OverviewPage, [:admin])
-  grant_access(Systems.Support.TicketPage, [:admin])
   grant_access(Systems.Test.Page, [:visitor, :member])
 
   grant_actions(CoreWeb.FakeAllianceController, %{
@@ -404,28 +353,32 @@ defmodule Core.Authorization do
     )
   end
 
-  @entities [
-    Systems.Project.Model,
-    Systems.Project.NodeModel,
-    Systems.Workflow.Model,
-    Systems.Assignment.Model,
-    Systems.Storage.EndpointModel,
-    Systems.Crew.Model,
-    Systems.Graphite.ToolModel,
-    Systems.Graphite.LeaderboardModel
-  ]
-
   defp find_entity(node_id) do
-    @entities
-    |> Enum.reduce("Unkown", fn entity, acc ->
-      if from(e in entity, where: e.auth_node_id == ^node_id)
-         |> Core.Repo.exists?() do
+    entities()
+    |> Enum.find_value("Unknown", fn entity ->
+      if from(e in entity, where: e.auth_node_id == ^node_id) |> Core.Repo.exists?() do
         entity
         |> Atom.to_string()
         |> String.replace("Elixir.Systems.", "")
-      else
-        acc
       end
     end)
+  end
+
+  # Every schema that owns an auth node, from Mica and the SaaS alike.
+  defp entities do
+    {:ok, modules} = :application.get_key(:core, :modules)
+
+    modules
+    |> Enum.sort()
+    |> Enum.filter(&owns_auth_node?/1)
+  end
+
+  defp owns_auth_node?(module) do
+    Code.ensure_loaded?(module) and function_exported?(module, :__schema__, 2) and
+      module.__schema__(:source) != nil and
+      match?(
+        %Ecto.Association.BelongsTo{related: Core.Authorization.Node},
+        module.__schema__(:association, :auth_node)
+      )
   end
 end

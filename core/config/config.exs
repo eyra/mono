@@ -18,15 +18,6 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :core, :deploy_env, :local
 
-# Notify system — list of per-system notifier modules that declare their
-# events via `use Systems.Notify.EventDeclaration`. Add a system to this list
-# when it drops a `_notify.ex`; envs can override to short-circuit notifiers
-# (e.g. omit an integration-only notifier in dev).
-config :core, Systems.Notify,
-  notifiers: [
-    Systems.Assignment.Notify
-  ]
-
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
 config :core, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,
@@ -77,32 +68,6 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
-config :core, :signal,
-  handlers: [
-    "Systems.Account.Switch",
-    "Systems.Admin.Switch",
-    "Systems.Advert.Switch",
-    "Systems.Alliance.Switch",
-    "Systems.Assignment.Switch",
-    "Systems.Consent.Switch",
-    "Systems.Crew.Switch",
-    "Systems.Desktop.Switch",
-    "Systems.Feldspar.Switch",
-    "Systems.Graphite.Switch",
-    "Systems.Home.Switch",
-    "Systems.Instruction.Switch",
-    "Systems.Manual.Switch",
-    "Systems.NextAction.Switch",
-    "Systems.Observatory.Switch",
-    "Systems.Org.Switch",
-    "Systems.Pool.Switch",
-    "Systems.Project.Switch",
-    "Systems.Storage.Switch",
-    "Systems.Student.Switch",
-    "Systems.Workflow.Switch",
-    "Systems.Zircon.Switch"
-  ]
-
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 
 # Maximum HTTP body size for uploads (Plug.Parsers)
@@ -125,7 +90,7 @@ config :core,
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
 # Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per bundle (see next/bundle/config/config.exs and mica_saas/bundle/config/config.exs).
+# Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
 config :core, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -152,29 +117,19 @@ config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
 
-config :core, Oban,
-  repo: Core.Repo,
-  queues: false
+# Queues: Mica's and the systems' (Core.ObanConfig); a queue listed under
+# `queues:` keeps the limit set here, and `queues: false` turns them all off.
+config :core, Oban, repo: Core.Repo
 
-config :packmatic, Packmatic.Source.URL,
-  hackney: [
-    pool: :default
-  ]
+config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 
-config :core, :rate,
-  prune_interval: 60 * 60 * 1000,
-  quotas: [
-    [service: :azure_blob, limit: 1000, unit: :call, window: :minute, scope: :local],
-    [service: :azure_blob, limit: 10_000_000, unit: :byte, window: :day, scope: :local],
-    [service: :azure_blob, limit: 1_000_000_000, unit: :byte, window: :day, scope: :global],
-    [service: :storage_export, limit: 1, unit: :call, window: :minute, scope: :local],
-    [service: :feldspar_data_donation, limit: 1, unit: :byte, window: :day, scope: :local],
-    [service: :feldspar_log, limit: 60, unit: :call, window: :minute, scope: :local],
-    [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :recruit, limit: 5, unit: :call, window: :minute, scope: :local],
-    [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local],
-    [service: :provider_reconcile, limit: 300, unit: :call, window: :minute, scope: :global]
-  ]
+# Default quotas come from the systems (rate_quotas/0). `quota_overrides`
+# (RATE_QUOTAS in releases) replaces the quotas of the services it lists; the
+# other services keep their defaults. Setting `quotas:` here replaces all
+# defaults. A service without any quota is not limited. The Feldspar donate and
+# log API has none: its requests come through the proxy, so a per-IP limit
+# would cover every participant on a node.
+config :core, :rate, prune_interval: 60 * 60 * 1000
 
 # Reconciliation sweep: base back-off (ms) for provider retries/throttle waits.
 config :core, :reconciliation, backoff_ms: 200
@@ -253,26 +208,19 @@ config :core, :storage,
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
-module =
-  case Code.ensure_compiled(Bundle) do
-    {:module, module} ->
-      module
-
-    _ ->
-      [{module, _binary}] = Code.compile_file(".bundle.ex")
-      module
+# The SaaS config, which names the SaaS module (`config :core, saas:`). The
+# BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
+# code-split.
+default_bundle =
+  case File.read(".bundle") do
+    {:ok, bundle} -> String.trim(bundle)
+    {:error, _} -> "next"
   end
 
-bundle = apply(module, :name, [])
+saas_dir =
+  Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, System.get_env("BUNDLE", default_bundle))
 
-bundle_dir = apply(module, :dir, [bundle])
-
-config :core, :bundle, bundle
-config :core, :bundle_dir, bundle_dir
-
-unless is_nil(bundle) do
-  import_config "../#{bundle_dir}/config/config.exs"
-end
+import_config "../#{saas_dir}/config/config.exs"
 
 config :core, :zircon,
   screening: [

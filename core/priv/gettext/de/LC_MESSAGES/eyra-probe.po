@@ -17,12 +17,12 @@ msgstr "Kognitives Screening"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Sie starten gleich einen Test. Folgen Sie den Anweisungen auf dem Bildschirm. Das Laden der Seite kann einen Moment dauern — vielen Dank für Ihre Geduld."
+msgstr "Sie starten gleich eine Aufgabe. Folgen Sie den Anweisungen auf dem Bildschirm. Das Laden der Seite kann einen Moment dauern — vielen Dank für Ihre Geduld."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Laden Sie die ZIP-Datei eines Probe-Tools hoch. Teilnehmende machen den Test im Browser."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Laden Sie die ZIP-Datei eines kognitiven Tools hoch. Teilnehmende bearbeiten die Aufgabe im Browser."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Kognitiver Test"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Kognitive Aufgabe"

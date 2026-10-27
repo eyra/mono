@@ -11,7 +11,33 @@
 
 ## Unreleased
 
-* Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` command that moves them to `STORAGE_PATH`. Installations on S3 storage are not affected.
+* Fixed - Deliveries to Yoda and Azure put the donation file name in the upload URL as one percent-encoded path segment, so names with spaces, `?`, `#` or `%` arrive intact; a `/` or `\` in the name becomes `_` there, so the file stays in the endpoint's folder. Built-in storage keeps its file names as before. A donation whose key, task or group is not plain text or a number, or contains a control character (such as a line break), is refused with 400. Upgrading: no action needed.
+* Fixed - When the payment provider refuses a pay-in, the payment form closes with an error, and "Pay to add participants" opens it again with the study's current settings, so the researcher can retry. Before, pressing "Confirm" again in the same form crashed the page. A save that conflicts with a newer change to the same record now returns an error instead of crashing. Upgrading: no action needed.
+* Fixed - In the root `Dockerfile`, a failed download of a precompiled NIF no longer gets cached as a passing build step. Upgrading: if you build your own image from the root `Dockerfile`, use the updated one.
+* Fixed - Feldspar app uploads on the local filesystem (no S3) refuse a zip with an entry that resolves outside the app's own folder, such as `../other/file`, or whose entry names differ between the zip's index and its file headers, instead of extracting it. The upload form then shows "The selected file is not a valid app zip", also for a file that isn't a zip or a zip that can't be extracted, instead of failing without a message. Upgrading: no action needed.
+* Changed - `RATE_QUOTAS` now only replaces the default rate limits of the services it lists; every other service keeps the default its system declares (`rate_quotas/0`) (before, it replaced all defaults, and services it left out had no limit). A release without `RATE_QUOTAS` (such as the Fly deployments and Self) had no rate limits at all; it now gets every default: sign-up, recruitment links, storage export, email sign-in code requests (3 per minute per email address) and provider reconciliation. A release with `RATE_QUOTAS` now also keeps the defaults of the services it doesn't list, such as the email sign-in code limit. The defaults for storage exports, sign-ups and recruitment links match the production values. The Feldspar donate and log API has no default limit, as before. Upgrading: no action needed; an installation that relied on a service being unlimited sets a higher limit for it in `RATE_QUOTAS`.
+* Fixed - A study's preview link (`/a/<id>?p=preview`) only opens the study for people who can edit it. Anyone else sees the "not available" page, also while the study is online; `preview` is no longer accepted as a participant id.
+* Security - The study setup export only includes assets from the installation's own content storage; any other asset URL is skipped and listed in `export-warnings.json`. The study settings and manual page forms only save the fields they show, so image URLs can't be set from the browser; images are set through their uploaders only. Upgrading: no action needed.
+* Changed - Elixir 1.19.6 in development, CI, the Fly image and the release image (was 1.18.4, and 1.17.0 in CI). OTP stays 27 on Fly and in CI, and 28 in the release image.
+* Changed - The zip exports (study setup and storage) use packmatic 2.1 from Hex instead of a pinned fork of 1.2: correct Zip64 offsets for large archives and UTF-8 download file names. Downloads into the zip don't follow redirects; an empty file is included as an empty file, and an asset that answers with an error is left out of the study setup export and listed in `export-warnings.json`, as is an asset larger than the upload limit.
+* Security - Built-in storage on the local filesystem (no `STORAGE_S3_PREFIX`) keeps donations in `STORAGE_PATH` (default: a `storage` folder next to `UPLOAD_PATH`) instead of `UPLOAD_PATH`, which is served without authentication. Upgrading: the app refuses to start while `UPLOAD_PATH` still holds endpoint folders (`project_node=<id>`, or `assignment=<id>` from mid-2024 and earlier); the error lists them and gives the `mv` commands that move them to `STORAGE_PATH`. Installations on S3 storage are not affected.
+* Security - Built-in storage on S3 (`STORAGE_S3_PREFIX` set) must keep donations in a private bucket, separate from the public bucket for content and Feldspar apps. Objects in `PUBLIC_S3_BUCKET` are readable by anyone who knows their URL, and the old setup docs used one bucket for both. Upgrading: the app refuses to start when `AWS_S3_BUCKET` equals `PUBLIC_S3_BUCKET`. Create a separate private bucket, move the existing `storage/` objects (the `STORAGE_S3_PREFIX` folder) there, and set `AWS_S3_BUCKET` to it; the app's access key needs read and write access to both buckets. Installations on the local filesystem are not affected.
+
+## \#32.1 2026-10-23
+
+* Fixed - Data donation: a donation is only accepted for the signed-in user's own participation in that study, and the donation context keys stay strings
+* Fixed - Study page: consent, task data and files are stored under the participant id this study uses
+
+## \#32 2026-10-22
+
+* Changed - Signed-out visitors who open a study invitation land on the participant sign-in page, and a wrong or expired code keeps them on that path back to the study (behind `:otp`)
+* Changed - Native app: the assignment page fits the viewport, and other app pages scroll as one page
+* Changed - Code moved into `core/mica`, `core/next` and `core/mica_saas` (Nova migration), with a CI boundary check; no intended functional change. Self-hosters building their own image need the updated root `Dockerfile`
+* Removed - Banking, which was unused; its `money_manager_transaction_marker` table stays behind under the deferred-drop pattern
+* Fixed - PDF viewer: pages no longer appear out of order or duplicated after resizing, and documents keep their own fonts
+* Fixed - Owners can preview an unpublished study
+* Security - The shared service login key was removed from the repository's docs and scripts. Service login still reads it from `SERVICE_LOGIN_KEY` and stays off (503) when that is unset
+* Security - Includes the 31.1 storage export access check
 
 ## \#31.1 2026-10-19
 

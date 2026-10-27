@@ -295,15 +295,14 @@ end
 ```elixir
 # Temporarily add logging to Signal.Private.dispatch
 defp signal_handlers do
-  handlers = case Process.get(:signal_handlers_override) do
+  case Process.get(:signal_handlers_override) || override_from_config() do
     nil ->
       IO.puts("PID #{inspect(self())}: Using default handlers")
-      Keyword.get(config(), :handlers, [])
+      Core.SaaS.signal_handlers()
     override ->
       IO.puts("PID #{inspect(self())}: Using override: #{inspect(override)}")
-      override
+      # ...
   end
-  # ...
 end
 ```
 

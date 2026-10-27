@@ -25,10 +25,9 @@ defmodule Systems.Observatory.LiveFeature do
 
       def observe_view_model(%{assigns: %{model: %{id: id} = model}} = socket) do
         user_id =
-          if current_user = socket.assigns |> Map.get(:current_user) do
-            current_user.id
-          else
-            0
+          case Map.get(socket.assigns, :current_user) do
+            nil -> 0
+            current_user -> current_user.id
           end
 
         socket

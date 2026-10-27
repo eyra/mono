@@ -291,4 +291,21 @@ defmodule AuthorizationTest do
              }
            } = Repo.get!(Authorization.Node, child_a.id) |> Repo.preload(parent: [:parent])
   end
+
+  describe "print_roles/1" do
+    import ExUnit.CaptureLog
+
+    setup do
+      level = Logger.level()
+      Logger.configure(level: :notice)
+      on_exit(fn -> Logger.configure(level: level) end)
+    end
+
+    test "names the schema that owns the node" do
+      %{auth_node_id: node_id} = project = Factories.insert!(:project, %{name: "Project"})
+
+      assert capture_log(fn -> Authorization.print_roles(project) end) =~
+               "0 roles for Project.Model ##{node_id}"
+    end
+  end
 end

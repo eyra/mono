@@ -136,7 +136,6 @@ defmodule CoreWeb do
       use Frameworks.Pixel
 
       unquote(component_helpers())
-      unquote(verified_routes())
       unquote(live_features())
     end
   end
@@ -163,7 +162,6 @@ defmodule CoreWeb do
       use Frameworks.Pixel
 
       unquote(component_helpers())
-      unquote(verified_routes())
       unquote(live_features())
     end
   end

@@ -1,9 +1,7 @@
 defmodule CoreWeb.Menu.ItemsProvider do
   @callback values() :: map()
 
-  defp menu_items, do: Core.Env.fetch!(:menu_items)
-
-  def items(), do: menu_items().values()
+  def items(), do: Core.SaaS.module().menu_items().values()
   def item(item_id), do: items()[item_id]
 
   def info(item_id) do

@@ -1,6 +1,7 @@
 defmodule Systems.Storage.BuiltIn.S3 do
   @behaviour Systems.Storage.BuiltIn.Special
   alias ExAws.S3
+  alias Frameworks.Utility.PackmaticURLSource
 
   @impl true
   def store(folder, filename, data) do
@@ -39,7 +40,12 @@ defmodule Systems.Storage.BuiltIn.S3 do
           _ -> nil
         end
 
-      %{path: path, size: String.to_integer(size), timestamp: timestamp, source: {:url, url}}
+      %{
+        path: path,
+        size: String.to_integer(size),
+        timestamp: timestamp,
+        source: {PackmaticURLSource, url}
+      }
     end)
   end
 

@@ -4,6 +4,11 @@ on:
   push:
     branches:
       - master
+  # Build-only check for changes to the docs pipeline; publishing stays on master.
+  pull_request:
+    paths:
+      - .github/workflows/docs.yml
+      - Makefile
 
 jobs:
   docs:
@@ -17,15 +22,20 @@ jobs:
         uses: erlef/setup-elixir@v1.24.1
         with:
           otp-version: "27.3.4"
-          elixir-version: "1.17.0-otp-27"
+          elixir-version: "1.19.6-otp-27"
 
       - name: Setup the Elixir project
         run: make deps
+
+      # elixir_make's :httpc download can fail on GitHub's redirects; see the script.
+      - name: Prefetch precompiled NIFs
+        run: core/scripts/prefetch-nifs
 
       - name: Generate the docs
         run: make docs
 
       - name: Publish documentation
+        if: github.event_name == 'push'
         uses: peaceiris/actions-gh-pages@v4.1.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

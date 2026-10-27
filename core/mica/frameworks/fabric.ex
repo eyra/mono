@@ -288,10 +288,9 @@ defmodule Fabric do
 
   def add_child(%Fabric.Model{children: children} = fabric, %Fabric.LiveComponent.Model{} = child) do
     children =
-      if index = Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
-        List.replace_at(children, index, child)
-      else
-        List.wrap(children) ++ List.wrap(child)
+      case Enum.find_index(children, &(&1.ref.id == child.ref.id)) do
+        nil -> List.wrap(children) ++ List.wrap(child)
+        index -> List.replace_at(children, index, child)
       end
 
     %Fabric.Model{fabric | children: children}

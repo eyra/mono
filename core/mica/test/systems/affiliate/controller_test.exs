@@ -20,6 +20,10 @@ defmodule Systems.Affiliate.ControllerTest do
       refute Controller.valid_id?("undefined")
     end
 
+    test "rejects \"preview\"" do
+      refute Controller.valid_id?("preview")
+    end
+
     test "rejects empty string" do
       refute Controller.valid_id?("")
     end
@@ -34,6 +38,10 @@ defmodule Systems.Affiliate.ControllerTest do
 
     test "rejects identifiers containing special characters" do
       refute Controller.valid_id?("foo@bar")
+    end
+
+    test "rejects identifiers with a trailing newline" do
+      refute Controller.valid_id?("abc123\n")
     end
 
     test "accepts alphanumeric identifier" do

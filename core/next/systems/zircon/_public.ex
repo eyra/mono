@@ -231,7 +231,7 @@ defmodule Systems.Zircon.Public do
       |> Enum.map(& &1.id)
 
     # Archive all uploaded files
-    if length(uploaded_file_ids) > 0 do
+    if uploaded_file_ids != [] do
       Systems.Paper.Public.archive_reference_files!(uploaded_file_ids)
     end
   end

@@ -85,10 +85,9 @@ defmodule Systems.Zircon.Screening.ToolModel do
     def resource_id(%{id: id}), do: "zircon/#{id}"
     def tag(_), do: dgettext("eyra-zircon", "leaf.tag")
 
-    def info(%{papers: papers}, _timezone) do
-      paper_count = papers |> length()
-      [dngettext("eyra-zircon", "1 paper", "* papers", paper_count)]
-    end
+    # The tool has no papers field (they live in its reference files), so the old
+    # `%{papers: papers}` clause could never match; Zircon tools aren't project items.
+    def info(_tool, _timezone), do: []
 
     def status(_), do: %Concept.Leaf.Status{value: :private}
   end

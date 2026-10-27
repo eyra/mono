@@ -22,14 +22,22 @@ defmodule Systems.Rate.Server do
   @impl true
   def init(args) do
     prune_interval = Keyword.get(args, :prune_interval, 60 * 60 * 1000)
-
-    quotas =
-      Keyword.get(args, :quotas, [])
-      |> Enum.map(&Quota.init(&1))
+    quotas = quotas(args)
 
     Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
     {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
+  end
+
+  @doc "The quotas the server enforces: `quotas`, where `quota_overrides` replace a service's quotas."
+  def quotas(args) do
+    Quota.merge(init_quotas(args, :quotas), init_quotas(args, :quota_overrides))
+  end
+
+  defp init_quotas(args, key) do
+    args
+    |> Keyword.get(key, [])
+    |> Enum.map(&Quota.init/1)
   end
 
   @impl true
@@ -49,7 +57,7 @@ defmodule Systems.Rate.Server do
   end
 
   defp schedule_prune(%State{prune_interval: prune_interval, quotas: quotas} = state) do
-    if Enum.count(quotas) > 0 do
+    if not Enum.empty?(quotas) do
       Process.send_after(self(), :prune, prune_interval)
     end
 

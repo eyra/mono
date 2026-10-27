@@ -101,7 +101,7 @@ config :core, CoreWeb.Endpoint,
       ~r"systems/*/templates/.*(eex)$",
       ~r"frameworks/*/.*(ex)$",
       ~r"frameworks/*/templates/.*(eex)$",
-      ~r"(next|mica_saas)/bundle/.*(ex)$"
+      ~r"(next|mica_saas)/lib/.*(ex)$"
     ]
   ],
   watchers: [
@@ -109,19 +109,8 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
-# Node-local queue for storage delivery (data donation files are on local filesystem)
-# IMPORTANT: Systems.Storage.Private.storage_delivery_queue/0 is the source of truth for this formula.
-# This duplication is required because config runs before modules are loaded.
-storage_delivery_queue = :"storage_delivery_local_#{Node.self()}"
-
+# The queues come from Mica and the systems (Core.ObanConfig).
 config :core, Oban,
-  queues: [
-    {storage_delivery_queue, 1},
-    default: 5,
-    email_dispatchers: 1,
-    email_delivery: 1,
-    ris_import: 1
-  ],
   plugins: [
     {Oban.Plugins.Pruner, max_age: 60 * 60},
     {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
@@ -158,7 +147,7 @@ config :core, :account,
 
 config :core, :rate,
   prune_interval: 5 * 60 * 1000,
-  quotas: [
+  quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
     # Higher limit for E2E testing - 100MB per hour
     [

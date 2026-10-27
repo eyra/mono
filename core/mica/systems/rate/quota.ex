@@ -21,6 +21,15 @@ defmodule Systems.Rate.Quota do
       scope: get!(:atom, quota, :scope, [:local, :global])
     }
   end
+
+  @doc """
+  Replaces the default quotas of every service that has an override; the other
+  services keep their defaults.
+  """
+  def merge(defaults, overrides) when is_list(defaults) and is_list(overrides) do
+    overridden = MapSet.new(overrides, & &1.service)
+    Enum.reject(defaults, &MapSet.member?(overridden, &1.service)) ++ overrides
+  end
 end
 
 """

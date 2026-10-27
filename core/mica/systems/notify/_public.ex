@@ -119,7 +119,7 @@ defmodule Systems.Notify.Public do
   end
 
   defp mark_message_seen(%MessageModel{channel: channel} = message) do
-    adapter = channel_adapter(channel)
+    adapter = Notify.Channel.adapter(channel)
 
     if function_exported?(adapter, :mark_seen, 1) do
       case safe_mark_seen(adapter, message) do
@@ -144,10 +144,6 @@ defmodule Systems.Notify.Public do
     error ->
       {:error, Exception.message(error)}
   end
-
-  # Keep in sync with Dispatcher.channel_adapter/1
-  defp channel_adapter(:email), do: Notify.Channel.Email
-  defp channel_adapter(:na), do: Notify.Channel.NA
 
   # Fire-and-forget metric log. A failure here shouldn't roll back the event.
   defp log_to_monitor(%EventModel{type: type, subject_user_id: user_id}) do

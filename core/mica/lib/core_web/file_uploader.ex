@@ -10,8 +10,12 @@ defmodule CoreWeb.FileUploader do
   @callback file_upload_start(socket :: Socket.t(), info :: any()) :: Socket.t()
   @callback file_upload_progress(socket :: Socket.t(), info :: any()) :: Socket.t()
   @callback pre_process_file(info :: any()) :: map()
+  @callback file_upload_error(socket :: Socket.t(), reason :: any()) :: Socket.t()
 
-  @optional_callbacks file_upload_start: 2, file_upload_progress: 2, pre_process_file: 1
+  @optional_callbacks file_upload_start: 2,
+                      file_upload_progress: 2,
+                      pre_process_file: 1,
+                      file_upload_error: 2
 
   def get_upload_path(filename) do
     unless Regex.match?(@allowed_filename_pattern, filename) do
@@ -75,8 +79,10 @@ defmodule CoreWeb.FileUploader do
 
         socket =
           if entry.done? do
-            upload_result = consume_file(socket, entry)
-            socket |> process_file(upload_result)
+            case consume_file(socket, entry) do
+              {:error, reason} -> handle_upload_failure(socket, reason)
+              upload_result -> process_file(socket, upload_result)
+            end
           else
             socket
           end
@@ -84,28 +90,39 @@ defmodule CoreWeb.FileUploader do
         {:noreply, socket}
       end
 
+      defp handle_upload_failure(socket, reason) do
+        if function_exported?(__MODULE__, :file_upload_error, 2) do
+          apply(__MODULE__, :file_upload_error, [socket, reason])
+        else
+          Frameworks.Pixel.Flash.push_error(socket)
+        end
+      end
+
       def consume_file(socket, entry) do
         consume_uploaded_entry(socket, entry, fn %{path: tmp_path} ->
-          path = unquote(store).store(tmp_path, entry.client_name)
-          public_url = unquote(store).get_public_url(path)
-
-          info =
-            if function_exported?(__MODULE__, :pre_process_file, 1) do
-              apply(__MODULE__, :pre_process_file, [
-                %{entry: entry, tmp_path: tmp_path, public_url: public_url}
-              ])
-            else
-              %{}
-            end
-
-          result =
-            Map.merge(
-              %{path: path, public_url: public_url, original_filename: entry.client_name},
-              info
-            )
-
-          {:ok, result}
+          case unquote(store).store(tmp_path, entry.client_name) do
+            {:error, reason} -> {:ok, {:error, reason}}
+            path -> {:ok, stored_file(entry, tmp_path, path)}
+          end
         end)
+      end
+
+      defp stored_file(entry, tmp_path, path) do
+        public_url = unquote(store).get_public_url(path)
+
+        info =
+          if function_exported?(__MODULE__, :pre_process_file, 1) do
+            apply(__MODULE__, :pre_process_file, [
+              %{entry: entry, tmp_path: tmp_path, public_url: public_url}
+            ])
+          else
+            %{}
+          end
+
+        Map.merge(
+          %{path: path, public_url: public_url, original_filename: entry.client_name},
+          info
+        )
       end
 
       def ext(entry) do

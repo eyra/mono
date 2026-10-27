@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.OnboardingConsentView do
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
 
   alias Frameworks.Pixel.Text
   alias CoreWeb.UI.Area

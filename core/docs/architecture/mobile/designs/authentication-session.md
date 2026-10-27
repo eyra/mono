@@ -221,6 +221,8 @@ Both flows use the same code and session functions, so they cannot drift apart:
 The mobile session and the `NextApp` client are Next's, so the calls live in
 Next: `Next.Account.NativeSigninController`, `Next.Account.NativeSigninGuard`
 (CSRF and client checks) and `Next.Account.OtpSignin` (steps shared with the
-LiveView pages and the redeem step), under `next/bundle/lib/account/`. Mica only
-gained `Account.UserAuth.log_in_user_without_redirect/3`, which starts a session
-of the requested type without redirecting.
+LiveView pages and the redeem step), in `next/systems/account/`. Their routes and
+the `:native_signin` pipeline are in `Next.Account.System`. In Mica,
+`Account.UserAuth.log_in_user_without_redirect/3` starts a session of the
+requested type without redirecting, and `CoreWeb.ReturnTo.sanitize/1` keeps only
+same-site paths.

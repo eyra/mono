@@ -3,6 +3,7 @@ defmodule Systems.Storage.ControllerTest do
 
   import Mox
 
+  alias Frameworks.Utility.PackmaticURLSource
   alias Systems.Storage
   alias Systems.Storage.BuiltIn.MockSpecial
 
@@ -36,15 +37,12 @@ defmodule Systems.Storage.ControllerTest do
 
       bypass = Bypass.open()
       Bypass.expect_once(bypass, "GET", "/donation.json", &Plug.Conn.resp(&1, 200, "{}"))
+      Bypass.expect_once(bypass, "GET", "/empty.json", &Plug.Conn.resp(&1, 200, ""))
 
       expect(MockSpecial, :list_files, fn "export_test" ->
         [
-          %{
-            source: {:url, "http://localhost:#{bypass.port}/donation.json"},
-            path: "donation.json",
-            size: 2,
-            timestamp: DateTime.utc_now()
-          }
+          stored_file(bypass, "donation.json", 2),
+          stored_file(bypass, "empty.json", 0)
         ]
       end)
 
@@ -54,8 +52,20 @@ defmodule Systems.Storage.ControllerTest do
       assert [disposition] = get_resp_header(conn, "content-disposition")
       assert URI.decode(disposition) =~ ~r/endpoint_#{endpoint.id}\.zip/
 
-      {:ok, [{path, "{}"}]} = :zip.unzip(conn.resp_body, [:memory])
-      assert to_string(path) =~ ~r|endpoint_#{endpoint.id}/donation\.json$|
+      {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
+      files = Map.new(files, fn {path, data} -> {Path.basename(to_string(path)), data} end)
+
+      assert files == %{"donation.json" => "{}", "empty.json" => ""}
     end
+  end
+
+  # The shape S3 storage lists its files in.
+  defp stored_file(%Bypass{port: port}, path, size) do
+    %{
+      source: {PackmaticURLSource, "http://localhost:#{port}/#{path}"},
+      path: path,
+      size: size,
+      timestamp: DateTime.utc_now()
+    }
   end
 end

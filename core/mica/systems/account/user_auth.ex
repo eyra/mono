@@ -171,10 +171,8 @@ defmodule Systems.Account.UserAuth do
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if user = conn.assigns[:current_user] do
-      path = signed_in_path(user) || Account.Public.start_page_path(user)
-
       conn
-      |> redirect(to: path)
+      |> redirect(to: signed_in_path(user))
       |> halt()
     else
       conn
@@ -224,25 +222,11 @@ defmodule Systems.Account.UserAuth do
   defp redirect_path_after_signin(conn, user) do
     onboarding_path(user) ||
       get_session(conn, :user_return_to) ||
-      signed_in_path(user) ||
-      Account.Public.start_page_path(user)
+      signed_in_path(user)
   end
 
   defp onboarding_path(_), do: nil
 
-  def signed_in_path(%{creator: false}),
-    do: path(:member_signed_in_page)
-
-  def signed_in_path(%{creator: true}),
-    do: path(:creator_signed_in_page)
-
-  def signed_in_path(_user),
-    do: path(:member_signed_in_page)
-
-  defp path(key), do: auth_config(key)
-
-  defp auth_config(key) when is_atom(key) do
-    Core.Env.get(Systems.Account.UserAuth, [])
-    |> Keyword.get(key)
-  end
+  def signed_in_path(%{creator: true}), do: Core.SaaS.module().signed_in_page(:creator)
+  def signed_in_path(_user), do: Core.SaaS.module().signed_in_page(:member)
 end

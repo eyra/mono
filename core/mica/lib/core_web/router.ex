@@ -1,15 +1,14 @@
 defmodule CoreWeb.Router do
   use CoreWeb, :router
 
-  require Core.BundleOverrides
+  require Core.SaaS
   require Core.Env
   require Systems.Account.Auth.Surfconext
   require Systems.Account.Auth.Centerdata
   require CoreWeb.Routes
   require CoreWeb.LocalImageCatalogPlug
-  require Frameworks.E2E.Routes
 
-  Core.BundleOverrides.routes()
+  Core.SaaS.override_routes()
 
   require Systems.Account.Auth.Google
   Systems.Account.Auth.Google.routes(:core)
@@ -19,7 +18,6 @@ defmodule CoreWeb.Router do
 
   CoreWeb.Routes.routes()
   CoreWeb.LocalImageCatalogPlug.routes()
-  Frameworks.E2E.Routes.routes()
 
   scope "/", CoreWeb do
     pipe_through([:browser_base])

@@ -1054,6 +1054,43 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
+  describe "ensure_tester/2" do
+    setup do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+
+      {:ok, user: user, assignment: assignment}
+    end
+
+    test "makes the user a crew member with the tester role", %{
+      user: user,
+      assignment: assignment
+    } do
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert Crew.Public.get_member(assignment.crew, user)
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "adds the tester role to an existing crew member", %{
+      user: user,
+      assignment: assignment
+    } do
+      Crew.Factories.create_member(assignment.crew, user)
+
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert Assignment.Public.tester?(assignment, user)
+    end
+
+    test "can be called again without adding rows", %{user: user, assignment: assignment} do
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+      assert {:ok, _} = Assignment.Public.ensure_tester(assignment, user)
+
+      assert [_] = Crew.Public.list_members(assignment.crew)
+    end
+  end
+
   describe "add_participant!/2 reserves reward at join" do
     setup do
       user = Factories.insert!(:member)
@@ -1288,5 +1325,56 @@ defmodule Systems.Assignment.PublicTest do
       })
 
     Factories.insert!(:assignment, %{info: info, fund: fund})
+  end
+
+  describe "participant_identifier/2" do
+    test "returns the member's identifier at the assignment's affiliate" do
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+      user = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, user)
+      Assignment.Factories.add_affiliate_user(assignment, user, "panel-42")
+
+      assert {:ok, "panel-42"} = Assignment.Public.participant_identifier(assignment, user)
+    end
+
+    test "returns the member id for a member without an identifier at the affiliate" do
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+      user = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      assert {:ok, ^public_id} = Assignment.Public.participant_identifier(assignment, user)
+    end
+
+    test "ignores the member's identifier at another affiliate" do
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+      other_study = Assignment.Factories.create_assignment_with_affiliate()
+      user = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, user)
+      Assignment.Factories.add_affiliate_user(other_study, user, "panel-other")
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      assert {:ok, ^public_id} = Assignment.Public.participant_identifier(assignment, user)
+    end
+
+    test "returns the member id for an assignment without an affiliate" do
+      assignment =
+        Assignment.Factories.create_assignment(31, 0, :online)
+        |> Repo.preload(Assignment.Model.preload_graph(:down))
+
+      user = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      assert {:ok, ^public_id} = Assignment.Public.participant_identifier(assignment, user)
+    end
+
+    test "returns :error for a user who is not a member" do
+      assignment = Assignment.Factories.create_assignment_with_affiliate()
+      user = Factories.insert!(:member)
+      Assignment.Factories.add_affiliate_user(assignment, user, "panel-43")
+
+      assert :error = Assignment.Public.participant_identifier(assignment, user)
+    end
   end
 end

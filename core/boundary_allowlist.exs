@@ -4,10 +4,8 @@
 [
   {"mica/frameworks/pixel/components/footer.ex", :eyra_domain,
    "\"Powered by Eyra\" footer link; code-brand Core.Brand"},
-  {"mica/lib/core/application.ex", :next_name,
-   "Paper RIS processor Registry started by Mica; code-instance moves it into Zircon's system children"},
   {"mica/lib/core/authorization.ex", :next_reference,
-   "grants for Next bundle sign-in pages and Graphite/Onyx pages; code-systems grants from Core.System"},
+   "grants of Next's systems spliced by Core.SaaS.grants(); spliced grants stay a compile-time reference until code-split"},
   {"mica/lib/core/factories.ex", :next_reference,
    "shared factories build Graphite/Zircon/Paper/Annotation/Ontology models; split into Next factories (code-instance)"},
   {"mica/lib/core/release.ex", :eyra_domain,
@@ -21,7 +19,7 @@
   {"mica/lib/core/seeds/test.ex", :eyra_service,
    "e2e@eyra.service named in moduledoc; code-instance synthetic accounts"},
   {"mica/lib/core_web/router.ex", :next_reference,
-   "Next bundle routes, E2E controller, Graphite and Onyx routes; code-systems routes from Core.System"},
+   "routes of Next's systems spliced by Core.SaaS; spliced routes stay a compile-time reference until code-split"},
   {"mica/systems/account/auth/external.ex", :eyra_domain,
    "external+…@eyra.co synthetic email; code-instance synthetic accounts"},
   {"mica/systems/account/features_model.ex", :next_reference,
@@ -32,8 +30,8 @@
    "@eyra.service service-account domain; code-instance synthetic accounts"},
   {"mica/systems/account/signup_page.ex", :panl_atom,
    "add_to_panl post-action and :panl flag; code-instance PaNL sign-up flow"},
-  {"mica/systems/admin/config_page_builder.ex", :next_reference,
-   "Citizen settings in admin; code-instance admin panels"},
+  {"mica/systems/admin/system_panel.ex", :next_reference,
+   "Citizen pools in the system panel; code-instance admin panels"},
   {"mica/systems/admin/system_view_builder.ex", :next_reference,
    "Citizen pool form in admin; code-instance admin panels"},
   {"mica/systems/affiliate/_public.ex", :eyra_domain,
@@ -71,5 +69,7 @@
   {"mica/systems/workflow/_public.ex", :next_reference,
    "Graphite and Zircon tool handling; code-registry tool registry"},
   {"mica/systems/workflow/tool_ref_model.ex", :next_reference,
-   "workflow_tool_refs FKs to Graphite and Zircon tools; code-registry tool registry"}
+   "workflow_tool_refs FKs to Graphite and Zircon tools; code-registry tool registry"},
+  {"mica_saas/lib/saas.ex", :next_reference,
+   "Self.SaaS keeps Next's Graphite, Onyx, Student, Zircon and Paper systems (decided E3); code-registry/code-instance"}
 ]

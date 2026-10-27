@@ -72,6 +72,15 @@ defmodule Systems.Assignment.PaidSlotsLogic do
       end
 
       @impl true
+      def handle_event("pay_in_request_form_failed", _, socket) do
+        {:noreply,
+         socket
+         |> Systems.Assignment.PaidSlotsLogic.refresh_assignment()
+         |> Systems.Assignment.PaidSlotsLogic.assign_transactions()
+         |> hide_modal(:pay_in_request_form)}
+      end
+
+      @impl true
       def handle_event("resume_payment", %{"provider-uid" => provider_uid}, socket) do
         case Systems.Payment.Public.get_transaction(provider_uid) do
           {:ok, %{payment_url: payment_url}} when is_binary(payment_url) ->

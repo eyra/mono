@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This codebase is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](../docs/nova-migration/plan.md) and [design](../docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
 
 - No new PaNL, VU or other Eyra specifics in generic systems.
-- New systems use `Core.System` once it exists (plan step code-systems): one `Systems.X.System` per system; the SaaS composes them through `Core.SaaS`.
+- Systems contribute through `Core.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Core.SaaS` (`Next.SaaS`, `Self.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `mica/lib/core/authorization.ex` or `mica/lib/core_web/routes.ex`. So do its signal handlers, notifiers and notify channels (`signal_handlers/0`, `notifiers/0`, `notify_channels/0`): a `_switch.ex` or `_notify.ex` that no `_system.ex` lists never runs. Its supervised processes, Oban queues and default rate quotas go there too (`children/0`, `oban_queues/0`, `rate_quotas/0`), not in `Core.Application` or the config files. So do its tabs on the Admin page and the account page (`admin_panels/0` with `Systems.Admin.Panel` modules, `account_tabs/0` with `Systems.Account.Tab` modules), and its sections on the Desktop page (`desktop_sections/0` with `Systems.Desktop.Section` modules). A new system with a `_system.ex` is listed in `Core.Systems.all/0` (Mica) or in the SaaS's `systems/0`.
 - Mica only contains code under Nova governance; custom and experimental systems start in Next.
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `mica/`, `next/`, or `mica_saas/` for the Self reference SaaS. Code under `mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `next/` and `mica_saas/` must not name each other's modules. CI enforces this with `scripts/boundary_check.exs` and `boundary_allowlist.exs`; the allowlist may only shrink.
@@ -112,6 +112,13 @@ fly storage update <app-name>-storage --public --yes
 ```
 Verify with: `fly storage status <app-name>-storage` → should show `Public = True`
 
+### 3b. Create a Private Bucket for Donations
+```bash
+fly storage create --name <app-name>-donations --org eyra --yes
+```
+Keep it private: donations must never share the public bucket. Give the app's access key
+access to this bucket in the Tigris dashboard (`fly storage dashboard`).
+
 ### 4. Set Required Secrets
 ```bash
 # Database
@@ -122,6 +129,9 @@ fly secrets set SECRET_KEY_BASE="$(mix phx.gen.secret)" -a <app-name>
 
 # CRITICAL: Use t3.storage.dev domain (no hyphens)
 fly secrets set PUBLIC_S3_URL="https://<app-name>-storage.t3.storage.dev" -a <app-name>
+
+# Donations go to the private bucket; the app refuses to start when it is the public one
+fly secrets set AWS_S3_BUCKET="<app-name>-donations" PUBLIC_S3_BUCKET="<app-name>-storage" -a <app-name>
 
 # Other required secrets
 fly secrets set APP_ADMINS="admin@example.com" -a <app-name>
@@ -161,9 +171,11 @@ Artillery-based load tests for the data donation API are located in `core/test/l
    - Set a strong password
    - The service user authenticates via `/api/service/login`
 
-2. **Ensure assignment has storage endpoint**: The target assignment must have a storage endpoint configured for data donations.
+2. **Add the service user to the study's crew**: the donate endpoint only accepts donations from a participant or tester of the assignment, otherwise it returns 403. Add the service user as a tester (`Systems.Crew.Public.apply_member_with_role(crew, user, :tester)`, see `core/test/load/README.md`).
 
-3. **Setup load test environment**:
+3. **Ensure assignment has storage endpoint**: The target assignment must have a storage endpoint configured for data donations.
+
+4. **Setup load test environment**:
 ```bash
 cd core/test/load
 npm run setup  # Installs deps and auto-generates test data files (1MB, 10MB, 100MB, 200MB)
@@ -218,6 +230,7 @@ Use the verification script to count files on Fly machines before/after:
 | Issue | Cause | Fix |
 |-------|-------|-----|
 | 401 Unauthorized | Invalid service credentials | Verify service user exists and password is correct |
+| 403 Forbidden | Service user is not in the study's crew | Add it as a tester (see Prerequisites) |
 | 413 Payload Too Large | File exceeds Phoenix limit | Use FILE_SIZE_MB=100 or less, check `STORAGE_UPLOAD_MAX_SIZE` |
 | Timeout errors | Slow network/processing | Increase timeout in `donate.yml` (default 300s) |
 | Files not appearing | Wrong assignment ID | Verify ASSIGNMENT_ID has storage endpoint configured |
@@ -531,12 +544,12 @@ def process_data(list) when is_list(list), do: {:list, list}  # Wrong: same arit
 - Follow existing patterns for models, forms, views, and pages
 - Implement proper authorization using GreenLight
 
-## Bundle System
-The application supports different "bundles" (configurations):
-- Bundle selection via `.bundle.ex` file in root
-- Bundle-specific config in `next/bundle/config/` (Next) and `mica_saas/bundle/config/` (Self, the reference SaaS on Mica)
-- Current bundles: `next`, `self`
-- Both `bundle/` folders are temporary: Nova migration step code-systems dissolves them into `<saas>/{lib,config}`
+## SaaS selection
+The build composes one SaaS on Mica:
+- `BUNDLE=next` (default) or `BUNDLE=self` picks the SaaS config that `config/config.exs` imports: `next/config/config.exs` or `mica_saas/config/config.exs`. Each sets `config :core, saas: Next.SaaS` or `Self.SaaS`, read at compile time.
+- The SaaS module (`next/lib/saas.ex`, `mica_saas/lib/saas.ex`) lists its systems and carries the SaaS-level config: start pages, menus, title, signed-in pages.
+- A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
+- `config/test.exs` always builds Next. Run Self with `BUNDLE=self MIX_ENV=dev`.
 
 ## Build Warning Fix Rule
 **CRITICAL**: When fixing compiler warnings, ALWAYS target the **exact line numbers** specified in the warning message. Never use find-and-replace-all approaches. Be surgical and precise - fix only the problematic lines mentioned in the compiler output.

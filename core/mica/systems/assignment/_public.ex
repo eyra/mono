@@ -543,6 +543,23 @@ defmodule Systems.Assignment.Public do
     end
   end
 
+  @doc """
+  The id a crew member is known by in the assignment's data, as in the participant
+  export: their identifier at the assignment's affiliate, else their crew member id.
+  Returns `:error` when the user is not a member of the crew.
+  """
+  def participant_identifier(%Assignment.Model{affiliate: affiliate} = assignment, user) do
+    with {:ok, public_id} <- participant_id(assignment, user) do
+      {:ok, affiliate_identifier(affiliate, user) || public_id}
+    end
+  end
+
+  defp affiliate_identifier(%Affiliate.Model{} = affiliate, %User{} = user) do
+    Affiliate.Public.get_identifier(affiliate, user)
+  end
+
+  defp affiliate_identifier(nil, _user), do: nil
+
   # Only entities that carry an auth node: a Workflow.ItemModel has none, so it
   # has no tree to resolve an owner from.
   def owner!(%Assignment.Model{} = assignment), do: parent_owner!(assignment)
@@ -618,6 +635,15 @@ defmodule Systems.Assignment.Public do
   end
 
   def tester?(_, _), do: false
+
+  @doc """
+  Makes the user a tester of the assignment: a crew member with the tester role,
+  so that previewing the study shows its tasks. Safe to call repeatedly and
+  concurrently.
+  """
+  def ensure_tester(%Assignment.Model{crew: crew} = assignment, %User{} = user) do
+    Crew.Public.ensure_member_with_role(crew, user, :tester, reset_opts(assignment))
+  end
 
   def apply_member(id, user, identifier, reward_amount) when is_number(id) do
     get!(id, [:crew])

@@ -18,7 +18,7 @@ defmodule Systems.Student.CriteriaFilters do
   end
 
   def include?(codes, filter) when is_list(codes) do
-    Enum.count(codes, &include?(&1, filter)) > 0
+    Enum.any?(codes, &include?(&1, filter))
   end
 
   def include?(code, :iba), do: String.contains?(Atom.to_string(code), "iba")

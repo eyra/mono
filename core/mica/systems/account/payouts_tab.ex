@@ -6,7 +6,7 @@ defmodule Systems.Account.PayoutsTab do
   Part of the post-launch money surface, so it follows `:panl_post_launch`
   along with the rewards summary and the participation history.
   """
-  @behaviour Systems.Account.Page.Tab
+  @behaviour Systems.Account.Tab
 
   use Gettext, backend: CoreWeb.Gettext
   use Core.FeatureFlags

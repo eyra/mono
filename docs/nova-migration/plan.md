@@ -134,7 +134,7 @@ flowchart LR
 Details and rationale are in [design.md](./design.md#decisions).
 
 - **Option A.** `eyra/next` is the root Phoenix project. Mica is a versioned Mix dependency. Every system, in Mica or in a SaaS, implements `Core.System`; the SaaS composes them through `Core.SaaS`. During the migration Next uses `path:` or branch dependencies; afterwards it pins to tags.
-- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.systems/0`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
+- **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.Systems.all/0`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
 - **Optional Mica building blocks:** assignment, fund, affiliate, and pool/advert/promotion.
 - **Moves to the SaaS (instance specifics):**
   - PaNL names and panl.nl URLs
@@ -142,7 +142,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - `participant?(:panl, …)` checks
   - VU student codes
 - **`banking_proxy`** is not deployed anywhere and is retired.
-- **Names** (revised 2026-10-16). One step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names. Modules added before code-rename (such as `Core.System`, `Core.SaaS`, `Core.Env` and `Core.systems/0`) use the `Core` name until then and move with the rest. This replaces the earlier decision that modules stay `Core.*`/`CoreWeb.*`.
+- **Names** (revised 2026-10-16). One step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names. Modules added before code-rename (such as `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems`) use the `Core` name until then and move with the rest. This replaces the earlier decision that modules stay `Core.*`/`CoreWeb.*`.
 - **Database:**
   - one database per deployment
   - every table has one owner, with its migrations in the owner's repository
@@ -349,7 +349,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - admin panels and account features
 
     A system can use the extension points of other systems, so a SaaS extends Mica's systems through its own systems.
-  - **The `Core.SaaS` behaviour,** one per SaaS: `Next.SaaS` and `Self.SaaS`. `systems/0` returns Mica's systems (`Core.systems/0`) plus the SaaS's own. It also holds the SaaS-level config: start pages, menus, feature-flag defaults and, later, the brand (code-brand). The SaaS is selected with `config :core, saas: Next.SaaS`.
+  - **The `Core.SaaS` behaviour,** one per SaaS: `Next.SaaS` and `Self.SaaS`. `systems/0` returns Mica's systems (`Core.Systems.all/0`) plus the SaaS's own. It also holds the SaaS-level config: start pages, menus, feature-flag defaults and, later, the brand (code-brand). The SaaS is selected with `config :core, saas: Next.SaaS`.
 
     See [design.md §3.3](./design.md#33-the-coresystem-and-coresaas-contracts).
   - **Convert.** Each Mica system gets a `Systems.X.System`; the Next and Self bundles become `Next.SaaS` and `Self.SaaS`, and the systems that live in Next get their own `Core.System` modules.
@@ -387,7 +387,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Modules.**
     - `defmodule Core…`/`defmodule CoreWeb…`, aliases, imports and every other reference.
     - `use CoreWeb, :live_view` and the other `use CoreWeb` forms, `use CoreWeb.Router`.
-    - Modules added before this step move with the rest: `Core.System`, `Core.SaaS`, `Core.Env` and `Core.systems/0` become `Mica.System`, `Mica.SaaS`, `Mica.Env` and `Mica.systems/0`.
+    - Modules added before this step move with the rest: `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems` become `Mica.System`, `Mica.SaaS`, `Mica.Env` and `Mica.Systems`.
     - Rename the files and folders that carry the name: `core/mica/lib/core*` becomes `core/mica/lib/mica*`.
   - **Tooling that names modules.**
     - the Gettext backend (`CoreWeb.Gettext` becomes `MicaWeb.Gettext`) and its `otp_app`
@@ -499,7 +499,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Graphite and Zircon** (with Paper, Annotation, Ontology, Onyx):
     - depend only on `Core.Tool` and `Core.System`
     - the screening agent concept moves with Zircon
-    - the Paper registry moves from `Core.Application` into Zircon's system children
+    - the Paper registry is already a child of `Systems.Paper.System` (code-systems)
   - **Remaining dependency cycles** are broken with signals or behaviours where the direction would otherwise be Mica → Next:
     - Account ↔ Fund/Payment
     - Assignment ↔ Pool/Advert
@@ -697,7 +697,7 @@ Full plan: [eyra/feldspar `doc/nova-migration/plan.md`](https://github.com/eyra/
 - **feldspar-tests — Contract tests.** Shared fixtures run in both CIs. Depends on feldspar-protocol.
 - **feldspar-transfer — Transfer `eyra/feldspar` to `novasoftwarefoundation/feldspar`.**
   - It is a GitHub transfer, so the full history moves. It needs its own pre-transfer assessment and the user's authorization.
-  - After the transfer, update the Feldspar release URL in `core/frameworks/e2e/controller.ex`.
+  - After the transfer, update the Feldspar release URL in `core/next/systems/e2e/controller.ex`.
   - Not in the same window as ops-cutover.
 
 ## Old numbering
