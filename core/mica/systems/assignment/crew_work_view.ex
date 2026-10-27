@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.CrewWorkView do
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
 
   require Logger
 

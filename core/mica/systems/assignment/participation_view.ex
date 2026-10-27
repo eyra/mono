@@ -5,7 +5,6 @@ defmodule Systems.Assignment.ParticipationView do
   navigate away.
   """
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
