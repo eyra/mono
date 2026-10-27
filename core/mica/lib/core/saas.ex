@@ -79,6 +79,9 @@ defmodule Core.SaaS do
   @doc "The account tabs of all systems, in `systems/0` order."
   def account_tabs, do: Enum.flat_map(systems(), & &1.account_tabs())
 
+  @doc "The Desktop sections of all systems, in `systems/0` order."
+  def desktop_sections, do: Enum.flat_map(systems(), & &1.desktop_sections())
+
   @doc "The children of all systems, in `systems/0` order."
   def children, do: Enum.flat_map(systems(), & &1.children())
 

@@ -44,6 +44,14 @@ defmodule Systems.Desktop.View do
             <Project.CardView.dynamic card={card} />
           <% end %>
         </Grid.dynamic>
+        <%= for section <- @vm.sections do %>
+          <div id={"desktop_section_#{section.id}"}>
+            <.spacing value="XL" />
+            <Text.title2><%= section.title %></Text.title2>
+            <Margin.y id={:title2_bottom} />
+            <%= section.module.render(%{vm: section.vm}) %>
+          </div>
+        <% end %>
       </Area.content>
     </div>
     """
