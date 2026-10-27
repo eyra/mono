@@ -18,11 +18,25 @@ defmodule Core.ObanConfig do
   @doc """
   `config` with Mica's queues and the `declared` queues. A queue that `config`
   lists keeps the limit set there; `queues: false` (tests) keeps every queue off.
+  Raises when a system declares one of Mica's queues.
   """
   def config(config, declared) do
     case Keyword.get(config, :queues, []) do
-      false -> config
-      configured -> Keyword.put(config, :queues, Keyword.merge(queues() ++ declared, configured))
+      false ->
+        config
+
+      configured ->
+        Keyword.put(config, :queues, Keyword.merge(with_mica_queues(declared), configured))
+    end
+  end
+
+  defp with_mica_queues(declared) do
+    case Enum.filter(Keyword.keys(declared), &Keyword.has_key?(queues(), &1)) do
+      [] ->
+        queues() ++ declared
+
+      [name | _] ->
+        raise ArgumentError, "Oban queue #{inspect(name)} is Mica's; a system can't declare it"
     end
   end
 end

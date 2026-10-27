@@ -29,6 +29,17 @@ defmodule Core.ObanConfigTest do
            ]
   end
 
+  test "a system can't declare one of Mica's queues" do
+    assert_raise ArgumentError, "Oban queue :default is Mica's; a system can't declare it", fn ->
+      ObanConfig.config([], default: 1)
+    end
+  end
+
+  test "Oban accepts the queues of the SaaS" do
+    config = ObanConfig.config([repo: Core.Repo], Core.SaaS.oban_queues())
+    assert :ok = Oban.Config.validate(config)
+  end
+
   test "queues: false keeps every queue off" do
     assert ObanConfig.config([queues: false], ris_import: 1) == [queues: false]
   end

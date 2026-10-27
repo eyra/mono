@@ -13,7 +13,7 @@ defmodule Self.SaaS do
         Systems.Onyx.System,
         Systems.Student.System,
         Systems.Zircon.System,
-        # Zircon's RIS import runs on Paper's registry and queue.
+        # Zircon's RIS import runs on Paper's ris_import queue.
         Systems.Paper.System
       ]
   end

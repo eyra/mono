@@ -499,7 +499,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Graphite and Zircon** (with Paper, Annotation, Ontology, Onyx):
     - depend only on `Core.Tool` and `Core.System`
     - the screening agent concept moves with Zircon
-    - the Paper registry moves from `Core.Application` into Zircon's system children
+    - the Paper registry is already a child of `Systems.Paper.System` (code-systems)
   - **Remaining dependency cycles** are broken with signals or behaviours where the direction would otherwise be Mica → Next:
     - Account ↔ Fund/Payment
     - Assignment ↔ Pool/Advert
