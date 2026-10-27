@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This codebase is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](../docs/nova-migration/plan.md) and [design](../docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
 
 - No new PaNL, VU or other Eyra specifics in generic systems.
-- New systems use `Core.System` once it exists (plan step code-systems): one `Systems.X.System` per system; the SaaS composes them through `Core.SaaS`.
+- Systems contribute through `Core.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Core.SaaS` (`Next.SaaS`, `Self.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `mica/lib/core/authorization.ex` or `mica/lib/core_web/routes.ex`. A new system with a `_system.ex` is listed in `Core.systems/0` (Mica) or in the SaaS's `systems/0`.
 - Mica only contains code under Nova governance; custom and experimental systems start in Next.
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `mica/`, `next/`, or `mica_saas/` for the Self reference SaaS. Code under `mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `next/` and `mica_saas/` must not name each other's modules. CI enforces this with `scripts/boundary_check.exs` and `boundary_allowlist.exs`; the allowlist may only shrink.
@@ -544,12 +544,12 @@ def process_data(list) when is_list(list), do: {:list, list}  # Wrong: same arit
 - Follow existing patterns for models, forms, views, and pages
 - Implement proper authorization using GreenLight
 
-## Bundle System
-The application supports different "bundles" (configurations):
-- Bundle selection via `.bundle.ex` file in root
-- Bundle-specific config in `next/bundle/config/` (Next) and `mica_saas/bundle/config/` (Self, the reference SaaS on Mica)
-- Current bundles: `next`, `self`
-- Both `bundle/` folders are temporary: Nova migration step code-systems dissolves them into `<saas>/{lib,config}`
+## SaaS selection
+The build composes one SaaS on Mica:
+- `BUNDLE=next` (default) or `BUNDLE=self` picks the SaaS config that `config/config.exs` imports: `next/config/config.exs` or `mica_saas/config/config.exs`. Each sets `config :core, saas: Next.SaaS` or `Self.SaaS`, read at compile time.
+- The SaaS module (`next/lib/saas.ex`, `mica_saas/lib/saas.ex`) lists its systems and carries the SaaS-level config: start pages, menus, title, signed-in pages.
+- A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
+- `config/test.exs` always builds Next. Run Self with `BUNDLE=self MIX_ENV=dev`.
 
 ## Build Warning Fix Rule
 **CRITICAL**: When fixing compiler warnings, ALWAYS target the **exact line numbers** specified in the warning message. Never use find-and-replace-all approaches. Be surgical and precise - fix only the problematic lines mentioned in the compiler output.

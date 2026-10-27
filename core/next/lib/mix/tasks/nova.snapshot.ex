@@ -12,8 +12,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `permissions.exs`: `Core.Authorization.permission_map/0`
     * `signal.exs`: signal handlers (in order) and notifiers
     * `flags.exs`: the feature flags declared at compile time
-    * `saas_config.exs`: start pages, menus, `:meta`, `UserAuth` pages, account
-      and admin tab order
+    * `saas_config.exs`: the `Core.SaaS` callbacks (start pages, menus, title,
+      signed-in pages), the SaaS app config and account and admin tab order
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `CoreWeb.Router` is compile-connected to
 
@@ -25,7 +25,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
       BUNDLE=self MIX_ENV=dev mix nova.snapshot      # Self: fail on drift
       mix nova.snapshot --update                     # rewrite the snapshots
 
-  Self needs `MIX_ENV=dev`: `config/test.exs` pins `:bundle` to `:next`.
+  Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
 
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
@@ -86,7 +86,9 @@ defmodule Mix.Tasks.Nova.Snapshot do
 
   @doc "The SaaS the current build is for. Raises when config and `BUNDLE` disagree."
   def saas! do
-    configured = Core.Env.fetch!(:bundle)
+    configured =
+      Core.SaaS.module() |> Module.split() |> hd() |> Macro.underscore() |> String.to_atom()
+
     requested = requested_bundle()
 
     if configured != requested do
@@ -99,7 +101,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
     configured
   end
 
-  # Same rule as `.bundle.ex`, which is loaded by the config and not compiled.
+  # Same rule as `config/config.exs`.
   defp requested_bundle do
     default =
       case File.read(".bundle") do
@@ -173,20 +175,17 @@ defmodule Mix.Tasks.Nova.Snapshot do
     ]
   end
 
-  @saas_keys [
-    :start_pages,
-    :menu_items,
-    :workspace_menu_builder,
-    :website_menu_builder,
-    :stripped_menu_builder,
-    :meta,
-    Systems.Account.UserAuth,
-    :account,
-    :pixel
-  ]
-
   defp saas_config(prod) do
-    Enum.map(@saas_keys, &{&1, Keyword.get(prod, &1)}) ++
+    saas = Core.SaaS.module()
+
+    [
+      start_pages: saas.start_pages(),
+      menu_items: saas.menu_items(),
+      menu_builder: Map.new(~w(workspace website stripped)a, &{&1, saas.menu_builder(&1)}),
+      title: saas.title(),
+      signed_in_page: Map.new(~w(creator member)a, &{&1, saas.signed_in_page(&1)})
+    ] ++
+      Enum.map([:account, :pixel], &{&1, Keyword.get(prod, &1)}) ++
       [
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
         admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids()

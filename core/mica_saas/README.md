@@ -1,6 +1,6 @@
 # Self: the reference SaaS on Mica
 
-Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`; its bundle is in `bundle/`. In Nova migration step code-systems (`docs/nova-migration/plan.md`), `bundle/` is dissolved into `core/mica_saas/{lib,config}` when the bundle concept is replaced by `Core.SaaS` (`Self.SaaS`) and `Core.System`.
+Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`, which imports `config/config.exs` (`config :core, saas: Self.SaaS`). `lib/saas.ex` (`Self.SaaS`, a `Core.SaaS`) lists the systems Self is made of and its SaaS-level config: start pages, menus, title and signed-in pages. Self's own systems live in `systems/`, such as `systems/account/` (`Self.Account.System`, a `Core.System`) with the sign-in pages.
 
 All commands below run from the `core/` folder unless stated otherwise.
 
@@ -70,7 +70,7 @@ All commands below run from the `core/` folder unless stated otherwise.
 
 ### Menu items
 
-* In [items.ex](bundle/lib/menu/items.ex) you will find all the menu items. Add custom items when required.
+* In [items.ex](lib/menu/items.ex) you will find all the menu items. Add custom items when required.
 
 Core supports the following page layouts:
 * Stripped: minimalistic page without menu
@@ -78,9 +78,9 @@ Core supports the following page layouts:
 * Workspace: menu on the left
 
 Change the menus here:
-* [Stripped](bundle/lib/layouts/stripped/menu_builder.ex)
-* [Website](bundle/lib/layouts/website/menu_builder.ex)
-* [Workspace](bundle/lib/layouts/workspace/menu_builder.ex)
+* [Stripped](lib/layouts/stripped/menu_builder.ex)
+* [Website](lib/layouts/website/menu_builder.ex)
+* [Workspace](lib/layouts/workspace/menu_builder.ex)
 
 ### Storage
 
