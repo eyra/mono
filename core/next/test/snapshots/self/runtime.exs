@@ -35,12 +35,15 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
-         e2e: false,
          leaderboard: true,
+         member_google_sign_in: true,
+         onyx: false,
          opp_phase_3: false,
-         otp: false
+         otp: true,
+         password_sign_in: true
        ]
      ]},
     {"prod-all-oban-plugins",
@@ -67,12 +70,15 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
-         e2e: false,
          leaderboard: true,
+         member_google_sign_in: true,
+         onyx: false,
          opp_phase_3: false,
-         otp: false
+         otp: true,
+         password_sign_in: true
        ]
      ]},
     {"prod-migrate",
@@ -97,7 +103,17 @@
          {"storage_export", 21_474_836_480, :byte, :day, :local},
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
-       features: ["": true, debug_expire_force: false, e2e: false, opp_phase_3: false, otp: false]
+       features: [
+         "": true,
+         centerdata_sign_in: false,
+         debug_expire_force: false,
+         leaderboard: false,
+         member_google_sign_in: true,
+         onyx: false,
+         opp_phase_3: false,
+         otp: true,
+         password_sign_in: true
+       ]
      ]},
     {"staging",
      [
@@ -122,13 +138,16 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
-         e2e: false,
          leaderboard: true,
+         member_google_sign_in: true,
+         onyx: false,
          opp_phase_3: false,
-         otp: false,
-         panl: true
+         otp: true,
+         panl: true,
+         password_sign_in: true
        ]
      ]},
     {"dev",
@@ -154,13 +173,17 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
          e2e: true,
          leaderboard: true,
+         member_google_sign_in: true,
+         onyx: false,
          opp_phase_3: false,
-         otp: false,
-         panl: true
+         otp: true,
+         panl: true,
+         password_sign_in: true
        ]
      ]},
     {"local",
@@ -184,6 +207,7 @@
          {"storage_export", 1, :call, :hour, :local}
        ],
        features: [
+         centerdata_sign_in: false,
          debug_expire_force: false,
          e2e: true,
          leaderboard: true,

@@ -361,8 +361,8 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - the `core/.bundle.ex` selection; instead, config names the SaaS module
   - **Oban crons.** Move them into the `Core.System` declarations, keeping the environment toggles from `runtime.*.exs`.
   - **Feature flags.**
-    - Declared flags default to *off*. [`core/lib/core/feature_flags.ex`](../../core/lib/core/feature_flags.ex) treats an unconfigured flag as on today.
-    - Next declares its current defaults, so the flags in effect stay identical.
+    - Declared flags default to *off*, and so does a flag that no system declares ([`core/mica/lib/core/feature_flags.ex`](../../core/mica/lib/core/feature_flags.ex), code-systems).
+    - Next sets its current defaults in `Next.SaaS`, so the flags in effect stay identical.
     - Check production's `ENABLED_APP_FEATURES` first.
   - **Prepare the OTP rename.** Add one accessor (for example `Core.Env.get/2`) and route the roughly 66 `Application.*env(:core, …)` calls through it.
 - **Dependencies.** code-layout. The Oban-cron PR merges after build-image M1.

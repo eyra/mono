@@ -103,6 +103,13 @@ defmodule Core.System do
   """
   @callback rate_quotas() :: [keyword()]
 
+  @doc """
+  The feature flags the system reads, as names. A declared flag is off unless
+  `c:Core.SaaS.feature_flags/0` or the app config turns it on. Several systems
+  may declare the same flag.
+  """
+  @callback feature_flags() :: [atom()]
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Core.System
@@ -119,6 +126,7 @@ defmodule Core.System do
       def children, do: []
       def oban_queues, do: []
       def rate_quotas, do: []
+      def feature_flags, do: []
 
       defoverridable Core.System
     end

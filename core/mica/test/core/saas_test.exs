@@ -55,6 +55,36 @@ defmodule Core.SaaSTest do
     def desktop_sections, do: [TipsSection]
   end
 
+  defmodule SignInSystem do
+    use Core.System
+    def feature_flags, do: [:password_sign_in, :otp]
+  end
+
+  defmodule OtpSystem do
+    use Core.System
+    def feature_flags, do: [:otp]
+  end
+
+  defmodule FlagSaaS do
+    use Core.SaaS
+    def systems, do: [SignInSystem, OtpSystem]
+    def feature_flags, do: [otp: true]
+    def start_pages, do: nil
+    def menu_items, do: nil
+    def menu_builder(_), do: nil
+    def signed_in_page(_), do: "/"
+  end
+
+  defmodule TypoFlagSaaS do
+    use Core.SaaS
+    def systems, do: [SignInSystem]
+    def feature_flags, do: [opt: true]
+    def start_pages, do: nil
+    def menu_items, do: nil
+    def menu_builder(_), do: nil
+    def signed_in_page(_), do: "/"
+  end
+
   defmodule DuplicateSaaS do
     use Core.SaaS
     def systems, do: [GoodSystem, GoodSystem]
@@ -161,6 +191,30 @@ defmodule Core.SaaSTest do
     assert_raise ArgumentError,
                  "Oban queue :imports is declared by more than one system",
                  fn -> Core.SaaS.collect_oban_queues([QueueSystem, OtherQueueSystem]) end
+  end
+
+  test "declared feature flags are off unless the SaaS turns them on" do
+    assert Core.SaaS.collect_feature_flags(FlagSaaS, FlagSaaS.systems()) == [
+             otp: true,
+             password_sign_in: false
+           ]
+  end
+
+  test "a SaaS default for a flag that no system declares is an error, also at compile time" do
+    message =
+      "Core.SaaSTest.TypoFlagSaaS.feature_flags/0 sets [:opt], which none of its systems declares"
+
+    assert_raise ArgumentError, message, fn ->
+      Core.SaaS.collect_feature_flags(TypoFlagSaaS, TypoFlagSaaS.systems())
+    end
+
+    # The route and grant macros check the SaaS while the router compiles.
+    assert_raise ArgumentError, message, fn -> Core.SaaS.checked_systems(TypoFlagSaaS) end
+  end
+
+  test "Next declares every flag it sets, and nothing more" do
+    assert Keyword.keys(Core.SaaS.feature_flags()) ==
+             Enum.sort(Keyword.keys(Next.SaaS.feature_flags()))
   end
 
   test "the Paper registry is a child and the systems declare their queues and quotas" do

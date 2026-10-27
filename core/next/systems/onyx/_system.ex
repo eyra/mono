@@ -15,4 +15,6 @@ defmodule Systems.Onyx.System do
       ]
     end
   end
+
+  def feature_flags, do: [:onyx]
 end

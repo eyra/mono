@@ -36,4 +36,6 @@ defmodule Systems.Account.System do
       [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
     ]
   end
+
+  def feature_flags, do: [:centerdata_sign_in, :member_google_sign_in, :password_sign_in]
 end

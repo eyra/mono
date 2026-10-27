@@ -17,4 +17,6 @@ defmodule Systems.Home.System do
   end
 
   def signal_handlers, do: [Systems.Home.Switch]
+
+  def feature_flags, do: [:opp_phase_3]
 end

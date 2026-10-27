@@ -30,4 +30,6 @@ defmodule Systems.Admin.System do
       Systems.Admin.ClientActivityPanel
     ]
   end
+
+  def feature_flags, do: [:debug_expire_force]
 end

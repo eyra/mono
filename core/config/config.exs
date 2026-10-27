@@ -100,11 +100,6 @@ config :core, :pixel, pool_assets: []
 # ENABLE_E2E_SUPPORT build arg.
 config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
 
-# Feature flag defaults. Override per environment in dev.secret.exs, test.exs,
-# or via ENABLED_APP_FEATURES at runtime. Use safe-by-default (false) for any
-# feature that exposes routes or UI to users until the epic is fully shipped.
-config :core, :features, otp: false, opp_phase_3: false
-
 config :core, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
   partner_fee_percentage: 0

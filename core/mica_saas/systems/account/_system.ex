@@ -35,4 +35,6 @@ defmodule Self.Account.System do
       ]
     end
   end
+
+  def feature_flags, do: [:otp, :password_sign_in]
 end
