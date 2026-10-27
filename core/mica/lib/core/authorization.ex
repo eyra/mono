@@ -353,28 +353,32 @@ defmodule Core.Authorization do
     )
   end
 
-  @entities [
-    Systems.Project.Model,
-    Systems.Project.NodeModel,
-    Systems.Workflow.Model,
-    Systems.Assignment.Model,
-    Systems.Storage.EndpointModel,
-    Systems.Crew.Model,
-    Systems.Graphite.ToolModel,
-    Systems.Graphite.LeaderboardModel
-  ]
-
   defp find_entity(node_id) do
-    @entities
-    |> Enum.reduce("Unkown", fn entity, acc ->
-      if from(e in entity, where: e.auth_node_id == ^node_id)
-         |> Core.Repo.exists?() do
+    entities()
+    |> Enum.find_value("Unknown", fn entity ->
+      if from(e in entity, where: e.auth_node_id == ^node_id) |> Core.Repo.exists?() do
         entity
         |> Atom.to_string()
         |> String.replace("Elixir.Systems.", "")
-      else
-        acc
       end
     end)
+  end
+
+  # Every schema that owns an auth node, from Mica and the SaaS alike.
+  defp entities do
+    {:ok, modules} = :application.get_key(:core, :modules)
+
+    modules
+    |> Enum.sort()
+    |> Enum.filter(&owns_auth_node?/1)
+  end
+
+  defp owns_auth_node?(module) do
+    Code.ensure_loaded?(module) and function_exported?(module, :__schema__, 2) and
+      module.__schema__(:source) != nil and
+      match?(
+        %Ecto.Association.BelongsTo{related: Core.Authorization.Node},
+        module.__schema__(:association, :auth_node)
+      )
   end
 end

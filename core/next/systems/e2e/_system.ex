@@ -1,11 +1,11 @@
-defmodule Frameworks.E2E.Routes do
+defmodule Next.E2E.System do
   @moduledoc """
-  E2E test routes.
-
-  Requires the :e2e feature to be enabled via ENABLED_APP_FEATURES.
+  The E2E test API (`/api/e2e/*`) that the Playwright suite uses to set up its
+  fixtures. The controller answers only when the `:e2e` feature is on.
   """
+  use Core.System
 
-  defmacro routes() do
+  def routes do
     quote do
       scope "/api/e2e", Frameworks.E2E do
         pipe_through([:api])

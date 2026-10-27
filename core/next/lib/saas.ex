@@ -8,6 +8,7 @@ defmodule Next.SaaS do
       [
         Next.WellKnown.System,
         Next.Account.System,
+        Next.E2E.System,
         Systems.Graphite.System,
         Systems.Onyx.System
       ]
