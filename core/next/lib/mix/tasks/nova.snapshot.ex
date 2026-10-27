@@ -14,12 +14,16 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `flags.exs`: the feature flags declared at compile time
     * `saas_config.exs`: the `Core.SaaS` callbacks (start pages, menus, title,
       signed-in pages), the SaaS app config and account and admin tab order
+    * `runtime.exs`: the children `Core.Application` starts, and per env fixture
+      of `mix config.snapshot` the Oban queues and rate quotas it starts them with
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `CoreWeb.Router` is compile-connected to
 
   Config-derived snapshots read `config/config.exs` as a prod build would
-  (`Config.Reader`, env `:prod`). Runtime config, Oban and the runtime flag list
-  are covered by `mix config.snapshot`, not here.
+  (`Config.Reader`, env `:prod`). `runtime.exs` adds `config/runtime.exs` for each
+  env fixture; the rest of the runtime config and the runtime flag list are
+  covered by `mix config.snapshot`, not here. The node-local storage queue is
+  rendered as `storage_delivery_local_<node>`.
 
       mix nova.snapshot                              # Next: fail on drift
       BUNDLE=self MIX_ENV=dev mix nova.snapshot      # Self: fail on drift
@@ -128,7 +132,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp update_command(saas), do: "BUNDLE=#{saas} MIX_ENV=dev mix nova.snapshot --update"
 
   defp render_names,
-    do: ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs counts.exs)
+    do: ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs runtime.exs counts.exs)
 
   @doc """
   Renders the snapshots of the current build as `{file name, text}`. `counts: false`
@@ -142,7 +146,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       {"permissions.exs", format(permissions())},
       {"signal.exs", format(signal())},
       {"flags.exs", format(prod |> Keyword.get(:features, []) |> Enum.sort())},
-      {"saas_config.exs", format(saas_config(prod))}
+      {"saas_config.exs", format(saas_config(prod))},
+      {"runtime.exs", format(runtime(saas))}
     ]
 
     snapshots =
@@ -193,6 +198,49 @@ defmodule Mix.Tasks.Nova.Snapshot do
       ]
   end
 
+  defp runtime(saas) do
+    children = Enum.map(Core.Application.children(), &Supervisor.child_spec(&1, []).id)
+
+    deployments =
+      for fixture <- Mix.Tasks.Config.Snapshot.fixtures() do
+        core = deployment_config(saas, fixture)
+
+        {fixture.name,
+         [
+           oban_queues: oban_queues(core[Oban]),
+           rate_quotas: rate_quotas(core[:rate])
+         ]}
+      end
+
+    [children: children, deployments: deployments]
+  end
+
+  defp oban_queues(config) do
+    node_queue = :"storage_delivery_local_#{Node.self()}"
+
+    case Core.Application.oban_config(config)[:queues] do
+      false ->
+        false
+
+      queues ->
+        queues
+        |> Enum.map(fn
+          {^node_queue, limit} -> {:"storage_delivery_local_<node>", limit}
+          queue -> queue
+        end)
+        |> Enum.sort()
+    end
+  end
+
+  # Sorted by service only: the order of one service's quotas is kept.
+  defp rate_quotas(config) do
+    config
+    |> Core.Application.rate_config()
+    |> Systems.Rate.Server.quotas()
+    |> Enum.map(&{&1.service, &1.limit, &1.unit, &1.window, &1.scope})
+    |> Enum.sort_by(&elem(&1, 0))
+  end
+
   defp counts do
     [
       boundary_allowlist: "boundary_allowlist.exs" |> Code.eval_file() |> elem(0) |> length(),
@@ -223,12 +271,23 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp mix(args), do: System.cmd("mix", args, stderr_to_stdout: true)
 
   # The `:core` config a prod build of `saas` compiles with.
-  defp prod_config(saas) do
+  defp prod_config(saas), do: saas |> build_config(:prod) |> Keyword.get(:core)
+
+  # The `:core` config of a deployment: the build config plus `config/runtime.exs`
+  # evaluated with the fixture's environment variables.
+  defp deployment_config(saas, %{env_file: env_file, config_env: config_env}) do
+    env = Core.RuntimeConfig.Snapshot.read_env_file(env_file)
+    runtime = Core.RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, config_env)
+
+    saas |> build_config(config_env) |> Config.Reader.merge(runtime) |> Keyword.get(:core)
+  end
+
+  defp build_config(saas, config_env) do
     saved = System.get_env("BUNDLE")
     System.put_env("BUNDLE", to_string(saas))
 
     try do
-      "config/config.exs" |> Config.Reader.read!(env: :prod, target: :host) |> Keyword.get(:core)
+      Config.Reader.read!("config/config.exs", env: config_env, target: :host)
     after
       if saved, do: System.put_env("BUNDLE", saved), else: System.delete_env("BUNDLE")
     end

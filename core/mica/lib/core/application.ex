@@ -16,6 +16,17 @@ defmodule Core.Application do
 
     Systems.Storage.BuiltIn.Backend.check_upload_path!()
 
+    opts = [strategy: :one_for_one, name: Core.Supervisor]
+    Supervisor.start_link(children(), opts)
+  end
+
+  def config_change(_changed, _new, _removed) do
+    :ok
+  end
+
+  @doc false
+  # Public for `mix nova.snapshot`.
+  def children do
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -23,32 +34,25 @@ defmodule Core.Application do
       ]
     ]
 
-    children = [
+    [
       {Cluster.Supervisor, [topologies, [name: MyApp.ClusterSupervisor]]},
       Core.Repo,
       CoreWeb.Telemetry,
       {Phoenix.PubSub, name: Core.PubSub},
       {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
-      {Oban, oban_config()},
+      {Oban, oban_config(Core.Env.fetch!(Oban))},
       CoreWeb.Endpoint,
-      {Rate.Server, rate_config()}
+      {Rate.Server, rate_config(Core.Env.fetch!(:rate))}
     ]
-
-    opts = [strategy: :one_for_one, name: Core.Supervisor]
-    Supervisor.start_link(children, opts)
   end
 
-  def config_change(_changed, _new, _removed) do
-    :ok
-  end
+  @doc false
+  # The Oban config started from `config :core, Oban`. Public for `mix nova.snapshot`.
+  def oban_config(config), do: config
 
-  defp oban_config do
-    Core.Env.fetch!(Oban)
-  end
-
-  defp rate_config do
-    Core.Env.fetch!(:rate)
-  end
+  @doc false
+  # The rate server config started from `config :core, :rate`. Public for `mix nova.snapshot`.
+  def rate_config(config), do: config
 
   defp dist_hosts do
     Core.Env.get(:dist_hosts, [])
