@@ -21,4 +21,11 @@ defmodule Systems.Account.System do
   end
 
   def signal_handlers, do: [Systems.Account.Switch]
+
+  def rate_quotas do
+    [
+      [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
+      [service: :otp_request, limit: 3, unit: :call, window: :minute, scope: :local]
+    ]
+  end
 end

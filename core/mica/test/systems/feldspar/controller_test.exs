@@ -841,7 +841,7 @@ defmodule Systems.Feldspar.ControllerTest do
 
       on_exit(fn ->
         # Restore original config
-        original_config = Application.get_env(:core, :rate)
+        original_config = Core.Application.rate_config(Application.get_env(:core, :rate))
         Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
         Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
         Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, original_config})

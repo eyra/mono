@@ -4,8 +4,6 @@
 [
   {"mica/frameworks/pixel/components/footer.ex", :eyra_domain,
    "\"Powered by Eyra\" footer link; code-brand Core.Brand"},
-  {"mica/lib/core/application.ex", :next_name,
-   "Paper RIS processor Registry started by Mica; code-instance moves it into Zircon's system children"},
   {"mica/lib/core/authorization.ex", :next_reference,
    "grants of Next's systems spliced by Core.SaaS.grants(); spliced grants stay a compile-time reference until code-split"},
   {"mica/lib/core/factories.ex", :next_reference,
@@ -73,5 +71,5 @@
   {"mica/systems/workflow/tool_ref_model.ex", :next_reference,
    "workflow_tool_refs FKs to Graphite and Zircon tools; code-registry tool registry"},
   {"mica_saas/lib/saas.ex", :next_reference,
-   "Self.SaaS keeps Next's Graphite, Onyx, Student and Zircon systems (decided E3); code-registry/code-instance"}
+   "Self.SaaS keeps Next's Graphite, Onyx, Student, Zircon and Paper systems (decided E3); code-registry/code-instance"}
 ]

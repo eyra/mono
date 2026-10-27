@@ -39,13 +39,6 @@
        plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
          {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
-       ],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
        ]
      ]},
     {Systems.Account.Auth.Centerdata,

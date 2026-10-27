@@ -12,7 +12,8 @@ defmodule Next.SaaS do
         Systems.Graphite.System,
         Systems.Onyx.System,
         Systems.Student.System,
-        Systems.Zircon.System
+        Systems.Zircon.System,
+        Systems.Paper.System
       ]
   end
 

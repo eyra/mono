@@ -16,6 +16,17 @@ defmodule Core.Application do
 
     Systems.Storage.BuiltIn.Backend.check_upload_path!()
 
+    opts = [strategy: :one_for_one, name: Core.Supervisor]
+    Supervisor.start_link(children(), opts)
+  end
+
+  def config_change(_changed, _new, _removed) do
+    :ok
+  end
+
+  @doc false
+  # Public for `mix nova.snapshot`.
+  def children do
     topologies = [
       example: [
         strategy: Cluster.Strategy.Epmd,
@@ -23,32 +34,28 @@ defmodule Core.Application do
       ]
     ]
 
-    children = [
+    [
       {Cluster.Supervisor, [topologies, [name: MyApp.ClusterSupervisor]]},
       Core.Repo,
       CoreWeb.Telemetry,
-      {Phoenix.PubSub, name: Core.PubSub},
-      {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry},
-      {Oban, oban_config()},
-      CoreWeb.Endpoint,
-      {Rate.Server, rate_config()}
-    ]
-
-    opts = [strategy: :one_for_one, name: Core.Supervisor]
-    Supervisor.start_link(children, opts)
+      {Phoenix.PubSub, name: Core.PubSub}
+    ] ++
+      Core.SaaS.children() ++
+      [
+        {Oban, oban_config(Core.Env.fetch!(Oban))},
+        CoreWeb.Endpoint,
+        {Rate.Server, rate_config(Core.Env.fetch!(:rate))}
+      ]
   end
 
-  def config_change(_changed, _new, _removed) do
-    :ok
-  end
+  @doc false
+  # `config :core, Oban` with Mica's and the systems' queues. Public for `mix nova.snapshot`.
+  def oban_config(config), do: Core.ObanConfig.config(config, Core.SaaS.oban_queues())
 
-  defp oban_config do
-    Core.Env.fetch!(Oban)
-  end
-
-  defp rate_config do
-    Core.Env.fetch!(:rate)
-  end
+  @doc false
+  # `config :core, :rate`, with the systems' quotas unless it sets `quotas:` itself
+  # (tests do). Public for `mix nova.snapshot`.
+  def rate_config(config), do: Keyword.put_new_lazy(config, :quotas, &Core.SaaS.rate_quotas/0)
 
   defp dist_hosts do
     Core.Env.get(:dist_hosts, [])

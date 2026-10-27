@@ -22,17 +22,7 @@
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
     {CoreWeb.FileUploader, [max_file_size: 100_000_000]},
-    {Oban,
-     [
-       plugins: [],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
-       ]
-     ]},
+    {Oban, [plugins: []]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],

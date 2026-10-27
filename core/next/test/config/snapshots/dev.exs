@@ -45,13 +45,6 @@
               {"0 * * * *", Systems.Fund.AutoApproveWorker}
             ]
           ]}
-       ],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
        ]
      ]},
     {Systems.Account.Auth.Centerdata,

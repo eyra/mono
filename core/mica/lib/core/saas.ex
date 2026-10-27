@@ -73,6 +73,27 @@ defmodule Core.SaaS do
   @doc "The notification channels of all systems. Raises when two systems name the same channel."
   def notify_channels, do: collect_notify_channels(systems())
 
+  @doc "The children of all systems, in `systems/0` order."
+  def children, do: Enum.flat_map(systems(), & &1.children())
+
+  @doc "The Oban queues of all systems. Raises when two systems declare the same queue."
+  def oban_queues, do: collect_oban_queues(systems())
+
+  @doc "The default rate quotas of all systems, in `systems/0` order."
+  def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
+
+  @doc false
+  def collect_oban_queues(systems) do
+    for system <- systems, {name, _limit} = queue <- system.oban_queues(), reduce: [] do
+      queues ->
+        if Keyword.has_key?(queues, name) do
+          raise ArgumentError, "Oban queue #{inspect(name)} is declared by more than one system"
+        end
+
+        queues ++ [queue]
+    end
+  end
+
   @doc """
   The channel names of `notify_channels/0`, sorted, for use at compile time (an
   `Ecto.Enum`). Editing a system recompiles the caller. Like the route and grant
