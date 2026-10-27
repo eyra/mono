@@ -20,7 +20,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
   alias Core.Factories
   alias Core.Repo
-  alias Systems.Fund
+  alias Systems.Assignment
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
 
@@ -40,8 +40,10 @@ defmodule Systems.Fund.CreatePayInTest do
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
         })
 
+      # The researcher comes back from the payment page to a freshly loaded
+      # assignment before opening the form again.
       {:ok, %{transaction: t2}} =
-        Fund.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(reload(assignment), user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
@@ -78,7 +80,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
       # Retry — the researcher clicks "Confirm" again on a fresh PayInRequestForm.
       {:ok, %{transaction: retry}} =
-        Fund.Public.create_pay_in(assignment, user, %{
+        Fund.Public.create_pay_in(reload(assignment), user, %{
           "subject_count" => 10,
           "subject_reward" => 500,
           "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
@@ -91,6 +93,48 @@ defmodule Systems.Fund.CreatePayInTest do
       assert %{status: :failed} = Repo.get!(Fund.TransactionModel, failed.id)
       assert %{status: :pending} = Repo.get!(Fund.TransactionModel, retry.id)
     end
+
+    test "a provider error leaves the assignment info saved, so a retry needs the reloaded assignment" do
+      %{assignment: assignment, user: user} = setup_assignment()
+
+      stub(ProviderMock, :get_merchant, fn _uid ->
+        {:ok,
+         %{
+           uid: "m_create_pay_in",
+           status: "active",
+           kyc_level: 100,
+           compliance_status: "verified"
+         }}
+      end)
+
+      ProviderMock
+      |> expect(:create_transaction, fn _request -> {:error, :provider_unavailable} end)
+
+      attrs = %{
+        "subject_count" => 10,
+        "subject_reward" => 500,
+        "aim_of_study" => "Ten-participant test with a valid aim-of-study text."
+      }
+
+      assert {:error, :provider_unavailable} =
+               Fund.Public.create_pay_in(assignment, user, attrs)
+
+      # The info was saved before the provider call, so the struct the form
+      # still holds is stale and the update guard rejects it.
+      assert {:error, %Ecto.Changeset{data: %Assignment.InfoModel{}}} =
+               Fund.Public.create_pay_in(assignment, user, attrs)
+
+      stub_provider_create_transaction()
+
+      assert {:ok, %{transaction: %{status: :pending}}} =
+               Fund.Public.create_pay_in(reload(assignment), user, attrs)
+    end
+  end
+
+  # What `Assignment.PaidSlotsLogic.refresh_assignment/1` does before the
+  # form is opened again.
+  defp reload(%Assignment.Model{id: id}) do
+    Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
   end
 
   defp setup_assignment do
@@ -106,7 +150,19 @@ defmodule Systems.Fund.CreatePayInTest do
     currency = Factories.insert!(:currency, %{name: "eur_pay_in"})
     fund = Fund.Factories.create_fund("pay_in_fund", currency)
 
-    info = Factories.insert!(:assignment_info, %{subject_count: 10, subject_reward: 500})
+    # `updated_at` has second precision. Backdating it makes the first
+    # pay-in's save land in a later second, so reusing a stale assignment
+    # always trips `Core.Repo.multi_update_guard/3` instead of only sometimes.
+    an_hour_ago =
+      NaiveDateTime.utc_now() |> NaiveDateTime.add(-3600) |> NaiveDateTime.truncate(:second)
+
+    info =
+      Factories.insert!(:assignment_info, %{
+        subject_count: 10,
+        subject_reward: 500,
+        inserted_at: an_hour_ago,
+        updated_at: an_hour_ago
+      })
 
     assignment =
       Factories.insert!(:assignment, %{

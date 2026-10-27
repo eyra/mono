@@ -72,12 +72,14 @@ defmodule Systems.Fund.PayInRequestForm do
       {:ok, %{payment_url: payment_url}} ->
         {:noreply, redirect(socket, external: payment_url)}
 
-      {:error, %Ecto.Changeset{} = changeset} ->
+      {:error, %Ecto.Changeset{data: %Fund.PayInRequestModel{}} = changeset} ->
         {:noreply, assign(socket, changeset: changeset, validate?: true)}
 
+      # The assignment info may already be saved by now, so this form's
+      # assignment is stale; the parent reloads it before the next attempt.
       {:error, reason} ->
         Logger.warning("[PayInRequestForm] Payment creation failed: #{inspect(reason)}")
-        {:noreply, socket |> flash_error()}
+        {:noreply, socket |> flash_error() |> send_event(:parent, "pay_in_request_form_failed")}
     end
   end
 

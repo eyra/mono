@@ -21,7 +21,9 @@ defmodule Core.Repo do
       if up_to_date?(repo, model) do
         {:ok, true}
       else
-        message = "#{String.capitalize(name)} is not up to date, preventing database change"
+        message =
+          "#{name |> to_string() |> String.capitalize()} is not up to date, preventing database change"
+
         Logger.warning(message)
         {:error, message}
       end
