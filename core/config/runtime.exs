@@ -136,8 +136,8 @@ if config_env() == :prod do
 
   config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
-  # SIGN-IN CODES: AUTH_CODE_LIMITS replaces the default limits
-  # (Systems.Account.AuthCodeLimits) of the action and count it lists.
+  # SIGN-IN CODES: AUTH_CODE_LIMITS replaces the default limit
+  # (Systems.Account.AuthCodeLimits) of each action, count and window it lists.
 
   if auth_code_limits = System.get_env("AUTH_CODE_LIMITS") do
     config :core, :auth_code_limits,

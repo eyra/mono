@@ -33,11 +33,18 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
     refute AuthCodeLimits.allow_request?("a@example.com", @remote_ip)
   end
 
-  test "an override replaces every default window of its action and count" do
-    override([%{"action" => "check", "by" => "email", "limit" => 40, "window" => "day"}])
+  test "an override keeps the other windows of its action and count" do
+    override([%{"action" => "check", "by" => "email", "limit" => 20, "window" => "hour"}])
 
-    assert [{:check, :email, 40, :day}] =
+    assert [{:check, :email, 30, :day}, {:check, :email, 20, :hour}] =
              Enum.filter(AuthCodeLimits.limits(), &match?({:check, :email, _, _}, &1))
+  end
+
+  test "an override with a window that has no default adds a limit" do
+    override([%{"action" => "request", "by" => "email", "limit" => 3, "window" => "minute"}])
+
+    assert [{:request, :email, 10, :hour}, {:request, :email, 3, :minute}] =
+             Enum.filter(AuthCodeLimits.limits(), &match?({:request, :email, _, _}, &1))
   end
 
   test "an override leaves the other defaults in place" do
@@ -67,6 +74,30 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
     test "raises without a limit" do
       assert_raise RuntimeError, fn ->
         AuthCodeLimits.overrides!([%{"action" => "check", "by" => "email", "window" => "hour"}])
+      end
+    end
+
+    test "raises on a limit of 0" do
+      assert_raise RuntimeError, fn ->
+        AuthCodeLimits.overrides!([
+          %{"action" => "check", "by" => "email", "limit" => 0, "window" => "hour"}
+        ])
+      end
+    end
+
+    test "raises on a negative limit" do
+      assert_raise RuntimeError, fn ->
+        AuthCodeLimits.overrides!([
+          %{"action" => "check", "by" => "email", "limit" => -5, "window" => "hour"}
+        ])
+      end
+    end
+
+    test "raises on a limit that is a string" do
+      assert_raise RuntimeError, fn ->
+        AuthCodeLimits.overrides!([
+          %{"action" => "check", "by" => "email", "limit" => "20abc", "window" => "hour"}
+        ])
       end
     end
   end

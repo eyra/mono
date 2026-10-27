@@ -17,8 +17,10 @@ defmodule Systems.Account.AuthCodeLimits do
   as a whole. The network address limits leave room for many people behind
   one address, such as a university network or a mobile carrier.
 
-  The `AUTH_CODE_LIMITS` environment variable replaces the default limits of
-  the action and count it lists (`overrides!/1`).
+  The `AUTH_CODE_LIMITS` environment variable replaces the default limit of
+  each action, count and window it lists (`overrides!/1`); the other limits
+  keep their defaults. A window without a default adds a limit. A default
+  limit can be raised but not removed.
   """
 
   import Frameworks.Utility.ConfigHelpers
@@ -54,15 +56,15 @@ defmodule Systems.Account.AuthCodeLimits do
 
   @doc """
   The limits in force: the defaults, of which the configured overrides
-  (`config :core, :auth_code_limits, overrides: …`) replace those of each
-  action and count they list.
+  (`config :core, :auth_code_limits, overrides: …`) replace the one with the
+  same action, count and window.
   """
   def limits do
     overrides = Core.Env.get(:auth_code_limits, []) |> Keyword.get(:overrides, [])
-    overridden = MapSet.new(overrides, fn {action, by, _, _} -> {action, by} end)
+    overridden = MapSet.new(overrides, fn {action, by, _, window} -> {action, by, window} end)
 
-    Enum.reject(@default_limits, fn {action, by, _, _} ->
-      MapSet.member?(overridden, {action, by})
+    Enum.reject(@default_limits, fn {action, by, _, window} ->
+      MapSet.member?(overridden, {action, by, window})
     end) ++ overrides
   end
 
@@ -70,18 +72,24 @@ defmodule Systems.Account.AuthCodeLimits do
   Parses the decoded JSON of `AUTH_CODE_LIMITS`, a list of limits such as
   `{"action": "check", "by": "email", "limit": 20, "window": "hour"}`:
   `action` is `request` or `check`, `by` is `email` or `network`, `window` is
-  `minute`, `hour` or `day`. Raises on an invalid entry.
+  `minute`, `hour` or `day`, and `limit` is a positive integer. Raises on an
+  invalid entry.
   """
   def overrides!(limits) when is_list(limits) do
     Enum.map(limits, fn limit ->
       {
         get!(:atom, limit, :action, [:request, :check]),
         get!(:atom, limit, :by, [:email, :network]),
-        get!(:integer, limit, :limit),
+        positive_integer!(limit),
         get!(:atom, limit, :window, Map.keys(@windows))
       }
     end)
   end
+
+  defp positive_integer!(%{"limit" => limit}) when is_integer(limit) and limit > 0, do: limit
+
+  defp positive_integer!(entry),
+    do: raise("The limit must be a positive integer: #{inspect(entry)}")
 
   defp checks_allowed?(email) do
     limits()

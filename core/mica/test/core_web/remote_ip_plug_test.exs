@@ -117,5 +117,9 @@ defmodule CoreWeb.Plug.RemoteIpTest do
     test "raises on a prefix longer than the address" do
       assert_raise ArgumentError, fn -> RemoteIp.trusted_proxies!(["10.0.0.0/33"]) end
     end
+
+    test "raises on an empty list" do
+      assert_raise ArgumentError, fn -> RemoteIp.trusted_proxies!([]) end
+    end
   end
 end

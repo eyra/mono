@@ -63,8 +63,12 @@ defmodule CoreWeb.Plug.RemoteIp do
 
   @doc """
   Checks the trusted proxies of `TRUSTED_PROXIES`: addresses or CIDR ranges,
-  IPv4 or IPv6. Raises an `ArgumentError` on an entry that is neither.
+  IPv4 or IPv6. Raises an `ArgumentError` on an entry that is neither, and on
+  an empty list: behind a proxy, that would count every client as the proxy.
   """
+  def trusted_proxies!([]),
+    do: raise(ArgumentError, "TRUSTED_PROXIES lists no proxies; unset it for the default")
+
   def trusted_proxies!(proxies) when is_list(proxies) do
     Enum.each(proxies, &parse_cidr!/1)
     proxies

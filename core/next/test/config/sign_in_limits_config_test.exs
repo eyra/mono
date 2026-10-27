@@ -43,4 +43,17 @@ defmodule Next.Config.SignInLimitsConfigTest do
       runtime_config(%{"TRUSTED_PROXIES" => "proxy.example.com"})
     end
   end
+
+  test "a release doesn't start with a TRUSTED_PROXIES that lists no proxies" do
+    assert_raise ArgumentError, fn -> runtime_config(%{"TRUSTED_PROXIES" => " , "}) end
+  end
+
+  test "a release doesn't start with an AUTH_CODE_LIMITS limit of 0" do
+    assert_raise RuntimeError, fn ->
+      runtime_config(%{
+        "AUTH_CODE_LIMITS" =>
+          ~s([{"action": "check", "by": "network", "limit": 0, "window": "hour"}])
+      })
+    end
+  end
 end
