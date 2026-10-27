@@ -7,7 +7,7 @@
   ],
   "timezone": "Europe/Amsterdam",
   "constraints": {
-    "erlang": "^28",
+    "erlang": "28.1.0.0",
     "elixir": "1.19.6"
   },
   "ignoreDeps": [
@@ -45,7 +45,7 @@
     },
     {
       "description": "Toolchain updates get their own PR, outside the weekly group: move CI, images and the constraints above in the same change",
-      "matchManagers": ["asdf", "dockerfile", "github-actions"],
+      "matchManagers": ["asdf", "dockerfile", "github-actions", "renovate-config"],
       "matchDepNames": ["erlang", "elixir", "node"],
       "groupName": "toolchain",
       "groupSlug": "toolchain",
