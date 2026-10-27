@@ -22,7 +22,7 @@ jobs:
   e2e:
     name: E2E Tests (${{ inputs.app_name }})
     # Playwright 1.58 has no chromium build for Ubuntu 26.04 (needs >= 1.61).
-    runs-on: ubuntu-24.04
+    runs-on: ubuntu-26.04
 
     steps:
       - name: Checkout
