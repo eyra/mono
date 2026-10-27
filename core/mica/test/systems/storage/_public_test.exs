@@ -14,6 +14,13 @@ defmodule Systems.Storage.PublicTest do
       assert {:error, :identifier, :invalid, %{}} =
                Storage.Public.store(%Storage.EndpointModel{}, @storage_info, "{}", meta_data)
     end
+
+    test "refuses an identifier with a list value" do
+      meta_data = %{remote_ip: "127.0.0.1", identifier: [[:key, ["k\r\nx"]]]}
+
+      assert {:error, :identifier, :invalid, %{}} =
+               Storage.Public.store(%Storage.EndpointModel{}, @storage_info, "{}", meta_data)
+    end
   end
 
   describe "deliver_file/3" do

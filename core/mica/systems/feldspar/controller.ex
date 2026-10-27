@@ -47,7 +47,8 @@ defmodule Systems.Feldspar.Controller do
   Returns:
   - 200 with {status: "ok"} on success
   - 400 if missing required fields (key, data, context), invalid context or assignment_id,
-    or a control character (CR, LF, NUL, ...) in the key, task or group
+    a key that is not a string, a task or group that is not a string or integer, or a
+    control character (CR, LF, NUL, ...) in any of them
   - 401 if user not authenticated
   - 403 if user is not a participant or tester of the assignment
   - 422 if storage/delivery fails
@@ -399,14 +400,22 @@ defmodule Systems.Feldspar.Controller do
     end
   end
 
-  # Task, group and key reach the storage file name as the client sent them.
-  defp validate_identifier(key, context) do
-    client_values = [[:task, context["task"]], [:source, context["group"]], [:key, key]]
+  # Task, group and key reach the storage file names as the client sent them; the
+  # temp file name (DataDonationFolder.filename/1) takes its key from the context.
+  defp validate_identifier(key, context) when is_binary(key) do
+    client_values = [
+      [:task, context["task"]],
+      [:source, context["group"]],
+      [:key, key],
+      [:key, context["key"]]
+    ]
 
     if Storage.Filename.valid_identifier?(client_values),
       do: :ok,
       else: {:error, :invalid_identifier}
   end
+
+  defp validate_identifier(_key, _context), do: {:error, :invalid_identifier}
 
   defp build_meta_data(conn, key, context) do
     %{

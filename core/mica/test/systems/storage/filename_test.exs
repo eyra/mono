@@ -48,6 +48,18 @@ defmodule Systems.Storage.FilenameTest do
       refute Filename.valid_identifier?([[:key, "k\x7Fx"]])
     end
 
+    test "rejects a list" do
+      refute Filename.valid_identifier?([[:task, [13, 10]]])
+    end
+
+    test "rejects a map" do
+      refute Filename.valid_identifier?([[:task, %{"a" => 1}]])
+    end
+
+    test "rejects an atom" do
+      refute Filename.valid_identifier?([[:source, :tiktok]])
+    end
+
     test "rejects a control character in any part" do
       refute Filename.valid_identifier?([[:assignment, 1], [:participant, "p\n"], [:key, "k"]])
     end
