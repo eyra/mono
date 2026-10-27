@@ -18,6 +18,11 @@ defmodule Core.SaaSTest do
     def notify_channels, do: %{email: Core.SaaSTest.OtherEmailChannel}
   end
 
+  defmodule ChildSystem do
+    use Core.System
+    def children, do: [{Registry, keys: :unique, name: Core.SaaSTest.Registry}]
+  end
+
   defmodule QueueSystem do
     use Core.System
     def oban_queues, do: [imports: 1]
@@ -108,6 +113,12 @@ defmodule Core.SaaSTest do
     assert_raise ArgumentError,
                  "notify channel :email is declared by more than one system",
                  fn -> Core.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
+  end
+
+  test "the children of the systems are collected" do
+    assert Core.SaaS.collect_children([GoodSystem, ChildSystem]) == [
+             {Registry, keys: :unique, name: Core.SaaSTest.Registry}
+           ]
   end
 
   test "Oban queues are collected in system order" do

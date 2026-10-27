@@ -74,13 +74,16 @@ defmodule Core.SaaS do
   def notify_channels, do: collect_notify_channels(systems())
 
   @doc "The children of all systems, in `systems/0` order."
-  def children, do: Enum.flat_map(systems(), & &1.children())
+  def children, do: collect_children(systems())
 
   @doc "The Oban queues of all systems. Raises when two systems declare the same queue."
   def oban_queues, do: collect_oban_queues(systems())
 
   @doc "The default rate quotas of all systems, in `systems/0` order."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
+
+  @doc false
+  def collect_children(systems), do: Enum.flat_map(systems, & &1.children())
 
   @doc false
   def collect_oban_queues(systems) do
