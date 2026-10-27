@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.OnboardingView do
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
 
   alias Frameworks.Pixel.Button
   alias CoreWeb.UI.Area
