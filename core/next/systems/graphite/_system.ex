@@ -16,4 +16,6 @@ defmodule Systems.Graphite.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Graphite.Switch]
 end

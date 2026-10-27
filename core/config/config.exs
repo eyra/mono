@@ -18,15 +18,6 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :core, :deploy_env, :local
 
-# Notify system — list of per-system notifier modules that declare their
-# events via `use Systems.Notify.EventDeclaration`. Add a system to this list
-# when it drops a `_notify.ex`; envs can override to short-circuit notifiers
-# (e.g. omit an integration-only notifier in dev).
-config :core, Systems.Notify,
-  notifiers: [
-    Systems.Assignment.Notify
-  ]
-
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
 config :core, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,
@@ -76,32 +67,6 @@ config :plug, :statuses, %{
   403 => "Access Denied",
   404 => "Page not found"
 }
-
-config :core, :signal,
-  handlers: [
-    "Systems.Account.Switch",
-    "Systems.Admin.Switch",
-    "Systems.Advert.Switch",
-    "Systems.Alliance.Switch",
-    "Systems.Assignment.Switch",
-    "Systems.Consent.Switch",
-    "Systems.Crew.Switch",
-    "Systems.Desktop.Switch",
-    "Systems.Feldspar.Switch",
-    "Systems.Graphite.Switch",
-    "Systems.Home.Switch",
-    "Systems.Instruction.Switch",
-    "Systems.Manual.Switch",
-    "Systems.NextAction.Switch",
-    "Systems.Observatory.Switch",
-    "Systems.Org.Switch",
-    "Systems.Pool.Switch",
-    "Systems.Project.Switch",
-    "Systems.Storage.Switch",
-    "Systems.Student.Switch",
-    "Systems.Workflow.Switch",
-    "Systems.Zircon.Switch"
-  ]
 
 config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
 

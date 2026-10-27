@@ -19,4 +19,6 @@ defmodule Systems.Account.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Account.Switch]
 end

@@ -18,4 +18,6 @@ defmodule Systems.Admin.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Admin.Switch]
 end

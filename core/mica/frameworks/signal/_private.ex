@@ -45,21 +45,16 @@ defmodule Frameworks.Signal.Private do
     end
   end
 
+  # The SaaS's handlers, unless a test overrides them per process or with
+  # `config :core, :signal, handlers: [...]` (module names as atoms or strings).
   defp signal_handlers do
-    # Allow per-process override of signal handlers (useful for testing)
-    handlers =
-      case Process.get(:signal_handlers_override) do
-        nil -> Keyword.get(config(), :handlers, [])
-        override_handlers -> override_handlers
-      end
-
-    handlers
-    |> Enum.map(fn module_name ->
-      String.to_atom("Elixir.#{module_name}")
-    end)
+    case Process.get(:signal_handlers_override) || override_from_config() do
+      nil -> Core.SaaS.signal_handlers()
+      handlers -> Enum.map(handlers, &Module.concat([&1]))
+    end
   end
 
-  defp config do
-    Core.Env.get(:signal)
+  defp override_from_config do
+    Core.Env.get(:signal, []) |> Keyword.get(:handlers)
   end
 end

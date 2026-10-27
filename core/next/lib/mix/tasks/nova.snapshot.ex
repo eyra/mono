@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `routes.exs`: every route as `{verb, path, plug, plug_opts, helper, module}`,
       in router order
     * `permissions.exs`: `Core.Authorization.permission_map/0`
-    * `signal.exs`: signal handlers (in order) and notifiers
+    * `signal.exs`: signal handlers (in order), notifiers and notify channels
     * `flags.exs`: the feature flags declared at compile time
     * `saas_config.exs`: the `Core.SaaS` callbacks (start pages, menus, title,
       signed-in pages), the SaaS app config and account and admin tab order
@@ -140,7 +140,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
     snapshots = [
       {"routes.exs", @routes_header <> format(routes())},
       {"permissions.exs", format(permissions())},
-      {"signal.exs", format(signal(prod))},
+      {"signal.exs", format(signal())},
       {"flags.exs", format(prod |> Keyword.get(:features, []) |> Enum.sort())},
       {"saas_config.exs", format(saas_config(prod))}
     ]
@@ -168,10 +168,11 @@ defmodule Mix.Tasks.Nova.Snapshot do
     |> Enum.sort()
   end
 
-  defp signal(prod) do
+  defp signal do
     [
-      handlers: prod |> Keyword.get(:signal, []) |> Keyword.get(:handlers),
-      notifiers: prod |> Keyword.get(Systems.Notify, []) |> Keyword.get(:notifiers)
+      handlers: Enum.map(Core.SaaS.signal_handlers(), &inspect/1),
+      notifiers: Core.SaaS.notifiers(),
+      notify_channels: Core.SaaS.notify_channels()
     ]
   end
 

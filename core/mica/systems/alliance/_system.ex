@@ -15,4 +15,6 @@ defmodule Systems.Alliance.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Alliance.Switch]
 end

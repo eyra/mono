@@ -16,4 +16,6 @@ defmodule Systems.Project.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Project.Switch]
 end

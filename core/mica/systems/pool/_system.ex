@@ -21,4 +21,6 @@ defmodule Systems.Pool.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Pool.Switch]
 end

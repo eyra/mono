@@ -15,4 +15,6 @@ defmodule Systems.Home.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Home.Switch]
 end
