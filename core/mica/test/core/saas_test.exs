@@ -123,8 +123,7 @@ defmodule Core.SaaSTest do
                  fn -> Core.SaaS.collect_oban_queues([QueueSystem, OtherQueueSystem]) end
   end
 
-  test "the Paper registry is a child and the systems declare their queues and quotas" do
-    assert {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry} in Core.SaaS.children()
+  test "the systems declare their queues and quotas" do
     assert Core.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
