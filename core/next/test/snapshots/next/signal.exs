@@ -24,5 +24,6 @@
     "Systems.Workflow.Switch",
     "Systems.Zircon.Switch"
   ],
-  notifiers: [Systems.Assignment.Notify]
+  notifiers: [Systems.Assignment.Notify],
+  notify_channels: %{email: Systems.Notify.Channel.Email, na: Systems.Notify.Channel.NA}
 ]

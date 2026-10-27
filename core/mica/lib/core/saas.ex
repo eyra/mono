@@ -14,7 +14,7 @@ defmodule Core.SaaS do
   when it differs from the compiled value.
   """
 
-  @doc "The systems the SaaS is made of: `Core.systems() ++` its own systems."
+  @doc "The systems the SaaS is made of: `Core.Systems.all() ++` its own systems."
   @callback systems() :: [module()]
 
   @doc "The `CoreWeb.StartPageProvider` implementation."
@@ -52,8 +52,8 @@ defmodule Core.SaaS do
               "mica_saas/config/config.exs) names the SaaS module"
           )
 
-  # Core.systems/0, by path: naming Core here would make it a dependency of the callers.
-  @core_systems_source Path.expand("../core.ex", __DIR__)
+  # Core.Systems, by path: naming it here would make it a dependency of the callers.
+  @core_systems_source Path.expand("systems.ex", __DIR__)
 
   # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
   # changed the value; this recompiles Core.SaaS and so the router and authorization.
@@ -63,6 +63,40 @@ defmodule Core.SaaS do
   def module, do: @saas
 
   def systems, do: module().systems()
+
+  @doc "The signal handlers of all systems, sorted by module name."
+  def signal_handlers, do: systems() |> Enum.flat_map(& &1.signal_handlers()) |> Enum.sort()
+
+  @doc "The notifiers of all systems, in `systems/0` order."
+  def notifiers, do: Enum.flat_map(systems(), & &1.notifiers())
+
+  @doc "The notification channels of all systems. Raises when two systems name the same channel."
+  def notify_channels, do: collect_notify_channels(systems())
+
+  @doc """
+  The channel names of `notify_channels/0`, sorted, for use at compile time (an
+  `Ecto.Enum`). Editing a system recompiles the caller. Like the route and grant
+  macros, it compiles the SaaS module and its systems first, so they must not
+  depend on the caller at compile time.
+  """
+  defmacro notify_channel_names do
+    systems = checked_systems(module())
+    names = systems |> collect_notify_channels() |> Map.keys() |> Enum.sort()
+    {:__block__, [], external_resources(systems) ++ [names]}
+  end
+
+  @doc false
+  def collect_notify_channels(systems) do
+    for system <- systems, {name, channel} <- system.notify_channels(), reduce: %{} do
+      channels ->
+        if Map.has_key?(channels, name) do
+          raise ArgumentError,
+                "notify channel #{inspect(name)} is declared by more than one system"
+        end
+
+        Map.put(channels, name, channel)
+    end
+  end
 
   @doc "Splices `override_routes/0` of all systems."
   defmacro override_routes, do: splice(:override_routes)

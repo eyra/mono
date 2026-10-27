@@ -15,4 +15,6 @@ defmodule Systems.Feldspar.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Feldspar.Switch]
 end

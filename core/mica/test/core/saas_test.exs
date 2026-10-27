@@ -8,6 +8,16 @@ defmodule Core.SaaSTest do
   defmodule NotASystem do
   end
 
+  defmodule EmailSystem do
+    use Core.System
+    def notify_channels, do: %{email: Core.SaaSTest.EmailChannel}
+  end
+
+  defmodule OtherEmailSystem do
+    use Core.System
+    def notify_channels, do: %{email: Core.SaaSTest.OtherEmailChannel}
+  end
+
   defmodule DuplicateSaaS do
     use Core.SaaS
     def systems, do: [GoodSystem, GoodSystem]
@@ -37,7 +47,7 @@ defmodule Core.SaaSTest do
 
   test "the configured SaaS lists Mica's systems first" do
     assert Core.SaaS.module() == Next.SaaS
-    assert List.starts_with?(Core.SaaS.systems(), Core.systems())
+    assert List.starts_with?(Core.SaaS.systems(), Core.Systems.all())
     assert Core.SaaS.checked_systems(Next.SaaS) == Next.SaaS.systems()
   end
 
@@ -63,5 +73,30 @@ defmodule Core.SaaSTest do
     assert_raise ArgumentError,
                  "Core.SaaSTest.DuplicateSaaS.systems/0 lists [Core.SaaSTest.GoodSystem] more than once",
                  fn -> Core.SaaS.checked_systems(DuplicateSaaS) end
+  end
+
+  test "signal handlers are collected from all systems, sorted by module name" do
+    handlers = Core.SaaS.signal_handlers()
+
+    assert handlers == Enum.sort(handlers)
+    assert Systems.Assignment.Switch in handlers
+    assert Systems.Zircon.Switch in handlers
+  end
+
+  test "notify channels are collected from all systems" do
+    assert Core.SaaS.notify_channels() == %{
+             email: Systems.Notify.Channel.Email,
+             na: Systems.Notify.Channel.NA
+           }
+  end
+
+  test "the notify message channel enum has the collected channel names" do
+    assert Systems.Notify.MessageModel.channels() == [:email, :na]
+  end
+
+  test "a notify channel declared by two systems is an error" do
+    assert_raise ArgumentError,
+                 "notify channel :email is declared by more than one system",
+                 fn -> Core.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
   end
 end

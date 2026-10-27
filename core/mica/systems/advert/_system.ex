@@ -16,4 +16,6 @@ defmodule Systems.Advert.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Advert.Switch]
 end

@@ -76,7 +76,7 @@ defmodule Systems.Notify.Dispatcher do
   end
 
   defp deliver(%MessageModel{} = message) do
-    adapter = channel_adapter(message.channel)
+    adapter = Notify.Channel.adapter(message.channel)
 
     result =
       try do
@@ -117,12 +117,7 @@ defmodule Systems.Notify.Dispatcher do
 
   defp build_payload(channel, event) do
     channel
-    |> channel_adapter()
+    |> Notify.Channel.adapter()
     |> apply(:build_payload, [event])
   end
-
-  # Channel routing. Keeping this as a case rather than a data structure so a
-  # rename shows up in `mix xref`.
-  defp channel_adapter(:email), do: Notify.Channel.Email
-  defp channel_adapter(:na), do: Notify.Channel.NA
 end

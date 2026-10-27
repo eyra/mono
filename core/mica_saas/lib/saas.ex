@@ -4,13 +4,15 @@ defmodule Self.SaaS do
 
   @impl true
   def systems do
-    Core.systems() ++
+    Core.Systems.all() ++
       [
         Self.Account.System,
-        # Mica code still links to Graphite and Onyx pages, until steps
-        # code-registry and code-instance remove those links.
+        # Next systems that Self keeps until steps code-registry and
+        # code-instance remove Mica's links to them.
         Systems.Graphite.System,
-        Systems.Onyx.System
+        Systems.Onyx.System,
+        Systems.Student.System,
+        Systems.Zircon.System
       ]
   end
 

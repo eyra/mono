@@ -4,13 +4,15 @@ defmodule Next.SaaS do
 
   @impl true
   def systems do
-    Core.systems() ++
+    Core.Systems.all() ++
       [
         Next.WellKnown.System,
         Next.Account.System,
         Next.E2E.System,
         Systems.Graphite.System,
-        Systems.Onyx.System
+        Systems.Onyx.System,
+        Systems.Student.System,
+        Systems.Zircon.System
       ]
   end
 

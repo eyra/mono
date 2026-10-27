@@ -73,5 +73,5 @@
   {"mica/systems/workflow/tool_ref_model.ex", :next_reference,
    "workflow_tool_refs FKs to Graphite and Zircon tools; code-registry tool registry"},
   {"mica_saas/lib/saas.ex", :next_reference,
-   "Self.SaaS keeps Next's Graphite and Onyx systems while Mica links to their pages (decided E3); code-registry/code-instance"}
+   "Self.SaaS keeps Next's Graphite, Onyx, Student and Zircon systems (decided E3); code-registry/code-instance"}
 ]

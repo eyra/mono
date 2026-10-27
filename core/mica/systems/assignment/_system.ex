@@ -17,4 +17,8 @@ defmodule Systems.Assignment.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Assignment.Switch]
+
+  def notifiers, do: [Systems.Assignment.Notify]
 end

@@ -15,4 +15,6 @@ defmodule Systems.Desktop.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Desktop.Switch]
 end

@@ -27,11 +27,13 @@ defmodule Core.System do
         end
       end
 
-  System modules are data modules, read at compile time by the router and
-  `Core.Authorization`. Callbacks return quoted code and never call system code.
-  `grants/0` is quoted too: a module name used as a value is a runtime
-  dependency, and that would make the router recompile whenever any granted page
-  changes.
+  System modules are data modules and never call system code. The router and
+  `Core.Authorization` read `override_routes/0`, `routes/0` and `grants/0` at
+  compile time, so these return quoted code. `grants/0` is quoted too: a module
+  name used as a value is a runtime dependency, and that would make the router
+  recompile whenever any granted page changes. The other callbacks return plain
+  values, which `Core.SaaS` collects (`notify_channels/0` also at compile time,
+  for the `Systems.Notify.MessageModel` enum).
 
   A SaaS extends Mica's systems only through its own systems, for example by
   shadowing Mica's sign-in routes with `override_routes/0`.
@@ -55,6 +57,18 @@ defmodule Core.System do
   """
   @callback grants() :: Macro.t()
 
+  @doc """
+  The system's `Frameworks.Signal.Handler` modules (its `_switch.ex`).
+  `c:Core.SaaS.signal_handlers/0` dispatches to all of them, sorted by module name.
+  """
+  @callback signal_handlers() :: [module()]
+
+  @doc "The system's `Systems.Notify.EventDeclaration` modules (its `_notify.ex`)."
+  @callback notifiers() :: [module()]
+
+  @doc "The notification channels the system delivers: name to `Systems.Notify.Channel` module."
+  @callback notify_channels() :: %{atom() => module()}
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Core.System
@@ -62,6 +76,9 @@ defmodule Core.System do
       def override_routes, do: nil
       def routes, do: nil
       def grants, do: quote(do: [])
+      def signal_handlers, do: []
+      def notifiers, do: []
+      def notify_channels, do: %{}
 
       defoverridable Core.System
     end

@@ -15,4 +15,6 @@ defmodule Systems.NextAction.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.NextAction.Switch]
 end

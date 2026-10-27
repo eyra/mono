@@ -15,4 +15,6 @@ defmodule Systems.Storage.System do
       ]
     end
   end
+
+  def signal_handlers, do: [Systems.Storage.Switch]
 end

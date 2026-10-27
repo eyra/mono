@@ -2,9 +2,10 @@ defmodule Systems.Notify.EventType do
   @moduledoc """
   Global registry of notification event types → channel routing.
 
-  Built at first-use from all modules listed in
-  `config :core, Systems.Notify, notifiers: [...]`; each notifier declares
-  its events via `use Systems.Notify.EventDeclaration`.
+  Built at first-use from the notifiers of the SaaS's systems
+  (`Core.SaaS.notifiers/0`), unless `config :core, Systems.Notify, notifiers: [...]`
+  overrides them; each notifier declares its events via
+  `use Systems.Notify.EventDeclaration`.
 
   Cached in `:persistent_term` — one lookup at first call, direct-map after.
   """
@@ -37,7 +38,7 @@ defmodule Systems.Notify.EventType do
   defp build do
     notifiers =
       Core.Env.get(Systems.Notify, [])
-      |> Keyword.get(:notifiers, [])
+      |> Keyword.get_lazy(:notifiers, &Core.SaaS.notifiers/0)
 
     registry =
       notifiers
