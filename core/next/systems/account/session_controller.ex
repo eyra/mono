@@ -149,7 +149,7 @@ defmodule Next.Account.SessionController do
     redirect_path =
       if mobile_app?(conn),
         do: ~p"/user/auth/identify",
-        else: ~p"/user/signin"
+        else: Next.SaaS.sign_in_page()
 
     conn
     |> put_flash(:info, dgettext("eyra-user", "Signed out successfully"))

@@ -17,6 +17,7 @@ defmodule Next.Account.AuthIdentifyPage do
   @impl true
   def mount(params, _session, socket) do
     creator? = socket.assigns.live_action != :participant
+    return_to = ReturnTo.sanitize(Map.get(params, "return_to"))
 
     if feature_enabled?(:otp) do
       {
@@ -26,7 +27,8 @@ defmodule Next.Account.AuthIdentifyPage do
           form: to_form(%{"email" => ""}),
           loading: false,
           creator?: creator?,
-          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
+          return_to: return_to,
+          password_signin_url: password_signin_url(creator?, return_to)
         )
         |> update_menus()
       }
@@ -100,6 +102,17 @@ defmodule Next.Account.AuthIdentifyPage do
     end
   end
 
+  # The participant entry stays code-only; elsewhere the password form is the fallback.
+  defp password_signin_url(true, return_to) do
+    if feature_enabled?(:password_sign_in), do: password_form_url(return_to)
+  end
+
+  defp password_signin_url(false, _return_to), do: nil
+
+  # `GET /user/session` keeps the return path in the session for the password form.
+  defp password_form_url(nil), do: ~p"/user/signin"
+  defp password_form_url(return_to), do: ReturnTo.append(~p"/user/session", return_to)
+
   defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
 
   defp verify_url(email, nil, creator?),
@@ -148,6 +161,13 @@ defmodule Next.Account.AuthIdentifyPage do
               testid="auth-continue-button"
             />
           </.form>
+          <div :if={@password_signin_url} class="mt-6 flex justify-center">
+            <Button.dynamic
+              action={%{type: :redirect, to: @password_signin_url}}
+              face={%{type: :link, text: dgettext("eyra-account", "auth.password.link")}}
+              testid="auth-password-link"
+            />
+          </div>
         </Area.form>
       </Area.content>
       </div>

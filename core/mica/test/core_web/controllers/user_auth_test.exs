@@ -197,7 +197,7 @@ defmodule Systems.Account.UserAuthTest do
         |> UserAuth.require_authenticated_user([])
 
       assert conn.halted
-      assert redirected_to(conn) == ~p"/user/signin"
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
 
       assert Phoenix.Flash.get(conn.assigns.flash, :info) ==
                "Please sign in first"
