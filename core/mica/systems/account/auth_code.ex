@@ -44,6 +44,8 @@ defmodule Systems.Account.AuthCodeModel do
     hash_code(code) == code_hash
   end
 
+  def attempts_left?(%__MODULE__{attempts: attempts}), do: attempts < @max_attempts
+
   @doc """
   Selects the code only while it has attempts left. Run it with
   `Repo.update_all(query, inc: [attempts: 1])`: the database checks the limit and

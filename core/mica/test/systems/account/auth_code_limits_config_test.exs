@@ -90,6 +90,15 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
       end
     end
 
+    test "raises on an action, count and window listed twice" do
+      assert_raise RuntimeError, fn ->
+        AuthCodeLimits.overrides!([
+          %{"action" => "check", "by" => "network", "limit" => 20, "window" => "hour"},
+          %{"action" => "check", "by" => "network", "limit" => 30, "window" => "hour"}
+        ])
+      end
+    end
+
     test "raises on a limit of 0" do
       assert_raise RuntimeError, fn ->
         AuthCodeLimits.overrides!([

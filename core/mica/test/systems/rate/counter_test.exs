@@ -47,6 +47,30 @@ defmodule Systems.Rate.CounterTest do
     end
   end
 
+  describe "decrement_counter/2" do
+    test "takes back one event" do
+      Rate.Public.increment_counter("k", 3600)
+      Rate.Public.increment_counter("k", 3600)
+
+      assert :ok = Rate.Public.decrement_counter("k", 3600)
+      assert 1 = Rate.Public.counter("k", 3600)
+    end
+
+    test "never goes below 0" do
+      Rate.Public.increment_counter("k", 3600)
+      Rate.Public.decrement_counter("k", 3600)
+      Rate.Public.decrement_counter("k", 3600)
+
+      assert 0 = Rate.Public.counter("k", 3600)
+      assert 1 = Rate.Public.increment_counter("k", 3600)
+    end
+
+    test "does nothing for a key without a count" do
+      assert :ok = Rate.Public.decrement_counter("none", 3600)
+      assert 0 = Rate.Public.counter("none", 3600)
+    end
+  end
+
   describe "delete_expired_counters/0" do
     test "deletes the counters of ended windows only" do
       Rate.Public.increment_counter("current", 3600)

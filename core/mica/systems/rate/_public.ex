@@ -43,6 +43,19 @@ defmodule Systems.Rate.Public do
   end
 
   @doc """
+  Takes back one event of `key` in the current window of `window_seconds`,
+  for an event `increment_counter/2` counted that didn't happen after all.
+  Never goes below 0.
+  """
+  def decrement_counter(key, window_seconds)
+      when is_binary(key) and is_integer(window_seconds) and window_seconds > 0 do
+    Rate.CounterModel.decrement_query(key, window_seconds, Rate.Private.datetime_now())
+    |> Repo.update_all(inc: [count: -1])
+
+    :ok
+  end
+
+  @doc """
   The count of `key` in the current window of `window_seconds`, without
   counting an event.
   """

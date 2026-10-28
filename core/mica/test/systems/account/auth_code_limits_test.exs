@@ -38,6 +38,14 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
   defp network_ip(i), do: "192.0.2.#{i}"
 
+  # A request or check as `Account.Public` counts it, without the per-minute
+  # quota per email address that the service keeps in memory.
+  defp request?(email, remote_ip),
+    do: AuthCodeLimits.allow_request?(email, remote_ip) and AuthCodeLimits.count_request?(email)
+
+  defp check?(email, remote_ip),
+    do: AuthCodeLimits.allow_check?(email, remote_ip) and AuthCodeLimits.count_check?(email)
+
   describe "guards" do
     test "generate_otp/2 crashes without a network address" do
       assert_raise FunctionClauseError, fn ->
@@ -86,27 +94,27 @@ defmodule Systems.Account.AuthCodeLimitsTest do
     test "an email address gets 10 codes per hour from one network address" do
       email = unique_email("requests")
 
-      for _ <- 1..10, do: assert(AuthCodeLimits.allow_request?(email, @remote_ip))
-      refute AuthCodeLimits.allow_request?(email, @remote_ip)
-      assert AuthCodeLimits.allow_request?(email, @other_ip)
+      for _ <- 1..10, do: assert(request?(email, @remote_ip))
+      refute request?(email, @remote_ip)
+      assert request?(email, @other_ip)
 
       end_windows(3600)
-      assert AuthCodeLimits.allow_request?(email, @remote_ip)
+      assert request?(email, @remote_ip)
     end
 
     test "an email address gets 50 codes per day across network addresses" do
       email = unique_email("requests-daily")
 
-      for i <- 1..5, _ <- 1..10, do: assert(AuthCodeLimits.allow_request?(email, network_ip(i)))
-      refute AuthCodeLimits.allow_request?(email, network_ip(6))
+      for i <- 1..5, _ <- 1..10, do: assert(request?(email, network_ip(i)))
+      refute request?(email, network_ip(6))
 
       end_windows(86_400)
-      assert AuthCodeLimits.allow_request?(email, network_ip(6))
+      assert request?(email, network_ip(6))
     end
 
     test "a network address gets 200 codes per hour, for any email addresses" do
       for _ <- 1..200 do
-        assert AuthCodeLimits.allow_request?(unique_email("network"), @remote_ip)
+        assert request?(unique_email("network"), @remote_ip)
       end
 
       email = unique_email("network")
@@ -118,17 +126,17 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
     test "IPv6 addresses count by their /64 network" do
       for i <- 1..200 do
-        assert AuthCodeLimits.allow_request?(unique_email("v6"), "2001:db8:1:2::#{i}")
+        assert request?(unique_email("v6"), "2001:db8:1:2::#{i}")
       end
 
-      refute AuthCodeLimits.allow_request?(unique_email("v6"), "2001:db8:1:2:ffff::1")
-      assert AuthCodeLimits.allow_request?(unique_email("v6"), "2001:db8:1:3::1")
+      refute request?(unique_email("v6"), "2001:db8:1:2:ffff::1")
+      assert request?(unique_email("v6"), "2001:db8:1:3::1")
     end
 
     test "an email address that can't check codes from a network address gets no new code there" do
       email = unique_email("locked")
 
-      for _ <- 1..10, do: assert(AuthCodeLimits.allow_check?(email, @remote_ip))
+      for _ <- 1..10, do: assert(check?(email, @remote_ip))
 
       assert {:error, :rate_limited} = Account.Public.generate_otp(email, @remote_ip)
       assert :ok = Account.Public.generate_otp(email, @other_ip)
@@ -137,7 +145,7 @@ defmodule Systems.Account.AuthCodeLimitsTest do
     test "an email address at its daily total of checks gets no new code anywhere" do
       email = unique_email("locked-total")
 
-      for i <- 1..10, _ <- 1..10, do: assert(AuthCodeLimits.allow_check?(email, network_ip(i)))
+      for i <- 1..10, _ <- 1..10, do: assert(check?(email, network_ip(i)))
 
       assert {:error, :rate_limited} = Account.Public.generate_otp(email, network_ip(11))
     end
@@ -168,15 +176,15 @@ defmodule Systems.Account.AuthCodeLimitsTest do
       email = unique_email("daily")
 
       for _ <- 1..3 do
-        for _ <- 1..10, do: assert(AuthCodeLimits.allow_check?(email, @remote_ip))
+        for _ <- 1..10, do: assert(check?(email, @remote_ip))
         end_windows(3600)
       end
 
-      refute AuthCodeLimits.allow_check?(email, @remote_ip)
-      assert AuthCodeLimits.allow_check?(email, @other_ip)
+      refute check?(email, @remote_ip)
+      assert check?(email, @other_ip)
 
       end_windows(86_400)
-      assert AuthCodeLimits.allow_check?(email, @remote_ip)
+      assert check?(email, @remote_ip)
     end
 
     test "checks from one network address don't lock the email address out on another" do
@@ -184,7 +192,7 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
       for _ <- 1..3 do
         for _ <- 1..2 do
-          assert AuthCodeLimits.allow_request?(user.email, @other_ip)
+          assert request?(user.email, @other_ip)
           delete_codes(user.email)
           insert_code(user.email, user.id)
 
@@ -209,16 +217,16 @@ defmodule Systems.Account.AuthCodeLimitsTest do
     test "an email address gets 100 checks per day across network addresses" do
       email = unique_email("checks-total")
 
-      for i <- 1..10, _ <- 1..10, do: assert(AuthCodeLimits.allow_check?(email, network_ip(i)))
-      refute AuthCodeLimits.allow_check?(email, network_ip(11))
+      for i <- 1..10, _ <- 1..10, do: assert(check?(email, network_ip(i)))
+      refute check?(email, network_ip(11))
 
       end_windows(86_400)
-      assert AuthCodeLimits.allow_check?(email, network_ip(11))
+      assert check?(email, network_ip(11))
     end
 
     test "a network address gets 200 checks per hour, for any email addresses" do
       for _ <- 1..200 do
-        assert AuthCodeLimits.allow_check?(unique_email("network"), @remote_ip)
+        assert check?(unique_email("network"), @remote_ip)
       end
 
       email = unique_email("network")
@@ -243,12 +251,99 @@ defmodule Systems.Account.AuthCodeLimitsTest do
       email = unique_email("variants")
 
       for _ <- 1..10,
-          do: assert(AuthCodeLimits.allow_check?(email, @remote_ip))
+          do: assert(check?(email, @remote_ip))
 
       {code, _wrong_code} = insert_code(email)
 
       assert {:error, :max_attempts} =
                Account.Public.verify_otp(String.upcase(email), code, @remote_ip)
+    end
+  end
+
+  describe "totals per email address" do
+    test "checks of a code without attempts left leave the totals alone" do
+      email = unique_email("used-up")
+      {_code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 5})
+
+      for i <- 1..10, _ <- 1..10 do
+        assert {:error, :max_attempts} = Account.Public.verify_otp(email, "000000", network_ip(i))
+      end
+
+      delete_codes(email)
+      {code, _wrong_code} = insert_code(email)
+
+      assert {:ok, nil} = Account.Public.verify_otp(email, code, network_ip(11))
+    end
+
+    test "requests refused by the network address limit leave the totals alone" do
+      for _ <- 1..200, do: assert(request?(unique_email("other"), network_ip(1)))
+
+      email = unique_email("refused-requests")
+      for _ <- 1..20, do: refute(request?(email, network_ip(1)))
+
+      for i <- 2..6, _ <- 1..10, do: assert(request?(email, network_ip(i)))
+    end
+
+    test "checks refused by the network address limit leave the totals alone" do
+      for _ <- 1..200, do: assert(check?(unique_email("other"), network_ip(1)))
+
+      email = unique_email("refused-checks")
+      {code, _wrong_code} = insert_code(email)
+
+      for _ <- 1..20 do
+        assert {:error, :max_attempts} = Account.Public.verify_otp(email, code, network_ip(1))
+      end
+
+      assert Repo.one(AuthCodeModel.active_query(email)).attempts == 0
+      for i <- 2..11, _ <- 1..10, do: assert(check?(email, network_ip(i)))
+    end
+
+    test "filling the check total takes 20 codes checked from 10 network addresses" do
+      email = unique_email("filled")
+
+      for i <- 1..10, _ <- 1..2 do
+        delete_codes(email)
+        {_code, wrong_code} = insert_code(email)
+
+        for _ <- 1..5 do
+          assert {:error, :invalid} = Account.Public.verify_otp(email, wrong_code, network_ip(i))
+        end
+      end
+
+      delete_codes(email)
+      {code, _wrong_code} = insert_code(email)
+
+      assert {:error, :max_attempts} = Account.Public.verify_otp(email, code, network_ip(11))
+    end
+
+    test "19 codes checked from 10 network addresses leave room in the check total" do
+      email = unique_email("not-filled")
+
+      for i <- 1..10, j <- 1..2, {i, j} != {10, 2} do
+        delete_codes(email)
+        {_code, wrong_code} = insert_code(email)
+
+        for _ <- 1..5 do
+          assert {:error, :invalid} = Account.Public.verify_otp(email, wrong_code, network_ip(i))
+        end
+      end
+
+      delete_codes(email)
+      {code, _wrong_code} = insert_code(email)
+
+      assert {:ok, nil} = Account.Public.verify_otp(email, code, network_ip(11))
+    end
+
+    test "a check taken back leaves room in the check total" do
+      email = unique_email("taken-back")
+
+      for _ <- 1..100, do: assert(AuthCodeLimits.count_check?(email))
+      refute AuthCodeLimits.count_check?(email)
+
+      AuthCodeLimits.uncount_check(email)
+      AuthCodeLimits.uncount_check(email)
+      assert AuthCodeLimits.count_check?(email)
     end
   end
 

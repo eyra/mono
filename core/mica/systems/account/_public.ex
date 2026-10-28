@@ -498,11 +498,16 @@ defmodule Systems.Account.Public do
   """
   def generate_otp(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
     email = Account.AuthCodeModel.normalize_email(email)
-    Rate.Public.request_permission(:otp_request, email, 1)
 
-    if Account.AuthCodeLimits.allow_request?(email, remote_ip),
-      do: send_otp(email),
-      else: {:error, :rate_limited}
+    # The totals per email address count last, so only requests that send a
+    # code use them up.
+    with true <- Account.AuthCodeLimits.allow_request?(email, remote_ip),
+         :granted <- Rate.Public.request_permission(:otp_request, email, 1),
+         true <- Account.AuthCodeLimits.count_request?(email) do
+      send_otp(email)
+    else
+      false -> {:error, :rate_limited}
+    end
   rescue
     Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
@@ -542,15 +547,19 @@ defmodule Systems.Account.Public do
       nil ->
         {:error, :not_found}
 
-      %{id: id} ->
-        if Account.AuthCodeLimits.allow_check?(email, remote_ip),
-          do: verify_otp_attempt(id, code),
-          else: {:error, :max_attempts}
+      auth_code ->
+        if Account.AuthCodeModel.attempts_left?(auth_code) and
+             Account.AuthCodeLimits.allow_check?(email, remote_ip) and
+             Account.AuthCodeLimits.count_check?(email),
+           do: verify_otp_attempt(auth_code, email, code),
+           else: {:error, :max_attempts}
     end
   end
 
-  # The attempt is counted before the code is compared, whether it matches or not.
-  defp verify_otp_attempt(id, code) do
+  # The attempt is counted before the code is compared, whether it matches or
+  # not. A check that finds no attempts left after all (another request took
+  # the last one) is taken back from the totals per email address.
+  defp verify_otp_attempt(%{id: id}, email, code) do
     case Repo.update_all(Account.AuthCodeModel.attempt_query(id), inc: [attempts: 1]) do
       {1, [token]} ->
         if Account.AuthCodeModel.matches?(token, code),
@@ -558,6 +567,8 @@ defmodule Systems.Account.Public do
           else: {:error, :invalid}
 
       {0, _} ->
+        Account.AuthCodeLimits.uncount_check(email)
+
         if Repo.exists?(from(t in Account.AuthCodeModel, where: t.id == ^id)),
           do: {:error, :max_attempts},
           else: {:error, :not_found}

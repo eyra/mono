@@ -12,7 +12,7 @@ defmodule Systems.Account.AuthCodeLimits do
     50 per email address per day, 200 per network address per hour.
   - Checking a code: 10 per email address and network address per hour and
     30 per day, 100 per email address per day, 200 per network address per
-    hour. Only checks of an active code count.
+    hour. Only checks of a code with attempts left count.
   - While an email address can't check codes from a network address, it can't
     request new ones from there either; at its daily total of checks, from
     nowhere.
@@ -21,6 +21,10 @@ defmodule Systems.Account.AuthCodeLimits do
   network address can't use up the limits of the same email address on
   another; the limits per email address alone bound the total across all
   network addresses.
+
+  The totals per email address count last, after every other limit has
+  passed: only requests that send a code and checks that compare a code count
+  toward them, so events another limit refuses don't use them up.
 
   An IPv6 client counts by its /64 network, which one connection usually owns
   as a whole. The network address limits leave room for many people behind
@@ -50,19 +54,50 @@ defmodule Systems.Account.AuthCodeLimits do
   ]
 
   @doc """
-  Counts a code request for `email` (normalised) from `remote_ip`; false when
-  a limit refuses it.
+  Counts a code request for `email` (normalised) from `remote_ip` against the
+  limits per network address (`email_network` and `network`); false when one
+  refuses it. The totals per email address count separately, with
+  `count_request?/1`, once every other limit has passed.
   """
   def allow_request?(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
-    checks_allowed?(email, remote_ip) and allow?(:request, email, remote_ip)
+    checks_allowed?(email, remote_ip) and allow?(per_network(:request), email, remote_ip)
   end
 
   @doc """
-  Counts a check of a code for `email` (normalised) from `remote_ip`; false
-  when a limit refuses it.
+  Counts a code request for `email` (normalised) against the totals per email
+  address; false when one refuses it. Call it last, right before the code is
+  sent, so only requests that send a code count.
+  """
+  def count_request?(email) when is_binary(email) do
+    allow?(totals(:request), email, nil)
+  end
+
+  @doc """
+  Counts a check of a code for `email` (normalised) from `remote_ip` against
+  the limits per network address; false when one refuses it. The totals per
+  email address count separately, with `count_check?/1`.
   """
   def allow_check?(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
-    allow?(:check, email, remote_ip)
+    allow?(per_network(:check), email, remote_ip)
+  end
+
+  @doc """
+  Counts a check of a code for `email` (normalised) against the totals per
+  email address; false when one refuses it. When the check then turns out not
+  to reach the code, because the code has no attempts left, `uncount_check/1`
+  takes it back, so the totals only count checks that compare a code.
+  """
+  def count_check?(email) when is_binary(email) do
+    allow?(totals(:check), email, nil)
+  end
+
+  @doc """
+  Takes back a check that `count_check?/1` counted.
+  """
+  def uncount_check(email) when is_binary(email) do
+    Enum.each(totals(:check), fn {:check, :email, _limit, window} ->
+      Rate.Public.decrement_counter(key(:check, :email, email, nil), @windows[window])
+    end)
   end
 
   @doc """
@@ -83,12 +118,13 @@ defmodule Systems.Account.AuthCodeLimits do
   Parses the decoded JSON of `AUTH_CODE_LIMITS`, a list of limits such as
   `{"action": "check", "by": "email", "limit": 20, "window": "hour"}`:
   `action` is `request` or `check`, `by` is `email`, `email_network` or
-  `network`, `window` is
-  `minute`, `hour` or `day`, and `limit` is a positive integer. Raises on an
-  invalid entry.
+  `network`, `window` is `minute`, `hour` or `day`, and `limit` is a positive
+  integer. Raises on an invalid entry, and on an action, count and window
+  listed more than once.
   """
   def overrides!(limits) when is_list(limits) do
-    Enum.map(limits, fn limit ->
+    limits
+    |> Enum.map(fn limit ->
       {
         get!(:atom, limit, :action, [:request, :check]),
         get!(:atom, limit, :by, [:email, :email_network, :network]),
@@ -96,6 +132,17 @@ defmodule Systems.Account.AuthCodeLimits do
         get!(:atom, limit, :window, Map.keys(@windows))
       }
     end)
+    |> unique!()
+  end
+
+  defp unique!(overrides) do
+    overrides
+    |> Enum.frequencies_by(fn {action, by, _, window} -> {action, by, window} end)
+    |> Enum.find(fn {_, count} -> count > 1 end)
+    |> case do
+      nil -> overrides
+      {limit, _} -> raise("A limit is listed more than once: #{inspect(limit)}")
+    end
   end
 
   defp positive_integer!(%{"limit" => limit}) when is_integer(limit) and limit > 0, do: limit
@@ -111,10 +158,16 @@ defmodule Systems.Account.AuthCodeLimits do
     end)
   end
 
-  defp allow?(action, email, remote_ip) do
-    limits()
-    |> Enum.filter(&match?({^action, _, _, _}, &1))
-    |> Enum.all?(fn {^action, by, limit, window} ->
+  defp per_network(action) do
+    Enum.filter(limits(), &match?({^action, by, _, _} when by in [:email_network, :network], &1))
+  end
+
+  defp totals(action), do: Enum.filter(limits(), &match?({^action, :email, _, _}, &1))
+
+  # Each counter counts and compares in one statement, so concurrent events
+  # can't pass a limit together.
+  defp allow?(limits, email, remote_ip) do
+    Enum.all?(limits, fn {action, by, limit, window} ->
       Rate.Public.increment_counter(key(action, by, email, remote_ip), @windows[window]) <= limit
     end)
   end

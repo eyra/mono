@@ -34,6 +34,14 @@ defmodule Systems.Rate.CounterModel do
     )
   end
 
+  def decrement_query(key, window_seconds, %DateTime{} = now) do
+    from(c in __MODULE__,
+      where: c.key == ^hash_key(key, window_seconds),
+      where: c.window_start == ^window_start(now, window_seconds),
+      where: c.count > 0
+    )
+  end
+
   def expired_query(%DateTime{} = now) do
     from(c in __MODULE__, where: c.expires_at <= ^DateTime.truncate(now, :second))
   end
