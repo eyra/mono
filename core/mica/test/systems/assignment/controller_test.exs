@@ -71,8 +71,8 @@ defmodule Systems.Assignment.ControllerTest do
     test "other assignment routes keep the generic sign-in page", %{conn: conn} do
       %{id: id} = Assignment.Factories.create_assignment(31, 0, :online)
 
-      conn = get(conn, "/assignment/#{id}/landing")
-      assert redirected_to(conn) == "/user/signin"
+      conn = get(conn, "/assignment/#{id}/content")
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
     end
   end
 

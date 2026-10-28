@@ -196,6 +196,13 @@ defmodule Systems.Account.UserAuth do
   def require_authenticated_participant(conn, _opts),
     do: require_authenticated(conn, :participant)
 
+  @doc """
+  Like `require_authenticated_user/2`, for pages participants open (tasks,
+  pool and lab pages). Signed-out visitors go to the SaaS's
+  `member_sign_in_page/1`.
+  """
+  def require_authenticated_member(conn, _opts), do: require_authenticated(conn, :member)
+
   defp require_authenticated(conn, entry) do
     if conn.assigns[:current_user] do
       conn
@@ -208,10 +215,12 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
-  defp signin_path(_conn, :user), do: ~p"/user/signin"
+  defp signin_path(_conn, :user), do: Core.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
     do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
+
+  defp signin_path(conn, :member), do: Core.SaaS.module().member_sign_in_page(current_path(conn))
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))

@@ -16,7 +16,7 @@ defmodule Systems.Account.SettingsControllerTest do
     test "redirects if user is not logged in" do
       conn = CoreWeb.ConnCase.build_conn()
       conn = get(conn, ~p"/user/settings")
-      assert redirected_to(conn) == ~p"/user/signin"
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
     end
   end
 
@@ -143,7 +143,7 @@ defmodule Systems.Account.SettingsControllerTest do
     test "redirects if user is not logged in", %{token: token} do
       conn = CoreWeb.ConnCase.build_conn()
       conn = get(conn, ~p"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == ~p"/user/signin"
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
     end
   end
 end

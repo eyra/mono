@@ -32,7 +32,13 @@ defmodule Core.SaaS do
   @doc "Where a user lands after signing in, unless a return path is set."
   @callback signed_in_page(:creator | :member) :: String.t()
 
-  @optional_callbacks title: 0
+  @doc "Where a signed-out user is sent to sign in."
+  @callback sign_in_page() :: String.t()
+
+  @doc "Where a signed-out user is sent to sign in for a page participants open, which they return to."
+  @callback member_sign_in_page(return_to :: String.t()) :: String.t()
+
+  @optional_callbacks title: 0, sign_in_page: 0, member_sign_in_page: 1
 
   defmacro __using__(_opts) do
     quote do
@@ -40,7 +46,11 @@ defmodule Core.SaaS do
 
       def title, do: "Mica"
 
-      defoverridable title: 0
+      def sign_in_page, do: "/user/signin"
+
+      def member_sign_in_page(_return_to), do: sign_in_page()
+
+      defoverridable title: 0, sign_in_page: 0, member_sign_in_page: 1
     end
   end
 
@@ -83,13 +93,16 @@ defmodule Core.SaaS do
   def desktop_sections, do: collect_desktop_sections(systems())
 
   @doc "The children of all systems, in `systems/0` order."
-  def children, do: Enum.flat_map(systems(), & &1.children())
+  def children, do: collect_children(systems())
 
   @doc "The Oban queues of all systems. Raises when two systems declare the same queue."
   def oban_queues, do: collect_oban_queues(systems())
 
   @doc "The default rate quotas of all systems, in `systems/0` order."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
+
+  @doc false
+  def collect_children(systems), do: Enum.flat_map(systems, & &1.children())
 
   @doc false
   def collect_desktop_sections(systems) do
