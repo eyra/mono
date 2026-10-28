@@ -413,3 +413,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.decline"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "auth.password.link"
+msgstr ""

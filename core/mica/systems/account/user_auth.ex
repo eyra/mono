@@ -207,7 +207,7 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
-  defp signin_path(_conn, :user), do: ~p"/user/signin"
+  defp signin_path(_conn, :user), do: Core.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
     do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))

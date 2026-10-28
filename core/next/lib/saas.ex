@@ -1,6 +1,7 @@
 defmodule Next.SaaS do
   @moduledoc "Next, Eyra's SaaS on Mica."
   use Core.SaaS
+  use Core.FeatureFlags
 
   @impl true
   def systems do
@@ -34,4 +35,9 @@ defmodule Next.SaaS do
   @impl true
   def signed_in_page(:creator), do: "/project"
   def signed_in_page(:member), do: "/"
+
+  @impl true
+  def sign_in_page do
+    if feature_enabled?(:otp), do: "/user/auth/identify", else: "/user/signin"
+  end
 end

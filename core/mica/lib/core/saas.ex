@@ -32,7 +32,10 @@ defmodule Core.SaaS do
   @doc "Where a user lands after signing in, unless a return path is set."
   @callback signed_in_page(:creator | :member) :: String.t()
 
-  @optional_callbacks title: 0
+  @doc "Where a signed-out user is sent to sign in."
+  @callback sign_in_page() :: String.t()
+
+  @optional_callbacks title: 0, sign_in_page: 0
 
   defmacro __using__(_opts) do
     quote do
@@ -40,7 +43,9 @@ defmodule Core.SaaS do
 
       def title, do: "Mica"
 
-      defoverridable title: 0
+      def sign_in_page, do: "/user/signin"
+
+      defoverridable title: 0, sign_in_page: 0
     end
   end
 
