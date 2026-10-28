@@ -426,4 +426,4 @@ msgstr "Refuză"
 
 #, elixir-autogen, elixir-format
 msgid "auth.password.link"
-msgstr "Autentificare cu parola"
+msgstr "Autentificare cu parolă"

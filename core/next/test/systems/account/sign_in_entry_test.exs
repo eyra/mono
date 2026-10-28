@@ -12,6 +12,20 @@ defmodule Next.Account.SignInEntryTest do
 
   @token_salt "otp-redeem"
 
+  @participant_pages [
+    "/assignment/1",
+    "/assignment/1/landing",
+    "/assignment/callback/1",
+    "/alliance/1/callback",
+    "/pool/panl/join",
+    "/pool/panl/onboarding",
+    "/pool/1",
+    "/pool/1/marketplace",
+    "/lab/1"
+  ]
+
+  @researcher_pages ["/assignment/1/content", "/pool/1/content", "/pool/participant/1"]
+
   describe "with sign-in codes on" do
     setup do
       set_feature_flag(:otp, true)
@@ -99,6 +113,38 @@ defmodule Next.Account.SignInEntryTest do
       assert html =~ "signin-form"
     end
 
+    for path <- @participant_pages do
+      test "participant page #{path} goes to the participant code page", %{conn: conn} do
+        conn = get(conn, unquote(path))
+
+        assert redirected_to(conn) ==
+                 "/user/auth/identify/participant?return_to=#{URI.encode_www_form(unquote(path))}"
+
+        assert get_session(conn, :user_return_to) == unquote(path)
+      end
+    end
+
+    for path <- @researcher_pages do
+      test "researcher page #{path} goes to the code page", %{conn: conn} do
+        conn = get(conn, unquote(path))
+
+        assert redirected_to(conn) == "/user/auth/identify"
+      end
+    end
+
+    test "a new email from a participant page continues as a participant", %{conn: conn} do
+      conn = get(conn, "/pool/panl/join")
+      {:ok, view, _html} = conn |> recycle() |> live(redirected_to(conn))
+      email = "participant-#{System.unique_integer([:positive])}@example.invalid"
+
+      render_submit(view, "submit", %{"email" => email})
+
+      assert_redirect(
+        view,
+        "/user/auth/verify?email=#{URI.encode_www_form(email)}&return_to=%2Fpool%2Fpanl%2Fjoin&creator=false"
+      )
+    end
+
     test "a protected participant page still goes to the participant entry", %{conn: conn} do
       conn = get(conn, "/assignment/1/invite")
 
@@ -126,6 +172,15 @@ defmodule Next.Account.SignInEntryTest do
 
       assert redirected_to(conn) == "/user/signin"
       assert get_session(conn, :user_return_to) == "/user/account"
+    end
+
+    for path <- @participant_pages do
+      test "participant page #{path} goes to the password page", %{conn: conn} do
+        conn = get(conn, unquote(path))
+
+        assert redirected_to(conn) == "/user/signin"
+        assert get_session(conn, :user_return_to) == unquote(path)
+      end
     end
 
     test "signing out goes to the password page", %{conn: conn} do

@@ -40,4 +40,11 @@ defmodule Next.SaaS do
   def sign_in_page do
     if feature_enabled?(:otp), do: "/user/auth/identify", else: "/user/signin"
   end
+
+  @impl true
+  def member_sign_in_page(return_to) do
+    if feature_enabled?(:otp),
+      do: CoreWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
+      else: "/user/signin"
+  end
 end

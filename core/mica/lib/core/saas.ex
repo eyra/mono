@@ -35,7 +35,10 @@ defmodule Core.SaaS do
   @doc "Where a signed-out user is sent to sign in."
   @callback sign_in_page() :: String.t()
 
-  @optional_callbacks title: 0, sign_in_page: 0
+  @doc "Where a signed-out user is sent to sign in for a page participants open, which they return to."
+  @callback member_sign_in_page(return_to :: String.t()) :: String.t()
+
+  @optional_callbacks title: 0, sign_in_page: 0, member_sign_in_page: 1
 
   defmacro __using__(_opts) do
     quote do
@@ -45,7 +48,9 @@ defmodule Core.SaaS do
 
       def sign_in_page, do: "/user/signin"
 
-      defoverridable title: 0, sign_in_page: 0
+      def member_sign_in_page(_return_to), do: sign_in_page()
+
+      defoverridable title: 0, sign_in_page: 0, member_sign_in_page: 1
     end
   end
 
