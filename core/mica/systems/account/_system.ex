@@ -22,6 +22,14 @@ defmodule Systems.Account.System do
 
   def signal_handlers, do: [Systems.Account.Switch]
 
+  def account_tabs do
+    [
+      Systems.Account.ProfileTab,
+      Systems.Account.PayoutsTab,
+      Systems.Account.FeaturesTab
+    ]
+  end
+
   def rate_quotas do
     [
       [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],

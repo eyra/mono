@@ -33,6 +33,33 @@ defmodule Core.SaaSTest do
     def oban_queues, do: [exports: 2, imports: 3]
   end
 
+  defmodule NewsSection do
+    def id, do: :news
+  end
+
+  defmodule OtherNewsSection do
+    def id, do: :news
+  end
+
+  defmodule TipsSection do
+    def id, do: :tips
+  end
+
+  defmodule NewsSystem do
+    use Core.System
+    def desktop_sections, do: [NewsSection]
+  end
+
+  defmodule OtherNewsSystem do
+    use Core.System
+    def desktop_sections, do: [OtherNewsSection, TipsSection]
+  end
+
+  defmodule TipsSystem do
+    use Core.System
+    def desktop_sections, do: [TipsSection]
+  end
+
   defmodule DuplicateSaaS do
     use Core.SaaS
     def systems, do: [GoodSystem, GoodSystem]
@@ -121,6 +148,19 @@ defmodule Core.SaaSTest do
            ]
   end
 
+  test "Desktop sections are collected in system order" do
+    assert Core.SaaS.collect_desktop_sections([TipsSystem, GoodSystem, NewsSystem]) == [
+             TipsSection,
+             NewsSection
+           ]
+  end
+
+  test "a Desktop section id declared by two sections is an error" do
+    assert_raise ArgumentError,
+                 "Desktop section id :news is declared by more than one section",
+                 fn -> Core.SaaS.collect_desktop_sections([NewsSystem, OtherNewsSystem]) end
+  end
+
   test "Oban queues are collected in system order" do
     assert Core.SaaS.collect_oban_queues([OtherQueueSystem, GoodSystem]) == [
              exports: 2,
@@ -138,5 +178,21 @@ defmodule Core.SaaSTest do
     assert Core.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
+  end
+
+  test "the Admin and Account systems declare the admin panels and account tabs, in order" do
+    assert Core.SaaS.admin_panels() == [
+             Systems.Admin.SystemPanel,
+             Systems.Admin.AccountPanel,
+             Systems.Admin.OrgPanel,
+             Systems.Admin.ActionsPanel,
+             Systems.Admin.ClientActivityPanel
+           ]
+
+    assert Core.SaaS.account_tabs() == [
+             Systems.Account.ProfileTab,
+             Systems.Account.PayoutsTab,
+             Systems.Account.FeaturesTab
+           ]
   end
 end

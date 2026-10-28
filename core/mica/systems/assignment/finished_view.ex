@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.FinishedView do
   use CoreWeb, :embedded_live_view
-  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   alias Frameworks.Pixel.Text

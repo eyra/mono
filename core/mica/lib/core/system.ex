@@ -70,6 +70,25 @@ defmodule Core.System do
   @callback notify_channels() :: %{atom() => module()}
 
   @doc """
+  The system's `Systems.Admin.Panel` modules: tabs on the Admin page, shown
+  after the panels of earlier systems in `c:Core.SaaS.systems/0`.
+  """
+  @callback admin_panels() :: [module()]
+
+  @doc """
+  The system's `Systems.Account.Tab` modules: tabs on the account page, shown
+  after the tabs of earlier systems in `c:Core.SaaS.systems/0`.
+  """
+  @callback account_tabs() :: [module()]
+
+  @doc """
+  The system's `Systems.Desktop.Section` modules: sections on the Desktop page,
+  shown after Recent items and the sections of earlier systems in
+  `c:Core.SaaS.systems/0`.
+  """
+  @callback desktop_sections() :: [module()]
+
+  @doc """
   Processes the system needs, started under `Core.Supervisor` after
   `Phoenix.PubSub` and before Oban, in `c:Core.SaaS.systems/0` order.
   """
@@ -94,6 +113,9 @@ defmodule Core.System do
       def signal_handlers, do: []
       def notifiers, do: []
       def notify_channels, do: %{}
+      def admin_panels, do: []
+      def account_tabs, do: []
+      def desktop_sections, do: []
       def children, do: []
       def oban_queues, do: []
       def rate_quotas, do: []

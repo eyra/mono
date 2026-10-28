@@ -3,7 +3,7 @@ defmodule Systems.Account.ProfileTab do
   Profile tab implementation.
   This tab is always visible for all users.
   """
-  @behaviour Systems.Account.Page.Tab
+  @behaviour Systems.Account.Tab
 
   use Gettext, backend: CoreWeb.Gettext
 

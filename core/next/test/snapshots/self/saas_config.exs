@@ -12,5 +12,6 @@
   account: nil,
   pixel: [pool_assets: []],
   account_tabs: [:profile, :payouts, :features],
-  admin_tabs: %{admin: [:system, :account, :org, :actions, :client_activity], org_admin: [:org]}
+  admin_tabs: %{admin: [:system, :account, :org, :actions, :client_activity], org_admin: [:org]},
+  desktop_sections: []
 ]

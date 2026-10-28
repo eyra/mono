@@ -57,19 +57,21 @@ defmodule Systems.Storage.Azure.Backend do
   @impl true
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
-  defp url(
-         %{
-           "account_name" => storage_account_name,
-           "container" => container,
-           "sas_token" => sas_token
-         },
-         path
-       ) do
+  def url(
+        %{
+          "account_name" => storage_account_name,
+          "container" => container,
+          "sas_token" => sas_token
+        },
+        filename
+      ) do
+    path = Systems.Storage.Filename.url_segment(filename)
+
     {:ok,
      "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
   end
 
-  defp url(_, _) do
+  def url(_, _) do
     {:error, "Unable to deliver donation: invalid Azure config"}
   end
 end
