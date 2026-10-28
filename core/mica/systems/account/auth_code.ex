@@ -29,16 +29,33 @@ defmodule Systems.Account.AuthCodeModel do
     {code, auth_code}
   end
 
-  def verify(%__MODULE__{attempts: attempts}, _code) when attempts >= @max_attempts do
-    {:error, :max_attempts}
+  @doc """
+  The form of an email address used for codes and their request limit, so
+  every spelling of one address shares one code, one limit and one attempts
+  counter. `users.email` is citext, so user lookups already ignore case.
+  """
+  def normalize_email(email) when is_binary(email) do
+    email
+    |> String.trim()
+    |> String.downcase()
   end
 
-  def verify(%__MODULE__{code_hash: code_hash}, code) do
-    if :crypto.hash(@hash_algorithm, code) == code_hash do
-      :ok
-    else
-      {:error, :invalid}
-    end
+  def matches?(%__MODULE__{code_hash: code_hash}, code) do
+    hash_code(code) == code_hash
+  end
+
+  @doc """
+  Selects the code only while it has attempts left. Run it with
+  `Repo.update_all(query, inc: [attempts: 1])`: the database checks the limit and
+  counts the attempt in one statement, so concurrent requests can't check a
+  code more often than `@max_attempts` times.
+  """
+  def attempt_query(id) do
+    from(t in __MODULE__,
+      where: t.id == ^id,
+      where: t.attempts < @max_attempts,
+      select: t
+    )
   end
 
   def active_query(email) do

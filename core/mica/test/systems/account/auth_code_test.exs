@@ -54,28 +54,40 @@ defmodule Systems.Account.AuthCodeTest do
     end
   end
 
-  describe "AuthCodeModel.verify/2" do
-    test "returns :ok for correct code" do
+  describe "AuthCodeModel.matches?/2" do
+    test "is true for the correct code" do
       {code, auth_code} = AuthCodeModel.build("user@example.com", nil)
-      assert :ok = AuthCodeModel.verify(auth_code, code)
+      assert AuthCodeModel.matches?(auth_code, code)
     end
 
-    test "returns {:error, :invalid} for wrong code" do
+    test "is false for a wrong code" do
       {code, auth_code} = AuthCodeModel.build("user@example.com", nil)
       wrong_code = if code == "000000", do: "000001", else: "000000"
-      assert {:error, :invalid} = AuthCodeModel.verify(auth_code, wrong_code)
+      refute AuthCodeModel.matches?(auth_code, wrong_code)
     end
+  end
 
-    test "returns {:error, :max_attempts} when attempts exhausted" do
-      {code, auth_code} = AuthCodeModel.build("user@example.com", nil)
-      exhausted = %{auth_code | attempts: 5}
-      assert {:error, :max_attempts} = AuthCodeModel.verify(exhausted, code)
+  describe "AuthCodeModel.normalize_email/1" do
+    test "trims and downcases" do
+      assert AuthCodeModel.normalize_email("  User@Example.COM \n") == "user@example.com"
     end
+  end
 
-    test "returns {:error, :max_attempts} before checking code when attempts exhausted" do
+  describe "AuthCodeModel.attempt_query/1" do
+    test "counts an attempt while attempts are left" do
       {_code, auth_code} = AuthCodeModel.build("user@example.com", nil)
-      exhausted = %{auth_code | attempts: 5}
-      assert {:error, :max_attempts} = AuthCodeModel.verify(exhausted, "correct-irrelevant")
+      %{id: id} = Repo.insert!(%{auth_code | attempts: 4})
+
+      assert {1, [%{attempts: 5}]} =
+               Repo.update_all(AuthCodeModel.attempt_query(id), inc: [attempts: 1])
+    end
+
+    test "leaves the code alone once attempts are exhausted" do
+      {_code, auth_code} = AuthCodeModel.build("user@example.com", nil)
+      %{id: id} = Repo.insert!(%{auth_code | attempts: 5})
+
+      assert {0, []} = Repo.update_all(AuthCodeModel.attempt_query(id), inc: [attempts: 1])
+      assert Repo.get!(AuthCodeModel, id).attempts == 5
     end
   end
 
@@ -94,10 +106,10 @@ defmodule Systems.Account.AuthCodeTest do
       assert result == nil
     end
 
-    test "still returns the row after max attempts so verify/2 can flag the rate-limit" do
+    test "still returns the row after max attempts so verify_otp/2 can flag the rate-limit" do
       # If active_query filtered rate-limited rows out, verify_otp would map
       # them to :not_found — and the verify page would show "code expired"
-      # instead of the rate-limit message. Keep the row visible so verify/2
+      # instead of the rate-limit message. Keep the row visible so verify_otp/2
       # gets a chance to return :max_attempts.
       {_code, auth_code} = AuthCodeModel.build("user@example.com", nil)
 
@@ -264,6 +276,97 @@ defmodule Systems.Account.AuthCodeTest do
 
       updated = Repo.one(AuthCodeModel.active_query(email))
       assert updated.attempts == 5
+    end
+
+    test "concurrent wrong codes are checked no more often than the attempts limit" do
+      email = unique_email("concurrent")
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(auth_code)
+      wrong_code = if code == "000000", do: "000001", else: "000000"
+
+      results =
+        1..20
+        |> Enum.map(fn _ ->
+          Task.async(fn -> Account.Public.verify_otp(email, wrong_code) end)
+        end)
+        |> Task.await_many()
+
+      assert Enum.count(results, &(&1 == {:error, :invalid})) == 5
+      assert Enum.count(results, &(&1 == {:error, :max_attempts})) == 15
+      assert Repo.one(AuthCodeModel.active_query(email)).attempts == 5
+    end
+
+    test "a correct code used concurrently signs in once" do
+      user = Factories.insert!(:member)
+      {code, auth_code} = AuthCodeModel.build(user.email, user.id)
+      Repo.insert!(auth_code)
+
+      results =
+        1..3
+        |> Enum.map(fn _ -> Task.async(fn -> Account.Public.verify_otp(user.email, code) end) end)
+        |> Task.await_many()
+
+      assert Enum.count(results, &match?({:ok, _}, &1)) == 1
+      assert Enum.count(results, &(&1 == {:error, :not_found})) == 2
+    end
+  end
+
+  describe "email variants" do
+    test "case and whitespace variants of one email share a single code" do
+      user = Factories.insert!(:member)
+
+      email = String.downcase(user.email)
+
+      :ok = Account.Public.generate_otp(user.email)
+      :ok = Account.Public.generate_otp(String.upcase(user.email))
+      :ok = Account.Public.generate_otp("  " <> user.email <> " ")
+
+      codes =
+        Repo.all(from(t in AuthCodeModel, where: fragment("lower(trim(?))", t.email) == ^email))
+
+      assert [%{email: ^email, user_id: user_id}] = codes
+      assert user_id == user.id
+    end
+
+    test "case variants of one email share one request limit" do
+      email = unique_email("shared-limit")
+
+      assert :ok = Account.Public.generate_otp(email)
+      assert :ok = Account.Public.generate_otp(String.upcase(email))
+      assert :ok = Account.Public.generate_otp(String.capitalize(email))
+
+      assert {:error, :rate_limited} =
+               Account.Public.generate_otp(" " <> String.upcase(email))
+    end
+
+    test "a code verifies with a case variant of the email" do
+      user = Factories.insert!(:member)
+      {code, auth_code} = AuthCodeModel.build(String.downcase(user.email), user.id)
+      Repo.insert!(auth_code)
+
+      assert {:ok, returned_user} =
+               Account.Public.verify_otp(" " <> String.upcase(user.email), code)
+
+      assert returned_user.id == user.id
+    end
+
+    test "wrong codes through case variants share one attempts counter" do
+      email = unique_email("shared-attempts")
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(auth_code)
+      wrong_code = if code == "000000", do: "000001", else: "000000"
+
+      for variant <- [
+            String.upcase(email),
+            String.capitalize(email),
+            " " <> email,
+            String.upcase(email) <> " ",
+            email
+          ] do
+        assert {:error, :invalid} = Account.Public.verify_otp(variant, wrong_code)
+      end
+
+      assert {:error, :max_attempts} = Account.Public.verify_otp(String.upcase(email), code)
     end
   end
 end
