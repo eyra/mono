@@ -24,11 +24,11 @@ defmodule Next.Account.NativeSigninControllerTest do
     %{conn: conn}
   end
 
-  describe "POST /user/auth/native/code" do
+  describe "POST /user/auth/native/identify" do
     test "sends a code to an unknown email", %{conn: conn} do
       email = unique_email("new")
 
-      conn = post_json(conn, "/user/auth/native/code", %{email: " #{email} "})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: " #{email} "})
 
       assert json_response(conn, 200) == %{"next" => "code"}
       assert get_resp_header(conn, "cache-control") == ["no-store"]
@@ -39,7 +39,7 @@ defmodule Next.Account.NativeSigninControllerTest do
     test "sends a code to an existing email the same way", %{conn: conn} do
       user = Factories.insert!(:member)
 
-      conn = post_json(conn, "/user/auth/native/code", %{email: user.email})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: user.email})
 
       assert json_response(conn, 200) == %{"next" => "code"}
       assert %{user_id: user_id} = Repo.one(AuthCodeModel.active_query(user.email))
@@ -47,13 +47,13 @@ defmodule Next.Account.NativeSigninControllerTest do
     end
 
     test "rejects an invalid email", %{conn: conn} do
-      conn = post_json(conn, "/user/auth/native/code", %{email: "not-an-email"})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: "not-an-email"})
 
       assert json_response(conn, 422) == %{"error" => "invalid_email"}
     end
 
     test "rejects a request without an email", %{conn: conn} do
-      conn = post_json(conn, "/user/auth/native/code", %{})
+      conn = post_json(conn, "/user/auth/native/identify", %{})
 
       assert json_response(conn, 400) == %{"error" => "invalid_request"}
     end
@@ -64,11 +64,11 @@ defmodule Next.Account.NativeSigninControllerTest do
       for _ <- 1..3 do
         assert %{"next" => "code"} =
                  conn
-                 |> post_json("/user/auth/native/code", %{email: email})
+                 |> post_json("/user/auth/native/identify", %{email: email})
                  |> json_response(200)
       end
 
-      conn = post_json(conn, "/user/auth/native/code", %{email: email})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: email})
 
       assert json_response(conn, 429) == %{"error" => "rate_limited"}
     end
@@ -83,7 +83,10 @@ defmodule Next.Account.NativeSigninControllerTest do
       |> Repo.insert!()
 
       conn =
-        post_json(conn, "/user/auth/native/code", %{email: user.email, return_to: "/assignment/1"})
+        post_json(conn, "/user/auth/native/identify", %{
+          email: user.email,
+          return_to: "/assignment/1"
+        })
 
       assert json_response(conn, 200) == %{
                "next" => "identity_provider",
@@ -107,7 +110,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       |> Ecto.Changeset.put_assoc(:user, user)
       |> Repo.insert!()
 
-      conn = post_json(conn, "/user/auth/native/code", %{email: user.email})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: user.email})
 
       assert json_response(conn, 422) == %{"error" => "unsupported_account"}
       refute Repo.one(AuthCodeModel.active_query(user.email))
@@ -116,7 +119,7 @@ defmodule Next.Account.NativeSigninControllerTest do
     test "is unavailable while OTP sign-in is off", %{conn: conn} do
       set_feature_flag(:otp, false)
 
-      conn = post_json(conn, "/user/auth/native/code", %{email: unique_email("off")})
+      conn = post_json(conn, "/user/auth/native/identify", %{email: unique_email("off")})
 
       assert json_response(conn, 404) == %{"error" => "unavailable"}
     end
@@ -322,7 +325,9 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn = put_req_header(conn, "accept", "application/json")
 
       assert {400, _headers, body} =
-               assert_error_sent(400, fn -> post(conn, "/user/auth/native/code", "{not json") end)
+               assert_error_sent(400, fn ->
+                 post(conn, "/user/auth/native/identify", "{not json")
+               end)
 
       assert Jason.decode!(body) == %{"error" => "Bad Request"}
     end
@@ -333,7 +338,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn =
         conn
         |> put_req_header("origin", "https://evil.example")
-        |> post_json("/user/auth/native/code", %{email: unique_email("csrf")})
+        |> post_json("/user/auth/native/identify", %{email: unique_email("csrf")})
 
       assert json_response(conn, 403) == %{"error" => "forbidden"}
     end
@@ -342,7 +347,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn =
         conn
         |> delete_req_header("origin")
-        |> post_json("/user/auth/native/code", %{email: unique_email("csrf")})
+        |> post_json("/user/auth/native/identify", %{email: unique_email("csrf")})
 
       assert json_response(conn, 403) == %{"error" => "forbidden"}
     end
@@ -351,7 +356,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn =
         conn
         |> put_req_header("sec-fetch-site", "cross-site")
-        |> post_json("/user/auth/native/code", %{email: unique_email("csrf")})
+        |> post_json("/user/auth/native/identify", %{email: unique_email("csrf")})
 
       assert json_response(conn, 403) == %{"error" => "forbidden"}
     end

@@ -105,10 +105,13 @@ Every call needs:
 All responses are JSON with `Cache-Control: no-store`. Errors are
 `{"error": "<code>"}`; the app maps each code to its own copy.
 
-### Request a code
+### Identify
+
+The same step as the web flow's identify page: the app sends the email, and
+Core either emails a code or names the identity provider to continue with.
 
 ```text
-POST /user/auth/native/code
+POST /user/auth/native/identify
 {"email": "participant@example.com", "return_to": "/assignment/1"}
 ```
 
@@ -137,9 +140,9 @@ POST /user/auth/native/verify
 | `200` | `{"onboarding": false, "redirect_to": null}` | Signed in. The session cookie is set on this response. |
 | `200` | `{"onboarding": true, "redirect_to": "/user/onboarding"}` | Signed in as a new participant, who still has to go through onboarding at `redirect_to`. |
 | `422` | `{"error": "invalid_code"}` | Wrong code; the attempt is counted. The user may try again. |
-| `422` | `{"error": "code_expired"}` | No valid code for this email (expired, used, or never requested). Request a new one. |
-| `422` | `{"error": "too_many_attempts"}` | The code is locked after too many wrong attempts. Request a new one. |
-| `422` | `{"error": "invalid_email"}` | The code was right, but no account could be created for the email (for example, another sign-in registered it in the meantime). Request a new code. |
+| `422` | `{"error": "code_expired"}` | No valid code for this email (expired, used, or never requested). Identify again for a new code. |
+| `422` | `{"error": "too_many_attempts"}` | The code is locked after too many wrong attempts. Identify again for a new code. |
+| `422` | `{"error": "invalid_email"}` | The code was right, but no account could be created for the email (for example, another sign-in registered it in the meantime). Identify again for a new code. |
 
 `redirect_to` is `/user/onboarding` (with the kept `return_to` appended) for a
 new user, the kept `return_to` for an existing user, or `null` when there is

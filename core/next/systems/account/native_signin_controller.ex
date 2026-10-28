@@ -1,7 +1,8 @@
 defmodule Next.Account.NativeSigninController do
   @moduledoc """
-  JSON calls behind the native Sign-in screen of the Next apps: request a
-  sign-in code for an email, then verify it. They follow the participant
+  JSON calls behind the native Sign-in screen of the Next apps: identify
+  (send a sign-in code to an email, or point to its identity provider), then
+  verify the code. They follow the participant
   path of the LiveView flow (`AuthIdentifyPage`, `AuthCodeVerifyPage`, the
   redeem step) and share its steps through `Next.Account.OtpSignin`.
 
@@ -19,7 +20,7 @@ defmodule Next.Account.NativeSigninController do
 
   @mobile_session %{mobile_session?: true}
 
-  def request_code(conn, %{"email" => email} = params) when is_binary(email) do
+  def identify(conn, %{"email" => email} = params) when is_binary(email) do
     with_otp(conn, fn ->
       email = String.trim(email)
       return_to = return_to(params)
@@ -32,7 +33,7 @@ defmodule Next.Account.NativeSigninController do
     end)
   end
 
-  def request_code(conn, _params), do: error(conn, :bad_request, "invalid_request")
+  def identify(conn, _params), do: error(conn, :bad_request, "invalid_request")
 
   def verify_code(conn, %{"email" => email, "code" => code} = params)
       when is_binary(email) and is_binary(code) do

@@ -15,7 +15,7 @@
    Next.Account.AuthCodeVerifyPage},
   {:get, "/user/session", Next.Account.SessionController, :new, "session", nil},
   {:post, "/user/session", Next.Account.SessionController, :create, "session", nil},
-  {:post, "/user/auth/native/code", Next.Account.NativeSigninController, :request_code,
+  {:post, "/user/auth/native/identify", Next.Account.NativeSigninController, :identify,
    "native_signin", nil},
   {:post, "/user/auth/native/verify", Next.Account.NativeSigninController, :verify_code,
    "native_signin", nil},

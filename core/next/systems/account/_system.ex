@@ -38,7 +38,7 @@ defmodule Next.Account.System do
 
       scope "/", Next do
         pipe_through([:native_signin])
-        post("/user/auth/native/code", Account.NativeSigninController, :request_code)
+        post("/user/auth/native/identify", Account.NativeSigninController, :identify)
         post("/user/auth/native/verify", Account.NativeSigninController, :verify_code)
       end
 
