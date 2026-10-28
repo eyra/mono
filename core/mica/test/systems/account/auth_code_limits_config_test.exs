@@ -26,7 +26,9 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
   end
 
   test "an override replaces the default limit of its action and count" do
-    override([%{"action" => "request", "by" => "email", "limit" => 2, "window" => "hour"}])
+    override([
+      %{"action" => "request", "by" => "email_network", "limit" => 2, "window" => "hour"}
+    ])
 
     assert AuthCodeLimits.allow_request?("a@example.com", @remote_ip)
     assert AuthCodeLimits.allow_request?("a@example.com", @remote_ip)
@@ -34,17 +36,28 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
   end
 
   test "an override keeps the other windows of its action and count" do
-    override([%{"action" => "check", "by" => "email", "limit" => 20, "window" => "hour"}])
+    override([
+      %{"action" => "check", "by" => "email_network", "limit" => 20, "window" => "hour"}
+    ])
 
-    assert [{:check, :email, 30, :day}, {:check, :email, 20, :hour}] =
-             Enum.filter(AuthCodeLimits.limits(), &match?({:check, :email, _, _}, &1))
+    assert [{:check, :email_network, 30, :day}, {:check, :email_network, 20, :hour}] =
+             Enum.filter(AuthCodeLimits.limits(), &match?({:check, :email_network, _, _}, &1))
   end
 
   test "an override with a window that has no default adds a limit" do
-    override([%{"action" => "request", "by" => "email", "limit" => 3, "window" => "minute"}])
+    override([
+      %{"action" => "request", "by" => "email_network", "limit" => 3, "window" => "minute"}
+    ])
 
-    assert [{:request, :email, 10, :hour}, {:request, :email, 3, :minute}] =
-             Enum.filter(AuthCodeLimits.limits(), &match?({:request, :email, _, _}, &1))
+    assert [{:request, :email_network, 10, :hour}, {:request, :email_network, 3, :minute}] =
+             Enum.filter(AuthCodeLimits.limits(), &match?({:request, :email_network, _, _}, &1))
+  end
+
+  test "an override replaces the daily total of an email address" do
+    override([%{"action" => "check", "by" => "email", "limit" => 150, "window" => "day"}])
+
+    assert [{:check, :email, 150, :day}] =
+             Enum.filter(AuthCodeLimits.limits(), &match?({:check, :email, _, _}, &1))
   end
 
   test "an override leaves the other defaults in place" do

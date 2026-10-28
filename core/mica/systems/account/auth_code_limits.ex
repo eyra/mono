@@ -1,17 +1,26 @@
 defmodule Systems.Account.AuthCodeLimits do
   @moduledoc """
   Limits on sign-in codes on top of the checks each single code allows
-  (`Systems.Account.AuthCodeModel`). They count per email address and per
-  network address, in the database (`Rate.Public.increment_counter/2`), so all
-  nodes share them and restarts don't reset them. Windows are fixed: a refused
-  address or network is allowed again when the window ends.
+  (`Systems.Account.AuthCodeModel`). They count per email address, per email
+  address and network address together, and per network address, in the
+  database (`Rate.Public.increment_counter/2`), so all nodes share them and
+  restarts don't reset them. Windows are fixed: a refused address or network
+  is allowed again when the window ends.
 
   The default limits:
-  - Requesting a code: 10 per email address per hour, 200 per network address
-    per hour.
-  - Checking a code: 10 per email address per hour and 30 per day, 200 per
-    network address per hour. Only checks of an active code count.
-  - While an email address can't check codes, it can't request new ones either.
+  - Requesting a code: 10 per email address and network address per hour,
+    50 per email address per day, 200 per network address per hour.
+  - Checking a code: 10 per email address and network address per hour and
+    30 per day, 100 per email address per day, 200 per network address per
+    hour. Only checks of an active code count.
+  - While an email address can't check codes from a network address, it can't
+    request new ones from there either; at its daily total of checks, from
+    nowhere.
+
+  Counting an email address per network address means requests from one
+  network address can't use up the limits of the same email address on
+  another; the limits per email address alone bound the total across all
+  network addresses.
 
   An IPv6 client counts by its /64 network, which one connection usually owns
   as a whole. The network address limits leave room for many people behind
@@ -31,10 +40,12 @@ defmodule Systems.Account.AuthCodeLimits do
 
   # {action, counted by, limit, window}
   @default_limits [
-    {:request, :email, 10, :hour},
+    {:request, :email_network, 10, :hour},
+    {:request, :email, 50, :day},
     {:request, :network, 200, :hour},
-    {:check, :email, 10, :hour},
-    {:check, :email, 30, :day},
+    {:check, :email_network, 10, :hour},
+    {:check, :email_network, 30, :day},
+    {:check, :email, 100, :day},
     {:check, :network, 200, :hour}
   ]
 
@@ -43,7 +54,7 @@ defmodule Systems.Account.AuthCodeLimits do
   a limit refuses it.
   """
   def allow_request?(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
-    checks_allowed?(email) and allow?(:request, email, remote_ip)
+    checks_allowed?(email, remote_ip) and allow?(:request, email, remote_ip)
   end
 
   @doc """
@@ -71,7 +82,8 @@ defmodule Systems.Account.AuthCodeLimits do
   @doc """
   Parses the decoded JSON of `AUTH_CODE_LIMITS`, a list of limits such as
   `{"action": "check", "by": "email", "limit": 20, "window": "hour"}`:
-  `action` is `request` or `check`, `by` is `email` or `network`, `window` is
+  `action` is `request` or `check`, `by` is `email`, `email_network` or
+  `network`, `window` is
   `minute`, `hour` or `day`, and `limit` is a positive integer. Raises on an
   invalid entry.
   """
@@ -79,7 +91,7 @@ defmodule Systems.Account.AuthCodeLimits do
     Enum.map(limits, fn limit ->
       {
         get!(:atom, limit, :action, [:request, :check]),
-        get!(:atom, limit, :by, [:email, :network]),
+        get!(:atom, limit, :by, [:email, :email_network, :network]),
         positive_integer!(limit),
         get!(:atom, limit, :window, Map.keys(@windows))
       }
@@ -91,11 +103,11 @@ defmodule Systems.Account.AuthCodeLimits do
   defp positive_integer!(entry),
     do: raise("The limit must be a positive integer: #{inspect(entry)}")
 
-  defp checks_allowed?(email) do
+  defp checks_allowed?(email, remote_ip) do
     limits()
-    |> Enum.filter(&match?({:check, :email, _, _}, &1))
-    |> Enum.all?(fn {:check, :email, limit, window} ->
-      Rate.Public.counter(key(:check, :email, email, nil), @windows[window]) < limit
+    |> Enum.filter(&match?({:check, by, _, _} when by in [:email, :email_network], &1))
+    |> Enum.all?(fn {:check, by, limit, window} ->
+      Rate.Public.counter(key(:check, by, email, remote_ip), @windows[window]) < limit
     end)
   end
 
@@ -108,6 +120,9 @@ defmodule Systems.Account.AuthCodeLimits do
   end
 
   defp key(action, :email, email, _remote_ip), do: "auth_code_#{action}:email:#{email}"
+
+  defp key(action, :email_network, email, remote_ip),
+    do: "auth_code_#{action}:email_network:#{email}:#{network(remote_ip)}"
 
   defp key(action, :network, _email, remote_ip),
     do: "auth_code_#{action}:network:#{network(remote_ip)}"
