@@ -55,9 +55,27 @@ defmodule Systems.Storage.RunChartTest do
     assert bands |> Enum.flat_map(& &1.points) |> Enum.count() == 2
   end
 
-  test "draws a band per Prompt" do
-    assert %{bands: [%{label: "symbols / practice1"}, %{label: "symbols / test"}]} =
+  test "labels each band with its Prompt when all Prompts share a flow" do
+    assert %{bands: [%{label: "practice1"}, %{label: "test"}]} =
              RunChart.build(@prompts, "rt_ms")
+  end
+
+  test "fits a label in a narrow band" do
+    assert RunChart.fit("practice1", 68.0) == "practice1"
+  end
+
+  test "shortens a label that does not fit" do
+    assert RunChart.fit("switch-test", 50.0) == "switc…"
+  end
+
+  test "keeps the flow in the labels of Prompts from different flows" do
+    prompts = [
+      %{label: "symbols / test", records: [[{"rt_ms", 1}]]},
+      %{label: "cogflex / test", records: [[{"rt_ms", 2}]]}
+    ]
+
+    assert %{bands: [%{label: "symbols / test"}, %{label: "cogflex / test"}]} =
+             RunChart.build(prompts, "rt_ms")
   end
 
   test "draws no trend in a Prompt with fewer than 5 trials" do

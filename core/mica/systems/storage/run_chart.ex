@@ -13,7 +13,9 @@ defmodule Systems.Storage.RunChart do
   @right 16
   @top 36
   @bottom 24
-  @char_width 7
+  # Average width of a 12px character of the chart font, with the label's 8px inset and 2px air.
+  @char_width 6.2
+  @label_padding 10
   @trend_window 5
 
   def width, do: @width
@@ -48,7 +50,9 @@ defmodule Systems.Storage.RunChart do
     scale = fn value -> y(value, List.first(ticks), List.last(ticks)) end
 
     {bands, _offset} =
-      Enum.map_reduce(prompts, 0, fn %{label: label, records: records}, offset ->
+      prompts
+      |> short_labels()
+      |> Enum.map_reduce(0, fn %{label: label, records: records}, offset ->
         band = band(label, records, column, offset, step, scale)
         {band, offset + Enum.count(records)}
       end)
@@ -66,6 +70,19 @@ defmodule Systems.Storage.RunChart do
       y_ticks: Enum.map(ticks, fn tick -> %{y: scale.(tick), label: format(tick)} end),
       count: count
     }
+  end
+
+  # All Prompts of one flow: "motor" instead of "symbols / motor", so a narrow band keeps its label.
+  defp short_labels(prompts) do
+    parts = Enum.map(prompts, fn %{label: label} -> String.split(label, " / ", parts: 2) end)
+
+    case Enum.uniq_by(parts, &hd/1) do
+      [[_flow, _prompt]] ->
+        Enum.zip_with(prompts, parts, fn prompt, [_flow, name] -> %{prompt | label: name} end)
+
+      _ ->
+        prompts
+    end
   end
 
   defp band(label, records, column, offset, step, scale) do
@@ -89,7 +106,7 @@ defmodule Systems.Storage.RunChart do
       x: x,
       width: width,
       label: label,
-      show_label?: String.length(label) * @char_width + 12 <= width,
+      short_label: fit(label, width),
       points:
         Enum.map(measured, fn {px, value, index} ->
           %{x: px, y: scale.(value), tooltip: "#{label} · trial #{index + 1}: #{format(value)}"}
@@ -97,6 +114,17 @@ defmodule Systems.Storage.RunChart do
       connection: measured |> Enum.map(fn {px, value, _} -> {px, scale.(value)} end) |> path(),
       trend: trend(measured, scale)
     }
+  end
+
+  @doc "The label as it fits in a band: whole, shortened with …, or nil when not even 3 characters fit."
+  def fit(label, width) do
+    room = floor((width - @label_padding) / @char_width)
+
+    cond do
+      String.length(label) <= room -> label
+      room >= 3 -> String.slice(label, 0, room - 1) <> "…"
+      true -> nil
+    end
   end
 
   defp trend(measured, _scale) when length(measured) < @trend_window, do: nil

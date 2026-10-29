@@ -110,8 +110,8 @@ defmodule Systems.Storage.RunChartSVG do
         fill={if band.shaded?, do: @colors.grey6, else: "#FFFFFF"}
       />
       <line x1={band.x} x2={band.x} y1={@chart.plot.top - 14} y2={@chart.plot.bottom} stroke={@colors.grey4} stroke-width="1" />
-      <text :if={@chart.labels? and band.show_label?} x={band.x + 8} y={@chart.plot.top - 2} font-size="12" fill={@colors.grey2}>
-        <%= band.label %>
+      <text :if={@chart.labels? and band.short_label} x={band.x + 8} y={@chart.plot.top - 2} font-size="12" fill={@colors.grey2}>
+        <title><%= band.label %></title><%= band.short_label %>
       </text>
     <% end %>
     <%= for tick <- @chart.y_ticks do %>
