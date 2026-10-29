@@ -274,10 +274,13 @@ flow: the provider, its callback, and the move-your-account page when the email
 already has an account with another sign-in method.
 
 Only the flow of the provider the start names goes back to the app: its
-callback, and the confirm or decline on its move-your-account page. Other
-sign-ins in the same browser (password, email code, another provider) and the
-sign-in pages work as on the site while the cookie is there. A start with an
-error leaves the browser's Core session as it was.
+callback, and the confirm or decline on its move-your-account page. While a
+start for a provider is pending in a browser (10 minutes, or until a flow of
+that provider ends), a sign-in with that provider in the same browser also goes
+back to the native callback and starts no session in the browser. Other
+sign-ins in that browser (password, email code, another provider) and the
+sign-in pages work as on the site. A start with an error leaves the browser's
+Core session as it was.
 
 ### Callback
 
@@ -306,6 +309,11 @@ that opens the callback URL itself is sent to `/user/signin`.
 | `unavailable` | The provider is off on this Core. |
 | `failed` | The provider's flow ended with an error: its sign-in state was lost, the identity it returned was refused, or the account could not be registered. |
 | `cancelled` | The user declined moving their account to the provider. |
+
+An error or cancel on the provider's own page (for example Google's
+`access_denied`) does not reach the app yet: it ends on an error page in the
+sheet, and the app gets `canceledLogin` when the user closes the sheet. Flux
+10457630067 covers that.
 
 When the user closes the sheet, the app gets
 `ASWebAuthenticationSessionError.canceledLogin` from iOS and nothing from Core.
