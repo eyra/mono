@@ -247,6 +247,7 @@ Details and rationale are in [design.md](./design.md#decisions).
     - fails when code under `core/mica/**` references a module defined under `core/next/**` or `core/mica_saas/**`, or when `core/next/**` and `core/mica_saas/**` reference each other (xref references and name-only references)
     - fails on new PaNL, VU or Eyra literals under `core/mica/**`: `:panl`, `"Panl"`, `panl.nl`, `eyra.co`, `@eyra.service`, VU study codes
     - uses a committed allowlist of today's violations, `core/boundary_allowlist.exs`: 36 entries in 34 files at the move. It also fails on stale entries, so the list only shrinks.
+    - since October 2026 also keeps each entry's referenced files, module names or literal count and fails when they grow, scans `core/config/*.exs` (its own `config:` section), and resolves grouped aliases and `:"Elixir.…"` atoms. The script and the credo check share their rules in `core/scripts/boundary_rules.ex`. `core/mica/test` is not scanned yet.
     - Run it from `core/` after `mix compile`: `elixir scripts/boundary_check.exs`.
 - **Dependencies.** Preferably after code-cleanup.
 - **Parallel with.** code-guardrails, code-cleanup, track Feldspar.

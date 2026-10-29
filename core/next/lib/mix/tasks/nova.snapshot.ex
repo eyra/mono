@@ -265,10 +265,16 @@ defmodule Mix.Tasks.Nova.Snapshot do
 
   defp counts do
     [
-      boundary_allowlist: "boundary_allowlist.exs" |> Code.eval_file() |> elem(0) |> length(),
+      boundary_allowlist: boundary_allowlist_size(),
       no_route_path_warnings: no_route_path_warnings(),
       router_compile_connected: router_compile_connected()
     ]
+  end
+
+  # Entries in all sections (code, config) of the allowlist.
+  defp boundary_allowlist_size do
+    {sections, _} = Code.eval_file("boundary_allowlist.exs")
+    sections |> Keyword.values() |> Enum.map(&length/1) |> Enum.sum()
   end
 
   # `--all-warnings` reprints the warnings stored in the manifest without recompiling.

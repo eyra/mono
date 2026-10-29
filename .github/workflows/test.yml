@@ -126,7 +126,7 @@ jobs:
         run: make credo
 
       - name: Boundary check (Nova migration)
-        run: cd core && elixir scripts/boundary_check.exs
+        run: cd core && elixir scripts/boundary_check_test.exs && elixir scripts/boundary_check.exs
 
       # Routes, grants, handlers, SaaS config and counts of the Next build.
       - name: Nova snapshots (Next)
