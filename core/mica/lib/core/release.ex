@@ -1,11 +1,16 @@
 defmodule Core.Release do
   @app Core.Env.app()
 
+  @doc "Runs the migrations of Mica and the SaaS's systems (`Core.SaaS.migrations_paths/0`)."
   def migrate do
     load_app()
 
     for repo <- repos() do
-      {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :up, all: true))
+      {:ok, _, _} =
+        Ecto.Migrator.with_repo(
+          repo,
+          &Ecto.Migrator.run(&1, Core.SaaS.migrations_paths(), :up, all: true)
+        )
     end
   end
 
@@ -23,7 +28,12 @@ defmodule Core.Release do
 
   def rollback(repo, version) do
     load_app()
-    {:ok, _, _} = Ecto.Migrator.with_repo(repo, &Ecto.Migrator.run(&1, :down, to: version))
+
+    {:ok, _, _} =
+      Ecto.Migrator.with_repo(
+        repo,
+        &Ecto.Migrator.run(&1, Core.SaaS.migrations_paths(), :down, to: version)
+      )
   end
 
   @doc """

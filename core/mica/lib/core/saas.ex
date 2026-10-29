@@ -112,6 +112,21 @@ defmodule Core.SaaS do
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
 
   @doc """
+  The Ecto migration paths to run: Mica's own, then those of the systems that
+  have their own, in `systems/0` order.
+  """
+  def migrations_paths do
+    [
+      Application.app_dir(Core.Env.app(), "priv/repo/migrations")
+      | collect_migrations_paths(systems())
+    ]
+  end
+
+  @doc false
+  def collect_migrations_paths(systems),
+    do: Enum.flat_map(systems, &List.wrap(&1.migrations_path()))
+
+  @doc """
   The declared feature flags of all systems, off unless the SaaS turns them on,
   sorted by name. Raises when the SaaS sets a flag that no system declares.
   """

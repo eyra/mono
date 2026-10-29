@@ -192,6 +192,9 @@ defmodule Core.MixProject do
       "test.smoke": "cmd ./test/smoke/run.sh",
       # Usage: mix test.smoke dev | staging | prod
       seed: "cmd ./scripts/seed",
+      "ecto.migrate": &with_migrations_paths("ecto.migrate", &1),
+      "ecto.rollback": &with_migrations_paths("ecto.rollback", &1),
+      "ecto.migrations": &with_migrations_paths("ecto.migrations", &1),
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       i18n: [
@@ -219,5 +222,19 @@ defmodule Core.MixProject do
       "test.e2e.headed":
         "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
+  end
+
+  # Runs the Ecto task over `Core.SaaS.migrations_paths/0`, the migrations of Mica
+  # and the SaaS's systems, unless the paths are given. The task module is run
+  # directly: running it by name would run this alias again.
+  defp with_migrations_paths(task, args) do
+    Mix.Task.run("app.config", args)
+
+    paths =
+      if Enum.any?(args, &String.starts_with?(&1, "--migrations-path")),
+        do: [],
+        else: Enum.flat_map(Core.SaaS.migrations_paths(), &["--migrations-path", &1])
+
+    Mix.Task.get!(task).run(args ++ paths)
   end
 end

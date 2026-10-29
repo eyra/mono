@@ -85,6 +85,11 @@ defmodule Core.SaaSTest do
     def feature_flags, do: [:otp]
   end
 
+  defmodule MigrationsSystem do
+    use Core.System
+    def migrations_path, do: "/app/priv/tools/migrations"
+  end
+
   defmodule FlagSaaS do
     use Core.SaaS
     def systems, do: [SignInSystem, OtpSystem]
@@ -185,6 +190,18 @@ defmodule Core.SaaSTest do
     assert_raise ArgumentError,
                  "notify channel :email is declared by more than one system",
                  fn -> Core.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
+  end
+
+  test "the migration paths of the systems that have their own are collected" do
+    assert Core.SaaS.collect_migrations_paths([GoodSystem, MigrationsSystem]) == [
+             "/app/priv/tools/migrations"
+           ]
+  end
+
+  test "the migration paths are only Mica's while no system has its own" do
+    assert Core.SaaS.migrations_paths() == [
+             Application.app_dir(:core, "priv/repo/migrations")
+           ]
   end
 
   test "the children of the systems are collected" do
