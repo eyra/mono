@@ -5,6 +5,7 @@ defmodule Systems.Storage.Routes do
         pipe_through([:browser, :require_authenticated_user])
         live("/storage/endpoint/:id/content", EndpointContentPage)
         get("/storage/endpoint/:id/export", Controller, :export)
+        get("/storage/endpoint/:id/donation", Controller, :donation)
       end
     end
   end

@@ -81,7 +81,7 @@ defmodule Systems.Storage.EndpointFilesView do
     ~H"""
       <div>
         <%= if not Enum.empty?(@filtered_files) do %>
-          <Storage.Html.files_table files={@filtered_files} />
+          <Storage.Html.files_table files={@filtered_files} endpoint_id={@endpoint.id} />
         <% end %>
       </div>
     """

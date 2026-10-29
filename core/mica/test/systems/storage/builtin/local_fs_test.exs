@@ -64,6 +64,41 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
     refute File.exists?(Path.join(Path.dirname(LocalFS.get_root_path()), "escaped.json"))
   end
 
+  describe "donation" do
+    setup :login_as_member
+
+    @result "participant=2_key=run1/cogflex/practice1.json"
+
+    setup %{folder: folder} do
+      json = ~s({"promptId":"practice1","responses":[{"trial_index":1,"rt_ms":2057}]})
+      :ok = LocalFS.store(folder, @result, json)
+      :ok
+    end
+
+    test "shows the owner a donation as tables", %{conn: conn, endpoint: endpoint} do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+
+      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/donation?#{[path: @result]}")
+
+      assert html_response(conn, 200) =~ ~r|<th[^>]*>\s*rt_ms\s*</th>|
+    end
+
+    test "denies a member without access to the endpoint", %{conn: conn, endpoint: endpoint} do
+      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/donation?#{[path: @result]}")
+
+      assert conn.status == 403
+    end
+
+    test "does not read a path the endpoint does not list", %{conn: conn, endpoint: endpoint} do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+
+      conn =
+        get(conn, ~p"/storage/endpoint/#{endpoint.id}/donation?#{[path: "../../secret.json"]}")
+
+      assert conn.status == 404
+    end
+  end
+
   describe "export" do
     setup :login_as_member
 

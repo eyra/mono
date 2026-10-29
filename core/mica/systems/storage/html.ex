@@ -4,24 +4,27 @@ defmodule Systems.Storage.Html do
   import Frameworks.Pixel.Table
 
   attr(:files, :list, required: true)
+  attr(:endpoint_id, :integer, required: true)
 
-  def files_table(%{files: files} = assigns) do
+  def files_table(%{files: files, endpoint_id: endpoint_id} = assigns) do
     head_cells = [
       dgettext("eyra-storage", "table.file.label"),
       dgettext("eyra-storage", "table.size.label"),
-      dgettext("eyra-storage", "table.date.label")
+      dgettext("eyra-storage", "table.date.label"),
+      ""
     ]
 
     layout = [
       %{type: :text, width: "flex-1", align: "text-left"},
       %{type: :text, width: "w-40", align: "text-center"},
-      %{type: :date, width: "w-60", align: "text-right"}
+      %{type: :date, width: "w-60", align: "text-right"},
+      %{type: :text, width: "w-20", align: "text-right"}
     ]
 
     rows =
       files
       |> Enum.map(fn %{path: path, size: size, timestamp: timestamp} ->
-        [path, size, timestamp]
+        [path, size, timestamp, donation_link(endpoint_id, path)]
       end)
 
     assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)
@@ -29,6 +32,15 @@ defmodule Systems.Storage.Html do
     ~H"""
       <.table layout={@layout} head_cells={@head_cells} rows={@rows} border={false} />
     """
+  end
+
+  # Pixel's :href cell only links hosts with a dot, so not localhost.
+  defp donation_link(endpoint_id, path) do
+    href = Phoenix.HTML.html_escape(~p"/storage/endpoint/#{endpoint_id}/donation?#{[path: path]}")
+
+    Phoenix.HTML.raw(
+      ~s(<a class="underline text-primary" href="#{Phoenix.HTML.safe_to_string(href)}" target="_blank">View</a>)
+    )
   end
 
   attr(:participants, :list, required: true)

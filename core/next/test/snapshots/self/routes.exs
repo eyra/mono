@@ -141,6 +141,7 @@
   {:get, "/storage/endpoint/:id/content", Phoenix.LiveView.Plug,
    Systems.Storage.EndpointContentPage, "live", Systems.Storage.EndpointContentPage},
   {:get, "/storage/endpoint/:id/export", Systems.Storage.Controller, :export, "", nil},
+  {:get, "/storage/endpoint/:id/donation", Systems.Storage.Controller, :donation, "", nil},
   {:get, "/support/ticket", Phoenix.LiveView.Plug, Systems.Support.OverviewPage, "live",
    Systems.Support.OverviewPage},
   {:get, "/support/ticket/:id", Phoenix.LiveView.Plug, Systems.Support.TicketPage, "live",

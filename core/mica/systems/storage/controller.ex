@@ -55,6 +55,39 @@ defmodule Systems.Storage.Controller do
     service_unavailable(conn)
   end
 
+  @max_donation_bytes 5_000_000
+
+  # shortcut: only reads files on the local filesystem (S3 lists a URL source and gets 503);
+  # read S3 objects too before this leaves the spike.
+  def donation(conn, %{"id" => id, "path" => path}) do
+    endpoint =
+      Storage.Public.get_endpoint!(
+        String.to_integer(id),
+        Storage.EndpointModel.preload_graph(:down)
+      )
+
+    with {:authorized, true} <- {:authorized, authorized?(conn, endpoint)},
+         {:found, %{source: {:file, file}, size: size}} <- {:found, find_file(endpoint, path)},
+         {:size, true} <- {:size, size <= @max_donation_bytes},
+         {:ok, json} <- File.read(file),
+         {:ok, donation} <- Storage.DonationView.decode(json) do
+      conn
+      |> put_view(html: Storage.DonationHTML)
+      |> render(:donation, path: path, blocks: Storage.DonationView.blocks(donation))
+    else
+      {:authorized, false} -> forbidden(conn)
+      {:found, nil} -> send_resp(conn, :not_found, "")
+      _ -> service_unavailable(conn)
+    end
+  end
+
+  # Only a path the endpoint lists can be read, so the path never reaches the filesystem.
+  defp find_file(endpoint, path) do
+    endpoint
+    |> Storage.Public.list_files()
+    |> Enum.find(fn %{path: file_path} -> file_path == path end)
+  end
+
   # A participant id never has spaces or brackets, so this folder cannot clash with one.
   defp participant_folder(path), do: Storage.Donations.participant(path) || "(no participant)"
 
