@@ -229,3 +229,43 @@ msgstr "Vă rugăm să utilizați o adresă care există pe internetul public"
 #, elixir-autogen, elixir-format
 msgid "url.port_not_allowed"
 msgstr "Vă rugăm să utilizați o adresă fără număr de port"
+
+#, elixir-autogen, elixir-format
+msgid "participants.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.unknown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.files.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.last_donation.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.participant.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.sessions.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.tools.label"
+msgstr ""
