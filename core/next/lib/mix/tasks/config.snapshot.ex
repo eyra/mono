@@ -27,7 +27,8 @@ defmodule Mix.Tasks.Config.Snapshot do
     {"prod-migrate", :prod},
     {"staging", :prod},
     {"dev", :prod},
-    {"local", :dev}
+    {"local", :dev},
+    {"local-http-port", :dev}
   ]
 
   def fixtures do

@@ -47,6 +47,23 @@ start your Phoenix server:
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
+Emails the app sends are not delivered: they stay in the local mailbox at
+[`localhost:4000/sent_emails`](http://localhost:4000/sent_emails), and each one
+opens there in your browser.
+
+Two environment variables change this:
+
+- `HTTP_PORT` (default `4000`): the port the server listens on. Links in the
+  app and emails, the sent-email viewer and the Google sign-in callback follow
+  it. It wins over the port in your `config/dev.secret.exs`, so you can run a
+  second server next to the one on 4000 without editing that file:
+  `HTTP_PORT=4001 mix phx.server`. Use your own database for it, and register
+  the callback (`http://localhost:4001/auth/google/callback`) with Google if
+  you sign in with Google there. `APP_DOMAIN` still overrides the address used
+  in links.
+- `OPEN_SENT_EMAILS=false`: sent emails no longer open in the browser; read
+  them at `/sent_emails`.
+
 Learn more about Phoenix by visiting the [official website](https://www.phoenixframework.org/)
 
 ## i18n

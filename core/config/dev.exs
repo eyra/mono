@@ -32,7 +32,6 @@ config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 config :core,
   domain: "localhost",
   name: "Next [local]",
-  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
   upload_path: upload_path
 
@@ -149,7 +148,6 @@ config :core, image_catalog: Core.ImageCatalog.Unsplash
 
 config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
-  open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
 # Service login for load testing

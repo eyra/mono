@@ -49,7 +49,7 @@ Always investigate first, understand second, fix third.
 - `mix test --cover --warnings-as-errors` - Run tests with coverage
 
 ### Development Server
-- `mix phx.server` or `mix run` - Start development server on port 4000
+- `mix phx.server` or `mix run` - Start development server on port 4000 (`HTTP_PORT` changes the port, `OPEN_SENT_EMAILS=false` stops sent emails opening in the browser; see `guides/development_setup.md`)
 
 ### Code Quality
 - `mix compile --warnings-as-errors` - Compile with warnings as errors (ALWAYS use this)

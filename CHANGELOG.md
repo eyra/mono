@@ -17,6 +17,7 @@
 * Fixed - Deliveries to Yoda and Azure put the donation file name in the upload URL as one percent-encoded path segment, so names with spaces, `?`, `#` or `%` arrive intact; a `/` or `\` in the name becomes `_` there, so the file stays in the endpoint's folder. Built-in storage keeps its file names as before. A donation whose key, task or group is not plain text or a number, or contains a control character (such as a line break), is refused with 400. Upgrading: no action needed.
 * Fixed - When the payment provider refuses a pay-in, the payment form closes with an error, and "Pay to add participants" opens it again with the study's current settings, so the researcher can retry. Before, pressing "Confirm" again in the same form crashed the page. A save that conflicts with a newer change to the same record now returns an error instead of crashing. Upgrading: no action needed.
 * Fixed - In the root `Dockerfile`, a failed download of a precompiled NIF no longer gets cached as a passing build step. Upgrading: if you build your own image from the root `Dockerfile`, use the updated one.
+* Added - Local development: `HTTP_PORT` sets the port of the development server (default 4000), and links, the sent-email viewer and the Google sign-in callback follow it; `OPEN_SENT_EMAILS=false` stops sent emails opening in the browser. See `guides/development_setup.md`.
 
 ## \#33 2026-10-28
 
