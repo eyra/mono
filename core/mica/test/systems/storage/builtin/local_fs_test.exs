@@ -46,6 +46,24 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
              LocalFS.list_files(folder)
   end
 
+  test "stores and lists a donation whose key contains slashes", %{folder: folder} do
+    filename = "participant=2_key=run1/cogflex/practice2/0.json"
+
+    assert :ok = LocalFS.store(folder, filename, "{}")
+
+    file_path = Path.join([LocalFS.get_root_path(), folder, filename])
+
+    assert %{path: ^filename, size: 2, source: {:file, ^file_path}} =
+             Enum.find(LocalFS.list_files(folder), &(&1.path == filename))
+  end
+
+  test "refuses a key that climbs out of the endpoint folder", %{folder: folder} do
+    filename = "participant=2_key=run1/../../../escaped.json"
+
+    assert {:error, :unsafe_filename} = LocalFS.store(folder, filename, "{}")
+    refute File.exists?(Path.join(Path.dirname(LocalFS.get_root_path()), "escaped.json"))
+  end
+
   describe "export" do
     setup :login_as_member
 
