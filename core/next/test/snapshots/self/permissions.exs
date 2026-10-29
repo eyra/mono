@@ -48,6 +48,7 @@
   {"access/systems/project/node_page", [:owner]},
   {"access/systems/project/overview_page", [:admin, :creator]},
   {"access/systems/promotion/landing_page", [:member, :visitor]},
+  {"access/systems/storage/donation_page", [:owner]},
   {"access/systems/storage/endpoint_content_page", [:owner]},
   {"access/systems/support/helpdesk_page", [:member]},
   {"access/systems/support/overview_page", [:admin]},

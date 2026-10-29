@@ -12,6 +12,33 @@ defmodule Systems.Storage.DonationView do
   """
 
   alias Jason.OrderedObject
+  alias Systems.Storage
+
+  @max_bytes 5_000_000
+
+  @doc """
+  Reads a donation the endpoint lists, so a path never reaches the filesystem
+  unchecked. Returns the listed file with its decoded `donation`.
+  """
+  # shortcut: reads files on the local filesystem only (S3 lists a URL source);
+  # read S3 objects too before this leaves the spike.
+  def read(endpoint, path) when is_binary(path) do
+    case Enum.find(Storage.Public.list_files(endpoint), fn %{path: listed} -> listed == path end) do
+      nil -> {:error, :not_found}
+      %{size: size} when size > @max_bytes -> {:error, :too_large}
+      %{source: {:file, file}} = listed -> read_file(listed, file)
+      _ -> {:error, :unsupported}
+    end
+  end
+
+  defp read_file(listed, file) do
+    with {:ok, json} <- File.read(file),
+         {:ok, donation} <- decode(json) do
+      {:ok, Map.put(listed, :donation, donation)}
+    else
+      _ -> {:error, :unreadable}
+    end
+  end
 
   def decode(json) when is_binary(json), do: Jason.decode(json, objects: :ordered_objects)
 

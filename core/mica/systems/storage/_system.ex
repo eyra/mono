@@ -11,7 +11,8 @@ defmodule Systems.Storage.System do
   def grants do
     quote do
       [
-        {Systems.Storage.EndpointContentPage, [:owner]}
+        {Systems.Storage.EndpointContentPage, [:owner]},
+        {Systems.Storage.DonationPage, [:owner]}
       ]
     end
   end

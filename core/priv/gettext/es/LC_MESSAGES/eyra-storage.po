@@ -248,3 +248,47 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "table.tools.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.back.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.details.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.not_found"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.too_large"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.unreadable"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.participant.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.session.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.size.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.stored.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.task.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.view.label"
+msgstr ""

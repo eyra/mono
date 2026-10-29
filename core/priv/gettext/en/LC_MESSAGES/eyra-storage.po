@@ -248,3 +248,47 @@ msgstr "Sessions"
 #, elixir-autogen, elixir-format
 msgid "table.tools.label"
 msgstr "Tasks"
+
+#, elixir-autogen, elixir-format
+msgid "donation.back.button"
+msgstr "Back to data"
+
+#, elixir-autogen, elixir-format
+msgid "donation.details.title"
+msgstr "Details"
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.not_found"
+msgstr "This donation is not in the storage of this study."
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.too_large"
+msgstr "This donation is too large to show here. Export the data to view it."
+
+#, elixir-autogen, elixir-format
+msgid "donation.error.unreadable"
+msgstr "This donation cannot be shown here. Export the data to view it."
+
+#, elixir-autogen, elixir-format
+msgid "donation.participant.label"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "donation.session.label"
+msgstr "Session"
+
+#, elixir-autogen, elixir-format
+msgid "donation.size.label"
+msgstr "Size"
+
+#, elixir-autogen, elixir-format
+msgid "donation.stored.label"
+msgstr "Stored"
+
+#, elixir-autogen, elixir-format
+msgid "donation.task.label"
+msgstr "Task"
+
+#, elixir-autogen, elixir-format
+msgid "table.view.label"
+msgstr "View"

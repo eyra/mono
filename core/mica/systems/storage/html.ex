@@ -39,7 +39,7 @@ defmodule Systems.Storage.Html do
     href = Phoenix.HTML.html_escape(~p"/storage/endpoint/#{endpoint_id}/donation?#{[path: path]}")
 
     Phoenix.HTML.raw(
-      ~s(<a class="underline text-primary" href="#{Phoenix.HTML.safe_to_string(href)}" target="_blank">View</a>)
+      ~s(<a class="underline text-primary" href="#{Phoenix.HTML.safe_to_string(href)}">#{dgettext("eyra-storage", "table.view.label")}</a>)
     )
   end
 
