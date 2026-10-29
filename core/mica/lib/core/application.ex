@@ -14,6 +14,8 @@ defmodule Core.Application do
 
     Core.RuntimeConfig.log_choices()
 
+    Core.FeatureFlags.warn_undeclared()
+
     Systems.Storage.BuiltIn.Backend.check_upload_path!()
 
     opts = [strategy: :one_for_one, name: Core.Supervisor]

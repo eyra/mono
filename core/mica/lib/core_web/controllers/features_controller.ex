@@ -10,7 +10,7 @@ defmodule CoreWeb.FeaturesController do
 
   def get(conn, _params) do
     enabled =
-      Core.Env.get(:features, [])
+      Core.FeatureFlags.effective()
       |> Enum.filter(fn {_, on?} -> on? end)
       |> Enum.map(fn {key, _} -> Atom.to_string(key) end)
       |> Enum.sort()

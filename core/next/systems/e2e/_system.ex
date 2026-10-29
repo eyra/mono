@@ -22,4 +22,6 @@ defmodule Next.E2E.System do
       end
     end
   end
+
+  def feature_flags, do: [:e2e]
 end

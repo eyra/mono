@@ -56,8 +56,8 @@ defmodule Systems.Probe.AssignmentTemplateTest do
       refute Enum.any?(Project.ItemTemplates.extension_labels(), &(&1.id == :probe))
     end
 
-    test "is off in the Next bundle config by default" do
-      assert Core.Env.get(:features)[:probe] == false
+    test "is off in Next by default" do
+      assert Next.SaaS.feature_flags()[:probe] == false
     end
   end
 

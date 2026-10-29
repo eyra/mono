@@ -67,4 +67,6 @@ defmodule Next.Account.System do
       ]
     end
   end
+
+  def feature_flags, do: [:member_google_sign_in, :otp, :password_sign_in, :surfconext_sign_in]
 end

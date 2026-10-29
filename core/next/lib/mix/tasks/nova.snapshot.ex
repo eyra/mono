@@ -11,11 +11,12 @@ defmodule Mix.Tasks.Nova.Snapshot do
       in router order
     * `permissions.exs`: `Core.Authorization.permission_map/0`
     * `signal.exs`: signal handlers (in order), notifiers and notify channels
-    * `flags.exs`: the feature flags declared at compile time
+    * `flags.exs`: the effective feature flags at compile time
     * `saas_config.exs`: the `Core.SaaS` callbacks (start pages, menus, title,
       signed-in pages), the SaaS app config and account and admin tab order
     * `runtime.exs`: the children `Core.Application` starts, and per env fixture
       of `mix config.snapshot` the Oban queues and rate quotas it starts them with
+      and the effective feature flags
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `CoreWeb.Router` is compile-connected to
 
@@ -145,7 +146,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
       {"routes.exs", @routes_header <> format(routes())},
       {"permissions.exs", format(permissions())},
       {"signal.exs", format(signal())},
-      {"flags.exs", format(prod |> Keyword.get(:features, []) |> Enum.sort())},
+      {"flags.exs", format(features(prod))},
       {"saas_config.exs", format(saas_config(prod))},
       {"runtime.exs", format(runtime(saas))}
     ]
@@ -209,12 +210,15 @@ defmodule Mix.Tasks.Nova.Snapshot do
         {fixture.name,
          [
            oban_queues: oban_queues(core[Oban]),
-           rate_quotas: rate_quotas(core[:rate])
+           rate_quotas: rate_quotas(core[:rate]),
+           features: features(core)
          ]}
       end
 
     [children: children, deployments: deployments]
   end
+
+  defp features(config), do: config |> Keyword.get(:features, []) |> Core.FeatureFlags.effective()
 
   defp oban_queues(config) do
     node_queue = :"storage_delivery_local_#{Node.self()}"

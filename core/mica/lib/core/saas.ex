@@ -38,19 +38,26 @@ defmodule Core.SaaS do
   @doc "Where a signed-out user is sent to sign in for a page participants open, which they return to."
   @callback member_sign_in_page(return_to :: String.t()) :: String.t()
 
-  @optional_callbacks title: 0, sign_in_page: 0, member_sign_in_page: 1
+  @doc """
+  The SaaS defaults of declared feature flags: `[password_sign_in: true]`. Every
+  name must be declared by one of its systems (`c:Core.System.feature_flags/0`).
+  """
+  @callback feature_flags() :: keyword(boolean())
+
+  @optional_callbacks title: 0, sign_in_page: 0, member_sign_in_page: 1, feature_flags: 0
 
   defmacro __using__(_opts) do
     quote do
       @behaviour Core.SaaS
 
       def title, do: "Mica"
+      def feature_flags, do: []
 
       def sign_in_page, do: "/user/signin"
 
       def member_sign_in_page(_return_to), do: sign_in_page()
 
-      defoverridable title: 0, sign_in_page: 0, member_sign_in_page: 1
+      defoverridable title: 0, sign_in_page: 0, member_sign_in_page: 1, feature_flags: 0
     end
   end
 
@@ -100,6 +107,28 @@ defmodule Core.SaaS do
 
   @doc "The default rate quotas of all systems, in `systems/0` order."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
+
+  @doc """
+  The declared feature flags of all systems, off unless the SaaS turns them on,
+  sorted by name. Raises when the SaaS sets a flag that no system declares.
+  """
+  def feature_flags, do: collect_feature_flags(module(), systems())
+
+  @doc false
+  def collect_feature_flags(saas, systems) do
+    declared = systems |> Enum.flat_map(& &1.feature_flags()) |> Enum.uniq()
+    defaults = saas.feature_flags()
+
+    case Keyword.keys(defaults) -- declared do
+      [] ->
+        declared |> Enum.map(&{&1, false}) |> Keyword.merge(defaults) |> Enum.sort()
+
+      undeclared ->
+        raise ArgumentError,
+              "#{inspect(saas)}.feature_flags/0 sets #{inspect(undeclared)}, " <>
+                "which none of its systems declares"
+    end
+  end
 
   @doc false
   def collect_children(systems), do: Enum.flat_map(systems, & &1.children())
@@ -237,6 +266,7 @@ defmodule Core.SaaS do
 
     case systems -- Enum.uniq(systems) do
       [] ->
+        collect_feature_flags(saas, systems)
         systems
 
       duplicates ->

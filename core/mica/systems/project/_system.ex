@@ -18,4 +18,6 @@ defmodule Systems.Project.System do
   end
 
   def signal_handlers, do: [Systems.Project.Switch]
+
+  def feature_flags, do: [:leaderboard, :onyx]
 end

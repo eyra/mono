@@ -111,8 +111,8 @@ defmodule Core.RuntimeConfig do
   Feature flags from `ENABLED_APP_FEATURES`. `:e2e` gates test-only endpoints
   and is never enabled when `deploy_env` is `:prod`.
 
-  The list can only switch flags on; a flag is off only through config. Parsing
-  is kept exactly as before, empty items included (they become the flag `:""`).
+  The list can only switch flags on (`Core.FeatureFlags`). Parsing is kept
+  exactly as before, empty items included (they become the flag `:""`).
   """
   def features(env, deploy_env) do
     env

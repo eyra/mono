@@ -10,12 +10,34 @@ defmodule Next.SaaS do
         Next.WellKnown.System,
         Next.Account.System,
         Next.E2E.System,
+        Next.Panl.System,
         Systems.Graphite.System,
         Systems.Onyx.System,
         Systems.Student.System,
         Systems.Zircon.System,
-        Systems.Paper.System
+        Systems.Paper.System,
+        Systems.Probe.System
       ]
+  end
+
+  # On Fly and AWS, ENABLED_APP_FEATURES turns more flags on.
+  @impl true
+  def feature_flags do
+    [
+      surfconext_sign_in: false,
+      centerdata_sign_in: false,
+      member_google_sign_in: true,
+      password_sign_in: true,
+      debug_expire_force: false,
+      leaderboard: true,
+      panl: true,
+      panl_post_launch: false,
+      opp_phase_3: false,
+      onyx: false,
+      otp: false,
+      probe: false,
+      e2e: false
+    ]
   end
 
   @impl true

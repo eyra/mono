@@ -18,4 +18,6 @@ defmodule Systems.Graphite.System do
   end
 
   def signal_handlers, do: [Systems.Graphite.Switch]
+
+  def feature_flags, do: [:leaderboard]
 end

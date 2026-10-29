@@ -19,6 +19,9 @@ defmodule Self.SaaS do
   end
 
   @impl true
+  def feature_flags, do: [password_sign_in: true, member_google_sign_in: true, otp: true]
+
+  @impl true
   def start_pages, do: Self.StartPages
 
   @impl true
