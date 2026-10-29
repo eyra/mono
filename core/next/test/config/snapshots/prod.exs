@@ -34,13 +34,6 @@
      ]},
     {CoreWeb.FileUploader, [max_file_size: 200_000_000]},
     {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
-    {Oban,
-     [
-       plugins: [
-         {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
-       ]
-     ]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -104,7 +97,8 @@
     {:feldspar_data_donation, [path: "/home/next/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "APP_NAME"},
-    {:oban_unknown_plugins, ["job_data_cleanup"]},
+    {:oban_plugins,
+     [enabled: ["pruner", "lifeline", "job_data_cleanup"], schedule_overrides: []]},
     {:paper,
      [
        import_batch_size: 101,

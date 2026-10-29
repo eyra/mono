@@ -15,4 +15,13 @@ defmodule Systems.Fund.System do
       ]
     end
   end
+
+  def oban_crons do
+    [
+      # Fail pending pay-in transactions older than 15 minutes
+      pay_in_expiration: {"* * * * *", Systems.Fund.PayInExpirationWorker},
+      # Approve pending rewards every hour
+      auto_approve: {"0 * * * *", Systems.Fund.AutoApproveWorker}
+    ]
+  end
 end

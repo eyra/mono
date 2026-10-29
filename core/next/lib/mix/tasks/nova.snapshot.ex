@@ -207,12 +207,15 @@ defmodule Mix.Tasks.Nova.Snapshot do
     deployments =
       for fixture <- Mix.Tasks.Config.Snapshot.fixtures() do
         core = deployment_config(saas, fixture)
+        oban_plugins = Keyword.get(core, :oban_plugins, [])
+        oban = Core.Application.oban_config(core[Oban], oban_plugins)
 
         {fixture.name,
          [
-           oban_queues: oban_queues(core[Oban]),
-           oban_plugins: oban_plugins(core[Oban]),
-           oban_unknown_plugins: Keyword.get(core, :oban_unknown_plugins, []),
+           oban_queues: oban_queues(oban),
+           oban_plugins: oban_plugins(oban),
+           oban_unknown_plugins:
+             Core.ObanConfig.unknown_plugins(Core.SaaS.oban_crons(), oban_plugins),
            rate_quotas: rate_quotas(core[:rate]),
            features: features(core)
          ]}
@@ -226,7 +229,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp oban_queues(config) do
     node_queue = :"storage_delivery_local_#{Node.self()}"
 
-    case Core.Application.oban_config(config)[:queues] do
+    case config[:queues] do
       false ->
         false
 

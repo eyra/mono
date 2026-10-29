@@ -98,6 +98,14 @@ defmodule Core.System do
   @callback oban_queues() :: keyword(pos_integer())
 
   @doc """
+  The system's Oban cron jobs, by the name `ENABLED_OBAN_PLUGINS` enables them
+  with: `[advert_expiration: {"*/5 * * * *", Systems.Advert.ExpirationWorker}]`.
+  An entry is an `Oban.Plugins.Cron` crontab entry. A cron runs only where its
+  name is enabled (`Core.ObanConfig`).
+  """
+  @callback oban_crons() :: keyword({String.t(), module()} | {String.t(), module(), keyword()})
+
+  @doc """
   The default `Systems.Rate` quotas of the services the system limits, as keyword
   lists: `[service: :signup, limit: 5, unit: :call, window: :minute, scope: :local]`.
   """
@@ -125,6 +133,7 @@ defmodule Core.System do
       def desktop_sections, do: []
       def children, do: []
       def oban_queues, do: []
+      def oban_crons, do: []
       def rate_quotas, do: []
       def feature_flags, do: []
 

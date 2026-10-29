@@ -355,7 +355,7 @@ Optional:
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
 | `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |
-| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` and others in `runtime.fly.exs` | `pruner, lifeline` |
+| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` (`Core.ObanConfig.plugins/0`) and the crons the systems declare (`oban_crons/0`) | `pruner, lifeline` |
 | `GOOGLE_SIGN_IN_CLIENT_ID`, `GOOGLE_SIGN_IN_CLIENT_SECRET` | secret | Your own Google OAuth client | unset |
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |

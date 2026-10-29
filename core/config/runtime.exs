@@ -107,29 +107,19 @@ if config_env() == :prod do
   config :core, CoreWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
-  # OBAN: the queues come from Mica and the systems (Core.ObanConfig).
+  # OBAN: the queues, plugins and crons come from Mica and the systems
+  # (Core.ObanConfig). ENABLED_OBAN_PLUGINS names the ones that run;
+  # FELDSPAR_CLEANUP_SCHEDULE replaces the schedule of the donation cleanup.
 
-  # The names that ENABLED_OBAN_PLUGINS can switch on. All enabled cron names
-  # share one Oban.Plugins.Cron.
-  {oban_plugins, oban_unknown_plugins} =
-    RuntimeConfig.oban_plugins(env, [
-      {"pruner", {:plugin, {Oban.Plugins.Pruner, max_age: 60 * 60}}},
-      {"lifeline", {:plugin, {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)}}},
-      {"advert_expiration", {:cron, {"*/5 * * * *", Systems.Advert.ExpirationWorker}}},
-      {"data_donation_cleanup",
-       {:cron,
-        {System.get_env("FELDSPAR_CLEANUP_SCHEDULE", "0 * * * *"),
-         Systems.Feldspar.DataDonationCleanupWorker}}},
-      {"pay_in_expiration", {:cron, {"* * * * *", Systems.Fund.PayInExpirationWorker}}},
-      {"payment_reconciliation", {:cron, {"0 3 * * *", Systems.Payment.ReconciliationWorker}}},
-      {"auth_code_cleanup", {:cron, {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}}},
-      {"auto_approve", {:cron, {"0 * * * *", Systems.Fund.AutoApproveWorker}}}
-    ])
+  schedule_overrides =
+    case env["FELDSPAR_CLEANUP_SCHEDULE"] do
+      nil -> []
+      schedule -> [data_donation_cleanup: schedule]
+    end
 
-  config :core, Oban, plugins: oban_plugins
-
-  # Logged at boot by Core.Application.
-  config :core, :oban_unknown_plugins, oban_unknown_plugins
+  config :core, :oban_plugins,
+    enabled: RuntimeConfig.list(env["ENABLED_OBAN_PLUGINS"]),
+    schedule_overrides: schedule_overrides
 
   # RATE LIMITER: RATE_QUOTAS replaces the default quotas (the systems'
   # rate_quotas/0) of the services it lists; the other services keep their defaults.

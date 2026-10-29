@@ -55,7 +55,8 @@ defmodule Next.Config.RuntimeSnapshotTest do
 
     env = RuntimeConfig.Snapshot.read_env_file(env_file)
     config = RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
-    oban = config[:core][Oban]
+    oban_plugins = config[:core][:oban_plugins]
+    oban = Core.Application.oban_config([repo: Core.Repo], oban_plugins)
     plugins = Keyword.fetch!(oban, :plugins)
 
     # Oban starts each plugin under the child id {:plugin, module}.
@@ -66,7 +67,7 @@ defmodule Next.Config.RuntimeSnapshotTest do
              Enum.filter(plugins, &match?({Oban.Plugins.Cron, _}, &1))
 
     assert length(crontab) == 6
-    assert config[:core][:oban_unknown_plugins] == []
-    assert :ok = Oban.Config.validate(Keyword.put(oban, :repo, Core.Repo))
+    assert Core.ObanConfig.unknown_plugins(Core.SaaS.oban_crons(), oban_plugins) == []
+    assert :ok = Oban.Config.validate(oban)
   end
 end

@@ -194,44 +194,4 @@ defmodule Core.RuntimeConfigTest do
       assert RuntimeConfig.dist_hosts(%{}) == []
     end
   end
-
-  describe "oban_plugins/2" do
-    @table [
-      {"pruner", {:plugin, {Oban.Plugins.Pruner, max_age: 60}}},
-      {"first_cron", {:cron, {"* * * * *", FirstWorker}}},
-      {"lifeline", {:plugin, {Oban.Plugins.Lifeline, []}}},
-      {"second_cron", {:cron, {"0 * * * *", SecondWorker, queue: :other}}}
-    ]
-
-    test "puts every enabled cron entry in one Cron plugin, in table order" do
-      env = %{"ENABLED_OBAN_PLUGINS" => "second_cron, lifeline, first_cron, pruner"}
-
-      assert RuntimeConfig.oban_plugins(env, @table) == {
-               [
-                 {Oban.Plugins.Pruner, max_age: 60},
-                 {Oban.Plugins.Lifeline, []},
-                 {Oban.Plugins.Cron,
-                  crontab: [
-                    {"* * * * *", FirstWorker},
-                    {"0 * * * *", SecondWorker, queue: :other}
-                  ]}
-               ],
-               []
-             }
-    end
-
-    test "adds no Cron plugin when no cron name is enabled" do
-      env = %{"ENABLED_OBAN_PLUGINS" => "pruner"}
-      assert RuntimeConfig.oban_plugins(env, @table) == {[{Oban.Plugins.Pruner, max_age: 60}], []}
-    end
-
-    test "returns unknown names" do
-      env = %{"ENABLED_OBAN_PLUGINS" => "pruner, typo, typo"}
-      assert {_, ["typo"]} = RuntimeConfig.oban_plugins(env, @table)
-    end
-
-    test "enables nothing when unset" do
-      assert RuntimeConfig.oban_plugins(%{}, @table) == {[], []}
-    end
-  end
 end

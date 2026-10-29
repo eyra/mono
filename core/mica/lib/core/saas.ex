@@ -105,6 +105,9 @@ defmodule Core.SaaS do
   @doc "The Oban queues of all systems. Raises when two systems declare the same queue."
   def oban_queues, do: collect_oban_queues(systems())
 
+  @doc "The Oban crons of all systems, in `systems/0` order. Raises when two systems declare the same name."
+  def oban_crons, do: collect_oban_crons(systems())
+
   @doc "The default rate quotas of all systems, in `systems/0` order."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
 
@@ -155,6 +158,18 @@ defmodule Core.SaaS do
         end
 
         queues ++ [queue]
+    end
+  end
+
+  @doc false
+  def collect_oban_crons(systems) do
+    for system <- systems, {name, _entry} = cron <- system.oban_crons(), reduce: [] do
+      crons ->
+        if Keyword.has_key?(crons, name) do
+          raise ArgumentError, "Oban cron #{inspect(name)} is declared by more than one system"
+        end
+
+        crons ++ [cron]
     end
   end
 

@@ -44,15 +44,20 @@ defmodule Core.Application do
     ] ++
       Core.SaaS.children() ++
       [
-        {Oban, oban_config(Core.Env.fetch!(Oban))},
+        {Oban, oban_config(Core.Env.fetch!(Oban), Core.Env.get(:oban_plugins, []))},
         CoreWeb.Endpoint,
         {Rate.Server, rate_config(Core.Env.fetch!(:rate))}
       ]
   end
 
   @doc false
-  # `config :core, Oban` with Mica's and the systems' queues. Public for `mix nova.snapshot`.
-  def oban_config(config), do: Core.ObanConfig.config(config, Core.SaaS.oban_queues())
+  # `config :core, Oban` with Mica's and the systems' queues, and the plugins and
+  # crons `config :core, :oban_plugins` enables. Public for `mix nova.snapshot`.
+  def oban_config(config, oban_plugins) do
+    config
+    |> Core.ObanConfig.config(Core.SaaS.oban_queues())
+    |> Core.ObanConfig.put_plugins(Core.SaaS.oban_crons(), oban_plugins)
+  end
 
   @doc false
   # `config :core, :rate`, with the systems' quotas unless it sets `quotas:` itself

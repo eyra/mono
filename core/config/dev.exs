@@ -109,26 +109,8 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
-# The queues come from Mica and the systems (Core.ObanConfig).
-config :core, Oban,
-  plugins: [
-    {Oban.Plugins.Pruner, max_age: 60 * 60},
-    {Oban.Plugins.Lifeline, rescue_after: :timer.minutes(60)},
-    {Oban.Plugins.Cron,
-     crontab: [
-       {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-       # Clean up old data donation files every hour
-       {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
-       # Fail pending pay-in transactions older than 15 minutes
-       {"* * * * *", Systems.Fund.PayInExpirationWorker},
-       # Reconcile pay-in/payout state against the payment provider daily
-       {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-       # Prune auth codes past their validity window every hour
-       {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
-       # Approve pending rewards every hour
-       {"0 * * * *", Systems.Fund.AutoApproveWorker}
-     ]}
-  ]
+# Every Oban plugin and cron of Mica and the systems runs (Core.ObanConfig).
+config :core, :oban_plugins, enabled: :all
 
 config :core,
   admins: [
