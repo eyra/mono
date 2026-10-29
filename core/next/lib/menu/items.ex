@@ -46,7 +46,7 @@ defmodule Next.Menu.Items do
         title: dgettext("eyra-ui", "menu.item.signout")
       },
       signin: %{
-        action: %{type: :redirect, to: ~p"/user/signin"},
+        action: %{type: :redirect, to: Next.SaaS.sign_in_page()},
         title: dgettext("eyra-ui", "menu.item.signin")
       },
       menu: %{

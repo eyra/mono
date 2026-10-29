@@ -492,6 +492,7 @@ defmodule Systems.Account.Public do
   ## OTP
 
   def generate_otp(email) when is_binary(email) do
+    email = Account.AuthCodeModel.normalize_email(email)
     Rate.Public.request_permission(:otp_request, email, 1)
 
     Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
@@ -518,24 +519,35 @@ defmodule Systems.Account.Public do
   end
 
   def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+    email = Account.AuthCodeModel.normalize_email(email)
+
     case Account.AuthCodeModel.active_query(email) |> Repo.one() do
-      nil ->
-        {:error, :not_found}
+      nil -> {:error, :not_found}
+      %{id: id} -> verify_otp_attempt(id, code)
+    end
+  end
 
-      token ->
-        case Account.AuthCodeModel.verify(token, code) do
-          :ok ->
-            Repo.delete!(token)
-            user = token.user_id && get_user!(token.user_id)
-            {:ok, user}
+  # The attempt is counted before the code is compared, whether it matches or not.
+  defp verify_otp_attempt(id, code) do
+    case Repo.update_all(Account.AuthCodeModel.attempt_query(id), inc: [attempts: 1]) do
+      {1, [token]} ->
+        if Account.AuthCodeModel.matches?(token, code),
+          do: redeem_otp(token),
+          else: {:error, :invalid}
 
-          {:error, reason} ->
-            token
-            |> Ecto.Changeset.change(attempts: token.attempts + 1)
-            |> Repo.update!()
+      {0, _} ->
+        if Repo.exists?(from(t in Account.AuthCodeModel, where: t.id == ^id)),
+          do: {:error, :max_attempts},
+          else: {:error, :not_found}
+    end
+  end
 
-            {:error, reason}
-        end
+  # Deleting the row is what makes a code single-use: only the request that
+  # deletes it signs in.
+  defp redeem_otp(%{id: id, user_id: user_id}) do
+    case Repo.delete_all(from(t in Account.AuthCodeModel, where: t.id == ^id)) do
+      {1, _} -> {:ok, user_id && get_user!(user_id)}
+      {0, _} -> {:error, :not_found}
     end
   end
 

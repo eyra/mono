@@ -18,6 +18,11 @@ defmodule Core.SaaSTest do
     def notify_channels, do: %{email: Core.SaaSTest.OtherEmailChannel}
   end
 
+  defmodule ChildSystem do
+    use Core.System
+    def children, do: [{Registry, keys: :unique, name: Core.SaaSTest.Registry}]
+  end
+
   defmodule QueueSystem do
     use Core.System
     def oban_queues, do: [imports: 1]
@@ -167,6 +172,12 @@ defmodule Core.SaaSTest do
                  fn -> Core.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
   end
 
+  test "the children of the systems are collected" do
+    assert Core.SaaS.collect_children([GoodSystem, ChildSystem]) == [
+             {Registry, keys: :unique, name: Core.SaaSTest.Registry}
+           ]
+  end
+
   test "Desktop sections are collected in system order" do
     assert Core.SaaS.collect_desktop_sections([TipsSystem, GoodSystem, NewsSystem]) == [
              TipsSection,
@@ -217,8 +228,7 @@ defmodule Core.SaaSTest do
              Enum.sort(Keyword.keys(Next.SaaS.feature_flags()))
   end
 
-  test "the Paper registry is a child and the systems declare their queues and quotas" do
-    assert {Registry, keys: :unique, name: Systems.Paper.RISProcessorRegistry} in Core.SaaS.children()
+  test "the systems declare their queues and quotas" do
     assert Core.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
