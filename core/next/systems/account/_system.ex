@@ -24,6 +24,7 @@ defmodule Next.Account.System do
       pipeline :native_signin do
         plug(:accepts, ["json"])
         plug(:fetch_session)
+        plug(CoreWeb.Plug.RemoteIp)
         plug(Systems.Account.Plug)
 
         plug(Cldr.Plug.PutLocale,

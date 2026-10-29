@@ -5,6 +5,7 @@ defmodule Next.Account.NativeSigninControllerTest do
 
   alias Core.Repo
   alias Systems.Account
+  alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
 
   @remember_me_cookie "_core_web_user_remember_me"
@@ -317,6 +318,55 @@ defmodule Next.Account.NativeSigninControllerTest do
       conn = post_json(conn, "/user/auth/native/verify", %{email: unique_email("no-code")})
 
       assert json_response(conn, 400) == %{"error" => "invalid_request"}
+    end
+  end
+
+  describe "network address limits" do
+    test "identify counts code requests by the client's address", %{conn: conn} do
+      for _ <- 1..200 do
+        assert AuthCodeLimits.allow_request?(unique_email("other"), "198.51.100.30")
+      end
+
+      email = unique_email("network")
+
+      limited =
+        conn
+        |> put_req_header("x-forwarded-for", "198.51.100.30")
+        |> post_json("/user/auth/native/identify", %{email: email})
+
+      assert json_response(limited, 429) == %{"error" => "rate_limited"}
+      refute Repo.one(AuthCodeModel.active_query(email))
+
+      other =
+        conn
+        |> put_req_header("x-forwarded-for", "198.51.100.31")
+        |> post_json("/user/auth/native/identify", %{email: email})
+
+      assert json_response(other, 200) == %{"next" => "code"}
+    end
+
+    test "verify counts checks by the client's address", %{conn: conn} do
+      for _ <- 1..200 do
+        assert AuthCodeLimits.allow_check?(unique_email("other"), "198.51.100.32")
+      end
+
+      user = Factories.insert!(:member)
+      code = issue_code(user.email, user.id)
+
+      limited =
+        conn
+        |> put_req_header("x-forwarded-for", "198.51.100.32")
+        |> post_json("/user/auth/native/verify", %{email: user.email, code: code})
+
+      assert json_response(limited, 422) == %{"error" => "too_many_attempts"}
+      assert Repo.one(AuthCodeModel.active_query(user.email)).attempts == 0
+
+      other =
+        conn
+        |> put_req_header("x-forwarded-for", "198.51.100.33")
+        |> post_json("/user/auth/native/verify", %{email: user.email, code: code})
+
+      assert json_response(other, 200) == %{"onboarding" => false, "redirect_to" => nil}
     end
   end
 
