@@ -302,6 +302,58 @@
          probe: true,
          surfconext_sign_in: true
        ]
+     ]},
+    {"local-http-port",
+     [
+       oban_queues: [
+         default: 5,
+         email_delivery: 1,
+         email_dispatchers: 1,
+         ris_import: 1,
+         "storage_delivery_local_<node>": 1
+       ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker}
+            ]
+          ]}
+       ],
+       oban_unknown_plugins: [],
+       rate_quotas: [
+         {"azure_blob", 1000, :call, :minute, :local},
+         {"azure_blob", 10_000_000, :byte, :day, :local},
+         {"azure_blob", 1_000_000_000, :byte, :day, :global},
+         {"feldspar_data_donation", 100_000_000, :byte, :hour, :local},
+         {"otp_request", 3, :call, :minute, :local},
+         {"provider_reconcile", 300, :call, :minute, :global},
+         {"recruit", 5, :call, :minute, :local},
+         {"signup", 5, :call, :minute, :local},
+         {"storage_export", 1, :call, :hour, :local}
+       ],
+       features: [
+         centerdata_sign_in: false,
+         debug_expire_force: false,
+         e2e: true,
+         leaderboard: true,
+         member_google_sign_in: true,
+         onyx: true,
+         opp_phase_3: true,
+         otp: true,
+         panl: true,
+         panl_post_launch: true,
+         password_sign_in: true,
+         probe: true,
+         surfconext_sign_in: true
+       ]
      ]}
   ]
 ]
