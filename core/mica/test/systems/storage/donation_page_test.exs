@@ -120,6 +120,88 @@ defmodule Systems.Storage.DonationPageTest do
     refute has_element?(view, "[data-testid='run-chart-block']")
   end
 
+  describe "Feldspar app donations" do
+    setup %{conn: conn, endpoint: endpoint} do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok
+    end
+
+    test "shows the first 200 rows of a large table", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      rows = for i <- 1..250, do: %{"Date" => "2026-10-01", "Link" => "video #{i}"}
+      file = "participant=2_key=1793-tiktok.json"
+      :ok = LocalFS.store(folder, file, Jason.encode!(%{"history" => %{"data" => rows}}))
+
+      {:ok, view, _html} = live(conn, donation_path(endpoint, file))
+
+      html = view |> element("[data-testid='table-block']") |> render()
+      assert html |> String.split("<tr class=") |> Enum.count() == 1 + 200
+    end
+
+    test "says how many rows the page leaves out", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      rows = for i <- 1..250, do: %{"Link" => "video #{i}", "Date" => "2026-10-01"}
+      file = "participant=2_key=1793-tiktok.json"
+      :ok = LocalFS.store(folder, file, Jason.encode!(%{"history" => %{"data" => rows}}))
+
+      {:ok, view, _html} = live(conn, donation_path(endpoint, file))
+
+      assert view |> element("[data-testid='table-block']") |> render() =~ "200"
+      assert view |> element("[data-testid='table-block']") |> render() =~ "250"
+    end
+
+    test "titles the donation without its session", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      file = "participant=2_key=1793-tracking.json"
+      :ok = LocalFS.store(folder, file, ~s([{"message":"user entered script"}]))
+
+      {:ok, view, _html} = live(conn, donation_path(endpoint, file))
+
+      assert view
+             |> element("[data-testid='header-block'] span.break-all", ~r/^\s*tracking\s*$/)
+             |> has_element?()
+    end
+
+    test "shows a declined donation as a message", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      file = "participant=2_key=1793-youtube.json"
+
+      :ok =
+        LocalFS.store(folder, file, Jason.encode!(~s({"status" : "data_submission declined"})))
+
+      {:ok, view, _html} = live(conn, donation_path(endpoint, file))
+
+      assert view |> element("[data-testid='message-block']") |> render() =~
+               "data_submission declined"
+    end
+
+    test "titles a named table in a list by its name", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      file = "participant=2_key=1793-instagram.json"
+      json = ~s([{"instagram_ads_viewed":[{"Author":"a"},{"Author":"b"}]}])
+      :ok = LocalFS.store(folder, file, json)
+
+      {:ok, view, _html} = live(conn, donation_path(endpoint, file))
+
+      assert view |> element("[data-testid='table-block']") |> render() =~ "Instagram ads viewed"
+    end
+  end
+
   test "denies a member without access to the endpoint", %{conn: conn, endpoint: endpoint} do
     assert {:error, {_redirect, _}} = live(conn, donation_path(endpoint, @result))
   end

@@ -308,3 +308,7 @@ msgstr "Trend (mean of 5 trials)"
 #, elixir-autogen, elixir-format
 msgid "donation.chart.trial"
 msgstr "Trial"
+
+#, elixir-autogen, elixir-format
+msgid "donation.table.truncated"
+msgstr "Showing the first %{shown} of %{total} rows. The export has all of them."

@@ -140,6 +140,10 @@ defmodule Systems.Storage.DonationPage do
           </tbody>
         </table>
       </div>
+      <%= if @truncated do %>
+        <.spacing value="XS" />
+        <Text.body_small><span class="text-grey2"><%= @truncated %></span></Text.body_small>
+      <% end %>
     </div>
     """
   end

@@ -308,3 +308,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "donation.chart.trial"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.table.truncated"
+msgstr ""

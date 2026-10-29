@@ -5,6 +5,8 @@ defmodule Systems.Storage.DonationPageBuilder do
   alias Frameworks.Concept
   alias Systems.Storage
 
+  @max_rows 200
+
   def view_model(
         %{id: endpoint_id},
         %{branch: branch, path: path, donation: donation, timezone: timezone} = assigns
@@ -79,7 +81,19 @@ defmodule Systems.Storage.DonationPageBuilder do
   defp key_title(path) do
     case Storage.Donations.key(path) do
       nil -> path
-      key -> key |> String.split("/") |> drop_session() |> Enum.join(" / ")
+      key -> key_title(key, Storage.Donations.session(path))
+    end
+  end
+
+  # Without the session: "cogflex / practice1" for <run>/cogflex/practice1, "tiktok" for <session>-tiktok.
+  defp key_title(key, session) do
+    if String.contains?(key, "/") do
+      key |> String.split("/") |> drop_session() |> Enum.join(" / ")
+    else
+      case String.replace_prefix(key, "#{session}-", "") do
+        "" -> key
+        name -> name
+      end
     end
   end
 
@@ -118,7 +132,8 @@ defmodule Systems.Storage.DonationPageBuilder do
          title: section_title(title),
          count: Enum.count(rows),
          columns: columns,
-         rows: Enum.map(rows, &cells/1)
+         rows: rows |> Enum.take(@max_rows) |> Enum.map(&cells/1),
+         truncated: truncated(Enum.count(rows))
        }}
     ]
   end
@@ -131,20 +146,36 @@ defmodule Systems.Storage.DonationPageBuilder do
   defp sections({:list, items}, title) do
     items
     |> Enum.with_index(1)
-    |> Enum.flat_map(fn {item, index} -> sections(item, join(title, "#{index}")) end)
+    |> Enum.flat_map(fn {item, index} -> list_item_sections(item, index, title) end)
   end
+
+  # A top-level value, such as a declined donation's status text, is the message itself.
+  defp sections({:value, value}, nil), do: [{:message, %{text: cell(value)}}]
 
   defp sections({:value, value}, title) do
     [{:fields, %{title: section_title(title), fields: [{title || "", cell(value)}]}}]
   end
+
+  defp truncated(count) when count <= @max_rows, do: nil
+
+  defp truncated(count) do
+    dgettext("eyra-storage", "donation.table.truncated", shown: @max_rows, total: count)
+  end
+
+  # An item that is one named table ({"tiktok_comments": [...]}) is titled by that name, not its index.
+  defp list_item_sections({:tree, nil, [{key, child}]}, _index, title),
+    do: sections(child, join(title, key))
+
+  defp list_item_sections(item, index, title), do: sections(item, join(title, "#{index}"))
 
   defp join(nil, key), do: key
   defp join(title, key), do: "#{title} / #{key}"
 
   defp section_title(nil), do: details_title()
 
+  # "tiktok_video_browsing_history / data" reads as "Tiktok video browsing history / data".
   defp section_title(title) do
-    {first, rest} = String.split_at(title, 1)
+    {first, rest} = title |> String.replace("_", " ") |> String.split_at(1)
     String.upcase(first) <> rest
   end
 
