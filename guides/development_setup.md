@@ -68,6 +68,9 @@ Two environment variables change this:
 - `OPEN_SENT_EMAILS=false`: sent emails no longer open in the browser; read
   them at `/sent_emails`.
 
+Set `HTTP_PORT` and `OPEN_SENT_EMAILS` in the shell that starts the server,
+not in `core/.env`: that file is only loaded after these settings are read.
+
 Learn more about Phoenix by visiting the [official website](https://www.phoenixframework.org/)
 
 ## i18n
