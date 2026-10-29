@@ -32,7 +32,6 @@ config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 config :core,
   domain: "localhost",
   name: "Next [local]",
-  base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000",
   payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
   upload_path: upload_path
 
@@ -149,7 +148,6 @@ config :core, image_catalog: Core.ImageCatalog.Unsplash
 
 config :core, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
-  open_email_in_browser_url: "http://localhost:4000/sent_emails",
   default_from_email: "no-reply@example.com"
 
 # Service login for load testing
@@ -176,4 +174,24 @@ rescue
   File.Error ->
     # Continuing without `dev.secret.exs` file...
     nil
+end
+
+# HTTP_PORT moves this server off 4000, e.g. for a second local Core. Set after
+# dev.secret.exs, so the port set here wins over the one there; without
+# HTTP_PORT that file's port and Google redirect stay.
+http_port = System.get_env("HTTP_PORT")
+local_url = "http://localhost:#{http_port || 4000}"
+
+if http_port do
+  config :core, CoreWeb.Endpoint, http: [port: String.to_integer(http_port)]
+
+  config :core, Systems.Account.Auth.Google, redirect_uri: "#{local_url}/auth/google/callback"
+end
+
+config :core, base_url: System.get_env("APP_DOMAIN") || local_url
+
+# Opens each sent email in the browser. OPEN_SENT_EMAILS=false leaves them in
+# the mailbox at /sent_emails only.
+if System.get_env("OPEN_SENT_EMAILS") != "false" do
+  config :core, Systems.Email.Mailer, open_email_in_browser_url: "#{local_url}/sent_emails"
 end
