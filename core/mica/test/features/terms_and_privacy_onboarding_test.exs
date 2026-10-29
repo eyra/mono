@@ -2,7 +2,7 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
   @moduledoc """
   Feature test for the terms-and-privacy onboarding flow using the Mock OAuth provider.
 
-  Covers the full chain: signup page → initiator plug → callback creates user
+  Covers the full chain: mock reset → mock sign-in page → callback creates user
   → onboarding page → Continue (with and without accepting terms) → signed-in
   page.
   """
@@ -31,8 +31,6 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
   feature "first-time mock user goes through onboarding to signed-in page", %{session: session} do
     session
     |> visit("/user/auth/mock/reset")
-    |> assert_has(Query.css("[data-testid='auth-signin-button']"))
-    |> click(Query.css("[data-testid='auth-signin-button']"))
     # Mock identity provider: the form is prefilled with example@mock.com and
     # submits over the LiveView socket.
     |> assert_connected("[data-testid='mock-auth-signin-page']")
