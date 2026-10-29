@@ -13,11 +13,13 @@ defmodule Next.Account.AuthIdentifyPage do
 
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
+  alias Next.Account.OtpSignin
   alias Systems.Account
 
   @impl true
   def mount(params, _session, socket) do
     creator? = socket.assigns.live_action != :participant
+    return_to = ReturnTo.sanitize(Map.get(params, "return_to"))
 
     if feature_enabled?(:otp) do
       {
@@ -27,7 +29,8 @@ defmodule Next.Account.AuthIdentifyPage do
           form: to_form(%{"email" => ""}),
           loading: false,
           creator?: creator?,
-          return_to: ReturnTo.sanitize(Map.get(params, "return_to"))
+          return_to: return_to,
+          password_signin_url: password_signin_url(creator?, return_to)
         )
         |> update_menus()
       }
@@ -45,7 +48,7 @@ defmodule Next.Account.AuthIdentifyPage do
   def handle_event("submit", %{"email" => email}, socket) do
     email = String.trim(email)
 
-    if valid_email?(email) do
+    if OtpSignin.valid_email?(email) do
       socket =
         socket
         |> assign(loading: true, form: to_form(%{"email" => email}))
@@ -74,17 +77,8 @@ defmodule Next.Account.AuthIdentifyPage do
         %{assigns: %{return_to: return_to, creator?: creator?, remote_ip: remote_ip}} = socket
       ) do
     case Account.EmailRouter.route(email) do
-      :google ->
-        {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}
-
-      :surfconext ->
-        {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
-
-      :mock ->
-        {:noreply,
-         redirect(socket,
-           to: "/auth/mock/callback?email=#{URI.encode(email)}"
-         )}
+      provider when provider in [:google, :surfconext, :mock] ->
+        {:noreply, redirect(socket, to: OtpSignin.provider_url(provider, email, return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email, remote_ip) do
@@ -103,15 +97,22 @@ defmodule Next.Account.AuthIdentifyPage do
     end
   end
 
-  defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
+  # The participant entry stays code-only; elsewhere the password form is the fallback.
+  defp password_signin_url(true, return_to) do
+    if feature_enabled?(:password_sign_in), do: password_form_url(return_to)
+  end
+
+  defp password_signin_url(false, _return_to), do: nil
+
+  # `GET /user/session` keeps the return path in the session for the password form.
+  defp password_form_url(nil), do: ~p"/user/signin"
+  defp password_form_url(return_to), do: ReturnTo.append(~p"/user/session", return_to)
 
   defp verify_url(email, nil, creator?),
     do: ~p"/user/auth/verify?email=#{email}&creator=#{creator?}"
 
   defp verify_url(email, return_to, creator?),
     do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}&creator=#{creator?}"
-
-  defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 
   @impl true
   def render(assigns) do
@@ -151,6 +152,13 @@ defmodule Next.Account.AuthIdentifyPage do
               testid="auth-continue-button"
             />
           </.form>
+          <div :if={@password_signin_url} class="mt-6 flex justify-center">
+            <Button.dynamic
+              action={%{type: :redirect, to: @password_signin_url}}
+              face={%{type: :link, text: dgettext("eyra-account", "auth.password.link")}}
+              testid="auth-password-link"
+            />
+          </div>
         </Area.form>
       </Area.content>
       </div>

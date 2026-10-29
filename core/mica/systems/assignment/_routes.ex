@@ -6,11 +6,16 @@ defmodule Systems.Assignment.Routes do
       end
 
       scope "/assignment/:id", Systems.Assignment do
-        pipe_through([:browser, :require_authenticated_user, :assignment_exists])
+        pipe_through([:browser, :require_authenticated_member, :assignment_exists])
 
         live("/", CrewPage)
-        live("/content", ContentPage)
         live("/landing", LandingPage)
+      end
+
+      scope "/assignment/:id", Systems.Assignment do
+        pipe_through([:browser, :require_authenticated_user, :assignment_exists])
+
+        live("/content", ContentPage)
         get("/export", Controller, :export_setup)
         get("/export-progress", Controller, :export_progress)
       end
@@ -24,7 +29,7 @@ defmodule Systems.Assignment.Routes do
       end
 
       scope "/", Systems.Assignment do
-        pipe_through([:browser, :require_authenticated_user])
+        pipe_through([:browser, :require_authenticated_member])
         get("/assignment/callback/:workflow_item_id", Controller, :callback)
       end
     end

@@ -1,5 +1,5 @@
 defmodule Next.Account.System do
-  @moduledoc "Next's sign-in pages, which shadow Mica's sign-in routes."
+  @moduledoc "Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's sign-in calls."
   use Core.System
 
   def override_routes do
@@ -17,6 +17,29 @@ defmodule Next.Account.System do
         live("/user/auth/verify", Account.AuthCodeVerifyPage)
         get("/user/session", Account.SessionController, :new)
         post("/user/session", Account.SessionController, :create)
+      end
+
+      import Systems.Account.UserAuth, only: [fetch_current_user: 2]
+
+      pipeline :native_signin do
+        plug(:accepts, ["json"])
+        plug(:fetch_session)
+        plug(Systems.Account.Plug)
+
+        plug(Cldr.Plug.PutLocale,
+          apps: [cldr: CoreWeb.Cldr, gettext: :global, gettext: CoreWeb.Gettext],
+          from: [:session, :accept_language],
+          default: "en"
+        )
+
+        plug(:put_secure_browser_headers)
+        plug(:fetch_current_user)
+      end
+
+      scope "/", Next do
+        pipe_through([:native_signin])
+        post("/user/auth/native/identify", Account.NativeSigninController, :identify)
+        post("/user/auth/native/verify", Account.NativeSigninController, :verify_code)
       end
 
       scope "/", Next do

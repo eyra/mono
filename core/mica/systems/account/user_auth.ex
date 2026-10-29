@@ -28,8 +28,6 @@ defmodule Systems.Account.UserAuth do
   if you are not using LiveView.
   """
   def log_in_user(conn, user, first_time?, params \\ %{}) do
-    token = Account.Public.generate_user_session_token(user, session_type(params))
-
     # For first-time users, we always land on onboarding — but if the caller
     # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
     # `?return_to=/pool/panl/join` into the OTP flow), we forward it as a URL
@@ -43,20 +41,23 @@ defmodule Systems.Account.UserAuth do
       end
 
     conn
-    |> renew_session()
-    |> put_session(:user_token, token)
-    |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
-    |> maybe_write_remember_me_cookie(token, params)
+    |> log_in_user_without_redirect(user, params)
     |> redirect(to: redirect_to)
   end
 
-  def log_in_user_without_redirect(conn, user) do
-    token = Account.Public.generate_user_session_token(user)
+  @doc """
+  Starts a session for the user like `log_in_user/4`, but leaves the
+  response to the caller. `params` selects the session type and the
+  remember-me cookie the same way.
+  """
+  def log_in_user_without_redirect(conn, user, params \\ %{}) do
+    token = Account.Public.generate_user_session_token(user, session_type(params))
 
     conn
     |> renew_session()
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+    |> maybe_write_remember_me_cookie(token, params)
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{mobile_session?: true}) do
@@ -195,6 +196,13 @@ defmodule Systems.Account.UserAuth do
   def require_authenticated_participant(conn, _opts),
     do: require_authenticated(conn, :participant)
 
+  @doc """
+  Like `require_authenticated_user/2`, for pages participants open (tasks,
+  pool and lab pages). Signed-out visitors go to the SaaS's
+  `member_sign_in_page/1`.
+  """
+  def require_authenticated_member(conn, _opts), do: require_authenticated(conn, :member)
+
   defp require_authenticated(conn, entry) do
     if conn.assigns[:current_user] do
       conn
@@ -207,10 +215,12 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
-  defp signin_path(_conn, :user), do: ~p"/user/signin"
+  defp signin_path(_conn, :user), do: Core.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
     do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
+
+  defp signin_path(conn, :member), do: Core.SaaS.module().member_sign_in_page(current_path(conn))
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))

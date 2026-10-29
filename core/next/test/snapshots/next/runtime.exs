@@ -5,7 +5,6 @@
     Core.Repo,
     CoreWeb.Telemetry,
     Phoenix.PubSub.Supervisor,
-    Systems.Paper.RISProcessorRegistry,
     Oban,
     CoreWeb.Endpoint,
     Systems.Rate.Server

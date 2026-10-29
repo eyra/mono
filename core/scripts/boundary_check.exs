@@ -7,7 +7,7 @@
 #   1. a file in one root references a module defined in a file in a forbidden
 #      root (compile, export or runtime reference, from `mix xref graph`), or
 #   2. a file names a namespace of a forbidden root that xref cannot see (for
-#      example a Registry name such as Systems.Paper.RISProcessorRegistry), or
+#      example a Registry name such as Systems.Paper.ImportRegistry in mica/), or
 #   3. a file under mica/ contains a PaNL, VU or Eyra literal,
 # unless the file is listed in boundary_allowlist.exs for that kind.
 # Also fails when an allowlisted entry no longer occurs, so the list only shrinks.

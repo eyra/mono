@@ -89,7 +89,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
     test "logs the user out", %{conn: conn} do
       conn = delete(conn, ~p"/user/session")
-      assert redirected_to(conn) == "/user/signin"
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
       refute get_session(conn, :user_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"
     end
@@ -98,7 +98,7 @@ defmodule Systems.Account.UserSessionControllerTest do
   describe "DELETE /users/signout as visitor" do
     test "succeeds even if the user is not logged in", %{conn: conn} do
       conn = delete(conn, ~p"/user/session")
-      assert redirected_to(conn) == "/user/signin"
+      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
       refute get_session(conn, :user_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"
     end

@@ -414,3 +414,7 @@ msgstr "Conferma il trasferimento"
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.decline"
 msgstr "Rifiuta"
+
+#, elixir-autogen, elixir-format
+msgid "auth.password.link"
+msgstr "Accedi con password"

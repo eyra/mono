@@ -423,3 +423,7 @@ msgstr "Confirmă transferul"
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.decline"
 msgstr "Refuză"
+
+#, elixir-autogen, elixir-format
+msgid "auth.password.link"
+msgstr "Autentificare cu parolă"
