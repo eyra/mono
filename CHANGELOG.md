@@ -11,6 +11,7 @@
 
 ## Unreleased
 
+* Fixed - Donations that arrive in the same millisecond each keep their own content. Before, they shared a temporary file, so the last one overwrote the others and every one of them was delivered with that content under its own key; a Feldspar app that donates a trial and its result (or a result and its summary) at once lost one of them. Upgrading: no action needed.
 * Fixed - The mock sign-in reset (`/user/auth/mock/reset`, only where the mock provider is on) goes to the mock sign-in page (`/auth/mock`). Before, it went to `/user/auth/mock`, which only Next serves (as its "Sign in with Mock" page), so in Self it ended on "Page not found". Upgrading: no action needed.
 * Fixed - On the email sign-in code page (`/user/auth/identify`, also in Self), an error message under the email field is shown in full and pushes the "Continue" button down. Before, a message longer than one line ran behind the button. This page and the code entry page (`/user/auth/verify`) now use the same spacing as the other sign-in forms (password sign-in, sign-up, reset password): 24px between the field and the button, and with an error 8px above the message and 24px below it. Upgrading: no action needed.
 
