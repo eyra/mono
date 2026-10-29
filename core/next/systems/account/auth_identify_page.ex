@@ -137,7 +137,7 @@ defmodule Next.Account.AuthIdentifyPage do
               testid="auth-email-input"
               placeholder={dgettext("eyra-account", "auth.email.placeholder")}
             />
-            <div class="mt-[6px]" />
+            <.spacing value="S" />
             <Button.dynamic
               action={%{type: :submit}}
               face={
