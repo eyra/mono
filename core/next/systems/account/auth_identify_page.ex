@@ -133,7 +133,7 @@ defmodule Next.Account.AuthIdentifyPage do
               form={@form}
               field={:email}
               label_text=""
-              reserve_error_space={true}
+              reserve_error_space={false}
               testid="auth-email-input"
               placeholder={dgettext("eyra-account", "auth.email.placeholder")}
             />
