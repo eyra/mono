@@ -118,6 +118,21 @@ defmodule Core.System do
   """
   @callback feature_flags() :: [atom()]
 
+  @doc """
+  Seeds the records the system needs in the deploy environment (`:prod`,
+  `:staging`, `:dev`, `:test`, `:local`). `Core.Seeds` runs it on every
+  deployment, after Mica's own seeds and in `c:Core.SaaS.systems/0` order, so
+  it must be idempotent.
+  """
+  @callback seeds(deploy_env :: atom()) :: :ok
+
+  @doc """
+  The absolute path of the system's own Ecto migrations, or `nil` when its
+  tables are in Mica's migrations. Migrated with Mica's, see
+  `Core.SaaS.migrations_paths/0`.
+  """
+  @callback migrations_path() :: Path.t() | nil
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Core.System
@@ -136,6 +151,8 @@ defmodule Core.System do
       def oban_crons, do: []
       def rate_quotas, do: []
       def feature_flags, do: []
+      def seeds(_deploy_env), do: :ok
+      def migrations_path, do: nil
 
       defoverridable Core.System
     end

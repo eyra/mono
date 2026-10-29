@@ -38,4 +38,35 @@ defmodule Core.SeedsTest do
       assert :ok = Core.Seeds.seed()
     end
   end
+
+  describe "seed_systems/2" do
+    defmodule NoSeedsSystem do
+      use Core.System
+    end
+
+    defmodule SeedsSystem do
+      use Core.System
+
+      def seeds(deploy_env) do
+        send(self(), {:seeded, __MODULE__, deploy_env})
+        :ok
+      end
+    end
+
+    defmodule OtherSeedsSystem do
+      use Core.System
+
+      def seeds(deploy_env) do
+        send(self(), {:seeded, __MODULE__, deploy_env})
+        :ok
+      end
+    end
+
+    test "runs the seeds of each system for the deploy env, in system order" do
+      assert :ok = Core.Seeds.seed_systems([OtherSeedsSystem, NoSeedsSystem, SeedsSystem], :dev)
+
+      assert {:messages, [{:seeded, OtherSeedsSystem, :dev}, {:seeded, SeedsSystem, :dev}]} =
+               Process.info(self(), :messages)
+    end
+  end
 end
