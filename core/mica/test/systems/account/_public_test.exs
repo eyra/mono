@@ -569,6 +569,53 @@ defmodule Systems.Account.PublicTest do
     end
   end
 
+  describe "one-time tokens" do
+    setup do
+      %{user: Factories.insert!(:member)}
+    end
+
+    test "a token is redeemed once, by its context", %{user: %{id: user_id} = user} do
+      token = Account.Public.generate_one_time_token(user, "handoff")
+
+      assert {:error, :not_found} = Account.Public.take_one_time_token(token, "other", 60)
+      assert {:ok, %User{id: ^user_id}} = Account.Public.take_one_time_token(token, "handoff", 60)
+      assert {:error, :not_found} = Account.Public.take_one_time_token(token, "handoff", 60)
+    end
+
+    test "only its hash is stored", %{user: user} do
+      token = Account.Public.generate_one_time_token(user, "handoff")
+
+      assert [%UserTokenModel{token: stored, sent_to: nil}] =
+               Repo.all(UserTokenModel.user_and_contexts_query(user, ["handoff"]))
+
+      refute stored == Base.url_decode64!(token, padding: false)
+    end
+
+    test "a token older than max_age is refused", %{user: user} do
+      token = Account.Public.generate_one_time_token(user, "handoff")
+      old = NaiveDateTime.utc_now() |> NaiveDateTime.add(-61) |> NaiveDateTime.truncate(:second)
+
+      Repo.update_all(UserTokenModel.user_and_contexts_query(user, ["handoff"]),
+        set: [inserted_at: old]
+      )
+
+      assert {:error, :not_found} = Account.Public.take_one_time_token(token, "handoff", 60)
+    end
+
+    test "a new token replaces the user's earlier one of that context", %{user: user} do
+      earlier = Account.Public.generate_one_time_token(user, "handoff")
+      later = Account.Public.generate_one_time_token(user, "handoff")
+
+      assert {:error, :not_found} = Account.Public.take_one_time_token(earlier, "handoff", 60)
+      assert {:ok, _user} = Account.Public.take_one_time_token(later, "handoff", 60)
+    end
+
+    test "a malformed token is refused" do
+      assert {:error, :not_found} =
+               Account.Public.take_one_time_token("not base64!", "handoff", 60)
+    end
+  end
+
   describe "deliver_user_confirmation_instructions/2" do
     setup do
       %{user: Factories.insert!(:member, %{confirmed_at: nil})}

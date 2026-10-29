@@ -4,8 +4,12 @@ defmodule Next.Account.System do
 
   def override_routes do
     quote do
+      pipeline :native_sheet_return do
+        plug(Next.Account.NativeSheetReturn)
+      end
+
       scope "/", Next do
-        pipe_through([:browser, :redirect_if_user_is_authenticated])
+        pipe_through([:browser, :native_sheet_return, :redirect_if_user_is_authenticated])
         live("/user/signin", Account.SigninPage)
         live("/user/signin/:user_type", Account.SigninPage)
         live("/user/auth/identify", Account.AuthIdentifyPage, :creator, as: :auth_identify)
@@ -41,10 +45,13 @@ defmodule Next.Account.System do
         pipe_through([:native_signin])
         post("/user/auth/native/identify", Account.NativeSigninController, :identify)
         post("/user/auth/native/verify", Account.NativeSigninController, :verify_code)
+        post("/user/auth/native/redeem", Account.NativeSigninController, :redeem)
       end
 
       scope "/", Next do
         pipe_through([:browser])
+        get("/user/auth/native/provider/:provider", Account.NativeProviderController, :start)
+        get("/user/auth/native/callback", Account.NativeProviderController, :callback)
         get("/user/auth/redeem", Account.SessionController, :redeem_otp)
         get("/user/auth/status", Account.SessionController, :status)
         delete("/user/session", Account.SessionController, :delete)
@@ -67,6 +74,8 @@ defmodule Next.Account.System do
       ]
     end
   end
+
+  def sign_in_handoffs, do: [Next.Account.NativeHandoff]
 
   def feature_flags, do: [:member_google_sign_in, :otp, :password_sign_in, :surfconext_sign_in]
 end

@@ -26,8 +26,27 @@ defmodule Systems.Account.UserAuth do
   so LiveView sessions are identified and automatically
   disconnected on log out. The line can be safely removed
   if you are not using LiveView.
+
+  A `Systems.Account.SignInHandoff` of the SaaS can take the sign-in over
+  instead (`Core.SaaS.sign_in_handoffs/0`).
   """
   def log_in_user(conn, user, first_time?, params \\ %{}) do
+    case hand_off(Core.SaaS.sign_in_handoffs(), conn, user, first_time?) do
+      {:ok, conn} -> conn
+      :skip -> log_in_user_and_redirect(conn, user, first_time?, params)
+    end
+  end
+
+  defp hand_off([], _conn, _user, _first_time?), do: :skip
+
+  defp hand_off([handoff | handoffs], conn, user, first_time?) do
+    case handoff.hand_off(conn, user, first_time?) do
+      {:ok, conn} -> {:ok, conn}
+      :skip -> hand_off(handoffs, conn, user, first_time?)
+    end
+  end
+
+  defp log_in_user_and_redirect(conn, user, first_time?, params) do
     # For first-time users, we always land on onboarding — but if the caller
     # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
     # `?return_to=/pool/panl/join` into the OTP flow), we forward it as a URL

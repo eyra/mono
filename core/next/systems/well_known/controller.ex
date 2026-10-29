@@ -1,7 +1,9 @@
 defmodule Next.WellKnownController do
   @moduledoc """
   Serves the apple-app-site-association file, so iOS opens invitation links
-  (`/assignment/*`) in the Next app (UC-SENSE-03).
+  (`/assignment/*`) in the Next app (UC-SENSE-03), and so the sign-in sheet may
+  hand an identity-provider sign-in back to the app on this host
+  (`webcredentials`, see `Next.Account.NativeHandoff`).
 
   Both app IDs are listed on every environment: iOS only links a domain to an
   app whose Associated Domains entitlement names that domain, so the Dev app
@@ -14,7 +16,8 @@ defmodule Next.WellKnownController do
 
   def apple_app_site_association(conn, _params) do
     json(conn, %{
-      applinks: %{details: [%{appIDs: @app_ids, components: [%{"/" => "/assignment/*"}]}]}
+      applinks: %{details: [%{appIDs: @app_ids, components: [%{"/" => "/assignment/*"}]}]},
+      webcredentials: %{apps: @app_ids}
     })
   end
 end

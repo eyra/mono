@@ -2,7 +2,8 @@ defmodule Next.Account.NativeSigninController do
   @moduledoc """
   JSON calls behind the native Sign-in screen of the Next apps: identify
   (send a sign-in code to an email, or point to its identity provider), then
-  verify the code. They follow the participant
+  verify the code; or redeem the token of an identity-provider sign-in (see
+  `Next.Account.NativeHandoff`). They follow the participant
   path of the LiveView flow (`AuthIdentifyPage`, `AuthCodeVerifyPage`, the
   redeem step) and share its steps through `Next.Account.OtpSignin`.
 
@@ -13,6 +14,7 @@ defmodule Next.Account.NativeSigninController do
   use CoreWeb, {:controller, [formats: [:json]]}
 
   alias CoreWeb.ReturnTo
+  alias Next.Account.NativeHandoff
   alias Next.Account.OtpSignin
   alias Systems.Account
 
@@ -51,6 +53,21 @@ defmodule Next.Account.NativeSigninController do
 
   def verify_code(conn, _params), do: error(conn, :bad_request, "invalid_request")
 
+  @doc """
+  Redeems the token an identity-provider sign-in in the sign-in sheet sent to
+  the app's callback URL (`Next.Account.NativeHandoff`), with the code
+  verifier of the challenge the app started it with.
+  """
+  def redeem(conn, %{"token" => token, "code_verifier" => code_verifier})
+      when is_binary(token) and is_binary(code_verifier) do
+    case NativeHandoff.redeem(token, code_verifier) do
+      {:ok, user, first_time?, return_to} -> start_session(conn, user, first_time?, return_to)
+      {:error, reason} -> error(conn, :unprocessable_entity, Atom.to_string(reason))
+    end
+  end
+
+  def redeem(conn, _params), do: error(conn, :bad_request, "invalid_request")
+
   defp route_email(conn, email, return_to) do
     case Account.EmailRouter.route(email) do
       :otp ->
@@ -73,14 +90,15 @@ defmodule Next.Account.NativeSigninController do
 
   defp sign_in(conn, payload, return_to) do
     case OtpSignin.resolve_user(conn.assigns[:current_user], Map.put(payload, :creator?, false)) do
-      {:ok, user, first_time?} ->
-        conn
-        |> Account.UserAuth.log_in_user_without_redirect(user, @mobile_session)
-        |> respond(%{onboarding: first_time?, redirect_to: redirect_to(first_time?, return_to)})
-
-      {:error, _changeset} ->
-        error(conn, :unprocessable_entity, "invalid_email")
+      {:ok, user, first_time?} -> start_session(conn, user, first_time?, return_to)
+      {:error, _changeset} -> error(conn, :unprocessable_entity, "invalid_email")
     end
+  end
+
+  defp start_session(conn, user, first_time?, return_to) do
+    conn
+    |> Account.UserAuth.log_in_user_without_redirect(user, @mobile_session)
+    |> respond(%{onboarding: first_time?, redirect_to: redirect_to(first_time?, return_to)})
   end
 
   defp redirect_to(true, return_to), do: ReturnTo.append(~p"/user/onboarding", return_to)

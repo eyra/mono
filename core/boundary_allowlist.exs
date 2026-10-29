@@ -51,6 +51,8 @@
        "next/systems/account/auth_code_verify_page.ex",
        "next/systems/account/auth_identify_page.ex",
        "next/systems/account/auth_provider_page.ex",
+       "next/systems/account/native_provider_controller.ex",
+       "next/systems/account/native_sheet_return.ex",
        "next/systems/account/native_signin_controller.ex",
        "next/systems/account/session_controller.ex",
        "next/systems/account/signin_page.ex",

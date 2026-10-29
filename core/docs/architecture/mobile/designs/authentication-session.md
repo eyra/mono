@@ -123,7 +123,7 @@ in the web flow.
 | Status | Body | Meaning |
 | --- | --- | --- |
 | `200` | `{"next": "code"}` | A code was emailed; show the code step. Same answer for known and unknown emails. |
-| `200` | `{"next": "identity_provider", "provider": "google", "url": "/auth/google?login_hint=…"}` | The account signs in with an identity provider (`google`, `surfconext`). Continue in a visible WebView at `url`. |
+| `200` | `{"next": "identity_provider", "provider": "google", "url": "/auth/google?login_hint=…"}` | The account signs in with an identity provider (`google`, `surfconext`). Continue in the sign-in sheet with `provider` (see [Identity providers in the sign-in sheet](#identity-providers-in-the-sign-in-sheet)); `url` is the web flow's start, for app versions that open it in a WebView. |
 | `422` | `{"error": "invalid_email"}` | Not an email address. |
 | `422` | `{"error": "unsupported_account"}` | The account signs in only through a panel provider (Centerdata), never by email. |
 | `429` | `{"error": "rate_limited"}` | Too many codes requested for this email. |
@@ -229,3 +229,115 @@ the `:native_signin` pipeline are in `Next.Account.System`. In Mica,
 `Account.UserAuth.log_in_user_without_redirect/3` starts a session of the
 requested type without redirecting, and `CoreWeb.ReturnTo.sanitize/1` keeps only
 same-site paths.
+
+## Identity providers in the sign-in sheet
+
+The app opens identity providers (Google, SURFconext, Centerdata) in Apple's
+system sign-in sheet (`ASWebAuthenticationSession`), not in its own WebView:
+Google refuses OAuth in embedded WebViews, and the sheet shows the provider's
+real address and the user's saved sign-ins. The sheet has Safari's cookies, not
+the app's, so Core does not sign the user in there. It hands the sign-in back
+to the app with a one-time token, which the app redeems in its own WebView with
+a PKCE-style code verifier (RFC 7636, `S256`).
+
+1. The app makes a code verifier and opens Core's start URL, with the
+   verifier's challenge, in the sheet.
+2. Core marks the sheet with a cookie and continues at its own start of the
+   provider.
+3. After the provider's callback, Core redirects the sheet to the app's callback
+   URL with a token, instead of signing in there. The sheet catches the URL and
+   closes.
+4. The app redeems the token with the verifier from its hidden WebView. Core sets
+   the session cookie, and `GET /user/auth/status` answers `204`.
+
+### Start
+
+The app generates a random `code_verifier` (43 to 128 characters of
+`[A-Za-z0-9-._~]`) and sends its challenge,
+`base64url(sha256(code_verifier))` without padding:
+
+```text
+GET /user/auth/native/provider/<provider>?code_challenge=<challenge>&code_challenge_method=S256
+    [&login_hint=<email>][&return_to=<path>]
+```
+
+- `provider`: `google`, `surfconext` or `centerdata` (and `mock` where Core has
+  test sign-in). Identify answers the provider of an email account; the app may
+  also offer provider buttons.
+- `login_hint`: preselects the Google account (the email the user typed).
+- `return_to`: kept like the native calls' `return_to`, and returned by redeem.
+
+Core sets a signed `_next_native_sign_in` cookie (10 minutes, HttpOnly,
+`SameSite=Lax`) holding the challenge and `return_to`, and redirects to its own
+start of the provider. Everything after that is the web flow: the provider, its
+callback, and the move-your-account page when the email already has an account
+with another sign-in method.
+
+### Callback
+
+Where the web flow would sign the user in and redirect, a sheet with the cookie
+is instead redirected to the callback URL on Core's own host, and the cookie is
+removed. The sheet keeps no Core session.
+
+```text
+https://<core host>/user/auth/native/callback?token=<token>
+https://<core host>/user/auth/native/callback?error=<code>
+```
+
+The app starts the sheet with
+`ASWebAuthenticationSession.Callback.https(host: <core host>, path: "/user/auth/native/callback")`
+(iOS 17.4+). An `https` callback on Core's host is used rather than a custom URL
+scheme: iOS only gives it to the app whose Associated Domains entitlement lists
+`webcredentials:<core host>` and which Core's `apple-app-site-association`
+names under `webcredentials`, while any app can register a custom scheme. Core
+serves `webcredentials` for `co.eyra.next` and `co.eyra.next.dev`. A browser
+that opens the callback URL itself is sent to `/user/signin`.
+
+| `error` | Meaning |
+| --- | --- |
+| `invalid_request` | Unknown provider, or `code_challenge` missing, not `S256`, or not 43 Base64url characters. |
+| `unavailable` | The provider is off on this Core. |
+| `failed` | The sign-in ended on Core's sign-in page with an error: the provider's state was lost or the account could not be registered. |
+| `cancelled` | The sign-in ended on Core's sign-in pages without an error, for example when the user declined moving their account to the provider. |
+
+When the user closes the sheet, the app gets
+`ASWebAuthenticationSessionError.canceledLogin` from iOS and nothing from Core.
+
+### Redeem
+
+Within 2 minutes, from the hidden WebView with the [calling
+convention](#calling-convention) of the native calls:
+
+```text
+POST /user/auth/native/redeem
+{"token": "<token>", "code_verifier": "<code_verifier>"}
+```
+
+| Status | Body | Meaning |
+| --- | --- | --- |
+| `200` | `{"onboarding": false, "redirect_to": "/assignment/1"}` | Signed in, as after Verify the code: the session cookie is set on this response. |
+| `200` | `{"onboarding": true, "redirect_to": "/user/onboarding?return_to=…"}` | Signed in as a user the provider sign-in registered, who still has to go through onboarding at `redirect_to`. |
+| `422` | `{"error": "token_expired"}` | Older than 2 minutes. Start again. |
+| `422` | `{"error": "token_used"}` | Already redeemed, or replaced by a newer sign-in of the same user. Start again. |
+| `422` | `{"error": "verifier_mismatch"}` | `code_verifier` does not match the challenge. The token is used up. |
+| `422` | `{"error": "invalid_token"}` | Not a token Core issued. |
+| `400` | `{"error": "invalid_request"}` | `token` or `code_verifier` missing or not a string. |
+
+`403` and `415` answer as for the other native calls. Redeem works whether or
+not the `otp` feature is on. `redirect_to` follows the rules of Verify the code.
+
+The token is single-use: the first redeem deletes it, whatever its outcome. An
+account is never matched against `login_hint`: like the web flow, the app is
+signed in to the account the provider returned. After a `200` the app reruns
+`GET /user/auth/status`, and only that `204` opens the native shell.
+
+### Where this code lives
+
+In Next: `Next.Account.NativeProviderController` (start and callback URL),
+`Next.Account.NativeHandoff` (the cookie, the token, and the redeem checks),
+`Next.Account.NativeSheetReturn` (the `cancelled` and `failed` results on the
+sign-in pages) and `NativeSigninController.redeem/2`. Mica's
+`Account.UserAuth.log_in_user/4` asks the SaaS's sign-in handoffs
+(`Core.System.sign_in_handoffs/0`, `Systems.Account.SignInHandoff`) before it
+starts a session, and `Account.Public.generate_one_time_token/2` and
+`take_one_time_token/3` keep the single-use half of the token in `users_tokens`.
