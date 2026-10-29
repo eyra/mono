@@ -81,8 +81,49 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
 
       assert conn.status == 200
       {:ok, [{path, content}]} = :zip.unzip(conn.resp_body, [:memory])
-      assert to_string(path) =~ ~r|endpoint_#{endpoint.id}/participant=1\.json$|
+      assert to_string(path) =~ ~r|endpoint_#{endpoint.id}/1/participant=1\.json$|
       assert content == ~s({"donation":true})
+    end
+
+    test "puts the donations of three participants in three folders", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok = LocalFS.store(folder, "participant=2_key=run1/summary.json", "{}")
+      :ok = LocalFS.store(folder, "participant=3_key=run1/summary.json", "{}")
+
+      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+
+      {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
+
+      folders =
+        files
+        |> Enum.map(fn {path, _} -> path |> to_string() |> Path.split() |> Enum.at(1) end)
+        |> Enum.uniq()
+        |> Enum.sort()
+
+      assert folders == ["1", "2", "3"]
+    end
+
+    test "puts a donation without a participant in its own folder", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok = LocalFS.store(folder, "assignment=5_key=run1/summary.json", "{}")
+
+      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+
+      {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
+      paths = Enum.map(files, fn {path, _} -> to_string(path) end)
+
+      assert Enum.any?(
+               paths,
+               &(&1 =~ ~r|/\(no participant\)/assignment=5_key=run1/summary\.json$|)
+             )
     end
   end
 end
