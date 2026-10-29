@@ -12,6 +12,7 @@ defmodule Next.Account.AuthIdentifyPage do
 
   alias CoreWeb.ReturnTo
   alias Frameworks.Pixel.Button
+  alias Next.Account.OtpSignin
   alias Systems.Account
 
   @impl true
@@ -46,7 +47,7 @@ defmodule Next.Account.AuthIdentifyPage do
   def handle_event("submit", %{"email" => email}, socket) do
     email = String.trim(email)
 
-    if valid_email?(email) do
+    if OtpSignin.valid_email?(email) do
       socket =
         socket
         |> assign(loading: true, form: to_form(%{"email" => email}))
@@ -75,17 +76,8 @@ defmodule Next.Account.AuthIdentifyPage do
         %{assigns: %{return_to: return_to, creator?: creator?}} = socket
       ) do
     case Account.EmailRouter.route(email) do
-      :google ->
-        {:noreply, redirect(socket, to: ReturnTo.append(google_url(email), return_to))}
-
-      :surfconext ->
-        {:noreply, redirect(socket, to: ReturnTo.append("/auth/surfconext", return_to))}
-
-      :mock ->
-        {:noreply,
-         redirect(socket,
-           to: "/auth/mock/callback?email=#{URI.encode(email)}"
-         )}
+      provider when provider in [:google, :surfconext, :mock] ->
+        {:noreply, redirect(socket, to: OtpSignin.provider_url(provider, email, return_to))}
 
       :otp ->
         case Account.Public.generate_otp(email) do
@@ -113,15 +105,11 @@ defmodule Next.Account.AuthIdentifyPage do
   defp password_form_url(nil), do: ~p"/user/signin"
   defp password_form_url(return_to), do: ReturnTo.append(~p"/user/session", return_to)
 
-  defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
-
   defp verify_url(email, nil, creator?),
     do: ~p"/user/auth/verify?email=#{email}&creator=#{creator?}"
 
   defp verify_url(email, return_to, creator?),
     do: ~p"/user/auth/verify?email=#{email}&return_to=#{return_to}&creator=#{creator?}"
-
-  defp valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)
 
   @impl true
   def render(assigns) do

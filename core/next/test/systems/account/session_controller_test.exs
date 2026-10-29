@@ -220,6 +220,38 @@ defmodule Next.Account.SessionControllerTest do
     end
   end
 
+  describe "GET /user/auth/redeem — return_to accepts only same-site paths" do
+    test "an existing user lands on the default page", %{conn: conn} do
+      user = Factories.insert!(:member, %{creator: false})
+
+      token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: user.id,
+          email: user.email,
+          return_to: "//example.org/x"
+        })
+
+      conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
+
+      assert redirected_to(conn) == "/"
+    end
+
+    test "a new user lands on onboarding without the return_to", %{conn: conn} do
+      email = "fresh-#{Faker.UUID.v4()}@example.com"
+
+      token =
+        Phoenix.Token.sign(Endpoint, @token_salt, %{
+          user_id: nil,
+          email: email,
+          return_to: "/\\example.org"
+        })
+
+      conn = get(conn, ~p"/user/auth/redeem?token=#{token}")
+
+      assert redirected_to(conn) == "/user/onboarding"
+    end
+  end
+
   describe "GET /user/auth/redeem — existing creator via participant entry" do
     test "retains the stored account type", %{conn: conn} do
       user = Factories.insert!(:member, %{creator: true})
