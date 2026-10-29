@@ -42,7 +42,16 @@ defmodule Systems.Storage.DonationsTest do
       assert Donations.session(@path) == "run1"
     end
 
-    test "is the whole key when the key has no slash" do
+    test "is the part of a key without slash before the first dash" do
+      assert Donations.session("participant=p1_key=1793001234567-tiktok.json") == "1793001234567"
+    end
+
+    test "keeps the dashes of a run id before the first slash" do
+      assert Donations.session("participant=p1_key=6e455c88-7dde-4e6e/summary.json") ==
+               "6e455c88-7dde-4e6e"
+    end
+
+    test "is the whole key when the key has neither slash nor dash" do
       assert Donations.session("participant=p1_key=summary.json") == "summary"
     end
 
