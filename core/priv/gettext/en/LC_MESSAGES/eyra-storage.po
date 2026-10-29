@@ -292,3 +292,15 @@ msgstr "Task"
 #, elixir-autogen, elixir-format
 msgid "table.view.label"
 msgstr "View"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.column.label"
+msgstr "Value"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.title"
+msgstr "Trials in this session"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.x.label"
+msgstr "Trials"

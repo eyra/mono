@@ -5,17 +5,17 @@ defmodule Systems.Storage.DonationPageBuilder do
   alias Frameworks.Concept
   alias Systems.Storage
 
-  def view_model(%{id: endpoint_id}, %{
-        branch: branch,
-        path: path,
-        donation: donation,
-        timezone: timezone
-      }) do
+  def view_model(
+        %{id: endpoint_id},
+        %{branch: branch, path: path, donation: donation, timezone: timezone} = assigns
+      ) do
     %{
       title: page_title(branch),
       breadcrumbs: breadcrumbs(branch),
       buttons: [back_button(endpoint_id)],
-      blocks: [header(path, donation, timezone) | sections(donation)]
+      blocks:
+        [header(path, donation, timezone)] ++
+          run_chart(Map.get(assigns, :run), Map.get(assigns, :column)) ++ sections(donation)
     }
   end
 
@@ -27,6 +27,28 @@ defmodule Systems.Storage.DonationPageBuilder do
       buttons: [back_button(endpoint_id)],
       blocks: []
     }
+  end
+
+  defp run_chart(nil, _column), do: []
+
+  defp run_chart(prompts, requested) do
+    case Storage.RunChart.column(prompts, requested) do
+      nil ->
+        []
+
+      column ->
+        [
+          {:run_chart,
+           %{
+             title: dgettext("eyra-storage", "donation.chart.title"),
+             column_label: dgettext("eyra-storage", "donation.chart.column.label"),
+             x_label: dgettext("eyra-storage", "donation.chart.x.label"),
+             columns: Storage.RunChart.columns(prompts),
+             column: column,
+             chart: Storage.RunChart.build(prompts, column)
+           }}
+        ]
+    end
   end
 
   defp page_title(nil), do: dgettext("eyra-storage", "tabbar.item.data")
