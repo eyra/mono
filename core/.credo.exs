@@ -21,6 +21,8 @@
       plugins: [],
       requires: [
         "./custom_credo_checks/no_repo_transaction.ex",
+        # Shared with scripts/boundary_check.exs; MicaBoundary uses it.
+        "./scripts/boundary_rules.ex",
         "./custom_credo_checks/mica_boundary.ex",
         "./custom_credo_checks/core_env_access.ex"
       ],
