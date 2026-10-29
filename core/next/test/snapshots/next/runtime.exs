@@ -19,6 +19,11 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+       ],
+       oban_unknown_plugins: ["job_data_cleanup"],
        rate_quotas: [
          {"RATE_QUOTAS", 1, :call, :minute, :local},
          {"azure_blob", 1000, :call, :minute, :local},
@@ -59,6 +64,22 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker}
+            ]
+          ]}
+       ],
+       oban_unknown_plugins: [],
        rate_quotas: [
          {"RATE_QUOTAS", 1, :call, :minute, :local},
          {"azure_blob", 1000, :call, :minute, :local},
@@ -99,6 +120,8 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [],
+       oban_unknown_plugins: [],
        rate_quotas: [
          {"azure_blob", 1000, :call, :minute, :local},
          {"azure_blob", 10_000_000, :byte, :day, :local},
@@ -138,6 +161,11 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+       ],
+       oban_unknown_plugins: [],
        rate_quotas: [
          {"azure_blob", 1000, :call, :minute, :local},
          {"azure_blob", 10_000_000, :byte, :day, :local},
@@ -177,6 +205,22 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker}
+            ]
+          ]}
+       ],
+       oban_unknown_plugins: [],
        rate_quotas: [
          {"azure_blob", 1000, :call, :minute, :local},
          {"azure_blob", 10_000_000, :byte, :day, :local},
@@ -216,6 +260,22 @@
          ris_import: 1,
          "storage_delivery_local_<node>": 1
        ],
+       oban_plugins: [
+         {Oban.Plugins.Pruner, [max_age: 3600]},
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron,
+          [
+            crontab: [
+              {"* * * * *", Systems.Fund.PayInExpirationWorker},
+              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
+              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
+              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
+              {"0 * * * *", Systems.Fund.AutoApproveWorker},
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker}
+            ]
+          ]}
+       ],
+       oban_unknown_plugins: [],
        rate_quotas: [
          {"azure_blob", 1000, :call, :minute, :local},
          {"azure_blob", 10_000_000, :byte, :day, :local},

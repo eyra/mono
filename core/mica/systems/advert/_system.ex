@@ -18,4 +18,6 @@ defmodule Systems.Advert.System do
   end
 
   def signal_handlers, do: [Systems.Advert.Switch]
+
+  def oban_crons, do: [advert_expiration: {"*/5 * * * *", Systems.Advert.ExpirationWorker}]
 end

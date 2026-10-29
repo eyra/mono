@@ -33,6 +33,21 @@ defmodule Core.SaaSTest do
     def oban_queues, do: [exports: 2, imports: 3]
   end
 
+  defmodule CronSystem do
+    use Core.System
+    def oban_crons, do: [cleanup: {"0 * * * *", Core.SaaSTest.CleanupWorker}]
+  end
+
+  defmodule OtherCronSystem do
+    use Core.System
+
+    def oban_crons,
+      do: [
+        report: {"0 3 * * *", Core.SaaSTest.ReportWorker},
+        cleanup: {"* * * * *", Core.SaaSTest.CleanupWorker}
+      ]
+  end
+
   defmodule NewsSection do
     def id, do: :news
   end
@@ -204,6 +219,18 @@ defmodule Core.SaaSTest do
                  fn -> Core.SaaS.collect_oban_queues([QueueSystem, OtherQueueSystem]) end
   end
 
+  test "Oban crons are collected in system order" do
+    assert Core.SaaS.collect_oban_crons([CronSystem, GoodSystem]) == [
+             cleanup: {"0 * * * *", Core.SaaSTest.CleanupWorker}
+           ]
+  end
+
+  test "an Oban cron declared by two systems is an error" do
+    assert_raise ArgumentError,
+                 "Oban cron :cleanup is declared by more than one system",
+                 fn -> Core.SaaS.collect_oban_crons([CronSystem, OtherCronSystem]) end
+  end
+
   test "declared feature flags are off unless the SaaS turns them on" do
     assert Core.SaaS.collect_feature_flags(FlagSaaS, FlagSaaS.systems()) == [
              otp: true,
@@ -230,6 +257,15 @@ defmodule Core.SaaSTest do
 
   test "the systems declare their queues and quotas" do
     assert Core.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
+
+    assert Keyword.keys(Core.SaaS.oban_crons()) == [
+             :advert_expiration,
+             :pay_in_expiration,
+             :auto_approve,
+             :data_donation_cleanup,
+             :payment_reconciliation,
+             :auth_code_cleanup
+           ]
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Core.SaaS.rate_quotas()
   end

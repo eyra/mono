@@ -17,4 +17,8 @@ defmodule Systems.Feldspar.System do
   end
 
   def signal_handlers, do: [Systems.Feldspar.Switch]
+
+  # Clean up old data donation files every hour
+  def oban_crons,
+    do: [data_donation_cleanup: {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker}]
 end

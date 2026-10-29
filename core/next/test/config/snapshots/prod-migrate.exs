@@ -22,7 +22,6 @@
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
     {CoreWeb.FileUploader, [max_file_size: 100_000_000]},
-    {Oban, [plugins: []]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -70,7 +69,7 @@
     {:feldspar_data_donation, [path: "/home/next/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "APP_NAME"},
-    {:oban_unknown_plugins, []},
+    {:oban_plugins, [enabled: [], schedule_overrides: []]},
     {:paper,
      [
        import_batch_size: 100,

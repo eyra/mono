@@ -164,26 +164,6 @@ defmodule Core.RuntimeConfig do
   end
 
   @doc """
-  Oban plugins for the names in `ENABLED_OBAN_PLUGINS`.
-
-  `table` maps each valid name to `{:plugin, plugin}` or `{:cron, crontab_entry}`.
-  Plugins come in table order, followed by one `Oban.Plugins.Cron` holding the
-  crontab entries of every enabled cron name, also in table order. Returns
-  `{plugins, unknown_names}`.
-  """
-  def oban_plugins(env, table) do
-    enabled = list(env["ENABLED_OBAN_PLUGINS"])
-    known = Enum.map(table, &elem(&1, 0))
-
-    selected = Enum.filter(table, fn {name, _} -> name in enabled end)
-    plugins = for {_, {:plugin, plugin}} <- selected, do: plugin
-    crontab = for {_, {:cron, entry}} <- selected, do: entry
-    cron = if crontab == [], do: [], else: [{Oban.Plugins.Cron, crontab: crontab}]
-
-    {plugins ++ cron, Enum.uniq(enabled -- known)}
-  end
-
-  @doc """
   Logs the setup the runtime config chose, never values: database TLS, mail
   adapter, S3 endpoint and cluster size. Warns about unknown Oban plugin names.
   """
@@ -200,7 +180,7 @@ defmodule Core.RuntimeConfig do
         "cluster_hosts=#{length(Core.Env.get(:dist_hosts, []))}"
     )
 
-    case Core.Env.get(:oban_unknown_plugins, []) do
+    case Core.ObanConfig.unknown_plugins(Core.SaaS.oban_crons(), Core.Env.get(:oban_plugins, [])) do
       [] ->
         :ok
 

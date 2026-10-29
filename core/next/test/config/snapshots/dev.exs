@@ -29,24 +29,6 @@
      ]},
     {CoreWeb.FileUploader, [max_file_size: 100_000_000]},
     {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
-    {Oban,
-     [
-       plugins: [
-         {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
-         {Oban.Plugins.Cron,
-          [
-            crontab: [
-              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker},
-              {"* * * * *", Systems.Fund.PayInExpirationWorker},
-              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
-              {"0 * * * *", Systems.Fund.AutoApproveWorker}
-            ]
-          ]}
-       ]
-     ]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -123,7 +105,20 @@
     {:feldspar_data_donation, [path: "/app/data/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "Next [dev]"},
-    {:oban_unknown_plugins, []},
+    {:oban_plugins,
+     [
+       enabled: [
+         "pruner",
+         "lifeline",
+         "advert_expiration",
+         "data_donation_cleanup",
+         "pay_in_expiration",
+         "payment_reconciliation",
+         "auth_code_cleanup",
+         "auto_approve"
+       ],
+       schedule_overrides: [data_donation_cleanup: "FELDSPAR_CLEANUP_SCHEDULE"]
+     ]},
     {:paper,
      [
        import_batch_size: 100,

@@ -15,8 +15,9 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `saas_config.exs`: the `Core.SaaS` callbacks (start pages, menus, title,
       signed-in pages), the SaaS app config and account and admin tab order
     * `runtime.exs`: the children `Core.Application` starts, and per env fixture
-      of `mix config.snapshot` the Oban queues and rate quotas it starts them with
-      and the effective feature flags
+      of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
+      unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
+      feature flags
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `CoreWeb.Router` is compile-connected to
 
@@ -206,10 +207,15 @@ defmodule Mix.Tasks.Nova.Snapshot do
     deployments =
       for fixture <- Mix.Tasks.Config.Snapshot.fixtures() do
         core = deployment_config(saas, fixture)
+        oban_plugins = Keyword.get(core, :oban_plugins, [])
+        oban = Core.Application.oban_config(core[Oban], oban_plugins)
 
         {fixture.name,
          [
-           oban_queues: oban_queues(core[Oban]),
+           oban_queues: oban_queues(oban),
+           oban_plugins: oban_plugins(oban),
+           oban_unknown_plugins:
+             Core.ObanConfig.unknown_plugins(Core.SaaS.oban_crons(), oban_plugins),
            rate_quotas: rate_quotas(core[:rate]),
            features: features(core)
          ]}
@@ -223,7 +229,7 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp oban_queues(config) do
     node_queue = :"storage_delivery_local_#{Node.self()}"
 
-    case Core.Application.oban_config(config)[:queues] do
+    case config[:queues] do
       false ->
         false
 
@@ -235,6 +241,17 @@ defmodule Mix.Tasks.Nova.Snapshot do
         end)
         |> Enum.sort()
     end
+  end
+
+  # The crontab is sorted: Oban.Plugins.Cron does not depend on its order.
+  defp oban_plugins(config) do
+    Enum.map(Keyword.get(config, :plugins, []), fn
+      {Oban.Plugins.Cron, opts} ->
+        {Oban.Plugins.Cron, Keyword.update!(opts, :crontab, &Enum.sort/1)}
+
+      plugin ->
+        plugin
+    end)
   end
 
   # Sorted by service only: the order of one service's quotas is kept.

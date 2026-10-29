@@ -30,6 +30,9 @@ defmodule Systems.Account.System do
     ]
   end
 
+  # Prune auth codes past their validity window every hour
+  def oban_crons, do: [auth_code_cleanup: {"0 * * * *", Systems.Account.AuthCodeCleanupWorker}]
+
   def rate_quotas do
     [
       [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local],
