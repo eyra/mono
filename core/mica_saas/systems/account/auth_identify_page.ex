@@ -130,7 +130,7 @@ defmodule Self.Account.AuthIdentifyPage do
               testid="auth-email-input"
               placeholder={dgettext("eyra-account", "auth.email.placeholder")}
             />
-            <div class="mt-[6px]" />
+            <.spacing value="M" />
             <Button.dynamic
               action={%{type: :submit}}
               face={

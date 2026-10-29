@@ -2,7 +2,8 @@ defmodule CoreWeb.Features.AuthIdentifyErrorTest do
   @moduledoc """
   An error message under the email field on the sign-in code page stays fully
   visible: a message that wraps to more lines pushes the continue button down
-  instead of running behind it.
+  instead of running behind it. Without an error, the continue button keeps the
+  same gap below the field as on the code entry page.
   """
   use CoreWeb.FeatureCase
   use Core.FeatureFlags.Test
@@ -53,5 +54,45 @@ defmodule CoreWeb.Features.AuthIdentifyErrorTest do
         assert gap >= 0
       end
     )
+  end
+
+  @sessions [[capabilities: @phone_nl_capabilities]]
+  @tag :feature
+  feature "without an error the continue button keeps the gap of the code entry page", %{
+    session: session
+  } do
+    verify_gap =
+      session
+      |> visit("/user/auth/verify?email=gap@example.com")
+      |> assert_has(Query.css(".phx-connected [data-testid='auth-code-input']"))
+      |> gap("auth-code-input", "auth-code-verify-button")
+
+    assert verify_gap == 32
+
+    for path <- ["/user/auth/identify/participant", "/user/auth/identify"] do
+      identify_gap =
+        session
+        |> visit(path)
+        |> assert_has(Query.css(".phx-connected [data-testid='auth-email-input']"))
+        |> gap("auth-email-input", "auth-continue-button")
+
+      assert identify_gap == verify_gap, "#{path}: #{identify_gap}px, code entry: #{verify_gap}px"
+    end
+  end
+
+  defp gap(session, field_testid, button_testid) do
+    session
+    |> execute_script(
+      """
+      const field = document.querySelector(`[data-testid='${arguments[0]}']`).getBoundingClientRect();
+      const button = document.querySelector(`[data-testid='${arguments[1]}']`).getBoundingClientRect();
+      return button.top - field.bottom;
+      """,
+      [field_testid, button_testid],
+      &send(self(), {:gap, &1})
+    )
+
+    assert_received {:gap, gap}
+    gap
   end
 end
