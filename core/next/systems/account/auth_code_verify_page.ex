@@ -3,6 +3,7 @@ defmodule Next.Account.AuthCodeVerifyPage do
 
   on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
   on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
 
   import CoreWeb.Layouts.Stripped.Html
@@ -51,11 +52,13 @@ defmodule Next.Account.AuthCodeVerifyPage do
   def handle_event(
         "verify",
         %{"code" => code},
-        %{assigns: %{email: email, return_to: return_to, creator?: creator?}} = socket
+        %{
+          assigns: %{email: email, return_to: return_to, creator?: creator?, remote_ip: remote_ip}
+        } = socket
       ) do
     code = String.trim(code)
 
-    case Account.Public.verify_otp(email, code) do
+    case Account.Public.verify_otp(email, code, remote_ip) do
       {:ok, user} ->
         payload = %{
           user_id: user && user.id,

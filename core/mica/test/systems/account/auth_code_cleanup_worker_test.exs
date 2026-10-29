@@ -8,6 +8,7 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
   alias Systems.Account
   alias Systems.Account.AuthCodeCleanupWorker
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
 
   @validity_in_minutes 10
 
@@ -58,6 +59,20 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
 
     test "returns :ok when there is nothing to delete" do
       assert :ok = perform_job(AuthCodeCleanupWorker, %{})
+    end
+
+    test "deletes rate counters whose window has ended" do
+      Rate.Public.increment_counter("ended", 3600)
+
+      Repo.update_all(Rate.CounterModel,
+        set: [window_start: ~U[2000-01-01 00:00:00Z], expires_at: ~U[2000-01-01 01:00:00Z]]
+      )
+
+      Rate.Public.increment_counter("current", 3600)
+
+      assert :ok = perform_job(AuthCodeCleanupWorker, %{})
+      assert 1 = Rate.Public.counter("current", 3600)
+      assert 1 = Repo.aggregate(Rate.CounterModel, :count)
     end
   end
 

@@ -60,7 +60,8 @@ config :logger, :console,
     :method,
     :path,
     :duration_ms,
-    :status
+    :status,
+    :remote_ip
   ]
 
 config :plug, :statuses, %{

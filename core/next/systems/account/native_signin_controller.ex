@@ -40,7 +40,7 @@ defmodule Next.Account.NativeSigninController do
     with_otp(conn, fn ->
       email = String.trim(email)
 
-      case Account.Public.verify_otp(email, String.trim(code)) do
+      case Account.Public.verify_otp(email, String.trim(code), client_ip(conn)) do
         {:ok, user} -> sign_in(conn, %{user_id: user && user.id, email: email}, return_to(params))
         {:error, :invalid} -> error(conn, :unprocessable_entity, "invalid_code")
         {:error, :not_found} -> error(conn, :unprocessable_entity, "code_expired")
@@ -54,7 +54,7 @@ defmodule Next.Account.NativeSigninController do
   defp route_email(conn, email, return_to) do
     case Account.EmailRouter.route(email) do
       :otp ->
-        case Account.Public.generate_otp(email) do
+        case Account.Public.generate_otp(email, client_ip(conn)) do
           :ok -> respond(conn, %{next: "code"})
           {:error, :rate_limited} -> error(conn, :too_many_requests, "rate_limited")
         end
@@ -85,6 +85,10 @@ defmodule Next.Account.NativeSigninController do
 
   defp redirect_to(true, return_to), do: ReturnTo.append(~p"/user/onboarding", return_to)
   defp redirect_to(false, return_to), do: return_to
+
+  # The client's address from CoreWeb.Plug.RemoteIp; the sign-in code limits
+  # count by it.
+  defp client_ip(%Plug.Conn{remote_ip: remote_ip}), do: remote_ip |> :inet.ntoa() |> to_string()
 
   defp return_to(%{"return_to" => return_to}), do: ReturnTo.sanitize(return_to)
   defp return_to(_params), do: nil

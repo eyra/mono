@@ -491,10 +491,28 @@ defmodule Systems.Account.Public do
 
   ## OTP
 
-  def generate_otp(email) when is_binary(email) do
+  @doc """
+  Emails a new sign-in code to `email`, replacing any earlier code for it.
+  `remote_ip` is the client's address (`CoreWeb.Plug.RemoteIp`), which the
+  limits of `Account.AuthCodeLimits` count by.
+  """
+  def generate_otp(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
     email = Account.AuthCodeModel.normalize_email(email)
-    Rate.Public.request_permission(:otp_request, email, 1)
 
+    # The totals per email address count last, so only requests that send a
+    # code use them up.
+    with true <- Account.AuthCodeLimits.allow_request?(email, remote_ip),
+         :granted <- Rate.Public.request_permission(:otp_request, email, 1),
+         true <- Account.AuthCodeLimits.count_request?(email) do
+      send_otp(email)
+    else
+      false -> {:error, :rate_limited}
+    end
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  defp send_otp(email) do
     Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
 
     user = get_user_by_email(email)
@@ -503,8 +521,6 @@ defmodule Systems.Account.Public do
 
     Account.UserNotifier.deliver_otp(email, code)
     :ok
-  rescue
-    Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
 
   @doc """
@@ -518,17 +534,32 @@ defmodule Systems.Account.Public do
     deleted_count
   end
 
-  def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+  @doc """
+  Checks `code` against the active sign-in code of `email`. When a limit of
+  `Account.AuthCodeLimits` refuses the check, the result is
+  `{:error, :max_attempts}` and the code's own attempts stay unused.
+  """
+  def verify_otp(email, code, remote_ip)
+      when is_binary(email) and is_binary(code) and is_binary(remote_ip) do
     email = Account.AuthCodeModel.normalize_email(email)
 
     case Account.AuthCodeModel.active_query(email) |> Repo.one() do
-      nil -> {:error, :not_found}
-      %{id: id} -> verify_otp_attempt(id, code)
+      nil ->
+        {:error, :not_found}
+
+      auth_code ->
+        if Account.AuthCodeModel.attempts_left?(auth_code) and
+             Account.AuthCodeLimits.allow_check?(email, remote_ip) and
+             Account.AuthCodeLimits.count_check?(email),
+           do: verify_otp_attempt(auth_code, email, code),
+           else: {:error, :max_attempts}
     end
   end
 
-  # The attempt is counted before the code is compared, whether it matches or not.
-  defp verify_otp_attempt(id, code) do
+  # The attempt is counted before the code is compared, whether it matches or
+  # not. A check that finds no attempts left after all (another request took
+  # the last one) is taken back from the totals per email address.
+  defp verify_otp_attempt(%{id: id}, email, code) do
     case Repo.update_all(Account.AuthCodeModel.attempt_query(id), inc: [attempts: 1]) do
       {1, [token]} ->
         if Account.AuthCodeModel.matches?(token, code),
@@ -536,6 +567,8 @@ defmodule Systems.Account.Public do
           else: {:error, :invalid}
 
       {0, _} ->
+        Account.AuthCodeLimits.uncount_check(email)
+
         if Repo.exists?(from(t in Account.AuthCodeModel, where: t.id == ^id)),
           do: {:error, :max_attempts},
           else: {:error, :not_found}
