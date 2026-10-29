@@ -22,7 +22,7 @@ defmodule Next.Account.NativeProviderController do
          true <- NativeHandoff.valid_code_challenge?(code_challenge),
          {:ok, path} <- provider_path(provider, params["login_hint"]) do
       conn
-      |> NativeHandoff.start(code_challenge, return_to(params))
+      |> NativeHandoff.start(provider, code_challenge, return_to(params))
       |> redirect(to: path)
     else
       :unavailable -> NativeHandoff.return_error(conn, "unavailable")
@@ -45,7 +45,9 @@ defmodule Next.Account.NativeProviderController do
   end
 
   defp provider_path("surfconext", _login_hint) do
-    if Methods.provider?(:surfconext), do: {:ok, "/auth/surfconext"}, else: :unavailable
+    if Methods.provider?(:surfconext) and feature_enabled?(:surfconext_sign_in),
+      do: {:ok, "/auth/surfconext"},
+      else: :unavailable
   end
 
   defp provider_path("centerdata", _login_hint) do

@@ -268,16 +268,23 @@ GET /user/auth/native/provider/<provider>?code_challenge=<challenge>&code_challe
 - `return_to`: kept like the native calls' `return_to`, and returned by redeem.
 
 Core sets a signed `_next_native_sign_in` cookie (10 minutes, HttpOnly,
-`SameSite=Lax`) holding the challenge and `return_to`, and redirects to its own
-start of the provider. Everything after that is the web flow: the provider, its
-callback, and the move-your-account page when the email already has an account
-with another sign-in method.
+`SameSite=Lax`) holding the provider, the challenge and `return_to`, and
+redirects to its own start of the provider. Everything after that is the web
+flow: the provider, its callback, and the move-your-account page when the email
+already has an account with another sign-in method.
+
+Only the flow of the provider the start names goes back to the app: its
+callback, and the confirm or decline on its move-your-account page. Other
+sign-ins in the same browser (password, email code, another provider) and the
+sign-in pages work as on the site while the cookie is there. A start with an
+error leaves the browser's Core session as it was.
 
 ### Callback
 
-Where the web flow would sign the user in and redirect, a sheet with the cookie
-is instead redirected to the callback URL on Core's own host, and the cookie is
-removed. The sheet keeps no Core session.
+Where the provider's flow ends, a sheet with the cookie is redirected to the
+callback URL on Core's own host, and the cookie is removed. A sign-in that
+succeeds leaves the sheet without a Core session, so a Core session in the
+same browser ends with it.
 
 ```text
 https://<core host>/user/auth/native/callback?token=<token>
@@ -297,11 +304,16 @@ that opens the callback URL itself is sent to `/user/signin`.
 | --- | --- |
 | `invalid_request` | Unknown provider, or `code_challenge` missing, not `S256`, or not 43 Base64url characters. |
 | `unavailable` | The provider is off on this Core. |
-| `failed` | The sign-in ended on Core's sign-in page with an error: the provider's state was lost or the account could not be registered. |
-| `cancelled` | The sign-in ended on Core's sign-in pages without an error, for example when the user declined moving their account to the provider. |
+| `failed` | The provider's flow ended with an error: its sign-in state was lost, the identity it returned was refused, or the account could not be registered. |
+| `cancelled` | The user declined moving their account to the provider. |
 
 When the user closes the sheet, the app gets
 `ASWebAuthenticationSessionError.canceledLogin` from iOS and nothing from Core.
+
+The cookie lasts 10 minutes. When the provider's flow ends later than that, the
+sheet continues as a web sign-in on the site and the app gets nothing. The app
+therefore closes the sheet itself (`cancel()`) 10 minutes after it opened it,
+and handles that like `canceledLogin`.
 
 ### Redeem
 
@@ -334,10 +346,10 @@ signed in to the account the provider returned. After a `200` the app reruns
 ### Where this code lives
 
 In Next: `Next.Account.NativeProviderController` (start and callback URL),
-`Next.Account.NativeHandoff` (the cookie, the token, and the redeem checks),
-`Next.Account.NativeSheetReturn` (the `cancelled` and `failed` results on the
-sign-in pages) and `NativeSigninController.redeem/2`. Mica's
-`Account.UserAuth.log_in_user/4` asks the SaaS's sign-in handoffs
-(`Core.System.sign_in_handoffs/0`, `Systems.Account.SignInHandoff`) before it
-starts a session, and `Account.Public.generate_one_time_token/2` and
-`take_one_time_token/3` keep the single-use half of the token in `users_tokens`.
+`Next.Account.NativeHandoff` (the cookie, the token, and the redeem checks) and
+`NativeSigninController.redeem/2`. In Mica, the Google, SURFconext, Centerdata
+and mock flows and the move-your-account confirm and decline end through
+`Systems.Account.SignInHandoff`, which asks the SaaS's sign-in handoffs
+(`Core.System.sign_in_handoffs/0`) first; other sign-ins don't.
+`Account.Public.generate_one_time_token/2` and `take_one_time_token/3` keep the
+single-use half of the token in `users_tokens`.

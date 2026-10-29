@@ -46,6 +46,7 @@ defmodule Next.Account.NativeHandoffTest do
 
     set_feature_flag(:member_google_sign_in, true)
     set_feature_flag(:centerdata_sign_in, true)
+    set_feature_flag(:surfconext_sign_in, true)
     :ok
   end
 
@@ -92,6 +93,9 @@ defmodule Next.Account.NativeHandoffTest do
 
       set_feature_flag(:member_google_sign_in, false)
       assert_app_callback(start(conn, "google"), error: "unavailable")
+
+      set_feature_flag(:surfconext_sign_in, false)
+      assert_app_callback(start(conn, "surfconext"), error: "unavailable")
     end
   end
 
@@ -191,9 +195,6 @@ defmodule Next.Account.NativeHandoffTest do
       conn = start(conn, "mock", login_hint: user.email)
       conn = conn |> recycle() |> get("/auth/mock/callback?email=#{user.email}")
       conn = conn |> recycle() |> post("/auth/mock/transfer/decline")
-      assert redirected_to(conn) == "/user/auth/identify"
-
-      conn = conn |> recycle() |> get("/user/auth/identify")
 
       assert_app_callback(conn, error: "cancelled")
       assert %{max_age: 0} = conn.resp_cookies[@cookie]
@@ -203,9 +204,24 @@ defmodule Next.Account.NativeHandoffTest do
       conn = start(conn, "surfconext")
       # No provider state in the session: the callback fails like an expired attempt.
       conn = conn |> recycle() |> get("/auth/surfconext/callback?code=test")
-      assert redirected_to(conn) == "/user/signin"
 
-      conn = conn |> recycle() |> get("/user/signin")
+      assert_app_callback(conn, error: "failed")
+      assert %{max_age: 0} = conn.resp_cookies[@cookie]
+    end
+
+    test "a refused provider identity sends `failed` to the app", %{conn: conn} do
+      with_oidc(Account.Auth.Centerdata,
+        base_url: "https://messpanel.test.centerdata.nl",
+        userinfo: %{
+          "sub" => "native-2",
+          "email" => "panel-2@example.com",
+          "email_verified" => false
+        }
+      )
+
+      conn = start(conn, "centerdata")
+      conn = conn |> recycle() |> get("/auth/centerdata")
+      conn = conn |> recycle() |> get("/auth/centerdata/callback?code=test")
 
       assert_app_callback(conn, error: "failed")
     end
@@ -315,6 +331,90 @@ defmodule Next.Account.NativeHandoffTest do
     end
   end
 
+  describe "other sign-ins in a browser with a marked sheet" do
+    setup %{conn: conn} do
+      %{conn: conn |> start("surfconext") |> recycle()}
+    end
+
+    test "a password sign-in signs in as before", %{conn: conn} do
+      set_feature_flag(:password_sign_in, true)
+      password = Factories.valid_user_password()
+      user = Factories.insert!(:member, %{password: password})
+
+      conn =
+        post(conn, "/user/session", %{"user" => %{"email" => user.email, "password" => password}})
+
+      assert_web_sign_in(conn, user)
+    end
+
+    test "an email-code sign-in signs in as before", %{conn: conn} do
+      set_feature_flag(:otp, true)
+      user = Factories.insert!(:member)
+
+      token =
+        Phoenix.Token.sign(Endpoint, "otp-redeem", %{
+          user_id: user.id,
+          email: user.email,
+          creator?: false,
+          return_to: nil
+        })
+
+      conn = get(conn, "/user/auth/redeem?token=#{token}")
+
+      assert_web_sign_in(conn, user)
+    end
+
+    test "the sign-in after a password change signs in as before", %{conn: conn} do
+      password = Factories.valid_user_password()
+      user = Factories.insert!(:member, %{password: password})
+      {:ok, conn: conn, user: _} = login(user, %{conn: conn})
+
+      conn =
+        put(conn, "/user/settings", %{
+          "action" => "update_password",
+          "current_password" => password,
+          "user" => %{
+            "password" => "New-" <> password,
+            "password_confirmation" => "New-" <> password
+          }
+        })
+
+      assert redirected_to(conn) == "/user/settings"
+      assert_web_sign_in(conn, user)
+    end
+
+    test "a sign-in through another provider signs in as before", %{conn: conn} do
+      email = unique_email("other-provider", "mock.com")
+
+      conn = get(conn, "/auth/mock/callback?email=#{email}")
+
+      assert redirected_to(conn) == "/user/onboarding"
+      assert_web_sign_in(conn, Account.Public.get_user_by_email(email))
+    end
+
+    test "the sign-in pages render as before", %{conn: conn} do
+      assert html_response(get(conn, "/user/signin"), 200)
+
+      assert html_response(
+               get(conn, "/user/auth/identify/participant?return_to=%2Fassignment%2F1"),
+               200
+             )
+    end
+  end
+
+  describe "a start URL with a bad provider or challenge" do
+    test "leaves a signed-in browser signed in", %{conn: conn} do
+      user = Factories.insert!(:member)
+      {:ok, conn: conn, user: _} = login(user, %{conn: conn})
+
+      conn = start(conn, "unknown")
+
+      assert_app_callback(conn, error: "invalid_request")
+      refute conn.private[:plug_session_info] == :drop
+      assert get_session(conn, :user_token)
+    end
+  end
+
   describe "apple-app-site-association" do
     test "lets the apps catch the callback URL in the sign-in sheet", %{conn: conn} do
       assert %{"webcredentials" => %{"apps" => apps}} =
@@ -370,6 +470,16 @@ defmodule Next.Account.NativeHandoffTest do
     assert String.starts_with?(location, Endpoint.url())
     assert get_resp_header(conn, "cache-control") == ["no-store"]
     URI.decode_query(query)
+  end
+
+  defp assert_web_sign_in(conn, %{id: user_id}) do
+    refute redirected_to(conn) =~ "/user/auth/native/callback"
+    refute conn.private[:plug_session_info] == :drop
+
+    assert %{context: "session", user_id: ^user_id} =
+             Repo.get_by(Account.UserTokenModel, token: get_session(conn, :user_token))
+
+    refute Map.has_key?(conn.resp_cookies, @cookie)
   end
 
   defp assert_mobile_session(conn, user_id) do

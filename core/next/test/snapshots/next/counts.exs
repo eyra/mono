@@ -17,7 +17,6 @@
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",
     "mica/systems/account/auth/surfconext.ex",
-    "mica/systems/assignment/_public.ex",
-    "next/systems/account/native_sheet_return.ex"
+    "mica/systems/assignment/_public.ex"
   ]
 ]

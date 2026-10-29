@@ -4,11 +4,13 @@ defmodule Next.Account.NativeHandoff do
 
   The app opens the provider in the system sign-in sheet, which keeps its own
   cookies. `NativeProviderController.start/2` marks the sheet with a cookie
-  that holds the app's code challenge; when the provider's callback signs the
-  user in, `hand_off/3` redirects the sheet to the app's callback URL with a
-  one-time token instead of starting a session there. The app redeems the
-  token in its own web view (`NativeSigninController.redeem/2`) together with
-  the code verifier.
+  that holds the provider and the app's code challenge. When that provider's
+  flow signs the user in, `hand_off/4` redirects the sheet to the app's
+  callback URL with a one-time token instead of starting a session there; when
+  it ends without signing in, `hand_off_unfinished/3` sends the result there.
+  Other sign-ins in the same browser are left alone. The app redeems the token
+  in its own web view (`NativeSigninController.redeem/2`) together with the
+  code verifier.
 
   See the "Identity providers in the sign-in sheet" section of
   `docs/architecture/mobile/designs/authentication-session.md`.
@@ -33,9 +35,11 @@ defmodule Next.Account.NativeHandoff do
 
   def valid_code_challenge?(_code_challenge), do: false
 
-  @doc "Marks the sheet: the next sign-in in it goes back to the app."
-  def start(conn, code_challenge, return_to) do
-    put_resp_cookie(conn, @cookie, %{code_challenge: code_challenge, return_to: return_to},
+  @doc "Marks the sheet: the next sign-in through `provider` in it goes back to the app."
+  def start(conn, provider, code_challenge, return_to) when is_binary(provider) do
+    marker = %{provider: provider, code_challenge: code_challenge, return_to: return_to}
+
+    put_resp_cookie(conn, @cookie, marker,
       sign: true,
       max_age: @cookie_max_age,
       http_only: true,
@@ -43,18 +47,30 @@ defmodule Next.Account.NativeHandoff do
     )
   end
 
-  @doc "Whether the request comes from a sheet that `start/3` marked."
-  def pending?(conn), do: pending(conn) != nil
-
   @impl Systems.Account.SignInHandoff
-  def hand_off(conn, user, first_time?) do
-    case pending(conn) do
+  def hand_off(conn, provider, user, first_time?) do
+    case pending(conn, provider) do
       %{code_challenge: code_challenge, return_to: return_to} ->
         token = issue(user, first_time?, code_challenge, return_to)
-        {:ok, return_to_app(conn, token: token)}
+
+        # The sheet keeps no session: the app's web view gets one when it redeems.
+        conn =
+          conn
+          |> configure_session(drop: true)
+          |> return_to_app(token: token)
+
+        {:ok, conn}
 
       nil ->
         :skip
+    end
+  end
+
+  @impl Systems.Account.SignInHandoff
+  def hand_off_unfinished(conn, provider, result) do
+    case pending(conn, provider) do
+      %{} -> {:ok, return_to_app(conn, error: Atom.to_string(result))}
+      nil -> :skip
     end
   end
 
@@ -69,7 +85,7 @@ defmodule Next.Account.NativeHandoff do
     do: "#{Endpoint.url()}/user/auth/native/callback?#{URI.encode_query(params)}"
 
   @doc """
-  Redeems a token of `hand_off/3` with the app's code verifier. The token is
+  Redeems a token of `hand_off/4` with the app's code verifier. The token is
   used up by the first attempt, whether the verifier matches or not.
   """
   def redeem(token, code_verifier) when is_binary(token) and is_binary(code_verifier) do
@@ -112,19 +128,20 @@ defmodule Next.Account.NativeHandoff do
       else: {:error, :verifier_mismatch}
   end
 
-  # The sheet keeps no session: the app's web view gets one when it redeems.
   defp return_to_app(conn, params) do
     conn
     |> delete_resp_cookie(@cookie, http_only: true, same_site: "Lax")
-    |> configure_session(drop: true)
     |> put_resp_header("cache-control", "no-store")
     |> Phoenix.Controller.redirect(external: callback_url(params))
   end
 
-  defp pending(conn) do
-    conn
-    |> fetch_cookies(signed: [@cookie])
-    |> Map.fetch!(:cookies)
-    |> Map.get(@cookie)
+  # The marker of a sheet that `start/4` marked for `provider`, or nil.
+  defp pending(conn, provider) do
+    provider = Atom.to_string(provider)
+
+    case conn |> fetch_cookies(signed: [@cookie]) |> Map.fetch!(:cookies) |> Map.get(@cookie) do
+      %{provider: ^provider} = marker -> marker
+      _ -> nil
+    end
   end
 end

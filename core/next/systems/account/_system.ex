@@ -4,12 +4,8 @@ defmodule Next.Account.System do
 
   def override_routes do
     quote do
-      pipeline :native_sheet_return do
-        plug(Next.Account.NativeSheetReturn)
-      end
-
       scope "/", Next do
-        pipe_through([:browser, :native_sheet_return, :redirect_if_user_is_authenticated])
+        pipe_through([:browser, :redirect_if_user_is_authenticated])
         live("/user/signin", Account.SigninPage)
         live("/user/signin/:user_type", Account.SigninPage)
         live("/user/auth/identify", Account.AuthIdentifyPage, :creator, as: :auth_identify)

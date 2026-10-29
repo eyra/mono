@@ -6,6 +6,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
 
   alias Systems.Account
   alias Systems.Account.Auth
+  alias Systems.Account.SignInHandoff
 
   def confirm(conn, %{"idp" => "mock"}) do
     case get_session(conn, :idp_transfer) do
@@ -16,7 +17,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
           {:ok, _} ->
             conn
             |> delete_session(:idp_transfer)
-            |> Account.UserAuth.log_in_user(user, false)
+            |> SignInHandoff.sign_in(:mock, user, false, &Account.UserAuth.log_in_user/3)
 
           {:error, _step, _reason, _changes} ->
             conn |> send_resp(422, "Transfer failed") |> halt()
@@ -50,7 +51,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
           {:ok, %{selected_identity: _}} ->
             conn
             |> delete_session(:idp_transfer)
-            |> Account.UserAuth.log_in_user(user, false)
+            |> SignInHandoff.sign_in(satellite_key, user, false, &Account.UserAuth.log_in_user/3)
 
           {:error, _step, _reason, _changes} ->
             conn |> send_resp(422, "Transfer failed") |> halt()
@@ -66,10 +67,21 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
       %{"idp" => ^idp} ->
         conn
         |> delete_session(:idp_transfer)
-        |> redirect(to: ~p"/user/auth/identify")
+        |> SignInHandoff.end_sign_in(
+          provider(idp),
+          :cancelled,
+          &redirect(&1, to: ~p"/user/auth/identify")
+        )
 
       _ ->
         conn |> send_resp(404, "Not found") |> halt()
     end
+  end
+
+  defp provider("mock"), do: :mock
+
+  defp provider(idp) do
+    {_provider, satellite_key} = Map.fetch!(@providers, idp)
+    satellite_key
   end
 end
