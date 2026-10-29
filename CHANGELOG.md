@@ -11,7 +11,7 @@
 
 ## Unreleased
 
-* Added - A storage endpoint on built-in storage has a "Participants" tab: per participant the number of sessions (the part of the donation key before the first `/`), the tasks, the number of files and the last donation. It reads the file names only, not the donations. Upgrading: no action needed.
+* Added - A storage endpoint on built-in storage has a "Participants" tab: per participant the number of sessions (the part of the donation key before the first `/`, or before the first `-` in a key without `/`, as Feldspar apps name them), the tasks, the number of files and the last donation. It reads the file names only, not the donations. Upgrading: no action needed.
 * Changed - The storage export (built-in storage) puts each participant's donations in a folder named after the participant id; donations without a participant go to `(no participant)`. Upgrading: no action needed; scripts that read the export zip look one folder deeper.
 * Fixed - Built-in storage on the local filesystem (no S3) stores donations whose key contains `/`, such as `run1/summary`, in subfolders and lists them; before, such a donation failed to store. A key whose `..` segments lead out of the endpoint's folder is refused. Upgrading: no action needed.
 * Fixed - Donations that arrive in the same millisecond each keep their own content. Before, they shared a temporary file, so the last one overwrote the others and every one of them was delivered with that content under its own key; a Feldspar app that donates a trial and its result (or a result and its summary) at once lost one of them. Upgrading: no action needed.

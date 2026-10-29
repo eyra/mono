@@ -21,12 +21,20 @@ defmodule Systems.Storage.Donations do
     end
   end
 
-  @doc "The part of the key before the first `/`: one run of a tool."
+  @doc """
+  One run of a tool: the part of the key before the first `/` (`<run>/summary`),
+  or, in a key without `/`, before the first `-` (Feldspar's `<session>-<name>`).
+  """
   def session(path) when is_binary(path) do
     case key(path) do
       nil -> nil
-      key -> key |> String.split("/", parts: 2) |> hd()
+      key -> session_of(key)
     end
+  end
+
+  defp session_of(key) do
+    separator = if String.contains?(key, "/"), do: "/", else: "-"
+    key |> String.split(separator, parts: 2) |> hd()
   end
 
   def tool(path) when is_binary(path) do
