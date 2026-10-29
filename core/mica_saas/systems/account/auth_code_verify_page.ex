@@ -131,10 +131,10 @@ defmodule Self.Account.AuthCodeVerifyPage do
               <input type="hidden" name="code" data-otp-value />
             </div>
             <%= if @error do %>
-              <.spacing value="XS" />
-              <Text.caption color="text-warning" padding="" margin=""><%= @error %></Text.caption>
+              <.spacing value="XXS" />
+              <Text.caption color="text-warning" padding="" margin="" testid="auth-code-error"><%= @error %></Text.caption>
             <% end %>
-            <.spacing value="M" />
+            <.spacing value="S" />
             <Button.dynamic
               action={%{type: :submit}}
               face={
