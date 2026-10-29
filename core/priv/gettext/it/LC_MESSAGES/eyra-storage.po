@@ -312,3 +312,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "donation.table.truncated"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.all_fields"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.fewer_fields"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.share"
+msgstr ""

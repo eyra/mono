@@ -1,6 +1,7 @@
 defmodule Systems.Storage.DonationPage do
   use Systems.Content.Composer, :live_workspace
 
+  alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Navigation
   alias Systems.Storage
 
@@ -23,9 +24,18 @@ defmodule Systems.Storage.DonationPage do
       :ok,
       socket
       |> assign(path: path, donation: Storage.DonationView.read(endpoint, path))
-      |> assign(run: run(endpoint, path))
+      |> assign(run: run(endpoint, path), all_fields?: false)
       |> update_view_model()
     }
+  end
+
+  @impl true
+  def handle_event(
+        "toggle_all_fields",
+        _payload,
+        %{assigns: %{all_fields?: all_fields?}} = socket
+      ) do
+    {:noreply, socket |> assign(all_fields?: not all_fields?) |> update_view_model()}
   end
 
   defp run(endpoint, path) do
@@ -79,6 +89,10 @@ defmodule Systems.Storage.DonationPage do
       <div class="border-[2px] border-grey4 rounded-lg p-4">
         <Storage.RunChartSVG.charts charts={@charts} labels={@labels} />
       </div>
+      <%= if @toggle do %>
+        <.spacing value="XS" />
+        <div data-testid="all-fields-toggle"><Button.dynamic {@toggle} /></div>
+      <% end %>
     </div>
     """
   end

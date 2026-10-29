@@ -17,7 +17,8 @@ defmodule Systems.Storage.DonationPageBuilder do
       buttons: [back_button(endpoint_id)],
       blocks:
         [header(path, donation, timezone)] ++
-          run_charts(Map.get(assigns, :run)) ++ sections(donation)
+          run_charts(Map.get(assigns, :run), Map.get(assigns, :all_fields?, false)) ++
+          sections(donation)
     }
   end
 
@@ -31,17 +32,37 @@ defmodule Systems.Storage.DonationPageBuilder do
     }
   end
 
-  defp run_charts(nil), do: []
+  defp run_charts(nil, _all_fields?), do: []
 
-  defp run_charts(prompts) do
-    case Storage.RunChart.charts(prompts) do
+  defp run_charts(prompts, all_fields?) do
+    case Storage.RunChart.charts(prompts, all?: all_fields?) do
       [] ->
         []
 
       charts ->
         labels = Storage.RunChartSVG.labels()
-        [{:run_charts, %{title: labels.title, labels: labels, charts: charts}}]
+
+        [
+          {:run_charts,
+           %{
+             title: labels.title,
+             labels: labels,
+             charts: charts,
+             toggle: all_fields_toggle(Storage.RunChart.hidden_count(prompts), all_fields?)
+           }}
+        ]
     end
+  end
+
+  defp all_fields_toggle(0, _all_fields?), do: nil
+
+  defp all_fields_toggle(hidden, all_fields?) do
+    label =
+      if all_fields?,
+        do: dgettext("eyra-storage", "donation.chart.fewer_fields"),
+        else: dgettext("eyra-storage", "donation.chart.all_fields", count: hidden)
+
+    %{action: %{type: :send, event: "toggle_all_fields"}, face: %{type: :label, label: label}}
   end
 
   defp page_title(nil), do: dgettext("eyra-storage", "tabbar.item.data")

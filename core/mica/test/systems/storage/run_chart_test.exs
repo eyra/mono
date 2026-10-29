@@ -46,7 +46,96 @@ defmodule Systems.Storage.RunChartTest do
       }
     ]
 
-    assert prompts |> RunChart.charts() |> Enum.map(& &1.column) == ["rt_ms", "trial_index"]
+    assert prompts |> RunChart.charts(all?: true) |> Enum.map(& &1.column) == [
+             "rt_ms",
+             "trial_index"
+           ]
+  end
+
+  describe "charts that mean something" do
+    @run [
+      %{
+        label: "symbols / practice",
+        records: [
+          [
+            {"trial_index", 1},
+            {"option_1", 238},
+            {"time_limit_ms", 8000},
+            {"correct", 1},
+            {"rt_ms", 900}
+          ],
+          [
+            {"trial_index", 2},
+            {"option_1", 504},
+            {"time_limit_ms", 8000},
+            {"correct", 0},
+            {"rt_ms", 700}
+          ]
+        ]
+      },
+      %{
+        label: "symbols / test",
+        records: [
+          [
+            {"trial_index", 1},
+            {"option_1", 17},
+            {"time_limit_ms", 5000},
+            {"correct", 1},
+            {"rt_ms", 650}
+          ],
+          [
+            {"trial_index", 2},
+            {"option_1", 33},
+            {"time_limit_ms", 5000},
+            {"correct", 1},
+            {"rt_ms", 640}
+          ]
+        ]
+      }
+    ]
+
+    test "shows a measurement and a 0/1 field" do
+      assert @run |> RunChart.charts() |> Enum.map(&{&1.type, &1.column}) == [
+               dots: "rt_ms",
+               share: "correct"
+             ]
+    end
+
+    test "leaves out a field ending in _ms that is one setting per Prompt" do
+      refute "time_limit_ms" in (@run |> RunChart.charts() |> Enum.map(& &1.column))
+    end
+
+    test "adds the other fields that vary when asked for all fields" do
+      assert @run |> RunChart.charts(all?: true) |> Enum.map(& &1.column) == [
+               "rt_ms",
+               "correct",
+               "trial_index",
+               "option_1",
+               "time_limit_ms"
+             ]
+    end
+
+    test "counts the fields it leaves out" do
+      assert RunChart.hidden_count(@run) == 3
+    end
+
+    test "shows the share of 1 per Prompt" do
+      %{bands: bands} = RunChart.share(@run, "correct")
+
+      assert Enum.map(bands, & &1.bar.label) == ["50%", "100%"]
+    end
+
+    test "draws no bar for a Prompt where every trial has 0" do
+      prompts = [%{label: "p", records: [[{"correct", 0}], [{"correct", 0}]]}]
+
+      assert %{bands: [%{bar: %{label: "0%", path: nil}}]} = RunChart.share(prompts, "correct")
+    end
+
+    test "keeps a bar inside the plot" do
+      %{bands: bands, plot: %{top: top, bottom: bottom}} = RunChart.share(@run, "correct")
+
+      assert Enum.all?(bands, fn %{bar: %{y: y}} -> y >= top and y <= bottom end)
+    end
   end
 
   test "draws one dot per trial with a number" do

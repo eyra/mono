@@ -86,6 +86,26 @@ defmodule Systems.Storage.DonationPageTest do
       assert html |> String.split(~s(r="4")) |> Enum.count() == 1 + 3
     end
 
+    test "leaves a field that is no measurement out of the charts", %{
+      conn: conn,
+      endpoint: endpoint
+    } do
+      {:ok, view, _html} = live(conn, donation_path(endpoint, @summary))
+
+      refute has_element?(view, "g[data-column='trial_index']")
+    end
+
+    test "shows every field that varies after asking for all fields", %{
+      conn: conn,
+      endpoint: endpoint
+    } do
+      {:ok, view, _html} = live(conn, donation_path(endpoint, @summary))
+
+      view |> render_click("toggle_all_fields")
+
+      assert has_element?(view, "g[data-column='trial_index']")
+    end
+
     test "charts the trials of a Prompt whose result has no records", %{
       conn: conn,
       endpoint: endpoint,

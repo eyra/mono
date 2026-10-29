@@ -312,3 +312,15 @@ msgstr "Trial"
 #, elixir-autogen, elixir-format
 msgid "donation.table.truncated"
 msgstr "Showing the first %{shown} of %{total} rows. The export has all of them."
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.all_fields"
+msgstr "Show all fields (%{count} more)"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.fewer_fields"
+msgstr "Show fewer fields"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.share"
+msgstr "% of trials with 1, per Prompt"

@@ -1,10 +1,11 @@
 defmodule Systems.Storage.RunChart do
   @moduledoc """
-  Geometry for dot charts of the trials of a run: one chart per numeric field,
-  one dot per trial in donation order, on one y-axis from 0, with a band per
-  Prompt. Within a band a thin line connects the dots (monotone, so it never
-  overshoots a measured value) and, from 5 trials up, a trend line shows the
-  mean of up to 5 neighbouring trials. Lines stop at each Prompt boundary.
+  Geometry for charts of the trials of a run, with a band per Prompt. A dot
+  chart has one dot per trial in donation order, on one y-axis through 0.
+  Within a band a thin line connects the dots (monotone, so it never overshoots
+  a measured value) and, from 5 trials up, a trend line shows the mean of up to
+  5 neighbouring trials. Lines stop at each Prompt boundary. A share chart has
+  one bar per band: the share of its trials with 1.
   """
 
   @width 1000
@@ -28,36 +29,96 @@ defmodule Systems.Storage.RunChart do
     |> Enum.uniq()
   end
 
-  @doc "A chart per numeric field with more than one value, `rt_ms` first."
-  def charts(prompts) do
-    prompts
-    |> columns()
-    |> Enum.filter(&varies?(prompts, &1))
-    |> Enum.sort_by(&(&1 != "rt_ms"))
+  @doc """
+  The charts that mean something without knowing the Tool, in this order:
+
+  1. a measurement, a field ending in `_ms` that varies within a Prompt, as dots
+     per trial (`rt_ms` first; `time_limit_ms`, a setting per Prompt, stays out);
+  2. a field of only 0 and 1, with both, as the share of 1 per Prompt (`correct`).
+
+  Other fields (codes, positions, clock times, indices) look like numbers but are
+  no measurement; `all?: true` adds every one that varies, as dots.
+  """
+  def charts(prompts, opts \\ []) do
+    varying = prompts |> columns() |> Enum.filter(&varies?(prompts, &1))
+
+    measurements =
+      varying |> Enum.filter(&measurement?(prompts, &1)) |> Enum.sort_by(&(&1 != "rt_ms"))
+
+    shares = Enum.filter(varying -- measurements, &binary?(prompts, &1))
+    others = if Keyword.get(opts, :all?, false), do: varying -- (measurements ++ shares), else: []
+
+    (Enum.map(measurements, &{:dots, &1}) ++
+       Enum.map(shares, &{:share, &1}) ++ Enum.map(others, &{:dots, &1}))
     |> Enum.with_index()
-    |> Enum.map(fn {column, index} -> build(prompts, column, labels?: index == 0) end)
+    |> Enum.map(fn
+      {{:dots, column}, index} -> build(prompts, column, labels?: index == 0)
+      {{:share, column}, index} -> share(prompts, column, labels?: index == 0)
+    end)
   end
+
+  @doc "How many fields `charts/1` leaves out that `all?: true` shows."
+  def hidden_count(prompts),
+    do: Enum.count(charts(prompts, all?: true)) - Enum.count(charts(prompts))
 
   defp varies?(prompts, column) do
     prompts |> values(column) |> Enum.uniq() |> Enum.count() > 1
   end
 
+  defp measurement?(prompts, column) do
+    String.ends_with?(column, "_ms") and
+      Enum.any?(prompts, fn prompt -> varies?([prompt], column) end)
+  end
+
+  defp binary?(prompts, column) do
+    prompts |> values(column) |> Enum.all?(&(&1 == 0 or &1 == 1))
+  end
+
   def build(prompts, column, opts \\ []) do
-    count = prompts |> records() |> Enum.count()
-    step = (@width - @left - @right) / max(count, 1)
     values = values(prompts, column)
     ticks = ticks(Enum.min(values, fn -> 0 end), Enum.max(values, fn -> 0 end))
     scale = fn value -> y(value, List.first(ticks), List.last(ticks)) end
+
+    chart(prompts, column, :dots, opts,
+      ticks: Enum.map(ticks, fn tick -> %{y: scale.(tick), label: format(tick)} end),
+      band: fn label, records, offset, step ->
+        band(label, records, column, offset, step, scale)
+      end
+    )
+  end
+
+  @doc "The share of trials with 1 per Prompt, as a bar per band on a 0–100% axis."
+  def share(prompts, column, opts \\ []) do
+    scale = fn value -> y(value, 0, 1) end
+
+    chart(prompts, column, :share, opts,
+      ticks: for(tick <- [0, 0.25, 0.5, 0.75, 1], do: %{y: scale.(tick), label: percent(tick)}),
+      band: fn label, records, offset, step ->
+        share_band(label, records, column, offset, step, scale)
+      end
+    )
+  end
+
+  defp chart(prompts, column, type, opts, ticks: ticks, band: band_fun) do
+    count = prompts |> records() |> Enum.count()
+    step = (@width - @left - @right) / max(count, 1)
 
     {bands, _offset} =
       prompts
       |> short_labels()
       |> Enum.map_reduce(0, fn %{label: label, records: records}, offset ->
-        band = band(label, records, column, offset, step, scale)
+        x = @left + offset * step
+        width = Enum.count(records) * step
+
+        band =
+          %{x: x, width: width, label: label, short_label: fit(label, width)}
+          |> Map.merge(band_fun.(label, records, offset, step))
+
         {band, offset + Enum.count(records)}
       end)
 
     %{
+      type: type,
       column: column,
       width: @width,
       height: @height,
@@ -67,7 +128,7 @@ defmodule Systems.Storage.RunChart do
         bands
         |> Enum.with_index()
         |> Enum.map(fn {band, index} -> Map.put(band, :shaded?, rem(index, 2) == 1) end),
-      y_ticks: Enum.map(ticks, fn tick -> %{y: scale.(tick), label: format(tick)} end),
+      y_ticks: ticks,
       count: count
     }
   end
@@ -86,9 +147,6 @@ defmodule Systems.Storage.RunChart do
   end
 
   defp band(label, records, column, offset, step, scale) do
-    x = @left + offset * step
-    width = Enum.count(records) * step
-
     measured =
       records
       |> Enum.with_index()
@@ -103,10 +161,6 @@ defmodule Systems.Storage.RunChart do
       end)
 
     %{
-      x: x,
-      width: width,
-      label: label,
-      short_label: fit(label, width),
       points:
         Enum.map(measured, fn {px, value, index} ->
           %{x: px, y: scale.(value), tooltip: "#{label} · trial #{index + 1}: #{format(value)}"}
@@ -115,6 +169,43 @@ defmodule Systems.Storage.RunChart do
       trend: trend(measured, scale)
     }
   end
+
+  defp share_band(label, records, column, offset, step, scale) do
+    case values([%{records: records}], column) do
+      [] -> %{bar: nil}
+      values -> %{bar: bar(label, values, {offset, Enum.count(records)}, step, scale)}
+    end
+  end
+
+  defp bar(label, values, {offset, trials}, step, scale) do
+    ones = Enum.count(values, &(&1 == 1))
+    share = ones / Enum.count(values)
+    width = min(trials * step * 0.6, 40)
+    x = @left + (offset + trials / 2) * step - width / 2
+    top = scale.(share)
+    bottom = scale.(0)
+
+    %{
+      x: x + width / 2,
+      y: top,
+      path: rounded_top(x, top, width, bottom),
+      label: percent(share),
+      tooltip: "#{label}: #{ones} of #{Enum.count(values)} (#{percent(share)})"
+    }
+  end
+
+  # A bar anchored to the baseline with its data end rounded (4px).
+  defp rounded_top(_x, top, _width, bottom) when bottom - top < 0.5, do: nil
+
+  defp rounded_top(x, top, width, bottom) do
+    radius = Enum.min([4, width / 2, bottom - top])
+
+    "M#{r(x)},#{r(bottom)} V#{r(top + radius)} Q#{r(x)},#{r(top)} #{r(x + radius)},#{r(top)} " <>
+      "H#{r(x + width - radius)} Q#{r(x + width)},#{r(top)} #{r(x + width)},#{r(top + radius)} " <>
+      "V#{r(bottom)} Z"
+  end
+
+  defp percent(share), do: "#{round(share * 100)}%"
 
   @doc "The label as it fits in a band: whole, shortened with …, or nil when not even 3 characters fit."
   def fit(label, width) do

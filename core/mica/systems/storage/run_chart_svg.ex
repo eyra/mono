@@ -21,7 +21,8 @@ defmodule Systems.Storage.RunChartSVG do
       title: dgettext("eyra-storage", "donation.chart.title"),
       trial: dgettext("eyra-storage", "donation.chart.trial"),
       connection: dgettext("eyra-storage", "donation.chart.connection"),
-      trend: dgettext("eyra-storage", "donation.chart.trend")
+      trend: dgettext("eyra-storage", "donation.chart.trend"),
+      share: dgettext("eyra-storage", "donation.chart.share")
     }
   end
 
@@ -88,7 +89,7 @@ defmodule Systems.Storage.RunChartSVG do
       </g>
       <%= for {chart, offset} <- Enum.zip(@charts, @offsets) do %>
         <g transform={"translate(0, #{offset})"} data-column={chart.column}>
-          <.chart chart={chart} colors={@colors} />
+          <.chart chart={chart} colors={@colors} labels={@labels} />
         </g>
       <% end %>
     </svg>
@@ -97,10 +98,13 @@ defmodule Systems.Storage.RunChartSVG do
 
   attr(:chart, :map, required: true)
   attr(:colors, :map, required: true)
+  attr(:labels, :map, required: true)
 
   defp chart(assigns) do
     ~H"""
-    <text x="0" y="14" font-size="13" font-weight="700" fill={@colors.grey1}><%= @chart.column %></text>
+    <text x="0" y="14" font-size="13" font-weight="700" fill={@colors.grey1}>
+      <%= @chart.column %><tspan :if={@chart.type == :share} font-weight="400" fill={@colors.grey2}> · <%= @labels.share %></tspan>
+    </text>
     <%= for band <- @chart.bands do %>
       <rect
         x={band.x}
@@ -120,6 +124,24 @@ defmodule Systems.Storage.RunChartSVG do
         <%= tick.label %>
       </text>
     <% end %>
+    <.marks chart={@chart} colors={@colors} />
+    """
+  end
+
+  defp marks(%{chart: %{type: :share}} = assigns) do
+    ~H"""
+    <%= for %{bar: bar} when bar != nil <- @chart.bands do %>
+      <g>
+        <title><%= bar.tooltip %></title>
+        <path :if={bar.path} d={bar.path} fill={@colors.primary} />
+        <text x={bar.x} y={bar.y - 6} font-size="12" text-anchor="middle" fill={@colors.grey1} style="font-variant-numeric: tabular-nums"><%= bar.label %></text>
+      </g>
+    <% end %>
+    """
+  end
+
+  defp marks(assigns) do
+    ~H"""
     <%= for band <- @chart.bands do %>
       <path :if={band.connection} d={band.connection} fill="none" stroke={@colors.grey3} stroke-width="1" />
       <path :if={band.trend} d={band.trend} fill="none" stroke={@colors.primary} stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
