@@ -15,8 +15,6 @@ defmodule Next.Account.NativeHandoff do
   """
   @behaviour Systems.Account.SignInHandoff
 
-  use CoreWeb, :verified_routes
-
   import Plug.Conn
 
   alias CoreWeb.Endpoint
@@ -67,7 +65,8 @@ defmodule Next.Account.NativeHandoff do
   The app's callback URL, on Core's own host; the sheet catches it before it
   loads.
   """
-  def callback_url(params), do: url(~p"/user/auth/native/callback?#{params}")
+  def callback_url(params),
+    do: "#{Endpoint.url()}/user/auth/native/callback?#{URI.encode_query(params)}"
 
   @doc """
   Redeems a token of `hand_off/3` with the app's code verifier. The token is
