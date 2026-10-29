@@ -10,9 +10,16 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
 
   @impl true
   def store(folder, filename, data) do
-    folder_path = get_full_path(folder)
-    File.mkdir_p(folder_path)
-    file_path = Path.join(folder_path, filename)
+    # A donation key may contain "/" (e.g. "<run>/summary"), which nests the file;
+    # a ".." segment must not lead it out of the endpoint folder.
+    case Path.safe_relative(filename) do
+      {:ok, relative_path} -> write(Path.join(get_full_path(folder), relative_path), data)
+      :error -> {:error, :unsafe_filename}
+    end
+  end
+
+  defp write(file_path, data) do
+    File.mkdir_p(Path.dirname(file_path))
 
     case File.write(file_path, data) do
       :ok -> :ok
@@ -25,9 +32,11 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
     folder_path = get_full_path(folder)
     File.mkdir_p(folder_path)
 
-    File.ls!(folder_path)
-    |> Enum.map(fn filename ->
-      file_path = Path.join(folder_path, filename)
+    Path.join(folder_path, "**/*")
+    |> Path.wildcard()
+    |> Enum.filter(&File.regular?/1)
+    |> Enum.map(fn file_path ->
+      filename = Path.relative_to(file_path, folder_path)
       {:ok, %File.Stat{mtime: mtime, size: size}} = File.stat(file_path)
 
       datetime =
