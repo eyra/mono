@@ -15,7 +15,7 @@ defmodule Systems.Storage.DonationPageBuilder do
       buttons: [back_button(endpoint_id)],
       blocks:
         [header(path, donation, timezone)] ++
-          run_chart(Map.get(assigns, :run), Map.get(assigns, :column)) ++ sections(donation)
+          run_charts(Map.get(assigns, :run)) ++ sections(donation)
     }
   end
 
@@ -29,25 +29,16 @@ defmodule Systems.Storage.DonationPageBuilder do
     }
   end
 
-  defp run_chart(nil, _column), do: []
+  defp run_charts(nil), do: []
 
-  defp run_chart(prompts, requested) do
-    case Storage.RunChart.column(prompts, requested) do
-      nil ->
+  defp run_charts(prompts) do
+    case Storage.RunChart.charts(prompts) do
+      [] ->
         []
 
-      column ->
-        [
-          {:run_chart,
-           %{
-             title: dgettext("eyra-storage", "donation.chart.title"),
-             column_label: dgettext("eyra-storage", "donation.chart.column.label"),
-             x_label: dgettext("eyra-storage", "donation.chart.x.label"),
-             columns: Storage.RunChart.columns(prompts),
-             column: column,
-             chart: Storage.RunChart.build(prompts, column)
-           }}
-        ]
+      charts ->
+        labels = Storage.RunChartSVG.labels()
+        [{:run_charts, %{title: labels.title, labels: labels, charts: charts}}]
     end
   end
 

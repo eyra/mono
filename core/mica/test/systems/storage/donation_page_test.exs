@@ -82,8 +82,8 @@ defmodule Systems.Storage.DonationPageTest do
     } do
       {:ok, view, _html} = live(conn, donation_path(endpoint, @summary))
 
-      html = view |> element("[data-testid='run-chart']") |> render()
-      assert html |> String.split("<circle") |> Enum.count() == 1 + 2 * 3
+      html = view |> element("g[data-column='rt_ms']") |> render()
+      assert html |> String.split(~s(r="4")) |> Enum.count() == 1 + 3
     end
 
     test "charts the trials of a Prompt whose result has no records", %{
@@ -107,19 +107,8 @@ defmodule Systems.Storage.DonationPageTest do
 
       {:ok, view, _html} = live(conn, donation_path(endpoint, @summary))
 
-      html = view |> element("[data-testid='run-chart']") |> render()
-      assert html |> String.split("<circle") |> Enum.count() == 1 + 2 * 4
-    end
-
-    test "charts another column when one is selected", %{conn: conn, endpoint: endpoint} do
-      {:ok, view, _html} = live(conn, donation_path(endpoint, @summary))
-
-      html =
-        view
-        |> element("form[phx-change='select_column']")
-        |> render_change(%{column: "trial_index"})
-
-      assert html =~ ~r|<option[^>]*selected[^>]*>\s*trial_index|
+      html = view |> element("g[data-column='rt_ms']") |> render()
+      assert html |> String.split(~s(r="4")) |> Enum.count() == 1 + 4
     end
   end
 

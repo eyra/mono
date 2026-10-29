@@ -23,7 +23,7 @@ defmodule Systems.Storage.DonationPage do
       :ok,
       socket
       |> assign(path: path, donation: Storage.DonationView.read(endpoint, path))
-      |> assign(run: run(endpoint, path), column: nil)
+      |> assign(run: run(endpoint, path))
       |> update_view_model()
     }
   end
@@ -31,16 +31,6 @@ defmodule Systems.Storage.DonationPage do
   defp run(endpoint, path) do
     if Storage.DonationRun.summary?(path), do: Storage.DonationRun.prompts(endpoint, path)
   end
-
-  @impl true
-  def handle_event("select_column", %{"column" => column}, socket) do
-    {:noreply, socket |> assign(column: column) |> update_view_model()}
-  end
-
-  def handle_view_model_updated(socket), do: socket
-
-  @impl true
-  def handle_uri(socket), do: update_view_model(socket)
 
   @impl true
   def render(assigns) do
@@ -81,28 +71,13 @@ defmodule Systems.Storage.DonationPage do
     """
   end
 
-  defp block(%{type: :run_chart} = assigns) do
+  defp block(%{type: :run_charts} = assigns) do
     ~H"""
     <div data-testid="run-chart-block">
-      <div class="flex flex-row flex-wrap items-center gap-4">
-        <Text.title4><%= @title %></Text.title4>
-        <div class="flex-grow" />
-        <form phx-change="select_column" class="flex flex-row items-center gap-3">
-          <label for="run-chart-column"><Text.label color="text-grey2"><%= @column_label %></Text.label></label>
-          <select
-            id="run-chart-column"
-            name="column"
-            class="h-10 pl-3 pr-8 rounded border-2 border-grey3 focus:border-primary focus:outline-none text-bodymedium font-body bg-white"
-          >
-            <%= for column <- @columns do %>
-              <option value={column} selected={column == @column}><%= column %></option>
-            <% end %>
-          </select>
-        </form>
-      </div>
+      <Text.title4><%= @title %></Text.title4>
       <.spacing value="XS" />
       <div class="border-[2px] border-grey4 rounded-lg p-4">
-        <.run_chart chart={@chart} column={@column} x_label={@x_label} />
+        <Storage.RunChartSVG.charts charts={@charts} labels={@labels} />
       </div>
     </div>
     """
@@ -174,52 +149,6 @@ defmodule Systems.Storage.DonationPage do
     <div data-testid="message-block">
       <Text.body_large><%= @text %></Text.body_large>
     </div>
-    """
-  end
-
-  attr(:chart, :map, required: true)
-  attr(:column, :string, required: true)
-  attr(:x_label, :string, required: true)
-
-  defp run_chart(assigns) do
-    ~H"""
-    <svg
-      viewBox={"0 0 #{@chart.width} #{@chart.height}"}
-      class="w-full h-auto font-body"
-      role="img"
-      aria-label={"#{@column} per #{@x_label}"}
-      data-testid="run-chart"
-    >
-      <%= for band <- @chart.bands do %>
-        <rect
-          x={band.x}
-          y={@chart.plot.top - 28}
-          width={band.width}
-          height={@chart.plot.bottom - @chart.plot.top + 28}
-          class={if band.shaded?, do: "fill-grey6", else: "fill-white"}
-        />
-        <line x1={band.x} x2={band.x} y1={@chart.plot.top - 28} y2={@chart.plot.bottom} class="stroke-grey4" stroke-width="1" />
-        <text :if={band.show_label?} x={band.x + 8} y={@chart.plot.top - 12} font-size="12" class="fill-grey1">
-          <%= band.label %>
-        </text>
-      <% end %>
-      <%= for tick <- @chart.y_ticks do %>
-        <line x1={@chart.plot.left} x2={@chart.plot.right} y1={tick.y} y2={tick.y} class="stroke-grey4" stroke-width="1" />
-        <text x={@chart.plot.left - 8} y={tick.y + 4} font-size="12" text-anchor="end" class="fill-grey2" style="font-variant-numeric: tabular-nums">
-          <%= tick.label %>
-        </text>
-      <% end %>
-      <%= for point <- @chart.points do %>
-        <g>
-          <title><%= point.tooltip %></title>
-          <circle cx={point.x} cy={point.y} r="10" fill="transparent" />
-          <circle cx={point.x} cy={point.y} r="4" class="fill-primary stroke-white" stroke-width="2" />
-        </g>
-      <% end %>
-      <text x={@chart.plot.right} y={@chart.height - 6} font-size="12" text-anchor="end" class="fill-grey2">
-        <%= @x_label %> (<%= @chart.count %>)
-      </text>
-    </svg>
     """
   end
 end

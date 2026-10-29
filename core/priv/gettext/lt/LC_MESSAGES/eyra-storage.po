@@ -295,13 +295,17 @@ msgid "table.view.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "donation.chart.column.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "donation.chart.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "donation.chart.x.label"
+msgid "donation.chart.connection"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.trend"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.trial"
 msgstr ""

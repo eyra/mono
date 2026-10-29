@@ -107,6 +107,31 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
       assert folders == ["1", "2", "3"]
     end
 
+    test "puts the charts of a summary next to it", %{
+      conn: conn,
+      endpoint: endpoint,
+      folder: folder
+    } do
+      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok = LocalFS.store(folder, "participant=2_key=run1/summary.json", "{}")
+
+      :ok =
+        LocalFS.store(
+          folder,
+          "participant=2_key=run1/cogflex/test.json",
+          ~s({"responses":[{"rt_ms":900},{"rt_ms":700}]})
+        )
+
+      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+
+      {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
+
+      assert {_path, "<svg" <> _} =
+               Enum.find(files, fn {path, _} ->
+                 to_string(path) =~ ~r|/2/participant=2_key=run1/summary-charts\.svg$|
+               end)
+    end
+
     test "puts a donation without a participant in its own folder", %{
       conn: conn,
       endpoint: endpoint,

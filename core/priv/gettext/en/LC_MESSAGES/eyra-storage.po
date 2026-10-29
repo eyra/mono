@@ -294,13 +294,17 @@ msgid "table.view.label"
 msgstr "View"
 
 #, elixir-autogen, elixir-format
-msgid "donation.chart.column.label"
-msgstr "Value"
-
-#, elixir-autogen, elixir-format
 msgid "donation.chart.title"
 msgstr "Trials in this session"
 
 #, elixir-autogen, elixir-format
-msgid "donation.chart.x.label"
-msgstr "Trials"
+msgid "donation.chart.connection"
+msgstr "Connection"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.trend"
+msgstr "Trend (mean of 5 trials)"
+
+#, elixir-autogen, elixir-format
+msgid "donation.chart.trial"
+msgstr "Trial"

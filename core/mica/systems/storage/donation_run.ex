@@ -19,11 +19,15 @@ defmodule Systems.Storage.DonationRun do
   @doc "The Prompts of the run, in donation order, each with its records as field lists."
   # shortcut: reads files on the local filesystem only, as DonationView.read/2 does.
   def prompts(endpoint, path) when is_binary(path) do
+    endpoint |> Storage.Public.list_files() |> prompts_in(path)
+  end
+
+  @doc "As `prompts/2`, from a file listing the caller already has."
+  def prompts_in(files, path) when is_list(files) and is_binary(path) do
     [identifiers, _key] = String.split(path, "_key=", parts: 2)
     prefix = "#{identifiers}_key=#{Storage.Donations.session(path)}/"
 
-    endpoint
-    |> Storage.Public.list_files()
+    files
     |> Enum.filter(fn %{path: listed} -> String.starts_with?(listed, prefix) end)
     |> Enum.flat_map(&prompt_file/1)
     |> Enum.group_by(fn {label, _kind, _file} -> label end)

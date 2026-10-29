@@ -37,9 +37,12 @@ defmodule Systems.Storage.Controller do
       |> Enum.join(" ")
       |> Slug.slugify(separator: ?_)
 
-    builtin
-    |> Storage.BuiltIn.Backend.list_files()
-    |> request_permission(remote_ip)
+    files =
+      builtin
+      |> Storage.BuiltIn.Backend.list_files()
+      |> request_permission(remote_ip)
+
+    files
     |> Enum.map(fn %{source: source, path: path, timestamp: timestamp} ->
       [
         source: source,
@@ -47,12 +50,35 @@ defmodule Systems.Storage.Controller do
         timestamp: timestamp
       ]
     end)
+    |> Enum.concat(chart_entries(files, export_name))
     |> Packmatic.build_stream()
     |> Packmatic.Conn.send_chunked(conn, "#{export_name}.zip")
   end
 
   def export(conn, _, _) do
     service_unavailable(conn)
+  end
+
+  # Next to each summary: its charts as SVG, drawn while the zip streams.
+  defp chart_entries(files, export_name) do
+    for %{path: path, timestamp: timestamp} <- files, Storage.DonationRun.summary?(path) do
+      [
+        source: {:dynamic, fn -> {:ok, {:stream, [chart_svg(files, path)]}} end},
+        path:
+          "#{export_name}/#{participant_folder(path)}/#{String.replace_suffix(path, ".json", "-charts.svg")}",
+        timestamp: timestamp
+      ]
+    end
+  end
+
+  defp chart_svg(files, path) do
+    Storage.RunChartSVG.render_string(%{
+      charts: files |> Storage.DonationRun.prompts_in(path) |> Storage.RunChart.charts(),
+      labels: Storage.RunChartSVG.labels(),
+      heading:
+        "#{dgettext("eyra-storage", "donation.participant.label")} #{participant_folder(path)} · " <>
+          "#{dgettext("eyra-storage", "donation.session.label")} #{Storage.Donations.session(path)}"
+    })
   end
 
   # A participant id never has spaces or brackets, so this folder cannot clash with one.
