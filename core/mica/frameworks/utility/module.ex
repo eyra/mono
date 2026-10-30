@@ -15,26 +15,46 @@ defmodule Frameworks.Utility.Module do
   def get(system, name) when is_atom(system),
     do: get(Atom.to_string(system), name)
 
+  # A Mica system's module (`Systems.<System>.<name>`), or else the SaaS system's
+  # (`<SaaS namespace>.Systems.<System>.<name>`, such as `Next.Systems.Student.Director`).
   def get(system, name) when is_binary(system) do
     system = Macro.camelize(system)
+    mica = Module.concat(["Systems", system, name])
 
-    "Elixir.Systems.#{system}.#{name}"
-    |> String.to_atom()
+    if Code.ensure_loaded?(mica) do
+      mica
+    else
+      saas = Mica.SaaS.module() |> Module.split() |> hd()
+      saas_module = Module.concat([saas, "Systems", system, name])
+      if Code.ensure_loaded?(saas_module), do: saas_module, else: mica
+    end
   end
 
   def to_system(module) when is_atom(module) do
     to_system(split(module))
   end
 
-  def to_system(["Elixir", "Next", system | _]), do: system
-  def to_system(["Elixir", "Self", system | _]), do: system
   def to_system(["Elixir", "Systems", system | _]), do: system
+  def to_system(["Elixir", _saas, "Systems", system | _]), do: system
   def to_system([system]) when is_binary(system), do: system
   def to_system(_), do: nil
+
+  @doc "The system namespace a module is in (`[\"Systems\", \"Assignment\"]`), or nil."
+  def system_namespace(module) when is_atom(module) do
+    case split(module) do
+      ["Elixir", "Systems", system | _] -> ["Systems", system]
+      ["Elixir", saas, "Systems", system | _] -> [saas, "Systems", system]
+      _ -> nil
+    end
+  end
 
   def to_model(module) when is_atom(module) do
     to_model(split(module))
   end
+
+  # A SaaS system's model is named like a Mica system's: Next.Systems.Graphite.ToolModel
+  # is "graphite_tool".
+  def to_model(["Elixir", _saas, "Systems" | rest]), do: to_model(["Elixir", "Systems" | rest])
 
   def to_model(["Elixir", "Systems", system, item]) do
     if String.contains?(item, "Model") do

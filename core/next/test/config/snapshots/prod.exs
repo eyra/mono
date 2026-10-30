@@ -10,7 +10,13 @@
       revision: "APPSIGNAL_REVISION"
     ]
   ],
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "AWS_REGION",
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
   mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
     {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
     {Mica.Repo,
@@ -33,7 +39,6 @@
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
     {MicaWeb.FileUploader, [max_file_size: 200_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -121,10 +126,5 @@
      ]},
     {:storage, [services: [:builtin, :yoda]]},
     {:upload_path, "/home/next/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "AWS_REGION",
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]

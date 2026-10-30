@@ -167,10 +167,12 @@ defmodule Mica.SaaSTest do
                  fn -> Mica.SaaS.checked_systems(DuplicateSaaS) end
   end
 
-  test "signal handlers are collected from all systems, sorted by module name" do
+  test "signal handlers are collected from all systems, sorted by module name within the systems" do
     handlers = Mica.SaaS.signal_handlers()
 
-    assert handlers == Enum.sort(handlers)
+    assert handlers ==
+             Enum.sort_by(handlers, &String.replace(inspect(&1), ~r/^\w+\.(?=Systems\.)/, ""))
+
     assert Systems.Assignment.Switch in handlers
     assert Next.Systems.Zircon.Switch in handlers
   end

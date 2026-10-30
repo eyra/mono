@@ -8,7 +8,8 @@ defmodule Next.Systems.WellKnown.System do
         get(
           "/.well-known/apple-app-site-association",
           WellKnown.Controller,
-          :apple_app_site_association
+          :apple_app_site_association,
+          as: :well_known
         )
       end
     end

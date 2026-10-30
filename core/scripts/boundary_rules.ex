@@ -50,26 +50,93 @@ defmodule BoundaryRules do
 
   def test_file?(path), do: Enum.any?(Map.keys(@roots), &String.starts_with?(path, &1 <> "test/"))
 
+  # Owner => the top-level namespaces its modules are in. Mica owns Mica, MicaWeb,
+  # Systems and Frameworks, and every name no SaaS owns. Mix tasks keep Mix.Tasks.
+  @saas_namespaces %{
+    "next" => ["Next", "NextWeb"],
+    "mica_saas" => ["MicaSaas", "MicaSaasWeb"]
+  }
+
   @doc """
   Namespaces of the modules defined in the roots of `owner`, from their
-  top-level `defmodule`s: `Systems.<System>` for systems, the whole `Next` and
-  `Self` namespaces, and the exact module for anything else.
+  top-level `defmodule`s: `Systems.<System>` for Mica's systems, the whole SaaS
+  namespaces (`Next`, `NextWeb`, `MicaSaas`, `MicaSaasWeb`), and the exact module
+  for anything else. A SaaS system also gets `{"Systems.<System>", full name}`,
+  so that a `config :mica, :<system>` key resolves to it.
   """
   def namespaces(owner) do
+    mica_systems = if owner == "mica", do: [], else: mica_systems()
+
     for {root, ^owner} <- @roots,
-        file <- Path.wildcard(root <> "**/*.ex"),
-        [_, name] <- Regex.scan(~r/^defmodule\s+([\w.]+)/m, File.read!(file)),
-        uniq: true do
-      case String.split(name, ".") do
-        ["Systems", system | _] -> "Systems." <> system
-        [top | _] when top in ["Next", "Self"] -> top
-        _ -> name
-      end
-    end
+        {_file, name} <- defined_modules(root, "**/*.ex"),
+        namespace <- namespaces_of(String.split(name, "."), mica_systems),
+        uniq: true,
+        do: namespace
   end
 
-  def in_namespace?(name, namespaces),
-    do: Enum.any?(namespaces, &(name == &1 or String.starts_with?(name, &1 <> ".")))
+  defp namespaces_of(["Systems", system | _], _mica_systems), do: ["Systems." <> system]
+
+  defp namespaces_of([top, "Systems", system | _], mica_systems)
+       when top in ["Next", "MicaSaas"] do
+    key = "Systems." <> system
+
+    if key in mica_systems,
+      do: [top],
+      else: [top, {key, Enum.join([top, "Systems", system], ".")}]
+  end
+
+  defp namespaces_of([top | _] = parts, _mica_systems) do
+    if top in Enum.concat(Map.values(@saas_namespaces)), do: [top], else: [Enum.join(parts, ".")]
+  end
+
+  defp mica_systems do
+    for {_file, "Systems." <> rest} <- defined_modules("mica/", "**/*.ex"),
+        uniq: true,
+        do: "Systems." <> hd(String.split(rest, "."))
+  end
+
+  # {file, name} of the top-level `defmodule`s in the files under `root` matching `glob`.
+  defp defined_modules(root, glob) do
+    for file <- Path.wildcard(root <> glob),
+        [_, name] <- Regex.scan(~r/^defmodule\s+([\w.]+)/m, File.read!(file)),
+        do: {file, name}
+  end
+
+  def in_namespace?(name, namespaces), do: owned_name(name, namespaces) != nil
+
+  @doc """
+  The name as its owner's module, when `name` is in `namespaces`, or nil. The
+  name of a `config :mica, :<system>` key (`Systems.<System>`) resolves to the
+  SaaS system (`Next.Systems.<System>`).
+  """
+  def owned_name(name, namespaces) do
+    Enum.find_value(namespaces, fn
+      {^name, full} -> full
+      {_key, _full} -> nil
+      namespace -> if name == namespace or String.starts_with?(name, namespace <> "."), do: name
+    end)
+  end
+
+  @doc """
+  Top-level modules defined outside their owner's namespaces, as
+  `{file, module}`, tests included: a module under next/ must be in `Next` or
+  `NextWeb`, one under mica_saas/ in `MicaSaas` or `MicaSaasWeb` (Mix tasks may
+  keep `Mix.Tasks`), and one under mica/ or config/ in no SaaS namespace.
+  """
+  def misplaced_modules do
+    saas_tops = Enum.concat(Map.values(@saas_namespaces))
+
+    for {root, owner} <- @roots,
+        {file, name} <- defined_modules(root, "**/*.{ex,exs}"),
+        top = hd(String.split(name, ".")),
+        misplaced?(owner, top, name, saas_tops),
+        do: {file, name}
+  end
+
+  defp misplaced?("mica", top, _name, saas_tops), do: top in saas_tops
+
+  defp misplaced?(owner, top, name, _saas_tops),
+    do: top not in @saas_namespaces[owner] and not String.starts_with?(name, "Mix.Tasks.")
 
   @doc """
   The module names in `source` with their lines: aliases (grouped aliases

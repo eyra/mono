@@ -81,8 +81,20 @@ defmodule Mica.SaaS do
 
   def systems, do: module().systems()
 
-  @doc "The signal handlers of all systems, sorted by module name."
-  def signal_handlers, do: systems() |> Enum.flat_map(& &1.signal_handlers()) |> Enum.sort()
+  @doc """
+  The signal handlers of all systems, sorted by module name within the system
+  namespaces: a SaaS system's handler (`Next.Systems.<System>.Switch`) sorts as
+  `Systems.<System>.Switch`, among Mica's.
+  """
+  def signal_handlers,
+    do: systems() |> Enum.flat_map(& &1.signal_handlers()) |> Enum.sort_by(&handler_order/1)
+
+  defp handler_order(handler) do
+    case Module.split(handler) do
+      [_saas, "Systems" | rest] -> {Enum.join(["Systems" | rest], "."), inspect(handler)}
+      _ -> {inspect(handler), inspect(handler)}
+    end
+  end
 
   @doc "The notifiers of all systems, in `systems/0` order."
   def notifiers, do: Enum.flat_map(systems(), & &1.notifiers())

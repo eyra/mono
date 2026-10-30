@@ -26,6 +26,9 @@ defmodule Mica.MixProject do
       aliases: aliases(),
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
+      # The release keeps the name `core` (bin/core): the Dockerfile, predeploy and
+      # Eyra's AWS deploy tooling call it.
+      releases: [core: []],
       # The main page in the docs
       docs: [
         main: "readme",

@@ -110,10 +110,7 @@ defmodule BoundaryRulesTest do
     defp names(source), do: source |> BoundaryRules.names() |> Enum.map(&elem(&1, 0))
 
     test "expands grouped aliases" do
-      assert names("alias Systems.{Fund, Paper.Model}") == [
-               "Systems.Fund",
-               "Next.Systems.Paper.Model"
-             ]
+      assert names("alias Systems.{Fund, Pool.Model}") == ["Systems.Fund", "Systems.Pool.Model"]
     end
 
     test "resolves short names through the file's aliases" do
@@ -132,14 +129,14 @@ defmodule BoundaryRulesTest do
     end
 
     test "finds :\"Elixir.…\" atoms" do
-      assert names(~s|{Registry, name: :"Elixir.Next.Systems.Paper.ImportRegistry"}|) == [
+      assert names(~s|{Registry, name: :"Elixir.Systems.Pool.ImportRegistry"}|) == [
                "Registry",
-               "Next.Systems.Paper.ImportRegistry"
+               "Systems.Pool.ImportRegistry"
              ]
     end
 
     test "turns config :mica keys into system namespaces" do
-      assert names("config :mica, :zircon, agent: 1") == ["Next.Systems.Zircon"]
+      assert names("config :mica, :widget, agent: 1") == ["Systems.Widget"]
       assert names("config :mica, saas: Next.SaaS") == ["Next.SaaS"]
     end
 
@@ -149,11 +146,24 @@ defmodule BoundaryRulesTest do
     end
   end
 
+  describe "owned_name/2" do
+    test "resolves a config key name to the SaaS system" do
+      namespaces = ["Next", {"Systems.Widget", "Next.Systems.Widget"}]
+
+      assert BoundaryRules.owned_name("Systems.Widget", namespaces) == "Next.Systems.Widget"
+
+      assert BoundaryRules.owned_name("Next.Systems.Widget.Model", namespaces) ==
+               "Next.Systems.Widget.Model"
+
+      assert BoundaryRules.owned_name("Systems.Widget.Model", namespaces) == nil
+    end
+  end
+
   describe "in_namespace?/2" do
     test "matches the namespace and its children, not a prefix" do
       assert BoundaryRules.in_namespace?("Next.Systems.Paper", ["Next.Systems.Paper"])
       assert BoundaryRules.in_namespace?("Next.Systems.Paper.Model", ["Next.Systems.Paper"])
-      refute BoundaryRules.in_namespace?("Systems.PaperTrail", ["Next.Systems.Paper"])
+      refute BoundaryRules.in_namespace?("Next.Systems.PaperTrail", ["Next.Systems.Paper"])
     end
   end
 end

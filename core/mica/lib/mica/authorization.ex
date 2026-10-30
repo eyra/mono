@@ -359,7 +359,7 @@ defmodule Mica.Authorization do
       if from(e in entity, where: e.auth_node_id == ^node_id) |> Mica.Repo.exists?() do
         entity
         |> Atom.to_string()
-        |> String.replace("Elixir.Systems.", "")
+        |> String.replace(~r/^Elixir\.(\w+\.)?Systems\./, "")
       end
     end)
   end

@@ -10,7 +10,14 @@
       revision: nil
     ]
   ],
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "auto",
+    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
   mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
     {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
     {Mica.Repo,
@@ -28,7 +35,6 @@
        url: [host: "eyra-next-dev.fly.dev", port: 443, scheme: "https"]
      ]},
     {MicaWeb.FileUploader, [max_file_size: 100_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -131,11 +137,5 @@
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "auto",
-    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]
