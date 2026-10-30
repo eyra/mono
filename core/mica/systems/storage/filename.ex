@@ -16,12 +16,15 @@ defmodule Systems.Storage.Filename do
   end
 
   @doc """
-  Generates a unique filename with timestamp.
+  Generates a unique filename with timestamp. The unique integer keeps names
+  apart that are generated in the same millisecond, such as a trial and its
+  Prompt result donated at once.
   """
   def generate_unique(identifier) do
     base = generate(identifier)
     timestamp = System.system_time(:millisecond)
-    String.replace(base, ".json", "_#{timestamp}.json")
+    unique = System.unique_integer([:positive, :monotonic])
+    String.replace(base, ".json", "_#{timestamp}_#{unique}.json")
   end
 
   @doc """

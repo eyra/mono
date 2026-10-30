@@ -19,6 +19,16 @@ defmodule Systems.Storage.FilenameTest do
     end
   end
 
+  describe "generate_unique/1" do
+    test "gives each call its own name, also within the same millisecond" do
+      identifier = [[:assignment, 1], [:task, 2], [:participant, "preview"]]
+
+      names = for _ <- 1..1000, do: Filename.generate_unique(identifier)
+
+      assert length(Enum.uniq(names)) == 1000
+    end
+  end
+
   describe "valid_identifier?/1" do
     test "accepts the characters real donation keys contain" do
       assert Filename.valid_identifier?([[:key, @real_key]])
