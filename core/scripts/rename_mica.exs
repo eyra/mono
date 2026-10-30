@@ -2,7 +2,8 @@
 #
 # Renames, in every text file of the repository:
 #   * the OTP app :core to :mica, and Core.* / CoreWeb.* to Mica.* / MicaWeb.*
-#   * Next's systems: Systems.<X> defined under core/next becomes Next.Systems.<X>,
+#   * Next's systems: Systems.<X> with a folder or a module under core/next becomes
+#     Next.Systems.<X>,
 #     and the bundle systems Next.<X> (with a Next.<X>.System) become Next.Systems.<X>
 #   * Next's frameworks: Frameworks.* defined under core/next becomes Next.Frameworks.*
 #   * Next's web shell: Next.Layouts and Next.Menu become NextWeb.*, and CoreWeb.*
@@ -32,7 +33,7 @@ defmodule RenameMica do
     "core/priv/static/",
     "core/scripts/rename_mica.exs",
     # Migrates the stored old names, so it names them.
-    "core/priv/repo/migrations/20261030120000_rename_stored_module_names.exs"
+    "core/priv/repo/migrations/20261031091717_rename_stored_module_names.exs"
   ]
   @excluded_exts ~w(.png .jpg .jpeg .gif .ico .webp .svg .woff .woff2 .ttf .otf .eot .pdf .zip
                     .gz .beam .lock .archimate .mp4 .mov)
@@ -170,11 +171,15 @@ defmodule RenameMica do
 
     mica_systems = for ["Systems", x | _] <- mica, uniq: true, do: x
 
+    next_bundle_systems =
+      union(@next_bundle_systems, for(["Next", x, "System"] <- next, x != "Systems", do: x))
+
     %{
       next_systems:
-        union(@next_systems, for(["Systems", x | _] <- next, x not in mica_systems, do: x)),
-      next_bundle_systems:
-        union(@next_bundle_systems, for(["Next", x, "System"] <- next, x != "Systems", do: x)),
+        @next_systems
+        |> union(for ["Systems", x | _] <- next, x not in mica_systems, do: x)
+        |> union(next_system_folders(mica_systems, next_bundle_systems)),
+      next_bundle_systems: next_bundle_systems,
       next_frameworks:
         union(@next_frameworks, for(["Frameworks" | rest] <- next, do: Enum.join(rest, "."))),
       next_web: union(@next_web, for(["CoreWeb" | rest] <- next, do: Enum.join(rest, "."))),
@@ -192,6 +197,19 @@ defmodule RenameMica do
         [_, name] <- Regex.scan(~r/^defmodule\s+([A-Z][\w.]*)/m, File.read!(file)),
         uniq: true,
         do: String.split(name, ".")
+  end
+
+  # The systems Next has a folder for (core/next/systems/<system>/), so a system
+  # that lands later is renamed too: all but Mica's systems and Next's bundle
+  # systems (Next.Account, …), which have their own rule.
+  defp next_system_folders(mica_systems, bundle_systems) do
+    taken = Enum.map(mica_systems ++ bundle_systems, &String.downcase/1)
+
+    for dir <- Path.wildcard("core/next/systems/*"),
+        File.dir?(dir),
+        name = dir |> Path.basename() |> Macro.camelize(),
+        String.downcase(name) not in taken,
+        do: name
   end
 
   defp union(seed, found), do: Enum.uniq(seed ++ found)
