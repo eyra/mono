@@ -28,7 +28,7 @@ Paths are relative to the repository root and describe the layout of `develop` a
 
 ## Decisions
 
-Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395322806.
+Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395322806. Later rows carry their own date.
 
 | # | Topic | Decision |
 |---|---|---|
@@ -42,9 +42,12 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
 | D8 | Database | One database per deployment. Every table has one owner (Mica or the SaaS), with migrations in the owner's repository. Foreign keys point only from the SaaS to Mica. `workflow_tool_refs` and `project_items` become open registry references. Historical migrations are squashed into a Mica baseline and a SaaS baseline, which are marked as applied in Eyra production after a dry run on a production snapshot. Separate Postgres schemas per owner remain an option for later. |
 | D9 | History | `novasoftwarefoundation/mica` starts with fresh git history. Its first commit points back to the `eyra/mono` commit it came from. `eyra/mono` is not deleted; Self deployments use it. |
 | D10 | Approach | Incremental, inside `eyra/mono` `develop`, in normal small PRs shipped through Next's milestones. No big-bang migration and no copy of core. Guardrails: an early visible layout, a CI boundary check that blocks Mica → Next references and new `:panl` hard-coding, and the rules communicated to the Next and Feldspar teams. |
-| D11 | Layout | `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). `core/` disappears. Self is the reference SaaS on Mica, a sibling of Next and not part of Mica: since code-layout it lives in `core/mica_saas/` (decided 2026-10-14). It may later get its own repository, `novasoftwarefoundation/mica-saas` (deferred). |
-| D12 | Repositories | `mica/` → `novasoftwarefoundation/mica`; `next/` → `eyra/next`; `eyra/feldspar` → `novasoftwarefoundation/feldspar` (Feldspar Flux project). The Mica–Feldspar protocol becomes a versioned public contract. Prism already lives at `novasoftwarefoundation/prism`. |
+| D11 | Layout | `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). `core/` disappears. Self is the reference SaaS on Mica, a sibling of Next and not part of Mica: since code-layout it lives in `core/mica_saas/` (decided 2026-10-14). In code-split it becomes the third Mix project, `mica_saas/`, and in repo-create its own repository, `novasoftwarefoundation/mica-saas`. It never lives in Mica's repository (decided 2026-10-30, m-0460). |
+| D12 | Repositories | `mica/` → `novasoftwarefoundation/mica`; `mica_saas/` → `novasoftwarefoundation/mica-saas` (decided 2026-10-30); `next/` → `eyra/next`; `eyra/feldspar` → `novasoftwarefoundation/feldspar` (Feldspar Flux project). The Mica–Feldspar protocol becomes a versioned public contract. Prism already lives at `novasoftwarefoundation/prism`. |
 | D13 | Deployment model | One SaaS per deployment. Each operator builds and runs its own SaaS on Mica; multi-tenancy is out of scope. |
+| D14 | What Mica holds | Decided 2026-10-29 (d-0011). Mica only contains reusable code that Next (re)uses. Next and the reference SaaS may have custom code and may copy from each other. Mica ships no neutral pages, brand or home that only the reference SaaS would use. |
+| D15 | Routing | Decided 2026-10-30 (d-0009). No router in Mica: no router module, no route table, no verified routes. Each SaaS owns its router and endpoint, built with Mica's macros. Mica records its links with `~m`, and each SaaS checks them against its router and checks that Mica serves them. Plan step code-compose. |
+| D16 | Mica's tests | Decided 2026-10-30 (m-0460, d-0012). Mica's repository is not a SaaS: it holds no test SaaS, router or endpoint. Mica's own tests run on a composition of Mica's own systems (`Mica.SaaS.put_composition(systems: Mica.Systems.all())`). Tests that need a SaaS environment live in mica-saas, whose suite is a required check on every Mica pull request. |
 
 ---
 
@@ -223,10 +226,10 @@ Classes:
 
 ### 3.1 Principles
 
-1. **Dependency direction** is SaaS → Mica, never the reverse. Mica compiles, tests and boots on its own with its reference SaaS.
+1. **Dependency direction** is SaaS → Mica, never the reverse. Mica compiles and runs its own tests on its own. It boots only inside a SaaS. Its reference SaaS, mica-saas, is tested against every Mica change (D16).
 2. **The SaaS is the root application.** Mica provides building blocks, macros and behaviours. Mica never names a SaaS module.
 3. **Open registries.** Every list in [§1.3](#13-central-registries-a-new-system-must-edit-today) becomes something systems contribute to.
-4. **Safe defaults.** Unknown feature flags are off. Mica ships neutral defaults for branding, home, sign-in and policy pages.
+4. **Safe defaults, no neutral product code.** Unknown feature flags are off. Mica only contains code Next (re)uses (D14): it ships no brand, home, sign-in or policy pages of its own. Every SaaS provides them; the reference SaaS's live in `mica_saas`.
 5. **Versioned public contracts.** `Core.System`, `Core.SaaS`, `Core.Tool`, `Core.Brand`, the integration behaviours and the Mica App Protocol are documented, semver'd and covered by contract tests.
 6. **Names.**
    - Mica uses `Mica`, `MicaWeb`, `Systems` and `Frameworks`. `Core` and `CoreWeb` become `Mica` and `MicaWeb` in code-rename (D7).
@@ -245,8 +248,8 @@ Target shape of `eyra/next`:
 ```
 eyra/next (Phoenix project, OTP app :next)
 ├── mix.exs           deps: {:mica, github: "novasoftwarefoundation/mica", tag: "v…"} (path: during migration)
-├── lib/next/…        Next.Router (use MicaWeb.Router), Next.SaaS, Next.Brand
-├── lib/next/systems  pool directors (citizen, student), home, graphite, zircon, …
+├── lib/next/…        Next.SaaS, Next.Brand; NextWeb, NextWeb.Router, NextWeb.Endpoint (built with Mica's macros, D15)
+├── lib/next/systems  Next.Systems.*: pool directors (citizen, student), home, graphite, zircon, …
 ├── config/           Eyra config, feature flags, hosts, runtime.aws.exs / runtime.fly.exs
 ├── priv/repo/migrations, priv/gettext, priv/static (logos, favicons, manifest)
 ├── assets/           app.js imports Mica hooks + Next hooks; Tailwind preset = Prism + Next theme
@@ -325,10 +328,10 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
 
 - **One system, one `Systems.X.System`.** Each system, in Mica or in a SaaS, has its `Systems.X.System` module in a `_system.ex` file in its folder. Mica's systems (Assignment, Feldspar, Manual, …) are listed in `Core.Systems.all/0`.
 - **Systems extend systems.** A system can use the extension points of other systems: Citizen registers a pool director with Pool, Zircon registers a tool with Workflow. A SaaS therefore extends Mica's systems through its own systems, not through SaaS-level hooks.
-- **How the SaaS composes.** Config names one `Core.SaaS` module. Its `systems/0` returns Mica's systems plus its own. The router and authorization macros read that list at compile time, as `Core.BundleOverrides` does today. There is no runtime cost, and verified routes keep working.
+- **How the SaaS composes.** Config names one `Core.SaaS` module. Its `systems/0` returns Mica's systems plus its own. Each SaaS writes its own router and endpoint with Mica's macros, which splice its systems' routes in `systems/0` order. Grants, notify channels and the other collections are read at boot, cached, and checked by `validate!/0`. Mica has no router: it records its links with `~m`, and each SaaS checks them against its router (D15, plan step code-compose).
 - **SaaS-level config** lives in `Core.SaaS`: start pages, menus, feature-flag defaults and, from code-brand, the brand. The existing `CoreWeb.StartPageProvider`, `CoreWeb.Menu.ItemsProvider` and `CoreWeb.Menu.Builder` are reached through it.
 - **Graduation** (D3) moves a system from a SaaS's `systems/0` into `Core.Systems.all/0`, together with its code.
-- **Reference SaaS.** Mica keeps a small reference SaaS (Self, `Self.SaaS`) for its CI, its e2e tests and as operator documentation.
+- **Reference SaaS.** Self (`MicaSaas.SaaS` after code-rename) is the reference implementation on Mica, in its own repository `novasoftwarefoundation/mica-saas`, with its own test suite and e2e. It also serves as operator documentation. Mica's repository holds no SaaS code; Mica's CI runs mica-saas's suite against every Mica change (D16).
 
 ### 3.4 Tool and item registry
 
@@ -352,7 +355,7 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
 | Repo | One `Core.Repo` per deployment, configured by the SaaS. SaaS schemas use it too. |
 | Translations | Mica keeps its own Gettext backend (`CoreWeb.Gettext`, `MicaWeb.Gettext` after code-rename) with its own `priv/gettext`. The SaaS has its own backend for its own domains. Mica's `eyra-*` domains are renamed to neutral names, and brand words become `Core.Brand` interpolations. Whether SaaS repos can override Mica copy is an open question. |
 | Assets | Mica's JS hooks are resolvable from `deps/mica/assets`. The SaaS `app.js` merges them with its own hooks. Tailwind `content` includes `deps/mica`. Prism stays an npm dependency of both. Mica ships neutral icons; the SaaS serves its own logos, favicons and manifest. |
-| Routing | `Next.Router` does `use MicaWeb.Router` and calls the Mica route macro. Overriding routes by shadowing them is the exception; prefer extension points (start pages, the sign-in page). |
+| Routing | `NextWeb.Router` is `use Phoenix.Router` with Mica's macros for the pipelines, the systems' routes and Mica's base routes, in an order Next writes (D15). Overriding routes by shadowing them is the exception; prefer extension points (start pages, the sign-in page). |
 | Menus, start pages | Systems contribute menu items. `Core.SaaS` sets the start pages, and the SaaS's builder decides layout and order. |
 | Auth providers | Email, password and OTP sign-in are Mica core. Google and Apple are M-opt behind a provider behaviour. SURFconext and Centerdata are integrations that contribute their own routes. |
 | Seeds, supervision | Seeds and supervisor children are declared per system (`Core.children/1` plus `Systems.X.System.children/1`). |
@@ -368,7 +371,7 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
   - monitoring app name
   - invoice prefix
   - merchant and donation recipient
-- **Default brand.** Mica ships a neutral one. Whether it says "Powered by Mica / Nova" is an open question.
+- **No default brand** (D14). Every SaaS implements `Core.Brand`, the reference SaaS included. Mica shows no "Powered by Mica / Nova" of its own.
 - **Theming is Prism.** The SaaS supplies a Tailwind preset that extends `@novasoftwarefoundation/prism/tailwind.preset`. Pixel components use only Prism tokens.
 - **Partner and pool logos** are supplied by the brand or by SaaS systems, not stored in Mica.
 
@@ -444,11 +447,11 @@ Decided questions are in [Decisions](#decisions). Still open:
 
 1. **Integrations** (OPP, Yoda, SURFconext, Centerdata). Mica building blocks under Nova governance, separate Nova-owned packages, or Next? Until decided, they live in Next.
 2. **Generic cloud backends** (S3/Tigris, Azure storage, Mailgun/SES). Mica core or integration packages?
-3. **Mica's own branding.** Does a Mica-based SaaS show "Powered by Mica / Nova" by default (configurable), or nothing?
+3. **Mica's own branding.** Answered 2026-10-29 (D14): nothing. Mica has no default brand; a SaaS may show "Powered by Mica / Nova" through its own.
 4. **Translations.** Do SaaS repositories need to override Mica's UI copy? If so, by which mechanism?
 5. **Eyra-owned forks** used as Mica dependencies (`bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`). Move them to Nova, upstream them, or keep them Eyra-maintained?
-6. **Self.** Is it still deployed from `eyra/mono`? Will it follow Mica's reference SaaS or `novasoftwarefoundation/mica-saas`, and when?
-7. **`eyra/mono` after the split.** Read-only/archived, or security fixes for Self deployments?
+6. **Self.** Answered 2026-10-30 (D11, D12, D16): Self is the reference SaaS. It becomes `mica_saas/` in code-split and `novasoftwarefoundation/mica-saas` in repo-create; Self deployments build from it.
+7. **`eyra/mono` after the split.** Read-only/archived, or security fixes for deployments still on the pre-split tag?
 8. **Licence and copyright** (AGPL-3.0). Copyright holder after the move, and consequences for operators. Needs legal input.
 
 The questions about release mechanics (binary name, `eyra/next` history) are listed in [plan.md](./plan.md#open-questions).
