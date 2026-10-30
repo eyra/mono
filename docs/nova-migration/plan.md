@@ -5,7 +5,7 @@ Status: **draft for review**. Each step gets its own issue in the Next Flux proj
 Related documents:
 - [design.md](./design.md): the design, the inventory and the decisions this plan builds on.
 
-Paths in this document are relative to the repository root and refer to the layout *before* code-split, when `core/` still exists. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the code-layout section says which. Module names (`Core.System`, `CoreWeb.Router`, …) are the names before [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica); from then on they are `Mica.*` and `MicaWeb.*`.
+Paths in this document are relative to the repository root and refer to the layout *before* code-split, when `core/` still exists. Since code-layout, `core/X` means `core/mica/X`, `core/next/X` or `core/mica_saas/X`; the code-layout section says which. Module names (`Core.System`, `CoreWeb.Router`, …) are the names before [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica); from then on they are `Mica.*` and `MicaWeb.*`. code-compose comes after code-rename, so its section uses the Mica names.
 
 ## How steps are identified
 
@@ -29,18 +29,19 @@ Paths in this document are relative to the repository root and refer to the layo
 | [code-guardrails](#code-guardrails--credentials-guardrails-and-communication) | Guardrails | Plan pointers, briefing, credentials | none | done |
 | [code-cleanup](#code-cleanup--remove-dead-code-and-retire-banking) | Guardrails | Dead code, retire Banking | none | done |
 | [code-layout](#code-layout--early-visible-layout-and-the-boundary-check) | Guardrails | `core/mica`, `core/next`, `core/mica_saas` and the boundary check | code-cleanup | done |
-| [ops-mica-dev](#ops-mica-dev--development-server-nova-mica-dev) | Build and development server | Eyra-internal development server `nova-mica-dev` | code-layout; ideally with build-image | next |
-| [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
-| [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
+| [ops-mica-dev](#ops-mica-dev--development-server-nova-mica-dev) | Build and development server | Eyra-internal development server `nova-mica-dev` | code-layout; ideally with build-image | done |
+| [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | in progress (M0, M1 done) |
+| [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | done (production checks with M34) |
 | [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica) | Decoupling | OTP app `:core` → `:mica`, modules `Core.*`/`CoreWeb.*` → `Mica.*`/`MicaWeb.*` | code-systems; ideally build-image; before code-split | planned |
+| [code-compose](#code-compose--no-router-and-no-saas-composition-in-micas-compiled-code) | Decoupling | No router in Mica: SaaS routers and endpoints, recorded Mica paths; grants and notify channels at runtime; Mica's tests without a SaaS | code-systems, code-rename | planned |
 | [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
 | [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | planned |
 | [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-systems; code-registry for Graphite and Zircon | planned |
 | [data-tables](#data-tables--table-ownership-migration-paths-and-baselines) | Decoupling | Table ownership, migration paths, baselines | code-registry, code-instance | planned |
 | [ops-prod-image](#ops-prod-image--one-image-on-aws-production) | Split and cutover | One image on AWS production | ops-mica-dev, build-image | planned |
-| [code-split](#code-split--layout-split-mica-and-next-as-two-mix-projects) | Split and cutover | Separate Mix projects | code-rename, code-brand, code-instance, data-tables | planned |
+| [code-split](#code-split--layout-split-mica-mica_saas-and-next-as-three-mix-projects) | Split and cutover | Separate Mix projects: `mica/`, `mica_saas/`, `next/` | code-rename, code-compose, code-brand, code-instance, data-tables | planned |
 | [repo-assess](#repo-assess--pre-transfer-assessment) | Split and cutover | Pre-transfer assessment (history, secrets, permissions) | code-layout; final run before repo-create | planned |
-| [repo-create](#repo-create--create-the-repositories) | Split and cutover | Create `novasoftwarefoundation/mica` and `eyra/next` | code-split, repo-assess, data-tables | planned |
+| [repo-create](#repo-create--create-the-repositories) | Split and cutover | Create `novasoftwarefoundation/mica`, `novasoftwarefoundation/mica-saas` and `eyra/next` | code-split, repo-assess, data-tables | planned |
 | [ops-cutover](#ops-cutover--cutover-of-eyra-production-to-eyranext) | Split and cutover | Production cutover to `eyra/next` | repo-create | planned |
 | [feldspar-protocol](#track-feldspar-summary) | Feldspar | Mica App Protocol v1 | none | planned |
 | [feldspar-tests](#track-feldspar-summary) | Feldspar | Contract tests | feldspar-protocol | planned |
@@ -60,8 +61,8 @@ flowchart LR
 
   m32([M32 cut, Mon 19 Oct]):::milestone -->|M1 merges after| build_image
   code_layout --> build_image[build-image]:::next
-  code_layout --> ops_mica_dev[ops-mica-dev]:::next
-  code_layout --> code_systems[code-systems]:::next
+  code_layout --> ops_mica_dev[ops-mica-dev]:::done
+  code_layout --> code_systems[code-systems]:::done
   code_layout --> repo_assess[repo-assess]
 
   build_image -->|M1 before the Oban-cron PR| code_systems
@@ -78,7 +79,9 @@ flowchart LR
   code_registry --> data_tables[data-tables]
   code_instance --> data_tables
 
-  code_rename --> code_split[code-split]
+  code_rename --> code_compose[code-compose]
+  code_compose --> code_split[code-split]
+  code_rename --> code_split
   code_brand --> code_split
   data_tables --> code_split
   code_split --> repo_create[repo-create]
@@ -90,13 +93,14 @@ flowchart LR
   feldspar_transfer -.-|not in the same window| ops_cutover
 ```
 
-- **Done:** code-guardrails, code-cleanup, code-layout.
-- **Next, in parallel:** ops-mica-dev, build-image and code-systems. build-image M1 merges after the M32 cut on Monday 19 October; the code-systems Oban-cron PR merges after build-image M1, because both edit the runtime config.
+- **Done:** code-guardrails, code-cleanup, code-layout, ops-mica-dev, code-systems (merged; its production checks ship with M34).
+- **In progress:** build-image (M0 and M1 done; M2–M4 and the rehearsal R open).
+- **Next:** code-rename, then code-compose (decided 2026-10-30: rename first, so code-compose's new modules get their Mica names).
 - **Can start now:** feldspar-protocol, and the first run of repo-assess.
 - **Recommended, not blocking:** build-image ideally before code-rename. ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
 - **Can run in parallel after code-systems:** code-brand, code-registry and the items of code-instance.
 - **Merge freeze:** code-rename, like code-layout: it touches almost every file, so every open PR has to catch up with it.
-- **Strictly sequential:** code-layout → code-systems, then data-tables → code-split → repo-create → ops-cutover.
+- **Strictly sequential:** code-layout → code-systems → code-rename → code-compose, then data-tables → code-split → repo-create → ops-cutover.
 
 ## Summary
 
@@ -110,8 +114,8 @@ flowchart LR
 |---|---|---|
 | Guardrails | code-guardrails, code-cleanup, code-layout | Record the rules, remove dead code and Banking, make the target layout visible inside `core/`, add a CI boundary check that only lets violations shrink. |
 | Build and development server | ops-mica-dev, build-image | Keep the Self code alive on the Eyra-internal development server `nova-mica-dev`; build one image per commit from one `runtime.exs`. |
-| Decoupling | code-systems, code-rename, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app and the `Core`/`CoreWeb` namespaces to Mica, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
-| Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
+| Decoupling | code-systems, code-rename, code-compose, code-brand, code-registry, code-instance, data-tables | Open the registries (`Core.System`, `Core.SaaS`), rename the OTP app and the `Core`/`CoreWeb` namespaces to Mica, take the router, the endpoint and every compile-time read of the SaaS out of Mica, add brand and config seams, open the tool/item registry, move PaNL/VU and other instance specifics to Next, give every table one owner and prepare the migration baselines (with a dry run on a production snapshot). |
+| Split and cutover | ops-prod-image, code-split, repo-assess, repo-create, ops-cutover | Run the image on AWS production; `git mv` into `mica/`, `mica_saas/` and `next/`; assess what becomes public; create the repositories; cut over Eyra production. |
 | Feldspar | feldspar-protocol, feldspar-tests, feldspar-transfer | Versioned Mica App Protocol, contract tests, and the transfer of `eyra/feldspar` to Nova. Planned in the Feldspar repository; summarized here. |
 
 **Production.** Eyra's production Next keeps running at every step. Decoupling steps are invisible to users and are verified by snapshot tests. Three steps carry real operational risk, and each gets a rehearsal on dev/staging and a written rollback:
@@ -120,8 +124,7 @@ flowchart LR
 - ops-cutover: production cutover to `eyra/next`
 
 **Decisions and authorizations still needed:**
-- removal of `banking_proxy/` (code-cleanup)
-- creating `novasoftwarefoundation/mica` and `eyra/next` (repo-create)
+- creating `novasoftwarefoundation/mica`, `novasoftwarefoundation/mica-saas` and `eyra/next` (repo-create)
 - using a production snapshot and marking the baselines as applied (data-tables and ops-cutover)
 - the production cutover (ops-cutover)
 - the Feldspar transfer (feldspar-transfer)
@@ -135,6 +138,9 @@ Details and rationale are in [design.md](./design.md#decisions).
 
 - **Option A.** `eyra/next` is the root Phoenix project. Mica is a versioned Mix dependency. Every system, in Mica or in a SaaS, implements `Core.System`; the SaaS composes them through `Core.SaaS`. During the migration Next uses `path:` or branch dependencies; afterwards it pins to tags.
 - **Governance and graduation.** Mica contains only code under Nova governance. Custom and experimental systems live in the SaaS as `Core.System` systems and can graduate to Mica later: the system moves from the SaaS's list into `Core.Systems.all/0`. Graphite and Zircon (with Paper, Annotation, Ontology and Onyx) start in Next, as the proof that the contract works.
+- **Mica only contains code Next (re)uses** (decided 2026-10-29, d-0011). Next and the reference SaaS may have custom code, and may copy code from each other. Mica ships no neutral pages, brand or home that only the reference SaaS would use: every SaaS provides its own sign-in pages, brand, home and policy pages.
+- **No router in Mica** (decided 2026-10-30, d-0009). Each SaaS owns its router and its endpoint, built with Mica's macros. Mica's systems offer their routes as quoted route blocks. Mica builds its links with a recording sigil, `~m`, and every SaaS checks them against its own router. See [code-compose](#code-compose--no-router-and-no-saas-composition-in-micas-compiled-code).
+- **Mica's repository is not a SaaS** (decided 2026-10-30, m-0460). It holds no test SaaS, router or endpoint. Mica tests that need a SaaS environment live in the reference SaaS, mica-saas, which is its own repository with its own test suite. Its suite is a required check on every Mica pull request (decided 2026-10-30).
 - **Optional Mica building blocks:** assignment, fund, affiliate, and pool/advert/promotion.
 - **Moves to the SaaS (instance specifics):**
   - PaNL names and panl.nl URLs
@@ -149,9 +155,10 @@ Details and rationale are in [design.md](./design.md#decisions).
   - foreign keys point only from the SaaS to Mica
   - `workflow_tool_refs` and `project_items` become open registry references
   - at the split, the migrations are squashed into Mica and Next baselines, which are marked as applied in Eyra production after a dry run on a production snapshot
-- **Layout.** `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is the reference SaaS on Mica: a sibling of Next, not part of Mica (`core/mica_saas/` since code-layout). A separate `novasoftwarefoundation/mica-saas` repository is a later decision.
+- **Layout.** `core/` is split with `git mv` into three Mix projects: `mica/`, `mica_saas/` (the reference SaaS, Self) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is a sibling of Next, not part of Mica (`core/mica_saas/` since code-layout). It gets its own repository, `novasoftwarefoundation/mica-saas`, and never lives in Mica's repository (decided 2026-10-30, m-0460).
 - **Repositories:**
   - `mica/` goes to `novasoftwarefoundation/mica` with fresh history. Its first commit points back to the `eyra/mono` commit it came from.
+  - `mica_saas/` goes to `novasoftwarefoundation/mica-saas` with fresh history, pointing back the same way.
   - `next/` goes to `eyra/next`.
   - `eyra/mono` stays available, because Self deployments use it.
 - **Deployment model.** One SaaS per deployment. Each operator builds and runs its own SaaS on Mica; multi-tenancy is out of scope.
@@ -273,14 +280,14 @@ Details and rationale are in [design.md](./design.md#decisions).
   - A Fly Postgres database and a storage bucket. Machines stop when idle.
   - Auto-deploy from `develop`, like `eyra-next-dev`.
   - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
-  - Neutral configuration: no Eyra branding and no Eyra secrets. The configuration is documented in `core/mica_saas/README.md`.
+  - Dev-grade configuration: Eyra's dev Mailgun and `*@eyra.co` admins are accepted, because the server is Eyra-internal. The configuration is documented in `core/mica_saas/README.md`.
 - **Dependencies.** After code-layout. Ideally together with build-image: the app then deploys the private `ghcr.io/eyra/self` image by digest. Until then, it builds from `core/Dockerfile` with `BUNDLE=self`.
 - **Parallel with.** build-image, code-systems and later steps, track Feldspar. It doubles as the rehearsal environment for build-image (R).
 - **Eyra prod impact.** None. It is a separate Fly app with its own database, bucket and secrets.
 - **Risks.** `BUNDLE=self` compiles with 17 `no route path` warnings, so the first deploy may show broken Self pages. The fixes belong to code-systems and code-brand, not to this step; the smoke test covers only the pages listed above.
 - **Verification.**
   - A push to `develop` deploys to `nova-mica-dev`, and the smoke test passes.
-  - The deployed app shows no Eyra branding and uses no Eyra secrets.
+  - The deployed app uses dev-grade configuration only: no production secrets.
   - Machines stop when idle and start again on the next request.
 - **Rollback.** Stop or delete the Fly app; nothing else depends on it.
 - **Decisions/authorizations.** Creating the Fly app, its database and bucket, and their monthly cost.
@@ -295,7 +302,7 @@ Details and rationale are in [design.md](./design.md#decisions).
       - `DATABASE_URL`: the database
       - `AWS_S3_BUCKET`: the private bucket
       - `PUBLIC_S3_BUCKET`: the public bucket
-      - `APPSIGNAL_REVISION`: the release revision, set inside the image at build time
+      - `APPSIGNAL_REVISION`: the release revision, set per deploy and environment, not inside the image (decided 2026-10-16): prod `next_<date>_<n>`, staging `milestone-<N>_<short sha>`, dev `develop_<short sha>`
 
       The order:
       1. Add the new names everywhere first. A devops PR adds `DATABASE_URL` on AWS next to `DB_URL`; Fly gets `AWS_S3_BUCKET` and `PUBLIC_S3_BUCKET` as staged secrets.
@@ -309,7 +316,8 @@ Details and rationale are in [design.md](./design.md#decisions).
       3. **No platform branches and no aliases.** AWS/Fly differences are only environment values, and every setting is read under one name (see above).
       4. **Staging runs what production runs.** Staging runs the same image and `runtime.exs` as production. A parity script compares which environment variable *names* are set on production and on staging.
       5. **Gradual rollout.** Canary on node 02, then node 01 (P in ops-prod-image). On a failed health check, roll back to the previous image digest.
-      6. **CODEOWNERS rule.** Changes to `runtime.exs` need approval from a code owner (for example Joeri).
+      6. **CODEOWNERS rule.** Melle and Joeri own `core/config`, including `runtime.exs`. The CODEOWNERS file requests their review; nothing is enforced (decided 2026-10-16).
+  - **M1 follow-ups.** The nova-mica-dev workflow drops the unused `--build-arg PLATFORM=fly` (`fly-deploy-mica-dev.yml`), and the config snapshots get a `mica-dev.env` fixture, because nova-mica-dev runs the same `runtime.exs`.
   - **M2.** `FORCE_SSL` becomes a runtime plug, the unused `SSL_PROXIED` goes, and the release refuses to boot clustered without `RELEASE_COOKIE`.
   - **M3.** One `core/Dockerfile`, built with the repository root as context, on the versions in `.tool-versions`. The root `Dockerfile` is deleted.
   - **M4.** A build workflow pushes one image per commit to GHCR. Fly dev and staging deploy it by digest. `release.yml` tags the image staging tested and extracts the release tarball from it, so the AWS deploy flow does not change yet.
@@ -416,11 +424,86 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - The merge moment and the merge freeze, agreed with the Next team.
   - Whether the release binary stays `core` or becomes `next` (open question 3).
 
+### code-compose — No router and no SaaS composition in Mica's compiled code
+
+- **Goal.** Mica compiles without knowing which SaaS uses it, so it can compile, test and run as a Mix dependency of the SaaS (Option A). Mica holds no router, no endpoint module and no verified routes (decided 2026-10-30, d-0009).
+  - **Why.** Today the router, the authorization module and the notify message schema read the configured SaaS's systems while Mica compiles. Under Option A, Mica compiles before the SaaS exists, so that can't work:
+    - `router.ex:11` splices `override_routes()`
+    - `routes.ex:82` splices `routes()`
+    - `authorization.ex:24` splices `grants()`
+    - `notify/message_model.ex:16` builds an `Ecto.Enum` from the composition
+  - **Two module scans see only the `:core` application:** `Repo.orphan?/2` and the authorization entity list. After code-split they would miss Next's schemas.
+  - **Mica's tests run with Next composed in.**
+- **Scope.** Comes after code-rename, so the names below are the Mica names. The design, with the inventory, the spikes and the options compared, is kept by the Nova migration project (thread t-0033, `compose-design.md`).
+  - **Routers and endpoints belong to the SaaS.**
+    - `NextWeb.Router` and `MicaSaasWeb.Router` are `use Phoenix.Router` with Mica's macros, in an order each SaaS writes:
+      - `MicaWeb.Pipelines.define/0`
+      - `Mica.SaaS.Routes.override_routes/1` and `system_routes/1`
+      - `MicaWeb.BaseRoutes`
+    - `NextWeb.Endpoint` and `MicaSaasWeb.Endpoint` are `use MicaWeb.Endpoint, router: …`. The session cookie, salt and socket paths stay the same.
+    - `Mica.SaaS` gets the required callbacks `router/0` and `endpoint/0`. Mica reaches the endpoint only through `Mica.SaaS.endpoint()`.
+    - Mica's systems offer their routes as quoted blocks in `routes/0` and `override_routes/0`, as today.
+    - `core/mica` has no router module, no route table and no `Phoenix.VerifiedRoutes`.
+  - **Mica paths.**
+    - **The sigil.** Mica builds its links with `~m` (`MicaWeb.Path`), which builds paths exactly like `~p` and records each one in its module. The swap is a literal `~p"` → `~m"` in 126 files.
+    - **The check.** Every SaaS checks all recorded Mica paths against its router with `MicaWeb.PathCheck`: a compile-time warning (`use MicaWeb.PathCheck` in the router) and a test that fails. It also checks that a Mica module serves each matched route, so a Mica link to a page only that SaaS serves fails too. A SaaS's own override routes are allowed.
+    - **For Mica's own links, the reference is mica-saas's check.**
+  - **Web modules.** SaaS code keeps Phoenix's `~p`, verified against its own router, through `use NextWeb, :live_view` / `use MicaSaasWeb, :live_view`. A credo check stops `use MicaWeb` in SaaS folders and `~p` in `core/mica`.
+  - **Grants** are plain data in `Mica.System.grants/0`, merged into the permission map at boot.
+  - **Notify channels** become a string with a runtime-checked `Ecto.Type` instead of a compile-time `Ecto.Enum`. There is no migration. A stored channel that the composition doesn't have loads, and fails only its own message.
+  - **`config :mica, saas:`** is read at boot, not at compile time, and the composition is cached in `:persistent_term`.
+    - **`Mica.SaaS.validate!/0`** checks every collection at boot. It catches:
+      - duplicate systems, handlers, notifiers, channels, queues, crons, Desktop sections and sign-in handoffs (`sign_in_handoffs/0`)
+      - flag defaults that no system declares
+      - grant widening, which must be explicit and is logged
+      - notify event channels that no system declares
+    - In dev and test, a flag read that no system declares logs a warning.
+  - **Module scans.** `Repo.orphan?/2` and the authorization entity list see the schemas of every application in the composition (`Mica.SaaS.schemas/0`), not only Mica's.
+  - **Test overrides** of handlers, notifiers and Desktop sections leave the production paths. They become one test hook, `Mica.SaaS.put_composition/1`. `assignment_templates` becomes a `Mica.System` callback.
+  - **Sign-in pages belong to the SaaS** (decided 2026-10-29, d-0011).
+    - Mica links to them through required `Mica.SaaS` callbacks: `sign_in_page/0`, `member_sign_in_page/1`, `identify_page/1`, `session_path/0`.
+    - None of these has a default in Mica, and the `title/0` default goes too.
+  - **Mica's tests need no SaaS** (decided 2026-10-30: m-0460, and d-0012 for the composition).
+    - **What stays in `mica/test`:** only tests that need no router, endpoint or `Mica.SaaS` callback, on a composition of Mica's own systems. `mica/test/test_helper.exs` sets it in one line, `Mica.SaaS.put_composition(systems: Mica.Systems.all())`, with no SaaS module, router or endpoint. `Mica.SaaS` callbacks raise in it.
+    - **What moves:** about 200 test files stay. About 104 router and endpoint test files move to `mica_saas/test`, Self's suite. Tests of Next's systems move to `next/test`.
+    - **CI** runs `mica/test`, `mica_saas/test` (with `BUNDLE=self`) and `next/test`.
+    - **Checks:** the boundary check scans `mica/test` with its own allowlist section, which only shrinks. A credo check keeps `ConnCase`, `LiveViewTest`, `@endpoint` and Wallaby out of `mica/test`.
+  - **PRs**, one at a time:
+    1. grants at boot
+    2. notify channel type
+    3. schemas across applications
+    4. runtime SaaS and `validate!/0`
+    5. SaaS web modules
+    6. Mica paths (`~m`)
+    7. SaaS endpoints
+    8. SaaS routers, which delete Mica's router
+    9. router and endpoint tests to `mica_saas/test`
+    10. Mica's tests on Mica's own composition
+- **Dependencies.** code-systems and code-rename (decided 2026-10-30: rename first, so the new modules get their Mica names).
+- **Parallel with.** code-brand, code-registry, code-instance, build-image, track Feldspar. Two PRs are large but mechanical, the web modules (about 94 SaaS files) and `~p` → `~m` (295 uses in 126 Mica files). Each comes with a script and merges at a quiet moment.
+- **Eyra prod impact.** None intended. Requests, grants, sessions and notifications behave as before. The endpoint module's name changes (`MicaWeb.Endpoint` → `NextWeb.Endpoint`), so its config keys and any runbook snippets that name it change too.
+- **Verification.**
+  - The route, permission, handler and cron snapshots are identical for Next and Self.
+  - `/.status/features` is unchanged on staging.
+  - The path check, routes and route owners, passes for Next and Self.
+  - Sessions and LiveView clients survive the endpoint switch on staging.
+  - `mica/test` (no SaaS), `mica_saas/test` and `next/test` are green, with the same total number of tests.
+  - Changing `BUNDLE` recompiles no Mica file.
+  - Notify messages on staging still load and deliver.
+- **Rollback.** Revert per PR. No data changes.
+- **Decisions/authorizations.** None.
+- **Done when:**
+  - no Mica module reads the SaaS at compile time: no `compile_env(:mica, :saas)`, no `Mica.SaaS` route, grant or channel macros
+  - the `router.ex` and `authorization.ex` allowlist entries are gone (code section 36 → 34)
+  - `core/mica` has no router module, no `~p` and no `Phoenix.VerifiedRoutes`
+  - every SaaS's path-check test passes, and `Mica.SaaS` has no default that points to a SaaS page
+  - `mica/test` runs with no SaaS in CI and holds no router, endpoint or SaaS-callback test
+
 ### code-brand — Brand and config seams
 
 - **Goal.** Mica code contains no Eyra or Next branding and no instance config, and Next reproduces today's output exactly.
 - **Scope.**
-  - **`Core.Brand` behaviour with a neutral Mica default.** `Next.Brand` provides:
+  - **`Core.Brand` behaviour, no default in Mica** (d-0011: Mica only contains code Next (re)uses). Every SaaS implements it: `Next.Brand`, and `MicaSaas.Brand` for the reference SaaS. `Next.Brand` provides:
     - name and logos
     - footer, now in [`core/frameworks/pixel/components/footer.ex`](../../core/frameworks/pixel/components/footer.ex) (the "Powered by Eyra" line becomes Next's choice)
     - policy URLs (`next_*` and `panl_*` in `core/config/config.exs`)
@@ -436,6 +519,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - Replace brand words in msgstrs with brand interpolation.
     - Give Next its own Gettext backend for the `eyra-next` and PaNL copy.
   - **De-brand Pixel:** the footer, the logo catalogue and the `__eyra_field_*` attributes.
+  - **Sign-in, OTP and identify pages stay with each SaaS.** The reference SaaS's pages do not graduate into Mica (d-0011).
 - **Dependencies.** code-systems.
 - **Parallel with.** code-registry and code-instance, track Feldspar. Schedule the gettext rename at a quiet moment, because it touches every `dgettext` call.
 - **Eyra prod impact.** None visible.
@@ -443,8 +527,9 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - Snapshot tests of every email template and of the app, workspace and website layouts for Next.
   - All 7 locales resolve.
   - On staging, manually check the sign-up email, the OTP email, the footer and the terms page.
+  - A case-insensitive `eyra` sweep of `core/mica` finds nothing outside gettext domain names (until their rename). That includes "Powered by Eyra" in the app layout, docstrings and comments, and links to `eyra/mono`.
 - **Rollback.** Revert.
-- **Decisions/authorizations.** Whether Mica shows "Powered by Mica / Nova" by default (open question 7).
+- **Decisions/authorizations.** None. "Powered by Mica / Nova" (open question 7) is answered by d-0011: Mica shows nothing of its own, and a SaaS may show it through its brand.
 
 ### code-registry — Open tool and item registry (data migration)
 
@@ -493,7 +578,8 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - the student promotion next action
   - **Pool directors.** Citizen and Student register as pool directors from Next.
   - **Admin and Org.** The citizen/pool admin settings and the Org pools tab become panels contributed by Next systems through Mica's extension points.
-  - **Home.** Mica gets a minimal default home. Next's current home moves to Next and is set through start pages.
+  - **Home.** Next's current home moves to Next and is set through start pages. Mica has no home of its own (d-0011); the reference SaaS gets its own in `mica_saas`.
+  - **Module lookups by name.** `Frameworks.Utility.Module` stops naming the `Next` and `Self`/`MicaSaas` namespaces and stops computing `Systems.#{system}.#{name}`; pool directors come from `pool_directors/0`.
   - **Eyra-domain synthetic accounts.** The `@eyra.service`, `external+…@eyra.co` and `@next.eyra.co` addresses become config with Next's values.
   - **External panel ids.** `liss` and `ioresearch` become Next config. Mica keeps `generic`.
   - **Integrations.** SURFconext and Centerdata auth, the OPP payment provider and Yoda storage move behind their behaviours. They go to `core/next/integrations` until their owner is decided (open question 5). Only Nova-governed code goes into Mica; they can graduate later.
@@ -515,8 +601,9 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Rollback.** Revert per PR.
 - **Decisions/authorizations.** Ownership of the integrations (open question 5).
 - **Done when:**
-  - the allowlist is empty
+  - the allowlist is empty, including its `mica/test` section
   - `core/mica/**` compiles without `core/next/**` (a CI job does exactly this)
+  - `MicaSaas.SaaS` lists no Next system: the entry for `mica_saas/lib/saas.ex` (decided 2026-10-16, E3) is gone
 
 ### data-tables — Table ownership, migration paths and baselines
 
@@ -571,25 +658,30 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Rollback.** Per host: drain, set `next_runtime` back to the tarball, start the tarball unit of the same release (still on disk) and undrain. The tarball stays available for two milestones after node 01 switches.
 - **Decisions/authorizations.** **Each part of the AWS production switch (P: preparation, canary on node 02, node 01) needs the rehearsal (R), a rollback to the tarball, and the user's go-ahead.**
 
-### code-split — Layout split: `mica/` and `next/` as two Mix projects
+### code-split — Layout split: `mica/`, `mica_saas/` and `next/` as three Mix projects
 
-- **Goal.** Two real Mix projects in this repository, with `core/` gone. This is the shape the repositories will have.
+- **Goal.** Three real Mix projects in this repository, with `core/` gone. This is the shape the repositories will have.
 - **Scope.**
-  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and neutral static assets. Where Self (`core/mica_saas/`) goes in code-split is open question 2.
+  - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and the static assets its own components use. No router, no endpoint module, no SaaS.
+  - **`git mv core/mica_saas mica_saas/`.** This is the Mix project `:mica_saas` (the reference SaaS, Self), with `{:mica, path: "../mica"}` or `MICA_PATH`. It holds its router, endpoint, config, Dockerfile and `fly.mica-dev.toml`, and its own test suite, which includes the Mica tests that need a router or an endpoint (decided 2026-10-30, m-0460).
   - **`git mv core/next next/`.** This is the Phoenix app `:next`, with `{:mica, path: "../mica"}`. Next owns:
-    - endpoint and router composition
+    - its router and endpoint (`NextWeb.Router`, `NextWeb.Endpoint`, built with Mica's macros since code-compose)
     - config, including `runtime.fly.exs` and `runtime.aws.exs`
     - `rel/`, the Dockerfile, `fly.*.toml` and the scripts
     - `assets/`, which imports Mica's JS hooks and adds Mica to the Tailwind content
     - the e2e, smoke and load tests
-  - **Mica keeps its own tests.** They run against the reference SaaS.
+  - **Mica keeps only the tests that need no SaaS.** They run on a composition of Mica's own systems (since code-compose). Mica's CI also runs mica-saas's suite against the Mica code of the same commit, as a required check.
   - **Workflows.**
-    - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`.
-    - Add a Mica CI job that builds and tests `mica/` on its own.
-    - The `BUNDLE` build argument disappears.
+    - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`; nova-mica-dev builds from `mica_saas/`.
+    - Add a Mica CI job that builds `mica/` on its own (warnings as errors) and runs `mica/test`, and a mica-saas job that runs `mica_saas/`'s suite.
+    - The `BUNDLE` build argument disappears, and with it the bundle id `:self`.
     - If build-image has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
-  - **Self.** Self deployments keep building from a pinned tag of this repository from before code-split, unless the reference SaaS is made deployable for them first (open question 2).
-- **Dependencies.** code-systems, code-rename, code-brand, code-registry, code-instance and data-tables: the allowlist is empty and the standalone compile job is green.
+  - **Self.** Self deployments build from `mica_saas/`. The pinned pre-split tag of this repository stays available for anyone who can't switch yet.
+- **Dependencies.** code-systems, code-rename, code-compose, code-brand, code-registry, code-instance and data-tables. Gate:
+  - the allowlist is empty, including its `mica/test` section
+  - the standalone compile job is green: `core/mica/**` compiles without `core/next/**` and `core/mica_saas/**`
+  - `mica/test` passes with no SaaS and holds no router, endpoint or SaaS-callback test
+  - `MicaSaas.SaaS` lists no Next system, and Self's and Next's path checks (routes and route owners) pass
 - **Parallel with.** repo-assess, the data-tables baselines, track Feldspar.
 - **Eyra prod impact.** The build and release pipeline changes; runtime behaviour must not. Rollout:
   1. Rehearse on a branch. Build the Fly image and the AWS tarball from `next/`, deploy to `eyra-next-dev`, and run e2e and smoke tests. If build-image has landed, build the one image instead.
@@ -598,19 +690,20 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   4. Ship to production through the normal AWS release flow. The binary name is unchanged.
 - **Verification.**
   - The release diff shows the same modules (now across `:mica` and `:next`), the same migration versions and the same route and permission snapshots.
+  - Mica's CI is green on its own, and its mica-saas job is green against the same commit.
   - Smoke tests pass on production after the release.
 - **Rollback.** Redeploy the previous release artifact. Reverting the move itself is possible but heavy.
-- **Decisions/authorizations.** The merge moment, agreed with the Next team. The user decides the Self strategy.
+- **Decisions/authorizations.** The merge moment, agreed with the Next team.
 
 ### repo-assess — Pre-transfer assessment
 
 - **Goal.** Know exactly what becomes public or accessible under `novasoftwarefoundation`. The database baselines are part of data-tables.
 - **Scope.** A read-only report covering:
-  - **Content of `mica/`:**
+  - **Content of `mica/` and `mica_saas/`** (both go to `novasoftwarefoundation`):
     - a secrets scan of the tree (for example gitleaks)
     - Eyra-private material: customer names, internal hosts, fixtures with real e-mail domains
     - docs and agent instructions that describe Eyra infrastructure
-  - **History.** Mica starts with fresh history, so only the tree is published. Confirm that pointing the first commit back to `eyra/mono`, which stays public, is acceptable.
+  - **History.** Mica and mica-saas start with fresh history, so only the trees are published. Confirm that pointing the first commit back to `eyra/mono`, which stays public, is acceptable.
   - **Licence.** This repository and `eyra/feldspar` are AGPL-3.0 ([`COPYING.md`](../../COPYING.md)). Two questions need legal input, not an engineering answer:
     - the copyright holder and notices under Nova, and a contributor agreement for non-Eyra contributors
     - the consequences for operators, including for `eyra/next`
@@ -630,29 +723,40 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 
 ### repo-create — Create the repositories
 
-- **Goal.** `novasoftwarefoundation/mica` and `eyra/next` exist and build. `eyra/mono` remains the source of truth until ops-cutover.
+- **Goal.** `novasoftwarefoundation/mica`, `novasoftwarefoundation/mica-saas` and `eyra/next` exist and build. `eyra/mono` remains the source of truth until ops-cutover.
 - **Scope.**
   - **`novasoftwarefoundation/mica`:**
     - fresh history; the first commit is `mica/` at `eyra/mono` commit X, with a message pointing to `eyra/mono@X`
     - the Mica baseline, CI and branch protection
     - tag `v0.1.0`
+    - CI, both jobs required checks on every pull request (decided 2026-10-30):
+      - the `mica` job compiles Mica with warnings as errors and runs `mica/test`
+      - the `mica-saas` job checks out `novasoftwarefoundation/mica-saas` at the branch with the same name as the pull request's branch, or `main`, and runs its suite with `MICA_PATH` pointing at the Mica commit
+    - A Mica change that needs a mica-saas change is two pull requests on same-named branches.
+  - **`novasoftwarefoundation/mica-saas`** (the reference SaaS, Self; decided 2026-10-30, m-0460):
+    - fresh history; the first commit is `mica_saas/` at `eyra/mono` commit X
+    - `{:mica, github: "novasoftwarefoundation/mica", tag: "v0.1.0"}`, with a `MICA_PATH` override for Mica's CI
+    - its own test suite and CI: against its pinned Mica tag on every push, and against Mica's `main` nightly
+    - nova-mica-dev deploys from here; its Fly secrets are re-created
   - **`eyra/next`:**
     - built from `next/` plus the root files Eyra needs
     - history approach is open question 4
     - `{:mica, github: "novasoftwarefoundation/mica", tag: "v0.1.0"}`
     - the Next baseline, workflows and Fly config; secrets are re-created in the new repository
+    - Mica's CI does not check out `eyra/next`; Next tests a Mica upgrade in its own CI
   - **Sync window.** Changes on `eyra/mono` after X are replayed, or development pauses briefly. Keep the window to days.
 - **Dependencies.** code-split, repo-assess and the data-tables baselines.
 - **Parallel with.** Track Feldspar.
 - **Eyra prod impact.** None yet. `eyra/next` deploys only to `eyra-next-dev`.
 - **Verification.**
-  - Mica CI is green on its own.
+  - Mica CI is green on its own and against mica-saas.
+  - mica-saas CI is green against `v0.1.0`.
   - `eyra/next` builds the same release as `eyra/mono@X`.
   - Full e2e passes on dev.
 - **Rollback.** Archive the new repositories. Nothing depends on them yet.
 - **Decisions/authorizations.**
-  - **The user authorizes creating `novasoftwarefoundation/mica` (public) and `eyra/next`.**
-  - The user decides who gets admin rights on the Nova repository.
+  - **The user authorizes creating `novasoftwarefoundation/mica` (public), `novasoftwarefoundation/mica-saas` (public) and `eyra/next`.**
+  - The user decides who gets admin rights on the Nova repositories.
 
 ### ops-cutover — Cutover of Eyra production to `eyra/next`
 
@@ -666,7 +770,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
      - deploy the `eyra/next` release through the normal AWS flow
      - run `predeploy`; nothing should be pending
      - run the smoke tests
-  4. Point the Fly dev/staging workflows and the AWS release source at `eyra/next`, and disable the Next workflows in `eyra/mono`.
+  4. Point the Fly dev/staging workflows and the AWS release source at `eyra/next`, point the nova-mica-dev deploy at `novasoftwarefoundation/mica-saas`, and disable both in `eyra/mono`.
   5. Monitor AppSignal and the job queues for one milestone.
 - **Rollback plan.**
   - Before the baseline marking: abort and keep `eyra/mono`.
@@ -737,15 +841,15 @@ One step ID was renamed, on 2026-10-16, before any build work on that step had s
 
 ## Open questions
 
-1. **`eyra/mono` after the split.** Read-only/archived, or security fixes for the Self deployments that use it? If fixes: who backports them, and for how long? Should Self move to Mica's reference SaaS (or `novasoftwarefoundation/mica-saas`) instead, and when?
-2. **Self during code-split.** Do Self deployments pin to a pre-split tag, or must the reference SaaS be deployable for them first?
+1. **`eyra/mono` after the split.** Read-only/archived, or security fixes for deployments still on the pre-split tag? If fixes: who backports them, and for how long? (Where Self goes is answered in question 2.)
+2. **Self during code-split.** Answered 2026-10-30 (m-0460): Self becomes the Mix project `mica_saas/` in code-split and `novasoftwarefoundation/mica-saas` in repo-create, with its own test suite. Self deployments build from it; the pre-split tag stays available.
 3. **Release binary name.** Keep `bin/core` through the cutover, or rename to `next`? Renaming requires changing Eyra's AWS deploy tooling.
 4. **`eyra/next` history.** Fresh start with a pointer (like Mica), or filtered full history?
 5. **Integrations** (OPP, Yoda, SURFconext, Centerdata). Mica building blocks under Nova governance, separate Nova-owned packages, or Next?
 6. **Generic cloud backends** (S3/Tigris, Azure storage, Mailgun/SES). Mica core or integration packages?
-7. **"Powered by Mica / Nova".** A default in Mica's brand, configurable, or nothing?
+7. **"Powered by Mica / Nova".** Answered 2026-10-29 (d-0011): nothing in Mica, which has no default brand. A SaaS may show it through its own brand.
 8. **Eyra-owned forks** used as Mica dependencies (`bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`). Move them to Nova, upstream them, or keep them as Eyra-maintained?
 9. **Licence and copyright.** Copyright holder for Mica and Feldspar after the move, and the AGPL-3.0 consequences for operators. This needs legal input.
 10. **Translation overrides.** Do SaaS repositories need to override Mica's UI copy?
 
-<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; step IDs by t-0016).</sub>
+<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; step IDs by t-0016; code-compose by t-0033).</sub>
