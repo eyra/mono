@@ -13,6 +13,7 @@
        "next/systems/account/auth_identify_page.ex",
        "next/systems/account/auth_provider_page.ex",
        "next/systems/account/signin_page.ex",
+       "next/systems/announcement/page.ex",
        "next/systems/graphite/leaderboard_content_page.ex",
        "next/systems/graphite/leaderboard_page.ex",
        "next/systems/onyx/landing_page.ex"
@@ -55,6 +56,8 @@
        "next/systems/account/native_signin_controller.ex",
        "next/systems/account/session_controller.ex",
        "next/systems/account/signin_page.ex",
+       "next/systems/announcement/_routes.ex",
+       "next/systems/announcement/page.ex",
        "next/systems/e2e/controller.ex",
        "next/systems/graphite/_routes.ex",
        "next/systems/graphite/export_controller.ex",

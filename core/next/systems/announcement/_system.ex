@@ -9,5 +9,22 @@ defmodule Systems.Announcement.System do
   """
   use Core.System
 
+  def routes do
+    quote do
+      require Systems.Announcement.Routes
+      Systems.Announcement.Routes.routes()
+    end
+  end
+
+  # Who may open an announcement is decided by its recipient rows
+  # (`Systems.Announcement.Public.get_received/2`), not by a role.
+  def grants do
+    quote do
+      [
+        {Systems.Announcement.Page, [:member]}
+      ]
+    end
+  end
+
   def feature_flags, do: [:announcements]
 end
