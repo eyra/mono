@@ -95,7 +95,8 @@ defmodule Systems.NextAction.Public do
     * `:params` - passed to the action's `to_view_model/2`
     * `:priority` - `:high`, `:normal` (default) or `:low`; lists show higher
       priorities first. Creating an existing next action again increases its
-      count and only changes its priority when `:priority` is given.
+      count and only changes its priority when `:priority` is given. Leave the
+      option out instead of passing `nil`, which the changeset refuses.
   """
   def create_next_action(audience, action, opts \\ [])
 

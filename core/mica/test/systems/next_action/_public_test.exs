@@ -100,6 +100,12 @@ defmodule Systems.NextAction.PublicTest do
       assert Repo.get_by!(NextAction.Model, user_id: user.id).priority == :low
     end
 
+    test "rejects a nil priority", %{user: user} do
+      assert_raise Ecto.InvalidChangesetError, fn ->
+        create_titled(user, "a", priority: nil)
+      end
+    end
+
     test "rejects an unknown priority", %{user: user} do
       assert_raise Ecto.InvalidChangesetError, fn ->
         create_titled(user, "a", priority: :urgent)
@@ -163,8 +169,15 @@ defmodule Systems.NextAction.PublicTest do
     end
 
     test "next_best_action_for_key/2 returns the highest priority for the key", %{user: user} do
-      Public.create_next_action(user, SomeAction, key: "low-new", priority: :high)
-      assert %{title: "Test: 1"} = Public.next_best_action_for_key(user, "low-new")
+      Public.create_next_action(user, SomeAction, key: "shared", priority: :low)
+      create_titled(user, "shared", priority: :high)
+
+      from(na in NextAction.Model,
+        where: na.user_id == ^user.id and na.action == ^to_string(TitledAction)
+      )
+      |> Repo.update_all(set: [inserted_at: ~N[2020-01-01 00:00:00]])
+
+      assert %{title: "shared"} = Public.next_best_action_for_key(user, "shared")
     end
   end
 

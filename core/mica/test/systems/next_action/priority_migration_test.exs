@@ -29,4 +29,22 @@ defmodule Systems.NextAction.PriorityMigrationTest do
 
     assert %{priority: :normal} = Repo.get_by!(NextAction.Model, user_id: user_id)
   end
+
+  test "refuses a priority outside the levels" do
+    %{id: user_id} = Factories.insert!(:member)
+
+    error =
+      assert_raise Postgrex.Error, fn ->
+        Repo.query!(
+          """
+          INSERT INTO next_actions (user_id, action, count, priority, inserted_at, updated_at)
+          VALUES ($1, 'Elixir.Systems.Account.NextActions.CompleteProfile', 1, 5, now(), now())
+          """,
+          [user_id]
+        )
+      end
+
+    assert %{postgres: %{code: :check_violation, constraint: "next_actions_priority_check"}} =
+             error
+  end
 end
