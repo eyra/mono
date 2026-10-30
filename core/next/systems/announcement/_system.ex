@@ -10,4 +10,6 @@ defmodule Systems.Announcement.System do
   use Core.System
 
   def feature_flags, do: [:announcements]
+
+  def admin_panels, do: [Systems.Announcement.AdminPanel]
 end

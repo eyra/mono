@@ -1,0 +1,88 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.kind"
+msgstr "Kind"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.priority"
+msgstr "Priority"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.published"
+msgstr "Published"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.recipients"
+msgstr "Recipients"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.title"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "admin.empty"
+msgstr "No announcements yet."
+
+#, elixir-autogen, elixir-format
+msgid "admin.new.button"
+msgstr "New announcement"
+
+#, elixir-autogen, elixir-format
+msgid "admin.not.published"
+msgstr "Not published"
+
+#, elixir-autogen, elixir-format
+msgid "admin.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "form.body.label"
+msgstr "Text"
+
+#, elixir-autogen, elixir-format
+msgid "form.cancel.button"
+msgstr "Cancel"
+
+#, elixir-autogen, elixir-format
+msgid "form.kind.label"
+msgstr "Kind"
+
+#, elixir-autogen, elixir-format
+msgid "form.priority.label"
+msgstr "Priority"
+
+#, elixir-autogen, elixir-format
+msgid "form.save.button"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format
+msgid "form.summary.label"
+msgstr "Short summary"
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "kind.release_notes"
+msgstr "Release notes"
+
+#, elixir-autogen, elixir-format
+msgid "priority.high"
+msgstr "High"
+
+#, elixir-autogen, elixir-format
+msgid "priority.normal"
+msgstr "Normal"
