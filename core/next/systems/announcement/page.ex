@@ -42,12 +42,10 @@ defmodule Systems.Announcement.Page do
         <div data-testid="announcement-title">
           <Text.title2><%= @vm.announcement_title %></Text.title2>
         </div>
-        <%= if @vm.published do %>
-          <div data-testid="announcement-published">
-            <Text.body_medium color="text-grey2"><%= @vm.published %></Text.body_medium>
-          </div>
-          <.spacing value="M" />
-        <% end %>
+        <div data-testid="announcement-published">
+          <Text.body_medium color="text-grey2"><%= @vm.published %></Text.body_medium>
+        </div>
+        <.spacing value="M" />
         <div class="wysiwyg" data-testid="announcement-body">
           <%= raw(@vm.body) %>
         </div>

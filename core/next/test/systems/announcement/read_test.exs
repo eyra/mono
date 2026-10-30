@@ -39,7 +39,7 @@ defmodule Systems.Announcement.ReadTest do
       assert NextAction.Public.count_next_actions(user) == 0
     end
 
-    test "changes nothing when it was read before", %{
+    test "keeps the first read_at and clears a To-do that is there after reading", %{
       announcement: %{id: id},
       user: user,
       recipient: recipient
@@ -48,9 +48,13 @@ defmodule Systems.Announcement.ReadTest do
       create_to_do!(user, id)
 
       assert %{read_at: ^read_at} = Announcement.Public.mark_read(read)
+      assert NextAction.Public.count_next_actions(user) == 0
+
+      create_to_do!(user, id)
+
       assert %{read_at: ^read_at} = Announcement.Public.mark_read(recipient)
       assert %{read_at: ^read_at} = Repo.reload!(recipient)
-      assert NextAction.Public.count_next_actions(user) == 1
+      assert NextAction.Public.count_next_actions(user) == 0
     end
   end
 

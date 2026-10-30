@@ -52,16 +52,27 @@ defmodule Systems.Announcement.PageTest do
       assert %{read_at: %DateTime{}} = Repo.reload!(ctx.recipient)
     end
 
-    test "opening it again changes nothing", %{conn: conn, announcement: %{id: id}} = ctx do
+    test "opening it again keeps the first read_at and clears a To-do that came back",
+         %{conn: conn, announcement: %{id: id}} = ctx do
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
       %{read_at: read_at} = Repo.reload!(ctx.recipient)
 
-      # A To-do with the same key, which a second opening must leave alone.
       create_to_do!(ctx.creator, id)
 
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 
       assert %{read_at: ^read_at} = Repo.reload!(ctx.recipient)
+      assert NextAction.Public.count_next_actions(ctx.creator) == 0
+    end
+
+    test "a plain HTTP fetch of the page leaves it unread and keeps the To-do",
+         %{conn: conn, announcement: %{id: id}} = ctx do
+      create_to_do!(ctx.creator, id)
+
+      assert conn |> get(~p"/announcement/#{id}") |> html_response(200) =~
+               "Release notes October"
+
+      assert %{read_at: nil} = Repo.reload!(ctx.recipient)
       assert NextAction.Public.count_next_actions(ctx.creator) == 1
     end
 
@@ -126,6 +137,15 @@ defmodule Systems.Announcement.PageTest do
       assert %{read_at: nil} = Repo.reload!(ctx.recipient)
     end
 
+    test "for an announcement that is not published", %{conn: conn} = ctx do
+      draft = create_announcement!(ctx.author, "Draft", nil)
+      recipient = insert_recipient!(draft, ctx.creator)
+      conn = sign_in(conn, ctx.creator)
+
+      assert_error_sent(404, fn -> get(conn, ~p"/announcement/#{draft.id}") end)
+      assert %{read_at: nil} = Repo.reload!(recipient)
+    end
+
     test "for an id that is not a number", %{conn: conn} = ctx do
       conn = sign_in(conn, ctx.creator)
 
@@ -161,7 +181,7 @@ defmodule Systems.Announcement.PageTest do
     Keyword.fetch!(ctx, :conn)
   end
 
-  defp create_announcement!(author, title) do
+  defp create_announcement!(author, title, published_at \\ @published_at) do
     {:ok, announcement} =
       Announcement.Public.create_announcement(author, %{
         kind: :release_notes,
@@ -172,7 +192,7 @@ defmodule Systems.Announcement.PageTest do
       })
 
     announcement
-    |> Ecto.Changeset.change(published_at: @published_at)
+    |> Ecto.Changeset.change(published_at: published_at)
     |> Repo.update!()
   end
 

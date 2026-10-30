@@ -196,6 +196,13 @@ defmodule Systems.Announcement.PublicTest do
       assert older_id == older.id
     end
 
+    test "leaves out announcements that are not published", %{author: author} do
+      user = Factories.insert!(:creator)
+      {:ok, _} = insert_recipient(create_announcement(author), user)
+
+      assert Announcement.Public.list_received(user) == []
+    end
+
     test "is empty for a user without announcements" do
       assert Announcement.Public.list_received(Factories.insert!(:creator)) == []
     end
@@ -204,7 +211,7 @@ defmodule Systems.Announcement.PublicTest do
   describe "get_received/2" do
     test "returns the user's recipient row with the announcement", %{author: author} do
       user = Factories.insert!(:creator)
-      %{id: id} = announcement = create_announcement(author)
+      %{id: id} = announcement = create_announcement(author, ~U[2026-10-28 09:00:00Z])
       {:ok, _} = insert_recipient(announcement, user)
 
       assert %Announcement.RecipientModel{announcement: %Announcement.Model{id: ^id}} =
@@ -212,11 +219,19 @@ defmodule Systems.Announcement.PublicTest do
     end
 
     test "returns nil when the user did not receive the announcement", %{author: author} do
-      announcement = create_announcement(author)
+      announcement = create_announcement(author, ~U[2026-10-28 09:00:00Z])
       {:ok, _} = insert_recipient(announcement, Factories.insert!(:creator))
 
       assert Announcement.Public.get_received(Factories.insert!(:creator), announcement.id) ==
                nil
+    end
+
+    test "returns nil when the announcement is not published", %{author: author} do
+      user = Factories.insert!(:creator)
+      announcement = create_announcement(author)
+      {:ok, _} = insert_recipient(announcement, user)
+
+      assert Announcement.Public.get_received(user, announcement.id) == nil
     end
   end
 
