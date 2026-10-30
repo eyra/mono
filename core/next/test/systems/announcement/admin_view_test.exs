@@ -121,6 +121,27 @@ defmodule Systems.Announcement.AdminViewTest do
       assert html =~ "Not published"
     end
 
+    test "every link opens in a new tab, whatever target it had", %{conn: conn, admin: admin} do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+
+      save(
+        view,
+        @attrs,
+        ~s|<div><a href="https://a.org" target="_self">a</a> | <>
+          ~s|<a href='https://b.org' TARGET=_top target="_parent">b</a> | <>
+          ~s|<a href="https://c.org" target="_blank">c</a> <a href="https://d.org">d</a></div>|
+      )
+
+      assert [%Announcement.Model{body: body}] = Repo.all(Announcement.Model)
+
+      assert body ==
+               ~s|<div><a href="https://a.org" target="_blank">a</a> | <>
+                 ~s|<a href="https://b.org" target="_blank">b</a> | <>
+                 ~s|<a href="https://c.org" target="_blank">c</a> | <>
+                 ~s|<a href="https://d.org" target="_blank">d</a></div>|
+    end
+
     test "cancel closes the form", %{conn: conn, admin: admin} do
       view = mount_view(conn, admin)
 

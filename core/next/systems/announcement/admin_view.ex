@@ -49,9 +49,7 @@ defmodule Systems.Announcement.AdminView do
         %{"announcement" => attrs} = params,
         %{assigns: %{current_user: user}} = socket
       ) do
-    body =
-      params |> Map.get("announcement[body]_input", "") |> TrixPostProcessor.add_target_blank()
-
+    body = params |> Map.get("announcement[body]_input", "") |> open_links_in_new_tab()
     attrs = Map.put(attrs, "body", body)
 
     case Announcement.Public.create_announcement(user, attrs) do
@@ -60,6 +58,23 @@ defmodule Systems.Announcement.AdminView do
 
       {:error, changeset} ->
         {:noreply, assign(socket, form: to_form(changeset, as: :announcement))}
+    end
+  end
+
+  # `add_target_blank/1` skips links that already have a target, and the
+  # scrubber drops every target but `_blank`, so other targets go first.
+  @link_target ~r/(<a\b[^>]*?)\s+target\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i
+
+  defp open_links_in_new_tab(body) do
+    body
+    |> drop_link_targets()
+    |> TrixPostProcessor.add_target_blank()
+  end
+
+  defp drop_link_targets(body) do
+    case Regex.replace(@link_target, body, "\\1") do
+      ^body -> body
+      dropped -> drop_link_targets(dropped)
     end
   end
 
