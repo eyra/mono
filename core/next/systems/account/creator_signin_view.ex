@@ -1,5 +1,5 @@
-defmodule Next.Account.CreatorSigninView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Account.CreatorSigninView do
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Line
   import Systems.Account.UserForm

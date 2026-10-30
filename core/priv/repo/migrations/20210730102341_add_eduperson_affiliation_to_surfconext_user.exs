@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddEdupersonAffiliationToSurfconextUser do
+defmodule Mica.Repo.Migrations.AddEdupersonAffiliationToSurfconextUser do
   use Ecto.Migration
 
   def change do

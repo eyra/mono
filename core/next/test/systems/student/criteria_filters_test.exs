@@ -1,6 +1,6 @@
-defmodule Systems.Student.CriteriaFiltersTest do
-  use Core.DataCase, async: true
-  alias Systems.Student.CriteriaFilters
+defmodule Next.Systems.Student.CriteriaFiltersTest do
+  use Mica.DataCase, async: true
+  alias Next.Systems.Student.CriteriaFilters
 
   describe "include?/2" do
     test "include with nil filters, 2 codes: true" do

@@ -1,6 +1,6 @@
 defmodule Systems.Account.OnboardingPageBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
 
@@ -11,7 +11,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
   describe "view_model/2 with confirmed user" do
     setup do
       user = Factories.insert!(:member)
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
       %{user: user}
     end
 
@@ -55,7 +55,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
   describe "view_model/2 with unconfirmed user" do
     setup do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
       %{user: user}
     end
 
@@ -92,9 +92,9 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
           creator: true,
           verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
-        |> Core.Repo.insert()
+        |> Mica.Repo.insert()
 
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
 
       %{user: user}
     end
@@ -136,7 +136,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
     setup do
       email = "otp-#{System.unique_integer([:positive])}@example.com"
       {:ok, user} = Account.Public.register_user_with_email(email)
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
 
       %{user: user}
     end
@@ -164,7 +164,7 @@ defmodule Systems.Account.OnboardingPageBuilderTest do
   describe "view_model/2 defaults" do
     setup do
       user = Factories.insert!(:member)
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
       %{user: user}
     end
 

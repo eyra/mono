@@ -1,6 +1,6 @@
-defmodule Systems.Student.Years do
+defmodule Next.Systems.Student.Years do
   @moduledoc """
     Defines student years supported by the studentpool app.
   """
-  use Core.Enums.Base, {:student_years, [:first, :second]}
+  use Mica.Enums.Base, {:student_years, [:first, :second]}
 end

@@ -1,5 +1,5 @@
 defmodule Systems.Userflow.PublicTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Userflow
 
@@ -44,7 +44,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "mark_visited/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.insert(:userflow)
       {:ok, step} = Userflow.Public.add_step(userflow, "group-1")
       {:ok, user: user, step: step}
@@ -59,7 +59,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "next_step/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow()
       {:ok, user: user, userflow: userflow}
     end
@@ -78,7 +78,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "finished?/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow()
       {:ok, user: user, userflow: userflow}
     end
@@ -111,7 +111,7 @@ defmodule Systems.Userflow.PublicTest do
 
   describe "get_progress/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow_finished(user)
       {:ok, user: user, userflow: userflow}
     end
@@ -127,7 +127,7 @@ defmodule Systems.Userflow.PublicTest do
     end
 
     test "returns empty list when no progress exists", %{userflow: userflow} do
-      other_user = Core.Factories.insert!(:member)
+      other_user = Mica.Factories.insert!(:member)
       assert [] == Userflow.Public.list_progress(userflow, other_user.id)
     end
   end

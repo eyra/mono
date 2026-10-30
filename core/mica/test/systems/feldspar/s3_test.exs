@@ -6,9 +6,9 @@ defmodule Systems.Feldspar.S3Test do
   setup :verify_on_exit!
 
   setup do
-    initial_config = Application.get_env(:core, :feldspar)
+    initial_config = Application.get_env(:mica, :feldspar)
 
-    Application.put_env(:core, :feldspar,
+    Application.put_env(:mica, :feldspar,
       backend: Systems.Feldspar.S3,
       bucket: "test-bucket",
       public_url: "http://example.com",
@@ -16,7 +16,7 @@ defmodule Systems.Feldspar.S3Test do
     )
 
     on_exit(fn ->
-      Application.put_env(:core, :feldspar, initial_config)
+      Application.put_env(:mica, :feldspar, initial_config)
     end)
 
     :ok

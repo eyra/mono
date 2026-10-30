@@ -2,7 +2,7 @@ defmodule Systems.Account.Auth.Centerdata do
   @moduledoc "Centerdata/LISS Panel identity provider."
   @behaviour Systems.Account.Auth.Provider
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.Auth.Centerdata.UserModel
   alias Systems.Account.User
 

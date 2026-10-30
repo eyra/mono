@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.MoveParticipantsToSurveyTool do
+defmodule Mica.Repo.Migrations.MoveParticipantsToSurveyTool do
   use Ecto.Migration
 
   def change do

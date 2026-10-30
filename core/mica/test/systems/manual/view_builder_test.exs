@@ -7,7 +7,7 @@ defmodule Systems.Manual.ViewBuilderTest do
   # owner registration, producing intermittent
   # `DBConnection.ConnectionError{message: "client #PID<…> exited"}`
   # during setup. (FX#9998325274)
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Manual
 

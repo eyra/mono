@@ -9,12 +9,12 @@ defmodule Systems.Storage.BuiltIn.BackendTest do
   setup :verify_on_exit!
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
 
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: MockSpecial)
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config)
     end)
 
     :ok

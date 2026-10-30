@@ -1,7 +1,7 @@
 defmodule Systems.Support.OverviewPageTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
-  alias Core.Factories
+  alias Mica.Factories
 
   describe "require admin role" do
     setup [:login_as_member]

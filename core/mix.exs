@@ -1,4 +1,4 @@
-defmodule Core.MixProject do
+defmodule Mica.MixProject do
   use Mix.Project
 
   def cli do
@@ -14,7 +14,7 @@ defmodule Core.MixProject do
 
   def project do
     [
-      app: :core,
+      app: :mica,
       version: "0.1.0",
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
@@ -26,6 +26,9 @@ defmodule Core.MixProject do
       aliases: aliases(),
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
+      # The release keeps the name `core` (bin/core): the Dockerfile, predeploy and
+      # Eyra's AWS deploy tooling call it.
+      releases: [core: []],
       # The main page in the docs
       docs: [
         main: "readme",
@@ -65,7 +68,7 @@ defmodule Core.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Core.Application, []},
+      mod: {Mica.Application, []},
       extra_applications: [:logger, :runtime_tools, :csv, :ssl]
     ]
   end
@@ -224,7 +227,7 @@ defmodule Core.MixProject do
     ]
   end
 
-  # Runs the Ecto task over `Core.SaaS.migrations_paths/0`, the migrations of Mica
+  # Runs the Ecto task over `Mica.SaaS.migrations_paths/0`, the migrations of Mica
   # and the SaaS's systems, unless the paths are given. The task module is run
   # directly: running it by name would run this alias again.
   defp with_migrations_paths(task, args) do
@@ -233,7 +236,7 @@ defmodule Core.MixProject do
     paths =
       if Enum.any?(args, &String.starts_with?(&1, "--migrations-path")),
         do: [],
-        else: Enum.flat_map(Core.SaaS.migrations_paths(), &["--migrations-path", &1])
+        else: Enum.flat_map(Mica.SaaS.migrations_paths(), &["--migrations-path", &1])
 
     Mix.Task.get!(task).run(args ++ paths)
   end

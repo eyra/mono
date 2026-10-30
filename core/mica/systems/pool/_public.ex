@@ -1,8 +1,8 @@
 defmodule Systems.Pool.Public do
-  use Core, :public
-  use Core.FeatureFlags
+  use Mica, :public
+  use Mica.FeatureFlags
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Pool.Queries
 
@@ -11,7 +11,7 @@ defmodule Systems.Pool.Public do
   alias Frameworks.Signal
   alias Frameworks.Concept.Directable
 
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.Account
   alias Systems.Pool
@@ -126,7 +126,7 @@ defmodule Systems.Pool.Public do
   """
   def list_participants_with_added_at(%Pool.Model{auth_node_id: auth_node_id}) do
     rows =
-      from(ra in Core.Authorization.RoleAssignment,
+      from(ra in Mica.Authorization.RoleAssignment,
         join: u in Account.User,
         on: u.id == ra.principal_id,
         where: ra.node_id == ^auth_node_id and ra.role == :participant,
@@ -168,7 +168,7 @@ defmodule Systems.Pool.Public do
       from(p in Pool.Model, select: p.auth_node_id)
       |> Repo.all()
 
-    from(ra in Core.Authorization.RoleAssignment,
+    from(ra in Mica.Authorization.RoleAssignment,
       where: ra.node_id in ^pool_ids and ra.role == :participant,
       select: ra.principal_id
     )
@@ -537,7 +537,7 @@ defmodule Systems.Pool.Public do
   defp update_pool(pool, user, :delete), do: remove_participant(pool, user)
 end
 
-defimpl Core.Persister, for: Systems.Pool.Model do
+defimpl Mica.Persister, for: Systems.Pool.Model do
   def save(_pool, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :pool) do
       {:ok, %{pool: pool}} -> {:ok, pool}

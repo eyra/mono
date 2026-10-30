@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.SubmissionForm do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.SubmissionForm do
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Form
 
-  alias CoreWeb.UI.Timestamp
-  alias Systems.Graphite
+  alias MicaWeb.UI.Timestamp
+  alias Next.Systems.Graphite
 
   # Handle initial update
   @impl true
@@ -127,7 +127,7 @@ defmodule Systems.Graphite.SubmissionForm do
   # Submit
 
   defp handle_submit(%{assigns: %{tool: tool, submission: nil}} = socket, attrs) do
-    if Systems.Graphite.Public.open_for_submissions?(tool) do
+    if Next.Systems.Graphite.Public.open_for_submissions?(tool) do
       socket |> add_submission(attrs)
     else
       socket |> notify_closed_for_submissions()
@@ -135,7 +135,7 @@ defmodule Systems.Graphite.SubmissionForm do
   end
 
   defp handle_submit(%{assigns: %{tool: tool}} = socket, attrs) do
-    if Systems.Graphite.Public.open_for_submissions?(tool) do
+    if Next.Systems.Graphite.Public.open_for_submissions?(tool) do
       socket |> update_submission(attrs)
     else
       socket |> notify_closed_for_submissions()

@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ToolReferenceFileAssoc do
+defmodule Next.Systems.Zircon.Screening.ToolReferenceFileAssoc do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Systems.Zircon.Screening
-  alias Systems.Paper
+  alias Next.Systems.Zircon.Screening
+  alias Next.Systems.Paper
 
   schema "zircon_screening_tool_reference_file" do
     belongs_to(:tool, Screening.ToolModel)

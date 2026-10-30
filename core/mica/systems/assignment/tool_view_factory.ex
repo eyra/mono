@@ -8,7 +8,7 @@ defmodule Systems.Assignment.ToolViewFactory do
   Also extends context with tool-specific data (e.g., Alliance url and description).
   """
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Workflow
@@ -24,7 +24,7 @@ defmodule Systems.Assignment.ToolViewFactory do
     view_module = tool_model_to_view_module(tool.__struct__)
     task_context = extend_context_for_tool(tool, tool_ref, task_context)
 
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "tool_view",
       view_module,
       live_context: task_context

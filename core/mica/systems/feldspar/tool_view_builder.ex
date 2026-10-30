@@ -1,5 +1,5 @@
 defmodule Systems.Feldspar.ToolViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @doc """
   Builds view model for Feldspar tool view.
@@ -68,7 +68,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
        Systems.Feldspar.AppView,
        key: "feldspar_tool_#{id}",
        url: archive_ref <> "/index.html",
-       locale: Gettext.get_locale(CoreWeb.Gettext),
+       locale: Gettext.get_locale(MicaWeb.Gettext),
        attempt_id: Map.get(assigns, :attempt_id),
        upload_context: build_upload_context(assigns)
      ), nil}

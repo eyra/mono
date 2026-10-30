@@ -1,5 +1,5 @@
-defmodule CoreWeb.UI.Footer do
-  use CoreWeb, :pixel
+defmodule MicaWeb.UI.Footer do
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Text
 

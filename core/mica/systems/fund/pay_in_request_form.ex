@@ -1,5 +1,5 @@
 defmodule Systems.Fund.PayInRequestForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   require Logger
 

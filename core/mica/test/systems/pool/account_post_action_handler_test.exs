@@ -1,5 +1,5 @@
 defmodule Systems.Pool.AccountPostActionHandlerTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Pool
   alias Systems.Pool.AccountPostActionHandler

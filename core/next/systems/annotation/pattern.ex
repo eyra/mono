@@ -1,4 +1,4 @@
-defprotocol Systems.Annotation.Pattern do
+defprotocol Next.Systems.Annotation.Pattern do
   @moduledoc """
   A protocol for creating Annotation Patterns.
   Naming convention:
@@ -9,7 +9,7 @@ defprotocol Systems.Annotation.Pattern do
   # FIXME: Remove hard dependency on Ecto
   alias Ecto.Query
 
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
 
   @doc """
     Obtain an annotation from a pattern. It returns an annotation and inserts it if it doesn't exist.

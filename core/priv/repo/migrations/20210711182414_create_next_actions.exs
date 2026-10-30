@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateNextActions do
+defmodule Mica.Repo.Migrations.CreateNextActions do
   use Ecto.Migration
 
   def change do

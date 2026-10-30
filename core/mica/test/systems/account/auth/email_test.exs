@@ -1,5 +1,5 @@
 defmodule Systems.Account.Auth.EmailTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
   alias Systems.Account.User
 
@@ -146,9 +146,9 @@ defmodule Systems.Account.Auth.EmailTest do
 
     test "returns nil for non-email-signup user" do
       user =
-        Core.Factories.insert!(:member, %{
+        Mica.Factories.insert!(:member, %{
           email: "regular@example.com",
-          password: Core.Factories.valid_user_password()
+          password: Mica.Factories.valid_user_password()
         })
 
       assert Systems.Account.Auth.Email.get_by_user(user) == nil

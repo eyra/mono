@@ -2,10 +2,10 @@ defmodule Systems.Test.Page do
   @moduledoc """
   The page for testing the view model observations
   """
-  use CoreWeb, :live_view_fabric
+  use MicaWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
   alias Systems.Test

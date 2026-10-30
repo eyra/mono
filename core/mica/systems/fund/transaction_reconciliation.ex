@@ -13,7 +13,7 @@ defmodule Systems.Fund.TransactionReconciliation do
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ReconciliationState, as: State

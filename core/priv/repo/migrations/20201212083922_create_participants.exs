@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateParticipants do
+defmodule Mica.Repo.Migrations.CreateParticipants do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AdjustLeaderboard do
+defmodule Mica.Repo.Migrations.AdjustLeaderboard do
   use Ecto.Migration
 
   def up do

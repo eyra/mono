@@ -1,7 +1,7 @@
 defmodule Systems.Instruction.ForkForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Instruction
   alias Systems.Content

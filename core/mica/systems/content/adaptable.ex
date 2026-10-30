@@ -80,7 +80,7 @@ defmodule Systems.Content.Adaptable do
     end
   end
 
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Navigation
   alias Frameworks.Pixel.Tabbed

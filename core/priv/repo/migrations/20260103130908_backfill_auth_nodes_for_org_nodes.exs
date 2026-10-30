@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.BackfillAuthNodesForOrgNodes do
+defmodule Mica.Repo.Migrations.BackfillAuthNodesForOrgNodes do
   use Ecto.Migration
 
   def up do

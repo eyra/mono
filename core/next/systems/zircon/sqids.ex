@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Sqids do
+defmodule Next.Systems.Zircon.Sqids do
   import Sqids.Hacks, only: [dialyzed_ctx: 1]
 
   @context Sqids.new!(

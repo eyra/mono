@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddAssignmentExclude do
+defmodule Mica.Repo.Migrations.AddAssignmentExclude do
   use Ecto.Migration
 
   def up do

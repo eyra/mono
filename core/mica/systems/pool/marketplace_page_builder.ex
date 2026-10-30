@@ -1,6 +1,6 @@
 defmodule Systems.Pool.MarketplacePageBuilder do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Account

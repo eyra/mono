@@ -1,8 +1,8 @@
 defmodule Systems.Payment.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Mox
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -61,7 +61,7 @@ defmodule Systems.Payment.PublicTest do
       assert {:ok, {_user, %{uid: "m_replacement"}}} =
                Payment.Public.ensure_merchant_for(user)
 
-      assert %{merchant_uid: "m_replacement"} = Core.Repo.reload!(user)
+      assert %{merchant_uid: "m_replacement"} = Mica.Repo.reload!(user)
     end
 
     test "bubbles up an OPP error from get_merchant" do
@@ -90,7 +90,7 @@ defmodule Systems.Payment.PublicTest do
                Payment.Public.ensure_merchant_for(user)
 
       # Persisted on the user row, not just returned in memory.
-      assert %{merchant_uid: "m_freshly_created"} = Core.Repo.reload!(user)
+      assert %{merchant_uid: "m_freshly_created"} = Mica.Repo.reload!(user)
     end
 
     test "falls back to find_merchant_by_email on OPP email-collision error" do
@@ -113,7 +113,7 @@ defmodule Systems.Payment.PublicTest do
       assert {:ok, {%Account.User{merchant_uid: "m_recovered"}, %{uid: "m_recovered"}}} =
                Payment.Public.ensure_merchant_for(user)
 
-      assert %{merchant_uid: "m_recovered"} = Core.Repo.reload!(user)
+      assert %{merchant_uid: "m_recovered"} = Mica.Repo.reload!(user)
     end
 
     test "bubbles up a validation error on a field other than the email" do
@@ -131,7 +131,7 @@ defmodule Systems.Payment.PublicTest do
       assert {:error, %Systems.Payment.Error{code: :validation_error}} =
                Payment.Public.ensure_merchant_for(user)
 
-      assert %{merchant_uid: nil} = Core.Repo.reload!(user)
+      assert %{merchant_uid: nil} = Mica.Repo.reload!(user)
     end
 
     test "bubbles up a non-collision create_merchant error without persisting anything" do
@@ -144,7 +144,7 @@ defmodule Systems.Payment.PublicTest do
       assert {:error, %Systems.Payment.Error{code: :http_error}} =
                Payment.Public.ensure_merchant_for(user)
 
-      assert %{merchant_uid: nil} = Core.Repo.reload!(user)
+      assert %{merchant_uid: nil} = Mica.Repo.reload!(user)
     end
   end
 

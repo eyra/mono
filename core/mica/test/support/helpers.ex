@@ -1,4 +1,4 @@
-defmodule Core.Authorization.TestEntity do
+defmodule Mica.Authorization.TestEntity do
   @moduledoc """
   An entity that is only used for test purposes.
   """
@@ -19,7 +19,7 @@ defmodule Core.Authorization.TestEntity do
   end
 end
 
-defmodule Core.TestHelpers do
+defmodule Mica.TestHelpers do
   @moduledoc """
   Helper functions to make testing convenient.
   """
@@ -54,11 +54,11 @@ defmodule Core.TestHelpers do
   end
 end
 
-defmodule Core.AuthTestHelpers do
+defmodule Mica.AuthTestHelpers do
   @moduledoc """
   Helper functions to make testing authorization convenient.
   """
-  alias Core.Factories
+  alias Mica.Factories
 
   def login(user, %{conn: conn}) do
     token = Systems.Account.Public.generate_user_session_token(user)

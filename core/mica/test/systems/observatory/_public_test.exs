@@ -1,5 +1,5 @@
 defmodule Systems.Observatory.PublicTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   alias Systems.Observatory.Public
 
   describe "subscribe/1" do

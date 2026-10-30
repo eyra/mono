@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateTimeSlot do
+defmodule Mica.Repo.Migrations.UpdateTimeSlot do
   use Ecto.Migration
 
   def up do

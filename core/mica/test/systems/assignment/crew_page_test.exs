@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.CrewPageTest do
-  use CoreWeb.ConnCase
-  use Oban.Testing, repo: Core.Repo
+  use MicaWeb.ConnCase
+  use Oban.Testing, repo: Mica.Repo
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -54,7 +54,7 @@ defmodule Systems.Assignment.CrewPageTest do
 
       # Create manual tool with chapters and pages
       manual_tool = Manual.Factories.create_manual_tool(2, 3, tool_auth_node)
-      manual_tool = Core.Repo.preload(manual_tool, manual: [chapters: [:pages]])
+      manual_tool = Mica.Repo.preload(manual_tool, manual: [chapters: [:pages]])
       manual = manual_tool.manual
       [chapter1, _chapter2] = manual.chapters
 
@@ -110,7 +110,7 @@ defmodule Systems.Assignment.CrewPageTest do
       study =
         Assignment.Factories.create_assignment_with_affiliate()
         |> Ecto.Changeset.change(special: :data_donation)
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
         |> Project.Factories.link_storage_endpoint()
 
       other = Factories.insert!(:member)

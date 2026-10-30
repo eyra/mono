@@ -1,8 +1,8 @@
 defmodule Systems.Account.AuthTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account.Auth
   alias Systems.Account.Auth.Surfconext
   alias Systems.Account

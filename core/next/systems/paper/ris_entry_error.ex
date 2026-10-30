@@ -1,4 +1,4 @@
-defmodule Systems.Paper.RISEntryError do
+defmodule Next.Systems.Paper.RISEntryError do
   @moduledoc """
   Struct representing a parsing error for a specific line in a RIS file.
   """

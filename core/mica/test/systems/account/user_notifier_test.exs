@@ -2,7 +2,7 @@ defmodule Systems.Account.UserNotifierTest do
   use ExUnit.Case, async: true
   use Bamboo.Test
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account.UserNotifier
 
   describe("deliver_confirmation_instructions/2") do

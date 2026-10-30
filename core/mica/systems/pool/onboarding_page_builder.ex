@@ -18,9 +18,9 @@ defmodule Systems.Pool.OnboardingPageBuilder do
       because there is nothing to interact with (yet — a leave-pool
       action is likely to be added here later).
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Frameworks.Concept.LiveContext
   alias Systems.Pool
   alias Systems.Account
@@ -106,7 +106,7 @@ defmodule Systems.Pool.OnboardingPageBuilder do
   end
 
   defp build_step_view(:features, _pool, %LiveContext{} = live_context) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       :features_view,
       Account.FeaturesView,
       live_context: live_context

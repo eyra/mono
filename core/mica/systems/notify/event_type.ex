@@ -3,7 +3,7 @@ defmodule Systems.Notify.EventType do
   Global registry of notification event types → channel routing.
 
   Built at first-use from the notifiers of the SaaS's systems
-  (`Core.SaaS.notifiers/0`), unless `config :core, Systems.Notify, notifiers: [...]`
+  (`Mica.SaaS.notifiers/0`), unless `config :mica, Systems.Notify, notifiers: [...]`
   overrides them; each notifier declares its events via
   `use Systems.Notify.EventDeclaration`.
 
@@ -37,8 +37,8 @@ defmodule Systems.Notify.EventType do
 
   defp build do
     notifiers =
-      Core.Env.get(Systems.Notify, [])
-      |> Keyword.get_lazy(:notifiers, &Core.SaaS.notifiers/0)
+      Mica.Env.get(Systems.Notify, [])
+      |> Keyword.get_lazy(:notifiers, &Mica.SaaS.notifiers/0)
 
     registry =
       notifiers

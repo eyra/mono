@@ -15,7 +15,7 @@ defmodule Systems.Fund.PayoutWithdrawal do
   """
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   import Ecto.Query
 

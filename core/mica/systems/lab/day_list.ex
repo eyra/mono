@@ -1,7 +1,7 @@
 defmodule Systems.Lab.DayList do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
 
   defp datestamp(%Date{} = date) do

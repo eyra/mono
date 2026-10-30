@@ -12,8 +12,8 @@
     "alternate": "mica/systems/{}.ex",
     "template": [
       "defmodule Systems.{camelcase|capitalize|dot}Test do",
-      "  use Core.DataCase, async: true",
-      "  alias Core.Factories",
+      "  use Mica.DataCase, async: true",
+      "  alias Mica.Factories",
       "  alias {camelcase|capitalize|dot}",
       "",
       "  describe \"\" do",
@@ -28,8 +28,8 @@
     "alternate": "next/systems/{}.ex",
     "template": [
       "defmodule Systems.{camelcase|capitalize|dot}Test do",
-      "  use Core.DataCase, async: true",
-      "  alias Core.Factories",
+      "  use Mica.DataCase, async: true",
+      "  alias Mica.Factories",
       "  alias {camelcase|capitalize|dot}",
       "",
       "  describe \"\" do",
@@ -44,8 +44,8 @@
     "alternate": "mica/lib/{}.ex",
     "template": [
       "defmodule {camelcase|capitalize|dot}Test do",
-      "  use Core.DataCase, async: true",
-      "  alias Core.Factories",
+      "  use Mica.DataCase, async: true",
+      "  alias Mica.Factories",
       "  alias {camelcase|capitalize|dot}",
       "",
       "  describe \"\" do",

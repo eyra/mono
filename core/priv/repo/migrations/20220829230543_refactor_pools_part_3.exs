@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorPoolsPart3 do
+defmodule Mica.Repo.Migrations.RefactorPoolsPart3 do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -110,7 +110,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart3 do
 
   def exist?(table, where) do
     {:ok, %{rows: [[count]]}} =
-      query(Core.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
+      query(Mica.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
 
     count > 0
   end
@@ -121,21 +121,21 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart3 do
 
   defp query_field(table, field, where) do
     {:ok, %{rows: [[id] | _]}} =
-      query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
+      query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     id
   end
 
   defp query_all(table, fields, where) do
     {:ok, %{rows: rows}} =
-      query(Core.Repo, "SELECT #{fields} FROM #{table} WHERE #{where}")
+      query(Mica.Repo, "SELECT #{fields} FROM #{table} WHERE #{where}")
 
     rows
   end
 
   defp query_all(table, fields) do
     {:ok, %{rows: rows}} =
-      query(Core.Repo, "SELECT #{fields} FROM #{table}")
+      query(Mica.Repo, "SELECT #{fields} FROM #{table}")
 
     rows
   end

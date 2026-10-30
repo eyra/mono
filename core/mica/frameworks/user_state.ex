@@ -86,7 +86,7 @@ defmodule Frameworks.UserState do
   Returns the domain for storage keys.
   """
   def domain do
-    Core.Env.get(:domain, "localhost")
+    Mica.Env.get(:domain, "localhost")
   end
 
   @doc """

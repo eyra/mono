@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorCampaignPromotionAssignment do
+defmodule Mica.Repo.Migrations.RefactorCampaignPromotionAssignment do
   use Ecto.Migration
 
   import Ecto.Query, warn: false

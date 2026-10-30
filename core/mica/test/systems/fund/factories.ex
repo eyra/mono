@@ -2,15 +2,15 @@ defmodule Systems.Fund.Factories do
   alias Systems.Fund
 
   def create_currency(name, type, sign, decimal_scale) do
-    label_bundle = Core.Factories.insert!(:text_bundle, %{})
+    label_bundle = Mica.Factories.insert!(:text_bundle, %{})
 
     label_items = [
-      Core.Factories.insert!(:text_item, %{
+      Mica.Factories.insert!(:text_item, %{
         bundle: label_bundle,
         locale: "nl",
         text: "#{sign}%{amount}"
       }),
-      Core.Factories.insert!(:text_item, %{
+      Mica.Factories.insert!(:text_item, %{
         bundle: label_bundle,
         locale: "en",
         text: "#{sign}%{amount}"
@@ -19,7 +19,7 @@ defmodule Systems.Fund.Factories do
 
     label_bundle = Map.put(label_bundle, :items, label_items)
 
-    Core.Factories.insert!(:currency, %{
+    Mica.Factories.insert!(:currency, %{
       name: name,
       type: type,
       label_bundle: label_bundle,
@@ -29,22 +29,22 @@ defmodule Systems.Fund.Factories do
 
   def create_fund(name, currency) do
     fund =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["fund", name],
         balance_debit: 5000,
         balance_credit: 10_000
       })
 
     reserve =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["reserve", name],
         balance_debit: 0,
         balance_credit: 5000
       })
 
-    auth_node = Core.Factories.insert!(:auth_node)
+    auth_node = Mica.Factories.insert!(:auth_node)
 
-    Core.Factories.insert!(:fund, %{
+    Mica.Factories.insert!(:fund, %{
       name: name,
       currency: currency,
       available: fund,
@@ -55,13 +55,13 @@ defmodule Systems.Fund.Factories do
 
   def create_bank_account(name, icon, currency) do
     account =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["bank", name],
         balance_debit: 0,
         balance_credit: 0
       })
 
-    Core.Factories.insert!(:bank_account, %{
+    Mica.Factories.insert!(:bank_account, %{
       name: name,
       icon: icon,
       currency: currency,
@@ -81,13 +81,13 @@ defmodule Systems.Fund.Factories do
     })
     |> Ecto.Changeset.put_change(:user_id, user_id)
     |> Ecto.Changeset.put_change(:target_fund_id, fund_id)
-    |> Core.Repo.insert!()
+    |> Mica.Repo.insert!()
   end
 
   def create_reward(assignment, user, fund, amount \\ 2) do
     idempotence_key = "assignment=#{assignment.id},user=#{user.id}"
 
-    Core.Factories.insert!(:reward, %{
+    Mica.Factories.insert!(:reward, %{
       amount: amount,
       user: user,
       fund: fund,
@@ -112,7 +112,7 @@ defmodule Systems.Fund.Factories do
         balance_credit,
         balance_debit
       ) do
-    Core.Factories.insert!(:book_account, %{
+    Mica.Factories.insert!(:book_account, %{
       identifier: ["wallet", currency_name, "#{user_id}"],
       balance_credit: balance_credit,
       balance_debit: balance_debit

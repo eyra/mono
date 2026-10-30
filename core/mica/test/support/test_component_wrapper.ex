@@ -1,4 +1,4 @@
-defmodule CoreWeb.TestComponentWrapper do
+defmodule MicaWeb.TestComponentWrapper do
   @moduledoc """
   A simple wrapper LiveView for testing LiveComponents in isolation.
   """

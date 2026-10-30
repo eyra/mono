@@ -6,8 +6,8 @@
 [
   code: [
     {"mica/frameworks/pixel/components/footer.ex", :eyra_domain, 1,
-     "\"Powered by Eyra\" footer link; code-brand Core.Brand"},
-    {"mica/lib/core/authorization.ex", :next_reference,
+     "\"Powered by Eyra\" footer link; code-brand Mica.Brand"},
+    {"mica/lib/mica/authorization.ex", :next_reference,
      [
        "next/systems/account/auth_code_verify_page.ex",
        "next/systems/account/auth_identify_page.ex",
@@ -17,8 +17,8 @@
        "next/systems/graphite/leaderboard_page.ex",
        "next/systems/onyx/landing_page.ex"
      ],
-     "grants of Next's systems spliced by Core.SaaS.grants(); spliced grants stay a compile-time reference until code-split"},
-    {"mica/lib/core/factories.ex", :next_reference,
+     "grants of Next's systems spliced by Mica.SaaS.grants(); spliced grants stay a compile-time reference until code-split"},
+    {"mica/lib/mica/factories.ex", :next_reference,
      [
        "next/systems/annotation/model.ex",
        "next/systems/annotation/ref_model.ex",
@@ -36,17 +36,17 @@
        "next/systems/zircon/screening/tool_model.ex"
      ],
      "shared factories build Graphite/Zircon/Paper/Annotation/Ontology models; split into Next factories (code-instance)"},
-    {"mica/lib/core/release.ex", :eyra_domain, 1,
+    {"mica/lib/mica/release.ex", :eyra_domain, 1,
      "test-creator@eyra.co release task user; code-instance synthetic accounts become config"},
-    {"mica/lib/core/seeds/local.ex", :eyra_domain, 2,
+    {"mica/lib/mica/seeds/local.ex", :eyra_domain, 2,
      "local seed users on eyra.co; code-instance seeds per system"},
-    {"mica/lib/core/seeds/local.ex", :panl_domain, 1,
+    {"mica/lib/mica/seeds/local.ex", :panl_domain, 1,
      "admin@panl.nl local seed user; code-instance PaNL seeds to Next"},
-    {"mica/lib/core/seeds/staging.ex", :eyra_service, 1,
+    {"mica/lib/mica/seeds/staging.ex", :eyra_service, 1,
      "loadtest@eyra.service named in moduledoc; code-instance synthetic accounts"},
-    {"mica/lib/core/seeds/test.ex", :eyra_service, 1,
+    {"mica/lib/mica/seeds/test.ex", :eyra_service, 1,
      "e2e@eyra.service named in moduledoc; code-instance synthetic accounts"},
-    {"mica/lib/core_web/router.ex", :next_reference,
+    {"mica/lib/mica_web/router.ex", :next_reference,
      [
        "next/systems/account/auth_code_verify_page.ex",
        "next/systems/account/auth_identify_page.ex",
@@ -65,7 +65,7 @@
        "next/systems/onyx/landing_page.ex",
        "next/systems/well_known/controller.ex"
      ],
-     "routes of Next's systems spliced by Core.SaaS; spliced routes stay a compile-time reference until code-split"},
+     "routes of Next's systems spliced by Mica.SaaS; spliced routes stay a compile-time reference until code-split"},
     {"mica/systems/account/auth/external.ex", :eyra_domain, 1,
      "external+…@eyra.co synthetic email; code-instance synthetic accounts"},
     {"mica/systems/account/features_model.ex", :next_reference, ["next/systems/student/codes.ex"],
@@ -90,7 +90,7 @@
        "next/systems/zircon/screening/import_view.ex"
      ], "Zircon screening views and Annotation in assignment; code-registry tool registry"},
     {"mica/systems/assignment/crew_task_helpers.ex", :eyra_domain, 1,
-     "support@eyra.co; code-brand Core.Brand support email"},
+     "support@eyra.co; code-brand Mica.Brand support email"},
     {"mica/systems/assignment/finished_view_builder.ex", :panl_atom, 3,
      "\"Join Panl\" finished-view CTA; code-instance PaNL"},
     {"mica/systems/assignment/runtime_config.ex", :panl_atom, 1,
@@ -135,19 +135,19 @@
        "next/systems/student/_system.ex",
        "next/systems/zircon/_system.ex"
      ],
-     "Self.SaaS keeps Next's Graphite, Onyx, Student, Zircon and Paper systems (decided E3); code-registry/code-instance"}
+     "MicaSaas.SaaS keeps Next's Graphite, Onyx, Student, Zircon and Paper systems (decided E3); code-registry/code-instance"}
   ],
   config: [
     {"config/config.exs", :next_name,
-     ["Systems.Paper", "Systems.Zircon", "Systems.Zircon.Screening.HumanAgent"],
-     "config :core, :zircon (Zircon screening agent module) and :paper (RIS import limits) for Next systems; the system config moves to Next config by code-split"},
+     ["Next.Systems.Paper", "Next.Systems.Zircon", "Next.Systems.Zircon.Screening.HumanAgent"],
+     "config :mica, :zircon (Zircon screening agent module) and :paper (RIS import limits) for Next systems; the system config moves to Next config by code-split"},
     {"config/config.exs", :panl_domain, 2,
      "panl_* policy URLs; code-brand Next.Brand policy URLs"},
     {"config/dev.exs", :eyra_domain, 1,
      "*@eyra.co dev admins; code-split moves dev config per SaaS"},
-    {"config/runtime.exs", :next_name, ["Systems.Paper"],
-     "config :core, :paper import limits from env; runtime.exs moves to next/ in code-split"},
-    {"config/test.exs", :next_name, ["Next.SaaS", "Systems.Paper"],
-     "tests always build Next.SaaS and set :paper limits; code-instance (Mica tests on Self.SaaS)"}
+    {"config/runtime.exs", :next_name, ["Next.Systems.Paper"],
+     "config :mica, :paper import limits from env; runtime.exs moves to next/ in code-split"},
+    {"config/test.exs", :next_name, ["Next.SaaS", "Next.Systems.Paper"],
+     "tests always build Next.SaaS and set :paper limits; code-instance (Mica tests on MicaSaas.SaaS)"}
   ]
 ]

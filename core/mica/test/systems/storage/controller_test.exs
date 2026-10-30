@@ -1,5 +1,5 @@
 defmodule Systems.Storage.ControllerTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Mox
 
@@ -10,13 +10,13 @@ defmodule Systems.Storage.ControllerTest do
   setup :verify_on_exit!
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
-    on_exit(fn -> Application.put_env(:core, Systems.Storage.BuiltIn, initial_config) end)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: MockSpecial)
+    on_exit(fn -> Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config) end)
 
     {:ok, endpoint} =
       Storage.Public.prepare_endpoint(:builtin, %{key: "export_test"})
-      |> Core.Repo.insert()
+      |> Mica.Repo.insert()
 
     %{endpoint: endpoint}
   end
@@ -33,7 +33,7 @@ defmodule Systems.Storage.ControllerTest do
     end
 
     test "sends the zip to the endpoint owner", %{conn: conn, endpoint: endpoint} do
-      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok = Mica.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
 
       bypass = Bypass.open()
       Bypass.expect_once(bypass, "GET", "/donation.json", &Plug.Conn.resp(&1, 200, "{}"))

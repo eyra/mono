@@ -1,7 +1,7 @@
-defmodule Systems.Citizen.Pool.DetailPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Citizen.Pool.DetailPageBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Citizen
+  alias Next.Systems.Citizen
   alias Systems.Pool
   alias Systems.Advert
 

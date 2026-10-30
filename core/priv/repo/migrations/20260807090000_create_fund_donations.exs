@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateFundDonations do
+defmodule Mica.Repo.Migrations.CreateFundDonations do
   use Ecto.Migration
 
   def change do

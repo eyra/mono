@@ -36,7 +36,7 @@ defmodule Systems.Storage.BuiltIn.Backend do
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
   defp settings do
-    Core.Env.fetch!(Systems.Storage.BuiltIn)
+    Mica.Env.fetch!(Systems.Storage.BuiltIn)
   end
 
   @doc """
@@ -47,7 +47,7 @@ defmodule Systems.Storage.BuiltIn.Backend do
   """
   def check_upload_path! do
     if special() == BuiltIn.LocalFS do
-      BuiltIn.LocalFS.check_upload_path!(Core.Env.get(:upload_path))
+      BuiltIn.LocalFS.check_upload_path!(Mica.Env.get(:upload_path))
     end
 
     :ok

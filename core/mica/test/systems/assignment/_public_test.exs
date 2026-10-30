@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Systems.NextAction.TestHelper
   import Systems.Fund.TestHelper
 
@@ -10,7 +10,7 @@ defmodule Systems.Assignment.PublicTest do
   alias Systems.Monitor
   alias Systems.Fund
 
-  alias Core.Factories
+  alias Mica.Factories
 
   describe "assignment participations" do
     test "obtain_participation!/2 inserts a participation" do
@@ -661,7 +661,7 @@ defmodule Systems.Assignment.PublicTest do
       %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       project_owner = Factories.insert!(:member)
-      :ok = Core.Authorization.assign_role(project_owner, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(project_owner, assignment, :owner)
 
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
@@ -863,7 +863,7 @@ defmodule Systems.Assignment.PublicTest do
                Assignment.Public.accept_participation(rejected)
 
       # Participation stays rejected: no accepted_at written, reject state intact.
-      reloaded = Core.Repo.get!(Assignment.ParticipationModel, rejected.id)
+      reloaded = Mica.Repo.get!(Assignment.ParticipationModel, rejected.id)
       assert reloaded.accepted_at == nil
       assert %NaiveDateTime{} = reloaded.rejected_at
 
@@ -895,7 +895,7 @@ defmodule Systems.Assignment.PublicTest do
                Assignment.Public.reject_participation(accepted, "too late")
 
       # Participation stays accepted: no rejected_at written, accept state intact.
-      reloaded = Core.Repo.get!(Assignment.ParticipationModel, accepted.id)
+      reloaded = Mica.Repo.get!(Assignment.ParticipationModel, accepted.id)
       assert %NaiveDateTime{} = reloaded.accepted_at
       assert reloaded.rejected_at == nil
       assert reloaded.rejected_message == nil
@@ -919,7 +919,7 @@ defmodule Systems.Assignment.PublicTest do
     test "returns owners inherited from the top of the auth tree" do
       user = Factories.insert!(:member)
       assignment = Assignment.Factories.create_assignment(31, 1)
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
 
       assert [%{id: user_id}] = Assignment.Public.owners(assignment)
       assert user_id == user.id
@@ -1098,7 +1098,7 @@ defmodule Systems.Assignment.PublicTest do
 
       assignment.info
       |> Ecto.Changeset.change(%{subject_reward: 100})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
@@ -1132,7 +1132,7 @@ defmodule Systems.Assignment.PublicTest do
         expired: true,
         expire_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       })
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       Assignment.Public.rollback_expired_deposits()
 
@@ -1145,7 +1145,7 @@ defmodule Systems.Assignment.PublicTest do
     test "is a no-op when subject_reward is 0", %{user: user, assignment: assignment} do
       assignment.info
       |> Ecto.Changeset.change(%{subject_reward: 0})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
@@ -1160,18 +1160,18 @@ defmodule Systems.Assignment.PublicTest do
       user: user,
       assignment: %{fund_id: fund_id} = assignment
     } do
-      eur_ledger = Core.Repo.insert!(Fund.CurrencyLedgerModel.create(:EUR))
+      eur_ledger = Mica.Repo.insert!(Fund.CurrencyLedgerModel.create(:EUR))
       fund = Fund.Public.get!(fund_id)
 
       fund
       |> Ecto.Changeset.change(%{currency_id: nil, currency_ledger_id: eur_ledger.id})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       # The resolved euro currency is :legal, which activates the fund balance
       # guard; give the fund enough available funds so the deposit succeeds.
       fund.available
       |> Ecto.Changeset.change(%{balance_credit: 10_000})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       assignment =
         Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
@@ -1246,8 +1246,8 @@ defmodule Systems.Assignment.PublicTest do
   describe "owner!/1" do
     test "finds an owner assigned on the top of the tree" do
       %{id: user_id} = user = Factories.insert!(:creator)
-      top = Core.Authorization.create_node!()
-      assignment = assignment_under(Core.Authorization.create_node!(top))
+      top = Mica.Authorization.create_node!()
+      assignment = assignment_under(Mica.Authorization.create_node!(top))
 
       :ok = assign_owner(user, top)
 
@@ -1259,8 +1259,8 @@ defmodule Systems.Assignment.PublicTest do
     # asking only the top node would miss it.
     test "finds an owner assigned on an intermediate node" do
       %{id: user_id} = user = Factories.insert!(:creator)
-      middle = Core.Authorization.create_node!(Core.Authorization.create_node!())
-      assignment = assignment_under(Core.Authorization.create_node!(middle))
+      middle = Mica.Authorization.create_node!(Mica.Authorization.create_node!())
+      assignment = assignment_under(Mica.Authorization.create_node!(middle))
 
       :ok = assign_owner(user, middle)
 
@@ -1269,7 +1269,7 @@ defmodule Systems.Assignment.PublicTest do
 
     test "finds an owner assigned directly on the assignment" do
       %{id: user_id} = user = Factories.insert!(:creator)
-      node = Core.Authorization.create_node!(Core.Authorization.create_node!())
+      node = Mica.Authorization.create_node!(Mica.Authorization.create_node!())
       assignment = assignment_under(node)
 
       :ok = assign_owner(user, node)
@@ -1279,40 +1279,40 @@ defmodule Systems.Assignment.PublicTest do
 
     test "ignores a role that is not :owner" do
       user = Factories.insert!(:creator)
-      top = Core.Authorization.create_node!()
-      assignment = assignment_under(Core.Authorization.create_node!(top))
+      top = Mica.Authorization.create_node!()
+      assignment = assignment_under(Mica.Authorization.create_node!(top))
 
-      :ok = Core.Authorization.assign_role(user, node_id(top), :participant)
+      :ok = Mica.Authorization.assign_role(user, node_id(top), :participant)
 
       assert Assignment.Public.owner!(assignment) == nil
     end
 
     test "does not pick up an owner from a sibling tree" do
       user = Factories.insert!(:creator)
-      assignment = assignment_under(Core.Authorization.create_node!())
+      assignment = assignment_under(Mica.Authorization.create_node!())
 
-      :ok = assign_owner(user, Core.Authorization.create_node!())
+      :ok = assign_owner(user, Mica.Authorization.create_node!())
 
       assert Assignment.Public.owner!(assignment) == nil
     end
 
     test "returns nil when the tree carries no owner" do
-      assignment = assignment_under(Core.Authorization.create_node!())
+      assignment = assignment_under(Mica.Authorization.create_node!())
 
       assert Assignment.Public.owner!(assignment) == nil
     end
   end
 
-  defp assignment_under(%Core.Authorization.Node{id: parent_id}) do
+  defp assignment_under(%Mica.Authorization.Node{id: parent_id}) do
     auth_node = Factories.insert!(:auth_node, %{parent_id: parent_id})
     Factories.insert!(:assignment, %{auth_node: auth_node})
   end
 
   # assign_role/3 resolves its target through the AuthorizationNode protocol,
   # which a raw Node struct does not implement — it takes the id.
-  defp assign_owner(user, node), do: Core.Authorization.assign_role(user, node_id(node), :owner)
+  defp assign_owner(user, node), do: Mica.Authorization.assign_role(user, node_id(node), :owner)
 
-  defp node_id(%Core.Authorization.Node{id: id}), do: id
+  defp node_id(%Mica.Authorization.Node{id: id}), do: id
 
   defp funded_assignment(fund, subject_reward) do
     info =

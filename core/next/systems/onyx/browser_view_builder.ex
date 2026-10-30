@@ -1,15 +1,15 @@
-defmodule Systems.Onyx.BrowserViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Onyx.BrowserViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Annotation
-  alias Systems.Ontology
-  alias Systems.Onyx
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
+  alias Next.Systems.Onyx
 
   @filter_keys %{
     :root => [:annotation, :concept, :predicate],
-    Systems.Ontology.ConceptModel => [:annotation, :predicate],
-    Systems.Ontology.PredicateModel => [:annotation, :concept],
-    Systems.Annotation.Model => [:annotation, :concept, :predicate]
+    Next.Systems.Ontology.ConceptModel => [:annotation, :predicate],
+    Next.Systems.Ontology.PredicateModel => [:annotation, :concept],
+    Next.Systems.Annotation.Model => [:annotation, :concept, :predicate]
   }
 
   @max_history_count 6

@@ -1,13 +1,13 @@
-defmodule Systems.Zircon.Queries do
+defmodule Next.Systems.Zircon.Queries do
   import Ecto.Query
   require Frameworks.Utility.Query
 
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Account
-  alias Systems.Annotation
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Next.Systems.Annotation
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   # SCREENING TOOL MODEL
 

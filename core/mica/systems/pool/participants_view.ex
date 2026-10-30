@@ -6,7 +6,7 @@ defmodule Systems.Pool.ParticipantsView do
   Search by email or display name; no admin actions yet (the
   Activate/Deactivate model is a separate design conversation).
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateAuthCodes do
+defmodule Mica.Repo.Migrations.CreateAuthCodes do
   use Ecto.Migration
 
   def change do

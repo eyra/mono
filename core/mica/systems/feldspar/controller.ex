@@ -6,7 +6,7 @@ defmodule Systems.Feldspar.Controller do
   - Data donation uploads (large file handling via HTTP instead of WebSocket)
   - Client-side logging (forwarded to AppSignal via Elixir Logger)
   """
-  use CoreWeb, {:controller, [formats: [:json]]}
+  use MicaWeb, {:controller, [formats: [:json]]}
 
   require Logger
 

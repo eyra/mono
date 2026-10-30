@@ -24,18 +24,18 @@ defmodule Systems.Pool.OnboardingPage do
       gender / birth year. A page-level continue button advances.
     * `:already_member` — static info block; no interaction.
   """
-  use CoreWeb, :routed_live_view
-  use CoreWeb.Layouts.Stripped.Composer
+  use MicaWeb, :routed_live_view
+  use MicaWeb.Layouts.Stripped.Composer
 
   import LiveNest.HTML
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Logo
   alias Frameworks.Pixel.Text
   alias Systems.Pool
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
 
   @impl true
   def get_model(%{"slug" => slug}, _session, _socket) do

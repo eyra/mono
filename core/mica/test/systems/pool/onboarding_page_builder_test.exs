@@ -1,6 +1,6 @@
 defmodule Systems.Pool.OnboardingPageBuilderTest do
-  use Core.DataCase, async: true
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase, async: true
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account

@@ -1,4 +1,4 @@
-defmodule Systems.Citizen.Director do
+defmodule Next.Systems.Citizen.Director do
   defmodule Error do
     @moduledoc false
     defexception [:message]
@@ -6,15 +6,12 @@ defmodule Systems.Citizen.Director do
 
   @behaviour Frameworks.Concept.PoolDirector
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.{
-    Pool,
-    Fund,
-    Citizen
-  }
+  alias Next.Systems.Citizen
+  alias Systems.{Pool, Fund}
 
   @impl true
   def overview_plugin(user) do

@@ -1,4 +1,4 @@
-defmodule Systems.Probe.AssignmentTemplate do
+defmodule Next.Systems.Probe.AssignmentTemplate do
   @moduledoc """
   Assignment template for cognitive tools: zip apps that run like Feldspar apps
   but are cognitive tasks, not data donations. Consent, storage of results and
@@ -7,8 +7,8 @@ defmodule Systems.Probe.AssignmentTemplate do
   """
   @behaviour Systems.Assignment.TemplateExtension
 
-  use Core.FeatureFlags
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.FeatureFlags
+  use Gettext, backend: MicaWeb.Gettext
 
   defstruct [:id]
 
@@ -23,7 +23,7 @@ defmodule Systems.Probe.AssignmentTemplate do
   def tool_description(_special), do: nil
 
   defimpl Systems.Assignment.Template do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Frameworks.Builder
     alias Systems.Assignment

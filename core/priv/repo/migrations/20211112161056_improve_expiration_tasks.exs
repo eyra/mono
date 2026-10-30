@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.ImproveExpirationTasks do
+defmodule Mica.Repo.Migrations.ImproveExpirationTasks do
   use Ecto.Migration
 
   def up do

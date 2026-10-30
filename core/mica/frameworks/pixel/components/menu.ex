@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Menu do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Button
 

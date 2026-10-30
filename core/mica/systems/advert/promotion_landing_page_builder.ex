@@ -1,10 +1,10 @@
 defmodule Systems.Advert.PromotionLandingPageBuilder do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Phoenix.LiveView
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Frameworks.Pixel.Logo
   alias Systems.Advert
   alias Systems.Pool
@@ -28,7 +28,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
       ) do
     assignment
     |> Assignment.Model.language()
-    |> CoreWeb.Live.Hook.Locale.put_locale()
+    |> MicaWeb.Live.Hook.Locale.put_locale()
 
     extra = Map.take(promotion, [:image_id | Promotion.Model.plain_fields()])
     icon_url = Logo.path(pool_name, {:pool, {:wide, :dark}})

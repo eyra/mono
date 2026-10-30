@@ -1,5 +1,5 @@
 defmodule Systems.Account.ServiceLoginControllerTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
 
   alias Systems.Account
 
@@ -9,10 +9,10 @@ defmodule Systems.Account.ServiceLoginControllerTest do
 
   setup do
     # Configure service login key for tests
-    Application.put_env(:core, :service_login, key: @service_key)
+    Application.put_env(:mica, :service_login, key: @service_key)
 
     on_exit(fn ->
-      Application.delete_env(:core, :service_login)
+      Application.delete_env(:mica, :service_login)
     end)
 
     :ok
@@ -29,12 +29,12 @@ defmodule Systems.Account.ServiceLoginControllerTest do
     # Confirm the user (required for login)
     user
     |> Account.User.confirm_changeset()
-    |> Core.Repo.update!()
+    |> Mica.Repo.update!()
   end
 
   describe "POST /api/service/login" do
     test "returns 503 when service login not configured", %{conn: conn} do
-      Application.delete_env(:core, :service_login)
+      Application.delete_env(:mica, :service_login)
 
       conn =
         conn

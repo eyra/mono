@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportView do
-  use CoreWeb, :embedded_live_view
-  use CoreWeb.FileUploader, accept: ~w(.ris)
+defmodule Next.Systems.Zircon.Screening.ImportView do
+  use MicaWeb, :embedded_live_view
+  use MicaWeb.FileUploader, accept: ~w(.ris)
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]
 
@@ -8,11 +8,11 @@ defmodule Systems.Zircon.Screening.ImportView do
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.LoadingSpinner
-  alias CoreWeb.UI.Area
-  alias CoreWeb.UI.Margin
+  alias MicaWeb.UI.Area
+  alias MicaWeb.UI.Margin
 
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   @impl true
   def file_upload_start(socket, {original_filename, _}) do
@@ -150,7 +150,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-warnings",
-        Systems.Zircon.Screening.ImportSessionWarningsView,
+        Next.Systems.Zircon.Screening.ImportSessionWarningsView,
         session: [session: session, title: title, header: filename],
         style: :full
       )
@@ -171,7 +171,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-new-papers",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        Next.Systems.Zircon.Screening.ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "new"],
         style: :full
       )
@@ -192,7 +192,7 @@ defmodule Systems.Zircon.Screening.ImportView do
     modal =
       LiveNest.Modal.prepare_live_view(
         "import-session-duplicates",
-        Systems.Zircon.Screening.ImportSessionPapersView,
+        Next.Systems.Zircon.Screening.ImportSessionPapersView,
         session: [session: session, title: title, header: filename, filter: "duplicates"],
         style: :full
       )

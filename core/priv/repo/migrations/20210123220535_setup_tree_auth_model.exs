@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.SetupTreeAuthModel do
+defmodule Mica.Repo.Migrations.SetupTreeAuthModel do
   use Ecto.Migration
 
   def change do

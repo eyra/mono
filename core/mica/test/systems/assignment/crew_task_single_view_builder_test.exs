@@ -1,8 +1,8 @@
 defmodule Systems.Assignment.CrewTaskSingleViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Assignment
 
   describe "view_model/2" do

@@ -1,7 +1,7 @@
 defmodule Systems.Account.EmailRouter do
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.Auth.Methods
 

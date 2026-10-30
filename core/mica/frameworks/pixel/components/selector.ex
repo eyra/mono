@@ -1,9 +1,9 @@
 defmodule Frameworks.Pixel.Selector do
   @moduledoc false
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
-  import CoreWeb.LiveDefaults
+  import MicaWeb.LiveDefaults
   alias Phoenix.LiveView.JS
 
   @defaults [
@@ -236,7 +236,7 @@ end
 
 defmodule Frameworks.Pixel.Selector.Item do
   @moduledoc false
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:item, :map, required: true)
   attr(:multiselect?, :boolean, default: true)

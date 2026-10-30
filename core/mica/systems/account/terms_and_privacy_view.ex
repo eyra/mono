@@ -7,7 +7,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
   and publishes :terms_completed for the parent to re-mount the onboarding
   URL so the builder advances past this step.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash
@@ -15,8 +15,8 @@ defmodule Systems.Account.TermsAndPrivacyView do
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  require Core.Env
-  @policy_urls Core.Env.compile_env(:policy_urls)
+  require Mica.Env
+  @policy_urls Mica.Env.compile_env(:policy_urls)
 
   defp policy_url(key), do: @policy_urls[key]
 
@@ -59,7 +59,7 @@ defmodule Systems.Account.TermsAndPrivacyView do
     {:ok, _} =
       user
       |> Account.User.confirm_changeset()
-      |> Core.Repo.update()
+      |> Mica.Repo.update()
 
     {:noreply, socket |> Flash.push_hide() |> publish_event(:terms_completed)}
   end

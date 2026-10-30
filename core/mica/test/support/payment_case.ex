@@ -1,4 +1,4 @@
-defmodule Core.PaymentCase do
+defmodule Mica.PaymentCase do
   use ExUnit.CaseTemplate
 
   Mox.defmock(Systems.Payment.ProviderMock, for: Systems.Payment.Provider)

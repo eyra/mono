@@ -11,7 +11,7 @@ defmodule Systems.Fund.BalanceRaceTest do
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Adapters.SQL.Sandbox
   alias Systems.Bookkeeping
   alias Systems.Fund
@@ -112,7 +112,7 @@ defmodule Systems.Fund.BalanceRaceTest do
     Bookkeeping.AccountModel.balance(Repo.get!(Bookkeeping.AccountModel, account_id))
   end
 
-  defp insert_participant(_), do: Core.Factories.insert!(:member, %{creator: false})
+  defp insert_participant(_), do: Mica.Factories.insert!(:member, %{creator: false})
 
   defp reset_sandbox do
     truncate_fixtures()

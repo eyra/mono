@@ -1,21 +1,21 @@
-defmodule Systems.Zircon.Screening.ToolModel do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ToolModel do
+  use Gettext, backend: MicaWeb.Gettext
 
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Paper
-  alias Systems.Zircon.Screening
-  alias Systems.Annotation
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon.Screening
+  alias Next.Systems.Annotation
 
-  require Core.Env
-  @tool_directors Core.Env.compile_env(:tool_directors)
+  require Mica.Env
+  @tool_directors Mica.Env.compile_env(:tool_directors)
 
   schema "zircon_screening_tool" do
     field(:director, Ecto.Enum, values: @tool_directors)
 
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     many_to_many(:reference_files, Paper.ReferenceFileModel,
       join_through: Screening.ToolReferenceFileAssoc,
@@ -58,8 +58,8 @@ defmodule Systems.Zircon.Screening.ToolModel do
   def ready?(_), do: true
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
-    alias Systems.Zircon
+    use Gettext, backend: MicaWeb.Gettext
+    alias Next.Systems.Zircon
 
     def key(_), do: :zircon_screening
     def auth_tree(%{auth_node: auth_node}), do: auth_node
@@ -80,7 +80,7 @@ defmodule Systems.Zircon.Screening.ToolModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
     alias Frameworks.Concept
     def resource_id(%{id: id}), do: "zircon/#{id}"
     def tag(_), do: dgettext("eyra-zircon", "leaf.tag")

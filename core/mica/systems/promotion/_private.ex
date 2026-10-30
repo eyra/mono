@@ -1,6 +1,6 @@
 defmodule Systems.Promotion.Private do
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
 
   alias Systems.Promotion

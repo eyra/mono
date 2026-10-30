@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.SetupCascadeDeleteForUsers do
+defmodule Mica.Repo.Migrations.SetupCascadeDeleteForUsers do
   use Ecto.Migration
 
   def change do

@@ -1,10 +1,10 @@
-defmodule Self.Account.System do
+defmodule MicaSaas.Systems.Account.System do
   @moduledoc "Self's sign-in pages, which shadow Mica's sign-in routes."
-  use Core.System
+  use Mica.System
 
   def override_routes do
     quote do
-      scope "/", Self do
+      scope "/", MicaSaas.Systems do
         pipe_through([:browser, :redirect_if_user_is_authenticated])
         live("/user/signin", Account.SigninPage)
         live("/user/auth/identify", Account.AuthIdentifyPage, :creator, as: :auth_identify)
@@ -18,7 +18,7 @@ defmodule Self.Account.System do
         post("/user/session", Account.SessionController, :create)
       end
 
-      scope "/", Self do
+      scope "/", MicaSaas.Systems do
         pipe_through([:browser])
         get("/user/auth/redeem", Account.SessionController, :redeem_otp)
         delete("/user/session", Account.SessionController, :delete)
@@ -29,9 +29,9 @@ defmodule Self.Account.System do
   def grants do
     quote do
       [
-        {Self.Account.SigninPage, [:visitor, :user]},
-        {Self.Account.AuthIdentifyPage, [:visitor, :user]},
-        {Self.Account.AuthCodeVerifyPage, [:visitor, :user]}
+        {MicaSaas.Systems.Account.SigninPage, [:visitor, :user]},
+        {MicaSaas.Systems.Account.AuthIdentifyPage, [:visitor, :user]},
+        {MicaSaas.Systems.Account.AuthCodeVerifyPage, [:visitor, :user]}
       ]
     end
   end

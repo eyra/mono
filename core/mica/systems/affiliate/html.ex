@@ -2,7 +2,7 @@ defmodule Systems.Affiliate.Html do
   @moduledoc """
   HTML components for the Affiliate system.
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Annotation

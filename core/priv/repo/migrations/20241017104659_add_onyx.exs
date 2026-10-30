@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddOnyx do
+defmodule Mica.Repo.Migrations.AddOnyx do
   use Ecto.Migration
 
   def up do

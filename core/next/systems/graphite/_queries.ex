@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.Queries do
+defmodule Next.Systems.Graphite.Queries do
   require Ecto.Query
   require Frameworks.Utility.Query
 
@@ -6,7 +6,7 @@ defmodule Systems.Graphite.Queries do
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Account.User
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Assignment
 
   # Leaderboards

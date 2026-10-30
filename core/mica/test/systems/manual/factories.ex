@@ -1,5 +1,5 @@
 defmodule Systems.Manual.Factories do
-  use ExMachina.Ecto, repo: Core.Repo
+  use ExMachina.Ecto, repo: Mica.Repo
 
   alias Systems.Manual
   alias Systems.Userflow

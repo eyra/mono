@@ -1,5 +1,5 @@
-defmodule Next.Layouts.Workspace.MenuBuilder do
-  import Core.FeatureFlags
+defmodule NextWeb.Layouts.Workspace.MenuBuilder do
+  import Mica.FeatureFlags
 
   @home_flags [
     desktop_menu: [:wide],
@@ -35,7 +35,7 @@ defmodule Next.Layouts.Workspace.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :next
+  use MicaWeb.Menu.Builder, home: :next
 
   @impl true
   def include_map(user),

@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.Annotation do
   A pixel component for displaying an annotation.
   Note: this has no relation to the annotation system.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Panel
 

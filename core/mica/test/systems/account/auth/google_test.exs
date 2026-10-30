@@ -1,7 +1,7 @@
 defmodule Systems.Account.Auth.Google.Test do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
 
   describe "user_attrs/1" do
     test "maps proprietary fields to the normalized Account.User attrs" do

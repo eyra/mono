@@ -2,17 +2,17 @@ defmodule Systems.Account.SignupPage do
   @moduledoc """
   The home screen.
   """
-  use CoreWeb, :live_view_fabric
+  use MicaWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.RemoteIp, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
 
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
+  import MicaWeb.Layouts.Stripped.Html
+  import MicaWeb.Layouts.Stripped.Composer
+  import MicaWeb.Menus
 
   alias Systems.Account
   alias Systems.Account.UserForm

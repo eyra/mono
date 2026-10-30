@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameNextActions do
+defmodule Mica.Repo.Migrations.RenameNextActions do
   use Ecto.Migration
 
   def change do
@@ -9,7 +9,7 @@ defmodule Core.Repo.Migrations.RenameNextActions do
     update(
       :next_actions,
       :action,
-      "Elixir.Core.Accounts.NextActions.CompleteProfile",
+      "Elixir.Mica.Accounts.NextActions.CompleteProfile",
       "Elixir.Systems.Account.NextActions.CompleteProfile"
     )
   end

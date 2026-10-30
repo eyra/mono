@@ -32,7 +32,7 @@ Paths in this document are relative to the repository root and refer to the layo
 | [ops-mica-dev](#ops-mica-dev--development-server-nova-mica-dev) | Build and development server | Eyra-internal development server `nova-mica-dev` | code-layout; ideally with build-image | next |
 | [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | next |
 | [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | next |
-| [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica) | Decoupling | OTP app `:core` → `:mica`, modules `Core.*`/`CoreWeb.*` → `Mica.*`/`MicaWeb.*` | code-systems; ideally build-image; before code-split | planned |
+| [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica) | Decoupling | OTP app `:core` → `:mica`, modules `Core.*`/`CoreWeb.*` → `Mica.*`/`MicaWeb.*`, Next's and Self's modules into `Next.*`/`NextWeb.*` and `MicaSaas.*`/`MicaSaasWeb.*` | code-systems; ideally build-image; before code-split | planned |
 | [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
 | [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | planned |
 | [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-systems; code-registry for Graphite and Zircon | planned |
@@ -142,7 +142,11 @@ Details and rationale are in [design.md](./design.md#decisions).
   - `participant?(:panl, …)` checks
   - VU student codes
 - **`banking_proxy`** is not deployed anywhere and is retired.
-- **Names** (revised 2026-10-16). One step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names. Modules added before code-rename (such as `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems`) use the `Core` name until then and move with the rest. This replaces the earlier decision that modules stay `Core.*`/`CoreWeb.*`.
+- **Names** (revised 2026-10-16 and 2026-10-30, d-0013). One step, code-rename, renames the OTP app `:core` to `:mica` and gives every owner its own namespaces, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names:
+  - **Mica:** `Mica.*` and `MicaWeb.*` (today's `Core.*` and `CoreWeb.*`), plus Mica's `Systems.*` and `Frameworks.*`.
+  - **Next:** `Next.*` and `NextWeb.*`. Next's systems are `Next.Systems.*` (its systems under `core/next`, and its bundle systems such as `Next.Account`), its frameworks `Next.Frameworks.*`. `NextWeb.*` holds only the web shell: web module, router, endpoint, layouts and menus.
+  - **Self:** `MicaSaas.*` and `MicaSaasWeb.*`, with its systems as `MicaSaas.Systems.*`. "Self" stays its name in prose; the bundle id `:self` and `BUNDLE=self` change at code-split.
+  - Modules added before code-rename (such as `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems`) use the old names until then and move with the rest. This replaces the earlier decisions that modules stay `Core.*`/`CoreWeb.*` and that `Systems.*`, `Next.*` and `Self.*` keep their names.
 - **Database:**
   - one database per deployment
   - every table has one owner, with its migrations in the owner's repository
@@ -377,44 +381,40 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 
 ### code-rename — Rename the OTP app and the namespaces to Mica
 
-- **Goal.** Rename the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*` in one go, while there is still one project, so `novasoftwarefoundation/mica` is published with Mica names (decided 2026-10-16). `Systems.*`, `Frameworks.*`, `Next.*` and `Self.*` keep their names.
-- **Scope.** One scripted rename in one PR. The script is committed with the PR, so it can be re-run on the latest `develop` at the merge moment and by open PRs on their own branches.
+- **Goal.** Rename the OTP app `:core` to `:mica` and give every owner its own module namespaces in one go, while there is still one project, so `novasoftwarefoundation/mica` is published with Mica names (decided 2026-10-16; namespaces per owner d-0013, 2026-10-30): Mica gets `Mica.*`/`MicaWeb.*` and keeps `Systems.*`/`Frameworks.*`, Next gets `Next.*`/`NextWeb.*` with `Next.Systems.*`/`Next.Frameworks.*`, Self gets `MicaSaas.*`/`MicaSaasWeb.*`.
+- **Scope.** One scripted rename in one PR: [`core/scripts/rename_mica.exs`](../../core/scripts/rename_mica.exs), committed with the PR. It only rewrites names that are still old, so it can be re-run on the latest `develop` at the merge moment, by open PRs on their own branches, and on a merge that brings old names back (`elixir core/scripts/rename_mica.exs`, then `mix format`; `--check` lists what is left).
   - **OTP app.**
-    - Set `app: :mica` in `core/mix.exs`.
-    - Rename `config :core, …` to `config :mica, …` in all config files, including the config keys that name a module (`config :core, CoreWeb.Endpoint` becomes `config :mica, MicaWeb.Endpoint`).
-    - Update the accessor (`Core.Env`, which becomes `Mica.Env`).
-    - Update the call sites that name the app: `otp_app: :core`, `app_dir(:core, …)`, `from: :core` (about 10).
-    - Update the `priv` paths.
-  - **Modules.**
-    - `defmodule Core…`/`defmodule CoreWeb…`, aliases, imports and every other reference.
-    - `use CoreWeb, :live_view` and the other `use CoreWeb` forms, `use CoreWeb.Router`.
-    - Modules added before this step move with the rest: `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems` become `Mica.System`, `Mica.SaaS`, `Mica.Env` and `Mica.Systems`.
-    - Rename the files and folders that carry the name: `core/mica/lib/core*` becomes `core/mica/lib/mica*`.
-  - **Tooling that names modules.**
-    - the Gettext backend (`CoreWeb.Gettext` becomes `MicaWeb.Gettext`) and its `otp_app`
-    - the credo config and custom checks, the boundary check (`core/scripts/boundary_check.exs`) and the module names in `core/boundary_allowlist.exs`
-    - the snapshot harness and its committed snapshots (module names in route, permission, handler and cron snapshots)
-    - test support modules (`CoreWeb.ConnCase` and the like) and the agent and developer docs that name them (`CLAUDE.md`, `core/CLAUDE.md`)
-  - Keep the release binary name `core` for now (`releases: [core: …]`). [`core/scripts/predeploy`](../../core/scripts/predeploy), [`core/scripts/docker-start-app`](../../core/scripts/docker-start-app), the root `Dockerfile` entrypoint and Eyra's AWS deploy tooling (outside this repository) all call `bin/core`.
-  - Environment variable names do not change.
-- **Dependencies.** After code-systems: its accessor exists and its new modules exist, so they move with the rest. Ideally after build-image. Before code-split.
+    - `app: :mica` in `core/mix.exs`; `config :core, …` becomes `config :mica, …` everywhere, including the keys that name a module (`config :mica, MicaWeb.Endpoint`).
+    - The accessor `Core.Env` becomes `Mica.Env`; `otp_app:`, `app_dir`, `Application.*` and `priv` paths name `:mica`.
+  - **Mica.** `Core.*` becomes `Mica.*` and `CoreWeb.*` becomes `MicaWeb.*` (with `Core.System`, `Core.SaaS`, `Core.Env` and `Core.Systems`); `core/mica/lib/core*` and `core/mica/test/core*` become `mica*`. Mica keeps `Systems.*` and `Frameworks.*`.
+  - **Next** (`core/next`).
+    - Its systems become `Next.Systems.*`: the `Systems.*` systems under `core/next` (Annotation, Citizen, Graphite, Ontology, Onyx, Paper, Probe, Student, Zircon) and the bundle systems `Next.Account`, `Next.E2E`, `Next.Panl` and `Next.WellKnown` (`Next.WellKnownController` becomes `Next.Systems.WellKnown.Controller`). System pages stay in their system's namespace.
+    - `Frameworks.E2E.*` and `Frameworks.Concept.ScreeningAgent` become `Next.Frameworks.*`.
+    - The web shell becomes `NextWeb.*`: `Next.Layouts.*`, `Next.Menu.*` and the eight `CoreWeb.Features.*` tests under `core/next`. `NextWeb` holds only the web shell (web module, router, endpoint, layouts, menus).
+    - Its Mix tasks keep `Mix.Tasks.*`; `mix core.graphite.*` becomes `mix next.graphite.*`.
+  - **Self** (`core/mica_saas`). `Self.*` becomes `MicaSaas.*`, with `Self.Account` as `MicaSaas.Systems.Account` and the web shell (`Self.Layouts`, `Self.Menu`) as `MicaSaasWeb.*`. The bundle id `:self` and `BUNDLE=self` keep their names until code-split, where `BUNDLE` goes away; renaming them now would change the CI, Fly and nova-mica-dev deploy config twice. The Self Nova snapshots move from `next/test/snapshots/self/` to `mica_saas/`, because `mix nova.snapshot` names the folder after the SaaS module.
+  - **Code that builds module names at runtime** follows the namespaces: `Frameworks.Utility.Module` and `Frameworks.Concept.System` find a SaaS system's director and presenter (`Next.Systems.Student.Director`) through the SaaS module's namespace, and `Mica.SaaS.signal_handlers/0` sorts a SaaS system's handlers among Mica's by their system name, so the dispatch order does not change.
+  - **Stored names.** A migration rewrites the module names stored in `oban_jobs.worker` (jobs that have not run yet, such as Next's Paper RIS import jobs) and in `authentication_entity.identifier` (`Elixir.Core.Authentication.Actor:<id>` for the system actors).
+  - **Tooling.** The Gettext backend and its `otp_app`, the credo config and checks (`MicaEnvAccess`), the boundary check and allowlist, the snapshot harness and snapshots, test support, `CLAUDE.md` files and docs. The boundary check also fails when a module sits outside its owner's namespaces: `core/next` defines only `Next.*`/`NextWeb.*`, `core/mica_saas` only `MicaSaas.*`/`MicaSaasWeb.*` (Mix tasks keep `Mix.Tasks.*`), `core/mica` nothing in a SaaS namespace.
+  - **Unchanged:** the release name and binary `core` (`releases: [core: []]`; `predeploy`, `docker-start-app`, the root `Dockerfile` and Eyra's AWS deploy call `bin/core`), environment variable names, cookie names (`_core_key`, `_core_web_user_remember_me`), Mica's `Systems.*` and `Frameworks.*`, and the folders `core/mica`, `core/next` and `core/mica_saas`.
+- **Dependencies.** After code-systems: its accessor exists and its new modules exist, so they move with the rest. Before code-compose (d-0014), so code-compose's modules get their final names. Before code-split.
 - **Parallel with.** Nothing during the merge freeze. code-brand, code-registry and code-instance continue before and after it; their open PRs catch up with it by running the rename script and merging `develop` in.
-- **Eyra prod impact.** Build-level only. Rehearse the release build and deploy on `eyra-next-dev` and staging, and run one AWS release build. If build-image has landed, there is one runtime file to rename, and the AWS tarball comes from the image staging ran.
+- **Eyra prod impact.** Build-level, plus the stored-names migration. Eyra's AWS deploy calls `Core.Release.migrate`/`seed`; an eyra/devops PR makes it call `Mica.Release` when the release has it, and must be merged before the first prod deploy with the rename. AppSignal action names change with the module names (`CoreWeb.*` to `MicaWeb.*`, `Systems.Graphite.*` to `Next.Systems.Graphite.*`, …); dashboards and alerts that filter on them need the new names.
 - **Risks.**
-  - **Every open PR conflicts.** Almost every file changes. As with code-layout, agree a short merge freeze with the Next team, merge at the start of a milestone, and give open PRs the rename script to run on their branches before they merge `develop` in.
-  - **Persisted module names.** Anything stored with a module name breaks after the rename: Oban job rows (`worker`), stored atoms, cached terms. Check before the merge that no stored value names a `Core.*` or `CoreWeb.*` module, or migrate those values in the same release.
-  - **Work outside this repository** that names `Core.*` or `CoreWeb.*` modules: `rpc` and remote-console snippets in runbooks and in eyra/devops, and AppSignal namespaces and dashboards.
+  - **Every open PR conflicts.** Almost every file changes. Agree a short merge freeze with the Next team, merge at the start of a milestone, and give open PRs the rename script to run on their branches before they merge `develop` in.
+  - **Persisted module names.** Checked read-only on eyra-next-dev, eyra-next-staging and nova-mica-dev (one system actor entity on dev) and on production before the merge; the migration covers what is stored.
+  - **Work outside this repository** that names the old modules: `rpc` and remote-console snippets in runbooks and eyra/devops, and AppSignal dashboards.
 - **Verification.**
   - The release contains the same set of `.beam` modules as before, modulo the rename.
-  - The route, permission, handler and cron snapshots are identical, modulo the module names.
+  - The route, permission, handler and cron snapshots and the runtime config snapshots are identical, modulo the module names.
+  - The boundary check passes with the same counts.
   - No `Core.`, `CoreWeb.` or `:core` app reference remains, apart from the release name `core`.
-  - The app boots on dev and staging.
-  - Smoke tests pass.
-  - `predeploy` runs migrations and seeds.
-- **Rollback.** Revert the PR.
+  - The app boots on dev and nova-mica-dev; `predeploy` runs migrations and seeds.
+- **Rollback.** Before reverting, roll back the stored-names migration (its `down` restores the old names); then revert the PR.
 - **Decisions/authorizations.**
-  - The merge moment and the merge freeze, agreed with the Next team.
+  - The merge moment and the merge freeze, agreed with the Next team (a 09:00–13:00 develop freeze on a working-day morning after the M34 cut).
   - Whether the release binary stays `core` or becomes `next` (open question 3).
+
 
 ### code-brand — Brand and config seams
 

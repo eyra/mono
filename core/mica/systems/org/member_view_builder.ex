@@ -17,7 +17,7 @@ defmodule Systems.Org.MemberViewBuilder do
   members whose role was granted in the current ISO week (Mon 00:00 UTC
   onward).
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
   alias Systems.Org

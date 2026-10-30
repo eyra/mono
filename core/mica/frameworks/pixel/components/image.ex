@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Image do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:id, :any, required: true)
   attr(:image, :any, required: true)

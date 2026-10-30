@@ -2,7 +2,7 @@ defmodule Systems.Assignment.Routes do
   defmacro routes() do
     quote do
       pipeline :assignment_exists do
-        plug(CoreWeb.ResourceExistsPlug, param: "id", fetch: {Systems.Assignment.Public, :get})
+        plug(MicaWeb.ResourceExistsPlug, param: "id", fetch: {Systems.Assignment.Public, :get})
       end
 
       scope "/assignment/:id", Systems.Assignment do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.LeaderboardAuth do
+defmodule Mica.Repo.Migrations.LeaderboardAuth do
   use Ecto.Migration
 
   require Logger
@@ -112,12 +112,12 @@ defmodule Core.Repo.Migrations.LeaderboardAuth do
   end
 
   defp query_all(table, fields) do
-    {:ok, %{rows: rows}} = query(Core.Repo, "SELECT #{fields} FROM #{table}")
+    {:ok, %{rows: rows}} = query(Mica.Repo, "SELECT #{fields} FROM #{table}")
     rows
   end
 
   def query_id(table, field, where) do
-    case query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
+    case query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
       {:ok, %{rows: [[value] | _]}} -> {:ok, value}
       _ -> :error
     end

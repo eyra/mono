@@ -5,7 +5,7 @@ defmodule Systems.Assignment.TemplateExtension do
 
   A SaaS registers its templates in config:
 
-      config :core, :assignment_templates, [MySaaS.SomeTemplate]
+      config :mica, :assignment_templates, [MySaaS.SomeTemplate]
 
   Each module defines the template struct (`defstruct [:id]`), implements
   `Systems.Assignment.Template` for it and implements this behaviour.
@@ -25,7 +25,7 @@ defmodule Systems.Assignment.TemplateExtension do
   """
   @callback tool_description(special :: atom()) :: binary() | nil
 
-  def all, do: Core.Env.get(:assignment_templates, [])
+  def all, do: Mica.Env.get(:assignment_templates, [])
 
   def enabled, do: Enum.filter(all(), & &1.enabled?())
 

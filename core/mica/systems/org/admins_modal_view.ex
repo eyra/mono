@@ -4,8 +4,8 @@ defmodule Systems.Org.AdminsModalView do
 
   Uses the reusable PeopleEditorComponent.
   """
-  use CoreWeb, :modal_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :modal_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
   alias Systems.Org

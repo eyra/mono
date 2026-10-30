@@ -1,6 +1,6 @@
-defmodule Systems.Annotation.Pattern.Definition do
-  alias Core.Authentication
-  alias Systems.Ontology
+defmodule Next.Systems.Annotation.Pattern.Definition do
+  alias Mica.Authentication
+  alias Next.Systems.Ontology
 
   @type t :: %__MODULE__{
           definition: String.t() | nil,
@@ -10,8 +10,8 @@ defmodule Systems.Annotation.Pattern.Definition do
 
   defstruct [:definition, :subject, :entity]
 
-  defimpl Systems.Annotation.Pattern do
-    use Systems.Annotation.Pattern.Helpers
+  defimpl Next.Systems.Annotation.Pattern do
+    use Next.Systems.Annotation.Pattern.Helpers
 
     def obtain(%{definition: nil}), do: raise(MissingFieldError, :definition)
     def obtain(%{subject: nil}), do: raise(MissingFieldError, :subject)

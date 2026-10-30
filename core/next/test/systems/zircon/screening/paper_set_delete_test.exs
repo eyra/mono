@@ -1,15 +1,15 @@
-defmodule Systems.Zircon.Screening.PaperSetDeleteTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.PaperSetDeleteTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
-  alias Systems.Paper
-  alias Systems.Zircon.Screening
+  alias Mica.Repo
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon.Screening
 
   setup do
     # Isolate signals to prevent unwanted side effects
-    isolate_signals(except: [Systems.Zircon.Switch])
+    isolate_signals(except: [Next.Systems.Zircon.Switch])
 
     # Create required entities
     auth_node = Factories.insert!(:auth_node)

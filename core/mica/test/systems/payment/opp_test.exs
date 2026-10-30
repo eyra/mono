@@ -13,10 +13,10 @@ defmodule Systems.Payment.Provider.OPPTest do
 
   setup do
     bypass = Bypass.open()
-    previous = Application.get_env(:core, OPP)
+    previous = Application.get_env(:mica, OPP)
 
     Application.put_env(
-      :core,
+      :mica,
       OPP,
       Keyword.merge(previous || [],
         base_url: "http://localhost:#{bypass.port}",
@@ -25,7 +25,7 @@ defmodule Systems.Payment.Provider.OPPTest do
       )
     )
 
-    on_exit(fn -> Application.put_env(:core, OPP, previous) end)
+    on_exit(fn -> Application.put_env(:mica, OPP, previous) end)
 
     {:ok, bypass: bypass}
   end

@@ -21,7 +21,7 @@ defmodule Systems.Account.PayoutsView do
   re-renders this view (see `Systems.Account.Switch`). A slow poll while pending
   is the fallback for missed webhooks.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash

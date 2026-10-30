@@ -1,5 +1,5 @@
-defmodule Next.WellKnownControllerTest do
-  use CoreWeb.ConnCase, async: true
+defmodule Next.Systems.WellKnown.ControllerTest do
+  use MicaWeb.ConnCase, async: true
 
   test "serves the apple-app-site-association as JSON without a redirect or session", %{
     conn: conn

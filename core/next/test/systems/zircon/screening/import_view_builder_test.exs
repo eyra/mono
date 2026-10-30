@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
-  use Core.DataCase
-  alias Systems.Zircon.Screening.ImportViewBuilder
+defmodule Next.Systems.Zircon.Screening.ImportViewBuilderTest do
+  use Mica.DataCase
+  alias Next.Systems.Zircon.Screening.ImportViewBuilder
 
   # Helper function to extract import buttons assigns from nested structure
   defp get_import_buttons_assigns(stack) do
@@ -63,7 +63,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "view_model/2 basic functionality" do
     test "creates basic view model for tool with no papers" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
       assigns = %{}
 
       result = ImportViewBuilder.view_model(tool, assigns)
@@ -98,15 +98,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "creates view model for tool with papers" do
       # Create tool first to get its ID
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       # Create papers
-      paper1 = Core.Factories.insert!(:paper, %{title: "Test Paper 1"})
-      paper2 = Core.Factories.insert!(:paper, %{title: "Test Paper 2"})
+      paper1 = Mica.Factories.insert!(:paper, %{title: "Test Paper 1"})
+      paper2 = Mica.Factories.insert!(:paper, %{title: "Test Paper 2"})
 
       # Create paper set with papers, using the tool's category and identifier
       _paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id,
           papers: [paper1, paper2]
@@ -134,7 +134,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "extracts title from assigns with different structures" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       # Test direct title
       assigns = %{"title" => "Custom Title"}
@@ -158,7 +158,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "import status determination" do
     test "returns idle status when no reference files exist" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
       assigns = %{}
 
       result = ImportViewBuilder.view_model(tool, assigns)
@@ -173,24 +173,24 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "returns active import status when session is running" do
       # Create reference file
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       # Create tool with reference file
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       # Create paper set with the tool's category and identifier
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create active import session
       _import_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -222,17 +222,17 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       for phase <- active_phases do
         # Create reference file
-        reference_file = Core.Factories.insert!(:paper_reference_file)
+        reference_file = Mica.Factories.insert!(:paper_reference_file)
 
         # Create tool with reference file
         tool =
-          Core.Factories.insert!(:zircon_screening_tool, %{
+          Mica.Factories.insert!(:zircon_screening_tool, %{
             reference_files: [reference_file]
           })
 
         # Create paper set with the tool's category and identifier
         paper_set =
-          Core.Factories.insert!(:paper_set, %{
+          Mica.Factories.insert!(:paper_set, %{
             category: :zircon_screening_tool,
             identifier: tool.id
           })
@@ -240,7 +240,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
         # Create import session with specific phase
         # Add appropriate data for phases that need it
         session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
-        import_session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
+        import_session = Mica.Factories.insert!(:paper_ris_import_session, session_attrs)
 
         result = ImportViewBuilder.view_model(tool, %{})
 
@@ -259,12 +259,12 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
                "Expected at least 2 blocks in stack (header, import_section) for active phase #{phase}"
 
         # Clean up for next iteration
-        Core.Repo.delete!(import_session)
+        Mica.Repo.delete!(import_session)
       end
     end
 
     test "shows normal button when idle or completed" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
       assigns = %{}
 
       result = ImportViewBuilder.view_model(tool, assigns)
@@ -277,15 +277,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "import session view" do
     test "shows import session view for active sessions" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -295,7 +295,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       for phase <- phases do
         # Create session with specific phase and appropriate data
         session_attrs = build_session_attrs_for_phase(phase, paper_set, reference_file)
-        session = Core.Factories.insert!(:paper_ris_import_session, session_attrs)
+        session = Mica.Factories.insert!(:paper_ris_import_session, session_attrs)
 
         result = ImportViewBuilder.view_model(tool, %{})
 
@@ -309,14 +309,14 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
         assert session_block, "Should have processing status block for phase #{phase}"
 
         # Clean up for next iteration
-        Core.Repo.delete!(session)
+        Mica.Repo.delete!(session)
       end
     end
   end
 
   describe "display state logic" do
     test "no content block when no papers" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       result = ImportViewBuilder.view_model(tool, %{})
 
@@ -327,14 +327,14 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "includes content block when papers exist" do
       # Create tool first to get its ID
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       # Create paper
-      paper = Core.Factories.insert!(:paper)
+      paper = Mica.Factories.insert!(:paper)
 
       # Create paper set with papers, using the tool's category and identifier
       _paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id,
           papers: [paper]
@@ -353,7 +353,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "file information extraction" do
     test "returns nil file info when no reference files" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       result = ImportViewBuilder.view_model(tool, %{})
 
@@ -367,9 +367,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create reference file with specific filename and url
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: filename,
               ref: url
             })
@@ -377,7 +377,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create tool with the reference file
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -390,9 +390,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     test "prefers active session file info over uploaded files" do
       # Create uploaded reference file
       uploaded_ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "uploaded.ris",
               ref: "http://example.com/uploaded.ris"
             })
@@ -400,9 +400,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create active session reference file
       session_ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "session.ris",
               ref: "http://example.com/session.ris"
             })
@@ -410,20 +410,20 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create tool with both reference files
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [uploaded_ref_file, session_ref_file]
         })
 
       # Create paper set with the tool's category and identifier
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create active import session with the session reference file
       _import_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: session_ref_file,
           status: :activated,
@@ -440,23 +440,23 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "import session view logic" do
     test "includes import session block only for active sessions" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       # Create tool with reference file
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Test with active session
       active_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -475,10 +475,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       assert processing_status_block != nil
 
       # Clean up and test with completed session
-      Core.Repo.delete!(active_session)
+      Mica.Repo.delete!(active_session)
 
       _completed_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :succeeded,
@@ -512,16 +512,16 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     test "shows import buttons when no active session and filename exists" do
       # Create tool with uploaded file
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -538,7 +538,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "does not show import buttons when no filename" do
       # Create tool without any reference files
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       result = ImportViewBuilder.view_model(tool, %{})
 
@@ -548,28 +548,28 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "does not show import buttons during active session" do
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create active session
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -584,21 +584,21 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "shows file selector during processing phases" do
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -608,7 +608,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       for phase <- processing_phases do
         # Create session with specific phase
         session =
-          Core.Factories.insert!(:paper_ris_import_session, %{
+          Mica.Factories.insert!(:paper_ris_import_session, %{
             paper_set: paper_set,
             reference_file: reference_file,
             status: :activated,
@@ -629,34 +629,34 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
                "Should not have import buttons for phase #{phase}"
 
         # Clean up for next iteration
-        Core.Repo.delete!(session)
+        Mica.Repo.delete!(session)
       end
     end
 
     test "shows file selector during prompting phase with errors" do
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create session in prompting phase with errors
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -680,28 +680,28 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "shows file selector during prompting phase without errors" do
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create session in prompting phase with new papers (no errors)
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -729,28 +729,28 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       # This test ensures that when there are 0 new papers, the duplicates button
       # is created with the correct event handler
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "duplicates_only.ris",
               ref: "http://example.com/duplicates.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create session with warnings, 0 new papers, and duplicates
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -797,9 +797,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     test "shows prompting summary when session has both errors and new papers" do
       # Create reference file
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "mixed_results.ris",
               ref: "http://example.com/mixed.ris"
             })
@@ -807,19 +807,19 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create tool with reference file
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create session in prompting phase with both errors and new papers
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -886,28 +886,28 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "shows prompting summary with only errors (no new papers)" do
       reference_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "errors_only.ris",
               ref: "http://example.com/errors.ris"
             })
         })
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create session with only errors
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -943,15 +943,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
   describe "batch progress display" do
     test "shows processing progress message during processing phase with progress data" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -959,7 +959,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       # Create active import session in processing phase with progress data
       # Use 25 references to be above the threshold of 20
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -988,22 +988,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "shows generic processing message when no progress data during processing phase" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create active import session in processing phase without progress data
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1027,15 +1027,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "shows correct progress message during importing phase with session progress" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -1052,7 +1052,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create active import session in importing phase with progress data
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1087,15 +1087,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "shows importing message for 20+ new papers without progress data" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -1108,7 +1108,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create active import session in importing phase with entries but no progress
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1137,15 +1137,15 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "hides importing status for small batches of new papers" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -1158,7 +1158,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create active import session in importing phase
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1181,22 +1181,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "does not show progress for small batches below threshold" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Test with 19 references (below threshold of 20)
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1220,22 +1220,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "shows progress for batches at or above threshold" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Test with exactly 20 references (at threshold)
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1261,22 +1261,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "shows progress spinner at 0 for parsing phase" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Test with parsing phase
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1299,22 +1299,22 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     end
 
     test "does not show progress for waiting phase" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Test with waiting phase
       _session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -1351,18 +1351,18 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     test "handles complex scenarios with multiple reference files" do
       # Create multiple reference files
       ref_file_1 =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "file1.ris",
               ref: "http://example.com/file1.ris"
             })
         })
 
       ref_file_2 =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "file2.ris",
               ref: "http://example.com/file2.ris"
             })
@@ -1370,7 +1370,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # Create tool with multiple reference files
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [ref_file_1, ref_file_2]
         })
 
@@ -1389,10 +1389,10 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
   describe "flash error handling" do
     setup do
       # Create tool with paper set
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -1406,9 +1406,9 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     } do
       # Create a reference file
       ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
+        Mica.Factories.insert!(:paper_reference_file, %{
           file:
-            Core.Factories.build(:content_file, %{
+            Mica.Factories.build(:content_file, %{
               name: "test.ris",
               ref: "http://example.com/test.ris"
             }),
@@ -1418,14 +1418,14 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       # Associate with tool
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create a failed import session
       _failed_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file,
           status: :failed,
@@ -1453,13 +1453,13 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     } do
       # Create a failed session
       ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "test.ris"}),
           status: :failed
         })
 
       _failed_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file,
           status: :failed,
@@ -1481,20 +1481,20 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     } do
       # Create an active session
       ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "test.ris"}),
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "test.ris"}),
           status: :uploaded
         })
 
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [ref_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       _active_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file,
           status: :activated,
@@ -1516,18 +1516,18 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     } do
       # Create multiple failed sessions with different timestamps
       ref_file1 =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "old.ris"})
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "old.ris"})
         })
 
       ref_file2 =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "recent.ris"})
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "recent.ris"})
         })
 
       # Older failed session
       _old_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file1,
           status: :failed,
@@ -1537,7 +1537,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
       # More recent failed session
       _recent_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file2,
           status: :failed,
@@ -1556,13 +1556,13 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "handles empty error list gracefully", %{tool: tool, paper_set: paper_set} do
       ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "test.ris"})
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "test.ris"})
         })
 
       # Failed session with empty errors
       _failed_session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file,
           status: :failed,
@@ -1580,8 +1580,8 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
 
     test "shows specific validation error messages", %{tool: tool, paper_set: paper_set} do
       ref_file =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "binary.jpg"})
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "binary.jpg"})
         })
 
       # Test different error messages
@@ -1595,7 +1595,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
       for error_message <- test_cases do
         # Update or create session with specific error
         session =
-          Core.Factories.insert!(:paper_ris_import_session, %{
+          Mica.Factories.insert!(:paper_ris_import_session, %{
             paper_set: paper_set,
             reference_file: ref_file,
             status: :failed,
@@ -1608,7 +1608,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
         assert result.flash_error == error_message
 
         # Clean up for next iteration
-        Core.Repo.delete!(session)
+        Mica.Repo.delete!(session)
       end
     end
 
@@ -1618,26 +1618,26 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
     } do
       # Create two active sessions for different files
       ref_file1 =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "file1.ris"}),
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "file1.ris"}),
           status: :uploaded
         })
 
       ref_file2 =
-        Core.Factories.insert!(:paper_reference_file, %{
-          file: Core.Factories.build(:content_file, %{name: "file2.ris"}),
+        Mica.Factories.insert!(:paper_reference_file, %{
+          file: Mica.Factories.build(:content_file, %{name: "file2.ris"}),
           status: :uploaded
         })
 
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [ref_file1, ref_file2])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       _session1 =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file1,
           status: :activated,
@@ -1645,7 +1645,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilderTest do
         })
 
       _session2 =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: ref_file2,
           status: :activated,

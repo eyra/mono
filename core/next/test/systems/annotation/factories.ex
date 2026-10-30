@@ -1,7 +1,7 @@
-defmodule Systems.Annotation.Factories do
-  alias Core.Factories
-  alias Systems.Annotation
-  alias Systems.Ontology
+defmodule Next.Systems.Annotation.Factories do
+  alias Mica.Factories
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   def insert_annotation(type, value, author, target)
 

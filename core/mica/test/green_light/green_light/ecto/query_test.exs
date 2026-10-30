@@ -1,9 +1,9 @@
-defmodule Core.Authorization.DBTest do
-  # use Core.DataCase
+defmodule Mica.Authorization.DBTest do
+  # use Mica.DataCase
 
   # alias Systems.Account.User
-  # alias Core.Authorization.TestEntity
-  # alias Core.Authorization.DB
+  # alias Mica.Authorization.TestEntity
+  # alias Mica.Authorization.DB
 
   # describe "list_roles" do
   #   test "returns empty set for nil principal" do

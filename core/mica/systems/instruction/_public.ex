@@ -1,9 +1,9 @@
 defmodule Systems.Instruction.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   import Systems.Instruction.Queries
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
 
   alias Frameworks.Signal

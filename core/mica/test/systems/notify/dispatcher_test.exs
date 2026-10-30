@@ -1,8 +1,8 @@
 defmodule Systems.Notify.DispatcherTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Notify
 
   describe "dispatch/1" do

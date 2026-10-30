@@ -8,7 +8,7 @@ defmodule Systems.Org.ArchiveModalView do
   - Filter by hierarchy (root/nested)
   - Restore button per organisation
   """
-  use CoreWeb, :modal_live_view
+  use MicaWeb, :modal_live_view
   use Frameworks.Pixel
 
   alias Frameworks.Pixel.Button

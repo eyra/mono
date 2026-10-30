@@ -1,4 +1,4 @@
-defmodule Self.Layouts.Workspace.MenuBuilder do
+defmodule MicaSaasWeb.Layouts.Workspace.MenuBuilder do
   @home_flags [
     desktop_menu: [:wide],
     tablet_menu: [:narrow],
@@ -32,7 +32,7 @@ defmodule Self.Layouts.Workspace.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :self
+  use MicaWeb.Menu.Builder, home: :self
 
   @impl true
   def include_map(user),

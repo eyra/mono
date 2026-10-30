@@ -2,12 +2,12 @@ defmodule Systems.Admin.Panel do
   @moduledoc """
   A tab on the Admin page (`/admin/config`), with an embedded live view.
 
-  Systems contribute panels with `c:Core.System.admin_panels/0`; the page shows
-  them in `c:Core.SaaS.systems/0` order.
+  Systems contribute panels with `c:Mica.System.admin_panels/0`; the page shows
+  them in `c:Mica.SaaS.systems/0` order.
 
       defmodule Systems.Admin.ActionsPanel do
         use Systems.Admin.Panel
-        use Gettext, backend: CoreWeb.Gettext
+        use Gettext, backend: MicaWeb.Gettext
 
         @impl true
         def id, do: :actions

@@ -1,8 +1,8 @@
-defmodule Systems.Paper.Private do
-  import Systems.Paper.Queries
+defmodule Next.Systems.Paper.Private do
+  import Next.Systems.Paper.Queries
   import Ecto.Query, only: [last: 2]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Version
 
   def obtain_version!(nil, nil, _paper_set) do

@@ -7,20 +7,20 @@ defmodule Systems.Alliance.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  require Core.Enums.Devices
+  require Mica.Enums.Devices
 
   alias Systems.Workflow
   alias Systems.Alliance.VariableParser
 
-  require Core.Env
-  @tool_directors Core.Env.compile_env(:tool_directors)
+  require Mica.Env
+  @tool_directors Mica.Env.compile_env(:tool_directors)
 
   schema "alliance_tools" do
     field(:url, :string)
     field(:director, Ecto.Enum, values: @tool_directors)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :alliance_tool_id)
 
@@ -166,7 +166,7 @@ defmodule Systems.Alliance.ToolModel do
   defp decode_query(query), do: URI.decode_query(query)
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Systems.Alliance
     def key(_), do: :alliance

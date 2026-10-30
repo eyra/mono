@@ -1,8 +1,8 @@
 defmodule Systems.Assignment.BrandingFormTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Assignment
 
   defmodule BrandingFormView do

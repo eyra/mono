@@ -1,15 +1,15 @@
 defmodule Systems.Admin.TypographyPage do
-  use CoreWeb, :live_view_fabric
+  use MicaWeb, :live_view_fabric
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.User, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
   on_mount({Frameworks.Fabric.LiveHook, __MODULE__})
 
-  import CoreWeb.Layouts.Stripped.Html
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
+  import MicaWeb.Layouts.Stripped.Html
+  import MicaWeb.Layouts.Stripped.Composer
+  import MicaWeb.Menus
 
   @impl true
   def mount(_params, _session, socket) do

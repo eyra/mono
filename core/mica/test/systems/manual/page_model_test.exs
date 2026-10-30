@@ -1,5 +1,5 @@
 defmodule Systems.Manual.PageModelTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Manual
   alias Systems.Userflow

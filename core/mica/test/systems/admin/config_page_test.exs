@@ -1,5 +1,5 @@
 defmodule Systems.Admin.ConfigPageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -54,7 +54,7 @@ defmodule Systems.Admin.ConfigPageTest do
             [{:en, name}]
           )
 
-        Core.Authorization.assign_role(user, org, :owner)
+        Mica.Authorization.assign_role(user, org, :owner)
       end
 
       :ok

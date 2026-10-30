@@ -1,6 +1,6 @@
 defmodule Systems.Content.LocalFS do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   defmodule Error do
     defexception [:message]
@@ -27,11 +27,11 @@ defmodule Systems.Content.LocalFS do
   end
 
   def get_root_path do
-    Core.Env.get(:upload_path)
+    Mica.Env.get(:upload_path)
   end
 
   def get_base_url do
-    Core.Env.get(:base_url)
+    Mica.Env.get(:base_url)
   end
 
   def remove(path) do
@@ -86,7 +86,7 @@ defmodule Systems.Content.LocalFS do
   end
 
   defp get_stream_chunk_size do
-    Core.Env.fetch!(:paper)
+    Mica.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

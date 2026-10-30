@@ -1,7 +1,7 @@
-defmodule Systems.Citizen.Pool.OverviewPlugin do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Citizen.Pool.OverviewPlugin do
+  use MicaWeb, :live_component_fabric
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Grid
 

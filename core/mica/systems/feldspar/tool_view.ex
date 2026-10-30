@@ -1,5 +1,5 @@
 defmodule Systems.Feldspar.ToolView do
-  use CoreWeb, :modal_live_view
+  use MicaWeb, :modal_live_view
   use Frameworks.Pixel
 
   require Logger

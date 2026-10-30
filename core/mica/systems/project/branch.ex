@@ -9,8 +9,8 @@ defmodule Systems.Project.Branch do
 end
 
 defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Utility.List
   alias Frameworks.Concept
   alias Systems.Project

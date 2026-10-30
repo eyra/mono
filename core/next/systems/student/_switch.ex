@@ -1,7 +1,7 @@
-defmodule Systems.Student.Switch do
+defmodule Next.Systems.Student.Switch do
   use Frameworks.Signal.Handler
 
-  alias Systems.{
+  alias Next.Systems.{
     Student
   }
 

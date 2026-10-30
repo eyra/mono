@@ -96,7 +96,7 @@ defmodule Systems.Payment.Provider.Local do
        uid: uid,
        status: :pending,
        raw_status: "created",
-       payment_url: "#{CoreWeb.Endpoint.url()}/payment/local/#{uid}",
+       payment_url: "#{MicaWeb.Endpoint.url()}/payment/local/#{uid}",
        amount: total_amount,
        reference: idempotence_key,
        created: nil

@@ -1,7 +1,7 @@
 defmodule Systems.Org.OwnersViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org.OwnersViewBuilder
 
   describe "view_model/2" do
@@ -10,8 +10,8 @@ defmodule Systems.Org.OwnersViewBuilderTest do
       user2 = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["owners_vm_org"]})
 
-      Core.Authorization.assign_role(user1, org, :owner)
-      Core.Authorization.assign_role(user2, org, :owner)
+      Mica.Authorization.assign_role(user1, org, :owner)
+      Mica.Authorization.assign_role(user2, org, :owner)
 
       vm = OwnersViewBuilder.view_model(org, %{})
 

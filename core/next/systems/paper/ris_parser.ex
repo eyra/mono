@@ -1,4 +1,4 @@
-defmodule Systems.Paper.RISParser do
+defmodule Next.Systems.Paper.RISParser do
   @moduledoc """
   Pure module for parsing RIS file content.
 
@@ -7,7 +7,7 @@ defmodule Systems.Paper.RISParser do
   """
 
   require Logger
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   # Supported RIS reference types
   @supported_reference_types ["JOUR", "JFULL", "ABST", "INPR", "CPAPER", "THES"]

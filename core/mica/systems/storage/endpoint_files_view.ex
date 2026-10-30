@@ -1,7 +1,7 @@
 defmodule Systems.Storage.EndpointFilesView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Storage
 
   @max 100

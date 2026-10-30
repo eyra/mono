@@ -4,7 +4,7 @@ defmodule Systems.Account.PayoutsReactiveTest do
   the bank account and `{:payment_kyc, :updated}` is dispatched, the mounted
   PayoutsView re-fetches its status and the badge flips without a reload.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Mox
 

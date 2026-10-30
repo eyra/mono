@@ -32,9 +32,9 @@ defmodule Systems.Account.PeopleView do
 
   3. For modal usage, see `Systems.Account.PeopleEditorModalView`.
   """
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem

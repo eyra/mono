@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.SearchBar do
   @moduledoc false
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
   @impl true

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameWorkflowType do
+defmodule Mica.Repo.Migrations.RenameWorkflowType do
   use Ecto.Migration
 
   def up do

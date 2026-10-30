@@ -2,7 +2,7 @@ defmodule Systems.Assignment.Public do
   @moduledoc """
   The assignment context.
   """
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
   import Systems.Assignment.Private, only: [reward_idempotence_key: 1, reward_idempotence_key: 2]
@@ -10,8 +10,8 @@ defmodule Systems.Assignment.Public do
   require Logger
 
   alias Ecto.Multi
-  alias Core.Repo
-  alias CoreWeb.UI.Timestamp
+  alias Mica.Repo
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account.User
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
@@ -432,7 +432,7 @@ defmodule Systems.Assignment.Public do
 
   def update(assignment, %{} = attrs) do
     changeset = Assignment.Model.changeset(assignment, attrs)
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update!(assignment, %{} = attrs) do
@@ -447,7 +447,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:fund, fund)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update_consent_agreement(assignment, consent_agreement) do
@@ -455,7 +455,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update_storage_endpoint(assignment, storage_endpoint) do
@@ -463,7 +463,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def add_participant!(%Assignment.Model{} = assignment, user) do
@@ -1173,7 +1173,7 @@ defmodule Systems.Assignment.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Assignment.Model do
+defimpl Mica.Persister, for: Systems.Assignment.Model do
   def save(_assignment, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment) do
       {:ok, %{assignment: assignment}} ->
@@ -1188,7 +1188,7 @@ defimpl Core.Persister, for: Systems.Assignment.Model do
   end
 end
 
-defimpl Core.Persister, for: Systems.Assignment.InfoModel do
+defimpl Mica.Persister, for: Systems.Assignment.InfoModel do
   def save(_info, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment_info) do
       {:ok, %{assignment_info: assignment_info}} -> {:ok, assignment_info}

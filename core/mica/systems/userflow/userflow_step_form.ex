@@ -1,5 +1,5 @@
 defmodule Systems.Userflow.StepForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.Userflow
 

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddAuthor do
+defmodule Mica.Repo.Migrations.AddAuthor do
   use Ecto.Migration
 
   def change do

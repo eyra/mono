@@ -6,14 +6,14 @@ defmodule Systems.Desktop.PageTest do
   without a manual refresh.
 
   The section tests contribute `Systems.Desktop.TestSection` through
-  `config :core, Systems.Desktop, sections: [...]`.
+  `config :mica, Systems.Desktop, sections: [...]`.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   import Frameworks.Signal.TestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Frameworks.Signal
   alias Systems.Desktop
   alias Systems.Org
@@ -52,7 +52,7 @@ defmodule Systems.Desktop.PageTest do
     end
 
     test "without contributed sections, Desktop shows only Recent items", %{conn: conn} do
-      assert Core.SaaS.desktop_sections() == []
+      assert Mica.SaaS.desktop_sections() == []
 
       {:ok, view, html} = live(conn, ~p"/desktop")
 
@@ -83,7 +83,7 @@ defmodule Systems.Desktop.PageTest do
 
     test "a contributed section refreshes live through its own Switch", %{conn: conn, user: user} do
       contribute_test_section(message: "Before")
-      override_signal_handlers(Core.SaaS.signal_handlers() ++ [Desktop.TestSection.Switch])
+      override_signal_handlers(Mica.SaaS.signal_handlers() ++ [Desktop.TestSection.Switch])
       on_exit(&restore_signal_handlers/0)
 
       {:ok, view, _html} = live(conn, ~p"/desktop")
@@ -102,13 +102,13 @@ defmodule Systems.Desktop.PageTest do
   end
 
   defp put_env(key, value) do
-    original = Application.get_env(:core, key)
-    Application.put_env(:core, key, value)
+    original = Application.get_env(:mica, key)
+    Application.put_env(:mica, key, value)
 
     on_exit(fn ->
       if original,
-        do: Application.put_env(:core, key, original),
-        else: Application.delete_env(:core, key)
+        do: Application.put_env(:mica, key, original),
+        else: Application.delete_env(:mica, key)
     end)
   end
 end

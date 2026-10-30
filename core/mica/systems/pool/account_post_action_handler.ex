@@ -3,7 +3,7 @@ defmodule Systems.Pool.AccountPostActionHandler do
   Handles post account actions intercepted by the Pool switch.
   """
 
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   require Logger
 

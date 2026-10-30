@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.PanlStudyAdvertTest do
+defmodule NextWeb.Features.PanlStudyAdvertTest do
   @moduledoc """
   Feature test for creating a PaNL study (questionnaire assignment) and its advertisement.
 
@@ -11,7 +11,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
   6. Navigate to the advert and publish it
   7. Login as a PaNL participant and see the advert on home page
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   alias Systems.Pool
 
@@ -99,7 +99,7 @@ defmodule CoreWeb.Features.PanlStudyAdvertTest do
 
     assignment.info
     |> Ecto.Changeset.change(%{subject_count: 100})
-    |> Core.Repo.update!()
+    |> Mica.Repo.update!()
 
     # Create advertisement
     researcher_session

@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.LeaderboardScoresView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.LeaderboardScoresView do
+  use MicaWeb, :live_component_fabric
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

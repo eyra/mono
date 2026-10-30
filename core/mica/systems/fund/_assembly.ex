@@ -2,7 +2,7 @@ defmodule Systems.Fund.Assembly do
   @moduledoc """
   Assembly module for creating and managing fund-related entities.
   """
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Content
 

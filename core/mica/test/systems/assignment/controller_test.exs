@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ControllerTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
 
   alias Systems.Assignment
   alias Systems.Fund
@@ -35,8 +35,8 @@ defmodule Systems.Assignment.ControllerTest do
 
     test "task removed by the researcher shows a friendly page", %{conn: conn} do
       %{workflow: workflow} = Assignment.Factories.create_assignment(31, 1, :online)
-      %{items: [item]} = Core.Repo.preload(workflow, :items)
-      Core.Repo.delete!(item)
+      %{items: [item]} = Mica.Repo.preload(workflow, :items)
+      Mica.Repo.delete!(item)
 
       conn = get(conn, "/assignment/callback/#{item.id}")
       assert html_response(conn, 200) =~ "error-task_unavailable"
@@ -72,7 +72,7 @@ defmodule Systems.Assignment.ControllerTest do
       %{id: id} = Assignment.Factories.create_assignment(31, 0, :online)
 
       conn = get(conn, "/assignment/#{id}/content")
-      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
+      assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end
   end
 
@@ -110,7 +110,7 @@ defmodule Systems.Assignment.ControllerTest do
 
       assignment.info
       |> Ecto.Changeset.change(subject_reward: 6000)
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       # The returning participant is not blocked.
       conn = get(conn, "/assignment/#{id}/apply")
@@ -169,7 +169,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=1"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :rejected
@@ -178,7 +178,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=1"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         status: :pending
       })
@@ -186,7 +186,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=2"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :accepted
@@ -195,7 +195,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=2"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :completed
@@ -281,7 +281,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=#{member_1.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :rejected
@@ -290,7 +290,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=#{member_1.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         status: :pending
       })
@@ -298,7 +298,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=#{member_2.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :accepted
@@ -307,7 +307,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=#{member_2.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :completed
@@ -380,7 +380,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=#{member_1.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :rejected
@@ -389,7 +389,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=#{member_1.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         status: :pending
       })
@@ -397,7 +397,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_1_id}", "member=#{member_2.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :accepted
@@ -406,7 +406,7 @@ defmodule Systems.Assignment.ControllerTest do
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_2_id}", "member=#{member_2.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         started_at: ~N[2024-09-30 19:36:39],
         completed_at: ~N[2024-09-30 19:36:39],
         status: :completed
@@ -431,7 +431,7 @@ defmodule Systems.Assignment.ControllerTest do
 
     test "streams a zip holding next-metadata.json and an ro-crate description", %{conn: conn} do
       assignment = Assignment.Factories.create_assignment(31, 10, :online)
-      :ok = Core.Authorization.assign_role(conn.assigns.current_user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(conn.assigns.current_user, assignment, :owner)
 
       conn = get(conn, ~p"/assignment/#{assignment.id}/export")
 
@@ -487,7 +487,7 @@ defmodule Systems.Assignment.ControllerTest do
   end
 
   defp assign_owner(%{assigns: %{current_user: user}} = conn, assignment) do
-    :ok = Core.Authorization.assign_role(user, assignment, :owner)
+    :ok = Mica.Authorization.assign_role(user, assignment, :owner)
     Plug.Conn.assign(conn, :branch, nil)
   end
 

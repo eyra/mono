@@ -1,4 +1,4 @@
-defmodule Self.Layouts.Stripped.MenuBuilder do
+defmodule MicaSaasWeb.Layouts.Stripped.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
     mobile_navbar: [:wide]
@@ -12,7 +12,7 @@ defmodule Self.Layouts.Stripped.MenuBuilder do
   @primary []
   @secondary []
 
-  use CoreWeb.Menu.Builder, home: :self
+  use MicaWeb.Menu.Builder, home: :self
 
   @impl true
   def include_map(_user), do: %{}

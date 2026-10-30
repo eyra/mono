@@ -12,7 +12,7 @@ defmodule Systems.Pool.JoinConsentView do
   no signed record is created. If the pool ever needs a proper signed
   agreement, wrap `Systems.Consent.ClickWrapView` instead.
   """
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   @impl true

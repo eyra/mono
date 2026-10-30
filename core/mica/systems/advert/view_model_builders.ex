@@ -1,6 +1,6 @@
 defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   import Frameworks.Utility.Guards
 
@@ -11,7 +11,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     Fund
   }
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
 
   def view_model(%Advert.Model{} = advert, page, assigns) do
     vm(advert, page, assigns)
@@ -251,7 +251,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     reward_value = guard_nil(reward_value, :integer)
     subject_count = guard_nil(subject_count, :integer)
 
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     required_funding_amount = subject_count * reward_value
     required_funding_label = Fund.CurrencyModel.label(currency, locale, required_funding_amount)
     dgettext("eyra-advert", "required.funding.label", funding: required_funding_label)
@@ -327,8 +327,8 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   defp get_quick_summary(updated_at) do
     updated_at
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
+    |> MicaWeb.UI.Timestamp.apply_timezone()
+    |> MicaWeb.UI.Timestamp.humanize()
   end
 
   defp reward_value_label(
@@ -341,7 +341,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
   defp reward_value_label(%{} = currency, nil), do: reward_value_label(currency, 0)
 
   defp reward_value_label(%{} = currency, reward_value) when is_integer(reward_value) do
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     Fund.CurrencyModel.label(currency, locale, reward_value)
   end
 
@@ -377,7 +377,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   def get_card_icon_url(marks) do
     case marks do
-      [mark] -> CoreWeb.Endpoint.static_path("/images/#{mark}.svg")
+      [mark] -> MicaWeb.Endpoint.static_path("/images/#{mark}.svg")
       _ -> nil
     end
   end

@@ -1,10 +1,8 @@
 defmodule Systems.Pool.StudentFiltersTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Systems.{
-    Fund,
-    Student
-  }
+  alias Next.Systems.Student
+  alias Systems.Fund
 
   describe "include?/2" do
     test "include with 3 supported filters" do

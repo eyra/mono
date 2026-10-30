@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ImportViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ImportViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Repo
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Mica.Repo
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   # Threshold for showing progress - only show for 20+ items
   @progress_threshold 20
@@ -29,7 +29,7 @@ defmodule Systems.Zircon.Screening.ImportViewBuilder do
     button_config = build_button_config(import_status)
 
     paper_set_view =
-      CoreWeb.Live.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView,
+      MicaWeb.Live.Element.prepare_live_view(:paper_set, Zircon.Screening.PaperSetView,
         paper_set_id: paper_set.id
       )
 

@@ -1,10 +1,10 @@
-defmodule Systems.Paper.SetAssoc do
+defmodule Next.Systems.Paper.SetAssoc do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   schema "paper_set_assoc" do
-    belongs_to(:paper, Systems.Paper.Model)
-    belongs_to(:set, Systems.Paper.SetModel)
+    belongs_to(:paper, Next.Systems.Paper.Model)
+    belongs_to(:set, Next.Systems.Paper.SetModel)
 
     timestamps()
   end

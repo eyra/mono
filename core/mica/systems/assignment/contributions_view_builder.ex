@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ContributionsViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
   alias Systems.Crew

@@ -1,4 +1,4 @@
-defmodule Next.Account.OtpSignin do
+defmodule Next.Systems.Account.OtpSignin do
   @moduledoc """
   Steps of the email-first OTP sign-in shared by the LiveView pages
   (`AuthIdentifyPage`, `AuthCodeVerifyPage` and the redeem step in
@@ -6,7 +6,7 @@ defmodule Next.Account.OtpSignin do
   (`NativeSigninController`), so both follow the same rules.
   """
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Systems.Account
 
   def valid_email?(email), do: String.match?(email, ~r/^[^\s@]+@[^\s@]+\.[^\s@]+$/)

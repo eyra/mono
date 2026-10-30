@@ -1,13 +1,13 @@
-defmodule Systems.Paper.RISImportPrepareJob do
+defmodule Next.Systems.Paper.RISImportPrepareJob do
   use Oban.Worker, queue: :ris_import
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
-  alias Systems.Paper
-  alias Systems.Paper.RISEntry
+  alias Next.Systems.Paper
+  alias Next.Systems.Paper.RISEntry
 
   @impl true
   def perform(%Oban.Job{args: %{"session_id" => session_id}}) do
@@ -42,7 +42,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
       |> Paper.RISImportSessionModel.advance_phase_with_signal(:parsing)
 
     # Get stream from fetcher using configured backend
-    case Systems.Paper.RISFetcherBackendStream.fetch_content(reference_file) do
+    case Next.Systems.Paper.RISFetcherBackendStream.fetch_content(reference_file) do
       {:ok, content_stream} ->
         process_ris_stream(session, content_stream)
 
@@ -62,7 +62,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     # First, collect all parsed entries to know the total count
     parsed_entries =
       content_stream
-      |> Systems.Paper.RISParserStream.parse_stream_with_validation()
+      |> Next.Systems.Paper.RISParserStream.parse_stream_with_validation()
       |> Enum.to_list()
 
     total_references = length(parsed_entries)
@@ -239,7 +239,7 @@ defmodule Systems.Paper.RISImportPrepareJob do
     })
 
     # Get reference file and mark it as failed
-    reference_file = Core.Repo.get!(Paper.ReferenceFileModel, session.reference_file_id)
+    reference_file = Mica.Repo.get!(Paper.ReferenceFileModel, session.reference_file_id)
     ris_error = %Paper.RISError{message: error_message}
     Paper.Public.mark_as_failed!(reference_file, ris_error)
 

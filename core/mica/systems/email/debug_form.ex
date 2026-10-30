@@ -9,7 +9,7 @@ defmodule Systems.Email.DebugModel do
 end
 
 defmodule Systems.Email.DebugForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   import Ecto.Changeset
 

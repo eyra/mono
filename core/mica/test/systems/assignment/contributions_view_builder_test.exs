@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.ContributionsViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Assignment
   alias Systems.Assignment.ContributionsViewBuilder, as: Builder
   alias Systems.Crew

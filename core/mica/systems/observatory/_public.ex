@@ -1,6 +1,6 @@
 defmodule Systems.Observatory.Public do
-  use Core, :public
-  alias CoreWeb.Endpoint
+  use Mica, :public
+  alias MicaWeb.Endpoint
   alias Systems.Observatory.UpdateCollector
 
   def subscribe(signal, key \\ []) do

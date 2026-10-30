@@ -3,7 +3,7 @@ defmodule Systems.Fund.CurrencyModel do
   require Systems.Fund.CurrencyTypes
 
   alias Ecto.Changeset
-  alias CoreWeb.Cldr
+  alias MicaWeb.Cldr
 
   alias Systems.{
     Fund,

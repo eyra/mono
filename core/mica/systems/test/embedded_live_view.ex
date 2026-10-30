@@ -3,7 +3,7 @@ defmodule Systems.Test.EmbeddedLiveView do
   Generic embedded LiveView for testing purposes.
   Can optionally render a nested child and publish events.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Systems.Test
 

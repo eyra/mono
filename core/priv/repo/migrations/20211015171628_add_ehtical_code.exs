@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddEhticalCode do
+defmodule Mica.Repo.Migrations.AddEhticalCode do
   use Ecto.Migration
 
   def up do

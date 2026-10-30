@@ -1,11 +1,11 @@
 defmodule Systems.Content.LocalFSStreamTest do
-  use Core.DataCase
+  use Mica.DataCase
   alias Systems.Content.LocalFS
 
   describe "stream/1" do
     setup do
       # Create a temporary test file
-      upload_path = Application.get_env(:core, :upload_path)
+      upload_path = Application.get_env(:mica, :upload_path)
       File.mkdir_p!(upload_path)
 
       test_content = """
@@ -48,7 +48,7 @@ defmodule Systems.Content.LocalFSStreamTest do
 
     test "streams file content from URL format", %{filename: filename, content: expected_content} do
       # Simulate URL format
-      base_url = Application.get_env(:core, :base_url)
+      base_url = Application.get_env(:mica, :base_url)
       url = "#{base_url}/uploads/#{filename}"
 
       assert {:ok, stream} = LocalFS.stream(url)
@@ -67,7 +67,7 @@ defmodule Systems.Content.LocalFSStreamTest do
 
     test "streams large file in chunks", %{file_path: _} do
       # Create a large test file (1MB)
-      upload_path = Application.get_env(:core, :upload_path)
+      upload_path = Application.get_env(:mica, :upload_path)
       large_filename = "large_test_#{Ecto.UUID.generate()}.ris"
       large_file_path = Path.join(upload_path, large_filename)
 
@@ -81,7 +81,7 @@ defmodule Systems.Content.LocalFSStreamTest do
 
       # Get the configured chunk size
       expected_chunk_size =
-        Application.fetch_env!(:core, :paper)
+        Application.fetch_env!(:mica, :paper)
         |> Keyword.fetch!(:ris_stream_chunk_size)
 
       # Verify it's actually streaming

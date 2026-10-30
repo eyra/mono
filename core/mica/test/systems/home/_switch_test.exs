@@ -1,5 +1,5 @@
 defmodule Systems.Home.SwitchTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
   alias Frameworks.Signal
   alias Systems.Home

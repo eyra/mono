@@ -1,5 +1,5 @@
-defmodule Systems.Graphite.LeaderboardScoreHTML do
-  use CoreWeb, :html
+defmodule Next.Systems.Graphite.LeaderboardScoreHTML do
+  use MicaWeb, :html
 
   import Frameworks.Pixel.Table
 

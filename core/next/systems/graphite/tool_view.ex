@@ -1,6 +1,6 @@
-defmodule Systems.Graphite.ToolView do
-  use CoreWeb, :modal_live_view
-  use Core.FeatureFlags
+defmodule Next.Systems.Graphite.ToolView do
+  use MicaWeb, :modal_live_view
+  use Mica.FeatureFlags
   use Frameworks.Pixel
 
   import Frameworks.Pixel.Line

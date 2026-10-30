@@ -3,11 +3,11 @@ defmodule Systems.Fund.ReconcileOrphanedTransactionsTest do
   Provider→local pass for pay-ins: given the transactions the provider holds,
   flag the ones with no local row — the restore-orphan case.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
   alias Systems.Fund

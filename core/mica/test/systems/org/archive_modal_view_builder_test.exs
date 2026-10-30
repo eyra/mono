@@ -1,7 +1,7 @@
 defmodule Systems.Org.ArchiveModalViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
   alias Systems.Org.ArchiveModalViewBuilder
 

@@ -1,5 +1,5 @@
 defmodule Systems.Storage.Html do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.Table
 

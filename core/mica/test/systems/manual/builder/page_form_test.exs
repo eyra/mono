@@ -1,8 +1,8 @@
 defmodule Systems.Manual.Builder.PageFormTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Manual
 
   defmodule PageFormView do

@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Button do
   @moduledoc """
   A colored button with white text.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   require Logger
 

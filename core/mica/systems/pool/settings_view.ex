@@ -6,8 +6,8 @@ defmodule Systems.Pool.SettingsView do
   changing it post-creation would break bookkeeping. Replaces the
   Citizen.Pool.Form modal for the cases this tab covers.
   """
-  use CoreWeb, :embedded_live_view
-  use CoreWeb.Live.FlashHelpers
+  use MicaWeb, :embedded_live_view
+  use MicaWeb.Live.FlashHelpers
 
   alias Frameworks.Pixel.Text
   alias Systems.Pool
@@ -36,7 +36,7 @@ defmodule Systems.Pool.SettingsView do
   defp save(socket, pool, attrs) do
     changeset = Pool.Model.change(pool, attrs)
 
-    case Core.Persister.save(pool, changeset) do
+    case Mica.Persister.save(pool, changeset) do
       {:ok, updated_pool} ->
         socket
         |> assign(model: updated_pool)

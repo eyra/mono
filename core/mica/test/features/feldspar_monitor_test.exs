@@ -1,18 +1,18 @@
-defmodule CoreWeb.Features.FeldsparMonitorTest do
+defmodule MicaWeb.Features.FeldsparMonitorTest do
   @moduledoc """
   Feature test for Feldspar monitor:* protocol.
 
   Tests that monitor:log messages from Feldspar apps are correctly
   routed to the logging endpoint.
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   @mock_app_id "mock_monitor_app"
   @mock_app_source_path "mica/test/systems/feldspar/mock_monitor_app"
 
   setup do
     # Copy mock app to where the Feldspar plug serves static files from
-    upload_path = Application.get_env(:core, :upload_path)
+    upload_path = Application.get_env(:mica, :upload_path)
     target_path = Path.join(upload_path, @mock_app_id)
 
     # Ensure target directory exists

@@ -3,9 +3,9 @@ defmodule Systems.Assignment.PaidSlotsHtml do
   Functional components for the paid-slots block on the participants tab.
   All state and event handling live in the parent (ParticipantsView).
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Tag

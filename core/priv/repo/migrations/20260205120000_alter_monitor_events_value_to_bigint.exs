@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AlterMonitorEventsValueToBigint do
+defmodule Mica.Repo.Migrations.AlterMonitorEventsValueToBigint do
   use Ecto.Migration
 
   def change do

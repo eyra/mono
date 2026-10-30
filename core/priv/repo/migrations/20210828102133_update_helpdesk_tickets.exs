@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateHelpdeskTickets do
+defmodule Mica.Repo.Migrations.UpdateHelpdeskTickets do
   use Ecto.Migration
 
   def change do

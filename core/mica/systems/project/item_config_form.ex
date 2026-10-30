@@ -1,5 +1,5 @@
 defmodule Systems.Project.ItemConfigForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.{
     Project

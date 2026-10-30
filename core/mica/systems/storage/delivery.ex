@@ -93,6 +93,6 @@ defmodule Systems.Storage.Delivery do
   end
 
   defp temp_file_store do
-    Core.Env.get(:temp_file_store)[:module]
+    Mica.Env.get(:temp_file_store)[:module]
   end
 end

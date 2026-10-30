@@ -1,4 +1,4 @@
-defmodule Next.Layouts.Stripped.MenuBuilder do
+defmodule NextWeb.Layouts.Stripped.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
     mobile_navbar: [:wide]
@@ -12,7 +12,7 @@ defmodule Next.Layouts.Stripped.MenuBuilder do
   @primary []
   @secondary [:profile]
 
-  use CoreWeb.Menu.Builder, home: :next
+  use MicaWeb.Menu.Builder, home: :next
 
   @impl true
   def include_map(_user), do: %{}

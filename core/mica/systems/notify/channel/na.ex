@@ -12,7 +12,7 @@ defmodule Systems.Notify.Channel.NA do
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.NextAction
   alias Systems.Notify.EventModel

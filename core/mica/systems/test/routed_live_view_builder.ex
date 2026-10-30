@@ -17,7 +17,7 @@ defmodule Systems.Test.RoutedLiveViewBuilder do
           user_state_namespace: namespace
         })
 
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         id,
         Test.EmbeddedLiveView,
         vm: %{

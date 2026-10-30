@@ -1,7 +1,7 @@
 defmodule Systems.Project.OverviewPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.NextAction
   alias Systems.Project

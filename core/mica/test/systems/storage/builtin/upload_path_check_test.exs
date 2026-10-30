@@ -8,21 +8,21 @@ defmodule Systems.Storage.BuiltIn.UploadPathCheckTest do
   @moduletag :tmp_dir
 
   setup %{tmp_dir: tmp_dir} do
-    initial_upload_path = Application.get_env(:core, :upload_path)
-    initial_builtin = Application.get_env(:core, Systems.Storage.BuiltIn)
-    initial_local_fs = Application.get_env(:core, LocalFS)
+    initial_upload_path = Application.get_env(:mica, :upload_path)
+    initial_builtin = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    initial_local_fs = Application.get_env(:mica, LocalFS)
 
     upload_path = Path.join(tmp_dir, "uploads")
     storage_path = Path.join(tmp_dir, "storage")
     File.mkdir_p!(upload_path)
 
-    Application.put_env(:core, :upload_path, upload_path)
-    Application.put_env(:core, LocalFS, root_path: storage_path)
+    Application.put_env(:mica, :upload_path, upload_path)
+    Application.put_env(:mica, LocalFS, root_path: storage_path)
 
     on_exit(fn ->
-      Application.put_env(:core, :upload_path, initial_upload_path)
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_builtin)
-      Application.put_env(:core, LocalFS, initial_local_fs)
+      Application.put_env(:mica, :upload_path, initial_upload_path)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, initial_builtin)
+      Application.put_env(:mica, LocalFS, initial_local_fs)
     end)
 
     %{upload_path: upload_path, storage_path: storage_path}
@@ -30,7 +30,7 @@ defmodule Systems.Storage.BuiltIn.UploadPathCheckTest do
 
   describe "with LocalFS storage" do
     setup do
-      Application.put_env(:core, Systems.Storage.BuiltIn, special: LocalFS)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, special: LocalFS)
       :ok
     end
 
@@ -244,7 +244,7 @@ defmodule Systems.Storage.BuiltIn.UploadPathCheckTest do
   test "starts on S3 storage even with donation folders in the upload folder", %{
     upload_path: upload_path
   } do
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: S3)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: S3)
     File.mkdir_p!(Path.join(upload_path, "project_node=1"))
 
     assert :ok = Backend.check_upload_path!()

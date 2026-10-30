@@ -1,5 +1,5 @@
 defmodule Systems.Consent.RevisionForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
   alias Systems.Consent
@@ -45,7 +45,7 @@ defmodule Systems.Consent.RevisionForm do
   def save(socket, entity, attrs) do
     changeset = Consent.RevisionModel.changeset(entity, attrs)
 
-    case Core.Persister.save(entity, changeset) do
+    case Mica.Persister.save(entity, changeset) do
       {:ok, entity} ->
         socket
         |> assign(entity: entity)

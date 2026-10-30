@@ -1,9 +1,9 @@
-defmodule Systems.Paper.RISValidatorTest do
-  use Core.DataCase
+defmodule Next.Systems.Paper.RISValidatorTest do
+  use Mica.DataCase
 
   @moduletag :capture_log
 
-  alias Systems.Paper.RISValidator
+  alias Next.Systems.Paper.RISValidator
 
   describe "validate_content/1" do
     test "accepts valid RIS content" do

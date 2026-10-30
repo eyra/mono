@@ -19,20 +19,20 @@ feature_test_base_url = "http://localhost:#{feature_test_port}"
 feature_test_db_suffix =
   if feature_test_session == 0, do: "", else: to_string(feature_test_session)
 
-config :core,
+config :mica,
   name: "Next [test]",
   base_url: feature_test_base_url,
   upload_path: Path.expand("../tmp/uploads_test", __DIR__) |> tap(&File.mkdir_p!/1)
 
-config :core,
+config :mica,
   payment_provider: Systems.Payment.ProviderMock
 
-config :core, Systems.Payment.Provider.OPP,
+config :mica, Systems.Payment.Provider.OPP,
   notification_secret: "test_notification_secret",
   merchant_uid: "mer_platform_test"
 
 # Compile in E2E support facilities (e.g. local payment simulator).
-config :core, :enable_e2e_support, true
+config :mica, :enable_e2e_support, true
 
 # Print only errors during test
 config :logger, level: :error
@@ -55,7 +55,7 @@ config :bcrypt_elixir, :log_rounds, 1
 # The MIX_TEST_PARTITION environment variable can be used
 # to provide built-in test partitioning in CI environment.
 # Run `mix help test` for more information.
-config :core, Core.Repo,
+config :mica, Mica.Repo,
   username: System.get_env("POSTGRES_USER", "postgres"),
   password: System.get_env("POSTGRES_PASS", "postgres"),
   database: "core_test#{feature_test_db_suffix}",
@@ -69,20 +69,20 @@ config :bcrypt_elixir,
   log_rounds: 4
 
 # Paper system configuration for tests
-config :core, :paper,
+config :mica, :paper,
   # Use smaller file size limit for tests (10MB)
   ris_max_file_size: 10_485_760,
   # Use smaller chunk size for tests (1KB)
   ris_stream_chunk_size: 1_024
 
-config :core, CoreWeb.Endpoint,
+config :mica, MicaWeb.Endpoint,
   http: [port: feature_test_port],
   force_ssl: false,
   server: true
 
 # Wallaby configuration
 config :wallaby,
-  otp_app: :core,
+  otp_app: :mica,
   base_url: feature_test_base_url,
   driver: Wallaby.Chrome,
   screenshot_dir: "tmp/wallaby_screenshots",
@@ -114,7 +114,7 @@ config :wallaby,
     ]
     |> Enum.reject(fn {_key, value} -> is_nil(value) end)
 
-config :core, :features,
+config :mica, :features,
   member_google_sign_in: true,
   centerdata_sign_in: true,
   password_sign_in: true,
@@ -125,33 +125,33 @@ config :core, :features,
   e2e: true,
   otp: true
 
-config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
+config :mica, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
-config :core, Oban, queues: false, plugins: false
+config :mica, Oban, queues: false, plugins: false
 
-config :core, Systems.Account.Auth.Surfconext,
+config :mica, Systems.Account.Auth.Surfconext,
   oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
 
-config :core, Systems.Account.Auth.Centerdata,
+config :mica, Systems.Account.Auth.Centerdata,
   oidc_module: Systems.Account.Auth.Centerdata.FakeOIDC
 
 # Tests always build Next
-config :core, saas: Next.SaaS
+config :mica, saas: Next.SaaS
 
-config :core, :content, backend: Systems.Content.LocalFS
+config :mica, :content, backend: Systems.Content.LocalFS
 
-config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+config :mica, :feldspar, backend: Systems.Feldspar.LocalFS
 
-config :core, Systems.Storage.BuiltIn.LocalFS,
+config :mica, Systems.Storage.BuiltIn.LocalFS,
   root_path: Path.expand("../tmp/storage_test", __DIR__)
 
 # Feldspar data donation file storage for tests
-config :core, :feldspar_data_donation,
+config :mica, :feldspar_data_donation,
   path: "/tmp/data_donations_test",
   retention_hours: 336
 
 # Higher rate limit for concurrent upload tests
-config :core, :rate,
+config :mica, :rate,
   quotas: [
     [service: :feldspar_data_donation, limit: 100, unit: :call, window: :minute, scope: :local],
     [service: :feldspar_log, limit: 100, unit: :call, window: :minute, scope: :local],
@@ -160,7 +160,7 @@ config :core, :rate,
     [service: :provider_reconcile, limit: 100_000, unit: :call, window: :minute, scope: :global]
   ]
 
-config :core, :reconciliation, backoff_ms: 0
+config :mica, :reconciliation, backoff_ms: 0
 
 try do
   import_config "test.secret.exs"

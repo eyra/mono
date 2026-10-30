@@ -4,13 +4,13 @@ defmodule Systems.Promotion.LandingPage do
   """
   use Systems.Content.Composer, :live_website
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
 
   import Systems.Promotion.BannerView
   import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Card
 
@@ -46,7 +46,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def compose(:preview_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "preview_inform",
@@ -59,7 +59,7 @@ defmodule Systems.Promotion.LandingPage do
   @impl true
   def compose(:full_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "full_inform",
@@ -213,7 +213,7 @@ defmodule Systems.Promotion.LandingPage do
 
         <.advert_banner
           photo_url={@vm.banner_photo_url}
-          placeholder_photo_url={CoreWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
+          placeholder_photo_url={MicaWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
           title={@vm.banner_title}
           subtitle={@vm.banner_subtitle}
           url={@vm.banner_url}

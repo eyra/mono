@@ -1,10 +1,10 @@
 defmodule Systems.Support.HelpdeskForm do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Form
 
   alias Systems.Support
-  alias Core.Enums
+  alias Mica.Enums
   alias Frameworks.Pixel.Selector
 
   @impl true

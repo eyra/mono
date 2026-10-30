@@ -1,8 +1,8 @@
 defmodule Systems.Admin.SystemViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Admin.SystemViewBuilder
 
   describe "view_model/2" do

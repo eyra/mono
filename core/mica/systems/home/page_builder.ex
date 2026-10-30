@@ -1,11 +1,11 @@
 defmodule Systems.Home.PageBuilder do
-  use CoreWeb, :verified_routes
-  use Core.FeatureFlags
+  use MicaWeb, :verified_routes
+  use Mica.FeatureFlags
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Utility.List
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Utility.ViewModelBuilder
   alias Systems.Home
 
@@ -247,7 +247,7 @@ defmodule Systems.Home.PageBuilder do
   end
 
   defp image_info(nil), do: nil
-  defp image_info(image_id), do: Core.ImageHelpers.get_image_info(image_id, 96, 64)
+  defp image_info(image_id), do: Mica.ImageHelpers.get_image_info(image_id, 96, 64)
 
   defp reward_status(%{status: status})
        when status in [:reserved, :pending_approval],
@@ -273,8 +273,8 @@ defmodule Systems.Home.PageBuilder do
 
   defp get_quick_summary(timestamp) do
     timestamp
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
+    |> MicaWeb.UI.Timestamp.apply_timezone()
+    |> MicaWeb.UI.Timestamp.humanize()
   end
 
   defp to_card(%Advert.Model{} = advert, assigns) do

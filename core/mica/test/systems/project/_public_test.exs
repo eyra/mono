@@ -1,12 +1,12 @@
 defmodule Systems.Project.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Project
 
   describe "list_items/2" do
     test "one matching item" do
       item =
-        Core.Factories.build(:assignment, %{special: :benchmark_challenge})
+        Mica.Factories.build(:assignment, %{special: :benchmark_challenge})
         |> Project.Factories.build_item()
 
       %{root: %{id: node_id, items: [item]} = node} =
@@ -27,19 +27,19 @@ defmodule Systems.Project.PublicTest do
 
     test "multiple matching items" do
       item1 =
-        Core.Factories.build(:assignment, %{special: :benchmark_challenge})
+        Mica.Factories.build(:assignment, %{special: :benchmark_challenge})
         |> Project.Factories.build_item()
 
       item2 =
-        Core.Factories.build(:assignment, %{special: :data_donation})
+        Mica.Factories.build(:assignment, %{special: :data_donation})
         |> Project.Factories.build_item()
 
       item3 =
-        Core.Factories.build(:assignment, %{special: :benchmark_challenge})
+        Mica.Factories.build(:assignment, %{special: :benchmark_challenge})
         |> Project.Factories.build_item()
 
       item4 =
-        Core.Factories.build(:assignment, %{special: :data_donation})
+        Mica.Factories.build(:assignment, %{special: :data_donation})
         |> Project.Factories.build_item()
 
       %{root: %{items: [%{id: item_1_id}, _, %{id: item_3_id}, _]} = node} =
@@ -55,11 +55,11 @@ defmodule Systems.Project.PublicTest do
 
     test "no matching items" do
       item1 =
-        Core.Factories.build(:assignment, %{special: :data_donation})
+        Mica.Factories.build(:assignment, %{special: :data_donation})
         |> Project.Factories.build_item()
 
       item2 =
-        Core.Factories.build(:assignment, %{special: :data_donation})
+        Mica.Factories.build(:assignment, %{special: :data_donation})
         |> Project.Factories.build_item()
 
       %{root: node} =
@@ -82,7 +82,7 @@ defmodule Systems.Project.PublicTest do
 
   describe "get_node_id_by/1" do
     setup do
-      assignment = Core.Factories.build(:assignment)
+      assignment = Mica.Factories.build(:assignment)
       item = Project.Factories.build_item(assignment)
 
       %{root: %{id: node_id, items: [%{assignment: %{id: assignment_id}}]}} =

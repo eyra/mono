@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.Pattern.Parameter do
+defmodule Next.Systems.Annotation.Pattern.Parameter do
   @moduledoc """
   A pattern for creating a Parameter Annotation.
 
@@ -9,8 +9,8 @@ defmodule Systems.Annotation.Pattern.Parameter do
   control of relationships, behaviors, or outcomes in a scientific study.
   """
 
-  alias Core.Authentication
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Ontology
 
   @type t :: %__MODULE__{
           statement: String.t() | nil,
@@ -23,10 +23,10 @@ defmodule Systems.Annotation.Pattern.Parameter do
   def type_phrase(), do: "Parameter"
 end
 
-defimpl Systems.Annotation.Pattern, for: Systems.Annotation.Pattern.Parameter do
-  use Systems.Annotation.Pattern.Helpers
+defimpl Next.Systems.Annotation.Pattern, for: Next.Systems.Annotation.Pattern.Parameter do
+  use Next.Systems.Annotation.Pattern.Helpers
 
-  @parameter Systems.Annotation.Pattern.Parameter.type_phrase()
+  @parameter Next.Systems.Annotation.Pattern.Parameter.type_phrase()
 
   def obtain(%{statement: nil}), do: raise(MissingFieldError, :statement)
   def obtain(%{dimension: nil}), do: raise(MissingFieldError, :dimension)

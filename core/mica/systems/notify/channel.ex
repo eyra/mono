@@ -24,6 +24,6 @@ defmodule Systems.Notify.Channel do
   @callback mark_seen(%MessageModel{}) :: :ok | {:error, term()}
   @optional_callbacks [mark_seen: 1]
 
-  @doc "The channel module for a channel name, from `Core.SaaS.notify_channels/0`."
-  def adapter(name), do: Map.fetch!(Core.SaaS.notify_channels(), name)
+  @doc "The channel module for a channel name, from `Mica.SaaS.notify_channels/0`."
+  def adapter(name), do: Map.fetch!(Mica.SaaS.notify_channels(), name)
 end

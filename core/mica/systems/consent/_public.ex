@@ -1,11 +1,11 @@
 defmodule Systems.Consent.Public do
-  use Core, :public
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica, :public
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Query
   import Systems.Consent.Queries
 
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
 
   alias Systems.Account
@@ -195,8 +195,8 @@ defmodule Systems.Consent.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Consent.RevisionModel do
-  use Gettext, backend: CoreWeb.Gettext
+defimpl Mica.Persister, for: Systems.Consent.RevisionModel do
+  use Gettext, backend: MicaWeb.Gettext
 
   def save(_revision, changeset) do
     case Systems.Consent.Public.update_revision(changeset) do

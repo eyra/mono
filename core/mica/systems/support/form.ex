@@ -1,5 +1,5 @@
 defmodule Systems.Support.Form do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   @impl true
   def render(assigns) do

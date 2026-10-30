@@ -1,12 +1,12 @@
 defmodule Systems.NextAction.PublicTest do
-  use Core.DataCase
-  alias Core.Factories
+  use Mica.DataCase
+  alias Mica.Factories
 
   alias Systems.NextAction.Public
 
   defmodule SomeAction do
     @behaviour Systems.NextAction.ViewModel
-    use CoreWeb, :verified_routes
+    use MicaWeb, :verified_routes
 
     @impl Systems.NextAction.ViewModel
     def to_view_model(count, _params) do

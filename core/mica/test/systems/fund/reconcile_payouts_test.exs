@@ -1,10 +1,10 @@
 defmodule Systems.Fund.ReconcilePayoutsTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
   import Ecto.Query
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock

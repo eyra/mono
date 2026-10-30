@@ -114,7 +114,7 @@ defmodule Systems.Storage.BuiltIn.S3 do
   defp content_type(name), do: MIME.from_path(name)
 
   defp settings do
-    Core.Env.fetch!(Systems.Storage.BuiltIn.S3)
+    Mica.Env.fetch!(Systems.Storage.BuiltIn.S3)
   end
 
   defp backend do

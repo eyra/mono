@@ -1,8 +1,8 @@
 defmodule Systems.Lab.CheckInItem do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  use Gettext, backend: CoreWeb.Gettext
-  alias CoreWeb.UI.Timestamp
+  use Gettext, backend: MicaWeb.Gettext
+  alias MicaWeb.UI.Timestamp
 
   alias Systems.{
     Lab

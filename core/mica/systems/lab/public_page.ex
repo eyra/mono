@@ -2,12 +2,12 @@ defmodule Systems.Lab.PublicPage do
   @moduledoc """
   The public lab screen.
   """
-  use CoreWeb, :live_view_fabric
+  use MicaWeb, :live_view_fabric
 
   alias Systems.Lab
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.User, __MODULE__})
 
   @impl true
   def mount(%{"id" => id}, _session, %{assigns: %{current_user: user}} = socket) do

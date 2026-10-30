@@ -1,15 +1,15 @@
 defmodule Systems.Crew.PublicTest do
-  use Core, :auth
-  use Core.DataCase
-  alias CoreWeb.UI.Timestamp
+  use Mica, :auth
+  use Mica.DataCase
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.GreenLight
 
   describe "crews" do
     alias Systems.Crew
 
     test "list/0 returns all created crews with preloaded references" do
-      {:ok, crew1} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
-      {:ok, crew2} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
+      {:ok, crew1} = Crew.Public.prepare(Mica.Authorization.prepare_node()) |> Mica.Repo.insert()
+      {:ok, crew2} = Crew.Public.prepare(Mica.Authorization.prepare_node()) |> Mica.Repo.insert()
       list = Crew.Public.list()
       assert list |> Enum.find(&(&1.id == crew1.id))
       assert list |> Enum.find(&(&1.id == crew2.id))
@@ -19,7 +19,7 @@ defmodule Systems.Crew.PublicTest do
     end
 
     test "get/1 returns crew with preloaded references" do
-      {:ok, crew} = Crew.Public.prepare(Core.Authorization.prepare_node()) |> Core.Repo.insert()
+      {:ok, crew} = Crew.Public.prepare(Mica.Authorization.prepare_node()) |> Mica.Repo.insert()
       crew = Crew.Public.get!(crew.id)
 
       assert crew.tasks == []
@@ -29,7 +29,7 @@ defmodule Systems.Crew.PublicTest do
 
   describe "members" do
     alias Systems.Crew
-    alias Core.Factories
+    alias Mica.Factories
 
     test "create_member/2 returns valid member" do
       user = Factories.insert!(:member)
@@ -74,9 +74,9 @@ defmodule Systems.Crew.PublicTest do
                expired: false,
                started_at: nil,
                completed_at: nil,
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id,
                      role: :owner
                    }
@@ -372,7 +372,7 @@ defmodule Systems.Crew.PublicTest do
 
       Ecto.Multi.new()
       |> Crew.Public.expire_member(member)
-      |> Core.Repo.commit()
+      |> Mica.Repo.commit()
 
       assert %{expired: true} = Crew.Public.get_member!(member.id)
       assert %{expired: true} = Crew.Public.get_task!(task.id)
@@ -381,7 +381,7 @@ defmodule Systems.Crew.PublicTest do
 
   describe "tasks" do
     alias Systems.Crew
-    alias Core.Factories
+    alias Mica.Factories
 
     test "create_task/2 returns valid task" do
       %{id: user_id} = user = Factories.insert!(:member)
@@ -392,9 +392,9 @@ defmodule Systems.Crew.PublicTest do
 
       assert %{
                crew_id: ^crew_id,
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id,
                      role: :owner
                    }
@@ -577,14 +577,14 @@ defmodule Systems.Crew.PublicTest do
                identifier: ["task1"],
                status: :pending,
                crew_id: ^crew_id,
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id1,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    }
@@ -608,14 +608,14 @@ defmodule Systems.Crew.PublicTest do
                identifier: ["task1"],
                status: :pending,
                crew_id: ^crew_id,
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id1,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    }
@@ -627,14 +627,14 @@ defmodule Systems.Crew.PublicTest do
                identifier: ["task2"],
                status: :pending,
                crew_id: ^crew_id,
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  parent_id: nil,
                  role_assignments: [
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id2,
                      role: :owner
                    },
-                   %Core.Authorization.RoleAssignment{
+                   %Mica.Authorization.RoleAssignment{
                      principal_id: ^user_id3,
                      role: :owner
                    }

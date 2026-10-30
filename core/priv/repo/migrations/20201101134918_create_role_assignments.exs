@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateRoleAssignments do
+defmodule Mica.Repo.Migrations.CreateRoleAssignments do
   use Ecto.Migration
 
   def change do

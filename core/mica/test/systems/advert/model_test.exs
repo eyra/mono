@@ -1,12 +1,12 @@
 defmodule Systems.Advert.ModelTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
 
   alias Systems.Advert
 
   describe "adverts" do
     alias Systems.Advert
-    alias Core.Factories
+    alias Mica.Factories
 
     test "list/1 returns all adverts" do
       advert = Factories.insert!(:advert)

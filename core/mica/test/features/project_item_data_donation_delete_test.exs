@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
+defmodule MicaWeb.Features.ProjectItemDataDonationDeleteTest do
   @moduledoc """
   Feature test for deleting a data donation project item.
 
@@ -6,7 +6,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
 
   Issue: #9511260407
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   # CSS selector for main cards (action buttons use {event}__action__card_{id} pattern)
   @card_selector "[data-testid^='card_']"

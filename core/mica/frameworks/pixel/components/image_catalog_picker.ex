@@ -1,9 +1,9 @@
 defmodule Frameworks.Pixel.ImageCatalogPicker do
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
-  import CoreWeb.UI.Dialog
-  import CoreWeb.LiveDefaults
+  import MicaWeb.UI.Dialog
+  import MicaWeb.LiveDefaults
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Grid

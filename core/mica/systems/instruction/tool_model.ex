@@ -3,13 +3,13 @@ defmodule Systems.Instruction.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Instruction
   alias Systems.Workflow
 
   schema "instruction_tools" do
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_many(:assets, Instruction.AssetModel, foreign_key: :tool_id)
     has_many(:pages, Instruction.PageModel, foreign_key: :tool_id)
@@ -40,7 +40,7 @@ defmodule Systems.Instruction.ToolModel do
   def preload_graph(:auth_node), do: [auth_node: []]
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Systems.Instruction
     def key(_), do: :instruction

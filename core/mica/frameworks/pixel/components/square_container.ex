@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Square do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Button

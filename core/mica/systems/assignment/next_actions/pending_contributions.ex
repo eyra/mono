@@ -9,11 +9,11 @@ defmodule Systems.Assignment.NextActions.PendingContributions do
   contribution.
   """
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Assignment
 
   @max_description_length 80

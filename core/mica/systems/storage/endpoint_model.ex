@@ -9,7 +9,7 @@ defmodule Systems.Storage.EndpointModel do
   use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept
   alias Frameworks.Pixel.Icon
@@ -21,7 +21,7 @@ defmodule Systems.Storage.EndpointModel do
   require Storage.ServiceIds
 
   schema "storage_endpoints" do
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     belongs_to(:builtin, Storage.BuiltIn.EndpointModel, on_replace: :delete)
     belongs_to(:yoda, Storage.Yoda.EndpointModel, on_replace: :delete)
@@ -81,7 +81,7 @@ defmodule Systems.Storage.EndpointModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Frameworks.Concept
 

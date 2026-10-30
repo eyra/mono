@@ -6,7 +6,7 @@ defmodule Systems.Workflow.Platforms do
   * <platform>_square.svg (square variant)
   See Figma https://www.figma.com/design/RXKuvMFGz3Eln5MNPJ1q6a/Design-system?node-id=470-10741&t=XxCVZd4kNTsfcQP7-1 for reference.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:platforms,
        [
          :apple,

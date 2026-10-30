@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddStorageProjectItem do
+defmodule Mica.Repo.Migrations.AddStorageProjectItem do
   use Ecto.Migration
 
   def up do

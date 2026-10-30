@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.DeclinedView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @impl true
   def update(_, socket) do

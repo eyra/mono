@@ -57,8 +57,8 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
   import Systems.Account.Auth.Google.PlugUtils
   require Logger
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
-  use Core.FeatureFlags
+  use MicaWeb, :verified_routes
+  use Mica.FeatureFlags
 
   alias Frameworks.Utility.Params
   alias Frameworks.Signal

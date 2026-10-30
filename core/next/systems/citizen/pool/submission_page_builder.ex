@@ -1,7 +1,7 @@
-defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
-  use CoreWeb, :verified_routes
+defmodule Next.Systems.Citizen.Pool.SubmissionPageBuilder do
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.{
     Pool,
@@ -21,8 +21,8 @@ defmodule Systems.Citizen.Pool.SubmissionPageBuilder do
 
     update_at =
       advert.updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 

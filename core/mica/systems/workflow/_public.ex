@@ -1,10 +1,10 @@
 defmodule Systems.Workflow.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   import Systems.Workflow.Queries
 
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Frameworks.Signal
 
@@ -14,9 +14,9 @@ defmodule Systems.Workflow.Public do
   alias Systems.Feldspar
   alias Systems.Lab
   alias Systems.Manual
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Instruction
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
 
   def list_items(workflow, preload \\ [])
   def list_items(%Workflow.Model{id: id}, preload), do: list_items(id, preload)
@@ -262,7 +262,7 @@ defmodule Systems.Workflow.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Workflow.Model do
+defimpl Mica.Persister, for: Systems.Workflow.Model do
   def save(_task, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :workflow) do
       {:ok, %{workflow: workflow}} -> {:ok, workflow}
@@ -271,7 +271,7 @@ defimpl Core.Persister, for: Systems.Workflow.Model do
   end
 end
 
-defimpl Core.Persister, for: Systems.Workflow.ItemModel do
+defimpl Mica.Persister, for: Systems.Workflow.ItemModel do
   def save(_task, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :workflow_item) do
       {:ok, %{workflow_item: workflow_item}} -> {:ok, workflow_item}

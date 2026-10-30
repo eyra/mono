@@ -1,5 +1,5 @@
 defmodule Systems.Consent.System do
-  use Core.System
+  use Mica.System
 
   def signal_handlers, do: [Systems.Consent.Switch]
 end

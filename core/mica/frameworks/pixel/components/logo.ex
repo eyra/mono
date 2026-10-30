@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Logo do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   @moduledoc """
   Logo component for product, platform, and pool logos.
@@ -40,13 +40,13 @@ defmodule Frameworks.Pixel.Logo do
   def path(name, :pool), do: pool_path(name, :default)
 
   # Pool assets are optional. Configured per bundle via
-  # `config :core, :pixel, pool_assets: […]`; returns nil for anything
+  # `config :mica, :pixel, pool_assets: […]`; returns nil for anything
   # not listed so callers can omit the icon slot instead of rendering
   # a broken image. Compile-time list so we don't stat the filesystem
   # on every render.
-  require Core.Env
+  require Mica.Env
 
-  @pool_assets Core.Env.compile_env([:pixel, :pool_assets], [])
+  @pool_assets Mica.Env.compile_env([:pixel, :pool_assets], [])
                |> Enum.map(&to_string/1)
 
   defp pool_path(name, variant) do

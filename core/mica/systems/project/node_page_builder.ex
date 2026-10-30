@@ -1,7 +1,7 @@
 defmodule Systems.Project.NodePageBuilder do
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Storage.EndpointDataView
 

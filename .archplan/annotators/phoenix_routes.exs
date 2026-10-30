@@ -16,7 +16,7 @@ ctx = ctx_file |> File.read!() |> JSON.decode!()
 # core/, and the cwd has symlinks resolved, like the compiled source paths.
 root = Path.expand("..", File.cwd!())
 params = ctx["params"] || %{}
-router = Module.concat([params["router"] || "CoreWeb.Router"])
+router = Module.concat([params["router"] || "MicaWeb.Router"])
 authn = MapSet.new(params["authn_pipelines"] || ["require_authenticated_user"])
 unscoped = MapSet.new(params["unscoped_params"] || [])
 

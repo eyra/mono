@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.Gen do
-  use Core, :auth
-  alias Core.Factories
-  alias Systems.Graphite
+defmodule Next.Systems.Graphite.Gen do
+  use Mica, :auth
+  alias Mica.Factories
+  alias Next.Systems.Graphite
   alias Systems.Account
 
   require Logger
@@ -12,7 +12,7 @@ defmodule Systems.Graphite.Gen do
   number.
   """
   def create_submissions(leaderboard_id, amount, prefix) do
-    Application.ensure_all_started(Core.Env.app())
+    Application.ensure_all_started(Mica.Env.app())
 
     leaderboard = Graphite.Public.get_leaderboard!(leaderboard_id, [{:tool, :auth_node}])
 
@@ -27,7 +27,7 @@ defmodule Systems.Graphite.Gen do
         |> create_auth_node(name)
         |> create_submission(name, leaderboard.tool)
       end)
-      |> Core.Repo.commit(returning: true)
+      |> Mica.Repo.commit(returning: true)
 
     submission_count = count(result, :submission)
     user_count = count(result, :user)
@@ -54,7 +54,7 @@ defmodule Systems.Graphite.Gen do
 
   defp create_submission(multi, name, tool) do
     Ecto.Multi.insert(multi, {:submission, name}, fn %{{:auth_node, ^name} => auth_node} ->
-      Core.Factories.build(:graphite_submission, %{
+      Mica.Factories.build(:graphite_submission, %{
         tool: tool,
         auth_node: auth_node,
         github_commit_url: gen_commit_url(),
@@ -80,7 +80,7 @@ defmodule Systems.Graphite.Gen do
   with `prefix`.
   """
   def delete_submissions(prefix) do
-    Application.ensure_all_started(Core.Env.app())
+    Application.ensure_all_started(Mica.Env.app())
 
     submissions_to_delete = Graphite.Queries.submissions_by_prefix(:description, prefix)
     scores_to_delete = Graphite.Queries.scores_by_submissions(submissions_to_delete)
@@ -95,7 +95,7 @@ defmodule Systems.Graphite.Gen do
       |> Ecto.Multi.delete_all(:features, features_to_delete)
       |> Ecto.Multi.delete_all(:profiles, profiles_to_delete)
       |> Ecto.Multi.delete_all(:users, users_to_delete)
-      |> Core.Repo.commit()
+      |> Mica.Repo.commit()
 
     %{
       submissions: {submission_count, nil},

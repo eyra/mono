@@ -2,6 +2,6 @@ defmodule Systems.Assignment.Templates do
   @moduledoc """
     Defines different templates used by Systems.Assignment.Assembly to initialize specials.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:templates, [:data_donation, :benchmark_challenge, :questionnaire, :paper_screening]}
 end

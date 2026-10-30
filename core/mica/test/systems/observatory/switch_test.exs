@@ -1,3 +1,3 @@
 defmodule Systems.Observatory.SwitchTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 end

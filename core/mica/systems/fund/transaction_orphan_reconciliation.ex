@@ -28,7 +28,7 @@ defmodule Systems.Fund.TransactionOrphanReconciliation do
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.OrphanScan

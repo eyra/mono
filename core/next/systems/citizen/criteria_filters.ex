@@ -1,8 +1,8 @@
-defmodule Systems.Citizen.CriteriaFilters do
+defmodule Next.Systems.Citizen.CriteriaFilters do
   @moduledoc """
   Defines filters used to filter citizens in the overview page of the pool.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:criteria_filters, [:man, :woman, :x]}
 
   def include?(items, nil) when is_list(items), do: true

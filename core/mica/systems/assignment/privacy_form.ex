@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.PrivacyForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, accept: ~w(.pdf)
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, accept: ~w(.pdf)
 
   import Frameworks.Pixel.FileSelector
 

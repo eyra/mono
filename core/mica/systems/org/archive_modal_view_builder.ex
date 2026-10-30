@@ -6,7 +6,7 @@ defmodule Systems.Org.ArchiveModalViewBuilder do
   - Archived organisation list with filtering and search
   - Organisation item view models with restore buttons
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Content
   alias Systems.Org

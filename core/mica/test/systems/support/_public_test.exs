@@ -1,7 +1,7 @@
 defmodule Systems.Support.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Support.Public
 
   describe "list_open_tickets/0" do

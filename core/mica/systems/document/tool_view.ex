@@ -1,5 +1,5 @@
 defmodule Systems.Document.ToolView do
-  use CoreWeb, :modal_live_view
+  use MicaWeb, :modal_live_view
   use Frameworks.Pixel
 
   import Frameworks.Pixel.Line

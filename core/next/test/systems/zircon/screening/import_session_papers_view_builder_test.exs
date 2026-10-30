@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
+defmodule Next.Systems.Zircon.Screening.ImportSessionPapersViewBuilderTest do
   use ExUnit.Case
-  alias Systems.Zircon.Screening.ImportSessionPapersViewBuilder
+  alias Next.Systems.Zircon.Screening.ImportSessionPapersViewBuilder
 
   describe "view_model/2" do
     test "extracts new papers from entries and sets up pagination" do

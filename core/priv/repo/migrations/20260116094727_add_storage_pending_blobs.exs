@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddStoragePendingBlobs do
+defmodule Mica.Repo.Migrations.AddStoragePendingBlobs do
   use Ecto.Migration
 
   def change do

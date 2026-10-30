@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.InfoModelTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Assignment
 

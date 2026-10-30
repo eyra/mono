@@ -1,5 +1,5 @@
 defmodule Systems.Test.Public do
-  use Core, :public
+  use Mica, :public
 
   alias Systems.{
     Test

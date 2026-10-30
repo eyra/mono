@@ -1,18 +1,18 @@
-defmodule Systems.Graphite.SubmissionModel do
+defmodule Next.Systems.Graphite.SubmissionModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Changeset
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   schema "graphite_submissions" do
     field(:description, :string)
     field(:github_commit_url, :string)
 
     belongs_to(:tool, Graphite.ToolModel)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     has_many(:scores, Graphite.ScoreModel, foreign_key: :submission_id)
 
     timestamps()

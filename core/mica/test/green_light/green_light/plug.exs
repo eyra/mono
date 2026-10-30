@@ -1,10 +1,10 @@
-defmodule Core.Authorization.Plug.ControllerAuthorizationTest do
-  use Core.DataCase
+defmodule Mica.Authorization.Plug.ControllerAuthorizationTest do
+  use Mica.DataCase
   import Plug.Test
   import Plug.Conn
   alias Plug.Conn
-  alias Core.Authorization.Plug.ControllerAuthorization
-  alias Core.Authorization.PermissionMap
+  alias Mica.Authorization.Plug.ControllerAuthorization
+  alias Mica.Authorization.PermissionMap
   alias Systems.Account
 
   defmodule TestStruct do

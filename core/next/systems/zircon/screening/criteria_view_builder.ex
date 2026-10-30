@@ -1,13 +1,14 @@
-defmodule Systems.Zircon.Screening.CriteriaViewBuilder do
-  import Systems.Zircon.Private, only: [list_research_dimensions: 0, list_research_frameworks: 0]
+defmodule Next.Systems.Zircon.Screening.CriteriaViewBuilder do
+  import Next.Systems.Zircon.Private,
+    only: [list_research_dimensions: 0, list_research_frameworks: 0]
 
   alias Frameworks.Builder
 
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
-  @parameter Systems.Annotation.Pattern.Parameter.type_phrase()
+  @parameter Next.Systems.Annotation.Pattern.Parameter.type_phrase()
 
   def view_model(%{annotations: annotations}, _assigns) do
     actor = Authentication.obtain_actor!(:system, "Zircon")

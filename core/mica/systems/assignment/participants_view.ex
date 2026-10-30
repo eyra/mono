@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.ParticipantsView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   use Systems.Assignment.PaidSlotsLogic
 
   alias Frameworks.Pixel.InlineBlock

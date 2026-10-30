@@ -77,7 +77,7 @@ defmodule Systems.Assignment.Queries do
       on: u.id == e.user_id,
       as: :external_user
     )
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], ra in Mica.Authorization.RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )
@@ -97,7 +97,7 @@ defmodule Systems.Assignment.Queries do
       }) do
     build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
     |> join(:left, [user: u], au in Affiliate.User, on: u.id == au.user_id, as: :affiliate_user)
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], ra in Mica.Authorization.RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )
@@ -116,7 +116,7 @@ defmodule Systems.Assignment.Queries do
         crew: %{id: id, auth_node_id: auth_node_id}
       }) do
     build(participant_query(), :member, [crew_id == ^id, user: [id != nil]])
-    |> join(:inner, [user: u], ra in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], ra in Mica.Authorization.RoleAssignment,
       on: ra.principal_id == u.id,
       as: :role_assignment
     )

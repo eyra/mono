@@ -1,9 +1,9 @@
 defmodule Systems.Manual.Builder.PageForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
-  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
+  use MicaWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
-  import Core.ImageHelpers, only: [image_from_path!: 1, encode_image_info: 2]
+  import Mica.ImageHelpers, only: [image_from_path!: 1, encode_image_info: 2]
 
   alias Systems.Manual
 
@@ -103,7 +103,7 @@ defmodule Systems.Manual.Builder.PageForm do
       <.form id={"#{@id}_title_form"} :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself} >
         <.spacing value="M" />
         <.image_input
-            static_path={&CoreWeb.Endpoint.static_path/1}
+            static_path={&MicaWeb.Endpoint.static_path/1}
             image_url={@image_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-manual", "choose.image.file")}

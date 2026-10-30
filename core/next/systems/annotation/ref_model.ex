@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.RefModel do
+defmodule Next.Systems.Annotation.RefModel do
   @moduledoc """
   A module for referencing an Annotation or Ontology Association.
   """
@@ -8,9 +8,9 @@ defmodule Systems.Annotation.RefModel do
 
   import Ecto.Changeset
 
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   schema "annotation_ref" do
     belongs_to(:entity, Authentication.Entity)
@@ -65,9 +65,9 @@ defmodule Systems.Annotation.RefModel do
     end
   end
 
-  defimpl Systems.Ontology.Element do
-    alias Systems.Ontology
-    alias Systems.Annotation
+  defimpl Next.Systems.Ontology.Element do
+    alias Next.Systems.Ontology
+    alias Next.Systems.Annotation
 
     def flatten(annotation_ref) do
       [annotation_ref | Ontology.Element.flatten(Annotation.RefModel.get_target(annotation_ref))]

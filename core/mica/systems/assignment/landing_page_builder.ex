@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.LandingPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   def view_model(%{info: info}, _assigns) do
     %{

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMonitorEvents do
+defmodule Mica.Repo.Migrations.AddMonitorEvents do
   use Ecto.Migration
 
   def up do

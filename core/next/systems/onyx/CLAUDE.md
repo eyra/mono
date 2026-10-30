@@ -61,9 +61,9 @@ Landing Page (Entry Point)
 ```elixir
 @filter_keys %{
   :root => [:annotation, :concept, :predicate],
-  Systems.Ontology.ConceptModel => [:annotation, :predicate],
-  Systems.Ontology.PredicateModel => [:annotation, :concept],
-  Systems.Annotation.Model => [:annotation, :concept, :predicate]
+  Next.Systems.Ontology.ConceptModel => [:annotation, :predicate],
+  Next.Systems.Ontology.PredicateModel => [:annotation, :concept],
+  Next.Systems.Annotation.Model => [:annotation, :concept, :predicate]
 }
 ```
 
@@ -146,15 +146,15 @@ Human Validation ← [Onyx Interface] ← AI-Generated Annotations ← AI Synthe
 ### Route Configuration
 ```elixir
 # Single route for main interface
-live("/onyx", Systems.Onyx.LandingPage)
+live("/onyx", Next.Systems.Onyx.LandingPage)
 ```
 
 ### Component Interface
 ```elixir
 # Reusable browser components
-%{module: Systems.Onyx.BrowserView, params: %{...}}
-%{module: Systems.Onyx.ConceptView, params: %{...}}
-%{module: Systems.Onyx.AnnotationView, params: %{...}}
+%{module: Next.Systems.Onyx.BrowserView, params: %{...}}
+%{module: Next.Systems.Onyx.ConceptView, params: %{...}}
+%{module: Next.Systems.Onyx.AnnotationView, params: %{...}}
 ```
 
 ### Event System
@@ -177,8 +177,8 @@ live("/onyx", Systems.Onyx.LandingPage)
 # core/next/systems/onyx/_system.ex, listed in Next.SaaS.systems/0
 def routes do
   quote do
-    require Systems.Onyx.Routes
-    Systems.Onyx.Routes.routes()
+    require Next.Systems.Onyx.Routes
+    Next.Systems.Onyx.Routes.routes()
   end
 end
 ```

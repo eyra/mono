@@ -1,5 +1,5 @@
 defmodule Systems.Advert.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Systems.Fund.TestHelper
 
   describe "assignments" do
@@ -9,8 +9,8 @@ defmodule Systems.Advert.PublicTest do
     alias Systems.Bookkeeping
     alias Systems.Fund
 
-    alias CoreWeb.UI.Timestamp
-    alias Core.Factories
+    alias MicaWeb.UI.Timestamp
+    alias Mica.Factories
 
     setup do
       currency = Fund.Factories.create_currency("fake_currency", :legal, "ƒ", 2)
@@ -279,7 +279,7 @@ defmodule Systems.Advert.PublicTest do
     alias Systems.Advert
     alias Systems.Crew
     alias Systems.Fund
-    alias Core.Factories
+    alias Mica.Factories
 
     setup do
       currency = Fund.Factories.create_currency("vis_currency", :legal, "ƒ", 2)
@@ -290,14 +290,14 @@ defmodule Systems.Advert.PublicTest do
     defp reload(advert), do: Advert.Public.get!(advert.id, Advert.Model.preload_graph(:down))
 
     defp online(advert) do
-      advert |> Ecto.Changeset.change(status: :online) |> Core.Repo.update!()
+      advert |> Ecto.Changeset.change(status: :online) |> Mica.Repo.update!()
       reload(advert)
     end
 
     defp empty_fund(advert) do
       advert.assignment.fund.available
       |> Ecto.Changeset.change(%{balance_credit: 0, balance_debit: 0})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
     end
 
     test "is :invisible when the advert is not online", %{currency: currency, user: user} do
@@ -335,7 +335,7 @@ defmodule Systems.Advert.PublicTest do
 
       advert.submission
       |> Ecto.Changeset.change(%{reward_value: 0})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       empty_fund(advert)
 

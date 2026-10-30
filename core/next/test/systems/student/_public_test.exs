@@ -1,13 +1,8 @@
-defmodule Systems.Student.PublicTest do
-  use Core.DataCase
+defmodule Next.Systems.Student.PublicTest do
+  use Mica.DataCase
 
-  alias Systems.{
-    Student,
-    Fund,
-    Pool,
-    Org,
-    Bookkeeping
-  }
+  alias Next.Systems.Student
+  alias Systems.{Fund, Pool, Org, Bookkeeping}
 
   test "handle_features_updated/3 succeeded" do
     student = Factories.insert!(:member, %{creator: false})
@@ -35,29 +30,29 @@ defmodule Systems.Student.PublicTest do
       director: :student
     })
 
-    Core.Factories.insert!(:book_account, %{
+    Mica.Factories.insert!(:book_account, %{
       identifier: last_year_wallet,
       balance_credit: 99,
       balance_debit: 0
     })
 
-    Core.Factories.insert!(:book_account, %{
+    Mica.Factories.insert!(:book_account, %{
       identifier: current_year_wallet,
       balance_credit: 0,
       balance_debit: 0
     })
 
     class_2001 =
-      Core.Factories.insert!(:org_node, %{
+      Mica.Factories.insert!(:org_node, %{
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
-      Core.Factories.insert!(:org_node, %{
+      Mica.Factories.insert!(:org_node, %{
         identifier: ["course", ":year1", ":2001"]
       })
 
-    Core.Factories.insert!(:org_link, %{
+    Mica.Factories.insert!(:org_link, %{
       from: class_2001,
       to: course_2001
     })
@@ -101,29 +96,29 @@ defmodule Systems.Student.PublicTest do
       director: :citizen
     })
 
-    Core.Factories.insert!(:book_account, %{
+    Mica.Factories.insert!(:book_account, %{
       identifier: last_year_wallet,
       balance_credit: 100,
       balance_debit: 0
     })
 
-    Core.Factories.insert!(:book_account, %{
+    Mica.Factories.insert!(:book_account, %{
       identifier: current_year_wallet,
       balance_credit: 0,
       balance_debit: 0
     })
 
     class_2001 =
-      Core.Factories.insert!(:org_node, %{
+      Mica.Factories.insert!(:org_node, %{
         identifier: ["class", ":year1", ":2001"]
       })
 
     course_2001 =
-      Core.Factories.insert!(:org_node, %{
+      Mica.Factories.insert!(:org_node, %{
         identifier: ["course", ":year1", ":2001"]
       })
 
-    Core.Factories.insert!(:org_link, %{
+    Mica.Factories.insert!(:org_link, %{
       from: class_2001,
       to: course_2001
     })

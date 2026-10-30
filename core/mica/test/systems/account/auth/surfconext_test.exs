@@ -1,7 +1,7 @@
 defmodule Systems.Account.Auth.Surfconext.Test do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account.Auth.Surfconext
 
   describe "user_attrs/1" do

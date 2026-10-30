@@ -9,7 +9,7 @@ defmodule Systems.Account.PayoutsViewBuilder do
 
   All i18n lives here; `PayoutsView` only renders the supplied strings.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.ConfirmationModal
   alias Systems.Account

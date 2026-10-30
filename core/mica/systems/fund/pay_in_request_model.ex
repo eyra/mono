@@ -12,7 +12,7 @@ defmodule Systems.Fund.PayInRequestModel do
   errors until the researcher hits Confirm.
   """
   use Ecto.Schema
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   import Ecto.Changeset
 

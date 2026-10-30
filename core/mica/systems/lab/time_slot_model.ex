@@ -28,12 +28,12 @@ defmodule Systems.Lab.TimeSlotModel do
   def message(%{start_time: start_time, location: location}) do
     date =
       start_time
-      |> CoreWeb.UI.Timestamp.to_date()
-      |> CoreWeb.UI.Timestamp.humanize_date()
+      |> MicaWeb.UI.Timestamp.to_date()
+      |> MicaWeb.UI.Timestamp.humanize_date()
 
     time =
       start_time
-      |> CoreWeb.UI.Timestamp.humanize_time()
+      |> MicaWeb.UI.Timestamp.humanize_time()
 
     " #{date}  |  #{time}  |  #{location}" |> Macro.camelize()
   end

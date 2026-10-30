@@ -2,7 +2,7 @@ defmodule Systems.Pool.Model do
   @moduledoc """
   The pool schema.
   """
-  use Core, :auth
+  use Mica, :auth
   use Frameworks.Utility.Schema
 
   import Frameworks.Utility.EctoHelper
@@ -29,7 +29,7 @@ defmodule Systems.Pool.Model do
 
     belongs_to(:currency, Fund.CurrencyModel)
     belongs_to(:org, Org.NodeModel)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_many(:submissions, Pool.SubmissionModel, foreign_key: :pool_id)
 
@@ -105,7 +105,7 @@ defmodule Systems.Pool.Model do
   end
 
   def label(%{id: pool_id, org: %{full_name_bundle: full_name_bundle}}, %{id: active_pool_id}) do
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     full_name = Content.TextBundleModel.text(full_name_bundle, locale)
     %{id: pool_id, value: full_name, active: pool_id == active_pool_id}
   end

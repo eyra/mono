@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.ToolForm do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Graphite.ToolForm do
+  use MicaWeb.LiveForm
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Pixel.Form
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @impl true
   def update(%{id: id, entity: entity, title: title, timezone: timezone}, socket) do

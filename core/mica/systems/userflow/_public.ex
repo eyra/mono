@@ -1,7 +1,7 @@
 defmodule Systems.Userflow.Public do
   import Systems.Userflow.Assembly, only: [prepare_step: 3, prepare_progress: 2]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Systems.Userflow

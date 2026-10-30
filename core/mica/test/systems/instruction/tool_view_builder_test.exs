@@ -1,6 +1,6 @@
 defmodule Systems.Instruction.ToolViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.{Instruction, Content}
 

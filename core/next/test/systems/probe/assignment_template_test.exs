@@ -1,10 +1,10 @@
-defmodule Systems.Probe.AssignmentTemplateTest do
-  use Core.DataCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Probe.AssignmentTemplateTest do
+  use Mica.DataCase, async: false
+  use Mica.FeatureFlags.Test
 
   alias Frameworks.Builder
   alias Systems.Assignment
-  alias Systems.Probe
+  alias Next.Systems.Probe
   alias Systems.Project
 
   test "Next registers the Probe template" do
@@ -71,7 +71,7 @@ defmodule Systems.Probe.AssignmentTemplateTest do
 
     test "names the task without the word test in English and Dutch" do
       for {locale, title} <- [{"en", "Cognitive task"}, {"nl", "Cognitieve taak"}] do
-        Gettext.with_locale(CoreWeb.Gettext, locale, fn ->
+        Gettext.with_locale(MicaWeb.Gettext, locale, fn ->
           %{library: %{items: items}} =
             Assignment.Template.workflow_config(Assignment.Private.get_template(:probe))
 

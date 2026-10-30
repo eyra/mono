@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorAssignmentPart1 do
+defmodule Mica.Repo.Migrations.RefactorAssignmentPart1 do
   use Ecto.Migration
 
   def up do

@@ -1,8 +1,8 @@
-defmodule Self.Menu.Items do
-  @behaviour CoreWeb.Menu.ItemsProvider
+defmodule MicaSaasWeb.Menu.Items do
+  @behaviour MicaWeb.Menu.ItemsProvider
 
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
   alias Phoenix.LiveView.JS
 
   @impl true

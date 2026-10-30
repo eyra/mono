@@ -1,5 +1,5 @@
 defmodule Systems.Crew.TaskItemView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   defp message_color(%{type: :warning}), do: "text-grey1"
   defp message_color(%{type: :alarm}), do: "text-delete"

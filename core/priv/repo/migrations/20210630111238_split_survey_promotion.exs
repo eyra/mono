@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.SplitSurveyPromotion do
+defmodule Mica.Repo.Migrations.SplitSurveyPromotion do
   use Ecto.Migration
 
   def change do

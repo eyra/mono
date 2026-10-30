@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMissingLocallyToReconciliation do
+defmodule Mica.Repo.Migrations.AddMissingLocallyToReconciliation do
   use Ecto.Migration
 
   def change do

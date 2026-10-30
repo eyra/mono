@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPlatformNameToAffiliate do
+defmodule Mica.Repo.Migrations.AddPlatformNameToAffiliate do
   use Ecto.Migration
 
   def change do

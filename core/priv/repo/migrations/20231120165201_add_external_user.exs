@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddExternalUser do
+defmodule Mica.Repo.Migrations.AddExternalUser do
   use Ecto.Migration
 
   def up do

@@ -1,5 +1,5 @@
 defmodule Systems.Pool.ContentPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
@@ -36,7 +36,7 @@ defmodule Systems.Pool.ContentPageBuilder do
 
   defp participants_tab(pool_id, live_context) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         "pool_participants_view_#{pool_id}",
         Pool.ParticipantsView,
         live_context: live_context
@@ -54,7 +54,7 @@ defmodule Systems.Pool.ContentPageBuilder do
 
   defp settings_tab(pool_id, live_context) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         "pool_settings_view_#{pool_id}",
         Pool.SettingsView,
         live_context: live_context

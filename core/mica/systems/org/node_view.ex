@@ -1,6 +1,6 @@
 defmodule Systems.Org.NodeView do
-  use CoreWeb, :embedded_live_view
-  use CoreWeb.Live.FlashHelpers
+  use MicaWeb, :embedded_live_view
+  use MicaWeb.Live.FlashHelpers
 
   alias Frameworks.Pixel.Text
   alias Systems.Content
@@ -32,7 +32,7 @@ defmodule Systems.Org.NodeView do
   defp save(socket, entity, attrs) do
     changeset = Org.NodeModel.changeset(entity, attrs)
 
-    case Core.Persister.save(entity, changeset) do
+    case Mica.Persister.save(entity, changeset) do
       {:ok, updated_entity} ->
         socket
         |> hide_flash()

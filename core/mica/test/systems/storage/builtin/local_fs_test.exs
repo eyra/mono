@@ -1,30 +1,30 @@
 defmodule Systems.Storage.BuiltIn.LocalFSTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   alias Systems.Storage
   alias Systems.Storage.BuiltIn.LocalFS
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: LocalFS)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: LocalFS)
 
     folder = "project_node=#{System.unique_integer([:positive])}"
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config)
       File.rm_rf!(Path.join(LocalFS.get_root_path(), folder))
     end)
 
     :ok = LocalFS.store(folder, "participant=1.json", ~s({"donation":true}))
 
     {:ok, endpoint} =
-      Storage.Public.prepare_endpoint(:builtin, %{key: folder}) |> Core.Repo.insert()
+      Storage.Public.prepare_endpoint(:builtin, %{key: folder}) |> Mica.Repo.insert()
 
     %{folder: folder, endpoint: endpoint}
   end
 
   test "stores donations outside the statically served upload path", %{folder: folder} do
-    upload_path = Path.expand(Core.Env.get(:upload_path))
+    upload_path = Path.expand(Mica.Env.get(:upload_path))
     file_path = Path.join([LocalFS.get_root_path(), folder, "participant=1.json"])
 
     assert File.exists?(file_path)
@@ -57,7 +57,7 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
     end
 
     test "sends the donations to the endpoint owner", %{conn: conn, endpoint: endpoint} do
-      :ok = Core.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
+      :ok = Mica.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
 
       conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
 

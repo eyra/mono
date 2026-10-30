@@ -1,7 +1,7 @@
 defmodule Systems.Desktop.TestSection do
   @moduledoc """
   A Desktop section for tests. It shows the message in
-  `config :core, Systems.Desktop.TestSection, message: ...`, and hides when no
+  `config :mica, Systems.Desktop.TestSection, message: ...`, and hides when no
   message is set. `Systems.Desktop.TestSection.Switch` refreshes it.
   """
   use Systems.Desktop.Section
@@ -14,7 +14,7 @@ defmodule Systems.Desktop.TestSection do
 
   @impl true
   def view_model(_user, _assigns) do
-    case Core.Env.get(__MODULE__, []) |> Keyword.get(:message) do
+    case Mica.Env.get(__MODULE__, []) |> Keyword.get(:message) do
       nil -> nil
       message -> %{message: message}
     end

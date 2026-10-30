@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.ToolController do
-  use CoreWeb,
+defmodule Next.Systems.Graphite.ToolController do
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   def ensure_spot(%{assigns: %{current_user: _user}} = conn, %{"id" => _id}) do
     # FIXME: PreRef

@@ -1,6 +1,6 @@
 defmodule Systems.Pool.ParticipantItemBuilder do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   def view_model(
         %{
@@ -23,8 +23,8 @@ defmodule Systems.Pool.ParticipantItemBuilder do
 
     quick_summery =
       inserted_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
 
     %{
       path: ~p"/pool/participant/#{user_id}",

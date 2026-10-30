@@ -5,10 +5,10 @@ defmodule Systems.Account.OnboardingController do
   After signup, participants are redirected here with a signed token
   to be auto-logged in and sent to the onboarding page.
   """
-  use CoreWeb,
-      {:controller, [formats: [:html], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+  use MicaWeb,
+      {:controller, [formats: [:html], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
 
@@ -32,10 +32,10 @@ defmodule Systems.Account.OnboardingController do
   end
 
   defp verify_token(token) do
-    Phoenix.Token.verify(CoreWeb.Endpoint, @token_salt, token, max_age: @token_max_age)
+    Phoenix.Token.verify(MicaWeb.Endpoint, @token_salt, token, max_age: @token_max_age)
   end
 
   def generate_token(user) do
-    Phoenix.Token.sign(CoreWeb.Endpoint, @token_salt, user.id)
+    Phoenix.Token.sign(MicaWeb.Endpoint, @token_salt, user.id)
   end
 end

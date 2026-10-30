@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Empty do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button

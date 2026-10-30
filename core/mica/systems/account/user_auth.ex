@@ -1,11 +1,11 @@
 defmodule Systems.Account.UserAuth do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
   import Phoenix.Controller
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Systems.Account
 
   # Make the remember me cookie valid for 60 days.
@@ -100,7 +100,7 @@ defmodule Systems.Account.UserAuth do
   """
   def sign_out_current_user(conn) do
     if live_socket_id = get_session(conn, :live_socket_id) do
-      CoreWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      MicaWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn
@@ -215,12 +215,12 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
-  defp signin_path(_conn, :user), do: Core.SaaS.module().sign_in_page()
+  defp signin_path(_conn, :user), do: Mica.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
     do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
 
-  defp signin_path(conn, :member), do: Core.SaaS.module().member_sign_in_page(current_path(conn))
+  defp signin_path(conn, :member), do: Mica.SaaS.module().member_sign_in_page(current_path(conn))
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
@@ -236,6 +236,6 @@ defmodule Systems.Account.UserAuth do
 
   defp onboarding_path(_), do: nil
 
-  def signed_in_path(%{creator: true}), do: Core.SaaS.module().signed_in_page(:creator)
-  def signed_in_path(_user), do: Core.SaaS.module().signed_in_page(:member)
+  def signed_in_path(%{creator: true}), do: Mica.SaaS.module().signed_in_page(:creator)
+  def signed_in_path(_user), do: Mica.SaaS.module().signed_in_page(:member)
 end

@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
+defmodule Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilderTest do
   use ExUnit.Case
-  alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
+  alias Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
   describe "view_model/2" do
     test "extracts errors from entries and sets up pagination" do

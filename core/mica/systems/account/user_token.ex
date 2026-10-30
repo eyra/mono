@@ -75,7 +75,7 @@ defmodule Systems.Account.UserTokenModel do
     from(token in token_and_context_query(token, @mobile_session_context),
       where: token.last_used_at > ago(@session_validity_in_days, "day")
     )
-    |> Core.Repo.update_all(
+    |> Mica.Repo.update_all(
       set: [last_used_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)]
     )
     |> case do

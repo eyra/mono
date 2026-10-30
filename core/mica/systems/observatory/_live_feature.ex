@@ -12,7 +12,7 @@ defmodule Systems.Observatory.LiveFeature do
 
       @presenter Frameworks.Concept.System.presenter(__MODULE__)
 
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
       alias Systems.Observatory
 
       # Stubs for messages that are handled in Live Hooks

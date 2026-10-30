@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.LeaderboardSettingsView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.LeaderboardSettingsView do
+  use MicaWeb, :live_component_fabric
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

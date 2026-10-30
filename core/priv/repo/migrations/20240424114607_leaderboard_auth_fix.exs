@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.LeaderboardAuthFix do
+defmodule Mica.Repo.Migrations.LeaderboardAuthFix do
   use Ecto.Migration
 
   require Logger
@@ -21,7 +21,7 @@ defmodule Core.Repo.Migrations.LeaderboardAuthFix do
     "Migrate tool #{tool_id}" |> Logger.notice()
 
     # Fix for https://github.com/eyra/mono/issues/778
-    # See previous migration: Core.Repo.Migrations.LeaderboardAuth
+    # See previous migration: Mica.Repo.Migrations.LeaderboardAuth
     # before: "id = #{tool_ref_id}"
     # after: "tool_ref_id = #{tool_ref_id}"
 
@@ -37,12 +37,12 @@ defmodule Core.Repo.Migrations.LeaderboardAuthFix do
   end
 
   defp query_all(table, fields) do
-    {:ok, %{rows: rows}} = query(Core.Repo, "SELECT #{fields} FROM #{table}")
+    {:ok, %{rows: rows}} = query(Mica.Repo, "SELECT #{fields} FROM #{table}")
     rows
   end
 
   def query_id(table, field, where) do
-    case query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
+    case query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}") do
       {:ok, %{rows: [[value] | _]}} -> {:ok, value}
       _ -> :error
     end

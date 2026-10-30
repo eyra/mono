@@ -1,6 +1,6 @@
 defmodule Systems.Feldspar.ToolForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, store: Systems.Feldspar.Public, accept: ~w(.zip)
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, store: Systems.Feldspar.Public, accept: ~w(.zip)
 
   alias Systems.{
     Feldspar

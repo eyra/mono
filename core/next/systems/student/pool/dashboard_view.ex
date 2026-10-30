@@ -1,5 +1,5 @@
-defmodule Systems.Student.Pool.DashboardView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Student.Pool.DashboardView do
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Widget
 

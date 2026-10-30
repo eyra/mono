@@ -1,5 +1,5 @@
 defmodule Systems.Workflow.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Ecto.Multi
 
@@ -10,7 +10,7 @@ defmodule Systems.Workflow.PublicTest do
     test "no matching tool" do
       workflow = Factories.create_workflow()
 
-      graphite_tool = Core.Factories.build(:graphite_tool)
+      graphite_tool = Mica.Factories.build(:graphite_tool)
       tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
       Factories.create_item(workflow, tool_ref, 0)
 
@@ -20,37 +20,37 @@ defmodule Systems.Workflow.PublicTest do
     test "one matching tool" do
       workflow = Factories.create_workflow()
 
-      graphite_tool = Core.Factories.build(:graphite_tool)
+      graphite_tool = Mica.Factories.build(:graphite_tool)
       tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
       Factories.create_item(workflow, tool_ref, 0)
 
       assert [
-               %Systems.Graphite.ToolModel{}
+               %Next.Systems.Graphite.ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 
     test "multiple matching tool" do
       workflow = Factories.create_workflow()
 
-      tool1 = Core.Factories.build(:graphite_tool)
+      tool1 = Mica.Factories.build(:graphite_tool)
       tool_ref1 = Factories.create_tool_ref(tool1, :submit)
       Factories.create_item(workflow, tool_ref1, 0)
 
-      tool2 = Core.Factories.build(:document_tool)
+      tool2 = Mica.Factories.build(:document_tool)
       tool_ref2 = Factories.create_tool_ref(tool2, :request_manual)
       Factories.create_item(workflow, tool_ref2, 1)
 
-      tool3 = Core.Factories.build(:graphite_tool)
+      tool3 = Mica.Factories.build(:graphite_tool)
       tool_ref3 = Factories.create_tool_ref(tool3, :submit)
       Factories.create_item(workflow, tool_ref3, 2)
 
-      tool4 = Core.Factories.build(:document_tool)
+      tool4 = Mica.Factories.build(:document_tool)
       tool_ref4 = Factories.create_tool_ref(tool4, :download_manual)
       Factories.create_item(workflow, tool_ref4, 3)
 
       assert [
-               %Systems.Graphite.ToolModel{},
-               %Systems.Graphite.ToolModel{}
+               %Next.Systems.Graphite.ToolModel{},
+               %Next.Systems.Graphite.ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 
