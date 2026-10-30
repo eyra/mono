@@ -2,6 +2,7 @@ defmodule Systems.Announcement.PageTest do
   use CoreWeb.ConnCase, async: false
   use Core.FeatureFlags.Test
 
+  import ExUnit.CaptureLog
   import Phoenix.LiveViewTest
 
   alias Core.Repo
@@ -115,6 +116,24 @@ defmodule Systems.Announcement.PageTest do
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 
       assert %{read_at: %DateTime{}} = Repo.reload!(ctx.recipient)
+    end
+
+    test "opens it with a timezone the server doesn't know", %{
+      conn: conn,
+      announcement: %{id: id},
+      recipient: recipient
+    } do
+      capture_log(fn ->
+        {:ok, view, _html} =
+          conn
+          |> put_connect_params(%{"timezone" => "Nope/Zone"})
+          |> live(~p"/announcement/#{id}")
+
+        assert view |> element("[data-testid=announcement-published]") |> render() =~
+                 "Published on 28 October 2026"
+      end)
+
+      assert %{read_at: %DateTime{}} = Repo.reload!(recipient)
     end
   end
 

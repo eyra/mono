@@ -1,6 +1,7 @@
 defmodule Systems.Announcement.PageBuilder do
   use Gettext, backend: CoreWeb.Gettext
 
+  alias CoreWeb.UI.Timestamp
   alias Frameworks.Pixel.TrixPostProcessor
   alias Systems.Announcement
 
@@ -26,7 +27,7 @@ defmodule Systems.Announcement.PageBuilder do
   defp published(%DateTime{} = published_at, timezone) do
     date =
       published_at
-      |> Timex.Timezone.convert(timezone)
+      |> Timestamp.convert(timezone)
       |> Timex.lformat!("{D} {Mfull} {YYYY}", Gettext.get_locale(CoreWeb.Gettext))
 
     dgettext("eyra-announcement", "page.published", date: date)
