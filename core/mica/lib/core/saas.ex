@@ -99,6 +99,9 @@ defmodule Core.SaaS do
   @doc "The Desktop sections of all systems, in `systems/0` order. Raises when two sections have the same id."
   def desktop_sections, do: collect_desktop_sections(systems())
 
+  @doc "The sign-in handoffs of all systems, in `systems/0` order."
+  def sign_in_handoffs, do: Enum.flat_map(systems(), & &1.sign_in_handoffs())
+
   @doc "The children of all systems, in `systems/0` order."
   def children, do: collect_children(systems())
 

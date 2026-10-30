@@ -89,6 +89,13 @@ defmodule Core.System do
   @callback desktop_sections() :: [module()]
 
   @doc """
+  The system's `Systems.Account.SignInHandoff` modules. When an
+  identity-provider sign-in ends, the first one that takes it answers instead
+  of the site, in `c:Core.SaaS.systems/0` order.
+  """
+  @callback sign_in_handoffs() :: [module()]
+
+  @doc """
   Processes the system needs, started under `Core.Supervisor` after
   `Phoenix.PubSub` and before Oban, in `c:Core.SaaS.systems/0` order.
   """
@@ -146,6 +153,7 @@ defmodule Core.System do
       def admin_panels, do: []
       def account_tabs, do: []
       def desktop_sections, do: []
+      def sign_in_handoffs, do: []
       def children, do: []
       def oban_queues, do: []
       def oban_crons, do: []

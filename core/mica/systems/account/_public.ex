@@ -489,6 +489,42 @@ defmodule Systems.Account.Public do
     :ok
   end
 
+  ## One-time tokens
+
+  @doc """
+  Generates a token for a one-time step of `context`, replacing the user's
+  earlier token of that context. Redeem it with `take_one_time_token/3`.
+  """
+  def generate_one_time_token(user, context) when is_binary(context) do
+    {token, user_token} = Account.UserTokenModel.build_one_time_token(user, context)
+
+    {:ok, _} =
+      Multi.new()
+      |> Multi.delete_all(
+        :earlier,
+        Account.UserTokenModel.user_and_contexts_query(user, [context])
+      )
+      |> Multi.insert(:token, user_token)
+      |> Repo.commit()
+
+    token
+  end
+
+  @doc """
+  Redeems a token of `generate_one_time_token/2` that is younger than `max_age`
+  seconds. Deleting the token is what makes it single-use: only the call that
+  deletes it gets the user.
+  """
+  def take_one_time_token(token, context, max_age)
+      when is_binary(token) and is_binary(context) and is_integer(max_age) do
+    with {:ok, query} <- Account.UserTokenModel.one_time_token_query(token, context, max_age),
+         {1, [user_id]} <- Repo.delete_all(select(query, [t], t.user_id)) do
+      {:ok, get_user!(user_id)}
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
   ## OTP
 
   @doc """

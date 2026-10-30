@@ -11,6 +11,8 @@ defmodule Systems.Account.Auth.SSOHelpers do
   use Gettext, backend: CoreWeb.Gettext
   use CoreWeb, :verified_routes
 
+  alias Systems.Account.SignInHandoff
+
   @doc """
   Handles SSO registration result, redirecting to signin with error flash on failure.
 
@@ -37,6 +39,32 @@ defmodule Systems.Account.Auth.SSOHelpers do
       put_flash(conn, :error, message)
     end)
     |> redirect(to: ~p"/user/signin")
+  end
+
+  @doc """
+  Like `handle_registration_error/2` for a sign-in through `provider`, which a
+  `Systems.Account.SignInHandoff` may end instead.
+  """
+  def handle_registration_error(conn, provider, changeset) do
+    SignInHandoff.end_sign_in(
+      conn,
+      provider,
+      :failed,
+      &handle_registration_error(&1, changeset)
+    )
+  end
+
+  @doc """
+  Ends a failed sign-in through `provider` on the sign-in page with the message
+  of `error` (see `error_message/1`), unless a `Systems.Account.SignInHandoff`
+  ends it.
+  """
+  def redirect_with_error(conn, provider, error) do
+    SignInHandoff.end_sign_in(conn, provider, :failed, fn conn ->
+      conn
+      |> put_flash(:error, error_message(error))
+      |> redirect(to: ~p"/user/signin")
+    end)
   end
 
   @doc """

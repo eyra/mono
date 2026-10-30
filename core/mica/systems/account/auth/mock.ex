@@ -69,7 +69,12 @@ defmodule Systems.Account.Auth.Mock.CallbackController do
 
           conn
           |> Systems.Account.UserAuth.sign_out_current_user()
-          |> Systems.Account.UserAuth.log_in_user(user, true)
+          |> Systems.Account.SignInHandoff.sign_in(
+            :mock,
+            user,
+            true,
+            &Systems.Account.UserAuth.log_in_user/3
+          )
 
         user ->
           conn

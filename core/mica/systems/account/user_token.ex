@@ -167,6 +167,31 @@ defmodule Systems.Account.UserTokenModel do
   end
 
   @doc """
+  Builds a token for a one-time step of `context`, such as handing a sign-in
+  over to another client. Like an email token, only its hash is stored.
+  """
+  def build_one_time_token(user, context), do: build_hashed_token(user, context, nil)
+
+  @doc """
+  The token of `context` that was built less than `max_age` seconds ago, or
+  `:error` for a token that is not valid Base64.
+  """
+  def one_time_token_query(token, context, max_age) do
+    case Base.url_decode64(token, padding: false) do
+      {:ok, decoded_token} ->
+        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
+
+        {:ok,
+         from(token in token_and_context_query(hashed_token, context),
+           where: token.inserted_at > ago(^max_age, "second")
+         )}
+
+      :error ->
+        :error
+    end
+  end
+
+  @doc """
   Returns the given token with the given context.
   """
   def token_and_context_query(token, context) do

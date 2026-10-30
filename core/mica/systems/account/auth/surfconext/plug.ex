@@ -11,7 +11,7 @@ defmodule Systems.Account.Auth.Surfconext.PlugUtils do
 
   def log_in_user(config, conn, user, first_time?) do
     log_in_user = Keyword.get(config, :log_in_user, &Systems.Account.UserAuth.log_in_user/3)
-    log_in_user.(conn, user, first_time?)
+    Systems.Account.SignInHandoff.sign_in(conn, :surfconext, user, first_time?, log_in_user)
   end
 end
 
@@ -67,11 +67,8 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController do
     )
   end
 
-  defp redirect_with_error(conn, error) do
-    conn
-    |> put_flash(:error, Auth.SSOHelpers.error_message(error))
-    |> redirect(to: ~p"/user/signin")
-  end
+  defp redirect_with_error(conn, error),
+    do: Auth.SSOHelpers.redirect_with_error(conn, :surfconext, error)
 
   defp do_authenticate(conn, params, session_params) do
     config = config(:core) |> Keyword.put(:session_params, session_params)
@@ -100,7 +97,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController do
           log_in_user(config, conn, user, first_time?)
 
         {:error, changeset} ->
-          Auth.SSOHelpers.handle_registration_error(conn, changeset)
+          Auth.SSOHelpers.handle_registration_error(conn, :surfconext, changeset)
       end
     end
   end

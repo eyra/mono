@@ -9,7 +9,7 @@ defmodule Systems.Account.Auth.Google.PlugUtils do
 
   def log_in_user(config, conn, user, first_time?) do
     log_in_user = Keyword.get(config, :log_in_user, &Systems.Account.UserAuth.log_in_user/3)
-    log_in_user.(conn, user, first_time?)
+    Systems.Account.SignInHandoff.sign_in(conn, :google, user, first_time?, log_in_user)
   end
 end
 
@@ -84,11 +84,8 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
     )
   end
 
-  defp redirect_with_error(conn, error) do
-    conn
-    |> put_flash(:error, Systems.Account.Auth.SSOHelpers.error_message(error))
-    |> redirect(to: ~p"/user/signin")
-  end
+  defp redirect_with_error(conn, error),
+    do: Systems.Account.Auth.SSOHelpers.redirect_with_error(conn, :google, error)
 
   defp authenticate(conn, otp_app, session_params) do
     post_action = Params.parse_string_param(session_params, "post_signin_action")
@@ -122,7 +119,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
         log_in_user(config, conn, user, first_time?)
 
       {:error, changeset} ->
-        Systems.Account.Auth.SSOHelpers.handle_registration_error(conn, changeset)
+        Systems.Account.Auth.SSOHelpers.handle_registration_error(conn, :google, changeset)
     end
   end
 
