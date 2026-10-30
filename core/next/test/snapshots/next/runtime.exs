@@ -39,6 +39,7 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         announcements: false,
          centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
@@ -95,6 +96,7 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         announcements: false,
          centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
@@ -137,6 +139,7 @@
        ],
        features: [
          "": true,
+         announcements: false,
          centerdata_sign_in: false,
          debug_expire_force: false,
          e2e: false,
@@ -180,6 +183,7 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         announcements: false,
          centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
@@ -235,6 +239,7 @@
          {"storage_export", 107_374_182_400, :byte, :day, :global}
        ],
        features: [
+         announcements: false,
          centerdata_sign_in: false,
          debug: true,
          debug_expire_force: false,
@@ -288,6 +293,7 @@
          {"storage_export", 1, :call, :hour, :local}
        ],
        features: [
+         announcements: true,
          centerdata_sign_in: false,
          debug_expire_force: false,
          e2e: true,
