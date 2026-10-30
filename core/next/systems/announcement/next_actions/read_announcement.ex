@@ -6,7 +6,6 @@ defmodule Systems.Announcement.NextActions.ReadAnnouncement do
   page clears it (`Systems.Announcement.Public.mark_read/1`).
   """
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
   use Gettext, backend: CoreWeb.Gettext
 
   alias Systems.Announcement
@@ -25,7 +24,7 @@ defmodule Systems.Announcement.NextActions.ReadAnnouncement do
       title: title,
       description: summary,
       cta_label: dgettext("eyra-announcement", "next_action.cta"),
-      cta_action: %{type: :redirect, to: ~p"/announcement/#{announcement_id}"}
+      cta_action: %{type: :redirect, to: Announcement.Private.page_path(announcement_id)}
     }
   end
 end
