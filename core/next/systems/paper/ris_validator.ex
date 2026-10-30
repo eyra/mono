@@ -1,10 +1,10 @@
-defmodule Systems.Paper.RISValidator do
+defmodule Next.Systems.Paper.RISValidator do
   @moduledoc """
   Validates RIS files before parsing to prevent crashes from invalid files.
   """
 
   require Logger
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   # Maximum time allowed for validation (30 seconds for large files)
   @validation_timeout 30_000
@@ -67,7 +67,7 @@ defmodule Systems.Paper.RISValidator do
   end
 
   defp get_max_file_size do
-    Core.Env.fetch!(:paper)
+    Mica.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_max_file_size)
   end
 

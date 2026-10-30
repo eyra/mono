@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameProbeToolRefSpecial do
+defmodule Mica.Repo.Migrations.RenameProbeToolRefSpecial do
   use Ecto.Migration
 
   def up do

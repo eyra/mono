@@ -1,9 +1,9 @@
-defmodule Annotation.PublicTest do
-  use Core.DataCase
+defmodule Next.Systems.Annotation.PublicTest do
+  use Mica.DataCase
 
-  import Systems.Annotation.Public
+  import Next.Systems.Annotation.Public
 
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
 
   setup do
     user = Factories.insert!(:member)

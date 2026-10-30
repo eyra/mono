@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.ArchiveVuOrganisations do
+defmodule Mica.Repo.Migrations.ArchiveVuOrganisations do
   use Ecto.Migration
 
   def up do

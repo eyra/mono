@@ -1,7 +1,7 @@
 defmodule Systems.Manual.View do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
   use Frameworks.Pixel
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Toolbar
   alias Systems.Manual

@@ -44,7 +44,7 @@ defmodule Systems.Fund.CurrencyLedgerModel do
   end
 
   def get_by_currency(currency) when currency in @currencies do
-    Core.Repo.get_by(__MODULE__, currency: currency)
+    Mica.Repo.get_by(__MODULE__, currency: currency)
   end
 
   def preload_graph(:full), do: [:inbound, :outbound]

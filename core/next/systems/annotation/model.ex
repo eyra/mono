@@ -1,12 +1,12 @@
-defmodule Systems.Annotation.Model do
+defmodule Next.Systems.Annotation.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   schema "annotation" do
     field(:statement, :string)
@@ -52,11 +52,11 @@ defmodule Systems.Annotation.Model do
   def preload_graph(:entity), do: [entity: []]
   def preload_graph(:references), do: [references: Annotation.RefModel.preload_graph(:down)]
 
-  defimpl Systems.Ontology.Element do
+  defimpl Next.Systems.Ontology.Element do
     # TODO: add limits to the depth of the graph to avoid deep graphs and infinite recursion
     def flatten(%{type: type, references: references} = annotation) do
       Enum.reduce(references, [annotation, type], fn ref, acc ->
-        acc ++ Systems.Ontology.Element.flatten(ref)
+        acc ++ Next.Systems.Ontology.Element.flatten(ref)
       end)
     end
   end

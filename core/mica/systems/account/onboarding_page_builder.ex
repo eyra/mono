@@ -2,8 +2,8 @@ defmodule Systems.Account.OnboardingPageBuilder do
   @moduledoc """
   Builder for OnboardingPage that determines which steps to show and manages step progression.
   """
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -86,7 +86,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
         show_email: false
       })
 
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       :profile_view,
       Account.ProfileView,
       live_context: profile_context
@@ -94,7 +94,7 @@ defmodule Systems.Account.OnboardingPageBuilder do
   end
 
   defp build_step_view(:terms_and_privacy, _user, live_context) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       :terms_and_privacy_view,
       Account.TermsAndPrivacyView,
       live_context: live_context

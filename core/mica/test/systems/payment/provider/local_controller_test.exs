@@ -8,9 +8,9 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   The routes are compiled in only when `:enable_e2e_support` is set, which is
   the case for :test (see config/test.exs).
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
   alias Systems.Fund

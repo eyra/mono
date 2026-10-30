@@ -1,6 +1,6 @@
 defmodule Systems.Pool.PublicTest do
-  use Core.DataCase
-  alias Core.Factories
+  use Mica.DataCase
+  alias Mica.Factories
 
   alias Systems.Pool.Public
 
@@ -180,8 +180,8 @@ defmodule Systems.Pool.PublicTest do
     end
 
     test "true when user is an owner of the pool's org", %{user: user, pool: pool} do
-      pool = Core.Repo.preload(pool, :org)
-      Core.Authorization.assign_role(user, pool.org, :owner)
+      pool = Mica.Repo.preload(pool, :org)
+      Mica.Authorization.assign_role(user, pool.org, :owner)
       assert Public.can_manage?(pool, user) == true
     end
 
@@ -191,7 +191,7 @@ defmodule Systems.Pool.PublicTest do
 
     test "preloads org when the association is not loaded", %{user: user, pool: pool} do
       stripped = %{pool | org: %Ecto.Association.NotLoaded{}}
-      Core.Authorization.assign_role(user, Core.Repo.preload(pool, :org).org, :owner)
+      Mica.Authorization.assign_role(user, Mica.Repo.preload(pool, :org).org, :owner)
       assert Public.can_manage?(stripped, user) == true
     end
   end

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Separator do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:type, :atom, required: true)
 

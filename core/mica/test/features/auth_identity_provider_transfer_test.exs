@@ -1,15 +1,15 @@
-defmodule CoreWeb.Features.Auth.IdentityProviderTransferTest do
-  use CoreWeb.FeatureCase
+defmodule MicaWeb.Features.Auth.IdentityProviderTransferTest do
+  use MicaWeb.FeatureCase
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.Auth.Email.UserModel
 
   setup do
-    account = Application.get_env(:core, :account, [])
+    account = Application.get_env(:mica, :account, [])
     original = Keyword.get(account, :auth_methods, %{})
 
     Application.put_env(
-      :core,
+      :mica,
       :account,
       Keyword.put(
         account,
@@ -19,8 +19,8 @@ defmodule CoreWeb.Features.Auth.IdentityProviderTransferTest do
     )
 
     on_exit(fn ->
-      account = Application.get_env(:core, :account, [])
-      Application.put_env(:core, :account, Keyword.put(account, :auth_methods, original))
+      account = Application.get_env(:mica, :account, [])
+      Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, original))
     end)
 
     :ok

@@ -1,8 +1,8 @@
 defmodule Systems.Account.UserFormTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
-  @policy_urls Application.compile_env(:core, :policy_urls)
+  @policy_urls Application.compile_env(:mica, :policy_urls)
 
   describe "password_signup form" do
     test "renders Next policy links with configured URLs", %{conn: conn} do

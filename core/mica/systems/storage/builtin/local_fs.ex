@@ -56,7 +56,7 @@ defmodule Systems.Storage.BuiltIn.LocalFS do
   end
 
   def get_root_path do
-    Core.Env.fetch!(__MODULE__) |> Keyword.fetch!(:root_path)
+    Mica.Env.fetch!(__MODULE__) |> Keyword.fetch!(:root_path)
   end
 
   @legacy_folder_prefixes ["project_node=", "assignment="]

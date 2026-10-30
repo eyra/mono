@@ -1,9 +1,9 @@
 defmodule Systems.Project.Factories do
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Project
   alias Systems.Alliance
   alias Systems.Assignment
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Storage
 
   @doc """
@@ -15,7 +15,7 @@ defmodule Systems.Project.Factories do
 
     storage_endpoint =
       Storage.Public.prepare_endpoint(:builtin, %{key: "test_key_#{:erlang.unique_integer()}"})
-      |> Core.Repo.insert!()
+      |> Mica.Repo.insert!()
 
     Factories.insert!(:project_item, %{
       name: "assignment_item",

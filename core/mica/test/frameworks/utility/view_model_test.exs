@@ -1,5 +1,5 @@
 defmodule Frameworks.Utility.ViewModelTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Frameworks.Utility.ViewModel
 

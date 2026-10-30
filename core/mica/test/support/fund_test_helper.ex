@@ -17,7 +17,7 @@ defmodule Systems.Fund.TestHelper do
       reward is a caller bug, not an idempotent no-op.
   """
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Fund
 
   def mark_pending_approval(idempotence_key) when is_binary(idempotence_key) do

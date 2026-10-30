@@ -1,13 +1,13 @@
-defmodule Systems.Onyx.ConceptTab do
+defmodule Next.Systems.Onyx.ConceptTab do
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
-  use CoreWeb.UI
+  use MicaWeb.UI
   use Frameworks.Pixel
   use Frameworks.Signal.LiveFeature
 
   alias Frameworks.Pixel.Grid
 
-  alias Systems.Onyx
+  alias Next.Systems.Onyx
 
   @impl true
   def mount(
@@ -44,7 +44,7 @@ defmodule Systems.Onyx.ConceptTab do
     modal =
       LiveNest.Modal.prepare_live_view(
         "concept-modal",
-        Systems.Onyx.ConceptView,
+        Next.Systems.Onyx.ConceptView,
         session: [id: concept_id, user: user, depth: depth + 1],
         style: :full
       )

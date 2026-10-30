@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
+defmodule MicaWeb.Features.TermsAndPrivacyOnboardingTest do
   @moduledoc """
   Feature test for the terms-and-privacy onboarding flow using the Mock OAuth provider.
 
@@ -6,14 +6,14 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
   → onboarding page → Continue (with and without accepting terms) → signed-in
   page.
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   setup do
-    account = Application.get_env(:core, :account, [])
+    account = Application.get_env(:mica, :account, [])
     auth_methods = Keyword.fetch!(account, :auth_methods)
 
     Application.put_env(
-      :core,
+      :mica,
       :account,
       Keyword.put(
         account,
@@ -22,7 +22,7 @@ defmodule CoreWeb.Features.TermsAndPrivacyOnboardingTest do
       )
     )
 
-    on_exit(fn -> Application.put_env(:core, :account, account) end)
+    on_exit(fn -> Application.put_env(:mica, :account, account) end)
 
     :ok
   end

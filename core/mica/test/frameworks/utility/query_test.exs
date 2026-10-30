@@ -1,12 +1,12 @@
 defmodule Frameworks.Utility.QueryTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   require Ecto.Query
   require Frameworks.Utility.Query
 
   alias Frameworks.Utility.Query
   alias Systems.Crew
-  alias Core.Factories
+  alias Mica.Factories
 
   describe "compile_clauses/1" do
     test "join: 1" do
@@ -115,7 +115,7 @@ defmodule Frameworks.Utility.QueryTest do
 
       assert %Systems.Crew.MemberModel{
                user_id: ^user_id
-             } = Core.Repo.one(query)
+             } = Mica.Repo.one(query)
     end
 
     test "is_nil with result" do
@@ -135,7 +135,7 @@ defmodule Frameworks.Utility.QueryTest do
 
       assert %Systems.Account.User{
                id: ^user_id
-             } = Core.Repo.one(query)
+             } = Mica.Repo.one(query)
     end
   end
 
@@ -154,6 +154,6 @@ defmodule Frameworks.Utility.QueryTest do
              ]
            } = query |> Map.from_struct()
 
-    assert nil == Core.Repo.one(query)
+    assert nil == Mica.Repo.one(query)
   end
 end

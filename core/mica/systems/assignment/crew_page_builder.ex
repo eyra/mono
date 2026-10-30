@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -58,7 +58,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp apply_language(language) do
-    CoreWeb.Live.Hook.Locale.put_locale(language)
+    MicaWeb.Live.Hook.Locale.put_locale(language)
   end
 
   # State machine - determines which view to show based on current state and action
@@ -195,7 +195,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp intro_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "onboarding_view_#{assignment_id}",
       Assignment.OnboardingView,
       live_context: context
@@ -203,7 +203,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp consent_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "onboarding_consent_view_#{assignment_id}",
       Assignment.OnboardingConsentView,
       live_context: context
@@ -214,7 +214,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
          %{id: assignment_id} = _assignment,
          %{live_context: context} = _assigns
        ) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "activate_account_view_#{assignment_id}",
       Assignment.ActivateAccountView,
       live_context: context
@@ -222,7 +222,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "crew_work_view_#{assignment_id}",
       Assignment.CrewWorkView,
       live_context: context
@@ -230,7 +230,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp finished_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "finished_view_#{assignment_id}",
       Assignment.FinishedView,
       live_context: context
@@ -250,7 +250,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp participation_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "participation_view_#{assignment_id}",
       Assignment.ParticipationView,
       live_context: context

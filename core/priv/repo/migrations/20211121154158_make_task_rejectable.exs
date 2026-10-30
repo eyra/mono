@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.MakeTaskRejectable do
+defmodule Mica.Repo.Migrations.MakeTaskRejectable do
   use Ecto.Migration
 
   def up do

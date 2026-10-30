@@ -1,6 +1,6 @@
 defmodule Systems.Admin.ActionsPanel do
   use Systems.Admin.Panel
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Admin
 

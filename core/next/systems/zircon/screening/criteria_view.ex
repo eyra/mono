@@ -1,14 +1,14 @@
-defmodule Systems.Zircon.Screening.CriteriaView do
-  use CoreWeb, :embedded_live_view
+defmodule Next.Systems.Zircon.Screening.CriteriaView do
+  use MicaWeb, :embedded_live_view
 
   import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]
 
   alias Frameworks.Pixel.Text
-  alias CoreWeb.UI.Area
-  alias CoreWeb.UI.Margin
+  alias MicaWeb.UI.Area
+  alias MicaWeb.UI.Margin
 
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
 
   def get_model(:not_mounted_at_router, %{"tool" => tool}, _socket) do
     tool
@@ -39,7 +39,7 @@ defmodule Systems.Zircon.Screening.CriteriaView do
 
         LiveNest.Element.prepare_live_component(
           "criterion_form_#{index}",
-          Systems.Annotation.Form,
+          Next.Systems.Annotation.Form,
           annotation: criterion,
           label_text: dimension_label,
           user: current_user

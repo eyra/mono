@@ -1,7 +1,7 @@
 defmodule Systems.Document.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.Document
 
@@ -17,7 +17,7 @@ defmodule Systems.Document.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Document.ToolModel do
+defimpl Mica.Persister, for: Systems.Document.ToolModel do
   def save(_task, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :document_tool) do
       {:ok, %{document_tool: tool}} -> {:ok, tool}

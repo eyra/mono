@@ -1,5 +1,5 @@
 defmodule Systems.Project.AssemblyTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Project
 
@@ -56,10 +56,10 @@ defmodule Systems.Project.AssemblyTest do
                crew: %Systems.Crew.Model{
                  tasks: [],
                  members: [],
-                 auth_node: %Core.Authorization.Node{}
+                 auth_node: %Mica.Authorization.Node{}
                },
                fund: %Systems.Fund.Model{},
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  role_assignments: []
                },
                excluded: []

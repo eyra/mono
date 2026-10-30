@@ -2,7 +2,7 @@ defmodule Systems.Account.Auth.Apple do
   @behaviour Systems.Account.Auth.Provider
 
   alias Systems.Account.User
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
   import Ecto.Query, warn: false
 

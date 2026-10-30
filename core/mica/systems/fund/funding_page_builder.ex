@@ -1,5 +1,5 @@
 defmodule Systems.Fund.FundingPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   def view_model(user, _assigns) do
     create_fund = %{

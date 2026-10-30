@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.MigrateSurveyTool do
+defmodule Mica.Repo.Migrations.MigrateSurveyTool do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -12,7 +12,7 @@ defmodule Core.Repo.Migrations.MigrateSurveyTool do
   end
 
   defp migrate(tool_type) do
-    query(Core.Repo, "SELECT id FROM #{tool_type}s WHERE director = 'assignment';")
+    query(Mica.Repo, "SELECT id FROM #{tool_type}s WHERE director = 'assignment';")
     |> migrate_tools(tool_type)
   end
 

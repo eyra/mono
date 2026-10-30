@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.GoogleSignIn do
+defmodule Mica.Repo.Migrations.GoogleSignIn do
   use Ecto.Migration
 
   def change do

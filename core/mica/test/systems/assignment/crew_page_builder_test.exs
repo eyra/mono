@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.CrewPageBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
   alias Systems.Crew
@@ -252,7 +252,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
 
       # Make user a tester by assigning tester role on crew
       %{crew: crew} = assignment
-      Core.Authorization.assign_role(unconfirmed_user, crew, :tester)
+      Mica.Authorization.assign_role(unconfirmed_user, crew, :tester)
       mark_intro_visited(assignment, unconfirmed_user)
 
       assigns = build_assigns(unconfirmed_user)

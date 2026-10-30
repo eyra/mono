@@ -1,14 +1,14 @@
 defmodule Systems.Alliance.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.{
     Alliance
   }
 
   describe "alliance_tools" do
-    alias Core.Factories
+    alias Mica.Factories
 
     @update_attrs %{url: "http://eyra.co/fake_alliance"}
 

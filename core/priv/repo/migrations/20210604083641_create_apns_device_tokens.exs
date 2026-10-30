@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateAPNSDeviceTokens do
+defmodule Mica.Repo.Migrations.CreateAPNSDeviceTokens do
   use Ecto.Migration
 
   def change do

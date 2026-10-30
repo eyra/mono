@@ -20,7 +20,7 @@ defmodule Systems.Org.NodeModel do
     field(:domains_string, :string, virtual: true)
     field(:archived_at, :utc_datetime)
 
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     belongs_to(:short_name_bundle, Content.TextBundleModel, on_replace: :update)
     belongs_to(:full_name_bundle, Content.TextBundleModel, on_replace: :update)
 

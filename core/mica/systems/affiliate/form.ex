@@ -1,5 +1,5 @@
 defmodule Systems.Affiliate.Form do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.Affiliate
 

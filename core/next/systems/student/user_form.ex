@@ -1,12 +1,12 @@
-defmodule Systems.Student.UserForm do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Student.UserForm do
+  use MicaWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
 
   alias Systems.Account
   alias Systems.Account.FeaturesModel
-  alias Systems.Student
+  alias Next.Systems.Student
   alias Systems.Fund
   alias Systems.Content
 
@@ -118,7 +118,7 @@ defmodule Systems.Student.UserForm do
       |> Enum.filter(&active?(&1, active_classes))
       |> Enum.map(&Student.Class.code(&1.identifier))
 
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     student_class_labels = Student.Class.selector_labels(student_classes, locale, active_codes)
 
     socket

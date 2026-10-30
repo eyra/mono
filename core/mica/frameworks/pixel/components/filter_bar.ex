@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.FilterBar do
   @moduledoc false
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:items, :list, required: true)
 

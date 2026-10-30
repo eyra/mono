@@ -77,17 +77,17 @@ end
 
 defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
   use ExUnit.Case, async: false
-  use Core.DataCase
+  use Mica.DataCase
   import Plug.Test
   import ExUnit.CaptureLog
-  use Core.FeatureFlags.Test
+  use Mica.FeatureFlags.Test
   alias Systems.Account.Auth.Google.CallbackPlug
 
   setup do
-    conf = Application.get_env(:core, :admins, [])
+    conf = Application.get_env(:mica, :admins, [])
 
     on_exit(fn ->
-      Application.put_env(:core, :admins, conf)
+      Application.put_env(:mica, :admins, conf)
     end)
 
     domain = Faker.Internet.domain_name()
@@ -146,7 +146,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
 
     test "offers transfer for an existing account without a Google satellite" do
       email = Systems.Account.Auth.Google.FakeGoogle.email()
-      Core.Factories.insert!(:creator, %{email: email})
+      Mica.Factories.insert!(:creator, %{email: email})
 
       conn =
         conn(:get, "/google")
@@ -168,7 +168,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
 
     test "allow admin when member login is disabled" do
       Application.put_env(
-        :core,
+        :mica,
         :admins,
         Systems.Admin.Public.compile([Systems.Account.Auth.Google.FakeGoogle.email()])
       )
@@ -188,7 +188,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
         capture_log([level: :error], fn ->
           conn =
             conn(:get, "/google?code=abc&state=xyz")
-            |> Map.replace!(:secret_key_base, CoreWeb.Endpoint.config(:secret_key_base))
+            |> Map.replace!(:secret_key_base, MicaWeb.Endpoint.config(:secret_key_base))
             |> init_test_session(%{})
             |> Plug.Conn.fetch_query_params()
             |> Phoenix.Controller.fetch_flash([])

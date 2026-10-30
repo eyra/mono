@@ -1,16 +1,16 @@
-defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
-  use CoreWeb.ConnCase, async: false
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Zircon.Screening.ImportViewUIUpdateTest do
+  use MicaWeb.ConnCase, async: false
+  use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Systems.Paper
-  alias Systems.Zircon
-  alias Systems.Zircon.Screening
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
+  alias Next.Systems.Zircon.Screening
 
   setup do
     # Isolate signals to prevent workflow errors, but keep Observatory.Switch for UI updates
-    isolate_signals(except: [Systems.Zircon.Switch, Systems.Observatory.Switch])
+    isolate_signals(except: [Next.Systems.Zircon.Switch, Systems.Observatory.Switch])
 
     # Create required entities
     auth_node = Factories.insert!(:auth_node)
@@ -136,7 +136,7 @@ defmodule Systems.Zircon.Screening.ImportViewUIUpdateTest do
       final_html = render(view)
 
       # Session should be completed
-      final_session = Core.Repo.get!(Paper.RISImportSessionModel, import_session.id)
+      final_session = Mica.Repo.get!(Paper.RISImportSessionModel, import_session.id)
       assert final_session.status == :succeeded
 
       # UI should show file selector again for new imports

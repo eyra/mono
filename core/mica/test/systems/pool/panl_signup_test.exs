@@ -1,13 +1,13 @@
 defmodule Systems.Pool.PanlSignupTest do
   # async: false because test relies on global Pool.Public.get_panl() lookup by name
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   alias Systems.Pool
   alias Systems.Account
 
   describe "PANL pool signup integration" do
     setup do
-      panl_pool = Core.Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+      panl_pool = Mica.Factories.insert!(:pool, %{name: "Panl", director: :citizen})
       {:ok, panl_pool: panl_pool}
     end
 
@@ -96,7 +96,7 @@ defmodule Systems.Pool.PanlSignupTest do
       assert pool != nil
       assert pool.name == "Panl"
 
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       refute Pool.Public.participant?(panl_pool, user)
       Pool.Public.add_participant!(panl_pool, user)
       assert Pool.Public.participant?(panl_pool, user)

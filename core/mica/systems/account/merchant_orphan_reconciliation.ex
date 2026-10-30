@@ -25,7 +25,7 @@ defmodule Systems.Account.MerchantOrphanReconciliation do
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Payment
   alias Systems.Payment.OrphanScan

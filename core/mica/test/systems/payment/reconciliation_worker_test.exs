@@ -7,12 +7,12 @@ defmodule Systems.Payment.ReconciliationWorkerTest do
   ReconcileOrphanedTransactionsTest; here we assert the worker delegates to all
   four and returns :ok.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
   import Ecto.Query
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Bookkeeping
   alias Systems.Fund
   alias Systems.Fund

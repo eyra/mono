@@ -74,7 +74,7 @@ defmodule BoundaryRules do
   @doc """
   The module names in `source` with their lines: aliases (grouped aliases
   expanded, aliased short names resolved), `:"Elixir.…"` atoms, and
-  `config :core, :<system>` keys as `Systems.<System>`.
+  `config :mica, :<system>` keys as `Systems.<System>`.
   """
   def names(source) do
     {:ok, ast} = Code.string_to_quoted(source)
@@ -100,7 +100,7 @@ defmodule BoundaryRules do
     end
   end
 
-  defp collect({:config, meta, [:core, key | _]} = node, acc, _aliases) when is_atom(key) do
+  defp collect({:config, meta, [:mica, key | _]} = node, acc, _aliases) when is_atom(key) do
     {node, [{"Systems." <> Macro.camelize(Atom.to_string(key)), meta[:line]} | acc]}
   end
 

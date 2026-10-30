@@ -1,12 +1,12 @@
 defmodule Systems.Fund.AutoApproveWorkerTest do
-  use Core.DataCase
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query
   import Systems.Fund.TestHelper
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Fund.AutoApproveWorker
 

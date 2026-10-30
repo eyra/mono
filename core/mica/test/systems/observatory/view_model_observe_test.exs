@@ -1,8 +1,8 @@
 defmodule Systems.Observatory.ViewModelObserveTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
-  import Core.AuthTestHelpers
+  import Mica.AuthTestHelpers
 
   alias Systems.Test
 

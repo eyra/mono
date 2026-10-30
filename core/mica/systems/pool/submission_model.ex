@@ -11,7 +11,7 @@ defmodule Systems.Pool.SubmissionModel do
     Pool
   }
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   schema "pool_submissions" do
     field(:status, Ecto.Enum, values: Pool.SubmissionStatus.values())
@@ -120,7 +120,7 @@ defmodule Systems.Pool.SubmissionModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Pool.SubmissionModel do
+defimpl Mica.Persister, for: Systems.Pool.SubmissionModel do
   alias Systems.Pool
 
   def save(submission, changeset) do

@@ -1,4 +1,4 @@
-defmodule Next.Layouts.Website.MenuBuilder do
+defmodule NextWeb.Layouts.Website.MenuBuilder do
   @home_flags [
     desktop_navbar: [:wide],
     mobile_navbar: [:narrow],
@@ -19,7 +19,7 @@ defmodule Next.Layouts.Website.MenuBuilder do
     mobile_navbar: [:menu]
   ]
 
-  use CoreWeb.Menu.Builder, home: :next
+  use MicaWeb.Menu.Builder, home: :next
 
   @impl true
 

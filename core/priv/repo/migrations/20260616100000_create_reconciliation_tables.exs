@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateReconciliationTables do
+defmodule Mica.Repo.Migrations.CreateReconciliationTables do
   use Ecto.Migration
 
   def change do

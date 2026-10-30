@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddVisitedPages do
+defmodule Mica.Repo.Migrations.AddVisitedPages do
   use Ecto.Migration
 
   def change do

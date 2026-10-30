@@ -1,7 +1,7 @@
 defmodule Systems.Pool.OnboardingPageTest do
   # async: false — same reason as PanlSignupTest: this exercises the global
   # `Pool.Public.get_by_slug/1` lookup on a fixed-name "Panl" pool.
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Systems.Pool

@@ -8,16 +8,16 @@ defmodule Systems.Project.ItemModel do
   use Frameworks.Concept.Special, @special_fields
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Concept
 
   alias Systems.Project
   alias Systems.Storage
   alias Systems.Assignment
   alias Systems.Advert
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   schema "project_items" do
     field(:name, :string)
@@ -109,9 +109,9 @@ defmodule Systems.Project.ItemModel do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
-    use CoreWeb, :verified_routes
+    use MicaWeb, :verified_routes
 
     def view_model(
           %Project.ItemModel{id: id, name: name} = item,

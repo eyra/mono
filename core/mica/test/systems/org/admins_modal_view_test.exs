@@ -1,9 +1,9 @@
 defmodule Systems.Org.AdminsModalViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
 
   describe "AdminsModalView" do
@@ -58,7 +58,7 @@ defmodule Systems.Org.AdminsModalViewTest do
     test "handle_info remove_user revokes owner role", %{conn: conn, user: _user} do
       owner = Factories.insert!(:creator)
       org = Factories.insert!(:org_node, %{identifier: ["remove_owner_org"]})
-      Core.Authorization.assign_role(owner, org, :owner)
+      Mica.Authorization.assign_role(owner, org, :owner)
 
       {:ok, view, _html} =
         live_isolated(conn, Org.AdminsModalView,

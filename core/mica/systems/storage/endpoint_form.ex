@@ -1,5 +1,5 @@
 defmodule Systems.Storage.EndpointForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Frameworks.Concept
   alias Frameworks.Pixel.RadioGroup

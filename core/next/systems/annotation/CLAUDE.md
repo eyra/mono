@@ -52,7 +52,7 @@ This approach makes sophisticated knowledge capture **as natural as social media
 
 ### Core Models
 
-#### `Systems.Annotation.Model` (Primary Annotation)
+#### `Next.Systems.Annotation.Model` (Primary Annotation)
 - **Table**: `annotation`
 - **Fields**:
   - `statement` (string) - Annotation content
@@ -64,7 +64,7 @@ This approach makes sophisticated knowledge capture **as natural as social media
   - `belongs_to(:entity, Authentication.Entity)` - Entity-based ownership
   - `many_to_many(:references, Annotation.RefModel)` - Polymorphic references
 
-#### `Systems.Annotation.RefModel` (Reference System)
+#### `Next.Systems.Annotation.RefModel` (Reference System)
 - **Table**: `annotation_ref`
 - **Purpose**: Flexible reference system supporting multiple entity types
 - **Fields**:
@@ -75,18 +75,18 @@ This approach makes sophisticated knowledge capture **as natural as social media
   - `annotation_id` - Self-referential annotation linking
   - `ontology_ref_id` - References ontology concepts/predicates
 
-#### `Systems.Annotation.ResourceModel` (String Resources)
+#### `Next.Systems.Annotation.ResourceModel` (String Resources)
 - **Table**: `annotation_resource`
 - **Purpose**: Deduplicated string resource storage
 - **Fields**: `value` (string, unique)
 - **Benefits**: Efficient storage of repeated string values
 
-#### `Systems.Annotation.Assoc` (Association Table)
+#### `Next.Systems.Annotation.Assoc` (Association Table)
 - **Table**: `annotation_assoc`
 - **Purpose**: Many-to-many relationship between annotations and references
 - **Fields**: `annotation_id`, `ref_id`
 
-#### `Systems.Annotation.OntologyAssoc` (Ontology Association)
+#### `Next.Systems.Annotation.OntologyAssoc` (Ontology Association)
 - **Table**: `annotation_ontology_assoc`
 - **Purpose**: Direct association with ontology elements
 - **Fields**: `annotation_id`, `ontology_ref_id`
@@ -117,7 +117,7 @@ annotation_ontology_assoc(id, annotation_id, ontology_ref_id, timestamps)
 While annotations offer **infinite flexibility** in connecting to the knowledge graph, **Patterns provide essential structure** and semantic consistency:
 
 ```elixir
-defprotocol Systems.Annotation.Pattern do
+defprotocol Next.Systems.Annotation.Pattern do
   def obtain(t)    # Creates or retrieves annotation following pattern structure
   def query(t)     # Builds queries for pattern-structured annotations
 end
@@ -207,12 +207,12 @@ Advanced querying capabilities via `_queries.ex`:
 
 ## Dependencies
 
-### Systems.Ontology
+### Next.Systems.Ontology
 - **Enhanced Integration**: Deep integration with `ConceptModel` and `PredicateModel`
 - **Semantic Typing**: Annotations typed using ontological concepts
 - **Reference System**: Can reference ontology elements through `RefModel`
 
-### Core.Authentication
+### Mica.Authentication
 - **Entity-Based Ownership**: Multi-entity collaborative annotation
 - **Authorization Integration**: Respects platform permission system
 - **User Attribution**: Tracks annotation creators and collaborators

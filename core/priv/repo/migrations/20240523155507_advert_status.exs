@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AdvertStatus do
+defmodule Mica.Repo.Migrations.AdvertStatus do
   use Ecto.Migration
 
   def up do

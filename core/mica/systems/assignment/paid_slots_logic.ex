@@ -15,7 +15,7 @@ defmodule Systems.Assignment.PaidSlotsLogic do
   none.
   """
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
   alias Systems.Assignment.CurrencyHelpers

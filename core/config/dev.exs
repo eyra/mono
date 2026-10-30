@@ -27,9 +27,9 @@ config :phoenix_live_view,
   debug_attributes: true,
   enable_expensive_runtime_checks: true
 
-config :core, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
+config :mica, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
-config :core,
+config :mica,
   domain: "localhost",
   name: "Next [local]",
   payment_webhook_base_url: System.get_env("PAYMENT_WEBHOOK_BASE_URL"),
@@ -37,15 +37,15 @@ config :core,
 
 # `mix phx.server` does not load a runtime config. Keep development payment
 # flows local unless `core/start` explicitly selects a configured provider.
-config :core, payment_provider: Systems.Payment.Provider.Local
+config :mica, payment_provider: Systems.Payment.Provider.Local
 
-config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
+config :mica, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
 
-config :core, :feldspar_data_donation,
+config :mica, :feldspar_data_donation,
   path: feldspar_data_donation_path,
   retention_hours: 336
 
-config :core, :features,
+config :mica, :features,
   e2e: true,
   leaderboard: true,
   member_google_sign_in: true,
@@ -73,9 +73,9 @@ verify_mode =
     _ -> :verify_peer
   end
 
-config :core, skip_webhook_verification: true
+config :mica, skip_webhook_verification: true
 
-config :core, Core.Repo,
+config :mica, Mica.Repo,
   username: "postgres",
   password: "postgres",
   database: "next_dev",
@@ -84,7 +84,7 @@ config :core, Core.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :core, CoreWeb.Endpoint,
+config :mica, MicaWeb.Endpoint,
   reloadable_compilers: [:elixir],
   force_ssl: false,
   debug_errors: true,
@@ -94,8 +94,8 @@ config :core, CoreWeb.Endpoint,
     patterns: [
       ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
       ~r"priv/gettext/.*(po)$",
-      ~r"lib/core_web/(live|views|components)/.*(ex|sface|js)$",
-      ~r"lib/core_web/templates/*/.*(eex)$",
+      ~r"lib/mica_web/(live|views|components)/.*(ex|sface|js)$",
+      ~r"lib/mica_web/templates/*/.*(eex)$",
       ~r"systems/*/.*(ex)$",
       ~r"systems/*/templates/.*(eex)$",
       ~r"frameworks/*/.*(ex)$",
@@ -108,15 +108,15 @@ config :core, CoreWeb.Endpoint,
     tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
   ]
 
-# Every Oban plugin and cron of Mica and the systems runs (Core.ObanConfig).
-config :core, :oban_plugins, enabled: :all
+# Every Oban plugin and cron of Mica and the systems runs (Mica.ObanConfig).
+config :mica, :oban_plugins, enabled: :all
 
-config :core,
+config :mica,
   admins: [
     "*@eyra.co"
   ]
 
-config :core, :account,
+config :mica, :account,
   auth_methods: %{
     surfconext: %{provider: true, satellite: true},
     centerdata: %{provider: true, satellite: true},
@@ -126,7 +126,7 @@ config :core, :account,
     mock: %{provider: true, satellite: false}
   }
 
-config :core, :rate,
+config :mica, :rate,
   prune_interval: 5 * 60 * 1000,
   quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"],
@@ -140,18 +140,18 @@ config :core, :rate,
     ]
   ]
 
-config :core, Core.ImageCatalog.Unsplash,
+config :mica, Mica.ImageCatalog.Unsplash,
   access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
   app_name: System.get_env("UNSPLASH_APP_NAME")
 
-config :core, image_catalog: Core.ImageCatalog.Unsplash
+config :mica, image_catalog: Mica.ImageCatalog.Unsplash
 
-config :core, Systems.Email.Mailer,
+config :mica, Systems.Email.Mailer,
   adapter: Bamboo.LocalAdapter,
   default_from_email: "no-reply@example.com"
 
 # Service login for load testing
-config :core, :service_login, key: "dev-test-key"
+config :mica, :service_login, key: "dev-test-key"
 
 # #  For Minio (local S3)
 # config :ex_aws,
@@ -161,12 +161,12 @@ config :core, :service_login, key: "dev-test-key"
 #   access_key_id: "my_access_key",
 #   secret_access_key: "a_super_secret"
 
-config :core, :content, backend: Systems.Content.LocalFS
+config :mica, :content, backend: Systems.Content.LocalFS
 
-config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+config :mica, :feldspar, backend: Systems.Feldspar.LocalFS
 
 # Compile in E2E support facilities (e.g. local payment simulator).
-config :core, :enable_e2e_support, true
+config :mica, :enable_e2e_support, true
 
 try do
   import_config "dev.secret.exs"
@@ -176,22 +176,22 @@ rescue
     nil
 end
 
-# HTTP_PORT moves this server off 4000, e.g. for a second local Core. Set after
+# HTTP_PORT moves this server off 4000, e.g. for a second local Mica. Set after
 # dev.secret.exs, so the port set here wins over the one there; without
 # HTTP_PORT that file's port and Google redirect stay.
 http_port = System.get_env("HTTP_PORT")
 local_url = "http://localhost:#{http_port || 4000}"
 
 if http_port do
-  config :core, CoreWeb.Endpoint, http: [port: String.to_integer(http_port)]
+  config :mica, MicaWeb.Endpoint, http: [port: String.to_integer(http_port)]
 
-  config :core, Systems.Account.Auth.Google, redirect_uri: "#{local_url}/auth/google/callback"
+  config :mica, Systems.Account.Auth.Google, redirect_uri: "#{local_url}/auth/google/callback"
 end
 
-config :core, base_url: System.get_env("APP_DOMAIN") || local_url
+config :mica, base_url: System.get_env("APP_DOMAIN") || local_url
 
 # Opens each sent email in the browser. OPEN_SENT_EMAILS=false leaves them in
 # the mailbox at /sent_emails only.
 if System.get_env("OPEN_SENT_EMAILS") != "false" do
-  config :core, Systems.Email.Mailer, open_email_in_browser_url: "#{local_url}/sent_emails"
+  config :mica, Systems.Email.Mailer, open_email_in_browser_url: "#{local_url}/sent_emails"
 end

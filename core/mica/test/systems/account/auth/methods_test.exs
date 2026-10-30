@@ -4,10 +4,10 @@ defmodule Systems.Account.Auth.MethodsTest do
   alias Systems.Account.Auth.Methods
 
   setup do
-    account = Application.fetch_env!(:core, :account)
+    account = Application.fetch_env!(:mica, :account)
 
     Application.put_env(
-      :core,
+      :mica,
       :account,
       Keyword.put(account, :auth_methods, %{
         surfconext: %{provider: true, satellite: true},
@@ -18,7 +18,7 @@ defmodule Systems.Account.Auth.MethodsTest do
       })
     )
 
-    on_exit(fn -> Application.put_env(:core, :account, account) end)
+    on_exit(fn -> Application.put_env(:mica, :account, account) end)
     :ok
   end
 

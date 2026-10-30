@@ -2,8 +2,8 @@ defmodule Systems.Account.ProfileViewBuilder do
   @moduledoc """
   Builder for ProfileView that constructs the view model for user profile editing.
   """
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
 

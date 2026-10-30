@@ -1,8 +1,8 @@
-defmodule Next.Account.SigninPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Account.SigninPageBuilder do
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Utility.List
 
-  import Core.FeatureFlags
+  import Mica.FeatureFlags
 
   def view_model(_, assigns) do
     tabs = create_tabs(assigns)
@@ -36,7 +36,7 @@ defmodule Next.Account.SigninPageBuilder do
       |> insert_at_every(1, fn -> :seperator end)
 
     child =
-      Fabric.prepare_child(fabric, :participant, Next.Account.ParticipantSigninView, %{
+      Fabric.prepare_child(fabric, :participant, Next.Systems.Account.ParticipantSigninView, %{
         email: email,
         blocks: blocks,
         status: status,
@@ -62,7 +62,7 @@ defmodule Next.Account.SigninPageBuilder do
       |> insert_at_every(1, fn -> :seperator end)
 
     child =
-      Fabric.prepare_child(fabric, :creator, Next.Account.CreatorSigninView, %{
+      Fabric.prepare_child(fabric, :creator, Next.Systems.Account.CreatorSigninView, %{
         email: email,
         blocks: blocks,
         status: status

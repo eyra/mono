@@ -1,13 +1,10 @@
-defmodule Systems.Student.Pool.SubmissionPageBuilder do
-  use CoreWeb, :verified_routes
+defmodule Next.Systems.Student.Pool.SubmissionPageBuilder do
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.{
-    Student,
-    Pool,
-    Advert
-  }
+  alias Next.Systems.Student
+  alias Systems.{Pool, Advert}
 
   def view_model(%Pool.SubmissionModel{} = submission, %{current_user: user}) do
     %{promotion: promotion} = advert = Advert.Public.get_by_submission(submission, [:promotion])
@@ -22,8 +19,8 @@ defmodule Systems.Student.Pool.SubmissionPageBuilder do
 
     update_at =
       advert.updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 

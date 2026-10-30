@@ -1,7 +1,7 @@
 defmodule Systems.Fund.BalanceView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  import CoreWeb.UI.ProgressBar
+  import MicaWeb.UI.ProgressBar
   alias Frameworks.Pixel.Text
 
   attr(:progress, :map, required: true)

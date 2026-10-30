@@ -7,11 +7,11 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 This codebase is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](../docs/nova-migration/plan.md) and [design](../docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
 
 - No new PaNL, VU or other Eyra specifics in generic systems.
-- Systems contribute through `Core.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Core.SaaS` (`Next.SaaS`, `Self.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `mica/lib/core/authorization.ex` or `mica/lib/core_web/routes.ex`. So do its signal handlers, notifiers and notify channels (`signal_handlers/0`, `notifiers/0`, `notify_channels/0`): a `_switch.ex` or `_notify.ex` that no `_system.ex` lists never runs. Its supervised processes, Oban queues and crons and default rate quotas go there too (`children/0`, `oban_queues/0`, `oban_crons/0`, `rate_quotas/0`), not in `Core.Application` or the config files; a cron runs only where `ENABLED_OBAN_PLUGINS` names it (every cron in dev). So do its tabs on the Admin page and the account page (`admin_panels/0` with `Systems.Admin.Panel` modules, `account_tabs/0` with `Systems.Account.Tab` modules), and its sections on the Desktop page (`desktop_sections/0` with `Systems.Desktop.Section` modules). Its idempotent seeds go in `seeds/1` (run by `Core.Seeds` after Mica's), and a system with its own migrations folder returns it from `migrations_path/0` (migrated with Mica's through `Core.SaaS.migrations_paths/0`). It declares the feature flags it reads (`feature_flags/0`, names only): a declared flag is off unless the SaaS's `feature_flags/0` or the app config turns it on, and a flag nobody declares is off. A new system with a `_system.ex` is listed in `Core.Systems.all/0` (Mica) or in the SaaS's `systems/0`.
+- Systems contribute through `Mica.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Mica.SaaS` (`Next.SaaS`, `MicaSaas.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `mica/lib/mica/authorization.ex` or `mica/lib/mica_web/routes.ex`. So do its signal handlers, notifiers and notify channels (`signal_handlers/0`, `notifiers/0`, `notify_channels/0`): a `_switch.ex` or `_notify.ex` that no `_system.ex` lists never runs. Its supervised processes, Oban queues and crons and default rate quotas go there too (`children/0`, `oban_queues/0`, `oban_crons/0`, `rate_quotas/0`), not in `Mica.Application` or the config files; a cron runs only where `ENABLED_OBAN_PLUGINS` names it (every cron in dev). So do its tabs on the Admin page and the account page (`admin_panels/0` with `Systems.Admin.Panel` modules, `account_tabs/0` with `Systems.Account.Tab` modules), and its sections on the Desktop page (`desktop_sections/0` with `Systems.Desktop.Section` modules). Its idempotent seeds go in `seeds/1` (run by `Mica.Seeds` after Mica's), and a system with its own migrations folder returns it from `migrations_path/0` (migrated with Mica's through `Mica.SaaS.migrations_paths/0`). It declares the feature flags it reads (`feature_flags/0`, names only): a declared flag is off unless the SaaS's `feature_flags/0` or the app config turns it on, and a flag nobody declares is off. A new system with a `_system.ex` is listed in `Mica.Systems.all/0` (Mica) or in the SaaS's `systems/0`.
 - Mica only contains code under Nova governance; custom and experimental systems start in Next.
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `mica/`, `next/`, or `mica_saas/` for the Self reference SaaS. Code under `mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `next/` and `mica_saas/` must not name each other's modules. CI enforces this with `scripts/boundary_check.exs` and `boundary_allowlist.exs`; the allowlist may only shrink.
-- Read and write application config through `Core.Env` (`get/2`, `fetch!/1`, `put/2`, the `compile_env/2` macro, `app/0`), never `Application.*(:core, ...)`. Config files and tests are exempt; the credo check `Credo.Check.Warning.CoreEnvAccess` enforces it.
+- Read and write application config through `Mica.Env` (`get/2`, `fetch!/1`, `put/2`, the `compile_env/2` macro, `app/0`), never `Application.*(:mica, ...)`. Config files and tests are exempt; the credo check `Credo.Check.Warning.MicaEnvAccess` enforces it.
 
 ## CRITICAL DEBUGGING PRINCIPLE
 
@@ -41,7 +41,7 @@ Always investigate first, understand second, fix third.
 - `mix ecto.setup` - Create and migrate database
 - `mix ecto.migrate` - Run database migrations
 - `mix ecto.reset` - Drop and recreate database
-- `mix seed` - Run idempotent seeds for the current deploy environment (`Core.Seeds.seed/0`)
+- `mix seed` - Run idempotent seeds for the current deploy environment (`Mica.Seeds.seed/0`)
 
 ### Testing
 - `mix test --warnings-as-errors` - Run all tests (ALWAYS use this)
@@ -448,7 +448,7 @@ Uses **GreenLight** framework with hierarchical permissions:
 ### Database
 - PostgreSQL with Ecto ORM
 - Migrations in `/priv/repo/migrations/`
-- Models use `use Core, :model` for common functionality
+- Models use `use Mica, :model` for common functionality
 - **Deferred-drop pattern**: when removing a `field(...)` from a schema, the DB column can stay behind and be dropped in a follow-up migration once the risk of any lingering reader has passed. Append a row to `core/docs/schema-deprecations.md` in the same PR so the debt is tracked.
 
 ### Frontend
@@ -459,9 +459,9 @@ Uses **GreenLight** framework with hierarchical permissions:
 
 ### Testing
 - Uses ExUnit with custom test cases:
-  - `Core.DataCase` for database tests
-  - `CoreWeb.ConnCase` for controller/LiveView tests
-- Factory functions in `Core.Factories` and system-specific factories
+  - `Mica.DataCase` for database tests
+  - `MicaWeb.ConnCase` for controller/LiveView tests
+- Factory functions in `Mica.Factories` and system-specific factories
 - Mocking with Mox for external dependencies
 - Signal testing with `Frameworks.Signal.TestHelper`
 
@@ -506,7 +506,7 @@ end
 
 ### Elixir Style Rules
 - **No alias grouping** - Each alias on separate line
-- **Always alias Systems modules** - Use `alias Systems.Paper` then `Paper.Model`, never `Systems.Paper.Model` directly in code
+- **Always alias Systems modules** - Use `alias Next.Systems.Paper` then `Paper.Model`, never `Next.Systems.Paper.Model` directly in code
 - Prefer single system alias: `alias Systems.Account` then use `Account.Model`
 - Follow existing naming patterns and file structures
 - **Prefer subfunctions over comments** - When a function is long or needs extensive comments, split it into smaller, well-named functions instead. Function names should be self-documenting and eliminate the need for comments explaining what the code does.
@@ -546,9 +546,9 @@ def process_data(list) when is_list(list), do: {:list, list}  # Wrong: same arit
 
 ## SaaS selection
 The build composes one SaaS on Mica:
-- `BUNDLE=next` (default) or `BUNDLE=self` picks the SaaS config that `config/config.exs` imports: `next/config/config.exs` or `mica_saas/config/config.exs`. Each sets `config :core, saas: Next.SaaS` or `Self.SaaS`, read at compile time.
+- `BUNDLE=next` (default) or `BUNDLE=self` picks the SaaS config that `config/config.exs` imports: `next/config/config.exs` or `mica_saas/config/config.exs`. Each sets `config :mica, saas: Next.SaaS` or `MicaSaas.SaaS`, read at compile time.
 - The SaaS module (`next/lib/saas.ex`, `mica_saas/lib/saas.ex`) lists its systems and carries the SaaS-level config: start pages, menus, title, signed-in pages, feature flag defaults.
-- A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
+- A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Systems.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
 - `config/test.exs` always builds Next. Run Self with `BUNDLE=self MIX_ENV=dev`.
 
 ## Build Warning Fix Rule

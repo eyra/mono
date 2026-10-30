@@ -2,9 +2,9 @@ defmodule Systems.Account.FeaturesViewBuilder do
   @moduledoc """
   Builder for FeaturesView that constructs the view model for user features editing.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Enums.Genders
+  alias Mica.Enums.Genders
   alias Frameworks.Pixel.Selector
   alias Systems.Account
 

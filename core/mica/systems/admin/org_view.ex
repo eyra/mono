@@ -1,7 +1,7 @@
 defmodule Systems.Admin.OrgView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.AlertBanner
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Grid

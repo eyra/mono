@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.MakeCrewMemberTaskDeletable do
+defmodule Mica.Repo.Migrations.MakeCrewMemberTaskDeletable do
   use Ecto.Migration
 
   def up do

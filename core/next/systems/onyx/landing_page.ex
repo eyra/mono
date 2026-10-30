@@ -1,12 +1,12 @@
-defmodule Systems.Onyx.LandingPage do
+defmodule Next.Systems.Onyx.LandingPage do
   use Systems.Content.Composer, :live_workspace
 
   import LiveNest.HTML
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Observatory
-  alias Systems.Onyx
+  alias Next.Systems.Onyx
 
   @impl true
   def get_authorization_context(params, session, socket) do
@@ -92,7 +92,7 @@ defmodule Systems.Onyx.LandingPage do
         %{assigns: %{vm: %{entities: entities}, model: model, history: history}} = socket
       ) do
     browser_view =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         get_browser_view_id(model),
         Onyx.BrowserView,
         history: history,

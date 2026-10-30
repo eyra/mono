@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPrerequisitesToPromotions do
+defmodule Mica.Repo.Migrations.AddPrerequisitesToPromotions do
   use Ecto.Migration
 
   def change do

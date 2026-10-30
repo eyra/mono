@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.PanlFinishedCTATest do
+defmodule NextWeb.Features.PanlFinishedCTATest do
   @moduledoc """
   Feature test for the post-launch Panl block on the finished screen.
 
@@ -11,12 +11,12 @@ defmodule CoreWeb.Features.PanlFinishedCTATest do
 
   The auth flow that runs after the "Join Panl" click (identify →
   verify → redeem) is exercised at the unit level in
-  `Next.Account.SessionControllerTest`. This test verifies the UI
+  `Next.Systems.Account.SessionControllerTest`. This test verifies the UI
   plumbing on the finished page — the right block state renders and
   the CTA points at the right destination.
   """
-  use CoreWeb.FeatureCase
-  use Core.FeatureFlags.Test
+  use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
   alias Systems.Affiliate
   alias Systems.Assignment

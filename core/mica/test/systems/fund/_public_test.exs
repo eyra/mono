@@ -1,5 +1,5 @@
 defmodule Systems.Fund.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Mox
   import Systems.Fund.TestHelper
 
@@ -9,7 +9,7 @@ defmodule Systems.Fund.PublicTest do
   }
 
   alias Systems.Payment.ProviderMock
-  alias Core.Factories
+  alias Mica.Factories
 
   setup :verify_on_exit!
 
@@ -408,14 +408,14 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 succeeded" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -441,14 +441,14 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 skipped: exceeding limit" do
     a_b_c_2021 =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2021", "1"],
         balance_credit: 10_000,
         balance_debit: 5000
       })
 
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -474,7 +474,7 @@ defmodule Systems.Fund.PublicTest do
 
   test "move_wallet_balance/4 skipped: from account does not exist" do
     a_b_c_2022 =
-      Core.Factories.insert!(:book_account, %{
+      Mica.Factories.insert!(:book_account, %{
         identifier: ["wallet", "a_b_c_2022", "1"],
         balance_credit: 0,
         balance_debit: 0
@@ -803,7 +803,7 @@ defmodule Systems.Fund.PublicTest do
 
       Fund.Public.get!(fund_id).available
       |> Ecto.Changeset.change(%{balance_debit: drain_amount + 100_000})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       assert {:error, :insufficient_fund} = approve_reward(key)
     end
@@ -911,7 +911,7 @@ defmodule Systems.Fund.PublicTest do
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
         |> Fund.Public.reject_reward(reward)
-        |> Core.Repo.commit()
+        |> Mica.Repo.commit()
 
       assert {:ok, %{noop: :pre, reject_status: %{status: :rejected}}} = result
       assert %{status: :rejected, deposit_id: nil} = Fund.Public.get_reward(key, [])
@@ -930,7 +930,7 @@ defmodule Systems.Fund.PublicTest do
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
         |> Fund.Public.reject_reward(reward)
-        |> Core.Repo.commit()
+        |> Mica.Repo.commit()
 
       assert {:error, :reject_guard, :reward_already_approved, _} = result
       assert %{status: :approved} = Fund.Public.get_reward(key, [])
@@ -946,7 +946,7 @@ defmodule Systems.Fund.PublicTest do
         Ecto.Multi.new()
         |> Ecto.Multi.run(:noop, fn _, _ -> {:ok, :pre} end)
         |> Fund.Public.reject_reward(reward)
-        |> Core.Repo.commit()
+        |> Mica.Repo.commit()
 
       assert {:ok, %{noop: :pre}} = result
       assert %{status: :rejected} = Fund.Public.get_reward(key, [])
@@ -1115,7 +1115,7 @@ defmodule Systems.Fund.PublicTest do
 
       assert %{status: :pending_payout} = Fund.Public.get_reward(reward_key(id), [])
 
-      [payout] = Core.Repo.all(Fund.PayoutModel)
+      [payout] = Mica.Repo.all(Fund.PayoutModel)
       assert payout.status == :pending
     end
 
@@ -1127,9 +1127,9 @@ defmodule Systems.Fund.PublicTest do
       # during this request's OPP readiness recheck. list_bank_accounts runs
       # inside recheck_payout_ready, just before lock_for_payout's compare-and-swap.
       expect(ProviderMock, :list_bank_accounts, fn _merchant_uid ->
-        Core.Repo.get!(Fund.RewardModel, id)
+        Mica.Repo.get!(Fund.RewardModel, id)
         |> Ecto.Changeset.change(%{status: :pending_payout})
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
         {:ok, [%{uid: "ba_ok", status: :verified, raw_status: "approved", verification_url: nil}]}
       end)
@@ -1140,7 +1140,7 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, :lock_failed} = Fund.Public.request_payout(user, "euro")
 
       # The losing attempt's payout insert was rolled back with the failed lock.
-      assert Core.Repo.all(Fund.PayoutModel) == []
+      assert Mica.Repo.all(Fund.PayoutModel) == []
     end
 
     test "ignores rewards in other statuses when computing the payout", %{user: user, fund: fund} do
@@ -1179,11 +1179,11 @@ defmodule Systems.Fund.PublicTest do
                status: :pending,
                provider_uid: "w_aggregate_1",
                failure_reason: nil
-             } = Core.Repo.reload!(payout)
+             } = Mica.Repo.reload!(payout)
 
       payout_id = payout.id
-      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r1_id)
-      assert %{payout_id: ^payout_id} = Core.Repo.get!(Fund.RewardModel, r2_id)
+      assert %{payout_id: ^payout_id} = Mica.Repo.get!(Fund.RewardModel, r1_id)
+      assert %{payout_id: ^payout_id} = Mica.Repo.get!(Fund.RewardModel, r2_id)
     end
 
     test "marks the Payout :failed (with reason) and detaches reverted rewards on a rejected transfer",
@@ -1198,11 +1198,11 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:error, {:opp_failed, _}} = Fund.Public.request_payout(user, "euro")
 
-      reward = Core.Repo.get!(Fund.RewardModel, r_id)
+      reward = Mica.Repo.get!(Fund.RewardModel, r_id)
       assert reward.status == :approved
       assert reward.payout_id == nil
 
-      [payout] = Core.Repo.all(Fund.PayoutModel)
+      [payout] = Mica.Repo.all(Fund.PayoutModel)
       assert payout.status == :failed
       assert payout.failure_reason =~ "transfer_rejected"
       assert payout.provider_uid == nil
@@ -1215,7 +1215,7 @@ defmodule Systems.Fund.PublicTest do
          %{user: user, fund: fund} do
       # Stranded: funds moved to the participant merchant, no withdrawal recorded.
       stranded =
-        Core.Repo.insert!(%Fund.PayoutModel{
+        Mica.Repo.insert!(%Fund.PayoutModel{
           user_id: user.id,
           amount_cents: 1000,
           currency: "eur",
@@ -1227,7 +1227,7 @@ defmodule Systems.Fund.PublicTest do
       locked =
         insert_reward(user, fund, 1000, :pending_payout)
         |> Ecto.Changeset.change(%{payout_id: stranded.id})
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # A newly-earned reward the participant would be shortchanged out of.
       fresh = insert_reward(user, fund, 500, :approved)
@@ -1250,19 +1250,19 @@ defmodule Systems.Fund.PublicTest do
       assert {:ok, _} = Fund.Public.request_payout(user, "euro")
 
       # Exactly one payout — the stranded one, now driven forward.
-      assert [%{id: id, provider_uid: "w_resumed"}] = Core.Repo.all(Fund.PayoutModel)
+      assert [%{id: id, provider_uid: "w_resumed"}] = Mica.Repo.all(Fund.PayoutModel)
       assert id == stranded.id
 
       # The locked reward stays with it; the fresh reward is untouched, to be paid
       # out on a later request once this payout resolves.
-      assert %{status: :pending_payout, payout_id: ^id} = Core.Repo.reload!(locked)
-      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+      assert %{status: :pending_payout, payout_id: ^id} = Mica.Repo.reload!(locked)
+      assert %{status: :approved, payout_id: nil} = Mica.Repo.reload!(fresh)
     end
 
     test "surfaces :manual_review for an unresolved awaiting-transfer payout, leaving rewards approved",
          %{user: user, fund: fund} do
       stranded =
-        Core.Repo.insert!(%Fund.PayoutModel{
+        Mica.Repo.insert!(%Fund.PayoutModel{
           user_id: user.id,
           amount_cents: 1000,
           currency: "eur",
@@ -1279,16 +1279,16 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, :manual_review} = Fund.Public.request_payout(user, "euro")
 
       # Still exactly one payout (the stranded one); the fresh reward is untouched.
-      assert [%{id: id}] = Core.Repo.all(Fund.PayoutModel)
+      assert [%{id: id}] = Mica.Repo.all(Fund.PayoutModel)
       assert id == stranded.id
-      assert %{status: :approved, payout_id: nil} = Core.Repo.reload!(fresh)
+      assert %{status: :approved, payout_id: nil} = Mica.Repo.reload!(fresh)
     end
 
     # A :failed payout that moved no money already released its lock, so it must
     # not block a fresh payout of the reverted (now :approved) rewards.
     test "starts a new payout when the only prior one failed before moving money",
          %{user: user, fund: fund} do
-      Core.Repo.insert!(%Fund.PayoutModel{
+      Mica.Repo.insert!(%Fund.PayoutModel{
         user_id: user.id,
         amount_cents: 1000,
         currency: "eur",
@@ -1312,7 +1312,7 @@ defmodule Systems.Fund.PublicTest do
     end
 
     defp reward_key(id) do
-      Core.Repo.get!(Fund.RewardModel, id).idempotence_key
+      Mica.Repo.get!(Fund.RewardModel, id).idempotence_key
     end
   end
 
@@ -1324,7 +1324,7 @@ defmodule Systems.Fund.PublicTest do
 
     defp stranded_payout(user, fund, attrs) do
       payout =
-        Core.Repo.insert!(
+        Mica.Repo.insert!(
           struct!(
             %Fund.PayoutModel{
               user_id: user.id,
@@ -1378,8 +1378,8 @@ defmodule Systems.Fund.PublicTest do
       # No create_withdrawal expectation: issuing one would be a second withdrawal.
       assert {:ok, _} = Fund.Public.resume_payout(payout)
 
-      assert %{status: :completed, provider_uid: "w_found"} = Core.Repo.reload!(payout)
-      assert %{status: :paid} = Core.Repo.reload!(reward)
+      assert %{status: :completed, provider_uid: "w_found"} = Mica.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(reward)
     end
 
     # :awaiting_withdrawal after a retry whose response was lost: the provider now
@@ -1425,8 +1425,8 @@ defmodule Systems.Fund.PublicTest do
 
       # Adopts the live current attempt and stays pending — not :failed (which would
       # trigger a double-paying retry).
-      assert %{status: :pending, provider_uid: "w_live_1"} = Core.Repo.reload!(payout)
-      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+      assert %{status: :pending, provider_uid: "w_live_1"} = Mica.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(reward)
     end
 
     # :awaiting_withdrawal, and no withdrawal was ever created. Resume must issue
@@ -1449,7 +1449,7 @@ defmodule Systems.Fund.PublicTest do
       end)
 
       assert {:ok, _} = Fund.Public.resume_payout(payout)
-      assert %{status: :pending, provider_uid: "w_new"} = Core.Repo.reload!(payout)
+      assert %{status: :pending, provider_uid: "w_new"} = Mica.Repo.reload!(payout)
     end
 
     # :withdrawal_retryable — a withdrawal failed after the money moved. Resume
@@ -1480,7 +1480,7 @@ defmodule Systems.Fund.PublicTest do
                withdrawal_attempt: 1,
                failure_reason: nil
              } =
-               Core.Repo.reload!(payout)
+               Mica.Repo.reload!(payout)
     end
 
     test "leaves an unconfirmed transfer with no charge for manual review", %{
@@ -1493,7 +1493,7 @@ defmodule Systems.Fund.PublicTest do
       expect(ProviderMock, :list_charges_to_merchant, fn "m_resume_1" -> {:ok, []} end)
 
       assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
-      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Mica.Repo.reload!(payout)
     end
 
     test "leaves an unconfirmed transfer whose charge never settled for manual review", %{
@@ -1522,7 +1522,7 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
 
       assert %{status: :pending, funds_committed_at: nil, transfer_uid: nil} =
-               Core.Repo.reload!(payout)
+               Mica.Repo.reload!(payout)
     end
 
     test "leaves a payout whose participant has no merchant for manual review", %{
@@ -1532,10 +1532,10 @@ defmodule Systems.Fund.PublicTest do
       {payout, _reward} =
         stranded_payout(user, fund, %{funds_committed_at: nil, provider_uid: nil})
 
-      user |> Ecto.Changeset.change(%{merchant_uid: nil}) |> Core.Repo.update!()
+      user |> Ecto.Changeset.change(%{merchant_uid: nil}) |> Mica.Repo.update!()
 
       assert {:error, :manual_review} = Fund.Public.resume_payout(payout)
-      assert %{status: :pending, funds_committed_at: nil} = Core.Repo.reload!(payout)
+      assert %{status: :pending, funds_committed_at: nil} = Mica.Repo.reload!(payout)
     end
 
     test "adopts a transfer found at the provider and issues the withdrawal", %{
@@ -1598,7 +1598,7 @@ defmodule Systems.Fund.PublicTest do
                transfer_uid: "trf_found",
                provider_uid: "w_after_adopt",
                funds_committed_at: %NaiveDateTime{}
-             } = Core.Repo.reload!(payout)
+             } = Mica.Repo.reload!(payout)
     end
 
     test "is a no-op for a healthy in-flight payout", %{user: user, fund: fund} do
@@ -1714,10 +1714,10 @@ defmodule Systems.Fund.PublicTest do
 
       assert :ok = Fund.Public.payout_eligibility(user, "euro")
 
-      [reward] = Core.Repo.all(Fund.RewardModel)
+      [reward] = Mica.Repo.all(Fund.RewardModel)
       assert reward.status == :approved
       assert reward.payout_id == nil
-      assert Core.Repo.all(Fund.PayoutModel) == []
+      assert Mica.Repo.all(Fund.PayoutModel) == []
     end
   end
 
@@ -1828,7 +1828,7 @@ defmodule Systems.Fund.PublicTest do
 
       assert :ok = Fund.Public.prepare_payout(user, "euro")
 
-      assert %{merchant_uid: "m_created_inline"} = Core.Repo.reload!(user)
+      assert %{merchant_uid: "m_created_inline"} = Mica.Repo.reload!(user)
     end
 
     test "creates a bank account when none exist for the merchant",
@@ -2000,7 +2000,7 @@ defmodule Systems.Fund.PublicTest do
       total = Enum.sum(amounts)
 
       payout =
-        Core.Repo.insert!(%Fund.PayoutModel{
+        Mica.Repo.insert!(%Fund.PayoutModel{
           user_id: user.id,
           amount_cents: total,
           currency: "eur",
@@ -2039,9 +2039,9 @@ defmodule Systems.Fund.PublicTest do
                  withdrawal(:completed, "completed")
                )
 
-      assert %{status: :paid} = Core.Repo.reload!(r1)
-      assert %{status: :paid} = Core.Repo.reload!(r2)
-      assert %{status: :completed} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(r1)
+      assert %{status: :paid} = Mica.Repo.reload!(r2)
+      assert %{status: :completed} = Mica.Repo.reload!(payout)
     end
 
     test "maps :failed to Payout :failed and leaves rewards :pending_payout",
@@ -2055,8 +2055,8 @@ defmodule Systems.Fund.PublicTest do
       # The transfer already funded the participant merchant, so the rewards stay
       # locked (:pending_payout) for reconciliation rather than reverting to
       # :approved (a re-payout would charge the platform again).
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
-      assert %{status: :failed, failure_reason: ^reason} = Core.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(r1)
+      assert %{status: :failed, failure_reason: ^reason} = Mica.Repo.reload!(payout)
     end
 
     test ~s(records the provider's own word, not the normalized atom, as the failure reason),
@@ -2072,7 +2072,7 @@ defmodule Systems.Fund.PublicTest do
       # :failed collapses OPP's "failed" and "disapproved"; the audit trail must
       # still say which one it actually was.
       assert reason =~ "disapproved"
-      assert %{status: :failed} = Core.Repo.reload!(payout)
+      assert %{status: :failed} = Mica.Repo.reload!(payout)
     end
 
     test ":pending is a no-op regardless of the provider's own word",
@@ -2088,8 +2088,8 @@ defmodule Systems.Fund.PublicTest do
       end
 
       # Nothing should have moved from the original :pending / :pending_payout state.
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
-      assert %{status: :pending} = Core.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(r1)
+      assert %{status: :pending} = Mica.Repo.reload!(payout)
     end
 
     test "returns {:ok, nil} and does nothing when the provider_uid is unknown" do
@@ -2107,15 +2107,15 @@ defmodule Systems.Fund.PublicTest do
       done = withdrawal(:completed, "completed")
 
       assert {:ok, _} = Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
-      assert %{status: :paid} = Core.Repo.reload!(r1)
+      assert %{status: :paid} = Mica.Repo.reload!(r1)
 
       # A second "completed" webhook must not flip the (now :paid) reward back
       # to :pending_payout or otherwise change state.
       assert {:ok, %Fund.PayoutModel{status: :completed}} =
                Fund.Public.apply_withdrawal_status("w_idempotent_completed", done)
 
-      assert %{status: :paid} = Core.Repo.reload!(r1)
-      assert %{status: :completed} = Core.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(r1)
+      assert %{status: :completed} = Mica.Repo.reload!(payout)
     end
 
     test "is idempotent: a stray late status after :failed does not re-transition",
@@ -2128,7 +2128,7 @@ defmodule Systems.Fund.PublicTest do
                  withdrawal(:failed, "failed")
                )
 
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(r1)
 
       # Late :completed must not flip a :failed payout to :completed or move
       # the still-locked reward.
@@ -2138,8 +2138,8 @@ defmodule Systems.Fund.PublicTest do
                  withdrawal(:completed, "completed")
                )
 
-      assert %{status: :pending_payout} = Core.Repo.reload!(r1)
-      assert %{status: :failed} = Core.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(r1)
+      assert %{status: :failed} = Mica.Repo.reload!(payout)
     end
   end
 
@@ -2155,7 +2155,7 @@ defmodule Systems.Fund.PublicTest do
       end)
     end
 
-    defp donation_of(user), do: Core.Repo.get_by!(Fund.DonationModel, user_id: user.id)
+    defp donation_of(user), do: Mica.Repo.get_by!(Fund.DonationModel, user_id: user.id)
 
     test "donates every approved reward and records the charge", %{donor: donor, euro: euro} do
       %{id: id1} = insert_reward(donor, euro, 600, :approved)
@@ -2170,8 +2170,8 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:ok, _donation} = Fund.Public.request_donation(donor, "euro")
 
-      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id1)
-      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id2)
+      assert %{status: :donated} = Mica.Repo.get!(Fund.RewardModel, id1)
+      assert %{status: :donated} = Mica.Repo.get!(Fund.RewardModel, id2)
 
       assert %{status: :completed, amount_cents: 1000, charge_uid: "chg_1"} = donation_of(donor)
     end
@@ -2186,8 +2186,8 @@ defmodule Systems.Fund.PublicTest do
 
       assert {:ok, _} = Fund.Public.request_donation(donor, "euro")
 
-      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, euro_id)
-      assert %{status: :approved} = Core.Repo.get!(Fund.RewardModel, other_id)
+      assert %{status: :donated} = Mica.Repo.get!(Fund.RewardModel, euro_id)
+      assert %{status: :approved} = Mica.Repo.get!(Fund.RewardModel, other_id)
     end
 
     # A donation has no floor: @payout_threshold_cents exists because
@@ -2197,7 +2197,7 @@ defmodule Systems.Fund.PublicTest do
       stub_partner_charge_ok()
 
       assert {:ok, _} = Fund.Public.request_donation(donor, "euro")
-      assert %{status: :donated} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :donated} = Mica.Repo.get!(Fund.RewardModel, id)
     end
 
     # No ProviderMock stub at all, so Mox raises if anything reaches OPP.
@@ -2221,7 +2221,7 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, {:opp_failed, %Systems.Payment.Error{}}} =
                Fund.Public.request_donation(donor, "euro")
 
-      assert %{status: :approved, donation_id: nil} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :approved, donation_id: nil} = Mica.Repo.get!(Fund.RewardModel, id)
       assert %{status: :failed} = donation_of(donor)
     end
 
@@ -2237,7 +2237,7 @@ defmodule Systems.Fund.PublicTest do
       assert {:error, {:opp_uncertain, %Systems.Payment.Error{}}} =
                Fund.Public.request_donation(donor, "euro")
 
-      assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :donating} = Mica.Repo.get!(Fund.RewardModel, id)
       assert %{status: :pending, charge_uid: nil} = donation_of(donor)
     end
 
@@ -2248,7 +2248,7 @@ defmodule Systems.Fund.PublicTest do
       donor: donor,
       euro: euro
     } do
-      Core.Repo.insert!(%Fund.DonationModel{
+      Mica.Repo.insert!(%Fund.DonationModel{
         user_id: donor.id,
         amount_cents: 1,
         currency: "eur",
@@ -2268,7 +2268,7 @@ defmodule Systems.Fund.PublicTest do
         end)
 
       assert log =~ "chg_taken"
-      assert %{status: :donating} = Core.Repo.get!(Fund.RewardModel, id)
+      assert %{status: :donating} = Mica.Repo.get!(Fund.RewardModel, id)
     end
   end
 
@@ -2280,6 +2280,6 @@ defmodule Systems.Fund.PublicTest do
 
     {1, _} =
       from(r in Fund.RewardModel, where: r.idempotence_key == ^key)
-      |> Core.Repo.update_all(set: [status: status, updated_at: DateTime.utc_now(:second)])
+      |> Mica.Repo.update_all(set: [status: status, updated_at: DateTime.utc_now(:second)])
   end
 end

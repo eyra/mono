@@ -1,14 +1,14 @@
 defmodule Systems.Support.TicketModel do
   use Ecto.Schema
   import Ecto.Changeset
-  require Core.Enums.TicketTypes
+  require Mica.Enums.TicketTypes
   alias Systems.Account.User
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   schema "helpdesk_tickets" do
     belongs_to(:user, User)
-    field(:type, Ecto.Enum, values: Core.Enums.TicketTypes.schema_values())
+    field(:type, Ecto.Enum, values: Mica.Enums.TicketTypes.schema_values())
     field(:description, :string)
     field(:title, :string)
     field(:completed_at, :utc_datetime)

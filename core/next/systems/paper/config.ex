@@ -1,4 +1,4 @@
-defmodule Systems.Paper.Config do
+defmodule Next.Systems.Paper.Config do
   @moduledoc """
   Runtime configuration for the Paper system.
   Provides access to paper import settings.
@@ -9,7 +9,7 @@ defmodule Systems.Paper.Config do
   Defaults to 100 if not configured.
   """
   def import_batch_size do
-    Core.Env.get(:paper, [])
+    Mica.Env.get(:paper, [])
     |> Keyword.get(:import_batch_size, 100)
   end
 
@@ -18,7 +18,7 @@ defmodule Systems.Paper.Config do
   Defaults to 30_000 (30 seconds) if not configured.
   """
   def import_batch_timeout do
-    Core.Env.get(:paper, [])
+    Mica.Env.get(:paper, [])
     |> Keyword.get(:import_batch_timeout, 30_000)
   end
 end

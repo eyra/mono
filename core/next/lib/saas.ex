@@ -1,22 +1,22 @@
 defmodule Next.SaaS do
   @moduledoc "Next, Eyra's SaaS on Mica."
-  use Core.SaaS
-  use Core.FeatureFlags
+  use Mica.SaaS
+  use Mica.FeatureFlags
 
   @impl true
   def systems do
-    Core.Systems.all() ++
+    Mica.Systems.all() ++
       [
-        Next.WellKnown.System,
-        Next.Account.System,
-        Next.E2E.System,
-        Next.Panl.System,
-        Systems.Graphite.System,
-        Systems.Onyx.System,
-        Systems.Student.System,
-        Systems.Zircon.System,
-        Systems.Paper.System,
-        Systems.Probe.System
+        Next.Systems.WellKnown.System,
+        Next.Systems.Account.System,
+        Next.Systems.E2E.System,
+        Next.Systems.Panl.System,
+        Next.Systems.Graphite.System,
+        Next.Systems.Onyx.System,
+        Next.Systems.Student.System,
+        Next.Systems.Zircon.System,
+        Next.Systems.Paper.System,
+        Next.Systems.Probe.System
       ]
   end
 
@@ -44,12 +44,12 @@ defmodule Next.SaaS do
   def start_pages, do: Next.StartPages
 
   @impl true
-  def menu_items, do: Next.Menu.Items
+  def menu_items, do: NextWeb.Menu.Items
 
   @impl true
-  def menu_builder(:workspace), do: Next.Layouts.Workspace.MenuBuilder
-  def menu_builder(:website), do: Next.Layouts.Website.MenuBuilder
-  def menu_builder(:stripped), do: Next.Layouts.Stripped.MenuBuilder
+  def menu_builder(:workspace), do: NextWeb.Layouts.Workspace.MenuBuilder
+  def menu_builder(:website), do: NextWeb.Layouts.Website.MenuBuilder
+  def menu_builder(:stripped), do: NextWeb.Layouts.Stripped.MenuBuilder
 
   @impl true
   def title, do: "Next"
@@ -66,7 +66,7 @@ defmodule Next.SaaS do
   @impl true
   def member_sign_in_page(return_to) do
     if feature_enabled?(:otp),
-      do: CoreWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
+      do: MicaWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
       else: "/user/signin"
   end
 end

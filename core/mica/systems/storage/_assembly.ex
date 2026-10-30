@@ -1,5 +1,5 @@
 defmodule Systems.Storage.Assembly do
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Storage
 
   def delete_endpoint_special(endpoint) do

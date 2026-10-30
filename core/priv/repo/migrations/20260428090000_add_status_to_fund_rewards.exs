@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddStatusToFundRewards do
+defmodule Mica.Repo.Migrations.AddStatusToFundRewards do
   use Ecto.Migration
 
   # Non-transactional so the index can build CONCURRENTLY without blocking writes.

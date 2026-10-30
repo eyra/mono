@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateCenterdataUser do
+defmodule Mica.Repo.Migrations.CreateCenterdataUser do
   use Ecto.Migration
 
   def change do

@@ -1,5 +1,5 @@
 defmodule Systems.Affiliate.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   @moduletag :capture_log
 

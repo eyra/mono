@@ -1,7 +1,7 @@
 defmodule Systems.Email.IntegrationTest do
   use ExUnit.Case, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Email.Factory
 
   describe "bamboo_phoenix 2.0 integration" do

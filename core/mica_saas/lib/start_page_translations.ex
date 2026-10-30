@@ -1,3 +1,3 @@
-defmodule Self.StartPageTranslations do
-  use Self.StartPages
+defmodule MicaSaas.StartPageTranslations do
+  use MicaSaas.StartPages
 end

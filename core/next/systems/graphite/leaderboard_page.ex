@@ -1,16 +1,16 @@
-defmodule Systems.Graphite.LeaderboardPage do
-  use CoreWeb, :live_view_fabric
-  use CoreWeb.Layouts.Stripped.Composer
+defmodule Next.Systems.Graphite.LeaderboardPage do
+  use MicaWeb, :live_view_fabric
+  use MicaWeb.Layouts.Stripped.Composer
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.Card
   alias Frameworks.Pixel.Hero
   alias Frameworks.Pixel.Align
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @impl true
   def get_authorization_context(%{"id" => leaderboard_id}, _session, _socket) do

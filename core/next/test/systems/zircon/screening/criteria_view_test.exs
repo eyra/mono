@@ -1,10 +1,10 @@
-defmodule Systems.Zircon.Screening.CriteriaViewTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.CriteriaViewTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Ecto.Query
 
-  alias Systems.Zircon
-  alias Systems.Zircon.Screening
+  alias Next.Systems.Zircon
+  alias Next.Systems.Zircon.Screening
 
   setup do
     ontology = Zircon.Factories.setup_ontology()
@@ -75,17 +75,17 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
       assert [%{}] =
-               Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+               Mica.Repo.all(
+                 from(taa in Next.Systems.Zircon.Screening.ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
+               Mica.Repo.all(
+                 from(t in Next.Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
                )
-               |> Core.Repo.preload(:annotations)
+               |> Mica.Repo.preload(:annotations)
     end
 
     test "Clicking on add criterion twice on same dimension fails", %{
@@ -107,17 +107,17 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_1_statement\""
 
       assert [%{}] =
-               Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+               Mica.Repo.all(
+                 from(taa in Next.Systems.Zircon.Screening.ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
+               Mica.Repo.all(
+                 from(t in Next.Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
                )
-               |> Core.Repo.preload(:annotations)
+               |> Mica.Repo.preload(:annotations)
     end
 
     test "Clicking on add criterion twice on different dimension succeeds", %{
@@ -138,17 +138,17 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       assert html =~ "<div><textarea id=\"annotation_form_criterion_form_1_statement\""
 
       assert [%{}, %{}] =
-               Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+               Mica.Repo.all(
+                 from(taa in Next.Systems.Zircon.Screening.ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: [%{}, %{}]}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
+               Mica.Repo.all(
+                 from(t in Next.Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
                )
-               |> Core.Repo.preload(:annotations)
+               |> Mica.Repo.preload(:annotations)
     end
 
     test "Clicking on delete criterion removes criterion", %{
@@ -170,17 +170,17 @@ defmodule Systems.Zircon.Screening.CriteriaViewTest do
       refute html =~ "<div><textarea id=\"annotation_form_criterion_form_0_statement\""
 
       assert [] =
-               Core.Repo.all(
-                 from(taa in Systems.Zircon.Screening.ToolAnnotationAssoc,
+               Mica.Repo.all(
+                 from(taa in Next.Systems.Zircon.Screening.ToolAnnotationAssoc,
                    where: taa.tool_id == ^tool.id
                  )
                )
 
       assert [%{annotations: []}] =
-               Core.Repo.all(
-                 from(t in Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
+               Mica.Repo.all(
+                 from(t in Next.Systems.Zircon.Screening.ToolModel, where: t.id == ^tool.id)
                )
-               |> Core.Repo.preload(:annotations)
+               |> Mica.Repo.preload(:annotations)
     end
   end
 end

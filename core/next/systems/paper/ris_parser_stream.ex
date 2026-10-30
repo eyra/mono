@@ -1,12 +1,12 @@
-defmodule Systems.Paper.RISParserStream do
+defmodule Next.Systems.Paper.RISParserStream do
   @moduledoc """
   Streaming RIS parser that processes records one at a time without loading
   the entire file into memory. Designed for handling large files with 100k+ references.
   """
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Paper.RISValidator
+  alias Next.Systems.Paper.RISValidator
 
   # Supported RIS reference types
   @supported_reference_types ["JOUR", "JFULL", "ABST", "INPR", "CPAPER", "THES"]

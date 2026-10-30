@@ -1,6 +1,6 @@
 defmodule Systems.Lab.DayListItemModelTest do
-  use Core.DataCase, async: true
-  alias Core.Factories
+  use Mica.DataCase, async: true
+  alias Mica.Factories
 
   alias Systems.{
     Lab

@@ -1,14 +1,14 @@
 defmodule Systems.Affiliate.Public do
   use Systems.Affiliate.Constants
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
 
   import Ecto.Query, warn: true
   import Ecto.Changeset
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
 
@@ -270,6 +270,6 @@ defmodule Systems.Affiliate.Public do
   end
 
   defp get_base_url do
-    Core.Env.get(:base_url)
+    Mica.Env.get(:base_url)
   end
 end

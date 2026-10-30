@@ -1,5 +1,5 @@
 defmodule Systems.Admin.ClientActivityView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text

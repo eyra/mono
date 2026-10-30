@@ -1,8 +1,8 @@
 defmodule Systems.Pool.QueriesTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   import Systems.Pool.Queries
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Pool
 
   describe "pool_query/0" do

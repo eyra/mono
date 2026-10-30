@@ -1,9 +1,9 @@
-defmodule Systems.Paper.ReferenceFileErrorModel do
+defmodule Next.Systems.Paper.ReferenceFileErrorModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_reference_file_error" do
     field(:error, :string)

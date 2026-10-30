@@ -1,7 +1,7 @@
-defmodule Systems.Paper.RISImportCommitJobTest do
-  use Core.DataCase
+defmodule Next.Systems.Paper.RISImportCommitJobTest do
+  use Mica.DataCase
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
   import Ecto.Query
   import Frameworks.Signal.TestHelper
 

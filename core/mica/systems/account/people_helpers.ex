@@ -2,7 +2,7 @@ defmodule Systems.Account.PeopleHelpers do
   @moduledoc """
   Shared helpers for building people/user display items with confirmation rows.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @doc """
   Builds a confirmation row map for self-removal UI.

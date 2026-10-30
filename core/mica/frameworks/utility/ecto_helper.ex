@@ -2,7 +2,7 @@ defmodule Frameworks.Utility.EctoHelper do
   import Ecto.Query, only: [from: 2]
   require Logger
   alias Ecto.{Multi, Changeset}
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
 
   def get_assoc(entity, assoc) when is_atom(assoc) do

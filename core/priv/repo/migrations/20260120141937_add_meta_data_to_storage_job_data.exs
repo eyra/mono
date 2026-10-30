@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMetaDataToStorageJobData do
+defmodule Mica.Repo.Migrations.AddMetaDataToStorageJobData do
   use Ecto.Migration
 
   def change do

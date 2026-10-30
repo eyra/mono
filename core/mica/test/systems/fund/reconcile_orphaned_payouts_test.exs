@@ -3,11 +3,11 @@ defmodule Systems.Fund.ReconcileOrphanedPayoutsTest do
   Provider→local pass: given the withdrawals and transfers the provider holds,
   flag the ones whose payout has no local row — the restore-orphan case.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock

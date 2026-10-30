@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.LeaderboardContentPage do
+defmodule Next.Systems.Graphite.LeaderboardContentPage do
   use Systems.Content.Composer, :management_page
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do

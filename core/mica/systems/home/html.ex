@@ -1,5 +1,5 @@
 defmodule Systems.Home.HTML do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.NumberIcon
 

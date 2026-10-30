@@ -75,7 +75,7 @@ defmodule Systems.Feldspar.S3 do
   end
 
   defp s3_settings do
-    Core.Env.fetch!(:feldspar)
+    Mica.Env.fetch!(:feldspar)
   end
 
   defp backend do

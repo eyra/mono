@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.Html do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   slot(:inner_block, required: true)
 

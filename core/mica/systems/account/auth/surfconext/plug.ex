@@ -40,7 +40,7 @@ end
 defmodule Systems.Account.Auth.Surfconext.CallbackController do
   require Logger
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
   import Systems.Account.Auth.Surfconext.PlugUtils
@@ -71,7 +71,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController do
     do: Auth.SSOHelpers.redirect_with_error(conn, :surfconext, error)
 
   defp do_authenticate(conn, params, session_params) do
-    config = config(:core) |> Keyword.put(:session_params, session_params)
+    config = config(:mica) |> Keyword.put(:session_params, session_params)
 
     {:ok, %{token: token}} = oidc_module(config).callback(config, params)
 

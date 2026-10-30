@@ -7,7 +7,7 @@ defmodule Systems.Org.AdminsModalViewBuilder do
   - people: Current org admins (owners)
   - users: Available users that can be added as admins
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
   alias Systems.Org

@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.ToolModelTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.{
     Alliance

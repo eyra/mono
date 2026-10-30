@@ -1,16 +1,16 @@
 defmodule Systems.Userflow.ModelTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Userflow
 
   describe "finished?/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       {:ok, user: user}
     end
 
     test "returns true when all steps have progress for the user" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.insert(:userflow)
       steps = Userflow.Factories.insert_list(3, :step, %{userflow: userflow})
 
@@ -26,14 +26,14 @@ defmodule Systems.Userflow.ModelTest do
     end
 
     test "returns false when not all steps have progress" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow_started(user)
       userflow = Repo.preload(userflow, steps: [:progress])
       refute Userflow.Model.finished?(userflow, user.id)
     end
 
     test "returns false when some steps have progress" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow()
       userflow = Repo.preload(userflow, :steps)
       [first_step | _] = Enum.sort_by(userflow.steps, & &1.order)
@@ -51,13 +51,13 @@ defmodule Systems.Userflow.ModelTest do
 
   describe "next_step/2" do
     test "returns nil when all steps are completed" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow_finished(user)
       assert nil == Userflow.Model.next_step(userflow, user.id)
     end
 
     test "returns the first step when no progress exists" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow()
       userflow = Repo.preload(userflow, steps: [:progress])
       [first_step | _] = Enum.sort_by(userflow.steps, & &1.order)
@@ -66,7 +66,7 @@ defmodule Systems.Userflow.ModelTest do
     end
 
     test "returns the next incomplete step" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.userflow()
       [first_step, second_step | _] = Enum.sort_by(userflow.steps, & &1.order)
 

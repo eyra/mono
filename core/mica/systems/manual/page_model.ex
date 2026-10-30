@@ -33,7 +33,7 @@ defmodule Systems.Manual.PageModel do
   def preload_graph(:userflow_step), do: [userflow_step: []]
 end
 
-defimpl Core.Persister, for: Systems.Manual.PageModel do
+defimpl Mica.Persister, for: Systems.Manual.PageModel do
   def save(_page, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :manual_page) do
       {:ok, %{manual_page: manual_page}} -> {:ok, manual_page}

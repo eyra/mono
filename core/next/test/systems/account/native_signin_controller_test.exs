@@ -1,9 +1,9 @@
-defmodule Next.Account.NativeSigninControllerTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Account.NativeSigninControllerTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
   use Bamboo.Test
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
@@ -160,7 +160,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       %{value: signed_token} = verify_conn.resp_cookies[@remember_me_cookie]
 
       status_conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
@@ -168,7 +168,7 @@ defmodule Next.Account.NativeSigninControllerTest do
       assert response(status_conn, 204) == ""
 
       account_conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/account")
@@ -452,13 +452,13 @@ defmodule Next.Account.NativeSigninControllerTest do
   defp unique_email(prefix), do: "#{prefix}-#{System.unique_integer([:positive])}@example.com"
 
   defp with_auth_methods(auth_methods) do
-    account = Application.get_env(:core, :account, [])
+    account = Application.get_env(:mica, :account, [])
     original = Keyword.fetch!(account, :auth_methods)
-    Application.put_env(:core, :account, Keyword.put(account, :auth_methods, auth_methods))
+    Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, auth_methods))
 
     on_exit(fn ->
-      account = Application.get_env(:core, :account, [])
-      Application.put_env(:core, :account, Keyword.put(account, :auth_methods, original))
+      account = Application.get_env(:mica, :account, [])
+      Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, original))
     end)
   end
 end

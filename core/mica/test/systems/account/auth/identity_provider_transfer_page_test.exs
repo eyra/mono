@@ -1,9 +1,9 @@
 defmodule Systems.Account.Auth.IdentityProviderTransferPageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias Core.{Factories, Repo}
+  alias Mica.{Factories, Repo}
   alias Systems.Account.Auth.{Centerdata, Email, Google, Surfconext}
 
   test "renders the transfer details from the pending transition", %{conn: conn} do

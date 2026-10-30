@@ -1,9 +1,9 @@
 defmodule Systems.Account.TermsAndPrivacyViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
 

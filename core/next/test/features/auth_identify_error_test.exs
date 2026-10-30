@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.AuthIdentifyErrorTest do
+defmodule NextWeb.Features.AuthIdentifyErrorTest do
   @moduledoc """
   An error message under the email field on the sign-in code page stays fully
   visible: a message that wraps to more lines pushes the continue button down
@@ -6,10 +6,10 @@ defmodule CoreWeb.Features.AuthIdentifyErrorTest do
   the code entry page keep 24px between the field and the continue button, and
   with an error 8px above the message and 24px below it.
   """
-  use CoreWeb.FeatureCase
-  use Core.FeatureFlags.Test
+  use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
 

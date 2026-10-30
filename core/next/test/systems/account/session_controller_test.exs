@@ -1,12 +1,12 @@
-defmodule Next.Account.SessionControllerTest do
+defmodule Next.Systems.Account.SessionControllerTest do
   @moduledoc """
   Integration coverage for the redeem step of the email-first OTP flow.
   """
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
-  alias CoreWeb.Endpoint
-  alias Next.Account.AuthCodeVerifyPage
+  alias MicaWeb.Endpoint
+  alias Next.Systems.Account.AuthCodeVerifyPage
 
   @token_salt "otp-redeem"
   @remember_me_cookie "_core_web_user_remember_me"
@@ -48,7 +48,7 @@ defmodule Next.Account.SessionControllerTest do
       assert session_token = get_session(conn, :user_token)
 
       assert %{context: "mobile_session", last_used_at: %NaiveDateTime{}} =
-               Core.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
+               Mica.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
 
       assert %{value: signed_token, max_age: 5_184_000, http_only: true} =
                conn.resp_cookies[@remember_me_cookie]
@@ -73,10 +73,10 @@ defmodule Next.Account.SessionControllerTest do
         |> NaiveDateTime.truncate(:second)
         |> NaiveDateTime.add(-30 * 24 * 60 * 60, :second)
 
-      Core.Repo.update_all(Systems.Account.UserTokenModel, set: [last_used_at: last_used_at])
+      Mica.Repo.update_all(Systems.Account.UserTokenModel, set: [last_used_at: last_used_at])
 
       conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/identify")
@@ -85,7 +85,7 @@ defmodule Next.Account.SessionControllerTest do
       assert %{max_age: 5_184_000} = conn.resp_cookies[@remember_me_cookie]
 
       assert %{last_used_at: renewed_at} =
-               Core.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
+               Mica.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
 
       assert NaiveDateTime.compare(renewed_at, last_used_at) == :gt
     end
@@ -103,7 +103,7 @@ defmodule Next.Account.SessionControllerTest do
       %{value: signed_token} = mobile_conn.resp_cookies[@remember_me_cookie]
 
       conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> put_req_header("user-agent", @mobile_user_agent)
         |> delete("/user/session")
@@ -121,7 +121,7 @@ defmodule Next.Account.SessionControllerTest do
       assert session_token = get_session(conn, :user_token)
 
       assert %{context: "session", last_used_at: nil} =
-               Core.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
+               Mica.Repo.get_by(Systems.Account.UserTokenModel, token: session_token)
 
       refute conn.resp_cookies[@remember_me_cookie]
     end
@@ -142,7 +142,7 @@ defmodule Next.Account.SessionControllerTest do
       %{value: signed_token} = mobile_conn.resp_cookies[@remember_me_cookie]
 
       conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
 
@@ -390,6 +390,6 @@ defmodule Next.Account.SessionControllerTest do
 
   defp user_count do
     import Ecto.Query
-    Core.Repo.aggregate(from(u in Systems.Account.User), :count, :id)
+    Mica.Repo.aggregate(from(u in Systems.Account.User), :count, :id)
   end
 end

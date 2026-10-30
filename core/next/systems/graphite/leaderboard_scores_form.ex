@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.LeaderboardScoresForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, accept: ~w(.csv)
+defmodule Next.Systems.Graphite.LeaderboardScoresForm do
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, accept: ~w(.csv)
 
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

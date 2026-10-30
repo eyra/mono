@@ -5,7 +5,7 @@ defmodule Systems.Account.FeaturesTab do
   """
   @behaviour Systems.Account.Tab
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -22,7 +22,7 @@ defmodule Systems.Account.FeaturesTab do
     features_context = LiveContext.extend(live_context, %{show_title: true})
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         :features_view,
         Account.FeaturesView,
         live_context: features_context

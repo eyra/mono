@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenamePendingPayoutNextAction do
+defmodule Mica.Repo.Migrations.RenamePendingPayoutNextAction do
   use Ecto.Migration
 
   @old "Elixir.Systems.Fund.NextActions.PendingPayout"

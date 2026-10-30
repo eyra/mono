@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.SubmissionOverview do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.SubmissionOverview do
+  use MicaWeb, :live_component_fabric
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 
@@ -51,8 +51,8 @@ defmodule Systems.Graphite.SubmissionOverview do
        }) do
     summary =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
       |> Macro.camelize()
 
     %{

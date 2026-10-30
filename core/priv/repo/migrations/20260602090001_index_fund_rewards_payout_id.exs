@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.IndexFundRewardsPayoutId do
+defmodule Mica.Repo.Migrations.IndexFundRewardsPayoutId do
   use Ecto.Migration
 
   @disable_ddl_transaction true

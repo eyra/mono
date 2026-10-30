@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UserVerified do
+defmodule Mica.Repo.Migrations.UserVerified do
   use Ecto.Migration
 
   def up do

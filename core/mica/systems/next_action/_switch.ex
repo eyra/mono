@@ -1,7 +1,7 @@
 defmodule Systems.NextAction.Switch do
   use Frameworks.Signal.Handler
 
-  alias CoreWeb.Endpoint
+  alias MicaWeb.Endpoint
 
   alias Systems.{
     NextAction

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameStudentPool do
+defmodule Mica.Repo.Migrations.RenameStudentPool do
   use Ecto.Migration
 
   def up do

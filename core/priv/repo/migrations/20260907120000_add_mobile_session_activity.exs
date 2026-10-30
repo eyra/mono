@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMobileSessionActivity do
+defmodule Mica.Repo.Migrations.AddMobileSessionActivity do
   use Ecto.Migration
 
   def change do

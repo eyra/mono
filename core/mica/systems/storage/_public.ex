@@ -1,10 +1,10 @@
 defmodule Systems.Storage.Public do
-  use Core, :public
+  use Mica, :public
   require Logger
 
   alias Ecto.Multi
   alias Ecto.Changeset
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
   alias Systems.Rate
   alias Systems.Storage
@@ -219,7 +219,7 @@ defmodule Systems.Storage.Public do
   end
 
   defp temp_file_store do
-    Core.Env.get(:temp_file_store)[:module]
+    Mica.Env.get(:temp_file_store)[:module]
   end
 
   @doc """
@@ -232,7 +232,7 @@ defmodule Systems.Storage.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Storage.EndpointModel do
+defimpl Mica.Persister, for: Systems.Storage.EndpointModel do
   def save(_endpoint, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :storage_endpoint) do
       {:ok, %{storage_endpoint: storage_endpoint}} -> {:ok, storage_endpoint}
@@ -241,7 +241,7 @@ defimpl Core.Persister, for: Systems.Storage.EndpointModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Storage.Yoda.EndpointModel do
+defimpl Mica.Persister, for: Systems.Storage.Yoda.EndpointModel do
   def save(_endpoint, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :yoda_endpoint) do
       {:ok, %{yoda_endpoint: yoda_endpoint}} -> {:ok, yoda_endpoint}

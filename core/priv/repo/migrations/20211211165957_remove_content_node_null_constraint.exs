@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RemoveContentNodeNullConstraint do
+defmodule Mica.Repo.Migrations.RemoveContentNodeNullConstraint do
   use Ecto.Migration
 
   @tables [:lab_tools, :survey_tools, :data_donation_tools, :promotions, :pool_submissions]

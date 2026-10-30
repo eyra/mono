@@ -1,9 +1,9 @@
 defmodule Systems.Crew.Factories do
-  use Core, :auth
-  alias CoreWeb.UI.Timestamp
+  use Mica, :auth
+  alias MicaWeb.UI.Timestamp
 
   def create_member(crew, user, attrs \\ %{}) do
-    Core.Factories.insert!(:crew_member, Map.merge(%{crew: crew, user: user}, attrs))
+    Mica.Factories.insert!(:crew_member, Map.merge(%{crew: crew, user: user}, attrs))
   end
 
   def create_task(crew, member, [_ | _] = identifier, opts \\ []) do
@@ -17,7 +17,7 @@ defmodule Systems.Crew.Factories do
 
     auth_node = auth_module().prepare_node(member.user, :owner)
 
-    Core.Factories.insert!(:crew_task, %{
+    Mica.Factories.insert!(:crew_task, %{
       identifier: identifier,
       crew: crew,
       auth_node: auth_node,

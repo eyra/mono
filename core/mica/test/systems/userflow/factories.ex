@@ -1,7 +1,7 @@
 defmodule Systems.Userflow.Factories do
-  use ExMachina.Ecto, repo: Core.Repo
+  use ExMachina.Ecto, repo: Mica.Repo
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Userflow
 
   def userflow_factory do
@@ -28,13 +28,13 @@ defmodule Systems.Userflow.Factories do
     %{userflow | steps: steps}
   end
 
-  def userflow_started(user \\ Core.Factories.insert!(:member)) do
+  def userflow_started(user \\ Mica.Factories.insert!(:member)) do
     userflow = %{steps: steps} = userflow()
     insert(:progress, %{user: user, step: Enum.at(steps, 0)})
     userflow |> Repo.preload(steps: [:progress])
   end
 
-  def userflow_finished(user \\ Core.Factories.insert!(:member)) do
+  def userflow_finished(user \\ Mica.Factories.insert!(:member)) do
     userflow = %{steps: steps} = userflow()
 
     for step <- steps do
@@ -47,7 +47,7 @@ defmodule Systems.Userflow.Factories do
   @doc """
   Creates a step with associated progress records for multiple users.
   """
-  def step__progress(user \\ Core.Factories.insert!(:member)) do
+  def step__progress(user \\ Mica.Factories.insert!(:member)) do
     step = insert(:step)
     progress = insert(:progress, %{user: user, step: step})
     %{step | progress: [progress]}

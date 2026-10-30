@@ -1,7 +1,7 @@
 defmodule Systems.Instruction.GeneralForm do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Content
   alias Systems.Instruction
@@ -45,7 +45,7 @@ defmodule Systems.Instruction.GeneralForm do
       |> Instruction.ToolModel.changeset(%{})
       |> Ecto.Changeset.put_assoc(:pages, [page])
 
-    {:ok, tool} = Core.Persister.save(tool, changeset)
+    {:ok, tool} = Mica.Persister.save(tool, changeset)
 
     assign(socket, tool: tool)
   end

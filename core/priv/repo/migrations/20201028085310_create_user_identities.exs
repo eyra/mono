@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateUserIdentities do
+defmodule Mica.Repo.Migrations.CreateUserIdentities do
   use Ecto.Migration
 
   def change do

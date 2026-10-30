@@ -204,9 +204,9 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp publisher do
     %{
-      "@id" => CoreWeb.Endpoint.url(),
+      "@id" => MicaWeb.Endpoint.url(),
       "@type" => "Organization",
-      "name" => CoreWeb.Meta.bundle_title()
+      "name" => MicaWeb.Meta.bundle_title()
     }
   end
 
@@ -314,7 +314,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   # Read at call time: runtime.*.exs overrides this from STORAGE_UPLOAD_MAX_SIZE.
   defp max_asset_bytes do
-    Core.Env.fetch!(CoreWeb.FileUploader)
+    Mica.Env.fetch!(MicaWeb.FileUploader)
     |> Keyword.fetch!(:max_file_size)
   end
 
@@ -356,7 +356,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp header_image_url(%Assignment.InfoModel{image_id: image_id}) do
     {width, height} = @header_image_size
-    Core.ImageHelpers.get_image_info(image_id, width, height).url
+    Mica.ImageHelpers.get_image_info(image_id, width, height).url
   end
 
   defp privacy_statement(%Assignment.Model{privacy_doc: %{ref: ref}}),
@@ -471,7 +471,7 @@ defmodule Systems.Assignment.SetupExporter do
   end
 
   defp image_url(image) do
-    case Core.ImageHelpers.decode_image_info(image) do
+    case Mica.ImageHelpers.decode_image_info(image) do
       %{url: url} -> url
       nil -> nil
     end

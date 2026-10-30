@@ -1,8 +1,8 @@
 defmodule Systems.Fund.RewardModelTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
 
   describe "status field" do

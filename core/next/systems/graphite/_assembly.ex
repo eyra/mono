@@ -1,14 +1,14 @@
-defmodule Systems.Graphite.Assembly do
-  use Core, :auth
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Graphite.Assembly do
+  use Mica, :auth
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
 
   alias Frameworks.Signal
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Project
   alias Systems.Assignment
 

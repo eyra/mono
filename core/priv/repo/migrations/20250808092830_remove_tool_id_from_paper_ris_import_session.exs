@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RemoveToolIdFromPaperRisImportSession do
+defmodule Mica.Repo.Migrations.RemoveToolIdFromPaperRisImportSession do
   use Ecto.Migration
 
   def change do

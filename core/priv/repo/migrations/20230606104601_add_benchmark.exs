@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddBenchmark do
+defmodule Mica.Repo.Migrations.AddBenchmark do
   use Ecto.Migration
 
   def up do

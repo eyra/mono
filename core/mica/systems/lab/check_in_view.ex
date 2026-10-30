@@ -1,6 +1,6 @@
 defmodule Systems.Lab.CheckInView do
-  use CoreWeb, :live_component_fabric
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :live_component_fabric
+  use Gettext, backend: MicaWeb.Gettext
   require Logger
 
   import Frameworks.Pixel.Form

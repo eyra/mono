@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.AffiliateView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   alias Systems.Affiliate
 

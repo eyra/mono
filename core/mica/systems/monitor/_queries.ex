@@ -2,7 +2,7 @@ defmodule Systems.Monitor.Queries do
   # import Frameworks.Utility.Query, only: [build: 3]
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Systems.Monitor
 

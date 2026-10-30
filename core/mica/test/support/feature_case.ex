@@ -1,4 +1,4 @@
-defmodule CoreWeb.FeatureCase do
+defmodule MicaWeb.FeatureCase do
   @moduledoc """
   This module defines the test case to be used by
   browser-based feature tests using Wallaby.
@@ -8,7 +8,7 @@ defmodule CoreWeb.FeatureCase do
 
   ## Usage
 
-      use CoreWeb.FeatureCase
+      use MicaWeb.FeatureCase
 
   ## Running tests
 
@@ -37,10 +37,10 @@ defmodule CoreWeb.FeatureCase do
       use Wallaby.Feature
 
       import Wallaby.Query
-      import CoreWeb.FeatureCase
+      import MicaWeb.FeatureCase
 
-      alias Core.Factories
-      alias Core.Repo
+      alias Mica.Factories
+      alias Mica.Repo
 
       # Feature tests drive a real headless Chrome via chromedriver. Under
       # full-suite load chromedriver intermittently takes 30–60s to ack a
@@ -183,10 +183,10 @@ defmodule CoreWeb.FeatureCase do
   Returns the session and the user.
   """
   def sign_in_as_new_user(session) do
-    password = Core.Factories.valid_user_password()
+    password = Mica.Factories.valid_user_password()
 
     user =
-      Core.Factories.insert!(:member, %{
+      Mica.Factories.insert!(:member, %{
         password: password,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       })
@@ -202,7 +202,7 @@ defmodule CoreWeb.FeatureCase do
   def create_confirmed_user(email, password, opts \\ []) do
     creator = Keyword.get(opts, :creator, false)
 
-    Core.Factories.insert!(:member, %{
+    Mica.Factories.insert!(:member, %{
       email: email,
       password: password,
       confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
@@ -226,7 +226,7 @@ defmodule CoreWeb.FeatureCase do
   """
   defmacro retry_stale(do: block) do
     quote do
-      CoreWeb.FeatureCase.do_retry_stale(fn -> unquote(block) end)
+      MicaWeb.FeatureCase.do_retry_stale(fn -> unquote(block) end)
     end
   end
 

@@ -46,15 +46,15 @@ defmodule Frameworks.Signal.Private do
   end
 
   # The SaaS's handlers, unless a test overrides them per process or with
-  # `config :core, :signal, handlers: [...]` (module names as atoms or strings).
+  # `config :mica, :signal, handlers: [...]` (module names as atoms or strings).
   defp signal_handlers do
     case Process.get(:signal_handlers_override) || override_from_config() do
-      nil -> Core.SaaS.signal_handlers()
+      nil -> Mica.SaaS.signal_handlers()
       handlers -> Enum.map(handlers, &Module.concat([&1]))
     end
   end
 
   defp override_from_config do
-    Core.Env.get(:signal, []) |> Keyword.get(:handlers)
+    Mica.Env.get(:signal, []) |> Keyword.get(:handlers)
   end
 end

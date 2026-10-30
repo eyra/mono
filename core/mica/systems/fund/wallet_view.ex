@@ -1,8 +1,8 @@
 defmodule Systems.Fund.WalletView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Text
-  import CoreWeb.UI.ProgressBar
+  import MicaWeb.UI.ProgressBar
 
   attr(:items, :list, required: true)
 

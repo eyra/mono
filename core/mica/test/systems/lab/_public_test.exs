@@ -1,7 +1,7 @@
 defmodule Systems.Lab.PublicTest do
-  use Core.DataCase, async: true
-  alias Core.Factories
-  alias CoreWeb.UI.Timestamp
+  use Mica.DataCase, async: true
+  alias Mica.Factories
+  alias MicaWeb.UI.Timestamp
 
   alias Systems.{
     Lab

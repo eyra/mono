@@ -1,9 +1,9 @@
-defmodule Self.Account.SessionController do
-  use CoreWeb,
+defmodule MicaSaas.Systems.Account.SessionController do
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
 
@@ -45,7 +45,7 @@ defmodule Self.Account.SessionController do
   end
 
   defp do_redeem_otp(conn, token) do
-    case Self.Account.AuthCodeVerifyPage.decode_redeem_token(token) do
+    case MicaSaas.Systems.Account.AuthCodeVerifyPage.decode_redeem_token(token) do
       {:ok, %{user_id: nil, email: email} = payload} ->
         register_new_email_user(conn, email, payload)
 

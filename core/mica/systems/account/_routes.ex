@@ -1,4 +1,4 @@
-defmodule CoreWeb.Live.User.Routes do
+defmodule MicaWeb.Live.User.Routes do
   defmacro routes() do
     quote do
       scope "/user", Systems.Account do
@@ -46,9 +46,9 @@ defmodule CoreWeb.Live.User.Routes do
         live("/:idp/transfer", IdentityProviderTransferPage)
       end
 
-      require Core.Env
+      require Mica.Env
 
-      if Core.Env.compile_env(:enable_e2e_support, false) do
+      if Mica.Env.compile_env(:enable_e2e_support, false) do
         scope "/auth", Systems.Account.Auth.Mock do
           pipe_through([:browser])
           live("/mock", SigninPage)

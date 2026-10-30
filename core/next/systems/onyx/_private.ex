@@ -1,9 +1,9 @@
-defmodule Systems.Onyx.Private do
-  alias Core.Repo
-  alias Core.Authentication
-  alias CoreWeb.UI.Timestamp
-  alias Systems.Ontology
-  alias Systems.Annotation
+defmodule Next.Systems.Onyx.Private do
+  alias Mica.Repo
+  alias Mica.Authentication
+  alias MicaWeb.UI.Timestamp
+  alias Next.Systems.Ontology
+  alias Next.Systems.Annotation
 
   def map_to_card(%{entity: %Ecto.Association.NotLoaded{}} = model, type) do
     map_to_card(Repo.preload(model, :entity), type)
@@ -23,7 +23,7 @@ defmodule Systems.Onyx.Private do
       title: phrase,
       tags: ["Concept"],
       info: "Created #{Timestamp.humanize(inserted_at)} by #{entity_name}",
-      model: {Systems.Ontology.ConceptModel, id}
+      model: {Next.Systems.Ontology.ConceptModel, id}
     }
   end
 
@@ -51,7 +51,7 @@ defmodule Systems.Onyx.Private do
       title: title,
       tags: ["Predicate"],
       info: "Created #{Timestamp.humanize(inserted_at)} by #{entity_name}",
-      model: {Systems.Ontology.PredicateModel, id}
+      model: {Next.Systems.Ontology.PredicateModel, id}
     }
   end
 
@@ -78,7 +78,7 @@ defmodule Systems.Onyx.Private do
       title: statement,
       tags: ["Annotation", type.phrase] ++ reference_summaries,
       info: "Created #{Timestamp.humanize(inserted_at)} by #{entity_name}",
-      model: {Systems.Annotation.Model, id}
+      model: {Next.Systems.Annotation.Model, id}
     }
   end
 

@@ -1,7 +1,7 @@
 defmodule Systems.Desktop.PageBuilder do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Utility.ViewModelBuilder
   alias Systems.NextAction
@@ -42,9 +42,9 @@ defmodule Systems.Desktop.PageBuilder do
   end
 
   # The SaaS's sections, unless a test overrides them with
-  # `config :core, Systems.Desktop, sections: [...]`.
+  # `config :mica, Systems.Desktop, sections: [...]`.
   defp section_modules do
-    Core.Env.get(Systems.Desktop, [])
-    |> Keyword.get_lazy(:sections, &Core.SaaS.desktop_sections/0)
+    Mica.Env.get(Systems.Desktop, [])
+    |> Keyword.get_lazy(:sections, &Mica.SaaS.desktop_sections/0)
   end
 end

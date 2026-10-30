@@ -2,7 +2,7 @@ defmodule Systems.Advert.Themes do
   @moduledoc """
   Defines themes used to categorize adverts.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:themes,
        [
          :marketing,

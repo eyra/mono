@@ -1,7 +1,7 @@
 defmodule Systems.Account.Auth.Apple.Test do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
 
   describe "get_user_by_sub/1" do
     test "get a user by their subject id" do

@@ -1,9 +1,9 @@
 defmodule Systems.Org.OwnersViewTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
 
   describe "OwnersView" do
@@ -19,8 +19,8 @@ defmodule Systems.Org.OwnersViewTest do
       owner2 = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["owners_view_org"]})
 
-      Core.Authorization.assign_role(owner1, org, :owner)
-      Core.Authorization.assign_role(owner2, org, :owner)
+      Mica.Authorization.assign_role(owner1, org, :owner)
+      Mica.Authorization.assign_role(owner2, org, :owner)
 
       {:ok, view, _html} =
         live_isolated(conn, Org.OwnersView,

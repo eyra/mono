@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddNotificationLog do
+defmodule Mica.Repo.Migrations.AddNotificationLog do
   use Ecto.Migration
 
   def change do

@@ -1,18 +1,21 @@
-defmodule Systems.Annotation.Pattern.Helpers do
+defmodule Next.Systems.Annotation.Pattern.Helpers do
   defmacro __using__(_opts) do
     quote do
-      use Systems.Annotation.Constants
+      use Next.Systems.Annotation.Constants
 
-      import Systems.Annotation.Queries
-      import Systems.Annotation.Public, only: [insert_annotation!: 4, obtain_annotation_ref!: 1]
-      import Systems.Ontology.Public, only: [obtain_concept!: 2, obtain_ontology_ref!: 1]
+      import Next.Systems.Annotation.Queries
 
-      alias Core.Repo
-      alias Systems.Annotation
-      alias Systems.Annotation.Pattern.MissingFieldError
-      alias Systems.Ontology
-      alias Systems.Ontology.ConceptModel
-      alias Systems.Ontology.PredicateModel
+      import Next.Systems.Annotation.Public,
+        only: [insert_annotation!: 4, obtain_annotation_ref!: 1]
+
+      import Next.Systems.Ontology.Public, only: [obtain_concept!: 2, obtain_ontology_ref!: 1]
+
+      alias Mica.Repo
+      alias Next.Systems.Annotation
+      alias Next.Systems.Annotation.Pattern.MissingFieldError
+      alias Next.Systems.Ontology
+      alias Next.Systems.Ontology.ConceptModel
+      alias Next.Systems.Ontology.PredicateModel
       alias Systems.Account.User
 
       def query_annotation(type_phrase, statement, entity, reference_target) do

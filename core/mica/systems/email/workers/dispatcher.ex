@@ -1,7 +1,7 @@
 defmodule Systems.Email.Dispatcher do
   use Oban.Worker, queue: :email_dispatchers
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
 
   @impl Oban.Worker
   def perform(%Oban.Job{

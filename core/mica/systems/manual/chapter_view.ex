@@ -3,11 +3,11 @@ defmodule Systems.Manual.ChapterView do
     Chapter View divided into Desktop and Mobile views.
   """
 
-  use CoreWeb, :live_component_fabric
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :live_component_fabric
+  use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Manual.Html, only: [chapter_desktop: 1, chapter_mobile: 1]
-  import Core.ImageHelpers, only: [decode_image_info: 1]
+  import Mica.ImageHelpers, only: [decode_image_info: 1]
 
   alias Systems.Userflow
 

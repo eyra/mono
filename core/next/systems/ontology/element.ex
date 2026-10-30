@@ -1,4 +1,4 @@
-defprotocol Systems.Ontology.Element do
+defprotocol Next.Systems.Ontology.Element do
   @moduledoc """
   A protocol for elements in the knowledge graph.
   """

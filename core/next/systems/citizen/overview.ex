@@ -1,5 +1,5 @@
-defmodule Systems.Citizen.Overview do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Citizen.Overview do
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
@@ -7,10 +7,8 @@ defmodule Systems.Citizen.Overview do
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Empty
 
-  alias Systems.{
-    Citizen,
-    Pool
-  }
+  alias Next.Systems.Citizen
+  alias Systems.Pool
 
   # Handle Search Bar Update
   @impl true

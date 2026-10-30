@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddScreeningSession do
+defmodule Mica.Repo.Migrations.AddScreeningSession do
   use Ecto.Migration
 
   def change do

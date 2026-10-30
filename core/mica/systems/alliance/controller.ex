@@ -1,7 +1,7 @@
 defmodule Systems.Alliance.Controller do
-  use CoreWeb,
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   def callback(conn, %{"id" => _id}) do
     conn

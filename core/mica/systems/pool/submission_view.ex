@@ -1,11 +1,11 @@
 defmodule Systems.Pool.SubmissionView do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
   import Frameworks.Pixel.Form
 
-  import CoreWeb.UI.Timestamp,
+  import MicaWeb.UI.Timestamp,
     only: [
       now: 0,
       one_week_after: 1,

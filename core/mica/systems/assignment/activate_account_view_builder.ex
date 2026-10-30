@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ActivateAccountViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
 

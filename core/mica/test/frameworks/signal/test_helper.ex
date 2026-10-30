@@ -10,7 +10,7 @@ defmodule Frameworks.Signal.TestHelper do
       setup do
         Frameworks.Signal.TestHelper.override_signal_handlers([
           Frameworks.Signal.TestHelper,
-          Systems.Paper.Switch
+          Next.Systems.Paper.Switch
         ])
 
         on_exit(fn ->
@@ -39,18 +39,18 @@ defmodule Frameworks.Signal.TestHelper do
   Must be called from within a test setup block or test case.
 
   Options:
-    - `except: Systems.Paper.Switch` - Also keep the specified switch active
-    - `except: [Systems.Paper.Switch, Systems.Assignment.Switch]` - Keep multiple switches active
+    - `except: Next.Systems.Paper.Switch` - Also keep the specified switch active
+    - `except: [Next.Systems.Paper.Switch, Systems.Assignment.Switch]` - Keep multiple switches active
 
   Examples:
       setup do
-        isolate_signals(except: [Systems.Zircon.Switch])
+        isolate_signals(except: [Next.Systems.Zircon.Switch])
         # No need for on_exit - it's handled automatically
       end
   """
   def isolate_signals(opts \\ []) do
     # Save original config
-    original_config = Application.get_env(:core, :signal)
+    original_config = Application.get_env(:mica, :signal)
 
     # Always include TestRecorder and TestCatchAll
     base_handlers = [
@@ -81,14 +81,14 @@ defmodule Frameworks.Signal.TestHelper do
 
     # Set the new configuration
     new_config = Keyword.put(original_config || [], :handlers, new_handlers)
-    Application.put_env(:core, :signal, new_config)
+    Application.put_env(:mica, :signal, new_config)
 
     # Also set process-local for the test process itself
     Process.put(:signal_handlers_override, new_handlers)
 
     # Register cleanup callback
     ExUnit.Callbacks.on_exit(fn ->
-      Application.put_env(:core, :signal, original_config || [])
+      Application.put_env(:mica, :signal, original_config || [])
       restore_signal_handlers()
     end)
 

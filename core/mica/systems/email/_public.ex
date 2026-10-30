@@ -1,5 +1,5 @@
 defmodule Systems.Email.Public do
-  use Core, :public
+  use Mica, :public
   import Bamboo.Email
   import Bamboo.Phoenix
 
@@ -10,7 +10,7 @@ defmodule Systems.Email.Public do
   def base_email do
     new_email()
     |> from(
-      Core.Env.fetch!(Systems.Email.Mailer)
+      Mica.Env.fetch!(Systems.Email.Mailer)
       |> Keyword.fetch!(:default_from_email)
     )
     |> put_layout({Systems.Email.EmailLayoutHTML, :email})

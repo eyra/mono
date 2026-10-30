@@ -3,19 +3,19 @@ defmodule Systems.Lab.ToolModel do
   use Frameworks.Utility.Model
   use Frameworks.Utility.Schema
 
-  require Core.Enums.Themes
+  require Mica.Enums.Themes
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Lab
   alias Systems.Workflow
 
-  require Core.Env
-  @tool_directors Core.Env.compile_env(:tool_directors)
+  require Mica.Env
+  @tool_directors Mica.Env.compile_env(:tool_directors)
 
   schema "lab_tools" do
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :lab_tool_id)
 
@@ -84,7 +84,7 @@ defmodule Systems.Lab.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Systems.Lab
     def key(_), do: :lab

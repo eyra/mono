@@ -6,10 +6,10 @@ defmodule Systems.Admin.SystemViewBuilder do
   - Bank account management
   - Citizen pool management
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Fund
-  alias Systems.Citizen
+  alias Next.Systems.Citizen
 
   def view_model(_model, assigns) do
     bank_accounts = Map.get(assigns, :bank_accounts, [])

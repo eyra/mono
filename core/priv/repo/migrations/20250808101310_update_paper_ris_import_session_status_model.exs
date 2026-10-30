@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdatePaperRisImportSessionStatusModel do
+defmodule Mica.Repo.Migrations.UpdatePaperRisImportSessionStatusModel do
   use Ecto.Migration
 
   def up do

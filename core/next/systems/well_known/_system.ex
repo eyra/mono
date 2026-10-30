@@ -1,13 +1,13 @@
-defmodule Next.WellKnown.System do
+defmodule Next.Systems.WellKnown.System do
   @moduledoc "The `/.well-known` files of Next's domains, such as the iOS app-site association."
-  use Core.System
+  use Mica.System
 
   def override_routes do
     quote do
-      scope "/", Next do
+      scope "/", Next.Systems do
         get(
           "/.well-known/apple-app-site-association",
-          WellKnownController,
+          WellKnown.Controller,
           :apple_app_site_association
         )
       end

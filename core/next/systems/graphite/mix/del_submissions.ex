@@ -1,13 +1,13 @@
-defmodule Mix.Tasks.Core.Graphite.Del.Submissions do
+defmodule Mix.Tasks.Next.Graphite.Del.Submissions do
   @moduledoc """
   Remove Submissions generated with the generate submissions command.
 
   Usage:
-    $ mix core.graphite.del.submissions PREFIX
+    $ mix next.graphite.del.submissions PREFIX
   """
   use Mix.Task
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @shortdoc "Remove Graphite submissions"
   def run(args) do

@@ -7,10 +7,10 @@ defmodule Systems.Payment.ControllerTest do
   here we set `:skip_webhook_verification` so the assertions stay on the
   routing + downstream-effect side of the controller.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Mox
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
 
@@ -19,10 +19,10 @@ defmodule Systems.Payment.ControllerTest do
   setup :verify_on_exit!
 
   setup do
-    Application.put_env(:core, :skip_webhook_verification, true)
+    Application.put_env(:mica, :skip_webhook_verification, true)
 
     on_exit(fn ->
-      Application.put_env(:core, :skip_webhook_verification, false)
+      Application.put_env(:mica, :skip_webhook_verification, false)
     end)
 
     currency = Fund.Factories.create_currency("ctrl_currency", :legal, "ƒ", 2)
@@ -34,7 +34,7 @@ defmodule Systems.Payment.ControllerTest do
 
   defp insert_pending_payout(user, fund, amount, provider_uid) do
     payout =
-      Core.Repo.insert!(%Fund.PayoutModel{
+      Mica.Repo.insert!(%Fund.PayoutModel{
         user_id: user.id,
         amount_cents: amount,
         currency: "eur",
@@ -82,8 +82,8 @@ defmodule Systems.Payment.ControllerTest do
       conn = post_webhook(conn, "withdrawal.status.changed", "w_ctrl_completed")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :completed} = Core.Repo.reload!(payout)
-      assert %{status: :paid} = Core.Repo.reload!(reward)
+      assert %{status: :completed} = Mica.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(reward)
     end
 
     test ~s(routes the underscore variant "withdrawal.status_changed" OPP actually sends),
@@ -98,8 +98,8 @@ defmodule Systems.Payment.ControllerTest do
       conn = post_webhook(conn, "withdrawal.status_changed", "w_ctrl_underscore")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :completed} = Core.Repo.reload!(payout)
-      assert %{status: :paid} = Core.Repo.reload!(reward)
+      assert %{status: :completed} = Mica.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(reward)
     end
 
     test ~s(routes the real "merchant.withdrawal.status.changed" type OPP actually sends),
@@ -121,8 +121,8 @@ defmodule Systems.Payment.ControllerTest do
       conn = post_webhook(conn, "merchant.withdrawal.status.changed", "w_ctrl_merchant_prefixed")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :completed} = Core.Repo.reload!(payout)
-      assert %{status: :paid} = Core.Repo.reload!(reward)
+      assert %{status: :completed} = Mica.Repo.reload!(payout)
+      assert %{status: :paid} = Mica.Repo.reload!(reward)
     end
 
     test ~s(routes "failed" to Fund.Public, :failed payout, rewards stay :pending_payout),
@@ -136,9 +136,9 @@ defmodule Systems.Payment.ControllerTest do
       conn = post_webhook(conn, "withdrawal.status.changed", "w_ctrl_failed")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :failed, failure_reason: reason} = Core.Repo.reload!(payout)
+      assert %{status: :failed, failure_reason: reason} = Mica.Repo.reload!(payout)
       assert reason =~ "failed"
-      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(reward)
     end
 
     test "returns 200 and leaves state untouched when get_withdrawal fails",
@@ -154,8 +154,8 @@ defmodule Systems.Payment.ControllerTest do
       # OPP retries failed webhooks; we acknowledge with 200 so the next
       # delivery can be processed when the provider is reachable again.
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :pending} = Core.Repo.reload!(payout)
-      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+      assert %{status: :pending} = Mica.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(reward)
     end
 
     test "a non-terminal withdrawal status leaves the payout pending",
@@ -172,8 +172,8 @@ defmodule Systems.Payment.ControllerTest do
       conn = post_webhook(conn, "merchant.withdrawal.status.changed", "w_ctrl_non_terminal")
 
       assert json_response(conn, 200) == %{"status" => "ok"}
-      assert %{status: :pending} = Core.Repo.reload!(payout)
-      assert %{status: :pending_payout} = Core.Repo.reload!(reward)
+      assert %{status: :pending} = Mica.Repo.reload!(payout)
+      assert %{status: :pending_payout} = Mica.Repo.reload!(reward)
     end
   end
 

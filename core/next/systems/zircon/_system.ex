@@ -1,5 +1,5 @@
-defmodule Systems.Zircon.System do
-  use Core.System
+defmodule Next.Systems.Zircon.System do
+  use Mica.System
 
-  def signal_handlers, do: [Systems.Zircon.Switch]
+  def signal_handlers, do: [Next.Systems.Zircon.Switch]
 end

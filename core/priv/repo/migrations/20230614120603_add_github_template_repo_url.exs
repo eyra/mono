@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddGithubTemplateRepoUrl do
+defmodule Mica.Repo.Migrations.AddGithubTemplateRepoUrl do
   use Ecto.Migration
 
   def up do

@@ -1,5 +1,5 @@
 defmodule Systems.Account.OnboardingControllerTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
 
   alias Systems.Account.OnboardingController
 
@@ -87,7 +87,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       # Verify using the same salt and endpoint
       result =
         Phoenix.Token.verify(
-          CoreWeb.Endpoint,
+          MicaWeb.Endpoint,
           "onboarding_token",
           token,
           max_age: 300
@@ -102,7 +102,7 @@ defmodule Systems.Account.OnboardingControllerTest do
 
       {:ok, user_id} =
         Phoenix.Token.verify(
-          CoreWeb.Endpoint,
+          MicaWeb.Endpoint,
           "onboarding_token",
           token,
           max_age: 300

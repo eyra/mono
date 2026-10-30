@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddArchivedAtToOrgNodes do
+defmodule Mica.Repo.Migrations.AddArchivedAtToOrgNodes do
   use Ecto.Migration
 
   def change do

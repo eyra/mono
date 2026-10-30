@@ -1,5 +1,5 @@
 defmodule Systems.Org.ItemView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.ClickableCard
   import Frameworks.Pixel.Tag

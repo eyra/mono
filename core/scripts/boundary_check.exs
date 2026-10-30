@@ -9,8 +9,8 @@
 #   1. a file in one root references a module defined in a file in a forbidden
 #      root (compile, export or runtime reference, from `mix xref graph`), or
 #   2. a file names a namespace of a forbidden root that xref cannot see (for
-#      example a Registry name such as Systems.Paper.ImportRegistry in mica/, an
-#      :"Elixir.…" atom, or a module or `config :core, :<system>` key in config/), or
+#      example a Registry name such as Next.Systems.Paper.ImportRegistry in mica/, an
+#      :"Elixir.…" atom, or a module or `config :mica, :<system>` key in config/), or
 #   3. a file under mica/ or config/ contains a PaNL, VU or Eyra literal,
 # unless boundary_allowlist.exs lists the file for that kind. Each entry also
 # records the referenced files, the module names or the number of literal

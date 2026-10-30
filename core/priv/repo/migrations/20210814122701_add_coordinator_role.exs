@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddCoordinatorRole do
+defmodule Mica.Repo.Migrations.AddCoordinatorRole do
   use Ecto.Migration
 
   def change do

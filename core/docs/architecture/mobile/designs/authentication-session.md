@@ -212,22 +212,22 @@ Both flows use the same code and session functions, so they cannot drift apart:
   accounts to their provider).
 - Users: unknown emails are registered as participants (`creator: false`); a
   provisional user (one that never had a real email) signed in on the same
-  session gets the email linked instead (`Next.Account.OtpSignin`). External and
+  session gets the email linked instead (`Next.Systems.Account.OtpSignin`). External and
   affiliate sessions are signed out first (`Systems.Account.Plug`), as on the
   web, so the email is never linked into them.
-- `return_to`: same-site paths only (`CoreWeb.ReturnTo.sanitize/1`).
+- `return_to`: same-site paths only (`MicaWeb.ReturnTo.sanitize/1`).
 - The code email is the web flow's, in the locale from the session or
   `Accept-Language`.
 
 ### Where the code lives
 
 The mobile session and the `NextApp` client are Next's, so the calls live in
-Next: `Next.Account.NativeSigninController`, `Next.Account.NativeSigninGuard`
-(CSRF and client checks) and `Next.Account.OtpSignin` (steps shared with the
+Next: `Next.Systems.Account.NativeSigninController`, `Next.Systems.Account.NativeSigninGuard`
+(CSRF and client checks) and `Next.Systems.Account.OtpSignin` (steps shared with the
 LiveView pages and the redeem step), in `next/systems/account/`. Their routes and
-the `:native_signin` pipeline are in `Next.Account.System`. In Mica,
+the `:native_signin` pipeline are in `Next.Systems.Account.System`. In Mica,
 `Account.UserAuth.log_in_user_without_redirect/3` starts a session of the
-requested type without redirecting, and `CoreWeb.ReturnTo.sanitize/1` keeps only
+requested type without redirecting, and `MicaWeb.ReturnTo.sanitize/1` keeps only
 same-site paths.
 
 ## Identity providers in the sign-in sheet
@@ -353,11 +353,11 @@ signed in to the account the provider returned. After a `200` the app reruns
 
 ### Where this code lives
 
-In Next: `Next.Account.NativeProviderController` (start and callback URL),
-`Next.Account.NativeHandoff` (the cookie, the token, and the redeem checks) and
+In Next: `Next.Systems.Account.NativeProviderController` (start and callback URL),
+`Next.Systems.Account.NativeHandoff` (the cookie, the token, and the redeem checks) and
 `NativeSigninController.redeem/2`. In Mica, the Google, SURFconext, Centerdata
 and mock flows and the move-your-account confirm and decline end through
 `Systems.Account.SignInHandoff`, which asks the SaaS's sign-in handoffs
-(`Core.System.sign_in_handoffs/0`) first; other sign-ins don't.
+(`Mica.System.sign_in_handoffs/0`) first; other sign-ins don't.
 `Account.Public.generate_one_time_token/2` and `take_one_time_token/3` keep the
 single-use half of the token in `users_tokens`.

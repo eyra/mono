@@ -1,5 +1,5 @@
 defmodule Systems.Project.Form do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.{
     Project
@@ -65,7 +65,7 @@ defmodule Systems.Project.Form do
   # Submit
 
   defp submit_form(%{assigns: %{project: project, changeset: changeset}} = socket) do
-    case Core.Persister.save(project, changeset) do
+    case Mica.Persister.save(project, changeset) do
       {:ok, _} ->
         socket |> finish()
 

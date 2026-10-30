@@ -1,13 +1,13 @@
 defmodule Systems.Assignment.Private do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
 
   import Ecto.Query, only: [where: 3]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
@@ -170,7 +170,7 @@ defmodule Systems.Assignment.Private do
   end
 
   defp config() do
-    Core.Env.get(:assignment)
+    Mica.Env.get(:assignment)
   end
 
   def connector_popup_module(:storage), do: Assignment.ConnectorPopupStorage

@@ -74,7 +74,7 @@ end
 ```elixir
 # This attempts to allow certain switches through
 # BUT remember it still only works in test process!
-isolate_signals(except: [Systems.Paper.Switch])
+isolate_signals(except: [Next.Systems.Paper.Switch])
 ```
 
 ### Testing Multi-Based Functions
@@ -231,7 +231,7 @@ end
 
 **Why this matters:**
 - The view's `dependencies()` function declares what it needs (e.g., `[:current_user, :locale, ...]`)
-- The `CoreWeb.Live.Hook.Context` hook extracts these from LiveContext and assigns to socket
+- The `MicaWeb.Live.Hook.Context` hook extracts these from LiveContext and assigns to socket
 - Event handlers often pattern match on `%{assigns: %{locale: locale}}` - this fails without LiveContext
 - Without LiveContext, the view model may render but event handlers will fail with "no function clause matching"
 
@@ -261,7 +261,7 @@ setup do
   isolate_signals()
 
   # Or allow specific switches
-  isolate_signals(except: [Systems.Paper.Switch])
+  isolate_signals(except: [Next.Systems.Paper.Switch])
 
   # Always clean up
   on_exit(fn ->
@@ -298,7 +298,7 @@ defp signal_handlers do
   case Process.get(:signal_handlers_override) || override_from_config() do
     nil ->
       IO.puts("PID #{inspect(self())}: Using default handlers")
-      Core.SaaS.signal_handlers()
+      Mica.SaaS.signal_handlers()
     override ->
       IO.puts("PID #{inspect(self())}: Using override: #{inspect(override)}")
       # ...
@@ -312,8 +312,8 @@ end
 For complex signal flows, create focused integration tests:
 ```elixir
 # core/next/test/systems/zircon/screening/abort_prompting_integration_test.exs
-defmodule Systems.Zircon.Screening.AbortPromptingIntegrationTest do
-  use CoreWeb.ConnCase, async: false  # async: false for signal tests
+defmodule Next.Systems.Zircon.Screening.AbortPromptingIntegrationTest do
+  use MicaWeb.ConnCase, async: false  # async: false for signal tests
 
   describe "abort from prompting phase" do
     test "complete flow", %{conn: conn} do
@@ -336,7 +336,7 @@ Eyra has four test categories. They live in different directories, have differen
 
 | Category | Directory | What it answers | Speed | External systems |
 |---|---|---|---|---|
-| **Unit** | `core/{mica,next}/test/systems/...`, `core/mica/test/core_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
+| **Unit** | `core/{mica,next}/test/systems/...`, `core/mica/test/mica_web/...` | "Does this function / changeset / state-machine clause behave correctly, including edge cases and error branches?" | ms | mocked via Mox |
 | **Feature (Wallaby)** | `core/{mica,next}/test/features/` | "Does this user journey work end-to-end through the UI, happy path?" | seconds | mocked via Mox |
 | **E2E (Playwright)** | `core/test/e2e/` | "Does the deployed system work in a real browser, with real external integrations (real OPP sandbox, real Feldspar, real storage)?" | tens of seconds | real |
 | **Smoke (Playwright)** | `core/test/smoke/` | "Did the latest deploy survive its own boot? Are the critical endpoints reachable?" | seconds | real |

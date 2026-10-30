@@ -1,8 +1,8 @@
 defmodule Frameworks.Pixel.Tabbed do
   @moduledoc false
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
-  import CoreWeb.UI.FunctionComponent
+  import MicaWeb.UI.FunctionComponent
   alias Frameworks.Pixel.Button
 
   defp get_tab(:seperated, tab, index), do: Map.merge(tab, %{type: :seperated, index: index})

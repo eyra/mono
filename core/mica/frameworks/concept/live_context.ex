@@ -45,7 +45,7 @@ defmodule Frameworks.Concept.LiveContext do
 
   Embedded live views declare their dependencies:
 
-      on_mount({CoreWeb.Live.Hook.Context, [:crew, :current_user]})
+      on_mount({MicaWeb.Live.Hook.Context, [:crew, :current_user]})
 
   The hook extracts these from context and assigns to socket.assigns.
 

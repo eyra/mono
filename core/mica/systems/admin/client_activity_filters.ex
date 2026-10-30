@@ -1,4 +1,4 @@
 defmodule Systems.Admin.ClientActivityFilters do
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:admin_client_activity_filters, [:this_year, :published]}
 end

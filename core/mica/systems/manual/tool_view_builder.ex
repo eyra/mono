@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ToolViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Manual
@@ -32,7 +32,7 @@ defmodule Systems.Manual.ToolViewBuilder do
         user_state_namespace: [:manual, manual_id]
       })
 
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "manual_view",
       Manual.View,
       live_context: context

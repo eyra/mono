@@ -6,11 +6,11 @@ defmodule Frameworks.Signal.PublicTest do
   describe "without any handlers" do
     setup do
       # Save original config and clear all handlers
-      original_config = Application.get_env(:core, :signal)
-      Application.put_env(:core, :signal, handlers: [])
+      original_config = Application.get_env(:mica, :signal)
+      Application.put_env(:mica, :signal, handlers: [])
 
       on_exit(fn ->
-        Application.put_env(:core, :signal, original_config || [])
+        Application.put_env(:mica, :signal, original_config || [])
       end)
     end
 
@@ -26,11 +26,11 @@ defmodule Frameworks.Signal.PublicTest do
   describe "with TestForceSwitch only" do
     setup do
       # Set only TestForceSwitch as handler
-      original_config = Application.get_env(:core, :signal)
-      Application.put_env(:core, :signal, handlers: ["Frameworks.Signal.TestForceSwitch"])
+      original_config = Application.get_env(:mica, :signal)
+      Application.put_env(:mica, :signal, handlers: ["Frameworks.Signal.TestForceSwitch"])
 
       on_exit(fn ->
-        Application.put_env(:core, :signal, original_config || [])
+        Application.put_env(:mica, :signal, original_config || [])
       end)
     end
 

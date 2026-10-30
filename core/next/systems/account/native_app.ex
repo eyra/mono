@@ -1,4 +1,4 @@
-defmodule Next.Account.NativeApp do
+defmodule Next.Systems.Account.NativeApp do
   @moduledoc """
   Recognises requests from the Next native apps by their
   `NextApp/<version> iOS|Android` user-agent suffix.

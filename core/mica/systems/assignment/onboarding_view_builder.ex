@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.OnboardingViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Content
 

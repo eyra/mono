@@ -1,7 +1,7 @@
 defmodule Systems.Affiliate.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   import Ecto.Changeset
 
@@ -37,7 +37,7 @@ defmodule Systems.Affiliate.Model do
   def preload_graph(:up), do: []
   def preload_graph(:down), do: []
 
-  defimpl Core.Persister do
+  defimpl Mica.Persister do
     def save(_affiliate, changeset) do
       case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :affiliate) do
         {:ok, %{affiliate: affiliate}} -> {:ok, affiliate}

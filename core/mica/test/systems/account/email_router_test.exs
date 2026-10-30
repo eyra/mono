@@ -1,15 +1,15 @@
 defmodule Systems.Account.EmailRouterTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.EmailRouter
 
   setup do
-    account = Application.get_env(:core, :account, [])
+    account = Application.get_env(:mica, :account, [])
     original = Keyword.fetch!(account, :auth_methods)
 
     Application.put_env(
-      :core,
+      :mica,
       :account,
       Keyword.put(account, :auth_methods, %{
         surfconext: %{provider: true, satellite: true},
@@ -19,8 +19,8 @@ defmodule Systems.Account.EmailRouterTest do
     )
 
     on_exit(fn ->
-      account = Application.get_env(:core, :account, [])
-      Application.put_env(:core, :account, Keyword.put(account, :auth_methods, original))
+      account = Application.get_env(:mica, :account, [])
+      Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, original))
     end)
 
     :ok

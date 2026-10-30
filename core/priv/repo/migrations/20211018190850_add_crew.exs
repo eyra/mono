@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddCrew do
+defmodule Mica.Repo.Migrations.AddCrew do
   use Ecto.Migration
 
   def up do

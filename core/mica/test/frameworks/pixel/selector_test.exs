@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.SelectorTest.View do
-  use CoreWeb, :live_view_fabric
+  use MicaWeb, :live_view_fabric
 
   alias Frameworks.Pixel.Selector
 
@@ -66,7 +66,7 @@ defmodule Frameworks.Pixel.SelectorTest.View do
 end
 
 defmodule Frameworks.Pixel.SelectorTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.LiveViewTest
 
   alias Frameworks.Pixel.SelectorTest.View

@@ -1,13 +1,13 @@
 defmodule Systems.Account.UserForm do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.AlertBanner
 
-  require Core.Env
-  @policy_urls Core.Env.compile_env(:policy_urls)
+  require Mica.Env
+  @policy_urls Mica.Env.compile_env(:policy_urls)
 
   defp policy_link(key, label) when is_atom(key) do
     url = @policy_urls[key]

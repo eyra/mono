@@ -6,12 +6,12 @@ defmodule Systems.Feldspar.PlugTest do
   alias Systems.Feldspar.Plug
 
   setup do
-    upload_path = Application.get_env(:core, :upload_path)
-    backend = Application.fetch_env!(:core, :feldspar) |> Access.fetch!(:backend)
+    upload_path = Application.get_env(:mica, :upload_path)
+    backend = Application.fetch_env!(:mica, :feldspar) |> Access.fetch!(:backend)
 
     on_exit(fn ->
-      Application.put_env(:core, :upload_path, upload_path)
-      Application.put_env(:core, :feldspar, backend: backend)
+      Application.put_env(:mica, :upload_path, upload_path)
+      Application.put_env(:mica, :feldspar, backend: backend)
     end)
 
     folder_name = "temp_#{:crypto.strong_rand_bytes(16) |> Base.encode16()}"
@@ -26,8 +26,8 @@ defmodule Systems.Feldspar.PlugTest do
       File.rm_rf!(tmp_dir)
     end)
 
-    Application.put_env(:core, :upload_path, tmp_dir)
-    Application.put_env(:core, :feldspar, backend: Systems.Feldspar.LocalFS)
+    Application.put_env(:mica, :upload_path, tmp_dir)
+    Application.put_env(:mica, :feldspar, backend: Systems.Feldspar.LocalFS)
 
     {:ok, tmp_dir: tmp_dir}
   end
@@ -43,7 +43,7 @@ defmodule Systems.Feldspar.PlugTest do
   end
 
   test "call with other backends doesn't serve static content" do
-    Application.put_env(:core, :feldspar, backend: Systems.Feldspar.FakeBackend)
+    Application.put_env(:mica, :feldspar, backend: Systems.Feldspar.FakeBackend)
 
     opts = Plug.init(at: "/web_apps")
     conn = Plug.call(conn(:get, "/web_apps/plug_test.txt"), opts)

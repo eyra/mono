@@ -12,7 +12,7 @@ defmodule Systems.Notify.Dispatcher do
   """
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
 
   alias Systems.Notify

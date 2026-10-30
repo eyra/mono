@@ -1,5 +1,5 @@
 defmodule Systems.Manual.Builder.ChapterForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.Manual
 

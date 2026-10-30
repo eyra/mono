@@ -7,7 +7,7 @@
 # `mix config.snapshot --update`.
 import Config
 
-alias Core.RuntimeConfig
+alias Mica.RuntimeConfig
 
 if config_env() == :dev do
   env_file = Path.expand("../.env", __DIR__)
@@ -39,11 +39,11 @@ if config_env() == :dev do
     end)
   end
 
-  config :core, base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000"
+  config :mica, base_url: System.get_env("APP_DOMAIN") || "http://localhost:4000"
 
-  config :core, :payment_webhook_base_url, System.get_env("PAYMENT_WEBHOOK_BASE_URL")
+  config :mica, :payment_webhook_base_url, System.get_env("PAYMENT_WEBHOOK_BASE_URL")
 
-  config :core, Systems.Payment.Provider.OPP,
+  config :mica, Systems.Payment.Provider.OPP,
     base_url: System.get_env("OPP_BASE_URL") || "https://api-sandbox.onlinebetaalplatform.nl/v1",
     api_key: System.get_env("OPP_API_KEY"),
     notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
@@ -52,12 +52,12 @@ if config_env() == :dev do
 
   # Without PAYMENT_PROVIDER, dev.exs keeps payments on the local provider.
   if System.get_env("PAYMENT_PROVIDER") do
-    config :core, payment_provider: Core.Config.payment_provider()
+    config :mica, payment_provider: Mica.Config.payment_provider()
   end
 
   # Unset means no fallback: an untranslated string renders its msgid, which in
   # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
-  config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
+  config :mica, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
 end
 
 if config_env() == :prod do
@@ -71,7 +71,7 @@ if config_env() == :prod do
   scheme = "https"
   base_url = "#{scheme}://#{app_domain}"
 
-  config :core,
+  config :mica,
     domain: app_domain,
     name: app_name,
     base_url: base_url,
@@ -79,20 +79,20 @@ if config_env() == :prod do
 
   # Deployment environment for seed modules. Defaults to :prod for safety.
   deploy_env = System.get_env("DEPLOY_ENV", "prod") |> String.to_atom()
-  config :core, :deploy_env, deploy_env
+  config :mica, :deploy_env, deploy_env
 
   # UserCheck email validation API key
   if usercheck_api_key = System.get_env("USERCHECK_API_KEY") do
-    config :core, Frameworks.UserCheck, api_key: usercheck_api_key
+    config :mica, Frameworks.UserCheck, api_key: usercheck_api_key
   end
 
-  config :core, :features, RuntimeConfig.features(env, deploy_env)
+  config :mica, :features, RuntimeConfig.features(env, deploy_env)
 
-  config :core,
+  config :mica,
          :admins,
          System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
-  config :core, CoreWeb.Endpoint,
+  config :mica, MicaWeb.Endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),
@@ -104,11 +104,11 @@ if config_env() == :prod do
 
   # PHOENIX LIVE UPLOAD
 
-  config :core, CoreWeb.FileUploader,
+  config :mica, MicaWeb.FileUploader,
     max_file_size: System.get_env("STORAGE_UPLOAD_MAX_SIZE", "100000000") |> String.to_integer()
 
   # OBAN: the queues, plugins and crons come from Mica and the systems
-  # (Core.ObanConfig). ENABLED_OBAN_PLUGINS names the ones that run;
+  # (Mica.ObanConfig). ENABLED_OBAN_PLUGINS names the ones that run;
   # FELDSPAR_CLEANUP_SCHEDULE replaces the schedule of the donation cleanup.
 
   schedule_overrides =
@@ -117,20 +117,20 @@ if config_env() == :prod do
       schedule -> [data_donation_cleanup: schedule]
     end
 
-  config :core, :oban_plugins,
+  config :mica, :oban_plugins,
     enabled: RuntimeConfig.list(env["ENABLED_OBAN_PLUGINS"]),
     schedule_overrides: schedule_overrides
 
   # RATE LIMITER: RATE_QUOTAS replaces the default quotas (the systems'
   # rate_quotas/0) of the services it lists; the other services keep their defaults.
 
-  config :core, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
+  config :mica, :rate, quota_overrides: System.get_env("RATE_QUOTAS", "[]") |> Jason.decode!()
 
   # SIGN-IN CODES: AUTH_CODE_LIMITS replaces the default limit
   # (Systems.Account.AuthCodeLimits) of each action, count and window it lists.
 
   if auth_code_limits = System.get_env("AUTH_CODE_LIMITS") do
-    config :core, :auth_code_limits,
+    config :mica, :auth_code_limits,
       overrides:
         auth_code_limits |> Jason.decode!() |> Systems.Account.AuthCodeLimits.overrides!()
   end
@@ -140,14 +140,14 @@ if config_env() == :prod do
   # private ranges.
 
   if trusted_proxies = System.get_env("TRUSTED_PROXIES") do
-    config :core, CoreWeb.Plug.RemoteIp,
+    config :mica, MicaWeb.Plug.RemoteIp,
       trusted_proxies:
-        trusted_proxies |> RuntimeConfig.list() |> CoreWeb.Plug.RemoteIp.trusted_proxies!()
+        trusted_proxies |> RuntimeConfig.list() |> MicaWeb.Plug.RemoteIp.trusted_proxies!()
   end
 
   # MAIL: Mailgun when MAILGUN_API_KEY is set, otherwise Amazon SES.
 
-  config :core,
+  config :mica,
          Systems.Email.Mailer,
          RuntimeConfig.mailer(env,
            name: app_name,
@@ -163,33 +163,33 @@ if config_env() == :prod do
   # AZURE BLOB
 
   if container = System.get_env("AZURE_BLOB_CONTAINER") do
-    config :core, :azure_storage_backend, container: container
+    config :mica, :azure_storage_backend, container: container
   end
 
   if storage_account_name = System.get_env("AZURE_BLOB_STORAGE_USER") do
-    config :core, :azure_storage_backend, storage_account_name: storage_account_name
+    config :mica, :azure_storage_backend, storage_account_name: storage_account_name
   end
 
   if sas_token = System.get_env("AZURE_SAS_TOKEN") do
-    config :core, :azure_storage_backend, sas_token: sas_token
+    config :mica, :azure_storage_backend, sas_token: sas_token
   end
 
   # DATABASE: DATABASE_URL; TLS when DB_CA_PATH is set.
 
-  config :core, Core.Repo, RuntimeConfig.repo(env)
+  config :mica, Mica.Repo, RuntimeConfig.repo(env)
 
-  config :core, Systems.Account.Auth.Google,
+  config :mica, Systems.Account.Auth.Google,
     redirect_uri: "#{base_url}/auth/google/callback",
     client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
     client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET")
 
-  config :core, Systems.Account.Auth.Surfconext,
+  config :mica, Systems.Account.Auth.Surfconext,
     redirect_uri: "#{base_url}/auth/surfconext/callback",
     base_url: System.get_env("SURFCONEXT_SITE"),
     client_id: System.get_env("SURFCONEXT_CLIENT_ID"),
     client_secret: System.get_env("SURFCONEXT_CLIENT_SECRET")
 
-  config :core, Systems.Account.Auth.Centerdata,
+  config :mica, Systems.Account.Auth.Centerdata,
     redirect_uri: "#{base_url}/auth/centerdata/callback",
     base_url: System.get_env("CENTERDATA_SITE", "https://messpanel.test.centerdata.nl"),
     client_id: System.get_env("CENTERDATA_CLIENT_ID"),
@@ -198,13 +198,13 @@ if config_env() == :prod do
     client_authentication_method: "client_secret_post",
     code_verifier: true
 
-  config :core, Core.ImageCatalog.Unsplash,
+  config :mica, Mica.ImageCatalog.Unsplash,
     access_key: System.get_env("UNSPLASH_ACCESS_KEY"),
     app_name: System.get_env("UNSPLASH_APP_NAME")
 
   if push_api_key = System.get_env("APPSIGNAL_PUSH_API_KEY") do
     config :appsignal, :config,
-      otp_app: :core,
+      otp_app: :mica,
       name: "Next",
       env: app_domain,
       revision: System.get_env("APPSIGNAL_REVISION"),
@@ -214,14 +214,14 @@ if config_env() == :prod do
 
   # STORAGE BACKENDS
 
-  config :core, :storage,
+  config :mica, :storage,
     services:
       System.get_env("STORAGE_SERVICES", "builtin, yoda")
       |> RuntimeConfig.list()
       |> Enum.map(&String.to_atom/1)
 
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
     storage_s3_bucket = System.fetch_env!("AWS_S3_BUCKET")
 
@@ -230,11 +230,11 @@ if config_env() == :prod do
       raise "AWS_S3_BUCKET (#{storage_s3_bucket}) must be a private bucket, not PUBLIC_S3_BUCKET"
     end
 
-    config :core, Systems.Storage.BuiltIn.S3,
+    config :mica, Systems.Storage.BuiltIn.S3,
       bucket: storage_s3_bucket,
       prefix: storage_s3_prefix
   else
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
     # Donations must stay out of UPLOAD_PATH: that folder is served without
     # authentication at /uploads and /feldspar/apps. Defaults to a `storage`
@@ -249,21 +249,21 @@ if config_env() == :prod do
       raise "STORAGE_PATH (#{storage_path}) must not be inside UPLOAD_PATH (#{upload_path})"
     end
 
-    config :core, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
+    config :mica, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
   end
 
   if content_s3_prefix = System.get_env("CONTENT_S3_PREFIX") do
-    config :core, :content,
+    config :mica, :content,
       backend: Systems.Content.S3,
       bucket: System.fetch_env!("PUBLIC_S3_BUCKET"),
       public_url: System.fetch_env!("PUBLIC_S3_URL"),
       prefix: content_s3_prefix
   else
-    config :core, :content, backend: Systems.Content.LocalFS
+    config :mica, :content, backend: Systems.Content.LocalFS
   end
 
   if feldspar_s3_prefix = System.get_env("FELDSPAR_S3_PREFIX") do
-    config :core, :feldspar,
+    config :mica, :feldspar,
       backend: Systems.Feldspar.S3,
       bucket: System.fetch_env!("PUBLIC_S3_BUCKET"),
       # The public URL must point to the root's (bucket) publicly accessible URL.
@@ -271,10 +271,10 @@ if config_env() == :prod do
       public_url: System.fetch_env!("PUBLIC_S3_URL"),
       prefix: feldspar_s3_prefix
   else
-    config :core, :feldspar, backend: Systems.Feldspar.LocalFS
+    config :mica, :feldspar, backend: Systems.Feldspar.LocalFS
   end
 
-  config :core, :paper,
+  config :mica, :paper,
     import_batch_size:
       System.get_env("PAPER_RIS_IMPORT_BATCH_SIZE", "100") |> String.to_integer(),
     import_batch_timeout:
@@ -291,42 +291,42 @@ if config_env() == :prod do
   # Data donation temporary file storage
   # Files are stored here before being delivered to the final storage endpoint
   # Default retention is 2 weeks (336 hours), configurable via FELDSPAR_DATA_DONATION_RETENTION
-  config :core, :feldspar_data_donation,
+  config :mica, :feldspar_data_donation,
     path: System.fetch_env!("FELDSPAR_DATA_DONATION_PATH"),
     retention_hours:
       System.get_env("FELDSPAR_DATA_DONATION_RETENTION", "336") |> String.to_integer()
 
-  config :core, :dist_hosts, RuntimeConfig.dist_hosts(env)
+  config :mica, :dist_hosts, RuntimeConfig.dist_hosts(env)
 
-  config :core, Systems.Payment.Provider.OPP,
+  config :mica, Systems.Payment.Provider.OPP,
     base_url: System.get_env("OPP_BASE_URL"),
     api_key: System.get_env("OPP_API_KEY"),
     notification_secret: System.get_env("OPP_NOTIFICATION_SECRET"),
     merchant_uid: System.get_env("OPP_MERCHANT_UID"),
     partner_fee_percentage: String.to_integer(System.get_env("OPP_PARTNER_FEE_PERCENTAGE") || "0")
 
-  config :core, payment_provider: Core.Config.payment_provider()
+  config :mica, payment_provider: Mica.Config.payment_provider()
 
-  config :core,
+  config :mica,
     auto_approve_timeout: System.get_env("AUTO_APPROVE_TIMEOUT", "14") |> String.to_integer()
 
   # SERVICE LOGIN API
   # Required for /api/service/login endpoint (load testing, integrations)
   if service_login_key = System.get_env("SERVICE_LOGIN_KEY") do
-    config :core, :service_login, key: service_login_key
+    config :mica, :service_login, key: service_login_key
   end
 
   # Unset means no fallback: an untranslated string renders its msgid, which in
   # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
-  config :core, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
+  config :mica, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
 
   # Mock sign-in for test environments; never on production.
   if deploy_env != :prod do
     auth_methods =
-      Application.get_env(:core, :account, [])
+      Application.get_env(:mica, :account, [])
       |> Keyword.get(:auth_methods, %{})
       |> Map.put(:mock, %{provider: true, satellite: false})
 
-    config :core, :account, auth_methods: auth_methods
+    config :mica, :account, auth_methods: auth_methods
   end
 end

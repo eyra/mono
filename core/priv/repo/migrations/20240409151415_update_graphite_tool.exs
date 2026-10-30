@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateGraphiteTool do
+defmodule Mica.Repo.Migrations.UpdateGraphiteTool do
   use Ecto.Migration
 
   def up do

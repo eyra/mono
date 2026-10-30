@@ -6,10 +6,10 @@ defmodule Systems.Account.FeaturesModel do
   import Ecto.Changeset
   alias Systems.Account.User
 
-  alias Core.Enums.Genders
-  require Core.Enums.Genders
+  alias Mica.Enums.Genders
+  require Mica.Enums.Genders
 
-  alias Systems.{
+  alias Next.Systems.{
     Student
   }
 

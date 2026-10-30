@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddStateToStudyParticipants do
+defmodule Mica.Repo.Migrations.AddStateToStudyParticipants do
   use Ecto.Migration
 
   def change do

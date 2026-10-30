@@ -1,8 +1,8 @@
 defmodule Systems.Assignment.ContributionsDeclinedView do
   use Phoenix.LiveComponent
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.List, as: PixelList
   alias Frameworks.Pixel.Text
 

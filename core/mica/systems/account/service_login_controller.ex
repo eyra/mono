@@ -1,5 +1,5 @@
 defmodule Systems.Account.ServiceLoginController do
-  use CoreWeb, {:controller, [formats: [:json]]}
+  use MicaWeb, {:controller, [formats: [:json]]}
 
   alias Systems.Account
 
@@ -39,7 +39,7 @@ defmodule Systems.Account.ServiceLoginController do
   end
 
   defp verify_service_key(conn) do
-    expected_key = Core.Env.get(:service_login, [])[:key]
+    expected_key = Mica.Env.get(:service_login, [])[:key]
     provided_key = get_req_header(conn, "x-service-key") |> List.first()
 
     cond do

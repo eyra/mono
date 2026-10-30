@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.ScoreModel do
+defmodule Next.Systems.Graphite.ScoreModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

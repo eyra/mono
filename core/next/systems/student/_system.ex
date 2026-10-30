@@ -1,5 +1,5 @@
-defmodule Systems.Student.System do
-  use Core.System
+defmodule Next.Systems.Student.System do
+  use Mica.System
 
-  def signal_handlers, do: [Systems.Student.Switch]
+  def signal_handlers, do: [Next.Systems.Student.Switch]
 end

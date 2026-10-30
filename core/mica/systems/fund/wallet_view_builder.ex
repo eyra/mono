@@ -1,5 +1,5 @@
 defmodule Systems.Fund.WalletViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.{
     Pool,
@@ -14,7 +14,7 @@ defmodule Systems.Fund.WalletViewBuilder do
         } = account,
         user
       ) do
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     currency = Fund.Public.get_currency_by_name(currency, label_bundle: [:items])
     title = Fund.CurrencyModel.title(currency, locale)
 

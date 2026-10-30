@@ -1,8 +1,8 @@
-defmodule Systems.Zircon.Screening.ToolViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ToolViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   @doc """
   Builds view model for Zircon Screening tool view.

@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.MonitorView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Widget
 

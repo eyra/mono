@@ -13,10 +13,10 @@ defmodule Systems.Admin.AccountViewBuilder do
   membership lookup is pre-built into a MapSet (one bulk query per
   filter) instead of N+1 queries per user.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.ImageHelpers
-  alias CoreWeb.UI.Timestamp
+  alias Mica.ImageHelpers
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Admin
   alias Systems.Affiliate

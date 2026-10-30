@@ -1,6 +1,6 @@
 defmodule Systems.Account.UserProfileForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
   import Frameworks.Pixel.Form
 
@@ -86,7 +86,7 @@ defmodule Systems.Account.UserProfileForm do
         <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
           <.form id="main_form" :let={form} for={@changeset} phx-submit="signup" phx-change="save" phx-target={@myself} >
             <.photo_input
-              static_path={&CoreWeb.Endpoint.static_path/1}
+              static_path={&MicaWeb.Endpoint.static_path/1}
               photo_url={@entity.photo_url}
               uploads={@uploads}
               primary_button_text={dgettext("eyra-account", "choose.profile.photo.file")}

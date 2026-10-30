@@ -1,10 +1,10 @@
 defmodule Systems.Account.AuthCodeCleanupWorkerTest do
-  use Core.DataCase, async: true
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase, async: true
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeCleanupWorker
   alias Systems.Account.AuthCodeModel

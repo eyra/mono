@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.Private do
-  use CoreWeb, :verified_routes
+defmodule Next.Systems.Graphite.Private do
+  use MicaWeb, :verified_routes
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

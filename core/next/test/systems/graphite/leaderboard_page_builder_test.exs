@@ -1,8 +1,8 @@
-defmodule Systems.Graphite.LeaderboardPageBuilderTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.LeaderboardPageBuilderTest do
+  use Mica.DataCase
 
   alias Frameworks.Utility.ViewModelBuilder
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Project
 
   describe "challenge task deleted" do

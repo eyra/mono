@@ -1,7 +1,7 @@
-defmodule Systems.Ontology.Factories do
-  alias Core.Factories
-  alias Systems.Ontology.ConceptModel
-  alias Systems.Ontology.PredicateModel
+defmodule Next.Systems.Ontology.Factories do
+  alias Mica.Factories
+  alias Next.Systems.Ontology.ConceptModel
+  alias Next.Systems.Ontology.PredicateModel
 
   def insert_concept(phrase, %{} = author) do
     Factories.insert!(:ontology_concept, %{

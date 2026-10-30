@@ -1,18 +1,18 @@
-defmodule Systems.Onyx.BrowserView do
+defmodule Next.Systems.Onyx.BrowserView do
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
-  use CoreWeb.UI
+  use MicaWeb.UI
   use Frameworks.Pixel
   use Frameworks.Signal.LiveFeature
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   import Frameworks.Pixel.FilterBar
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.SearchBar
 
-  alias Systems.Onyx
+  alias Next.Systems.Onyx
 
   @impl true
   def mount(

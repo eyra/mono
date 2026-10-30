@@ -1,3 +1,3 @@
 import Config
 
-config :core, saas: Self.SaaS
+config :mica, saas: MicaSaas.SaaS

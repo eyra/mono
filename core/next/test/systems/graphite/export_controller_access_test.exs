@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.ExportControllerAccessTest do
-  use CoreWeb.ConnCase, async: true
+defmodule Next.Systems.Graphite.ExportControllerAccessTest do
+  use MicaWeb.ConnCase, async: true
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   describe "submissions" do
     setup :login_as_member
@@ -16,7 +16,7 @@ defmodule Systems.Graphite.ExportControllerAccessTest do
 
     test "sends the csv to the leaderboard owner", %{conn: conn} do
       leaderboard = Graphite.Factories.create_leaderboard(%{})
-      :ok = Core.Authorization.assign_role(conn.assigns.current_user, leaderboard, :owner)
+      :ok = Mica.Authorization.assign_role(conn.assigns.current_user, leaderboard, :owner)
 
       conn = get(conn, ~p"/graphite/#{leaderboard.id}/export/submissions")
 

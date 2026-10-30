@@ -8,8 +8,8 @@ defmodule Systems.Account.Auth.SSOHelpers do
   """
 
   import Phoenix.Controller, only: [put_flash: 3, redirect: 2]
-  use Gettext, backend: CoreWeb.Gettext
-  use CoreWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
+  use MicaWeb, :verified_routes
 
   alias Systems.Account.SignInHandoff
 

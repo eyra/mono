@@ -3,8 +3,8 @@ defmodule Frameworks.GreenLight.LiveHook do
     Live Hook that enables automatic authorization checks.
   """
   use Frameworks.Concept.LiveHook
-  use Core, :auth
-  use CoreWeb, :verified_routes
+  use Mica, :auth
+  use MicaWeb, :verified_routes
   require Logger
 
   @impl true

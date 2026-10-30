@@ -9,24 +9,24 @@ defmodule Systems.Content.Composer do
 
   def __using_live_website__ do
     quote do
-      use CoreWeb, :live_view_fabric
+      use MicaWeb, :live_view_fabric
 
-      use CoreWeb.Layouts.Website.Composer
-      use CoreWeb.LiveDefaults
+      use MicaWeb.Layouts.Website.Composer
+      use MicaWeb.LiveDefaults
 
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
       import Systems.Content.Html
     end
   end
 
   def __using_live_workspace__ do
     quote do
-      use CoreWeb, :live_view_fabric
+      use MicaWeb, :live_view_fabric
 
-      use CoreWeb.Layouts.Workspace.Composer
-      use CoreWeb.LiveDefaults
+      use MicaWeb.Layouts.Workspace.Composer
+      use MicaWeb.LiveDefaults
 
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
       import Systems.Content.Html
 
       @impl true
@@ -50,12 +50,12 @@ defmodule Systems.Content.Composer do
 
   def __using_live_workspace_live_nest__ do
     quote do
-      use CoreWeb, :routed_live_view
+      use MicaWeb, :routed_live_view
 
-      use CoreWeb.Layouts.Workspace.Composer, :live_nest
-      use CoreWeb.LiveDefaults
+      use MicaWeb.Layouts.Workspace.Composer, :live_nest
+      use MicaWeb.LiveDefaults
 
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
       import Systems.Content.Html
 
       @impl true

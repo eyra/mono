@@ -1,11 +1,11 @@
 defmodule Systems.Consent.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   alias Ecto.Multi
   alias Systems.Consent
 
   test "list/0 returns all created agreements" do
     {:ok, %{id: id}} =
-      Core.Authorization.prepare_node()
+      Mica.Authorization.prepare_node()
       |> Consent.Public.create_agreement()
 
     assert [%Systems.Consent.AgreementModel{id: ^id}] = Consent.Public.list_agreements()
@@ -16,7 +16,7 @@ defmodule Systems.Consent.PublicTest do
       Multi.new()
       |> Multi.insert(
         :agreement,
-        Consent.Public.prepare_agreement(Core.Authorization.prepare_node())
+        Consent.Public.prepare_agreement(Mica.Authorization.prepare_node())
       )
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
         Consent.Public.prepare_revision(agreement, "revision2")
@@ -52,7 +52,7 @@ defmodule Systems.Consent.PublicTest do
       Multi.new()
       |> Multi.insert(
         :agreement,
-        Consent.Public.prepare_agreement(Core.Authorization.prepare_node())
+        Consent.Public.prepare_agreement(Mica.Authorization.prepare_node())
       )
       |> Multi.insert(:revision2, fn %{agreement: agreement} ->
         Consent.Public.prepare_revision(agreement, "revision2")

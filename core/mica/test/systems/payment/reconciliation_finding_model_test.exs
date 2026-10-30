@@ -4,7 +4,7 @@ defmodule Systems.Payment.ReconciliationFindingModelTest do
   reviews after a sweep, so a finding that fails to identify its subject is
   worse than no finding at all — hence the required set.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Payment.ReconciliationFindingModel, as: Finding
   alias Systems.Payment.ReconciliationSummary, as: Summary

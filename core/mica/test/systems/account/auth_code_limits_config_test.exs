@@ -1,23 +1,23 @@
 defmodule Systems.Account.AuthCodeLimitsConfigTest do
   # Sets the limit overrides in the application environment.
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
   alias Systems.Account.AuthCodeLimits
 
   @remote_ip "203.0.113.10"
 
   setup do
-    original = Core.Env.get(:auth_code_limits)
+    original = Mica.Env.get(:auth_code_limits)
 
     on_exit(fn ->
       if original,
-        do: Core.Env.put(:auth_code_limits, original),
-        else: Application.delete_env(:core, :auth_code_limits)
+        do: Mica.Env.put(:auth_code_limits, original),
+        else: Application.delete_env(:mica, :auth_code_limits)
     end)
   end
 
   defp override(limits) do
-    Core.Env.put(:auth_code_limits, overrides: AuthCodeLimits.overrides!(limits))
+    Mica.Env.put(:auth_code_limits, overrides: AuthCodeLimits.overrides!(limits))
   end
 
   test "without overrides the default limits apply" do

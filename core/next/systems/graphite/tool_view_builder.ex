@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.ToolViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Graphite.ToolViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @doc """
   Builds view model for Graphite tool view.

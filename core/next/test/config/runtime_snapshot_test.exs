@@ -2,7 +2,7 @@ defmodule Next.Config.RuntimeSnapshotTest do
   # Replaces the process environment while each fixture is evaluated.
   use ExUnit.Case, async: false
 
-  alias Core.RuntimeConfig
+  alias Mica.RuntimeConfig
   alias Mix.Tasks.Config.Snapshot
 
   for fixture <- Snapshot.fixtures() do
@@ -55,8 +55,8 @@ defmodule Next.Config.RuntimeSnapshotTest do
 
     env = RuntimeConfig.Snapshot.read_env_file(env_file)
     config = RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
-    oban_plugins = config[:core][:oban_plugins]
-    oban = Core.Application.oban_config([repo: Core.Repo], oban_plugins)
+    oban_plugins = config[:mica][:oban_plugins]
+    oban = Mica.Application.oban_config([repo: Mica.Repo], oban_plugins)
     plugins = Keyword.fetch!(oban, :plugins)
 
     # Oban starts each plugin under the child id {:plugin, module}.
@@ -67,7 +67,7 @@ defmodule Next.Config.RuntimeSnapshotTest do
              Enum.filter(plugins, &match?({Oban.Plugins.Cron, _}, &1))
 
     assert length(crontab) == 6
-    assert Core.ObanConfig.unknown_plugins(Core.SaaS.oban_crons(), oban_plugins) == []
+    assert Mica.ObanConfig.unknown_plugins(Mica.SaaS.oban_crons(), oban_plugins) == []
     assert :ok = Oban.Config.validate(oban)
   end
 end

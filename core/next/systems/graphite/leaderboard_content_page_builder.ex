@@ -1,11 +1,11 @@
-defmodule Systems.Graphite.LeaderboardContentPageBuilder do
-  use CoreWeb, :verified_routes
+defmodule Next.Systems.Graphite.LeaderboardContentPageBuilder do
+  use MicaWeb, :verified_routes
   use Systems.Content.PageBuilder
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   alias Frameworks.Concept
   alias Systems.Content
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   def view_model(%Graphite.LeaderboardModel{id: id} = leaderboard, %{branch: branch} = assigns) do
     action_map = action_map(leaderboard, assigns)
@@ -189,7 +189,7 @@ defmodule Systems.Graphite.LeaderboardContentPageBuilder do
   @impl true
   def set_status(%{assigns: %{model: leaderboard}} = socket, status) do
     changeset = Graphite.LeaderboardModel.changeset(leaderboard, %{status: status})
-    {:ok, leaderboard} = Core.Persister.save(leaderboard, changeset)
+    {:ok, leaderboard} = Mica.Persister.save(leaderboard, changeset)
     socket |> Phoenix.Component.assign(leaderboard: leaderboard)
   end
 end

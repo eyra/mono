@@ -142,9 +142,9 @@ This rule:
 
 ## Test Module Structure
 1. Use appropriate test case module:
-   - Use `Core.DataCase` for tests requiring database access
+   - Use `Mica.DataCase` for tests requiring database access
    - Use `ExUnit.Case` for pure functional tests
-   - Use `CoreWeb.ConnCase` for controller/LiveView tests
+   - Use `MicaWeb.ConnCase` for controller/LiveView tests
    - Set `async: true` when possible
 
 2. Module naming:
@@ -165,7 +165,7 @@ This rule:
 
 ## Factory Organization
 1. Core Factories:
-   - Located in `Core.Factories`
+   - Located in `Mica.Factories`
    - Contains basic `build` functions for all models
    - Handles common model creation across systems
    - Example: `Factories.build(:member)`, `Factories.build(:auth_node)`
@@ -174,11 +174,11 @@ This rule:
    - Each system has its own Factories module (e.g., `Systems.Userflow.Factories`)
    - Located in `{mica,next}/test/systems/[system]/factories.ex`
    - Provides system-specific factory functions
-   - Uses `Core.Factories` for basic model creation
+   - Uses `Mica.Factories` for basic model creation
    - Example: `Userflow.Factories.create_step()`
 
 3. Factory Function Types:
-   - `build` functions: Create structs without persistence (in `Core.Factories`)
+   - `build` functions: Create structs without persistence (in `Mica.Factories`)
    - `create` functions: Build and persist records (in system factories)
    - Helper functions: Create complex scenarios or related records
 
@@ -189,14 +189,14 @@ This rule:
    - Document complex factory functions
    - Example:
      ```elixir
-     # In Core.Factories
+     # In Mica.Factories
      def build(:userflow) do
        build(:userflow, %{name: "test flow"})
      end
 
      # In Systems.Userflow.Factories
      def create_complete_userflow(attrs \\ %{}, opts \\ []) do
-       userflow = Core.Factories.build(:userflow, attrs) |> Repo.insert!()
+       userflow = Mica.Factories.build(:userflow, attrs) |> Repo.insert!()
        # Add additional setup...
        userflow
      end
@@ -204,7 +204,7 @@ This rule:
 
 ## Test Data Setup
 1. Use factories for test data:
-   - Use `Core.Factories` for basic model creation
+   - Use `Mica.Factories` for basic model creation
    - Use system-specific factories for specialized data
    - Example: `Factories.build(:member)`, `Userflow.Factories.create_step()`
 
@@ -255,7 +255,7 @@ This rule:
 ## Database Tests
 1. Transaction handling:
    - Tests run in a transaction by default
-   - Use `Core.DataCase` for database tests
+   - Use `Mica.DataCase` for database tests
    - Clean up any data created outside transactions
 
 2. Preloading:

@@ -1,8 +1,8 @@
-defmodule Systems.Zircon.Screening.RISErrorContentTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.RISErrorContentTest do
+  use MicaWeb.ConnCase, async: false
 
-  alias Systems.Paper
-  alias Systems.Paper.RISEntryError
+  alias Next.Systems.Paper
+  alias Next.Systems.Paper.RISEntryError
 
   describe "RIS error content display" do
     test "error table should display the actual line content from RIS file" do

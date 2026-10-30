@@ -1,13 +1,13 @@
-defmodule Systems.Graphite.SwitchTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.SwitchTest do
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
 
-  alias Systems.Graphite
-  alias Systems.Graphite.Switch
+  alias Next.Systems.Graphite
+  alias Next.Systems.Graphite.Switch
 
   describe "graphite_tool events" do
     setup do
-      isolate_signals(except: [Systems.Graphite.Switch])
+      isolate_signals(except: [Next.Systems.Graphite.Switch])
 
       tool = Factories.insert!(:graphite_tool)
       %{tool: tool}
@@ -43,7 +43,7 @@ defmodule Systems.Graphite.SwitchTest do
 
   describe "graphite_leaderboard events" do
     setup do
-      isolate_signals(except: [Systems.Graphite.Switch])
+      isolate_signals(except: [Next.Systems.Graphite.Switch])
 
       tool = Factories.insert!(:graphite_tool)
       leaderboard = Factories.insert!(:graphite_leaderboard, %{tool: tool})

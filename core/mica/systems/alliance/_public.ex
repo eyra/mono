@@ -28,10 +28,10 @@ defmodule Systems.Alliance.Public do
   IDEA: A list of alliances can be access by the notification icon which is shown
   on all screens.
   """
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Frameworks.{
     Signal
@@ -123,7 +123,7 @@ defmodule Systems.Alliance.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Alliance.ToolModel do
+defimpl Mica.Persister, for: Systems.Alliance.ToolModel do
   def save(_tool, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :alliance_tool) do
       {:ok, %{alliance_tool: alliance_tool}} -> {:ok, alliance_tool}

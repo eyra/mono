@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
-  alias Core.Factories
-  alias Systems.Zircon.Screening
+  alias Mica.Factories
+  alias Next.Systems.Zircon.Screening
 
   setup do
     user = Factories.insert!(:member)
@@ -15,10 +15,10 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
   describe "Summary buttons in prompting phase" do
     test "shows warning, new papers, and existing papers buttons", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"
@@ -94,10 +94,10 @@ defmodule Systems.Zircon.Screening.ImportViewSummaryButtonsTest do
 
     test "buttons only show when there are items to display", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "empty.ris",
           "http://example.com/empty.ris"

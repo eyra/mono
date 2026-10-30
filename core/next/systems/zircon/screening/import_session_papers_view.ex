@@ -1,8 +1,8 @@
-defmodule Systems.Zircon.Screening.ImportSessionPapersView do
-  use CoreWeb, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ImportSessionPapersView do
+  use MicaWeb, :embedded_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
-  import Systems.Zircon.HTML, only: [ris_entry_table: 1]
+  import Next.Systems.Zircon.HTML, only: [ris_entry_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
 
   alias Frameworks.Pixel.Text

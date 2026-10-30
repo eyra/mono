@@ -1,18 +1,18 @@
-defmodule Systems.Zircon.Screening.ImportViewTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.ImportViewTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   import Ecto.Query
 
-  alias Systems.Zircon.Screening
+  alias Next.Systems.Zircon.Screening
 
   setup do
     # Isolate signals to prevent workflow errors (includes nested LiveViews)
     # Keeps TestHelper, Zircon.Switch, and Observatory.Switch active
-    isolate_signals(except: [Systems.Zircon.Switch, Systems.Observatory.Switch])
+    isolate_signals(except: [Next.Systems.Zircon.Switch, Systems.Observatory.Switch])
 
     # Use LocalFS backend for tests with real files
-    Application.put_env(:core, :content, backend: Systems.Content.LocalFS)
+    Application.put_env(:mica, :content, backend: Systems.Content.LocalFS)
 
     # Create required entities for ImportView
     auth_node = Factories.insert!(:auth_node)
@@ -48,10 +48,10 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Associate reference file with tool
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create an active import session
       active_session =
@@ -64,25 +64,27 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # Verify session is active
       assert active_session.status == :activated
-      assert Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id)
+      assert Next.Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id)
 
       # Directly test the abort logic that happens in process_file
       # This simulates what happens when a new file is uploaded
-      reference_files = Systems.Zircon.Public.list_reference_files(tool)
+      reference_files = Next.Systems.Zircon.Public.list_reference_files(tool)
 
       Enum.each(reference_files, fn ref_file ->
-        if Systems.Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
+        if Next.Systems.Paper.Public.has_active_import_for_reference_file?(ref_file.id) do
           active_session =
-            Systems.Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
+            Next.Systems.Paper.Public.get_active_import_session_for_reference_file(ref_file.id)
 
           if active_session do
-            Systems.Paper.Public.abort_import_session!(active_session)
+            Next.Systems.Paper.Public.abort_import_session!(active_session)
           end
         end
       end)
 
       # Verify the active session was aborted
-      aborted_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, active_session.id)
+      aborted_session =
+        Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, active_session.id)
+
       assert aborted_session.status == :aborted
       assert aborted_session.completed_at != nil
     end
@@ -193,7 +195,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # The view should render the file selector
       assert view |> has_element?("[data-testid='file-selector']")
       # Basic test - verify the import session exists in database
-      import_sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      import_sessions = Mica.Repo.all(Next.Systems.Paper.RISImportSessionModel)
       assert length(import_sessions) == 1
       assert hd(import_sessions).status == :succeeded
     end
@@ -307,14 +309,14 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # This tests the same functionality that process_file would trigger in production
 
       # Simulate what process_file would do: create reference file and start import
-      reference_file = Systems.Zircon.Public.insert_reference_file!(tool, "sample.ris")
+      reference_file = Next.Systems.Zircon.Public.insert_reference_file!(tool, "sample.ris")
 
       # Get paper set
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       # Start the import process (skip the file update for now since it's not critical for this test)
       import_session =
-        Systems.Paper.Public.prepare_import_session!(reference_file, paper_set)
+        Next.Systems.Paper.Public.prepare_import_session!(reference_file, paper_set)
 
       # Render the view one more time
       html_after_upload = render(view)
@@ -327,7 +329,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Skip the ref check for now since it's not essential
 
       # 2. Import session was created with correct associations
-      import_session = Core.Repo.preload(import_session, [:paper_set, :reference_file])
+      import_session = Mica.Repo.preload(import_session, [:paper_set, :reference_file])
       assert import_session.paper_set.id == paper_set.id
       assert import_session.reference_file.id == reference_file.id
 
@@ -338,10 +340,10 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # 4. Oban job was created with correct session_id
       import_jobs =
         from(j in Oban.Job,
-          where: j.worker == "Systems.Paper.RISImportPrepareJob",
+          where: j.worker == "Next.Systems.Paper.RISImportPrepareJob",
           where: j.args["session_id"] == ^import_session.id
         )
-        |> Core.Repo.all()
+        |> Mica.Repo.all()
 
       assert import_jobs != [], "Import job should have been enqueued"
 
@@ -366,14 +368,14 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Create a reference file that was uploaded but not yet processed
       # Status :uploaded means file is fresh and hasn't been processed yet
       _reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"
         )
 
       # Ensure no import session exists (file uploaded but import not started)
-      import_sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      import_sessions = Mica.Repo.all(Next.Systems.Paper.RISImportSessionModel)
       assert Enum.empty?(import_sessions), "No import sessions should exist for this test"
 
       # Simulate page refresh - create a new LiveView instance
@@ -436,10 +438,10 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       # Update tool to include the reference file
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create an import session in :parsing status
       # This is what happens immediately after file upload
@@ -477,12 +479,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
           "skipped_duplicates" => 0
         }
       })
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       # Also update reference file to processed
       reference_file
       |> Ecto.Changeset.change(%{status: :processed})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       # Simulate page refresh - create a new LiveView instance
       {:ok, _view2, html2} = live_isolated(conn, Screening.ImportView, session: session)
@@ -494,12 +496,12 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert html2 |> String.contains?("import-section")
 
       # Verify the session is completed
-      sessions = Core.Repo.all(Systems.Paper.RISImportSessionModel)
+      sessions = Mica.Repo.all(Next.Systems.Paper.RISImportSessionModel)
       assert length(sessions) == 1
       assert hd(sessions).status == :succeeded
 
       # No active imports should exist
-      refute Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
+      refute Next.Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
              "Completed sessions should not be considered active"
     end
 
@@ -518,26 +520,26 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
         })
 
       # Create a reference file associated with the tool
-      reference_file = Systems.Zircon.Public.insert_reference_file!(tool, "test.ris")
+      reference_file = Next.Systems.Zircon.Public.insert_reference_file!(tool, "test.ris")
 
       # Update reference file to point to actual test RIS file
       test_file_path =
         Path.join(File.cwd!(), "next/test/systems/zircon/screening/test_data/small.ris")
 
-      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
+      reference_file = reference_file |> Mica.Repo.preload(:file, force: true)
 
-      Core.Repo.update!(
+      Mica.Repo.update!(
         Ecto.Changeset.change(reference_file.file, %{
           ref: test_file_path
         })
       )
 
       # Reload to get the updated file ref
-      reference_file = reference_file |> Core.Repo.preload(:file, force: true)
+      reference_file = reference_file |> Mica.Repo.preload(:file, force: true)
 
       # Create session manually (avoiding automatic Oban job execution)
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -546,12 +548,14 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
 
       # Run the job manually to process the file (but not import yet)
       result =
-        Systems.Paper.RISImportPrepareJob.perform(%Oban.Job{args: %{"session_id" => session.id}})
+        Next.Systems.Paper.RISImportPrepareJob.perform(%Oban.Job{
+          args: %{"session_id" => session.id}
+        })
 
       assert result == :ok
 
       # Reload the session to get the updated state
-      processed_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      processed_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
 
       # Verify the processing completed successfully but import hasn't happened yet
       assert processed_session.status == :activated
@@ -561,7 +565,7 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert length(processed_session.entries) == 3
 
       # Now manually continue the import (this is what the Continue button would do)
-      final_session = Systems.Paper.Public.commit_import_session!(processed_session)
+      final_session = Next.Systems.Paper.Public.commit_import_session!(processed_session)
       assert final_session.status == :activated
       assert final_session.phase == :importing
 
@@ -591,14 +595,14 @@ defmodule Systems.Zircon.Screening.ImportViewTest do
       assert view |> has_element?("[data-testid='import-section-block']")
 
       # Verify backend state matches what the view should see
-      vm = Systems.Zircon.Screening.ImportViewBuilder.view_model(tool, %{})
+      vm = Next.Systems.Zircon.Screening.ImportViewBuilder.view_model(tool, %{})
 
       # Paper count will be 0 since import happens asynchronously via job
       {_, header_block} = vm.stack |> Enum.find(fn {type, _} -> type == :header end)
       assert header_block.paper_count == 0, "View model should show 0 papers (import is async)"
 
       # Session remains active in :importing phase until the job completes
-      assert Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
+      assert Next.Systems.Paper.Public.has_active_import_for_reference_file?(reference_file.id),
              "Should still have active import in :importing phase"
     end
   end

@@ -1,7 +1,7 @@
 defmodule Systems.Pool.SubmissionPageBuilder do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   # FIXME: Pool should not have relation with Advert
   alias Systems.Advert

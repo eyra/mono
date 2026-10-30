@@ -1,10 +1,10 @@
-defmodule Systems.Ontology.PredicateModel do
+defmodule Next.Systems.Ontology.PredicateModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
   import Ecto.Changeset
 
-  alias Systems.Ontology
-  alias Core.Authentication
+  alias Next.Systems.Ontology
+  alias Mica.Authentication
 
   schema "ontology_predicate" do
     field(:type_negated?, :boolean, default: false)
@@ -54,7 +54,7 @@ defmodule Systems.Ontology.PredicateModel do
   def preload_graph(:object), do: [object: Ontology.ConceptModel.preload_graph(:down)]
   def preload_graph(:entity), do: [entity: []]
 
-  defimpl Systems.Ontology.Element do
+  defimpl Next.Systems.Ontology.Element do
     def flatten(%{subject: subject, type: type, object: object} = predicate) do
       [predicate, subject, type, object]
     end

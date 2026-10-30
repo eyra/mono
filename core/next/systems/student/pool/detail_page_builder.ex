@@ -1,13 +1,13 @@
-defmodule Systems.Student.Pool.DetailPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Student.Pool.DetailPageBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  import CoreWeb.UI.Responsive.Breakpoint
+  import MicaWeb.UI.Responsive.Breakpoint
 
   alias Systems.Pool
   alias Systems.Advert
   alias Systems.Fund
   alias Systems.Bookkeeping
-  alias Systems.Student
+  alias Next.Systems.Student
 
   def view_model(pool, assigns) do
     %{

@@ -37,7 +37,7 @@ defmodule Systems.Userflow.StepModel do
   def preload_graph(:userflow), do: [userflow: Userflow.Model.preload_graph(:up)]
 end
 
-defimpl Core.Persister, for: Systems.Userflow.StepModel do
+defimpl Mica.Persister, for: Systems.Userflow.StepModel do
   def save(_step, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :userflow_step) do
       {:ok, %{userflow_step: userflow_step}} -> {:ok, userflow_step}

@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.PayoutFlowTest do
+defmodule MicaWeb.Features.PayoutFlowTest do
   @moduledoc """
   Broad journey test for the payout flow: participant earns a reward,
   researcher approves it, participant requests payout.
@@ -23,7 +23,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
   top of narrow ones." All three conditions hold for this flow.
   """
 
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   import Mox
 
@@ -126,7 +126,7 @@ defmodule CoreWeb.Features.PayoutFlowTest do
     |> Project.Factories.build_item()
     |> Project.Factories.build_node()
     |> Project.Factories.build_project()
-    |> Core.Repo.insert!()
+    |> Mica.Repo.insert!()
 
     # Researcher is owner of the assignment so they can navigate to the
     # Contributions tab and approve.

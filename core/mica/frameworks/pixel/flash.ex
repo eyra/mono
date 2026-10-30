@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.Flash do
   Provides support for flash messages.
   """
   import Phoenix.Component
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Phoenix.LiveView
 

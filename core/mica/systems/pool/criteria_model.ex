@@ -7,8 +7,8 @@ defmodule Systems.Pool.CriteriaModel do
 
   alias Systems.Pool.SubmissionModel
 
-  alias Core.Enums.Genders
-  require Core.Enums.Genders
+  alias Mica.Enums.Genders
+  require Mica.Enums.Genders
 
   schema "eligibility_criteria" do
     field(:genders, {:array, Ecto.Enum}, values: Genders.schema_values())
@@ -76,7 +76,7 @@ defmodule Systems.Pool.CriteriaModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Pool.CriteriaModel do
+defimpl Mica.Persister, for: Systems.Pool.CriteriaModel do
   alias Systems.Pool
 
   def save(criteria, changeset) do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorStorageJobData do
+defmodule Mica.Repo.Migrations.RefactorStorageJobData do
   use Ecto.Migration
 
   def change do

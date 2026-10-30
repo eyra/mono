@@ -1,7 +1,7 @@
-defmodule Systems.Zircon.Screening.RISEntryErrorTest do
+defmodule Next.Systems.Zircon.Screening.RISEntryErrorTest do
   use ExUnit.Case
 
-  alias Systems.Paper.RISEntryError
+  alias Next.Systems.Paper.RISEntryError
 
   describe "ris_entry_error handling" do
     test "handles error structure with line_number and message fields" do

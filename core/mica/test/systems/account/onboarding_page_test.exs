@@ -1,5 +1,5 @@
 defmodule Systems.Account.OnboardingPageTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
@@ -102,7 +102,7 @@ defmodule Systems.Account.OnboardingPageTest do
           creator: true,
           verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
-        |> Core.Repo.insert()
+        |> Mica.Repo.insert()
 
       {:ok, conn: logged_in_conn, user: _user} = login(user, %{conn: conn})
       {:ok, view, _html} = live(logged_in_conn, "/user/onboarding")

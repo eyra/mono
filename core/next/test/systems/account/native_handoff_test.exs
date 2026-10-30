@@ -1,11 +1,11 @@
-defmodule Next.Account.NativeHandoffTest.FakeGoogle do
+defmodule Next.Systems.Account.NativeHandoffTest.FakeGoogle do
   def authorize_url(config),
     do: {:ok, %{url: Keyword.fetch!(config, :site), session_params: %{state: "test-state"}}}
 
   def callback(config, _params), do: Keyword.fetch!(config, :result)
 end
 
-defmodule Next.Account.NativeHandoffTest.FakeOIDC do
+defmodule Next.Systems.Account.NativeHandoffTest.FakeOIDC do
   def authorize_url(config),
     do:
       {:ok,
@@ -18,16 +18,16 @@ defmodule Next.Account.NativeHandoffTest.FakeOIDC do
   def fetch_userinfo(config, "test-token"), do: {:ok, config[:userinfo]}
 end
 
-defmodule Next.Account.NativeHandoffTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Account.NativeHandoffTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   import Ecto.Query, only: [from: 2]
 
-  alias Core.Repo
-  alias CoreWeb.Endpoint
-  alias Next.Account.NativeHandoffTest.FakeGoogle
-  alias Next.Account.NativeHandoffTest.FakeOIDC
+  alias Mica.Repo
+  alias MicaWeb.Endpoint
+  alias Next.Systems.Account.NativeHandoffTest.FakeGoogle
+  alias Next.Systems.Account.NativeHandoffTest.FakeOIDC
   alias Systems.Account
 
   @cookie "_next_native_sign_in"
@@ -51,7 +51,7 @@ defmodule Next.Account.NativeHandoffTest do
   end
 
   describe "GET /user/auth/native/provider/:provider" do
-    test "marks the sheet and continues at Core's start of the provider", %{conn: conn} do
+    test "marks the sheet and continues at Mica's start of the provider", %{conn: conn} do
       conn = start(conn, "google", login_hint: "jane@gmail.com", return_to: "/assignment/1")
 
       assert redirected_to(conn) == "/auth/google?login_hint=jane%40gmail.com"
@@ -240,7 +240,7 @@ defmodule Next.Account.NativeHandoffTest do
       assert %{value: signed_token} = redeem_conn.resp_cookies[@remember_me_cookie]
 
       status_conn =
-        CoreWeb.ConnCase.build_conn()
+        MicaWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
@@ -446,7 +446,7 @@ defmodule Next.Account.NativeHandoffTest do
   end
 
   defp native_conn do
-    CoreWeb.ConnCase.build_conn()
+    MicaWeb.ConnCase.build_conn()
     |> put_req_header("user-agent", @mobile_user_agent)
     |> put_req_header("origin", "https://eyra.co")
     |> put_req_header("sec-fetch-site", "same-origin")
@@ -537,19 +537,19 @@ defmodule Next.Account.NativeHandoffTest do
   end
 
   defp put_config(key, config) do
-    original = Application.get_env(:core, key)
-    Application.put_env(:core, key, config)
+    original = Application.get_env(:mica, key)
+    Application.put_env(:mica, key, config)
     on_exit(fn -> restore_env(key, original) end)
   end
 
-  defp restore_env(key, nil), do: Application.delete_env(:core, key)
-  defp restore_env(key, original), do: Application.put_env(:core, key, original)
+  defp restore_env(key, nil), do: Application.delete_env(:mica, key)
+  defp restore_env(key, original), do: Application.put_env(:mica, key, original)
 
   defp unique_email(prefix, domain \\ "example.com"),
     do: "#{prefix}-#{System.unique_integer([:positive])}@#{domain}"
 
   defp with_auth_methods(auth_methods) do
-    account = Application.get_env(:core, :account, [])
+    account = Application.get_env(:mica, :account, [])
     put_config(:account, Keyword.put(account, :auth_methods, auth_methods))
   end
 end

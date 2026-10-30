@@ -1,6 +1,6 @@
 defmodule Systems.Admin.ActionsViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Admin.ActionsViewBuilder
 

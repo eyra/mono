@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddUserToStorageJobData do
+defmodule Mica.Repo.Migrations.AddUserToStorageJobData do
   use Ecto.Migration
 
   def change do

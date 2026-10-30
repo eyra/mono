@@ -24,11 +24,11 @@ defmodule Systems.Account.PeopleEditorComponent do
   - `{:remove_user, %{user: user}}` - when a user is removed
   """
   use Phoenix.LiveComponent
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  import CoreWeb.UI.Spacing, only: [spacing: 1]
+  import MicaWeb.UI.Spacing, only: [spacing: 1]
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.UserListItem

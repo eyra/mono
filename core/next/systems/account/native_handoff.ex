@@ -1,4 +1,4 @@
-defmodule Next.Account.NativeHandoff do
+defmodule Next.Systems.Account.NativeHandoff do
   @moduledoc """
   Hands a sign-in through an identity provider back to the Next native apps.
 
@@ -19,7 +19,7 @@ defmodule Next.Account.NativeHandoff do
 
   import Plug.Conn
 
-  alias CoreWeb.Endpoint
+  alias MicaWeb.Endpoint
   alias Systems.Account
 
   @cookie "_next_native_sign_in"
@@ -78,7 +78,7 @@ defmodule Next.Account.NativeHandoff do
   def return_error(conn, error), do: return_to_app(conn, error: error)
 
   @doc """
-  The app's callback URL, on Core's own host; the sheet catches it before it
+  The app's callback URL, on Mica's own host; the sheet catches it before it
   loads.
   """
   def callback_url(params),

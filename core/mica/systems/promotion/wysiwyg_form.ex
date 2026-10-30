@@ -1,5 +1,5 @@
 defmodule Systems.Promotion.WysiwygForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
   alias Systems.Promotion
@@ -40,7 +40,7 @@ defmodule Systems.Promotion.WysiwygForm do
   def save(socket, entity, attrs) do
     changeset = Promotion.Model.changeset(entity, :save, attrs)
 
-    case Core.Persister.save(entity, changeset) do
+    case Mica.Persister.save(entity, changeset) do
       {:ok, entity} ->
         socket
         |> assign(entity: entity)

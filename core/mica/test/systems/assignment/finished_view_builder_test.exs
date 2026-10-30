@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.FinishedViewBuilderTest do
-  use Core.DataCase
-  use Core.FeatureFlags.Test
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Mica.FeatureFlags.Test
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
 
@@ -289,7 +289,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
           special: :questionnaire,
           status: :online
         })
-        |> Core.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
+        |> Mica.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
         |> Assignment.Factories.add_participant(user)
 
       Assignment.Public.expire_member(assignment, user)

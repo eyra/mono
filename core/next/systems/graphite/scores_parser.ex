@@ -1,5 +1,5 @@
-defmodule Systems.Graphite.ScoresParser do
-  alias Systems.Graphite
+defmodule Next.Systems.Graphite.ScoresParser do
+  alias Next.Systems.Graphite
 
   require Logger
 

@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.LandingPage do
-  use CoreWeb, :live_view_fabric
-  use CoreWeb.Layouts.Stripped.Composer
+  use MicaWeb, :live_view_fabric
+  use MicaWeb.Layouts.Stripped.Composer
 
   alias Systems.Assignment
 

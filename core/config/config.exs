@@ -16,10 +16,10 @@ config :mime, :types, %{
 # Defaults to :local for developer machines (mix dev, mix test).
 # Releases override this in runtime.{aws,fly}.exs based on the DEPLOY_ENV env var,
 # defaulting to :prod for safety.
-config :core, :deploy_env, :local
+config :mica, :deploy_env, :local
 
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
-config :core, Frameworks.UserCheck,
+config :mica, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,
   base_url: "https://api.usercheck.com",
   timeout: 2_000
@@ -69,20 +69,20 @@ config :plug, :statuses, %{
   404 => "Page not found"
 }
 
-config :core, CoreWeb.FileUploader, max_file_size: 100_000_000
+config :mica, MicaWeb.FileUploader, max_file_size: 100_000_000
 
 # Maximum HTTP body size for uploads (Plug.Parsers)
-config :core, CoreWeb.Endpoint, http_body_max_size: 210_000_000
+config :mica, MicaWeb.Endpoint, http_body_max_size: 210_000_000
 
-config :core, :policy_urls,
+config :mica, :policy_urls,
   next_terms: "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c",
   next_privacy: "https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752",
   panl_terms: "https://panl.nl/terms",
   panl_privacy: "https://panl.nl/privacy"
 
-config :core,
-  greenlight_auth_module: Core.Authorization,
-  image_catalog: Core.ImageCatalog.Unsplash,
+config :mica,
+  greenlight_auth_module: Mica.Authorization,
+  image_catalog: Mica.ImageCatalog.Unsplash,
   payment_providers: %{
     "opp" => Systems.Payment.Provider.OPP,
     "local" => Systems.Payment.Provider.Local
@@ -92,30 +92,30 @@ config :core,
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
 # Compile-time list so Logo.pool doesn't stat the filesystem on every render.
 # Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
-config :core, :pixel, pool_assets: []
+config :mica, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
 # (e.g. the local payment simulator routes /payment/local/...). Off by default
 # so production never compiles in these stubs; enabled for :dev/:test (see
 # dev.exs/test.exs) and for non-production release builds via the
 # ENABLE_E2E_SUPPORT build arg.
-config :core, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
+config :mica, :enable_e2e_support, System.get_env("ENABLE_E2E_SUPPORT", "false") == "true"
 
-config :core, Systems.Payment.Provider.OPP,
+config :mica, Systems.Payment.Provider.OPP,
   base_url: "https://api-sandbox.onlinebetaalplatform.nl/v1",
   partner_fee_percentage: 0
 
 config :gettext, default_locale: "en"
 
-config :core, CoreWeb.Gettext, locales: ~w(en es de it nl ro lt)
+config :mica, MicaWeb.Gettext, locales: ~w(en es de it nl ro lt)
 
 config :phoenix_inline_svg,
   dir: "./assets/static/images",
   default_collection: "icons"
 
-# Queues: Mica's and the systems' (Core.ObanConfig); a queue listed under
+# Queues: Mica's and the systems' (Mica.ObanConfig); a queue listed under
 # `queues:` keeps the limit set here, and `queues: false` turns them all off.
-config :core, Oban, repo: Core.Repo
+config :mica, Oban, repo: Mica.Repo
 
 config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 
@@ -125,24 +125,24 @@ config :assent, http_adapter: Assent.HTTPAdapter.Httpc
 # defaults. A service without any quota is not limited. The Feldspar donate and
 # log API has none: its requests come through the proxy, so a per-IP limit
 # would cover every participant on a node.
-config :core, :rate, prune_interval: 60 * 60 * 1000
+config :mica, :rate, prune_interval: 60 * 60 * 1000
 
 # Reconciliation sweep: base back-off (ms) for provider retries/throttle waits.
-config :core, :reconciliation, backoff_ms: 200
+config :mica, :reconciliation, backoff_ms: 200
 
-config :core, ecto_repos: [Core.Repo]
+config :mica, ecto_repos: [Mica.Repo]
 
-config :core, Systems.Email.Mailer,
+config :mica, Systems.Email.Mailer,
   adapter: Bamboo.TestAdapter,
   default_from_email: "no-reply@example.com"
 
-config :core, Systems.Account.Auth.Surfconext,
+config :mica, Systems.Account.Auth.Surfconext,
   client_id: "not-set",
   client_secret: "not-set",
   base_url: "https://connect.test.surfconext.nl",
   redirect_uri: "not-set"
 
-config :core, Systems.Account.Auth.Centerdata,
+config :mica, Systems.Account.Auth.Centerdata,
   client_id: "not-set",
   client_secret: "not-set",
   base_url: "https://messpanel.test.centerdata.nl",
@@ -153,29 +153,29 @@ config :core, Systems.Account.Auth.Centerdata,
 
 # Domains routed to Surfconext SSO on the email-first auth page.
 # Override in runtime config per environment.
-config :core, :surfconext_domains, []
+config :mica, :surfconext_domains, []
 
-config :core, Systems.Account.Auth.Google,
+config :mica, Systems.Account.Auth.Google,
   client_id: System.get_env("GOOGLE_SIGN_IN_CLIENT_ID"),
   client_secret: System.get_env("GOOGLE_SIGN_IN_CLIENT_SECRET"),
   redirect_uri: "http://localhost:4000/auth/google/callback"
 
-config :core, Core.ImageCatalog.Unsplash,
+config :mica, Mica.ImageCatalog.Unsplash,
   access_key: "",
-  app_name: "Core"
+  app_name: "Mica"
 
-config :core, :s3, bucket: "port"
+config :mica, :s3, bucket: "port"
 
-config :core, CoreWeb.Endpoint,
+config :mica, MicaWeb.Endpoint,
   url: [host: "localhost"],
   secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
   server: true,
   force_ssl: false,
   render_errors: [
-    formats: [html: CoreWeb.ErrorHTML, json: CoreWeb.ErrorJSON],
-    layout: [html: {CoreWeb.Layouts, :error}]
+    formats: [html: MicaWeb.ErrorHTML, json: MicaWeb.ErrorJSON],
+    layout: [html: {MicaWeb.Layouts, :error}]
   ],
-  pubsub_server: Core.PubSub,
+  pubsub_server: Mica.PubSub,
   live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
   http: [
     port: 4000,
@@ -184,27 +184,27 @@ config :core, CoreWeb.Endpoint,
     ]
   ]
 
-config :core, :ssl,
+config :mica, :ssl,
   client: :native,
   directory_url: {:internal, port: 4002},
   db_folder: Path.join("tmp", "site_encrypt_db"),
   domains: ["localhost"],
   emails: ["admin@localhost"]
 
-config :core, :ssl_proxied, {:ok, "true"} == System.fetch_env("SSL_PROXIED")
+config :mica, :ssl_proxied, {:ok, "true"} == System.fetch_env("SSL_PROXIED")
 
-config :core, :version, System.get_env("VERSION", "dev")
+config :mica, :version, System.get_env("VERSION", "dev")
 
-config :core, :assignment, external_panels: ~w(liss ioresearch generic)
+config :mica, :assignment, external_panels: ~w(liss ioresearch generic)
 
-config :core, :storage,
+config :mica, :storage,
   services: ~w(builtin yoda),
   job_scheduler: Systems.Storage.JobScheduler.Oban
 
 # Default built-in storage backend (can be overridden in runtime.exs for production)
-config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
-# The SaaS config, which names the SaaS module (`config :core, saas:`). The
+# The SaaS config, which names the SaaS module (`config :mica, saas:`). The
 # BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
 # code-split.
 default_bundle =
@@ -218,13 +218,13 @@ saas_dir =
 
 import_config "../#{saas_dir}/config/config.exs"
 
-config :core, :zircon,
+config :mica, :zircon,
   screening: [
-    agent_module: Systems.Zircon.Screening.HumanAgent
+    agent_module: Next.Systems.Zircon.Screening.HumanAgent
   ]
 
 # Paper system import configuration
-config :core, :paper,
+config :mica, :paper,
   import_batch_size: 100,
   import_batch_timeout: 30_000,
   # Maximum allowed RIS file size (default 150MB - supports ~100,000 paper references)
@@ -233,6 +233,6 @@ config :core, :paper,
   ris_stream_chunk_size: 65_536
 
 # Temp file store for Storage system (stores data donations before delivery)
-config :core, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
+config :mica, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
 
 import_config "#{config_env()}.exs"

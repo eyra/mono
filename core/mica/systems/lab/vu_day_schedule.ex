@@ -1,5 +1,5 @@
 defmodule Systems.Lab.VUDaySchedule do
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   alias Systems.{
     Lab

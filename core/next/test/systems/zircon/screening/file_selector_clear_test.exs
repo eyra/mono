@@ -1,10 +1,10 @@
-defmodule Systems.Zircon.Screening.FileSelectorClearTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.FileSelectorClearTest do
+  use MicaWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Mica.Repo
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   setup do
     # Isolate all signals to prevent unwanted propagation
@@ -38,7 +38,7 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
             })
         })
 
-      Repo.insert!(%Systems.Zircon.Screening.ToolReferenceFileAssoc{
+      Repo.insert!(%Next.Systems.Zircon.Screening.ToolReferenceFileAssoc{
         tool: tool,
         reference_file: reference_file
       })
@@ -153,7 +153,7 @@ defmodule Systems.Zircon.Screening.FileSelectorClearTest do
       # Associate all with tool
       [ref_file_1, ref_file_2, ref_file_3]
       |> Enum.each(fn rf ->
-        Repo.insert!(%Systems.Zircon.Screening.ToolReferenceFileAssoc{
+        Repo.insert!(%Next.Systems.Zircon.Screening.ToolReferenceFileAssoc{
           tool: tool,
           reference_file: rf
         })

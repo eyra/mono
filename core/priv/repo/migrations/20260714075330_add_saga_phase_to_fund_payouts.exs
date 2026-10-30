@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddSagaPhaseToFundPayouts do
+defmodule Mica.Repo.Migrations.AddSagaPhaseToFundPayouts do
   use Ecto.Migration
 
   def up do

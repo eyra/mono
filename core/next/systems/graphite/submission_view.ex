@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.SubmissionView do
-  use CoreWeb, :html
+defmodule Next.Systems.Graphite.SubmissionView do
+  use MicaWeb, :html
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.Panel
 
   attr(:items, :list, required: true)

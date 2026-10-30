@@ -25,7 +25,7 @@ defmodule Systems.Account.Auth do
   `{:ok, %{user: ..., first_time?: ...}}` result.
   """
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Systems.Account
   alias Systems.Account.Auth.Methods

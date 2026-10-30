@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ImportViewModalTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.ImportViewModalTest do
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
-  alias Core.Factories
-  alias Systems.Zircon.Screening
+  alias Mica.Factories
+  alias Next.Systems.Zircon.Screening
 
   setup do
     user = Factories.insert!(:member)
@@ -15,10 +15,10 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
   describe "Modal functionality for warnings, new papers, and existing papers" do
     test "clicking warning button opens modal with warnings view", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"
@@ -62,10 +62,10 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
 
     test "clicking new papers button opens modal with new papers view", %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"
@@ -111,10 +111,10 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
       tool: tool
     } do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"
@@ -158,10 +158,10 @@ defmodule Systems.Zircon.Screening.ImportViewModalTest do
     test "all three modals (warnings, new papers, duplicates) can be triggered from the same view",
          %{conn: conn, tool: tool} do
       # Create the necessary setup
-      paper_set = Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
+      paper_set = Next.Systems.Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
 
       reference_file =
-        Systems.Zircon.Public.insert_reference_file!(
+        Next.Systems.Zircon.Public.insert_reference_file!(
           tool,
           "test.ris",
           "http://example.com/test.ris"

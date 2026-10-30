@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddExperimentPart3 do
+defmodule Mica.Repo.Migrations.AddExperimentPart3 do
   use Ecto.Migration
 
   def up do

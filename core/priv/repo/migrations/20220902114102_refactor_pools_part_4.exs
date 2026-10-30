@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
+defmodule Mica.Repo.Migrations.RefactorPoolsPart4 do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -62,7 +62,7 @@ defmodule Core.Repo.Migrations.RefactorPoolsPart4 do
 
   defp query_all(table, fields) do
     {:ok, %{rows: rows}} =
-      query(Core.Repo, "SELECT #{fields} FROM #{table}")
+      query(Mica.Repo, "SELECT #{fields} FROM #{table}")
 
     rows
   end

@@ -2,10 +2,10 @@ defmodule Systems.NextAction.Public do
   @moduledoc """
   The NextActions context.
   """
-  # This is a macro that imports the Core module and the public macro from the Core module.
-  use Core, :public
+  # This is a macro that imports the Mica module and the public macro from the Mica module.
+  use Mica, :public
   import Ecto.Query, warn: false
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
   alias Frameworks.Signal
 

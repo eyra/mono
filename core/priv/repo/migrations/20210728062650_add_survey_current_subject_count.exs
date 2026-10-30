@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddSurveyCurrentSubjectCount do
+defmodule Mica.Repo.Migrations.AddSurveyCurrentSubjectCount do
   use Ecto.Migration
 
   def up do

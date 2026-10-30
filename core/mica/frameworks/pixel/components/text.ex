@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.Text do
 
   The testid is rendered as `data-testid` on the outermost `<div>` wrapper of each text component.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:color, :string, default: "text-grey1")
   attr(:align, :string, default: "text-left")

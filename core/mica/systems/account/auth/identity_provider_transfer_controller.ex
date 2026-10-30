@@ -1,6 +1,6 @@
 defmodule Systems.Account.Auth.IdentityProviderTransferController do
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
 

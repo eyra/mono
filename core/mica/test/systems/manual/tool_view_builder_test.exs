@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ToolViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Manual

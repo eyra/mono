@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdatePoolSubmission do
+defmodule Mica.Repo.Migrations.UpdatePoolSubmission do
   use Ecto.Migration
 
   def up do

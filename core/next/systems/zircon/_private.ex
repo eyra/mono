@@ -1,8 +1,8 @@
-defmodule Systems.Zircon.Private do
-  use Systems.Zircon.Constants
+defmodule Next.Systems.Zircon.Private do
+  use Next.Systems.Zircon.Constants
 
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   def list_research_dimensions() do
     Ontology.Public.get_members_of_category(@research_dimension)

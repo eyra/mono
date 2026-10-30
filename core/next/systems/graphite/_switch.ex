@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.Switch do
+defmodule Next.Systems.Graphite.Switch do
   use Frameworks.Signal.Handler
   require Logger
 
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Signal
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Assignment
 
   @impl true

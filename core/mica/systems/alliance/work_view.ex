@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.WorkView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:url, :string, required: true)
 
