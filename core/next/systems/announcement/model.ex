@@ -1,15 +1,15 @@
-defmodule Next.Announcement.Model do
+defmodule Systems.Announcement.Model do
   @moduledoc """
   An announcement written by a system admin for a group of creators. The body is
-  Trix HTML, cleaned by `Next.Announcement.Scrubber` on every save.
+  Trix HTML, cleaned by `Systems.Announcement.Scrubber` on every save.
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
 
-  alias Next.Announcement
   alias Systems.Account.User
+  alias Systems.Announcement
 
   @kinds ~w(release_notes)a
   @priorities ~w(normal high)a
@@ -36,10 +36,17 @@ defmodule Next.Announcement.Model do
   def changeset(announcement, attrs) do
     announcement
     |> cast(attrs, @fields)
-    |> update_change(:body, &Announcement.Scrubber.sanitize/1)
+    |> update_change(:body, &clean_body/1)
     |> validate_required(@fields)
+    |> validate_length(:title, max: 255)
     |> check_constraint(:kind, name: :kind_must_be_valid)
     |> check_constraint(:priority, name: :priority_must_be_valid)
+  end
+
+  # A body without text, such as one that only held images, counts as empty.
+  defp clean_body(body) do
+    body = Announcement.Scrubber.sanitize(body)
+    if Announcement.Scrubber.text?(body), do: body, else: ""
   end
 
   def preload_graph(:down), do: preload_graph([:author])

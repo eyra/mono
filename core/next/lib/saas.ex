@@ -11,7 +11,7 @@ defmodule Next.SaaS do
         Next.Account.System,
         Next.E2E.System,
         Next.Panl.System,
-        Next.Announcement.System,
+        Systems.Announcement.System,
         Systems.Graphite.System,
         Systems.Onyx.System,
         Systems.Student.System,

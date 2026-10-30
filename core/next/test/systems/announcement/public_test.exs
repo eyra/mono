@@ -1,8 +1,8 @@
-defmodule Next.Announcement.PublicTest do
+defmodule Systems.Announcement.PublicTest do
   use Core.DataCase, async: true
 
   alias Core.Repo
-  alias Next.Announcement
+  alias Systems.Announcement
 
   @attrs %{
     kind: :release_notes,
@@ -67,6 +67,32 @@ defmodule Next.Announcement.PublicTest do
       assert %{body: ["can't be blank"]} = errors_on(changeset)
     end
 
+    test "rejects a body with only a pasted image", %{author: author} do
+      body =
+        ~S|<div><figure data-trix-content-type="image" class="attachment"><img src="https://example.org/s.png"><figcaption class="attachment__caption"></figcaption></figure></div>|
+
+      assert {:error, changeset} =
+               Announcement.Public.create_announcement(author, %{@attrs | body: body})
+
+      assert %{body: ["can't be blank"]} = errors_on(changeset)
+    end
+
+    test "rejects a title longer than 255 characters", %{author: author} do
+      assert {:ok, _} =
+               Announcement.Public.create_announcement(author, %{
+                 @attrs
+                 | title: String.duplicate("x", 255)
+               })
+
+      assert {:error, changeset} =
+               Announcement.Public.create_announcement(author, %{
+                 @attrs
+                 | title: String.duplicate("x", 256)
+               })
+
+      assert %{title: ["should be at most 255 character(s)"]} = errors_on(changeset)
+    end
+
     test "rejects an unknown kind or priority", %{author: author} do
       assert {:error, changeset} =
                Announcement.Public.create_announcement(author, %{
@@ -114,6 +140,17 @@ defmodule Next.Announcement.PublicTest do
 
       assert %{title: "Fixed title", body: "<div>Fixed <a>link</a></div>"} =
                Announcement.Public.get_announcement!(announcement.id)
+    end
+
+    test "rejects a title longer than 255 characters", %{author: author} do
+      announcement = create_announcement(author)
+
+      assert {:error, changeset} =
+               Announcement.Public.update_announcement(announcement, %{
+                 title: String.duplicate("x", 256)
+               })
+
+      assert %{title: ["should be at most 255 character(s)"]} = errors_on(changeset)
     end
   end
 

@@ -1,17 +1,17 @@
-defmodule Next.Announcement.Public do
+defmodule Systems.Announcement.Public do
   @moduledoc """
   Create, change and read announcements and their recipients.
 
-  A recipient row (`Next.Announcement.RecipientModel`) records that one user
+  A recipient row (`Systems.Announcement.RecipientModel`) records that one user
   received an announcement and when they read it. Only users with a recipient
   row may open an announcement (`get_received/2`).
   """
   import Ecto.Query, warn: false
-  import Next.Announcement.Queries
+  import Systems.Announcement.Queries
 
   alias Core.Repo
-  alias Next.Announcement
   alias Systems.Account.User
+  alias Systems.Announcement
 
   @doc "Creates an announcement by `author`. The body is cleaned before it is stored."
   def create_announcement(%User{id: author_id}, attrs) do

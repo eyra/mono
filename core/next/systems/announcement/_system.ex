@@ -1,4 +1,4 @@
-defmodule Next.Announcement.System do
+defmodule Systems.Announcement.System do
   @moduledoc """
   Announcements that system admins write for creators, such as release notes:
   the announcement, its cleaned rich-text body and the users who received it.

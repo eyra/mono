@@ -1,7 +1,7 @@
-defmodule Next.Announcement.ScrubberTest do
+defmodule Systems.Announcement.ScrubberTest do
   use ExUnit.Case, async: true
 
-  alias Next.Announcement.Scrubber
+  alias Systems.Announcement.Scrubber
 
   describe "Trix markup" do
     test "keeps the tags Trix produces" do
@@ -71,8 +71,34 @@ defmodule Next.Announcement.ScrubberTest do
              ) == "Text"
     end
 
+    test "removes images pasted as Trix attachments" do
+      html =
+        ~S|<div>See <figure data-trix-attachment="{}" data-trix-content-type="image" class="attachment attachment--preview"><img src="https://example.org/s.png" width="10" height="10"><figcaption class="attachment__caption"></figcaption></figure> it</div>|
+
+      assert Scrubber.sanitize(html) == "<div>See  it</div>"
+    end
+
     test "escapes stray angle brackets in text" do
       assert Scrubber.sanitize("1 < 2 & 3 > 2") == "1 &lt; 2 &amp; 3 &gt; 2"
+    end
+  end
+
+  describe "text?/1" do
+    test "is true when there is text" do
+      assert Scrubber.text?("<div>Hi</div>")
+      assert Scrubber.text?("<div><a href=\"https://example.org\">link</a></div>")
+    end
+
+    test "is false for tags and whitespace only" do
+      for html <- [
+            "",
+            "<div></div>",
+            "<div><br /></div>",
+            "<div> &nbsp; </div>",
+            "<ul><li></li></ul>"
+          ] do
+        refute Scrubber.text?(html), html
+      end
     end
   end
 end
