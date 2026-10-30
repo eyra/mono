@@ -32,6 +32,7 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
     []
     |> append_if(:settings, special != :builtin)
     |> append_if(:data, special == :builtin)
+    |> append_if(:participants, special == :builtin)
     |> append(:monitor)
   end
 
@@ -90,6 +91,29 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
       show_errors: show_errors,
       title: dgettext("eyra-storage", "tabbar.item.data"),
       forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
+      type: :fullpage,
+      child: child
+    }
+  end
+
+  defp create_tab(
+         :participants,
+         endpoint,
+         show_errors,
+         %{fabric: fabric, timezone: timezone} = _assigns
+       ) do
+    child =
+      Fabric.prepare_child(fabric, :participants_view, Storage.EndpointParticipantsView, %{
+        endpoint: endpoint,
+        timezone: timezone
+      })
+
+    %{
+      id: :participants_view,
+      ready: true,
+      show_errors: show_errors,
+      title: dgettext("eyra-storage", "tabbar.item.participants"),
+      forward_title: dgettext("eyra-storage", "tabbar.item.participants.forward"),
       type: :fullpage,
       child: child
     }
