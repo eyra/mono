@@ -22,6 +22,7 @@ defmodule Systems.NextAction.Public do
   """
   def list_next_actions(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
+    |> by_priority()
     |> Repo.all()
     |> Enum.map(&to_view_model(&1))
   end
@@ -30,6 +31,7 @@ defmodule Systems.NextAction.Public do
   """
   def next_best_action(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -46,6 +48,7 @@ defmodule Systems.NextAction.Public do
   """
   def next_best_action_for_key(%User{id: user_id}, key) do
     from(na in NextAction.Model, where: na.user_id == ^user_id and na.key == ^key, limit: 1)
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -64,6 +67,7 @@ defmodule Systems.NextAction.Public do
       where: na.user_id == ^user_id and na.action == ^action_string and na.key in ^keys,
       limit: 1
     )
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -78,12 +82,20 @@ defmodule Systems.NextAction.Public do
       where: na.user_id == ^user_id and na.action == ^action_string,
       limit: 10
     )
+    |> by_priority()
     |> Repo.all()
     |> Enum.map(&to_view_model(&1))
   end
 
   @doc """
   Creates a next action for the audience.
+
+  Options:
+    * `:key` - distinguishes several next actions of the same type for one user
+    * `:params` - passed to the action's `to_view_model/2`
+    * `:priority` - `:high`, `:normal` (default) or `:low`; lists show higher
+      priorities first. Creating an existing next action again increases its
+      count and only changes its priority when `:priority` is given.
   """
   def create_next_action(audience, action, opts \\ [])
 
@@ -101,15 +113,22 @@ defmodule Systems.NextAction.Public do
         "(user_id,action,key) WHERE key is not NULL"
       end
 
+    priority_attrs = Map.new(Keyword.take(opts, [:priority]))
+
     %NextAction.Model{}
-    |> NextAction.Model.changeset(%{
-      user: user,
-      action: Atom.to_string(action),
-      key: key,
-      params: Keyword.get(opts, :params)
-    })
+    |> NextAction.Model.changeset(
+      Map.merge(
+        %{
+          user: user,
+          action: Atom.to_string(action),
+          key: key,
+          params: Keyword.get(opts, :params)
+        },
+        priority_attrs
+      )
+    )
     |> Repo.insert!(
-      on_conflict: [inc: [count: 1]],
+      on_conflict: [inc: [count: 1], set: Map.to_list(priority_attrs)],
       conflict_target: {:unsafe_fragment, conflict_target_fragment}
     )
     |> tap(
@@ -142,6 +161,12 @@ defmodule Systems.NextAction.Public do
         key: key
       })
     end)
+  end
+
+  defp by_priority(query) do
+    from(na in query,
+      order_by: [desc: na.priority, desc: na.inserted_at, asc: na.action, asc: na.key]
+    )
   end
 
   defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))
