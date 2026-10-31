@@ -4,7 +4,7 @@ defmodule Systems.Announcement.Public do
 
   A recipient row (`Systems.Announcement.RecipientModel`) records that one user
   received an announcement and when they read it. Only users with a recipient
-  row may open an announcement (`get_received/2`).
+  row may open a published announcement (`get_received/2`).
   """
   import Ecto.Query, warn: false
   import Systems.Announcement.Queries
@@ -12,6 +12,8 @@ defmodule Systems.Announcement.Public do
   alias Core.Repo
   alias Systems.Account.User
   alias Systems.Announcement
+  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Systems.NextAction
 
   @doc "Creates an announcement by `author`."
   def create_announcement(%User{id: author_id}, attrs) do
@@ -40,7 +42,7 @@ defmodule Systems.Announcement.Public do
   end
 
   @doc """
-  The announcements `user` received, as recipient rows with the announcement
+  The published announcements `user` received, as recipient rows with the announcement
   preloaded, newest publication first.
   """
   def list_received(%User{} = user) do
@@ -51,13 +53,49 @@ defmodule Systems.Announcement.Public do
 
   @doc """
   The recipient row of `user` for the announcement with `announcement_id`, with
-  the announcement preloaded, or `nil` when the user did not receive it.
+  the announcement preloaded, or `nil` when the user did not receive it or it
+  is not published.
   """
   def get_received(%User{} = user, announcement_id) do
     received_query(user)
     |> where([announcement: a], a.id == ^announcement_id)
     |> preload([announcement: a], announcement: a)
     |> Repo.one()
+  end
+
+  @doc """
+  Marks the announcement read for the recipient and clears its To-do.
+  `read_at` is set only once and keeps the time of the first opening. The
+  To-do is cleared on every call, so one that is left or comes back after
+  the first opening goes too. Returns the recipient with `read_at` set.
+  """
+  def mark_read(%Announcement.RecipientModel{} = recipient) do
+    recipient = stamp_read_at(recipient)
+    clear_to_do(recipient)
+    recipient
+  end
+
+  defp stamp_read_at(%Announcement.RecipientModel{id: id, read_at: nil} = recipient) do
+    read_at = DateTime.utc_now() |> DateTime.truncate(:second)
+    updated_at = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    recipient_query()
+    |> where([recipient: r], r.id == ^id and is_nil(r.read_at))
+    |> Repo.update_all(set: [read_at: read_at, updated_at: updated_at])
+    |> case do
+      {1, _} -> %{recipient | read_at: read_at}
+      {0, _} -> %{recipient | read_at: Repo.reload!(recipient).read_at}
+    end
+  end
+
+  defp stamp_read_at(%Announcement.RecipientModel{} = recipient), do: recipient
+
+  defp clear_to_do(%Announcement.RecipientModel{announcement_id: announcement_id} = recipient) do
+    %{user: user} = Repo.preload(recipient, :user)
+
+    NextAction.Public.clear_next_action(user, ReadAnnouncement,
+      key: ReadAnnouncement.key(announcement_id)
+    )
   end
 
   @doc "The recipient rows of `announcement`."

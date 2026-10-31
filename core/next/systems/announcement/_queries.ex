@@ -22,9 +22,11 @@ defmodule Systems.Announcement.Queries do
     |> where([recipient: r], r.user_id == ^user_id)
   end
 
+  # Only published announcements are received, whatever recipient rows exist.
   def received_query(%User{} = user) do
     recipient_query(user)
     |> join(:inner, [recipient: r], a in assoc(r, :announcement), as: :announcement)
-    |> order_by([announcement: a], desc_nulls_last: a.published_at, desc: a.id)
+    |> where([announcement: a], not is_nil(a.published_at))
+    |> order_by([announcement: a], desc: a.published_at, desc: a.id)
   end
 end
