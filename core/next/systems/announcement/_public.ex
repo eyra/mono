@@ -13,14 +13,14 @@ defmodule Systems.Announcement.Public do
   alias Systems.Account.User
   alias Systems.Announcement
 
-  @doc "Creates an announcement by `author`. The body is cleaned before it is stored."
+  @doc "Creates an announcement by `author`."
   def create_announcement(%User{id: author_id}, attrs) do
     %Announcement.Model{author_id: author_id}
     |> Announcement.Model.changeset(attrs)
     |> Repo.insert()
   end
 
-  @doc "Changes an announcement. The body is cleaned before it is stored."
+  @doc "Changes an announcement."
   def update_announcement(%Announcement.Model{} = announcement, attrs) do
     announcement
     |> Announcement.Model.changeset(attrs)
