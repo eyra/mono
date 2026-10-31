@@ -30,7 +30,7 @@ defmodule Systems.Announcement.PageTest do
       ctx
     end
 
-    test "sees the title, the publication date and the cleaned body", %{
+    test "sees the title, the publication date and the body", %{
       conn: conn,
       announcement: %{id: id}
     } do

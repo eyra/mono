@@ -1,7 +1,7 @@
 defmodule Systems.Announcement.Model do
   @moduledoc """
   An announcement written by a system admin for a group of creators. The body is
-  Trix HTML, cleaned by `Systems.Announcement.Scrubber` on every save.
+  the HTML of the rich-text editor (Trix), stored as the editor sends it.
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
@@ -36,17 +36,24 @@ defmodule Systems.Announcement.Model do
   def changeset(announcement, attrs) do
     announcement
     |> cast(attrs, @fields)
-    |> update_change(:body, &clean_body/1)
+    |> update_change(:body, &blank_without_text/1)
     |> validate_required(@fields)
     |> validate_length(:title, max: 255)
     |> check_constraint(:kind, name: :kind_must_be_valid)
     |> check_constraint(:priority, name: :priority_must_be_valid)
   end
 
-  # A body without text, such as one that only held images, counts as empty.
-  defp clean_body(body) do
-    body = Announcement.Scrubber.sanitize(body)
-    if Announcement.Scrubber.text?(body), do: body, else: ""
+  # A body without visible text, such as one with only empty tags or an image,
+  # counts as empty.
+  defp blank_without_text(body) do
+    if text?(body), do: body, else: ""
+  end
+
+  defp text?(html) do
+    case Floki.parse_fragment(html) do
+      {:ok, tree} -> tree |> Floki.text(style: false) |> String.trim() != ""
+      {:error, _} -> false
+    end
   end
 
   def preload_graph(:down), do: preload_graph([:author])

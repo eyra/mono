@@ -37,13 +37,14 @@ defmodule Systems.Announcement.PublicTest do
                Announcement.Public.create_announcement(author, Map.delete(@attrs, :priority))
     end
 
-    test "stores the cleaned body", %{author: author} do
-      body = ~s'<div onclick="alert(1)">Hi<script>alert(1)</script></div>'
+    test "stores the body as the editor sends it", %{author: author} do
+      body =
+        ~s'<div>Hi <a href="https://example.org" target="_blank">link</a><br><!--block-->next</div>'
 
       assert {:ok, %{id: id}} =
                Announcement.Public.create_announcement(author, %{@attrs | body: body})
 
-      assert %{body: "<div>Hi</div>"} = Announcement.Public.get_announcement!(id)
+      assert %{body: ^body} = Announcement.Public.get_announcement!(id)
     end
 
     test "requires kind, title, summary and body", %{author: author} do
@@ -57,14 +58,19 @@ defmodule Systems.Announcement.PublicTest do
              } = errors_on(changeset)
     end
 
-    test "rejects a body that is empty after cleaning", %{author: author} do
-      assert {:error, changeset} =
-               Announcement.Public.create_announcement(author, %{
-                 @attrs
-                 | body: "<script>alert(1)</script>"
-               })
+    test "rejects a body without visible text", %{author: author} do
+      for body <- [
+            "<div></div>",
+            "<div><br></div>",
+            "<div> &nbsp; </div>",
+            "<ul><li></li></ul>",
+            "<div><script>alert(1)</script><style>p {}</style></div>"
+          ] do
+        assert {:error, changeset} =
+                 Announcement.Public.create_announcement(author, %{@attrs | body: body})
 
-      assert %{body: ["can't be blank"]} = errors_on(changeset)
+        assert %{body: ["can't be blank"]} = errors_on(changeset), body
+      end
     end
 
     test "rejects a body with only a pasted image", %{author: author} do
@@ -129,16 +135,19 @@ defmodule Systems.Announcement.PublicTest do
   end
 
   describe "update_announcement/2" do
-    test "changes the text and stores the cleaned body", %{author: author} do
+    test "changes the title and body", %{author: author} do
       announcement = create_announcement(author)
 
       assert {:ok, _} =
                Announcement.Public.update_announcement(announcement, %{
                  title: "Fixed title",
-                 body: ~s'<div>Fixed <a href="javascript:alert(1)">link</a></div>'
+                 body: ~s'<div>Fixed <a href="https://example.org">link</a></div>'
                })
 
-      assert %{title: "Fixed title", body: "<div>Fixed <a>link</a></div>"} =
+      assert %{
+               title: "Fixed title",
+               body: ~s'<div>Fixed <a href="https://example.org">link</a></div>'
+             } =
                Announcement.Public.get_announcement!(announcement.id)
     end
 

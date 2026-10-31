@@ -1,12 +1,13 @@
 defmodule Systems.Announcement.Page do
   @moduledoc """
   An announcement as its recipient reads it: title, publication date and the
-  cleaned body. Opening it marks it read and clears its To-do
+  rich-text body. Opening it marks it read and clears its To-do
   (`Systems.Announcement.Public.mark_read/1`); Desktop and the To-do counter
   refresh through their own switches on `{:next_action, :cleared}`.
 
-  Users who did not receive the announcement, and everyone while the
-  `:announcements` flag is off, get not-found.
+  Users who did not receive the announcement, everyone while it is not
+  published, and everyone while the `:announcements` flag is off, get
+  not-found.
   """
   use Systems.Content.Composer, :live_workspace
 
