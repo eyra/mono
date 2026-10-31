@@ -1,0 +1,88 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.kind"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.priority"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.published"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.recipients"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.empty"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.new.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.not.published"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.body.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.cancel.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.kind.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.priority.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.save.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.summary.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "kind.release_notes"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "priority.high"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "priority.normal"
+msgstr ""

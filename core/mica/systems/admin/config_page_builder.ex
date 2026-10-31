@@ -5,12 +5,21 @@ defmodule Systems.Admin.ConfigPageBuilder do
   alias Systems.Admin
   alias Systems.Org
 
-  @doc "Tab ids in display order, for system admins and for org admins."
+  @doc """
+  Tab ids in display order, for system admins and for org admins. Includes
+  panels that are not enabled in this deployment.
+  """
   def tab_ids do
     %{
-      admin: Enum.map(panels(:admin), & &1.id()),
-      org_admin: Enum.map(panels(:org_admin), & &1.id())
+      admin: tab_ids(:admin),
+      org_admin: tab_ids(:org_admin)
     }
+  end
+
+  defp tab_ids(viewer) do
+    Core.SaaS.admin_panels()
+    |> Enum.filter(&Admin.Panel.in_audience?(&1, viewer))
+    |> Enum.map(& &1.id())
   end
 
   @doc "The panels `viewer` sees, in `Core.SaaS.admin_panels/0` order."

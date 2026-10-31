@@ -60,6 +60,29 @@ defmodule Systems.Announcement.Public do
     |> Repo.one()
   end
 
+  @doc "All announcements, newest first."
+  def list_announcements(preload \\ []) do
+    announcement_query()
+    |> order_by([announcement: a], desc: a.inserted_at, desc: a.id)
+    |> Repo.all()
+    |> Repo.preload(preload)
+  end
+
+  @doc """
+  The number of recipients per announcement, as a map from announcement id to
+  count. Announcements without recipients are left out.
+  """
+  def count_recipients(announcements) do
+    ids = Enum.map(announcements, & &1.id)
+
+    recipient_query()
+    |> where([recipient: r], r.announcement_id in ^ids)
+    |> group_by([recipient: r], r.announcement_id)
+    |> select([recipient: r], {r.announcement_id, count(r.id)})
+    |> Repo.all()
+    |> Map.new()
+  end
+
   @doc "The recipient rows of `announcement`."
   def list_recipients(%Announcement.Model{} = announcement, preload \\ []) do
     recipient_query(announcement)
