@@ -22,6 +22,7 @@ defmodule Core.RuntimeConfig.Check do
   Checks the loaded config, prints the result and halts: status 0 when the
   config is valid, 1 when it is not.
   """
+  @spec run() :: no_return()
   def run do
     config = loaded_config()
 
