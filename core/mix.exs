@@ -99,10 +99,10 @@ defmodule Core.MixProject do
       {:ex_aws_s3, "2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0"},
+      {:floki, "0.38.3"},
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
       {:hackney, "1.25.0"},
-      {:html_sanitize_ex, "1.5.6"},
       {:httpoison, "2.2.3"},
       {:image, "0.62.0"},
       {:jason, "1.4.4"},
