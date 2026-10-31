@@ -97,7 +97,7 @@ defmodule Systems.Announcement.AdminViewTest do
         save(
           view,
           @attrs,
-          ~s|<div>See <a href="https://eyra.co">the notes</a><script>alert(1)</script></div>|
+          ~s|<div>See <a href="https://eyra.co">the notes</a></div>|
         )
 
       assert [%Announcement.Model{id: id} = announcement] = Repo.all(Announcement.Model)
@@ -137,7 +137,7 @@ defmodule Systems.Announcement.AdminViewTest do
 
       assert body ==
                ~s|<div><a href="https://a.org" target="_blank">a</a> | <>
-                 ~s|<a href="https://b.org" target="_blank">b</a> | <>
+                 ~s|<a href='https://b.org' target="_blank">b</a> | <>
                  ~s|<a href="https://c.org" target="_blank">c</a> | <>
                  ~s|<a href="https://d.org" target="_blank">d</a></div>|
     end

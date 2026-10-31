@@ -61,8 +61,8 @@ defmodule Systems.Announcement.AdminView do
     end
   end
 
-  # `add_target_blank/1` skips links that already have a target, and the
-  # scrubber drops every target but `_blank`, so other targets go first.
+  # `add_target_blank/1` skips links that already have a target, so other
+  # targets go first.
   @link_target ~r/(<a\b[^>]*?)\s+target\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i
 
   defp open_links_in_new_tab(body) do
