@@ -11,6 +11,7 @@
 
 ## \#34 2026-11-04
 
+* Changed - Dependency updates. Upgrading: no action needed.
 * Added - Next: sign-in calls for the native app, so the app can ask for the email address and then the sign-in code on its own screen. Upgrading: no action needed.
 * Fixed - Sign-in codes match the email address however it is capitalised. A code requested just before the upgrade for an address typed with capitals can't be used afterwards; request a new one. Upgrading: no action needed.
 * Added - Optional settings for sign-in codes: `AUTH_CODE_LIMITS` replaces default limits for sign-in codes, and `TRUSTED_PROXIES` lists the proxies in front of the app. See `core/mica_saas/README.md` for both. A new table keeps the request counters. Upgrading: run the migrations, as with every release; without these settings the defaults apply.
