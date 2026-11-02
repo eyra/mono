@@ -20,6 +20,7 @@ defmodule Systems.Announcement.ToDoOrderTest do
 
     author = Factories.insert!(:admin)
     creator = Factories.insert!(:creator)
+    align_assignment_and_announcement_ids!()
     assignment = Factories.insert!(:assignment)
 
     NextAction.Public.create_next_action(creator, PendingContributions,
@@ -110,6 +111,15 @@ defmodule Systems.Announcement.ToDoOrderTest do
       |> Repo.update_all(set: [inserted_at: inserted_at])
 
     announcement
+  end
+
+  # Gives the next assignment and the next announcement the same id, so the
+  # first announcement's To-do has the same key as the assignment's To-do.
+  defp align_assignment_and_announcement_ids! do
+    Repo.query!("""
+    SELECT setval('assignments_id_seq', id, false), setval('announcement_id_seq', id, false)
+    FROM (SELECT GREATEST(nextval('assignments_id_seq'), nextval('announcement_id_seq')) AS id) next
+    """)
   end
 
   defp recipient(%Announcement.Model{id: id}, %{id: user_id}) do
