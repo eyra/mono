@@ -219,6 +219,69 @@ defmodule Systems.NextAction.PublicTest do
     end
   end
 
+  describe "create_next_actions/3" do
+    test "gives every user the next action with its key, params and priority", %{user: user} do
+      other = Factories.insert!(:member)
+
+      assert 2 ==
+               Public.create_next_actions([user.id, other.id], TitledAction,
+                 key: "release",
+                 params: %{"title" => "Release"},
+                 priority: :high
+               )
+
+      for u <- [user, other] do
+        assert [%{title: "Release"}] = Public.list_next_actions(u)
+        assert stored_priority(u, "release") == :high
+      end
+    end
+
+    test "priority is normal unless given", %{user: user} do
+      Public.create_next_actions([user.id], TitledAction,
+        key: "release",
+        params: %{"title" => "Release"}
+      )
+
+      assert stored_priority(user, "release") == :normal
+    end
+
+    test "increases the count of an existing next action, with or without key", %{user: user} do
+      Public.create_next_action(user, SomeAction)
+      Public.create_next_actions([user.id], SomeAction)
+      Public.create_next_action(user, SomeAction, key: "1")
+      Public.create_next_actions([user.id, user.id], SomeAction, key: "1")
+
+      assert [%{title: "Test: 2"}, %{title: "Test: 2"}] = Public.list_next_actions(user)
+    end
+
+    test "inserts in batches", %{user: user} do
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      rows =
+        for i <- 1..1_100 do
+          %{
+            email: "batch#{i}@example.org",
+            displayname: "Batch",
+            hashed_password: "not-used",
+            inserted_at: now,
+            updated_at: now
+          }
+        end
+
+      {1_100, users} = Repo.insert_all(Systems.Account.User, rows, returning: [:id])
+      user_ids = [user.id | Enum.map(users, & &1.id)]
+
+      assert 1_101 == Public.create_next_actions(user_ids, SomeAction, key: "batch")
+
+      assert 1_101 ==
+               Repo.aggregate(from(na in NextAction.Model, where: na.key == "batch"), :count)
+    end
+
+    test "does nothing for no users" do
+      assert 0 == Public.create_next_actions([], SomeAction)
+    end
+  end
+
   describe "clear_next_action/3" do
     test "clearing a non existing action does nothing", %{user: user} do
       Public.clear_next_action(user, :does_not_exist)

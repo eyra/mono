@@ -98,3 +98,59 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin.edit.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.count.one"
+msgid_plural "form.audience.count.other"
+msgstr[0] ""
+msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.creators"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.none"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.search.placeholder"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.email.high"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.email.normal"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.publish.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] ""
+msgstr[1] ""

@@ -98,3 +98,59 @@ msgstr "Published on %{date}"
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Announcement"
+
+#, elixir-autogen, elixir-format
+msgid "admin.edit.button"
+msgstr "Edit"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.count.one"
+msgid_plural "form.audience.count.other"
+msgstr[0] "%{count} creator will receive this announcement."
+msgstr[1] "%{count} creators will receive this announcement."
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.creators"
+msgstr "Creators"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.label"
+msgstr "Audience"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.none"
+msgstr "No creators match these filters and search."
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.search.placeholder"
+msgstr "Search on email or name"
+
+#, elixir-autogen, elixir-format
+msgid "form.email.high"
+msgstr "Each recipient also gets an email."
+
+#, elixir-autogen, elixir-format
+msgid "form.email.normal"
+msgstr "No email is sent."
+
+#, elixir-autogen, elixir-format
+msgid "form.publish.button"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr "Unread"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr "This announcement was published in the meantime, so your changes were not saved."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] "The audience changed to %{count} creator. Press Publish again to send it."
+msgstr[1] "The audience changed to %{count} creators. Press Publish again to send it."

@@ -215,6 +215,24 @@ defmodule Next.Systems.Announcement.PublicTest do
     test "is empty for a user without announcements" do
       assert Announcement.Public.list_received(Factories.insert!(:creator)) == []
     end
+
+    test "with a limit, returns only the newest", %{author: author} do
+      user = Factories.insert!(:creator)
+
+      [_oldest, middle, newest] =
+        for day <- [1, 2, 3] do
+          announcement =
+            create_announcement(author, DateTime.new!(Date.new!(2026, 10, day), ~T[09:00:00]))
+
+          {:ok, _} = insert_recipient(announcement, user)
+          announcement
+        end
+
+      assert [%{announcement_id: newest_id}, %{announcement_id: middle_id}] =
+               Announcement.Public.list_received(user, limit: 2)
+
+      assert {newest_id, middle_id} == {newest.id, middle.id}
+    end
   end
 
   describe "get_received/2" do

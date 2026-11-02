@@ -106,14 +106,6 @@ defmodule Systems.NextAction.Public do
 
   def create_next_action(%User{} = user, action, opts) when is_atom(action) do
     key = Keyword.get(opts, :key)
-
-    conflict_target_fragment =
-      if is_nil(key) do
-        "(user_id,action) WHERE key is NULL"
-      else
-        "(user_id,action,key) WHERE key is not NULL"
-      end
-
     priority_attrs = Map.new(Keyword.take(opts, [:priority]))
 
     %NextAction.Model{}
@@ -130,7 +122,7 @@ defmodule Systems.NextAction.Public do
     )
     |> Repo.insert!(
       on_conflict: [inc: [count: 1], set: Map.to_list(priority_attrs)],
-      conflict_target: {:unsafe_fragment, conflict_target_fragment}
+      conflict_target: {:unsafe_fragment, conflict_target_fragment(key)}
     )
     |> tap(
       &Signal.Public.dispatch!({:next_action, :created}, %{
@@ -141,6 +133,53 @@ defmodule Systems.NextAction.Public do
       })
     )
   end
+
+  @batch_size 1_000
+
+  @doc """
+  Creates the same next action for every user in `user_ids` with batched
+  inserts, for audiences too large for `create_next_action/3`. Takes the same
+  options. Users who already have it get its count increased, as with
+  `create_next_action/3`.
+
+  No `{:next_action, :created}` signal is sent: open pages and menu counters
+  show the new next actions on their next load. Returns the number of rows
+  inserted or updated.
+  """
+  def create_next_actions(user_ids, action, opts \\ [])
+      when is_list(user_ids) and is_atom(action) do
+    key = Keyword.get(opts, :key)
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    priority_attrs = Keyword.take(opts, [:priority])
+
+    row = %{
+      action: Atom.to_string(action),
+      key: key,
+      params: Keyword.get(opts, :params),
+      count: 1,
+      priority: Keyword.get(opts, :priority, :normal),
+      inserted_at: now,
+      updated_at: now
+    }
+
+    user_ids
+    |> Enum.uniq()
+    |> Enum.chunk_every(@batch_size)
+    |> Enum.reduce(0, fn chunk, total ->
+      rows = Enum.map(chunk, &Map.put(row, :user_id, &1))
+
+      {count, _} =
+        Repo.insert_all(NextAction.Model, rows,
+          on_conflict: [inc: [count: 1], set: [updated_at: now] ++ priority_attrs],
+          conflict_target: {:unsafe_fragment, conflict_target_fragment(key)}
+        )
+
+      total + count
+    end)
+  end
+
+  defp conflict_target_fragment(nil), do: "(user_id,action) WHERE key is NULL"
+  defp conflict_target_fragment(_key), do: "(user_id,action,key) WHERE key is not NULL"
 
   def clear_next_action(audience, action, opts \\ [])
 

@@ -10,7 +10,10 @@ defmodule Next.Systems.Announcement.Public do
   import Next.Systems.Announcement.Queries
 
   alias Mica.Repo
+  alias Ecto.Multi
+  alias Frameworks.Signal
   alias Systems.Account.User
+  alias Systems.Admin
   alias Next.Systems.Announcement
   alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
@@ -22,11 +25,40 @@ defmodule Next.Systems.Announcement.Public do
     |> Repo.insert()
   end
 
-  @doc "Changes an announcement."
-  def update_announcement(%Announcement.Model{} = announcement, attrs) do
-    announcement
-    |> Announcement.Model.changeset(attrs)
-    |> Repo.update()
+  @doc """
+  Changes an unpublished announcement and dispatches `{:announcement, :updated}`,
+  so the pages that show it refresh.
+
+  Returns `{:error, :already_published}` when it is published, also when that
+  happened after `announcement` was loaded: the row is locked and checked in
+  the same transaction as the update.
+  """
+  def update_announcement(%Announcement.Model{id: id}, attrs) do
+    Multi.new()
+    |> Multi.run(:unpublished, fn _repo, _ -> lock_unpublished(id) end)
+    |> Multi.update(:announcement, fn %{unpublished: announcement} ->
+      Announcement.Model.changeset(announcement, attrs)
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{announcement: announcement}} ->
+        Signal.Public.dispatch!({:announcement, :updated}, %{announcement: announcement})
+        {:ok, announcement}
+
+      {:error, _operation, reason, _changes} ->
+        {:error, reason}
+    end
+  end
+
+  defp lock_unpublished(id) do
+    announcement_query()
+    |> where([announcement: a], a.id == ^id)
+    |> lock("FOR UPDATE")
+    |> Repo.one()
+    |> case do
+      %Announcement.Model{published_at: nil} = announcement -> {:ok, announcement}
+      _ -> {:error, :already_published}
+    end
   end
 
   def get_announcement!(id, preload \\ []) do
@@ -43,13 +75,17 @@ defmodule Next.Systems.Announcement.Public do
 
   @doc """
   The published announcements `user` received, as recipient rows with the announcement
-  preloaded, newest publication first.
+  preloaded, newest publication first. `limit: n` returns only the `n` newest.
   """
-  def list_received(%User{} = user) do
+  def list_received(%User{} = user, opts \\ []) do
     received_query(user)
+    |> limit_to(Keyword.get(opts, :limit))
     |> preload([announcement: a], announcement: a)
     |> Repo.all()
   end
+
+  defp limit_to(query, nil), do: query
+  defp limit_to(query, limit), do: limit(query, ^limit)
 
   @doc """
   The recipient row of `user` for the announcement with `announcement_id`, with
@@ -71,19 +107,172 @@ defmodule Next.Systems.Announcement.Public do
     |> Repo.preload(preload)
   end
 
-  @doc """
-  The number of recipients per announcement, as a map from announcement id to
-  count. Announcements without recipients are left out.
-  """
-  def count_recipients(announcements) do
-    ids = Enum.map(announcements, & &1.id)
+  @audience_filters [:verified, :unverified]
 
-    recipient_query()
-    |> where([recipient: r], r.announcement_id in ^ids)
-    |> group_by([recipient: r], r.announcement_id)
-    |> select([recipient: r], {r.announcement_id, count(r.id)})
+  @doc """
+  The filters that narrow the audience of an announcement. The audience is
+  always creators; these come on top, combined with AND.
+  """
+  def audience_filters, do: @audience_filters
+
+  @doc """
+  The ids of the users an announcement for the audience of `filters` and
+  `query` reaches: creators with a confirmed account that match every filter
+  and every word of the search, with the matching of Admin → Users
+  (`Systems.Admin.Public.list_matching_users/2`). Filters other than
+  `audience_filters/0` are ignored.
+  """
+  def list_audience_ids(filters, query) do
+    filters = [:creator | Enum.filter(filters, &(&1 in @audience_filters))]
+
+    Admin.Public.list_matching_users(filters, query)
+    |> Enum.filter(&confirmed?/1)
+    |> Enum.map(fn %User{id: id} -> id end)
+  end
+
+  defp confirmed?(%User{confirmed_at: confirmed_at}), do: confirmed_at != nil
+
+  @doc """
+  Publishes an unpublished announcement to the audience of `filters` and
+  `query` (`list_audience_ids/2`). The audience is resolved here, once, and
+  stored on the announcement; a job then gives every recipient a recipient
+  row and a To-do (`deliver_announcement/1`).
+
+  `shown_count` is the recipient count the admin saw and confirmed. When the
+  audience has changed since, nothing is published and the result is
+  `{:error, {:audience_changed, count}}` with the current count.
+
+  Returns `{:error, :no_recipients}` when the audience is empty and
+  `{:error, :already_published}` when it was published before.
+  """
+  def publish_announcement(
+        %Announcement.Model{published_at: nil} = announcement,
+        filters,
+        query,
+        shown_count
+      )
+      when is_integer(shown_count) do
+    case list_audience_ids(filters, query) do
+      [] ->
+        {:error, :no_recipients}
+
+      recipient_ids when length(recipient_ids) == shown_count ->
+        publish(announcement, recipient_ids)
+
+      recipient_ids ->
+        {:error, {:audience_changed, length(recipient_ids)}}
+    end
+  end
+
+  def publish_announcement(%Announcement.Model{}, _filters, _query, shown_count)
+      when is_integer(shown_count),
+      do: {:error, :already_published}
+
+  defp publish(%Announcement.Model{id: id}, recipient_ids) do
+    Multi.new()
+    |> Multi.run(:announcement, fn _repo, _ -> fix_audience(id, recipient_ids) end)
+    |> Multi.run(:job, fn _repo, _ ->
+      %{"announcement_id" => id}
+      |> Announcement.DeliverJob.new()
+      |> Oban.insert()
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{announcement: announcement}} -> {:ok, announcement}
+      {:error, _operation, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  # Only an unpublished announcement gets an audience, so publishing it twice
+  # at the same moment publishes it once.
+  defp fix_audience(id, recipient_ids) do
+    published_at = DateTime.utc_now() |> DateTime.truncate(:second)
+    updated_at = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    announcement_query()
+    |> where([announcement: a], a.id == ^id and is_nil(a.published_at))
+    |> select([announcement: a], a)
+    |> Repo.update_all(
+      set: [published_at: published_at, recipient_ids: recipient_ids, updated_at: updated_at]
+    )
+    |> case do
+      {1, [announcement]} -> {:ok, %{announcement | recipient_ids: recipient_ids}}
+      {0, _} -> {:error, :already_published}
+    end
+  end
+
+  @doc """
+  The number of recipients each published announcement was published to, as
+  a map from announcement id to count. Unpublished announcements count 0.
+  """
+  def count_audiences(announcements) do
+    ids = Enum.map(announcements, fn %Announcement.Model{id: id} -> id end)
+
+    announcement_query()
+    |> where([announcement: a], a.id in ^ids)
+    |> select([announcement: a], {a.id, fragment("cardinality(?)", a.recipient_ids)})
     |> Repo.all()
     |> Map.new()
+  end
+
+  @doc """
+  Gives every recipient of a published announcement a recipient row and a
+  To-do, with one insert for the rows and batched inserts for the To-dos.
+  Recipients who already have a row are skipped, so running it again adds
+  nothing. Users deleted since publication are left out. Returns
+  `{:ok, count}` with the number of recipients added.
+  """
+  def deliver_announcement(announcement_id) do
+    announcement_query()
+    |> where([announcement: a], a.id == ^announcement_id)
+    |> select_merge([announcement: a], %{recipient_ids: a.recipient_ids})
+    |> Repo.one()
+    |> case do
+      %Announcement.Model{published_at: nil} -> {:ok, 0}
+      %Announcement.Model{} = announcement -> deliver(announcement)
+      nil -> {:ok, 0}
+    end
+  end
+
+  defp deliver(%Announcement.Model{id: id} = announcement) do
+    Multi.new()
+    |> Multi.run(:user_ids, fn _repo, _ -> {:ok, insert_recipients(announcement)} end)
+    |> Multi.run(:next_actions, fn _repo, %{user_ids: user_ids} ->
+      {:ok,
+       NextAction.Public.create_next_actions(user_ids, ReadAnnouncement,
+         key: ReadAnnouncement.key(id),
+         params: ReadAnnouncement.params(id)
+       )}
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{user_ids: user_ids}} -> {:ok, length(user_ids)}
+      {:error, _operation, reason, _changes} -> {:error, reason}
+    end
+  end
+
+  defp insert_recipients(%Announcement.Model{id: id, recipient_ids: recipient_ids}) do
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+    users =
+      from(u in User,
+        where: u.id in ^recipient_ids,
+        select: %{
+          announcement_id: type(^id, :id),
+          user_id: u.id,
+          inserted_at: type(^now, :naive_datetime),
+          updated_at: type(^now, :naive_datetime)
+        }
+      )
+
+    {_count, rows} =
+      Repo.insert_all(Announcement.RecipientModel, users,
+        on_conflict: :nothing,
+        conflict_target: [:announcement_id, :user_id],
+        returning: [:user_id]
+      )
+
+    Enum.map(rows, fn %{user_id: user_id} -> user_id end)
   end
 
   @doc """
