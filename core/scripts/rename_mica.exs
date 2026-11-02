@@ -31,7 +31,9 @@ defmodule RenameMica do
     "docs/nova-migration/",
     "core/architecture/",
     "core/priv/static/",
-    "core/scripts/rename_mica.exs"
+    "core/scripts/rename_mica.exs",
+    # Its test names old modules on purpose.
+    "core/next/test/rename_mica_script_test.exs"
   ]
   @excluded_exts ~w(.png .jpg .jpeg .gif .ico .webp .svg .woff .woff2 .ttf .otf .eot .pdf .zip
                     .gz .beam .lock .archimate .mp4 .mov)
