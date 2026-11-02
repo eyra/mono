@@ -45,14 +45,16 @@ defmodule Next.Account.AuthIdentifyPage do
   end
 
   @impl true
-  def handle_event("submit", %{"email" => email}, %{assigns: %{form: %{errors: errors}}} = socket) do
+  def handle_event("submit", %{"email" => email}, %{assigns: %{form: form}} = socket) do
     email = String.trim(email)
 
     if OtpSignin.valid_email?(email) do
-      # A message already shown stays until routing replaces it, so it doesn't drop out and come back.
       socket =
         socket
-        |> assign(loading: true, form: to_form(%{"email" => email}, errors: errors))
+        |> assign(
+          loading: true,
+          form: to_form(%{"email" => email}, errors: shown_errors(form, email))
+        )
 
       send(self(), {:route_email, email})
       {:noreply, socket}
@@ -96,6 +98,13 @@ defmodule Next.Account.AuthIdentifyPage do
              )}
         end
     end
+  end
+
+  # A message already shown for this address stays until routing replaces it, so it doesn't
+  # drop out and come back. A message for an earlier address (the change event is debounced,
+  # so the form can still hold it) doesn't.
+  defp shown_errors(%{params: %{"email" => shown}, errors: errors}, email) do
+    if String.trim(shown) == email, do: errors, else: []
   end
 
   # The participant entry stays code-only; elsewhere the password form is the fallback.

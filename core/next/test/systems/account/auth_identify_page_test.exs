@@ -66,6 +66,20 @@ defmodule Next.Account.AuthIdentifyPageTest do
     refute loading_html =~ dgettext("eyra-account", "auth.email.rate_limited")
   end
 
+  test "a message for an earlier address doesn't stay under a corrected one", %{conn: conn} do
+    set_feature_flag(:otp, true)
+
+    {:ok, view, _html} = live(conn, "/user/auth/identify/participant")
+
+    assert render_submit(view, "submit", %{"email" => "someone@example"}) =~
+             dgettext("eyra-account", "auth.email.invalid")
+
+    # Submitted within the change event's debounce, so no change event in between.
+    loading_html = render_submit(view, "submit", %{"email" => "someone@example.com"})
+    assert loading_html =~ "prism-btn-loading"
+    refute loading_html =~ dgettext("eyra-account", "auth.email.invalid")
+  end
+
   test "participant entry carries its role into OTP verification", %{conn: conn} do
     set_feature_flag(:otp, true)
     email = "participant-#{System.unique_integer([:positive])}@example.invalid"

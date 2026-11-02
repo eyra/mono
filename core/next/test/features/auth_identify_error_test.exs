@@ -198,6 +198,25 @@ defmodule CoreWeb.Features.AuthIdentifyErrorTest do
     assert_received {:after_submit, %{"changes" => [], "active" => "auth-code-cell-0"}}
   end
 
+  @sessions [[capabilities: @phone_nl_capabilities]]
+  @tag :feature
+  feature "a submit while disconnected doesn't block the next one", %{session: session} do
+    email = "reconnect-#{System.unique_integer([:positive])}@example.com"
+
+    session
+    |> visit("/user/auth/identify/participant")
+    |> assert_has(Query.css(".phx-connected #{@email_field}"))
+    |> fill_in(Query.css(@email_field), with: email)
+    |> execute_script("window.liveSocket.disconnect();")
+    |> assert_has(Query.css("[data-phx-main].phx-error"))
+    |> send_keys(Query.css(@email_field), [:enter])
+    |> refute_has(Query.css("#{@email_button} .prism-btn-loading"))
+    |> execute_script("window.liveSocket.connect();")
+    |> assert_has(Query.css(".phx-connected #{@email_field}"))
+    |> send_keys(Query.css(@email_field), [:enter])
+    |> assert_has(Query.css(@code_field))
+  end
+
   defp gap(session, upper, lower) do
     session
     |> execute_script(

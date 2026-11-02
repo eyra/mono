@@ -9,7 +9,11 @@ import { clearClientLoading } from "./button_loading";
 // `phx-submit` event itself, so the focused field keeps its focus.
 //
 // The server may answer without re-rendering the submit button; the reply ends
-// the loading feedback that `button_loading.js` started on submit.
+// the loading feedback that `button_loading.js` started on submit. So does a
+// push that fails (e.g. while disconnected), so the next submit is sent.
+//
+// Not a general replacement for `phx-submit`: it sends the fields as one flat
+// map and ignores `phx-target`, which is enough for single-field forms.
 //
 // Markup contract:
 //   <form id="..." phx-hook="SubmitInPlace" phx-submit="event"> ... </form>
@@ -19,6 +23,10 @@ export const SubmitInPlace = {
     this.pending = false;
     this.onSubmit = this.handleSubmit.bind(this);
     this.el.addEventListener("submit", this.onSubmit);
+  },
+
+  reconnected() {
+    this.release();
   },
 
   destroyed() {
@@ -32,9 +40,13 @@ export const SubmitInPlace = {
 
     this.pending = true;
     const values = Object.fromEntries(new FormData(this.el));
-    this.pushEvent(this.el.getAttribute("phx-submit"), values, () => {
-      this.pending = false;
-      clearClientLoading(this.el);
-    });
+    this.pushEvent(this.el.getAttribute("phx-submit"), values)
+      .catch(() => {})
+      .finally(() => this.release());
+  },
+
+  release() {
+    this.pending = false;
+    clearClientLoading(this.el);
   },
 };
