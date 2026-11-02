@@ -4,6 +4,19 @@ defmodule Systems.Announcement.PageBuilder do
   alias Frameworks.Pixel.TrixPostProcessor
   alias Systems.Announcement
 
+  # An update message brings the recipient without its announcement
+  # (`Systems.Announcement.Switch`), so the latest text is read here.
+  def view_model(
+        %Announcement.RecipientModel{
+          announcement: %Ecto.Association.NotLoaded{},
+          announcement_id: announcement_id
+        } = recipient,
+        assigns
+      ) do
+    announcement = Announcement.Public.get_announcement!(announcement_id)
+    view_model(%{recipient | announcement: announcement}, assigns)
+  end
+
   def view_model(
         %Announcement.RecipientModel{
           announcement: %Announcement.Model{

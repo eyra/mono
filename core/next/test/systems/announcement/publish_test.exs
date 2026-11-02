@@ -1,6 +1,7 @@
 defmodule Systems.Announcement.PublishTest do
   use Core.DataCase, async: true
   use Oban.Testing, repo: Core.Repo
+  use Bamboo.Test
 
   import Ecto.Query
 
@@ -203,13 +204,120 @@ defmodule Systems.Announcement.PublishTest do
   end
 
   describe "update_announcement/2" do
-    test "refuses a published announcement", %{author: author} do
-      {:ok, published} = publish(announcement!(author), [], nil)
+    test "changes the title, summary and body of a published announcement", %{author: author} do
+      published = publish!(announcement!(author))
 
-      assert {:error, :already_published} =
-               Announcement.Public.update_announcement(published, %{title: "Changed"})
+      assert {:ok, %{title: "Release notes, corrected"}} =
+               Announcement.Public.update_announcement(published, %{
+                 title: "Release notes, corrected",
+                 summary: "What really changed",
+                 body: "<div>Fixed features</div>"
+               })
 
-      assert %{title: "Release notes"} = Announcement.Public.get_announcement!(published.id)
+      assert %{
+               title: "Release notes, corrected",
+               summary: "What really changed",
+               body: "<div>Fixed features</div>",
+               published_at: published_at
+             } = Announcement.Public.get_announcement!(published.id)
+
+      assert published_at == published.published_at
+    end
+
+    test "sends nothing again and keeps every read status", %{
+      author: author,
+      verified: verified,
+      unverified: unverified
+    } do
+      published = publish!(announcement!(author))
+      read = Announcement.Public.get_received(verified, published.id)
+      %{read_at: read_at} = Announcement.Public.mark_read(read)
+      enqueued = all_enqueued()
+
+      assert {:ok, _} =
+               Announcement.Public.update_announcement(published, %{title: "Corrected"})
+
+      assert [%{read_at: ^read_at}] =
+               Repo.all(from(r in Announcement.RecipientModel, where: r.user_id == ^verified.id))
+
+      assert %{read_at: nil} = Announcement.Public.get_received(unverified, published.id)
+      assert to_dos(verified) == []
+      assert [%{key: key}] = to_dos(unverified)
+      assert key == ReadAnnouncement.key(published.id)
+
+      assert all_enqueued() == enqueued
+      assert_no_emails_delivered()
+    end
+
+    test "refuses a new priority or kind once it is published", %{author: author} do
+      published = publish!(announcement!(author))
+
+      for attrs <- [%{priority: :high}, %{"priority" => "high", "title" => "Corrected"}] do
+        assert {:error, :already_published} =
+                 Announcement.Public.update_announcement(published, attrs)
+      end
+
+      assert %{title: "Release notes", priority: :normal} =
+               Announcement.Public.get_announcement!(published.id)
+    end
+
+    test "accepts the priority and kind it already has", %{author: author} do
+      published = publish!(announcement!(author))
+
+      assert {:ok, %{title: "Corrected"}} =
+               Announcement.Public.update_announcement(published, %{
+                 "kind" => "release_notes",
+                 "priority" => "normal",
+                 "title" => "Corrected"
+               })
+    end
+
+    test "refuses a second form on a copy that a first form has saved since", %{author: author} do
+      loaded = publish!(announcement!(author))
+      form = %{"title" => "Release notes", "summary" => "What changed"}
+
+      assert {:ok, _} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"title" => "Release notes, corrected"})
+               )
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"body" => "<div>New features, link fixed</div>"})
+               )
+
+      assert %{title: "Release notes, corrected", body: "<div>New features</div>"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
+    test "refuses a second form on a draft that a first form has saved since", %{author: author} do
+      loaded = announcement!(author)
+
+      assert {:ok, saved} =
+               Announcement.Public.update_announcement(loaded, %{title: "Release notes, v2"})
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(loaded, %{summary: "Other summary"})
+
+      assert {:ok, _} = Announcement.Public.update_announcement(saved, %{summary: "Next summary"})
+
+      assert %{title: "Release notes, v2", summary: "Next summary"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
+    test "never changes the audience", %{author: author, verified: verified, member: member} do
+      published = publish!(announcement!(author), [:verified])
+
+      {:ok, _} =
+        Announcement.Public.update_announcement(published, %{
+          recipient_ids: [member.id],
+          published_at: nil
+        })
+
+      assert stored_recipient_ids(published) == [verified.id]
+      assert %{published_at: %DateTime{}} = Announcement.Public.get_announcement!(published.id)
     end
 
     test "refuses a copy loaded before it was published", %{author: author} do

@@ -64,9 +64,10 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
              title: "February release",
              priority: "Normal",
              recipient_count: 2,
-             buttons: []
+             buttons: [%{action: %{type: :send, event: "edit_announcement", item: older_id}}]
            } = second
 
+    assert older_id == older.id
     assert second.published == CoreWeb.UI.Timestamp.humanize(published_at)
   end
 
@@ -110,7 +111,66 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
     end
 
     test "is only built while composing", %{admin: admin} do
-      assert %{audience: nil} = view_model(admin)
+      assert %{audience: nil, published: nil} = view_model(admin)
+    end
+
+    test "is built while composing a saved draft", %{admin: admin} do
+      draft = create!(admin, %{title: "Draft"})
+
+      assert %{audience: %{recipient_count: 2}, published: nil} =
+               composing(admin, %{announcement: draft})
+    end
+
+    test "is not built for a published announcement, which says what saving does", %{
+      admin: admin
+    } do
+      {:ok, published} =
+        admin
+        |> create!(%{title: "Published"})
+        |> Announcement.Public.publish_announcement([], nil, 2)
+
+      assert %{audience: nil, published: %{text: text, notice: nil}} =
+               composing(admin, %{announcement: published})
+
+      assert text ==
+               "This announcement is published. Saving shows your changes to its recipients " <>
+                 "at once; it isn't sent again. Its priority and recipients can't change."
+
+      Gettext.put_locale(CoreWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+
+      assert %{published: %{text: text}} = composing(admin, %{announcement: published})
+
+      assert text ==
+               "Deze aankondiging is gepubliceerd. Na opslaan zien de ontvangers je wijzigingen " <>
+                 "meteen; ze krijgen de aankondiging niet opnieuw. Prioriteit en ontvangers " <>
+                 "kunnen niet meer veranderen."
+    end
+
+    test "says a save was refused because it changed since it was opened", %{admin: admin} do
+      draft = create!(admin, %{title: "Draft"})
+      {:ok, published} = Announcement.Public.publish_announcement(draft, [], nil, 2)
+
+      en =
+        "This announcement was changed in the meantime, so your changes were not saved. " <>
+          "Cancel and open it again to see the latest version."
+
+      assert %{audience: %{notice: ^en}} =
+               composing(admin, %{announcement: draft, compose_notice: :changed_since_loaded})
+
+      assert %{published: %{notice: ^en}} =
+               composing(admin, %{announcement: published, compose_notice: :changed_since_loaded})
+
+      Gettext.put_locale(CoreWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+
+      assert %{published: %{notice: nl}} =
+               composing(admin, %{announcement: published, compose_notice: :changed_since_loaded})
+
+      assert nl ==
+               "Deze aankondiging is intussen gewijzigd, dus je wijzigingen zijn niet " <>
+                 "opgeslagen. Annuleer en open de aankondiging opnieuw om de nieuwste versie " <>
+                 "te zien."
     end
 
     test "counts every creator with a confirmed account", %{admin: admin} do

@@ -7,6 +7,7 @@ defmodule Systems.Announcement.PageTest do
 
   alias Core.Repo
   alias CoreWeb.Endpoint
+  alias Frameworks.Signal
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
@@ -108,6 +109,44 @@ defmodule Systems.Announcement.PageTest do
 
       assert NextAction.Public.next_best_action_for_key(creator, ReadAnnouncement.key(other_id))
       refute NextAction.Public.next_best_action_for_key(creator, ReadAnnouncement.key(id))
+    end
+
+    test "an open page shows an edit at once and the announcement stays read", %{
+      conn: conn,
+      announcement: %{id: id} = announcement,
+      recipient: recipient
+    } do
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+      %{read_at: read_at} = Repo.reload!(recipient)
+
+      {:ok, _} =
+        Announcement.Public.update_announcement(announcement, %{
+          title: "Release notes October, corrected",
+          body: ~s|<div>Fixed <a href="https://example.com/v2">the docs</a></div>|
+        })
+
+      assert view |> element("[data-testid=announcement-title]") |> render() =~
+               "Release notes October, corrected"
+
+      body = view |> element("[data-testid=announcement-body]") |> render()
+      assert body =~ ~s|<a href="https://example.com/v2" target="_blank">the docs</a>|
+      refute body =~ "features"
+
+      assert %{read_at: ^read_at} = Repo.reload!(recipient)
+    end
+
+    test "an open page keeps the latest text when an older edit's message arrives late", %{
+      conn: conn,
+      announcement: %{id: id} = announcement
+    } do
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+
+      {:ok, first} = Announcement.Public.update_announcement(announcement, %{title: "First"})
+      {:ok, _second} = Announcement.Public.update_announcement(first, %{title: "Second"})
+      Signal.Public.dispatch!({:announcement, :updated}, %{announcement: first})
+
+      assert view |> element("[data-testid=announcement-title]") |> render() =~ "Second"
+      refute view |> element("[data-testid=announcement-title]") |> render() =~ "First"
     end
 
     test "opens it without a To-do", %{conn: conn, announcement: %{id: id}} = ctx do
