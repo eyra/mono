@@ -266,6 +266,7 @@
          {"storage_export", 1, :call, :hour, :local}
        ],
        features: [
+         announcements: true,
          centerdata_sign_in: false,
          debug_expire_force: false,
          e2e: true,

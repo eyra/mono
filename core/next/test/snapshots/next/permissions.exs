@@ -5,6 +5,7 @@
   {"access/next/systems/account/auth_identify_page", [:user, :visitor]},
   {"access/next/systems/account/auth_provider_page", [:user, :visitor]},
   {"access/next/systems/account/signin_page", [:user, :visitor]},
+  {"access/next/systems/announcement/page", [:member]},
   {"access/next/systems/graphite/leaderboard_content_page", [:owner]},
   {"access/next/systems/graphite/leaderboard_page", [:owner, :participant, :tester]},
   {"access/next/systems/onyx/landing_page", [:admin]},

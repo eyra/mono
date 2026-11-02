@@ -46,6 +46,7 @@ config :mica, :feldspar_data_donation,
   retention_hours: 336
 
 config :mica, :features,
+  announcements: true,
   e2e: true,
   leaderboard: true,
   member_google_sign_in: true,

@@ -128,6 +128,11 @@ jobs:
       - name: Boundary check (Nova migration)
         run: cd core && elixir scripts/boundary_check_test.exs && elixir scripts/boundary_check.exs
 
+      # The comparison itself needs eyra/devops and Fly access; the release
+      # manager runs it at every cut (scripts/env_names.exs).
+      - name: Env-name parity script tests
+        run: cd core && elixir scripts/env_names_test.exs
+
       # Routes, grants, handlers, SaaS config and counts of the Next build.
       - name: Nova snapshots (Next)
         run: cd core && mix nova.snapshot

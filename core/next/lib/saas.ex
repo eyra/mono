@@ -11,6 +11,7 @@ defmodule Next.SaaS do
         Next.Systems.Account.System,
         Next.Systems.E2E.System,
         Next.Systems.Panl.System,
+        Next.Systems.Announcement.System,
         Next.Systems.Graphite.System,
         Next.Systems.Onyx.System,
         Next.Systems.Student.System,
@@ -24,6 +25,7 @@ defmodule Next.SaaS do
   @impl true
   def feature_flags do
     [
+      announcements: false,
       surfconext_sign_in: false,
       centerdata_sign_in: false,
       member_google_sign_in: true,

@@ -88,7 +88,7 @@ defmodule Mica.MixProject do
     [
       # Deps
       {:appsignal_phoenix, "2.7.0"},
-      {:assent, "0.3.1"},
+      {:assent, "0.3.2"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
        github: "eyra/bamboo_phoenix", ref: "faff46acfeea40b1348f9f70eea84436a1524568"},
@@ -102,6 +102,7 @@ defmodule Mica.MixProject do
       {:ex_aws_s3, "2.5.8"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0"},
+      {:floki, "0.38.3"},
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
       {:hackney, "1.25.0"},
@@ -117,14 +118,14 @@ defmodule Mica.MixProject do
       {:oban, "2.20.1"},
       {:packmatic, "2.1.0"},
       {:phoenix_ecto, "4.6.5"},
-      {:phoenix_html, "4.3.0"},
+      {:phoenix_html, "4.4.0"},
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
-      {:phoenix_live_view, "1.1.13"},
+      {:phoenix_live_view, "1.1.33"},
       {:phoenix_view, "2.0.4"},
-      {:phoenix, "1.8.1"},
-      {:plug_cowboy, "2.7.4"},
-      {:postgrex, "0.21.1"},
+      {:phoenix, "1.8.16"},
+      {:plug_cowboy, "2.9.0"},
+      {:postgrex, "0.22.4"},
       {:remote_ip, "1.2.0"},
       {:slugify, "1.3.1"},
       {:sqids, "0.2.1"},
@@ -143,12 +144,12 @@ defmodule Mica.MixProject do
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "2.15.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:ssl_verify_fun, "1.1.7"},
+      {:ssl_verify_fun, "1.1.8"},
       # Dev and test deps
       {:ex_machina, "2.8.0", only: :test},
       {:file_system, "1.1.1", only: [:dev, :test]},
       {:bypass, "2.1.0", only: :test},
-      {:lazy_html, "0.1.8", only: :test},
+      {:lazy_html, "0.1.13", only: :test},
       {:mox, "1.2.0", only: :test},
       {:promox, "0.1.4", only: :test},
       {:mock, "0.3.9", only: :test},
