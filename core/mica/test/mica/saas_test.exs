@@ -290,7 +290,8 @@ defmodule Mica.SaaSTest do
   end
 
   test "the Admin and Account systems declare the admin panels and account tabs, in order" do
-    assert Mica.SaaS.admin_panels() == [
+    # The SaaS's own systems add their panels after these.
+    assert Enum.take(Mica.SaaS.admin_panels(), 5) == [
              Systems.Admin.SystemPanel,
              Systems.Admin.AccountPanel,
              Systems.Admin.OrgPanel,

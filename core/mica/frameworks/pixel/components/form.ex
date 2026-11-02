@@ -597,6 +597,11 @@ defmodule Frameworks.Pixel.Form do
   attr(:visible, :boolean, default: true)
   attr(:reserve_error_space, :boolean, default: true)
 
+  attr(:attachments, :boolean,
+    default: true,
+    doc: "When false, the editor refuses pasted or dropped files and images."
+  )
+
   def wysiwyg_area(%{form: form, field: field} = assigns) do
     errors = guarded_errors(form, field)
     has_errors = not Enum.empty?(errors)
@@ -652,6 +657,7 @@ defmodule Frameworks.Pixel.Form do
           data-target={@target}
           data-min-height={@min_height}
           data-max-height={@max_height}
+          data-attachments={to_string(@attachments)}
         />
       </div>
     </.field>

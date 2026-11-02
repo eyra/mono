@@ -27,4 +27,6 @@ defmodule Next.Systems.Announcement.System do
   end
 
   def feature_flags, do: [:announcements]
+
+  def admin_panels, do: [Next.Systems.Announcement.AdminPanel]
 end
