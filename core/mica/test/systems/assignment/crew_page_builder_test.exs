@@ -94,6 +94,34 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       assert view.implementation == Assignment.ParticipationView
     end
 
+    test "shows participation view on a fresh visit after accepted contribution with a pending task",
+         %{assignment: assignment, user: user} do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      mark_intro_visited(assignment, user)
+      create_pending_task(assignment, user)
+
+      {:ok, participation} = Assignment.Public.complete_participation(assignment, user)
+      {:ok, _} = Assignment.Public.accept_participation(participation)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+
+      assert view.implementation == Assignment.ParticipationView
+    end
+
+    test "shows participation view on a fresh visit after declined contribution with a pending task",
+         %{assignment: assignment, user: user} do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      mark_intro_visited(assignment, user)
+      create_pending_task(assignment, user)
+
+      {:ok, participation} = Assignment.Public.complete_participation(assignment, user)
+      {:ok, _} = Assignment.Public.reject_participation(participation, "Incomplete answers")
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+
+      assert view.implementation == Assignment.ParticipationView
+    end
+
     test "shows finished view when consent declined", %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
@@ -292,12 +320,17 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     Account.Public.mark_as_visited(user, {:assignment_information, assignment_id})
   end
 
-  defp finish_all_tasks(%{crew: crew, workflow: workflow} = assignment, user) do
+  defp finish_all_tasks(assignment, user) do
+    assignment
+    |> create_pending_task(user)
+    |> Crew.Public.complete_task!()
+  end
+
+  defp create_pending_task(%{crew: crew, workflow: workflow} = assignment, user) do
     %{items: [item]} = workflow |> Repo.preload([:items])
     member = Crew.Public.get_member(crew, user)
     identifier = Assignment.Private.task_identifier(assignment, item, member)
-    task = Crew.Public.create_task!(crew, [user], identifier)
-    Crew.Public.complete_task!(task)
+    Crew.Public.create_task!(crew, [user], identifier)
   end
 
   defp build_assigns(user, opts \\ %{}) do
