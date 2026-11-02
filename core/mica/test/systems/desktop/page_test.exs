@@ -52,7 +52,7 @@ defmodule Systems.Desktop.PageTest do
     end
 
     test "without contributed sections, Desktop shows only Recent items", %{conn: conn} do
-      assert Core.SaaS.desktop_sections() == []
+      put_env(Systems.Desktop, sections: [])
 
       {:ok, view, html} = live(conn, ~p"/desktop")
 

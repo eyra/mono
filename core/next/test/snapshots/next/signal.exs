@@ -5,6 +5,7 @@
     "Systems.Admin.Switch",
     "Systems.Advert.Switch",
     "Systems.Alliance.Switch",
+    "Systems.Announcement.Switch",
     "Systems.Assignment.Switch",
     "Systems.Consent.Switch",
     "Systems.Crew.Switch",

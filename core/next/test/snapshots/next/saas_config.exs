@@ -20,5 +20,5 @@
   pixel: [pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]],
   account_tabs: [:profile, :payouts, :features],
   admin_tabs: %{admin: [:system, :account, :org, :actions, :client_activity], org_admin: [:org]},
-  desktop_sections: []
+  desktop_sections: [:announcements]
 ]

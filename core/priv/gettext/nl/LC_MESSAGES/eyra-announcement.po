@@ -22,3 +22,11 @@ msgstr "Gepubliceerd op %{date}"
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Aankondiging"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr "Aankondigingen"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr "Ongelezen"
