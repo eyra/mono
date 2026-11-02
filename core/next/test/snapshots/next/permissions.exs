@@ -24,6 +24,7 @@
   {"access/systems/advert/content_page", [:owner]},
   {"access/systems/advert/model", [:member, :visitor]},
   {"access/systems/alliance/callback_page", [:owner]},
+  {"access/systems/announcement/page", [:member]},
   {"access/systems/assignment/content_page", [:owner]},
   {"access/systems/assignment/crew_page", [:participant, :tester]},
   {"access/systems/assignment/landing_page", [:participant, :tester]},

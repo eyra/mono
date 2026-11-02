@@ -86,3 +86,15 @@ msgstr "Hoog"
 #, elixir-autogen, elixir-format
 msgid "priority.normal"
 msgstr "Normaal"
+
+#, elixir-autogen, elixir-format
+msgid "next_action.cta"
+msgstr "Lees aankondiging"
+
+#, elixir-autogen, elixir-format
+msgid "page.published"
+msgstr "Gepubliceerd op %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "page.title"
+msgstr "Aankondiging"

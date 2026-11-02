@@ -86,3 +86,15 @@ msgstr "High"
 #, elixir-autogen, elixir-format
 msgid "priority.normal"
 msgstr "Normal"
+
+#, elixir-autogen, elixir-format
+msgid "next_action.cta"
+msgstr "Read announcement"
+
+#, elixir-autogen, elixir-format
+msgid "page.published"
+msgstr "Published on %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "page.title"
+msgstr "Announcement"

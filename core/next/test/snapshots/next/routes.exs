@@ -166,6 +166,8 @@
   {:post, "/api/e2e/bootstrap", Frameworks.E2E.Controller, :bootstrap, "", nil},
   {:post, "/api/e2e/activate_user", Frameworks.E2E.Controller, :activate_user, "", nil},
   {:post, "/api/e2e/setup", Frameworks.E2E.Controller, :setup, "", nil},
+  {:get, "/announcement/:id", Phoenix.LiveView.Plug, Systems.Announcement.Page, "live",
+   Systems.Announcement.Page},
   {:get, "/graphite/leaderboard/:id/content", Phoenix.LiveView.Plug,
    Systems.Graphite.LeaderboardContentPage, "live", Systems.Graphite.LeaderboardContentPage},
   {:get, "/graphite/leaderboard/:id", Phoenix.LiveView.Plug, Systems.Graphite.LeaderboardPage,

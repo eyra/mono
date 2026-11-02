@@ -1,10 +1,8 @@
 defmodule Systems.Announcement.Presenter do
-  @behaviour Frameworks.Concept.Presenter
-
-  alias Systems.Announcement
+  use Frameworks.Concept.Presenter
 
   @impl true
-  def view_model(Announcement.AdminView, model, assigns) do
-    Announcement.AdminViewBuilder.view_model(model, assigns)
+  def view_model(page, model, assigns) do
+    builder(page).view_model(model, assigns)
   end
 end
