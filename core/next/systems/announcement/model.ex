@@ -39,6 +39,9 @@ defmodule Systems.Announcement.Model do
   def kinds, do: @kinds
   def priorities, do: @priorities
 
+  @doc "The fields a save can change."
+  def fields, do: @fields
+
   @doc """
   The fields that can't change once it is published. The audience can't
   either: `recipient_ids` is never cast.

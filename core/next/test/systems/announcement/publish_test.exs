@@ -272,6 +272,41 @@ defmodule Systems.Announcement.PublishTest do
                })
     end
 
+    test "refuses a second form on a copy that a first form has saved since", %{author: author} do
+      loaded = publish!(announcement!(author))
+      form = %{"title" => "Release notes", "summary" => "What changed"}
+
+      assert {:ok, _} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"title" => "Release notes, corrected"})
+               )
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"body" => "<div>New features, link fixed</div>"})
+               )
+
+      assert %{title: "Release notes, corrected", body: "<div>New features</div>"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
+    test "refuses a second form on a draft that a first form has saved since", %{author: author} do
+      loaded = announcement!(author)
+
+      assert {:ok, saved} =
+               Announcement.Public.update_announcement(loaded, %{title: "Release notes, v2"})
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(loaded, %{summary: "Other summary"})
+
+      assert {:ok, _} = Announcement.Public.update_announcement(saved, %{summary: "Next summary"})
+
+      assert %{title: "Release notes, v2", summary: "Next summary"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
     test "never changes the audience", %{author: author, verified: verified, member: member} do
       published = publish!(announcement!(author), [:verified])
 

@@ -162,3 +162,7 @@ msgstr "This announcement is published. Saving shows your changes to its recipie
 #, elixir-autogen, elixir-format
 msgid "email.link"
 msgstr "Read this announcement in Next"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.changed_since_loaded"
+msgstr "This announcement was changed in the meantime, so your changes were not saved. Cancel and open it again to see the latest version."

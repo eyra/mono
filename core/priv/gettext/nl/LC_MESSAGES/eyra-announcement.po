@@ -162,3 +162,7 @@ msgstr "Deze aankondiging is gepubliceerd. Na opslaan zien de ontvangers je wijz
 #, elixir-autogen, elixir-format
 msgid "email.link"
 msgstr "Lees deze aankondiging in Next"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.changed_since_loaded"
+msgstr "Deze aankondiging is intussen gewijzigd, dus je wijzigingen zijn niet opgeslagen. Annuleer en open de aankondiging opnieuw om de nieuwste versie te zien."

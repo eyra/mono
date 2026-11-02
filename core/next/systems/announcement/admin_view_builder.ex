@@ -10,9 +10,10 @@ defmodule Systems.Announcement.AdminViewBuilder do
   composing an unpublished one, assigns read: `audience_filters` (from
   `Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
   search words), `priority` (the priority chosen in the form) and
-  `compose_notice` (`:already_published` or `:audience_changed` after a
-  refused save or publish). A published one has no audience to choose, only
-  `published_notice`: what saving it does.
+  `compose_notice` (`:already_published`, `:changed_since_loaded` or
+  `:audience_changed` after a refused save or publish). A published one has
+  no audience to choose, only `published`: what saving it does, and the
+  notice of a refused save.
   """
   use Gettext, backend: CoreWeb.Gettext
   use Core.FeatureFlags
@@ -37,7 +38,7 @@ defmodule Systems.Announcement.AdminViewBuilder do
       items: Enum.map(announcements, &to_item(&1, audience_counts, timezone)),
       form: form_labels(),
       audience: audience(allowed? and composing(assigns) == :draft, assigns),
-      published_notice: published_notice(allowed? and composing(assigns) == :published)
+      published: published(allowed? and composing(assigns) == :published, assigns)
     }
   end
 
@@ -119,8 +120,14 @@ defmodule Systems.Announcement.AdminViewBuilder do
   defp composing(%{form: _}), do: :draft
   defp composing(_assigns), do: nil
 
-  defp published_notice(false), do: nil
-  defp published_notice(true), do: dgettext("eyra-announcement", "form.published.notice")
+  defp published(false, _assigns), do: nil
+
+  defp published(true, assigns) do
+    %{
+      text: dgettext("eyra-announcement", "form.published.notice"),
+      notice: notice(Map.get(assigns, :compose_notice), 0)
+    }
+  end
 
   defp audience(false, _assigns), do: nil
 
@@ -145,6 +152,9 @@ defmodule Systems.Announcement.AdminViewBuilder do
 
   defp notice(:already_published, _recipient_count),
     do: dgettext("eyra-announcement", "form.notice.already_published")
+
+  defp notice(:changed_since_loaded, _recipient_count),
+    do: dgettext("eyra-announcement", "form.notice.changed_since_loaded")
 
   defp notice(:audience_changed, recipient_count) do
     dngettext(

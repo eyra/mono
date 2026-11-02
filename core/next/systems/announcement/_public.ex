@@ -31,18 +31,20 @@ defmodule Systems.Announcement.Public do
   pages that show it refresh. Nothing is sent again and the recipients keep
   their read status.
 
-  After publication only the title, summary and body may change
+  `announcement` is the copy the change was made on, such as the one a form
+  opened. Returns `{:error, :changed_since_loaded}` when the announcement was
+  saved since that copy was loaded, so two forms can't undo each other's
+  changes. After publication only the title, summary and body may change
   (`Systems.Announcement.Model.fixed_after_publishing/0`). Returns
   `{:error, :already_published}` when the change touches another field, and
-  when `announcement` was loaded before it was published: a form opened on the
-  draft doesn't change the published announcement. The row is locked and
+  when the copy was loaded before it was published. The row is locked and
   checked in the same transaction as the update.
   """
-  def update_announcement(%Announcement.Model{id: id, published_at: seen_published_at}, attrs) do
+  def update_announcement(%Announcement.Model{id: id} = loaded, attrs) do
     Multi.new()
     |> Multi.run(:current, fn _repo, _ -> lock_announcement(id) end)
     |> Multi.run(:changeset, fn _repo, %{current: current} ->
-      change_announcement(current, seen_published_at, attrs)
+      change_announcement(current, loaded, attrs)
     end)
     |> Multi.update(:announcement, fn %{changeset: changeset} -> changeset end)
     |> Repo.commit()
@@ -67,21 +69,36 @@ defmodule Systems.Announcement.Public do
     end
   end
 
-  defp change_announcement(%Announcement.Model{published_at: nil} = current, _seen, attrs) do
-    {:ok, Announcement.Model.changeset(current, attrs)}
-  end
-
-  defp change_announcement(%Announcement.Model{}, nil = _seen, _attrs) do
+  defp change_announcement(
+         %Announcement.Model{published_at: %DateTime{}},
+         %Announcement.Model{published_at: nil},
+         _attrs
+       ) do
     {:error, :already_published}
   end
 
-  defp change_announcement(%Announcement.Model{} = current, _seen, attrs) do
-    changeset = Announcement.Model.changeset(current, attrs)
+  defp change_announcement(%Announcement.Model{} = current, %Announcement.Model{} = loaded, attrs) do
+    if changed_since_loaded?(current, loaded) do
+      {:error, :changed_since_loaded}
+    else
+      current
+      |> Announcement.Model.changeset(attrs)
+      |> refuse_fixed_changes()
+    end
+  end
 
-    if Enum.any?(
-         Announcement.Model.fixed_after_publishing(),
-         &Map.has_key?(changeset.changes, &1)
-       ) do
+  # The fields a save can change are compared: `updated_at` only counts
+  # whole seconds, so two saves within a second would look the same.
+  defp changed_since_loaded?(%Announcement.Model{} = current, %Announcement.Model{} = loaded) do
+    fields = Announcement.Model.fields()
+    Map.take(current, fields) != Map.take(loaded, fields)
+  end
+
+  defp refuse_fixed_changes(%Ecto.Changeset{data: %{published_at: nil}} = changeset),
+    do: {:ok, changeset}
+
+  defp refuse_fixed_changes(%Ecto.Changeset{changes: changes} = changeset) do
+    if Enum.any?(Announcement.Model.fixed_after_publishing(), &Map.has_key?(changes, &1)) do
       {:error, :already_published}
     else
       {:ok, changeset}

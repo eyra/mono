@@ -7,6 +7,7 @@ defmodule Systems.Announcement.PageTest do
 
   alias Core.Repo
   alias CoreWeb.Endpoint
+  alias Frameworks.Signal
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
@@ -132,6 +133,20 @@ defmodule Systems.Announcement.PageTest do
       refute body =~ "features"
 
       assert %{read_at: ^read_at} = Repo.reload!(recipient)
+    end
+
+    test "an open page keeps the latest text when an older edit's message arrives late", %{
+      conn: conn,
+      announcement: %{id: id} = announcement
+    } do
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+
+      {:ok, first} = Announcement.Public.update_announcement(announcement, %{title: "First"})
+      {:ok, _second} = Announcement.Public.update_announcement(first, %{title: "Second"})
+      Signal.Public.dispatch!({:announcement, :updated}, %{announcement: first})
+
+      assert view |> element("[data-testid=announcement-title]") |> render() =~ "Second"
+      refute view |> element("[data-testid=announcement-title]") |> render() =~ "First"
     end
 
     test "opens it without a To-do", %{conn: conn, announcement: %{id: id}} = ctx do

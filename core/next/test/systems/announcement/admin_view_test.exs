@@ -528,6 +528,33 @@ defmodule Systems.Announcement.AdminViewTest do
       assert has_element?(view, "[data-testid='announcement-row-#{id}']", "Published, corrected")
     end
 
+    test "a second form doesn't undo a correction saved in a first form", %{
+      conn: conn,
+      admin: admin
+    } do
+      %{id: id} = published!(admin)
+      first = mount_view(conn, admin)
+      second = mount_view(conn, admin)
+
+      for view <- [first, second] do
+        render_click(view, "edit_announcement", %{"item" => to_string(id)})
+      end
+
+      save(first, %{"title" => "Published, corrected", "summary" => "Summary"}, "<div>Text</div>")
+      save(second, %{"title" => "Published", "summary" => "Summary"}, "<div>Text, fixed</div>")
+
+      assert [%Announcement.Model{title: "Published, corrected", body: "<div>Text</div>"}] =
+               Repo.all(Announcement.Model)
+
+      assert has_element?(second, "[data-testid='announcement-form']")
+
+      assert has_element?(
+               second,
+               "[data-testid='announcement-compose-notice']",
+               "This announcement was changed in the meantime, so your changes were not saved."
+             )
+    end
+
     test "a published announcement keeps its priority", %{conn: conn, admin: admin} do
       %{id: id} = published!(admin)
 

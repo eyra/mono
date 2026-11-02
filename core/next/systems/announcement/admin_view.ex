@@ -157,8 +157,8 @@ defmodule Systems.Announcement.AdminView do
         )
         |> publish_or_close(announcement, shown_count)
 
-      {:error, :already_published} ->
-        show_notice(socket, :already_published)
+      {:error, reason} when reason in [:already_published, :changed_since_loaded] ->
+        show_notice(socket, reason)
 
       {:error, changeset} ->
         assign(socket, form: to_form(changeset, as: :announcement))
@@ -269,11 +269,17 @@ defmodule Systems.Announcement.AdminView do
         </div>
         <.spacing value="M" />
 
-        <%= if @form && @vm.published_notice do %>
+        <%= if @form && @vm.published do %>
           <.compose form={@form} labels={@vm.form} published?={true} />
           <.spacing value="M" />
-          <Text.body_medium testid="announcement-published-notice"><%= @vm.published_notice %></Text.body_medium>
+          <Text.body_medium testid="announcement-published-notice"><%= @vm.published.text %></Text.body_medium>
           <.spacing value="M" />
+          <%= if @vm.published.notice do %>
+            <Text.body_medium testid="announcement-compose-notice" color="text-warning">
+              <%= @vm.published.notice %>
+            </Text.body_medium>
+            <.spacing value="S" />
+          <% end %>
           <.compose_buttons labels={@vm.form} publish?={false} />
           <.spacing value="L" />
         <% end %>
