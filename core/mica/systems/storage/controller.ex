@@ -41,7 +41,11 @@ defmodule Systems.Storage.Controller do
     |> Storage.BuiltIn.Backend.list_files()
     |> request_permission(remote_ip)
     |> Enum.map(fn %{source: source, path: path, timestamp: timestamp} ->
-      [source: source, path: "#{export_name}/#{path}", timestamp: timestamp]
+      [
+        source: source,
+        path: "#{export_name}/#{participant_folder(path)}/#{path}",
+        timestamp: timestamp
+      ]
     end)
     |> Packmatic.build_stream()
     |> Packmatic.Conn.send_chunked(conn, "#{export_name}.zip")
@@ -50,6 +54,9 @@ defmodule Systems.Storage.Controller do
   def export(conn, _, _) do
     service_unavailable(conn)
   end
+
+  # A participant id never has spaces or brackets, so this folder cannot clash with one.
+  defp participant_folder(path), do: Storage.Donations.participant(path) || "(no participant)"
 
   defp authorized?(%{assigns: %{current_user: user}}, %Storage.EndpointModel{} = endpoint),
     do: Core.Authorization.can_access?(user, endpoint, Storage.EndpointContentPage)

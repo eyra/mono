@@ -208,3 +208,43 @@ msgid "1 file"
 msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.unknown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.files.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.last_donation.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.participant.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.sessions.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.tools.label"
+msgstr ""
