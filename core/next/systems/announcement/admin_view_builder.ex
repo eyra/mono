@@ -10,8 +10,9 @@ defmodule Systems.Announcement.AdminViewBuilder do
   composing an unpublished one, assigns read: `audience_filters` (from
   `Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
   search words), `priority` (the priority chosen in the form) and
-  `compose_notice` (`:already_published`, `:changed_since_loaded` or
-  `:audience_changed` after a refused save or publish). A published one has
+  `compose_notice` (`:already_published`, `:changed_since_loaded`,
+  `:audience_changed` or `:no_recipients` after a refused save or publish).
+  A published one has
   no audience to choose, only `published`: what saving it does, and the
   notice of a refused save.
   """
@@ -155,6 +156,9 @@ defmodule Systems.Announcement.AdminViewBuilder do
 
   defp notice(:changed_since_loaded, _recipient_count),
     do: dgettext("eyra-announcement", "form.notice.changed_since_loaded")
+
+  defp notice(:no_recipients, _recipient_count),
+    do: dgettext("eyra-announcement", "form.notice.no_recipients")
 
   defp notice(:audience_changed, recipient_count) do
     dngettext(
