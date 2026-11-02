@@ -46,6 +46,7 @@ config :core, :feldspar_data_donation,
   retention_hours: 336
 
 config :core, :features,
+  announcements: true,
   e2e: true,
   leaderboard: true,
   member_google_sign_in: true,
