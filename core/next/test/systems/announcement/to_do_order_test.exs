@@ -104,10 +104,13 @@ defmodule Systems.Announcement.ToDoOrderTest do
 
     assert :ok = perform_job(Announcement.DeliverJob, %{"announcement_id" => announcement.id})
 
+    action = to_string(ReadAnnouncement)
     key = ReadAnnouncement.key(announcement.id)
 
     {1, _} =
-      from(na in NextAction.Model, where: na.user_id == ^ctx.creator.id and na.key == ^key)
+      from(na in NextAction.Model,
+        where: na.user_id == ^ctx.creator.id and na.action == ^action and na.key == ^key
+      )
       |> Repo.update_all(set: [inserted_at: inserted_at])
 
     announcement
