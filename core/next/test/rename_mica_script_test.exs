@@ -12,7 +12,8 @@ defmodule Next.RenameMicaScriptTest do
   @versions ~w(20261030120000 20261031091717)
 
   setup %{tmp_dir: tmp_dir} do
-    {_, 0} = System.cmd("git", ["init", "--quiet"], cd: tmp_dir)
+    env = without_git_env()
+    {_, 0} = System.cmd("git", ["init", "--quiet"], cd: tmp_dir, env: env)
     [migration] = Path.wildcard(Path.join(@migration_dir, "*_rename_stored_module_names.exs"))
     source = File.read!(migration)
 
@@ -26,7 +27,7 @@ defmodule Next.RenameMicaScriptTest do
 
     write(tmp_dir, "core/mica/lib/core/example.ex", "defmodule Core.Example, do: :core\n")
 
-    {output, 0} = System.cmd("elixir", [@script], cd: tmp_dir, stderr_to_stdout: true)
+    {output, 0} = System.cmd("elixir", [@script], cd: tmp_dir, env: env, stderr_to_stdout: true)
     %{source: source, output: output}
   end
 
@@ -49,6 +50,11 @@ defmodule Next.RenameMicaScriptTest do
     assert renames != []
     assert Enum.all?(renames, fn [from, to] -> from != to end)
   end
+
+  # The pre-push hook runs this suite with GIT_DIR and GIT_INDEX_FILE set to the real
+  # repository. Inherited, they make `git init` reinitialise that repository (setting
+  # core.bare = true in the config all worktrees share) and the script read its index.
+  defp without_git_env, do: for({"GIT_" <> _ = name, _} <- System.get_env(), do: {name, nil})
 
   defp write(dir, path, content) do
     path = Path.join(dir, path)
