@@ -1,0 +1,2 @@
+<%= Phoenix.HTML.raw(@body) %>
+<p><a href="<%= @url %>"><%= dgettext("eyra-announcement", "email.link") %></a></p>
