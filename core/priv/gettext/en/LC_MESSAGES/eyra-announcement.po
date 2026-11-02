@@ -136,3 +136,11 @@ msgstr "No email is sent."
 #, elixir-autogen, elixir-format
 msgid "form.publish.button"
 msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr "Unread"

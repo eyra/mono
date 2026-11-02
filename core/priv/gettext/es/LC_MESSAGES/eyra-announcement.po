@@ -136,3 +136,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "form.publish.button"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr ""

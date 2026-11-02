@@ -26,6 +26,10 @@ defmodule Systems.Announcement.System do
     end
   end
 
+  def signal_handlers, do: [Systems.Announcement.Switch]
+
+  def desktop_sections, do: [Systems.Announcement.DesktopSection]
+
   def feature_flags, do: [:announcements]
 
   def admin_panels, do: [Systems.Announcement.AdminPanel]
