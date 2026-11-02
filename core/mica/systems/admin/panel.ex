@@ -24,6 +24,8 @@ defmodule Systems.Admin.Panel do
 
   The audience says who sees the panel: `:admin` only system admins,
   `:org_admin` also admins of an organisation. System admins see every panel.
+  A panel that is not `c:enabled?/0`, for example because its feature flag is
+  off, is shown to nobody.
   """
 
   alias Frameworks.Concept.LiveContext
@@ -48,6 +50,9 @@ defmodule Systems.Admin.Panel do
   """
   @callback live_context(live_context()) :: live_context()
 
+  @doc "Whether the panel is on. Defaults to `true`."
+  @callback enabled?() :: boolean()
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Systems.Admin.Panel
@@ -55,12 +60,19 @@ defmodule Systems.Admin.Panel do
       @impl true
       def live_context(context), do: context
 
-      defoverridable live_context: 1
+      @impl true
+      def enabled?, do: true
+
+      defoverridable live_context: 1, enabled?: 0
     end
   end
 
   @doc "Whether `viewer` sees `panel`."
   @spec shown_to?(module(), viewer()) :: boolean()
-  def shown_to?(_panel, :admin), do: true
-  def shown_to?(panel, :org_admin), do: panel.audience() == :org_admin
+  def shown_to?(panel, viewer), do: panel.enabled?() and in_audience?(panel, viewer)
+
+  @doc "Whether `viewer` is in the audience of `panel`, whether or not it is enabled."
+  @spec in_audience?(module(), viewer()) :: boolean()
+  def in_audience?(_panel, :admin), do: true
+  def in_audience?(panel, :org_admin), do: panel.audience() == :org_admin
 end
