@@ -28,6 +28,10 @@ defmodule Next.RenameMicaScriptTest do
 
       write(tmp_dir, "core/mica/lib/core/example.ex", "defmodule Core.Example, do: :core\n")
 
+      # A Next system that, on this branch, only has a folder: no module defines it yet.
+      write(tmp_dir, "core/next/systems/widget/README.md", "Widget\n")
+      write(tmp_dir, "core/next/lib/uses_widget.ex", "alias Systems.Widget.Model\n")
+
       {output, 0} =
         System.cmd("elixir", [@script],
           cd: tmp_dir,
@@ -41,6 +45,11 @@ defmodule Next.RenameMicaScriptTest do
     test "renames old names", %{tmp_dir: tmp_dir} do
       assert File.read!(Path.join(tmp_dir, "core/mica/lib/mica/example.ex")) ==
                "defmodule Mica.Example, do: :mica\n"
+    end
+
+    test "renames a Next system that only has a folder", %{tmp_dir: tmp_dir} do
+      assert File.read!(Path.join(tmp_dir, "core/next/lib/uses_widget.ex")) ==
+               "alias Next.Systems.Widget.Model\n"
     end
 
     for version <- @versions do
