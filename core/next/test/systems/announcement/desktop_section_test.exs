@@ -5,7 +5,6 @@ defmodule Systems.Announcement.DesktopSectionTest do
   import Phoenix.LiveViewTest
 
   alias Core.Repo
-  alias Frameworks.Signal
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
@@ -145,17 +144,11 @@ defmodule Systems.Announcement.DesktopSectionTest do
       {:ok, desktop, _html} = live(conn, ~p"/desktop")
       assert has_element?(desktop, "#announcement_item_#{id}", "Release notes")
 
-      # A published announcement can't be changed through
-      # `update_announcement/2` yet, so change the row and send its signal here.
-      announcement =
-        announcement
-        |> Ecto.Changeset.change(
+      {:ok, _} =
+        Announcement.Public.update_announcement(announcement, %{
           title: "Release notes, corrected",
           summary: "What really changed"
-        )
-        |> Repo.update!()
-
-      Signal.Public.dispatch!({:announcement, :updated}, %{announcement: announcement})
+        })
 
       item = desktop |> element("#announcement_item_#{id}") |> render()
       assert item =~ "Release notes, corrected"

@@ -49,6 +49,19 @@ defmodule Systems.Announcement.AdminViewTest do
 
   defp announcement_count, do: Repo.aggregate(Announcement.Model, :count)
 
+  defp published!(admin) do
+    {:ok, announcement} =
+      Announcement.Public.create_announcement(admin, %{
+        kind: :release_notes,
+        title: "Published",
+        summary: "Summary",
+        body: "<div>Text</div>"
+      })
+
+    {:ok, published} = Announcement.Public.publish_announcement(announcement, [], nil, 2)
+    published
+  end
+
   defp stored_recipient_ids do
     Repo.all(from(a in Announcement.Model, select: a.recipient_ids))
   end
@@ -180,6 +193,21 @@ defmodule Systems.Announcement.AdminViewTest do
                  ~s|<a href='https://b.org' target="_blank">b</a> | <>
                  ~s|<a href="https://c.org" target="_blank">c</a> | <>
                  ~s|<a href="https://d.org" target="_blank">d</a></div>|
+    end
+
+    test "a link with a data-target attribute opens in a new tab too", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+
+      save(view, @attrs, ~s|<div><a href="https://a.org" data-target="menu">a</a></div>|)
+
+      assert [%Announcement.Model{body: body}] = Repo.all(Announcement.Model)
+
+      assert body ==
+               ~s|<div><a href="https://a.org" data-target="menu" target="_blank">a</a></div>|
     end
 
     test "cancel closes the form", %{conn: conn, admin: admin} do
@@ -434,24 +462,83 @@ defmodule Systems.Announcement.AdminViewTest do
       assert [%Announcement.Model{id: ^id, title: "April release", published_at: %DateTime{}}] =
                Repo.all(Announcement.Model)
 
-      refute has_element?(view, "[data-testid='edit-announcement-#{id}']")
+      refute has_element?(view, "[data-testid='announcement-form']")
+      assert has_element?(view, "[data-testid='edit-announcement-#{id}']")
     end
 
-    test "a published announcement can't be opened again", %{conn: conn, admin: admin} do
-      {:ok, announcement} =
-        Announcement.Public.create_announcement(admin, %{
-          kind: :release_notes,
-          title: "Published",
-          summary: "Summary",
-          body: "<div>Text</div>"
-        })
-
-      {:ok, _} = Announcement.Public.publish_announcement(announcement, [], nil, 2)
+    test "a published announcement opens with only its title, summary and body", %{
+      conn: conn,
+      admin: admin
+    } do
+      %{id: id} = published!(admin)
 
       view = mount_view(conn, admin)
-      render_click(view, "edit_announcement", %{"item" => to_string(announcement.id)})
+      assert has_element?(view, "[data-testid='edit-announcement-#{id}']")
+      render_click(view, "edit_announcement", %{"item" => to_string(id)})
 
+      html = view |> element("[data-testid='announcement-form']") |> render()
+      assert html =~ ~s(value="Published")
+      assert html =~ ~s(value="Summary")
+      refute html =~ ~s(name="announcement[priority]")
+      refute html =~ ~s(name="announcement[kind]")
+
+      refute has_element?(view, "[data-testid='announcement-audience']")
+      refute has_element?(view, "[data-testid='publish-announcement-button']")
+      assert has_element?(view, "[data-testid='save-announcement-button']")
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-published-notice']",
+               "This announcement is published. Saving shows your changes to its recipients " <>
+                 "at once; it isn't sent again."
+             )
+    end
+
+    test "saving a published announcement changes its text and sends nothing again", %{
+      conn: conn,
+      admin: admin
+    } do
+      %{id: id, published_at: published_at} = published!(admin)
+      enqueued = all_enqueued()
+
+      view = mount_view(conn, admin)
+      render_click(view, "edit_announcement", %{"item" => to_string(id)})
+
+      save(
+        view,
+        %{"title" => "Published, corrected", "summary" => "Summary, corrected"},
+        ~s|<div>See <a href="https://eyra.co/v2">the notes</a></div>|
+      )
+
+      assert [
+               %Announcement.Model{
+                 id: ^id,
+                 title: "Published, corrected",
+                 summary: "Summary, corrected",
+                 priority: :normal,
+                 published_at: ^published_at
+               } = announcement
+             ] = Repo.all(Announcement.Model)
+
+      assert announcement.body ==
+               ~s(<div>See <a href="https://eyra.co/v2" target="_blank">the notes</a></div>)
+
+      assert all_enqueued() == enqueued
       refute has_element?(view, "[data-testid='announcement-form']")
+      assert has_element?(view, "[data-testid='announcement-row-#{id}']", "Published, corrected")
+    end
+
+    test "a published announcement keeps its priority", %{conn: conn, admin: admin} do
+      %{id: id} = published!(admin)
+
+      view = mount_view(conn, admin)
+      render_click(view, "edit_announcement", %{"item" => to_string(id)})
+      save(view, %{"title" => "Changed", "priority" => "high"}, "<div>Text</div>")
+
+      assert [%Announcement.Model{title: "Published", priority: :normal}] =
+               Repo.all(Announcement.Model)
+
+      assert has_element?(view, "[data-testid='announcement-form']")
     end
 
     test "Publish sends the count the admin sees", %{conn: conn, admin: admin} do

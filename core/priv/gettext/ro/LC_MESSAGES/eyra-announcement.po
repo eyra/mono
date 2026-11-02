@@ -156,3 +156,7 @@ msgid_plural "form.notice.audience_changed.other"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, elixir-autogen, elixir-format
+msgid "form.published.notice"
+msgstr ""

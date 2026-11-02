@@ -154,3 +154,7 @@ msgid "form.notice.audience_changed.one"
 msgid_plural "form.notice.audience_changed.other"
 msgstr[0] "The audience changed to %{count} creator. Press Publish again to send it."
 msgstr[1] "The audience changed to %{count} creators. Press Publish again to send it."
+
+#, elixir-autogen, elixir-format
+msgid "form.published.notice"
+msgstr "This announcement is published. Saving shows your changes to its recipients at once; it isn't sent again. Its priority and recipients can't change."

@@ -110,6 +110,30 @@ defmodule Systems.Announcement.PageTest do
       refute NextAction.Public.next_best_action_for_key(creator, ReadAnnouncement.key(id))
     end
 
+    test "an open page shows an edit at once and the announcement stays read", %{
+      conn: conn,
+      announcement: %{id: id} = announcement,
+      recipient: recipient
+    } do
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+      %{read_at: read_at} = Repo.reload!(recipient)
+
+      {:ok, _} =
+        Announcement.Public.update_announcement(announcement, %{
+          title: "Release notes October, corrected",
+          body: ~s|<div>Fixed <a href="https://example.com/v2">the docs</a></div>|
+        })
+
+      assert view |> element("[data-testid=announcement-title]") |> render() =~
+               "Release notes October, corrected"
+
+      body = view |> element("[data-testid=announcement-body]") |> render()
+      assert body =~ ~s|<a href="https://example.com/v2" target="_blank">the docs</a>|
+      refute body =~ "features"
+
+      assert %{read_at: ^read_at} = Repo.reload!(recipient)
+    end
+
     test "opens it without a To-do", %{conn: conn, announcement: %{id: id}} = ctx do
       assert NextAction.Public.count_next_actions(ctx.creator) == 0
 

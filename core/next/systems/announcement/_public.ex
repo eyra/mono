@@ -26,19 +26,24 @@ defmodule Systems.Announcement.Public do
   end
 
   @doc """
-  Changes an unpublished announcement and dispatches `{:announcement, :updated}`,
-  so the pages that show it refresh.
+  Changes an announcement and dispatches `{:announcement, :updated}`, so the
+  pages that show it refresh. Nothing is sent again and the recipients keep
+  their read status.
 
-  Returns `{:error, :already_published}` when it is published, also when that
-  happened after `announcement` was loaded: the row is locked and checked in
-  the same transaction as the update.
+  After publication only the title, summary and body may change
+  (`Systems.Announcement.Model.fixed_after_publishing/0`). Returns
+  `{:error, :already_published}` when the change touches another field, and
+  when `announcement` was loaded before it was published: a form opened on the
+  draft doesn't change the published announcement. The row is locked and
+  checked in the same transaction as the update.
   """
-  def update_announcement(%Announcement.Model{id: id}, attrs) do
+  def update_announcement(%Announcement.Model{id: id, published_at: seen_published_at}, attrs) do
     Multi.new()
-    |> Multi.run(:unpublished, fn _repo, _ -> lock_unpublished(id) end)
-    |> Multi.update(:announcement, fn %{unpublished: announcement} ->
-      Announcement.Model.changeset(announcement, attrs)
+    |> Multi.run(:current, fn _repo, _ -> lock_announcement(id) end)
+    |> Multi.run(:changeset, fn _repo, %{current: current} ->
+      change_announcement(current, seen_published_at, attrs)
     end)
+    |> Multi.update(:announcement, fn %{changeset: changeset} -> changeset end)
     |> Repo.commit()
     |> case do
       {:ok, %{announcement: announcement}} ->
@@ -50,14 +55,35 @@ defmodule Systems.Announcement.Public do
     end
   end
 
-  defp lock_unpublished(id) do
+  defp lock_announcement(id) do
     announcement_query()
     |> where([announcement: a], a.id == ^id)
     |> lock("FOR UPDATE")
     |> Repo.one()
     |> case do
-      %Announcement.Model{published_at: nil} = announcement -> {:ok, announcement}
-      _ -> {:error, :already_published}
+      %Announcement.Model{} = announcement -> {:ok, announcement}
+      nil -> {:error, :already_published}
+    end
+  end
+
+  defp change_announcement(%Announcement.Model{published_at: nil} = current, _seen, attrs) do
+    {:ok, Announcement.Model.changeset(current, attrs)}
+  end
+
+  defp change_announcement(%Announcement.Model{}, nil = _seen, _attrs) do
+    {:error, :already_published}
+  end
+
+  defp change_announcement(%Announcement.Model{} = current, _seen, attrs) do
+    changeset = Announcement.Model.changeset(current, attrs)
+
+    if Enum.any?(
+         Announcement.Model.fixed_after_publishing(),
+         &Map.has_key?(changeset.changes, &1)
+       ) do
+      {:error, :already_published}
+    else
+      {:ok, changeset}
     end
   end
 

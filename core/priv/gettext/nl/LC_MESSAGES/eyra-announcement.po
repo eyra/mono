@@ -154,3 +154,7 @@ msgid "form.notice.audience_changed.one"
 msgid_plural "form.notice.audience_changed.other"
 msgstr[0] "De ontvangers zijn veranderd naar %{count} creator. Druk nogmaals op Publiceren om te versturen."
 msgstr[1] "De ontvangers zijn veranderd naar %{count} creators. Druk nogmaals op Publiceren om te versturen."
+
+#, elixir-autogen, elixir-format
+msgid "form.published.notice"
+msgstr "Deze aankondiging is gepubliceerd. Na opslaan zien de ontvangers je wijzigingen meteen; ze krijgen de aankondiging niet opnieuw. Prioriteit en ontvangers kunnen niet meer veranderen."

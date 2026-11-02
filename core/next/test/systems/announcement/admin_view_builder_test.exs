@@ -64,9 +64,10 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
              title: "February release",
              priority: "Normal",
              recipient_count: 2,
-             buttons: []
+             buttons: [%{action: %{type: :send, event: "edit_announcement", item: older_id}}]
            } = second
 
+    assert older_id == older.id
     assert second.published == CoreWeb.UI.Timestamp.humanize(published_at)
   end
 
@@ -110,7 +111,40 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
     end
 
     test "is only built while composing", %{admin: admin} do
-      assert %{audience: nil} = view_model(admin)
+      assert %{audience: nil, published_notice: nil} = view_model(admin)
+    end
+
+    test "is built while composing a saved draft", %{admin: admin} do
+      draft = create!(admin, %{title: "Draft"})
+
+      assert %{audience: %{recipient_count: 2}, published_notice: nil} =
+               composing(admin, %{announcement: draft})
+    end
+
+    test "is not built for a published announcement, which says what saving does", %{
+      admin: admin
+    } do
+      {:ok, published} =
+        admin
+        |> create!(%{title: "Published"})
+        |> Announcement.Public.publish_announcement([], nil, 2)
+
+      assert %{audience: nil, published_notice: notice} =
+               composing(admin, %{announcement: published})
+
+      assert notice ==
+               "This announcement is published. Saving shows your changes to its recipients " <>
+                 "at once; it isn't sent again. Its priority and recipients can't change."
+
+      Gettext.put_locale(CoreWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+
+      assert %{published_notice: notice} = composing(admin, %{announcement: published})
+
+      assert notice ==
+               "Deze aankondiging is gepubliceerd. Na opslaan zien de ontvangers je wijzigingen " <>
+                 "meteen; ze krijgen de aankondiging niet opnieuw. Prioriteit en ontvangers " <>
+                 "kunnen niet meer veranderen."
     end
 
     test "counts every creator with a confirmed account", %{admin: admin} do
