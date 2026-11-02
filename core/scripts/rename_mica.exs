@@ -32,8 +32,9 @@ defmodule RenameMica do
     "core/architecture/",
     "core/priv/static/",
     "core/scripts/rename_mica.exs",
-    # Its test names old modules on purpose.
-    "core/next/test/rename_mica_script_test.exs"
+    # Its tests name old modules on purpose.
+    "core/next/test/rename_mica_script_test.exs",
+    "core/next/test/rename_stored_module_names_test.exs"
   ]
   @excluded_exts ~w(.png .jpg .jpeg .gif .ico .webp .svg .woff .woff2 .ttf .otf .eot .pdf .zip
                     .gz .beam .lock .archimate .mp4 .mov)
@@ -53,7 +54,7 @@ defmodule RenameMica do
 
   # Seeds for the sets derived from the tree, so a branch that lacks a module still
   # renames references to it.
-  @next_systems ~w(Annotation Citizen Graphite Ontology Onyx Paper Probe Student Zircon)
+  @next_systems ~w(Annotation Announcement Citizen Graphite Ontology Onyx Paper Probe Student Zircon)
   @next_bundle_systems ~w(Account E2E Panl WellKnown)
   # Frameworks.E2E is Next's whole namespace; Frameworks.Concept is Mica's.
   @next_frameworks ~w(E2E Concept.ScreeningAgent)
