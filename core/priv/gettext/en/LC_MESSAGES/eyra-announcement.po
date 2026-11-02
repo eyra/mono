@@ -158,3 +158,7 @@ msgstr[1] "The audience changed to %{count} creators. Press Publish again to sen
 #, elixir-autogen, elixir-format
 msgid "form.published.notice"
 msgstr "This announcement is published. Saving shows your changes to its recipients at once; it isn't sent again. Its priority and recipients can't change."
+
+#, elixir-autogen, elixir-format
+msgid "email.link"
+msgstr "Read this announcement in Next"

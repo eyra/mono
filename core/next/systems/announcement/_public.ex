@@ -16,6 +16,7 @@ defmodule Systems.Announcement.Public do
   alias Systems.Admin
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Systems.Email
   alias Systems.NextAction
 
   @doc "Creates an announcement by `author`."
@@ -244,9 +245,11 @@ defmodule Systems.Announcement.Public do
   @doc """
   Gives every recipient of a published announcement a recipient row and a
   To-do, with one insert for the rows and batched inserts for the To-dos.
-  Recipients who already have a row are skipped, so running it again adds
-  nothing. Users deleted since publication are left out. Returns
-  `{:ok, count}` with the number of recipients added.
+  For a high-priority announcement it also queues one email per recipient
+  (`Systems.Announcement.EmailTemplate`), in batches. Recipients who already
+  have a row are skipped, so running it again adds and sends nothing. Users
+  deleted since publication are left out. Returns `{:ok, count}` with the
+  number of recipients added.
   """
   def deliver_announcement(announcement_id) do
     announcement_query()
@@ -267,8 +270,12 @@ defmodule Systems.Announcement.Public do
       {:ok,
        NextAction.Public.create_next_actions(user_ids, ReadAnnouncement,
          key: ReadAnnouncement.key(id),
-         params: ReadAnnouncement.params(id)
+         params: ReadAnnouncement.params(id),
+         priority: ReadAnnouncement.priority(announcement)
        )}
+    end)
+    |> Multi.run(:emails, fn _repo, %{user_ids: user_ids} ->
+      queue_emails(announcement, user_ids)
     end)
     |> Repo.commit()
     |> case do
@@ -276,6 +283,27 @@ defmodule Systems.Announcement.Public do
       {:error, _operation, reason, _changes} -> {:error, reason}
     end
   end
+
+  @email_batch_size 500
+
+  # Only the recipients whose row this transaction added get an email, and
+  # the emails are queued in the same transaction as the rows: the row is
+  # what says the email went out.
+  defp queue_emails(%Announcement.Model{priority: :high} = announcement, user_ids) do
+    email = Announcement.EmailTemplate.email(announcement)
+
+    from(u in User, where: u.id in ^user_ids, order_by: u.id, select: u.email)
+    |> Repo.all()
+    |> Enum.chunk_every(@email_batch_size)
+    |> Enum.reduce_while({:ok, 0}, fn to, {:ok, count} ->
+      case Email.Public.deliver_later!(%{email | to: to}) do
+        {:ok, _job} -> {:cont, {:ok, count + length(to)}}
+        {:error, reason} -> {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp queue_emails(%Announcement.Model{}, _user_ids), do: {:ok, 0}
 
   defp insert_recipients(%Announcement.Model{id: id, recipient_ids: recipient_ids}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)

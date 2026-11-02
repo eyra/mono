@@ -9,6 +9,7 @@ defmodule Systems.Announcement.PublishTest do
   alias Systems.Account
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Systems.Assignment.NextActions.PendingContributions
   alias Systems.NextAction
 
   @now NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
@@ -348,6 +349,28 @@ defmodule Systems.Announcement.PublishTest do
       announcement = publish!(announcement!(ctx.author), [:unverified])
 
       assert length(recipient_ids(announcement)) == count
+    end
+
+    test "a high announcement's To-do has high priority", ctx do
+      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
+
+      assert [%NextAction.Model{priority: :high}] = to_dos(ctx.verified)
+    end
+
+    test "a normal announcement's To-do has low priority", ctx do
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+
+      assert [%NextAction.Model{priority: :low}] = to_dos(ctx.verified)
+    end
+
+    test "other To-dos keep their priority", ctx do
+      NextAction.Public.create_next_action(ctx.verified, PendingContributions, key: "other")
+
+      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+
+      assert %NextAction.Model{priority: :normal} =
+               Repo.get_by!(NextAction.Model, user_id: ctx.verified.id, key: "other")
     end
 
     test "publishing to yourself reaches only your account", %{author: author} do

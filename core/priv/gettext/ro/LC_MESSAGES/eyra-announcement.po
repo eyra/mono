@@ -160,3 +160,7 @@ msgstr[2] ""
 #, elixir-autogen, elixir-format
 msgid "form.published.notice"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "email.link"
+msgstr ""

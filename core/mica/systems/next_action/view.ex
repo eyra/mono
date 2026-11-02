@@ -14,7 +14,9 @@ defmodule Systems.NextAction.View do
 
   def highlight(assigns) do
     ~H"""
-    <.normal {assign(assigns, :style, :tertiary)} />
+    <div data-testid="next-action-highlight">
+      <.normal {assign(assigns, :style, :tertiary)} />
+    </div>
     """
   end
 
