@@ -84,14 +84,14 @@ defmodule Systems.Announcement.PageTest do
     } do
       create_to_do!(creator, id)
       {:ok, desktop, html} = live(conn, ~p"/desktop")
-      assert html =~ "Release notes October"
+      assert html =~ "Read announcement"
 
       Endpoint.subscribe("next_actions:#{creator_id}")
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 
       assert_receive %Phoenix.Socket.Broadcast{event: "next_actions_updated"}
       assert NextAction.Public.count_next_actions(creator) == 0
-      refute render(desktop) =~ "Release notes October"
+      refute render(desktop) =~ "Read announcement"
     end
 
     test "leaves the To-dos of other announcements", %{

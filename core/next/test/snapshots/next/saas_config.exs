@@ -23,5 +23,5 @@
     admin: [:system, :account, :org, :actions, :client_activity, :announcements],
     org_admin: [:org]
   },
-  desktop_sections: []
+  desktop_sections: [:announcements]
 ]

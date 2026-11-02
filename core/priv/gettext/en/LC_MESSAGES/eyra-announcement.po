@@ -98,3 +98,11 @@ msgstr "Published on %{date}"
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr "Announcement"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr "Unread"

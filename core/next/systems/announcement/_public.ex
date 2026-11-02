@@ -10,6 +10,7 @@ defmodule Systems.Announcement.Public do
   import Systems.Announcement.Queries
 
   alias Core.Repo
+  alias Frameworks.Signal
   alias Systems.Account.User
   alias Systems.Announcement
   alias Systems.Announcement.NextActions.ReadAnnouncement
@@ -22,11 +23,21 @@ defmodule Systems.Announcement.Public do
     |> Repo.insert()
   end
 
-  @doc "Changes an announcement."
+  @doc """
+  Changes an announcement and dispatches `{:announcement, :updated}`, so the
+  pages that show it refresh.
+  """
   def update_announcement(%Announcement.Model{} = announcement, attrs) do
     announcement
     |> Announcement.Model.changeset(attrs)
     |> Repo.update()
+    |> tap(fn
+      {:ok, announcement} ->
+        Signal.Public.dispatch!({:announcement, :updated}, %{announcement: announcement})
+
+      {:error, _} ->
+        :ok
+    end)
   end
 
   def get_announcement!(id, preload \\ []) do
@@ -43,13 +54,17 @@ defmodule Systems.Announcement.Public do
 
   @doc """
   The published announcements `user` received, as recipient rows with the announcement
-  preloaded, newest publication first.
+  preloaded, newest publication first. `limit: n` returns only the `n` newest.
   """
-  def list_received(%User{} = user) do
+  def list_received(%User{} = user, opts \\ []) do
     received_query(user)
+    |> limit_to(Keyword.get(opts, :limit))
     |> preload([announcement: a], announcement: a)
     |> Repo.all()
   end
+
+  defp limit_to(query, nil), do: query
+  defp limit_to(query, limit), do: limit(query, ^limit)
 
   @doc """
   The recipient row of `user` for the announcement with `announcement_id`, with

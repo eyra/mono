@@ -98,3 +98,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "page.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr ""
