@@ -101,6 +101,17 @@ defmodule Next.Account.AuthCodeVerifyPageTest do
     end
   end
 
+  test "the code form submits in place so the code field keeps its focus", %{conn: conn} do
+    set_feature_flag(:otp, true)
+
+    {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=focus@example.com")
+
+    assert has_element?(
+             view,
+             "form#auth_code_form[phx-hook='SubmitInPlace'][phx-submit='verify']"
+           )
+  end
+
   describe "/user/auth/verify success" do
     test "renders the standard loading button before redeeming the OTP", %{conn: conn} do
       set_feature_flag(:otp, true)

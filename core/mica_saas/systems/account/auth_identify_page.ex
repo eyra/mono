@@ -42,13 +42,16 @@ defmodule Self.Account.AuthIdentifyPage do
   end
 
   @impl true
-  def handle_event("submit", %{"email" => email}, socket) do
+  def handle_event("submit", %{"email" => email}, %{assigns: %{form: form}} = socket) do
     email = String.trim(email)
 
     if valid_email?(email) do
       socket =
         socket
-        |> assign(loading: true, form: to_form(%{"email" => email}))
+        |> assign(
+          loading: true,
+          form: to_form(%{"email" => email}, errors: shown_errors(form, email))
+        )
 
       send(self(), {:route_email, email})
       {:noreply, socket}
@@ -97,6 +100,13 @@ defmodule Self.Account.AuthIdentifyPage do
     end
   end
 
+  # A message already shown for this address stays until routing replaces it, so it doesn't
+  # drop out and come back. A message for an earlier address (the change event is debounced,
+  # so the form can still hold it) doesn't.
+  defp shown_errors(%{params: %{"email" => shown}, errors: errors}, email) do
+    if String.trim(shown) == email, do: errors, else: []
+  end
+
   defp google_url(email), do: "/auth/google?login_hint=#{URI.encode_www_form(email)}"
 
   defp verify_url(email, nil, creator?),
@@ -121,7 +131,7 @@ defmodule Self.Account.AuthIdentifyPage do
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change" novalidate>
+          <.form id="auth_form" for={@form} phx-hook="SubmitInPlace" phx-submit="submit" phx-change="change" novalidate>
             <.email_input
               form={@form}
               field={:email}
