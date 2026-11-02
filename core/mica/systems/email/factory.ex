@@ -73,12 +73,17 @@ defmodule Systems.Email.Factory do
     |> render(:contribution_declined, metadata: metadata)
   end
 
-  def notification(title, byline, message, to) do
+  @doc """
+  A notification with `title`, `byline` and the plain-text `message`.
+  Options: `subject` (default "Next notification") and `html_message`, the
+  HTML part (default: `message` as paragraphs).
+  """
+  def notification(title, byline, message, to, opts \\ []) do
     text_message = message
-    html_message = message |> to_html()
+    html_message = Keyword.get(opts, :html_message) || to_html(message)
 
     mail_user(to)
-    |> subject("Next notification")
+    |> subject(Keyword.get(opts, :subject) || "Next notification")
     |> render(:notification,
       title: title,
       byline: byline,

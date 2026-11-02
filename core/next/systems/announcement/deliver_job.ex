@@ -1,8 +1,9 @@
 defmodule Systems.Announcement.DeliverJob do
   @moduledoc """
   Gives the recipients of a just-published announcement their recipient rows
-  and To-dos (`Systems.Announcement.Public.deliver_announcement/1`). Running
-  it again adds nothing, so a retry is safe.
+  and To-dos, and for a high-priority announcement their emails
+  (`Systems.Announcement.Public.deliver_announcement/1`). Running it again
+  adds and sends nothing, so a retry is safe.
   """
   use Oban.Worker, queue: :default
 

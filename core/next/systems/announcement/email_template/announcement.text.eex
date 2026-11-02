@@ -1,0 +1,4 @@
+<%= @body %>
+
+<%= dgettext("eyra-announcement", "email.link") %>:
+<%= @url %>
