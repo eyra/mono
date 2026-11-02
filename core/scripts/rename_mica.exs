@@ -31,9 +31,7 @@ defmodule RenameMica do
     "docs/nova-migration/",
     "core/architecture/",
     "core/priv/static/",
-    "core/scripts/rename_mica.exs",
-    # Migrates the stored old names, so it names them.
-    "core/priv/repo/migrations/20261031091717_rename_stored_module_names.exs"
+    "core/scripts/rename_mica.exs"
   ]
   @excluded_exts ~w(.png .jpg .jpeg .gif .ico .webp .svg .woff .woff2 .ttf .otf .eot .pdf .zip
                     .gz .beam .lock .archimate .mp4 .mov)
@@ -119,8 +117,14 @@ defmodule RenameMica do
 
   defp text?(file) do
     not Enum.any?(@excluded_prefixes, &String.starts_with?(file, &1)) and
+      not stored_names_migration?(file) and
       Path.extname(file) not in @excluded_exts
   end
+
+  # The migration that rewrites the stored old names, so it names them. Matched under
+  # any version: a branch that merged the script commit has it as 20261030120000.
+  defp stored_names_migration?(file),
+    do: Regex.match?(~r{^core/priv/repo/migrations/\d+_rename_stored_module_names\.exs$}, file)
 
   # --- moves ---------------------------------------------------------------------
 
