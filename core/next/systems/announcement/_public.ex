@@ -26,20 +26,39 @@ defmodule Systems.Announcement.Public do
   end
 
   @doc """
-  Changes an announcement and dispatches `{:announcement, :updated}`, so the
-  pages that show it refresh.
-  """
-  def update_announcement(%Announcement.Model{} = announcement, attrs) do
-    announcement
-    |> Announcement.Model.changeset(attrs)
-    |> Repo.update()
-    |> tap(fn
-      {:ok, announcement} ->
-        Signal.Public.dispatch!({:announcement, :updated}, %{announcement: announcement})
+  Changes an unpublished announcement and dispatches `{:announcement, :updated}`,
+  so the pages that show it refresh.
 
-      {:error, _} ->
-        :ok
+  Returns `{:error, :already_published}` when it is published, also when that
+  happened after `announcement` was loaded: the row is locked and checked in
+  the same transaction as the update.
+  """
+  def update_announcement(%Announcement.Model{id: id}, attrs) do
+    Multi.new()
+    |> Multi.run(:unpublished, fn _repo, _ -> lock_unpublished(id) end)
+    |> Multi.update(:announcement, fn %{unpublished: announcement} ->
+      Announcement.Model.changeset(announcement, attrs)
     end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{announcement: announcement}} ->
+        Signal.Public.dispatch!({:announcement, :updated}, %{announcement: announcement})
+        {:ok, announcement}
+
+      {:error, _operation, reason, _changes} ->
+        {:error, reason}
+    end
+  end
+
+  defp lock_unpublished(id) do
+    announcement_query()
+    |> where([announcement: a], a.id == ^id)
+    |> lock("FOR UPDATE")
+    |> Repo.one()
+    |> case do
+      %Announcement.Model{published_at: nil} = announcement -> {:ok, announcement}
+      _ -> {:error, :already_published}
+    end
   end
 
   def get_announcement!(id, preload \\ []) do
@@ -119,18 +138,35 @@ defmodule Systems.Announcement.Public do
   stored on the announcement; a job then gives every recipient a recipient
   row and a To-do (`deliver_announcement/1`).
 
+  `shown_count` is the recipient count the admin saw and confirmed. When the
+  audience has changed since, nothing is published and the result is
+  `{:error, {:audience_changed, count}}` with the current count.
+
   Returns `{:error, :no_recipients}` when the audience is empty and
   `{:error, :already_published}` when it was published before.
   """
-  def publish_announcement(%Announcement.Model{published_at: nil} = announcement, filters, query) do
+  def publish_announcement(
+        %Announcement.Model{published_at: nil} = announcement,
+        filters,
+        query,
+        shown_count
+      )
+      when is_integer(shown_count) do
     case list_audience_ids(filters, query) do
-      [] -> {:error, :no_recipients}
-      recipient_ids -> publish(announcement, recipient_ids)
+      [] ->
+        {:error, :no_recipients}
+
+      recipient_ids when length(recipient_ids) == shown_count ->
+        publish(announcement, recipient_ids)
+
+      recipient_ids ->
+        {:error, {:audience_changed, length(recipient_ids)}}
     end
   end
 
-  def publish_announcement(%Announcement.Model{}, _filters, _query),
-    do: {:error, :already_published}
+  def publish_announcement(%Announcement.Model{}, _filters, _query, shown_count)
+      when is_integer(shown_count),
+      do: {:error, :already_published}
 
   defp publish(%Announcement.Model{id: id}, recipient_ids) do
     Multi.new()
@@ -160,9 +196,23 @@ defmodule Systems.Announcement.Public do
       set: [published_at: published_at, recipient_ids: recipient_ids, updated_at: updated_at]
     )
     |> case do
-      {1, [announcement]} -> {:ok, announcement}
+      {1, [announcement]} -> {:ok, %{announcement | recipient_ids: recipient_ids}}
       {0, _} -> {:error, :already_published}
     end
+  end
+
+  @doc """
+  The number of recipients each published announcement was published to, as
+  a map from announcement id to count. Unpublished announcements count 0.
+  """
+  def count_audiences(announcements) do
+    ids = Enum.map(announcements, fn %Announcement.Model{id: id} -> id end)
+
+    announcement_query()
+    |> where([announcement: a], a.id in ^ids)
+    |> select([announcement: a], {a.id, fragment("cardinality(?)", a.recipient_ids)})
+    |> Repo.all()
+    |> Map.new()
   end
 
   @doc """
@@ -173,7 +223,11 @@ defmodule Systems.Announcement.Public do
   `{:ok, count}` with the number of recipients added.
   """
   def deliver_announcement(announcement_id) do
-    case get_announcement(announcement_id) do
+    announcement_query()
+    |> where([announcement: a], a.id == ^announcement_id)
+    |> select_merge([announcement: a], %{recipient_ids: a.recipient_ids})
+    |> Repo.one()
+    |> case do
       %Announcement.Model{published_at: nil} -> {:ok, 0}
       %Announcement.Model{} = announcement -> deliver(announcement)
       nil -> {:ok, 0}

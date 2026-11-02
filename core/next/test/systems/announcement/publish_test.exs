@@ -64,8 +64,14 @@ defmodule Systems.Announcement.PublishTest do
     announcement
   end
 
+  # Publishes with the count the admin would have seen.
+  defp publish(announcement, filters, query) do
+    shown_count = length(Announcement.Public.list_audience_ids(filters, query))
+    Announcement.Public.publish_announcement(announcement, filters, query, shown_count)
+  end
+
   defp publish!(announcement, filters \\ [], query \\ nil) do
-    {:ok, announcement} = Announcement.Public.publish_announcement(announcement, filters, query)
+    {:ok, announcement} = publish(announcement, filters, query)
     assert :ok = perform_job(Announcement.DeliverJob, %{"announcement_id" => announcement.id})
     announcement
   end
@@ -75,6 +81,10 @@ defmodule Systems.Announcement.PublishTest do
     |> Announcement.Public.list_recipients()
     |> Enum.map(& &1.user_id)
     |> Enum.sort()
+  end
+
+  defp stored_recipient_ids(%Announcement.Model{id: id}) do
+    Repo.one!(from(a in Announcement.Model, where: a.id == ^id, select: a.recipient_ids))
   end
 
   defp to_dos(%Account.User{id: user_id}) do
@@ -126,7 +136,7 @@ defmodule Systems.Announcement.PublishTest do
       announcement = announcement!(author)
 
       assert {:ok, %Announcement.Model{published_at: %DateTime{}, recipient_ids: recipient_ids}} =
-               Announcement.Public.publish_announcement(announcement, [:verified], nil)
+               publish(announcement, [:verified], nil)
 
       assert recipient_ids == [verified.id]
 
@@ -135,33 +145,103 @@ defmodule Systems.Announcement.PublishTest do
         args: %{"announcement_id" => announcement.id}
       )
 
-      assert %{published_at: %DateTime{}, recipient_ids: [_]} =
-               Announcement.Public.get_announcement!(announcement.id)
+      assert %{published_at: %DateTime{}} = Announcement.Public.get_announcement!(announcement.id)
+      assert stored_recipient_ids(announcement) == [verified.id]
     end
 
     test "an empty audience leaves it unpublished", %{author: author} do
       announcement = announcement!(author)
 
       assert {:error, :no_recipients} =
-               Announcement.Public.publish_announcement(announcement, [], ["nobody"])
+               publish(announcement, [], ["nobody"])
 
-      assert %{published_at: nil, recipient_ids: []} =
-               Announcement.Public.get_announcement!(announcement.id)
+      assert %{published_at: nil} = Announcement.Public.get_announcement!(announcement.id)
+      assert stored_recipient_ids(announcement) == []
 
       refute_enqueued(worker: Announcement.DeliverJob)
     end
 
     test "publishes once", %{author: author} do
       announcement = announcement!(author)
-      {:ok, published} = Announcement.Public.publish_announcement(announcement, [], nil)
+      {:ok, published} = publish(announcement, [], nil)
 
       assert {:error, :already_published} =
-               Announcement.Public.publish_announcement(published, [], nil)
+               publish(published, [], nil)
 
       assert {:error, :already_published} =
-               Announcement.Public.publish_announcement(announcement, [], nil)
+               publish(announcement, [], nil)
 
       assert [_] = all_enqueued(worker: Announcement.DeliverJob)
+    end
+  end
+
+  describe "publish_announcement/4 with the count the admin saw" do
+    test "doesn't publish when the audience changed since", %{author: author} do
+      announcement = announcement!(author)
+      shown_count = length(Announcement.Public.list_audience_ids([], nil))
+      creator!("eva.new@example.org", "Eva New")
+
+      assert {:error, {:audience_changed, count}} =
+               Announcement.Public.publish_announcement(announcement, [], nil, shown_count)
+
+      assert count == shown_count + 1
+      assert %{published_at: nil} = Announcement.Public.get_announcement!(announcement.id)
+      refute_enqueued(worker: Announcement.DeliverJob)
+    end
+
+    test "publishes with the new count", %{author: author} do
+      announcement = announcement!(author)
+      creator!("eva.new@example.org", "Eva New")
+      count = length(Announcement.Public.list_audience_ids([], nil))
+
+      assert {:ok, %{recipient_ids: ids}} =
+               Announcement.Public.publish_announcement(announcement, [], nil, count)
+
+      assert length(ids) == count
+    end
+  end
+
+  describe "update_announcement/2" do
+    test "refuses a published announcement", %{author: author} do
+      {:ok, published} = publish(announcement!(author), [], nil)
+
+      assert {:error, :already_published} =
+               Announcement.Public.update_announcement(published, %{title: "Changed"})
+
+      assert %{title: "Release notes"} = Announcement.Public.get_announcement!(published.id)
+    end
+
+    test "refuses a copy loaded before it was published", %{author: author} do
+      announcement = announcement!(author)
+      {:ok, _} = publish(announcement, [], nil)
+
+      assert {:error, :already_published} =
+               Announcement.Public.update_announcement(announcement, %{
+                 title: "Changed",
+                 priority: :high
+               })
+
+      assert %{title: "Release notes", priority: :normal} =
+               Announcement.Public.get_announcement!(announcement.id)
+    end
+  end
+
+  describe "reading announcements" do
+    test "leaves the audience out", %{author: author} do
+      %{id: id} = publish!(announcement!(author))
+
+      assert %{recipient_ids: []} = Announcement.Public.get_announcement!(id)
+      assert [%{recipient_ids: []}] = Announcement.Public.list_announcements()
+    end
+
+    test "count_audiences/1 counts each announcement's audience", %{author: author} do
+      published = publish!(announcement!(author, %{title: "Published"}))
+      draft = announcement!(author, %{title: "Draft"})
+
+      assert Announcement.Public.count_audiences([published, draft]) == %{
+               published.id => 2,
+               draft.id => 0
+             }
     end
   end
 
@@ -221,7 +301,7 @@ defmodule Systems.Announcement.PublishTest do
 
     test "a creator who signs up later gets nothing", %{author: author} do
       {:ok, announcement} =
-        Announcement.Public.publish_announcement(announcement!(author), [], nil)
+        publish(announcement!(author), [], nil)
 
       later = creator!("eva.later@example.org", "Eva Later")
 
@@ -233,7 +313,7 @@ defmodule Systems.Announcement.PublishTest do
 
     test "skips recipients whose account is gone", %{author: author, verified: verified} do
       {:ok, announcement} =
-        Announcement.Public.publish_announcement(announcement!(author), [:verified], nil)
+        publish(announcement!(author), [:verified], nil)
 
       gone_id = Repo.aggregate(Account.User, :max, :id) + 1
 

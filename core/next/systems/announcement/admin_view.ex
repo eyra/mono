@@ -5,7 +5,7 @@ defmodule Systems.Announcement.AdminView do
   unpublished one can be opened again from the list. Publishing sends it to
   the audience chosen below the form: creators, narrowed by the Admin → Users
   filters and search. The server resolves the audience itself
-  (`Systems.Announcement.Public.publish_announcement/3`).
+  (`Systems.Announcement.Public.publish_announcement/4`).
 
   Every event checks `@vm.allowed?` (system admin, `announcements` flag on).
   """
@@ -101,19 +101,23 @@ defmodule Systems.Announcement.AdminView do
 
       filter ->
         filters = if filter in filters, do: List.delete(filters, filter), else: [filter | filters]
-        {:noreply, socket |> assign(audience_filters: filters) |> update_view_model()}
+
+        {
+          :noreply,
+          socket |> assign(audience_filters: filters, compose_notice: nil) |> update_view_model()
+        }
     end
   end
 
   # The editor's field is named after the body field with an `_input` suffix
   # (`Frameworks.Pixel.Form.wysiwyg_area/1`). The Publish button submits the
-  # form with `publish` set.
+  # form with `publish` set to the recipient count the admin saw.
   @impl true
   def handle_event("save_announcement", %{"announcement" => attrs} = params, socket) do
     body = params |> Map.get("announcement[body]_input", "") |> open_links_in_new_tab()
     attrs = Map.put(attrs, "body", body)
 
-    {:noreply, submit(socket, attrs, Map.has_key?(params, "publish"))}
+    {:noreply, submit(socket, attrs, shown_count(params))}
   end
 
   @impl true
@@ -124,12 +128,23 @@ defmodule Systems.Announcement.AdminView do
     {
       :stop,
       socket
-      |> assign(audience_query: query, audience_query_string: query_string)
+      |> assign(audience_query: query, audience_query_string: query_string, compose_notice: nil)
       |> update_view_model()
     }
   end
 
-  defp submit(socket, attrs, publish?) do
+  # `nil` for Save; for Publish the count the admin saw, or -1 when it isn't a
+  # number, which never matches the audience.
+  defp shown_count(%{"publish" => count}) do
+    case Integer.parse(count) do
+      {count, ""} -> count
+      _ -> -1
+    end
+  end
+
+  defp shown_count(_params), do: nil
+
+  defp submit(socket, attrs, shown_count) do
     case save(socket, attrs) do
       {:ok, announcement} ->
         socket
@@ -137,7 +152,10 @@ defmodule Systems.Announcement.AdminView do
           announcement: announcement,
           form: announcement |> Ecto.Changeset.change() |> to_form(as: :announcement)
         )
-        |> publish_or_close(announcement, publish?)
+        |> publish_or_close(announcement, shown_count)
+
+      {:error, :already_published} ->
+        show_notice(socket, :already_published)
 
       {:error, changeset} ->
         assign(socket, form: to_form(changeset, as: :announcement))
@@ -150,19 +168,26 @@ defmodule Systems.Announcement.AdminView do
   defp save(%{assigns: %{announcement: announcement}}, attrs),
     do: Announcement.Public.update_announcement(announcement, attrs)
 
-  defp publish_or_close(socket, _announcement, false), do: close_form(socket)
+  defp publish_or_close(socket, _announcement, nil), do: close_form(socket)
 
-  # With no recipients the form stays open on the saved announcement; the
-  # view model already says that nobody matches.
+  # When it isn't published the form stays open on the saved announcement:
+  # with no recipients the view model already says that nobody matches, and
+  # a changed audience shows its new count with a notice.
   defp publish_or_close(
          %{assigns: %{audience_filters: filters, audience_query: query}} = socket,
          announcement,
-         true
+         shown_count
        ) do
-    case Announcement.Public.publish_announcement(announcement, filters, query) do
+    case Announcement.Public.publish_announcement(announcement, filters, query, shown_count) do
+      {:ok, _announcement} -> close_form(socket)
       {:error, :no_recipients} -> update_view_model(socket)
-      _published -> close_form(socket)
+      {:error, {:audience_changed, _count}} -> show_notice(socket, :audience_changed)
+      {:error, :already_published} -> show_notice(socket, :already_published)
     end
+  end
+
+  defp show_notice(socket, notice) do
+    socket |> assign(compose_notice: notice) |> update_view_model()
   end
 
   defp close_form(socket) do
@@ -175,7 +200,8 @@ defmodule Systems.Announcement.AdminView do
       priority: :normal,
       audience_filters: [],
       audience_query: nil,
-      audience_query_string: ""
+      audience_query_string: "",
+      compose_notice: nil
     )
   end
 
@@ -242,6 +268,12 @@ defmodule Systems.Announcement.AdminView do
           <.spacing value="M" />
           <.audience audience={@vm.audience} query_string={@audience_query_string} />
           <.spacing value="M" />
+          <%= if @vm.audience.notice do %>
+            <Text.body_medium testid="announcement-compose-notice" color="text-warning">
+              <%= @vm.audience.notice %>
+            </Text.body_medium>
+            <.spacing value="S" />
+          <% end %>
           <.compose_buttons labels={@vm.form} recipient_count={@vm.audience.recipient_count} />
           <.spacing value="L" />
         <% end %>
@@ -343,7 +375,7 @@ defmodule Systems.Announcement.AdminView do
           type="submit"
           form="announcement_form"
           name="publish"
-          value="true"
+          value={@recipient_count}
           class="cursor-pointer focus:outline-none"
           data-testid="publish-announcement-button"
         >

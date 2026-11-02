@@ -161,5 +161,45 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
                }
              } = composing(admin, %{priority: :high})
     end
+
+    test "has no notice unless a save or publish was refused", %{admin: admin} do
+      assert %{audience: %{notice: nil}} = composing(admin)
+    end
+
+    test "says the audience changed, with the current count", %{admin: admin} do
+      assert %{
+               audience: %{
+                 notice: "The audience changed to 2 creators. Press Publish again to send it."
+               }
+             } = composing(admin, %{compose_notice: :audience_changed})
+    end
+
+    test "says the announcement was published in the meantime", %{admin: admin} do
+      assert %{
+               audience: %{
+                 notice:
+                   "This announcement was published in the meantime, so your changes were not saved."
+               }
+             } = composing(admin, %{compose_notice: :already_published})
+    end
+
+    test "the notices are in Dutch for a Dutch admin", %{admin: admin} do
+      Gettext.put_locale(CoreWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+
+      assert %{
+               audience: %{
+                 notice:
+                   "De ontvangers zijn veranderd naar 2 creators. Druk nogmaals op Publiceren om te versturen."
+               }
+             } = composing(admin, %{compose_notice: :audience_changed})
+
+      assert %{
+               audience: %{
+                 notice:
+                   "Deze aankondiging is intussen gepubliceerd, dus je wijzigingen zijn niet opgeslagen."
+               }
+             } = composing(admin, %{compose_notice: :already_published})
+    end
   end
 end

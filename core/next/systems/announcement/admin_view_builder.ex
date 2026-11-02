@@ -8,7 +8,9 @@ defmodule Systems.Announcement.AdminViewBuilder do
 
   Composing means a `form` is open. Assigns read then: `audience_filters` (from
   `Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
-  search words) and `priority` (the priority chosen in the form).
+  search words), `priority` (the priority chosen in the form) and
+  `compose_notice` (`:already_published` or `:audience_changed` after a
+  refused save or publish).
   """
   use Gettext, backend: CoreWeb.Gettext
   use Core.FeatureFlags
@@ -21,6 +23,7 @@ defmodule Systems.Announcement.AdminViewBuilder do
     allowed? = feature_enabled?(:announcements) and admin?(Map.get(assigns, :current_user))
     timezone = Map.get(assigns, :timezone)
     announcements = if allowed?, do: Announcement.Public.list_announcements(), else: []
+    audience_counts = Announcement.Public.count_audiences(announcements)
 
     %{
       allowed?: allowed?,
@@ -29,7 +32,7 @@ defmodule Systems.Announcement.AdminViewBuilder do
       empty_text: dgettext("eyra-announcement", "admin.empty"),
       new_button: new_button(),
       head_cells: head_cells(),
-      items: Enum.map(announcements, &to_item(&1, timezone)),
+      items: Enum.map(announcements, &to_item(&1, audience_counts, timezone)),
       form: form_labels(),
       audience: audience(allowed? and composing?(assigns), assigns)
     }
@@ -58,8 +61,8 @@ defmodule Systems.Announcement.AdminViewBuilder do
   # The recipient count of a published announcement is its audience, fixed at
   # publication; its recipient rows follow in a job.
   defp to_item(
-         %Announcement.Model{id: id, published_at: published_at, recipient_ids: recipient_ids} =
-           announcement,
+         %Announcement.Model{id: id, published_at: published_at} = announcement,
+         audience_counts,
          timezone
        ) do
     %{
@@ -68,7 +71,7 @@ defmodule Systems.Announcement.AdminViewBuilder do
       title: announcement.title,
       priority: priority_label(announcement.priority),
       published: published_label(published_at, timezone),
-      recipient_count: length(recipient_ids),
+      recipient_count: Map.get(audience_counts, id, 0),
       buttons: buttons(announcement)
     }
   end
@@ -124,8 +127,24 @@ defmodule Systems.Announcement.AdminViewBuilder do
       search_placeholder: dgettext("eyra-announcement", "form.audience.search.placeholder"),
       recipient_count: recipient_count,
       recipient_text: recipient_text(recipient_count),
-      email_text: email_text(Map.get(assigns, :priority, :normal))
+      email_text: email_text(Map.get(assigns, :priority, :normal)),
+      notice: notice(Map.get(assigns, :compose_notice), recipient_count)
     }
+  end
+
+  defp notice(nil, _recipient_count), do: nil
+
+  defp notice(:already_published, _recipient_count),
+    do: dgettext("eyra-announcement", "form.notice.already_published")
+
+  defp notice(:audience_changed, recipient_count) do
+    dngettext(
+      "eyra-announcement",
+      "form.notice.audience_changed.one",
+      "form.notice.audience_changed.other",
+      recipient_count,
+      count: recipient_count
+    )
   end
 
   defp recipient_text(0), do: dgettext("eyra-announcement", "form.audience.none")

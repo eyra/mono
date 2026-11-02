@@ -144,3 +144,13 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "desktop.unread"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] ""
+msgstr[1] ""

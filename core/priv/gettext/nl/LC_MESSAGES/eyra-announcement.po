@@ -144,3 +144,13 @@ msgstr "Aankondigingen"
 #, elixir-autogen, elixir-format
 msgid "desktop.unread"
 msgstr "Ongelezen"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr "Deze aankondiging is intussen gepubliceerd, dus je wijzigingen zijn niet opgeslagen."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] "De ontvangers zijn veranderd naar %{count} creator. Druk nogmaals op Publiceren om te versturen."
+msgstr[1] "De ontvangers zijn veranderd naar %{count} creators. Druk nogmaals op Publiceren om te versturen."

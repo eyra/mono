@@ -3,6 +3,7 @@ defmodule Systems.Announcement.AdminViewTest do
   use Core.FeatureFlags.Test
   use Oban.Testing, repo: Core.Repo
 
+  import Ecto.Query, only: [from: 2]
   import Phoenix.LiveViewTest
 
   alias Core.Repo
@@ -48,12 +49,28 @@ defmodule Systems.Announcement.AdminViewTest do
 
   defp announcement_count, do: Repo.aggregate(Announcement.Model, :count)
 
-  defp publish(view, attrs, body) do
+  defp stored_recipient_ids do
+    Repo.all(from(a in Announcement.Model, select: a.recipient_ids))
+  end
+
+  # Sends the count on the Publish button, as the browser does ("0" when the
+  # button is off).
+  defp publish(view, attrs, body), do: publish(view, attrs, body, shown_count(view))
+
+  defp publish(view, attrs, body, shown_count) do
     render_submit(view, "save_announcement", %{
       "announcement" => attrs,
       "announcement[body]_input" => body,
-      "publish" => "true"
+      "publish" => shown_count
     })
+  end
+
+  defp shown_count(view) do
+    view
+    |> render()
+    |> Floki.parse_document!()
+    |> Floki.attribute("button[data-testid='publish-announcement-button']", "value")
+    |> List.first("0")
   end
 
   defp search(view, query) do
@@ -350,10 +367,10 @@ defmodule Systems.Announcement.AdminViewTest do
 
       publish(view, @attrs, "<div>Text</div>")
 
-      assert [%Announcement.Model{id: id, published_at: %DateTime{}, recipient_ids: ids}] =
+      assert [%Announcement.Model{id: id, published_at: %DateTime{}}] =
                Repo.all(Announcement.Model)
 
-      assert ids == [unverified.id]
+      assert stored_recipient_ids() == [[unverified.id]]
       assert_enqueued(worker: Announcement.DeliverJob, args: %{"announcement_id" => id})
 
       refute has_element?(view, "[data-testid='announcement-form']")
@@ -376,8 +393,7 @@ defmodule Systems.Announcement.AdminViewTest do
         "<div>Text</div>"
       )
 
-      assert [%Announcement.Model{recipient_ids: ids}] = Repo.all(Announcement.Model)
-      assert ids == [verified.id]
+      assert stored_recipient_ids() == [[verified.id]]
     end
 
     test "with nobody in the audience, Publish is off and nothing is published", %{
@@ -430,12 +446,123 @@ defmodule Systems.Announcement.AdminViewTest do
           body: "<div>Text</div>"
         })
 
-      {:ok, _} = Announcement.Public.publish_announcement(announcement, [], nil)
+      {:ok, _} = Announcement.Public.publish_announcement(announcement, [], nil, 2)
 
       view = mount_view(conn, admin)
       render_click(view, "edit_announcement", %{"item" => to_string(announcement.id)})
 
       refute has_element?(view, "[data-testid='announcement-form']")
+    end
+
+    test "Publish sends the count the admin sees", %{conn: conn, admin: admin} do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+
+      assert has_element?(view, "button[data-testid='publish-announcement-button'][value='2']")
+      toggle_filter(view, "verified")
+      assert has_element?(view, "button[data-testid='publish-announcement-button'][value='1']")
+    end
+
+    test "when the audience changed since it was shown, nothing is published", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      assert recipient_count_text(view) =~ "2 creators will receive this announcement."
+
+      Factories.insert!(:creator, %{email: "eva@example.org"})
+      publish(view, @attrs, "<div>Text</div>", "2")
+
+      assert [%Announcement.Model{published_at: nil}] = Repo.all(Announcement.Model)
+      refute_enqueued(worker: Announcement.DeliverJob)
+      assert has_element?(view, "[data-testid='announcement-form']")
+      assert recipient_count_text(view) =~ "3 creators will receive this announcement."
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "The audience changed to 3 creators. Press Publish again to send it."
+             )
+    end
+
+    test "after the audience changed, Publish again publishes to the new count", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      Factories.insert!(:creator, %{email: "eva@example.org"})
+      publish(view, @attrs, "<div>Text</div>", "2")
+
+      publish(view, @attrs, "<div>Text</div>")
+
+      assert [%Announcement.Model{published_at: %DateTime{}}] = Repo.all(Announcement.Model)
+      assert [ids] = stored_recipient_ids()
+      assert length(ids) == 3
+      refute has_element?(view, "[data-testid='announcement-form']")
+    end
+
+    test "a form opened before the announcement was published doesn't change it on Save", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      save(view, @attrs, "<div>Text</div>")
+      [%Announcement.Model{id: id} = announcement] = Repo.all(Announcement.Model)
+
+      render_click(view, "edit_announcement", %{"item" => to_string(id)})
+      {:ok, _} = Announcement.Public.publish_announcement(announcement, [], nil, 2)
+
+      save(
+        view,
+        %{@attrs | "title" => "Changed after publish", "priority" => "normal"},
+        "<div>X</div>"
+      )
+
+      assert [
+               %Announcement.Model{
+                 title: "March release",
+                 priority: :high,
+                 body: "<div>Text</div>"
+               }
+             ] =
+               Repo.all(Announcement.Model)
+
+      assert has_element?(view, "[data-testid='announcement-form']")
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "This announcement was published in the meantime, so your changes were not saved."
+             )
+    end
+
+    test "a form opened before the announcement was published doesn't change it on Publish", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      save(view, @attrs, "<div>Text</div>")
+      [%Announcement.Model{id: id} = announcement] = Repo.all(Announcement.Model)
+
+      render_click(view, "edit_announcement", %{"item" => to_string(id)})
+      toggle_filter(view, "verified")
+      {:ok, _} = Announcement.Public.publish_announcement(announcement, [], nil, 2)
+
+      publish(view, %{@attrs | "title" => "Changed after publish"}, "<div>X</div>")
+
+      assert [%Announcement.Model{title: "March release"}] = Repo.all(Announcement.Model)
+      assert [[_, _]] = stored_recipient_ids()
+      assert [_] = all_enqueued(worker: Announcement.DeliverJob)
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "published in the meantime"
+             )
     end
 
     test "an org admin can't publish", %{conn: conn} do

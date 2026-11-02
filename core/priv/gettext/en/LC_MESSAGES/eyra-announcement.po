@@ -144,3 +144,13 @@ msgstr "Announcements"
 #, elixir-autogen, elixir-format
 msgid "desktop.unread"
 msgstr "Unread"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr "This announcement was published in the meantime, so your changes were not saved."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] "The audience changed to %{count} creator. Press Publish again to send it."
+msgstr[1] "The audience changed to %{count} creators. Press Publish again to send it."
