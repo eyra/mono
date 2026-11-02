@@ -31,4 +31,6 @@ defmodule Systems.Announcement.System do
   def desktop_sections, do: [Systems.Announcement.DesktopSection]
 
   def feature_flags, do: [:announcements]
+
+  def admin_panels, do: [Systems.Announcement.AdminPanel]
 end

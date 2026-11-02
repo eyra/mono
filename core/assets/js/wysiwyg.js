@@ -25,6 +25,7 @@ export const Wysiwyg = {
     this.locked = this.el.dataset.locked != undefined;
     this.minHeight = this.el.dataset.minHeight;
     this.maxHeight = this.el.dataset.maxHeight;
+    this.attachments = this.el.dataset.attachments !== "false";
   },
   insertTextArea(html) {
     if (this.textarea != undefined) {
@@ -61,6 +62,19 @@ export const Wysiwyg = {
     this.el.appendChild(this.container);
     this.editor.addEventListener("trix-change", (e) => {
       this.editor.dispatchEvent(new Event("input", { bubbles: true }));
+    });
+    if (!this.attachments) {
+      this.refuseAttachments();
+    }
+  },
+  refuseAttachments() {
+    // Files (pasted or dropped) never reach the document.
+    this.editor.addEventListener("trix-file-accept", (e) => {
+      e.preventDefault();
+    });
+    // Pasted HTML images arrive as attachments without a file.
+    this.editor.addEventListener("trix-attachment-add", (e) => {
+      e.attachment.remove();
     });
   },
   removeEditor() {
