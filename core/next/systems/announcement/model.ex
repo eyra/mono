@@ -2,6 +2,9 @@ defmodule Systems.Announcement.Model do
   @moduledoc """
   An announcement written by a system admin for a group of creators. The body is
   the HTML of the rich-text editor (Trix), stored as the editor sends it.
+
+  `recipient_ids` is the audience, resolved once when it is published
+  (`Systems.Announcement.Public.publish_announcement/3`); it does not change after that.
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
@@ -21,6 +24,7 @@ defmodule Systems.Announcement.Model do
     field(:body, :string)
     field(:priority, Ecto.Enum, values: @priorities, default: :normal)
     field(:published_at, :utc_datetime)
+    field(:recipient_ids, {:array, :id}, default: [])
 
     belongs_to(:author, User)
     has_many(:recipients, Announcement.RecipientModel, foreign_key: :announcement_id)
