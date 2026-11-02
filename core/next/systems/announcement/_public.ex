@@ -241,7 +241,8 @@ defmodule Systems.Announcement.Public do
       {:ok,
        NextAction.Public.create_next_actions(user_ids, ReadAnnouncement,
          key: ReadAnnouncement.key(id),
-         params: ReadAnnouncement.params(id)
+         params: ReadAnnouncement.params(id),
+         priority: ReadAnnouncement.priority(announcement)
        )}
     end)
     |> Repo.commit()
