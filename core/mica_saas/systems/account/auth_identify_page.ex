@@ -42,13 +42,14 @@ defmodule Self.Account.AuthIdentifyPage do
   end
 
   @impl true
-  def handle_event("submit", %{"email" => email}, socket) do
+  def handle_event("submit", %{"email" => email}, %{assigns: %{form: %{errors: errors}}} = socket) do
     email = String.trim(email)
 
     if valid_email?(email) do
+      # A message already shown stays until routing replaces it, so it doesn't drop out and come back.
       socket =
         socket
-        |> assign(loading: true, form: to_form(%{"email" => email}))
+        |> assign(loading: true, form: to_form(%{"email" => email}, errors: errors))
 
       send(self(), {:route_email, email})
       {:noreply, socket}
@@ -121,7 +122,7 @@ defmodule Self.Account.AuthIdentifyPage do
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change" novalidate>
+          <.form id="auth_form" for={@form} phx-hook="SubmitInPlace" phx-submit="submit" phx-change="change" novalidate>
             <.email_input
               form={@form}
               field={:email}

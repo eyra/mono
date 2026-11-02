@@ -26,6 +26,7 @@ import { Clipboard } from "./clipboard";
 import { FeldsparApp } from "./feldspar_app";
 import { FeldsparRecovery } from "./feldspar_recovery";
 import { AuthCodeInput } from "./auth_code_input";
+import { SubmitInPlace } from "./submit_in_place";
 import { installAuthSessionHandlers } from "./auth_session";
 import { installButtonLoading } from "./button_loading";
 import { Wysiwyg } from "./wysiwyg";
@@ -82,6 +83,7 @@ let Hooks = {
   LiveField,
   PDFViewer,
   SidePanel,
+  SubmitInPlace,
   Toggle,
   Tab,
   TabBar,
