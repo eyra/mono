@@ -27,6 +27,10 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
     Repo.get!(AuthCodeModel, inserted.id)
   end
 
+  # Async test modules write rate_counters in parallel transactions; a shared
+  # key makes their upserts wait on each other, in opposite order a deadlock.
+  defp unique_key(name), do: "#{name}-#{System.unique_integer([:positive])}"
+
   defp auth_code_count do
     Repo.aggregate(AuthCodeModel, :count)
   end
@@ -62,16 +66,19 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
     end
 
     test "deletes rate counters whose window has ended" do
-      Rate.Public.increment_counter("ended", 3600)
+      ended = unique_key("ended")
+      current = unique_key("current")
+
+      Rate.Public.increment_counter(ended, 3600)
 
       Repo.update_all(Rate.CounterModel,
         set: [window_start: ~U[2000-01-01 00:00:00Z], expires_at: ~U[2000-01-01 01:00:00Z]]
       )
 
-      Rate.Public.increment_counter("current", 3600)
+      Rate.Public.increment_counter(current, 3600)
 
       assert :ok = perform_job(AuthCodeCleanupWorker, %{})
-      assert 1 = Rate.Public.counter("current", 3600)
+      assert 1 = Rate.Public.counter(current, 3600)
       assert 1 = Repo.aggregate(Rate.CounterModel, :count)
     end
   end

@@ -5,80 +5,102 @@ defmodule Systems.Rate.CounterTest do
   alias Systems.Rate
   alias Systems.Rate.CounterModel
 
+  # Async test modules write rate_counters in parallel transactions; a shared
+  # key makes their upserts wait on each other, in opposite order a deadlock.
+  defp unique_key(name), do: "#{name}-#{System.unique_integer([:positive])}"
+
   describe "increment_counter/2" do
     test "crashes on a window that isn't a positive number of seconds" do
       assert_raise FunctionClauseError, fn -> Rate.Public.increment_counter("k", 0) end
     end
 
     test "counts each event of a key in the window" do
-      assert 1 = Rate.Public.increment_counter("k", 3600)
-      assert 2 = Rate.Public.increment_counter("k", 3600)
-      assert 3 = Rate.Public.increment_counter("k", 3600)
-      assert 3 = Rate.Public.counter("k", 3600)
+      k = unique_key("k")
+
+      assert 1 = Rate.Public.increment_counter(k, 3600)
+      assert 2 = Rate.Public.increment_counter(k, 3600)
+      assert 3 = Rate.Public.increment_counter(k, 3600)
+      assert 3 = Rate.Public.counter(k, 3600)
     end
 
     test "counts keys and window lengths apart" do
-      Rate.Public.increment_counter("a", 3600)
-      Rate.Public.increment_counter("a", 3600)
-      Rate.Public.increment_counter("a", 86_400)
-      Rate.Public.increment_counter("b", 3600)
+      a = unique_key("a")
+      b = unique_key("b")
+      c = unique_key("c")
 
-      assert 2 = Rate.Public.counter("a", 3600)
-      assert 1 = Rate.Public.counter("a", 86_400)
-      assert 1 = Rate.Public.counter("b", 3600)
-      assert 0 = Rate.Public.counter("c", 3600)
+      Rate.Public.increment_counter(a, 3600)
+      Rate.Public.increment_counter(a, 3600)
+      Rate.Public.increment_counter(a, 86_400)
+      Rate.Public.increment_counter(b, 3600)
+
+      assert 2 = Rate.Public.counter(a, 3600)
+      assert 1 = Rate.Public.counter(a, 86_400)
+      assert 1 = Rate.Public.counter(b, 3600)
+      assert 0 = Rate.Public.counter(c, 3600)
     end
 
     test "concurrent events are each counted once" do
+      k = unique_key("k")
+
       counts =
         1..20
-        |> Enum.map(fn _ -> Task.async(fn -> Rate.Public.increment_counter("k", 60) end) end)
+        |> Enum.map(fn _ -> Task.async(fn -> Rate.Public.increment_counter(k, 60) end) end)
         |> Task.await_many()
 
       assert Enum.sort(counts) == Enum.to_list(1..20)
-      assert 20 = Rate.Public.counter("k", 60)
+      assert 20 = Rate.Public.counter(k, 60)
     end
 
     test "doesn't store the key itself" do
-      Rate.Public.increment_counter("someone@example.com", 3600)
+      email = unique_key("someone") <> "@example.com"
+      Rate.Public.increment_counter(email, 3600)
 
       assert [%CounterModel{key: key}] = Repo.all(CounterModel)
-      refute key =~ "someone@example.com"
+      refute key =~ email
     end
   end
 
   describe "decrement_counter/2" do
     test "takes back one event" do
-      Rate.Public.increment_counter("k", 3600)
-      Rate.Public.increment_counter("k", 3600)
+      k = unique_key("k")
 
-      assert :ok = Rate.Public.decrement_counter("k", 3600)
-      assert 1 = Rate.Public.counter("k", 3600)
+      Rate.Public.increment_counter(k, 3600)
+      Rate.Public.increment_counter(k, 3600)
+
+      assert :ok = Rate.Public.decrement_counter(k, 3600)
+      assert 1 = Rate.Public.counter(k, 3600)
     end
 
     test "never goes below 0" do
-      Rate.Public.increment_counter("k", 3600)
-      Rate.Public.decrement_counter("k", 3600)
-      Rate.Public.decrement_counter("k", 3600)
+      k = unique_key("k")
 
-      assert 0 = Rate.Public.counter("k", 3600)
-      assert 1 = Rate.Public.increment_counter("k", 3600)
+      Rate.Public.increment_counter(k, 3600)
+      Rate.Public.decrement_counter(k, 3600)
+      Rate.Public.decrement_counter(k, 3600)
+
+      assert 0 = Rate.Public.counter(k, 3600)
+      assert 1 = Rate.Public.increment_counter(k, 3600)
     end
 
     test "does nothing for a key without a count" do
-      assert :ok = Rate.Public.decrement_counter("none", 3600)
-      assert 0 = Rate.Public.counter("none", 3600)
+      none = unique_key("none")
+
+      assert :ok = Rate.Public.decrement_counter(none, 3600)
+      assert 0 = Rate.Public.counter(none, 3600)
     end
   end
 
   describe "delete_expired_counters/0" do
     test "deletes the counters of ended windows only" do
-      Rate.Public.increment_counter("current", 3600)
-      Rate.Public.increment_counter("ended", 3600)
-      end_windows("ended", 3600)
+      current = unique_key("current")
+      ended = unique_key("ended")
+
+      Rate.Public.increment_counter(current, 3600)
+      Rate.Public.increment_counter(ended, 3600)
+      end_windows(ended, 3600)
 
       assert 1 = Rate.Public.delete_expired_counters()
-      assert 1 = Rate.Public.counter("current", 3600)
+      assert 1 = Rate.Public.counter(current, 3600)
       assert 1 = Repo.aggregate(CounterModel, :count)
     end
   end
