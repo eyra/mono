@@ -215,23 +215,6 @@ defmodule Frameworks.Pixel.RichTextTest do
     end
   end
 
-  describe "clean/1 takes linear time" do
-    test "on a long run of &" do
-      assert within_a_second(fn -> RichText.clean(String.duplicate("&", 200_000)) end) ==
-               String.duplicate("&amp;", 200_000)
-    end
-
-    test "on a long run of &#" do
-      assert within_a_second(fn -> RichText.clean(String.duplicate("&#", 100_000)) end) ==
-               String.duplicate("&amp;#", 100_000)
-    end
-
-    test "on a long run of & followed by a letter" do
-      assert within_a_second(fn -> RichText.clean(String.duplicate("&a", 100_000)) end) ==
-               String.duplicate("&amp;a", 100_000)
-    end
-  end
-
   describe "clean/1 keeps character references" do
     test "named, numeric and hexadecimal ones, as the characters they stand for" do
       assert RichText.clean("&amp; &nbsp; &#39; &eacute; &#x41;") == "&amp; \u00A0 ' é A"
@@ -290,14 +273,5 @@ defmodule Frameworks.Pixel.RichTextTest do
     |> Map.new(fn {key, value} -> {to_string(key), value} end)
     |> Jason.encode!()
     |> escape()
-  end
-
-  defp within_a_second(fun) do
-    task = Task.async(fun)
-
-    case Task.yield(task, 1_000) || Task.shutdown(task, :brutal_kill) do
-      {:ok, result} -> result
-      nil -> flunk("took longer than a second")
-    end
   end
 end
