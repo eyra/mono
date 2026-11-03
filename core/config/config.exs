@@ -29,6 +29,11 @@ config :phoenix,
   json_library: Jason,
   filter_parameters: ["password", "secret"]
 
+# Request params can carry participant ids and panel values (the affiliate
+# entry /a/:sqid does), so AppSignal gets none. runtime.exs refuses
+# APPSIGNAL_SEND_PARAMS, which would override this.
+config :appsignal, :config, send_params: false
+
 config :esbuild,
   version: "0.17.11",
   default: [
