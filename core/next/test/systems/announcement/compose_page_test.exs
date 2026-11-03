@@ -557,6 +557,31 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       assert [%Announcement.Model{title: "Changed"}] = Repo.all(Announcement.Model)
     end
 
+    test "a refused Publish of a new announcement moves to the saved draft's page", %{
+      conn: conn
+    } do
+      view = open_new(conn)
+      search(view, "nobody")
+
+      publish(view, @attrs, "<div>Text</div>")
+
+      assert [%Announcement.Model{id: id, published_at: nil}] = Repo.all(Announcement.Model)
+      assert_patch(view, "/admin/announcement/#{id}")
+      assert has_element?(view, "[data-testid='announcement-compose-page']", "Edit announcement")
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "No creators match"
+             )
+
+      publish(view, @attrs, "<div>Text</div>")
+      assert [%Announcement.Model{id: ^id}] = Repo.all(Announcement.Model)
+
+      reloaded = open(conn, "/admin/announcement/#{id}")
+      assert render(reloaded) =~ ~s(value="March release")
+    end
+
     test "changing the audience after a refused Publish drops the notice", %{conn: conn} do
       view = open_new(conn)
       search(view, "nobody")

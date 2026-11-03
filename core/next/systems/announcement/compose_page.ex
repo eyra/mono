@@ -59,6 +59,10 @@ defmodule Next.Systems.Announcement.ComposePage do
     {:ok, socket |> open(announcement) |> update_view_model()}
   end
 
+  # Only `stay/2` patches the address, to the draft the page already holds.
+  @impl true
+  def handle_params(_params, _uri, socket), do: {:noreply, socket}
+
   @impl true
   def handle_event(event, params, %{assigns: %{current_user: user}} = socket) do
     if feature_enabled?(:announcements) and Admin.Public.admin?(user) do
@@ -169,7 +173,7 @@ defmodule Next.Systems.Announcement.ComposePage do
   defp publish_or_close(socket, _announcement, nil), do: back_to_list(socket)
 
   # When it isn't published the form stays open on the saved announcement,
-  # with a notice that says what to change.
+  # with a notice that says what to change (`stay/2`).
   defp publish_or_close(
          %{assigns: %{audience_filters: filters, audience_query: query}} = socket,
          announcement,
@@ -177,11 +181,26 @@ defmodule Next.Systems.Announcement.ComposePage do
        ) do
     case Announcement.Public.publish_announcement(announcement, filters, query, shown_count) do
       {:ok, _announcement} -> back_to_list(socket)
-      {:error, :no_recipients} -> show_notice(socket, :no_recipients)
-      {:error, {:audience_changed, _count}} -> show_notice(socket, :audience_changed)
-      {:error, :already_published} -> show_notice(socket, :already_published)
+      {:error, :no_recipients} -> stay(socket, :no_recipients)
+      {:error, {:audience_changed, _count}} -> stay(socket, :audience_changed)
+      {:error, :already_published} -> stay(socket, :already_published)
     end
   end
+
+  # A new announcement that stays open once saved becomes that announcement's
+  # page, so a reload opens the saved draft rather than an empty form.
+  defp stay(
+         %{assigns: %{model: %{id: nil}, announcement: %{id: id} = announcement}} = socket,
+         notice
+       )
+       when is_integer(id) do
+    socket
+    |> assign(model: announcement)
+    |> show_notice(notice)
+    |> push_patch(to: Announcement.Private.compose_path(id))
+  end
+
+  defp stay(socket, notice), do: show_notice(socket, notice)
 
   defp show_notice(socket, notice) do
     socket |> assign(compose_notice: notice) |> update_view_model()

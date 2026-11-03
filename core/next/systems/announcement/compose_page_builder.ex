@@ -25,7 +25,7 @@ defmodule Next.Systems.Announcement.ComposePageBuilder do
     %{
       title: dgettext("eyra-announcement", "admin.title"),
       active_menu_item: :admin,
-      heading: heading(model),
+      heading: heading(announcement),
       form: form_labels(),
       audience: audience(not published?(announcement), assigns),
       published: published(published?(announcement), assigns)
