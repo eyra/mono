@@ -108,7 +108,7 @@ defmodule MicaSaas.Systems.Account.AuthCodeVerifyPage do
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.code.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_code_form" for={@form} phx-submit="verify">
+          <.form id="auth_code_form" for={@form} phx-hook="SubmitInPlace" phx-submit="verify">
             <div
               id="auth-code-input"
               phx-hook="AuthCodeInput"

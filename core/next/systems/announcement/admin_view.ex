@@ -1,11 +1,15 @@
 defmodule Next.Systems.Announcement.AdminView do
   @moduledoc """
   The Announcements tab on the Admin page: the list of announcements and the
-  form to compose one. Saving stores the announcement unpublished; an
-  unpublished one can be opened again from the list. Publishing sends it to
-  the audience chosen below the form: creators, narrowed by the Admin → Users
-  filters and search. The server resolves the audience itself
+  form to compose one. Saving stores the announcement unpublished; it can be
+  opened again from the list. Publishing sends it to the audience chosen below
+  the form: creators, narrowed by the Admin → Users filters and search. The
+  server resolves the audience itself
   (`Next.Systems.Announcement.Public.publish_announcement/4`).
+
+  A published announcement opens with only its title, summary and body:
+  saving shows the changes to its recipients without sending it again
+  (`Next.Systems.Announcement.Public.update_announcement/2`).
 
   Every event checks `@vm.allowed?` (system admin, `announcements` flag on).
   """
@@ -17,7 +21,6 @@ defmodule Next.Systems.Announcement.AdminView do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-  alias Frameworks.Pixel.TrixPostProcessor
   alias Next.Systems.Announcement
   alias Systems.Observatory
 
@@ -45,7 +48,7 @@ defmodule Next.Systems.Announcement.AdminView do
   @impl true
   def handle_event("edit_announcement", %{"item" => id}, socket) do
     case Announcement.Public.get_announcement(id) do
-      %Announcement.Model{published_at: nil, priority: priority} = announcement ->
+      %Announcement.Model{priority: priority} = announcement ->
         {
           :noreply,
           socket
@@ -154,8 +157,8 @@ defmodule Next.Systems.Announcement.AdminView do
         )
         |> publish_or_close(announcement, shown_count)
 
-      {:error, :already_published} ->
-        show_notice(socket, :already_published)
+      {:error, reason} when reason in [:already_published, :changed_since_loaded] ->
+        show_notice(socket, reason)
 
       {:error, changeset} ->
         assign(socket, form: to_form(changeset, as: :announcement))
@@ -170,9 +173,8 @@ defmodule Next.Systems.Announcement.AdminView do
 
   defp publish_or_close(socket, _announcement, nil), do: close_form(socket)
 
-  # When it isn't published the form stays open on the saved announcement:
-  # with no recipients the view model already says that nobody matches, and
-  # a changed audience shows its new count with a notice.
+  # When it isn't published the form stays open on the saved announcement,
+  # with a notice that says what to change.
   defp publish_or_close(
          %{assigns: %{audience_filters: filters, audience_query: query}} = socket,
          announcement,
@@ -180,7 +182,7 @@ defmodule Next.Systems.Announcement.AdminView do
        ) do
     case Announcement.Public.publish_announcement(announcement, filters, query, shown_count) do
       {:ok, _announcement} -> close_form(socket)
-      {:error, :no_recipients} -> update_view_model(socket)
+      {:error, :no_recipients} -> show_notice(socket, :no_recipients)
       {:error, {:audience_changed, _count}} -> show_notice(socket, :audience_changed)
       {:error, :already_published} -> show_notice(socket, :already_published)
     end
@@ -209,15 +211,18 @@ defmodule Next.Systems.Announcement.AdminView do
     Enum.find(Announcement.Model.priorities(), :normal, &(to_string(&1) == priority))
   end
 
-  # `add_target_blank/1` skips links that already have a target, so other
-  # targets go first.
+  # Every target is dropped first, so each link then gets `target="_blank"`;
+  # an attribute that ends in `target`, such as `data-target`, is not a target.
   @link_target ~r/(<a\b[^>]*?)\s+target\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i
+  @link ~r/<a\b([^>]*)>/i
 
   defp open_links_in_new_tab(body) do
     body
     |> drop_link_targets()
-    |> TrixPostProcessor.add_target_blank()
+    |> add_target_blank()
   end
+
+  defp add_target_blank(body), do: Regex.replace(@link, body, ~s|<a\\1 target="_blank">|)
 
   defp drop_link_targets(body) do
     case Regex.replace(@link_target, body, "\\1") do
@@ -263,8 +268,23 @@ defmodule Next.Systems.Announcement.AdminView do
         </div>
         <.spacing value="M" />
 
-        <%= if @form do %>
-          <.compose form={@form} labels={@vm.form} />
+        <%= if @form && @vm.published do %>
+          <.compose form={@form} labels={@vm.form} published?={true} />
+          <.spacing value="M" />
+          <Text.body_medium testid="announcement-published-notice"><%= @vm.published.text %></Text.body_medium>
+          <.spacing value="M" />
+          <%= if @vm.published.notice do %>
+            <Text.body_medium testid="announcement-compose-notice" color="text-warning">
+              <%= @vm.published.notice %>
+            </Text.body_medium>
+            <.spacing value="S" />
+          <% end %>
+          <.compose_buttons labels={@vm.form} publish?={false} />
+          <.spacing value="L" />
+        <% end %>
+
+        <%= if @form && @vm.audience do %>
+          <.compose form={@form} labels={@vm.form} published?={false} />
           <.spacing value="M" />
           <.audience audience={@vm.audience} query_string={@audience_query_string} />
           <.spacing value="M" />
@@ -274,7 +294,11 @@ defmodule Next.Systems.Announcement.AdminView do
             </Text.body_medium>
             <.spacing value="S" />
           <% end %>
-          <.compose_buttons labels={@vm.form} recipient_count={@vm.audience.recipient_count} />
+          <.compose_buttons
+            labels={@vm.form}
+            publish?={true}
+            recipient_count={@vm.audience.recipient_count}
+          />
           <.spacing value="L" />
         <% end %>
 
@@ -290,7 +314,9 @@ defmodule Next.Systems.Announcement.AdminView do
 
   attr(:form, :any, required: true)
   attr(:labels, :map, required: true)
+  attr(:published?, :boolean, required: true)
 
+  # Kind and priority can't change once it is published, so they are left out.
   defp compose(assigns) do
     ~H"""
     <.form
@@ -300,22 +326,26 @@ defmodule Next.Systems.Announcement.AdminView do
       phx-submit="save_announcement"
       data-testid="announcement-form"
     >
-      <.radio_group
-        form={@form}
-        field={:kind}
-        label_text={@labels.kind}
-        items={radio_items(@labels.kinds, @form[:kind].value)}
-      />
-      <.spacing value="S" />
+      <%= unless @published? do %>
+        <.radio_group
+          form={@form}
+          field={:kind}
+          label_text={@labels.kind}
+          items={radio_items(@labels.kinds, @form[:kind].value)}
+        />
+        <.spacing value="S" />
+      <% end %>
       <.text_input form={@form} field={:title} label_text={@labels.title} maxlength="255" />
       <.text_input form={@form} field={:summary} label_text={@labels.summary} />
       <.wysiwyg_area form={@form} field={:body} label_text={@labels.body} attachments={false} />
-      <.radio_group
-        form={@form}
-        field={:priority}
-        label_text={@labels.priority}
-        items={radio_items(@labels.priorities, @form[:priority].value)}
-      />
+      <%= unless @published? do %>
+        <.radio_group
+          form={@form}
+          field={:priority}
+          label_text={@labels.priority}
+          items={radio_items(@labels.priorities, @form[:priority].value)}
+        />
+      <% end %>
     </.form>
     """
   end
@@ -360,7 +390,8 @@ defmodule Next.Systems.Announcement.AdminView do
   end
 
   attr(:labels, :map, required: true)
-  attr(:recipient_count, :integer, required: true)
+  attr(:recipient_count, :integer, default: 0)
+  attr(:publish?, :boolean, required: true)
 
   defp compose_buttons(assigns) do
     ~H"""
@@ -370,7 +401,7 @@ defmodule Next.Systems.Announcement.AdminView do
         face={%{type: :secondary, label: @labels.save_button}}
         testid="save-announcement-button"
       />
-      <%= if @recipient_count > 0 do %>
+      <%= if @publish? do %>
         <button
           type="submit"
           form="announcement_form"
@@ -381,13 +412,6 @@ defmodule Next.Systems.Announcement.AdminView do
         >
           <Button.Face.primary label={@labels.publish_button} />
         </button>
-      <% else %>
-        <Button.dynamic
-          action={%{type: :fake}}
-          face={%{type: :primary, label: @labels.publish_button}}
-          enabled?={false}
-          testid="publish-announcement-button"
-        />
       <% end %>
       <Button.dynamic
         action={%{type: :send, event: "cancel_announcement"}}

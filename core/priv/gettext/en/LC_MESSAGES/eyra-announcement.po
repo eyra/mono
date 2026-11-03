@@ -154,3 +154,19 @@ msgid "form.notice.audience_changed.one"
 msgid_plural "form.notice.audience_changed.other"
 msgstr[0] "The audience changed to %{count} creator. Press Publish again to send it."
 msgstr[1] "The audience changed to %{count} creators. Press Publish again to send it."
+
+#, elixir-autogen, elixir-format
+msgid "form.published.notice"
+msgstr "This announcement is published. Saving shows your changes to its recipients at once; it isn't sent again. Its priority and recipients can't change."
+
+#, elixir-autogen, elixir-format
+msgid "email.link"
+msgstr "Read this announcement in Next"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.changed_since_loaded"
+msgstr "This announcement was changed in the meantime, so your changes were not saved. Cancel and open it again to see the latest version."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.no_recipients"
+msgstr "No creators match these filters and search, so nothing was published. Change the filters or search and press Publish again."

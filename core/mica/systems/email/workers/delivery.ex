@@ -19,19 +19,23 @@ defmodule Systems.Email.Delivery do
     end
   end
 
-  defp deliver(%{
-         "to" => to,
-         "from" => from,
-         "title" => title,
-         "byline" => byline,
-         "message" => message
-       }) do
+  defp deliver(
+         %{
+           "to" => to,
+           "from" => from,
+           "title" => title,
+           "byline" => byline,
+           "message" => message
+         } = args
+       ) do
     deliver(%Email.Model{
       to: to,
       from: from,
+      subject: Map.get(args, "subject"),
       title: title,
       byline: byline,
-      message: message
+      message: message,
+      html_message: Map.get(args, "html_message")
     })
   end
 

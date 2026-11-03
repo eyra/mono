@@ -114,6 +114,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
     %{current_user: user} = assigns
 
     cond do
+      contribution_reviewed?(assignment, user) ->
+        participation_view(assignment, assigns)
+
       not intro_visited?(assignment, user) ->
         intro_view(assignment, assigns)
 
@@ -242,10 +245,20 @@ defmodule Systems.Assignment.CrewPageBuilder do
   # message + navigate-home. Falls through to the finished_view for the still-
   # pending / no-review-yet state.
   defp participation_or_finished_view(assignment, %{current_user: user} = assigns) do
+    if contribution_reviewed?(assignment, user) do
+      participation_view(assignment, assigns)
+    else
+      finished_view(assignment, assigns)
+    end
+  end
+
+  # A participant can finish with tasks still pending, so a review is read from
+  # the participation, not from the task state.
+  defp contribution_reviewed?(assignment, user) do
     case Assignment.Public.get_participation(assignment, user) do
-      %{rejected_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
-      %{accepted_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
-      _ -> finished_view(assignment, assigns)
+      %{rejected_at: %NaiveDateTime{}} -> true
+      %{accepted_at: %NaiveDateTime{}} -> true
+      _ -> false
     end
   end
 

@@ -1,6 +1,7 @@
 defmodule Next.Systems.Announcement.PublishTest do
   use Mica.DataCase, async: true
   use Oban.Testing, repo: Mica.Repo
+  use Bamboo.Test
 
   import Ecto.Query
 
@@ -8,6 +9,7 @@ defmodule Next.Systems.Announcement.PublishTest do
   alias Systems.Account
   alias Next.Systems.Announcement
   alias Next.Systems.Announcement.NextActions.ReadAnnouncement
+  alias Systems.Assignment.NextActions.PendingContributions
   alias Systems.NextAction
 
   @now NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
@@ -202,13 +204,120 @@ defmodule Next.Systems.Announcement.PublishTest do
   end
 
   describe "update_announcement/2" do
-    test "refuses a published announcement", %{author: author} do
-      {:ok, published} = publish(announcement!(author), [], nil)
+    test "changes the title, summary and body of a published announcement", %{author: author} do
+      published = publish!(announcement!(author))
 
-      assert {:error, :already_published} =
-               Announcement.Public.update_announcement(published, %{title: "Changed"})
+      assert {:ok, %{title: "Release notes, corrected"}} =
+               Announcement.Public.update_announcement(published, %{
+                 title: "Release notes, corrected",
+                 summary: "What really changed",
+                 body: "<div>Fixed features</div>"
+               })
 
-      assert %{title: "Release notes"} = Announcement.Public.get_announcement!(published.id)
+      assert %{
+               title: "Release notes, corrected",
+               summary: "What really changed",
+               body: "<div>Fixed features</div>",
+               published_at: published_at
+             } = Announcement.Public.get_announcement!(published.id)
+
+      assert published_at == published.published_at
+    end
+
+    test "sends nothing again and keeps every read status", %{
+      author: author,
+      verified: verified,
+      unverified: unverified
+    } do
+      published = publish!(announcement!(author))
+      read = Announcement.Public.get_received(verified, published.id)
+      %{read_at: read_at} = Announcement.Public.mark_read(read)
+      enqueued = all_enqueued()
+
+      assert {:ok, _} =
+               Announcement.Public.update_announcement(published, %{title: "Corrected"})
+
+      assert [%{read_at: ^read_at}] =
+               Repo.all(from(r in Announcement.RecipientModel, where: r.user_id == ^verified.id))
+
+      assert %{read_at: nil} = Announcement.Public.get_received(unverified, published.id)
+      assert to_dos(verified) == []
+      assert [%{key: key}] = to_dos(unverified)
+      assert key == ReadAnnouncement.key(published.id)
+
+      assert all_enqueued() == enqueued
+      assert_no_emails_delivered()
+    end
+
+    test "refuses a new priority or kind once it is published", %{author: author} do
+      published = publish!(announcement!(author))
+
+      for attrs <- [%{priority: :high}, %{"priority" => "high", "title" => "Corrected"}] do
+        assert {:error, :already_published} =
+                 Announcement.Public.update_announcement(published, attrs)
+      end
+
+      assert %{title: "Release notes", priority: :normal} =
+               Announcement.Public.get_announcement!(published.id)
+    end
+
+    test "accepts the priority and kind it already has", %{author: author} do
+      published = publish!(announcement!(author))
+
+      assert {:ok, %{title: "Corrected"}} =
+               Announcement.Public.update_announcement(published, %{
+                 "kind" => "release_notes",
+                 "priority" => "normal",
+                 "title" => "Corrected"
+               })
+    end
+
+    test "refuses a second form on a copy that a first form has saved since", %{author: author} do
+      loaded = publish!(announcement!(author))
+      form = %{"title" => "Release notes", "summary" => "What changed"}
+
+      assert {:ok, _} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"title" => "Release notes, corrected"})
+               )
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(
+                 loaded,
+                 Map.merge(form, %{"body" => "<div>New features, link fixed</div>"})
+               )
+
+      assert %{title: "Release notes, corrected", body: "<div>New features</div>"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
+    test "refuses a second form on a draft that a first form has saved since", %{author: author} do
+      loaded = announcement!(author)
+
+      assert {:ok, saved} =
+               Announcement.Public.update_announcement(loaded, %{title: "Release notes, v2"})
+
+      assert {:error, :changed_since_loaded} =
+               Announcement.Public.update_announcement(loaded, %{summary: "Other summary"})
+
+      assert {:ok, _} = Announcement.Public.update_announcement(saved, %{summary: "Next summary"})
+
+      assert %{title: "Release notes, v2", summary: "Next summary"} =
+               Announcement.Public.get_announcement!(loaded.id)
+    end
+
+    test "never changes the audience", %{author: author, verified: verified, member: member} do
+      published = publish!(announcement!(author), [:verified])
+
+      {:ok, _} =
+        Announcement.Public.update_announcement(published, %{
+          recipient_ids: [member.id],
+          published_at: nil
+        })
+
+      assert stored_recipient_ids(published) == [verified.id]
+      assert %{published_at: %DateTime{}} = Announcement.Public.get_announcement!(published.id)
     end
 
     test "refuses a copy loaded before it was published", %{author: author} do
@@ -275,6 +384,28 @@ defmodule Next.Systems.Announcement.PublishTest do
       announcement = publish!(announcement!(ctx.author), [:unverified])
 
       assert length(recipient_ids(announcement)) == count
+    end
+
+    test "a high announcement's To-do has high priority", ctx do
+      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
+
+      assert [%NextAction.Model{priority: :high}] = to_dos(ctx.verified)
+    end
+
+    test "a normal announcement's To-do has low priority", ctx do
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+
+      assert [%NextAction.Model{priority: :low}] = to_dos(ctx.verified)
+    end
+
+    test "other To-dos keep their priority", ctx do
+      NextAction.Public.create_next_action(ctx.verified, PendingContributions, key: "other")
+
+      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+
+      assert %NextAction.Model{priority: :normal} =
+               Repo.get_by!(NextAction.Model, user_id: ctx.verified.id, key: "other")
     end
 
     test "publishing to yourself reaches only your account", %{author: author} do
@@ -362,10 +493,14 @@ defmodule Next.Systems.Announcement.PublishTest do
       assert length(announcement.recipient_ids) == 1_202
       assert length(recipient_ids(announcement)) == 1_202
 
+      action = to_string(ReadAnnouncement)
       key = ReadAnnouncement.key(announcement.id)
 
       assert 1_202 ==
-               Repo.aggregate(from(na in NextAction.Model, where: na.key == ^key), :count)
+               Repo.aggregate(
+                 from(na in NextAction.Model, where: na.action == ^action and na.key == ^key),
+                 :count
+               )
     end
   end
 end

@@ -45,13 +45,16 @@ defmodule Next.Systems.Account.AuthIdentifyPage do
   end
 
   @impl true
-  def handle_event("submit", %{"email" => email}, socket) do
+  def handle_event("submit", %{"email" => email}, %{assigns: %{form: form}} = socket) do
     email = String.trim(email)
 
     if OtpSignin.valid_email?(email) do
       socket =
         socket
-        |> assign(loading: true, form: to_form(%{"email" => email}))
+        |> assign(
+          loading: true,
+          form: to_form(%{"email" => email}, errors: shown_errors(form, email))
+        )
 
       send(self(), {:route_email, email})
       {:noreply, socket}
@@ -97,6 +100,13 @@ defmodule Next.Systems.Account.AuthIdentifyPage do
     end
   end
 
+  # A message already shown for this address stays until routing replaces it, so it doesn't
+  # drop out and come back. A message for an earlier address (the change event is debounced,
+  # so the form can still hold it) doesn't.
+  defp shown_errors(%{params: %{"email" => shown}, errors: errors}, email) do
+    if String.trim(shown) == email, do: errors, else: []
+  end
+
   # The participant entry stays code-only; elsewhere the password form is the fallback.
   defp password_signin_url(true, return_to) do
     if feature_enabled?(:password_sign_in), do: password_form_url(return_to)
@@ -128,7 +138,7 @@ defmodule Next.Systems.Account.AuthIdentifyPage do
         <Area.form>
           <Text.title2 align="text-center"><%= dgettext("eyra-account", "auth.title") %></Text.title2>
           <.spacing value="L" />
-          <.form id="auth_form" for={@form} phx-submit="submit" phx-change="change" novalidate>
+          <.form id="auth_form" for={@form} phx-hook="SubmitInPlace" phx-submit="submit" phx-change="change" novalidate>
             <.email_input
               form={@form}
               field={:email}

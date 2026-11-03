@@ -6,11 +6,15 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
   Only system admins with the `announcements` flag on get announcements
   (`allowed?`).
 
-  Composing means a `form` is open. Assigns read then: `audience_filters` (from
+  Composing means a `form` is open, on `announcement` once it is saved. While
+  composing an unpublished one, assigns read: `audience_filters` (from
   `Next.Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
   search words), `priority` (the priority chosen in the form) and
-  `compose_notice` (`:already_published` or `:audience_changed` after a
-  refused save or publish).
+  `compose_notice` (`:already_published`, `:changed_since_loaded`,
+  `:audience_changed` or `:no_recipients` after a refused save or publish).
+  A published one has
+  no audience to choose, only `published`: what saving it does, and the
+  notice of a refused save.
   """
   use Gettext, backend: MicaWeb.Gettext
   use Mica.FeatureFlags
@@ -34,7 +38,8 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
       head_cells: head_cells(),
       items: Enum.map(announcements, &to_item(&1, audience_counts, timezone)),
       form: form_labels(),
-      audience: audience(allowed? and composing?(assigns), assigns)
+      audience: audience(allowed? and composing(assigns) == :draft, assigns),
+      published: published(allowed? and composing(assigns) == :published, assigns)
     }
   end
 
@@ -76,7 +81,7 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
     }
   end
 
-  defp buttons(%Announcement.Model{id: id, published_at: nil}) do
+  defp buttons(%Announcement.Model{id: id}) do
     [
       %{
         action: %{type: :send, event: "edit_announcement", item: id},
@@ -84,8 +89,6 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
       }
     ]
   end
-
-  defp buttons(%Announcement.Model{}), do: []
 
   defp published_label(nil, _timezone),
     do: dgettext("eyra-announcement", "admin.not.published")
@@ -110,8 +113,22 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
     }
   end
 
-  defp composing?(%{form: form}), do: form != nil
-  defp composing?(_assigns), do: false
+  defp composing(%{form: nil}), do: nil
+
+  defp composing(%{form: _, announcement: %Announcement.Model{published_at: %DateTime{}}}),
+    do: :published
+
+  defp composing(%{form: _}), do: :draft
+  defp composing(_assigns), do: nil
+
+  defp published(false, _assigns), do: nil
+
+  defp published(true, assigns) do
+    %{
+      text: dgettext("eyra-announcement", "form.published.notice"),
+      notice: notice(Map.get(assigns, :compose_notice), 0)
+    }
+  end
 
   defp audience(false, _assigns), do: nil
 
@@ -136,6 +153,12 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
 
   defp notice(:already_published, _recipient_count),
     do: dgettext("eyra-announcement", "form.notice.already_published")
+
+  defp notice(:changed_since_loaded, _recipient_count),
+    do: dgettext("eyra-announcement", "form.notice.changed_since_loaded")
+
+  defp notice(:no_recipients, _recipient_count),
+    do: dgettext("eyra-announcement", "form.notice.no_recipients")
 
   defp notice(:audience_changed, recipient_count) do
     dngettext(

@@ -4,7 +4,9 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
   visible: a message that wraps to more lines pushes the continue button down
   instead of running behind it. Like our other forms, the sign-in code page and
   the code entry page keep 24px between the field and the continue button, and
-  with an error 8px above the message and 24px below it.
+  with an error 8px above the message and 24px below it. Submitting with an
+  error on screen keeps the field focused, so a phone's keyboard stays up, and
+  keeps the message in its place.
   """
   use MicaWeb.FeatureCase
   use Mica.FeatureFlags.Test
@@ -120,6 +122,99 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
                {8, 24},
              path
     end
+  end
+
+  @sessions [[capabilities: @phone_nl_capabilities]]
+  @tag :feature
+  feature "submitting again with a message keeps the field focused and the message in place",
+          %{session: session} do
+    limited = "limited-#{System.unique_integer([:positive])}@example.com"
+    Stream.repeatedly(fn -> AuthCodeLimits.count_request?(limited) end) |> Enum.find(&(!&1))
+
+    session
+    |> visit("/user/auth/identify/participant")
+    |> assert_has(Query.css(".phx-connected #{@email_field}"))
+    |> fill_in(Query.css(@email_field), with: limited)
+    |> click(Query.css(@email_button))
+    |> assert_has(Query.css(@email_error))
+    |> execute_script(
+      """
+      const input = document.querySelector(arguments[0]);
+      input.focus();
+      window.changes = [];
+      input.addEventListener("blur", () => window.changes.push("field blurred"));
+      new MutationObserver((mutations) => {
+        for (const mutation of mutations) {
+          if (mutation.type === "attributes") window.changes.push("field readonly");
+          for (const node of mutation.removedNodes) {
+            if (node.id === "email_error_message") window.changes.push("message removed");
+            if (node.matches?.("[data-button-loading]")) document.body.dataset.settled = "";
+          }
+        }
+      }).observe(input.form, {childList: true, subtree: true, attributes: true, attributeFilter: ["readonly"]});
+      """,
+      [@email_field]
+    )
+    |> send_keys(Query.css(@email_field), [:enter])
+    |> assert_has(Query.css("body[data-settled]"))
+    |> assert_has(Query.css(@email_error))
+    |> execute_script(
+      "return {changes: window.changes, active: document.activeElement.dataset.testid};",
+      fn result -> send(self(), {:after_submit, result}) end
+    )
+
+    assert_received {:after_submit, %{"changes" => [], "active" => "auth-email-input"}}
+  end
+
+  @sessions [[capabilities: @phone_nl_capabilities]]
+  @tag :feature
+  feature "a wrong code keeps the form usable and ends the loading feedback", %{session: session} do
+    email = "focus-code-#{System.unique_integer([:positive])}@example.com"
+    {_code, auth_code} = AuthCodeModel.build(email, nil)
+    Repo.insert!(auth_code)
+
+    session
+    |> visit("/user/auth/verify?email=#{email}")
+    |> assert_has(Query.css(".phx-connected #{@code_field}"))
+
+    for i <- 0..4,
+        do: fill_in(session, Query.css("[data-testid='auth-code-cell-#{i}']"), with: "9")
+
+    session
+    |> execute_script("""
+    window.changes = [];
+    new MutationObserver((mutations) => {
+      for (const mutation of mutations) window.changes.push(mutation.attributeName);
+    }).observe(document.getElementById("auth_code_form"), {subtree: true, attributes: true, attributeFilter: ["readonly", "disabled"]});
+    """)
+    |> fill_in(Query.css("[data-testid='auth-code-cell-5']"), with: "9")
+    |> assert_has(Query.css(@code_error))
+    |> refute_has(Query.css("#{@code_button} .prism-btn-loading"))
+    |> execute_script(
+      "return {changes: window.changes, active: document.activeElement.dataset.testid};",
+      fn result -> send(self(), {:after_submit, result}) end
+    )
+
+    assert_received {:after_submit, %{"changes" => [], "active" => "auth-code-cell-0"}}
+  end
+
+  @sessions [[capabilities: @phone_nl_capabilities]]
+  @tag :feature
+  feature "a submit while disconnected doesn't block the next one", %{session: session} do
+    email = "reconnect-#{System.unique_integer([:positive])}@example.com"
+
+    session
+    |> visit("/user/auth/identify/participant")
+    |> assert_has(Query.css(".phx-connected #{@email_field}"))
+    |> fill_in(Query.css(@email_field), with: email)
+    |> execute_script("window.liveSocket.disconnect();")
+    |> assert_has(Query.css("[data-phx-main].phx-error"))
+    |> send_keys(Query.css(@email_field), [:enter])
+    |> refute_has(Query.css("#{@email_button} .prism-btn-loading"))
+    |> execute_script("window.liveSocket.connect();")
+    |> assert_has(Query.css(".phx-connected #{@email_field}"))
+    |> send_keys(Query.css(@email_field), [:enter])
+    |> assert_has(Query.css(@code_field))
   end
 
   defp gap(session, upper, lower) do

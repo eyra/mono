@@ -34,9 +34,19 @@ defmodule Next.Systems.Announcement.Model do
   end
 
   @fields ~w(kind title summary body priority)a
+  @fixed_after_publishing ~w(kind priority)a
 
   def kinds, do: @kinds
   def priorities, do: @priorities
+
+  @doc "The fields a save can change."
+  def fields, do: @fields
+
+  @doc """
+  The fields that can't change once it is published. The audience can't
+  either: `recipient_ids` is never cast.
+  """
+  def fixed_after_publishing, do: @fixed_after_publishing
 
   def changeset(announcement, attrs) do
     announcement

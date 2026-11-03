@@ -63,6 +63,21 @@ defmodule Systems.Email.IntegrationTest do
       assert email.text_body =~ byline
     end
 
+    test "notification with a subject and its own HTML part" do
+      html_message = "<div>Rich <strong>text</strong></div>"
+
+      email =
+        Factory.notification("Title", "Byline", "Rich text", "user@example.com",
+          subject: "Custom subject",
+          html_message: html_message
+        )
+
+      assert email.subject == "Custom subject"
+      assert email.html_body =~ html_message
+      assert email.text_body =~ "Rich text"
+      refute email.text_body =~ "<strong>"
+    end
+
     test "debug email renders correctly with custom from address" do
       from_user = Factories.build(:member)
       to_user = Factories.build(:member)

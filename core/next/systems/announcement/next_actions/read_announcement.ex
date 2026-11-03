@@ -16,6 +16,14 @@ defmodule Next.Systems.Announcement.NextActions.ReadAnnouncement do
   @doc "The next-action params of the announcement with `announcement_id`."
   def params(announcement_id), do: %{"announcement_id" => announcement_id}
 
+  @doc """
+  The next-action priority of the announcement's To-do: a high announcement
+  comes before other To-dos (which have the default `:normal`), a normal
+  announcement after them.
+  """
+  def priority(%Announcement.Model{priority: :high}), do: :high
+  def priority(%Announcement.Model{priority: :normal}), do: :low
+
   @impl Systems.NextAction.ViewModel
   def to_view_model(_count, %{"announcement_id" => announcement_id}) do
     %{title: title, summary: summary} = Announcement.Public.get_announcement!(announcement_id)

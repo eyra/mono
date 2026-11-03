@@ -16,6 +16,7 @@ defmodule Next.Systems.Announcement.Public do
   alias Systems.Admin
   alias Next.Systems.Announcement
   alias Next.Systems.Announcement.NextActions.ReadAnnouncement
+  alias Systems.Email
   alias Systems.NextAction
 
   @doc "Creates an announcement by `author`."
@@ -26,19 +27,26 @@ defmodule Next.Systems.Announcement.Public do
   end
 
   @doc """
-  Changes an unpublished announcement and dispatches `{:announcement, :updated}`,
-  so the pages that show it refresh.
+  Changes an announcement and dispatches `{:announcement, :updated}`, so the
+  pages that show it refresh. Nothing is sent again and the recipients keep
+  their read status.
 
-  Returns `{:error, :already_published}` when it is published, also when that
-  happened after `announcement` was loaded: the row is locked and checked in
-  the same transaction as the update.
+  `announcement` is the copy the change was made on, such as the one a form
+  opened. Returns `{:error, :changed_since_loaded}` when the announcement was
+  saved since that copy was loaded, so two forms can't undo each other's
+  changes. After publication only the title, summary and body may change
+  (`Next.Systems.Announcement.Model.fixed_after_publishing/0`). Returns
+  `{:error, :already_published}` when the change touches another field, and
+  when the copy was loaded before it was published. The row is locked and
+  checked in the same transaction as the update.
   """
-  def update_announcement(%Announcement.Model{id: id}, attrs) do
+  def update_announcement(%Announcement.Model{id: id} = loaded, attrs) do
     Multi.new()
-    |> Multi.run(:unpublished, fn _repo, _ -> lock_unpublished(id) end)
-    |> Multi.update(:announcement, fn %{unpublished: announcement} ->
-      Announcement.Model.changeset(announcement, attrs)
+    |> Multi.run(:current, fn _repo, _ -> lock_announcement(id) end)
+    |> Multi.run(:changeset, fn _repo, %{current: current} ->
+      change_announcement(current, loaded, attrs)
     end)
+    |> Multi.update(:announcement, fn %{changeset: changeset} -> changeset end)
     |> Repo.commit()
     |> case do
       {:ok, %{announcement: announcement}} ->
@@ -50,14 +58,50 @@ defmodule Next.Systems.Announcement.Public do
     end
   end
 
-  defp lock_unpublished(id) do
+  defp lock_announcement(id) do
     announcement_query()
     |> where([announcement: a], a.id == ^id)
     |> lock("FOR UPDATE")
     |> Repo.one()
     |> case do
-      %Announcement.Model{published_at: nil} = announcement -> {:ok, announcement}
-      _ -> {:error, :already_published}
+      %Announcement.Model{} = announcement -> {:ok, announcement}
+      nil -> {:error, :already_published}
+    end
+  end
+
+  defp change_announcement(
+         %Announcement.Model{published_at: %DateTime{}},
+         %Announcement.Model{published_at: nil},
+         _attrs
+       ) do
+    {:error, :already_published}
+  end
+
+  defp change_announcement(%Announcement.Model{} = current, %Announcement.Model{} = loaded, attrs) do
+    if changed_since_loaded?(current, loaded) do
+      {:error, :changed_since_loaded}
+    else
+      current
+      |> Announcement.Model.changeset(attrs)
+      |> refuse_fixed_changes()
+    end
+  end
+
+  # The fields a save can change are compared: `updated_at` only counts
+  # whole seconds, so two saves within a second would look the same.
+  defp changed_since_loaded?(%Announcement.Model{} = current, %Announcement.Model{} = loaded) do
+    fields = Announcement.Model.fields()
+    Map.take(current, fields) != Map.take(loaded, fields)
+  end
+
+  defp refuse_fixed_changes(%Ecto.Changeset{data: %{published_at: nil}} = changeset),
+    do: {:ok, changeset}
+
+  defp refuse_fixed_changes(%Ecto.Changeset{changes: changes} = changeset) do
+    if Enum.any?(Announcement.Model.fixed_after_publishing(), &Map.has_key?(changes, &1)) do
+      {:error, :already_published}
+    else
+      {:ok, changeset}
     end
   end
 
@@ -218,9 +262,11 @@ defmodule Next.Systems.Announcement.Public do
   @doc """
   Gives every recipient of a published announcement a recipient row and a
   To-do, with one insert for the rows and batched inserts for the To-dos.
-  Recipients who already have a row are skipped, so running it again adds
-  nothing. Users deleted since publication are left out. Returns
-  `{:ok, count}` with the number of recipients added.
+  For a high-priority announcement it also queues one email per recipient
+  (`Next.Systems.Announcement.EmailTemplate`), in batches. Recipients who already
+  have a row are skipped, so running it again adds and sends nothing. Users
+  deleted since publication are left out. Returns `{:ok, count}` with the
+  number of recipients added.
   """
   def deliver_announcement(announcement_id) do
     announcement_query()
@@ -241,8 +287,12 @@ defmodule Next.Systems.Announcement.Public do
       {:ok,
        NextAction.Public.create_next_actions(user_ids, ReadAnnouncement,
          key: ReadAnnouncement.key(id),
-         params: ReadAnnouncement.params(id)
+         params: ReadAnnouncement.params(id),
+         priority: ReadAnnouncement.priority(announcement)
        )}
+    end)
+    |> Multi.run(:emails, fn _repo, %{user_ids: user_ids} ->
+      queue_emails(announcement, user_ids)
     end)
     |> Repo.commit()
     |> case do
@@ -250,6 +300,27 @@ defmodule Next.Systems.Announcement.Public do
       {:error, _operation, reason, _changes} -> {:error, reason}
     end
   end
+
+  @email_batch_size 500
+
+  # Only the recipients whose row this transaction added get an email, and
+  # the emails are queued in the same transaction as the rows: the row is
+  # what says the email went out.
+  defp queue_emails(%Announcement.Model{priority: :high} = announcement, user_ids) do
+    email = Announcement.EmailTemplate.email(announcement)
+
+    from(u in User, where: u.id in ^user_ids, order_by: u.id, select: u.email)
+    |> Repo.all()
+    |> Enum.chunk_every(@email_batch_size)
+    |> Enum.reduce_while({:ok, 0}, fn to, {:ok, count} ->
+      case Email.Public.deliver_later!(%{email | to: to}) do
+        {:ok, _job} -> {:cont, {:ok, count + length(to)}}
+        {:error, reason} -> {:halt, {:error, reason}}
+      end
+    end)
+  end
+
+  defp queue_emails(%Announcement.Model{}, _user_ids), do: {:ok, 0}
 
   defp insert_recipients(%Announcement.Model{id: id, recipient_ids: recipient_ids}) do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
