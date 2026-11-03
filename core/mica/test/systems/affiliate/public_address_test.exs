@@ -1,9 +1,12 @@
 defmodule Systems.Affiliate.PublicAddressTest do
-  # Sets the global :affiliate_callback limits.
+  # Sets the global :affiliate_callback limits and mocks the URL check.
   use ExUnit.Case, async: false
+
+  import Mock
 
   @moduletag :capture_log
 
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Affiliate
 
   @refused_urls [
@@ -56,6 +59,30 @@ defmodule Systems.Affiliate.PublicAddressTest do
       end
     end
 
+    test "refuses a port other than 443" do
+      changeset =
+        Affiliate.Model.changeset(%Affiliate.Model{}, %{
+          callback_url: "https://1.1.1.1:22/callback"
+        })
+
+      refute changeset.valid?
+    end
+
+    # Otherwise the form tells which names the server's internal DNS knows.
+    test "gives a name that doesn't resolve the same answer as a private address" do
+      unknown =
+        Affiliate.Model.changeset(%Affiliate.Model{}, %{
+          callback_url: "https://next-t0275.invalid/callback"
+        })
+
+      private =
+        Affiliate.Model.changeset(%Affiliate.Model{}, %{callback_url: "https://10.1.2.3/callback"})
+
+      assert [callback_url: {message, []}] = private.errors
+      assert unknown.errors == private.errors
+      assert is_binary(message)
+    end
+
     test "accepts a public https address" do
       changeset =
         Affiliate.Model.changeset(%Affiliate.Model{}, %{
@@ -81,6 +108,45 @@ defmodule Systems.Affiliate.PublicAddressTest do
       test "doesn't call back #{url}" do
         assert {:error, :address_not_allowed} =
                  Affiliate.Private.callback(%{callback_url: unquote(url)}, nil, %{})
+      end
+    end
+
+    test "doesn't call back a port other than 443" do
+      assert {:error, :port_not_allowed} =
+               Affiliate.Private.callback(
+                 %{callback_url: "https://1.1.1.1:8443/callback"},
+                 nil,
+                 %{}
+               )
+    end
+
+    test "gives up at the deadline when the DNS lookup is slow" do
+      slow_resolver = fn _host ->
+        Process.sleep(1_000)
+        {:ok, [{10, 0, 0, 1}]}
+      end
+
+      with_mock OutboundUrl, [:passthrough],
+        request: fn method, url, headers, body, options ->
+          passthrough([
+            method,
+            url,
+            headers,
+            body,
+            Keyword.put(options, :resolver, slow_resolver)
+          ])
+        end do
+        {elapsed_us, result} =
+          :timer.tc(fn ->
+            Affiliate.Private.callback(
+              %{callback_url: "https://panel.example/callback"},
+              nil,
+              %{}
+            )
+          end)
+
+        assert {:error, :timeout} = result
+        assert elapsed_us < 600_000
       end
     end
 

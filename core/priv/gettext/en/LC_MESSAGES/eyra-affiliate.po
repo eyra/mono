@@ -77,4 +77,8 @@ msgstr "Please use an address that starts with https://"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.not_public"
-msgstr "Please use an address on the public internet"
+msgstr "Please use an address that exists on the public internet"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr "Please use an address without a port number"

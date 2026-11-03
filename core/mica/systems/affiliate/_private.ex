@@ -68,7 +68,7 @@ defmodule Systems.Affiliate.Private do
   # The researcher's server answers inside the participant's process. Only the
   # status is used, and hackney 4 would read the whole body before returning,
   # so the response is taken asynchronously and stopped after its status line.
-  # The deadline covers the whole call, connecting included.
+  # The deadline covers the whole call, the DNS lookup and connecting included.
   @callback_limits [connect_timeout: 5_000, deadline: 10_000]
 
   # `:hackney.close/1` waits without limit for a connection that is still
@@ -85,7 +85,8 @@ defmodule Systems.Affiliate.Private do
       async: :once,
       pool: false,
       connect_timeout: connect_timeout,
-      recv_timeout: deadline
+      recv_timeout: deadline,
+      deadline: deadline
     ]
 
     connections_before = own_connections()

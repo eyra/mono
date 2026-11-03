@@ -2,17 +2,24 @@ defmodule Frameworks.Utility.OutboundUrl do
   @moduledoc """
   Requests to URLs that users enter, such as an affiliate's callback URL.
 
-  Only `https` URLs whose host resolves to public addresses are allowed: no
-  loopback, private, link-local, CGNAT, multicast, reserved or cloud metadata
-  addresses, IPv4 or IPv6. `request/5` resolves the host again and connects to
-  the address it checked, so a name can't resolve to a public address when the
-  URL is saved and to a private one when it is requested. TLS still verifies
-  the certificate against the host name. Redirects are never followed.
+  Only `https` URLs on port 443 whose host resolves to public addresses are
+  allowed: no loopback, private, link-local, CGNAT, multicast, reserved or
+  cloud metadata addresses, IPv4 or IPv6. `request/5` resolves the host again
+  and connects to the address it checked, so a name can't resolve to a public
+  address when the URL is saved and to a private one when it is requested.
+  TLS still verifies the certificate against the host name. Redirects are
+  never followed.
   """
 
   import Bitwise
 
-  @type reason :: :invalid_url | :scheme_not_allowed | :host_not_found | :address_not_allowed
+  @type reason ::
+          :invalid_url
+          | :scheme_not_allowed
+          | :port_not_allowed
+          | :host_not_found
+          | :address_not_allowed
+          | :timeout
 
   @resolve_timeout 5_000
 
@@ -48,16 +55,19 @@ defmodule Frameworks.Utility.OutboundUrl do
   ]
 
   @doc """
-  Checks that `url` is an `https` URL whose host resolves to public addresses
-  only. A host that doesn't resolve gives `{:error, :host_not_found}`.
+  Checks that `url` is an `https` URL on port 443 whose host resolves to
+  public addresses only. A host that doesn't resolve gives
+  `{:error, :host_not_found}`, and a lookup that takes longer than
+  `opts[:timeout]` ms (default 5 s) gives `{:error, :timeout}`.
   `opts[:resolver]` replaces the DNS lookup, for tests.
   """
   @spec check(String.t(), keyword()) :: {:ok, URI.t(), :inet.ip_address()} | {:error, reason}
   def check(url, opts \\ []) when is_binary(url) do
     resolver = Keyword.get(opts, :resolver, &resolve/1)
+    timeout = Keyword.get(opts, :timeout, @resolve_timeout)
 
     with {:ok, %URI{host: host} = uri} <- parse(url),
-         {:ok, addresses} <- resolver.(host),
+         {:ok, addresses} <- resolve_within(resolver, host, timeout),
          :ok <- all_public(addresses) do
       {:ok, uri, preferred(addresses)}
     end
@@ -65,18 +75,32 @@ defmodule Frameworks.Utility.OutboundUrl do
 
   @doc """
   `:hackney.request/5` to `url` after `check/2`, connected to the checked
-  address and without following redirects.
+  address and without following redirects. With `options[:deadline]` (ms) the
+  DNS lookup and connecting together take at most that long; a lookup that
+  uses it up gives `{:error, :timeout}`.
   """
   def request(method, url, headers, body, options) do
     {resolver, options} = Keyword.pop(options, :resolver, &resolve/1)
+    {deadline, options} = Keyword.pop(options, :deadline)
+    started_at = System.monotonic_time(:millisecond)
 
-    case check(url, resolver: resolver) do
-      {:ok, uri, address} ->
-        {pinned_url, headers, options} = pin(uri, address, headers, options)
-        :hackney.request(method, pinned_url, headers, body, options)
+    with {:ok, uri, address} <-
+           check(url, resolver: resolver, timeout: deadline || @resolve_timeout),
+         {:ok, options} <- connect_within(options, deadline, started_at) do
+      {pinned_url, headers, options} = pin(uri, address, headers, options)
+      :hackney.request(method, pinned_url, headers, body, options)
+    end
+  end
 
-      error ->
-        error
+  defp connect_within(options, nil, _started_at), do: {:ok, options}
+
+  defp connect_within(options, deadline, started_at) do
+    case deadline - (System.monotonic_time(:millisecond) - started_at) do
+      left when left > 0 ->
+        {:ok, Keyword.update(options, :connect_timeout, left, &min(&1, left))}
+
+      _ ->
+        {:error, :timeout}
     end
   end
 
@@ -103,8 +127,12 @@ defmodule Frameworks.Utility.OutboundUrl do
 
   defp parse(url) do
     case URI.new(url) do
-      {:ok, %URI{scheme: "https", host: host} = uri} when is_binary(host) and host != "" ->
+      {:ok, %URI{scheme: "https", host: host, port: 443} = uri}
+      when is_binary(host) and host != "" ->
         {:ok, uri}
+
+      {:ok, %URI{scheme: "https", host: host}} when is_binary(host) and host != "" ->
+        {:error, :port_not_allowed}
 
       {:ok, %URI{scheme: scheme}} when scheme != "https" ->
         {:error, :scheme_not_allowed}
@@ -114,12 +142,21 @@ defmodule Frameworks.Utility.OutboundUrl do
     end
   end
 
+  defp resolve_within(resolver, host, timeout) do
+    task = Task.async(fn -> resolver.(host) end)
+
+    case Task.yield(task, timeout) || Task.shutdown(task, :brutal_kill) do
+      {:ok, result} -> result
+      _ -> {:error, :timeout}
+    end
+  end
+
   defp resolve(host) do
     host = String.to_charlist(host)
 
     addresses =
       for family <- [:inet, :inet6],
-          {:ok, addresses} <- [:inet.getaddrs(host, family, @resolve_timeout)],
+          {:ok, addresses} <- [:inet.getaddrs(host, family)],
           address <- addresses,
           do: address
 
@@ -151,15 +188,12 @@ defmodule Frameworks.Utility.OutboundUrl do
       {URI.to_string(uri), headers, options}
     else
       pinned_url = URI.to_string(%URI{uri | host: :inet.ntoa(address) |> to_string()})
-      headers = [{"host", host_header(uri)} | headers]
+      headers = [{"host", host} | headers]
       sni = {:server_name_indication, host |> String.trim_trailing(".") |> to_charlist()}
       options = Keyword.update(options, :ssl_options, [sni], &[sni | &1])
       {pinned_url, headers, options}
     end
   end
-
-  defp host_header(%URI{host: host, port: 443}), do: host
-  defp host_header(%URI{host: host, port: port}), do: "#{host}:#{port}"
 
   defp ip_literal?(host), do: match?({:ok, _}, :inet.parse_strict_address(to_charlist(host)))
 

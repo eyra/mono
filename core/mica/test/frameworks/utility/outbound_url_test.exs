@@ -91,6 +91,16 @@ defmodule Frameworks.Utility.OutboundUrlTest do
                OutboundUrl.check("https://panel.example/", resolver: resolver)
     end
 
+    test "refuses a port other than 443" do
+      assert {:error, :port_not_allowed} =
+               OutboundUrl.check("https://panel.example:8443/", resolver: public())
+    end
+
+    test "allows port 443 written out" do
+      assert {:ok, _uri, _address} =
+               OutboundUrl.check("https://panel.example:443/", resolver: public())
+    end
+
     test "prefers an IPv4 address" do
       resolver = fn _host ->
         {:ok, [{0x2606, 0x4700, 0, 0, 0, 0, 0, 1}, {93, 184, 215, 14}]}
@@ -131,19 +141,43 @@ defmodule Frameworks.Utility.OutboundUrlTest do
       end
     end
 
-    test "keeps a port that isn't 443 in the Host header" do
-      with_mock :hackney, request: fn _, _, _, _, _ -> {:ok, 200, []} end do
-        OutboundUrl.request(:get, "https://panel.example:8443/cb", [], "", resolver: public())
+    test "gives up at the deadline when the DNS lookup is slow" do
+      resolver = fn _host ->
+        Process.sleep(1_000)
+        {:ok, [{93, 184, 215, 14}]}
+      end
 
-        assert_called(
-          :hackney.request(
-            :get,
-            "https://93.184.215.14:8443/cb",
-            [{"host", "panel.example:8443"}],
-            "",
-            :_
-          )
+      with_mock :hackney, request: fn _, _, _, _, _ -> {:ok, 200, []} end do
+        {elapsed_us, result} =
+          :timer.tc(fn ->
+            OutboundUrl.request(:get, "https://panel.example/", [], "",
+              deadline: 300,
+              resolver: resolver
+            )
+          end)
+
+        assert {:error, :timeout} = result
+        assert elapsed_us < 600_000
+        assert_not_called(:hackney.request(:_, :_, :_, :_, :_))
+      end
+    end
+
+    test "connects within what the DNS lookup left of the deadline" do
+      resolver = fn _host ->
+        Process.sleep(200)
+        {:ok, [{93, 184, 215, 14}]}
+      end
+
+      with_mock :hackney, request: fn _, _, _, _, _ -> {:ok, 200, []} end do
+        OutboundUrl.request(:get, "https://panel.example/", [], "",
+          connect_timeout: 5_000,
+          deadline: 1_000,
+          resolver: resolver
         )
+
+        [{_pid, {:hackney, :request, [_, _, _, _, options]}, _result}] = call_history(:hackney)
+        assert options[:connect_timeout] <= 800
+        refute Keyword.has_key?(options, :deadline)
       end
     end
 

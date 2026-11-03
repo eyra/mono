@@ -54,7 +54,7 @@ defmodule Systems.Affiliate.FormTest do
       |> element("form")
       |> render_change(%{"model" => %{"callback_url" => "https://10.1.2.3/callback"}})
 
-    assert html =~ "Please use an address on the public internet"
+    assert html =~ "Please use an address that exists on the public internet"
     assert %{callback_url: nil} = Repo.get!(Affiliate.Model, affiliate.id)
   end
 
@@ -67,7 +67,30 @@ defmodule Systems.Affiliate.FormTest do
       |> element("form")
       |> render_change(%{"model" => %{"redirect_url" => "https://localhost/return"}})
 
-    assert html =~ "Please use an address on the public internet"
+    assert html =~ "Please use an address that exists on the public internet"
     assert %{redirect_url: nil} = Repo.get!(Affiliate.Model, affiliate.id)
+  end
+
+  test "doesn't save a host that doesn't resolve and answers as for a private one", %{
+    view: view,
+    affiliate: affiliate
+  } do
+    html =
+      view
+      |> element("form")
+      |> render_change(%{"model" => %{"callback_url" => "https://next-t0275.invalid/callback"}})
+
+    assert html =~ "Please use an address that exists on the public internet"
+    assert %{callback_url: nil} = Repo.get!(Affiliate.Model, affiliate.id)
+  end
+
+  test "doesn't save a port other than 443", %{view: view, affiliate: affiliate} do
+    html =
+      view
+      |> element("form")
+      |> render_change(%{"model" => %{"callback_url" => "https://1.1.1.1:22/callback"}})
+
+    assert html =~ "Please use an address without a port number"
+    assert %{callback_url: nil} = Repo.get!(Affiliate.Model, affiliate.id)
   end
 end

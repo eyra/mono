@@ -77,4 +77,8 @@ msgstr "Gebruik een adres dat begint met https://"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.not_public"
-msgstr "Gebruik een adres op het openbare internet"
+msgstr "Gebruik een adres dat bestaat op het openbare internet"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr "Gebruik een adres zonder poortnummer"

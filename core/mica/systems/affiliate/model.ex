@@ -46,25 +46,21 @@ defmodule Systems.Affiliate.Model do
     end
   end
 
-  # A host that doesn't resolve yet is allowed; requesting it fails.
   defp validate_public_url(url) do
     case OutboundUrl.check(url) do
-      {:ok, _uri, _address} ->
-        {:ok, url}
-
-      {:error, :host_not_found} ->
-        {:ok, url}
-
-      {:error, :scheme_not_allowed} ->
-        {:error, dgettext("eyra-affiliate", "invalid_url.https_only")}
-
-      {:error, :address_not_allowed} ->
-        {:error, dgettext("eyra-affiliate", "invalid_url.not_public")}
-
-      {:error, :invalid_url} ->
-        {:error, dgettext("eyra-affiliate", "invalid_url.invalid_parts")}
+      {:ok, _uri, _address} -> {:ok, url}
+      {:error, reason} -> {:error, refusal(reason)}
     end
   end
+
+  defp refusal(:scheme_not_allowed), do: dgettext("eyra-affiliate", "invalid_url.https_only")
+  defp refusal(:port_not_allowed), do: dgettext("eyra-affiliate", "invalid_url.port_not_allowed")
+  defp refusal(:invalid_url), do: dgettext("eyra-affiliate", "invalid_url.invalid_parts")
+
+  # One answer for a name that doesn't resolve and one that resolves to a
+  # private address, so the form can't tell which names the server's DNS knows.
+  defp refusal(reason) when reason in [:host_not_found, :address_not_allowed, :timeout],
+    do: dgettext("eyra-affiliate", "invalid_url.not_public")
 
   def preload_graph(:up), do: []
   def preload_graph(:down), do: []

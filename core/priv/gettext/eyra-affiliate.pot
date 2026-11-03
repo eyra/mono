@@ -78,3 +78,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "invalid_url.not_public"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr ""

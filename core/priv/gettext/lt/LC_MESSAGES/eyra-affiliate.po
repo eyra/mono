@@ -86,4 +86,8 @@ msgstr "Naudokite adresą, prasidedantį https://"
 
 #, elixir-autogen, elixir-format
 msgid "invalid_url.not_public"
-msgstr "Naudokite viešą interneto adresą"
+msgstr "Naudokite viešame internete esantį adresą"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr "Naudokite adresą be prievado numerio"
