@@ -261,7 +261,11 @@ defmodule Systems.Affiliate.Public do
 
   def validate_url(url) do
     case :hackney.request(:head, url, [], "", []) do
-      {:ok, status, _} ->
+      {:ok, status, _headers} ->
+        {:ok, status}
+
+      # hackney 4 answers a HEAD redirect it doesn't follow with an empty body.
+      {:ok, status, _headers, _body} ->
         {:ok, status}
 
       {:error, reason} ->
