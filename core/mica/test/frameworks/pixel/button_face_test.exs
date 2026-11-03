@@ -72,11 +72,8 @@ defmodule Frameworks.Pixel.Button.FaceTest do
     test "secondary_icon" do
       button = face(&Face.secondary_icon/1, label: "Add", icon: :add)
 
-      assert classes(button) == [
-               "prism-button",
-               "prism-button--secondary",
-               "prism-button--with-icon"
-             ]
+      assert ["prism-button", "prism-button--secondary", "prism-button--with-icon" | _] =
+               classes(button)
     end
 
     test "plain fits its text" do
@@ -88,7 +85,9 @@ defmodule Frameworks.Pixel.Button.FaceTest do
     test "plain_icon puts the icon after the label by default" do
       button = face(&Face.plain_icon/1, label: "Next", icon: :forward)
 
-      assert classes(button) == ["prism-button", "prism-button--plain", "prism-button--with-icon"]
+      assert ["prism-button", "prism-button--plain", "prism-button--with-icon" | _] =
+               classes(button)
+
       assert parts(button) == ["prism-button__label", "prism-button__icon"]
     end
 
@@ -99,18 +98,13 @@ defmodule Frameworks.Pixel.Button.FaceTest do
     end
 
     test "label is a padded text button" do
-      assert classes(face(&Face.label/1, label: "Edit")) == [
-               "prism-button",
-               "prism-button--text",
-               "prism-button--padded"
-             ]
+      assert ["prism-button", "prism-button--text", "prism-button--padded" | _] =
+               classes(face(&Face.label/1, label: "Edit"))
     end
 
     test "label fits its text when it wraps" do
-      assert classes(face(&Face.label/1, label: "Edit", wrap: true)) == [
-               "prism-button",
-               "prism-button--text"
-             ]
+      assert ["prism-button", "prism-button--text", "flex", "w-fit"] =
+               classes(face(&Face.label/1, label: "Edit", wrap: true))
     end
 
     test "label_icon is a compact plain button with the icon first" do
