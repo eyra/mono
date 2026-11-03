@@ -1,7 +1,6 @@
 defmodule Next.Systems.Announcement.PageBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
-  alias Frameworks.Pixel.TrixPostProcessor
   alias Next.Systems.Announcement
 
   # An update message brings the recipient without its announcement
@@ -32,7 +31,7 @@ defmodule Next.Systems.Announcement.PageBuilder do
       active_menu_item: :desktop,
       announcement_title: title,
       published: published(published_at, timezone),
-      body: TrixPostProcessor.add_target_blank(body)
+      body: body
     }
   end
 

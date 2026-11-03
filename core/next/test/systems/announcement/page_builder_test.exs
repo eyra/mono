@@ -19,7 +19,7 @@ defmodule Next.Systems.Announcement.PageBuilderTest do
                title: "Announcement",
                announcement_title: "Release notes October",
                published: "Published on 28 October 2026",
-               body: ~s|<div>See <a href="https://example.com" target="_blank">the docs</a></div>|
+               body: ~s|<div>See <a href="https://example.com">the docs</a></div>|
              } =
                in_locale("en", fn -> Announcement.PageBuilder.view_model(@recipient, @assigns) end)
     end

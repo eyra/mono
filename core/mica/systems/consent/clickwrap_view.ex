@@ -4,6 +4,7 @@ defmodule Systems.Consent.ClickWrapView do
 
   use MicaWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
 
   alias Systems.{
     Consent
@@ -101,7 +102,7 @@ defmodule Systems.Consent.ClickWrapView do
     ~H"""
       <div>
         <div class="wysiwyg">
-          <%= raw @revision.source %>
+          <%= render_wysiwyg(@revision.source) %>
         </div>
         <.spacing value="L" />
         <Text.title6><%= @validation_text %></Text.title6>

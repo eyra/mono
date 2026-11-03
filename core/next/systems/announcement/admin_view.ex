@@ -117,8 +117,7 @@ defmodule Next.Systems.Announcement.AdminView do
   # form with `publish` set to the recipient count the admin saw.
   @impl true
   def handle_event("save_announcement", %{"announcement" => attrs} = params, socket) do
-    body = params |> Map.get("announcement[body]_input", "") |> open_links_in_new_tab()
-    attrs = Map.put(attrs, "body", body)
+    attrs = Map.put(attrs, "body", Map.get(params, "announcement[body]_input", ""))
 
     {:noreply, submit(socket, attrs, shown_count(params))}
   end
@@ -209,26 +208,6 @@ defmodule Next.Systems.Announcement.AdminView do
 
   defp to_priority(priority) do
     Enum.find(Announcement.Model.priorities(), :normal, &(to_string(&1) == priority))
-  end
-
-  # Every target is dropped first, so each link then gets `target="_blank"`;
-  # an attribute that ends in `target`, such as `data-target`, is not a target.
-  @link_target ~r/(<a\b[^>]*?)\s+target\s*=\s*(?:"[^"]*"|'[^']*'|[^\s>]+)/i
-  @link ~r/<a\b([^>]*)>/i
-
-  defp open_links_in_new_tab(body) do
-    body
-    |> drop_link_targets()
-    |> add_target_blank()
-  end
-
-  defp add_target_blank(body), do: Regex.replace(@link, body, ~s|<a\\1 target="_blank">|)
-
-  defp drop_link_targets(body) do
-    case Regex.replace(@link_target, body, "\\1") do
-      ^body -> body
-      dropped -> drop_link_targets(dropped)
-    end
   end
 
   defp new_form do

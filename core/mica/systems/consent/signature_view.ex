@@ -1,6 +1,8 @@
 defmodule Systems.Consent.SignatureView do
   use MicaWeb, :live_component_fabric
 
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
+
   @impl true
   def update(%{title: title, signature: signature}, %{assigns: %{}} = socket) do
     {
@@ -21,7 +23,7 @@ defmodule Systems.Consent.SignatureView do
       <div class="w-full h-full">
         <Text.title2 align="text-left"><%= @title %></Text.title2>
         <div class="wysiwyg">
-          <%= raw @source %>
+          <%= render_wysiwyg(@source) %>
         </div>
       </div>
     """

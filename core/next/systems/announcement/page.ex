@@ -11,6 +11,8 @@ defmodule Next.Systems.Announcement.Page do
   """
   use Systems.Content.Composer, :live_workspace
 
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
+
   alias Next.Systems.Announcement
 
   @impl true
@@ -48,7 +50,7 @@ defmodule Next.Systems.Announcement.Page do
         </div>
         <.spacing value="M" />
         <div class="wysiwyg" data-testid="announcement-body">
-          <%= raw(@vm.body) %>
+          <%= render_wysiwyg(@vm.body) %>
         </div>
       </Area.content>
     </.live_workspace>

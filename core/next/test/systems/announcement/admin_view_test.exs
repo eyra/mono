@@ -190,24 +190,28 @@ defmodule Next.Systems.Announcement.AdminViewTest do
 
       assert body ==
                ~s|<div><a href="https://a.org" target="_blank">a</a> | <>
-                 ~s|<a href='https://b.org' target="_blank">b</a> | <>
+                 ~s|<a href="https://b.org" target="_blank">b</a> | <>
                  ~s|<a href="https://c.org" target="_blank">c</a> | <>
                  ~s|<a href="https://d.org" target="_blank">d</a></div>|
     end
 
-    test "a link with a data-target attribute opens in a new tab too", %{
+    test "markup the editor doesn't make is removed from the stored body", %{
       conn: conn,
       admin: admin
     } do
       view = mount_view(conn, admin)
       render_click(view, "new_announcement")
 
-      save(view, @attrs, ~s|<div><a href="https://a.org" data-target="menu">a</a></div>|)
+      save(
+        view,
+        @attrs,
+        ~s|<div><a href="https://a.org" data-target="menu" onclick="x()">a</a>| <>
+          ~s|<script>alert(1)</script><span style="color:red">b</span></div>|
+      )
 
       assert [%Announcement.Model{body: body}] = Repo.all(Announcement.Model)
 
-      assert body ==
-               ~s|<div><a href="https://a.org" data-target="menu" target="_blank">a</a></div>|
+      assert body == ~s|<div><a href="https://a.org" target="_blank">a</a><span>b</span></div>|
     end
 
     test "cancel closes the form", %{conn: conn, admin: admin} do

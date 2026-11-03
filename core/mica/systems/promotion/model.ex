@@ -8,6 +8,8 @@ defmodule Systems.Promotion.Model do
 
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
+
   schema "promotions" do
     # Plain Content
     field(:title, :string)
@@ -34,6 +36,7 @@ defmodule Systems.Promotion.Model do
   @plain_fields ~w(title subtitle expectations description prerequisites banner_photo_url banner_title banner_subtitle banner_url)a
   @rich_fields ~w(themes image_id marks)a
   @technical_fields ~w(director)a
+  @wysiwyg_fields ~w(expectations description prerequisites)a
 
   @fields @plain_fields ++ @rich_fields ++ @technical_fields
 
@@ -66,6 +69,7 @@ defmodule Systems.Promotion.Model do
   def changeset(promotion, :publish, params) do
     promotion
     |> cast(params, @fields)
+    |> clean_wysiwyg_fields()
     |> validate_required(@publish_required_fields)
   end
 
@@ -73,5 +77,12 @@ defmodule Systems.Promotion.Model do
     promotion
     |> cast(attrs, [:director])
     |> cast(attrs, @fields)
+    |> clean_wysiwyg_fields()
+  end
+
+  defp clean_wysiwyg_fields(changeset) do
+    Enum.reduce(@wysiwyg_fields, changeset, fn field, changeset ->
+      update_change(changeset, field, &RichText.clean/1)
+    end)
   end
 end

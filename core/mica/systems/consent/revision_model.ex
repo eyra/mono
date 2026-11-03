@@ -4,6 +4,8 @@ defmodule Systems.Consent.RevisionModel do
 
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
+
   alias Systems.{
     Consent
   }
@@ -27,6 +29,7 @@ defmodule Systems.Consent.RevisionModel do
   def changeset(revision, attrs) do
     revision
     |> cast(attrs, @fields)
+    |> update_change(:source, &RichText.clean/1)
   end
 
   def validate(changeset) do

@@ -217,6 +217,20 @@ defmodule Next.Systems.Announcement.EmailTest do
       assert url == MicaWeb.Endpoint.url() <> "/announcement/#{id}"
     end
 
+    test "a body stored before cleaning existed is sent cleaned", %{author: author} do
+      announcement = %{
+        announcement!(author)
+        | body: ~s|<div>Hi<script>alert(1)</script> <a href="javascript:alert(1)">x</a></div>|
+      }
+
+      assert %Email.Model{html_message: html, message: text} =
+               Announcement.EmailTemplate.email(announcement)
+
+      assert html =~ ~s|<div>Hi <a target="_blank">x</a></div>|
+      refute html =~ "alert"
+      refute text =~ "alert"
+    end
+
     test "is in Dutch in the nl locale", %{author: author} do
       email =
         Gettext.with_locale(MicaWeb.Gettext, "nl", fn ->
