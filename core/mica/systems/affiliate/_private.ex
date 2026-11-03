@@ -65,19 +65,30 @@ defmodule Systems.Affiliate.Private do
 
   # The researcher's server answers inside the participant's process. Only the
   # status is used, and hackney 4 would read the whole body before returning,
-  # so the response is taken asynchronously and closed after its status line.
+  # so the response is taken asynchronously and stopped after its status line.
+  # The deadline covers the whole call, connecting included.
   @callback_limits [connect_timeout: 5_000, deadline: 10_000]
+
+  # `:hackney.close/1` waits without limit for a connection that is still
+  # reading headers; this stops it or kills it.
+  @stop_timeout 100
 
   defp request_status(url) do
     limits = callback_limits()
-    connect_timeout = Keyword.fetch!(limits, :connect_timeout)
     deadline = Keyword.fetch!(limits, :deadline)
+    connect_timeout = min(Keyword.fetch!(limits, :connect_timeout), deadline)
     deadline_at = System.monotonic_time(:millisecond) + deadline
-    options = [async: :once, connect_timeout: connect_timeout, recv_timeout: deadline]
+
+    options = [
+      async: :once,
+      pool: false,
+      connect_timeout: connect_timeout,
+      recv_timeout: deadline
+    ]
 
     with {:ok, ref} <- :hackney.request(:get, url, [], "", options) do
       result = await_status(ref, max(deadline_at - System.monotonic_time(:millisecond), 0))
-      :hackney.close(ref)
+      :hackney_conn.stop(ref, @stop_timeout)
       flush_responses(ref)
       result
     end

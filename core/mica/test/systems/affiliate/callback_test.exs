@@ -52,6 +52,15 @@ defmodule Systems.Affiliate.CallbackTest do
 
       assert {:error, :deadline_exceeded} = timed_callback(url, 1_000)
     end
+
+    test "gives up at the deadline when the headers are slow" do
+      Application.put_env(:mica, :affiliate_callback, deadline: 300)
+      url = serve_once(&send_headers_slowly/1)
+
+      assert {:error, :deadline_exceeded} = timed_callback(url, 700)
+      assert_receive {:served, :client_closed}, 1_000
+      refute_received {:hackney_response, _, _}
+    end
   end
 
   defp timed_callback(url, max_ms) do
@@ -84,12 +93,18 @@ defmodule Systems.Affiliate.CallbackTest do
     send_chunks(socket, chunk, interval, System.monotonic_time(:millisecond) + 3_000)
   end
 
+  # A status line, then one header line every 100 ms for up to 3 s.
+  defp send_headers_slowly(socket) do
+    :ok = :gen_tcp.send(socket, "HTTP/1.1 200 OK\r\n")
+    send_chunks(socket, "x-pad: a\r\n", 100, System.monotonic_time(:millisecond) + 3_000)
+  end
+
   defp send_chunks(socket, chunk, interval, stop_at) do
     Process.sleep(interval)
 
     cond do
       :gen_tcp.send(socket, chunk) != :ok -> :client_closed
-      System.monotonic_time(:millisecond) > stop_at -> :body_read
+      System.monotonic_time(:millisecond) > stop_at -> :all_sent
       true -> send_chunks(socket, chunk, interval, stop_at)
     end
   end
