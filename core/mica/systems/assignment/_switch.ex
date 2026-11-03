@@ -212,7 +212,7 @@ defmodule Systems.Assignment.Switch do
         {:crew_member, :accepted} ->
           Assignment.Private.log_performance_event(assignment, :accepted, crew_member)
 
-          Assignment.Private.send_progress_event(
+          Assignment.Private.queue_progress_event(
             assignment,
             @assignment_accepted_event,
             crew_member
@@ -222,7 +222,7 @@ defmodule Systems.Assignment.Switch do
           # Keep the historical :declined metric key; changing it would split existing reporting.
           Assignment.Private.log_performance_event(assignment, :declined, crew_member)
 
-          Assignment.Private.send_progress_event(
+          Assignment.Private.queue_progress_event(
             assignment,
             @assignment_declined_event,
             crew_member
@@ -231,7 +231,7 @@ defmodule Systems.Assignment.Switch do
         {:crew_member, :started} ->
           Assignment.Private.log_performance_event(assignment, :started, crew_member)
 
-          Assignment.Private.send_progress_event(
+          Assignment.Private.queue_progress_event(
             assignment,
             @assignment_started_event,
             crew_member
@@ -240,7 +240,7 @@ defmodule Systems.Assignment.Switch do
         {:crew_member, :finished_tasks} ->
           Assignment.Private.log_performance_event(assignment, :finished, crew_member)
 
-          Assignment.Private.send_progress_event(
+          Assignment.Private.queue_progress_event(
             assignment,
             @assignment_finished_event,
             crew_member
@@ -317,11 +317,11 @@ defmodule Systems.Assignment.Switch do
       case event do
         :started ->
           Assignment.Private.log_performance_event(assignment, crew_task, :started)
-          Assignment.Private.send_progress_event(assignment, crew_task, @task_started_event)
+          Assignment.Private.queue_progress_event(assignment, crew_task, @task_started_event)
 
         :completed ->
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
-          Assignment.Private.send_progress_event(assignment, crew_task, @task_finished_event)
+          Assignment.Private.queue_progress_event(assignment, crew_task, @task_finished_event)
 
           mark_participation_completed_if_finished(assignment, crew_task)
 

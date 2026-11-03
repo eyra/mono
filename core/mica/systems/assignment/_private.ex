@@ -69,20 +69,20 @@ defmodule Systems.Assignment.Private do
     |> Repo.exists?()
   end
 
-  def send_progress_event(
+  def queue_progress_event(
         %Assignment.Model{} = assignment,
         event,
         %{user_id: user_id} = _crew_member
       ) do
     user = Account.Public.get_user!(user_id)
-    Affiliate.Public.send_event(assignment, %{progress: event}, user)
+    Affiliate.Public.queue_event(assignment, %{progress: event}, user)
   end
 
-  def send_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
+  def queue_progress_event(%Assignment.Model{} = assignment, %Crew.TaskModel{} = crew_task, event) do
     with {:ok, %{title: title, position: position}} <- get_workflow_item(crew_task) do
       %{user: user} = Assignment.Public.get_member_by_task(crew_task, [:user])
 
-      Affiliate.Public.send_event(
+      Affiliate.Public.queue_event(
         assignment,
         %{task_nr: position + 1, task_slug: slugify(title), progress: event},
         user
