@@ -1,16 +1,12 @@
 defmodule Frameworks.Pixel.AlertBanner do
   use MicaWeb, :pixel
 
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Button
 
   @types ~w(success warning error info)a
 
-  @prism_classes %{
-    success: "prism-alert-success",
-    warning: "prism-alert-warning",
-    error: "prism-alert-error",
-    info: "prism-alert-info"
-  }
+  @tones %{success: :success, warning: :warning, error: :danger, info: :info}
 
   attr(:type, :atom, default: :info, values: @types)
   attr(:message, :string, default: nil)
@@ -21,16 +17,16 @@ defmodule Frameworks.Pixel.AlertBanner do
     assigns =
       assigns
       |> assign_new(:message, fn -> nil end)
-      |> assign(:prism_class, Map.fetch!(@prism_classes, assigns.type))
+      |> assign(:tone, Map.fetch!(@tones, assigns.type))
 
     ~H"""
-    <div class={["prism-alert", @prism_class, @class]}>
+    <Pixel.message_bar tone={@tone} class={@class}>
       <%= if @message do %>
         <%= @message %>
       <% end %>
 
       <%= render_slot(@inner_block) %>
-    </div>
+    </Pixel.message_bar>
     """
   end
 

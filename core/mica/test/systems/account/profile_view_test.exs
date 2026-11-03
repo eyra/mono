@@ -83,7 +83,7 @@ defmodule Systems.Account.ProfileViewTest do
 
       html = render_click(view, "signout")
 
-      assert html =~ "prism-btn-loading"
+      assert html =~ "prism-button--loading"
       refute html =~ "spinner_static_delete"
       assert_push_event(view, "auth:signout", %{url: "/user/session"})
     end

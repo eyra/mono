@@ -2,19 +2,31 @@
 // it after the reply was not re-rendered and still shows the loading feedback.
 const CLIENT_LOADING = "data-client-loading";
 
-const activateLoading = (element) => {
-  const face = element?.querySelector(".prism-btn");
+// Prism's button renders its spinner only while it is loading, so a face the
+// client sets loading gets the spinner Prism's loading button has.
+const addSpinner = (face) => {
+  if (face.querySelector(":scope > .prism-spinner")) return;
 
-  face?.classList.add("prism-btn-loading");
-  face?.setAttribute(CLIENT_LOADING, "");
-  face?.querySelector(":scope > span")?.classList.add("prism-btn-content");
+  const spinner = document.createElement("span");
+  spinner.className = "prism-spinner prism-spinner--20";
+  spinner.setAttribute(CLIENT_LOADING, "");
+  face.appendChild(spinner);
+};
+
+const activateLoading = (element) => {
+  const face = element?.querySelector(".prism-button");
+  if (!face) return;
+
+  face.classList.add("prism-button--loading");
+  face.setAttribute(CLIENT_LOADING, "");
+  addSpinner(face);
 };
 
 export const clearClientLoading = (root) => {
-  root.querySelectorAll(`.prism-btn[${CLIENT_LOADING}]`).forEach((face) => {
-    face.classList.remove("prism-btn-loading");
+  root.querySelectorAll(`.prism-button[${CLIENT_LOADING}]`).forEach((face) => {
+    face.classList.remove("prism-button--loading");
     face.removeAttribute(CLIENT_LOADING);
-    face.querySelector(":scope > span")?.classList.remove("prism-btn-content");
+    face.querySelector(`:scope > .prism-spinner[${CLIENT_LOADING}]`)?.remove();
   });
 };
 

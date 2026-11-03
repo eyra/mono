@@ -84,7 +84,7 @@ defmodule Systems.Feldspar.ToolViewTest do
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
     assert has_element?(view, "iframe")
     assert has_element?(view, "[data-testid='feldspar-recovery']")
-    assert has_element?(view, "[data-testid='feldspar-start'] .prism-btn-loading")
+    assert has_element?(view, "[data-testid='feldspar-start'] .prism-button--loading")
 
     render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
     assert has_element?(view, "[data-testid='start-container'].hidden")

@@ -97,7 +97,7 @@ defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
       assert html =~ dgettext("eyra-account", "auth.code.invalid")
       refute html =~ dgettext("eyra-account", "auth.code.max_attempts")
       refute html =~ dgettext("eyra-account", "auth.code.expired")
-      refute html =~ "prism-btn-loading"
+      refute html =~ "prism-button--loading"
     end
   end
 
@@ -123,7 +123,7 @@ defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
 
       html = render_submit(view, "verify", %{"code" => code})
 
-      assert html =~ "prism-btn-loading"
+      assert html =~ "prism-button--loading"
       refute html =~ "spinner_static_white"
       refute html =~ ~r/<button[^>]*disabled/
 

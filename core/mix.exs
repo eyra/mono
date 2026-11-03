@@ -126,6 +126,10 @@ defmodule Mica.MixProject do
       {:phoenix, "1.8.16"},
       {:plug_cowboy, "2.9.0"},
       {:postgrex, "0.22.4"},
+      # Prism's design: the components at compile time, and the CSS and the Tailwind
+      # preset from deps/prism_design/targets/web, so one pin decides both.
+      {:prism_design,
+       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.2.0", subdir: "design"},
       {:remote_ip, "1.2.0"},
       {:slugify, "1.3.1"},
       {:sqids, "0.2.1"},

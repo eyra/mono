@@ -1,16 +1,6 @@
-/* Prism - Base styles and component classes */
-@import "@novasoftwarefoundation/prism/css/base.css";
-@import "@novasoftwarefoundation/prism/css/components.css";
-
-.prism-spinner {
-  background-color: currentColor;
-  mask: url("/images/icons/spinner.svg") center / contain no-repeat;
-  -webkit-mask: url("/images/icons/spinner.svg") center / contain no-repeat;
-}
-
-.prism-btn:not(.prism-btn-loading) .prism-spinner {
-  display: none;
-}
+/* Prism - Base styles and component classes, from the prism_design Mix dependency */
+@import "../../deps/prism_design/targets/web/css/base.css";
+@import "../../deps/prism_design/targets/web/css/components.css";
 
 @tailwind base;
 
