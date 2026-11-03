@@ -22,9 +22,14 @@ defmodule Frameworks.Pixel.RichText do
   # from every such `&`, which takes quadratic time on long runs of them.
   @bare_ampersand ~r/&(?![a-z][a-z0-9]{0,31};|#[0-9]{1,7};|#x[0-9a-f]{1,6};)/i
 
-  # What html_sanitize_ex puts between tags to keep whitespace; it can remain
-  # when the next tag is removed.
-  @placeholders ~r/ (?:#{[239, 188, 191]} |#{[239, 189, 191]}|#{[239, 190, 191]})/u
+  # A numeric character reference the parser can't decode (it raises above
+  # U+10FFFF) or that isn't a character: replaced by U+FFFD, as browsers do.
+  @numeric_reference ~r/&#(?:([0-9]{1,7})|x([0-9a-f]{1,6}));/i
+
+  # Whitespace right after a tag, which html_sanitize_ex would replace by its
+  # own placeholder characters before parsing. Written as references instead,
+  # it comes out as the same whitespace and no placeholder is ever inserted.
+  @whitespace_after_tag ~r/>(?:\r?\n| +(?=<)|\t+(?=<))/
 
   defmodule Address do
     @moduledoc false
@@ -32,6 +37,12 @@ defmodule Frameworks.Pixel.RichText do
     @link_schemes ["http", "https", "mailto", "tel"]
     @image_schemes ["http", "https"]
     @raster_data ~r/\Adata:image\/(?:png|jpeg|gif|webp);base64,[a-z0-9+\/]*={0,2}\z/i
+
+    # What browsers remove from an address before reading its scheme: tabs and
+    # line breaks anywhere, control characters and spaces at either end.
+    @ignored_anywhere ~r/[\t\n\r]/
+    @ignored_at_ends ~r/\A[\x00-\x20]+|[\x00-\x20]+\z/
+    @scheme ~r/\A([a-z][a-z0-9+.-]*):/i
 
     def link?(href) when is_binary(href), do: allowed?(href, @link_schemes)
     def link?(_), do: false
@@ -41,8 +52,17 @@ defmodule Frameworks.Pixel.RichText do
 
     def image?(_), do: false
 
+    # An address without a scheme is relative, and allowed.
     defp allowed?(address, schemes) do
-      HtmlSanitizeEx.Scrubber.URI.scrub_attribute(nil, {nil, address}, schemes) != nil
+      address =
+        address
+        |> String.replace(@ignored_anywhere, "")
+        |> String.replace(@ignored_at_ends, "")
+
+      case Regex.run(@scheme, address, capture: :all_but_first) do
+        [scheme] -> String.downcase(scheme) in schemes
+        nil -> true
+      end
     end
   end
 
@@ -74,6 +94,11 @@ defmodule Frameworks.Pixel.RichText do
         do: "",
         else: {"figure", scrub_attributes("figure", attributes), children}
     end
+
+    # Text is kept as it is. (The library's own text clauses remove its
+    # placeholders, which `clean/1` never lets it insert, and so would remove
+    # the same characters typed by a user.)
+    def scrub("" <> text), do: text
 
     # Defining `scrub/1` above replaces the one `use HtmlSanitizeEx` defines.
     strip_comments()
@@ -158,14 +183,33 @@ defmodule Frameworks.Pixel.RichText do
   @doc "The largest rich text, in bytes, a field accepts."
   def max_bytes, do: @max_bytes
 
+  @doc "Whether `html` is over `max_bytes/0`."
+  def too_large?(html), do: is_binary(html) and byte_size(html) > @max_bytes
+
   @doc "`html` with only the markup of the rich-text editor. `nil` stays `nil`."
   def clean(nil), do: nil
 
   def clean(html) when is_binary(html) do
-    html
+    @numeric_reference
+    |> Regex.replace(html, &character_or_replacement/3)
     |> String.replace(@bare_ampersand, "&amp;")
+    |> String.replace(@whitespace_after_tag, &whitespace_as_references/1)
     |> Scrubber.sanitize()
-    |> String.replace(@placeholders, "")
+  end
+
+  defp character_or_replacement(reference, decimal, hexadecimal) do
+    codepoint =
+      if decimal == "",
+        do: String.to_integer(hexadecimal, 16),
+        else: String.to_integer(decimal)
+
+    if codepoint == 0 or codepoint in 0xD800..0xDFFF or codepoint > 0x10FFFF,
+      do: "&#xFFFD;",
+      else: reference
+  end
+
+  defp whitespace_as_references(">" <> whitespace) do
+    ">" <> for(<<char <- whitespace>>, into: "", do: "&##{char};")
   end
 
   @doc """

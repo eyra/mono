@@ -66,6 +66,20 @@ defmodule Next.Systems.Announcement.PageTest do
       refute body =~ "alert"
     end
 
+    test "sees a stored reference that isn't a character as U+FFFD", %{
+      conn: conn,
+      announcement: %{id: id} = announcement
+    } do
+      announcement
+      |> Ecto.Changeset.change(body: "<div>Hi &#x110000;</div>")
+      |> Repo.update!()
+
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+
+      assert view |> element("[data-testid=announcement-body]") |> render() =~
+               "<div>Hi �</div>"
+    end
+
     test "marks it read on the first opening", %{conn: conn, announcement: %{id: id}} = ctx do
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 

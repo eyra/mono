@@ -106,6 +106,12 @@ defmodule Mica.MixProject do
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
       {:hackney, "4.9.1"},
+      # Frameworks.Pixel.RichText relies on internals of html_sanitize_ex and
+      # mochiweb; re-check them on a bump (rich_text_test.exs covers each):
+      # the whitespace HtmlSanitizeEx.Parser.before_parse replaces by its
+      # placeholders (`>` + line break, `> +<`, `>\t+<`) and the text clauses
+      # that remove them, and mochiweb_html's character references (quadratic
+      # on bare `&`, raising above U+10FFFF).
       {:html_sanitize_ex, "== 1.5.6"},
       {:httpoison, "3.0.0"},
       {:image, "== 0.73.0"},

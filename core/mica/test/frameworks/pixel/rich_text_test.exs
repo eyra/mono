@@ -239,6 +239,86 @@ defmodule Frameworks.Pixel.RichTextTest do
     end
   end
 
+  describe "clean/1 reads an address's scheme as browsers do" do
+    for {name, href} <- [
+          {"split by line breaks", "javascript\n:\nhttps://%0aalert(1)"},
+          {"split by encoded line breaks", "javascript&#10;:&#10;https://%0aalert(1)"},
+          {"split by named line breaks", "javascript&NewLine;:&NewLine;https://%0aalert(1)"},
+          {"split by carriage returns", "javascript\r:\rhttps://%0aalert(1)"},
+          {"split by tabs", "javascript\t:\thttps://%0aalert(1)"},
+          {"in mixed case, split by line breaks", "JaVaScRiPt\n:\nhttps://%0aalert(1)"},
+          {"after control characters", "\u0001 javascript:alert(1)"}
+        ] do
+      test "removes a javascript: link #{name}" do
+        html = ~s|<a href="#{unquote(href)}">a</a>|
+        assert RichText.clean(html) == ~s|<a target="_blank">a</a>|
+      end
+    end
+
+    test "removes an image from a javascript: address split by line breaks" do
+      assert RichText.clean(~s|<div>a<img src="javascript\n:\nhttps://x">b</div>|) ==
+               "<div>ab</div>"
+    end
+
+    test "removes a javascript: link split by line breaks from an attachment's attributes" do
+      html =
+        ~s|<figure data-trix-attributes="#{attachment(%{caption: "c", href: "javascript\n:\nhttps://%0aalert(1)"})}"></figure>|
+
+      assert RichText.clean(html) ==
+               ~s|<figure data-trix-attributes="#{attachment(%{caption: "c"})}"></figure>|
+    end
+
+    test "removes a javascript: link split by line breaks from an attachment's description" do
+      html =
+        ~s|<figure data-trix-attachment="#{attachment(%{url: "https://example.org/a.png", href: "javascript\n:\nhttps://x"})}"></figure>|
+
+      assert RichText.clean(html) ==
+               ~s|<figure data-trix-attachment="#{attachment(%{url: "https://example.org/a.png"})}"></figure>|
+    end
+
+    for href <- [
+          "/path:x?q=a:b",
+          "//example.org/a",
+          "#top",
+          "HTTPS://example.org",
+          "https://example.org/a:b"
+        ] do
+      test "keeps a link to #{href}" do
+        href = unquote(href)
+
+        assert RichText.clean(~s|<a href="#{href}">a</a>|) ==
+                 ~s|<a href="#{href}" target="_blank">a</a>|
+      end
+    end
+  end
+
+  describe "clean/1 replaces a numeric reference that isn't a character by U+FFFD" do
+    for reference <- ~w(&#1114112; &#x110000; &#xFFFFFF; &#xD800; &#0;) do
+      test reference do
+        assert RichText.clean("<p>a#{unquote(reference)}b</p>") == "<p>a\uFFFDb</p>"
+      end
+    end
+
+    test "in an address" do
+      assert RichText.clean(~s|<a href="https://example.org/&#x110000;">a</a>|) ==
+               ~s|<a href="https://example.org/\uFFFD" target="_blank">a</a>|
+    end
+
+    test "and keeps one that is" do
+      assert RichText.clean("<p>&#x41;&#128512;</p>") == "<p>A😀</p>"
+    end
+  end
+
+  describe "clean/1 keeps text that looks like the parser's placeholders" do
+    # html_sanitize_ex marks whitespace between tags with these characters.
+    for text <- ["a ï½¿ b", " ï½¿ b", "a ï¼¿  b", " ï¼¿ b", "xï¾¿y z ï¾¿", " ï¾¿ b"] do
+      test inspect(text) do
+        html = "<div>#{unquote(text)}</div>"
+        assert RichText.clean(html) == html
+      end
+    end
+  end
+
   # What the text looks like: its elements, attributes and text. Left out:
   # comments, the target every link gets, and the classes on attachments,
   # which no style uses outside the editor. An attachment's description is
