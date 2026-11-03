@@ -111,6 +111,48 @@ defmodule Frameworks.Utility.OutboundUrlTest do
     end
   end
 
+  describe "check/2 with a name server that never answers" do
+    setup do
+      {:ok, socket} = :gen_udp.open(0, [:binary, ip: {127, 0, 0, 1}, active: true])
+      {:ok, port} = :inet.port(socket)
+      %{nameservers: [{{127, 0, 0, 1}, port}]}
+    end
+
+    test "gives up within its timeout without the node's shared resolver", %{
+      nameservers: nameservers
+    } do
+      label = unique_label()
+      native_resolver = trace_native_resolver()
+
+      assert {:error, :timeout} =
+               OutboundUrl.check("https://#{label}.example/",
+                 nameservers: nameservers,
+                 timeout: 300
+               )
+
+      assert_dns_queries([label])
+      refute Enum.any?(native_requests(native_resolver), &(inspect(&1) =~ label))
+    end
+
+    test "leaves other lookups on the node free while checks wait", %{nameservers: nameservers} do
+      labels = for _ <- 1..8, do: unique_label()
+
+      checks =
+        for label <- labels do
+          Task.async(fn ->
+            OutboundUrl.check("https://#{label}.example/", nameservers: nameservers)
+          end)
+        end
+
+      assert_dns_queries(labels)
+
+      assert {:ok, [_ | _]} =
+               Task.async(fn -> :inet.getaddrs(~c"localhost", :inet) end) |> Task.await(1_000)
+
+      Enum.each(checks, &Task.shutdown(&1, :brutal_kill))
+    end
+  end
+
   describe "request/5" do
     test "connects to the checked address, with the host name for HTTP and TLS" do
       with_mock :hackney, request: fn _, _, _, _, _ -> {:ok, 200, []} end do
@@ -211,4 +253,42 @@ defmodule Frameworks.Utility.OutboundUrlTest do
   end
 
   defp public, do: fn _host -> {:ok, [{93, 184, 215, 14}]} end
+
+  defp unique_label, do: "outbound-url-#{System.unique_integer([:positive])}"
+
+  # Waits until the name server got a query for each label.
+  defp assert_dns_queries([]), do: :ok
+
+  defp assert_dns_queries(labels) do
+    receive do
+      {:udp, _socket, _address, _port, query} ->
+        labels |> Enum.reject(&String.contains?(query, &1)) |> assert_dns_queries()
+    after
+      1_000 -> flunk("no DNS query for #{Enum.join(labels, ", ")}")
+    end
+  end
+
+  # OTP's native resolver: the worker pool every other lookup on the node uses.
+  defp trace_native_resolver do
+    {:ok, _addresses} = :inet.getaddrs(~c"localhost", :inet)
+    native_resolver = Process.whereis(:inet_gethost_native)
+    1 = :erlang.trace(native_resolver, true, [:receive])
+    native_resolver
+  end
+
+  defp native_requests(native_resolver) do
+    :erlang.trace(native_resolver, false, [:receive])
+    delivered = :erlang.trace_delivered(native_resolver)
+    assert_receive {:trace_delivered, ^native_resolver, ^delivered}
+    collect_native_requests(native_resolver)
+  end
+
+  defp collect_native_requests(native_resolver) do
+    receive do
+      {:trace, ^native_resolver, :receive, request} ->
+        [request | collect_native_requests(native_resolver)]
+    after
+      0 -> []
+    end
+  end
 end
