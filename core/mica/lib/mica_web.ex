@@ -123,6 +123,7 @@ defmodule MicaWeb do
       use Fabric.ModalPresenter
       use Frameworks.Pixel.ModalView
       use Frameworks.Signal.LiveFeature
+      use Systems.Email.LiveFeature
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
@@ -149,6 +150,7 @@ defmodule MicaWeb do
       use LiveNest, :single_modal_presenter_strategy
       use Frameworks.Pixel.ModalView
       use Frameworks.Signal.LiveFeature
+      use Systems.Email.LiveFeature
 
       # Import LiveView helpers (live_render, live_component, live_patch, etc)
       import Phoenix.LiveView.Helpers
@@ -176,6 +178,7 @@ defmodule MicaWeb do
       # Flash support for embedded views (handles :show_flash and :hide_flash messages)
       use Frameworks.Pixel.Flash
       use Frameworks.Signal.LiveFeature
+      use Systems.Email.LiveFeature
 
       # UserState LiveFeature provides publish_user_state_change
       use Frameworks.UserState.LiveFeature

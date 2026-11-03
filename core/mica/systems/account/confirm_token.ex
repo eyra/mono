@@ -76,10 +76,6 @@ defmodule Systems.Account.ConfirmToken do
     )
   end
 
-  def handle_info({:delivered_email, _email}, socket) do
-    {:noreply, socket}
-  end
-
   @impl true
   def handle_event("confirm", _, socket) do
     {:noreply, confirm_user(socket)}
