@@ -13,8 +13,7 @@
   "ignoreDeps": [
     "bamboo_phoenix",
     "bamboo_ses",
-    "live_nest",
-    "certifi"
+    "live_nest"
   ],
   "packageRules": [
     {
@@ -22,9 +21,16 @@
       "automerge": false
     },
     {
-      "description": "httpoison 2.3+ blocked by packmatic ~> 2.2.1 dependency",
-      "matchPackageNames": ["httpoison"],
-      "enabled": false
+      "description": "hackney, httpoison and certifi move together in their own PR, so a combination that doesn't resolve can't hold up the weekly group",
+      "matchPackageNames": ["hackney", "httpoison", "certifi"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "hackney",
+      "groupSlug": "hackney"
+    },
+    {
+      "description": "certifi stays within hackney 4.9.1's ~> 2.18.0; raise this together with hackney once a hackney release needs a newer certifi",
+      "matchPackageNames": ["certifi"],
+      "allowedVersions": "<2.19.0"
     },
     {
       "description": "gettext 1.0+ blocked by timex 3.7.13 requiring ~> 0.26",
@@ -33,8 +39,14 @@
       "enabled": false
     },
     {
-      "description": "hackney 3.x blocked by ex_aws ~> 2.4 requiring ~> 1.16",
+      "description": "hackney 5 blocked until httpoison, ex_aws, tzdata, tesla and web_driver_client allow it (their requirements stop at 4.x)",
       "matchPackageNames": ["hackney"],
+      "matchUpdateTypes": ["major"],
+      "enabled": false
+    },
+    {
+      "description": "httpoison 4 blocked until appsignal and wallaby allow it (their requirements stop at 3.x)",
+      "matchPackageNames": ["httpoison"],
       "matchUpdateTypes": ["major"],
       "enabled": false
     },
