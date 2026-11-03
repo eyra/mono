@@ -28,6 +28,10 @@ defmodule Frameworks.Utility.OutboundUrl do
 
   @resolve_timeout 5_000
 
+  # `:inet_res` waits 1.5 s by default before asking again after a SERVFAIL
+  # answer, so a host with broken DNS would take 3 s per record type.
+  @dns_options [servfail_retry_timeout: 0]
+
   # IPv4 ranges that aren't public: RFC 6890 and the CGNAT range of RFC 6598.
   # 169.254.0.0/16 holds most cloud metadata services, 100.64.0.0/10 Alibaba's
   # and 192.0.0.0/24 Oracle's.
@@ -70,7 +74,7 @@ defmodule Frameworks.Utility.OutboundUrl do
   @spec check(String.t(), keyword()) :: {:ok, URI.t(), :inet.ip_address()} | {:error, reason}
   def check(url, opts \\ []) when is_binary(url) do
     timeout = Keyword.get(opts, :timeout, @resolve_timeout)
-    dns_options = Keyword.take(opts, [:nameservers])
+    dns_options = @dns_options ++ Keyword.take(opts, [:nameservers])
     resolver = Keyword.get(opts, :resolver, &resolve(&1, dns_options, timeout))
 
     with {:ok, %URI{host: host} = uri} <- parse(url),
@@ -150,7 +154,7 @@ defmodule Frameworks.Utility.OutboundUrl do
   end
 
   defp resolve_within(resolver, host, timeout) do
-    task = Task.async(fn -> resolver.(host) end)
+    task = Task.async(fn -> resolve_or_refuse(resolver, host) end)
 
     case Task.yield(task, timeout) || Task.shutdown(task, :brutal_kill) do
       {:ok, result} -> result
@@ -158,22 +162,33 @@ defmodule Frameworks.Utility.OutboundUrl do
     end
   end
 
-  # `:inet_res` doesn't read the hosts file, as the native resolver did. That
-  # file names the node's own, private addresses, and localhost, whose names
-  # are loopback without asking DNS (RFC 6761).
+  # The task is linked to the caller, often a LiveView or a participant's
+  # process: a lookup that raises refuses the host instead of ending it.
+  defp resolve_or_refuse(resolver, host) do
+    resolver.(host)
+  catch
+    _kind, _reason -> {:error, :host_not_found}
+  end
+
   defp resolve(host, dns_options, timeout) do
     case :inet.parse_address(String.to_charlist(host)) do
-      {:ok, address} ->
-        {:ok, [address]}
-
-      {:error, :einval} ->
-        if localhost?(host),
-          do: {:ok, [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}]},
-          else: resolve_name(host, dns_options, timeout)
+      {:ok, address} -> {:ok, [address]}
+      {:error, :einval} -> resolve_name(host, dns_options, timeout)
     end
   end
 
+  # `:inet_res` doesn't read the hosts file, as the native resolver did. That
+  # file names the node's own, private addresses, and localhost, whose names
+  # are loopback without asking DNS (RFC 6761).
   defp resolve_name(host, dns_options, timeout) do
+    cond do
+      localhost?(host) -> {:ok, [{127, 0, 0, 1}, {0, 0, 0, 0, 0, 0, 0, 1}]}
+      dns_name?(host) -> lookup_addresses(host, dns_options, timeout)
+      true -> {:error, :host_not_found}
+    end
+  end
+
+  defp lookup_addresses(host, dns_options, timeout) do
     results = for type <- [:a, :aaaa], do: lookup(host, type, dns_options, timeout)
 
     case for({:ok, addresses} <- results, address <- addresses, do: address) |> Enum.uniq() do
@@ -185,6 +200,15 @@ defmodule Frameworks.Utility.OutboundUrl do
   defp localhost?(host) do
     name = host |> String.downcase() |> String.trim_trailing(".")
     name == "localhost" or String.ends_with?(name, ".localhost")
+  end
+
+  # Only names `:inet_res` can put in a query (RFC 1035): labels of 1 to 63
+  # bytes, at most 253 bytes without the dot that ends an absolute name.
+  defp dns_name?(host) do
+    name = String.replace_suffix(host, ".", "")
+
+    byte_size(name) <= 253 and
+      name |> String.split(".") |> Enum.all?(&(byte_size(&1) in 1..63))
   end
 
   defp lookup(host, type, dns_options, timeout) do

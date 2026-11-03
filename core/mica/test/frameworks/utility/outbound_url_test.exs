@@ -43,6 +43,15 @@ defmodule Frameworks.Utility.OutboundUrlTest do
     {0x2606, 0x4700, 0x4700, 0, 0, 0, 0, 0x1111}
   ]
 
+  # Hosts `URI.new/1` accepts that aren't DNS names.
+  @malformed_hosts [
+    {"an empty label", "a..b"},
+    {"a leading dot", ".example.org"},
+    {"two trailing dots", "example.org.."},
+    {"a label over 63 bytes", String.duplicate("a", 64) <> ".example"},
+    {"a name over 253 bytes", String.duplicate("a.", 140) <> "org"}
+  ]
+
   @refused_schemes [
     "http://example.org/",
     "ws://example.org/",
@@ -84,6 +93,19 @@ defmodule Frameworks.Utility.OutboundUrlTest do
       assert {:error, :address_not_allowed} = OutboundUrl.check("https://localhost/")
     end
 
+    for {description, host} <- @malformed_hosts do
+      test "refuses a host with #{description}" do
+        assert {:error, :host_not_found} = OutboundUrl.check("https://#{unquote(host)}/")
+      end
+    end
+
+    test "refuses a host whose lookup raises" do
+      resolver = fn _host -> raise ArgumentError end
+
+      assert {:error, :host_not_found} =
+               OutboundUrl.check("https://panel.example/", resolver: resolver)
+    end
+
     test "refuses a name that doesn't resolve" do
       resolver = fn _host -> {:error, :host_not_found} end
 
@@ -108,6 +130,23 @@ defmodule Frameworks.Utility.OutboundUrlTest do
 
       assert {:ok, %URI{host: "panel.example"}, {93, 184, 215, 14}} =
                OutboundUrl.check("https://panel.example/", resolver: resolver)
+    end
+  end
+
+  describe "check/2 with a name server that answers SERVFAIL" do
+    test "refuses the host well within its timeout" do
+      nameservers = servfail_nameserver()
+
+      {elapsed_us, result} =
+        :timer.tc(fn ->
+          OutboundUrl.check("https://#{unique_label()}.example/",
+            nameservers: nameservers,
+            timeout: 5_000
+          )
+        end)
+
+      assert {:error, :host_not_found} = result
+      assert elapsed_us < 2_000_000
     end
   end
 
@@ -255,6 +294,41 @@ defmodule Frameworks.Utility.OutboundUrlTest do
   defp public, do: fn _host -> {:ok, [{93, 184, 215, 14}]} end
 
   defp unique_label, do: "outbound-url-#{System.unique_integer([:positive])}"
+
+  defp servfail_nameserver do
+    test = self()
+
+    start_supervised!(
+      {Task,
+       fn ->
+         {:ok, socket} = :gen_udp.open(0, [:binary, ip: {127, 0, 0, 1}, active: true])
+         {:ok, port} = :inet.port(socket)
+         send(test, {:servfail_nameserver, port})
+         answer_servfail(socket)
+       end}
+    )
+
+    assert_receive {:servfail_nameserver, port}
+    [{{127, 0, 0, 1}, port}]
+  end
+
+  # Answers with the query's id and question, flags QR, RD and RA, and
+  # RCODE 2 (SERVFAIL).
+  defp answer_servfail(socket) do
+    receive do
+      {:udp, ^socket, address, port,
+       <<id::16, _flags::16, questions::16, _answers::16, _authority::16, additional::16,
+         rest::binary>>} ->
+        :gen_udp.send(
+          socket,
+          address,
+          port,
+          <<id::16, 0x8182::16, questions::16, 0::16, 0::16, additional::16, rest::binary>>
+        )
+    end
+
+    answer_servfail(socket)
+  end
 
   # Waits until the name server got a query for each label.
   defp assert_dns_queries([]), do: :ok
