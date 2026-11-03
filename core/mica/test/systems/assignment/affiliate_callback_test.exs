@@ -3,6 +3,7 @@ defmodule Systems.Assignment.AffiliateCallbackTest do
   use Mica.DataCase, async: false
   use Oban.Testing, repo: Mica.Repo
 
+  import ExUnit.CaptureLog
   import Mock
 
   @moduletag :capture_log
@@ -30,6 +31,7 @@ defmodule Systems.Assignment.AffiliateCallbackTest do
     Bypass.stub(bypass, "GET", "/callback", fn conn ->
       conn = Plug.Conn.fetch_query_params(conn)
       send(test, {:callback, conn.query_params})
+      send(test, {:callback_query, conn.query_string})
       Process.sleep(@slow_ms)
       Plug.Conn.resp(conn, 200, "ok")
     end)
@@ -56,7 +58,15 @@ defmodule Systems.Assignment.AffiliateCallbackTest do
     member = Crew.Factories.create_member(crew, user)
     task = Crew.Factories.create_task(crew, member, ["item=#{item.id}", "member=#{member.id}"])
 
-    %{assignment: assignment, user: user, member: member, task: task}
+    %{
+      affiliate: affiliate,
+      bypass: bypass,
+      crew: crew,
+      assignment: assignment,
+      user: user,
+      member: member,
+      task: task
+    }
   end
 
   describe "expiring a member" do
@@ -133,6 +143,103 @@ defmodule Systems.Assignment.AffiliateCallbackTest do
       refute_received {:callback, _}
 
       assert_calls_back([%{"progress" => "assignment_accepted"}])
+    end
+  end
+
+  describe "the callback URL" do
+    test "is built as when the event was sent directly, also when its query has the event's key",
+         %{affiliate: affiliate, assignment: assignment, user: user} do
+      callback_url = affiliate.callback_url <> "?progress=entered"
+      Repo.update!(Ecto.Changeset.change(affiliate, callback_url: callback_url))
+
+      {:ok, direct_url} =
+        Affiliate.Private.merge(callback_url, nil, %{progress: :assignment_declined})
+
+      assert {:ok, _} = Assignment.Public.expire_member(assignment, user)
+      assert %{success: 1} = Oban.drain_queue(queue: :affiliate_callback)
+
+      assert_received {:callback_query, query}
+      assert query == URI.parse(direct_url).query
+    end
+  end
+
+  describe "queueing no callback" do
+    test "for a participant without an affiliate identity", %{
+      assignment: assignment,
+      crew: crew
+    } do
+      user = Factories.insert!(:member)
+      Crew.Factories.create_member(crew, user)
+
+      assert {:ok, _} = Assignment.Public.expire_member(assignment, user)
+
+      refute_enqueued(worker: Affiliate.CallbackWorker)
+    end
+
+    test "for an affiliate without a callback URL", %{
+      affiliate: affiliate,
+      assignment: assignment,
+      user: user
+    } do
+      Repo.update!(Ecto.Changeset.change(affiliate, callback_url: ""))
+
+      assert {:ok, _} = Assignment.Public.expire_member(assignment, user)
+
+      refute_enqueued(worker: Affiliate.CallbackWorker)
+    end
+  end
+
+  describe "a failed callback" do
+    test "is logged and completes the job when the server is down", %{
+      bypass: bypass,
+      assignment: assignment,
+      user: user
+    } do
+      assert {:ok, _} = Assignment.Public.expire_member(assignment, user)
+      Bypass.down(bypass)
+
+      log =
+        capture_log(fn ->
+          assert %{success: 1, failure: 0, discard: 0} =
+                   Oban.drain_queue(queue: :affiliate_callback)
+        end)
+
+      assert log =~ "Error calling callback url"
+    end
+
+    test "is logged and completes the job when the server doesn't answer in time", %{
+      affiliate: affiliate,
+      assignment: assignment,
+      user: user
+    } do
+      initial_limits = Application.get_env(:mica, :affiliate_callback)
+      Application.put_env(:mica, :affiliate_callback, deadline: 100)
+
+      # The kernel accepts the connection; nobody answers the request.
+      {:ok, listener} = :gen_tcp.listen(0, [:binary, active: false])
+      {:ok, port} = :inet.port(listener)
+
+      on_exit(fn ->
+        :gen_tcp.close(listener)
+
+        if initial_limits,
+          do: Application.put_env(:mica, :affiliate_callback, initial_limits),
+          else: Application.delete_env(:mica, :affiliate_callback)
+      end)
+
+      callback_url = "http://localhost:#{port}/callback"
+      Repo.update!(Ecto.Changeset.change(affiliate, callback_url: callback_url))
+
+      assert {:ok, _} = Assignment.Public.expire_member(assignment, user)
+
+      log =
+        capture_log(fn ->
+          assert %{success: 1, failure: 0, discard: 0} =
+                   Oban.drain_queue(queue: :affiliate_callback)
+        end)
+
+      assert log =~ "Error calling callback url"
+      assert log =~ "deadline_exceeded"
     end
   end
 
