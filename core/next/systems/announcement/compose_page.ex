@@ -43,8 +43,12 @@ defmodule Next.Systems.Announcement.ComposePage do
     end
   end
 
+  # Ids are bigints: anything else, such as 0 or a number too big for the
+  # column, is an unknown announcement rather than a database error.
+  @max_id 9_223_372_036_854_775_807
+
   defp load(%{"id" => id}) do
-    with {id, ""} <- Integer.parse(id),
+    with {id, ""} when id in 1..@max_id <- Integer.parse(id),
          %Announcement.Model{} = announcement <- Announcement.Public.get_announcement(id) do
       announcement
     else
@@ -64,28 +68,34 @@ defmodule Next.Systems.Announcement.ComposePage do
   def handle_params(_params, _uri, socket), do: {:noreply, socket}
 
   @impl true
-  def handle_event(event, params, %{assigns: %{current_user: user}} = socket) do
-    if feature_enabled?(:announcements) and Admin.Public.admin?(user) do
+  def handle_event(event, params, socket) do
+    if allowed?(socket) do
       handle_allowed_event(event, params, socket)
     else
       {:noreply, socket}
     end
   end
 
-  # The filter chips are rendered here rather than with `Frameworks.Pixel.Selector`:
-  # its client-side toggle targets every chip with the same id on the page.
+  # The audience search (`Frameworks.Pixel.SearchBar`).
   @impl true
   def consume_event(
         %{name: :search_query, payload: %{query: query, query_string: query_string}},
         socket
       ) do
-    {
-      :stop,
-      socket
-      |> assign(audience_query: query, audience_query_string: query_string, compose_notice: nil)
-      |> update_view_model()
-    }
+    if allowed?(socket) do
+      {
+        :stop,
+        socket
+        |> assign(audience_query: query, audience_query_string: query_string, compose_notice: nil)
+        |> update_view_model()
+      }
+    else
+      {:stop, socket}
+    end
   end
+
+  defp allowed?(%{assigns: %{current_user: user}}),
+    do: feature_enabled?(:announcements) and Admin.Public.admin?(user)
 
   defp handle_allowed_event("cancel_announcement", _params, socket) do
     {:noreply, back_to_list(socket)}
@@ -107,6 +117,8 @@ defmodule Next.Systems.Announcement.ComposePage do
     {:noreply, socket}
   end
 
+  # The filter chips are rendered here rather than with `Frameworks.Pixel.Selector`:
+  # its client-side toggle targets every chip with the same id on the page.
   defp handle_allowed_event(
          "toggle_audience_filter",
          %{"filter" => filter},

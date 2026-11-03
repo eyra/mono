@@ -13,24 +13,33 @@ defmodule Next.Systems.Announcement.ComposePageBuilder do
   `:audience_changed` or `:no_recipients` after a refused save or publish).
   A published one has no audience to choose, only `published`: what saving it
   does, and the notice of a refused save.
+
+  Only system admins with the `announcements` flag on (`allowed?`) get the
+  audience or `published`.
   """
   use Gettext, backend: MicaWeb.Gettext
+  use Mica.FeatureFlags
 
   alias Next.Systems.Announcement
   alias Systems.Admin
 
   def view_model(%Announcement.Model{} = model, assigns) do
     announcement = Map.get(assigns, :announcement, model)
+    allowed? = feature_enabled?(:announcements) and admin?(Map.get(assigns, :current_user))
 
     %{
+      allowed?: allowed?,
       title: dgettext("eyra-announcement", "admin.title"),
       active_menu_item: :admin,
       heading: heading(announcement),
       form: form_labels(),
-      audience: audience(not published?(announcement), assigns),
-      published: published(published?(announcement), assigns)
+      audience: audience(allowed? and not published?(announcement), assigns),
+      published: published(allowed? and published?(announcement), assigns)
     }
   end
+
+  defp admin?(nil), do: false
+  defp admin?(user), do: Admin.Public.admin?(user)
 
   defp heading(%Announcement.Model{id: nil}), do: dgettext("eyra-announcement", "compose.new")
   defp heading(_announcement), do: dgettext("eyra-announcement", "compose.edit")

@@ -459,6 +459,15 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       assert recipient_count_text(view) =~ "1 creator will receive this announcement."
     end
 
+    test "search does nothing once the flag is off", %{conn: conn} do
+      view = open_new(conn)
+      set_feature_flag(:announcements, false)
+
+      search(view, "bram")
+
+      assert recipient_count_text(view) =~ "2 creators will receive this announcement."
+    end
+
     test "a chosen filter is shown as chosen", %{conn: conn} do
       view = open_new(conn)
 
@@ -669,6 +678,12 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     test "is not found for an announcement that doesn't exist", %{conn: conn} do
       assert_error_sent(404, fn -> get(conn, "/admin/announcement/0") end)
       assert_error_sent(404, fn -> get(conn, "/admin/announcement/latest") end)
+      assert_error_sent(404, fn -> get(conn, "/admin/announcement/-1") end)
+    end
+
+    test "is not found for an id too big for the database", %{conn: conn} do
+      assert_error_sent(404, fn -> get(conn, "/admin/announcement/9223372036854775808") end)
+      assert_error_sent(404, fn -> get(conn, "/admin/announcement/99999999999999999999") end)
     end
 
     for role <- [:creator, :member] do

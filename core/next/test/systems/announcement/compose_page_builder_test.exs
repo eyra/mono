@@ -41,9 +41,30 @@ defmodule Next.Systems.Announcement.ComposePageBuilderTest do
              composing(admin, %{announcement: create!(admin, %{title: "Draft"})})
   end
 
-  test "builds the audience before the page opened the announcement" do
+  test "builds the audience before the page opened the announcement", %{admin: admin} do
     assert %{audience: %{recipient_count: _}, published: nil} =
-             Announcement.ComposePageBuilder.view_model(new_announcement(), %{})
+             Announcement.ComposePageBuilder.view_model(new_announcement(), %{current_user: admin})
+  end
+
+  test "builds no audience and no published notice when the flag is off", %{admin: admin} do
+    published =
+      admin
+      |> create!(%{title: "Published"})
+      |> Ecto.Changeset.change(published_at: DateTime.utc_now() |> DateTime.truncate(:second))
+      |> Mica.Repo.update!()
+
+    set_feature_flag(:announcements, false)
+
+    assert %{allowed?: false, audience: nil, published: nil} = composing(admin)
+
+    assert %{allowed?: false, audience: nil, published: nil} =
+             composing(admin, %{announcement: published})
+  end
+
+  test "builds no audience for a user who is not a system admin" do
+    for user <- [Factories.insert!(:creator), Factories.insert!(:member), nil] do
+      assert %{allowed?: false, audience: nil, published: nil} = composing(user)
+    end
   end
 
   test "offers every kind and priority in the form", %{admin: admin} do
