@@ -130,6 +130,22 @@ defmodule MicaWeb.Live.User.ConfirmToken.Test do
 
       assert html =~ "receive instructions"
     end
+
+    test "resend form survives the email the test mailer sends back to it", %{conn: conn} do
+      user = Factories.insert!(:member, %{confirmed_at: nil})
+      {:ok, view, _html} = live(conn, ~p"/user/onboarding/confirm/test")
+
+      view
+      |> render_click("confirm")
+
+      view
+      |> element("form")
+      |> render_submit(%{user: %{email: user.email}})
+
+      # The LV reads the `{:delivered_email, _}` it sent itself while handling
+      # the submit before this render.
+      assert render(view) =~ "receive instructions"
+    end
   end
 
   describe "as a member" do

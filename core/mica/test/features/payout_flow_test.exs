@@ -184,7 +184,7 @@ defmodule MicaWeb.Features.PayoutFlowTest do
 
     participant_session
     |> visit("/")
-    |> assert_has(Query.css("[data-testid='payout-button']"))
+    |> assert_connected("[data-testid='payout-button']")
     |> click(Query.css("[data-testid='payout-button']"))
     |> assert_has(Query.css("[data-testid='confirmation-modal-confirm-button']"))
   end

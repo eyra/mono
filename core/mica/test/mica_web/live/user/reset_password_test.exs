@@ -43,5 +43,18 @@ defmodule MicaWeb.Live.User.ResetPassword.Test do
       assert html =~ "you will receive instructions shortly"
       assert Repo.get_by!(Account.UserTokenModel, user_id: user.id).context == "reset_password"
     end
+
+    test "survives the reset email the test mailer sends back to it", %{conn: conn} do
+      user = Factories.insert!(:member, %{confirmed_at: nil})
+      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+
+      view
+      |> element("form")
+      |> render_submit(%{user: %{email: user.email}})
+
+      # The LV reads the `{:delivered_email, _}` it sent itself while handling
+      # the submit before this render.
+      assert render(view) =~ "you will receive instructions shortly"
+    end
   end
 end
