@@ -354,7 +354,7 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
 | Migrations | Ecto runs several migration paths. `Core.Release.migrate/0` runs Mica's path plus each system's and the SaaS's path, in timestamp order. Table ownership and baselines follow D8. |
 | Repo | One `Core.Repo` per deployment, configured by the SaaS. SaaS schemas use it too. |
 | Translations | Mica keeps its own Gettext backend (`CoreWeb.Gettext`, `MicaWeb.Gettext` after code-rename) with its own `priv/gettext`. The SaaS has its own backend for its own domains. Mica's `eyra-*` domains are renamed to neutral names, and brand words become `Core.Brand` interpolations. Whether SaaS repos can override Mica copy is an open question. |
-| Assets | Mica's JS hooks are resolvable from `deps/mica/assets`. The SaaS `app.js` merges them with its own hooks. Tailwind `content` includes `deps/mica`. Prism stays an npm dependency of both. Mica ships neutral icons; the SaaS serves its own logos, favicons and manifest. |
+| Assets | Mica's JS hooks are resolvable from `deps/mica/assets`. The SaaS `app.js` merges them with its own hooks. Tailwind `content` includes `deps/mica`. Prism stays a Mix git dependency of both (`prism_design`, `subdir: "design"`, pinned by tag): its CSS and Tailwind preset come from `deps/prism_design/targets/web`. Mica ships neutral icons; the SaaS serves its own logos, favicons and manifest. |
 | Routing | `NextWeb.Router` is `use Phoenix.Router` with Mica's macros for the pipelines, the systems' routes and Mica's base routes, in an order Next writes (D15). Overriding routes by shadowing them is the exception; prefer extension points (start pages, the sign-in page). |
 | Menus, start pages | Systems contribute menu items. `Core.SaaS` sets the start pages, and the SaaS's builder decides layout and order. |
 | Auth providers | Email, password and OTP sign-in are Mica core. Google and Apple are M-opt behind a provider behaviour. SURFconext and Centerdata are integrations that contribute their own routes. |
@@ -372,7 +372,7 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
   - invoice prefix
   - merchant and donation recipient
 - **No default brand** (D14). Every SaaS implements `Core.Brand`, the reference SaaS included. Mica shows no "Powered by Mica / Nova" of its own.
-- **Theming is Prism.** The SaaS supplies a Tailwind preset that extends `@novasoftwarefoundation/prism/tailwind.preset`. Pixel components use only Prism tokens.
+- **Theming is Prism.** The SaaS supplies a Tailwind preset that extends Prism's, `deps/prism_design/targets/web/tailwind.preset` from the `prism_design` Mix dependency. Pixel components use only Prism tokens.
 - **Partner and pool logos** are supplied by the brand or by SaaS systems, not stored in Mica.
 
 ### 3.7 Integrations
