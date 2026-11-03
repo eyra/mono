@@ -44,6 +44,11 @@
       "allowedVersions": "<1.2"
     },
     {
+      "description": "Prism 0.2 renamed every component class; hold below 0.2 until mono moves to Prism 0.2, which removes this rule",
+      "matchPackageNames": ["@novasoftwarefoundation/prism"],
+      "allowedVersions": "<0.2.0"
+    },
+    {
       "description": "Toolchain updates get their own PR, outside the weekly group: move CI, images and the constraints above in the same change",
       "matchManagers": ["asdf", "dockerfile", "github-actions", "renovate-config"],
       "matchDepNames": ["erlang", "elixir", "node"],
