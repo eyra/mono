@@ -12,7 +12,7 @@ defmodule Frameworks.Pixel.Tag do
   def tag(assigns) do
     ~H"""
     <span class="prism-tag">
-      <span class={"prism-tag-inner #{@bg_color} #{@bg_opacity} #{@text_color}"}>
+      <span class={"prism-tag__label #{@bg_color} #{@bg_opacity} #{@text_color}"}>
         <%= @text %>
       </span>
     </span>

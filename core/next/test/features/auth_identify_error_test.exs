@@ -189,7 +189,7 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
     """)
     |> fill_in(Query.css("[data-testid='auth-code-cell-5']"), with: "9")
     |> assert_has(Query.css(@code_error))
-    |> refute_has(Query.css("#{@code_button} .prism-btn-loading"))
+    |> refute_has(Query.css("#{@code_button} .prism-button--loading"))
     |> execute_script(
       "return {changes: window.changes, active: document.activeElement.dataset.testid};",
       fn result -> send(self(), {:after_submit, result}) end
@@ -210,7 +210,7 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
     |> execute_script("window.liveSocket.disconnect();")
     |> assert_has(Query.css("[data-phx-main].phx-error"))
     |> send_keys(Query.css(@email_field), [:enter])
-    |> refute_has(Query.css("#{@email_button} .prism-btn-loading"))
+    |> refute_has(Query.css("#{@email_button} .prism-button--loading"))
     |> execute_script("window.liveSocket.connect();")
     |> assert_has(Query.css(".phx-connected #{@email_field}"))
     |> send_keys(Query.css(@email_field), [:enter])

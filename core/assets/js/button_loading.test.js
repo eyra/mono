@@ -14,7 +14,7 @@ describe("installButtonLoading", () => {
     document.body.innerHTML = `
       <div data-button-loading>
         <button type="submit">
-          <div class="prism-btn"><span>Continue</span><span class="prism-spinner"></span></div>
+          <div class="prism-button prism-button--primary"><span class="prism-button__label">Continue</span></div>
         </button>
       </div>
     `;
@@ -23,10 +23,28 @@ describe("installButtonLoading", () => {
 
     document.querySelector("button").click();
 
-    const face = document.querySelector(".prism-btn");
+    const face = document.querySelector(".prism-button");
 
-    expect(face.classList).toContain("prism-btn-loading");
-    expect(face.querySelector("span").classList).toContain("prism-btn-content");
+    expect(face.classList).toContain("prism-button--loading");
+    expect(
+      face.querySelector(":scope > .prism-spinner.prism-spinner--20")
+    ).not.toBeNull();
+  });
+
+  it("keeps the spinner of a face the server rendered loading", () => {
+    document.body.innerHTML = `
+      <div data-button-loading>
+        <button type="submit">
+          <div class="prism-button prism-button--primary prism-button--loading"><span class="prism-button__label">Continue</span><span class="prism-spinner prism-spinner--20"></span></div>
+        </button>
+      </div>
+    `;
+
+    uninstall = installButtonLoading();
+
+    document.querySelector("button").click();
+
+    expect(document.querySelectorAll(".prism-spinner")).toHaveLength(1);
   });
 });
 
@@ -40,10 +58,10 @@ describe("clearClientLoading", () => {
       <form>
         <div data-button-loading>
           <button type="submit">
-            <div id="client" class="prism-btn"><span>Continue</span></div>
+            <div id="client" class="prism-button prism-button--primary"><span class="prism-button__label">Continue</span></div>
           </button>
         </div>
-        <div id="server" class="prism-btn prism-btn-loading"><span class="prism-btn-content">Wait</span></div>
+        <div id="server" class="prism-button prism-button--primary prism-button--loading"><span class="prism-button__label">Wait</span><span class="prism-spinner prism-spinner--20"></span></div>
       </form>
     `;
 
@@ -53,11 +71,12 @@ describe("clearClientLoading", () => {
 
     clearClientLoading(document.querySelector("form"));
 
-    expect(document.getElementById("client").classList).not.toContain(
-      "prism-btn-loading"
-    );
-    expect(document.getElementById("server").classList).toContain(
-      "prism-btn-loading"
-    );
+    const client = document.getElementById("client");
+    const server = document.getElementById("server");
+
+    expect(client.classList).not.toContain("prism-button--loading");
+    expect(client.querySelector(".prism-spinner")).toBeNull();
+    expect(server.classList).toContain("prism-button--loading");
+    expect(server.querySelector(".prism-spinner")).not.toBeNull();
   });
 });

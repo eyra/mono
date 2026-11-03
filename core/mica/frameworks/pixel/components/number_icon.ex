@@ -1,17 +1,14 @@
 defmodule Frameworks.Pixel.NumberIcon do
   use MicaWeb, :pixel
 
-  defp prism_class(true), do: "prism-number-icon-active"
-  defp prism_class(false), do: "prism-number-icon-inactive"
+  alias Frameworks.Pixel.Prism
 
   attr(:number, :integer, required: true)
   attr(:active, :boolean, default: false)
 
   def number_icon(assigns) do
-    assigns = assign(assigns, :prism_class, prism_class(assigns.active))
-
     ~H"""
-    <span class={"prism-number-icon #{@prism_class}"}><%= @number %></span>
+    <Prism.step_indicator status={if @active, do: :current, else: :incomplete}><%= @number %></Prism.step_indicator>
     """
   end
 end

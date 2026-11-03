@@ -12,7 +12,7 @@ describe("SubmitInPlace", () => {
         <input name="email" value="someone@example.com" />
         <div data-button-loading>
           <button type="submit">
-            <div class="prism-btn prism-btn-loading" data-client-loading><span class="prism-btn-content">Continue</span></div>
+            <div class="prism-button prism-button--primary prism-button--loading" data-client-loading><span class="prism-button__label">Continue</span><span class="prism-spinner prism-spinner--20" data-client-loading></span></div>
           </button>
         </div>
       </form>
@@ -54,7 +54,9 @@ describe("SubmitInPlace", () => {
   };
 
   const loading = () =>
-    hook.el.querySelector(".prism-btn").classList.contains("prism-btn-loading");
+    hook.el
+      .querySelector(".prism-button")
+      .classList.contains("prism-button--loading");
 
   it("pushes the phx-submit event with the form values instead of LiveView's submit", () => {
     const notCancelled = submit();
@@ -91,9 +93,7 @@ describe("SubmitInPlace", () => {
     await reply();
 
     expect(loading()).toBe(false);
-    expect(hook.el.querySelector(".prism-btn span").classList).not.toContain(
-      "prism-btn-content"
-    );
+    expect(hook.el.querySelector(".prism-spinner")).toBeNull();
   });
 
   it("sends the next submit after a push that failed while disconnected", async () => {

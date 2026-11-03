@@ -1,4 +1,5 @@
-const prismPreset = require("@novasoftwarefoundation/prism/tailwind.preset");
+// Prism's preset, from the prism_design Mix dependency (the same pin as its components)
+const prismPreset = require("../deps/prism_design/targets/web/tailwind.preset");
 
 module.exports = {
   presets: [prismPreset],

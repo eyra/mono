@@ -24,7 +24,7 @@ defmodule Next.Systems.Account.AuthIdentifyPageTest do
     html = render_submit(view, "submit", %{"email" => ""})
 
     assert html =~ dgettext("eyra-account", "auth.email.invalid")
-    refute html =~ "prism-btn-loading"
+    refute html =~ "prism-button--loading"
   end
 
   test "the form submits in place so the email field keeps its focus", %{conn: conn} do
@@ -47,7 +47,7 @@ defmodule Next.Systems.Account.AuthIdentifyPageTest do
 
     # The reply to the submit itself, before routing renders the outcome.
     loading_html = render_submit(view, "submit", %{"email" => email})
-    assert loading_html =~ "prism-btn-loading"
+    assert loading_html =~ "prism-button--loading"
     assert loading_html =~ message
 
     assert render(view) =~ message
@@ -76,7 +76,7 @@ defmodule Next.Systems.Account.AuthIdentifyPageTest do
 
     # Submitted within the change event's debounce, so no change event in between.
     loading_html = render_submit(view, "submit", %{"email" => "someone@example.com"})
-    assert loading_html =~ "prism-btn-loading"
+    assert loading_html =~ "prism-button--loading"
     refute loading_html =~ dgettext("eyra-account", "auth.email.invalid")
   end
 
