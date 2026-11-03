@@ -1,4 +1,4 @@
 <h1><%= @title %></h1>
-<div class="subheader"><%= @byline %></div>
+<%= if @byline not in [nil, ""] do %><div class="subheader"><%= @byline %></div><% end %>
 
 <%= Phoenix.HTML.raw(@html_message) %>
