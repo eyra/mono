@@ -34,6 +34,12 @@ defmodule Systems.Desktop.View do
             <.spacing value="XL" />
           </div>
         <% end %>
+        <%= for section <- @vm.sections_before_recent_items do %>
+          <div id={"desktop_section_#{section.id}"}>
+            <.section section={section} />
+            <.spacing value="XL" />
+          </div>
+        <% end %>
         <Text.title2>
           <%= dgettext("eyra-dashboard", "recent-items.title") %>
           <span class="text-primary"> <%= Enum.count(@vm.content_items) %></span>
@@ -44,16 +50,24 @@ defmodule Systems.Desktop.View do
             <Project.CardView.dynamic card={card} />
           <% end %>
         </Grid.dynamic>
-        <%= for section <- @vm.sections do %>
+        <%= for section <- @vm.sections_after_recent_items do %>
           <div id={"desktop_section_#{section.id}"}>
             <.spacing value="XL" />
-            <Text.title2><%= section.title %></Text.title2>
-            <Margin.y id={:title2_bottom} />
-            <%= section.module.render(%{vm: section.vm}) %>
+            <.section section={section} />
           </div>
         <% end %>
       </Area.content>
     </div>
+    """
+  end
+
+  attr(:section, :map, required: true)
+
+  defp section(assigns) do
+    ~H"""
+    <Text.title2><%= @section.title %></Text.title2>
+    <Margin.y id={:title2_bottom} />
+    <%= @section.module.render(%{vm: @section.vm}) %>
     """
   end
 end
