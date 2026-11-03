@@ -1,7 +1,19 @@
 defmodule Systems.Affiliate.ValidateUrlTest do
-  use ExUnit.Case, async: true
+  # Mocks the URL check.
+  use ExUnit.Case, async: false
 
+  import Mock
+
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Affiliate
+
+  # These tests are about the response of the local server they start, which
+  # the URL check refuses.
+  setup_with_mocks([
+    {OutboundUrl, [:passthrough], [request: &:hackney.request/5]}
+  ]) do
+    :ok
+  end
 
   describe "validate_url/1" do
     test "returns the status of a 200" do

@@ -70,3 +70,15 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platform_name.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.https_only"
+msgstr "Bitte verwenden Sie eine Adresse, die mit https:// beginnt"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.not_public"
+msgstr "Bitte verwenden Sie eine Adresse, die im öffentlichen Internet existiert"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr "Bitte verwenden Sie eine Adresse ohne Portnummer"

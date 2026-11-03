@@ -1,12 +1,21 @@
 defmodule Systems.Affiliate.CallbackTest do
-  # Sets the global :affiliate_callback limits.
+  # Sets the global :affiliate_callback limits and mocks the URL check.
   use ExUnit.Case, async: false
 
   import Mock
 
   @moduletag :capture_log
 
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Affiliate
+
+  # These tests are about the connection to the local servers they start, which
+  # the URL check refuses.
+  setup_with_mocks([
+    {OutboundUrl, [:passthrough], [request: &:hackney.request/5]}
+  ]) do
+    :ok
+  end
 
   setup do
     initial_limits = Application.get_env(:mica, :affiliate_callback)

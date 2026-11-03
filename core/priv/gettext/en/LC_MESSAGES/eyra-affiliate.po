@@ -70,3 +70,15 @@ msgstr "Panel Platform"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platform_name.body"
 msgstr "If a redirect URL is provided, you may enter the name of the destination organisation or platform. This name will be shown to participants at the end of the workflow, just before they are redirected."
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.https_only"
+msgstr "Please use an address that starts with https://"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.not_public"
+msgstr "Please use an address that exists on the public internet"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.port_not_allowed"
+msgstr "Please use an address without a port number"
