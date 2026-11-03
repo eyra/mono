@@ -23,6 +23,28 @@ defmodule Systems.Affiliate.EntryLogTest do
       assert log =~ "Invalid sqid"
     end
 
+    test "a sqid with a newline logs on one line, escaped", %{conn: conn} do
+      {conn, log} =
+        with_log(fn ->
+          get(conn, "/a/abc%0Aforged-entry?p=participant-1")
+        end)
+
+      assert conn.status == 403
+      refute log =~ "\nforged-entry"
+      assert log =~ ~S(abc\nforged-entry)
+    end
+
+    test "a param key with a newline logs on one line, escaped", %{conn: conn} do
+      {conn, log} =
+        with_log(fn ->
+          get(conn, "/a/invalid_sqid_123?p=participant-1&key%0Aforged-entry=1")
+        end)
+
+      assert conn.status == 403
+      refute log =~ "\nforged-entry"
+      assert log =~ ~S(key\nforged-entry)
+    end
+
     test "an invalid participant id logs the reason, not the participant or panel values",
          %{conn: conn} do
       assignment = Assignment.Factories.create_assignment_with_affiliate()

@@ -84,7 +84,7 @@ defmodule Systems.Affiliate.Controller do
 
       {:error, error} ->
         Logger.error(
-          "Affiliate entry refused: #{error}; param keys=#{inspect(param_keys(params))}"
+          "Affiliate entry refused: #{inspect(error)}; param keys=#{inspect(param_keys(params))}"
         )
 
         forbidden(conn)
