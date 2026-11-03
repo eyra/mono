@@ -4,9 +4,9 @@ defmodule Frameworks.Pixel.Button.FaceTest do
   import ExUnit.CaptureIO
   import Phoenix.LiveViewTest
 
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Button.Face
-  alias Frameworks.Pixel.Prism
 
   defp face(function, assigns) do
     function
@@ -158,20 +158,20 @@ defmodule Frameworks.Pixel.Button.FaceTest do
 
             def render(assigns) do
               ~H\"\"\"
-              <Frameworks.Pixel.Prism.button variant={:primray}>Save</Frameworks.Pixel.Prism.button>
+              <Frameworks.Pixel.button variant={:primray}>Save</Frameworks.Pixel.button>
               \"\"\"
             end
           end
           """)
         end)
 
-      assert warnings =~ ~s(attribute "variant" in component Frameworks.Pixel.Prism.button)
+      assert warnings =~ ~s(attribute "variant" in component Frameworks.Pixel.button)
       assert warnings =~ ":primray"
     end
 
     test "an unknown variant from an assign fails when it renders" do
       assert_raise ArgumentError, fn ->
-        render_component(&Prism.button/1, variant: :primray)
+        render_component(&Pixel.button/1, variant: :primray)
       end
     end
   end

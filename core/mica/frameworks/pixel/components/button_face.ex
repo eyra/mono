@@ -1,7 +1,7 @@
 defmodule Frameworks.Pixel.Button.Face do
   @moduledoc """
   The look of a button, inside a `Frameworks.Pixel.Button.Action`. Every face but
-  the menu faces renders Prism's button (`Frameworks.Pixel.Prism.button/1`) as a
+  the menu faces renders Prism's button (`Frameworks.Pixel.button/1`) as a
   `<div>`, since the action is the clickable element.
 
   `bg_color`, `text_color`, `border_color` and `font` take Tailwind classes that
@@ -13,16 +13,16 @@ defmodule Frameworks.Pixel.Button.Face do
   """
   use MicaWeb, :pixel
 
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Logo
-  alias Frameworks.Pixel.Prism
 
   attr(:text, :string, required: true)
   attr(:font, :string, default: nil)
 
   def link(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:link} class={@font}><%= @text %></Prism.button>
+    <Pixel.button as="div" variant={:link} class={@font}><%= @text %></Pixel.button>
     """
   end
 
@@ -37,9 +37,9 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def icon(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:icon} class={["flex", @size]}>
+    <Pixel.button as="div" variant={:icon} class={["flex", @size]}>
       <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}></:icon>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -51,10 +51,10 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def label_icon(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:plain} padded={false} class={["flex w-fit font-label text-label", @height, @text_color]}>
+    <Pixel.button as="div" variant={:plain} padded={false} class={["flex w-fit font-label text-label", @height, @text_color]}>
       <%= @label %>
       <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@label}></:icon>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -65,9 +65,9 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def label(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:text} padded={not @wrap} class={["flex w-fit", @font, @text_color]}>
+    <Pixel.button as="div" variant={:text} padded={not @wrap} class={["flex w-fit", @font, @text_color]}>
       <%= @label %>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -78,7 +78,7 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain_icon(assigns) do
     ~H"""
-    <Prism.button
+    <Pixel.button
       as="div"
       variant={:plain}
       padded={false}
@@ -87,7 +87,7 @@ defmodule Frameworks.Pixel.Button.Face do
     >
       <%= @label %>
       <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -96,9 +96,9 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def plain(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:plain} padded={false} class={["w-full", @text_color]}>
+    <Pixel.button as="div" variant={:plain} padded={false} class={["w-full", @text_color]}>
       <span class="whitespace-pre-wrap"><%= @label %></span>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -109,10 +109,10 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def primary_icon(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:primary} class={["flex w-full h-12", @bg_color, @text_color]}>
+    <Pixel.button as="div" variant={:primary} class={["flex w-full h-12", @bg_color, @text_color]}>
       <%= @label %>
       <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -124,14 +124,14 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def primary(assigns) do
     ~H"""
-    <Prism.button
+    <Pixel.button
       as="div"
       variant={:primary}
       loading={@loading}
       class={[@full_width && "w-full", @bg_color, @text_color]}
     >
       <%= @label %>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -142,9 +142,9 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def secondary(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:secondary} loading={@loading} class={[@border_color, @text_color]}>
+    <Pixel.button as="div" variant={:secondary} loading={@loading} class={[@border_color, @text_color]}>
       <%= @label %>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 
@@ -155,10 +155,10 @@ defmodule Frameworks.Pixel.Button.Face do
 
   def secondary_icon(assigns) do
     ~H"""
-    <Prism.button as="div" variant={:secondary} class={["flex", @border_color, @text_color]}>
+    <Pixel.button as="div" variant={:secondary} class={["flex", @border_color, @text_color]}>
       <%= @label %>
       <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
-    </Prism.button>
+    </Pixel.button>
     """
   end
 

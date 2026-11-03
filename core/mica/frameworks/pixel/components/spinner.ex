@@ -1,7 +1,7 @@
 defmodule Frameworks.Pixel.Spinner do
   use MicaWeb, :html
 
-  alias Frameworks.Pixel.Prism
+  alias Frameworks.Pixel
 
   attr(:alt, :string, default: "Loading")
   attr(:size, :string, default: "")
@@ -11,7 +11,7 @@ defmodule Frameworks.Pixel.Spinner do
     assigns = assign(assigns, pixels: pixels(size), color_class: color && "text-#{color}")
 
     ~H"""
-    <Prism.spinner size={@pixels} class={@color_class} role="status" aria-label={@alt} />
+    <Pixel.spinner size={@pixels} class={@color_class} role="status" aria-label={@alt} />
     """
   end
 
