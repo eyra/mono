@@ -5,6 +5,12 @@ defmodule Next.Systems.Announcement.Routes do
         pipe_through([:browser, :require_authenticated_user])
         live("/:id", Page)
       end
+
+      scope "/admin/announcement", Next.Systems.Announcement do
+        pipe_through([:browser, :require_authenticated_user])
+        live("/new", ComposePage)
+        live("/:id", ComposePage)
+      end
     end
   end
 end
