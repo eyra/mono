@@ -70,3 +70,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platform_name.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.https_only"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.not_public"
+msgstr ""

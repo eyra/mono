@@ -5,6 +5,8 @@ defmodule Systems.Affiliate.Model do
 
   import Ecto.Changeset
 
+  alias Frameworks.Utility.OutboundUrl
+
   schema "affiliate" do
     field(:callback_url, :string)
     field(:redirect_url, :string)
@@ -16,7 +18,17 @@ defmodule Systems.Affiliate.Model do
   @fields ~w(callback_url redirect_url platform_name)a
 
   def changeset(affiliate, attrs) do
-    cast(affiliate, attrs, @fields)
+    affiliate
+    |> cast(attrs, @fields)
+    |> validate_change(:callback_url, &validate_url_change/2)
+    |> validate_change(:redirect_url, &validate_url_change/2)
+  end
+
+  defp validate_url_change(field, url) do
+    case validate_url(url) do
+      {:ok, _url} -> []
+      {:error, message} -> [{field, message}]
+    end
   end
 
   def validate_url(nil), do: {:error, nil}
@@ -28,9 +40,29 @@ defmodule Systems.Affiliate.Model do
       {:ok, %{scheme: ""}} -> {:error, dgettext("eyra-affiliate", "invalid_url.missing_scheme")}
       {:ok, %{host: nil}} -> {:error, dgettext("eyra-affiliate", "invalid_url.missing_host")}
       {:ok, %{host: ""}} -> {:error, dgettext("eyra-affiliate", "invalid_url.missing_host")}
-      {:ok, _} -> {:ok, url}
+      {:ok, _} -> validate_public_url(url)
       {:error, " "} -> {:error, dgettext("eyra-affiliate", "invalid_url.no_spaces_allowed")}
       {:error, _} -> {:error, dgettext("eyra-affiliate", "invalid_url.invalid_parts")}
+    end
+  end
+
+  # A host that doesn't resolve yet is allowed; requesting it fails.
+  defp validate_public_url(url) do
+    case OutboundUrl.check(url) do
+      {:ok, _uri, _address} ->
+        {:ok, url}
+
+      {:error, :host_not_found} ->
+        {:ok, url}
+
+      {:error, :scheme_not_allowed} ->
+        {:error, dgettext("eyra-affiliate", "invalid_url.https_only")}
+
+      {:error, :address_not_allowed} ->
+        {:error, dgettext("eyra-affiliate", "invalid_url.not_public")}
+
+      {:error, :invalid_url} ->
+        {:error, dgettext("eyra-affiliate", "invalid_url.invalid_parts")}
     end
   end
 

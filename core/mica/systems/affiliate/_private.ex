@@ -1,6 +1,8 @@
 defmodule Systems.Affiliate.Private do
   require Logger
 
+  alias Frameworks.Utility.OutboundUrl
+
   def merge(_redirect_url, _user_info, extra_query \\ %{})
   def merge(nil, _user_info, _extra_query), do: {:error, :redirect_url_missing}
   def merge("", _user_info, _extra_query), do: {:error, :redirect_url_missing}
@@ -88,7 +90,7 @@ defmodule Systems.Affiliate.Private do
 
     connections_before = own_connections()
 
-    case :hackney.request(:get, url, [], "", options) do
+    case OutboundUrl.request(:get, url, [], "", options) do
       {:ok, ref} ->
         result = await_status(ref, max(deadline_at - System.monotonic_time(:millisecond), 0))
         stop_connection(ref)

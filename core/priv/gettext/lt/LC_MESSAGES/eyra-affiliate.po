@@ -79,3 +79,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "platform_name.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.https_only"
+msgstr "Naudokite adresą, prasidedantį https://"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.not_public"
+msgstr "Naudokite viešą interneto adresą"

@@ -70,3 +70,11 @@ msgstr ""
 #, elixir-autogen, elixir-format, fuzzy
 msgid "platform_name.body"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.https_only"
+msgstr "Utilizzi un indirizzo che inizia con https://"
+
+#, elixir-autogen, elixir-format
+msgid "invalid_url.not_public"
+msgstr "Utilizzi un indirizzo pubblico su internet"

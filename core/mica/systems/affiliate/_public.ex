@@ -12,6 +12,8 @@ defmodule Systems.Affiliate.Public do
   alias Ecto.Multi
   alias Frameworks.Signal
 
+  alias Frameworks.Utility.OutboundUrl
+
   alias Systems.Account
   alias Systems.Affiliate
 
@@ -260,7 +262,7 @@ defmodule Systems.Affiliate.Public do
   end
 
   def validate_url(url) do
-    case :hackney.request(:head, url, [], "", []) do
+    case OutboundUrl.request(:head, url, [], "", []) do
       {:ok, status, _headers} ->
         {:ok, status}
 
