@@ -2,21 +2,55 @@ defmodule Frameworks.Pixel.RichText do
   @moduledoc """
   Cleans the HTML of the rich-text editor (Trix, `Frameworks.Pixel.Form.wysiwyg_area/1`).
 
-  Every rich-text field goes through `clean/1` when it is saved (its changeset)
-  and when it is shown (`Frameworks.Pixel.WysiwygAreaHelpers.render_wysiwyg/1`),
-  so text stored before cleaning existed is covered too.
+  Every rich-text field goes through `clean_change/2` when it is saved (its
+  changeset) and through `clean/1` when it is shown
+  (`Frameworks.Pixel.WysiwygAreaHelpers.render_wysiwyg/1`), so text stored
+  before cleaning existed is covered too.
 
   `clean/1` keeps the tags and attributes the editor produces and removes
   everything else: other tags (their text stays), `script`, `style` and similar
   tags with their content, comments, event and `style` attributes, and links or
-  images with an unsafe address. Every link opens in a new tab.
+  images with an unsafe address. An image whose address is removed is removed
+  with its attachment. Every link opens in a new tab.
   """
+
+  import Ecto.Changeset, only: [validate_length: 3, update_change: 3]
+
+  @max_bytes 2_000_000
+
+  # An `&` that doesn't start a character reference. The parser scans ahead
+  # from every such `&`, which takes quadratic time on long runs of them.
+  @bare_ampersand ~r/&(?![a-z][a-z0-9]{0,31};|#[0-9]{1,7};|#x[0-9a-f]{1,6};)/i
+
+  # What html_sanitize_ex puts between tags to keep whitespace; it can remain
+  # when the next tag is removed.
+  @placeholders ~r/ (?:#{[239, 188, 191]} |#{[239, 189, 191]}|#{[239, 190, 191]})/u
+
+  defmodule Address do
+    @moduledoc false
+
+    @link_schemes ["http", "https", "mailto", "tel"]
+    @image_schemes ["http", "https"]
+    @raster_data ~r/\Adata:image\/(?:png|jpeg|gif|webp);base64,[a-z0-9+\/]*={0,2}\z/i
+
+    def link?(href) when is_binary(href), do: allowed?(href, @link_schemes)
+    def link?(_), do: false
+
+    def image?(src) when is_binary(src),
+      do: Regex.match?(@raster_data, src) or allowed?(src, @image_schemes)
+
+    def image?(_), do: false
+
+    defp allowed?(address, schemes) do
+      HtmlSanitizeEx.Scrubber.URI.scrub_attribute(nil, {nil, address}, schemes) != nil
+    end
+  end
 
   defmodule Scrubber do
     @moduledoc false
     use HtmlSanitizeEx
 
-    @link_schemes ["http", "https", "mailto", "tel"]
+    alias Frameworks.Pixel.RichText.Address
 
     # Tags whose content is code or data, not text: removed with their content.
     @dropped ~w(script style template iframe object embed noscript textarea select title head svg math)
@@ -27,34 +61,49 @@ defmodule Frameworks.Pixel.RichText do
       {"a", scrub_attributes("a", attributes) ++ [{"target", "_blank"}], children}
     end
 
+    def scrub({"img", attributes, children}) do
+      attributes = scrub_attributes("img", attributes)
+
+      if List.keymember?(attributes, "src", 0),
+        do: {"img", attributes, children},
+        else: ""
+    end
+
+    def scrub({"figure", attributes, children}) do
+      if image_removed?(attributes),
+        do: "",
+        else: {"figure", scrub_attributes("figure", attributes), children}
+    end
+
     # Defining `scrub/1` above replaces the one `use HtmlSanitizeEx` defines.
     strip_comments()
 
-    # The attachment's own description; `content` would be HTML for the editor.
-    def scrub_attribute(tag, {"data-trix-attachment", json}) when tag in ["a", "figure"] do
+    # The editor reads an attachment and its link from this JSON, so its
+    # addresses follow the same rules as `href` and `src`; `content` would be
+    # HTML for the editor.
+    def scrub_attribute(tag, {name, json})
+        when tag in ["a", "figure"] and name in ["data-trix-attachment", "data-trix-attributes"] do
       case Jason.decode(json) do
-        {:ok, %{} = attachment} ->
-          {"data-trix-attachment", attachment |> Map.delete("content") |> Jason.encode!()}
+        {:ok, %{} = data} ->
+          {name, data |> Map.delete("content") |> safe_addresses() |> Jason.encode!()}
 
         _ ->
           nil
       end
     end
 
-    allow_tag_with_uri_attributes("a", ["href"], @link_schemes)
+    def scrub_attribute("a", {"href", href}) do
+      if Address.link?(href), do: {"href", href}
+    end
 
-    allow_tag_with_these_attributes("a", [
-      "data-trix-attributes",
-      "data-trix-content-type"
-    ])
+    def scrub_attribute("img", {"src", src}) do
+      if Address.image?(src), do: {"src", src}
+    end
 
-    allow_tag_with_uri_attributes("img", ["src"], ["http", "https"])
+    def scrub_attribute("figure", {"data-trix-content-type", _} = attribute), do: attribute
+
+    allow_tag_with_these_attributes("a", ["data-trix-content-type"])
     allow_tag_with_these_attributes("img", ["alt", "width", "height"])
-
-    allow_tag_with_these_attributes("figure", [
-      "data-trix-attributes",
-      "data-trix-content-type"
-    ])
 
     # The editor writes div, br, h1, strong, em, del, blockquote, pre, ul, ol,
     # li, figure, img, figcaption and span. The others are plain formatting
@@ -83,9 +132,51 @@ defmodule Frameworks.Pixel.RichText do
       "figcaption",
       "span"
     ])
+
+    defp safe_addresses(data) do
+      data
+      |> Map.reject(fn {key, value} -> key == "href" and not Address.link?(value) end)
+      |> Map.reject(fn {key, value} ->
+        key in ["url", "src"] and not Address.image?(value)
+      end)
+    end
+
+    defp image_removed?(attributes) do
+      case List.keyfind(attributes, "data-trix-attachment", 0) do
+        {_, json} ->
+          case Jason.decode(json) do
+            {:ok, %{"url" => url}} -> not Address.image?(url)
+            _ -> false
+          end
+
+        nil ->
+          false
+      end
+    end
   end
+
+  @doc "The largest rich text, in bytes, a field accepts."
+  def max_bytes, do: @max_bytes
 
   @doc "`html` with only the markup of the rich-text editor. `nil` stays `nil`."
   def clean(nil), do: nil
-  def clean(html) when is_binary(html), do: Scrubber.sanitize(html)
+
+  def clean(html) when is_binary(html) do
+    html
+    |> String.replace(@bare_ampersand, "&amp;")
+    |> Scrubber.sanitize()
+    |> String.replace(@placeholders, "")
+  end
+
+  @doc """
+  Cleans the change of `field`. Text longer than `max_bytes/0` is an error
+  instead, and isn't cleaned.
+  """
+  def clean_change(changeset, field) do
+    changeset = validate_length(changeset, field, max: @max_bytes, count: :bytes)
+
+    if Keyword.has_key?(changeset.errors, field),
+      do: changeset,
+      else: update_change(changeset, field, &clean/1)
+  end
 end

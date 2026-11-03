@@ -18,7 +18,7 @@ defmodule Systems.Content.PageModel do
   def changeset(page, attrs) do
     page
     |> cast(attrs, @fields)
-    |> update_change(:body, &RichText.clean/1)
+    |> RichText.clean_change(:body)
   end
 
   def validate(changeset) do

@@ -53,7 +53,7 @@ defmodule Next.Systems.Announcement.Model do
   def changeset(announcement, attrs) do
     announcement
     |> cast(attrs, @fields)
-    |> update_change(:body, &RichText.clean/1)
+    |> RichText.clean_change(:body)
     |> update_change(:body, &blank_without_text/1)
     |> validate_required(@fields)
     |> validate_length(:title, max: 255)

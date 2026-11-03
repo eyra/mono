@@ -3,6 +3,8 @@ defmodule Frameworks.Pixel.RichTextTest do
 
   alias Frameworks.Pixel.RichText
 
+  @svg "data:image/svg+xml;base64,PHN2Zz4="
+
   # Output of the editor (Trix 2.1.19), read from its input after loading each
   # format into it in the browser.
   @trix %{
@@ -117,11 +119,58 @@ defmodule Frameworks.Pixel.RichTextTest do
                ~s|<div><a href="https://example.org" target="_blank">a</a></div>|
     end
 
-    test "images with an unsafe address or event attributes" do
-      html =
-        ~s|<div><img src="javascript:alert(1)"><img src="https://example.org/a.png" onerror="alert(1)"></div>|
+    test "an image's event attributes" do
+      html = ~s|<div><img src="https://example.org/a.png" onerror="alert(1)"></div>|
+      assert RichText.clean(html) == ~s|<div><img src="https://example.org/a.png" /></div>|
+    end
 
-      assert RichText.clean(html) == ~s|<div><img /><img src="https://example.org/a.png" /></div>|
+    for src <- [
+          "javascript:alert(1)",
+          "data:image/svg+xml;base64,PHN2Zz4=",
+          "data:text/html;base64,PHNjcmlwdD4=",
+          "data:image/png,not-base64"
+        ] do
+      test "an image from #{src}, with its tag" do
+        html = ~s|<div>a<img src="#{unquote(src)}">b</div>|
+        assert RichText.clean(html) == "<div>ab</div>"
+      end
+    end
+
+    test "an image attachment whose address is removed, with its figure" do
+      html =
+        ~s|<div>a<figure data-trix-attachment="#{attachment(%{contentType: "image/svg+xml", url: @svg})}" | <>
+          ~s|data-trix-content-type="image"><img src="#{@svg}"><figcaption></figcaption></figure>b</div>|
+
+      assert RichText.clean(html) == "<div>ab</div>"
+    end
+
+    test "an unsafe link in an attachment's description" do
+      html =
+        ~s|<figure data-trix-attachment="#{attachment(%{url: "https://example.org/a.png", href: "javascript:alert(1)"})}"></figure>|
+
+      assert RichText.clean(html) ==
+               ~s|<figure data-trix-attachment="#{attachment(%{url: "https://example.org/a.png"})}"></figure>|
+    end
+
+    test "an unsafe link in an attachment's attributes" do
+      html =
+        ~s|<figure data-trix-attributes="#{attachment(%{caption: "c", href: "javascript:alert(1)"})}"></figure>|
+
+      assert RichText.clean(html) ==
+               ~s|<figure data-trix-attributes="#{attachment(%{caption: "c"})}"></figure>|
+    end
+
+    test "an unsafe address in a linked attachment's description" do
+      html =
+        ~s|<a href="https://example.org/f.pdf" data-trix-attachment="#{attachment(%{url: "javascript:alert(1)", href: "https://example.org/f.pdf"})}">f</a>|
+
+      assert RichText.clean(html) ==
+               ~s|<a href="https://example.org/f.pdf" data-trix-attachment="#{attachment(%{href: "https://example.org/f.pdf"})}" target="_blank">f</a>|
+    end
+
+    test "an attachment's attributes that aren't JSON" do
+      assert RichText.clean(~s|<figure data-trix-attributes="nonsense"></figure>|) ==
+               "<figure></figure>"
     end
 
     test "the HTML content of an attachment" do
@@ -141,6 +190,69 @@ defmodule Frameworks.Pixel.RichTextTest do
 
     test "comments, such as the block markers of earlier editor versions" do
       assert RichText.clean("<div><!--block-->a<!-- note -->b</div>") == "<div>ab</div>"
+    end
+  end
+
+  describe "clean/1 keeps pasted images" do
+    for type <- ~w(png jpeg gif webp) do
+      test "with a data: address of a #{type} image" do
+        src = "data:image/#{unquote(type)};base64,iVBORw0KGgo="
+        assert RichText.clean(~s|<img src="#{src}">|) == ~s|<img src="#{src}" />|
+      end
+    end
+
+    test "as an attachment with a data: address, in the page and in the editor" do
+      png = "data:image/png;base64,iVBORw0KGgo="
+      description = attachment(%{contentType: "image/png", url: png})
+
+      html =
+        ~s|<figure data-trix-attachment="#{description}" data-trix-content-type="image">| <>
+          ~s|<img src="#{png}"><figcaption></figcaption></figure>|
+
+      assert RichText.clean(html) ==
+               ~s|<figure data-trix-attachment="#{description}" data-trix-content-type="image">| <>
+                 ~s|<img src="#{png}" /><figcaption></figcaption></figure>|
+    end
+  end
+
+  describe "clean/1 takes linear time" do
+    test "on a long run of &" do
+      assert within_a_second(fn -> RichText.clean(String.duplicate("&", 200_000)) end) ==
+               String.duplicate("&amp;", 200_000)
+    end
+
+    test "on a long run of &#" do
+      assert within_a_second(fn -> RichText.clean(String.duplicate("&#", 100_000)) end) ==
+               String.duplicate("&amp;#", 100_000)
+    end
+
+    test "on a long run of & followed by a letter" do
+      assert within_a_second(fn -> RichText.clean(String.duplicate("&a", 100_000)) end) ==
+               String.duplicate("&amp;a", 100_000)
+    end
+  end
+
+  describe "clean/1 keeps character references" do
+    test "named, numeric and hexadecimal ones, as the characters they stand for" do
+      assert RichText.clean("&amp; &nbsp; &#39; &eacute; &#x41;") == "&amp; \u00A0 ' é A"
+    end
+
+    test "and writes an & that doesn't start one as &amp;" do
+      assert RichText.clean("AT&T a&b") == "AT&amp;T a&amp;b"
+    end
+  end
+
+  describe "clean/1 leaves no placeholders between tags" do
+    test "for a tab before a removed tag" do
+      assert RichText.clean("<div>a</div>\t<font>b</font>") == "<div>a</div>\tb"
+    end
+
+    test "for spaces before a removed tag" do
+      assert RichText.clean("<div>a</div>   <font>b</font>") == "<div>a</div>   b"
+    end
+
+    test "for a line break before a removed tag" do
+      assert RichText.clean("<div>a</div>\n<font>b</font>") == "<div>a</div>\nb"
     end
   end
 
@@ -172,4 +284,20 @@ defmodule Frameworks.Pixel.RichTextTest do
   defp attribute(_tag, attribute), do: [attribute]
 
   defp escape(text), do: text |> Phoenix.HTML.html_escape() |> Phoenix.HTML.safe_to_string()
+
+  defp attachment(description) do
+    description
+    |> Map.new(fn {key, value} -> {to_string(key), value} end)
+    |> Jason.encode!()
+    |> escape()
+  end
+
+  defp within_a_second(fun) do
+    task = Task.async(fun)
+
+    case Task.yield(task, 1_000) || Task.shutdown(task, :brutal_kill) do
+      {:ok, result} -> result
+      nil -> flunk("took longer than a second")
+    end
+  end
 end

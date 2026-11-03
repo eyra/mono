@@ -22,7 +22,7 @@ defmodule Systems.Manual.PageModel do
   def changeset(page, attrs \\ %{}) do
     page
     |> cast(attrs, @fields)
-    |> update_change(:text, &RichText.clean/1)
+    |> RichText.clean_change(:text)
   end
 
   def validate(changeset) do

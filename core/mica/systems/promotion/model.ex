@@ -81,8 +81,6 @@ defmodule Systems.Promotion.Model do
   end
 
   defp clean_wysiwyg_fields(changeset) do
-    Enum.reduce(@wysiwyg_fields, changeset, fn field, changeset ->
-      update_change(changeset, field, &RichText.clean/1)
-    end)
+    Enum.reduce(@wysiwyg_fields, changeset, &RichText.clean_change(&2, &1))
   end
 end

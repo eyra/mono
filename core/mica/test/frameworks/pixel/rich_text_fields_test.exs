@@ -2,9 +2,14 @@ defmodule Frameworks.Pixel.RichTextFieldsTest do
   use ExUnit.Case, async: true
 
   import Ecto.Changeset, only: [get_change: 2]
+  import Mica.DataCase, only: [errors_on: 1]
 
+  alias Frameworks.Pixel.RichText
   alias Frameworks.Pixel.WysiwygAreaHelpers
-  alias Systems.{Consent, Content, Manual, Promotion}
+  alias Systems.Consent
+  alias Systems.Content
+  alias Systems.Manual
+  alias Systems.Promotion
 
   @dirty ~s|<div onclick="alert(1)"><!--block--><strong>Hi</strong><script>alert(1)</script></div>|
   @clean "<div><strong>Hi</strong></div>"
@@ -37,6 +42,29 @@ defmodule Frameworks.Pixel.RichTextFieldsTest do
         # Plain text, shown escaped.
         assert get_change(changeset, :title) == @dirty
       end
+    end
+  end
+
+  describe "a rich-text field's size" do
+    test "up to the limit is accepted" do
+      body = String.duplicate("a", RichText.max_bytes())
+      changeset = Content.PageModel.changeset(%Content.PageModel{}, %{body: body})
+
+      assert changeset.valid?
+    end
+
+    test "over the limit is an error" do
+      body = String.duplicate("a", RichText.max_bytes() + 1)
+      changeset = Content.PageModel.changeset(%Content.PageModel{}, %{body: body})
+
+      assert %{body: ["should be at most 2000000 byte(s)"]} = errors_on(changeset)
+    end
+
+    test "over the limit isn't cleaned" do
+      body = "<script>x</script>" <> String.duplicate("a", RichText.max_bytes())
+      changeset = Content.PageModel.changeset(%Content.PageModel{}, %{body: body})
+
+      assert get_change(changeset, :body) == body
     end
   end
 

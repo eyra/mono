@@ -29,7 +29,7 @@ defmodule Systems.Consent.RevisionModel do
   def changeset(revision, attrs) do
     revision
     |> cast(attrs, @fields)
-    |> update_change(:source, &RichText.clean/1)
+    |> RichText.clean_change(:source)
   end
 
   def validate(changeset) do
