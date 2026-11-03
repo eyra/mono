@@ -13,6 +13,7 @@
     {"prod",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
@@ -53,6 +54,7 @@
     {"prod-all-oban-plugins",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
@@ -104,6 +106,7 @@
     {"prod-migrate",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
@@ -140,6 +143,7 @@
     {"staging",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
@@ -180,6 +184,7 @@
     {"dev",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
@@ -232,6 +237,7 @@
     {"local",
      [
        oban_queues: [
+         affiliate_callback: 10,
          default: 5,
          email_delivery: 1,
          email_dispatchers: 1,
