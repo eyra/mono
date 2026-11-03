@@ -32,9 +32,14 @@ defmodule Next.Systems.Announcement.ComposePage do
   @impl true
   def get_model(params, _session, %{assigns: %{current_user: user}}) do
     cond do
-      not feature_enabled?(:announcements) -> not_found()
-      not Admin.Public.admin?(user) -> raise AccessDeniedError, "Only system admins compose"
-      true -> load(params)
+      not feature_enabled?(:announcements) ->
+        raise Ecto.NoResultsError, queryable: Announcement.Model
+
+      not Admin.Public.admin?(user) ->
+        raise AccessDeniedError, "Only system admins compose"
+
+      true ->
+        load(params)
     end
   end
 
@@ -43,13 +48,11 @@ defmodule Next.Systems.Announcement.ComposePage do
          %Announcement.Model{} = announcement <- Announcement.Public.get_announcement(id) do
       announcement
     else
-      _ -> not_found()
+      _ -> raise Ecto.NoResultsError, queryable: Announcement.Model
     end
   end
 
   defp load(_params), do: %Announcement.Model{kind: :release_notes, priority: :normal}
-
-  defp not_found, do: raise(Ecto.NoResultsError, queryable: Announcement.Model)
 
   @impl true
   def mount(_params, _session, %{assigns: %{model: announcement}} = socket) do
