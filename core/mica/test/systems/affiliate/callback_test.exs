@@ -2,6 +2,8 @@ defmodule Systems.Affiliate.CallbackTest do
   # Sets the global :affiliate_callback limits.
   use ExUnit.Case, async: false
 
+  import Mock
+
   @moduletag :capture_log
 
   alias Systems.Affiliate
@@ -61,7 +63,54 @@ defmodule Systems.Affiliate.CallbackTest do
       assert_receive {:served, :client_closed}, 1_000
       refute_received {:hackney_response, _, _}
     end
+
+    test "stops the connection when the request fails after connecting" do
+      url = reset_on_accept()
+
+      assert {:error, _reason} = Affiliate.Private.callback(url)
+      assert own_connections() == []
+    end
+
+    test "kills the connection when stopping it raises" do
+      url = serve_once(&:gen_tcp.send(&1, "HTTP/1.1 200 OK\r\ncontent-length: 0\r\n\r\n"))
+      test = self()
+
+      with_mock :hackney_conn, [:passthrough],
+        stop: fn connection, timeout ->
+          if self() == test,
+            do: :erlang.error(:timeout_value),
+            else: passthrough([connection, timeout])
+        end do
+        assert {:ok, 200} = Affiliate.Private.callback(url)
+      end
+
+      assert own_connections() == []
+    end
   end
+
+  # A hackney connection monitors the process that owns it. Waits up to 500 ms
+  # for one that is being killed.
+  defp own_connections(attempts \\ 10) do
+    {:monitored_by, monitors} = Process.info(self(), :monitored_by)
+
+    case Enum.filter(monitors, &hackney_connection?/1) do
+      [_ | _] when attempts > 0 ->
+        Process.sleep(50)
+        own_connections(attempts - 1)
+
+      connections ->
+        connections
+    end
+  end
+
+  defp hackney_connection?(pid) when is_pid(pid) do
+    case Process.info(pid, :dictionary) do
+      {:dictionary, dictionary} -> match?({:hackney_conn, _, _}, dictionary[:"$initial_call"])
+      nil -> false
+    end
+  end
+
+  defp hackney_connection?(_port_or_resource), do: false
 
   defp timed_callback(url, max_ms) do
     {elapsed_us, result} = :timer.tc(fn -> Affiliate.Private.callback(url) end)
@@ -84,6 +133,24 @@ defmodule Systems.Affiliate.CallbackTest do
     end)
 
     "http://localhost:#{port}/callback"
+  end
+
+  # Resets every connection as soon as it's accepted, before the request
+  # arrives.
+  defp reset_on_accept do
+    {:ok, listen} = :gen_tcp.listen(0, [:binary, active: false])
+    {:ok, port} = :inet.port(listen)
+
+    spawn_link(fn -> reset_connections(listen) end)
+
+    "http://localhost:#{port}/callback"
+  end
+
+  defp reset_connections(listen) do
+    {:ok, socket} = :gen_tcp.accept(listen)
+    :ok = :inet.setopts(socket, linger: {true, 0})
+    :gen_tcp.close(socket)
+    reset_connections(listen)
   end
 
   # Announces a 100 MiB body and sends `chunk` every `interval` ms for up to

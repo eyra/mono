@@ -86,12 +86,44 @@ defmodule Systems.Affiliate.Private do
       recv_timeout: deadline
     ]
 
-    with {:ok, ref} <- :hackney.request(:get, url, [], "", options) do
-      result = await_status(ref, max(deadline_at - System.monotonic_time(:millisecond), 0))
-      :hackney_conn.stop(ref, @stop_timeout)
-      flush_responses(ref)
-      result
+    connections_before = own_connections()
+
+    case :hackney.request(:get, url, [], "", options) do
+      {:ok, ref} ->
+        result = await_status(ref, max(deadline_at - System.monotonic_time(:millisecond), 0))
+        stop_connection(ref)
+        flush_responses(ref)
+        result
+
+      error ->
+        # A request that fails after connecting leaves its connection running.
+        Enum.each(own_connections() -- connections_before, &stop_connection/1)
+        error
     end
+  end
+
+  # A hackney connection monitors the process that owns it.
+  defp own_connections do
+    {:monitored_by, monitors} = Process.info(self(), :monitored_by)
+    Enum.filter(monitors, &hackney_connection?/1)
+  end
+
+  defp hackney_connection?(pid) when is_pid(pid) do
+    case Process.info(pid, :dictionary) do
+      {:dictionary, dictionary} -> match?({:hackney_conn, _, _}, dictionary[:"$initial_call"])
+      nil -> false
+    end
+  end
+
+  defp hackney_connection?(_port_or_resource), do: false
+
+  # `hackney_conn.stop/2` can raise, e.g. OTP's `:timeout_value` when the
+  # connection exits right at the timeout; hackney's own `stop_conn/1` catches
+  # every class too.
+  defp stop_connection(connection) do
+    :hackney_conn.stop(connection, @stop_timeout)
+  catch
+    _kind, _reason -> Process.exit(connection, :kill)
   end
 
   defp await_status(ref, timeout) do
