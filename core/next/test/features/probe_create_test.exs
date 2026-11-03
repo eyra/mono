@@ -49,7 +49,7 @@ defmodule NextWeb.Features.ProbeCreateTest do
     |> fill_in(Query.css("[data-testid='signin-password-input']"), with: password)
     |> click(Query.css("[data-testid='signin-submit-button']"))
     |> assert_path_changed_from("/user/signin")
-    |> assert_has(Query.css("[data-testid='create-first-project-button']"))
+    |> assert_connected("[data-testid='create-first-project-button']")
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))

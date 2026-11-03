@@ -36,7 +36,7 @@ defmodule MicaWeb.Features.TermsAndPrivacyOnboardingTest do
     |> assert_connected("[data-testid='mock-auth-signin-page']")
     |> click(Query.css("[data-testid='mock-auth-submit-button']"))
     # First step: terms-and-privacy
-    |> assert_has(Query.css("[data-testid='terms-and-privacy-onboarding-terms']"))
+    |> assert_connected("[data-testid='terms-and-privacy-onboarding-terms']")
     # Continue without accepting terms → flash error
     |> click(Query.css("[data-testid='onboarding-continue']"))
     |> assert_has(Query.css("[role='alert']"))
