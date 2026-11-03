@@ -95,7 +95,7 @@ defmodule Mica.Factories do
 
   def build(:authentication_entity) do
     build(:authentication_entity, %{
-      identifier: "Systems.Account.User:#{Faker.Random.Elixir.random_between(1, 1_000_000)}"
+      identifier: "Mica.Factories:#{System.unique_integer([:positive])}"
     })
   end
 
