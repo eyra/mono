@@ -107,8 +107,8 @@ defmodule Systems.Announcement.PageTest do
 
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 
-      assert NextAction.Public.next_best_action_for_key(creator, ReadAnnouncement.key(other_id))
-      refute NextAction.Public.next_best_action_for_key(creator, ReadAnnouncement.key(id))
+      assert NextAction.Public.next_best_action_for_scope(creator, ReadAnnouncement, [other_id])
+      refute NextAction.Public.next_best_action_for_scope(creator, ReadAnnouncement, [id])
     end
 
     test "an open page shows an edit at once and the announcement stays read", %{

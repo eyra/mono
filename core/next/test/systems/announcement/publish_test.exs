@@ -493,10 +493,14 @@ defmodule Systems.Announcement.PublishTest do
       assert length(announcement.recipient_ids) == 1_202
       assert length(recipient_ids(announcement)) == 1_202
 
+      action = to_string(ReadAnnouncement)
       key = ReadAnnouncement.key(announcement.id)
 
       assert 1_202 ==
-               Repo.aggregate(from(na in NextAction.Model, where: na.key == ^key), :count)
+               Repo.aggregate(
+                 from(na in NextAction.Model, where: na.action == ^action and na.key == ^key),
+                 :count
+               )
     end
   end
 end
