@@ -166,3 +166,7 @@ msgstr "Read this announcement in Next"
 #, elixir-autogen, elixir-format
 msgid "form.notice.changed_since_loaded"
 msgstr "This announcement was changed in the meantime, so your changes were not saved. Cancel and open it again to see the latest version."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.no_recipients"
+msgstr "No creators match these filters and search, so nothing was published. Change the filters or search and press Publish again."

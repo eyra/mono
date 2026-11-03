@@ -66,8 +66,8 @@ defmodule Systems.Announcement.AdminViewTest do
     Repo.all(from(a in Announcement.Model, select: a.recipient_ids))
   end
 
-  # Sends the count on the Publish button, as the browser does ("0" when the
-  # button is off).
+  # Sends the count on the Publish button, as the browser does ("0" when there
+  # is no button).
   defp publish(view, attrs, body), do: publish(view, attrs, body, shown_count(view))
 
   defp publish(view, attrs, body, shown_count) do
@@ -424,7 +424,7 @@ defmodule Systems.Announcement.AdminViewTest do
       assert stored_recipient_ids() == [[verified.id]]
     end
 
-    test "with nobody in the audience, Publish is off and nothing is published", %{
+    test "with nobody in the audience, Publish says what to change and publishes nothing", %{
       conn: conn,
       admin: admin
     } do
@@ -432,8 +432,10 @@ defmodule Systems.Announcement.AdminViewTest do
       render_click(view, "new_announcement")
       search(view, "nobody")
 
-      refute has_element?(view, "button[data-testid='publish-announcement-button']")
+      assert has_element?(view, "button[data-testid='publish-announcement-button'][value='0']")
+      refute has_element?(view, "[data-testid='publish-announcement-button'][disabled]")
       assert recipient_count_text(view) =~ "No creators match"
+      refute has_element?(view, "[data-testid='announcement-compose-notice']")
 
       publish(view, @attrs, "<div>Text</div>")
 
@@ -441,8 +443,55 @@ defmodule Systems.Announcement.AdminViewTest do
       refute_enqueued(worker: Announcement.DeliverJob)
       assert has_element?(view, "[data-testid='announcement-form']")
 
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "No creators match these filters and search, so nothing was published. " <>
+                 "Change the filters or search and press Publish again."
+             )
+
       publish(view, %{@attrs | "title" => "Changed"}, "<div>Text</div>")
       assert [%Announcement.Model{title: "Changed"}] = Repo.all(Announcement.Model)
+    end
+
+    test "changing the audience after a refused Publish drops the notice", %{
+      conn: conn,
+      admin: admin
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      search(view, "nobody")
+      publish(view, @attrs, "<div>Text</div>")
+      assert has_element?(view, "[data-testid='announcement-compose-notice']")
+
+      search(view, "bram")
+
+      refute has_element?(view, "[data-testid='announcement-compose-notice']")
+      assert recipient_count_text(view) =~ "1 creator will receive this announcement."
+    end
+
+    test "when the audience emptied since it was shown, nothing is published", %{
+      conn: conn,
+      admin: admin,
+      unverified: unverified
+    } do
+      view = mount_view(conn, admin)
+      render_click(view, "new_announcement")
+      search(view, "bram")
+      assert recipient_count_text(view) =~ "1 creator will receive this announcement."
+
+      unverified |> Ecto.Changeset.change(confirmed_at: nil) |> Repo.update!()
+      publish(view, @attrs, "<div>Text</div>", "1")
+
+      assert [%Announcement.Model{published_at: nil}] = Repo.all(Announcement.Model)
+      refute_enqueued(worker: Announcement.DeliverJob)
+      assert recipient_count_text(view) =~ "No creators match"
+
+      assert has_element?(
+               view,
+               "[data-testid='announcement-compose-notice']",
+               "so nothing was published"
+             )
     end
 
     test "a saved announcement is opened again and published", %{conn: conn, admin: admin} do

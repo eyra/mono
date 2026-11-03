@@ -168,3 +168,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "form.notice.changed_since_loaded"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.no_recipients"
+msgstr ""

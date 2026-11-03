@@ -173,9 +173,8 @@ defmodule Systems.Announcement.AdminView do
 
   defp publish_or_close(socket, _announcement, nil), do: close_form(socket)
 
-  # When it isn't published the form stays open on the saved announcement:
-  # with no recipients the view model already says that nobody matches, and
-  # a changed audience shows its new count with a notice.
+  # When it isn't published the form stays open on the saved announcement,
+  # with a notice that says what to change.
   defp publish_or_close(
          %{assigns: %{audience_filters: filters, audience_query: query}} = socket,
          announcement,
@@ -183,7 +182,7 @@ defmodule Systems.Announcement.AdminView do
        ) do
     case Announcement.Public.publish_announcement(announcement, filters, query, shown_count) do
       {:ok, _announcement} -> close_form(socket)
-      {:error, :no_recipients} -> update_view_model(socket)
+      {:error, :no_recipients} -> show_notice(socket, :no_recipients)
       {:error, {:audience_changed, _count}} -> show_notice(socket, :audience_changed)
       {:error, :already_published} -> show_notice(socket, :already_published)
     end
@@ -402,7 +401,7 @@ defmodule Systems.Announcement.AdminView do
         face={%{type: :secondary, label: @labels.save_button}}
         testid="save-announcement-button"
       />
-      <%= if @publish? and @recipient_count > 0 do %>
+      <%= if @publish? do %>
         <button
           type="submit"
           form="announcement_form"
@@ -413,14 +412,6 @@ defmodule Systems.Announcement.AdminView do
         >
           <Button.Face.primary label={@labels.publish_button} />
         </button>
-      <% end %>
-      <%= if @publish? and @recipient_count == 0 do %>
-        <Button.dynamic
-          action={%{type: :fake}}
-          face={%{type: :primary, label: @labels.publish_button}}
-          enabled?={false}
-          testid="publish-announcement-button"
-        />
       <% end %>
       <Button.dynamic
         action={%{type: :send, event: "cancel_announcement"}}
