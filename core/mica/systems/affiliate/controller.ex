@@ -26,7 +26,7 @@ defmodule Systems.Affiliate.Controller do
         too_many_requests(conn)
 
       {:error, _} ->
-        Logger.error("Invalid recruit sqid=#{sqid}")
+        Logger.error("Invalid recruit sqid=#{inspect(sqid)}")
         forbidden(conn)
     end
   end

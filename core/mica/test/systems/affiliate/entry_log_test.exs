@@ -78,4 +78,17 @@ defmodule Systems.Affiliate.EntryLogTest do
       assert log =~ "unexpected sqid"
     end
   end
+
+  describe "GET /r/:sqid refused entries" do
+    test "a sqid with a newline logs on one line, escaped", %{conn: conn} do
+      {conn, log} =
+        with_log(fn ->
+          get(conn, "/r/abc%0Aforged-entry")
+        end)
+
+      assert conn.status == 403
+      refute log =~ "\nforged-entry"
+      assert log =~ ~S(abc\nforged-entry)
+    end
+  end
 end
