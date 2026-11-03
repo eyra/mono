@@ -178,6 +178,8 @@ defmodule Systems.Feldspar.ControllerTest do
 
     test "creates no atoms from unknown context keys", %{conn: conn} do
       {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+      # A first request loads modules, which adds atoms; count only the second one.
+      post_donation(conn, context_with_keys(unique_keys()))
       keys = unique_keys()
       atom_count = :erlang.system_info(:atom_count)
 
