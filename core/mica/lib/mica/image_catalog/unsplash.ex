@@ -30,11 +30,7 @@ defmodule Mica.ImageCatalog.Unsplash.HTTP do
     :hackney.request(:get, url, headers, "", []) |> parse_response()
   end
 
-  defp parse_response({:ok, _, _, client_ref}) do
-    with {:ok, body} <- :hackney.body(client_ref) do
-      Jason.decode(body)
-    end
-  end
+  defp parse_response({:ok, _, _, body}), do: Jason.decode(body)
 
   # 200 - OK 	Everything worked as expected
   # 400 - Bad Request 	The request was unacceptable, often due to missing a required parameter
