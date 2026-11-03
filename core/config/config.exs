@@ -234,6 +234,10 @@ config :mica, :paper,
 
 config :ex_aws, http_client: Mica.ExAws.Hackney
 
+# hackney 4 offers HTTP/2 over ALPN by default; outbound HTTPS stays on HTTP/1.1
+# as it was on hackney 1.x.
+config :hackney, default_protocols: [:http1]
+
 # Temp file store for Storage system (stores data donations before delivery)
 config :mica, :temp_file_store, module: Systems.Feldspar.DataDonationFolder
 
