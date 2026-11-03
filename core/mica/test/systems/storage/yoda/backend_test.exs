@@ -86,6 +86,75 @@ defmodule Systems.Storage.Yoda.BackendTest do
     end
   end
 
+  describe "store/3 answer status" do
+    setup do
+      bypass = Bypass.open()
+
+      %{
+        bypass: bypass,
+        endpoint: %{
+          "user" => "researcher",
+          "password" => "secret",
+          "url" => "http://localhost:#{bypass.port}/folder"
+        }
+      }
+    end
+
+    test "counts a 201 as delivered", %{bypass: bypass, endpoint: endpoint} do
+      Bypass.expect_once(bypass, "PUT", "/folder/participant=1.json", fn conn ->
+        Plug.Conn.resp(conn, 201, "")
+      end)
+
+      assert :ok = Backend.store(endpoint, "{}", %{"identifier" => [[:participant, 1]]})
+    end
+
+    test "counts a 204 as delivered", %{bypass: bypass, endpoint: endpoint} do
+      Bypass.expect_once(bypass, "PUT", "/folder/participant=1.json", fn conn ->
+        Plug.Conn.resp(conn, 204, "")
+      end)
+
+      assert :ok = Backend.store(endpoint, "{}", %{"identifier" => [[:participant, 1]]})
+    end
+
+    for status <- [401, 403, 404, 500] do
+      test "returns an error naming a #{status}", %{bypass: bypass, endpoint: endpoint} do
+        Bypass.expect_once(bypass, "PUT", "/folder/participant=1.json", fn conn ->
+          Plug.Conn.resp(conn, unquote(status), "")
+        end)
+
+        assert {:error, {:http_status, unquote(status)}} =
+                 Backend.store(endpoint, "{}", %{"identifier" => [[:participant, 1]]})
+      end
+    end
+  end
+
+  describe "connected?/1" do
+    setup do
+      bypass = Bypass.open()
+
+      %{
+        bypass: bypass,
+        endpoint: %{
+          user: "researcher",
+          password: "secret",
+          url: "http://localhost:#{bypass.port}/folder"
+        }
+      }
+    end
+
+    test "is true when the folder answers 200", %{bypass: bypass, endpoint: endpoint} do
+      Bypass.expect_once(bypass, "HEAD", "/folder", fn conn -> Plug.Conn.resp(conn, 200, "") end)
+
+      assert Backend.connected?(endpoint)
+    end
+
+    test "is false when the folder answers 401", %{bypass: bypass, endpoint: endpoint} do
+      Bypass.expect_once(bypass, "HEAD", "/folder", fn conn -> Plug.Conn.resp(conn, 401, "") end)
+
+      refute Backend.connected?(endpoint)
+    end
+  end
+
   defp read_head(socket, acc) do
     if String.contains?(acc, "\r\n\r\n") do
       acc |> String.split("\r\n\r\n") |> hd()

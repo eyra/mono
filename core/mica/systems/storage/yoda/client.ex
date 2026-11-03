@@ -2,17 +2,19 @@ defmodule Systems.Storage.Yoda.Client do
   alias Frameworks.Utility.HTTPClient
   require Logger
 
-  # issue with HTTPPoison not supporting HTTP method :mkcol
-  @dialyzer {:nowarn_function, create_folder: 3}
-
   def upload_file(username, password, file_url, body) do
     headers = headers(username, password)
-    http_request(:put, file_url, body, headers)
-  end
 
-  def create_folder(username, password, folder_url) do
-    headers = headers(username, password)
-    http_request(:mkcol, folder_url, "", headers)
+    case http_request(:put, file_url, body, headers) do
+      {:ok, %HTTPoison.Response{status_code: status} = response} when status in 200..299 ->
+        {:ok, response}
+
+      {:ok, %HTTPoison.Response{status_code: status}} ->
+        {:error, {:http_status, status}}
+
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   def connected?(username, password, folder_url) do
