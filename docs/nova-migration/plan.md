@@ -71,7 +71,7 @@ flowchart LR
   ops_mica_dev --> ops_prod_image
   ops_prod_image -.->|before, not in the same release window| code_split
 
-  code_systems --> code_rename[code-rename]
+  code_systems --> code_rename[code-rename]:::done
   code_systems --> code_brand[code-brand]
   code_systems --> code_registry[code-registry]
   code_systems --> code_instance[code-instance]
@@ -79,7 +79,7 @@ flowchart LR
   code_registry --> data_tables[data-tables]
   code_instance --> data_tables
 
-  code_rename --> code_compose[code-compose]
+  code_rename --> code_compose[code-compose]:::next
   code_compose --> code_split[code-split]
   code_rename --> code_split
   code_brand --> code_split
@@ -93,13 +93,11 @@ flowchart LR
   feldspar_transfer -.-|not in the same window| ops_cutover
 ```
 
-- **Done:** code-guardrails, code-cleanup, code-layout, ops-mica-dev, code-systems (merged; its production checks ship with M34).
+- **Done:** code-guardrails, code-cleanup, code-layout, ops-mica-dev, code-systems (merged; its production checks ship with M34), code-rename (mono#1989, merged 2026-11-03).
 - **In progress:** build-image (M0 and M1 done; M2–M4 and the rehearsal R open).
-- **Next:** code-rename, then code-compose (decided 2026-10-30: rename first, so code-compose's new modules get their Mica names).
-- **Can start now:** feldspar-protocol, and the first run of repo-assess.
-- **Recommended, not blocking:** build-image ideally before code-rename. ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
-- **Can run in parallel after code-systems:** code-brand, code-registry and the items of code-instance.
-- **Merge freeze:** code-rename, like code-layout: it touches almost every file, so every open PR has to catch up with it.
+- **Next:** code-compose, on the critical path to code-split.
+- **Can start now:** code-brand, code-registry and the items of code-instance (Graphite and Zircon after code-registry), in parallel; feldspar-protocol; the first run of repo-assess.
+- **Recommended, not blocking:** ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
 - **Strictly sequential:** code-layout → code-systems → code-rename → code-compose, then data-tables → code-split → repo-create → ops-cutover.
 
 ## Summary
@@ -709,7 +707,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Licence.** This repository and `eyra/feldspar` are AGPL-3.0 ([`COPYING.md`](../../COPYING.md)). Two questions need legal input, not an engineering answer:
     - the copyright holder and notices under Nova, and a contributor agreement for non-Eyra contributors
     - the consequences for operators, including for `eyra/next`
-  - **Dependencies.** Mica would rely on these Eyra-owned forks: `bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`. `@novasoftwarefoundation/prism` already belongs to Nova.
+  - **Dependencies.** Mica would rely on these Eyra-owned forks: `bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`. Prism (`novasoftwarefoundation/prism`, a Mix git dependency pinned by tag) already belongs to Nova.
   - **GitHub setup:**
     - org access, teams and branch protection
     - Actions secrets for Mica CI (no Eyra production secrets)
