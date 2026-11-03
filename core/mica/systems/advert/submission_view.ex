@@ -1,5 +1,5 @@
 defmodule Systems.Advert.SubmissionView do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text

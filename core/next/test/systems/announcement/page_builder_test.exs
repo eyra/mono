@@ -1,7 +1,7 @@
-defmodule Systems.Announcement.PageBuilderTest do
+defmodule Next.Systems.Announcement.PageBuilderTest do
   use ExUnit.Case, async: true
 
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   @recipient %Announcement.RecipientModel{
     announcement: %Announcement.Model{
@@ -38,5 +38,5 @@ defmodule Systems.Announcement.PageBuilderTest do
     end
   end
 
-  defp in_locale(locale, fun), do: Gettext.with_locale(CoreWeb.Gettext, locale, fun)
+  defp in_locale(locale, fun), do: Gettext.with_locale(MicaWeb.Gettext, locale, fun)
 end

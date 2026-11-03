@@ -1,5 +1,5 @@
-defmodule Systems.Zircon.Screening.HTML do
-  use CoreWeb, :html
+defmodule Next.Systems.Zircon.Screening.HTML do
+  use MicaWeb, :html
 
   attr(:id, :string, required: true)
   attr(:title, :string, required: true)

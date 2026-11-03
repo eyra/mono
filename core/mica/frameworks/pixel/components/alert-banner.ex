@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.AlertBanner do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Button
 

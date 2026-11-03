@@ -1,14 +1,14 @@
-defmodule Systems.Ontology.Public do
-  use Core, :auth
-  use Systems.Ontology.Constants
+defmodule Next.Systems.Ontology.Public do
+  use Mica, :auth
+  use Next.Systems.Ontology.Constants
 
   import Ecto.Query, only: [order_by: 3, select: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
-  import Systems.Ontology.Queries
+  import Next.Systems.Ontology.Queries
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
-  alias Systems.Ontology
+  alias Next.Systems.Ontology
 
   @ontology_ref_conflict_opts [
     conflict_target: [:concept_id, :predicate_id],

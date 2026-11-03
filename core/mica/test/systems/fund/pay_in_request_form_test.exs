@@ -4,13 +4,13 @@ defmodule Systems.Fund.PayInRequestFormTest do
   provider refuses the first pay-in (UC-OPP-01.A1).
   """
 
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Mox
   import Ecto.Query, only: [from: 2]
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Assignment
   alias Systems.Payment.ProviderMock
   alias Systems.Project

@@ -58,7 +58,7 @@ fly ssh console -a <app> -C '/opt/app/bin/core rpc "
   now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
   user
   |> Ecto.Changeset.change(%{confirmed_at: now, verified_at: now, creator: true})
-  |> Core.Repo.update!()
+  |> Mica.Repo.update!()
 "'
 ```
 

@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.ActivateAccountView do
-  use CoreWeb, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :embedded_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Flash
   alias Frameworks.Pixel.Text
-  alias CoreWeb.UI.Area
-  alias CoreWeb.UI.Margin
+  alias MicaWeb.UI.Area
+  alias MicaWeb.UI.Margin
 
   alias Systems.Account
 
@@ -25,7 +25,7 @@ defmodule Systems.Assignment.ActivateAccountView do
   def handle_event("resend", _params, %{assigns: %{model: user}} = socket) do
     case Account.Public.deliver_user_confirmation_instructions(
            user,
-           &(CoreWeb.Endpoint.url() <> "/user/onboarding/confirm/#{&1}")
+           &(MicaWeb.Endpoint.url() <> "/user/onboarding/confirm/#{&1}")
          ) do
       {:ok, _} ->
         {:noreply,

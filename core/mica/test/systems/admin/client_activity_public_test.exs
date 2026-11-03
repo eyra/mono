@@ -1,9 +1,9 @@
 defmodule Systems.Admin.ClientActivityPublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   import Systems.Admin.ClientActivityTestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Admin
   alias Systems.Project
 
@@ -53,7 +53,7 @@ defmodule Systems.Admin.ClientActivityPublicTest do
       project = Repo.preload(project, :root)
 
       Repo.update_all(
-        from(role in Core.Authorization.RoleAssignment,
+        from(role in Mica.Authorization.RoleAssignment,
           where: role.node_id == ^project.auth_node_id
         ),
         set: [inserted_at: ~N[2024-01-01 00:00:00]]

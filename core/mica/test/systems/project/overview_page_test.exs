@@ -1,9 +1,9 @@
 defmodule Systems.Project.OverviewPageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
 
   describe "login page" do
     setup [:login_as_creator]

@@ -1,12 +1,12 @@
-defmodule Systems.Zircon.Screening.ImportViewPaperCountTest do
-  use CoreWeb.ConnCase, async: false
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Zircon.Screening.ImportViewPaperCountTest do
+  use MicaWeb.ConnCase, async: false
+  use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
-  alias Systems.Paper
-  alias Systems.Zircon
-  alias Systems.Zircon.Screening
+  alias Mica.Repo
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
+  alias Next.Systems.Zircon.Screening
 
   setup do
     # Don't isolate signals - we need them for Observatory updates

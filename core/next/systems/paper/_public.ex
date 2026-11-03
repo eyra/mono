@@ -1,18 +1,18 @@
-defmodule Systems.Paper.Public do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Paper.Public do
+  use Gettext, backend: MicaWeb.Gettext
 
-  import Systems.Paper.Queries
+  import Next.Systems.Paper.Queries
   require Ecto.Query
   import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Systems.Content
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   # Reference File
 

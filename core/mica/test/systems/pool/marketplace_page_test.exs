@@ -1,10 +1,10 @@
 defmodule Systems.Pool.MarketplacePageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
   alias Systems.Pool
-  alias Core.Factories
+  alias Mica.Factories
 
   defp test_pool, do: Factories.insert!(:pool, %{name: "test_pool", director: :citizen})
 

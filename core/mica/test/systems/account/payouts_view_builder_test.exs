@@ -1,16 +1,16 @@
 defmodule Systems.Account.PayoutsViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Mox
 
   alias Systems.Account
   alias Systems.Assignment.CurrencyHelpers
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
-  alias Core.Factories
+  alias Mica.Factories
 
   setup :verify_on_exit!
 
-  defp t(key), do: Gettext.dgettext(CoreWeb.Gettext, "eyra-account", key)
+  defp t(key), do: Gettext.dgettext(MicaWeb.Gettext, "eyra-account", key)
 
   describe "bank status" do
     test "no merchant -> not_verified (red, Add) without hitting OPP" do

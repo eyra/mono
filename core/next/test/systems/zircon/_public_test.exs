@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.PublicTest do
-  use Core.DataCase
+defmodule Next.Systems.Zircon.PublicTest do
+  use Mica.DataCase
 
-  alias Core.Factories
-  alias Systems.Annotation
-  alias Systems.Zircon
+  alias Mica.Factories
+  alias Next.Systems.Annotation
+  alias Next.Systems.Zircon
 
   describe "insert_screening_tool_criterion/3" do
     test "inserts a criterion into the screening tool" do

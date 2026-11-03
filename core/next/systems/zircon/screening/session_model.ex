@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.SessionModel do
+defmodule Next.Systems.Zircon.Screening.SessionModel do
   @moduledoc """
   Model for the screening process.
   """
@@ -7,7 +7,7 @@ defmodule Systems.Zircon.Screening.SessionModel do
   use Frameworks.Utility.Schema
   import Ecto.Changeset
 
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
   alias Systems.Account
 
   schema "zircon_screening_session" do

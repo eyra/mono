@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.SignalDispatchTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
   alias Frameworks.Signal
   alias Systems.Assignment

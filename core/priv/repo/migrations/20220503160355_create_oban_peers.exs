@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateObanPeers do
+defmodule Mica.Repo.Migrations.CreateObanPeers do
   use Ecto.Migration
 
   def up, do: Oban.Migrations.up(version: 11)

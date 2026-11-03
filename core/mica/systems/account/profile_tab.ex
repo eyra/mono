@@ -5,7 +5,7 @@ defmodule Systems.Account.ProfileTab do
   """
   @behaviour Systems.Account.Tab
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -27,7 +27,7 @@ defmodule Systems.Account.ProfileTab do
       })
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         :profile_view,
         Account.ProfileView,
         live_context: profile_context

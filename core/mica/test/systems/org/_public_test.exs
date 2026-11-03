@@ -1,7 +1,7 @@
 defmodule Systems.Org.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
   alias Systems.Org.Public
 
@@ -305,7 +305,7 @@ defmodule Systems.Org.PublicTest do
     test "list_owners returns users with :owner role" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["test_uni"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       owners = Public.list_owners(org)
 
@@ -324,8 +324,8 @@ defmodule Systems.Org.PublicTest do
       org2 = Factories.insert!(:org_node, %{identifier: ["org2"]})
       _org3 = Factories.insert!(:org_node, %{identifier: ["org3"]})
 
-      Core.Authorization.assign_role(user, org1, :owner)
-      Core.Authorization.assign_role(user, org2, :owner)
+      Mica.Authorization.assign_role(user, org1, :owner)
+      Mica.Authorization.assign_role(user, org2, :owner)
 
       orgs = Public.list_orgs(user)
 
@@ -356,7 +356,7 @@ defmodule Systems.Org.PublicTest do
     test "revoke_owner/2 removes :owner role from user" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["revoke_owner_org"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       assert length(Public.list_owners(org)) == 1
 
@@ -479,7 +479,7 @@ defmodule Systems.Org.PublicTest do
     test "owns_any?/1 returns true when user owns at least one org" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["owns_any_org"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       assert Public.owns_any?(user)
     end
@@ -498,7 +498,7 @@ defmodule Systems.Org.PublicTest do
     test "can_manage?/2 returns true for org owner" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["can_manage_owner_org"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       assert Public.can_manage?(org, user)
     end
@@ -513,7 +513,7 @@ defmodule Systems.Org.PublicTest do
     test "can_manage?/2 returns false after the owner role is revoked" do
       user = Factories.insert!(:member, %{email: "ex@other.test"})
       org = Factories.insert!(:org_node, %{identifier: ["can_manage_revoked_org"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       assert Public.can_manage?(org, user)
 
@@ -523,11 +523,11 @@ defmodule Systems.Org.PublicTest do
     end
 
     test "can_manage?/2 returns true for system admins regardless of org membership" do
-      # System admin patterns are configured via :core, :admins — set one
+      # System admin patterns are configured via :mica, :admins — set one
       # for the duration of this test so the email matches.
-      original = Application.get_env(:core, :admins, [])
-      Application.put_env(:core, :admins, ["*@admin-can-manage.test"])
-      on_exit(fn -> Application.put_env(:core, :admins, original) end)
+      original = Application.get_env(:mica, :admins, [])
+      Application.put_env(:mica, :admins, ["*@admin-can-manage.test"])
+      on_exit(fn -> Application.put_env(:mica, :admins, original) end)
 
       sysadmin = Factories.insert!(:member, %{email: "anyone@admin-can-manage.test"})
       org = Factories.insert!(:org_node, %{identifier: ["can_manage_sysadmin_org"]})
@@ -634,7 +634,7 @@ defmodule Systems.Org.PublicTest do
 
       # Create an owner for the org
       owner = Factories.insert!(:member)
-      Core.Authorization.assign_role(owner, org, :owner)
+      Mica.Authorization.assign_role(owner, org, :owner)
 
       # Create a new user with matching domain
       new_user = Factories.insert!(:member, %{email: "newuser@sync-test.example"})
@@ -659,7 +659,7 @@ defmodule Systems.Org.PublicTest do
 
       # Create an owner for the org
       owner = Factories.insert!(:member)
-      Core.Authorization.assign_role(owner, org, :owner)
+      Mica.Authorization.assign_role(owner, org, :owner)
 
       # Create a new user with non-matching domain
       new_user = Factories.insert!(:member, %{email: "newuser@other-domain.test"})
@@ -685,8 +685,8 @@ defmodule Systems.Org.PublicTest do
       # Create two owners for the org
       owner1 = Factories.insert!(:member)
       owner2 = Factories.insert!(:member)
-      Core.Authorization.assign_role(owner1, org, :owner)
-      Core.Authorization.assign_role(owner2, org, :owner)
+      Mica.Authorization.assign_role(owner1, org, :owner)
+      Mica.Authorization.assign_role(owner2, org, :owner)
 
       # Create a new user with matching domain
       new_user = Factories.insert!(:member, %{email: "newuser@multi-owner.test"})

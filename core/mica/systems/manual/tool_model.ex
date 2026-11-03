@@ -3,17 +3,17 @@ defmodule Systems.Manual.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  require Core.Env
-  @tool_directors Core.Env.compile_env(:tool_directors)
+  require Mica.Env
+  @tool_directors Mica.Env.compile_env(:tool_directors)
 
   alias Systems.Manual
 
   schema "manual_tool" do
     field(:director, Ecto.Enum, values: @tool_directors)
     belongs_to(:manual, Manual.Model)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     timestamps()
   end
@@ -45,7 +45,7 @@ defmodule Systems.Manual.ToolModel do
   def preload_graph(:manual), do: [manual: Manual.Model.preload_graph(:down)]
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Systems.Manual
     def key(_), do: :manual

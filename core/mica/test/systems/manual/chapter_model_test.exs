@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ChapterModelTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Manual.ChapterModel
 

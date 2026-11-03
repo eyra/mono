@@ -1,8 +1,8 @@
-defmodule Systems.Graphite.ToolViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Graphite.ToolViewBuilderTest do
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   describe "view_model/2" do
     setup do

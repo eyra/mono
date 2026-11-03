@@ -1,14 +1,14 @@
-defmodule Systems.Announcement.ToDoOrderTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Announcement.ToDoOrderTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.Assignment.NextActions.PendingContributions
   alias Systems.NextAction
 

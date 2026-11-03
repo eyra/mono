@@ -6,12 +6,12 @@
 # eyra/devops (ansible/roles/predeploy/templates/bundle.service). Staging: the
 # `[env]` table of fly.staging.toml, the `--env` names its deploy workflow
 # passes and the app's Fly secrets (`fly secrets list --json`). The release
-# reads: the names in config/runtime.exs and Core.RuntimeConfig, the names lib
+# reads: the names in config/runtime.exs and Mica.RuntimeConfig, the names lib
 # code reads with System.get_env/fetch_env, the names rel/env.sh.eex reads and
 # those of the Elixir release start script.
 #
 # Fails when a name the release requires (System.fetch_env!/1 or
-# Core.RuntimeConfig.fetch!/2) is missing on either side, or when a name differs
+# Mica.RuntimeConfig.fetch!/2) is missing on either side, or when a name differs
 # between production and staging (read but set on one side only, or set but
 # never read) and env_names_accepted.exs does not list it with a reason.
 #

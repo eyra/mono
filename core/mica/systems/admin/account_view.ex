@@ -1,5 +1,5 @@
 defmodule Systems.Admin.AccountView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
@@ -27,7 +27,7 @@ defmodule Systems.Admin.AccountView do
   defp save(socket, user_id_string, attrs) do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
     changeset = Account.User.admin_changeset(user, attrs)
-    {:ok, _} = Core.Persister.save(user, changeset)
+    {:ok, _} = Mica.Persister.save(user, changeset)
     socket |> update_view_model()
   end
 

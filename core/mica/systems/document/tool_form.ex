@@ -1,6 +1,6 @@
 defmodule Systems.Document.ToolForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, accept: ~w(.pdf)
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, accept: ~w(.pdf)
 
   alias Systems.{
     Document

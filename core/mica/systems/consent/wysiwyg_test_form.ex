@@ -1,5 +1,5 @@
 defmodule Systems.Consent.WysiwygTestForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   @impl true
   def update(%{x: x}, socket) do

@@ -1,11 +1,11 @@
-defmodule Systems.Zircon.Switch do
+defmodule Next.Systems.Zircon.Switch do
   use Frameworks.Signal.Handler
 
-  alias Core.Repo
-  alias Systems.Annotation
+  alias Mica.Repo
+  alias Next.Systems.Annotation
   alias Systems.Observatory
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   def intercept(
         {:paper_reference_file, :updated},
@@ -135,7 +135,7 @@ defmodule Systems.Zircon.Switch do
       # Get the paper_set associated with the tool with papers preloaded
       paper_set =
         Paper.Public.obtain_paper_set!(:zircon_screening_tool, tool.id)
-        |> Core.Repo.preload([:papers])
+        |> Mica.Repo.preload([:papers])
 
       update_paper_set_view(paper_set, from_pid)
     end

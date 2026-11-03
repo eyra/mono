@@ -1,8 +1,8 @@
-defmodule Systems.Announcement.Queries do
+defmodule Next.Systems.Announcement.Queries do
   import Ecto.Query
 
   alias Systems.Account.User
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   def announcement_query do
     from(a in Announcement.Model, as: :announcement)

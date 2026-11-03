@@ -1,6 +1,6 @@
-defmodule Systems.Zircon.Screening.PaperSetViewBuilderTest do
-  use Core.DataCase
-  alias Systems.Zircon.Screening.PaperSetViewBuilder
+defmodule Next.Systems.Zircon.Screening.PaperSetViewBuilderTest do
+  use Mica.DataCase
+  alias Next.Systems.Zircon.Screening.PaperSetViewBuilder
 
   describe "view_model/2 basic functionality" do
     test "creates view model with default values" do

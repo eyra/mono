@@ -1,7 +1,7 @@
 defmodule Systems.Promotion.Test do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Frameworks.Signal.TestHelper
-  alias Core.Factories
+  alias Mica.Factories
 
   alias Systems.{
     Pool

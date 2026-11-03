@@ -1,4 +1,4 @@
-defmodule Systems.Student.Course do
+defmodule Next.Systems.Student.Course do
   @moduledoc """
     Defines student course using organisation nodes.
   """

@@ -4,9 +4,9 @@ defmodule Systems.Admin.SwitchTest do
   AddDomainMembers NextAction banner as Desktop and must rebuild its
   view model when NextActions change so the banner disappears live.
   """
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
-  alias CoreWeb.Endpoint
+  alias MicaWeb.Endpoint
   alias Systems.Admin
 
   describe "intercept/2" do

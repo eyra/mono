@@ -1,7 +1,7 @@
 defmodule Systems.Payment.Routes do
   defmacro routes() do
     quote do
-      require Core.Env
+      require Mica.Env
 
       scope "/api/payment", Systems.Payment do
         pipe_through([:api])
@@ -13,7 +13,7 @@ defmodule Systems.Payment.Routes do
       # so it can't be reached even if PAYMENT_PROVIDER is misconfigured at
       # runtime. Enabled for :dev/:test and for non-production release builds
       # via the ENABLE_E2E_SUPPORT build arg (see config/config.exs).
-      if Core.Env.compile_env(:enable_e2e_support, false) do
+      if Mica.Env.compile_env(:enable_e2e_support, false) do
         scope "/payment/local", Systems.Payment.Provider do
           pipe_through([:browser])
           get("/:uid", LocalController, :pay)

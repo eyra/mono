@@ -1,8 +1,8 @@
-defmodule Next.Menu.Items do
-  use CoreWeb, :verified_routes
-  @behaviour CoreWeb.Menu.ItemsProvider
+defmodule NextWeb.Menu.Items do
+  use MicaWeb, :verified_routes
+  @behaviour MicaWeb.Menu.ItemsProvider
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   alias Phoenix.LiveView.JS
 
   @impl true

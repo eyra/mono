@@ -1,5 +1,5 @@
 defmodule Systems.Workflow.BuilderView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   require Logger
 

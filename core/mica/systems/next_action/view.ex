@@ -1,5 +1,5 @@
 defmodule Systems.NextAction.View do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)

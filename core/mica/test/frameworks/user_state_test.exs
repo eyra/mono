@@ -1,5 +1,5 @@
 defmodule Frameworks.UserStateTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
 
@@ -73,7 +73,7 @@ defmodule Frameworks.UserStateTest do
 
   describe "publish_user_state_change/3" do
     defmodule TestLeafView do
-      use CoreWeb, :embedded_live_view
+      use MicaWeb, :embedded_live_view
 
       alias Frameworks.Concept.LiveContext
 

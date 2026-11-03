@@ -1,9 +1,9 @@
-defmodule Systems.Paper.RISLineTrackingTest do
-  use Core.DataCase, async: true
+defmodule Next.Systems.Paper.RISLineTrackingTest do
+  use Mica.DataCase, async: true
 
-  alias Systems.Paper.RISParser
-  alias Systems.Paper.RISProcessor
-  alias Systems.Paper.RISEntry
+  alias Next.Systems.Paper.RISParser
+  alias Next.Systems.Paper.RISProcessor
+  alias Next.Systems.Paper.RISEntry
 
   describe "line number tracking in parse errors" do
     test "tracks line number for invalid RIS line format" do
@@ -298,7 +298,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
 
   describe "error display in UI layer" do
     test "ImportSessionWarningsViewBuilder extracts message from structured error" do
-      alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
+      alias Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
       # Session with structured errors
       session = %{
@@ -341,7 +341,7 @@ defmodule Systems.Paper.RISLineTrackingTest do
     end
 
     test "ImportSessionWarningsViewBuilder handles mixed error formats" do
-      alias Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
+      alias Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilder
 
       session = %{
         status: :activated,

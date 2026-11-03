@@ -1,10 +1,10 @@
 import Config
 
-config :core, saas: Next.SaaS
+config :mica, saas: Next.SaaS
 
-config :core, assignment_templates: [Systems.Probe.AssignmentTemplate]
+config :mica, assignment_templates: [Next.Systems.Probe.AssignmentTemplate]
 
-config :core, :account,
+config :mica, :account,
   auth_methods: %{
     surfconext: %{provider: true, satellite: true},
     centerdata: %{provider: true, satellite: true},
@@ -12,4 +12,4 @@ config :core, :account,
     email: %{provider: false, satellite: true}
   }
 
-config :core, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]
+config :mica, :pixel, pool_assets: [:panl, :panl_wide, :panl_dark, :panl_wide_dark]

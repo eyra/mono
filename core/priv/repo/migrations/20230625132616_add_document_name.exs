@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddDocumentName do
+defmodule Mica.Repo.Migrations.AddDocumentName do
   use Ecto.Migration
 
   def up do

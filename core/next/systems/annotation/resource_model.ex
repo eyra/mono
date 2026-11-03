@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.ResourceModel do
+defmodule Next.Systems.Annotation.ResourceModel do
   @moduledoc """
   A module for managing annotations.
   """
@@ -8,7 +8,7 @@ defmodule Systems.Annotation.ResourceModel do
 
   import Ecto.Changeset
 
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
 
   schema "annotation_resource" do
     field(:value, :string)

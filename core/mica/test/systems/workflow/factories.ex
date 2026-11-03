@@ -1,7 +1,7 @@
 defmodule Systems.Workflow.Factories do
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Document
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   def create_tool() do
     Factories.insert!(:document_tool, %{

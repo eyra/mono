@@ -1,10 +1,10 @@
-defmodule Systems.Announcement.Model do
+defmodule Next.Systems.Announcement.Model do
   @moduledoc """
   An announcement written by a system admin for a group of creators. The body is
   the HTML of the rich-text editor (Trix), stored as the editor sends it.
 
   `recipient_ids` is the audience, resolved once when it is published
-  (`Systems.Announcement.Public.publish_announcement/4`); it does not change after that.
+  (`Next.Systems.Announcement.Public.publish_announcement/4`); it does not change after that.
   It can be long, so reads leave it out unless they select it.
   """
   use Ecto.Schema
@@ -13,7 +13,7 @@ defmodule Systems.Announcement.Model do
   import Ecto.Changeset
 
   alias Systems.Account.User
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   @kinds ~w(release_notes)a
   @priorities ~w(normal high)a

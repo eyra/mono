@@ -1,5 +1,5 @@
 defmodule Systems.Workflow.ItemForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   import Frameworks.Pixel.Form
 

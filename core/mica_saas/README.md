@@ -1,6 +1,6 @@
 # Self: the reference SaaS on Mica
 
-Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`, which imports `config/config.exs` (`config :core, saas: Self.SaaS`). `lib/saas.ex` (`Self.SaaS`, a `Core.SaaS`) lists the systems Self is made of and its SaaS-level config: start pages, menus, title and signed-in pages. Self's own systems live in `systems/`, such as `systems/account/` (`Self.Account.System`, a `Core.System`) with the sign-in pages.
+Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`, which imports `config/config.exs` (`config :mica, saas: MicaSaas.SaaS`). `lib/saas.ex` (`MicaSaas.SaaS`, a `Mica.SaaS`) lists the systems Self is made of and its SaaS-level config: start pages, menus, title and signed-in pages. Self's own systems live in `systems/`, such as `systems/account/` (`MicaSaas.Systems.Account.System`, a `Mica.System`) with the sign-in pages.
 
 All commands below run from the `core/` folder unless stated otherwise.
 
@@ -19,7 +19,7 @@ All commands below run from the `core/` folder unless stated otherwise.
 
     ```Elixir
     # Configure your database
-    config :core, Core.Repo,
+    config :mica, Mica.Repo,
     username: "postgres",
     password: "postgres",
     database: "self_dev",
@@ -138,7 +138,7 @@ defmodule Systems.Storage.BuiltIn.MyBackend do
   # Configuration
 
   defp config do
-    Application.fetch_env!(:core, Systems.Storage.BuiltIn.MyBackend)
+    Application.fetch_env!(:mica, Systems.Storage.BuiltIn.MyBackend)
   end
 
   defp var_1 do
@@ -216,13 +216,13 @@ The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_P
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
-    config :core, Systems.Storage.BuiltIn.S3,
+    config :mica, Systems.Storage.BuiltIn.S3,
       bucket: System.get_env("AWS_S3_BUCKET"),
       prefix: storage_s3_prefix
   else
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
   end
 ```
 
@@ -230,7 +230,7 @@ That config can be replace by:
 
 ```elixir
   if my_backend = System.get_env("STORAGE_BUILTIN_SPECIAL") do
-    config :core, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
+    config :mica, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
   end
 
   config Systems.Storage.BuiltIn.MyBackend,
@@ -268,7 +268,7 @@ RATE_QUOTAS='[{"service": "signup", "limit": 10, "unit": "call", "window": "minu
 Locally, `core/config/dev.exs` sets them with `quota_overrides:`:
 
 ```Elixir
-config :core, :rate,
+config :mica, :rate,
   prune_interval: 5 * 60 * 1000,
   quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
@@ -355,7 +355,7 @@ Optional:
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
 | `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |
-| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` (`Core.ObanConfig.plugins/0`) and the crons the systems declare (`oban_crons/0`) | `pruner, lifeline` |
+| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` (`Mica.ObanConfig.plugins/0`) and the crons the systems declare (`oban_crons/0`) | `pruner, lifeline` |
 | `GOOGLE_SIGN_IN_CLIENT_ID`, `GOOGLE_SIGN_IN_CLIENT_SECRET` | secret | Your own Google OAuth client | unset |
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |

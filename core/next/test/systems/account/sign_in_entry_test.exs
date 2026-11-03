@@ -1,14 +1,14 @@
-defmodule Next.Account.SignInEntryTest do
+defmodule Next.Systems.Account.SignInEntryTest do
   @moduledoc """
   Where Next sends a signed-out person to sign in: the code page when
   sign-in codes (`:otp`) are on, the password page otherwise.
   """
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest
 
-  alias CoreWeb.Endpoint
+  alias MicaWeb.Endpoint
 
   @token_salt "otp-redeem"
 
@@ -37,7 +37,7 @@ defmodule Next.Account.SignInEntryTest do
     end
 
     test "the menu's Sign in goes to the code page" do
-      assert %{signin: %{action: %{to: "/user/auth/identify"}}} = Next.Menu.Items.values()
+      assert %{signin: %{action: %{to: "/user/auth/identify"}}} = NextWeb.Menu.Items.values()
     end
 
     test "a protected page sends a signed-out visitor to the code page", %{conn: conn} do
@@ -164,7 +164,7 @@ defmodule Next.Account.SignInEntryTest do
     end
 
     test "the menu's Sign in goes to the password page" do
-      assert %{signin: %{action: %{to: "/user/signin"}}} = Next.Menu.Items.values()
+      assert %{signin: %{action: %{to: "/user/signin"}}} = NextWeb.Menu.Items.values()
     end
 
     test "a protected page sends a signed-out visitor to the password page", %{conn: conn} do

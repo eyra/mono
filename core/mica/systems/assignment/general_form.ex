@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.GeneralForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   import Frameworks.Pixel.Form
 

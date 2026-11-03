@@ -2,7 +2,7 @@ defmodule Next.Config.RateQuotasTest do
   # Replaces the process environment while runtime.exs is evaluated.
   use ExUnit.Case, async: false
 
-  alias Core.RuntimeConfig
+  alias Mica.RuntimeConfig
   alias Mix.Tasks.Config.Snapshot
   alias Systems.Rate
 
@@ -27,7 +27,7 @@ defmodule Next.Config.RateQuotasTest do
         RuntimeConfig.Snapshot.evaluate("config/runtime.exs", env, :prod)
       )
 
-    {:ok, state} = config[:core][:rate] |> Core.Application.rate_config() |> Rate.Server.init()
+    {:ok, state} = config[:mica][:rate] |> Mica.Application.rate_config() |> Rate.Server.init()
     %{quotas: Enum.map(state.quotas, &{&1.service, &1.limit, &1.unit, &1.window, &1.scope})}
   end
 

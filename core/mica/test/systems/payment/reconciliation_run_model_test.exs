@@ -5,7 +5,7 @@ defmodule Systems.Payment.ReconciliationRunModelTest do
   the names the summary uses — a field that silently fails to cast would leave
   the reconciliation history reading zero.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Payment.ReconciliationRunModel, as: Run
   alias Systems.Payment.ReconciliationSummary, as: Summary

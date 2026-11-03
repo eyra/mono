@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Icon do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   # Path function for use outside of components
 

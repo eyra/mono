@@ -1,11 +1,11 @@
-defmodule Systems.Annotation.Pattern.Connection do
+defmodule Next.Systems.Annotation.Pattern.Connection do
   @moduledoc """
   A pattern for creating a Connection Annotation.
   A Connection is way to express that two annotations are related.
   """
 
-  alias Core.Authentication
-  alias Systems.Annotation
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
 
   @type t :: %__MODULE__{
           statement: String.t() | nil,
@@ -16,8 +16,8 @@ defmodule Systems.Annotation.Pattern.Connection do
 
   defstruct [:statement, :subject, :object, :entity]
 
-  defimpl Systems.Annotation.Pattern do
-    use Systems.Annotation.Pattern.Helpers
+  defimpl Next.Systems.Annotation.Pattern do
+    use Next.Systems.Annotation.Pattern.Helpers
     import Ecto.Query, warn: true
 
     @connection "Connection"

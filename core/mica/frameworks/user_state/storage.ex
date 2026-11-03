@@ -17,7 +17,7 @@ defmodule Frameworks.UserState.Storage do
   Returns the configured storage backend module.
   """
   def backend do
-    Core.Env.get(:user_state_storage, Frameworks.UserState.LocalStorage)
+    Mica.Env.get(:user_state_storage, Frameworks.UserState.LocalStorage)
   end
 
   @doc """

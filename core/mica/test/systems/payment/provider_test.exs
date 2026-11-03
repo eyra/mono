@@ -1,5 +1,5 @@
 defmodule Systems.Payment.ProviderTest do
-  use Core.PaymentCase, async: true
+  use Mica.PaymentCase, async: true
 
   alias Systems.Payment.Transaction
 

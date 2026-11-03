@@ -1,5 +1,5 @@
-defmodule Systems.Citizen.Pool.Form do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Citizen.Pool.Form do
+  use MicaWeb, :live_component_fabric
 
   require Logger
 

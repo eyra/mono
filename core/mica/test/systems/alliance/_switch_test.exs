@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.SwitchTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
 
   alias Systems.Alliance.Switch

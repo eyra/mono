@@ -7,7 +7,7 @@ defmodule Systems.Project.Model do
 
   schema "projects" do
     field(:name, :string)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     belongs_to(:root, Project.NodeModel)
     timestamps()
   end
@@ -41,7 +41,7 @@ defmodule Systems.Project.Model do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
-    use CoreWeb, :verified_routes
+    use MicaWeb, :verified_routes
 
     def view_model(%Project.Model{} = project, page, %{current_user: user}) do
       vm(project, page, user)

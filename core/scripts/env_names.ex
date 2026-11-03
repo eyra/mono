@@ -4,7 +4,7 @@ defmodule EnvNames do
   @accepted_file "scripts/env_names_accepted.exs"
 
   # The runtime config and the helpers it hands the environment to.
-  @runtime_files ["config/runtime.exs", "mica/lib/core/runtime_config.ex"]
+  @runtime_files ["config/runtime.exs", "mica/lib/mica/runtime_config.ex"]
   @lib_roots ["mica", "next", "mica_saas"]
   @release_scripts ["rel/env.sh.eex", "rel/vm.args.eex"]
   # Read by the start script `mix release` generates (bin/core).

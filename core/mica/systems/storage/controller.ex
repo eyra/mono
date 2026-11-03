@@ -1,9 +1,9 @@
 defmodule Systems.Storage.Controller do
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
-  use CoreWeb,
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   alias Frameworks.Concept
 
@@ -52,7 +52,7 @@ defmodule Systems.Storage.Controller do
   end
 
   defp authorized?(%{assigns: %{current_user: user}}, %Storage.EndpointModel{} = endpoint),
-    do: Core.Authorization.can_access?(user, endpoint, Storage.EndpointContentPage)
+    do: Mica.Authorization.can_access?(user, endpoint, Storage.EndpointContentPage)
 
   defp branch_name(%{assigns: %{branch: branch}}, _id) when not is_nil(branch),
     do: Concept.Branch.name(branch, :parent)
@@ -70,14 +70,14 @@ defmodule Systems.Storage.Controller do
   defp forbidden(conn) do
     conn
     |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"403")
   end
 
   defp service_unavailable(conn) do
     conn
     |> put_status(:service_unavailable)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"503")
   end
 end

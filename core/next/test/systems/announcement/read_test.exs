@@ -1,9 +1,9 @@
-defmodule Systems.Announcement.ReadTest do
-  use Core.DataCase, async: true
+defmodule Next.Systems.Announcement.ReadTest do
+  use Mica.DataCase, async: true
 
-  alias Core.Repo
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
 
   setup do
@@ -76,7 +76,7 @@ defmodule Systems.Announcement.ReadTest do
 
     test "has a Dutch button", %{announcement: %{id: id}} do
       assert %{cta_label: "Lees aankondiging"} =
-               Gettext.with_locale(CoreWeb.Gettext, "nl", fn ->
+               Gettext.with_locale(MicaWeb.Gettext, "nl", fn ->
                  ReadAnnouncement.to_view_model(1, ReadAnnouncement.params(id))
                end)
     end

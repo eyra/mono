@@ -1,12 +1,12 @@
-defmodule Next.Account.SessionController do
-  use CoreWeb,
+defmodule Next.Systems.Account.SessionController do
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.ReturnTo
-  alias Next.Account.NativeApp
+  alias MicaWeb.ReturnTo
+  alias Next.Systems.Account.NativeApp
   alias Systems.Account
   alias Frameworks.Utility.Params
   alias Frameworks.Signal
@@ -63,9 +63,9 @@ defmodule Next.Account.SessionController do
   end
 
   defp do_redeem_otp(conn, token) do
-    with {:ok, payload} <- Next.Account.AuthCodeVerifyPage.decode_redeem_token(token),
+    with {:ok, payload} <- Next.Systems.Account.AuthCodeVerifyPage.decode_redeem_token(token),
          {:ok, user, first_time?} <-
-           Next.Account.OtpSignin.resolve_user(conn.assigns[:current_user], payload) do
+           Next.Systems.Account.OtpSignin.resolve_user(conn.assigns[:current_user], payload) do
       conn
       |> stash_return_to(payload)
       |> Account.UserAuth.log_in_user(user, first_time?, mobile_session_params(conn))

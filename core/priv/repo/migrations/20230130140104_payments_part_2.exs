@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.PaymentsPart2 do
+defmodule Mica.Repo.Migrations.PaymentsPart2 do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -60,20 +60,20 @@ defmodule Core.Repo.Migrations.PaymentsPart2 do
   end
 
   defp query_all(table, fields) do
-    {:ok, %{rows: rows}} = query(Core.Repo, "SELECT #{fields} FROM #{table}")
+    {:ok, %{rows: rows}} = query(Mica.Repo, "SELECT #{fields} FROM #{table}")
 
     rows
   end
 
   def query_field(table, field, where) do
     {:ok, %{rows: [[value] | _]}} =
-      query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
+      query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     value
   end
 
   defp query_all(table, fields, where) do
-    {:ok, %{rows: rows}} = query(Core.Repo, "SELECT #{fields} FROM #{table} WHERE #{where}")
+    {:ok, %{rows: rows}} = query(Mica.Repo, "SELECT #{fields} FROM #{table} WHERE #{where}")
 
     rows
   end

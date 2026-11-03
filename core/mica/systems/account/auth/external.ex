@@ -1,6 +1,6 @@
 defmodule Systems.Account.Auth.External do
   alias Systems.Account
-  alias Core.Repo
+  alias Mica.Repo
   import Ecto.Query, warn: false
 
   def sign_in(conn, organisation, external_id) do

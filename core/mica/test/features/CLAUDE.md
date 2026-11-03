@@ -143,7 +143,7 @@ CSS attribute selector reference:
 
 ### 5. Sign in via the helper, not inline steps
 
-`CoreWeb.FeatureCase` exposes `sign_in_as_participant/3` and `sign_in_as_creator/3`. The signin page renders both tab panels in the DOM, with tab-scoped testids. The helpers pick the right ones. **Don't** inline the visit + fill + click steps.
+`MicaWeb.FeatureCase` exposes `sign_in_as_participant/3` and `sign_in_as_creator/3`. The signin page renders both tab panels in the DOM, with tab-scoped testids. The helpers pick the right ones. **Don't** inline the visit + fill + click steps.
 
 ### 6. Unique testids when a component is rendered twice
 
@@ -172,8 +172,8 @@ card_id = testid |> String.replace("card_", "")
 ## File template
 
 ```elixir
-defmodule CoreWeb.Features.MyFeatureTest do
-  use CoreWeb.FeatureCase
+defmodule MicaWeb.Features.MyFeatureTest do
+  use MicaWeb.FeatureCase
 
   @card_selector "[data-testid^='card_']"
 

@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Table do
-  alias CoreWeb.UI.Timestamp
-  use CoreWeb, :html
+  alias MicaWeb.UI.Timestamp
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.Tag

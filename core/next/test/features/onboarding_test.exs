@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.OnboardingTest do
+defmodule NextWeb.Features.OnboardingTest do
   @moduledoc """
   Feature test for the PANL participant onboarding flow.
 
@@ -7,7 +7,7 @@ defmodule CoreWeb.Features.OnboardingTest do
   - Features step is displayed for PANL participants after profile
   - User can complete onboarding and navigate to home
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   alias Systems.Pool
 

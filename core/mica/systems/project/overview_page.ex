@@ -66,7 +66,7 @@ defmodule Systems.Project.OverviewPage do
     primary_button_label = dgettext("eyra-ui", "delete.confirm.label")
 
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :confirm,
         id: "delete_confirm",

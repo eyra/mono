@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateFundPayouts do
+defmodule Mica.Repo.Migrations.CreateFundPayouts do
   use Ecto.Migration
 
   def change do

@@ -1,5 +1,5 @@
-defmodule Systems.Graphite.LeaderboardSubmissionsForm do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Graphite.LeaderboardSubmissionsForm do
+  use MicaWeb.LiveForm
 
   alias Frameworks.Pixel.Text
 

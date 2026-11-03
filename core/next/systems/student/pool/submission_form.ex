@@ -1,13 +1,11 @@
-defmodule Systems.Student.Pool.SubmissionForm do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Student.Pool.SubmissionForm do
+  use MicaWeb.LiveForm
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
 
-  alias Systems.{
-    Pool,
-    Student
-  }
+  alias Next.Systems.Student
+  alias Systems.Pool
 
   @impl true
   def update(

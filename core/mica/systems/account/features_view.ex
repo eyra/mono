@@ -3,7 +3,7 @@ defmodule Systems.Account.FeaturesView do
   Embedded LiveView for editing user features (gender, birth_year).
   Used in both Account.Page (as a tab) and OnboardingPage (as a step).
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   import Frameworks.Pixel.Form
   import LiveNest.HTML
@@ -50,7 +50,7 @@ defmodule Systems.Account.FeaturesView do
   defp save_features(socket, features, attrs) do
     changeset = Account.FeaturesModel.changeset(features, :auto_save, attrs)
 
-    case Core.Persister.save(features, changeset) do
+    case Mica.Persister.save(features, changeset) do
       {:ok, updated_features} ->
         socket
         |> assign(model: updated_features)

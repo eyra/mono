@@ -1,8 +1,8 @@
 defmodule Systems.Admin.ActionsView do
-  use CoreWeb, :embedded_live_view
-  use Core.FeatureFlags
+  use MicaWeb, :embedded_live_view
+  use Mica.FeatureFlags
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
 

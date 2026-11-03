@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.LeaderboardModel do
+defmodule Next.Systems.Graphite.LeaderboardModel do
   @moduledoc """
   Data model for the `graphite_leaderboard` table.
   # Fields
@@ -14,18 +14,18 @@ defmodule Systems.Graphite.LeaderboardModel do
     for the scores on the leaderboard.
   - generation_date: :naive_datetime, the day the scores for the leaderboard were
     generated
-  - tool_id: connects to `Systems.Graphite.ToolModel`
-  - auth_node_id: connects to `Core.Authorization.Node`
+  - tool_id: connects to `Next.Systems.Graphite.ToolModel`
+  - auth_node_id: connects to `Mica.Authorization.Node`
   """
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Changeset
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Concept
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Project
 
   schema "graphite_leaderboards" do
@@ -39,7 +39,7 @@ defmodule Systems.Graphite.LeaderboardModel do
 
     has_many(:scores, Graphite.ScoreModel, foreign_key: :leaderboard_id)
     belongs_to(:tool, Graphite.ToolModel)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_one(:project_item, Project.ItemModel, foreign_key: :leaderboard_id)
 
@@ -76,7 +76,7 @@ defmodule Systems.Graphite.LeaderboardModel do
   end
 
   defimpl Frameworks.Concept.Leaf do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     def resource_id(%{id: id}), do: "graphite/leaderboard/#{id}"
     def tag(_), do: dgettext("eyra-graphite", "leaderboard.leaf.tag")

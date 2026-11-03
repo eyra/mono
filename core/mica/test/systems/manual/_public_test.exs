@@ -1,5 +1,5 @@
 defmodule Systems.Manual.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Manual
   alias Systems.Manual.Public
@@ -60,14 +60,14 @@ defmodule Systems.Manual.PublicTest do
 
   describe "next_chapter/2" do
     test "gets next unvisited chapter for user" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       manual = %{chapters: [chapter | _]} = Manual.Factories.create_manual(2, 2)
       next = Public.next_chapter(manual, user)
       assert next.id == chapter.id
     end
 
     test "returns nil when all chapters visited" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       manual = Manual.Factories.create_manual(2, 2)
 
       # Mark all chapters as visited
@@ -81,7 +81,7 @@ defmodule Systems.Manual.PublicTest do
 
   describe "finished_chapters?/2" do
     test "returns true when all chapters are visited" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       manual = Manual.Factories.create_manual(2, 2)
       chapters = Public.get_chapters(manual)
 
@@ -94,7 +94,7 @@ defmodule Systems.Manual.PublicTest do
     end
 
     test "returns false when not all chapters are visited" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       manual = Manual.Factories.create_manual(2, 2)
       refute Public.finished_chapters?(manual, user.id)
     end
@@ -115,7 +115,7 @@ defmodule Systems.Manual.PublicTest do
 
   describe "get_chapter_progress/2" do
     test "gets progress for user in manual chapters" do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       manual = %{chapters: [chapter | _]} = Manual.Factories.create_manual(2, 2)
 
       # Mark first chapter as visited

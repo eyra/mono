@@ -38,10 +38,10 @@ defmodule EnvNamesTest do
 
   if config_env() == :prod do
     env = System.get_env()
-    config :core, name: System.fetch_env!("APP_NAME")
-    config :core, Core.Repo, url: RuntimeConfig.fetch!(env, "DATABASE_URL")
-    config :core, :dist_hosts, env["DIST_HOSTS"]
-    config :core, :ipv6, System.get_env("ECTO_IPV6") == "true"
+    config :mica, name: System.fetch_env!("APP_NAME")
+    config :mica, Mica.Repo, url: RuntimeConfig.fetch!(env, "DATABASE_URL")
+    config :mica, :dist_hosts, env["DIST_HOSTS"]
+    config :mica, :ipv6, System.get_env("ECTO_IPV6") == "true"
     raise "AWS_S3_BUCKET (\#{bucket}) must be private"
   end
   """

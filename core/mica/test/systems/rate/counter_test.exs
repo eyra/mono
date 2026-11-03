@@ -1,7 +1,7 @@
 defmodule Systems.Rate.CounterTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Rate
   alias Systems.Rate.CounterModel
 

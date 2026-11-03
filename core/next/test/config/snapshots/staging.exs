@@ -5,21 +5,28 @@
       active: true,
       env: "eyra-next-staging.fly.dev",
       name: "Next",
-      otp_app: :core,
+      otp_app: :mica,
       push_api_key: "APPSIGNAL_PUSH_API_KEY",
       revision: nil
     ]
   ],
-  core: [
-    {Core.ImageCatalog.Unsplash,
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "auto",
+    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
+  mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
-    {Core.Repo,
+    {Mica.Repo,
      [
        socket_options: [:inet6],
        url:
          "postgres://DB_USER:DB_PASS@eyra-next-staging-db.flycast:5432/eyra_next_staging?sslmode=disable"
      ]},
-    {CoreWeb.Endpoint,
+    {MicaWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8000],
@@ -27,8 +34,7 @@
        server: true,
        url: [host: "eyra-next-staging.fly.dev", port: 443, scheme: "https"]
      ]},
-    {CoreWeb.FileUploader, [max_file_size: 100_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {MicaWeb.FileUploader, [max_file_size: 100_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -118,11 +124,5 @@
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "auto",
-    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]

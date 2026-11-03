@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateRateCounters do
+defmodule Mica.Repo.Migrations.CreateRateCounters do
   use Ecto.Migration
 
   def change do

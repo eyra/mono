@@ -2,7 +2,7 @@ defmodule Systems.Admin.Queries do
   require Ecto.Query
   import Ecto.Query, warn: false
 
-  alias Core.Authorization.RoleAssignment
+  alias Mica.Authorization.RoleAssignment
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Project

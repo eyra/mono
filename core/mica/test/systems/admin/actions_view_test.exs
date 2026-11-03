@@ -1,6 +1,6 @@
 defmodule Systems.Admin.ActionsViewTest do
-  use CoreWeb.ConnCase, async: false
-  use Oban.Testing, repo: Core.Repo
+  use MicaWeb.ConnCase, async: false
+  use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
 
   alias Systems.Admin

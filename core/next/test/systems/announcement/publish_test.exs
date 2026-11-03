@@ -1,14 +1,14 @@
-defmodule Systems.Announcement.PublishTest do
-  use Core.DataCase, async: true
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Announcement.PublishTest do
+  use Mica.DataCase, async: true
+  use Oban.Testing, repo: Mica.Repo
   use Bamboo.Test
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.Assignment.NextActions.PendingContributions
   alias Systems.NextAction
 

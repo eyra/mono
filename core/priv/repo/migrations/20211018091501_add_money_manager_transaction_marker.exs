@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMoneyManagerTransactionMarker do
+defmodule Mica.Repo.Migrations.AddMoneyManagerTransactionMarker do
   use Ecto.Migration
 
   def change do

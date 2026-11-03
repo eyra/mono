@@ -1,9 +1,9 @@
 defmodule Systems.Org.ArchiveModalViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
 
   describe "ArchiveModalView" do

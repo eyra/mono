@@ -1,4 +1,4 @@
-defmodule Frameworks.E2E.Controller do
+defmodule Next.Frameworks.E2E.Controller do
   @moduledoc """
   API endpoint for E2E test fixture setup.
 
@@ -18,12 +18,12 @@ defmodule Frameworks.E2E.Controller do
     "pdf_assignment_path": "/a/pdf123"
   }
   """
-  use CoreWeb, {:controller, [formats: [:json]]}
-  use Core.FeatureFlags
+  use MicaWeb, {:controller, [formats: [:json]]}
+  use Mica.FeatureFlags
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Advert
   alias Systems.Affiliate
@@ -150,7 +150,7 @@ defmodule Frameworks.E2E.Controller do
   defp create_service_user do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    Core.Factories.insert!(:member, %{
+    Mica.Factories.insert!(:member, %{
       email: @service_email,
       password: @service_password,
       confirmed_at: now
@@ -174,7 +174,7 @@ defmodule Frameworks.E2E.Controller do
   defp create_researcher do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    Core.Factories.insert!(:member, %{
+    Mica.Factories.insert!(:member, %{
       email: @researcher_email,
       password: @e2e_password,
       creator: true,
@@ -193,7 +193,7 @@ defmodule Frameworks.E2E.Controller do
   defp create_researcher_b do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    Core.Factories.insert!(:member, %{
+    Mica.Factories.insert!(:member, %{
       email: @researcher_b_email,
       password: @e2e_password,
       creator: true,
@@ -212,7 +212,7 @@ defmodule Frameworks.E2E.Controller do
   defp create_participant do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
-    Core.Factories.insert!(:member, %{
+    Mica.Factories.insert!(:member, %{
       email: @participant_email,
       password: @e2e_password,
       creator: false,
@@ -271,17 +271,17 @@ defmodule Frameworks.E2E.Controller do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
 
     promotion =
-      Core.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study", director: :advert})
+      Mica.Factories.insert!(:promotion, %{title: "E2E PaNL Test Study", director: :advert})
 
     submission =
-      Core.Factories.insert!(:pool_submission, %{
+      Mica.Factories.insert!(:pool_submission, %{
         pool: panl_pool,
         status: :accepted,
         submitted_at: now
       })
 
     info =
-      Core.Factories.insert!(:assignment_info, %{
+      Mica.Factories.insert!(:assignment_info, %{
         title: "E2E PaNL Test Study",
         subject_count: 100,
         duration: "5",
@@ -289,24 +289,24 @@ defmodule Frameworks.E2E.Controller do
         devices: [:desktop]
       })
 
-    crew = Core.Factories.insert!(:crew)
+    crew = Mica.Factories.insert!(:crew)
 
     assignment =
-      Core.Factories.insert!(:assignment, %{
+      Mica.Factories.insert!(:assignment, %{
         info: info,
         crew: crew,
         status: :online
       })
 
     advert =
-      Core.Factories.insert!(:advert, %{
+      Mica.Factories.insert!(:advert, %{
         promotion: promotion,
         submission: submission,
         assignment: assignment,
         status: :online
       })
 
-    Core.Authorization.assign_role(researcher, advert, :owner)
+    Mica.Authorization.assign_role(researcher, advert, :owner)
     Logger.info("[E2E] Created published PaNL advert #{advert.id}")
     advert
   end
@@ -333,16 +333,16 @@ defmodule Frameworks.E2E.Controller do
 
   defp create_pdf_assignment(researcher) do
     pdf_ref =
-      Core.Env.app()
+      Mica.Env.app()
       |> Application.app_dir("priv/e2e/#{@pdf_filename}")
       |> Content.Public.store(@pdf_filename)
       |> Content.Public.get_public_url()
 
-    auth_node = Core.Factories.insert!(:auth_node)
-    tool_auth_node = Core.Factories.insert!(:auth_node, %{parent: auth_node})
+    auth_node = Mica.Factories.insert!(:auth_node)
+    tool_auth_node = Mica.Factories.insert!(:auth_node, %{parent: auth_node})
 
     document_tool =
-      Core.Factories.insert!(:document_tool, %{
+      Mica.Factories.insert!(:document_tool, %{
         name: @pdf_filename,
         ref: pdf_ref,
         director: :assignment,
@@ -350,14 +350,14 @@ defmodule Frameworks.E2E.Controller do
       })
 
     tool_ref =
-      Core.Factories.insert!(:tool_ref, %{
+      Mica.Factories.insert!(:tool_ref, %{
         document_tool: document_tool,
         special: :download_manual
       })
 
-    workflow = Core.Factories.insert!(:workflow, %{})
+    workflow = Mica.Factories.insert!(:workflow, %{})
 
-    Core.Factories.insert!(:workflow_item, %{
+    Mica.Factories.insert!(:workflow_item, %{
       workflow: workflow,
       tool_ref: tool_ref,
       title: "PDF rendering verification",
@@ -365,7 +365,7 @@ defmodule Frameworks.E2E.Controller do
     })
 
     info =
-      Core.Factories.insert!(:assignment_info, %{
+      Mica.Factories.insert!(:assignment_info, %{
         title: @pdf_assignment_title,
         subject_count: 100,
         duration: "5",
@@ -374,16 +374,16 @@ defmodule Frameworks.E2E.Controller do
       })
 
     assignment =
-      Core.Factories.insert!(:assignment, %{
+      Mica.Factories.insert!(:assignment, %{
         info: info,
-        affiliate: Core.Factories.insert!(:affiliate, %{}),
+        affiliate: Mica.Factories.insert!(:affiliate, %{}),
         workflow: workflow,
         auth_node: auth_node,
         special: :data_donation,
         status: :online
       })
 
-    Core.Authorization.assign_role(researcher, assignment, :owner)
+    Mica.Authorization.assign_role(researcher, assignment, :owner)
 
     Repo.preload(assignment, Assignment.Model.preload_graph(:down))
   end
@@ -401,7 +401,7 @@ defmodule Frameworks.E2E.Controller do
   end
 
   defp ensure_affiliate(%{affiliate_id: nil} = assignment) do
-    affiliate = Core.Factories.insert!(:affiliate, %{})
+    affiliate = Mica.Factories.insert!(:affiliate, %{})
     ensure_fields(assignment, %{affiliate_id: affiliate.id})
   end
 
@@ -491,28 +491,28 @@ defmodule Frameworks.E2E.Controller do
 
   defp create_donate_assignment(researcher) do
     # Create auth nodes
-    auth_node = Core.Factories.insert!(:auth_node)
-    tool_auth_node = Core.Factories.insert!(:auth_node, %{parent: auth_node})
+    auth_node = Mica.Factories.insert!(:auth_node)
+    tool_auth_node = Mica.Factories.insert!(:auth_node, %{parent: auth_node})
 
     # Create affiliate for participant access via /a/ URL
-    affiliate = Core.Factories.insert!(:affiliate, %{})
+    affiliate = Mica.Factories.insert!(:affiliate, %{})
 
     # Download and store Feldspar app
     archive_ref = get_or_download_feldspar_app()
 
     # Create Feldspar tool with the stored app
     feldspar_tool =
-      Core.Factories.insert!(:feldspar_tool, %{
+      Mica.Factories.insert!(:feldspar_tool, %{
         archive_ref: archive_ref,
         archive_name: @feldspar_filename,
         auth_node: tool_auth_node
       })
 
     # Create workflow with tool
-    tool_ref = Core.Factories.insert!(:tool_ref, %{feldspar_tool: feldspar_tool})
-    workflow = Core.Factories.insert!(:workflow, %{})
+    tool_ref = Mica.Factories.insert!(:tool_ref, %{feldspar_tool: feldspar_tool})
+    workflow = Mica.Factories.insert!(:workflow, %{})
 
-    Core.Factories.insert!(:workflow_item, %{
+    Mica.Factories.insert!(:workflow_item, %{
       workflow: workflow,
       tool_ref: tool_ref,
       title: "TikTok Data Donation",
@@ -521,7 +521,7 @@ defmodule Frameworks.E2E.Controller do
 
     # Create assignment info
     info =
-      Core.Factories.insert!(:assignment_info, %{
+      Mica.Factories.insert!(:assignment_info, %{
         title: @donate_assignment_title,
         subject_count: 100,
         duration: "10",
@@ -530,10 +530,10 @@ defmodule Frameworks.E2E.Controller do
       })
 
     # Create crew and assignment
-    crew = Core.Factories.insert!(:crew)
+    crew = Mica.Factories.insert!(:crew)
 
     assignment =
-      Core.Factories.insert!(:assignment, %{
+      Mica.Factories.insert!(:assignment, %{
         info: info,
         affiliate: affiliate,
         workflow: workflow,
@@ -544,7 +544,7 @@ defmodule Frameworks.E2E.Controller do
       })
 
     # Grant researcher owner role
-    Core.Authorization.assign_role(researcher, assignment, :owner)
+    Mica.Authorization.assign_role(researcher, assignment, :owner)
 
     # Create project structure with storage endpoint for data donation
     setup_storage_for_assignment(assignment)
@@ -555,7 +555,7 @@ defmodule Frameworks.E2E.Controller do
   defp setup_storage_for_assignment(assignment) do
     # Create project node
     project_node =
-      Core.Factories.insert!(:project_node, %{
+      Mica.Factories.insert!(:project_node, %{
         name: "e2e_test_node",
         project_path: []
       })
@@ -568,7 +568,7 @@ defmodule Frameworks.E2E.Controller do
       |> Repo.insert!()
 
     # Link assignment to project node
-    Core.Factories.insert!(:project_item, %{
+    Mica.Factories.insert!(:project_item, %{
       name: "e2e_assignment_item",
       project_path: [],
       node_id: project_node.id,
@@ -576,7 +576,7 @@ defmodule Frameworks.E2E.Controller do
     })
 
     # Link storage endpoint to same project node
-    Core.Factories.insert!(:project_item, %{
+    Mica.Factories.insert!(:project_item, %{
       name: "e2e_storage_item",
       project_path: [],
       node_id: project_node.id,

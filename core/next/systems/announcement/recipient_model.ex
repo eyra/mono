@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.RecipientModel do
+defmodule Next.Systems.Announcement.RecipientModel do
   @moduledoc """
   One user who received an announcement. `read_at` is set the first time the
   user opens it.
@@ -9,7 +9,7 @@ defmodule Systems.Announcement.RecipientModel do
   import Ecto.Changeset
 
   alias Systems.Account.User
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   schema "announcement_recipient" do
     field(:read_at, :utc_datetime)

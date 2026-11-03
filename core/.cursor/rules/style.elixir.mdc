@@ -13,12 +13,12 @@ Each alias must be on a separate line. Do not group aliases, even if they share 
 
 ```elixir
 # INCORRECT
-alias Core.{Repo, DataCase}
+alias Mica.{Repo, DataCase}
 alias Systems.Userflow.{Model, StepModel, ProgressModel}
 
 # CORRECT
-alias Core.Repo
-alias Core.DataCase
+alias Mica.Repo
+alias Mica.DataCase
 
 # For system modules, prefer a single system alias
 alias Systems.Userflow  # Then use as Userflow.Model, Userflow.StepModel, etc.

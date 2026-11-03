@@ -1,9 +1,9 @@
 defmodule Systems.Advert.AssemblyTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
 
   import Mox
-  # alias Core.Repo
-  # alias CoreWeb.UI.Timestamp
+  # alias Mica.Repo
+  # alias MicaWeb.UI.Timestamp
 
   alias Systems.Project
   alias Systems.Advert
@@ -15,10 +15,10 @@ defmodule Systems.Advert.AssemblyTest do
 
   setup_all do
     Mox.defmock(Systems.Advert.AssemblyTest.UnsplashMockClient,
-      for: Core.ImageCatalog.Unsplash.Client
+      for: Mica.ImageCatalog.Unsplash.Client
     )
 
-    Application.put_env(:core, :unsplash_client, Advert.AssemblyTest.UnsplashMockClient)
+    Application.put_env(:mica, :unsplash_client, Advert.AssemblyTest.UnsplashMockClient)
     mock = Advert.AssemblyTest.UnsplashMockClient
 
     {:ok, mock: mock}
@@ -66,20 +66,20 @@ defmodule Systems.Advert.AssemblyTest do
         |> Project.Factories.build_item()
         |> Project.Factories.build_node()
         |> Project.Factories.build_project()
-        |> Core.Repo.insert!()
+        |> Mica.Repo.insert!()
 
       {:ok, %{project_item: %{advert: %{auth_node_id: advert_auth_node_id} = advert}}} =
         Advert.Assembly.create(assignment, creator, pool)
 
       assert %Systems.Advert.Model{
-               auth_node: %Core.Authorization.Node{
+               auth_node: %Mica.Authorization.Node{
                  parent_id: ^project_node_auth_node_id
                },
                assignment: %Systems.Assignment.Model{
                  id: ^assignment_id
                },
                promotion: %Systems.Promotion.Model{
-                 auth_node: %Core.Authorization.Node{
+                 auth_node: %Mica.Authorization.Node{
                    parent_id: ^advert_auth_node_id
                  },
                  banner_photo_url: banner_photo_url,
@@ -118,7 +118,7 @@ defmodule Systems.Advert.AssemblyTest do
     #   |> Project.Factories.build_item()
     #   |> Project.Factories.build_node()
     #   |> Project.Factories.build_project()
-    #   |> Core.Repo.insert!()
+    #   |> Mica.Repo.insert!()
 
     #   {:ok, %{project_item: %{advert: %{id: id}}}} = Advert.Assembly.create(assignment, creator, pool)
     #   advert = Advert.Public.get!(id, Advert.Model.preload_graph(:down))
@@ -126,9 +126,9 @@ defmodule Systems.Advert.AssemblyTest do
     #   Advert.Assembly.delete(advert)
 
     #   assert Repo.get(Advert.Model, advert.id) == nil
-    #   assert Repo.get(Core.Authorization.Node, advert.auth_node_id) == nil
+    #   assert Repo.get(Mica.Authorization.Node, advert.auth_node_id) == nil
     #   assert Repo.get(Systems.Promotion.Model, advert.promotion_id) == nil
-    #   assert Repo.get(Core.Authorization.Node, advert.promotion.auth_node_id) == nil
+    #   assert Repo.get(Mica.Authorization.Node, advert.promotion.auth_node_id) == nil
     #   assert Repo.get(Systems.Assignment.Model, advert.assignment_id) != nil
     # end
 
@@ -145,7 +145,7 @@ defmodule Systems.Advert.AssemblyTest do
 
     #   assignment =
     #     Assignment.Factories.create_assignment(31, 1)
-    #     |> Core.Repo.preload(Assignment.Model.preload_graph(:down))
+    #     |> Mica.Repo.preload(Assignment.Model.preload_graph(:down))
 
     #   %{id: id} = Advert.Assembly.create(assignment, creator, pool)
 

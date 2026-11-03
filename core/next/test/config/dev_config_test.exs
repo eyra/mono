@@ -11,9 +11,9 @@ defmodule Next.Config.DevConfigTest do
   @dev_secret """
   import Config
 
-  config :core, CoreWeb.Endpoint, http: [port: 4001]
+  config :mica, MicaWeb.Endpoint, http: [port: 4001]
 
-  config :core, Systems.Account.Auth.Google,
+  config :mica, Systems.Account.Auth.Google,
     redirect_uri: "http://localhost:4001/auth/google/callback"
   """
 
@@ -39,10 +39,10 @@ defmodule Next.Config.DevConfigTest do
     end
 
     System.put_env(env)
-    Config.Reader.read!(Path.join(tmp_dir, "dev.exs"), env: :dev)[:core]
+    Config.Reader.read!(Path.join(tmp_dir, "dev.exs"), env: :dev)[:mica]
   end
 
-  defp port(config), do: config[CoreWeb.Endpoint][:http][:port]
+  defp port(config), do: config[MicaWeb.Endpoint][:http][:port]
   defp redirect_uri(config), do: config[Systems.Account.Auth.Google][:redirect_uri]
   defp open_url(config), do: config[Systems.Email.Mailer][:open_email_in_browser_url]
 

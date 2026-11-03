@@ -2,7 +2,7 @@ defmodule Systems.Pool.ItemView do
   @moduledoc """
   The Pool Card displays information about a participant pool.
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
   alias Frameworks.Pixel.Panel
   import Frameworks.Pixel.Tag
 

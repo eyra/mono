@@ -1,5 +1,5 @@
 defmodule Systems.Org.System do
-  use Core.System
+  use Mica.System
 
   def routes do
     quote do

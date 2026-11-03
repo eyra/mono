@@ -1,8 +1,8 @@
-defmodule Systems.Announcement.Page do
+defmodule Next.Systems.Announcement.Page do
   @moduledoc """
   An announcement as its recipient reads it: title, publication date and the
   rich-text body. Opening it marks it read and clears its To-do
-  (`Systems.Announcement.Public.mark_read/1`); Desktop and the To-do counter
+  (`Next.Systems.Announcement.Public.mark_read/1`); Desktop and the To-do counter
   refresh through their own switches on `{:next_action, :cleared}`.
 
   Users who did not receive the announcement, everyone while it is not
@@ -11,7 +11,7 @@ defmodule Systems.Announcement.Page do
   """
   use Systems.Content.Composer, :live_workspace
 
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   @impl true
   def get_model(%{"id" => id}, _session, %{assigns: %{current_user: user}} = _socket) do

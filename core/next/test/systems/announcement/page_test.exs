@@ -1,15 +1,15 @@
-defmodule Systems.Announcement.PageTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Announcement.PageTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   import ExUnit.CaptureLog
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
-  alias CoreWeb.Endpoint
+  alias Mica.Repo
+  alias MicaWeb.Endpoint
   alias Frameworks.Signal
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
 
   @published_at ~U[2026-10-28 09:00:00Z]
@@ -221,7 +221,7 @@ defmodule Systems.Announcement.PageTest do
       insert_recipient!(Announcement.Public.get_announcement!(id), creator)
 
       conn = get(conn, ~p"/announcement/#{id}")
-      assert redirected_to(conn) == Core.SaaS.module().sign_in_page()
+      assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
 
       conn =
         conn

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.NumberIcon do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   defp prism_class(true), do: "prism-number-icon-active"
   defp prism_class(false), do: "prism-number-icon-inactive"

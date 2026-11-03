@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddAssignmentBranding do
+defmodule Mica.Repo.Migrations.AddAssignmentBranding do
   use Ecto.Migration
 
   def up do

@@ -1,5 +1,5 @@
 defmodule Systems.Alliance.ContentPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.{
     Alliance

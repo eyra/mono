@@ -1,13 +1,13 @@
-defmodule Systems.Announcement.AdminViewTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Announcement.AdminViewTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query, only: [from: 2]
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
-  alias Systems.Announcement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
 
   @attrs %{
     "kind" => "release_notes",
@@ -43,7 +43,7 @@ defmodule Systems.Announcement.AdminViewTest do
       {:ok, %{org: org}} =
         Systems.Org.Public.create_node(["announcements", name], [{:en, name}], [{:en, name}])
 
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
     end
   end
 

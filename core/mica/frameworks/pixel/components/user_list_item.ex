@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.UserListItem do
   @moduledoc """
     User list item
   """
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
   require Logger
 
   alias Frameworks.Pixel.Button

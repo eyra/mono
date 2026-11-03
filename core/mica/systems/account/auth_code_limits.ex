@@ -102,11 +102,11 @@ defmodule Systems.Account.AuthCodeLimits do
 
   @doc """
   The limits in force: the defaults, of which the configured overrides
-  (`config :core, :auth_code_limits, overrides: …`) replace the one with the
+  (`config :mica, :auth_code_limits, overrides: …`) replace the one with the
   same action, count and window.
   """
   def limits do
-    overrides = Core.Env.get(:auth_code_limits, []) |> Keyword.get(:overrides, [])
+    overrides = Mica.Env.get(:auth_code_limits, []) |> Keyword.get(:overrides, [])
     overridden = MapSet.new(overrides, fn {action, by, _, window} -> {action, by, window} end)
 
     Enum.reject(@default_limits, fn {action, by, _, window} ->

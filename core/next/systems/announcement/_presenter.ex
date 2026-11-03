@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.Presenter do
+defmodule Next.Systems.Announcement.Presenter do
   use Frameworks.Concept.Presenter
 
   @impl true

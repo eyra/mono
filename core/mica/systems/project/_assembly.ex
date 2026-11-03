@@ -1,10 +1,10 @@
 defmodule Systems.Project.Assembly do
   import Ecto.Query, warn: false
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
-  use Core, :auth
-  alias Core.Repo
+  use Mica, :auth
+  alias Mica.Repo
   alias Ecto.Changeset
   alias Ecto.Multi
   alias Frameworks.Signal

@@ -1,9 +1,9 @@
-defmodule Systems.Paper.RISModel do
+defmodule Next.Systems.Paper.RISModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_ris" do
     field(:raw, :string)

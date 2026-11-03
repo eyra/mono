@@ -2,11 +2,11 @@
 [
   children: [
     Cluster.Supervisor,
-    Core.Repo,
-    CoreWeb.Telemetry,
+    Mica.Repo,
+    MicaWeb.Telemetry,
     Phoenix.PubSub.Supervisor,
     Oban,
-    CoreWeb.Endpoint,
+    MicaWeb.Endpoint,
     Systems.Rate.Server
   ],
   deployments: [

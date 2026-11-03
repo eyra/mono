@@ -1,6 +1,6 @@
 defmodule Systems.Storage.DeliveryTest do
-  use Core.DataCase, async: false
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase, async: false
+  use Oban.Testing, repo: Mica.Repo
 
   @moduletag :capture_log
 
@@ -22,15 +22,15 @@ defmodule Systems.Storage.DeliveryTest do
     isolate_signals()
 
     # Configure mock backend
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: MockSpecial)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: MockSpecial)
 
     # Clean up test data donation directory
-    data_donation_path = Application.get_env(:core, :feldspar_data_donation)[:path]
+    data_donation_path = Application.get_env(:mica, :feldspar_data_donation)[:path]
     File.rm_rf(data_donation_path)
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config)
       File.rm_rf(data_donation_path)
     end)
 

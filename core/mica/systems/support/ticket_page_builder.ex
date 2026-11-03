@@ -1,5 +1,5 @@
 defmodule Systems.Support.TicketPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   alias Systems.Support
 
   def view_model(ticket, _assigns) do
@@ -40,8 +40,8 @@ defmodule Systems.Support.TicketPageBuilder do
 
   defp get_timestamp(%{updated_at: updated_at}) do
     updated_at
-    |> CoreWeb.UI.Timestamp.apply_timezone()
-    |> CoreWeb.UI.Timestamp.humanize()
+    |> MicaWeb.UI.Timestamp.apply_timezone()
+    |> MicaWeb.UI.Timestamp.humanize()
   end
 
   defp to_member(%{

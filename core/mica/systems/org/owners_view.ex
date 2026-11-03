@@ -1,5 +1,5 @@
 defmodule Systems.Org.OwnersView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Text
   alias Systems.Org

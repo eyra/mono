@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdatePoolCriteria do
+defmodule Mica.Repo.Migrations.UpdatePoolCriteria do
   use Ecto.Migration
 
   def change do

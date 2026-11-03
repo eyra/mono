@@ -1,11 +1,11 @@
-defmodule Systems.Announcement.AdminViewBuilderTest do
-  use Core.DataCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Announcement.AdminViewBuilderTest do
+  use Mica.DataCase, async: false
+  use Mica.FeatureFlags.Test
 
   import Ecto.Query
 
-  alias Core.Repo
-  alias Systems.Announcement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
 
   @attrs %{
     kind: :release_notes,
@@ -68,7 +68,7 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
            } = second
 
     assert older_id == older.id
-    assert second.published == CoreWeb.UI.Timestamp.humanize(published_at)
+    assert second.published == MicaWeb.UI.Timestamp.humanize(published_at)
   end
 
   test "has no announcements for a user who is not a system admin", %{admin: admin} do
@@ -136,8 +136,8 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
                "This announcement is published. Saving shows your changes to its recipients " <>
                  "at once; it isn't sent again. Its priority and recipients can't change."
 
-      Gettext.put_locale(CoreWeb.Gettext, "nl")
-      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(MicaWeb.Gettext, "en") end)
 
       assert %{published: %{text: text}} = composing(admin, %{announcement: published})
 
@@ -161,8 +161,8 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
       assert %{published: %{notice: ^en}} =
                composing(admin, %{announcement: published, compose_notice: :changed_since_loaded})
 
-      Gettext.put_locale(CoreWeb.Gettext, "nl")
-      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(MicaWeb.Gettext, "en") end)
 
       assert %{published: %{notice: nl}} =
                composing(admin, %{announcement: published, compose_notice: :changed_since_loaded})
@@ -211,8 +211,8 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
     end
 
     test "is in Dutch for a Dutch admin", %{admin: admin} do
-      Gettext.put_locale(CoreWeb.Gettext, "nl")
-      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(MicaWeb.Gettext, "en") end)
 
       assert %{
                audience: %{
@@ -244,8 +244,8 @@ defmodule Systems.Announcement.AdminViewBuilderTest do
     end
 
     test "the notices are in Dutch for a Dutch admin", %{admin: admin} do
-      Gettext.put_locale(CoreWeb.Gettext, "nl")
-      on_exit(fn -> Gettext.put_locale(CoreWeb.Gettext, "en") end)
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(MicaWeb.Gettext, "en") end)
 
       assert %{
                audience: %{

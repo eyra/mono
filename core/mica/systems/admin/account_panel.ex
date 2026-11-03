@@ -1,6 +1,6 @@
 defmodule Systems.Admin.AccountPanel do
   use Systems.Admin.Panel
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account

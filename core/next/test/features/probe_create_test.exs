@@ -1,10 +1,10 @@
-defmodule CoreWeb.Features.ProbeCreateTest do
+defmodule NextWeb.Features.ProbeCreateTest do
   @moduledoc """
   Feature test for creating a Cognitive screening (Probe) project item,
   which is behind the `:probe` feature flag.
   """
-  use CoreWeb.FeatureCase
-  use Core.FeatureFlags.Test
+  use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
   @card_selector "[data-testid^='card_']"
   @probe_selector "[data-testid='selector-item-probe']"

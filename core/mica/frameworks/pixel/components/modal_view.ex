@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.ModalView do
-  use CoreWeb, :pixel
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :pixel
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
 

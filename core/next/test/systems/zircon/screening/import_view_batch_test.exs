@@ -1,14 +1,14 @@
-defmodule Systems.Zircon.Screening.ImportViewBatchTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Zircon.Screening.ImportViewBatchTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Systems.Paper
-  alias Systems.Zircon.Screening
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon.Screening
 
   setup do
     # Isolate signals to prevent workflow errors
-    isolate_signals(except: [Systems.Zircon.Switch, Systems.Observatory.Switch])
+    isolate_signals(except: [Next.Systems.Zircon.Switch, Systems.Observatory.Switch])
 
     # Create required entities for ImportView
     auth_node = Factories.insert!(:auth_node)
@@ -35,15 +35,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure small batch size for testing
-      original_config = Application.get_env(:core, :paper)
+      original_config = Application.get_env(:mica, :paper)
 
       updated_config =
         Keyword.merge(original_config, import_batch_size: 5, import_batch_timeout: 30_000)
 
-      Application.put_env(:core, :paper, updated_config)
+      Application.put_env(:mica, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper, original_config)
+        Application.put_env(:mica, :paper, original_config)
       end)
 
       # Create reference file with file association
@@ -53,10 +53,10 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       # Associate reference file with tool
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create import session with 15 papers (should be 3 batches of 5)
       entries =
@@ -128,15 +128,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure small batch size
-      original_config = Application.get_env(:core, :paper)
+      original_config = Application.get_env(:mica, :paper)
 
       updated_config =
         Keyword.merge(original_config, import_batch_size: 3, import_batch_timeout: 30_000)
 
-      Application.put_env(:core, :paper, updated_config)
+      Application.put_env(:mica, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper, original_config)
+        Application.put_env(:mica, :paper, original_config)
       end)
 
       # Create some existing papers (duplicates)
@@ -161,10 +161,10 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       # Associate reference file with tool
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create import session with 8 papers (3 duplicates, 5 new)
       # Should be 3 batches: [3 papers], [3 papers], [2 papers]
@@ -235,15 +235,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       # This test simulates checking the progress message at different stages
 
       # Configure very small batch size
-      original_config = Application.get_env(:core, :paper)
+      original_config = Application.get_env(:mica, :paper)
 
       updated_config =
         Keyword.merge(original_config, import_batch_size: 2, import_batch_timeout: 30_000)
 
-      Application.put_env(:core, :paper, updated_config)
+      Application.put_env(:mica, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper, original_config)
+        Application.put_env(:mica, :paper, original_config)
       end)
 
       # Create reference file with file association
@@ -253,10 +253,10 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       # Associate reference file with tool
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create import session with just 4 papers (2 batches)
       entries =
@@ -316,7 +316,7 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
           "total_papers" => 4
         }
       })
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       # With small imports (below threshold), the UI continues without progress indicators
       # The import happens in the background without visible UI updates
@@ -330,15 +330,15 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
       paper_set: paper_set
     } do
       # Configure batch size
-      original_config = Application.get_env(:core, :paper)
+      original_config = Application.get_env(:mica, :paper)
 
       updated_config =
         Keyword.merge(original_config, import_batch_size: 5, import_batch_timeout: 30_000)
 
-      Application.put_env(:core, :paper, updated_config)
+      Application.put_env(:mica, :paper, updated_config)
 
       on_exit(fn ->
-        Application.put_env(:core, :paper, original_config)
+        Application.put_env(:mica, :paper, original_config)
       end)
 
       file = Factories.insert!(:content_file, %{name: "test.ris"})
@@ -346,10 +346,10 @@ defmodule Systems.Zircon.Screening.ImportViewBatchTest do
 
       tool =
         tool
-        |> Core.Repo.preload(:reference_files)
+        |> Mica.Repo.preload(:reference_files)
         |> Ecto.Changeset.change()
         |> Ecto.Changeset.put_assoc(:reference_files, [reference_file])
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       # Create import session with invalid entry that will cause failure
       entries = [

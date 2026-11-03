@@ -1,7 +1,7 @@
 defmodule Systems.Account.PageBuilderTest do
-  use Core.DataCase
-  use Core.FeatureFlags.Test
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Mica.FeatureFlags.Test
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
   alias Systems.Pool
@@ -9,7 +9,7 @@ defmodule Systems.Account.PageBuilderTest do
   describe "view_model/2" do
     setup do
       user = Factories.insert!(:member)
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
 
       %{user: user}
     end
@@ -54,7 +54,7 @@ defmodule Systems.Account.PageBuilderTest do
 
       Pool.Public.add_participant!(panl_pool, user)
 
-      user = Core.Repo.preload(user, [:features, :profile])
+      user = Mica.Repo.preload(user, [:features, :profile])
       vm = Account.PageBuilder.view_model(user, %{})
 
       item_ids = Enum.map(vm.items, & &1.id)

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddVersionSystem do
+defmodule Mica.Repo.Migrations.AddVersionSystem do
   use Ecto.Migration
 
   def change do

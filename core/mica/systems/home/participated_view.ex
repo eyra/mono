@@ -1,5 +1,5 @@
 defmodule Systems.Home.ParticipatedView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Text
   alias Systems.Assignment.CurrencyHelpers

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddExperimentPart2 do
+defmodule Mica.Repo.Migrations.AddExperimentPart2 do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -12,7 +12,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
 
   defp migrate_tools(tool_type) do
     tools =
-      query(Core.Repo, "SELECT assignable_#{tool_type}_id, id, auth_node_id FROM assignments;")
+      query(Mica.Repo, "SELECT assignable_#{tool_type}_id, id, auth_node_id FROM assignments;")
 
     migrate_tools(tools, tool_type)
   end
@@ -39,7 +39,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
   defp migrate_tool([id, assignment_id, assignment_auth_node_id], tool_type) do
     {:ok, %{rows: tools}} =
       query(
-        Core.Repo,
+        Mica.Repo,
         "SELECT id, subject_count, duration, language, ethical_approval, ethical_code, devices FROM #{tool_type}s WHERE id = #{id};"
       )
 
@@ -123,7 +123,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
 
   def exist?(table, where) do
     {:ok, %{rows: [[count]]}} =
-      query(Core.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
+      query(Mica.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
 
     count > 0
   end
@@ -134,7 +134,7 @@ defmodule Core.Repo.Migrations.AddExperimentPart2 do
 
   def query_field(table, field, where) do
     {:ok, %{rows: [[id] | _]}} =
-      query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
+      query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     id
   end

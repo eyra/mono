@@ -17,7 +17,7 @@ Zircon is a comprehensive **systematic literature review platform** that serves 
 
 ### Core Models
 
-#### `Systems.Zircon.Screening.ToolModel`
+#### `Next.Systems.Zircon.Screening.ToolModel`
 - **Central Model**: Represents a screening tool instance
 - **Authorization**: Integrates with hierarchical permission system via `auth_node`
 - **Protocols**: Implements `Frameworks.Concept.ToolModel` and `Frameworks.Concept.Leaf`
@@ -26,12 +26,12 @@ Zircon is a comprehensive **systematic literature review platform** that serves 
 #### Association Models
 ```elixir
 # Tool-Paper Relationship
-Systems.Zircon.Screening.ToolReferenceFileAssoc
+Next.Systems.Zircon.Screening.ToolReferenceFileAssoc
 - belongs_to(:tool, Screening.ToolModel)
 - belongs_to(:reference_file, Paper.ReferenceFileModel)
 
 # Tool-Annotation Relationship
-Systems.Zircon.Screening.ToolAnnotationAssoc
+Next.Systems.Zircon.Screening.ToolAnnotationAssoc
 - belongs_to(:tool, Screening.ToolModel)
 - belongs_to(:annotation, Annotation.Model)
 ```

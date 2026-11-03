@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Screening.Categories do
+defmodule Next.Systems.Zircon.Screening.Categories do
   @moduledoc """
   Defines the screening criteria categories used in the TIAB screening phase of the literature review process.
 
@@ -54,7 +54,7 @@ defmodule Systems.Zircon.Screening.Categories do
 
   """
 
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:zircon_screening_categories,
        [
          :population,

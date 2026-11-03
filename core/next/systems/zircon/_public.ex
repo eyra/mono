@@ -1,23 +1,23 @@
-defmodule Systems.Zircon.Public do
-  use Core, :public
-  use Systems.Zircon.Constants
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Public do
+  use Mica, :public
+  use Next.Systems.Zircon.Constants
+  use Gettext, backend: MicaWeb.Gettext
 
   require Ecto.Query
   require Logger
   import Ecto.Query, warn: false
   import Ecto.Changeset, only: [put_assoc: 3]
-  import Systems.Zircon.Queries
+  import Next.Systems.Zircon.Queries
 
   alias Ecto.Multi
-  alias Core.Repo
-  alias Core.Authentication
+  alias Mica.Repo
+  alias Mica.Authentication
   alias Frameworks.Signal
 
-  alias Systems.Annotation
-  alias Systems.Ontology
-  alias Systems.Paper
-  alias Systems.Zircon
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
+  alias Next.Systems.Paper
+  alias Next.Systems.Zircon
 
   # Screening Tool
 
@@ -222,7 +222,7 @@ defmodule Systems.Zircon.Public do
     all_ref_file_ids = Enum.map(reference_files, & &1.id)
 
     # Abort any active imports for all reference files
-    Systems.Paper.Public.abort_active_imports_for_reference_files!(all_ref_file_ids)
+    Next.Systems.Paper.Public.abort_active_imports_for_reference_files!(all_ref_file_ids)
 
     # Get IDs of uploaded files to archive
     uploaded_file_ids =
@@ -232,7 +232,7 @@ defmodule Systems.Zircon.Public do
 
     # Archive all uploaded files
     if uploaded_file_ids != [] do
-      Systems.Paper.Public.archive_reference_files!(uploaded_file_ids)
+      Next.Systems.Paper.Public.archive_reference_files!(uploaded_file_ids)
     end
   end
 
@@ -419,7 +419,7 @@ defmodule Systems.Zircon.Public do
   end
 
   def start_screening_session(tool, user) do
-    identifier = Systems.Zircon.Sqids.encode!([tool.id, user.id])
+    identifier = Next.Systems.Zircon.Sqids.encode!([tool.id, user.id])
 
     # For now we just have one configurable screening agent module, but in the future we may have multiple agents running in parallel
     Multi.new()

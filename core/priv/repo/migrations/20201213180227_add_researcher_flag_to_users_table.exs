@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddResearcherFlagToAccountsTable do
+defmodule Mica.Repo.Migrations.AddResearcherFlagToAccountsTable do
   use Ecto.Migration
 
   def change do

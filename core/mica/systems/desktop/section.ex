@@ -2,12 +2,12 @@ defmodule Systems.Desktop.Section do
   @moduledoc """
   A section on the Desktop page (`/desktop`), shown after Recent items.
 
-  Systems contribute sections with `c:Core.System.desktop_sections/0`; the page
-  shows them in `c:Core.SaaS.systems/0` order.
+  Systems contribute sections with `c:Mica.System.desktop_sections/0`; the page
+  shows them in `c:Mica.SaaS.systems/0` order.
 
       defmodule Systems.Notes.DesktopSection do
         use Systems.Desktop.Section
-        use Gettext, backend: CoreWeb.Gettext
+        use Gettext, backend: MicaWeb.Gettext
 
         alias Systems.Notes
 
@@ -60,7 +60,7 @@ defmodule Systems.Desktop.Section do
   defmacro __using__(_opts) do
     quote do
       @behaviour Systems.Desktop.Section
-      use CoreWeb, :html
+      use MicaWeb, :html
     end
   end
 end

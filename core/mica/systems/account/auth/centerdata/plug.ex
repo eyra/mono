@@ -13,7 +13,7 @@ end
 defmodule Systems.Account.Auth.Centerdata.AuthorizePlug do
   import Plug.Conn
   import Systems.Account.Auth.Centerdata.PlugUtils
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
@@ -42,11 +42,11 @@ end
 defmodule Systems.Account.Auth.Centerdata.CallbackController do
   require Logger
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
   import Systems.Account.Auth.Centerdata.PlugUtils
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   alias Systems.Account.Auth
 
@@ -63,7 +63,7 @@ defmodule Systems.Account.Auth.Centerdata.CallbackController do
 
   defp authenticate(conn, params, session_params) do
     config =
-      config(:core)
+      config(:mica)
       |> Keyword.put(:session_params, session_params)
       |> Keyword.put(:nonce, session_params.nonce)
 

@@ -6,7 +6,7 @@ defmodule Systems.Content.PageModel do
 
   schema "content_pages" do
     field(:body, :string)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     timestamps()
   end
 

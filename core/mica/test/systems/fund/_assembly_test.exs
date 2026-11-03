@@ -1,5 +1,5 @@
 defmodule Systems.Fund.AssemblyTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Fund
 

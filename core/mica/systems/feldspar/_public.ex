@@ -1,7 +1,7 @@
 defmodule Systems.Feldspar.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.{
     Feldspar
@@ -33,7 +33,7 @@ defmodule Systems.Feldspar.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Feldspar.ToolModel do
+defimpl Mica.Persister, for: Systems.Feldspar.ToolModel do
   def save(_tool, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :feldspar_tool) do
       {:ok, %{feldspar_tool: feldspar_tool}} -> {:ok, feldspar_tool}

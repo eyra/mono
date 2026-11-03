@@ -1,11 +1,11 @@
-defmodule Systems.Announcement.PageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Announcement.PageBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.TrixPostProcessor
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   # An update message brings the recipient without its announcement
-  # (`Systems.Announcement.Switch`), so the latest text is read here.
+  # (`Next.Systems.Announcement.Switch`), so the latest text is read here.
   def view_model(
         %Announcement.RecipientModel{
           announcement: %Ecto.Association.NotLoaded{},

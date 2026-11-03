@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorOnyxToZircon do
+defmodule Mica.Repo.Migrations.RefactorOnyxToZircon do
   use Ecto.Migration
 
   def up do

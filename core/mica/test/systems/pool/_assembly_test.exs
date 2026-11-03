@@ -1,5 +1,5 @@
 defmodule Systems.Pool.AssemblyTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Fund
   alias Systems.Org

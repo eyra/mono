@@ -1,5 +1,5 @@
 defmodule Next.StartPages do
-  @behaviour CoreWeb.StartPageProvider
+  @behaviour MicaWeb.StartPageProvider
 
   def pages(),
     do: %{
@@ -16,7 +16,7 @@ defmodule Next.StartPages do
 
   defmacro __using__(_opts) do
     quote do
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
 
       unquote do
         for {id, %{domain: domain}} <- Next.StartPages.pages() do

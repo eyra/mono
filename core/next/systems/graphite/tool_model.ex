@@ -1,4 +1,4 @@
-defmodule Systems.Graphite.ToolModel do
+defmodule Next.Systems.Graphite.ToolModel do
   @moduledoc """
   The benchmark tool schema.
   """
@@ -6,17 +6,17 @@ defmodule Systems.Graphite.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Workflow
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   schema "graphite_tools" do
     field(:deadline, :utc_datetime)
     field(:deadline_string, :string, virtual: true)
 
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_many(:submissions, Graphite.SubmissionModel, foreign_key: :tool_id)
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :graphite_tool_id)
@@ -115,9 +115,9 @@ defmodule Systems.Graphite.ToolModel do
   end
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
-    alias Systems.Graphite
+    alias Next.Systems.Graphite
     def key(_), do: :graphite
     def auth_tree(%{auth_node: auth_node}), do: auth_node
     def apply_label(_), do: ""

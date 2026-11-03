@@ -1,8 +1,8 @@
-defmodule Systems.Announcement.PublicTest do
-  use Core.DataCase, async: true
+defmodule Next.Systems.Announcement.PublicTest do
+  use Mica.DataCase, async: true
 
-  alias Core.Repo
-  alias Systems.Announcement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
 
   @attrs %{
     kind: :release_notes,

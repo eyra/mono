@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.AllianceCallbackPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  use Core, :auth
+  use Mica, :auth
   alias Phoenix.LiveView
 
   alias Systems.Account

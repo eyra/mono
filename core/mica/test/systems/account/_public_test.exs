@@ -1,14 +1,14 @@
 defmodule Systems.Account.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
 
   alias Systems.Account
   alias Systems.Account.User
   alias Systems.Account.UserTokenModel
 
-  import Core.AuthTestHelpers
+  import Mica.AuthTestHelpers
 
   describe "get_user_by_email/1" do
     test "does not return the user if the email does not exist" do

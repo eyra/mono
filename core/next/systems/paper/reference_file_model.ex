@@ -1,10 +1,10 @@
-defmodule Systems.Paper.ReferenceFileModel do
+defmodule Next.Systems.Paper.ReferenceFileModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
   alias Systems.Content
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_reference_file" do
     @doc """

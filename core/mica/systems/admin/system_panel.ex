@@ -1,10 +1,10 @@
 defmodule Systems.Admin.SystemPanel do
   use Systems.Admin.Panel
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
-  alias Systems.Citizen
+  alias Next.Systems.Citizen
   alias Systems.Fund
   alias Systems.Pool
 

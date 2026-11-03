@@ -15,7 +15,7 @@ The Ontology system is a sophisticated semantic knowledge management platform th
 
 ### Core Models
 
-#### `Systems.Ontology.ConceptModel`
+#### `Next.Systems.Ontology.ConceptModel`
 - **Table**: `ontology_concept`
 - **Fields**:
   - `phrase` (string) - The concept phrase
@@ -24,7 +24,7 @@ The Ontology system is a sophisticated semantic knowledge management platform th
 - **Relationships**: `belongs_to(:entity, Authentication.Entity)`
 - **Constraints**: Unique constraint on phrases
 
-#### `Systems.Ontology.PredicateModel`
+#### `Next.Systems.Ontology.PredicateModel`
 - **Table**: `ontology_predicate`
 - **Fields**:
   - `type_negated?` (boolean) - Support for negative assertions
@@ -37,7 +37,7 @@ The Ontology system is a sophisticated semantic knowledge management platform th
   - `belongs_to(:entity, Authentication.Entity)` - Owner
 - **Logic**: Implements Subject-Predicate-Object triples with negation support
 
-#### `Systems.Ontology.RefModel`
+#### `Next.Systems.Ontology.RefModel`
 - **Table**: `ontology_ref`
 - **Purpose**: Polymorphic references to concepts or predicates
 - **Relationships**:

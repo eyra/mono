@@ -1,5 +1,5 @@
 defmodule Systems.Project.NodePageGridView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Empty
   alias Frameworks.Pixel.Grid

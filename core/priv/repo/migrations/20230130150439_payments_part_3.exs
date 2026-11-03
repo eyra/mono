@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.PaymentsPart3 do
+defmodule Mica.Repo.Migrations.PaymentsPart3 do
   use Ecto.Migration
 
   def up do

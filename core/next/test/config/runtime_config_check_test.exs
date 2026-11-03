@@ -2,8 +2,8 @@ defmodule Next.Config.RuntimeConfigCheckTest do
   # Replaces the process environment while runtime.exs is evaluated.
   use ExUnit.Case, async: false
 
-  alias Core.RuntimeConfig.Check
-  alias Core.RuntimeConfig.Snapshot
+  alias Mica.RuntimeConfig.Check
+  alias Mica.RuntimeConfig.Snapshot
 
   @password "db-password-must-not-show"
 
@@ -30,7 +30,7 @@ defmodule Next.Config.RuntimeConfigCheckTest do
       |> Map.merge(overrides)
       |> Map.reject(fn {_, value} -> is_nil(value) end)
 
-    build_time = [core: [{Oban, [repo: Core.Repo]}]]
+    build_time = [core: [{Oban, [repo: Mica.Repo]}]]
     Config.Reader.merge(build_time, Snapshot.evaluate("config/runtime.exs", env, :prod))
   end
 

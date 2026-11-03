@@ -1,10 +1,10 @@
 defmodule Systems.Userflow.Assembly do
-  use Core, :auth
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica, :auth
+  use Gettext, backend: MicaWeb.Gettext
 
   import Ecto.Changeset
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Systems.Account
   alias Systems.Userflow

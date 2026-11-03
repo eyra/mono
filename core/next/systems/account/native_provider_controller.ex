@@ -1,16 +1,16 @@
-defmodule Next.Account.NativeProviderController do
+defmodule Next.Systems.Account.NativeProviderController do
   @moduledoc """
   The pages the Next native apps open in the system sign-in sheet to sign in
-  through an identity provider; see `Next.Account.NativeHandoff`.
+  through an identity provider; see `Next.Systems.Account.NativeHandoff`.
   """
-  use CoreWeb, {:controller, [formats: [:html]]}
+  use MicaWeb, {:controller, [formats: [:html]]}
 
-  alias CoreWeb.ReturnTo
-  alias Next.Account.NativeHandoff
+  alias MicaWeb.ReturnTo
+  alias Next.Systems.Account.NativeHandoff
   alias Systems.Account.Auth.Methods
 
   @doc """
-  Marks the sheet with the app's code challenge and continues at Core's own
+  Marks the sheet with the app's code challenge and continues at Mica's own
   start of the provider. `login_hint` preselects the account where the
   provider supports it; `return_to` comes back from the redeem.
   """

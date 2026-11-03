@@ -4,12 +4,12 @@ defmodule Systems.Pool.SubmissionPage do
   """
   use Systems.Content.Composer, :live_workspace
 
-  use Gettext, backend: CoreWeb.Gettext
-  import CoreWeb.UI.Member
+  use Gettext, backend: MicaWeb.Gettext
+  import MicaWeb.UI.Member
   import Frameworks.Pixel.Navigation, only: [button_bar: 1]
   import Frameworks.Pixel.Content
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.Text
   alias Systems.Pool
 
@@ -28,7 +28,7 @@ defmodule Systems.Pool.SubmissionPage do
   @impl true
   def compose(:publish_inform, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "publish_inform",
@@ -40,7 +40,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:publish_error, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "publish_error",
@@ -52,7 +52,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:retract_admin_success, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "retract_admin_success",
@@ -64,7 +64,7 @@ defmodule Systems.Pool.SubmissionPage do
 
   def compose(:complete_admin_success, _) do
     %{
-      module: CoreWeb.UI.Dialog.Plain,
+      module: MicaWeb.UI.Dialog.Plain,
       params: %{
         type: :inform,
         id: "complete_admin_success",

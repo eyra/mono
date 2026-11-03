@@ -2,7 +2,7 @@ defmodule Systems.Promotion.BannerView do
   @moduledoc """
   The Unique Selling Point Card highlights a reason for taking an action.
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.ImagePreview
 

@@ -1,5 +1,5 @@
-defmodule Next.Account.ParticipantSigninView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Account.ParticipantSigninView do
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Line
   import Systems.Account.UserForm

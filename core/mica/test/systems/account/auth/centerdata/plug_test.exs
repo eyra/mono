@@ -8,12 +8,12 @@ defmodule Systems.Account.Auth.Centerdata.FakeOIDC do
 end
 
 defmodule Systems.Account.Auth.Centerdata.PlugTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   alias Systems.Account.Auth.Centerdata.AuthorizePlug
 
   setup do
-    original = Application.get_env(:core, Systems.Account.Auth.Centerdata, [])
+    original = Application.get_env(:mica, Systems.Account.Auth.Centerdata, [])
 
     config = [
       client_id: "test-client",
@@ -24,8 +24,8 @@ defmodule Systems.Account.Auth.Centerdata.PlugTest do
       userinfo: %{"sub" => "-1", "email" => "panel@example.com", "email_verified" => true}
     ]
 
-    Application.put_env(:core, Systems.Account.Auth.Centerdata, config)
-    on_exit(fn -> Application.put_env(:core, Systems.Account.Auth.Centerdata, original) end)
+    Application.put_env(:mica, Systems.Account.Auth.Centerdata, config)
+    on_exit(fn -> Application.put_env(:mica, Systems.Account.Auth.Centerdata, original) end)
     {:ok, config: config}
   end
 
@@ -33,7 +33,7 @@ defmodule Systems.Account.Auth.Centerdata.PlugTest do
     conn =
       Plug.Test.conn(:get, "/auth/centerdata")
       |> init_test_session(%{})
-      |> AuthorizePlug.call(:core)
+      |> AuthorizePlug.call(:mica)
 
     assert %{state: "test-state", nonce: nonce} = conn.private.plug_session["centerdata"]
     assert is_binary(nonce)
@@ -41,9 +41,9 @@ defmodule Systems.Account.Auth.Centerdata.PlugTest do
   end
 
   test "is unavailable when the feature is disabled", %{conn: conn} do
-    features = Application.fetch_env!(:core, :features)
-    Application.put_env(:core, :features, Keyword.put(features, :centerdata_sign_in, false))
-    on_exit(fn -> Application.put_env(:core, :features, features) end)
+    features = Application.fetch_env!(:mica, :features)
+    Application.put_env(:mica, :features, Keyword.put(features, :centerdata_sign_in, false))
+    on_exit(fn -> Application.put_env(:mica, :features, features) end)
 
     conn = get(conn, "/auth/centerdata")
 
@@ -62,7 +62,7 @@ defmodule Systems.Account.Auth.Centerdata.PlugTest do
 
   test "rejects an unverified ID token email", %{conn: conn, config: config} do
     Application.put_env(
-      :core,
+      :mica,
       Systems.Account.Auth.Centerdata,
       Keyword.put(config, :userinfo, %{
         "sub" => "-1",

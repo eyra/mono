@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.SwitchTest do
-  use Core.DataCase
+  use Mica.DataCase
   import Frameworks.Signal.TestHelper
   import Systems.NextAction.TestHelper
 
@@ -83,13 +83,13 @@ defmodule Systems.Assignment.SwitchTest do
       %{crew: crew, workflow: workflow} = Assignment.Factories.create_assignment(31, 1)
 
       crew_member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-      %{items: [%{id: item_id}]} = workflow |> Core.Repo.preload([:items])
+      %{items: [%{id: item_id}]} = workflow |> Mica.Repo.preload([:items])
 
       crew_task =
         Factories.insert!(:crew_task, %{
           identifier: ["item=#{item_id}", "member=#{crew_member.id}"],
           crew: crew,
-          auth_node: %Core.Authorization.Node{},
+          auth_node: %Mica.Authorization.Node{},
           status: :pending
         })
 
@@ -123,7 +123,7 @@ defmodule Systems.Assignment.SwitchTest do
         crew_task: crew_task
       } do
         {:ok, item} = Assignment.Private.get_workflow_item(crew_task)
-        Core.Repo.delete!(item)
+        Mica.Repo.delete!(item)
 
         message = %{crew: crew, crew_task: crew_task, from_pid: self()}
         assert :ok = Switch.intercept({:crew_task, @event}, message)
@@ -179,7 +179,7 @@ defmodule Systems.Assignment.SwitchTest do
             Factories.insert!(:crew_task, %{
               identifier: Assignment.Private.task_identifier(assignment, item, member),
               crew: crew,
-              auth_node: %Core.Authorization.Node{},
+              auth_node: %Mica.Authorization.Node{},
               status: status
             })
           end
@@ -187,7 +187,7 @@ defmodule Systems.Assignment.SwitchTest do
         assert {:ok, _} = Systems.Workflow.Public.delete(deleted_item)
 
         for task <- tasks do
-          %{expired: expired} = Core.Repo.reload!(task)
+          %{expired: expired} = Mica.Repo.reload!(task)
           deleted? = Assignment.Private.workflow_item_id(task) == "#{deleted_item.id}"
           assert expired == deleted?
         end
@@ -237,12 +237,12 @@ defmodule Systems.Assignment.SwitchTest do
         assignment = Assignment.Factories.create_assignment(31, 1)
 
       crew_member = Factories.insert!(:crew_member, %{crew: crew, user: user})
-      %{items: [%{id: item_id}]} = workflow |> Core.Repo.preload([:items])
+      %{items: [%{id: item_id}]} = workflow |> Mica.Repo.preload([:items])
 
       Factories.insert!(:crew_task, %{
         identifier: ["item=#{item_id}", "member=#{crew_member.id}"],
         crew: crew,
-        auth_node: %Core.Authorization.Node{},
+        auth_node: %Mica.Authorization.Node{},
         status: :pending
       })
 
@@ -287,7 +287,7 @@ defmodule Systems.Assignment.SwitchTest do
       owner = Factories.insert!(:member)
 
       :ok =
-        Core.Authorization.assign_role(owner, assignment, :owner)
+        Mica.Authorization.assign_role(owner, assignment, :owner)
 
       participant = Factories.insert!(:member)
 
@@ -338,7 +338,7 @@ defmodule Systems.Assignment.SwitchTest do
 
     test ":completed on an unfunded assignment skips NA creation", %{owner: owner} do
       unfunded = Factories.insert!(:assignment, %{fund: nil})
-      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
+      :ok = Mica.Authorization.assign_role(owner, unfunded, :owner)
       participant = Factories.insert!(:member)
       {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
 
@@ -393,7 +393,7 @@ defmodule Systems.Assignment.SwitchTest do
       {:ok, _} =
         Ecto.Multi.new()
         |> Fund.Public.mark_pending_approval(other_reward)
-        |> Core.Repo.commit()
+        |> Mica.Repo.commit()
 
       message = %{assignment_participation: participation, from_pid: self()}
       assert :ok = Switch.intercept({:assignment_participation, :accepted}, message)
@@ -403,7 +403,7 @@ defmodule Systems.Assignment.SwitchTest do
 
     test ":accepted on an unfunded assignment leaves the NA untouched", %{owner: owner} do
       unfunded = Factories.insert!(:assignment, %{fund: nil})
-      :ok = Core.Authorization.assign_role(owner, unfunded, :owner)
+      :ok = Mica.Authorization.assign_role(owner, unfunded, :owner)
       participant = Factories.insert!(:member)
       {:ok, participation} = Assignment.Public.obtain_participation(unfunded, participant)
 
@@ -447,7 +447,7 @@ defmodule Systems.Assignment.SwitchTest do
       {:ok, _} =
         Ecto.Multi.new()
         |> Fund.Public.mark_pending_approval(other_reward)
-        |> Core.Repo.commit()
+        |> Mica.Repo.commit()
 
       message = %{assignment_participation: participation, from_pid: self()}
       assert :ok = Switch.intercept({:assignment_participation, :rejected}, message)

@@ -1,8 +1,8 @@
-defmodule Systems.Student.CriteriaFilters do
+defmodule Next.Systems.Student.CriteriaFilters do
   @moduledoc """
   Defines filters used to filter students in the overview page of the pool.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:criteria_filters, [:iba, :bk, :resit]}
 
   def include?(codes, nil) when is_list(codes), do: true

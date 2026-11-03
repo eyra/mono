@@ -15,11 +15,11 @@ defmodule Systems.Fund.CreatePayInTest do
   Wallaby feature test.
   """
 
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
   import Mox
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Assignment
   alias Systems.Fund
   alias Systems.Payment.ProviderMock
@@ -152,7 +152,7 @@ defmodule Systems.Fund.CreatePayInTest do
 
     # `updated_at` has second precision. Backdating it makes the first
     # pay-in's save land in a later second, so reusing a stale assignment
-    # always trips `Core.Repo.multi_update_guard/3` instead of only sometimes.
+    # always trips `Mica.Repo.multi_update_guard/3` instead of only sometimes.
     an_hour_ago =
       NaiveDateTime.utc_now() |> NaiveDateTime.add(-3600) |> NaiveDateTime.truncate(:second)
 

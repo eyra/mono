@@ -1,5 +1,5 @@
 defmodule Systems.Manual.AssemblyTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Manual
 

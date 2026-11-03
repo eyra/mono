@@ -1,5 +1,5 @@
 defmodule Systems.Monitor.Factories do
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Assignment
   alias Systems.Account
 

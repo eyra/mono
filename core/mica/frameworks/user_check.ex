@@ -9,17 +9,17 @@ defmodule Frameworks.UserCheck do
   ## Configuration
 
       # config.exs (default)
-      config :core, Frameworks.UserCheck,
+      config :mica, Frameworks.UserCheck,
         client: Frameworks.UserCheck.HTTPClient,
         base_url: "https://api.usercheck.com",
         timeout: 2_000
 
       # dev.exs / test.exs
-      config :core, Frameworks.UserCheck,
+      config :mica, Frameworks.UserCheck,
         client: Frameworks.UserCheck.MockClient
 
       # runtime.exs
-      config :core, Frameworks.UserCheck,
+      config :mica, Frameworks.UserCheck,
         api_key: System.get_env("USERCHECK_API_KEY")
 
   ## Usage
@@ -46,7 +46,7 @@ defmodule Frameworks.UserCheck do
   end
 
   defp client do
-    Core.Env.get(__MODULE__, [])
+    Mica.Env.get(__MODULE__, [])
     |> Keyword.get(:client, Frameworks.UserCheck.HTTPClient)
   end
 end

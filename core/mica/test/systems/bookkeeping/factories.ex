@@ -1,5 +1,5 @@
 defmodule Systems.Bookkeeping.Factories do
-  alias Core.Factories
+  alias Mica.Factories
 
   alias Systems.{
     Bookkeeping

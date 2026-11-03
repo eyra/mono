@@ -1,19 +1,19 @@
-defmodule Systems.Announcement.AdminView do
+defmodule Next.Systems.Announcement.AdminView do
   @moduledoc """
   The Announcements tab on the Admin page: the list of announcements and the
   form to compose one. Saving stores the announcement unpublished; it can be
   opened again from the list. Publishing sends it to the audience chosen below
   the form: creators, narrowed by the Admin → Users filters and search. The
   server resolves the audience itself
-  (`Systems.Announcement.Public.publish_announcement/4`).
+  (`Next.Systems.Announcement.Public.publish_announcement/4`).
 
   A published announcement opens with only its title, summary and body:
   saving shows the changes to its recipients without sending it again
-  (`Systems.Announcement.Public.update_announcement/2`).
+  (`Next.Systems.Announcement.Public.update_announcement/2`).
 
   Every event checks `@vm.allowed?` (system admin, `announcements` flag on).
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   import Frameworks.Pixel.Form
 
@@ -21,7 +21,7 @@ defmodule Systems.Announcement.AdminView do
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Text
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
   alias Systems.Observatory
 
   def dependencies(), do: [:current_user, :locale]

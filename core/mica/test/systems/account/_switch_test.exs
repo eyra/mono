@@ -1,7 +1,7 @@
 defmodule Systems.Account.SwitchTest do
-  use Core.DataCase
+  use Mica.DataCase
   use Bamboo.Test
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account
 
   describe "user_created" do

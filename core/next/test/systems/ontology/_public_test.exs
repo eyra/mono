@@ -1,9 +1,9 @@
-defmodule Ontology.PublicTest do
-  use Core.DataCase
+defmodule Next.Systems.Ontology.PublicTest do
+  use Mica.DataCase
 
-  alias Core.Repo
-  import Systems.Ontology.Public
-  alias Systems.Ontology
+  alias Mica.Repo
+  import Next.Systems.Ontology.Public
+  alias Next.Systems.Ontology
 
   describe "insert_concept/3" do
     setup do
@@ -184,7 +184,7 @@ defmodule Ontology.PublicTest do
              ] = changeset.errors
 
       assert [%Ontology.PredicateModel{id: ^id1}] =
-               from(Ontology.PredicateModel) |> Core.Repo.all()
+               from(Ontology.PredicateModel) |> Mica.Repo.all()
     end
 
     test "insert + insert (different type_negated?)", %{
@@ -221,7 +221,7 @@ defmodule Ontology.PublicTest do
              ] = changeset.errors
 
       assert [%Ontology.PredicateModel{id: ^id1}] =
-               from(Ontology.PredicateModel) |> Core.Repo.all()
+               from(Ontology.PredicateModel) |> Mica.Repo.all()
     end
   end
 end

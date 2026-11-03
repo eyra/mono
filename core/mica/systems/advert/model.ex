@@ -5,7 +5,7 @@ defmodule Systems.Advert.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Changeset
 
   alias Frameworks.Concept
@@ -20,7 +20,7 @@ defmodule Systems.Advert.Model do
     belongs_to(:assignment, Assignment.Model)
     belongs_to(:promotion, Promotion.Model)
     belongs_to(:submission, Pool.SubmissionModel)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     timestamps()
   end
@@ -33,7 +33,7 @@ defmodule Systems.Advert.Model do
   end
 
   defimpl Frameworks.Concept.Leaf do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     def tag(_), do: dgettext("eyra-advert", "leaf.tag")
     def resource_id(%{id: id}), do: "advert/#{id}"

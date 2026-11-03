@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddSurveyToolFlowFields do
+defmodule Mica.Repo.Migrations.AddSurveyToolFlowFields do
   use Ecto.Migration
 
   def change do

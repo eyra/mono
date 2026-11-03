@@ -1,7 +1,7 @@
 defmodule Systems.Org.AdminsModalViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org.AdminsModalViewBuilder
 
   describe "view_model/2" do
@@ -10,8 +10,8 @@ defmodule Systems.Org.AdminsModalViewBuilderTest do
       owner2 = Factories.insert!(:creator)
       org = Factories.insert!(:org_node, %{identifier: ["admins_vm_org"]})
 
-      Core.Authorization.assign_role(owner1, org, :owner)
-      Core.Authorization.assign_role(owner2, org, :owner)
+      Mica.Authorization.assign_role(owner1, org, :owner)
+      Mica.Authorization.assign_role(owner2, org, :owner)
 
       vm = AdminsModalViewBuilder.view_model(org, %{})
 
@@ -27,7 +27,7 @@ defmodule Systems.Org.AdminsModalViewBuilderTest do
       existing_owner = Factories.insert!(:creator)
       org = Factories.insert!(:org_node, %{identifier: ["avail_users_org"]})
 
-      Core.Authorization.assign_role(existing_owner, org, :owner)
+      Mica.Authorization.assign_role(existing_owner, org, :owner)
 
       vm = AdminsModalViewBuilder.view_model(org, %{})
 

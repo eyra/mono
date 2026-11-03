@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.Assembly do
-  alias Core.Repo
-  use Core, :auth
+  alias Mica.Repo
+  use Mica, :auth
 
   alias Systems.Affiliate
   alias Systems.Assignment

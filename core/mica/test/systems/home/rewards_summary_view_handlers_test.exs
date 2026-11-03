@@ -10,10 +10,10 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   Pins the B1 regression (KYC-blocked state never fires a withdrawal) and the
   stale-socket-user regression (a first-time payout reloads merchant_uid).
   """
-  use Core.DataCase
+  use Mica.DataCase
   import Mox
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Fund
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -92,7 +92,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     user
   end
 
-  defp reward_status(user), do: Core.Repo.get_by!(Fund.RewardModel, user_id: user.id).status
+  defp reward_status(user), do: Mica.Repo.get_by!(Fund.RewardModel, user_id: user.id).status
 
   defp stub_ready(merchant_uid) do
     stub(ProviderMock, :get_merchant, fn ^merchant_uid ->
@@ -320,9 +320,9 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       # :approved (a concurrent winner moved them to :pending_payout), so
       # request_payout fails. The card must refresh to drop the now-stale
       # approved balance — otherwise the loser keeps clicking a doomed button.
-      Core.Repo.get_by!(Fund.RewardModel, user_id: user.id)
+      Mica.Repo.get_by!(Fund.RewardModel, user_id: user.id)
       |> Ecto.Changeset.change(%{status: :pending_payout})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       {:noreply, socket} =
         RewardsSummaryView.handle_event(
@@ -405,7 +405,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       {:noreply, _socket} = RewardsSummaryView.handle_event("retry_payout", %{}, socket(user))
 
-      assert %{provider_uid: "w_retry"} = Core.Repo.reload!(payout)
+      assert %{provider_uid: "w_retry"} = Mica.Repo.reload!(payout)
       assert_received :payout_completed
     end
   end
@@ -423,7 +423,7 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
     user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
 
     payout =
-      Core.Repo.insert!(%Fund.PayoutModel{
+      Mica.Repo.insert!(%Fund.PayoutModel{
         user_id: user.id,
         amount_cents: 1000,
         currency: "eur",

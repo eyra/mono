@@ -1,5 +1,5 @@
 defmodule Systems.Admin.ConfigPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
@@ -17,14 +17,14 @@ defmodule Systems.Admin.ConfigPageBuilder do
   end
 
   defp tab_ids(viewer) do
-    Core.SaaS.admin_panels()
+    Mica.SaaS.admin_panels()
     |> Enum.filter(&Admin.Panel.in_audience?(&1, viewer))
     |> Enum.map(& &1.id())
   end
 
-  @doc "The panels `viewer` sees, in `Core.SaaS.admin_panels/0` order."
+  @doc "The panels `viewer` sees, in `Mica.SaaS.admin_panels/0` order."
   def panels(viewer),
-    do: Enum.filter(Core.SaaS.admin_panels(), &Admin.Panel.shown_to?(&1, viewer))
+    do: Enum.filter(Mica.SaaS.admin_panels(), &Admin.Panel.shown_to?(&1, viewer))
 
   def view_model(%{id: :singleton}, %{current_user: user} = assigns) do
     locale = Map.get(assigns, :locale, :en)
@@ -68,7 +68,7 @@ defmodule Systems.Admin.ConfigPageBuilder do
     id = panel.id()
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         "admin_#{id}_view",
         panel.live_view(),
         live_context: panel.live_context(live_context)

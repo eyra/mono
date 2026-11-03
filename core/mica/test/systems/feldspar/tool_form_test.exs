@@ -1,5 +1,5 @@
 defmodule Systems.Feldspar.ToolFormTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Systems.Feldspar
@@ -56,7 +56,7 @@ defmodule Systems.Feldspar.ToolFormTest do
       assert view |> element("#flash-message") |> render() =~
                "The selected file is not a valid app zip"
 
-      assert Core.Repo.reload!(tool).archive_ref == tool.archive_ref
+      assert Mica.Repo.reload!(tool).archive_ref == tool.archive_ref
     end
   end
 

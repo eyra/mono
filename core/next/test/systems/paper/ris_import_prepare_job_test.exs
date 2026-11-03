@@ -1,6 +1,6 @@
-defmodule Systems.Paper.RISImportPrepareJobTest do
-  use Core.DataCase
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Paper.RISImportPrepareJobTest do
+  use Mica.DataCase
+  use Oban.Testing, repo: Mica.Repo
 
   @moduletag :capture_log
 
@@ -8,12 +8,12 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
   setup do
     # Isolate signals to prevent unwanted side effects during unit testing
-    # Could also use: isolate_signals(except: Systems.Paper.Switch) to test paper signals
+    # Could also use: isolate_signals(except: Next.Systems.Paper.Switch) to test paper signals
     isolate_signals()
     on_exit(&restore_signal_handlers/0)
 
     # Use LocalFS backend for tests with real files
-    Application.put_env(:core, :content, backend: Systems.Content.LocalFS)
+    Application.put_env(:mica, :content, backend: Systems.Content.LocalFS)
     :ok
   end
 
@@ -58,7 +58,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session first
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -69,14 +69,14 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       job_args = %{"session_id" => session.id}
 
       # The job should handle the fetch error gracefully
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(Next.Systems.Paper.RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
 
       assert error_msg =~
                "Unable to process the file. Please try again. If the problem persists, please contact support."
 
       # Verify the session was updated with error status
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       assert Enum.any?(updated_session.errors, &(&1 =~ "Unable to process the file"))
       assert updated_session.completed_at != nil
@@ -90,7 +90,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -99,10 +99,10 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should parse and process the file (not import yet)
       job_args = %{"session_id" => session.id}
-      assert :ok = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert :ok = perform_job(Next.Systems.Paper.RISImportPrepareJob, job_args)
 
       # Verify the session is in prompting phase (after processing)
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :activated
       # After parsing and processing, it goes to prompting phase
       assert updated_session.phase == :prompting
@@ -115,9 +115,9 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # No papers should be created yet (two-phase workflow)
       papers =
-        Core.Repo.all(
-          from(p in Systems.Paper.Model,
-            join: assoc in Systems.Paper.SetAssoc,
+        Mica.Repo.all(
+          from(p in Next.Systems.Paper.Model,
+            join: assoc in Next.Systems.Paper.SetAssoc,
             on: assoc.paper_id == p.id,
             where: assoc.set_id == ^paper_set.id
           )
@@ -126,7 +126,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       assert Enum.empty?(papers)
 
       # Now continue the import (this enqueues a job to create the papers)
-      final_session = Systems.Paper.Public.commit_import_session!(updated_session)
+      final_session = Next.Systems.Paper.Public.commit_import_session!(updated_session)
       assert final_session.status == :activated
       assert final_session.phase == :importing
 
@@ -155,7 +155,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -164,12 +164,12 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should fail with validation error
       job_args = %{"session_id" => session.id}
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(Next.Systems.Paper.RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
       assert error_msg =~ "image or document file"
 
       # Verify the session was marked as failed
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       # Should still be in processing phase
       assert updated_session.phase == :processing
@@ -177,7 +177,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
       assert updated_session.completed_at != nil
 
       # Verify the reference file was marked as failed
-      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Mica.Repo.get!(Next.Systems.Paper.ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # Clean up temp file
@@ -209,7 +209,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -218,17 +218,17 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job - should fail with validation error
       job_args = %{"session_id" => session.id}
-      result = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      result = perform_job(Next.Systems.Paper.RISImportPrepareJob, job_args)
       assert {:discard, error_msg} = result
       assert error_msg =~ "doesn't appear to be a valid RIS file"
 
       # Verify the session was marked as failed
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       assert Enum.any?(updated_session.errors, &(&1 =~ "doesn't appear to be a valid RIS file"))
 
       # Verify the reference file was marked as failed
-      updated_file = Core.Repo.get!(Systems.Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Mica.Repo.get!(Next.Systems.Paper.ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # Clean up temp file
@@ -254,7 +254,7 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Create an import session
       session =
-        Core.Repo.insert!(%Systems.Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Next.Systems.Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -263,10 +263,10 @@ defmodule Systems.Paper.RISImportPrepareJobTest do
 
       # Run the import job
       job_args = %{"session_id" => session.id}
-      assert :ok = perform_job(Systems.Paper.RISImportPrepareJob, job_args)
+      assert :ok = perform_job(Next.Systems.Paper.RISImportPrepareJob, job_args)
 
       # Verify the session has moved to prompting phase
-      updated_session = Core.Repo.get!(Systems.Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Next.Systems.Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :activated
       assert updated_session.phase == :prompting
 

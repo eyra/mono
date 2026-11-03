@@ -1,16 +1,16 @@
-defmodule Next.Account.AuthProviderPageTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Account.AuthProviderPageTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   setup do
     original_providers =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_methods, %{})
+      Application.get_env(:mica, :account, []) |> Keyword.get(:auth_methods, %{})
 
     on_exit(fn ->
-      account = Application.get_env(:core, :account, [])
+      account = Application.get_env(:mica, :account, [])
 
       Application.put_env(
-        :core,
+        :mica,
         :account,
         Keyword.put(account, :auth_methods, original_providers)
       )
@@ -27,8 +27,8 @@ defmodule Next.Account.AuthProviderPageTest do
         :mock -> {:mock, %{provider: true, satellite: false}}
       end)
 
-    account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :auth_methods, satellites))
+    account = Application.get_env(:mica, :account, [])
+    Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, satellites))
   end
 
   describe "rendering" do

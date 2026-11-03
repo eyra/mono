@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ToolView do
-  use CoreWeb, :modal_live_view
+  use MicaWeb, :modal_live_view
 
   alias Systems.Workflow
 

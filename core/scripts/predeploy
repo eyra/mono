@@ -2,9 +2,9 @@
 set -e
 
 echo "Running database migrations..."
-/opt/app/bin/core eval Core.Release.migrate
+/opt/app/bin/core eval Mica.Release.migrate
 echo "Migrations complete."
 
 echo "Running seeds..."
-/opt/app/bin/core eval Core.Release.seed
+/opt/app/bin/core eval Mica.Release.seed
 echo "Seeds complete."

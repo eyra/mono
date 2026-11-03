@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.FinishedView do
-  use CoreWeb, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :embedded_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button

@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.System do
+defmodule Next.Systems.Announcement.System do
   @moduledoc """
   Announcements that system admins write for creators, such as release notes:
   the announcement, its rich-text body and the users who received it.
@@ -7,30 +7,30 @@ defmodule Systems.Announcement.System do
   To-dos, email and the Desktop section) checks `feature_enabled?(:announcements)`
   first. The flag is off by default (`Next.SaaS.feature_flags/0`).
   """
-  use Core.System
+  use Mica.System
 
   def routes do
     quote do
-      require Systems.Announcement.Routes
-      Systems.Announcement.Routes.routes()
+      require Next.Systems.Announcement.Routes
+      Next.Systems.Announcement.Routes.routes()
     end
   end
 
   # Who may open an announcement is decided by its recipient rows
-  # (`Systems.Announcement.Public.get_received/2`), not by a role.
+  # (`Next.Systems.Announcement.Public.get_received/2`), not by a role.
   def grants do
     quote do
       [
-        {Systems.Announcement.Page, [:member]}
+        {Next.Systems.Announcement.Page, [:member]}
       ]
     end
   end
 
-  def signal_handlers, do: [Systems.Announcement.Switch]
+  def signal_handlers, do: [Next.Systems.Announcement.Switch]
 
-  def desktop_sections, do: [Systems.Announcement.DesktopSection]
+  def desktop_sections, do: [Next.Systems.Announcement.DesktopSection]
 
   def feature_flags, do: [:announcements]
 
-  def admin_panels, do: [Systems.Announcement.AdminPanel]
+  def admin_panels, do: [Next.Systems.Announcement.AdminPanel]
 end

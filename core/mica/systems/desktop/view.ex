@@ -1,5 +1,5 @@
 defmodule Systems.Desktop.View do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text

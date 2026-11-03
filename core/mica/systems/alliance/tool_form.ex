@@ -1,7 +1,7 @@
 defmodule Systems.Alliance.ToolForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
-  import CoreWeb.UI.StepIndicator
+  import MicaWeb.UI.StepIndicator
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Text

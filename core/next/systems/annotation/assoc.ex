@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.Assoc do
+defmodule Next.Systems.Annotation.Assoc do
   @moduledoc """
   A module for associating an annotation with an annotation reference   .
   """
@@ -8,7 +8,7 @@ defmodule Systems.Annotation.Assoc do
 
   import Ecto.Changeset
 
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
 
   schema "annotation_assoc" do
     belongs_to(:annotation, Annotation.Model)

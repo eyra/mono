@@ -1,5 +1,5 @@
-defmodule Self.StartPages do
-  @behaviour CoreWeb.StartPageProvider
+defmodule MicaSaas.StartPages do
+  @behaviour MicaWeb.StartPageProvider
 
   def pages(),
     do: %{
@@ -15,10 +15,10 @@ defmodule Self.StartPages do
 
   defmacro __using__(_opts) do
     quote do
-      use Gettext, backend: CoreWeb.Gettext
+      use Gettext, backend: MicaWeb.Gettext
 
       unquote do
-        for {id, %{domain: domain}} <- Self.StartPages.pages() do
+        for {id, %{domain: domain}} <- MicaSaas.StartPages.pages() do
           quote do
             dgettext(unquote(domain), unquote("start.page.#{id}"))
           end

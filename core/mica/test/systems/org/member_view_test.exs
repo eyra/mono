@@ -4,12 +4,12 @@ defmodule Systems.Org.MemberViewTest do
   belonging to a user whose :owner role was revoked must not be able to
   mutate the org's membership.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
   require LiveNest.Constants
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Org
 

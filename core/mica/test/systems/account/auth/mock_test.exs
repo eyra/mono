@@ -1,9 +1,9 @@
 defmodule Systems.Account.Auth.MockTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.FeaturesModel
   alias Systems.Account.User
 
@@ -11,7 +11,7 @@ defmodule Systems.Account.Auth.MockTest do
     isolate_signals()
 
     original_satellites =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_methods, %{})
+      Application.get_env(:mica, :account, []) |> Keyword.get(:auth_methods, %{})
 
     on_exit(fn ->
       put_auth_methods(original_satellites)
@@ -21,8 +21,8 @@ defmodule Systems.Account.Auth.MockTest do
   end
 
   defp put_auth_methods(satellites) do
-    account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :auth_methods, satellites))
+    account = Application.get_env(:mica, :account, [])
+    Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, satellites))
   end
 
   defp enable_mock(), do: put_auth_methods(%{mock: %{provider: true, satellite: false}})

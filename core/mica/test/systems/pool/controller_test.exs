@@ -1,8 +1,8 @@
 defmodule Systems.Pool.ControllerTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
 
   alias Systems.Pool
-  alias Core.Factories
+  alias Mica.Factories
 
   # The controller looks up pools via `Pool.Public.get_by_slug/1`, which
   # takes an atom slug. `String.to_existing_atom/1` requires the atom to

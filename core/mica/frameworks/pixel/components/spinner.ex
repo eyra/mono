@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Spinner do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:alt, :string, default: "Loading")
   attr(:size, :string, default: "")

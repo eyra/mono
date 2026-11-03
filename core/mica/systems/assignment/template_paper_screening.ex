@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.TemplatePaperScreening do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   alias Systems.Assignment
   alias Systems.Workflow
   alias Frameworks.Builder
@@ -7,7 +7,7 @@ defmodule Systems.Assignment.TemplatePaperScreening do
   defstruct [:id]
 
   defimpl Assignment.Template do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
     alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)

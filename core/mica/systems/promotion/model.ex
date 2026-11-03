@@ -26,7 +26,7 @@ defmodule Systems.Promotion.Model do
     # Technical
     field(:director, Ecto.Enum, values: [:advert])
 
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     timestamps()
   end

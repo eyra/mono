@@ -8,8 +8,8 @@ defmodule Systems.Account.PayoutsTab do
   """
   @behaviour Systems.Account.Tab
 
-  use Gettext, backend: CoreWeb.Gettext
-  use Core.FeatureFlags
+  use Gettext, backend: MicaWeb.Gettext
+  use Mica.FeatureFlags
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -23,7 +23,7 @@ defmodule Systems.Account.PayoutsTab do
   @impl true
   def build(_user, live_context) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         :payouts_view,
         Account.PayoutsView,
         live_context: live_context

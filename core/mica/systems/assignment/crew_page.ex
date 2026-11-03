@@ -1,15 +1,15 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, :routed_live_view
-  use CoreWeb.Layouts.Stripped.Composer
+  use MicaWeb, :routed_live_view
+  use MicaWeb.Layouts.Stripped.Composer
 
   import LiveNest.HTML
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
 
   require Logger
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.Hero
 
   alias Systems.Assignment

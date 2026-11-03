@@ -1,6 +1,6 @@
 defmodule Systems.Admin.OrgViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Admin.OrgViewBuilder
   alias Systems.Org
@@ -184,7 +184,7 @@ defmodule Systems.Admin.OrgViewBuilderTest do
       # Update org with domains via the virtual domains_string field
       org
       |> Org.NodeModel.changeset(%{domains_string: "test.edu example.org"})
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
       item = OrgViewBuilder.build_organisation_item(org, :en, true)

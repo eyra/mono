@@ -1,6 +1,6 @@
 defmodule Systems.Account.PageBuilder do
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -44,7 +44,7 @@ defmodule Systems.Account.PageBuilder do
   end
 
   @doc "Keys of all account tabs in display order, before visibility filtering."
-  def tab_keys, do: Enum.map(Core.SaaS.account_tabs(), & &1.key())
+  def tab_keys, do: Enum.map(Mica.SaaS.account_tabs(), & &1.key())
 
   def tab_keys(user) do
     visible_tabs(user)
@@ -52,7 +52,7 @@ defmodule Systems.Account.PageBuilder do
   end
 
   defp visible_tabs(user) do
-    Core.SaaS.account_tabs()
+    Mica.SaaS.account_tabs()
     |> Enum.filter(& &1.visible?(user))
   end
 end

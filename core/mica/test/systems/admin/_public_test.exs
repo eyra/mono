@@ -1,14 +1,14 @@
 defmodule Systems.Admin.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Admin.Public
 
   describe "has_governable_entities?/1" do
     test "returns true when user owns at least one organisation" do
       user = Factories.insert!(:member)
       org = Factories.insert!(:org_node, %{identifier: ["test_org"]})
-      Core.Authorization.assign_role(user, org, :owner)
+      Mica.Authorization.assign_role(user, org, :owner)
 
       assert Public.has_governable_entities?(user)
     end

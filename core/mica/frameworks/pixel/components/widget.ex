@@ -1,7 +1,7 @@
 defmodule Frameworks.Pixel.Widget do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
-  import CoreWeb.UI.ProgressBar
+  import MicaWeb.UI.ProgressBar
   alias Frameworks.Pixel.Text
 
   attr(:integer, :integer, required: true)

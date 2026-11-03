@@ -1,5 +1,5 @@
 defmodule Systems.Instruction.System do
-  use Core.System
+  use Mica.System
 
   def signal_handlers, do: [Systems.Instruction.Switch]
 end

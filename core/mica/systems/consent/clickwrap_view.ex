@@ -2,7 +2,7 @@ defmodule Systems.Consent.ClickWrapView do
   # Clickwrap agreements are a type of electronic signature that involves a user
   # clicking a simple button to accept the agreement.
 
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   import LiveNest.Event.Publisher, only: [publish_event: 2]
 
   alias Systems.{

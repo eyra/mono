@@ -1,5 +1,5 @@
 defmodule Systems.Account.UserFormDebug do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.Account
   alias Systems.Account.UserProfileEditModel

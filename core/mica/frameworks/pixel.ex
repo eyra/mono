@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel do
     quote do
       use Frameworks.Pixel.Flash
       import Frameworks.Pixel.ErrorHelpers
-      import CoreWeb.UI.Wrap
+      import MicaWeb.UI.Wrap
       alias Frameworks.Pixel.Align
       alias Frameworks.Pixel.Button
       alias Frameworks.Pixel.Text

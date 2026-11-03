@@ -1,4 +1,4 @@
-defmodule Systems.Onyx.SeedBase do
+defmodule Next.Systems.Onyx.SeedBase do
   @moduledoc """
   Base macros and functions for seeding ontology concepts and annotations.
 
@@ -6,13 +6,13 @@ defmodule Systems.Onyx.SeedBase do
   used across different seed modules with a clean DSL.
   """
 
-  import Systems.Ontology.Public
+  import Next.Systems.Ontology.Public
 
-  use Systems.Ontology.Constants
-  use Systems.Annotation.Constants
+  use Next.Systems.Ontology.Constants
+  use Next.Systems.Annotation.Constants
 
-  alias Systems.Annotation
-  alias Systems.Onyx
+  alias Next.Systems.Annotation
+  alias Next.Systems.Onyx
 
   @doc """
   Macro for annotating a concept with a definition.

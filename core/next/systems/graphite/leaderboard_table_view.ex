@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.LeaderboardTableView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.LeaderboardTableView do
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   import Graphite.LeaderboardScoreHTML
 

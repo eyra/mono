@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.ApproveParticipationTest do
+defmodule MicaWeb.Features.ApproveParticipationTest do
   @moduledoc """
   Researcher's Contributions-tab happy path: a completed contribution
   shows up in the Pending section; clicking "Confirm all" drains it.
@@ -10,7 +10,7 @@ defmodule CoreWeb.Features.ApproveParticipationTest do
   and the assertion would fail.
   """
 
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   alias Systems.Assignment
   alias Systems.Crew
@@ -51,7 +51,7 @@ defmodule CoreWeb.Features.ApproveParticipationTest do
     |> Project.Factories.build_item()
     |> Project.Factories.build_node()
     |> Project.Factories.build_project()
-    |> Core.Repo.insert!()
+    |> Mica.Repo.insert!()
 
     currency = Factories.insert!(:currency, %{name: "eur_test"})
 
@@ -64,11 +64,11 @@ defmodule CoreWeb.Features.ApproveParticipationTest do
     {:ok, _} =
       assignment
       |> Assignment.Model.changeset(fund)
-      |> Core.Repo.update()
+      |> Mica.Repo.update()
 
     assignment =
-      Core.Repo.get!(Assignment.Model, assignment.id)
-      |> Core.Repo.preload(Assignment.Model.preload_graph(:down), force: true)
+      Mica.Repo.get!(Assignment.Model, assignment.id)
+      |> Mica.Repo.preload(Assignment.Model.preload_graph(:down), force: true)
 
     # Researcher owns the assignment so they can see the Contributions tab.
     Factories.insert!(:role_assignment, %{

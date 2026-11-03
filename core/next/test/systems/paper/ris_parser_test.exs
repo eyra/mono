@@ -1,7 +1,7 @@
-defmodule Systems.Paper.RISParserTest do
+defmodule Next.Systems.Paper.RISParserTest do
   use ExUnit.Case, async: true
 
-  alias Systems.Paper.RISParser
+  alias Next.Systems.Paper.RISParser
 
   describe "parse_content/1" do
     test "parses valid RIS content successfully" do

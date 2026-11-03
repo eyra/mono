@@ -1,8 +1,8 @@
-defmodule Systems.Announcement.AdminPanel do
+defmodule Next.Systems.Announcement.AdminPanel do
   @moduledoc "The Announcements tab on the Admin page, for system admins only."
   use Systems.Admin.Panel
-  use Gettext, backend: CoreWeb.Gettext
-  use Core.FeatureFlags
+  use Gettext, backend: MicaWeb.Gettext
+  use Mica.FeatureFlags
 
   @impl true
   def id, do: :announcements
@@ -17,5 +17,5 @@ defmodule Systems.Announcement.AdminPanel do
   def enabled?, do: feature_enabled?(:announcements)
 
   @impl true
-  def live_view, do: Systems.Announcement.AdminView
+  def live_view, do: Next.Systems.Announcement.AdminView
 end

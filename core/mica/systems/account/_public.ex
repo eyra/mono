@@ -1,11 +1,11 @@
 defmodule Systems.Account.Public do
-  use Core, :public
-  use CoreWeb.StartPageProvider
+  use Mica, :public
+  use MicaWeb.StartPageProvider
   require Logger
 
   import Ecto.Query
   import Systems.Account.Queries
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
 
@@ -529,7 +529,7 @@ defmodule Systems.Account.Public do
 
   @doc """
   Emails a new sign-in code to `email`, replacing any earlier code for it.
-  `remote_ip` is the client's address (`CoreWeb.Plug.RemoteIp`), which the
+  `remote_ip` is the client's address (`MicaWeb.Plug.RemoteIp`), which the
   limits of `Account.AuthCodeLimits` count by.
   """
   def generate_otp(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
@@ -814,7 +814,7 @@ defmodule Systems.Account.Public do
   defp page_key({page, id}) when is_atom(page) and is_integer(id), do: "#{page}_#{id}"
 end
 
-defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do
+defimpl Mica.Persister, for: Systems.Account.UserProfileEditModel do
   alias Systems.Account.UserProfileEditModel
   alias Systems.Account
 
@@ -837,7 +837,7 @@ defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Account.FeaturesModel do
+defimpl Mica.Persister, for: Systems.Account.FeaturesModel do
   alias Systems.Account
 
   def save(features, changeset) do

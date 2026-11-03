@@ -1,7 +1,7 @@
 defmodule Systems.Email.Form do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Button

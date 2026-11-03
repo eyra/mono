@@ -1,5 +1,5 @@
-defmodule Systems.Zircon.Screening.PaperSetViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.PaperSetViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
   @page_size 10
   alias Frameworks.Pixel

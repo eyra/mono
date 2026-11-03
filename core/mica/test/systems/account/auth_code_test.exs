@@ -1,8 +1,8 @@
 defmodule Systems.Account.AuthCodeTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeModel
 

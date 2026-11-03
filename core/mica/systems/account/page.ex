@@ -12,24 +12,24 @@ defmodule Systems.Account.Page do
   with two or more (PANL participants get a Features tab). The Profile
   tab owns the Sign-out action.
   """
-  use CoreWeb, :routed_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :routed_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Content.Html
 
-  alias Core
+  alias Mica
   alias Frameworks.Pixel.Hero
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Timezone, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Locale, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.RemoteIp, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Timezone, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Locale, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Menus, __MODULE__})
 
   # Defer menus_config to the page builder so it can pick the menu set that
   # matches the layout (website for participants, workspace for creators).
@@ -49,7 +49,7 @@ defmodule Systems.Account.Page do
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
-    Core.Repo.preload(user, [:features, :profile])
+    Mica.Repo.preload(user, [:features, :profile])
   end
 
   @impl true

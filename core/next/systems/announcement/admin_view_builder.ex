@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.AdminViewBuilder do
+defmodule Next.Systems.Announcement.AdminViewBuilder do
   @moduledoc """
   View model of the Announcements tab: every announcement, newest first, the
   labels of the compose form and, while composing, the audience: who it
@@ -8,7 +8,7 @@ defmodule Systems.Announcement.AdminViewBuilder do
 
   Composing means a `form` is open, on `announcement` once it is saved. While
   composing an unpublished one, assigns read: `audience_filters` (from
-  `Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
+  `Next.Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
   search words), `priority` (the priority chosen in the form) and
   `compose_notice` (`:already_published`, `:changed_since_loaded`,
   `:audience_changed` or `:no_recipients` after a refused save or publish).
@@ -16,12 +16,12 @@ defmodule Systems.Announcement.AdminViewBuilder do
   no audience to choose, only `published`: what saving it does, and the
   notice of a refused save.
   """
-  use Gettext, backend: CoreWeb.Gettext
-  use Core.FeatureFlags
+  use Gettext, backend: MicaWeb.Gettext
+  use Mica.FeatureFlags
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Admin
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   def view_model(_model, assigns) do
     allowed? = feature_enabled?(:announcements) and admin?(Map.get(assigns, :current_user))

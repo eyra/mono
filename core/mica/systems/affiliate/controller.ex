@@ -1,9 +1,9 @@
 defmodule Systems.Affiliate.Controller do
   use Systems.Affiliate.Constants
 
-  use CoreWeb,
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
@@ -73,7 +73,7 @@ defmodule Systems.Affiliate.Controller do
   defp too_many_requests(conn) do
     conn
     |> put_status(:too_many_requests)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"429")
   end
 
@@ -141,13 +141,13 @@ defmodule Systems.Affiliate.Controller do
   def validation_error_callback(conn, _errors) do
     conn
     |> put_status(:not_found)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"400")
     |> halt()
   end
 
   defp preview_access?(assignment, %{assigns: %{current_user: %{} = user}}) do
-    Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
+    Mica.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
       match?({:ok, _}, Assignment.Public.ensure_tester(assignment, user))
   end
 
@@ -207,14 +207,14 @@ defmodule Systems.Affiliate.Controller do
   defp not_found(conn) do
     conn
     |> put_status(:not_found)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"404")
   end
 
   defp forbidden(conn) do
     conn
     |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"403")
   end
 

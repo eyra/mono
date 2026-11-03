@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.Switch do
+defmodule Next.Systems.Announcement.Switch do
   @moduledoc """
   Refreshes the Desktop of every recipient when an announcement changes, so
   its Desktop section and To-do show the new title and summary at once, and
@@ -8,7 +8,7 @@ defmodule Systems.Announcement.Switch do
   """
   use Frameworks.Concept.Switch
 
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
   alias Systems.Desktop
 
   @impl true

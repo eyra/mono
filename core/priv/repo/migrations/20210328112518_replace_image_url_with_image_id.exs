@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.ReplaceImageUrlWithImageId do
+defmodule Mica.Repo.Migrations.ReplaceImageUrlWithImageId do
   use Ecto.Migration
 
   def up do

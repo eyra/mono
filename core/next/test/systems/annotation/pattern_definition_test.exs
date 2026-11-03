@@ -1,15 +1,15 @@
-defmodule Systems.Annotation.Pattern.DefinitionTest do
-  use Core.DataCase
+defmodule Next.Systems.Annotation.Pattern.DefinitionTest do
+  use Mica.DataCase
 
   import Ecto.Query, only: [from: 1]
 
-  alias Core.Repo
-  alias Core.Factories
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Repo
+  alias Mica.Factories
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
-  alias Systems.Annotation.Pattern.Definition
+  alias Next.Systems.Annotation.Pattern.Definition
 
   describe "obtain/1" do
     setup do

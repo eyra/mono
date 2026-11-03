@@ -14,7 +14,7 @@ defmodule Systems.Account.Auth.Google do
   @behaviour Systems.Account.Auth.Provider
 
   alias Systems.Account.User
-  alias Core.Repo
+  alias Mica.Repo
   import Ecto.Query, warn: false
 
   @impl Systems.Account.Auth.Provider

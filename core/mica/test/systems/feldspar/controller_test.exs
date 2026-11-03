@@ -1,6 +1,6 @@
 defmodule Systems.Feldspar.ControllerTest do
-  use CoreWeb.ConnCase, async: false
-  use Oban.Testing, repo: Core.Repo
+  use MicaWeb.ConnCase, async: false
+  use Oban.Testing, repo: Mica.Repo
 
   @moduletag :capture_log
 
@@ -619,10 +619,10 @@ defmodule Systems.Feldspar.ControllerTest do
 
     setup do
       # Save original config
-      original_storage_config = Application.get_env(:core, :storage)
+      original_storage_config = Application.get_env(:mica, :storage)
 
       on_exit(fn ->
-        Application.put_env(:core, :storage, original_storage_config)
+        Application.put_env(:mica, :storage, original_storage_config)
       end)
 
       :ok
@@ -649,10 +649,10 @@ defmodule Systems.Feldspar.ControllerTest do
         })
 
       # Configure mock job scheduler
-      storage_config = Application.get_env(:core, :storage)
+      storage_config = Application.get_env(:mica, :storage)
 
       Application.put_env(
-        :core,
+        :mica,
         :storage,
         Keyword.put(storage_config, :job_scheduler, Systems.Storage.MockJobScheduler)
       )
@@ -971,16 +971,16 @@ defmodule Systems.Feldspar.ControllerTest do
       ]
 
       # Stop, delete, and re-add with new config
-      Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
-      Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
-      Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, low_limit_config})
+      Supervisor.terminate_child(Mica.Supervisor, Systems.Rate.Server)
+      Supervisor.delete_child(Mica.Supervisor, Systems.Rate.Server)
+      Supervisor.start_child(Mica.Supervisor, {Systems.Rate.Server, low_limit_config})
 
       on_exit(fn ->
         # Restore original config
-        original_config = Core.Application.rate_config(Application.get_env(:core, :rate))
-        Supervisor.terminate_child(Core.Supervisor, Systems.Rate.Server)
-        Supervisor.delete_child(Core.Supervisor, Systems.Rate.Server)
-        Supervisor.start_child(Core.Supervisor, {Systems.Rate.Server, original_config})
+        original_config = Mica.Application.rate_config(Application.get_env(:mica, :rate))
+        Supervisor.terminate_child(Mica.Supervisor, Systems.Rate.Server)
+        Supervisor.delete_child(Mica.Supervisor, Systems.Rate.Server)
+        Supervisor.start_child(Mica.Supervisor, {Systems.Rate.Server, original_config})
       end)
 
       :ok

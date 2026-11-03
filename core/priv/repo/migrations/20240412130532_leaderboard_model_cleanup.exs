@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.LeaderboardModelCleanup do
+defmodule Mica.Repo.Migrations.LeaderboardModelCleanup do
   use Ecto.Migration
 
   def up do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPhoneToUsers do
+defmodule Mica.Repo.Migrations.AddPhoneToUsers do
   use Ecto.Migration
 
   def change do

@@ -1,9 +1,9 @@
 defmodule Systems.Pool.MarketplacePageBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Pool
   alias Systems.Advert
-  alias Core.Factories
+  alias Mica.Factories
 
   # Builds an advert that passes Advert.Public.validate_open/2 for any pool
   # member and binds its submission to the given pool: online status, an open

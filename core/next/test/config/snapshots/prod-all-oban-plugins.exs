@@ -5,15 +5,21 @@
       active: true,
       env: "APP_DOMAIN",
       name: "Next",
-      otp_app: :core,
+      otp_app: :mica,
       push_api_key: "APPSIGNAL_PUSH_API_KEY",
       revision: "APPSIGNAL_REVISION"
     ]
   ],
-  core: [
-    {Core.ImageCatalog.Unsplash,
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "AWS_REGION",
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
+  mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
-    {Core.Repo,
+    {Mica.Repo,
      [
        ssl: [
          cacertfile: "/home/next/etc/DB_CA_PATH.pem",
@@ -24,7 +30,7 @@
        url:
          "ecto://DB_USER:DB_PASS@eyra-database-prod.abcdefghijkl.eu-central-1.rds.amazonaws.com/next"
      ]},
-    {CoreWeb.Endpoint,
+    {MicaWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8080],
@@ -32,8 +38,7 @@
        server: true,
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
-    {CoreWeb.FileUploader, [max_file_size: 200_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {MicaWeb.FileUploader, [max_file_size: 200_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -133,10 +138,5 @@
      ]},
     {:storage, [services: [:builtin, :yoda]]},
     {:upload_path, "/home/next/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "AWS_REGION",
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]

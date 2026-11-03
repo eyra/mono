@@ -11,10 +11,10 @@ defmodule Systems.Admin.AccountViewBuilder do
 
   The matching itself is `Systems.Admin.Public.list_matching_users/2`.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.ImageHelpers
-  alias CoreWeb.UI.Timestamp
+  alias Mica.ImageHelpers
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Admin
   alias Systems.Pool

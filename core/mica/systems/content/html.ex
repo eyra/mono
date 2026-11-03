@@ -1,8 +1,8 @@
 defmodule Systems.Content.Html do
-  use CoreWeb, :html
-  import CoreWeb.Layouts.Workspace.Html, only: [workspace: 1]
-  import CoreWeb.Layouts.Website.Html, only: [website: 1]
-  import CoreWeb.Layouts.Stripped.Html, only: [stripped: 1]
+  use MicaWeb, :html
+  import MicaWeb.Layouts.Workspace.Html, only: [workspace: 1]
+  import MicaWeb.Layouts.Website.Html, only: [website: 1]
+  import MicaWeb.Layouts.Stripped.Html, only: [stripped: 1]
   import Frameworks.Pixel.Line
   alias Frameworks.Pixel.Breadcrumbs
   alias Frameworks.Pixel.ModalView

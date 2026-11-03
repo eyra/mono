@@ -1,24 +1,24 @@
-defmodule Next.Account.NativeSigninController do
+defmodule Next.Systems.Account.NativeSigninController do
   @moduledoc """
   JSON calls behind the native Sign-in screen of the Next apps: identify
   (send a sign-in code to an email, or point to its identity provider), then
   verify the code; or redeem the token of an identity-provider sign-in (see
-  `Next.Account.NativeHandoff`). They follow the participant
+  `Next.Systems.Account.NativeHandoff`). They follow the participant
   path of the LiveView flow (`AuthIdentifyPage`, `AuthCodeVerifyPage`, the
-  redeem step) and share its steps through `Next.Account.OtpSignin`.
+  redeem step) and share its steps through `Next.Systems.Account.OtpSignin`.
 
   Verifying starts a mobile session and sets its cookie on the response;
   the body carries no credential. See the "Native sign-in" section of
   `docs/architecture/mobile/designs/authentication-session.md`.
   """
-  use CoreWeb, {:controller, [formats: [:json]]}
+  use MicaWeb, {:controller, [formats: [:json]]}
 
-  alias CoreWeb.ReturnTo
-  alias Next.Account.NativeHandoff
-  alias Next.Account.OtpSignin
+  alias MicaWeb.ReturnTo
+  alias Next.Systems.Account.NativeHandoff
+  alias Next.Systems.Account.OtpSignin
   alias Systems.Account
 
-  plug(Next.Account.NativeSigninGuard)
+  plug(Next.Systems.Account.NativeSigninGuard)
 
   @mobile_session %{mobile_session?: true}
 
@@ -55,7 +55,7 @@ defmodule Next.Account.NativeSigninController do
 
   @doc """
   Redeems the token an identity-provider sign-in in the sign-in sheet sent to
-  the app's callback URL (`Next.Account.NativeHandoff`), with the code
+  the app's callback URL (`Next.Systems.Account.NativeHandoff`), with the code
   verifier of the challenge the app started it with.
   """
   def redeem(conn, %{"token" => token, "code_verifier" => code_verifier})
@@ -104,7 +104,7 @@ defmodule Next.Account.NativeSigninController do
   defp redirect_to(true, return_to), do: ReturnTo.append(~p"/user/onboarding", return_to)
   defp redirect_to(false, return_to), do: return_to
 
-  # The client's address from CoreWeb.Plug.RemoteIp; the sign-in code limits
+  # The client's address from MicaWeb.Plug.RemoteIp; the sign-in code limits
   # count by it.
   defp client_ip(%Plug.Conn{remote_ip: remote_ip}), do: remote_ip |> :inet.ntoa() |> to_string()
 

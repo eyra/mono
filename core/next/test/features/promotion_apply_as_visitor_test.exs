@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.PromotionApplyAsVisitorTest do
+defmodule NextWeb.Features.PromotionApplyAsVisitorTest do
   @moduledoc """
   Feature test for FX#10094100454. A visitor clicking Apply on a
   promotion should not crash on `Pool.Public.add_participant!(pool, nil)`
@@ -12,8 +12,8 @@ defmodule CoreWeb.Features.PromotionApplyAsVisitorTest do
   by exercising the real-browser click + Phoenix routing so the
   URL-encoding survives an actual round-trip.
   """
-  use CoreWeb.FeatureCase
-  use Core.FeatureFlags.Test
+  use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
   alias Systems.Advert
   alias Systems.Pool

@@ -1,8 +1,8 @@
 defmodule Systems.Content.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
 
   alias Frameworks.Signal
@@ -122,7 +122,7 @@ defmodule Systems.Content.Public do
     do: %{locale: Atom.to_string(locale), text: single, text_plural: plural}
 end
 
-defimpl Core.Persister, for: Systems.Content.PageModel do
+defimpl Mica.Persister, for: Systems.Content.PageModel do
   def save(_page, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :content_page) do
       {:ok, %{content_page: content_page}} -> {:ok, content_page}

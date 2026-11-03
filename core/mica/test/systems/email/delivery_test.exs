@@ -1,6 +1,6 @@
 defmodule Systems.Email.DeliveryTest do
-  use Core.DataCase, async: true
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase, async: true
+  use Oban.Testing, repo: Mica.Repo
   use Bamboo.Test
 
   alias Systems.Email

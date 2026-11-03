@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.ConnectorPopupStorage do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  import CoreWeb.UI.Dialog
+  import MicaWeb.UI.Dialog
 
   require Logger
 

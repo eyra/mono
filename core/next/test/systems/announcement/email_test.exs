@@ -1,12 +1,12 @@
-defmodule Systems.Announcement.EmailTest do
-  use Core.DataCase, async: true
-  use Oban.Testing, repo: Core.Repo
+defmodule Next.Systems.Announcement.EmailTest do
+  use Mica.DataCase, async: true
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
   alias Systems.Email
   alias Systems.NextAction
 
@@ -97,7 +97,7 @@ defmodule Systems.Announcement.EmailTest do
 
     test "sends the title, the summary, the full body and a link", %{author: author} do
       %{id: id} = publish!(announcement!(author))
-      url = CoreWeb.Endpoint.url() <> "/announcement/#{id}"
+      url = MicaWeb.Endpoint.url() <> "/announcement/#{id}"
 
       assert [
                %{to: [nil: "anna@example.org"], subject: "Release notes"},
@@ -214,12 +214,12 @@ defmodule Systems.Announcement.EmailTest do
                Announcement.EmailTemplate.email(announcement)
 
       assert [url] = Regex.run(~r/href="([^"]+announcement[^"]*)"/, html, capture: :all_but_first)
-      assert url == CoreWeb.Endpoint.url() <> "/announcement/#{id}"
+      assert url == MicaWeb.Endpoint.url() <> "/announcement/#{id}"
     end
 
     test "is in Dutch in the nl locale", %{author: author} do
       email =
-        Gettext.with_locale(CoreWeb.Gettext, "nl", fn ->
+        Gettext.with_locale(MicaWeb.Gettext, "nl", fn ->
           Announcement.EmailTemplate.email(announcement!(author))
         end)
 

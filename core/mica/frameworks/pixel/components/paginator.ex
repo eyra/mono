@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Paginator do
   @moduledoc false
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:active_page, :integer, required: true)
   attr(:page_count, :integer, required: true)

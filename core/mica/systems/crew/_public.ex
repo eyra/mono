@@ -1,5 +1,5 @@
 defmodule Systems.Crew.Public do
-  use Core, :public
+  use Mica, :public
   require Logger
 
   require Ecto.Query
@@ -8,10 +8,10 @@ defmodule Systems.Crew.Public do
   import Systems.Crew.Queries
 
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.Account.User
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Signal
   alias Systems.Crew
 

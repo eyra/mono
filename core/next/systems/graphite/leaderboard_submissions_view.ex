@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.LeaderboardSubmissionsView do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Graphite.LeaderboardSubmissionsView do
+  use MicaWeb, :live_component_fabric
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @impl true
   def update(

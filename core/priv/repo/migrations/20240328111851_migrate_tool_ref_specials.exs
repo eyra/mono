@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.MigrateToolRefSpecials do
+defmodule Mica.Repo.Migrations.MigrateToolRefSpecials do
   use Ecto.Migration
 
   def up do

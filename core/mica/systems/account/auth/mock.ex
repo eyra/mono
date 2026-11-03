@@ -46,11 +46,11 @@ end
 
 defmodule Systems.Account.Auth.Mock.CallbackController do
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
 
   def authenticate(conn, params) do
@@ -90,12 +90,12 @@ end
 
 defmodule Systems.Account.Auth.Mock.ResetController do
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Ecto.Query
   import Plug.Conn
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.FeaturesModel
   alias Systems.Account.User
 

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddStudentRole do
+defmodule Mica.Repo.Migrations.AddStudentRole do
   use Ecto.Migration
 
   def change do

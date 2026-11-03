@@ -1,7 +1,7 @@
 defmodule Systems.Account.FeaturesForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
-  alias Core.Enums.Genders
+  alias Mica.Enums.Genders
   alias Frameworks.Pixel.{Selector, Text}
   alias Systems.Account
 

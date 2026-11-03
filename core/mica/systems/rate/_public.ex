@@ -1,7 +1,7 @@
 defmodule Systems.Rate.Public do
-  use Core, :public
+  use Mica, :public
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Rate
 
   defmodule RateLimitError do

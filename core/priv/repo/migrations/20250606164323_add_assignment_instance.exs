@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddAssignmentInstance do
+defmodule Mica.Repo.Migrations.AddAssignmentInstance do
   use Ecto.Migration
 
   def up do

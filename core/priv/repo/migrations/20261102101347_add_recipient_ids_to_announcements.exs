@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddRecipientIdsToAnnouncements do
+defmodule Mica.Repo.Migrations.AddRecipientIdsToAnnouncements do
   use Ecto.Migration
 
   def change do

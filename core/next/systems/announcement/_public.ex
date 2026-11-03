@@ -1,21 +1,21 @@
-defmodule Systems.Announcement.Public do
+defmodule Next.Systems.Announcement.Public do
   @moduledoc """
   Create, change and read announcements and their recipients.
 
-  A recipient row (`Systems.Announcement.RecipientModel`) records that one user
+  A recipient row (`Next.Systems.Announcement.RecipientModel`) records that one user
   received an announcement and when they read it. Only users with a recipient
   row may open a published announcement (`get_received/2`).
   """
   import Ecto.Query, warn: false
-  import Systems.Announcement.Queries
+  import Next.Systems.Announcement.Queries
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Systems.Account.User
   alias Systems.Admin
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.Email
   alias Systems.NextAction
 
@@ -35,7 +35,7 @@ defmodule Systems.Announcement.Public do
   opened. Returns `{:error, :changed_since_loaded}` when the announcement was
   saved since that copy was loaded, so two forms can't undo each other's
   changes. After publication only the title, summary and body may change
-  (`Systems.Announcement.Model.fixed_after_publishing/0`). Returns
+  (`Next.Systems.Announcement.Model.fixed_after_publishing/0`). Returns
   `{:error, :already_published}` when the change touches another field, and
   when the copy was loaded before it was published. The row is locked and
   checked in the same transaction as the update.
@@ -263,7 +263,7 @@ defmodule Systems.Announcement.Public do
   Gives every recipient of a published announcement a recipient row and a
   To-do, with one insert for the rows and batched inserts for the To-dos.
   For a high-priority announcement it also queues one email per recipient
-  (`Systems.Announcement.EmailTemplate`), in batches. Recipients who already
+  (`Next.Systems.Announcement.EmailTemplate`), in batches. Recipients who already
   have a row are skipped, so running it again adds and sends nothing. Users
   deleted since publication are left out. Returns `{:ok, count}` with the
   number of recipients added.

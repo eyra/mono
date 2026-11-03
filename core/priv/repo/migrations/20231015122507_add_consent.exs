@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddConsent do
+defmodule Mica.Repo.Migrations.AddConsent do
   use Ecto.Migration
 
   def up do

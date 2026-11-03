@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateUserFeaturesFields do
+defmodule Mica.Repo.Migrations.UpdateUserFeaturesFields do
   use Ecto.Migration
 
   def up do

@@ -15,7 +15,7 @@ defmodule Systems.Manual.Queries do
       where: m.id == ^id,
       preload: ^Manual.Model.preload_graph(:down)
     )
-    |> Core.Repo.one!()
+    |> Mica.Repo.one!()
   end
 
   def get_chapters(manual_id) do

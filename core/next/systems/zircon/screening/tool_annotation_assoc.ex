@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ToolAnnotationAssoc do
+defmodule Next.Systems.Zircon.Screening.ToolAnnotationAssoc do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Systems.Zircon.Screening
-  alias Systems.Annotation
+  alias Next.Systems.Zircon.Screening
+  alias Next.Systems.Annotation
 
   schema "zircon_screening_tool_annotation" do
     belongs_to(:tool, Screening.ToolModel)

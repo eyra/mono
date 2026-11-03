@@ -4,7 +4,7 @@ defmodule Systems.Assignment.ParticipationViewBuilder do
   has reviewed a participant's contribution (accepted or rejected). Terminal
   from the participant's perspective; no retry.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
 

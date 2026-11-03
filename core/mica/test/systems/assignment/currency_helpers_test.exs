@@ -49,7 +49,7 @@ defmodule Systems.Assignment.CurrencyHelpersTest do
 
   describe "cents_to_display/1 in nl locale" do
     setup do
-      Gettext.put_locale(CoreWeb.Gettext, "nl")
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
       :ok
     end
 
@@ -72,7 +72,7 @@ defmodule Systems.Assignment.CurrencyHelpersTest do
 
   describe "cents_to_display/1 in en locale" do
     setup do
-      Gettext.put_locale(CoreWeb.Gettext, "en")
+      Gettext.put_locale(MicaWeb.Gettext, "en")
       :ok
     end
 

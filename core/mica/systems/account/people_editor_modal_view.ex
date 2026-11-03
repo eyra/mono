@@ -14,7 +14,7 @@ defmodule Systems.Account.PeopleEditorModalView do
   Override `handle_add_user/2` and `handle_remove_user/2` in the parent
   to persist changes.
   """
-  use CoreWeb, :modal_live_view
+  use MicaWeb, :modal_live_view
 
   alias Systems.Account
 
@@ -28,7 +28,7 @@ defmodule Systems.Account.PeopleEditorModalView do
     quote do
       @behaviour Systems.Account.PeopleEditorModalView
 
-      use CoreWeb, :modal_live_view
+      use MicaWeb, :modal_live_view
 
       alias Systems.Account
 

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPages do
+defmodule Mica.Repo.Migrations.AddPages do
   use Ecto.Migration
 
   def up do

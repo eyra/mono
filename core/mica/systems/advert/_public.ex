@@ -1,5 +1,5 @@
 defmodule Systems.Advert.Public do
-  use Core, :public
+  use Mica, :public
 
   @moduledoc """
   The Studies context.
@@ -8,7 +8,7 @@ defmodule Systems.Advert.Public do
   import Systems.Advert.Queries
 
   require Logger
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
 
   alias Frameworks.GreenLight.Principal

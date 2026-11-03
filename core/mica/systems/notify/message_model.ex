@@ -11,9 +11,9 @@ defmodule Systems.Notify.MessageModel do
 
   alias Systems.Notify
 
-  require Core.SaaS
+  require Mica.SaaS
 
-  @channels Core.SaaS.notify_channel_names()
+  @channels Mica.SaaS.notify_channel_names()
   @statuses ~w(pending sent failed skipped seen)a
 
   schema "notify_message" do

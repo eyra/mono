@@ -1,14 +1,14 @@
-defmodule Systems.Announcement.NextActions.ReadAnnouncement do
+defmodule Next.Systems.Announcement.NextActions.ReadAnnouncement do
   @moduledoc """
   The To-do of one unread announcement. There is one per recipient, keyed by
   the announcement (`key/1`). Title and summary are read from the announcement
   when the To-do is shown, so edits show at once. Opening the announcement
-  page clears it (`Systems.Announcement.Public.mark_read/1`).
+  page clears it (`Next.Systems.Announcement.Public.mark_read/1`).
   """
   @behaviour Systems.NextAction.ViewModel
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   @doc "The next-action key of the announcement with `announcement_id`."
   def key(announcement_id), do: to_string(announcement_id)

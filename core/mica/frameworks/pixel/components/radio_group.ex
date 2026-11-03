@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.RadioGroup do
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
   use Frameworks.Pixel.FabricBridge
 
   @impl true

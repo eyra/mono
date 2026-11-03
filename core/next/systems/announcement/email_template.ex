@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.EmailTemplate do
+defmodule Next.Systems.Announcement.EmailTemplate do
   @moduledoc """
   The email of a high-priority announcement, readable on its own: the title,
   the summary, the full body and a link to the announcement page. The HTML
@@ -8,9 +8,9 @@ defmodule Systems.Announcement.EmailTemplate do
   changes nothing in Next; only opening the page marks the announcement read.
   """
   use Phoenix.Component
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
   alias Systems.Email
 
   embed_templates("email_template/*.html", suffix: "_html")

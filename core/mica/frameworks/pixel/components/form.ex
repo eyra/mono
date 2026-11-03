@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Form do
   @moduledoc false
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   import Frameworks.Pixel.ImagePreview
 

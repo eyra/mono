@@ -1,8 +1,8 @@
 defmodule Systems.Advert.Assembly do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  use Core, :auth
-  alias Core.Repo
+  use Mica, :auth
+  alias Mica.Repo
   alias Ecto.Multi
   alias Ecto.Changeset
 

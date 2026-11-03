@@ -1,9 +1,9 @@
 defmodule Systems.Assignment.OnboardingConsentView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Text
-  alias CoreWeb.UI.Area
-  alias CoreWeb.UI.Margin
+  alias MicaWeb.UI.Area
+  alias MicaWeb.UI.Margin
 
   alias Systems.Assignment
 

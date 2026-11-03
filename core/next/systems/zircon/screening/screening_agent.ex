@@ -1,7 +1,7 @@
-defmodule Frameworks.Concept.ScreeningAgent do
-  alias Systems.Ontology
-  alias Systems.Annotation
-  alias Systems.Paper
+defmodule Next.Frameworks.Concept.ScreeningAgent do
+  alias Next.Systems.Ontology
+  alias Next.Systems.Annotation
+  alias Next.Systems.Paper
 
   @type internal_id :: String.t()
   @type session_id :: String.t()

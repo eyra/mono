@@ -1,7 +1,7 @@
-defmodule Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ImportSessionPapersViewBuilder do
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Systems.Paper.RISEntry
+  alias Next.Systems.Paper.RISEntry
   alias Frameworks.Utility.PaginationHelper
 
   def view_model(%{session: session, filter: filter}, assigns) do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.DropStorageJobData do
+defmodule Mica.Repo.Migrations.DropStorageJobData do
   use Ecto.Migration
 
   def up do

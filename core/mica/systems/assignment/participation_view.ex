@@ -4,7 +4,7 @@ defmodule Systems.Assignment.ParticipationView do
   No retry affordance. A "back to home" plain-arrow button lets the participant
   navigate away.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text

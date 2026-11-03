@@ -1,14 +1,14 @@
-defmodule Systems.Graphite.Public do
-  use Core, :public
+defmodule Next.Systems.Graphite.Public do
+  use Mica, :public
   import Ecto.Query, warn: false
-  import Systems.Graphite.Queries
+  import Next.Systems.Graphite.Queries
 
   alias Ecto.Multi
   alias Ecto.Changeset
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Frameworks.Signal
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Assignment
   alias Systems.Workflow
 
@@ -226,7 +226,7 @@ defmodule Systems.Graphite.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Graphite.ToolModel do
+defimpl Mica.Persister, for: Next.Systems.Graphite.ToolModel do
   def save(_tool, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :graphite_tool) do
       {:ok, %{graphite_tool: graphite_tool}} -> {:ok, graphite_tool}
@@ -235,7 +235,7 @@ defimpl Core.Persister, for: Systems.Graphite.ToolModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Graphite.LeaderboardModel do
+defimpl Mica.Persister, for: Next.Systems.Graphite.LeaderboardModel do
   def save(_leaderboard, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :graphite_leaderboard) do
       {:ok, %{graphite_leaderboard: graphite_leaderboard}} -> {:ok, graphite_leaderboard}

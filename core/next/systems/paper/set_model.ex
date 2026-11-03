@@ -1,8 +1,8 @@
-defmodule Systems.Paper.SetModel do
+defmodule Next.Systems.Paper.SetModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_set" do
     # free-form category
@@ -10,8 +10,8 @@ defmodule Systems.Paper.SetModel do
     # identifier within category
     field(:identifier, :integer)
 
-    many_to_many(:papers, Systems.Paper.Model,
-      join_through: Systems.Paper.SetAssoc,
+    many_to_many(:papers, Next.Systems.Paper.Model,
+      join_through: Next.Systems.Paper.SetAssoc,
       join_keys: [set_id: :id, paper_id: :id],
       on_replace: :delete
     )

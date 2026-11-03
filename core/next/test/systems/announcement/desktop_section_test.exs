@@ -1,12 +1,12 @@
-defmodule Systems.Announcement.DesktopSectionTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Announcement.DesktopSectionTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
-  alias Systems.Announcement
-  alias Systems.Announcement.NextActions.ReadAnnouncement
+  alias Mica.Repo
+  alias Next.Systems.Announcement
+  alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.NextAction
   alias Systems.Project
 

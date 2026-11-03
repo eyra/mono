@@ -1,7 +1,7 @@
-defmodule Next.Account.AuthIdentifyPageTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Account.AuthIdentifyPageTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
+  use Gettext, backend: MicaWeb.Gettext
 
   import Phoenix.LiveViewTest
 

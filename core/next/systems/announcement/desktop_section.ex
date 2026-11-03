@@ -1,4 +1,4 @@
-defmodule Systems.Announcement.DesktopSection do
+defmodule Next.Systems.Announcement.DesktopSection do
   @moduledoc """
   The Announcements section on Desktop: the newest announcements the user
   received, read and unread, each opening the announcement page. Hidden while
@@ -6,13 +6,13 @@ defmodule Systems.Announcement.DesktopSection do
 
   It refreshes with Desktop: on `{:next_action, :cleared}` when an announcement
   is opened (`Systems.Desktop.Switch`) and on `{:announcement, :updated}`
-  (`Systems.Announcement.Switch`).
+  (`Next.Systems.Announcement.Switch`).
   """
   use Systems.Desktop.Section
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   alias Frameworks.Pixel.Tag
-  alias Systems.Announcement
+  alias Next.Systems.Announcement
 
   @limit 6
 

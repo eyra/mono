@@ -2,7 +2,7 @@ defmodule Systems.Assignment.Switch do
   use Frameworks.Signal.Handler
   require Logger
 
-  use Core, :auth
+  use Mica, :auth
 
   alias Frameworks.Signal
 

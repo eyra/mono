@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPriorityToNextActions do
+defmodule Mica.Repo.Migrations.AddPriorityToNextActions do
   use Ecto.Migration
 
   def change do

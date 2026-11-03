@@ -1,9 +1,9 @@
 defmodule Systems.Payment.Public do
-  use Core, :public
+  use Mica, :public
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Payment.Error
   alias Systems.Payment.Provider
@@ -166,7 +166,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp return_url do
-    base_url = Core.Env.fetch!(:base_url)
+    base_url = Mica.Env.fetch!(:base_url)
     "#{base_url}/user/account?tab=payouts"
   end
 
@@ -370,14 +370,14 @@ defmodule Systems.Payment.Public do
   """
   @spec platform_merchant_uid() :: String.t() | nil
   def platform_merchant_uid do
-    Core.Env.get(Systems.Payment.Provider.OPP, [])
+    Mica.Env.get(Systems.Payment.Provider.OPP, [])
     |> Keyword.get(:merchant_uid)
   end
 
   def webhook_url do
     base_url =
-      Core.Env.get(:payment_webhook_base_url) ||
-        Core.Env.fetch!(:base_url)
+      Mica.Env.get(:payment_webhook_base_url) ||
+        Mica.Env.fetch!(:base_url)
 
     "#{base_url}/api/payment/webhook/#{provider_name()}"
   end
@@ -388,7 +388,7 @@ defmodule Systems.Payment.Public do
   """
   @spec partner_fee_percentage() :: non_neg_integer()
   def partner_fee_percentage do
-    Core.Env.get(Systems.Payment.Provider.OPP, [])
+    Mica.Env.get(Systems.Payment.Provider.OPP, [])
     |> Keyword.get(:partner_fee_percentage, 0)
   end
 
@@ -401,7 +401,7 @@ defmodule Systems.Payment.Public do
   end
 
   defp provider do
-    Core.Env.fetch!(:payment_provider)
+    Mica.Env.fetch!(:payment_provider)
   end
 
   defp provider_name do

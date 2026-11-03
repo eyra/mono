@@ -1,16 +1,16 @@
 defmodule Systems.Lab.DayView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   require Logger
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   import Frameworks.Pixel.Line
   import Frameworks.Pixel.Form
 
   alias Systems.Lab
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @impl true
   def update(%{id: id, day_model: day_model}, socket) do
@@ -153,7 +153,7 @@ defmodule Systems.Lab.DayView do
       tool_id
       |> Lab.Public.get_time_slots()
       |> Enum.filter(
-        &(&1.location == location and CoreWeb.UI.Timestamp.to_date(&1.start_time) == date)
+        &(&1.location == location and MicaWeb.UI.Timestamp.to_date(&1.start_time) == date)
       )
 
     error =

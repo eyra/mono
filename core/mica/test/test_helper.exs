@@ -11,7 +11,7 @@ Code.ensure_loaded!(Frameworks.Signal.TestForceSwitch)
 Code.ensure_loaded!(Frameworks.Signal.TestCatchAll)
 
 ExUnit.start(exclude: [:slow], capture_log: true)
-Ecto.Adapters.SQL.Sandbox.mode(Core.Repo, :manual)
+Ecto.Adapters.SQL.Sandbox.mode(Mica.Repo, :manual)
 
 Mox.defmock(MockAws, for: ExAws.Behaviour)
 
@@ -20,7 +20,7 @@ Mox.defmock(MockAws, for: ExAws.Behaviour)
 # Removed incorrect global TestHelper configuration
 
 Application.put_env(
-  :core,
+  :mica,
   :admins,
   Systems.Admin.Public.compile([
     "admin1@example.org",
@@ -33,7 +33,7 @@ Mox.defmock(Systems.Storage.BuiltIn.MockSpecial, for: Systems.Storage.BuiltIn.Sp
 Mox.defmock(Systems.Storage.MockTempFileStore, for: Systems.Storage.TempFileStore)
 Mox.defmock(Systems.Storage.MockJobScheduler, for: Systems.Storage.JobScheduler)
 
-defmodule Core.Test.SandboxLogFilter do
+defmodule Mica.Test.SandboxLogFilter do
   @moduledoc """
   Drops the benign SQL sandbox teardown disconnect logs that appear during the
   test suite.
@@ -82,5 +82,5 @@ end
 
 :logger.add_primary_filter(
   :silence_sandbox_teardown,
-  {&Core.Test.SandboxLogFilter.filter/2, []}
+  {&Mica.Test.SandboxLogFilter.filter/2, []}
 )

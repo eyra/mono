@@ -1,17 +1,17 @@
-defmodule Systems.Onyx.System do
-  use Core.System
+defmodule Next.Systems.Onyx.System do
+  use Mica.System
 
   def routes do
     quote do
-      require Systems.Onyx.Routes
-      Systems.Onyx.Routes.routes()
+      require Next.Systems.Onyx.Routes
+      Next.Systems.Onyx.Routes.routes()
     end
   end
 
   def grants do
     quote do
       [
-        {Systems.Onyx.LandingPage, [:admin]}
+        {Next.Systems.Onyx.LandingPage, [:admin]}
       ]
     end
   end

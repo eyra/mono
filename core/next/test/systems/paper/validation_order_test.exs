@@ -1,11 +1,11 @@
-defmodule Systems.Paper.ValidationOrderTest do
+defmodule Next.Systems.Paper.ValidationOrderTest do
   @moduledoc """
   Test that validation checks happen in the correct order and return
   appropriate error messages for different file types.
   """
 
-  use Core.DataCase
-  alias Systems.Paper.RISParserStream
+  use Mica.DataCase
+  alias Next.Systems.Paper.RISParserStream
 
   describe "validation order and messages" do
     test "PNG file gets binary file message" do

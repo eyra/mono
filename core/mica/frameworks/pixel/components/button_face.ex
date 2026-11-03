@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Button.Face do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Spinner
   alias Frameworks.Pixel.Icon

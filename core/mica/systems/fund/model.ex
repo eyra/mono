@@ -2,7 +2,7 @@ defmodule Systems.Fund.Model do
   @moduledoc """
   The fund type.
   """
-  use Core, :auth
+  use Mica, :auth
   use Ecto.Schema
   import Frameworks.Utility.EctoHelper
 
@@ -23,7 +23,7 @@ defmodule Systems.Fund.Model do
     belongs_to(:currency_ledger, Fund.CurrencyLedgerModel)
     belongs_to(:available, Bookkeeping.AccountModel, foreign_key: :fund_id)
     belongs_to(:pending, Bookkeeping.AccountModel, foreign_key: :reserve_id)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_many(:rewards, Fund.RewardModel, foreign_key: :fund_id)
 

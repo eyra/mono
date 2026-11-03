@@ -1,9 +1,9 @@
 defmodule Systems.Admin.Public do
-  use Core, :public
+  use Mica, :public
 
   import Ecto.Query, warn: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Admin
   alias Systems.Affiliate
@@ -83,7 +83,7 @@ defmodule Systems.Admin.Public do
   def admin?(_), do: false
 
   defp email_patterns do
-    Core.Env.get(:admins, [])
+    Mica.Env.get(:admins, [])
   end
 
   # Users

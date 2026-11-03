@@ -7,16 +7,16 @@ defmodule Systems.Account.PhoneFormHandlersTest do
   A provider failure used to collapse into one generic "try again later", hiding
   the case the participant can actually fix — a number OPP rejected.
   """
-  use Core.DataCase
+  use Mica.DataCase
   import Mox
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account
   alias Systems.Payment.ProviderMock
 
   setup :verify_on_exit!
 
-  defp t(key), do: Gettext.dgettext(CoreWeb.Gettext, "eyra-account", key)
+  defp t(key), do: Gettext.dgettext(MicaWeb.Gettext, "eyra-account", key)
 
   defp socket(user) do
     %Phoenix.LiveView.Socket{

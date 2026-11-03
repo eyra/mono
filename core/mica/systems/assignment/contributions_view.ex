@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.ContributionsView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   require Logger
 

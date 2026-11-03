@@ -1,5 +1,5 @@
 defmodule Systems.Advert.PromotionLandingPageBuilderTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -12,7 +12,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
   defp promote_pool_to_panl!(pool) do
     pool
     |> Ecto.Changeset.change(name: "Panl")
-    |> Core.Repo.update!()
+    |> Mica.Repo.update!()
   end
 
   describe "Promotion Landing Page" do
@@ -47,7 +47,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       assignment.info
       |> Ecto.Changeset.change(subject_reward: 6000)
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       {:ok, view, html} = live(conn, ~p"/promotion/#{promotion_id}")
 

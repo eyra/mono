@@ -1,10 +1,10 @@
 defmodule Systems.Manual.Assembly do
-  use Core, :auth
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica, :auth
+  use Gettext, backend: MicaWeb.Gettext
 
   import Ecto.Changeset, only: [put_assoc: 3]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
 
   alias Frameworks.Signal

@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Align do
   @moduledoc """
   Centers content along the x-axis.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   slot(:inner_block, required: true)
 

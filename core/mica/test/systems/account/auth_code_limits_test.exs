@@ -1,10 +1,10 @@
 defmodule Systems.Account.AuthCodeLimitsTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   import Ecto.Query
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel

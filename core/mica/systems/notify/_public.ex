@@ -8,7 +8,7 @@ defmodule Systems.Notify.Public do
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.Monitor
   alias Systems.Notify

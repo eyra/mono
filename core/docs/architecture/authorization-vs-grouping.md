@@ -30,10 +30,10 @@ Role assignments on auth_node - **source of truth for membership**
 
 ```elixir
 # Assign membership
-Core.Authorization.assign_role(user, entity.auth_node, :member)
+Mica.Authorization.assign_role(user, entity.auth_node, :member)
 
 # Query members
-Core.Authorization.list_principals_with_role(entity.auth_node, :member)
+Mica.Authorization.list_principals_with_role(entity.auth_node, :member)
 ```
 
 Benefits:
@@ -77,16 +77,16 @@ Foreign keys for performance when you need direct DB joins
 # In Org.Public
 
 def list_members(%Node{auth_node: auth_node}) do
-  Core.Authorization.list_principals_with_role(auth_node, :member)
+  Mica.Authorization.list_principals_with_role(auth_node, :member)
   |> Repo.preload([:profile])
 end
 
 def add_member(%Node{auth_node: auth_node}, %User{} = user) do
-  Core.Authorization.assign_role(user, auth_node, :member)
+  Mica.Authorization.assign_role(user, auth_node, :member)
 end
 
 def remove_member(%Node{auth_node: auth_node}, %User{} = user) do
-  Core.Authorization.revoke_role(user, auth_node, :member)
+  Mica.Authorization.revoke_role(user, auth_node, :member)
 end
 ```
 
@@ -96,7 +96,7 @@ No `org_users` table needed for membership.
 
 ```elixir
 # Auth layer for membership
-Core.Authorization.assign_role(user, crew.auth_node, :participant)
+Mica.Authorization.assign_role(user, crew.auth_node, :participant)
 
 # Extension layer for metadata (public_id cannot be derived)
 %CrewMemberData{
@@ -149,10 +149,10 @@ When implementing a new user-entity relationship:
 
 1. **Does the entity need an auth_node?**
    - If users need authorization to access/modify the entity: Yes
-   - Add `belongs_to :auth_node, Core.Authorization.Node` to the model
+   - Add `belongs_to :auth_node, Mica.Authorization.Node` to the model
 
 2. **What role(s) are needed?**
-   - Define roles in `lib/core/authorization.ex` if new
+   - Define roles in `lib/mica/authorization.ex` if new
    - Common roles: `:owner`, `:member`, `:participant`, `:admin`
 
 3. **Is metadata needed beyond membership?**
@@ -187,6 +187,6 @@ For systems that currently use both auth roles and join tables:
 
 ## Related Files
 
-- `lib/core/authorization.ex` - Authorization module with role functions
-- `lib/core/authorization/node.ex` - Auth node schema
-- `lib/core/authorization/role_assignment.ex` - Role assignment schema
+- `lib/mica/authorization.ex` - Authorization module with role functions
+- `lib/mica/authorization/node.ex` - Auth node schema
+- `lib/mica/authorization/role_assignment.ex` - Role assignment schema

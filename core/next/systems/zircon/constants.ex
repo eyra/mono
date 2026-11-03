@@ -1,4 +1,4 @@
-defmodule Systems.Zircon.Constants do
+defmodule Next.Systems.Zircon.Constants do
   @moduledoc """
   This module contains the Zircon constants.
   """
@@ -25,8 +25,8 @@ defmodule Systems.Zircon.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Zircon.Constants
-      alias Systems.Zircon.Constants
+      require Next.Systems.Zircon.Constants
+      alias Next.Systems.Zircon.Constants
 
       @research_framework Constants.research_framework()
       @research_dimension Constants.research_dimension()

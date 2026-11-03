@@ -3,8 +3,8 @@ defmodule Systems.Advert.SubmissionViewBuilder do
   alias Systems.{Advert, Project, Assignment, Pool}
 
   @enum_map %{
-    genders: Core.Enums.Genders,
-    native_languages: Core.Enums.NativeLanguages
+    genders: Mica.Enums.Genders,
+    native_languages: Mica.Enums.NativeLanguages
   }
 
   def view_model(%Advert.Model{submission: submission} = advert, %{current_user: user}) do

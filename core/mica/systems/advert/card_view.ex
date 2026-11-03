@@ -2,7 +2,7 @@ defmodule Systems.Advert.CardView do
   @moduledoc """
   A large eye-catcher meant to call a user into taking an action.
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Image
   alias Frameworks.Pixel.Icon

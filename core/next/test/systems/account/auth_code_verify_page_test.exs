@@ -1,17 +1,17 @@
-defmodule Next.Account.AuthCodeVerifyPageTest do
+defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
   @moduledoc """
   Wires up the rate-limit path end-to-end at the LiveView level: hitting
   the attempts limit on the verify page must bounce back to
   /user/auth/identify with the RATE-LIMIT flash, not the "code expired"
   one. See Flux 10025618754.
   """
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
+  use Gettext, backend: MicaWeb.Gettext
 
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
 

@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.ContributionsViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   import Systems.Fund.TestHelper
   import Systems.NextAction.TestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
   alias Systems.Crew
@@ -150,7 +150,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
            member: member_a
          } do
       # Signed-in user is the assignment's owner (inherited from auth tree).
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
 
       {_, _} = create_pending_contribution(assignment, participant_a, crew, member_a)
 

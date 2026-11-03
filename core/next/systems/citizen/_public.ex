@@ -1,5 +1,5 @@
-defmodule Systems.Citizen.Public do
-  use Core, :public
+defmodule Next.Systems.Citizen.Public do
+  use Mica, :public
   @pool_director_key "citizen"
 
   alias Systems.{

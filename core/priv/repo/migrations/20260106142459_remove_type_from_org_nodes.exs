@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RemoveTypeFromOrgNodes do
+defmodule Mica.Repo.Migrations.RemoveTypeFromOrgNodes do
   use Ecto.Migration
 
   def change do

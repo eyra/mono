@@ -23,7 +23,7 @@ defmodule Systems.Account.Auth.Email do
   require Logger
 
   alias Systems.Account.User
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.UserCheck
   alias Frameworks.Signal

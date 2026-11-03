@@ -1,5 +1,5 @@
 defmodule Systems.Home.PageBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Home
   alias Systems.Pool
@@ -7,7 +7,7 @@ defmodule Systems.Home.PageBuilderTest do
   alias Systems.Assignment
   alias Systems.Fund
 
-  alias Core.Factories
+  alias Mica.Factories
 
   defp block_keys(vm), do: Enum.map(vm.blocks, &elem(&1, 0))
 

@@ -1,10 +1,10 @@
-defmodule Systems.Zircon.Screening.ToolView do
-  use CoreWeb, :modal_live_view
+defmodule Next.Systems.Zircon.Screening.ToolView do
+  use MicaWeb, :modal_live_view
   use Frameworks.Pixel
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
   alias Systems.Workflow
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
 
   def dependencies(), do: [:tool_ref]
 

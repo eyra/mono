@@ -6,9 +6,9 @@ defmodule Systems.Content.S3Test do
   setup :verify_on_exit!
 
   setup do
-    initial_config = Application.get_env(:core, :content)
+    initial_config = Application.get_env(:mica, :content)
 
-    Application.put_env(:core, :content,
+    Application.put_env(:mica, :content,
       backend: Systems.Content.S3,
       bucket: "test-bucket",
       public_url: "http://example.com",
@@ -16,7 +16,7 @@ defmodule Systems.Content.S3Test do
     )
 
     on_exit(fn ->
-      Application.put_env(:core, :content, initial_config)
+      Application.put_env(:mica, :content, initial_config)
     end)
 
     :ok

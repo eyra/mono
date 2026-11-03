@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CleanUp do
+defmodule Mica.Repo.Migrations.CleanUp do
   use Ecto.Migration
 
   def up do

@@ -1,5 +1,5 @@
 defmodule Systems.Crew.System do
-  use Core.System
+  use Mica.System
 
   def signal_handlers, do: [Systems.Crew.Switch]
 end

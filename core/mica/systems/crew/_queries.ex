@@ -6,9 +6,9 @@ defmodule Systems.Crew.Queries do
   import Frameworks.Utility.Query, only: [build: 3]
 
   alias Systems.Crew
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account.User
-  alias Core.Authorization.RoleAssignment
+  alias Mica.Authorization.RoleAssignment
 
   # MEMBERS
 
@@ -39,7 +39,7 @@ defmodule Systems.Crew.Queries do
 
     member_ids =
       member_query()
-      |> join(:inner, [member: m], ra in Core.Authorization.RoleAssignment,
+      |> join(:inner, [member: m], ra in Mica.Authorization.RoleAssignment,
         as: :task_role,
         on: ra.principal_id == m.user_id and ra.role == :owner
       )
@@ -139,7 +139,7 @@ defmodule Systems.Crew.Queries do
     task_ids = select(tasks, [task: t], t.id)
 
     from(u in User, as: :user)
-    |> join(:inner, [user: u], tr in Core.Authorization.RoleAssignment,
+    |> join(:inner, [user: u], tr in Mica.Authorization.RoleAssignment,
       as: :task_role,
       on: tr.principal_id == u.id
     )

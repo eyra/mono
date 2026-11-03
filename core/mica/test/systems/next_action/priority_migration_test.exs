@@ -1,10 +1,10 @@
 defmodule Systems.NextAction.PriorityMigrationTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
   alias Systems.NextAction
 
   @version 20_261_030_120_000
-  @migration Core.Repo.Migrations.AddPriorityToNextActions
+  @migration Mica.Repo.Migrations.AddPriorityToNextActions
   @migration_file "priv/repo/migrations/20261030120000_add_priority_to_next_actions.exs"
 
   setup_all do

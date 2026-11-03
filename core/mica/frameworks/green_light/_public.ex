@@ -11,7 +11,7 @@ defmodule Frameworks.GreenLight.Public do
 
 
   """
-  use Core, :public
+  use Mica, :public
 
   @doc false
   defmacro __using__(config) do

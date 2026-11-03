@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RemoveVuStudentPools do
+defmodule Mica.Repo.Migrations.RemoveVuStudentPools do
   use Ecto.Migration
 
   def change do

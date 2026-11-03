@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewTaskListViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Assignment.CrewTaskHelpers,
     only: [map_item: 1, build_work_items: 2, get_participant: 3, recovery_context: 3]

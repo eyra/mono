@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateGraphiteScoresUniqueIndex do
+defmodule Mica.Repo.Migrations.UpdateGraphiteScoresUniqueIndex do
   use Ecto.Migration
 
   def up do

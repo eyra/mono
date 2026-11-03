@@ -1,5 +1,5 @@
 defmodule Systems.Account.System do
-  use Core.System
+  use Mica.System
 
   def grants do
     quote do

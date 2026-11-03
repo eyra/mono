@@ -1,4 +1,4 @@
-defmodule Systems.Paper.RISEntry do
+defmodule Next.Systems.Paper.RISEntry do
   @moduledoc """
   Struct representing a bibliographic entry from a RIS file.
   Used to maintain consistent data structure across the import pipeline.
@@ -204,7 +204,7 @@ defmodule Systems.Paper.RISEntry do
   Handles various error formats that may come from RIS parsing.
   """
   def process_entry_errors(entries) do
-    alias Systems.Paper.RISEntryError
+    alias Next.Systems.Paper.RISEntryError
 
     entries
     |> Enum.map(&from_map/1)

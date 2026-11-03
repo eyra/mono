@@ -1,5 +1,5 @@
 defmodule Systems.Payment.Provider.LocalController do
-  use CoreWeb, {:controller, [formats: [:html]]}
+  use MicaWeb, {:controller, [formats: [:html]]}
 
   require Logger
 
@@ -54,7 +54,7 @@ defmodule Systems.Payment.Provider.LocalController do
   end
 
   defp return_path(%{target_fund_id: fund_id}) do
-    case Core.Repo.one(
+    case Mica.Repo.one(
            from(a in Systems.Assignment.Model, where: a.fund_id == ^fund_id, select: a.id)
          ) do
       nil -> "/"

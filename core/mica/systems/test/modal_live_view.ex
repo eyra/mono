@@ -3,7 +3,7 @@ defmodule Systems.Test.ModalLiveView do
   Embedded LiveView for testing modal toolbar button functionality.
   Publishes toolbar buttons and handles toolbar events.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Systems.Test
 

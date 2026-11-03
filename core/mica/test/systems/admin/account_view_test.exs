@@ -1,5 +1,5 @@
 defmodule Systems.Admin.AccountViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   require LiveNest.Constants
@@ -122,7 +122,7 @@ defmodule Systems.Admin.AccountViewTest do
         |> Ecto.Changeset.change(%{
           verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       conn = conn |> Map.put(:request_path, "/admin/accounts")
 

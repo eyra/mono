@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.AuthorizationTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.AuthorizationTest do
+  use Mica.DataCase
 
   import ExUnit.CaptureLog
 
-  alias Core.Authorization
-  alias Core.Factories
+  alias Mica.Authorization
+  alias Mica.Factories
 
   setup do
     level = Logger.level()

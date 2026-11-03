@@ -1,5 +1,5 @@
-defmodule Systems.Student.Overview do
-  use CoreWeb, :live_component_fabric
+defmodule Next.Systems.Student.Overview do
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text
@@ -7,10 +7,8 @@ defmodule Systems.Student.Overview do
   import Frameworks.Pixel.Content
   import Frameworks.Pixel.Empty
 
-  alias Systems.{
-    Student,
-    Pool
-  }
+  alias Next.Systems.Student
+  alias Systems.Pool
 
   # Handle Search Bar Update
   @impl true

@@ -1,6 +1,6 @@
-defmodule Next.Account.AuthOtpFlagTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+defmodule Next.Systems.Account.AuthOtpFlagTest do
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest
 

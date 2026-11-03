@@ -9,14 +9,17 @@
 #   1. a file in one root references a module defined in a file in a forbidden
 #      root (compile, export or runtime reference, from `mix xref graph`), or
 #   2. a file names a namespace of a forbidden root that xref cannot see (for
-#      example a Registry name such as Systems.Paper.ImportRegistry in mica/, an
-#      :"Elixir.…" atom, or a module or `config :core, :<system>` key in config/), or
+#      example a Registry name such as Next.Systems.Paper.ImportRegistry in mica/, an
+#      :"Elixir.…" atom, or a module or `config :mica, :<system>` key in config/), or
 #   3. a file under mica/ or config/ contains a PaNL, VU or Eyra literal,
 # unless boundary_allowlist.exs lists the file for that kind. Each entry also
 # records the referenced files, the module names or the number of literal
 # matches, and the check fails when these grow. When they drop it passes and asks
 # for the entry to be lowered; when an entry no longer occurs it fails, so the
-# list only shrinks.
+# list only shrinks. It also fails, without an allowlist, when
+#   4. a module is defined outside its owner's namespaces: next/ defines only
+#      Next.* and NextWeb.*, mica_saas/ only MicaSaas.* and MicaSaasWeb.* (Mix
+#      tasks keep Mix.Tasks.*), and mica/ nothing in a SaaS namespace.
 #
 # Usage (from core/, after `mix compile`):
 #   elixir scripts/boundary_check.exs
@@ -42,6 +45,7 @@ defmodule BoundaryCheck do
       write_allowlist(found, allowlist)
     else
       check(found, Map.new(allowlist, fn {key, {detail, _reason}} -> {key, detail} end))
+      check_namespaces()
     end
   end
 
@@ -81,9 +85,11 @@ defmodule BoundaryCheck do
   end
 
   defp hits(file, namespaces) do
-    for {name, _line} <- names(File.read!(file)), in_namespace?(name, namespaces), uniq: true do
-      name
-    end
+    for {name, _line} <- names(File.read!(file)),
+        owned = owned_name(name, namespaces),
+        owned,
+        uniq: true,
+        do: owned
   end
 
   # {file, kind, number of matches}
@@ -126,6 +132,16 @@ defmodule BoundaryCheck do
     )
 
     if new != [] or grown != [] or stale != [], do: System.halt(1)
+  end
+
+  defp check_namespaces do
+    misplaced = misplaced_modules()
+
+    Enum.each(misplaced, fn {file, module} ->
+      IO.puts(:stderr, "boundary: #{file} defines #{module} outside its owner's namespaces")
+    end)
+
+    if misplaced != [], do: System.halt(1)
   end
 
   defp describe({from, to}) when is_integer(from), do: "#{from} -> #{to} matches"

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddBirthYearFieldsToEligibilityCriteria do
+defmodule Mica.Repo.Migrations.AddBirthYearFieldsToEligibilityCriteria do
   use Ecto.Migration
 
   def up do

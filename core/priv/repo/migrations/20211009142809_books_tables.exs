@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.BooksTables do
+defmodule Mica.Repo.Migrations.BooksTables do
   use Ecto.Migration
 
   def change do

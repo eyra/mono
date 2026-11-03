@@ -1,9 +1,9 @@
-defmodule Systems.Probe.ToolViewTest do
-  use CoreWeb.ConnCase, async: false
+defmodule Next.Systems.Probe.ToolViewTest do
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
   alias Systems.Workflow

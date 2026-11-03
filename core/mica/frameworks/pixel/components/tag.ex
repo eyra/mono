@@ -2,7 +2,7 @@ defmodule Frameworks.Pixel.Tag do
   @moduledoc """
   A colored tag/badge component.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:text, :string, required: true)
   attr(:bg_color, :string, default: "bg-primary")

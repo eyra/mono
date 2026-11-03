@@ -2,11 +2,11 @@ defmodule Systems.Account.SignInHandoff do
   @moduledoc """
   Takes over the end of an identity-provider sign-in, for example to hand it
   to a native app instead of continuing on the site. Systems list their
-  handoffs in `c:Core.System.sign_in_handoffs/0`.
+  handoffs in `c:Mica.System.sign_in_handoffs/0`.
 
   The identity-provider flows (their callbacks and the move-your-account
   confirm and decline) end through `sign_in/5` and `end_sign_in/4`, which ask
-  the handoffs in `Core.SaaS.sign_in_handoffs/0` order before they do what the
+  the handoffs in `Mica.SaaS.sign_in_handoffs/0` order before they do what the
   site does. Other sign-ins don't ask them.
   """
 
@@ -55,7 +55,7 @@ defmodule Systems.Account.SignInHandoff do
   end
 
   defp ask(hand_off) do
-    Enum.find_value(Core.SaaS.sign_in_handoffs(), :skip, fn handoff ->
+    Enum.find_value(Mica.SaaS.sign_in_handoffs(), :skip, fn handoff ->
       case hand_off.(handoff) do
         {:ok, conn} -> {:ok, conn}
         :skip -> nil
