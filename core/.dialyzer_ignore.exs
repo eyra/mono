@@ -11,5 +11,5 @@
   {"deps/httpoison/lib/httpoison/base.ex", :callback_arg_type_mismatch},
   {"deps/httpoison/lib/httpoison/base.ex", :callback_type_mismatch},
   {"deps/httpoison/lib/httpoison/base.ex", :pattern_match_cov},
-  {"mica/frameworks/utility/http_client.ex", :invalid_contract}
+  ~r/^mica\/frameworks\/utility\/http_client\.ex:\d+:invalid_contract Invalid type specification for function stream_next\./
 ]
