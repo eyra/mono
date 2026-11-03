@@ -33,7 +33,7 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant?post_signup_action=add_to_panl")
-    |> assert_has(Query.css("[data-testid='signup-page']"))
+    |> assert_connected("[data-testid='signup-page']")
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
@@ -57,7 +57,7 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant")
-    |> assert_has(Query.css("[data-testid='signup-page']"))
+    |> assert_connected("[data-testid='signup-page']")
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
