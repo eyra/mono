@@ -36,4 +36,50 @@ defmodule Next.Config.AppsignalConfigTest do
     config = release_config(%{"APPSIGNAL_SEND_PARAMS" => "false"})
     assert config[:appsignal][:config][:send_params] == false
   end
+
+  test "the running app sends no session data to AppSignal" do
+    assert Application.get_env(:appsignal, :config)[:send_session_data] == false
+  end
+
+  test "a release sends no session data to AppSignal" do
+    assert release_config()[:appsignal][:config][:send_session_data] == false
+  end
+
+  test "refuses APPSIGNAL_SEND_SESSION_DATA, which would override send_session_data" do
+    assert_raise RuntimeError, ~r/APPSIGNAL_SEND_SESSION_DATA/, fn ->
+      release_config(%{"APPSIGNAL_SEND_SESSION_DATA" => "true"})
+    end
+  end
+
+  test "accepts APPSIGNAL_SEND_SESSION_DATA=false" do
+    config = release_config(%{"APPSIGNAL_SEND_SESSION_DATA" => "false"})
+    assert config[:appsignal][:config][:send_session_data] == false
+  end
+
+  test "a release keeps the conn out of crash log metadata" do
+    assert release_config()[:plug_cowboy][:conn_in_exception_metadata] == false
+  end
+
+  # AppSignal's logger handler sends a crash's log metadata as is, and plug_cowboy
+  # puts the whole conn (params, cookie header, session) there unless told not to.
+  test "a crashed request's log metadata carries no conn" do
+    conn =
+      Plug.Test.init_test_session(
+        Plug.Test.conn(:get, "/a/sqid?p=participant-1"),
+        %{panel_info: %{participant: "participant-1"}}
+      )
+
+    reason = {{%RuntimeError{message: "boom"}, []}, {MicaWeb.Endpoint, :call, [conn, []]}}
+
+    assert {:ok, _message, metadata} =
+             Plug.Cowboy.Translator.translate(
+               :error,
+               :error,
+               :format,
+               {~c"Ranch listener MicaWeb.Endpoint.HTTP terminated",
+                [MicaWeb.Endpoint.HTTP, self(), 1, self(), {reason, []}]}
+             )
+
+    refute Keyword.has_key?(metadata, :conn)
+  end
 end
