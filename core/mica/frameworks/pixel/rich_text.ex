@@ -26,9 +26,8 @@ defmodule Frameworks.Pixel.RichText do
   # U+10FFFF) or that isn't a character: replaced by U+FFFD, as browsers do.
   @numeric_reference ~r/&#(?:([0-9]{1,7})|x([0-9a-f]{1,6}));/i
 
-  # Whitespace right after a tag, which html_sanitize_ex would replace by its
-  # own placeholder characters before parsing. Written as references instead,
-  # it comes out as the same whitespace and no placeholder is ever inserted.
+  # Whitespace right after a tag. mochiweb drops text that is only whitespace;
+  # written as character references, it is kept and comes out the same.
   @whitespace_after_tag ~r/>(?:\r?\n| +(?=<)|\t+(?=<))/
 
   defmodule Address do
@@ -95,9 +94,9 @@ defmodule Frameworks.Pixel.RichText do
         else: {"figure", scrub_attributes("figure", attributes), children}
     end
 
-    # Text is kept as it is. (The library's own text clauses remove its
-    # placeholders, which `clean/1` never lets it insert, and so would remove
-    # the same characters typed by a user.)
+    # Text is kept as it is. (The library's own text clauses remove the
+    # placeholders its parser inserts; `clean/1` doesn't use that parser, so
+    # they would only remove the same characters typed by a user.)
     def scrub("" <> text), do: text
 
     # Defining `scrub/1` above replaces the one `use HtmlSanitizeEx` defines.
@@ -180,6 +179,79 @@ defmodule Frameworks.Pixel.RichText do
     end
   end
 
+  # Parses and writes HTML with mochiweb, as html_sanitize_ex does, but under
+  # a root element the text can't close, and in linear time.
+  defmodule Tree do
+    @moduledoc false
+
+    @root "rich-text"
+
+    # mochiweb_html's void elements; an end tag of one closes nothing.
+    @void ~w(area base br col embed hr img input keygen link meta param source track wbr)
+
+    # Tags that may be closed again by a later tag of the same name.
+    @closed_by_same ["li", "option"]
+    @closed_by_each_other ["dd", "dt"]
+
+    def parse(html) do
+      tokens = [
+        {:start_tag, @root, [], false}
+        | (html <> "</#{@root}>") |> :mochiweb_html.tokens() |> matched()
+      ]
+
+      {@root, [], children} = :mochiweb_html.parse_tokens(tokens)
+      children
+    end
+
+    def to_html(children) do
+      html = {@root, [], List.wrap(children)} |> :mochiweb_html.to_html() |> IO.iodata_to_binary()
+      start = byte_size("<#{@root}>")
+      binary_part(html, start, byte_size(html) - start - byte_size("</#{@root}>"))
+    end
+
+    # The tokens without the end tags that close no open element. mochiweb
+    # searches all open elements for each of those, which takes quadratic
+    # time on many of them. The open elements are followed as mochiweb's
+    # tree builder does; each is pushed and popped once.
+    defp matched(tokens) do
+      {kept, _open, _counts} = Enum.reduce(tokens, {[], [], %{}}, &match/2)
+      Enum.reverse(kept)
+    end
+
+    defp match({:start_tag, _name, _attributes, true} = token, {kept, open, counts}),
+      do: {[token | kept], open, counts}
+
+    defp match({:start_tag, name, _attributes, false} = token, {kept, open, counts}) do
+      {open, counts} = close_implied(name, open, counts)
+      {[token | kept], [name | open], Map.update(counts, name, 1, &(&1 + 1))}
+    end
+
+    defp match({:end_tag, name} = token, {kept, open, counts}) do
+      if Map.get(counts, name, 0) > 0 and name not in @void do
+        {open, counts} = close(name, open, counts)
+        {[token | kept], open, counts}
+      else
+        {kept, open, counts}
+      end
+    end
+
+    defp match(token, {kept, open, counts}), do: {[token | kept], open, counts}
+
+    defp close_implied(name, [name | open], counts) when name in @closed_by_same,
+      do: {open, Map.update!(counts, name, &(&1 - 1))}
+
+    defp close_implied(name, [top | open], counts)
+         when name in @closed_by_each_other and top in @closed_by_each_other,
+         do: {open, Map.update!(counts, top, &(&1 - 1))}
+
+    defp close_implied(_name, open, counts), do: {open, counts}
+
+    defp close(name, [top | open], counts) do
+      counts = Map.update!(counts, top, &(&1 - 1))
+      if top == name, do: {open, counts}, else: close(name, open, counts)
+    end
+  end
+
   @doc "The largest rich text, in bytes, a field accepts."
   def max_bytes, do: @max_bytes
 
@@ -194,7 +266,11 @@ defmodule Frameworks.Pixel.RichText do
     |> Regex.replace(html, &character_or_replacement/3)
     |> String.replace(@bare_ampersand, "&amp;")
     |> String.replace(@whitespace_after_tag, &whitespace_as_references/1)
-    |> Scrubber.sanitize()
+    |> Scrubber.before_scrub()
+    |> String.replace("<?", "&lt;?")
+    |> Tree.parse()
+    |> HtmlSanitizeEx.Traverser.traverse(Scrubber)
+    |> Tree.to_html()
   end
 
   defp character_or_replacement(reference, decimal, hexadecimal) do

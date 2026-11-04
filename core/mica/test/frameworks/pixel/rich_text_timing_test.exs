@@ -26,6 +26,43 @@ defmodule Frameworks.Pixel.RichTextTimingTest do
     end
   end
 
+  # Each end tag that closes no open element made the parser search every
+  # open element: minutes for these inputs.
+  describe "clean/1 takes linear time on end tags that close nothing" do
+    test "after deeply nested elements" do
+      html = String.duplicate("<div>", 66_000) <> String.duplicate("</span>", 66_000)
+
+      assert within_budget(fn -> RichText.clean(html) end) ==
+               String.duplicate("<div>", 66_000) <> String.duplicate("</div>", 66_000)
+    end
+
+    test "with only tags the editor makes" do
+      html = String.duplicate("<span>", 61_000) <> String.duplicate("</b>", 61_000)
+
+      assert within_budget(fn -> RichText.clean(html) end) ==
+               String.duplicate("<span>", 61_000) <> String.duplicate("</span>", 61_000)
+    end
+
+    test "of an element that has no end tag" do
+      html = String.duplicate("<div>", 66_000) <> String.duplicate("</img>", 66_000)
+
+      assert within_budget(fn -> RichText.clean(html) end) ==
+               String.duplicate("<div>", 66_000) <> String.duplicate("</div>", 66_000)
+    end
+  end
+
+  describe "clean/1 takes linear time on deep nesting" do
+    test "of elements that are kept" do
+      html = String.duplicate("<div>", 160_000) <> "x" <> String.duplicate("</div>", 160_000)
+      assert within_budget(fn -> RichText.clean(html) end) == html
+    end
+
+    test "of elements that are removed" do
+      html = String.duplicate("<font>", 130_000) <> "x"
+      assert within_budget(fn -> RichText.clean(html) end) == "x"
+    end
+  end
+
   defp within_budget(fun) do
     task = Task.async(fun)
 

@@ -71,12 +71,19 @@ defmodule Frameworks.Pixel.RichTextTest do
   end
 
   describe "clean/1 removes what the editor doesn't make" do
-    for tag <- ~w(script style iframe object embed noscript template textarea svg math) do
+    for tag <- ~w(script style iframe object noscript template textarea svg math) do
       test "#{tag}, with its content" do
         tag = unquote(tag)
         html = ~s|<div>Before<#{tag}>alert(1)</#{tag}>after</div>|
         assert RichText.clean(html) == "<div>Beforeafter</div>"
       end
+    end
+
+    # A void element has no content, so the text after it is text, as
+    # browsers show it.
+    test "embed, keeping the text after it" do
+      assert RichText.clean("<div>Before<embed src=\"x\">text</embed>after</div>") ==
+               "<div>Beforetextafter</div>"
     end
 
     test "other tags, keeping their text" do
@@ -316,6 +323,34 @@ defmodule Frameworks.Pixel.RichTextTest do
         html = "<div>#{unquote(text)}</div>"
         assert RichText.clean(html) == html
       end
+    end
+  end
+
+  describe "clean/1 keeps text after the parser's own root element" do
+    test "written as a tag" do
+      assert RichText.clean("<div>a</div></html_sanitize_ex><div>b</div>") ==
+               "<div>a</div><div>b</div>"
+    end
+
+    test "written as text" do
+      html = "<div>a &lt;/html_sanitize_ex&gt; b</div>"
+      assert RichText.clean(html) == html
+    end
+
+    test "written as the tag of the root element clean/1 uses" do
+      assert RichText.clean("<div>a</div></rich-text><div>b</div>") ==
+               "<div>a</div><div>b</div>"
+    end
+  end
+
+  describe "clean/1 ignores an end tag that closes nothing" do
+    test "of an element that has no end tag, keeping what follows" do
+      assert RichText.clean(~s|<div><img src="https://example.org/a.png">a</img>b</div>|) ==
+               ~s|<div><img src="https://example.org/a.png" />ab</div>|
+    end
+
+    test "of an element that isn't open" do
+      assert RichText.clean("<div><b>a</i>b</b></div>") == "<div><b>ab</b></div>"
     end
   end
 
