@@ -97,6 +97,13 @@ defmodule Mica.System do
   @callback sign_in_handoffs() :: [module()]
 
   @doc """
+  The BFF pages the system serves: page name to `Systems.BFF.Page` module, for
+  example `%{home: Systems.Home.BFFPage}`. The BFF serves a page only when the
+  mica-bff spec lists it (`Systems.BFF.Blocks.pages/0`).
+  """
+  @callback bff_pages() :: %{atom() => module()}
+
+  @doc """
   Processes the system needs, started under `Mica.Supervisor` after
   `Phoenix.PubSub` and before Oban, in `c:Mica.SaaS.systems/0` order.
   """
@@ -155,6 +162,7 @@ defmodule Mica.System do
       def account_tabs, do: []
       def desktop_sections, do: []
       def sign_in_handoffs, do: []
+      def bff_pages, do: %{}
       def children, do: []
       def oban_queues, do: []
       def oban_crons, do: []

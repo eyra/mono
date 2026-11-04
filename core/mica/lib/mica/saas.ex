@@ -114,6 +114,9 @@ defmodule Mica.SaaS do
   @doc "The sign-in handoffs of all systems, in `systems/0` order."
   def sign_in_handoffs, do: Enum.flat_map(systems(), & &1.sign_in_handoffs())
 
+  @doc "The BFF pages of all systems. Raises when two systems serve the same page."
+  def bff_pages, do: collect_bff_pages(systems())
+
   @doc "The children of all systems, in `systems/0` order."
   def children, do: collect_children(systems())
 
@@ -176,6 +179,18 @@ defmodule Mica.SaaS do
         end
 
         sections ++ [section]
+    end
+  end
+
+  @doc false
+  def collect_bff_pages(systems) do
+    for system <- systems, {name, module} <- system.bff_pages(), reduce: %{} do
+      pages ->
+        if Map.has_key?(pages, name) do
+          raise ArgumentError, "BFF page #{inspect(name)} is served by more than one system"
+        end
+
+        Map.put(pages, name, module)
     end
   end
 
