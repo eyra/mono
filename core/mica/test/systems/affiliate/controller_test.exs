@@ -40,6 +40,14 @@ defmodule Systems.Affiliate.ControllerTest do
       refute Controller.valid_id?("foo@bar")
     end
 
+    test "rejects a map, as from p[x]=y" do
+      refute Controller.valid_id?(%{"x" => "y"})
+    end
+
+    test "rejects a list, as from p[]=y" do
+      refute Controller.valid_id?(["y"])
+    end
+
     test "rejects identifiers with a trailing newline" do
       refute Controller.valid_id?("abc123\n")
     end

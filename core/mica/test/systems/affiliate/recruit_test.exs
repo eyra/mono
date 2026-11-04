@@ -91,6 +91,42 @@ defmodule Systems.Affiliate.RecruitTest do
       assert redirected_to(conn) == "/assignment/#{assignment.id}"
     end
 
+    test "refuses a p that is a map", %{conn: conn, assignment: assignment} do
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p[x]=y")
+
+      assert conn.status == 403
+    end
+
+    test "refuses a p that is a list", %{conn: conn, assignment: assignment} do
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p[]=y")
+
+      assert conn.status == 403
+    end
+
+    test "starts the participant without another param that is a map", %{conn: conn} do
+      assignment = assignment_with_redirect_url()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-map-1&x[y]=z&code=1")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirect_query(conn) == %{"p" => "participant-map-1", "code" => "1"}
+    end
+
+    test "starts the participant without another param that is a list", %{conn: conn} do
+      assignment = assignment_with_redirect_url()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-list-1&x[]=z&code=1")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirect_query(conn) == %{"p" => "participant-list-1", "code" => "1"}
+    end
+
     test "shows a friendly 'not available' page to a signed out visitor",
          %{conn: conn, assignment: assignment} do
       assignment
@@ -189,6 +225,15 @@ defmodule Systems.Affiliate.RecruitTest do
     assignment = Assignment.Factories.create_assignment_with_affiliate()
     assert assignment.status == :online
     assignment
+  end
+
+  defp assignment_with_redirect_url do
+    Assignment.Factories.create_assignment_with_affiliate("https://panel.example.org/done")
+  end
+
+  defp redirect_query(conn) do
+    %{redirect_url: redirect_url} = get_session(conn, :panel_info)
+    redirect_url |> URI.parse() |> Map.fetch!(:query) |> URI.decode_query()
   end
 
   defp unpublished_assignment do

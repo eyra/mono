@@ -162,15 +162,17 @@ defmodule Systems.Affiliate.Controller do
     status != :online
   end
 
-  def valid_id?(nil), do: false
   def valid_id?("participant_id"), do: false
   def valid_id?("null"), do: false
   def valid_id?("undefined"), do: false
   def valid_id?("preview"), do: false
 
-  def valid_id?(id) do
+  def valid_id?(id) when is_binary(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
+
+  # nil, or a map or list from a query like `p[x]=y`
+  def valid_id?(_), do: false
 
   defp start_tester(conn, params, %{affiliate: affiliate} = assignment) do
     redirect_url = Affiliate.Public.get_redirect_url(affiliate)
@@ -281,8 +283,11 @@ defmodule Systems.Affiliate.Controller do
 
   defp get_participant(_), do: nil
 
+  # Only string values can be merged back into the redirect and callback URLs;
+  # a map or list (from `x[y]=z` or `x[]=z`) would crash the merge.
   defp strip_query_string(params) do
     params
     |> Map.delete("sqid")
+    |> Map.filter(fn {_key, value} -> is_binary(value) end)
   end
 end
