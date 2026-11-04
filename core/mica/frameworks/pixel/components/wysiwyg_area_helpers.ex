@@ -40,6 +40,6 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
   end
 
   def render_wysiwyg(wysiwyg_text) do
-    wysiwyg_text |> RichText.clean() |> raw()
+    wysiwyg_text |> RichText.clean_stored() |> raw()
   end
 end

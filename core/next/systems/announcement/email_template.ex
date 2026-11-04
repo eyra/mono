@@ -2,7 +2,7 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   @moduledoc """
   The email of a high-priority announcement, readable on its own: the title,
   the summary, the full body and a link to the announcement page. The HTML
-  part has the cleaned body (`Frameworks.Pixel.RichText.clean/1`); the
+  part has the cleaned body (`Frameworks.Pixel.RichText.clean_stored/1`); the
   plain-text part has the text of the body.
 
   The link is the plain page address. Opening the email or following the link
@@ -23,7 +23,7 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   @doc "The email of `announcement`, without recipients, rendered in the current locale."
   def email(%Announcement.Model{id: id, title: title, summary: summary, body: body}) do
     url = Announcement.Private.page_url(id)
-    body = RichText.clean(body)
+    body = RichText.clean_stored(body)
 
     %Email.Model{
       to: [],

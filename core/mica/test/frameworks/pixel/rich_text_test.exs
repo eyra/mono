@@ -343,6 +343,20 @@ defmodule Frameworks.Pixel.RichTextTest do
     end
   end
 
+  describe "clean/1 on a list item inside another one" do
+    # The parser closes an open list item only when it is the innermost open
+    # element. Here a removed element sits in between, so the first clean
+    # nests the items and the second makes them siblings. Browsers show both
+    # as siblings; the editor doesn't write this.
+    test "nests them when a removed element is in between" do
+      assert RichText.clean("<li>a<font><li>b") == "<li>a<li>b</li></li>"
+    end
+
+    test "makes them siblings when cleaned again" do
+      assert RichText.clean("<li>a<li>b</li></li>") == "<li>a</li><li>b</li>"
+    end
+  end
+
   describe "clean/1 ignores an end tag that closes nothing" do
     test "of an element that has no end tag, keeping what follows" do
       assert RichText.clean(~s|<div><img src="https://example.org/a.png">a</img>b</div>|) ==

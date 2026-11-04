@@ -28,6 +28,15 @@
       "groupSlug": "hackney"
     },
     {
+      "description": "html_sanitize_ex and mochiweb get their own PR: Frameworks.Pixel.RichText relies on their internals, listed by their pins in core/mix.exs",
+      "matchPackageNames": ["html_sanitize_ex", "mochiweb"],
+      "groupName": "html_sanitize_ex and mochiweb",
+      "groupSlug": "html-sanitize-ex-mochiweb",
+      "prBodyNotes": [
+        "Frameworks.Pixel.RichText relies on internals of html_sanitize_ex and mochiweb. Before merging, re-check what the comment by their pins in `core/mix.exs` lists, and run `core/mica/test/frameworks/pixel/rich_text_test.exs` and `rich_text_timing_test.exs`."
+      ]
+    },
+    {
       "description": "certifi stays within hackney 4.9.1's ~> 2.18.0; raise this together with hackney once a hackney release needs a newer certifi",
       "matchPackageNames": ["certifi"],
       "allowedVersions": "<2.19.0"

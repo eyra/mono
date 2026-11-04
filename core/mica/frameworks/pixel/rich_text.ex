@@ -290,13 +290,40 @@ defmodule Frameworks.Pixel.RichText do
 
   @doc """
   Cleans the change of `field`. Text longer than `max_bytes/0` is an error
-  instead, and isn't cleaned.
+  instead, and isn't cleaned; so is text that is longer than that once
+  cleaned.
   """
   def clean_change(changeset, field) do
-    changeset = validate_length(changeset, field, max: @max_bytes, count: :bytes)
+    changeset = validate_size(changeset, field)
 
     if Keyword.has_key?(changeset.errors, field),
       do: changeset,
-      else: update_change(changeset, field, &clean/1)
+      else: changeset |> update_change(field, &clean/1) |> validate_size(field)
+  end
+
+  # Cleaning can make text longer (an `&` becomes `&amp;`), so the cleaned
+  # text, which is what is stored, is held to the limit too.
+  defp validate_size(changeset, field),
+    do: validate_length(changeset, field, max: @max_bytes, count: :bytes)
+
+  @doc """
+  Cleans text read from storage, for showing it. Text saved through
+  `clean_change/2` is within `max_bytes/0`; of longer text, stored before,
+  only the first `max_bytes/0` are cleaned and shown, so a view costs no more
+  than cleaning a field of the largest size.
+  """
+  def clean_stored(nil), do: nil
+
+  def clean_stored(html) when is_binary(html) do
+    if too_large?(html),
+      do: html |> binary_part(0, @max_bytes) |> whole_characters() |> clean(),
+      else: clean(html)
+  end
+
+  defp whole_characters(text) do
+    case :unicode.characters_to_binary(text) do
+      text when is_binary(text) -> text
+      {_incomplete_or_error, valid, _rest} -> valid
+    end
   end
 end
