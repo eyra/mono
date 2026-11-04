@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>mix nova.snapshot — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-task" id="main" data-type="tasks">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">mix nova.snapshot</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Captures what a SaaS build wires together, so that the Nova migration
+(plan step code-systems) can move routes, grants, handlers and SaaS config
+between modules and show that nothing changed. The snapshots per SaaS are
+committed in <code class="inline">next/test/snapshots/&lt;saas&gt;/</code>:</p><ul><li><code class="inline">routes.exs</code>: every route as <code class="inline">{verb, path, plug, plug_opts, helper, module}</code>,
+in router order</li><li><code class="inline">permissions.exs</code>: <a href="Core.Authorization.html#permission_map/0"><code class="inline">Core.Authorization.permission_map/0</code></a></li><li><code class="inline">signal.exs</code>: signal handlers (in order), notifiers and notify channels</li><li><code class="inline">flags.exs</code>: the effective feature flags at compile time</li><li><code class="inline">saas_config.exs</code>: the <a href="Core.SaaS.html"><code class="inline">Core.SaaS</code></a> callbacks (start pages, menus, title,
+signed-in pages), the SaaS app config and account and admin tab order</li><li><code class="inline">runtime.exs</code>: the children <code class="inline">Core.Application</code> starts, and per env fixture
+of <a href="Mix.Tasks.Config.Snapshot.html"><code class="inline">mix config.snapshot</code></a> the Oban queues and plugins (crontab sorted), the
+unknown names in <code class="inline">ENABLED_OBAN_PLUGINS</code>, the rate quotas and the effective
+feature flags</li><li><code class="inline">counts.exs</code>: boundary allowlist size, <code class="inline">no route path</code> compile warnings and
+the files <a href="CoreWeb.Router.html"><code class="inline">CoreWeb.Router</code></a> is compile-connected to</li></ul><p>Config-derived snapshots read <code class="inline">config/config.exs</code> as a prod build would
+(<a href="https://hexdocs.pm/elixir/Config.Reader.html"><code class="inline">Config.Reader</code></a>, env <code class="inline">:prod</code>). <code class="inline">runtime.exs</code> adds <code class="inline">config/runtime.exs</code> for each
+env fixture; the rest of the runtime config and the runtime flag list are
+covered by <a href="Mix.Tasks.Config.Snapshot.html"><code class="inline">mix config.snapshot</code></a>, not here. The node-local storage queue is
+rendered as <code class="inline">storage_delivery_local_&lt;node&gt;</code>.</p><pre><code class="makeup elixir" translate="no"><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w">                              </span><span class="c1"># Next: fail on drift</span><span class="w">
+</span><span class="nc">BUNDLE</span><span class="o">=</span><span class="n">self</span><span class="w"> </span><span class="nc">MIX_ENV</span><span class="o">=</span><span class="n">dev</span><span class="w"> </span><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w">      </span><span class="c1"># Self: fail on drift</span><span class="w">
+</span><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w"> </span><span class="o">--</span><span class="n">update</span><span class="w">                     </span><span class="c1"># rewrite the snapshots</span></code></pre><p>Self needs <code class="inline">MIX_ENV=dev</code>: <code class="inline">config/test.exs</code> pins <code class="inline">:saas</code> to <a href="Next.SaaS.html"><code class="inline">Next.SaaS</code></a>.</p><p>Routes pass when the route set is identical and every two routes that can
+match the same request keep their relative order; other reordering is allowed.
+Everything else must be identical. Next is also checked in <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>
+(<code class="inline">next/test/snapshots/nova_snapshot_test.exs</code>), Self in the <code class="inline">snapshot-self</code> CI job.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#compare/3" data-no-tooltip="" translate="no">compare(name, path, rendered)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Compares one rendered snapshot with its committed file.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#overlap?/2" data-no-tooltip="" translate="no">overlap?(arg1, arg2)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether two routes can match the same request.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#path/2" data-no-tooltip="" translate="no">path(saas, name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#render/2" data-no-tooltip="" translate="no">render(saas, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Renders the snapshots of the current build as <code class="inline">{file name, text}</code>. <code class="inline">counts: false</code>
+leaves out <code class="inline">counts.exs</code>, which runs <a><code class="inline">mix compile</code></a> and <a><code class="inline">mix xref</code></a> in a subprocess.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#saas!/0" data-no-tooltip="" translate="no">saas!()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The SaaS the current build is for. Raises when config and <code class="inline">BUNDLE</code> disagree.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="compare/3">
+
+  <div class="detail-header">
+    <a href="#compare/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">compare(name, path, rendered)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L124" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Compares one rendered snapshot with its committed file.</p>
+  </section>
+</section>
+<section class="detail" id="overlap?/2">
+
+  <div class="detail-header">
+    <a href="#overlap?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">overlap?(arg1, arg2)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L380" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether two routes can match the same request.</p>
+  </section>
+</section>
+<section class="detail" id="path/2">
+
+  <div class="detail-header">
+    <a href="#path/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">path(saas, name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L121" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="render/2">
+
+    <span id="render/1"></span>
+
+  <div class="detail-header">
+    <a href="#render/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">render(saas, opts \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L143" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Renders the snapshots of the current build as <code class="inline">{file name, text}</code>. <code class="inline">counts: false</code>
+leaves out <code class="inline">counts.exs</code>, which runs <a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a> and <a href="https://hexdocs.pm/mix/Mix.Tasks.Xref.html"><code class="inline">mix xref</code></a> in a subprocess.</p>
+  </section>
+</section>
+<section class="detail" id="saas!/0">
+
+  <div class="detail-header">
+    <a href="#saas!/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">saas!()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L94" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The SaaS the current build is for. Raises when config and <code class="inline">BUNDLE</code> disagree.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

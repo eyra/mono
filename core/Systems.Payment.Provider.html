@@ -1,0 +1,1299 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Payment.Provider — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Payment.Provider</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:bank_account/0" data-no-tooltip="" translate="no">bank_account()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:kyc_status/0" data-no-tooltip="" translate="no">kyc_status()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Provider-agnostic bank-account (KYC) verification status. Each adapter maps its
+own vocabulary onto these atoms so domain code never matches on provider status
+strings</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:lifecycle_status/0" data-no-tooltip="" translate="no">lifecycle_status()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Provider-agnostic lifecycle status shared by transactions, withdrawals and
+transfers. Each adapter maps its own vocabulary onto these three atoms, so
+domain code never matches on a provider's status strings. An unrecognised
+provider status maps to <code class="inline">:pending</code>: an unknown state must never finalize money
+movement.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:listing/1" data-no-tooltip="" translate="no">listing(object)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Result of a bulk listing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:merchant/0" data-no-tooltip="" translate="no">merchant()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transaction/0" data-no-tooltip="" translate="no">transaction()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><code class="inline">reference</code> carries back the caller's own <code class="inline">idempotence_key</code>, which each adapter
+stores alongside the transaction. It is the only identifier on a pay-in that
+survives a database restore — <code class="inline">invoice_id</code> comes from a sequence a restore
+rewinds — so it is what a provider→local scan matches on.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:transfer/0" data-no-tooltip="" translate="no">transfer()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:withdrawal/0" data-no-tooltip="" translate="no">withdrawal()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:add_merchant_phone/2" data-no-tooltip="" translate="no">add_merchant_phone(merchant_uid, phone)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Set (or add) a phone number on an existing merchant's primary contact,
+satisfying OPP's <code class="inline">contact.phonenumber.required</code> compliance requirement via the
+API. Used when a merchant was created before we collected the phone, so the
+participant is not redirected to OPP's hosted merchant-overview page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:charge_to_partner/3" data-no-tooltip="" translate="no">charge_to_partner(from_owner_uid, amount, idempotence_key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Move funds out of a merchant balance to the platform operator's own balance.
+Debits <code class="inline">from_owner_uid</code>; the destination is the operator itself, so there is
+no <code class="inline">to_owner_uid</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:create_bank_account/2" data-no-tooltip="" translate="no">create_bank_account(merchant_uid, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a bank account on the given merchant. OPP returns a
+verification_url the merchant must visit to enter their IBAN and
+complete the bank-verification step of KYC.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:create_merchant/1" data-no-tooltip="" translate="no">create_merchant(attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a merchant (participant account) on the payment platform.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:create_transaction/1" data-no-tooltip="" translate="no">create_transaction(request)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a pay-in transaction (researcher topping up budget).
+Returns a payment URL for iDEAL payment.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:create_withdrawal/4" data-no-tooltip="" translate="no">create_withdrawal(merchant_uid, currency, attrs, idempotence_key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Create a payout from a merchant to a participant's bank account.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:find_merchant_by_email/1" data-no-tooltip="" translate="no">find_merchant_by_email(email)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:get_merchant/1" data-no-tooltip="" translate="no">get_merchant(uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:get_transaction/1" data-no-tooltip="" translate="no">get_transaction(uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:get_withdrawal/1" data-no-tooltip="" translate="no">get_withdrawal(uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_bank_accounts/1" data-no-tooltip="" translate="no">list_bank_accounts(merchant_uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_charges_to_merchant/1" data-no-tooltip="" translate="no">list_charges_to_merchant(merchant_uid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every transfer the provider holds <em>into</em> a merchant's balance.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_recent_merchants/1" data-no-tooltip="" translate="no">list_recent_merchants(since)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every merchant the provider created at or after <code class="inline">since</code>. See
+<code class="inline">list_recent_withdrawals/1</code> for why this is not anchored to local state — here
+it matters most, since the local row a restore rolls back is the very one that
+recorded the merchant uid.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_recent_transactions/1" data-no-tooltip="" translate="no">list_recent_transactions(since)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every transaction the provider created at or after <code class="inline">since</code>, across all
+merchants — the provider-side half of the provider→local pay-in scan. See
+<code class="inline">list_recent_withdrawals/1</code> for why this is not anchored to local state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_recent_transfers/1" data-no-tooltip="" translate="no">list_recent_transfers(since)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every transfer the provider created at or after <code class="inline">since</code>, across all merchants.
+The transfer-leg counterpart of <code class="inline">list_recent_withdrawals/1</code>; see there for why
+this is not anchored to local state.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_recent_withdrawals/1" data-no-tooltip="" translate="no">list_recent_withdrawals(since)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every withdrawal the provider created at or after <code class="inline">since</code>, across all
+merchants — the provider-side half of the provider→local reconciliation pass.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:list_withdrawals/1" data-no-tooltip="" translate="no">list_withdrawals(merchant_uid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Every withdrawal the provider holds for a merchant.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:transfer_to_merchant/4" data-no-tooltip="" translate="no">transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Move funds from one merchant balance to another within the provider. Debits
+<code class="inline">from_owner_uid</code> and credits <code class="inline">to_owner_uid</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+
+    <div class="types-list">
+<section class="detail" id="t:bank_account/0">
+
+  <div class="detail-header">
+    <a href="#t:bank_account/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">bank_account()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> bank_account() :: %{
+  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  status: <a href="#t:kyc_status/0">kyc_status</a>(),
+  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  verification_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:kyc_status/0">
+
+  <div class="detail-header">
+    <a href="#t:kyc_status/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">kyc_status()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L82" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> kyc_status() :: :verified | :rejected | :new | :pending</pre>
+
+      </div>
+
+<p>Provider-agnostic bank-account (KYC) verification status. Each adapter maps its
+own vocabulary onto these atoms so domain code never matches on provider status
+strings:</p><ul><li><code class="inline">:verified</code>  — approved; payouts may fire against it</li><li><code class="inline">:rejected</code>  — permanently refused; never reused for a payout</li><li><code class="inline">:new</code>       — created but the participant has not submitted details yet</li><li><code class="inline">:pending</code>   — submitted and under review</li></ul><p>An unrecognised provider status maps to <code class="inline">:pending</code>: an unknown state must never
+be treated as verified (which would authorize a payout) nor as rejected. The
+provider's own word is kept alongside it as <code class="inline">raw_status</code> for the audit trail.</p>
+  </section>
+</section>
+<section class="detail" id="t:lifecycle_status/0">
+
+  <div class="detail-header">
+    <a href="#t:lifecycle_status/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">lifecycle_status()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L120" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> lifecycle_status() :: :pending | :completed | :failed</pre>
+
+      </div>
+
+<p>Provider-agnostic lifecycle status shared by transactions, withdrawals and
+transfers. Each adapter maps its own vocabulary onto these three atoms, so
+domain code never matches on a provider's status strings. An unrecognised
+provider status maps to <code class="inline">:pending</code>: an unknown state must never finalize money
+movement.</p><p>The provider's own word is kept alongside it as <code class="inline">raw_status</code>, so an audit trail
+can record that OPP said &quot;disapproved&quot; rather than the collapsed <code class="inline">:failed</code>.</p>
+  </section>
+</section>
+<section class="detail" id="t:listing/1">
+
+  <div class="detail-header">
+    <a href="#t:listing/1" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">listing(object)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L15" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> listing(object) ::
+  {:ok, [object]} | {:truncated, [object]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Result of a bulk listing.</p><p><code class="inline">{:truncated, objects}</code> means the adapter stopped short of the end — it hit its
+own paging cap, so the objects returned are valid but incomplete. It is
+deliberately not <code class="inline">{:ok, objects}</code>: a provider→local scan that cannot tell the
+two apart would report the orphans it happened to see and a clean tally for
+everything past the cap, which reads as &quot;nothing wrong&quot; precisely when the
+provider holds more than we can walk.</p>
+  </section>
+</section>
+<section class="detail" id="t:merchant/0">
+
+  <div class="detail-header">
+    <a href="#t:merchant/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">merchant()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L19" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> merchant() :: %{
+  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  kyc_level: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  compliance_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  overview_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
+  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:transaction/0">
+
+  <div class="detail-header">
+    <a href="#t:transaction/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">transaction()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L128" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> transaction() :: %{
+  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
+  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  payment_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
+  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
+  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+}</pre>
+
+      </div>
+
+<p><code class="inline">reference</code> carries back the caller's own <code class="inline">idempotence_key</code>, which each adapter
+stores alongside the transaction. It is the only identifier on a pay-in that
+survives a database restore — <code class="inline">invoice_id</code> comes from a sequence a restore
+rewinds — so it is what a provider→local scan matches on.</p>
+  </section>
+</section>
+<section class="detail" id="t:transfer/0">
+
+  <div class="detail-header">
+    <a href="#t:transfer/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">transfer()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> transfer() :: %{
+  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
+  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
+  settled: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() | nil,
+  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:withdrawal/0">
+
+  <div class="detail-header">
+    <a href="#t:withdrawal/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">withdrawal()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> withdrawal() :: %{
+  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
+  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
+  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
+  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:add_merchant_phone/2">
+
+  <div class="detail-header">
+    <a href="#c:add_merchant_phone/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_merchant_phone(merchant_uid, phone)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L63" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> add_merchant_phone(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), phone :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Set (or add) a phone number on an existing merchant's primary contact,
+satisfying OPP's <code class="inline">contact.phonenumber.required</code> compliance requirement via the
+API. Used when a merchant was created before we collected the phone, so the
+participant is not redirected to OPP's hosted merchant-overview page.</p>
+  </section>
+</section>
+<section class="detail" id="c:charge_to_partner/3">
+
+  <div class="detail-header">
+    <a href="#c:charge_to_partner/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">charge_to_partner(from_owner_uid, amount, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L273" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> charge_to_partner(
+  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+) :: {:ok, <a href="#t:transfer/0">transfer</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Move funds out of a merchant balance to the platform operator's own balance.
+Debits <code class="inline">from_owner_uid</code>; the destination is the operator itself, so there is
+no <code class="inline">to_owner_uid</code>.</p><p>Used when a participant donates their reward: the money already sits on the
+platform (eyra) merchant, and this settles it as the operator's own rather
+than leaving it earmarked for a participant. Providers name this differently
+(OPP: a partner charge); that vocabulary stays inside the adapter.</p><p>The <code class="inline">idempotence_key</code> is a stable, caller-owned unique id so retrying the same
+logical charge never takes the money twice.</p>
+  </section>
+</section>
+<section class="detail" id="c:create_bank_account/2">
+
+  <div class="detail-header">
+    <a href="#c:create_bank_account/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_bank_account(merchant_uid, attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> create_bank_account(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+  {:ok, <a href="#t:bank_account/0">bank_account</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Create a bank account on the given merchant. OPP returns a
+verification_url the merchant must visit to enter their IBAN and
+complete the bank-verification step of KYC.</p><h2 id="c:create_bank_account/2-attrs" class="section-heading"><a href="#c:create_bank_account/2-attrs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attrs</span></h2><ul><li><code class="inline">return_url</code> (required) - where to send the participant after verification</li><li><code class="inline">notify_url</code> (required) - webhook URL for status notifications</li><li><code class="inline">is_default</code> - boolean</li><li><code class="inline">reference</code> - free-form string (≤50 chars)</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:create_merchant/1">
+
+  <div class="detail-header">
+    <a href="#c:create_merchant/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_merchant(attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L45" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> create_merchant(attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+  {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Create a merchant (participant account) on the payment platform.</p><h2 id="c:create_merchant/1-attrs" class="section-heading"><a href="#c:create_merchant/1-attrs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attrs</span></h2><ul><li><code class="inline">country</code> (required) - ISO 3166-1 alpha-3 country code (e.g. &quot;NLD&quot;)</li><li><code class="inline">emailaddress</code> (required) - unique email for the merchant</li><li><code class="inline">notify_url</code> (required) - webhook URL for status notifications</li><li><code class="inline">type</code> - &quot;consumer&quot; (default for participants) or &quot;business&quot;</li><li><code class="inline">name_first</code> - first name (consumer merchants)</li><li><code class="inline">name_last</code> - last name (consumer merchants)</li><li><code class="inline">phone</code> - phone number (satisfies the <code class="inline">contact.phonenumber.required</code>
+compliance requirement up front, so the participant is not redirected to
+OPP's hosted page to enter one)</li><li><code class="inline">locale</code> - language for verification screens (&quot;nl&quot;, &quot;en&quot;, &quot;fr&quot;, &quot;de&quot;)</li><li><code class="inline">metadata</code> - key/value pairs for additional data</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:create_transaction/1">
+
+  <div class="detail-header">
+    <a href="#c:create_transaction/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_transaction(request)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L157" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> create_transaction(request :: Systems.Payment.Transaction.Request.t()) ::
+  {:ok, <a href="#t:transaction/0">transaction</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Create a pay-in transaction (researcher topping up budget).
+Returns a payment URL for iDEAL payment.</p><p>The <code class="inline">currency</code> atom (e.g. <code class="inline">:EUR</code>) is mapped to the provider's native
+currency code by each implementation.</p><p>The <code class="inline">invoice_id</code> (e.g. &quot;NEXT-NL-0128&quot;) is used in both the bank statement
+description and the metadata.</p><p>The <code class="inline">idempotence_key</code> comes from the bookkeeping entry and prevents duplicate
+transactions on retry.</p><h2 id="c:create_transaction/1-opts" class="section-heading"><a href="#c:create_transaction/1-opts" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Opts</span></h2><ul><li><code class="inline">payment_method</code> - &quot;ideal&quot; (default, non-reversible)</li><li><code class="inline">return_url</code> - redirect URL after payment completion</li><li><code class="inline">notify_url</code> - webhook URL for transaction status updates</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:create_withdrawal/4">
+
+  <div class="detail-header">
+    <a href="#c:create_withdrawal/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_withdrawal(merchant_uid, currency, attrs, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> create_withdrawal(
+  merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  currency :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
+  attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
+  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+) :: {:ok, <a href="#t:withdrawal/0">withdrawal</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Create a payout from a merchant to a participant's bank account.</p><p>The <code class="inline">currency</code> atom (e.g. <code class="inline">:EUR</code>) is mapped to the provider's native
+currency code by each implementation.</p><p>The <code class="inline">idempotence_key</code> is a stable, caller-owned unique id. The provider
+passes it to the payment platform so retrying the same logical payout
+never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" class="section-heading"><a href="#c:create_withdrawal/4-attrs" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attrs</span></h2><ul><li><code class="inline">amount</code> (required) - payout amount in cents</li><li><code class="inline">description</code> - description for the bank statement</li></ul>
+  </section>
+</section>
+<section class="detail" id="c:find_merchant_by_email/1">
+
+  <div class="detail-header">
+    <a href="#c:find_merchant_by_email/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">find_merchant_by_email(email)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> find_merchant_by_email(email :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:get_merchant/1">
+
+  <div class="detail-header">
+    <a href="#c:get_merchant/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_merchant(uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_merchant(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:get_transaction/1">
+
+  <div class="detail-header">
+    <a href="#c:get_transaction/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_transaction(uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L159" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_transaction(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, <a href="#t:transaction/0">transaction</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:get_withdrawal/1">
+
+  <div class="detail-header">
+    <a href="#c:get_withdrawal/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_withdrawal(uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L201" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> get_withdrawal(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, <a href="#t:withdrawal/0">withdrawal</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:list_bank_accounts/1">
+
+  <div class="detail-header">
+    <a href="#c:list_bank_accounts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_bank_accounts(merchant_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_bank_accounts(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, [<a href="#t:bank_account/0">bank_account</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="c:list_charges_to_merchant/1">
+
+  <div class="detail-header">
+    <a href="#c:list_charges_to_merchant/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_charges_to_merchant(merchant_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L299" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_charges_to_merchant(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, [<a href="#t:transfer/0">transfer</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Every transfer the provider holds <em>into</em> a merchant's balance.</p><p>The incoming direction is the one that matters: it answers &quot;did the money we
+tried to send this participant actually land?&quot; when the response to
+<code class="inline">transfer_to_merchant/4</code> was lost. The caller matches on <code class="inline">reference</code>, which
+carries the caller's own idempotence key.</p><p>Unfiltered beyond the merchant, for the same reason as <code class="inline">list_withdrawals/1</code>:
+a participant merchant receives a handful of transfers in its lifetime.</p><p>Note the direction. OPP's <code class="inline">/merchants/{uid}/charges</code> subresource — the apparent
+mirror of <code class="inline">list_withdrawals/1</code> — lists charges <em>from</em> the merchant and returns
+an empty list for a participant, so incoming transfers are only reachable
+through the top-level collection filtered on the receiving merchant.</p><p>Only settled transfers are evidence money moved: a transfer has no lifecycle
+status at OPP, so <code class="inline">status</code> is always <code class="inline">:pending</code> and <code class="inline">settled</code> is nil until the
+balances actually change.</p>
+  </section>
+</section>
+<section class="detail" id="c:list_recent_merchants/1">
+
+  <div class="detail-header">
+    <a href="#c:list_recent_merchants/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_recent_merchants(since)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_merchants(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:merchant/0">merchant</a>())</pre>
+
+      </div>
+
+<p>Every merchant the provider created at or after <code class="inline">since</code>. See
+<code class="inline">list_recent_withdrawals/1</code> for why this is not anchored to local state — here
+it matters most, since the local row a restore rolls back is the very one that
+recorded the merchant uid.</p>
+  </section>
+</section>
+<section class="detail" id="c:list_recent_transactions/1">
+
+  <div class="detail-header">
+    <a href="#c:list_recent_transactions/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_recent_transactions(since)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_transactions(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transaction/0">transaction</a>())</pre>
+
+      </div>
+
+<p>Every transaction the provider created at or after <code class="inline">since</code>, across all
+merchants — the provider-side half of the provider→local pay-in scan. See
+<code class="inline">list_recent_withdrawals/1</code> for why this is not anchored to local state.</p>
+  </section>
+</section>
+<section class="detail" id="c:list_recent_transfers/1">
+
+  <div class="detail-header">
+    <a href="#c:list_recent_transfers/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_recent_transfers(since)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_transfers(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transfer/0">transfer</a>())</pre>
+
+      </div>
+
+<p>Every transfer the provider created at or after <code class="inline">since</code>, across all merchants.
+The transfer-leg counterpart of <code class="inline">list_recent_withdrawals/1</code>; see there for why
+this is not anchored to local state.</p>
+  </section>
+</section>
+<section class="detail" id="c:list_recent_withdrawals/1">
+
+  <div class="detail-header">
+    <a href="#c:list_recent_withdrawals/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_recent_withdrawals(since)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L227" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_withdrawals(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:withdrawal/0">withdrawal</a>())</pre>
+
+      </div>
+
+<p>Every withdrawal the provider created at or after <code class="inline">since</code>, across all
+merchants — the provider-side half of the provider→local reconciliation pass.</p><p>Unlike <code class="inline">list_withdrawals/1</code> this is not anchored to a merchant we already know
+about, which is the point: a restore can roll back the local row that recorded
+the merchant, so anchoring on local state would skip exactly the objects this
+is meant to find.</p><p>Implementations page internally and apply the <code class="inline">since</code> cutoff themselves —
+callers get a complete list, oldest-cutoff enforced, no pagination to thread.</p>
+  </section>
+</section>
+<section class="detail" id="c:list_withdrawals/1">
+
+  <div class="detail-header">
+    <a href="#c:list_withdrawals/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_withdrawals(merchant_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L212" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> list_withdrawals(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+  {:ok, [<a href="#t:withdrawal/0">withdrawal</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Every withdrawal the provider holds for a merchant.</p><p>This is how a withdrawal is found again when its uid was never recorded — the
+caller matches on <code class="inline">reference</code>, which carries the caller's own idempotence key.
+Deliberately unfiltered: these are participant merchants, which have a handful
+of withdrawals in their lifetime, so there is nothing to paginate around and no
+need to depend on a provider's filter vocabulary.</p>
+  </section>
+</section>
+<section class="detail" id="c:transfer_to_merchant/4">
+
+  <div class="detail-header">
+    <a href="#c:transfer_to_merchant/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L253" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> transfer_to_merchant(
+  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  to_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+) :: {:ok, <a href="#t:transfer/0">transfer</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
+
+      </div>
+
+<p>Move funds from one merchant balance to another within the provider. Debits
+<code class="inline">from_owner_uid</code> and credits <code class="inline">to_owner_uid</code>.</p><p>Used to fund a participant's merchant from the platform (eyra) merchant before
+the participant withdraws to their bank account. Providers name this operation
+differently (OPP: a &quot;charge&quot; of type <code class="inline">balance</code>; Stripe Connect: a transfer);
+that vocabulary stays inside the adapter.</p><p>The <code class="inline">idempotence_key</code> is a stable, caller-owned unique id so retrying the same
+logical transfer never moves the money twice.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

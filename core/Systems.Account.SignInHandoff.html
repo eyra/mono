@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Account.SignInHandoff — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-behaviour" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Account.SignInHandoff</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Takes over the end of an identity-provider sign-in, for example to hand it
+to a native app instead of continuing on the site. Systems list their
+handoffs in <a href="Core.System.html#c:sign_in_handoffs/0"><code class="inline">Core.System.sign_in_handoffs/0</code></a>.</p><p>The identity-provider flows (their callbacks and the move-your-account
+confirm and decline) end through <a href="#sign_in/5"><code class="inline">sign_in/5</code></a> and <a href="#end_sign_in/4"><code class="inline">end_sign_in/4</code></a>, which ask
+the handoffs in <a href="Core.SaaS.html#sign_in_handoffs/0"><code class="inline">Core.SaaS.sign_in_handoffs/0</code></a> order before they do what the
+site does. Other sign-ins don't ask them.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-types summary">
+  <h2>
+    <a href="#types">Types</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:provider/0" data-no-tooltip="" translate="no">provider()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-callbacks summary">
+  <h2>
+    <a href="#callbacks">Callbacks</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:hand_off/4" data-no-tooltip="" translate="no">hand_off(t, provider, t, first_time?)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">{:ok, conn}</code> with the response to send when the handoff takes this
+sign-in through <code class="inline">provider</code>, or <code class="inline">:skip</code>. <code class="inline">first_time?</code> is true for a user who
+registered with this sign-in.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:hand_off_unfinished/3" data-no-tooltip="" translate="no">hand_off_unfinished(t, provider, arg3)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns <code class="inline">{:ok, conn}</code> with the response to send when the handoff takes a
+sign-in through <code class="inline">provider</code> that ended without signing in: <code class="inline">:failed</code> (the
+provider or the registration failed) or <code class="inline">:cancelled</code> (the user stopped it).</p></div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#end_sign_in/4" data-no-tooltip="" translate="no">end_sign_in(conn, provider, result, otherwise)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Ends a sign-in through <code class="inline">provider</code> that did not sign in (<code class="inline">:failed</code> or
+<code class="inline">:cancelled</code>): the first handoff that takes it answers, otherwise <code class="inline">otherwise</code>
+does.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sign_in/5" data-no-tooltip="" translate="no">sign_in(conn, provider, user, first_time?, log_in_user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Ends a sign-in through <code class="inline">provider</code> that signed <code class="inline">user</code> in: the first handoff
+that takes it answers, otherwise <code class="inline">log_in_user</code> does.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h1>
+
+    <div class="types-list">
+<section class="detail" id="t:provider/0">
+
+  <div class="detail-header">
+    <a href="#t:provider/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">provider()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L15" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> provider() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h1>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:hand_off/4">
+
+  <div class="detail-header">
+    <a href="#c:hand_off/4" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hand_off(t, provider, t, first_time?)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L22" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> hand_off(
+  <a href="https://hexdocs.pm/plug/1.19.5/Plug.Conn.html#t:t/0">Plug.Conn.t</a>(),
+  <a href="#t:provider/0">provider</a>(),
+  <a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(),
+  first_time? :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()
+) ::
+  {:ok, <a href="https://hexdocs.pm/plug/1.19.5/Plug.Conn.html#t:t/0">Plug.Conn.t</a>()} | :skip</pre>
+
+      </div>
+
+<p>Returns <code class="inline">{:ok, conn}</code> with the response to send when the handoff takes this
+sign-in through <code class="inline">provider</code>, or <code class="inline">:skip</code>. <code class="inline">first_time?</code> is true for a user who
+registered with this sign-in.</p>
+  </section>
+</section>
+<section class="detail" id="c:hand_off_unfinished/3">
+
+  <div class="detail-header">
+    <a href="#c:hand_off_unfinished/3" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">hand_off_unfinished(t, provider, arg3)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L30" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> hand_off_unfinished(<a href="https://hexdocs.pm/plug/1.19.5/Plug.Conn.html#t:t/0">Plug.Conn.t</a>(), <a href="#t:provider/0">provider</a>(), :failed | :cancelled) ::
+  {:ok, <a href="https://hexdocs.pm/plug/1.19.5/Plug.Conn.html#t:t/0">Plug.Conn.t</a>()} | :skip</pre>
+
+      </div>
+
+<p>Returns <code class="inline">{:ok, conn}</code> with the response to send when the handoff takes a
+sign-in through <code class="inline">provider</code> that ended without signing in: <code class="inline">:failed</code> (the
+provider or the registration failed) or <code class="inline">:cancelled</code> (the user stopped it).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="end_sign_in/4">
+
+  <div class="detail-header">
+    <a href="#end_sign_in/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">end_sign_in(conn, provider, result, otherwise)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L49" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Ends a sign-in through <code class="inline">provider</code> that did not sign in (<code class="inline">:failed</code> or
+<code class="inline">:cancelled</code>): the first handoff that takes it answers, otherwise <code class="inline">otherwise</code>
+does.</p>
+  </section>
+</section>
+<section class="detail" id="sign_in/5">
+
+  <div class="detail-header">
+    <a href="#sign_in/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sign_in(conn, provider, user, first_time?, log_in_user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/sign_in_handoff.ex#L37" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Ends a sign-in through <code class="inline">provider</code> that signed <code class="inline">user</code> in: the first handoff
+that takes it answers, otherwise <code class="inline">log_in_user</code> does.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

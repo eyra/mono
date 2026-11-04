@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Account.Auth.Email — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Account.Auth.Email</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Email-first signup identity provider.</p><p>Creates a provisional Account.User (no password, not confirmed) plus a
+satellite <a href="Systems.Account.Auth.Email.UserModel.html"><code class="inline">Systems.Account.Auth.Email.UserModel</code></a> record with the UserCheck validation
+result. Mirrors the Systems.Account.Auth.Google / Systems.Account.Auth.Apple / Surfconext pattern.</p><p>The satellite row persists as a historical breadcrumb even after the user
+activates their account via another identity provider or by setting a
+password.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="k">case</span><span class="w"> </span><span class="nc">Systems.Account.Auth.Email</span><span class="o">.</span><span class="n">register</span><span class="p" data-group-id="0344498179-1">(</span><span class="s">&quot;user@example.com&quot;</span><span class="p" data-group-id="0344498179-1">)</span><span class="w"> </span><span class="k" data-group-id="0344498179-2">do</span><span class="w">
+  </span><span class="p" data-group-id="0344498179-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="n">user</span><span class="p" data-group-id="0344498179-3">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># Account.User created + satellite stored</span><span class="w">
+  </span><span class="p" data-group-id="0344498179-4">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:already_registered</span><span class="p" data-group-id="0344498179-4">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># email exists in users table</span><span class="w">
+  </span><span class="p" data-group-id="0344498179-5">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:disposable</span><span class="p" data-group-id="0344498179-5">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># rejected by policy</span><span class="w">
+  </span><span class="p" data-group-id="0344498179-6">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:invalid_format</span><span class="p" data-group-id="0344498179-6">}</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="c1"># not a valid email</span><span class="w">
+</span><span class="k" data-group-id="0344498179-2">end</span></code></pre>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_by_user/1" data-no-tooltip="" translate="no">get_by_user(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the Systems.Account.Auth.Email.UserModel satellite for a given user, or nil.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#link/3" data-no-tooltip="" translate="no">link(user, email, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Links a real email to an existing user (e.g. one created via Systems.Account.Auth.External
+with a synthetic email).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#opt_out/1" data-no-tooltip="" translate="no">opt_out(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Hard-deletes the user. Cascade deletes the satellite row.
+Use for GDPR opt-out requests.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#provisional?/1" data-no-tooltip="" translate="no">provisional?(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns true if the user is currently in a provisional state:
+no real password set and not confirmed.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#register/2" data-no-tooltip="" translate="no">register(email, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Registers a user via email-first signup.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="get_by_user/1">
+
+  <div class="detail-header">
+    <a href="#get_by_user/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_by_user(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L91" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the Systems.Account.Auth.Email.UserModel satellite for a given user, or nil.</p>
+  </section>
+</section>
+<section class="detail" id="link/3">
+
+    <span id="link/2"></span>
+
+  <div class="detail-header">
+    <a href="#link/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">link(user, email, opts \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L68" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Links a real email to an existing user (e.g. one created via Systems.Account.Auth.External
+with a synthetic email).</p><ol><li>Validates email format</li><li>Checks uniqueness</li><li>Calls UserCheck for validation (fails open on timeout/error)</li><li>Applies rejection policy</li><li>Updates user email + creates Systems.Account.Auth.Email.UserModel satellite</li></ol><h2 id="link/3-options" class="section-heading"><a href="#link/3-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:policy</code> - rejection policy module (default: <a href="Systems.Account.Auth.Email.DefaultRejectionPolicy.html"><code class="inline">Systems.Account.Auth.Email.DefaultRejectionPolicy</code></a>)</li></ul>
+  </section>
+</section>
+<section class="detail" id="opt_out/1">
+
+  <div class="detail-header">
+    <a href="#opt_out/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">opt_out(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L99" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Hard-deletes the user. Cascade deletes the satellite row.
+Use for GDPR opt-out requests.</p>
+  </section>
+</section>
+<section class="detail" id="provisional?/1">
+
+  <div class="detail-header">
+    <a href="#provisional?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">provisional?(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L82" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns true if the user is currently in a provisional state:
+no real password set and not confirmed.</p>
+  </section>
+</section>
+<section class="detail" id="register/2">
+
+    <span id="register/1"></span>
+
+  <div class="detail-header">
+    <a href="#register/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">register(email, opts \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/auth/email.ex#L44" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Registers a user via email-first signup.</p><ol><li>Validates email format</li><li>Checks uniqueness (returns <code class="inline">{:error, :already_registered}</code> if taken)</li><li>Calls UserCheck for validation (fails open on timeout/error)</li><li>Applies rejection policy</li><li>Creates Account.User + Systems.Account.Auth.Email.UserModel in a single transaction</li></ol><h2 id="register/2-options" class="section-heading"><a href="#register/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><code class="inline">:policy</code> - rejection policy module (default: <a href="Systems.Account.Auth.Email.DefaultRejectionPolicy.html"><code class="inline">Systems.Account.Auth.Email.DefaultRejectionPolicy</code></a>)</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

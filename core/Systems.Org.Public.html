@@ -1,0 +1,1241 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Org.Public — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Org.Public</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_member/2" data-no-tooltip="" translate="no">add_member(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Assigns the :member role to a user for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_user/2" data-no-tooltip="" translate="no">add_user(identifier, user)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#archive/1" data-no-tooltip="" translate="no">archive(node)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Archives an organisation node.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#assign_owner/2" data-no-tooltip="" translate="no">assign_owner(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Assigns the :owner role to a user for the given organisation and
+immediately syncs the AddDomainMembers NextAction so the new owner
+sees outstanding domain-matched users on their next admin visit
+without waiting for a registration event.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#auth_module/0" data-no-tooltip="" translate="no">auth_module()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#can_manage?/2" data-no-tooltip="" translate="no">can_manage?(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns true when the user is allowed to manage the given organisation
+(members, settings, domain-matched actions). Mirrors the access rule
+used by the UI: system admins can manage any org; org owners can
+manage their own.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#clear_domain_match_next_action/2" data-no-tooltip="" translate="no">clear_domain_match_next_action(org_id, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Clears the AddDomainMembers NextAction for a user on a given org.
+Used when revoking the :owner role so the action disappears
+immediately instead of lingering until the next sync pass.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_link!/2" data-no-tooltip="" translate="no">create_link!(from, to)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_node/3" data-no-tooltip="" translate="no">create_node(identifier, short_name, full_name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_node!/1" data-no-tooltip="" translate="no">create_node!(attrs)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_node!/3" data-no-tooltip="" translate="no">create_node!(identifier, short_name, full_name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#delete_user/2" data-no-tooltip="" translate="no">delete_user(identifier, user)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#find_domain_matched_users/2" data-no-tooltip="" translate="no">find_domain_matched_users(domains, current_members)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Finds platform users whose email matches org domains but aren't already members.
+Returns users that could be suggested for membership based on email domain matching.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_link/3" data-no-tooltip="" translate="no">get_link(node_model1, node_model2, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_node/2" data-no-tooltip="" translate="no">get_node(identifier, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_node!/2" data-no-tooltip="" translate="no">get_node!(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_all_nodes/1" data-no-tooltip="" translate="no">list_all_nodes(preload)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Lists all nodes including archived ones. Use sparingly.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_archived_nodes/1" data-no-tooltip="" translate="no">list_archived_nodes(preload)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Lists only archived organisation nodes.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_members/1" data-no-tooltip="" translate="no">list_members(org)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Lists all users with the :member role for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_members_with_added_at/1" data-no-tooltip="" translate="no">list_members_with_added_at(node_model)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Like <a><code class="inline">list_members/1</code></a> but returns <code class="inline">{user, added_at}</code> tuples where
+<code class="inline">added_at</code> is the timestamp at which the <code class="inline">:member</code> role was granted on
+the org's auth_node. Used by the Members tab to power the &quot;Recent&quot;
+filter.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_nodes/1" data-no-tooltip="" translate="no">list_nodes(preload)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_nodes/2" data-no-tooltip="" translate="no">list_nodes(user, preload)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_orgs/2" data-no-tooltip="" translate="no">list_orgs(user, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Lists all organisations where the user has the :owner role.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_owners/1" data-no-tooltip="" translate="no">list_owners(org)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Lists all users with the :owner role for the given organisation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#member?/2" data-no-tooltip="" translate="no">member?(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if a user is a member of the given organisation.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#owns_any?/1" data-no-tooltip="" translate="no">owns_any?(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if the user owns any organisations.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#print_auth_roles/1" data-no-tooltip="" translate="no">print_auth_roles(term)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#remove_member/2" data-no-tooltip="" translate="no">remove_member(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Revokes the :member role from a user for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#restore/1" data-no-tooltip="" translate="no">restore(node)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Restores an archived organisation node.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#revoke_owner/2" data-no-tooltip="" translate="no">revoke_owner(org, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Revokes the :owner role from a user for the given organisation and
+clears their AddDomainMembers NextAction for this org, since they
+are no longer responsible for adding domain-matched members here.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sync_all_domain_match_next_actions/1" data-no-tooltip="" translate="no">sync_all_domain_match_next_actions(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Syncs NextActions for a specific user across relevant orgs.
+For system admins: syncs all orgs.
+For org owners: syncs only orgs they own.
+Used as a fallback when opening admin pages.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sync_domain_match_next_action/3" data-no-tooltip="" translate="no">sync_domain_match_next_action(node, user, locale \\ :en)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Syncs the NextAction for domain-matched users.
+Creates the action if domain-matched users exist, clears it otherwise.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#sync_next_actions_for_new_user/1" data-no-tooltip="" translate="no">sync_next_actions_for_new_user(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Syncs NextActions for all org owners when a new user registers.
+Finds orgs whose domains match the user's email and notifies their owners.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="add_member/2">
+
+  <div class="detail-header">
+    <a href="#add_member/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_member(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L383" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Assigns the :member role to a user for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p>
+  </section>
+</section>
+<section class="detail" id="add_user/2">
+
+  <div class="detail-header">
+    <a href="#add_user/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_user(identifier, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="archive/1">
+
+  <div class="detail-header">
+    <a href="#archive/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">archive(node)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L204" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Archives an organisation node.</p>
+  </section>
+</section>
+<section class="detail" id="assign_owner/2">
+
+  <div class="detail-header">
+    <a href="#assign_owner/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">assign_owner(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Assigns the :owner role to a user for the given organisation and
+immediately syncs the AddDomainMembers NextAction so the new owner
+sees outstanding domain-matched users on their next admin visit
+without waiting for a registration event.</p>
+  </section>
+</section>
+<section class="detail" id="auth_module/0">
+
+  <div class="detail-header">
+    <a href="#auth_module/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">auth_module()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="can_manage?/2">
+
+  <div class="detail-header">
+    <a href="#can_manage?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">can_manage?(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L501" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns true when the user is allowed to manage the given organisation
+(members, settings, domain-matched actions). Mirrors the access rule
+used by the UI: system admins can manage any org; org owners can
+manage their own.</p><p>Use this at event-handler boundaries to defend against stale LiveView
+sessions where a user's role was revoked while the page was still open.</p>
+  </section>
+</section>
+<section class="detail" id="clear_domain_match_next_action/2">
+
+  <div class="detail-header">
+    <a href="#clear_domain_match_next_action/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">clear_domain_match_next_action(org_id, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L450" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Clears the AddDomainMembers NextAction for a user on a given org.
+Used when revoking the :owner role so the action disappears
+immediately instead of lingering until the next sync pass.</p>
+  </section>
+</section>
+<section class="detail" id="create_link!/2">
+
+  <div class="detail-header">
+    <a href="#create_link!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_link!(from, to)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L94" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_node/3">
+
+  <div class="detail-header">
+    <a href="#create_node/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_node(identifier, short_name, full_name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_node!/1">
+
+  <div class="detail-header">
+    <a href="#create_node!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_node!(attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L76" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_node!/3">
+
+  <div class="detail-header">
+    <a href="#create_node!/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_node!(identifier, short_name, full_name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L40" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="delete_user/2">
+
+  <div class="detail-header">
+    <a href="#delete_user/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">delete_user(identifier, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="find_domain_matched_users/2">
+
+  <div class="detail-header">
+    <a href="#find_domain_matched_users/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">find_domain_matched_users(domains, current_members)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L321" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Finds platform users whose email matches org domains but aren't already members.
+Returns users that could be suggested for membership based on email domain matching.</p>
+  </section>
+</section>
+<section class="detail" id="get_link/3">
+
+    <span id="get_link/2"></span>
+
+  <div class="detail-header">
+    <a href="#get_link/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_link(node_model1, node_model2, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L85" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_node/2">
+
+    <span id="get_node/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_node/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_node(identifier, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L17" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_node!/2">
+
+    <span id="get_node!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_node!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_node!(id, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L25" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_all_nodes/1">
+
+  <div class="detail-header">
+    <a href="#list_all_nodes/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_all_nodes(preload)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L150" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Lists all nodes including archived ones. Use sparingly.</p>
+  </section>
+</section>
+<section class="detail" id="list_archived_nodes/1">
+
+  <div class="detail-header">
+    <a href="#list_archived_nodes/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_archived_nodes(preload)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Lists only archived organisation nodes.</p>
+  </section>
+</section>
+<section class="detail" id="list_members/1">
+
+  <div class="detail-header">
+    <a href="#list_members/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_members(org)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L341" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Lists all users with the :member role for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p>
+  </section>
+</section>
+<section class="detail" id="list_members_with_added_at/1">
+
+  <div class="detail-header">
+    <a href="#list_members_with_added_at/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_members_with_added_at(node_model)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L356" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Like <a href="#list_members/1"><code class="inline">list_members/1</code></a> but returns <code class="inline">{user, added_at}</code> tuples where
+<code class="inline">added_at</code> is the timestamp at which the <code class="inline">:member</code> role was granted on
+the org's auth_node. Used by the Members tab to power the &quot;Recent&quot;
+filter.</p>
+  </section>
+</section>
+<section class="detail" id="list_nodes/1">
+
+  <div class="detail-header">
+    <a href="#list_nodes/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_nodes(preload)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_nodes/2">
+
+  <div class="detail-header">
+    <a href="#list_nodes/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_nodes(user, preload)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_orgs/2">
+
+    <span id="list_orgs/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_orgs/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_orgs(user, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L291" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Lists all organisations where the user has the :owner role.</p>
+  </section>
+</section>
+<section class="detail" id="list_owners/1">
+
+  <div class="detail-header">
+    <a href="#list_owners/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_owners(org)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L279" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Lists all users with the :owner role for the given organisation.</p>
+  </section>
+</section>
+<section class="detail" id="member?/2">
+
+  <div class="detail-header">
+    <a href="#member?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">member?(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L398" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if a user is a member of the given organisation.</p>
+  </section>
+</section>
+<section class="detail" id="owns_any?/1">
+
+  <div class="detail-header">
+    <a href="#owns_any?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">owns_any?(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L304" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if the user owns any organisations.</p>
+  </section>
+</section>
+<section class="detail" id="print_auth_roles/1">
+
+  <div class="detail-header">
+    <a href="#print_auth_roles/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">print_auth_roles(term)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="remove_member/2">
+
+  <div class="detail-header">
+    <a href="#remove_member/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">remove_member(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L391" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Revokes the :member role from a user for the given organisation.
+Auth roles are the source of truth for membership (Option C pattern).</p>
+  </section>
+</section>
+<section class="detail" id="restore/1">
+
+  <div class="detail-header">
+    <a href="#restore/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">restore(node)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L227" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Restores an archived organisation node.</p>
+  </section>
+</section>
+<section class="detail" id="revoke_owner/2">
+
+  <div class="detail-header">
+    <a href="#revoke_owner/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">revoke_owner(org, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L270" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Revokes the :owner role from a user for the given organisation and
+clears their AddDomainMembers NextAction for this org, since they
+are no longer responsible for adding domain-matched members here.</p>
+  </section>
+</section>
+<section class="detail" id="sync_all_domain_match_next_actions/1">
+
+  <div class="detail-header">
+    <a href="#sync_all_domain_match_next_actions/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sync_all_domain_match_next_actions(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L513" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Syncs NextActions for a specific user across relevant orgs.
+For system admins: syncs all orgs.
+For org owners: syncs only orgs they own.
+Used as a fallback when opening admin pages.</p>
+  </section>
+</section>
+<section class="detail" id="sync_domain_match_next_action/3">
+
+    <span id="sync_domain_match_next_action/2"></span>
+
+  <div class="detail-header">
+    <a href="#sync_domain_match_next_action/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sync_domain_match_next_action(node, user, locale \\ :en)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L416" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Syncs the NextAction for domain-matched users.
+Creates the action if domain-matched users exist, clears it otherwise.</p>
+  </section>
+</section>
+<section class="detail" id="sync_next_actions_for_new_user/1">
+
+  <div class="detail-header">
+    <a href="#sync_next_actions_for_new_user/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sync_next_actions_for_new_user(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L462" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Syncs NextActions for all org owners when a new user registers.
+Finds orgs whose domains match the user's email and notifies their owners.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

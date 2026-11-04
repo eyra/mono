@@ -1,0 +1,2536 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Fund.Public — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Fund.Public</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#apply_withdrawal_status/2" data-no-tooltip="" translate="no">apply_withdrawal_status(provider_uid, map)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Applies a provider withdrawal status change to the linked payout and its rewards.
+Idempotent: terminal payouts short-circuit. Returns <code class="inline">{:ok, payout}</code> when a
+payout was found, <code class="inline">{:ok, nil}</code> when none matched the uid, or <code class="inline">{:error, reason}</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#approve_pending_rewards/1" data-no-tooltip="" translate="no">approve_pending_rewards(cutoff)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#approve_reward/2" data-no-tooltip="" translate="no">approve_reward(multi, reward)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Approves a reward and pays it out, inside the caller's Multi. The status
+flip and payment Bookkeeping entry commit atomically with whatever else
+the caller is doing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#auth_module/0" data-no-tooltip="" translate="no">auth_module()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#complete_transaction/1" data-no-tooltip="" translate="no">complete_transaction(provider_uid)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Completes a transaction after successful payment.
+In one atomic Multi</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_bank_account/5" data-no-tooltip="" translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_currency_and_fund/5" data-no-tooltip="" translate="no">create_currency_and_fund(name, icon, type, decimal_scale, label)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_fund/3" data-no-tooltip="" translate="no">create_fund(currency, name, icon)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_fund/4" data-no-tooltip="" translate="no">create_fund(currency, name, icon, owner)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_pay_in/3" data-no-tooltip="" translate="no">create_pay_in(assignment, user, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates a pending transaction and initiates payment with the payment provider.
+Lazily creates an OPP merchant for the user if needed.
+Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_reward/4" data-no-tooltip="" translate="no">create_reward(fund, amount, user, idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_reward/5" data-no-tooltip="" translate="no">create_reward(multi, fund, amount, user, idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#expire_stale_pay_ins/1" data-no-tooltip="" translate="no">expire_stale_pay_ins(max_age_minutes \\ 15)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks pending pay-in transactions older than <code class="inline">max_age_minutes</code> as <code class="inline">:failed</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fail_transaction/1" data-no-tooltip="" translate="no">fail_transaction(provider_uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get!/2" data-no-tooltip="" translate="no">get!(id, preload \\ [:available, :pending])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_bank_account!/2" data-no-tooltip="" translate="no">get_bank_account!(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_by_currency!/2" data-no-tooltip="" translate="no">get_by_currency!(currency_model, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_by_name/2" data-no-tooltip="" translate="no">get_by_name(name, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_currency!/2" data-no-tooltip="" translate="no">get_currency!(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_currency_by_name/2" data-no-tooltip="" translate="no">get_currency_by_name(name, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_reward/2" data-no-tooltip="" translate="no">get_reward(idempotence_key, preload)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_reward/3" data-no-tooltip="" translate="no">get_reward(model, user, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_reward!/2" data-no-tooltip="" translate="no">get_reward!(id, preload \\ [:fund, :deposit, :payment, :user])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_transaction_by_provider_uid!/1" data-no-tooltip="" translate="no">get_transaction_by_provider_uid!(provider_uid)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_wallet_identifier/2" data-no-tooltip="" translate="no">get_wallet_identifier(user, currency_name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#has_pay_ins?/1" data-no-tooltip="" translate="no">has_pay_ins?(model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list/1" data-no-tooltip="" translate="no">list(preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_bank_accounts/1" data-no-tooltip="" translate="no">list_bank_accounts(preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_confirmed_rewards/2" data-no-tooltip="" translate="no">list_confirmed_rewards(model, preload \\ [:user, :payment])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Rewards from <code class="inline">:approved</code> onwards — the owner has confirmed the
+contribution and everything downstream (pending payout, paid).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_currencies/1" data-no-tooltip="" translate="no">list_currencies(preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_currencies_by_type/2" data-no-tooltip="" translate="no">list_currencies_by_type(type, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_owned/2" data-no-tooltip="" translate="no">list_owned(user, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_owned_by_currency/3" data-no-tooltip="" translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_paid_rewards/2" data-no-tooltip="" translate="no">list_paid_rewards(fund, preload \\ [:user, :payment])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_payouts_for_user/1" data-no-tooltip="" translate="no">list_payouts_for_user(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>All payouts (withdrawal requests) for a participant, newest first. Powers the
+&quot;Uitbetalingen &gt; Overzicht&quot; history on the account page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_pending_approvals/2" data-no-tooltip="" translate="no">list_pending_approvals(fund, preload \\ [:user])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_rejected_rewards/2" data-no-tooltip="" translate="no">list_rejected_rewards(fund, preload \\ [:user])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_rewards/2" data-no-tooltip="" translate="no">list_rewards(user, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_transactions_by_fund/1" data-no-tooltip="" translate="no">list_transactions_by_fund(model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_wallets/1" data-no-tooltip="" translate="no">list_wallets(arg1)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#make_deposit/1" data-no-tooltip="" translate="no">make_deposit(multi)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#make_test_deposit/2" data-no-tooltip="" translate="no">make_test_deposit(model, deposit_model)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mark_pending_approval/2" data-no-tooltip="" translate="no">mark_pending_approval(multi, reward_model)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks a reserved reward as awaiting owner approval, inside the caller's
+Multi. Single guarded UPDATE — matches only if the reward's current status
+is <code class="inline">:reserved</code>, so it's idempotent (no-op if already past <code class="inline">:reserved</code>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_wallet_balance/4" data-no-tooltip="" translate="no">move_wallet_balance(from, to, idempotence_key, limit)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_wallet_balance/5" data-no-tooltip="" translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#multiply_rewards/2" data-no-tooltip="" translate="no">multiply_rewards(currency_name, multiplier)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#payout_eligibility/2" data-no-tooltip="" translate="no">payout_eligibility(user, currency)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Pure pre-flight threshold check (no side effects), used by <a><code class="inline">prepare_payout/2</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#payout_reward/1" data-no-tooltip="" translate="no">payout_reward(idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#payout_status/1" data-no-tooltip="" translate="no">payout_status(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The participant's payout situation for display, so the home card can surface a
+stranded payout the reward-status columns don't show</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#payout_threshold_cents/0" data-no-tooltip="" translate="no">payout_threshold_cents()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Minimum approved balance (in cents) required to request a payout — €5.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pending_rewards/1" data-no-tooltip="" translate="no">pending_rewards(currency)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pending_rewards/2" data-no-tooltip="" translate="no">pending_rewards(student, currency)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#pending_rewards_query/1" data-no-tooltip="" translate="no">pending_rewards_query(currency_name)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#prepare_payout/2" data-no-tooltip="" translate="no">prepare_payout(user, currency)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
+account exist, then reports payout readiness via <code class="inline">payout_ready_for/1</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#print_auth_roles/1" data-no-tooltip="" translate="no">print_auth_roles(term)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reconcile_orphaned_payouts/2" data-no-tooltip="" translate="no">reconcile_orphaned_payouts(opts, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Flags provider withdrawals and transfers that have no local payout row.
+See <a><code class="inline">Systems.Fund.PayoutOrphanReconciliation</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reconcile_orphaned_transactions/2" data-no-tooltip="" translate="no">reconcile_orphaned_transactions(opts, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Flags provider transactions that have no local pay-in row.
+See <a><code class="inline">Systems.Fund.TransactionOrphanReconciliation</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reconcile_pending_payouts/2" data-no-tooltip="" translate="no">reconcile_pending_payouts(opts, state)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Reconciles <code class="inline">:pending</code> payouts against the payment provider.
+See <a><code class="inline">Systems.Fund.PayoutReconciliation</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reconcile_transactions/2" data-no-tooltip="" translate="no">reconcile_transactions(opts, state)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reject_reward/2" data-no-tooltip="" translate="no">reject_reward(multi, reward)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Rejects a reward and returns the reserved money to the assignment fund,
+inside the caller's Multi. The status flip and deposit reversal commit
+atomically with whatever else the caller is doing.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#request_donation/2" data-no-tooltip="" translate="no">request_donation(user, currency)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Donates every <code class="inline">:approved</code> reward the participant holds in <code class="inline">currency</code> to Eyra,
+waiving the right to have them paid out (UC-OPP-07).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#request_payout/2" data-no-tooltip="" translate="no">request_payout(user, currency)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Requests a payout for all of the participant's <code class="inline">:approved</code> rewards: locks
+them, then transfers and withdraws via the payment provider. Returns <code class="inline">{:ok, result}</code> or
+<code class="inline">{:error, reason}</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#resume_payout/1" data-no-tooltip="" translate="no">resume_payout(payout)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Drives a stranded payout forward, without ever re-moving money.
+See <a><code class="inline">Systems.Fund.PayoutWithdrawal.resume/1</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#reward_has_outstanding_deposit?/1" data-no-tooltip="" translate="no">reward_has_outstanding_deposit?(idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rewarded_amount/1" data-no-tooltip="" translate="no">rewarded_amount(idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rollback_deposit/1" data-no-tooltip="" translate="no">rollback_deposit(idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#rollback_deposit/2" data-no-tooltip="" translate="no">rollback_deposit(multi, idempotence_key)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_bank_verification/1" data-no-tooltip="" translate="no">start_bank_verification(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Onboarding entry point for the &quot;Toevoegen&quot; action: ensures the merchant + bank
+account exist (creating them if needed) and reports how to continue. Independent
+of payout-threshold eligibility — a participant can verify their bank before
+earning anything.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start_bank_verification/2" data-no-tooltip="" translate="no">start_bank_verification(user, phone)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#summarize_rewards/2" data-no-tooltip="" translate="no">summarize_rewards(user, currency)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Per-status reward totals (in cents) for the home rewards-summary card.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#verification_status/1" data-no-tooltip="" translate="no">verification_status(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Read-only KYC/bank-account verification status for the account page's
+&quot;Bankrekening&quot; section. Never creates a merchant: a user without a
+<code class="inline">merchant_uid</code> (never started a payout) is simply <code class="inline">:not_verified</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#wallet_is_active?/1" data-no-tooltip="" translate="no">wallet_is_active?(wallet)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#wallet_is_passive?/1" data-no-tooltip="" translate="no">wallet_is_passive?(map)</a>
+
+      </div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="apply_withdrawal_status/2">
+
+  <div class="detail-header">
+    <a href="#apply_withdrawal_status/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">apply_withdrawal_status(provider_uid, map)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1516" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Applies a provider withdrawal status change to the linked payout and its rewards.
+Idempotent: terminal payouts short-circuit. Returns <code class="inline">{:ok, payout}</code> when a
+payout was found, <code class="inline">{:ok, nil}</code> when none matched the uid, or <code class="inline">{:error, reason}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="approve_pending_rewards/1">
+
+  <div class="detail-header">
+    <a href="#approve_pending_rewards/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">approve_pending_rewards(cutoff)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L379" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="approve_reward/2">
+
+  <div class="detail-header">
+    <a href="#approve_reward/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">approve_reward(multi, reward)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L410" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Approves a reward and pays it out, inside the caller's Multi. The status
+flip and payment Bookkeeping entry commit atomically with whatever else
+the caller is doing.</p><p>Idempotent on <code class="inline">:approved</code>/<code class="inline">:paid</code>. Overrides a <code class="inline">:rejected</code> reward by
+flipping it back to <code class="inline">:approved</code> and paying from <code class="inline">fund.available</code> (the
+deposit was already rolled back when the reward was rejected). The
+balance guard on the override path mirrors <code class="inline">guard_fund_balance</code> on
+reserve: only <code class="inline">:legal</code> currencies are constrained by real available
+balance; <code class="inline">:virtual</code> currencies have no such constraint.</p>
+  </section>
+</section>
+<section class="detail" id="auth_module/0">
+
+  <div class="detail-header">
+    <a href="#auth_module/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">auth_module()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="complete_transaction/1">
+
+  <div class="detail-header">
+    <a href="#complete_transaction/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">complete_transaction(provider_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1816" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Completes a transaction after successful payment.
+In one atomic Multi:</p><ol><li>Update transaction status to :completed</li><li>Create bookkeeping entry (debit CurrencyLedger.inbound, credit Fund.available)</li><li>Increment assignment subject_count</li></ol><p>Money stays on the user's OPP merchant. Our bookkeeping is the source of truth
+for fund allocation. OPP withdrawals happen at payout time (UC-OPP-06).</p><p>Status handling: <code class="inline">:pending</code> and <code class="inline">:failed</code> transactions are both completed by
+this function. The <code class="inline">:failed → :completed</code> upgrade resolves the race where the
+expiration worker marks a transaction failed before a late webhook arrives —
+the researcher's payment did succeed at OPP and we credit it. Only
+<code class="inline">:completed</code> transactions are refused (idempotency on duplicate webhooks).</p>
+  </section>
+</section>
+<section class="detail" id="create_bank_account/5">
+
+  <div class="detail-header">
+    <a href="#create_bank_account/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L216" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_currency_and_fund/5">
+
+  <div class="detail-header">
+    <a href="#create_currency_and_fund/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_currency_and_fund(name, icon, type, decimal_scale, label)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_fund/3">
+
+  <div class="detail-header">
+    <a href="#create_fund/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_fund(currency, name, icon)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L221" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_fund/4">
+
+  <div class="detail-header">
+    <a href="#create_fund/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_fund(currency, name, icon, owner)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L226" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_pay_in/3">
+
+  <div class="detail-header">
+    <a href="#create_pay_in/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_pay_in(assignment, user, attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1635" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates a pending transaction and initiates payment with the payment provider.
+Lazily creates an OPP merchant for the user if needed.
+Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}.</p>
+  </section>
+</section>
+<section class="detail" id="create_reward/4">
+
+  <div class="detail-header">
+    <a href="#create_reward/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_reward(fund, amount, user, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L297" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="create_reward/5">
+
+  <div class="detail-header">
+    <a href="#create_reward/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_reward(multi, fund, amount, user, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L309" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="expire_stale_pay_ins/1">
+
+    <span id="expire_stale_pay_ins/0"></span>
+
+  <div class="detail-header">
+    <a href="#expire_stale_pay_ins/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">expire_stale_pay_ins(max_age_minutes \\ 15)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1890" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks pending pay-in transactions older than <code class="inline">max_age_minutes</code> as <code class="inline">:failed</code>.</p><p>Returns the number of transactions that were expired.</p>
+  </section>
+</section>
+<section class="detail" id="fail_transaction/1">
+
+  <div class="detail-header">
+    <a href="#fail_transaction/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fail_transaction(provider_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1864" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get!/2">
+
+    <span id="get!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get!(id, preload \\ [:available, :pending])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_bank_account!/2">
+
+    <span id="get_bank_account!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_bank_account!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_bank_account!(id, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L168" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_by_currency!/2">
+
+    <span id="get_by_currency!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_by_currency!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_by_currency!(currency_model, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L158" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_by_name/2">
+
+    <span id="get_by_name/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_by_name/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_by_name(name, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L163" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_currency!/2">
+
+    <span id="get_currency!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_currency!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_currency!(id, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L173" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_currency_by_name/2">
+
+    <span id="get_currency_by_name/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_currency_by_name/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_currency_by_name(name, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L178" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_reward/2">
+
+  <div class="detail-header">
+    <a href="#get_reward/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_reward(idempotence_key, preload)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L188" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_reward/3">
+
+  <div class="detail-header">
+    <a href="#get_reward/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_reward(model, user, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_reward!/2">
+
+    <span id="get_reward!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_reward!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_reward!(id, preload \\ [:fund, :deposit, :payment, :user])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L183" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_transaction_by_provider_uid!/1">
+
+  <div class="detail-header">
+    <a href="#get_transaction_by_provider_uid!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_transaction_by_provider_uid!(provider_uid)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1624" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_wallet_identifier/2">
+
+  <div class="detail-header">
+    <a href="#get_wallet_identifier/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_wallet_identifier(user, currency_name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L206" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="has_pay_ins?/1">
+
+  <div class="detail-header">
+    <a href="#has_pay_ins?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">has_pay_ins?(model)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L124" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list/1">
+
+    <span id="list/0"></span>
+
+  <div class="detail-header">
+    <a href="#list/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list(preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L35" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_bank_accounts/1">
+
+    <span id="list_bank_accounts/0"></span>
+
+  <div class="detail-header">
+    <a href="#list_bank_accounts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_bank_accounts(preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_confirmed_rewards/2">
+
+    <span id="list_confirmed_rewards/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_confirmed_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_confirmed_rewards(model, preload \\ [:user, :payment])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L139" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Rewards from <code class="inline">:approved</code> onwards — the owner has confirmed the
+contribution and everything downstream (pending payout, paid).</p>
+  </section>
+</section>
+<section class="detail" id="list_currencies/1">
+
+    <span id="list_currencies/0"></span>
+
+  <div class="detail-header">
+    <a href="#list_currencies/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_currencies(preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_currencies_by_type/2">
+
+    <span id="list_currencies_by_type/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_currencies_by_type/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_currencies_by_type(type, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L78" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_owned/2">
+
+    <span id="list_owned/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_owned/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_owned(user, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L39" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_owned_by_currency/3">
+
+    <span id="list_owned_by_currency/2"></span>
+
+  <div class="detail-header">
+    <a href="#list_owned_by_currency/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_paid_rewards/2">
+
+    <span id="list_paid_rewards/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_paid_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_paid_rewards(fund, preload \\ [:user, :payment])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_payouts_for_user/1">
+
+  <div class="detail-header">
+    <a href="#list_payouts_for_user/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_payouts_for_user(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>All payouts (withdrawal requests) for a participant, newest first. Powers the
+&quot;Uitbetalingen &gt; Overzicht&quot; history on the account page.</p>
+  </section>
+</section>
+<section class="detail" id="list_pending_approvals/2">
+
+    <span id="list_pending_approvals/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_pending_approvals/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_pending_approvals(fund, preload \\ [:user])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L118" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_rejected_rewards/2">
+
+    <span id="list_rejected_rewards/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_rejected_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_rejected_rewards(fund, preload \\ [:user])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L147" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_rewards/2">
+
+    <span id="list_rewards/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_rewards(user, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L98" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_transactions_by_fund/1">
+
+  <div class="detail-header">
+    <a href="#list_transactions_by_fund/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_transactions_by_fund(model)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1616" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="list_wallets/1">
+
+  <div class="detail-header">
+    <a href="#list_wallets/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_wallets(arg1)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L88" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="make_deposit/1">
+
+  <div class="detail-header">
+    <a href="#make_deposit/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">make_deposit(multi)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L688" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="make_test_deposit/2">
+
+  <div class="detail-header">
+    <a href="#make_test_deposit/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">make_test_deposit(model, deposit_model)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L653" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="mark_pending_approval/2">
+
+  <div class="detail-header">
+    <a href="#mark_pending_approval/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mark_pending_approval(multi, reward_model)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L370" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks a reserved reward as awaiting owner approval, inside the caller's
+Multi. Single guarded UPDATE — matches only if the reward's current status
+is <code class="inline">:reserved</code>, so it's idempotent (no-op if already past <code class="inline">:reserved</code>).</p>
+  </section>
+</section>
+<section class="detail" id="move_wallet_balance/4">
+
+  <div class="detail-header">
+    <a href="#move_wallet_balance/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_wallet_balance(from, to, idempotence_key, limit)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L236" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="move_wallet_balance/5">
+
+  <div class="detail-header">
+    <a href="#move_wallet_balance/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="multiply_rewards/2">
+
+  <div class="detail-header">
+    <a href="#multiply_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">multiply_rewards(currency_name, multiplier)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L521" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="payout_eligibility/2">
+
+  <div class="detail-header">
+    <a href="#payout_eligibility/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payout_eligibility(user, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1023" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Pure pre-flight threshold check (no side effects), used by <a href="#prepare_payout/2"><code class="inline">prepare_payout/2</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="payout_reward/1">
+
+  <div class="detail-header">
+    <a href="#payout_reward/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payout_reward(idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L358" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="payout_status/1">
+
+  <div class="detail-header">
+    <a href="#payout_status/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payout_status(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1006" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> payout_status(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>()) ::
+  :none | :in_progress | :retryable | :manual</pre>
+
+      </div>
+
+<p>The participant's payout situation for display, so the home card can surface a
+stranded payout the reward-status columns don't show:</p><ul><li><code class="inline">:none</code>        — no unresolved payout; the normal &quot;Uitbetalen&quot; flow applies.</li><li><code class="inline">:in_progress</code> — issued and awaiting the bank; nothing for the user to do.</li><li><code class="inline">:retryable</code>   — stranded but recoverable; a &quot;retry&quot; resumes it.</li><li><code class="inline">:manual</code>      — an unconfirmed transfer that only support can resolve.</li></ul>
+  </section>
+</section>
+<section class="detail" id="payout_threshold_cents/0">
+
+  <div class="detail-header">
+    <a href="#payout_threshold_cents/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">payout_threshold_cents()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L949" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Minimum approved balance (in cents) required to request a payout — €5.</p>
+  </section>
+</section>
+<section class="detail" id="pending_rewards/1">
+
+  <div class="detail-header">
+    <a href="#pending_rewards/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pending_rewards(currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L899" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="pending_rewards/2">
+
+  <div class="detail-header">
+    <a href="#pending_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pending_rewards(student, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L891" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="pending_rewards_query/1">
+
+  <div class="detail-header">
+    <a href="#pending_rewards_query/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">pending_rewards_query(currency_name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L905" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="prepare_payout/2">
+
+  <div class="detail-header">
+    <a href="#prepare_payout/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">prepare_payout(user, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1039" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Side-effecting pre-handoff check (UC-OPP-06.A1): ensures merchant + bank
+account exist, then reports payout readiness via <code class="inline">payout_ready_for/1</code>.</p>
+  </section>
+</section>
+<section class="detail" id="print_auth_roles/1">
+
+  <div class="detail-header">
+    <a href="#print_auth_roles/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">print_auth_roles(term)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="reconcile_orphaned_payouts/2">
+
+  <div class="detail-header">
+    <a href="#reconcile_orphaned_payouts/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reconcile_orphaned_payouts(opts, state)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1593" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Flags provider withdrawals and transfers that have no local payout row.
+See <a href="Systems.Fund.PayoutOrphanReconciliation.html"><code class="inline">Systems.Fund.PayoutOrphanReconciliation</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="reconcile_orphaned_transactions/2">
+
+  <div class="detail-header">
+    <a href="#reconcile_orphaned_transactions/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reconcile_orphaned_transactions(opts, state)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1915" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Flags provider transactions that have no local pay-in row.
+See <a href="Systems.Fund.TransactionOrphanReconciliation.html"><code class="inline">Systems.Fund.TransactionOrphanReconciliation</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="reconcile_pending_payouts/2">
+
+  <div class="detail-header">
+    <a href="#reconcile_pending_payouts/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reconcile_pending_payouts(opts, state)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1587" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Reconciles <code class="inline">:pending</code> payouts against the payment provider.
+See <a href="Systems.Fund.PayoutReconciliation.html"><code class="inline">Systems.Fund.PayoutReconciliation</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="reconcile_transactions/2">
+
+  <div class="detail-header">
+    <a href="#reconcile_transactions/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reconcile_transactions(opts, state)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1909" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="reject_reward/2">
+
+  <div class="detail-header">
+    <a href="#reject_reward/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reject_reward(multi, reward)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L505" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Rejects a reward and returns the reserved money to the assignment fund,
+inside the caller's Multi. The status flip and deposit reversal commit
+atomically with whatever else the caller is doing.</p><p>On a <code class="inline">:rejected</code> reward this is a no-op; on <code class="inline">:approved</code>/<code class="inline">:paid</code> it fails
+the surrounding transaction with <code class="inline">{:error, :reward_already_approved}</code>
+(rather than raising deep in <a href="#rollback_deposit/2"><code class="inline">rollback_deposit/2</code></a>). The status flip is
+a guarded compare-and-swap, so a concurrent transition makes this a
+safe rollback.</p><p>The reviewer's rejection reason lives on <code class="inline">Assignment.Participation</code>;
+Fund only records the outcome.</p>
+  </section>
+</section>
+<section class="detail" id="request_donation/2">
+
+  <div class="detail-header">
+    <a href="#request_donation/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">request_donation(user, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1339" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Donates every <code class="inline">:approved</code> reward the participant holds in <code class="inline">currency</code> to Eyra,
+waiving the right to have them paid out (UC-OPP-07).</p><p>The money already sits on the platform merchant, so unlike a payout there is
+nothing to transfer to the participant and nothing to withdraw: a single
+provider charge settles it as the operator's own. Rewards go
+<code class="inline">:approved -&gt; :donating -&gt; :donated</code>, locked the same way a payout locks them.</p><p>The lock is what prevents a double charge; the idempotency key only prevents a
+replay of the same donation. Changing either mechanism means checking the other.</p><p>No threshold and no KYC. <code class="inline">@payout_threshold_cents</code> exists because withdrawals
+cost money; a donation has no such floor, so donating €0.50 is fine.</p><p>Returns <code class="inline">{:ok, donation}</code>, or:</p><ul><li><code class="inline">{:error, :nothing_to_donate}</code> — no approved rewards in this currency</li><li><code class="inline">{:error, :no_platform_merchant}</code> — <code class="inline">OPP_MERCHANT_UID</code> unset</li><li><code class="inline">{:error, :lock_failed}</code> — a concurrent payout or donation took the rewards</li><li><code class="inline">{:error, {:opp_failed, error}}</code> — definitively rejected, lock released</li><li><code class="inline">{:error, {:opp_uncertain, error}}</code> — outcome unknown; the rewards stay
+<code class="inline">:donating</code> for manual resolution (see <code class="inline">Fund.DonationModel</code>)</li></ul>
+  </section>
+</section>
+<section class="detail" id="request_payout/2">
+
+  <div class="detail-header">
+    <a href="#request_payout/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">request_payout(user, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L956" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Requests a payout for all of the participant's <code class="inline">:approved</code> rewards: locks
+them, then transfers and withdraws via the payment provider. Returns <code class="inline">{:ok, result}</code> or
+<code class="inline">{:error, reason}</code>.</p>
+  </section>
+</section>
+<section class="detail" id="resume_payout/1">
+
+  <div class="detail-header">
+    <a href="#resume_payout/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">resume_payout(payout)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1581" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Drives a stranded payout forward, without ever re-moving money.
+See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">Systems.Fund.PayoutWithdrawal.resume/1</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="reward_has_outstanding_deposit?/1">
+
+  <div class="detail-header">
+    <a href="#reward_has_outstanding_deposit?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reward_has_outstanding_deposit?(idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L602" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="rewarded_amount/1">
+
+  <div class="detail-header">
+    <a href="#rewarded_amount/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rewarded_amount(idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1596" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="rollback_deposit/1">
+
+  <div class="detail-header">
+    <a href="#rollback_deposit/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rollback_deposit(idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L611" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="rollback_deposit/2">
+
+  <div class="detail-header">
+    <a href="#rollback_deposit/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">rollback_deposit(multi, idempotence_key)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L624" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="start_bank_verification/1">
+
+  <div class="detail-header">
+    <a href="#start_bank_verification/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_bank_verification(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1116" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_bank_verification(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>()) ::
+  {:bank, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+<p>Onboarding entry point for the &quot;Toevoegen&quot; action: ensures the merchant + bank
+account exist (creating them if needed) and reports how to continue. Independent
+of payout-threshold eligibility — a participant can verify their bank before
+earning anything.</p><p>Returns <code class="inline">{:bank, verification_url}</code> (drive the seamless iDEAL picker),
+<code class="inline">:verified</code>, or <code class="inline">{:error, reason}</code>.</p><p>The arity-2 form pushes the given phone to the merchant — used when collecting
+it in the phone form. The arity-1 form is for the already-on-file case and does
+not re-push (the phone was pushed to OPP when first collected).</p>
+  </section>
+</section>
+<section class="detail" id="start_bank_verification/2">
+
+  <div class="detail-header">
+    <a href="#start_bank_verification/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start_bank_verification(user, phone)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1122" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> start_bank_verification(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil) ::
+  {:bank, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="summarize_rewards/2">
+
+  <div class="detail-header">
+    <a href="#summarize_rewards/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">summarize_rewards(user, currency)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L923" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Per-status reward totals (in cents) for the home rewards-summary card.</p>
+  </section>
+</section>
+<section class="detail" id="verification_status/1">
+
+  <div class="detail-header">
+    <a href="#verification_status/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">verification_status(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1077" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> verification_status(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>()) ::
+  :not_verified | :pending | :verified</pre>
+
+      </div>
+
+<p>Read-only KYC/bank-account verification status for the account page's
+&quot;Bankrekening&quot; section. Never creates a merchant: a user without a
+<code class="inline">merchant_uid</code> (never started a payout) is simply <code class="inline">:not_verified</code>.</p><p>Unlike <code class="inline">payout_ready_for/2</code> (which collapses &quot;no redirect URL yet&quot; into
+<code class="inline">:kyc_unavailable</code>), this distinguishes <code class="inline">:pending</code> — a bank account submitted
+to OPP that is still being reviewed — so the UI can show &quot;Wordt geverifiëerd&quot;.</p>
+  </section>
+</section>
+<section class="detail" id="wallet_is_active?/1">
+
+  <div class="detail-header">
+    <a href="#wallet_is_active?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">wallet_is_active?(wallet)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L293" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="wallet_is_passive?/1">
+
+  <div class="detail-header">
+    <a href="#wallet_is_passive?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">wallet_is_passive?(map)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L285" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

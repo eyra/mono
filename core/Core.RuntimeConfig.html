@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Core.RuntimeConfig — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Core.RuntimeConfig</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Building blocks for a SaaS's <code class="inline">config/runtime.exs</code>.</p><p>Every helper takes the environment as a map (<a href="https://hexdocs.pm/elixir/System.html#get_env/0"><code class="inline">System.get_env/0</code></a> in
+<code class="inline">runtime.exs</code>, a fixture in tests) and returns plain config values. They read
+each setting under one name only, and environment values choose the setup,
+never the platform the release runs on.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#dist_hosts/1" data-no-tooltip="" translate="no">dist_hosts(env)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Erlang node names (<code class="inline">core@&lt;host&gt;</code>) for the hosts in <code class="inline">DIST_HOSTS</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#features/2" data-no-tooltip="" translate="no">features(env, deploy_env)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Feature flags from <code class="inline">ENABLED_APP_FEATURES</code>. <code class="inline">:e2e</code> gates test-only endpoints
+and is never enabled when <code class="inline">deploy_env</code> is <code class="inline">:prod</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#fetch!/2" data-no-tooltip="" translate="no">fetch!(env, name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Returns the value of <code class="inline">name</code>, raising like <a><code class="inline">System.fetch_env!/1</code></a> when it is not set.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#inside?/2" data-no-tooltip="" translate="no">inside?(path, root)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether <code class="inline">path</code> is <code class="inline">root</code> or lies inside it, after expanding both and
+resolving symbolic links in their existing parts.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list/1" data-no-tooltip="" translate="no">list(value)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Splits a comma-separated value into its trimmed, non-empty items.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#log_choices/0" data-no-tooltip="" translate="no">log_choices()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Logs the setup the runtime config chose, never values: database TLS, mail
+adapter, S3 endpoint and cluster size. Warns about unknown Oban plugin names.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mailer/2" data-no-tooltip="" translate="no">mailer(env, opts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Mailer options: Mailgun when <code class="inline">MAILGUN_API_KEY</code> is set, otherwise Amazon SES
+(with the keys and region from <a><code class="inline">s3/1</code></a>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#repo/1" data-no-tooltip="" translate="no">repo(env)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Repo options from <code class="inline">DATABASE_URL</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#s3/1" data-no-tooltip="" translate="no">s3(env)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><code class="inline">:ex_aws</code> options: keys and region from the environment, plus an S3 endpoint
+when <code class="inline">AWS_ENDPOINT_URL_S3</code> is set (an S3-compatible store; the keys are then
+required and the region defaults to <code class="inline">auto</code>).</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="dist_hosts/1">
+
+  <div class="detail-header">
+    <a href="#dist_hosts/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">dist_hosts(env)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L160" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Erlang node names (<code class="inline">core@&lt;host&gt;</code>) for the hosts in <code class="inline">DIST_HOSTS</code>.</p>
+  </section>
+</section>
+<section class="detail" id="features/2">
+
+  <div class="detail-header">
+    <a href="#features/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">features(env, deploy_env)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L117" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Feature flags from <code class="inline">ENABLED_APP_FEATURES</code>. <code class="inline">:e2e</code> gates test-only endpoints
+and is never enabled when <code class="inline">deploy_env</code> is <code class="inline">:prod</code>.</p><p>The list can only switch flags on (<a href="Core.FeatureFlags.html"><code class="inline">Core.FeatureFlags</code></a>). Parsing is kept
+exactly as before, empty items included (they become the flag <code class="inline">:&quot;&quot;</code>).</p>
+  </section>
+</section>
+<section class="detail" id="fetch!/2">
+
+  <div class="detail-header">
+    <a href="#fetch!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">fetch!(env, name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L14" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Returns the value of <code class="inline">name</code>, raising like <a href="https://hexdocs.pm/elixir/System.html#fetch_env!/1"><code class="inline">System.fetch_env!/1</code></a> when it is not set.</p>
+  </section>
+</section>
+<section class="detail" id="inside?/2">
+
+  <div class="detail-header">
+    <a href="#inside?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">inside?(path, root)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L132" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether <code class="inline">path</code> is <code class="inline">root</code> or lies inside it, after expanding both and
+resolving symbolic links in their existing parts.</p>
+  </section>
+</section>
+<section class="detail" id="list/1">
+
+  <div class="detail-header">
+    <a href="#list/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list(value)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L22" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Splits a comma-separated value into its trimmed, non-empty items.</p>
+  </section>
+</section>
+<section class="detail" id="log_choices/0">
+
+  <div class="detail-header">
+    <a href="#log_choices/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">log_choices()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Logs the setup the runtime config chose, never values: database TLS, mail
+adapter, S3 endpoint and cluster size. Warns about unknown Oban plugin names.</p>
+  </section>
+</section>
+<section class="detail" id="mailer/2">
+
+  <div class="detail-header">
+    <a href="#mailer/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mailer(env, opts)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L86" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Mailer options: Mailgun when <code class="inline">MAILGUN_API_KEY</code> is set, otherwise Amazon SES
+(with the keys and region from <a href="#s3/1"><code class="inline">s3/1</code></a>).</p><p>Options: <code class="inline">:name</code> and <code class="inline">:domain</code> of the app, <code class="inline">:mail_domain</code> to send from and
+<code class="inline">:mailgun_base_uri</code>.</p>
+  </section>
+</section>
+<section class="detail" id="repo/1">
+
+  <div class="detail-header">
+    <a href="#repo/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">repo(env)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L38" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Repo options from <code class="inline">DATABASE_URL</code>.</p><p>TLS is on when <code class="inline">DB_CA_PATH</code> is set. It verifies the peer unless
+<code class="inline">DB_TLS_VERIFY=verify_none</code>, and takes the server name for SNI and the
+hostname check from the URL host. <code class="inline">ECTO_IPV6=true</code> (or <code class="inline">1</code>) connects over IPv6.</p>
+  </section>
+</section>
+<section class="detail" id="s3/1">
+
+  <div class="detail-header">
+    <a href="#s3/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">s3(env)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/core/runtime_config.ex#L58" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p><code class="inline">:ex_aws</code> options: keys and region from the environment, plus an S3 endpoint
+when <code class="inline">AWS_ENDPOINT_URL_S3</code> is set (an S3-compatible store; the keys are then
+required and the region defaults to <code class="inline">auto</code>).</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

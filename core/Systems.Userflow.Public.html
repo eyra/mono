@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.38.4">
+    <meta name="project" content="core v0.1.0">
+
+
+    <title>Systems.Userflow.Public — core v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+
+    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-Y223O6DN.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="core" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+core
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of core</span>
+            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+          </label>
+          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
+            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
+          </button>
+          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+            <i class="ri-close-line ri-lg" title="Cancel search"></i>
+          </button>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Systems.Userflow.Public</span> 
+      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+
+    </h1>
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h1>
+<div class="summary-functions summary">
+  <h2>
+    <a href="#functions">Functions</a>
+  </h2>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_step/2" data-no-tooltip="" translate="no">add_step(userflow, group)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Adds a step to a userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#add_step/3" data-no-tooltip="" translate="no">add_step(multi, userflow, group)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  Adds a step to a userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#finished?/2" data-no-tooltip="" translate="no">finished?(userflow, user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks if a user has finished all steps in a userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_step!/1" data-no-tooltip="" translate="no">get_step!(id)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_userflow!/1" data-no-tooltip="" translate="no">get_userflow!(id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets a userflow by its id.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_progress/2" data-no-tooltip="" translate="no">list_progress(userflow, user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets all progress for a user in a userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mark_visited/2" data-no-tooltip="" translate="no">mark_visited(step, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks a step as visited for a user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mark_visited/3" data-no-tooltip="" translate="no">mark_visited(multi, step, user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks a step as visited for a user.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_step/2" data-no-tooltip="" translate="no">move_step(step, atom)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  Moves a step up in the userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#move_step/3" data-no-tooltip="" translate="no">move_step(multi, step, atom)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  Moves a step up in the userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#next_order/1" data-no-tooltip="" translate="no">next_order(userflow)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#next_step/2" data-no-tooltip="" translate="no">next_step(userflow, user_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets the next unvisited step for a user in a userflow.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#previous_step/1" data-no-tooltip="" translate="no">previous_step(step)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>  Gets the previous step for a step or nil if there is no previous step.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#steps_by_group/1" data-no-tooltip="" translate="no">steps_by_group(userflow)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gets all steps in a userflow grouped by their group field.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h1 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h1>
+
+    <div class="functions-list">
+<section class="detail" id="add_step/2">
+
+  <div class="detail-header">
+    <a href="#add_step/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_step(userflow, group)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L36" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Adds a step to a userflow.</p>
+  </section>
+</section>
+<section class="detail" id="add_step/3">
+
+  <div class="detail-header">
+    <a href="#add_step/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">add_step(multi, userflow, group)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>  Adds a step to a userflow.</p>
+  </section>
+</section>
+<section class="detail" id="finished?/2">
+
+  <div class="detail-header">
+    <a href="#finished?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">finished?(userflow, user_id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L155" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Checks if a user has finished all steps in a userflow.</p>
+  </section>
+</section>
+<section class="detail" id="get_step!/1">
+
+  <div class="detail-header">
+    <a href="#get_step!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_step!(id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L29" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_userflow!/1">
+
+  <div class="detail-header">
+    <a href="#get_userflow!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_userflow!(id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L24" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets a userflow by its id.</p>
+  </section>
+</section>
+<section class="detail" id="list_progress/2">
+
+  <div class="detail-header">
+    <a href="#list_progress/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_progress(userflow, user_id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L172" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets all progress for a user in a userflow.</p>
+  </section>
+</section>
+<section class="detail" id="mark_visited/2">
+
+  <div class="detail-header">
+    <a href="#mark_visited/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mark_visited(step, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L66" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks a step as visited for a user.</p>
+  </section>
+</section>
+<section class="detail" id="mark_visited/3">
+
+  <div class="detail-header">
+    <a href="#mark_visited/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mark_visited(multi, step, user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L75" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks a step as visited for a user.</p>
+  </section>
+</section>
+<section class="detail" id="move_step/2">
+
+  <div class="detail-header">
+    <a href="#move_step/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_step(step, atom)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L96" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>  Moves a step up in the userflow.</p>
+  </section>
+</section>
+<section class="detail" id="move_step/3">
+
+  <div class="detail-header">
+    <a href="#move_step/3" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">move_step(multi, step, atom)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>  Moves a step up in the userflow.</p>
+  </section>
+</section>
+<section class="detail" id="next_order/1">
+
+  <div class="detail-header">
+    <a href="#next_order/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">next_order(userflow)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L10" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="next_step/2">
+
+  <div class="detail-header">
+    <a href="#next_step/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">next_step(userflow, user_id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L146" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets the next unvisited step for a user in a userflow.</p>
+  </section>
+</section>
+<section class="detail" id="previous_step/1">
+
+  <div class="detail-header">
+    <a href="#previous_step/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">previous_step(step)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L133" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>  Gets the previous step for a step or nil if there is no previous step.</p>
+  </section>
+</section>
+<section class="detail" id="steps_by_group/1">
+
+  <div class="detail-header">
+    <a href="#steps_by_group/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">steps_by_group(userflow)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/userflow/_public.ex#L164" class="icon-action" rel="help" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gets all steps in a userflow grouped by their group field.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+      <p>
+
+        <span class="line">
+          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
+            Search HexDocs
+          </button>
+
+            <a href="core.epub" title="ePub version">
+              Download ePub version
+            </a>
+
+        </span>
+      </p>
+
+      <p class="built-using">
+        Built using
+        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
+
+          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+      </p>
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>
