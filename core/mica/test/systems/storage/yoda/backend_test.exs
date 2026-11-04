@@ -1,6 +1,10 @@
 defmodule Systems.Storage.Yoda.BackendTest do
-  use ExUnit.Case, async: true
+  # Mocks the URL check.
+  use ExUnit.Case, async: false
 
+  import Mock
+
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Storage.Yoda.Backend
 
   describe "filename/1" do
@@ -48,6 +52,14 @@ defmodule Systems.Storage.Yoda.BackendTest do
   end
 
   describe "store/3" do
+    # This test is about the request to the local server it starts, which the
+    # URL check refuses.
+    setup_with_mocks([
+      {OutboundUrl, [:passthrough], [request: &:hackney.request/5]}
+    ]) do
+      :ok
+    end
+
     setup do
       {:ok, listen} = :gen_tcp.listen(0, [:binary, active: false, reuseaddr: true])
       {:ok, port} = :inet.port(listen)

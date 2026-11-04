@@ -100,10 +100,6 @@ msgid "page.title"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "admin.edit.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "form.audience.count.one"
 msgid_plural "form.audience.count.other"
 msgstr[0] ""
@@ -171,4 +167,12 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "form.notice.no_recipients"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "compose.edit"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "compose.new"
 msgstr ""

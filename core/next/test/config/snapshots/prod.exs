@@ -78,7 +78,7 @@
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
     {Systems.Storage.BuiltIn.S3, [bucket: "AWS_S3_BUCKET", prefix: "STORAGE_S3_PREFIX"]},
-    {:admins, ~r/^[\w_.-]+@APP_ADMINS$/},
+    {:admins, ~r/^(?:[\w_.-]+@APP_ADMINS)$/},
     {:auto_approve_timeout, 14},
     {:base_url, "https://APP_DOMAIN"},
     {:content,

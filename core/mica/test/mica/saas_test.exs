@@ -275,7 +275,12 @@ defmodule Mica.SaaSTest do
   end
 
   test "the systems declare their queues and quotas" do
-    assert Mica.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
+    assert Mica.SaaS.oban_queues() == [
+             affiliate_callback: 10,
+             email_dispatchers: 1,
+             email_delivery: 1,
+             ris_import: 1
+           ]
 
     assert Keyword.keys(Mica.SaaS.oban_crons()) == [
              :advert_expiration,

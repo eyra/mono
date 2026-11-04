@@ -1,9 +1,10 @@
 defmodule Systems.Desktop.Section do
   @moduledoc """
-  A section on the Desktop page (`/desktop`), shown after Recent items.
+  A section on the Desktop page (`/desktop`), shown after Recent items, or
+  before them when `c:placement/0` says so.
 
   Systems contribute sections with `c:Mica.System.desktop_sections/0`; the page
-  shows them in `c:Mica.SaaS.systems/0` order.
+  shows the sections of each placement in `c:Mica.SaaS.systems/0` order.
 
       defmodule Systems.Notes.DesktopSection do
         use Systems.Desktop.Section
@@ -57,10 +58,20 @@ defmodule Systems.Desktop.Section do
   @doc "Renders the section's content. `@vm` is the result of `c:view_model/2`."
   @callback render(assigns :: map()) :: Phoenix.LiveView.Rendered.t()
 
+  @type placement :: :before_recent_items | :after_recent_items
+
+  @doc "Where the section goes relative to Recent items. Defaults to `:after_recent_items`."
+  @callback placement() :: placement()
+
   defmacro __using__(_opts) do
     quote do
       @behaviour Systems.Desktop.Section
       use MicaWeb, :html
+
+      @impl Systems.Desktop.Section
+      def placement, do: :after_recent_items
+
+      defoverridable placement: 0
     end
   end
 end

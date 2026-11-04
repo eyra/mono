@@ -60,6 +60,16 @@ if config_env() == :dev do
   config :mica, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
 end
 
+# AppSignal lets these variables override send_params and send_session_data
+# from config.exs.
+if System.get_env("APPSIGNAL_SEND_PARAMS") not in [nil, "false"] do
+  raise "APPSIGNAL_SEND_PARAMS must be unset or false: request params can carry participant ids"
+end
+
+if System.get_env("APPSIGNAL_SEND_SESSION_DATA") not in [nil, "false"] do
+  raise "APPSIGNAL_SEND_SESSION_DATA must be unset or false: the session can carry participant ids and the session token"
+end
+
 if config_env() == :prod do
   env = System.get_env()
 

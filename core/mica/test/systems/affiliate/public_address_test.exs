@@ -23,6 +23,15 @@ defmodule Systems.Affiliate.PublicAddressTest do
     "http://example.org/callback"
   ]
 
+  # Hosts `URI.new/1` accepts that aren't DNS names.
+  @malformed_urls [
+    "https://a..b/callback",
+    "https://.example.org/callback",
+    "https://example.org../callback",
+    "https://#{String.duplicate("a", 64)}.example/callback",
+    "https://#{String.duplicate("a.", 140)}org/callback"
+  ]
+
   @unroutable_urls [
     "https://10.255.255.1/callback",
     "https://169.254.169.254/latest/meta-data/"
@@ -83,6 +92,20 @@ defmodule Systems.Affiliate.PublicAddressTest do
       assert is_binary(message)
     end
 
+    for url <- @malformed_urls do
+      test "gives #{String.slice(url, 0, 40)} the same answer as a private address" do
+        malformed = Affiliate.Model.changeset(%Affiliate.Model{}, %{callback_url: unquote(url)})
+
+        private =
+          Affiliate.Model.changeset(%Affiliate.Model{}, %{
+            callback_url: "https://10.1.2.3/callback"
+          })
+
+        refute malformed.valid?
+        assert malformed.errors == private.errors
+      end
+    end
+
     test "accepts a public https address" do
       changeset =
         Affiliate.Model.changeset(%Affiliate.Model{}, %{
@@ -101,6 +124,13 @@ defmodule Systems.Affiliate.PublicAddressTest do
 
         assert {:error, _} = Affiliate.Private.callback(%{callback_url: url}, nil, %{})
         refute_received {:accepted, _}
+      end
+    end
+
+    for url <- @malformed_urls do
+      test "doesn't call back #{String.slice(url, 0, 40)}" do
+        assert {:error, :host_not_found} =
+                 Affiliate.Private.callback(%{callback_url: unquote(url)}, nil, %{})
       end
     end
 
@@ -174,6 +204,12 @@ defmodule Systems.Affiliate.PublicAddressTest do
     for url <- @unroutable_urls do
       test "doesn't request #{url}" do
         assert {:error, :address_not_allowed} = Affiliate.Public.validate_url(unquote(url))
+      end
+    end
+
+    for url <- @malformed_urls do
+      test "doesn't request #{String.slice(url, 0, 40)}" do
+        assert {:error, :host_not_found} = Affiliate.Public.validate_url(unquote(url))
       end
     end
   end

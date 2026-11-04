@@ -60,13 +60,19 @@ defmodule Systems.Storage.EndpointForm.Helper do
           ) do
         changeset = Model.changeset(entity, attrs)
 
-        {
-          :noreply,
-          socket
-          |> save(changeset)
-          |> validate()
-          |> test_connection()
-        }
+        {:noreply, save_and_test(socket, changeset)}
+      end
+
+      # A refused change keeps its errors at the inputs and isn't saved or tested.
+      defp save_and_test(socket, %{valid?: false} = changeset) do
+        assign(socket, changeset: %{changeset | action: :update}, show_status: false)
+      end
+
+      defp save_and_test(socket, changeset) do
+        socket
+        |> save(changeset)
+        |> validate()
+        |> test_connection()
       end
 
       @impl true
