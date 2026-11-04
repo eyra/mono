@@ -4,12 +4,17 @@ defmodule Systems.Storage.Yoda.Client do
 
   def upload_file(username, password, file_url, body) do
     headers = headers(username, password)
-    http_request(:put, file_url, body, headers)
-  end
 
-  def create_folder(username, password, folder_url) do
-    headers = headers(username, password)
-    http_request(:mkcol, folder_url, "", headers)
+    case http_request(:put, file_url, body, headers) do
+      {:ok, status} when status in 200..299 ->
+        {:ok, status}
+
+      {:ok, status} ->
+        {:error, {:http_status, status}}
+
+      {:error, error} ->
+        {:error, error}
+    end
   end
 
   def connected?(username, password, folder_url) do

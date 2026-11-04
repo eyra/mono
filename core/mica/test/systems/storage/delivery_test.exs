@@ -5,15 +5,19 @@ defmodule Systems.Storage.DeliveryTest do
   @moduletag :capture_log
 
   import Mox
+  import Mock
   import Frameworks.Signal.TestHelper
 
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Storage.Delivery
   alias Systems.Feldspar.DataDonationFolder
   alias Systems.Storage.BuiltIn.Backend
   alias Systems.Storage.BuiltIn.MockSpecial
+  alias Systems.Storage.Yoda
 
   # Force module load to register atom in atom table
   require Backend
+  require Yoda.Backend
 
   setup :verify_on_exit!
 
@@ -105,6 +109,55 @@ defmodule Systems.Storage.DeliveryTest do
       # Job should be discarded (not retried)
       assert {:discard, reason} = perform_job(Delivery, args)
       assert reason =~ "not found"
+    end
+  end
+
+  describe "perform/1 with the Yoda backend" do
+    # Exercise local HTTP responses without the production URL guard rejecting Bypass.
+    setup_with_mocks([
+      {OutboundUrl, [:passthrough], [request: &:hackney.request/5]}
+    ]) do
+      :ok
+    end
+
+    setup do
+      bypass = Bypass.open()
+      file_id = "participant=3_key=yoda.json"
+      {:ok, %{id: ^file_id}} = DataDonationFolder.store("yoda donation data", file_id)
+
+      args = %{
+        "file_id" => file_id,
+        "endpoint_id" => 1,
+        "backend" => "Elixir.Systems.Storage.Yoda.Backend",
+        "special" => %{
+          "user" => "researcher",
+          "password" => "secret",
+          "url" => "http://localhost:#{bypass.port}/folder"
+        },
+        "meta_data" => %{"identifier" => [[:participant, 3]]}
+      }
+
+      %{bypass: bypass, args: args}
+    end
+
+    test "is delivered when Yoda answers 201", %{bypass: bypass, args: args} do
+      Bypass.expect_once(bypass, "PUT", "/folder/participant=3.json", fn conn ->
+        Plug.Conn.resp(conn, 201, "")
+      end)
+
+      assert :ok = perform_job(Delivery, args)
+      assert_signal_dispatched({:storage_delivery, :delivered})
+    end
+
+    for status <- [401, 500] do
+      test "is not delivered when Yoda answers #{status}", %{bypass: bypass, args: args} do
+        Bypass.expect_once(bypass, "PUT", "/folder/participant=3.json", fn conn ->
+          Plug.Conn.resp(conn, unquote(status), "")
+        end)
+
+        assert {:error, {:http_status, unquote(status)}} = perform_job(Delivery, args)
+        refute_signal_dispatched({:storage_delivery, :delivered})
+      end
     end
   end
 
