@@ -208,3 +208,23 @@ msgid "1 file"
 msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.invalid"
+msgstr "Bitte verwenden Sie nur Buchstaben und Ziffern, wie im Namen Ihres Speicherkontos"
+
+#, elixir-autogen, elixir-format
+msgid "url.https_only"
+msgstr "Bitte verwenden Sie eine Adresse, die mit https:// beginnt"
+
+#, elixir-autogen, elixir-format
+msgid "url.invalid"
+msgstr "Bitte geben Sie eine gültige URL ein"
+
+#, elixir-autogen, elixir-format
+msgid "url.not_public"
+msgstr "Bitte verwenden Sie eine Adresse, die im öffentlichen Internet existiert"
+
+#, elixir-autogen, elixir-format
+msgid "url.port_not_allowed"
+msgstr "Bitte verwenden Sie eine Adresse ohne Portnummer"

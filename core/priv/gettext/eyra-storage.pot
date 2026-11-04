@@ -208,3 +208,23 @@ msgid "1 file"
 msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "url.https_only"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "url.invalid"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "url.not_public"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "url.port_not_allowed"
+msgstr ""

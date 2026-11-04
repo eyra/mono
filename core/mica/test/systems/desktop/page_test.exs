@@ -73,6 +73,22 @@ defmodule Systems.Desktop.PageTest do
       assert recent_items < section
     end
 
+    test "a section placed before Recent items shows above them", %{conn: conn} do
+      contribute_test_section(
+        message: "Hello from the test section",
+        placement: :before_recent_items
+      )
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert has_element?(view, "#desktop_section_test", "Hello from the test section")
+
+      {section, _} = :binary.match(html, "desktop_section_test")
+      {recent_items, _} = :binary.match(html, "Recent items")
+      assert section < recent_items
+      assert html =~ ~r/Recent items\s*<span class="text-primary"> 0<\/span>/
+    end
+
     test "a section without a view model is hidden", %{conn: conn} do
       contribute_test_section([])
 

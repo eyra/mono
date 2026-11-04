@@ -49,7 +49,7 @@ defmodule Systems.Admin.Public do
         |> String.replace("\\*", "[\\w_\.\-]+")
       end)
 
-    Regex.compile!("^#{combined}$")
+    Regex.compile!("^(?:#{combined})$")
   end
 
   def admin?(_compiled, email) when is_nil(email), do: false

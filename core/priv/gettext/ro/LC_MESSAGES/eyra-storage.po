@@ -209,3 +209,23 @@ msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.invalid"
+msgstr "Vă rugăm să utilizați doar litere și cifre, ca în numele contului de stocare"
+
+#, elixir-autogen, elixir-format
+msgid "url.https_only"
+msgstr "Vă rugăm să utilizați o adresă care începe cu https://"
+
+#, elixir-autogen, elixir-format
+msgid "url.invalid"
+msgstr "Vă rugăm să introduceți o adresă URL validă"
+
+#, elixir-autogen, elixir-format
+msgid "url.not_public"
+msgstr "Vă rugăm să utilizați o adresă care există pe internetul public"
+
+#, elixir-autogen, elixir-format
+msgid "url.port_not_allowed"
+msgstr "Vă rugăm să utilizați o adresă fără număr de port"

@@ -95,7 +95,7 @@ defmodule Next.Systems.Announcement.EmailTest do
       assert queued_addresses() == ["anna@example.org", "bram@example.org"]
     end
 
-    test "sends the title, the summary, the full body and a link", %{author: author} do
+    test "sends the title, the full body and a link", %{author: author} do
       %{id: id} = publish!(announcement!(author))
       url = MicaWeb.Endpoint.url() <> "/announcement/#{id}"
 
@@ -108,16 +108,30 @@ defmodule Next.Systems.Announcement.EmailTest do
       text = email.text_body
 
       assert html =~ "Release notes"
-      assert html =~ "What changed"
       assert html =~ "<strong>exports</strong> &amp; filters."
       assert html =~ "<li>Simpler</li>"
       assert html =~ ~s(<a href="#{url}">Read this announcement in Next</a>)
 
-      assert text =~ "Release notes\n\nWhat changed"
+      assert text =~ "Release notes\n\nNew: exports & filters."
       assert text =~ "New: exports & filters.\nRead the guide.\n\n- Faster\n- Simpler"
       assert text =~ "The guide (https://example.org/guide)"
       assert text =~ "Read this announcement in Next:\n#{url}"
       refute text =~ "<"
+    end
+
+    test "leaves out the summary", %{author: author} do
+      publish!(announcement!(author, %{summary: "A short summary"}))
+
+      assert [_, %{html_body: html, text_body: text}] = send_emails()
+
+      refute html =~ "A short summary"
+      refute html =~ ~s(class="subheader")
+      assert html =~ "<strong>exports</strong> &amp; filters."
+      assert html =~ "Read this announcement in Next"
+
+      refute text =~ "A short summary"
+      assert text =~ "New: exports & filters."
+      assert text =~ "Read this announcement in Next:\n"
     end
 
     test "running the delivery again queues no second email", %{author: author} do

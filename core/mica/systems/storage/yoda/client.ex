@@ -1,9 +1,6 @@
 defmodule Systems.Storage.Yoda.Client do
-  alias Frameworks.Utility.HTTPClient
+  alias Frameworks.Utility.OutboundUrl
   require Logger
-
-  # issue with HTTPPoison not supporting HTTP method :mkcol
-  @dialyzer {:nowarn_function, create_folder: 3}
 
   def upload_file(username, password, file_url, body) do
     headers = headers(username, password)
@@ -23,10 +20,10 @@ defmodule Systems.Storage.Yoda.Client do
     headers = headers(username, password)
 
     case http_request(:head, resource_url, "", headers) do
-      {:ok, %HTTPoison.Response{status_code: 200}} ->
+      {:ok, 200} ->
         {:ok, true}
 
-      {:ok, %HTTPoison.Response{}} ->
+      {:ok, _status} ->
         {:ok, false}
 
       {:error, error} ->
@@ -41,14 +38,17 @@ defmodule Systems.Storage.Yoda.Client do
     ]
   end
 
-  defp http_request(method, url, body, headers, options \\ []) do
-    case HTTPClient.request(method, url, body, headers, options) do
+  defp http_request(method, url, body, headers) do
+    case OutboundUrl.request(method, url, headers, body, []) do
+      {:ok, status, _headers} ->
+        {:ok, status}
+
+      {:ok, status, _headers, _body} ->
+        {:ok, status}
+
       {:error, error} ->
         Logger.error("Yoda request failed: #{inspect(error)}")
         {:error, error}
-
-      {:ok, response} ->
-        {:ok, response}
     end
   end
 end

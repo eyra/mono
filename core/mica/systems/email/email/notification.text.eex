@@ -1,5 +1,5 @@
 <%= @title %>
 
-<%= @byline %>
+<%= if @byline not in [nil, ""] do %><%= @byline %>
 
-<%= @text_message %>
+<% end %><%= @text_message %>
