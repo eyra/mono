@@ -1,6 +1,27 @@
 defmodule Systems.Account.System do
   use Mica.System
 
+  def routes do
+    quote do
+      pipeline :native_account do
+        plug(:accepts, ["json"])
+        plug(:fetch_session)
+        plug(Systems.Account.Plug)
+        plug(:fetch_current_user)
+        plug(:protect_from_forgery)
+        plug(:put_secure_browser_headers)
+      end
+
+      scope "/user/account/native", Systems.Account do
+        pipe_through([:native_account])
+        get("/profile", NativeController, :show)
+        post("/profile", NativeController, :update)
+        post("/photo", NativeController, :photo)
+        delete("/session", NativeController, :sign_out)
+      end
+    end
+  end
+
   def grants do
     quote do
       [
