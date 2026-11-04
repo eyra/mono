@@ -60,10 +60,23 @@ defmodule Systems.Affiliate.Private do
         {:ok, status}
 
       error ->
-        Logger.error("Error calling callback url: #{url}, error: #{inspect(error)}")
+        Logger.error(
+          "Error calling callback url on host #{inspect(host(url))}: #{inspect(error_kind(error))}"
+        )
+
         error
     end
   end
+
+  # The callback URL holds the participant's info and whatever the researcher
+  # put in it, such as a token, so only its host and the kind of error are
+  # logged. Some error reasons repeat the URL.
+  defp host(url), do: URI.parse(url).host
+
+  defp error_kind({:error, reason}), do: error_kind(reason)
+  defp error_kind(reason) when is_atom(reason), do: reason
+  defp error_kind(reason) when is_tuple(reason) and is_atom(elem(reason, 0)), do: elem(reason, 0)
+  defp error_kind(_reason), do: :unknown
 
   # The researcher's server answers inside the participant's process. Only the
   # status is used, and hackney 4 would read the whole body before returning,
