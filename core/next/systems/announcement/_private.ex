@@ -9,6 +9,9 @@ defmodule Next.Systems.Announcement.Private do
   """
   def page_path(announcement_id), do: "/announcement/#{announcement_id}"
 
+  @doc "The full list of published announcements addressed to the signed-in user."
+  def list_path, do: "/announcements"
+
   @doc "The full address of the announcement page, for use outside Next such as in email."
   def page_url(announcement_id), do: MicaWeb.Endpoint.url() <> page_path(announcement_id)
 

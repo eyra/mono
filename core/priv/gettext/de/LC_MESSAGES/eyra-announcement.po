@@ -174,3 +174,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "compose.new"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "Alle ansehen"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "Sie haben noch keine Ankündigungen."

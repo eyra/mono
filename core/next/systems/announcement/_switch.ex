@@ -15,9 +15,16 @@ defmodule Next.Systems.Announcement.Switch do
   def intercept({:announcement, :updated}, %{announcement: announcement, from_pid: from_pid}) do
     for %{user: user} = recipient <- Announcement.Public.list_recipients(announcement, [:user]) do
       update_routed(Desktop.Page, user, from_pid)
+      update_routed(Desktop.FullListPage, user, from_pid)
       update_routed(Announcement.Page, recipient, from_pid)
     end
 
+    :ok
+  end
+
+  @impl true
+  def intercept({:next_action, :cleared}, %{user: user, from_pid: from_pid}) do
+    update_routed(Desktop.FullListPage, user, from_pid)
     :ok
   end
 end

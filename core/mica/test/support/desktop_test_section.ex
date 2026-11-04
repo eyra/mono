@@ -14,6 +14,9 @@ defmodule Systems.Desktop.TestSection do
   def title, do: "Test section"
 
   @impl true
+  def full_list(_vm), do: Mica.Env.get(__MODULE__, []) |> Keyword.get(:full_list)
+
+  @impl true
   def placement do
     Mica.Env.get(__MODULE__, []) |> Keyword.get(:placement) || super()
   end

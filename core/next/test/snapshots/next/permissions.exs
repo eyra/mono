@@ -32,6 +32,7 @@
   {"access/systems/assignment/content_page", [:owner]},
   {"access/systems/assignment/crew_page", [:participant, :tester]},
   {"access/systems/assignment/landing_page", [:participant, :tester]},
+  {"access/systems/desktop/full_list_page", [:member]},
   {"access/systems/desktop/page", [:creator]},
   {"access/systems/feldspar/app_page", [:member, :visitor]},
   {"access/systems/fund/funding_page", [:admin, :creator]},

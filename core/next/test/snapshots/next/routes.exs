@@ -167,6 +167,8 @@
   {:post, "/api/e2e/bootstrap", Next.Frameworks.E2E.Controller, :bootstrap, "", nil},
   {:post, "/api/e2e/activate_user", Next.Frameworks.E2E.Controller, :activate_user, "", nil},
   {:post, "/api/e2e/setup", Next.Frameworks.E2E.Controller, :setup, "", nil},
+  {:get, "/announcements", Phoenix.LiveView.Plug, :announcements, "announcement_list",
+   Systems.Desktop.FullListPage},
   {:get, "/announcement/:id", Phoenix.LiveView.Plug, Next.Systems.Announcement.Page, "live",
    Next.Systems.Announcement.Page},
   {:get, "/admin/announcement/new", Phoenix.LiveView.Plug, Next.Systems.Announcement.ComposePage,

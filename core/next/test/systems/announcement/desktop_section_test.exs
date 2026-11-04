@@ -43,6 +43,12 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
 
     assert item_ids(view) == expected_ids
     refute has_element?(view, @section, "Announcement 1")
+
+    assert has_element?(
+             view,
+             "#{@section} [data-testid=section-full-list][href='/announcements']",
+             "View all"
+           )
   end
 
   test "shows title, summary and publication date, and links to the announcement page",
