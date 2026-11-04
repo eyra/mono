@@ -1,7 +1,8 @@
 defmodule Next.Systems.Announcement.DesktopSection do
   @moduledoc """
-  The Announcements section on Desktop: the newest announcements the user
-  received, read and unread, each opening the announcement page. Hidden while
+  The Announcements section on Desktop, above Recent items: the newest
+  announcements the user received, read and unread, as cards that each open
+  the announcement page. Hidden while
   the `:announcements` flag is off and for users without announcements.
 
   It refreshes with Desktop: on `{:next_action, :cleared}` when an announcement
@@ -11,7 +12,10 @@ defmodule Next.Systems.Announcement.DesktopSection do
   use Systems.Desktop.Section
   use Mica.FeatureFlags
 
+  alias Frameworks.Pixel.Card
+  alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Tag
+  alias Frameworks.Pixel.Text
   alias Next.Systems.Announcement
 
   @limit 6
@@ -21,6 +25,9 @@ defmodule Next.Systems.Announcement.DesktopSection do
 
   @impl true
   def title, do: dgettext("eyra-announcement", "desktop.title")
+
+  @impl true
+  def placement, do: :before_recent_items
 
   @impl true
   def view_model(user, assigns) do
@@ -59,33 +66,36 @@ defmodule Next.Systems.Announcement.DesktopSection do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-4">
+    <Grid.dynamic>
       <%= for item <- @vm.items do %>
         <.link
           navigate={item.path}
           id={"announcement_item_#{item.id}"}
+          class="block h-full"
           data-testid="announcement-item"
           data-unread={to_string(item.unread?)}
         >
-          <div class="p-4 md:p-6 rounded-md bg-grey6 flex flex-col gap-2">
-            <div class="flex flex-row flex-wrap items-center gap-3">
-              <div class="font-title6 text-title6 md:font-title5 md:text-title5 text-grey1 break-words">
+          <Card.normal bg_color="bg-grey5">
+            <:title>
+              <div class="text-title5 font-title5 lg:text-title3 lg:font-title3 text-grey1 break-words">
                 <%= item.title %>
               </div>
+            </:title>
+            <div class="flex flex-col gap-4 mt-4">
               <%= if item.unread? do %>
-                <Tag.tag text={dgettext("eyra-announcement", "desktop.unread")} />
+                <div>
+                  <Tag.tag text={dgettext("eyra-announcement", "desktop.unread")} />
+                </div>
               <% end %>
+              <Text.body_medium color="text-grey1">
+                <span class="break-words"><%= item.summary %></span>
+              </Text.body_medium>
+              <Text.sub_head color="text-grey2"><%= item.published %></Text.sub_head>
             </div>
-            <div class="text-bodysmall md:text-bodymedium font-body text-grey1 break-words">
-              <%= item.summary %>
-            </div>
-            <div class="text-caption font-caption text-grey2">
-              <%= item.published %>
-            </div>
-          </div>
+          </Card.normal>
         </.link>
       <% end %>
-    </div>
+    </Grid.dynamic>
     """
   end
 end

@@ -83,8 +83,9 @@ defmodule Mica.System do
 
   @doc """
   The system's `Systems.Desktop.Section` modules: sections on the Desktop page,
-  shown after Recent items and the sections of earlier systems in
-  `c:Mica.SaaS.systems/0`.
+  before or after Recent items as each section's `placement/0` says, and after
+  the sections of earlier systems in `c:Mica.SaaS.systems/0` with the same
+  placement.
   """
   @callback desktop_sections() :: [module()]
 
