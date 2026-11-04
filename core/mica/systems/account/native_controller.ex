@@ -118,7 +118,7 @@ defmodule Systems.Account.NativeController do
         title: profile.title,
         photo_url: profile.photo_url,
         email: user.email,
-        creator: user.creator
+        creator: user.creator == true
       },
       tabs: tabs,
       csrf_token: Plug.CSRFProtection.get_csrf_token()

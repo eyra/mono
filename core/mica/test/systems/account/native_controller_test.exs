@@ -33,6 +33,13 @@ defmodule Systems.Account.NativeControllerTest do
     assert Enum.all?(body["tabs"], &String.starts_with?(&1["path"], "/user/account?"))
   end
 
+  test "a legacy account with no creator flag returns a boolean", ctx do
+    ctx.user |> Ecto.Changeset.change(creator: nil) |> Repo.update!()
+
+    assert %{"profile" => %{"creator" => false}} =
+             ctx.conn |> get("/user/account/native/profile") |> json_response(200)
+  end
+
   test "saves through existing profile rules and cannot change identity or role", ctx do
     other = Factories.insert!(:member)
     {conn, token} = ready(ctx.conn)
