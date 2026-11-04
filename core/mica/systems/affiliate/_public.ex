@@ -40,6 +40,39 @@ defmodule Systems.Affiliate.Public do
     end
   end
 
+  @doc """
+  Queues `event` for the affiliate's callback URL (`Affiliate.CallbackWorker`).
+  Inside a transaction the callback is sent only after it commits. `affiliate`
+  is the affiliate or a struct that has one, such as an assignment.
+  """
+  def queue_event(%{affiliate: affiliate}, event, user), do: queue_event(affiliate, event, user)
+  def queue_event(nil, _event, _user), do: {:error, :affiliate_url_missing}
+  def queue_event(_affiliate, nil, _user), do: {:error, :event_missing}
+
+  def queue_event(_affiliate, event, _user) when not is_map(event),
+    do: {:error, :event_invalid_format}
+
+  def queue_event(_affiliate, _event, nil), do: {:error, :user_missing}
+
+  def queue_event(%Affiliate.Model{callback_url: callback_url}, _event, _user)
+      when callback_url in [nil, ""],
+      do: {:error, :callback_url_missing}
+
+  def queue_event(%Affiliate.Model{} = affiliate, %{} = event, %Account.User{} = user) do
+    with {:ok, _affiliate_user} <- get_user(user) do
+      affiliate
+      |> Affiliate.CallbackWorker.new_event(event, user)
+      |> Oban.insert()
+    end
+  end
+
+  @doc """
+  Sends an event that `queue_event/3` queued.
+  """
+  def deliver_event(affiliate_id, %{} = event, user_id) do
+    send_event(Repo.get(Affiliate.Model, affiliate_id), event, Repo.get(Account.User, user_id))
+  end
+
   def url_for_resource(%resource_type{} = %{id: id}) do
     path = ~p"/a/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
     get_base_url() <> path
