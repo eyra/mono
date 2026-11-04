@@ -15,6 +15,7 @@ defmodule Mica.Systems do
       Systems.Advert.System,
       Systems.Affiliate.System,
       Systems.Alliance.System,
+      Systems.BFF.System,
       Systems.Assignment.System,
       Systems.Fund.System,
       Systems.Desktop.System,

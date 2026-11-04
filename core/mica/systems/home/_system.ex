@@ -18,5 +18,7 @@ defmodule Systems.Home.System do
 
   def signal_handlers, do: [Systems.Home.Switch]
 
+  def bff_pages, do: %{home: Systems.Home.BFFPage}
+
   def feature_flags, do: [:opp_phase_3]
 end

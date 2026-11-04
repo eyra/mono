@@ -71,7 +71,8 @@ config :logger, :console,
     :path,
     :duration_ms,
     :status,
-    :remote_ip
+    :remote_ip,
+    :bff_spec
   ]
 
 config :plug, :statuses, %{
