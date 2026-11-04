@@ -37,10 +37,11 @@ defmodule Frameworks.Pixel.RichText do
     @image_schemes ["http", "https"]
     @raster_data ~r/\Adata:image\/(?:png|jpeg|gif|webp);base64,[a-z0-9+\/]*={0,2}\z/i
 
-    # What browsers remove from an address before reading its scheme: tabs and
-    # line breaks anywhere, control characters and spaces at either end.
+    # Read the scheme as browsers do: drop tabs and line breaks anywhere,
+    # then leading control characters and spaces. Trailing whitespace cannot
+    # change an anchored scheme match; scanning for it can be quadratic.
     @ignored_anywhere ~r/[\t\n\r]/
-    @ignored_at_ends ~r/\A[\x00-\x20]+|[\x00-\x20]+\z/
+    @ignored_at_start ~r/\A[\x00-\x20]+/
     @scheme ~r/\A([a-z][a-z0-9+.-]*):/i
 
     def link?(href) when is_binary(href), do: allowed?(href, @link_schemes)
@@ -56,7 +57,7 @@ defmodule Frameworks.Pixel.RichText do
       address =
         address
         |> String.replace(@ignored_anywhere, "")
-        |> String.replace(@ignored_at_ends, "")
+        |> String.replace(@ignored_at_start, "")
 
       case Regex.run(@scheme, address, capture: :all_but_first) do
         [scheme] -> String.downcase(scheme) in schemes

@@ -262,6 +262,15 @@ defmodule Frameworks.Pixel.RichTextTest do
       end
     end
 
+    test "rejects javascript with leading, trailing and interspersed whitespace" do
+      for address <- ["  javascript:1", "java\tscript:1 ", "javascript:1  "] do
+        assert RichText.clean(~s|<a href="#{address}">link</a>|) ==
+                 ~s|<a target="_blank">link</a>|
+
+        assert RichText.clean(~s|<img src="#{address}">|) == ""
+      end
+    end
+
     test "removes an image from a javascript: address split by line breaks" do
       assert RichText.clean(~s|<div>a<img src="javascript\n:\nhttps://x">b</div>|) ==
                "<div>ab</div>"

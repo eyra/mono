@@ -26,6 +26,25 @@ defmodule Frameworks.Pixel.RichTextTimingTest do
     end
   end
 
+  describe "clean/1 takes linear time on spaces inside an address" do
+    @tag :address_space_regression
+    test "in href" do
+      address = "x" <> String.duplicate(" ", 1_900_000) <> "x"
+      html = ~s|<a href="#{address}">link</a>|
+
+      assert within_budget(fn -> RichText.clean(html) end) ==
+               ~s|<a href="#{address}" target="_blank">link</a>|
+    end
+
+    @tag :address_space_regression
+    test "in src" do
+      address = "x" <> String.duplicate(" ", 1_900_000) <> "x"
+      html = ~s|<img src="#{address}">|
+
+      assert within_budget(fn -> RichText.clean(html) end) == ~s|<img src="#{address}" />|
+    end
+  end
+
   # Each end tag that closes no open element made the parser search every
   # open element: minutes for these inputs.
   describe "clean/1 takes linear time on end tags that close nothing" do
