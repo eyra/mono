@@ -65,7 +65,18 @@ defmodule Systems.Desktop.View do
 
   defp section(assigns) do
     ~H"""
-    <Text.title2><%= @section.title %></Text.title2>
+    <div class="flex items-center justify-between gap-4" data-testid="section-header">
+      <div class="min-w-0"><Text.title2><%= @section.title %></Text.title2></div>
+      <.link
+        :if={@section.full_list}
+        navigate={@section.full_list.to}
+        aria-label={"#{@section.full_list.label} — #{@section.title}"}
+        class="shrink-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        data-testid="section-full-list"
+      >
+        <Button.Face.plain_icon label={@section.full_list.label} icon={:forward} />
+      </.link>
+    </div>
     <Margin.y id={:title2_bottom} />
     <%= @section.module.render(%{vm: @section.vm}) %>
     """

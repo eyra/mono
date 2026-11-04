@@ -174,3 +174,11 @@ msgstr "Edit announcement"
 #, elixir-autogen, elixir-format
 msgid "compose.new"
 msgstr "New announcement"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "View all"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "You have no announcements yet."

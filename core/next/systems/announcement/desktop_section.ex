@@ -12,10 +12,6 @@ defmodule Next.Systems.Announcement.DesktopSection do
   use Systems.Desktop.Section
   use Mica.FeatureFlags
 
-  alias Frameworks.Pixel.Card
-  alias Frameworks.Pixel.Grid
-  alias Frameworks.Pixel.Tag
-  alias Frameworks.Pixel.Text
   alias Next.Systems.Announcement
 
   @limit 6
@@ -34,68 +30,34 @@ defmodule Next.Systems.Announcement.DesktopSection do
     if feature_enabled?(:announcements) do
       case Announcement.Public.list_received(user, limit: @limit) do
         [] -> nil
-        recipients -> %{items: Enum.map(recipients, &item(&1, assigns))}
+        recipients -> %{items: Announcement.Cards.items(recipients, assigns)}
       end
     end
   end
 
-  defp item(
-         %Announcement.RecipientModel{
-           read_at: read_at,
-           announcement: %Announcement.Model{
-             id: id,
-             title: title,
-             summary: summary,
-             published_at: published_at
-           }
-         },
-         assigns
-       ) do
+  @impl true
+  def full_list(_vm) do
     %{
-      id: id,
-      title: title,
-      summary: summary,
-      published: Announcement.Private.published_date(published_at, timezone(assigns)),
-      unread?: read_at == nil,
-      path: Announcement.Private.page_path(id)
+      label: dgettext("eyra-announcement", "desktop.view_all"),
+      to: Announcement.Private.list_path()
     }
   end
 
-  defp timezone(assigns), do: Map.get(assigns, :timezone, "Etc/UTC")
+  @impl true
+  def full_view_model(user, assigns) do
+    if feature_enabled?(:announcements) do
+      %{items: Announcement.Public.list_received(user) |> Announcement.Cards.items(assigns)}
+    end
+  end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <Grid.dynamic>
-      <%= for item <- @vm.items do %>
-        <.link
-          navigate={item.path}
-          id={"announcement_item_#{item.id}"}
-          class="block h-full"
-          data-testid="announcement-item"
-          data-unread={to_string(item.unread?)}
-        >
-          <Card.normal bg_color="bg-grey5">
-            <:title>
-              <div class="text-title5 font-title5 lg:text-title3 lg:font-title3 text-grey1 break-words">
-                <%= item.title %>
-              </div>
-            </:title>
-            <div class="flex flex-col gap-4 mt-4">
-              <%= if item.unread? do %>
-                <div>
-                  <Tag.tag text={dgettext("eyra-announcement", "desktop.unread")} />
-                </div>
-              <% end %>
-              <Text.body_medium color="text-grey1">
-                <span class="break-words"><%= item.summary %></span>
-              </Text.body_medium>
-              <Text.sub_head color="text-grey2"><%= item.published %></Text.sub_head>
-            </div>
-          </Card.normal>
-        </.link>
-      <% end %>
-    </Grid.dynamic>
+    <%= if @vm.items == [] do %>
+      <Text.body_medium><%= dgettext("eyra-announcement", "list.empty") %></Text.body_medium>
+    <% else %>
+      <Announcement.Cards.list items={@vm.items} />
+    <% end %>
     """
   end
 end

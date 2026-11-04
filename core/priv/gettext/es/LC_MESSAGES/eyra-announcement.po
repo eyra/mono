@@ -174,3 +174,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "compose.new"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "Ver todo"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "Todavía no tienes anuncios."

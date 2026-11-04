@@ -43,6 +43,7 @@ defmodule Systems.Desktop.PageBuilder do
         id: section.id(),
         title: section.title(),
         placement: section.placement(),
+        full_list: section.full_list(vm),
         module: section,
         vm: vm
       }

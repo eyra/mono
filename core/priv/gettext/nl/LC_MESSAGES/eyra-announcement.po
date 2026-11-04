@@ -174,3 +174,11 @@ msgstr "Aankondiging bewerken"
 #, elixir-autogen, elixir-format
 msgid "compose.new"
 msgstr "Nieuwe aankondiging"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "Alles bekijken"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "Je hebt nog geen aankondigingen."

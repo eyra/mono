@@ -97,6 +97,27 @@ defmodule Systems.Desktop.PageTest do
       refute has_element?(view, "#desktop_section_test")
     end
 
+    test "a section can link to its full list with its own label", %{conn: conn} do
+      contribute_test_section(
+        message: "Preview",
+        full_list: %{label: "See all notes", to: "/todo"}
+      )
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      link = "#desktop_section_test [data-testid=section-full-list]"
+      assert has_element?(view, "#{link}[href='/todo']", "See all notes")
+      assert has_element?(view, "#{link} img[src='/images/icons/forward.svg']")
+      view |> element(link) |> render_click()
+      assert_redirect(view, "/todo")
+    end
+
+    test "a section without a full-list destination has no header action", %{conn: conn} do
+      contribute_test_section(message: "Preview")
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+      refute has_element?(view, "#desktop_section_test [data-testid=section-full-list]")
+    end
+
     test "a contributed section refreshes live through its own Switch", %{conn: conn, user: user} do
       contribute_test_section(message: "Before")
       override_signal_handlers(Mica.SaaS.signal_handlers() ++ [Desktop.TestSection.Switch])

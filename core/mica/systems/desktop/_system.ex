@@ -11,7 +11,8 @@ defmodule Systems.Desktop.System do
   def grants do
     quote do
       [
-        {Systems.Desktop.Page, [:creator]}
+        {Systems.Desktop.Page, [:creator]},
+        {Systems.Desktop.FullListPage, [:member]}
       ]
     end
   end

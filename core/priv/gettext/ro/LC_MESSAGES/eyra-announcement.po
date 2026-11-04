@@ -176,3 +176,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "compose.new"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "Vedeți toate"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "Nu aveți încă anunțuri."
