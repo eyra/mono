@@ -82,6 +82,7 @@
   {:get, "/r/:sqid", Systems.Affiliate.Controller, :recruit, "", nil},
   {:get, "/alliance/:id/callback", Phoenix.LiveView.Plug, Systems.Alliance.CallbackPage, "live",
    Systems.Alliance.CallbackPage},
+  {:get, "/bff/page/:page", Systems.BFF.PageController, :show, "page", nil},
   {:get, "/assignment/:id", Phoenix.LiveView.Plug, Systems.Assignment.CrewPage, "live",
    Systems.Assignment.CrewPage},
   {:get, "/assignment/:id/landing", Phoenix.LiveView.Plug, Systems.Assignment.LandingPage, "live",

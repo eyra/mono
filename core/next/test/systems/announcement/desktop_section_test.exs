@@ -43,6 +43,12 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
 
     assert item_ids(view) == expected_ids
     refute has_element?(view, @section, "Announcement 1")
+
+    assert has_element?(
+             view,
+             "#{@section} [data-testid=section-full-list][href='/announcements']",
+             "View all"
+           )
   end
 
   test "shows title, summary and publication date, and links to the announcement page",
@@ -104,7 +110,8 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
     refute html =~ "Release notes"
   end
 
-  test "Recent items keeps showing only project items", %{conn: conn} = ctx do
+  test "shows above Recent items, which keeps showing only project items",
+       %{conn: conn} = ctx do
     {:ok, %{project: project}} = Project.Assembly.create("Project", ctx.creator, :empty)
     {:ok, _} = Project.Assembly.create_item(:questionnaire, "Study", project.root, ctx.creator)
     insert_recipient!(create_announcement!(ctx.author, "Release notes", 1), ctx.creator)
@@ -113,12 +120,26 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
 
     {section, _} = :binary.match(html, "desktop_section_announcements")
     {recent_items, _} = :binary.match(html, "Recent items")
-    assert recent_items < section
+    assert section < recent_items
 
-    recent = html |> binary_part(recent_items, section - recent_items)
+    recent = html |> binary_part(recent_items, byte_size(html) - recent_items)
+    assert recent =~ ~r/Recent items\s*<span class="text-primary"> 1<\/span>/
     assert recent =~ "Study"
     refute recent =~ "Release notes"
     assert has_element?(view, @items, "Release notes")
+  end
+
+  test "shows each announcement as a card", %{conn: conn} = ctx do
+    %{id: id} = announcement = create_announcement!(ctx.author, "Release notes", 1)
+    insert_recipient!(announcement, ctx.creator)
+
+    {:ok, view, _html} = live(conn, ~p"/desktop")
+
+    assert has_element?(
+             view,
+             "#{@section} .grid #announcement_item_#{id} .rounded-lg",
+             "Release notes"
+           )
   end
 
   describe "live" do

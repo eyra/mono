@@ -100,10 +100,6 @@ msgid "page.title"
 msgstr "Aankondiging"
 
 #, elixir-autogen, elixir-format
-msgid "admin.edit.button"
-msgstr "Bewerken"
-
-#, elixir-autogen, elixir-format
 msgid "form.audience.count.one"
 msgid_plural "form.audience.count.other"
 msgstr[0] "%{count} creator ontvangt deze aankondiging."
@@ -170,3 +166,19 @@ msgstr "Deze aankondiging is intussen gewijzigd, dus je wijzigingen zijn niet op
 #, elixir-autogen, elixir-format
 msgid "form.notice.no_recipients"
 msgstr "Geen creators gevonden met deze filters en zoekopdracht, dus er is niets gepubliceerd. Pas de filters of zoekopdracht aan en druk nogmaals op Publiceren."
+
+#, elixir-autogen, elixir-format
+msgid "compose.edit"
+msgstr "Aankondiging bewerken"
+
+#, elixir-autogen, elixir-format
+msgid "compose.new"
+msgstr "Nieuwe aankondiging"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "Alles bekijken"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "Je hebt nog geen aankondigingen."

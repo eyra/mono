@@ -33,6 +33,21 @@ defmodule Mica.SaaSTest do
     def oban_queues, do: [exports: 2, imports: 3]
   end
 
+  defmodule PagesSystem do
+    use Mica.System
+    def bff_pages, do: %{home: Mica.SaaSTest.HomePage}
+  end
+
+  defmodule OtherPagesSystem do
+    use Mica.System
+    def bff_pages, do: %{home: Mica.SaaSTest.OtherHomePage, settings: Mica.SaaSTest.SettingsPage}
+  end
+
+  defmodule SettingsSystem do
+    use Mica.System
+    def bff_pages, do: %{settings: Mica.SaaSTest.SettingsPage}
+  end
+
   defmodule CronSystem do
     use Mica.System
     def oban_crons, do: [cleanup: {"0 * * * *", Mica.SaaSTest.CleanupWorker}]
@@ -238,6 +253,19 @@ defmodule Mica.SaaSTest do
                  fn -> Mica.SaaS.collect_oban_queues([QueueSystem, OtherQueueSystem]) end
   end
 
+  test "BFF pages are collected from all systems" do
+    assert Mica.SaaS.collect_bff_pages([PagesSystem, GoodSystem, SettingsSystem]) == %{
+             home: Mica.SaaSTest.HomePage,
+             settings: Mica.SaaSTest.SettingsPage
+           }
+  end
+
+  test "a BFF page served by two systems is an error" do
+    assert_raise ArgumentError,
+                 "BFF page :home is served by more than one system",
+                 fn -> Mica.SaaS.collect_bff_pages([PagesSystem, OtherPagesSystem]) end
+  end
+
   test "Oban crons are collected in system order" do
     assert Mica.SaaS.collect_oban_crons([CronSystem, GoodSystem]) == [
              cleanup: {"0 * * * *", Mica.SaaSTest.CleanupWorker}
@@ -275,7 +303,12 @@ defmodule Mica.SaaSTest do
   end
 
   test "the systems declare their queues and quotas" do
-    assert Mica.SaaS.oban_queues() == [email_dispatchers: 1, email_delivery: 1, ris_import: 1]
+    assert Mica.SaaS.oban_queues() == [
+             affiliate_callback: 10,
+             email_dispatchers: 1,
+             email_delivery: 1,
+             ris_import: 1
+           ]
 
     assert Keyword.keys(Mica.SaaS.oban_crons()) == [
              :advert_expiration,

@@ -5,8 +5,10 @@ defmodule Systems.Storage.DeliveryTest do
   @moduletag :capture_log
 
   import Mox
+  import Mock
   import Frameworks.Signal.TestHelper
 
+  alias Frameworks.Utility.OutboundUrl
   alias Systems.Storage.Delivery
   alias Systems.Feldspar.DataDonationFolder
   alias Systems.Storage.BuiltIn.Backend
@@ -111,6 +113,13 @@ defmodule Systems.Storage.DeliveryTest do
   end
 
   describe "perform/1 with the Yoda backend" do
+    # Exercise local HTTP responses without the production URL guard rejecting Bypass.
+    setup_with_mocks([
+      {OutboundUrl, [:passthrough], [request: &:hackney.request/5]}
+    ]) do
+      :ok
+    end
+
     setup do
       bypass = Bypass.open()
       file_id = "participant=3_key=yoda.json"

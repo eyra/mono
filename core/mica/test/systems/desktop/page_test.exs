@@ -73,12 +73,49 @@ defmodule Systems.Desktop.PageTest do
       assert recent_items < section
     end
 
+    test "a section placed before Recent items shows above them", %{conn: conn} do
+      contribute_test_section(
+        message: "Hello from the test section",
+        placement: :before_recent_items
+      )
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert has_element?(view, "#desktop_section_test", "Hello from the test section")
+
+      {section, _} = :binary.match(html, "desktop_section_test")
+      {recent_items, _} = :binary.match(html, "Recent items")
+      assert section < recent_items
+      assert html =~ ~r/Recent items\s*<span class="text-primary"> 0<\/span>/
+    end
+
     test "a section without a view model is hidden", %{conn: conn} do
       contribute_test_section([])
 
       {:ok, view, _html} = live(conn, ~p"/desktop")
 
       refute has_element?(view, "#desktop_section_test")
+    end
+
+    test "a section can link to its full list with its own label", %{conn: conn} do
+      contribute_test_section(
+        message: "Preview",
+        full_list: %{label: "See all notes", to: "/todo"}
+      )
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      link = "#desktop_section_test [data-testid=section-full-list]"
+      assert has_element?(view, "#{link}[href='/todo']", "See all notes")
+      assert has_element?(view, "#{link} img[src='/images/icons/forward.svg']")
+      view |> element(link) |> render_click()
+      assert_redirect(view, "/todo")
+    end
+
+    test "a section without a full-list destination has no header action", %{conn: conn} do
+      contribute_test_section(message: "Preview")
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+      refute has_element?(view, "#desktop_section_test [data-testid=section-full-list]")
     end
 
     test "a contributed section refreshes live through its own Switch", %{conn: conn, user: user} do

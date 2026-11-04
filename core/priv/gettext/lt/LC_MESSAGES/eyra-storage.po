@@ -209,3 +209,23 @@ msgid_plural "* files"
 msgstr[0] ""
 msgstr[1] ""
 msgstr[2] ""
+
+#, elixir-autogen, elixir-format
+msgid "azure.account_name.invalid"
+msgstr "Naudokite tik raides ir skaitmenis, kaip jūsų saugyklos paskyros pavadinime"
+
+#, elixir-autogen, elixir-format
+msgid "url.https_only"
+msgstr "Naudokite adresą, prasidedantį https://"
+
+#, elixir-autogen, elixir-format
+msgid "url.invalid"
+msgstr "Įveskite galiojantį URL adresą"
+
+#, elixir-autogen, elixir-format
+msgid "url.not_public"
+msgstr "Naudokite viešame internete esantį adresą"
+
+#, elixir-autogen, elixir-format
+msgid "url.port_not_allowed"
+msgstr "Naudokite adresą be prievado numerio"

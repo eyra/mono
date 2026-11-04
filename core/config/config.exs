@@ -29,6 +29,16 @@ config :phoenix,
   json_library: Jason,
   filter_parameters: ["password", "secret"]
 
+# Request params and the session can carry participant ids and panel values
+# (the affiliate entry /a/:sqid puts them in both), and the session also holds
+# the session token, so AppSignal gets neither. runtime.exs refuses
+# APPSIGNAL_SEND_PARAMS and APPSIGNAL_SEND_SESSION_DATA, which would override this.
+config :appsignal, :config, send_params: false, send_session_data: false
+
+# A crash report would otherwise carry the whole conn (params, cookie header,
+# session) in its log metadata, which the AppSignal logger handler sends on.
+config :plug_cowboy, conn_in_exception_metadata: false
+
 config :esbuild,
   version: "0.17.11",
   default: [
@@ -61,7 +71,8 @@ config :logger, :console,
     :path,
     :duration_ms,
     :status,
-    :remote_ip
+    :remote_ip,
+    :bff_spec
   ]
 
 config :plug, :statuses, %{

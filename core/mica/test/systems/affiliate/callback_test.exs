@@ -73,10 +73,24 @@ defmodule Systems.Affiliate.CallbackTest do
       refute_received {:hackney_response, _, _}
     end
 
+    # The server resets the connection once hackney has connected, and the
+    # request waits for the reset to arrive, so sending it fails every time.
+    # Otherwise a reset while connecting makes hackney stop the connection
+    # itself, and a send that wins the race reports the error on the
+    # `{:ok, ref}` path.
     test "stops the connection when the request fails after connecting" do
-      url = reset_on_accept()
+      {url, server} = reset_when_told()
+      test = self()
 
-      assert {:error, _reason} = Affiliate.Private.callback(url)
+      with_mock :hackney_conn, [:passthrough],
+        request_async: fn connection, method, path, headers, body, mode, to, redirect, opts ->
+          if self() == test, do: reset(server, connection)
+          passthrough([connection, method, path, headers, body, mode, to, redirect, opts])
+        end do
+        assert {:error, :closed} = Affiliate.Private.callback(url)
+        assert_called(:hackney_conn.request_async(:_, :_, :_, :_, :_, :_, :_, :_, :_))
+      end
+
       assert own_connections() == []
     end
 
@@ -121,6 +135,27 @@ defmodule Systems.Affiliate.CallbackTest do
 
   defp hackney_connection?(_port_or_resource), do: false
 
+  defp reset(server, connection) do
+    send(server, :reset)
+    await_reset(connection)
+  end
+
+  # A reset socket has no peer. Waits up to 1 s. Asks the connection directly:
+  # a call to the mocked `:hackney_conn` would end meck's `passthrough` context.
+  defp await_reset(connection, attempts \\ 100) do
+    case :gen_statem.call(connection, :peername) do
+      {:error, _reason} ->
+        :ok
+
+      {:ok, _peer} when attempts > 0 ->
+        Process.sleep(10)
+        await_reset(connection, attempts - 1)
+
+      {:ok, _peer} ->
+        flunk("the server's reset didn't reach the connection")
+    end
+  end
+
   defp timed_callback(url, max_ms) do
     {elapsed_us, result} = :timer.tc(fn -> Affiliate.Private.callback(url) end)
     assert elapsed_us < max_ms * 1_000
@@ -144,22 +179,23 @@ defmodule Systems.Affiliate.CallbackTest do
     "http://localhost:#{port}/callback"
   end
 
-  # Resets every connection as soon as it's accepted, before the request
-  # arrives.
-  defp reset_on_accept do
+  # Accepts one connection and resets it on `:reset`.
+  defp reset_when_told do
     {:ok, listen} = :gen_tcp.listen(0, [:binary, active: false])
     {:ok, port} = :inet.port(listen)
 
-    spawn_link(fn -> reset_connections(listen) end)
+    server =
+      spawn_link(fn ->
+        {:ok, socket} = :gen_tcp.accept(listen)
 
-    "http://localhost:#{port}/callback"
-  end
+        receive do
+          :reset ->
+            :ok = :inet.setopts(socket, linger: {true, 0})
+            :gen_tcp.close(socket)
+        end
+      end)
 
-  defp reset_connections(listen) do
-    {:ok, socket} = :gen_tcp.accept(listen)
-    :ok = :inet.setopts(socket, linger: {true, 0})
-    :gen_tcp.close(socket)
-    reset_connections(listen)
+    {"http://localhost:#{port}/callback", server}
   end
 
   # Announces a 100 MiB body and sends `chunk` every `interval` ms for up to

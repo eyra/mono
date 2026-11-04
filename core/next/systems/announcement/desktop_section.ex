@@ -1,7 +1,8 @@
 defmodule Next.Systems.Announcement.DesktopSection do
   @moduledoc """
-  The Announcements section on Desktop: the newest announcements the user
-  received, read and unread, each opening the announcement page. Hidden while
+  The Announcements section on Desktop, above Recent items: the newest
+  announcements the user received, read and unread, as cards that each open
+  the announcement page. Hidden while
   the `:announcements` flag is off and for users without announcements.
 
   It refreshes with Desktop: on `{:next_action, :cleared}` when an announcement
@@ -11,7 +12,6 @@ defmodule Next.Systems.Announcement.DesktopSection do
   use Systems.Desktop.Section
   use Mica.FeatureFlags
 
-  alias Frameworks.Pixel.Tag
   alias Next.Systems.Announcement
 
   @limit 6
@@ -23,69 +23,41 @@ defmodule Next.Systems.Announcement.DesktopSection do
   def title, do: dgettext("eyra-announcement", "desktop.title")
 
   @impl true
+  def placement, do: :before_recent_items
+
+  @impl true
   def view_model(user, assigns) do
     if feature_enabled?(:announcements) do
       case Announcement.Public.list_received(user, limit: @limit) do
         [] -> nil
-        recipients -> %{items: Enum.map(recipients, &item(&1, assigns))}
+        recipients -> %{items: Announcement.Cards.items(recipients, assigns)}
       end
     end
   end
 
-  defp item(
-         %Announcement.RecipientModel{
-           read_at: read_at,
-           announcement: %Announcement.Model{
-             id: id,
-             title: title,
-             summary: summary,
-             published_at: published_at
-           }
-         },
-         assigns
-       ) do
+  @impl true
+  def full_list(_vm) do
     %{
-      id: id,
-      title: title,
-      summary: summary,
-      published: Announcement.Private.published_date(published_at, timezone(assigns)),
-      unread?: read_at == nil,
-      path: Announcement.Private.page_path(id)
+      label: dgettext("eyra-announcement", "desktop.view_all"),
+      to: Announcement.Private.list_path()
     }
   end
 
-  defp timezone(assigns), do: Map.get(assigns, :timezone, "Etc/UTC")
+  @impl true
+  def full_view_model(user, assigns) do
+    if feature_enabled?(:announcements) do
+      %{items: Announcement.Public.list_received(user) |> Announcement.Cards.items(assigns)}
+    end
+  end
 
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col gap-4">
-      <%= for item <- @vm.items do %>
-        <.link
-          navigate={item.path}
-          id={"announcement_item_#{item.id}"}
-          data-testid="announcement-item"
-          data-unread={to_string(item.unread?)}
-        >
-          <div class="p-4 md:p-6 rounded-md bg-grey6 flex flex-col gap-2">
-            <div class="flex flex-row flex-wrap items-center gap-3">
-              <div class="font-title6 text-title6 md:font-title5 md:text-title5 text-grey1 break-words">
-                <%= item.title %>
-              </div>
-              <%= if item.unread? do %>
-                <Tag.tag text={dgettext("eyra-announcement", "desktop.unread")} />
-              <% end %>
-            </div>
-            <div class="text-bodysmall md:text-bodymedium font-body text-grey1 break-words">
-              <%= item.summary %>
-            </div>
-            <div class="text-caption font-caption text-grey2">
-              <%= item.published %>
-            </div>
-          </div>
-        </.link>
-      <% end %>
-    </div>
+    <%= if @vm.items == [] do %>
+      <Text.body_medium><%= dgettext("eyra-announcement", "list.empty") %></Text.body_medium>
+    <% else %>
+      <Announcement.Cards.list items={@vm.items} />
+    <% end %>
     """
   end
 end

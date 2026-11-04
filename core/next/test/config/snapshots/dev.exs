@@ -87,7 +87,7 @@
          surfconext: %{provider: true, satellite: true}
        }
      ]},
-    {:admins, ~r/^[\w_.-]+@eyra\.co$/},
+    {:admins, ~r/^(?:[\w_.-]+@eyra\.co)$/},
     {:auto_approve_timeout, 14},
     {:base_url, "https://eyra-next-dev.fly.dev"},
     {:content,
