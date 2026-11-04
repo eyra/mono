@@ -17,11 +17,14 @@ defmodule Next.Systems.Announcement.System do
   end
 
   # Who may open an announcement is decided by its recipient rows
-  # (`Next.Systems.Announcement.Public.get_received/2`), not by a role.
+  # (`Next.Systems.Announcement.Public.get_received/2`), not by a role. The
+  # compose page also checks for a system admin itself, as org admins have
+  # the `:admin` role too.
   def grants do
     quote do
       [
-        {Next.Systems.Announcement.Page, [:member]}
+        {Next.Systems.Announcement.Page, [:member]},
+        {Next.Systems.Announcement.ComposePage, [:admin]}
       ]
     end
   end

@@ -1,20 +1,9 @@
 defmodule Next.Systems.Announcement.AdminViewBuilder do
   @moduledoc """
-  View model of the Announcements tab: every announcement, newest first, the
-  labels of the compose form and, while composing, the audience: who it
-  reaches with the chosen filters and search, and whether they get an email.
-  Only system admins with the `announcements` flag on get announcements
-  (`allowed?`).
-
-  Composing means a `form` is open, on `announcement` once it is saved. While
-  composing an unpublished one, assigns read: `audience_filters` (from
-  `Next.Systems.Announcement.Public.audience_filters/0`), `audience_query` (the
-  search words), `priority` (the priority chosen in the form) and
-  `compose_notice` (`:already_published`, `:changed_since_loaded`,
-  `:audience_changed` or `:no_recipients` after a refused save or publish).
-  A published one has
-  no audience to choose, only `published`: what saving it does, and the
-  notice of a refused save.
+  View model of the Announcements tab: every announcement, newest first, each
+  with the path of the page that opens it, and the link to compose a new one
+  (`Next.Systems.Announcement.ComposePage`). Only system admins with the
+  `announcements` flag on get announcements (`allowed?`).
   """
   use Gettext, backend: MicaWeb.Gettext
   use Mica.FeatureFlags
@@ -36,10 +25,7 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
       empty_text: dgettext("eyra-announcement", "admin.empty"),
       new_button: new_button(),
       head_cells: head_cells(),
-      items: Enum.map(announcements, &to_item(&1, audience_counts, timezone)),
-      form: form_labels(),
-      audience: audience(allowed? and composing(assigns) == :draft, assigns),
-      published: published(allowed? and composing(assigns) == :published, assigns)
+      items: Enum.map(announcements, &to_item(&1, audience_counts, timezone))
     }
   end
 
@@ -48,8 +34,12 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
 
   defp new_button do
     %{
-      action: %{type: :send, event: "new_announcement"},
-      face: %{type: :primary, label: dgettext("eyra-announcement", "admin.new.button")}
+      action: %{type: :redirect, to: Announcement.Private.compose_path(:new)},
+      face: %{
+        type: :plain,
+        label: dgettext("eyra-announcement", "admin.new.button"),
+        icon: :forward
+      }
     }
   end
 
@@ -66,28 +56,25 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
   # The recipient count of a published announcement is its audience, fixed at
   # publication; its recipient rows follow in a job.
   defp to_item(
-         %Announcement.Model{id: id, published_at: published_at} = announcement,
+         %Announcement.Model{
+           id: id,
+           kind: kind,
+           title: title,
+           priority: priority,
+           published_at: published_at
+         },
          audience_counts,
          timezone
        ) do
     %{
       id: id,
-      kind: kind_label(announcement.kind),
-      title: announcement.title,
-      priority: priority_label(announcement.priority),
+      path: Announcement.Private.compose_path(id),
+      kind: Announcement.Private.kind_label(kind),
+      title: title,
+      priority: Announcement.Private.priority_label(priority),
       published: published_label(published_at, timezone),
-      recipient_count: Map.get(audience_counts, id, 0),
-      buttons: buttons(announcement)
+      recipient_count: Map.get(audience_counts, id, 0)
     }
-  end
-
-  defp buttons(%Announcement.Model{id: id}) do
-    [
-      %{
-        action: %{type: :send, event: "edit_announcement", item: id},
-        face: %{type: :plain, label: dgettext("eyra-announcement", "admin.edit.button")}
-      }
-    ]
   end
 
   defp published_label(nil, _timezone),
@@ -97,96 +84,4 @@ defmodule Next.Systems.Announcement.AdminViewBuilder do
 
   defp published_label(published_at, timezone),
     do: published_at |> Timestamp.convert(timezone) |> Timestamp.humanize()
-
-  defp form_labels do
-    %{
-      kind: dgettext("eyra-announcement", "form.kind.label"),
-      title: dgettext("eyra-announcement", "form.title.label"),
-      summary: dgettext("eyra-announcement", "form.summary.label"),
-      body: dgettext("eyra-announcement", "form.body.label"),
-      priority: dgettext("eyra-announcement", "form.priority.label"),
-      kinds: Enum.map(Announcement.Model.kinds(), &{&1, kind_label(&1)}),
-      priorities: Enum.map(Announcement.Model.priorities(), &{&1, priority_label(&1)}),
-      save_button: dgettext("eyra-announcement", "form.save.button"),
-      publish_button: dgettext("eyra-announcement", "form.publish.button"),
-      cancel_button: dgettext("eyra-announcement", "form.cancel.button")
-    }
-  end
-
-  defp composing(%{form: nil}), do: nil
-
-  defp composing(%{form: _, announcement: %Announcement.Model{published_at: %DateTime{}}}),
-    do: :published
-
-  defp composing(%{form: _}), do: :draft
-  defp composing(_assigns), do: nil
-
-  defp published(false, _assigns), do: nil
-
-  defp published(true, assigns) do
-    %{
-      text: dgettext("eyra-announcement", "form.published.notice"),
-      notice: notice(Map.get(assigns, :compose_notice), 0)
-    }
-  end
-
-  defp audience(false, _assigns), do: nil
-
-  defp audience(true, assigns) do
-    filters = Map.get(assigns, :audience_filters, [])
-    query = Map.get(assigns, :audience_query)
-    recipient_count = length(Announcement.Public.list_audience_ids(filters, query))
-
-    %{
-      label: dgettext("eyra-announcement", "form.audience.label"),
-      creators_label: dgettext("eyra-announcement", "form.audience.creators"),
-      filter_labels: Admin.UserFilters.labels(filters, Announcement.Public.audience_filters()),
-      search_placeholder: dgettext("eyra-announcement", "form.audience.search.placeholder"),
-      recipient_count: recipient_count,
-      recipient_text: recipient_text(recipient_count),
-      email_text: email_text(Map.get(assigns, :priority, :normal)),
-      notice: notice(Map.get(assigns, :compose_notice), recipient_count)
-    }
-  end
-
-  defp notice(nil, _recipient_count), do: nil
-
-  defp notice(:already_published, _recipient_count),
-    do: dgettext("eyra-announcement", "form.notice.already_published")
-
-  defp notice(:changed_since_loaded, _recipient_count),
-    do: dgettext("eyra-announcement", "form.notice.changed_since_loaded")
-
-  defp notice(:no_recipients, _recipient_count),
-    do: dgettext("eyra-announcement", "form.notice.no_recipients")
-
-  defp notice(:audience_changed, recipient_count) do
-    dngettext(
-      "eyra-announcement",
-      "form.notice.audience_changed.one",
-      "form.notice.audience_changed.other",
-      recipient_count,
-      count: recipient_count
-    )
-  end
-
-  defp recipient_text(0), do: dgettext("eyra-announcement", "form.audience.none")
-
-  defp recipient_text(count) do
-    dngettext(
-      "eyra-announcement",
-      "form.audience.count.one",
-      "form.audience.count.other",
-      count,
-      count: count
-    )
-  end
-
-  defp email_text(:high), do: dgettext("eyra-announcement", "form.email.high")
-  defp email_text(_priority), do: dgettext("eyra-announcement", "form.email.normal")
-
-  def kind_label(:release_notes), do: dgettext("eyra-announcement", "kind.release_notes")
-
-  def priority_label(:normal), do: dgettext("eyra-announcement", "priority.normal")
-  def priority_label(:high), do: dgettext("eyra-announcement", "priority.high")
 end
