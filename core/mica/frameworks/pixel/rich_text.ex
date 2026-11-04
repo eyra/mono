@@ -307,23 +307,10 @@ defmodule Frameworks.Pixel.RichText do
     do: validate_length(changeset, field, max: @max_bytes, count: :bytes)
 
   @doc """
-  Cleans text read from storage, for showing it. Text saved through
-  `clean_change/2` is within `max_bytes/0`; of longer text, stored before,
-  only the first `max_bytes/0` are cleaned and shown, so a view costs no more
-  than cleaning a field of the largest size.
+  Cleans the complete stored text for display, including legacy values above
+  `max_bytes/0`. Existing content must remain readable in full. New writes are
+  bounded by `clean_change/2`, which checks both raw and cleaned sizes.
   """
   def clean_stored(nil), do: nil
-
-  def clean_stored(html) when is_binary(html) do
-    if too_large?(html),
-      do: html |> binary_part(0, @max_bytes) |> whole_characters() |> clean(),
-      else: clean(html)
-  end
-
-  defp whole_characters(text) do
-    case :unicode.characters_to_binary(text) do
-      text when is_binary(text) -> text
-      {_incomplete_or_error, valid, _rest} -> valid
-    end
-  end
+  def clean_stored(html) when is_binary(html), do: clean(html)
 end

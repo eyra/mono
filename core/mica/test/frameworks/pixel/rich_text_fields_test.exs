@@ -126,19 +126,28 @@ defmodule Frameworks.Pixel.RichTextFieldsTest do
   end
 
   describe "stored text over the limit" do
-    test "is shown up to the limit" do
-      text = "<div>" <> String.duplicate("a", RichText.max_bytes() * 2) <> "</div>"
+    @tag :legacy_full_text
+    test "preserves the final content while removing unsafe markup" do
+      text =
+        "<div>" <>
+          String.duplicate("a", RichText.max_bytes() * 2) <>
+          "</div><p>Final clause</p><script>unsafe()</script>"
+
       shown = text |> WysiwygAreaHelpers.render_wysiwyg() |> Phoenix.HTML.safe_to_string()
 
-      assert shown == "<div>" <> String.duplicate("a", RichText.max_bytes() - 5) <> "</div>"
+      assert byte_size(shown) > RichText.max_bytes()
+      assert String.ends_with?(shown, "<p>Final clause</p>")
+      refute shown =~ "unsafe"
     end
 
-    test "is cut at a character, not inside one" do
+    @tag :legacy_full_text
+    test "preserves all multibyte characters" do
       text = "a" <> String.duplicate("é", RichText.max_bytes())
       shown = RichText.clean_stored(text)
 
       assert String.valid?(shown)
-      assert shown == "a" <> String.duplicate("é", div(RichText.max_bytes() - 1, 2))
+      assert byte_size(shown) == byte_size(text)
+      assert shown == text
     end
   end
 
