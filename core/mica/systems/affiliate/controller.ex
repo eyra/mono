@@ -26,7 +26,7 @@ defmodule Systems.Affiliate.Controller do
         too_many_requests(conn)
 
       {:error, _} ->
-        Logger.error("Invalid recruit sqid=#{sqid}")
+        Logger.error("Invalid recruit sqid=#{inspect(sqid)}")
         forbidden(conn)
     end
   end
@@ -83,7 +83,10 @@ defmodule Systems.Affiliate.Controller do
         start(conn, params, numbers)
 
       {:error, error} ->
-        Logger.error("#{inspect(error)}, someone is trying to hack us, params=#{inspect(params)}")
+        Logger.error(
+          "Affiliate entry refused: #{inspect(error)}; param keys=#{inspect(param_keys(params))}"
+        )
+
         forbidden(conn)
     end
   end
@@ -125,13 +128,21 @@ defmodule Systems.Affiliate.Controller do
 
       # Invalid ID and not a tester -> forbidden
       true ->
-        Logger.error("Access denied invalid id #{inspect(params)}")
+        Logger.error(
+          "Affiliate entry refused: invalid participant id for assignment #{assignment.id}; " <>
+            "param keys=#{inspect(param_keys(params))}"
+        )
+
         forbidden(conn)
     end
   end
 
   defp start(conn, params, numbers) do
-    Logger.error("Access denied params=#{inspect(params)} numbers=#{inspect(numbers)}")
+    Logger.error(
+      "Affiliate entry refused: unexpected sqid numbers=#{inspect(numbers)}; " <>
+        "param keys=#{inspect(param_keys(params))}"
+    )
+
     forbidden(conn)
   end
 
@@ -282,6 +293,8 @@ defmodule Systems.Affiliate.Controller do
   defp get_participant(%{"p" => participant}), do: participant
 
   defp get_participant(_), do: nil
+
+  defp param_keys(params), do: params |> Map.keys() |> Enum.sort()
 
   # Only string values can be merged back into the redirect and callback URLs;
   # a map or list (from `x[y]=z` or `x[]=z`) would crash the merge.
