@@ -128,7 +128,10 @@ RUN echo "Release build info:" && \
 # =======================
 FROM debian:12-slim AS prod
 
+# ca-certificates fills the OS trust store that OTP's public_key:cacerts_get/0 reads, so
+# :httpc (tzdata's default client) can verify TLS.
 RUN apt-get update && apt-get install -y \
+      ca-certificates \
       libssl-dev \
       libncurses-dev \
       tzdata \
