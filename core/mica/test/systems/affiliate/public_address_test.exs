@@ -151,8 +151,10 @@ defmodule Systems.Affiliate.PublicAddressTest do
     end
 
     test "gives up at the deadline when the DNS lookup is slow" do
+      # Slower than the deadline but faster than OutboundUrl's 5 s default, so a
+      # lookup the deadline doesn't bound finishes and refuses the private address.
       slow_resolver = fn _host ->
-        Process.sleep(1_000)
+        Process.sleep(2_500)
         {:ok, [{10, 0, 0, 1}]}
       end
 
@@ -166,17 +168,16 @@ defmodule Systems.Affiliate.PublicAddressTest do
             Keyword.put(options, :resolver, slow_resolver)
           ])
         end do
-        {elapsed_us, result} =
-          :timer.tc(fn ->
-            Affiliate.Private.callback(
-              %{callback_url: "https://panel.example/callback"},
-              nil,
-              %{}
-            )
-          end)
+        links = links()
 
-        assert {:error, :timeout} = result
-        assert elapsed_us < 600_000
+        assert {:error, :timeout} =
+                 Affiliate.Private.callback(
+                   %{callback_url: "https://panel.example/callback"},
+                   nil,
+                   %{}
+                 )
+
+        assert links() == links, "the DNS lookup is still running"
       end
     end
 
@@ -231,5 +232,11 @@ defmodule Systems.Affiliate.PublicAddressTest do
     send(test, {:accepted, socket})
     :gen_tcp.close(socket)
     accept(listen, test)
+  end
+
+  # The DNS lookup runs in a task linked to the caller.
+  defp links do
+    {:links, links} = Process.info(self(), :links)
+    Enum.sort(links)
   end
 end

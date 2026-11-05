@@ -223,22 +223,23 @@ defmodule Frameworks.Utility.OutboundUrlTest do
     end
 
     test "gives up at the deadline when the DNS lookup is slow" do
+      # Slower than the deadline but faster than the 5 s default, so a lookup
+      # the deadline doesn't bound finishes and refuses the private address.
       resolver = fn _host ->
-        Process.sleep(1_000)
-        {:ok, [{93, 184, 215, 14}]}
+        Process.sleep(2_500)
+        {:ok, [{10, 0, 0, 1}]}
       end
 
       with_mock :hackney, request: fn _, _, _, _, _ -> {:ok, 200, []} end do
-        {elapsed_us, result} =
-          :timer.tc(fn ->
-            OutboundUrl.request(:get, "https://panel.example/", [], "",
-              deadline: 300,
-              resolver: resolver
-            )
-          end)
+        links = links()
 
-        assert {:error, :timeout} = result
-        assert elapsed_us < 600_000
+        assert {:error, :timeout} =
+                 OutboundUrl.request(:get, "https://panel.example/", [], "",
+                   deadline: 300,
+                   resolver: resolver
+                 )
+
+        assert links() == links, "the DNS lookup is still running"
         assert_not_called(:hackney.request(:_, :_, :_, :_, :_))
       end
     end
@@ -292,6 +293,12 @@ defmodule Frameworks.Utility.OutboundUrlTest do
   end
 
   defp public, do: fn _host -> {:ok, [{93, 184, 215, 14}]} end
+
+  # The DNS lookup runs in a task linked to the caller.
+  defp links do
+    {:links, links} = Process.info(self(), :links)
+    Enum.sort(links)
+  end
 
   defp unique_label, do: "outbound-url-#{System.unique_integer([:positive])}"
 
