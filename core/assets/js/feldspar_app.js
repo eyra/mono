@@ -23,12 +23,13 @@ export const FeldsparApp = {
 
     iframe.setAttribute("src", this.el.dataset.src);
 
+    const setHeight = this.setHeight.bind(this);
     const onAppLoaded = this.onAppLoaded.bind(this);
     this.messageListener = function (event) {
       if (event.source !== iframe.contentWindow || !event.data) return;
       const { action } = event.data;
       if (action === "resize") {
-        iframe.setAttribute("style", `height:${event.data.height}px`);
+        setHeight(iframe, event.data.height);
       }
       // Apps send app-loaded (since 2025-04-24) or, older ones, resize only once
       // they listen for live-init. The iframe load event can fire before that.
@@ -37,6 +38,20 @@ export const FeldsparApp = {
       }
     };
     window.addEventListener("message", this.messageListener);
+  },
+
+  // In a dialog the iframe fills the available space (min-h-full), so an app that fits can follow
+  // the window. A fixed height there would feed back: an app as high as its iframe keeps reporting it.
+  // shortcut: an app that was higher than the dialog stays at that height until the window grows.
+  setHeight(iframe, height) {
+    const available = this.el.closest(".modal-full")
+      ? this.el.getBoundingClientRect().height + 1 // reported heights are rounded differently
+      : 0;
+    if (height > available) {
+      iframe.setAttribute("style", `height:${height}px`);
+    } else {
+      iframe.removeAttribute("style");
+    }
   },
 
   destroyed() {

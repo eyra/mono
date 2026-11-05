@@ -76,7 +76,7 @@ defmodule Frameworks.Pixel.ModalView do
   # Modal presets - common aspect combinations
   # Note: :max and :full both use full width but different padding/controls
   # :max = minimal padding (p-4 lg:p-8), close button only
-  # :full = large padding (p-4 xl:p-20), toolbar
+  # :full = small padding (p-4), toolbar
   @presets %{
     max: [controls: :close, width: :max, height: :full],
     full: [controls: :tools, width: :full, height: :full],
@@ -130,7 +130,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   # Width classes
   # :max = truly full width with minimal padding (p-4 lg:p-8)
-  # :full = full width with larger padding (p-4 xl:p-20)
+  # :full = full width with small padding (p-4)
   # others = max-width with full width fallback for small screens
   @width_classes %{
     narrow: "w-full max-w-[500px]",
@@ -160,7 +160,7 @@ defmodule Frameworks.Pixel.ModalView do
   # others = standard padding
   @padding_classes %{
     max: "p-4 lg:p-8",
-    full: "p-4 xl:p-20",
+    full: "p-4",
     wide: "p-4 sm:px-10 sm:py-20",
     medium: "p-4 sm:px-10 sm:py-20",
     narrow: "px-4 sm:px-10"
@@ -338,8 +338,8 @@ defmodule Frameworks.Pixel.ModalView do
   def full(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-    <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
-      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
+    <div class={"modal-full p-4 w-full h-full"}>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full overflow-hidden #{unless Keyword.get(@modal.options, :flush), do: "pt-4 sm:pt-8"}"}>
           <%!-- HEADER --%>
           <%!-- OPTIONAL LIGHT GREY TITLE THAT DESCRIBES THE CONTEXT OF THE MODAL --%>
           <div :if={Keyword.get(@modal.element.options, :header)} class="px-4 sm:px-8">

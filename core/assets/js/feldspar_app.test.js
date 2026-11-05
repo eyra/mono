@@ -96,6 +96,33 @@ describe("FeldsparApp", () => {
       ]);
     });
 
+    describe("in a dialog", () => {
+      function mountInDialog(available) {
+        const mounted = mount();
+        const dialog = document.createElement("div");
+        dialog.className = "modal-full";
+        document.body.append(dialog);
+        dialog.append(mounted.app.el);
+        vi.spyOn(mounted.app.el, "getBoundingClientRect").mockReturnValue({
+          height: available,
+        });
+        return mounted;
+      }
+
+      it("sets no height for an app that fits, so the iframe follows the dialog", () => {
+        const { iframe } = mountInDialog(120);
+        iframe.setAttribute("style", "height:300px");
+        notify(iframe, "resize");
+        expect(iframe.getAttribute("style")).toBeNull();
+      });
+
+      it("sets the height of an app higher than the dialog", () => {
+        const { iframe } = mountInDialog(100);
+        notify(iframe, "resize");
+        expect(iframe.getAttribute("style")).toBe("height:120px");
+      });
+    });
+
     it("keeps the confirmed channel and pending donation through repeated startup signals", async () => {
       let finishUpload;
       const upload = new Promise((resolve) => {
