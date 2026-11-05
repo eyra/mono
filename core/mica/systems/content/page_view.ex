@@ -1,6 +1,8 @@
 defmodule Systems.Content.PageView do
   use MicaWeb, :live_component_fabric
 
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
+
   alias Systems.Content
 
   @impl true
@@ -17,7 +19,7 @@ defmodule Systems.Content.PageView do
       <div>
         <Text.title2 align="text-left"><%= @title %></Text.title2>
         <div class="wysiwyg">
-          <%= raw @body %>
+          <%= render_wysiwyg(@body) %>
         </div>
       </div>
     """

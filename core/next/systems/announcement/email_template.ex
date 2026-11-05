@@ -2,7 +2,7 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   @moduledoc """
   The email of a high-priority announcement, readable on its own: the title,
   the full body and a link to the announcement page, without the summary. The
-  HTML part has the body as stored; the plain-text part has the text of the body.
+  HTML part has the cleaned body; the plain-text part has its text.
 
   The link is the plain page address. Opening the email or following the link
   changes nothing in Next; only opening the page marks the announcement read.
@@ -10,6 +10,7 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   use Phoenix.Component
   use Gettext, backend: MicaWeb.Gettext
 
+  alias Frameworks.Pixel.RichText
   alias Next.Systems.Announcement
   alias Systems.Email
 
@@ -21,6 +22,7 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   @doc "The email of `announcement`, without recipients, rendered in the current locale."
   def email(%Announcement.Model{id: id, title: title, body: body}) do
     url = Announcement.Private.page_url(id)
+    body = RichText.clean_stored(body)
 
     %Email.Model{
       to: [],

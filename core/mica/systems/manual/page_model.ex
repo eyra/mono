@@ -3,6 +3,8 @@ defmodule Systems.Manual.PageModel do
   use Frameworks.Utility.Schema
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
+
   schema "manual_page" do
     field(:image, :string)
     field(:title, :string)
@@ -20,6 +22,7 @@ defmodule Systems.Manual.PageModel do
   def changeset(page, attrs \\ %{}) do
     page
     |> cast(attrs, @fields)
+    |> RichText.clean_change(:text)
   end
 
   def validate(changeset) do

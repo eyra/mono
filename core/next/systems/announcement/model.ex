@@ -1,7 +1,8 @@
 defmodule Next.Systems.Announcement.Model do
   @moduledoc """
   An announcement written by a system admin for a group of creators. The body is
-  the HTML of the rich-text editor (Trix), stored as the editor sends it.
+  the HTML of the rich-text editor (Trix), stored cleaned
+  (`Frameworks.Pixel.RichText.clean/1`).
 
   `recipient_ids` is the audience, resolved once when it is published
   (`Next.Systems.Announcement.Public.publish_announcement/4`); it does not change after that.
@@ -12,6 +13,7 @@ defmodule Next.Systems.Announcement.Model do
 
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
   alias Systems.Account.User
   alias Next.Systems.Announcement
 
@@ -51,6 +53,7 @@ defmodule Next.Systems.Announcement.Model do
   def changeset(announcement, attrs) do
     announcement
     |> cast(attrs, @fields)
+    |> RichText.clean_change(:body)
     |> update_change(:body, &blank_without_text/1)
     |> validate_required(@fields)
     |> validate_length(:title, max: 255)

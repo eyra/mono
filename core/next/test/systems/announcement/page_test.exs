@@ -48,6 +48,38 @@ defmodule Next.Systems.Announcement.PageTest do
       assert body =~ ~s|<a href="https://example.com" target="_blank">the docs</a>|
     end
 
+    test "sees a body stored before cleaning existed cleaned", %{
+      conn: conn,
+      announcement: %{id: id} = announcement
+    } do
+      announcement
+      |> Ecto.Changeset.change(
+        body:
+          ~s|<div onclick="alert(1)">Hi<script>alert(1)</script><img src=x onerror="alert(1)"></div>|
+      )
+      |> Repo.update!()
+
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+
+      body = view |> element("[data-testid=announcement-body]") |> render()
+      assert body =~ ~s|<div>Hi<img src="x"/></div>|
+      refute body =~ "alert"
+    end
+
+    test "sees a stored reference that isn't a character as U+FFFD", %{
+      conn: conn,
+      announcement: %{id: id} = announcement
+    } do
+      announcement
+      |> Ecto.Changeset.change(body: "<div>Hi &#x110000;</div>")
+      |> Repo.update!()
+
+      {:ok, view, _html} = live(conn, ~p"/announcement/#{id}")
+
+      assert view |> element("[data-testid=announcement-body]") |> render() =~
+               "<div>Hi �</div>"
+    end
+
     test "marks it read on the first opening", %{conn: conn, announcement: %{id: id}} = ctx do
       {:ok, _view, _html} = live(conn, ~p"/announcement/#{id}")
 

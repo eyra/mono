@@ -106,6 +106,19 @@ defmodule Mica.MixProject do
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
       {:hackney, "4.9.1"},
+      # Frameworks.Pixel.RichText relies on internals of these two; re-check
+      # them on a bump of either (rich_text_test.exs and
+      # rich_text_timing_test.exs cover each):
+      # - html_sanitize_ex: the scrubber's overridable `scrub/1` (its text
+      #   clauses remove its whitespace placeholders) and HtmlSanitizeEx.Traverser.
+      # - mochiweb_html: `tokens/1`, `parse_tokens/1` and `to_html/1`; the tree
+      #   builder searches all open elements for each end tag (quadratic on end
+      #   tags that close nothing), closes li/option/dd/dt implicitly and has
+      #   no end tags for its void elements; whitespace-only text is dropped
+      #   unless written as references; character references are quadratic on
+      #   bare `&` and raise above U+10FFFF.
+      {:html_sanitize_ex, "== 1.5.6"},
+      {:mochiweb, "== 3.5.0"},
       {:httpoison, "3.0.0"},
       {:image, "== 0.73.0"},
       {:jason, "1.4.5"},

@@ -168,7 +168,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
 
       assert body ==
                ~s|<div><a href="https://a.org" target="_blank">a</a> | <>
-                 ~s|<a href='https://b.org' target="_blank">b</a> | <>
+                 ~s|<a href="https://b.org" target="_blank">b</a> | <>
                  ~s|<a href="https://c.org" target="_blank">c</a> | <>
                  ~s|<a href="https://d.org" target="_blank">d</a></div>|
     end
@@ -181,7 +181,20 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       assert [%Announcement.Model{body: body}] = Repo.all(Announcement.Model)
 
       assert body ==
-               ~s|<div><a href="https://a.org" data-target="menu" target="_blank">a</a></div>|
+               ~s|<div><a href="https://a.org" target="_blank">a</a></div>|
+    end
+
+    test "markup outside Trix formatting is removed from the stored body", %{conn: conn} do
+      view = open_new(conn)
+
+      save(
+        view,
+        @attrs,
+        ~s|<div><a href="https://a.org" onclick="x()">a</a><script>alert(1)</script><span style="color:red">b</span></div>|
+      )
+
+      assert [%Announcement.Model{body: body}] = Repo.all(Announcement.Model)
+      assert body == ~s|<div><a href="https://a.org" target="_blank">a</a><span>b</span></div>|
     end
 
     test "Cancel goes back to the list without saving", %{conn: conn} do

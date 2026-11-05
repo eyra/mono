@@ -37,14 +37,37 @@ defmodule Next.Systems.Announcement.PublicTest do
                Announcement.Public.create_announcement(author, Map.delete(@attrs, :priority))
     end
 
-    test "stores the body as the editor sends it", %{author: author} do
-      body =
-        ~s'<div>Hi <a href="https://example.org" target="_blank">link</a><br><!--block-->next</div>'
+    test "stores the editor's formatting", %{author: author} do
+      body = ~s'<div><!--block-->Hi <a href="https://example.org">link</a><br>next</div>'
 
       assert {:ok, %{id: id}} =
                Announcement.Public.create_announcement(author, %{@attrs | body: body})
 
-      assert %{body: ^body} = Announcement.Public.get_announcement!(id)
+      assert %{
+               body:
+                 ~s'<div>Hi <a href="https://example.org" target="_blank">link</a><br />next</div>'
+             } = Announcement.Public.get_announcement!(id)
+    end
+
+    test "removes markup the editor doesn't make from the stored body", %{author: author} do
+      body =
+        ~s'<div onclick="alert(1)">Hi<script>alert(1)</script> ' <>
+          ~s'<a href="javascript:alert(1)">link</a><img src="x" onerror="alert(1)"></div>'
+
+      assert {:ok, %{id: id}} =
+               Announcement.Public.create_announcement(author, %{@attrs | body: body})
+
+      assert %{body: ~s'<div>Hi <a target="_blank">link</a><img src="x" /></div>'} =
+               Announcement.Public.get_announcement!(id)
+    end
+
+    test "a body with only markup the editor doesn't make is empty", %{author: author} do
+      body = ~s'<div><iframe>Hidden text</iframe></div>'
+
+      assert {:error, changeset} =
+               Announcement.Public.create_announcement(author, %{@attrs | body: body})
+
+      assert %{body: ["can't be blank"]} = errors_on(changeset)
     end
 
     test "requires kind, title, summary and body", %{author: author} do
@@ -146,7 +169,7 @@ defmodule Next.Systems.Announcement.PublicTest do
 
       assert %{
                title: "Fixed title",
-               body: ~s'<div>Fixed <a href="https://example.org">link</a></div>'
+               body: ~s'<div>Fixed <a href="https://example.org" target="_blank">link</a></div>'
              } =
                Announcement.Public.get_announcement!(announcement.id)
     end
