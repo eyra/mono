@@ -174,3 +174,19 @@ msgstr "Lamentablemente, todos los cupos para este estudio ya están ocupados. �
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "Este estudio está completo"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr ""

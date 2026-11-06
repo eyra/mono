@@ -174,3 +174,19 @@ msgstr "Leider sind alle Plätze für diese Studie bereits vergeben. Bleib dran 
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "Diese Studie ist ausgebucht"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr ""
