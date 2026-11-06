@@ -440,7 +440,7 @@ defmodule Systems.Advert.Public do
 
   def pool_visibility(%Advert.Model{status: :online} = advert) do
     case validate_open(advert) do
-      :ok -> :visible
+      :ok -> visible_status(advert)
       {:error, :no_open_spots} -> :filled
       {:error, :not_funded} -> :not_funded
       {:error, :not_released} -> nil
@@ -448,6 +448,11 @@ defmodule Systems.Advert.Public do
   end
 
   def pool_visibility(%Advert.Model{}), do: nil
+
+  defp visible_status(%{assignment: %{status: status}}) when status in [:online, :idle],
+    do: :visible
+
+  defp visible_status(_advert), do: :assignment_unpublished
 
   defp validate_member(%{assignment: assignment}, user) do
     if Assignment.Public.member?(assignment, user) do

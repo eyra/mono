@@ -58,4 +58,38 @@ defmodule Systems.Advert.ModelTest do
       assert %Ecto.Changeset{} = Advert.Public.change(advert)
     end
   end
+
+  describe "Leaf.info" do
+    alias Systems.Fund
+
+    setup do
+      currency = Fund.Factories.create_currency("info_currency", :legal, "ƒ", 2)
+      user = Mica.Factories.insert!(:member)
+      {:ok, currency: currency, user: user}
+    end
+
+    defp info_for_assignment_status(%{currency: currency, user: user}, status) do
+      fund = Fund.Factories.create_fund("info_#{status}", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund)
+      advert.assignment |> Ecto.Changeset.change(status: status) |> Mica.Repo.update!()
+      advert |> Ecto.Changeset.change(status: :online) |> Mica.Repo.update!()
+
+      advert.id
+      |> Advert.Public.get!(Advert.Model.preload_graph(:down))
+      |> Frameworks.Concept.Leaf.info("UTC")
+    end
+
+    test "labels an online advert whose assignment is not published", context do
+      assert info_for_assignment_status(context, :concept) ==
+               ["test_pool", "Visible in Pool – study not published"]
+    end
+
+    test "labels an online advert with a published assignment as visible", context do
+      assert info_for_assignment_status(context, :online) == ["test_pool", "Visible in Pool"]
+    end
+
+    test "labels an online advert with an idle assignment as visible", context do
+      assert info_for_assignment_status(context, :idle) == ["test_pool", "Visible in Pool"]
+    end
+  end
 end
