@@ -25,7 +25,8 @@ defmodule Systems.Advert.SettingsView do
        ) do
     assign(socket,
       pool_visibility: Advert.Public.pool_visibility(advert),
-      manage_participants_path: ~p"/assignment/#{assignment_id}/content?tab=#{:participants}"
+      manage_participants_path: ~p"/assignment/#{assignment_id}/content?tab=#{:participants}",
+      assignment_path: ~p"/assignment/#{assignment_id}/content"
     )
   end
 
@@ -61,6 +62,7 @@ defmodule Systems.Advert.SettingsView do
             :if={@pool_visibility != nil}
             status={@pool_visibility}
             manage_participants_path={@manage_participants_path}
+            assignment_path={@assignment_path}
           />
           <Text.title2><%= dgettext("eyra-advert", "settings.title") %></Text.title2>
           <.spacing value="M" />
@@ -78,6 +80,7 @@ defmodule Systems.Advert.SettingsView do
 
   attr(:status, :atom, required: true)
   attr(:manage_participants_path, :string, default: nil)
+  attr(:assignment_path, :string, default: nil)
 
   defp pool_visibility_banner(%{status: :visible} = assigns) do
     ~H"""
@@ -118,6 +121,26 @@ defmodule Systems.Advert.SettingsView do
         button={%{
           action: %{type: :http_get, to: @manage_participants_path},
           face: %{type: :primary, label: dgettext("eyra-advert", "pool.visibility.fund.button")}
+        }}
+      />
+      <.spacing value="M" />
+    </div>
+    """
+  end
+
+  defp pool_visibility_banner(%{status: :assignment_unpublished} = assigns) do
+    ~H"""
+    <div data-testid="advert-assignment-unpublished-banner">
+      <AlertBanner.action
+        title={dgettext("eyra-advert", "pool.visibility.assignment_unpublished.banner.title")}
+        subtitle={dgettext("eyra-advert", "pool.visibility.assignment_unpublished.banner.subtitle")}
+        button={%{
+          action: %{type: :http_get, to: @assignment_path},
+          face: %{
+            type: :primary,
+            label: dgettext("eyra-advert", "pool.visibility.assignment_unpublished.button")
+          },
+          testid: "advert-publish-assignment-button"
         }}
       />
       <.spacing value="M" />
