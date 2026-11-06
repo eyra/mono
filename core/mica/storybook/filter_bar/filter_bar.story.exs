@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.FilterBar.FilterBar do
+defmodule Frameworks.Storybook.Pixel.FilterBar.FilterBar do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.FilterBar.filter_bar/1

@@ -41,7 +41,7 @@ sequenceDiagram
 sequenceDiagram
     Caller-)Public: update reference file (url)
     Public ->> Content.FileModel: change url
-    Public ->> CoreWeb.Repo: update (content file)
+    Public ->> MicaWeb.Repo: update (content file)
 ```
 
 ### Processing Reference File
@@ -70,6 +70,6 @@ sequenceDiagram
 sequenceDiagram
     Caller->>Public: archive reference file (id)
     Public->>ReferenceFileModel: set status :archived
-    Public ->> CoreWeb.Repo: update (reference file)
+    Public ->> MicaWeb.Repo: update (reference file)
 
 ```

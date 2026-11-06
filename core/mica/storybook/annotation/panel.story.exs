@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Annotation.Panel do
+defmodule Frameworks.Storybook.Pixel.Annotation.Panel do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Annotation.panel/1

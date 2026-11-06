@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.SecondaryLiveView do
+defmodule Frameworks.Storybook.Pixel.Button.SecondaryLiveView do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.secondary_live_view/1

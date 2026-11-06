@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Back do
+defmodule Frameworks.Storybook.Pixel.Button.Back do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.back/1

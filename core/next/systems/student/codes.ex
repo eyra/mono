@@ -1,4 +1,4 @@
-defmodule Systems.Student.Codes do
+defmodule Next.Systems.Student.Codes do
   @moduledoc """
     Defines study program codes used as user feature for vu students.
   """
@@ -106,11 +106,11 @@ defmodule Systems.Student.Codes do
   end
 
   def translate(value) do
-    Gettext.dgettext(CoreWeb.Gettext, "eyra-enums", "study_pogram_codes.#{value}")
+    Gettext.dgettext(MicaWeb.Gettext, "eyra-enums", "study_pogram_codes.#{value}")
   end
 
   def text(code) when is_atom(code) do
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
 
     code
     |> Atom.to_string()

@@ -12,24 +12,24 @@ defmodule Systems.Account.Page do
   with two or more (PANL participants get a Features tab). The Profile
   tab owns the Sign-out action.
   """
-  use CoreWeb, :routed_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :routed_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Content.Html
 
-  alias Core
+  alias Mica
   alias Frameworks.Pixel.Hero
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
   on_mount({Frameworks.GreenLight.LiveHook, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.RemoteIp, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Timezone, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Locale, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Uri, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.RemoteIp, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Timezone, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Locale, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Menus, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Menus, __MODULE__})
 
   # Defer menus_config to the page builder so it can pick the menu set that
   # matches the layout (website for participants, workspace for creators).
@@ -49,7 +49,7 @@ defmodule Systems.Account.Page do
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
-    Core.Repo.preload(user, [:features, :profile])
+    Mica.Repo.preload(user, [:features, :profile])
   end
 
   @impl true
@@ -58,8 +58,14 @@ defmodule Systems.Account.Page do
 
     initial_item =
       case Map.get(params, "tab") do
-        nil -> nil
-        tab -> String.to_existing_atom(tab)
+        nil ->
+          nil
+
+        tab ->
+          Enum.find(
+            Systems.Account.PageBuilder.tab_keys(socket.assigns.model),
+            &(to_string(&1) == tab)
+          )
       end
 
     {
@@ -67,7 +73,8 @@ defmodule Systems.Account.Page do
       socket
       |> assign(
         tabbar_id: tabbar_id,
-        initial_item: initial_item
+        initial_item: initial_item,
+        external_navigation?: params["navigation"] == "external"
       )
     }
   end
@@ -86,7 +93,7 @@ defmodule Systems.Account.Page do
     <.live_stripped menus={@menus} modal={@modal} socket={@socket}>
       <.adaptable_layout
         socket={@socket}
-        items={@vm.items}
+        items={display_items(@vm.items, @initial_item, @external_navigation?)}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
         area_type={:sheet}
@@ -105,7 +112,7 @@ defmodule Systems.Account.Page do
       </:top_bar>
       <.adaptable_layout
         socket={@socket}
-        items={@vm.items}
+        items={display_items(@vm.items, @initial_item, @external_navigation?)}
         tabbar_id={@tabbar_id}
         initial_item={@initial_item}
         area_type={:sheet}
@@ -113,4 +120,15 @@ defmodule Systems.Account.Page do
     </.live_workspace>
     """
   end
+
+  # A shell can own the tab controls while this page supplies one existing tab.
+  # This is an explicit presentation mode, independent of a client platform.
+  defp display_items(items, selected, true) do
+    case Enum.find(items, &(&1.id == selected)) do
+      nil -> Enum.take(items, 1)
+      item -> [item]
+    end
+  end
+
+  defp display_items(items, _selected, false), do: items
 end

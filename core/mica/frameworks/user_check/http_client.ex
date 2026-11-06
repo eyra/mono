@@ -5,7 +5,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
   Calls `GET https://api.usercheck.com/email/{email}` with Bearer auth.
   Configured via application config:
 
-      config :core, Frameworks.UserCheck,
+      config :mica, Frameworks.UserCheck,
         client: Frameworks.UserCheck.HTTPClient,
         api_key: "your_api_key",
         base_url: "https://api.usercheck.com",
@@ -96,7 +96,7 @@ defmodule Frameworks.UserCheck.HTTPClient do
   defp base_url, do: config(:base_url, "https://api.usercheck.com")
 
   defp config(key, default \\ nil) do
-    Core.Env.get(Frameworks.UserCheck, [])
+    Mica.Env.get(Frameworks.UserCheck, [])
     |> Keyword.get(key, default)
   end
 end

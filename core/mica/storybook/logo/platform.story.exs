@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Logo.Platform do
+defmodule Frameworks.Storybook.Pixel.Logo.Platform do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Logo.platform/1

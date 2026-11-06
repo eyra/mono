@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.SetupExporterTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Manual
@@ -21,9 +21,9 @@ defmodule Systems.Assignment.SetupExporterTest do
   end
 
   defp put_max_file_size(bytes) do
-    original = Application.fetch_env!(:core, CoreWeb.FileUploader)
-    on_exit(fn -> Application.put_env(:core, CoreWeb.FileUploader, original) end)
-    Application.put_env(:core, CoreWeb.FileUploader, Keyword.put(original, :max_file_size, bytes))
+    original = Application.fetch_env!(:mica, MicaWeb.FileUploader)
+    on_exit(fn -> Application.put_env(:mica, MicaWeb.FileUploader, original) end)
+    Application.put_env(:mica, MicaWeb.FileUploader, Keyword.put(original, :max_file_size, bytes))
   end
 
   # A logo in our S3 content storage, served by the Bypass server.
@@ -61,10 +61,10 @@ defmodule Systems.Assignment.SetupExporterTest do
   end
 
   defp use_s3_content(public_url \\ "https://cdn.test") do
-    original = Application.fetch_env!(:core, :content)
-    on_exit(fn -> Application.put_env(:core, :content, original) end)
+    original = Application.fetch_env!(:mica, :content)
+    on_exit(fn -> Application.put_env(:mica, :content, original) end)
 
-    Application.put_env(:core, :content,
+    Application.put_env(:mica, :content,
       backend: Systems.Content.S3,
       public_url: public_url,
       prefix: "content"
@@ -447,7 +447,7 @@ defmodule Systems.Assignment.SetupExporterTest do
           profile: %Account.UserProfileModel{fullname: "Ada Lovelace"}
         })
 
-      :ok = Core.Authorization.assign_role(owner, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(owner, assignment, :owner)
 
       crate = crate(assignment)
       root = entity(crate, "./")
@@ -474,7 +474,7 @@ defmodule Systems.Assignment.SetupExporterTest do
       assignment = Factories.insert!(:assignment, %{info: nil})
       owner = Factories.insert!(:member, %{email: "ada@example.com"})
 
-      :ok = Core.Authorization.assign_role(owner, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(owner, assignment, :owner)
 
       crate = crate(assignment)
 

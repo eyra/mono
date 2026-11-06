@@ -1,5 +1,5 @@
 defmodule Systems.Account.OnboardingPageTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
@@ -49,6 +49,20 @@ defmodule Systems.Account.OnboardingPageTest do
     end
   end
 
+  describe "return_to" do
+    test "continues to a same-site return_to", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/user/onboarding?return_to=%2Fpool%2Fpanl%2Fjoin")
+
+      assert {:error, {:live_redirect, %{to: "/pool/panl/join"}}} = render_click(view, "skip")
+    end
+
+    test "return_to accepts only same-site paths", %{conn: conn} do
+      {:ok, view, _html} = live(conn, "/user/onboarding?return_to=%2F%2Fexample.org%2Fx")
+
+      assert {:error, {:live_redirect, %{to: "/"}}} = render_click(view, "skip")
+    end
+  end
+
   describe "unconfirmed user" do
     test "has profile and activate_account steps", %{conn: conn} do
       unconfirmed_user = Factories.insert!(:member, %{confirmed_at: nil})
@@ -88,7 +102,7 @@ defmodule Systems.Account.OnboardingPageTest do
           creator: true,
           verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
-        |> Core.Repo.insert()
+        |> Mica.Repo.insert()
 
       {:ok, conn: logged_in_conn, user: _user} = login(user, %{conn: conn})
       {:ok, view, _html} = live(logged_in_conn, "/user/onboarding")

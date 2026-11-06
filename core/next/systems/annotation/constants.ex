@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.Constants do
+defmodule Next.Systems.Annotation.Constants do
   @moduledoc """
   This module contains the Annotation constants.
   """
@@ -15,8 +15,8 @@ defmodule Systems.Annotation.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Ontology.Constants
-      alias Systems.Ontology.Constants
+      require Next.Systems.Ontology.Constants
+      alias Next.Systems.Ontology.Constants
 
       @definition Constants.definition()
       @subject Constants.subject()

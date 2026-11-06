@@ -1,4 +1,4 @@
 defmodule Systems.Pool.SubmissionStatus do
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:submission_status, [:idle, :submitted, :accepted, :completed]}
 end

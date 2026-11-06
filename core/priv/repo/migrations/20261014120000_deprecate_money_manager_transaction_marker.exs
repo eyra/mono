@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.DeprecateMoneyManagerTransactionMarker do
+defmodule Mica.Repo.Migrations.DeprecateMoneyManagerTransactionMarker do
   use Ecto.Migration
 
   # Systems.Banking has been retired. Following the deferred-drop pattern

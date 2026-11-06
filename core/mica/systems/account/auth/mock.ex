@@ -46,11 +46,11 @@ end
 
 defmodule Systems.Account.Auth.Mock.CallbackController do
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
 
   def authenticate(conn, params) do
@@ -69,7 +69,12 @@ defmodule Systems.Account.Auth.Mock.CallbackController do
 
           conn
           |> Systems.Account.UserAuth.sign_out_current_user()
-          |> Systems.Account.UserAuth.log_in_user(user, true)
+          |> Systems.Account.SignInHandoff.sign_in(
+            :mock,
+            user,
+            true,
+            &Systems.Account.UserAuth.log_in_user/3
+          )
 
         user ->
           conn
@@ -85,12 +90,12 @@ end
 
 defmodule Systems.Account.Auth.Mock.ResetController do
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Ecto.Query
   import Plug.Conn
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.FeaturesModel
   alias Systems.Account.User
 
@@ -100,7 +105,7 @@ defmodule Systems.Account.Auth.Mock.ResetController do
 
       conn
       |> Systems.Account.UserAuth.sign_out_current_user()
-      |> redirect(to: ~p"/user/auth/mock")
+      |> redirect(to: ~p"/auth/mock")
     else
       conn |> send_resp(404, "Not found") |> halt()
     end

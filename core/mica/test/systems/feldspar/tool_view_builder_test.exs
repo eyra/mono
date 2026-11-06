@@ -1,5 +1,5 @@
 defmodule Systems.Feldspar.ToolViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Feldspar
 

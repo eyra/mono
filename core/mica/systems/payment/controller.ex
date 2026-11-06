@@ -1,5 +1,5 @@
 defmodule Systems.Payment.Controller do
-  use CoreWeb, {:controller, [formats: [:json]]}
+  use MicaWeb, {:controller, [formats: [:json]]}
 
   require Logger
 

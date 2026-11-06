@@ -1,9 +1,9 @@
-defmodule Storybook.Systems.Zircon.Screening.HTML.CriterionCell do
+defmodule Next.Storybook.Systems.Zircon.Screening.HTML.CriterionCell do
   use PhoenixStorybook.Story, :component
 
   import Phoenix.Component, only: [sigil_H: 2]
 
-  def function, do: &Systems.Zircon.Screening.HTML.criterion_cell/1
+  def function, do: &Next.Systems.Zircon.Screening.HTML.criterion_cell/1
 
   def variations do
     [

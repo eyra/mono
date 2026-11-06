@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Icon.GenericBody do
+defmodule Frameworks.Storybook.Pixel.Icon.GenericBody do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Icon.generic_body/1

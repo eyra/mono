@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
+defmodule MicaWeb.Features.ProjectItemDataDonationDeleteTest do
   @moduledoc """
   Feature test for deleting a data donation project item.
 
@@ -6,7 +6,7 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
 
   Issue: #9511260407
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   # CSS selector for main cards (action buttons use {event}__action__card_{id} pattern)
   @card_selector "[data-testid^='card_']"
@@ -76,10 +76,15 @@ defmodule CoreWeb.Features.ProjectItemDataDonationDeleteTest do
     |> assert_has(Query.css("[id='crew_page']"))
 
     # Step 7: Researcher navigates back to project and deletes the assignment
-    # First navigate to project list and click into the project node
+    # First navigate to project list and click into the project node.
+    # LiveView's latency simulator holds back the /project LiveView's
+    # connection, so a card click before it connects is lost on every run,
+    # not only under load.
     researcher
+    |> execute_script("window.liveSocket.enableLatencySim(1000)")
     |> visit("/project")
-    |> assert_has(Query.css(@card_selector, count: 1))
+    |> assert_connected(@card_selector, count: 1)
+    |> execute_script("window.liveSocket.disableLatencySim()")
     |> click(Query.css(@card_selector))
     |> assert_path_changed_from("/project")
 

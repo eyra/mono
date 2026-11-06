@@ -1,5 +1,6 @@
 defmodule Next.NovaSnapshotTest do
-  use ExUnit.Case, async: true
+  # runtime.exs replaces the process environment while each env fixture is evaluated.
+  use ExUnit.Case, async: false
 
   alias Mix.Tasks.Nova.Snapshot
 

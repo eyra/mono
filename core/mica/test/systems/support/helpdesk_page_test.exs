@@ -1,5 +1,5 @@
 defmodule Systems.Support.HelpdeskPageTest do
-  use CoreWeb.ConnCase, async: true
+  use MicaWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   alias Systems.Support

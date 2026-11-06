@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.Dropdown do
+defmodule Frameworks.Storybook.Pixel.Form.Dropdown do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.dropdown/1

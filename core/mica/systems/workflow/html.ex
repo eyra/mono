@@ -1,10 +1,10 @@
 defmodule Systems.Workflow.HTML do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Align
   alias Frameworks.Pixel.Logo
 
-  import CoreWeb.UI.StepIndicator
+  import MicaWeb.UI.StepIndicator
 
   attr(:id, :any, required: true)
   attr(:title, :map, required: true)

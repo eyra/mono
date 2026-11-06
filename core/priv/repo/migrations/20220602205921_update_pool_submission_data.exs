@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
+defmodule Mica.Repo.Migrations.UpdatePoolSubmissionData do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -13,7 +13,7 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
   defp migrate_submissions() do
     tools =
       query(
-        Core.Repo,
+        Mica.Repo,
         "
     SELECT ps.id, ps.status, cr.id
     FROM pool_submissions as ps
@@ -46,7 +46,7 @@ defmodule Core.Repo.Migrations.UpdatePoolSubmissionData do
 
   defp migrate_submission([id, "idle", crew_id]) do
     {:ok, %{rows: [[count]]}} =
-      query(Core.Repo, "SELECT count(*) FROM crew_tasks where crew_id = #{crew_id};")
+      query(Mica.Repo, "SELECT count(*) FROM crew_tasks where crew_id = #{crew_id};")
 
     if count > 0 do
       update(:pool_submissions, id, :submitted_at, now())

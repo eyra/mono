@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.HttpDelete do
+defmodule Frameworks.Storybook.Pixel.Button.Action.HttpDelete do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.http_delete/1

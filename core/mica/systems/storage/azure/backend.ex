@@ -1,6 +1,9 @@
 defmodule Systems.Storage.Azure.Backend do
   @behaviour Systems.Storage.Backend
 
+  alias Frameworks.Utility.OutboundUrl
+  alias Systems.Storage.Azure
+
   require Logger
 
   @impl true
@@ -18,16 +21,16 @@ defmodule Systems.Storage.Azure.Backend do
 
     case url(endpoint, filename) do
       {:ok, url} ->
-        HTTPoison.put(url, data, headers)
+        OutboundUrl.request(:put, url, headers, data, [])
         |> case do
-          {:ok, %{status_code: 201}} ->
+          {:ok, 201, _headers, _body} ->
             :ok
 
-          {_, %{status_code: status_code, body: body}} ->
+          {:ok, status_code, _headers, body} ->
             {:error, "status_code=#{status_code},message=#{body}"}
 
-          {_, response} ->
-            {:error, response}
+          {:error, reason} ->
+            {:error, reason}
         end
 
       {:error, error} ->
@@ -57,19 +60,25 @@ defmodule Systems.Storage.Azure.Backend do
   @impl true
   def filename(identifier), do: Systems.Storage.Filename.generate(identifier)
 
-  defp url(
-         %{
-           "account_name" => storage_account_name,
-           "container" => container,
-           "sas_token" => sas_token
-         },
-         path
-       ) do
-    {:ok,
-     "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
+  def url(
+        %{
+          "account_name" => storage_account_name,
+          "container" => container,
+          "sas_token" => sas_token
+        },
+        filename
+      ) do
+    if Azure.EndpointModel.valid_account_name?(storage_account_name) do
+      path = Systems.Storage.Filename.url_segment(filename)
+
+      {:ok,
+       "https://#{storage_account_name}.blob.core.windows.net/#{container}/#{path}#{sas_token}"}
+    else
+      {:error, "Unable to deliver donation: invalid Azure account name"}
+    end
   end
 
-  defp url(_, _) do
+  def url(_, _) do
     {:error, "Unable to deliver donation: invalid Azure config"}
   end
 end

@@ -1,5 +1,5 @@
 defmodule Systems.Storage.BuiltIn.EndpointForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   require Logger
 

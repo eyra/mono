@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Navigation.ActionBar do
+defmodule Frameworks.Storybook.Pixel.Navigation.ActionBar do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Navigation.action_bar/1

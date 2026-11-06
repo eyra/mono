@@ -1,5 +1,5 @@
 defmodule Systems.Userflow.ProgressModelTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Userflow
 
@@ -26,7 +26,7 @@ defmodule Systems.Userflow.ProgressModelTest do
 
   describe "changeset/2" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.insert(:userflow)
       step = Userflow.Factories.insert(:step, %{userflow: userflow})
       {:ok, user: user, step: step}
@@ -67,7 +67,7 @@ defmodule Systems.Userflow.ProgressModelTest do
 
   describe "mark_visited/1" do
     setup do
-      user = Core.Factories.insert!(:member)
+      user = Mica.Factories.insert!(:member)
       userflow = Userflow.Factories.insert(:userflow)
       step = Userflow.Factories.insert(:step, %{userflow: userflow})
 

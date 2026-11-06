@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Selector.Item.Radio do
+defmodule Frameworks.Storybook.Pixel.Selector.Item.Radio do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Selector.Item.radio/1

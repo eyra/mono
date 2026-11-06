@@ -1,11 +1,11 @@
-defmodule Systems.Ontology.Queries do
+defmodule Next.Systems.Ontology.Queries do
   import Ecto.Query
   require Frameworks.Utility.Query
 
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Core.Authentication
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Ontology
 
   # CONCEPT
   def concept_query() do

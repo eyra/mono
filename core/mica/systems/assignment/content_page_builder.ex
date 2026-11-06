@@ -1,20 +1,20 @@
 defmodule Systems.Assignment.ContentPageBuilder do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
   require Logger
   use Systems.Content.PageBuilder
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Concept
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Monitor
   alias Systems.Pool
   alias Systems.Project
   alias Systems.Workflow
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
 
   @moduledoc """
     Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
@@ -329,7 +329,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          %{current_user: user}
        ) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
+      MicaWeb.Live.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
         tool: zircon_screening_tool,
         user: user,
         title: title
@@ -366,7 +366,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
       Repo.preload(zircon_screening_tool, annotations: Annotation.Model.preload_graph(:down))
 
     element =
-      CoreWeb.Live.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
+      MicaWeb.Live.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
         user: user,
         title: title
@@ -427,7 +427,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          _assigns
        ) do
     element =
-      CoreWeb.Live.Element.prepare_live_view(
+      MicaWeb.Live.Element.prepare_live_view(
         "contributions",
         Assignment.ContributionsView,
         live_context:

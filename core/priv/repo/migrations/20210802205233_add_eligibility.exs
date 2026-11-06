@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddEligibility do
+defmodule Mica.Repo.Migrations.AddEligibility do
   use Ecto.Migration
 
   def change do

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.FileSelector.FileSelector do
+defmodule Frameworks.Storybook.Pixel.FileSelector.FileSelector do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.FileSelector.file_selector/1

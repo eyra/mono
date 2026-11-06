@@ -17,8 +17,10 @@ defmodule Mix.Tasks.Storybook.GenTest do
     test "writes one story per function component, in a flat folder per module", %{tmp_dir: dir} do
       gen(dir)
 
-      assert File.read!(Path.join(dir, "button/dynamic.story.exs")) =~
-               "def function, do: &Frameworks.Pixel.Button.dynamic/1"
+      story = File.read!(Path.join(dir, "button/dynamic.story.exs"))
+      assert story =~ "def function, do: &Frameworks.Pixel.Button.dynamic/1"
+      # In the component's root namespace, which the boundary check requires of next/.
+      assert story =~ "defmodule Frameworks.Storybook.Pixel.Button.Dynamic do"
 
       assert File.exists?(Path.join(dir, "button.face/label.story.exs"))
     end

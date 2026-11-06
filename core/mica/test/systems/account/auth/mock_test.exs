@@ -1,9 +1,9 @@
 defmodule Systems.Account.Auth.MockTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
   import Phoenix.LiveViewTest
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.FeaturesModel
   alias Systems.Account.User
 
@@ -11,7 +11,7 @@ defmodule Systems.Account.Auth.MockTest do
     isolate_signals()
 
     original_satellites =
-      Application.get_env(:core, :account, []) |> Keyword.get(:auth_methods, %{})
+      Application.get_env(:mica, :account, []) |> Keyword.get(:auth_methods, %{})
 
     on_exit(fn ->
       put_auth_methods(original_satellites)
@@ -21,8 +21,8 @@ defmodule Systems.Account.Auth.MockTest do
   end
 
   defp put_auth_methods(satellites) do
-    account = Application.get_env(:core, :account, [])
-    Application.put_env(:core, :account, Keyword.put(account, :auth_methods, satellites))
+    account = Application.get_env(:mica, :account, [])
+    Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, satellites))
   end
 
   defp enable_mock(), do: put_auth_methods(%{mock: %{provider: true, satellite: false}})
@@ -115,15 +115,24 @@ defmodule Systems.Account.Auth.MockTest do
   end
 
   describe "ResetController" do
-    test "deletes mock user and redirects to /user/auth/mock", %{conn: conn} do
+    test "deletes mock user and redirects to /auth/mock", %{conn: conn} do
       enable_mock()
       user = insert_mock_user()
       assert Repo.get(User, user.id)
 
       conn = conn |> get("/user/auth/mock/reset")
 
-      assert redirected_to(conn) == "/user/auth/mock"
+      assert redirected_to(conn) == "/auth/mock"
       refute Repo.get(User, user.id)
+    end
+
+    test "redirects to the mock sign-in page", %{conn: conn} do
+      enable_mock()
+
+      conn = conn |> get("/user/auth/mock/reset")
+
+      {:ok, view, _html} = live(recycle(conn), redirected_to(conn))
+      assert has_element?(view, "[data-testid='mock-auth-signin-page']")
     end
 
     test "deletes associated user_features", %{conn: conn} do
@@ -141,7 +150,7 @@ defmodule Systems.Account.Auth.MockTest do
       assert is_nil(Repo.get_by(User, email: "example@mock.com"))
 
       conn = conn |> get("/user/auth/mock/reset")
-      assert redirected_to(conn) == "/user/auth/mock"
+      assert redirected_to(conn) == "/auth/mock"
     end
 
     test "returns 404 when not configured", %{conn: conn} do

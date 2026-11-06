@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Grid.Absolute do
+defmodule Frameworks.Storybook.Pixel.Grid.Absolute do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Grid.absolute/1

@@ -5,12 +5,13 @@
     "Systems.Admin.Switch",
     "Systems.Advert.Switch",
     "Systems.Alliance.Switch",
+    "Next.Systems.Announcement.Switch",
     "Systems.Assignment.Switch",
     "Systems.Consent.Switch",
     "Systems.Crew.Switch",
     "Systems.Desktop.Switch",
     "Systems.Feldspar.Switch",
-    "Systems.Graphite.Switch",
+    "Next.Systems.Graphite.Switch",
     "Systems.Home.Switch",
     "Systems.Instruction.Switch",
     "Systems.Manual.Switch",
@@ -20,9 +21,10 @@
     "Systems.Pool.Switch",
     "Systems.Project.Switch",
     "Systems.Storage.Switch",
-    "Systems.Student.Switch",
+    "Next.Systems.Student.Switch",
     "Systems.Workflow.Switch",
-    "Systems.Zircon.Switch"
+    "Next.Systems.Zircon.Switch"
   ],
-  notifiers: [Systems.Assignment.Notify]
+  notifiers: [Systems.Assignment.Notify],
+  notify_channels: %{email: Systems.Notify.Channel.Email, na: Systems.Notify.Channel.NA}
 ]

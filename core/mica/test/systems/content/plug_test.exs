@@ -6,12 +6,12 @@ defmodule Systems.Content.PlugTest do
   alias Systems.Content.Plug
 
   setup do
-    upload_path = Application.get_env(:core, :upload_path)
-    backend = Application.fetch_env!(:core, :content) |> Access.fetch!(:backend)
+    upload_path = Application.get_env(:mica, :upload_path)
+    backend = Application.fetch_env!(:mica, :content) |> Access.fetch!(:backend)
 
     on_exit(fn ->
-      Application.put_env(:core, :upload_path, upload_path)
-      Application.put_env(:core, :content, backend: backend)
+      Application.put_env(:mica, :upload_path, upload_path)
+      Application.put_env(:mica, :content, backend: backend)
     end)
 
     folder_name = "temp_#{:crypto.strong_rand_bytes(16) |> Base.encode16()}"
@@ -27,13 +27,13 @@ defmodule Systems.Content.PlugTest do
     end)
 
     Application.put_env(
-      :core,
+      :mica,
       :upload_path,
       tmp_dir
     )
 
     Application.put_env(
-      :core,
+      :mica,
       :content,
       backend: Systems.Content.LocalFS
     )
@@ -52,7 +52,7 @@ defmodule Systems.Content.PlugTest do
   end
 
   test "call with other backends doesn't serve static content" do
-    Application.put_env(:core, :content, backend: Systems.Content.FakeBackend)
+    Application.put_env(:mica, :content, backend: Systems.Content.FakeBackend)
 
     opts = Plug.init(at: "/uploads")
     conn = Plug.call(conn(:get, "/uploads/plug_test.txt"), opts)

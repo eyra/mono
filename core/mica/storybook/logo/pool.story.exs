@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Logo.Pool do
+defmodule Frameworks.Storybook.Pixel.Logo.Pool do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Logo.pool/1

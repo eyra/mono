@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ViewTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
 
   import Phoenix.LiveViewTest
 
@@ -54,7 +54,7 @@ defmodule Systems.Manual.ViewTest do
       third_page =
         third_page
         |> Ecto.Changeset.change(title: "Third page")
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       context =
         LiveContext.new(%{

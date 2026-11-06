@@ -1,9 +1,9 @@
-defmodule Systems.Paper.ReferenceFilePaperAssoc do
+defmodule Next.Systems.Paper.ReferenceFilePaperAssoc do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_reference_file_paper" do
     belongs_to(:reference_file, Paper.ReferenceFileModel)

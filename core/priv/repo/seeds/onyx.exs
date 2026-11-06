@@ -1,6 +1,6 @@
 defmodule Repo.Seeds.OnyxPrimitives do
   @moduledoc """
-  Core primitive concepts for the Onyx knowledge system.
+  Mica primitive concepts for the Onyx knowledge system.
 
   This module defines the fundamental primitives that form the foundation
   of all knowledge representation:
@@ -12,14 +12,14 @@ defmodule Repo.Seeds.OnyxPrimitives do
   basic knowledge operations.
   """
 
-  use Systems.Ontology.Constants
+  use Next.Systems.Ontology.Constants
 
   require Logger
-  require Systems.Onyx.SeedBase
-  import Systems.Onyx.SeedBase
-  import Systems.Ontology.Public
+  require Next.Systems.Onyx.SeedBase
+  import Next.Systems.Onyx.SeedBase
+  import Next.Systems.Ontology.Public
 
-  alias Core.Authentication
+  alias Mica.Authentication
 
   def run do
     # System actor / entity

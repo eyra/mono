@@ -1,9 +1,9 @@
-defmodule Systems.Ontology.ConceptModel do
+defmodule Next.Systems.Ontology.ConceptModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
   import Ecto.Changeset
 
-  alias Core.Authentication
+  alias Mica.Authentication
 
   schema "ontology_concept" do
     field(:phrase, :string)
@@ -41,7 +41,7 @@ defmodule Systems.Ontology.ConceptModel do
 
   def preload_graph(:entity), do: [entity: []]
 
-  defimpl Systems.Ontology.Element do
+  defimpl Next.Systems.Ontology.Element do
     def flatten(%{} = concept) do
       [concept]
     end

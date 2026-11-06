@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.UpdateDataDonation do
+defmodule Mica.Repo.Migrations.UpdateDataDonation do
   use Ecto.Migration
 
   def up do

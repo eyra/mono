@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Square.Container do
+defmodule Frameworks.Storybook.Pixel.Square.Container do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Square.container/1

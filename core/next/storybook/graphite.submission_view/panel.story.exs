@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Graphite.SubmissionView.Panel do
+defmodule Next.Storybook.Systems.Graphite.SubmissionView.Panel do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Graphite.SubmissionView.panel/1
+  def function, do: &Next.Systems.Graphite.SubmissionView.panel/1
 
   def variations do
     [

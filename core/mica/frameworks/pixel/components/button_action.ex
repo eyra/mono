@@ -19,7 +19,7 @@ defmodule Frameworks.Pixel.Button.Action do
   <a ... data-testid={@testid}>
   ```
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   slot(:inner_block, required: true)
   attr(:testid, :string, default: nil)

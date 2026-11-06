@@ -1,4 +1,4 @@
-defmodule Systems.Annotation.Pattern.MissingFieldError do
+defmodule Next.Systems.Annotation.Pattern.MissingFieldError do
   @moduledoc false
   defexception [:message]
 

@@ -1,6 +1,6 @@
 defmodule Systems.Content.Private do
   def get_backend do
-    Core.Env.fetch!(:content)
+    Mica.Env.fetch!(:content)
     |> Access.fetch!(:backend)
   end
 

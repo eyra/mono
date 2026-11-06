@@ -1,10 +1,10 @@
-defmodule Systems.Paper.RISFetcherBackendStream do
+defmodule Next.Systems.Paper.RISFetcherBackendStream do
   @moduledoc """
   Streaming fetcher that uses the configured storage backend.
   This is the recommended approach as it respects the application's storage configuration.
   """
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   @doc """
   Stream RIS content using the configured storage backend.
@@ -28,7 +28,7 @@ defmodule Systems.Paper.RISFetcherBackendStream do
 
   # Get the configured content backend module
   defp get_content_backend do
-    config = Core.Env.fetch!(:content)
+    config = Mica.Env.fetch!(:content)
     Keyword.fetch!(config, :backend)
   end
 end

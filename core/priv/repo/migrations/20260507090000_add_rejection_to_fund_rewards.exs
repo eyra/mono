@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddRejectionToFundRewards do
+defmodule Mica.Repo.Migrations.AddRejectionToFundRewards do
   use Ecto.Migration
 
   def change do

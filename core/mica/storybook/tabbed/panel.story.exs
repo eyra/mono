@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Tabbed.Panel do
+defmodule Frameworks.Storybook.Pixel.Tabbed.Panel do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Tabbed.panel/1
@@ -7,7 +7,7 @@ defmodule Storybook.Frameworks.Pixel.Tabbed.Panel do
   def template do
     """
     <div class="flex flex-col gap-6" psb-code-hidden>
-      <Frameworks.Pixel.Tabbed.bar id="panel_bar" initial_tab="workflow" tabs={Storybook.Frameworks.Pixel.Tabbed.Panel.tabs()} />
+      <Frameworks.Pixel.Tabbed.bar id="panel_bar" initial_tab="workflow" tabs={Frameworks.Storybook.Pixel.Tabbed.Panel.tabs()} />
       <.psb-variation/>
     </div>
     """

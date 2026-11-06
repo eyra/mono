@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.SubHead do
+defmodule Frameworks.Storybook.Pixel.Text.SubHead do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.sub_head/1

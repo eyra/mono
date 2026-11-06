@@ -17,12 +17,12 @@ msgstr "Screening cognitivo"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Stai per iniziare un test. Segui le istruzioni sullo schermo. Il caricamento della pagina potrebbe richiedere qualche istante — grazie per la pazienza."
+msgstr "Stai per iniziare un'attività. Segui le istruzioni sullo schermo. Il caricamento della pagina potrebbe richiedere qualche istante — grazie per la pazienza."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Carica il file zip di uno strumento Probe. I partecipanti svolgono il test nel browser."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Carica il file zip di uno strumento cognitivo. I partecipanti svolgono l'attività nel browser."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Test cognitivo"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Attività cognitiva"

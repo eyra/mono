@@ -1,7 +1,7 @@
 defmodule Systems.Pool.ParticipantPageBuilder do
   alias Frameworks.Utility.ViewModelBuilder
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Account
   alias Systems.Fund

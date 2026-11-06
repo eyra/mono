@@ -1,5 +1,5 @@
 defmodule Systems.Fund.AccountStrategyTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Fund.AccountStrategy
 

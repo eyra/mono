@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Image.Blurhash do
+defmodule Frameworks.Storybook.Pixel.Image.Blurhash do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Image.blurhash/1

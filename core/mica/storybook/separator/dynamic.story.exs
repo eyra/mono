@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Separator.Dynamic do
+defmodule Frameworks.Storybook.Pixel.Separator.Dynamic do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Separator.dynamic/1

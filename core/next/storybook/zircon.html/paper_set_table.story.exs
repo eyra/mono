@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Zircon.HTML.PaperSetTable do
+defmodule Next.Storybook.Systems.Zircon.HTML.PaperSetTable do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Zircon.HTML.paper_set_table/1
+  def function, do: &Next.Systems.Zircon.HTML.paper_set_table/1
 
   def variations do
     [

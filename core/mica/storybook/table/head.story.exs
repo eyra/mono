@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Table.Head do
+defmodule Frameworks.Storybook.Pixel.Table.Head do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Table.head/1

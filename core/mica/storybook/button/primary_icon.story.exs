@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.PrimaryIcon do
+defmodule Frameworks.Storybook.Pixel.Button.PrimaryIcon do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.primary_icon/1

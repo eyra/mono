@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.CurrencyInput do
+defmodule Frameworks.Storybook.Pixel.Form.CurrencyInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.currency_input/1

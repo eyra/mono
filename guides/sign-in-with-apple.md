@@ -32,7 +32,7 @@ Go to your account (profile button). There you will see the `:team_id`.
 Now enter all the configuration values into the config. It should look
 something like:
 
-    config :core, SignInWithApple,
+    config :mica, SignInWithApple,
       client_id: "com.exmple.service" # the id from the service,
       team_id: "2EDL5EPQY4" # the id from the profile page,
       private_key_id: "AABBCCDDEE" # shown at the download key page,

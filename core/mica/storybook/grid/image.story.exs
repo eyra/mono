@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Grid.Image do
+defmodule Frameworks.Storybook.Pixel.Grid.Image do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Grid.image/1

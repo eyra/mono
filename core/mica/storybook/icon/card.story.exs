@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Icon.Card do
+defmodule Frameworks.Storybook.Pixel.Icon.Card do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Icon.card/1

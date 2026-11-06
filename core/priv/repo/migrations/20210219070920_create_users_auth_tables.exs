@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateAccountsAuthTables do
+defmodule Mica.Repo.Migrations.CreateAccountsAuthTables do
   use Ecto.Migration
 
   def change do

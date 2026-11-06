@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Intro do
+defmodule Frameworks.Storybook.Pixel.Text.Intro do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.intro/1

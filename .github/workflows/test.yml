@@ -71,6 +71,10 @@ jobs:
       - name: Setup the Elixir project
         run: make deps
 
+      # elixir_make's :httpc download can fail on GitHub's redirects; see the script.
+      - name: Prefetch precompiled NIFs
+        run: core/scripts/prefetch-nifs
+
       - name: Format
         run: make format
         continue-on-error: true
@@ -122,7 +126,12 @@ jobs:
         run: make credo
 
       - name: Boundary check (Nova migration)
-        run: cd core && elixir scripts/boundary_check.exs
+        run: cd core && elixir scripts/boundary_check_test.exs && elixir scripts/boundary_check.exs
+
+      # The comparison itself needs eyra/devops and Fly access; the release
+      # manager runs it at every cut (scripts/env_names.exs).
+      - name: Env-name parity script tests
+        run: cd core && elixir scripts/env_names_test.exs
 
       # Every function component has a story (`mix storybook.stories` writes missing ones).
       - name: Storybook stories
@@ -164,6 +173,9 @@ jobs:
 
       - name: Setup the Elixir project
         run: make deps
+
+      - name: Prefetch precompiled NIFs
+        run: core/scripts/prefetch-nifs
 
       - name: Nova snapshots (Self)
         run: cd core && mix nova.snapshot

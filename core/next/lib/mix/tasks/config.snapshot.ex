@@ -16,7 +16,7 @@ defmodule Mix.Tasks.Config.Snapshot do
 
   use Mix.Task
 
-  alias Core.RuntimeConfig.Snapshot
+  alias Mica.RuntimeConfig.Snapshot
 
   @dir "next/test/config"
 

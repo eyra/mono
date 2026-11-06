@@ -1,5 +1,5 @@
 defmodule Systems.Email.Public do
-  use Core, :public
+  use Mica, :public
   import Bamboo.Email
   import Bamboo.Phoenix
 
@@ -10,7 +10,7 @@ defmodule Systems.Email.Public do
   def base_email do
     new_email()
     |> from(
-      Core.Env.fetch!(Systems.Email.Mailer)
+      Mica.Env.fetch!(Systems.Email.Mailer)
       |> Keyword.fetch!(:default_from_email)
     )
     |> put_layout({Systems.Email.EmailLayoutHTML, :email})
@@ -21,24 +21,35 @@ defmodule Systems.Email.Public do
   def deliver_later!(email), do: Email.Mailer.deliver_later!(email)
   def deliver_later(email), do: Email.Mailer.deliver_later(email)
 
-  def deliver_now!(%Email.Model{
-        title: title,
-        byline: byline,
-        message: message,
-        to: to
-      }) do
-    Email.Factory.notification(title, byline, message, to)
+  def deliver_now!(%Email.Model{} = email) do
+    email
+    |> notification()
     |> deliver_now!()
   end
 
   def deliver_now!(email), do: Email.Mailer.deliver_now!(email)
 
-  def deliver_now(%Email.Model{title: title, byline: byline, message: message, to: to}) do
-    Email.Factory.notification(title, byline, message, to)
+  def deliver_now(%Email.Model{} = email) do
+    email
+    |> notification()
     |> deliver_now()
   end
 
   def deliver_now(email), do: Email.Mailer.deliver_now(email)
+
+  defp notification(%Email.Model{
+         title: title,
+         byline: byline,
+         message: message,
+         to: to,
+         subject: subject,
+         html_message: html_message
+       }) do
+    Email.Factory.notification(title, byline, message, to,
+      subject: subject,
+      html_message: html_message
+    )
+  end
 
   defp dispatch(email) when is_struct(email) do
     email

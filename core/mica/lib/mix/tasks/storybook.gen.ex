@@ -78,7 +78,7 @@ defmodule Mix.Tasks.Storybook.Gen do
   end
 
   defp modules(source_dir) do
-    {:ok, modules} = :application.get_key(Core.Env.app(), :modules)
+    {:ok, modules} = :application.get_key(Mica.Env.app(), :modules)
 
     Enum.filter(modules, fn module ->
       Code.ensure_loaded!(module)
@@ -89,8 +89,11 @@ defmodule Mix.Tasks.Storybook.Gen do
     end)
   end
 
+  # `Storybook` goes after the component's root, so a story stays in its owner's namespace
+  # (`Next.Systems.Onyx.CardView` gets `Next.Storybook.Systems.Onyx.CardView.Basic`).
   defp story(module, fun, name, %{attrs: attrs, slots: slots}) do
-    story_module = Module.concat([Storybook | Module.split(module)] ++ [Macro.camelize(name)])
+    [root | rest] = Module.split(module)
+    story_module = Module.concat([root, Storybook | rest] ++ [Macro.camelize(name)])
 
     attributes =
       for %{required: true, name: attr, type: type, opts: opts} <- attrs, into: %{} do

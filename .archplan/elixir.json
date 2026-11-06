@@ -4,16 +4,16 @@
     {"prefix": "Self", "id": "Self"},
     {"prefix": "Fabric", "id": "Frameworks.Fabric"},
     {"prefix": "BankingClient", "id": "BankingClient"},
-    {"prefix": "Ecto.Atom", "id": "Core"},
-    {"prefix": "Eyra", "id": "Core"},
-    {"prefix": "Browser", "id": "CoreWeb"}
+    {"prefix": "Ecto.Atom", "id": "Mica"},
+    {"prefix": "Eyra", "id": "Mica"},
+    {"prefix": "Browser", "id": "MicaWeb"}
   ],
   "layers": [
     {"id": "bundles", "name": "Bundles", "components": ["Next", "Self"]},
-    {"id": "web", "name": "Web", "components": ["CoreWeb"]},
+    {"id": "web", "name": "Web", "components": ["MicaWeb"]},
     {"id": "systems", "name": "Systems", "components": ["Systems"]},
     {"id": "frameworks", "name": "Frameworks", "components": ["Frameworks"]},
-    {"id": "core", "name": "Core", "components": ["Core", "BankingClient"]}
+    {"id": "core", "name": "Mica", "components": ["Mica", "BankingClient"]}
   ],
-  "trace": {"exclude_modules": ["CoreWeb.Gettext", "CoreWeb.Cldr"]}
+  "trace": {"exclude_modules": ["MicaWeb.Gettext", "MicaWeb.Cldr"]}
 }

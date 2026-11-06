@@ -1,11 +1,11 @@
-defmodule Systems.Annotation.Pattern.Relevance do
+defmodule Next.Systems.Annotation.Pattern.Relevance do
   @moduledoc """
   A pattern for creating a Relevance Annotation.
   A Relevance Annotation states the relevance between a parameter and a resource.
   """
 
-  alias Core.Authentication
-  alias Systems.Annotation
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
 
   @type t :: %__MODULE__{
           relevance: :relevant | :irrelevant | :neutral,
@@ -16,8 +16,8 @@ defmodule Systems.Annotation.Pattern.Relevance do
 
   defstruct [:relevance, :parameter, :resource, :entity, :superseded]
 
-  defimpl Systems.Annotation.Pattern do
-    use Systems.Annotation.Pattern.Helpers
+  defimpl Next.Systems.Annotation.Pattern do
+    use Next.Systems.Annotation.Pattern.Helpers
     import Ecto.Query, warn: true
 
     @relevance "Relevance"

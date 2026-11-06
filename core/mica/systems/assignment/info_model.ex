@@ -3,7 +3,7 @@ defmodule Systems.Assignment.InfoModel do
   use Frameworks.Utility.Schema
   use Frameworks.Utility.Model
 
-  require Core.Enums.Devices
+  require Mica.Enums.Devices
   import Ecto.Changeset
 
   alias Systems.Assignment
@@ -26,7 +26,7 @@ defmodule Systems.Assignment.InfoModel do
       values: Assignment.Languages.schema_values()
     )
 
-    field(:devices, {:array, Ecto.Enum}, values: Core.Enums.Devices.schema_values())
+    field(:devices, {:array, Ecto.Enum}, values: Mica.Enums.Devices.schema_values())
     field(:ethical_approval, :boolean)
     field(:ethical_code, :string)
 

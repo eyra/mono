@@ -1,9 +1,9 @@
 defmodule Systems.Manual.Public do
-  use Core, :public
+  use Mica, :public
 
   import Systems.Manual.Assembly, only: [create_next_chapter: 2, create_next_page: 2]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
   alias Systems.Manual

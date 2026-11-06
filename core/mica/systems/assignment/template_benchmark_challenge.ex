@@ -6,7 +6,7 @@ defmodule Systems.Assignment.TemplateBenchmarkChallenge do
   defstruct [:id]
 
   defimpl Assignment.Template do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
     alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)

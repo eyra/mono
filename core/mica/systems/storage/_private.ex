@@ -6,7 +6,7 @@ defmodule Systems.Storage.Private do
   end
 
   defp config() do
-    Core.Env.get(:storage)
+    Mica.Env.get(:storage)
   end
 
   def build_special(:builtin), do: %Storage.BuiltIn.EndpointModel{}
@@ -33,7 +33,7 @@ defmodule Systems.Storage.Private do
   The queue name is derived from Node.self() to ensure jobs are processed
   only by the node that has access to the local filesystem.
 
-  Uses the same naming scheme as runtime.exs configuration.
+  `Mica.ObanConfig` starts this node's queue.
   """
   def storage_delivery_queue(node \\ Node.self()) do
     :"storage_delivery_local_#{node}"

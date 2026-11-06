@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Widget.Progress do
+defmodule Frameworks.Storybook.Pixel.Widget.Progress do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Widget.progress/1

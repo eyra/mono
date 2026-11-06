@@ -1,23 +1,23 @@
-defmodule Systems.Zircon.Screening.PaperSetView do
+defmodule Next.Systems.Zircon.Screening.PaperSetView do
   use Phoenix.LiveView
   use LiveNest, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   use Systems.Observatory.LiveFeature
-  use CoreWeb.UI
+  use MicaWeb.UI
   use Frameworks.Signal.LiveFeature
 
-  import Systems.Zircon.HTML, only: [paper_set_table: 1]
+  import Next.Systems.Zircon.HTML, only: [paper_set_table: 1]
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
 
   require Logger
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.User, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.User, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
   alias Frameworks.Pixel.Text
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   def get_model(:not_mounted_at_router, %{"paper_set_id" => paper_set_id}, _socket) do
     Paper.Public.get_paper_set!(paper_set_id, Paper.SetModel.preload_graph(:down))

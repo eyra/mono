@@ -1,7 +1,7 @@
-defmodule Systems.Annotation.Form do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Annotation.Form do
+  use MicaWeb.LiveForm
 
-  alias Systems.Annotation
+  alias Next.Systems.Annotation
 
   def update(
         %{

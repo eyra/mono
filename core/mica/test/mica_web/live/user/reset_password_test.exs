@@ -1,0 +1,60 @@
+defmodule MicaWeb.Live.User.ResetPassword.Test do
+  use MicaWeb.ConnCase, async: true
+  import Phoenix.ConnTest
+  import Phoenix.LiveViewTest
+
+  alias Mica.Factories
+  alias Mica.Repo
+  alias Systems.Account
+
+  describe "as a visitor" do
+    test "reset form validates the email field", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+
+      html =
+        view
+        |> element("form")
+        |> render_submit(%{user: %{email: "a b c d"}})
+
+      assert html =~ "Invalid email address"
+    end
+
+    test "reset form fakes sending mail when user does not exist", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+
+      html =
+        view
+        |> element("form")
+        |> render_submit(%{user: %{email: Faker.Internet.email()}})
+
+      assert html =~ "you will receive instructions shortly"
+      assert Repo.all(Account.UserTokenModel) == []
+    end
+
+    test "reset form sends token to user", %{conn: conn} do
+      user = Factories.insert!(:member, %{confirmed_at: nil})
+      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+
+      html =
+        view
+        |> element("form")
+        |> render_submit(%{user: %{email: user.email}})
+
+      assert html =~ "you will receive instructions shortly"
+      assert Repo.get_by!(Account.UserTokenModel, user_id: user.id).context == "reset_password"
+    end
+
+    test "survives the reset email the test mailer sends back to it", %{conn: conn} do
+      user = Factories.insert!(:member, %{confirmed_at: nil})
+      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+
+      view
+      |> element("form")
+      |> render_submit(%{user: %{email: user.email}})
+
+      # The LV reads the `{:delivered_email, _}` it sent itself while handling
+      # the submit before this render.
+      assert render(view) =~ "you will receive instructions shortly"
+    end
+  end
+end

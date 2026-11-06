@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Tabbed.Footer do
+defmodule Frameworks.Storybook.Pixel.Tabbed.Footer do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Tabbed.footer/1
@@ -12,7 +12,7 @@ defmodule Storybook.Frameworks.Pixel.Tabbed.Footer do
   def template do
     """
     <div class="flex flex-col gap-6" psb-code-hidden>
-      <Frameworks.Pixel.Tabbed.bar id="footer_bar" initial_tab="workflow" tabs={Storybook.Frameworks.Pixel.Tabbed.Footer.tabs()} />
+      <Frameworks.Pixel.Tabbed.bar id="footer_bar" initial_tab="workflow" tabs={Frameworks.Storybook.Pixel.Tabbed.Footer.tabs()} />
       <.psb-variation/>
     </div>
     """

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ClickableCard.ClickableCard do
+defmodule Frameworks.Storybook.Pixel.ClickableCard.ClickableCard do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ClickableCard.clickable_card/1

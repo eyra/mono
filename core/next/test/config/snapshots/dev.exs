@@ -5,21 +5,28 @@
       active: true,
       env: "eyra-next-dev.fly.dev",
       name: "Next",
-      otp_app: :core,
+      otp_app: :mica,
       push_api_key: "APPSIGNAL_PUSH_API_KEY",
       revision: nil
     ]
   ],
-  core: [
-    {Core.ImageCatalog.Unsplash,
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "auto",
+    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
+  mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
-    {Core.Repo,
+    {Mica.Repo,
      [
        socket_options: [:inet6],
        url:
          "postgres://DB_USER:DB_PASS@eyra-next-dev-db.flycast:5432/eyra_next_dev?sslmode=disable"
      ]},
-    {CoreWeb.Endpoint,
+    {MicaWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8000],
@@ -27,33 +34,7 @@
        server: true,
        url: [host: "eyra-next-dev.fly.dev", port: 443, scheme: "https"]
      ]},
-    {CoreWeb.FileUploader, [max_file_size: 100_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
-    {Oban,
-     [
-       plugins: [
-         {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
-         {Oban.Plugins.Cron,
-          [
-            crontab: [
-              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-              {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker},
-              {"* * * * *", Systems.Fund.PayInExpirationWorker},
-              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
-              {"0 * * * *", Systems.Fund.AutoApproveWorker}
-            ]
-          ]}
-       ],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
-       ]
-     ]},
+    {MicaWeb.FileUploader, [max_file_size: 100_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -106,7 +87,7 @@
          surfconext: %{provider: true, satellite: true}
        }
      ]},
-    {:admins, ~r/^[\w_.-]+@eyra\.co$/},
+    {:admins, ~r/^(?:[\w_.-]+@eyra\.co)$/},
     {:auto_approve_timeout, 14},
     {:base_url, "https://eyra-next-dev.fly.dev"},
     {:content,
@@ -130,7 +111,20 @@
     {:feldspar_data_donation, [path: "/app/data/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "Next [dev]"},
-    {:oban_unknown_plugins, []},
+    {:oban_plugins,
+     [
+       enabled: [
+         "pruner",
+         "lifeline",
+         "advert_expiration",
+         "data_donation_cleanup",
+         "pay_in_expiration",
+         "payment_reconciliation",
+         "auth_code_cleanup",
+         "auto_approve"
+       ],
+       schedule_overrides: [data_donation_cleanup: "FELDSPAR_CLEANUP_SCHEDULE"]
+     ]},
     {:paper,
      [
        import_batch_size: 100,
@@ -143,11 +137,5 @@
     {:service_login, [key: "SERVICE_LOGIN_KEY"]},
     {:storage, [services: [:builtin]]},
     {:upload_path, "/app/data/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "auto",
-    s3: [host: "fly.storage.tigris.dev", port: 443, scheme: "https://"],
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]

@@ -32,7 +32,7 @@ defmodule Systems.Pool.Switch do
 
   @impl true
   def intercept({:pool, _}, %{pool: pool, from_pid: from_pid}) do
-    pool = Core.Repo.preload(pool, Pool.Model.preload_graph(:org))
+    pool = Mica.Repo.preload(pool, Pool.Model.preload_graph(:org))
     update_page(Pool.DetailPage, pool, from_pid)
     update_page(Pool.ContentPage, pool, from_pid)
     :ok

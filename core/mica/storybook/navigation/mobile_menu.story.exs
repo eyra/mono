@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Navigation.MobileMenu do
+defmodule Frameworks.Storybook.Pixel.Navigation.MobileMenu do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Navigation.mobile_menu/1

@@ -1,7 +1,7 @@
 defmodule Systems.Lab.DayListItemModel do
   use Ecto.Schema
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   embedded_schema do
     field(:enabled?, :boolean)

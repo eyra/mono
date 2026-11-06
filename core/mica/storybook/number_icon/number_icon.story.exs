@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.NumberIcon.NumberIcon do
+defmodule Frameworks.Storybook.Pixel.NumberIcon.NumberIcon do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.NumberIcon.number_icon/1

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPhotoToProfile do
+defmodule Mica.Repo.Migrations.AddPhotoToProfile do
   use Ecto.Migration
 
   def up do

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.ExtendStudySurveyToolData do
+defmodule Mica.Repo.Migrations.ExtendStudySurveyToolData do
   use Ecto.Migration
 
   def up do

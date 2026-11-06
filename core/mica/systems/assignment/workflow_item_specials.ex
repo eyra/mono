@@ -2,7 +2,7 @@ defmodule Systems.Assignment.WorkflowItemSpecials do
   @moduledoc """
     Defines the types of workflow items supported by.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:assignment_workflow_item_types,
        [
          :questionnaire,

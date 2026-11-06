@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.RadioGroup do
+defmodule Frameworks.Storybook.Pixel.Form.RadioGroup do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.radio_group/1

@@ -5,15 +5,21 @@
       active: true,
       env: "APP_DOMAIN",
       name: "Next",
-      otp_app: :core,
+      otp_app: :mica,
       push_api_key: "APPSIGNAL_PUSH_API_KEY",
       revision: "APPSIGNAL_REVISION"
     ]
   ],
-  core: [
-    {Core.ImageCatalog.Unsplash,
+  ex_aws: [
+    access_key_id: "AWS_ACCESS_KEY_ID",
+    region: "AWS_REGION",
+    secret_access_key: "AWS_SECRET_ACCESS_KEY"
+  ],
+  mica: [
+    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
+    {Mica.ImageCatalog.Unsplash,
      [access_key: "UNSPLASH_ACCESS_KEY", app_name: "UNSPLASH_APP_NAME"]},
-    {Core.Repo,
+    {Mica.Repo,
      [
        ssl: [
          cacertfile: "/home/next/etc/DB_CA_PATH.pem",
@@ -24,7 +30,7 @@
        url:
          "ecto://DB_USER:DB_PASS@eyra-database-prod.abcdefghijkl.eu-central-1.rds.amazonaws.com/next"
      ]},
-    {CoreWeb.Endpoint,
+    {MicaWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8080],
@@ -32,33 +38,7 @@
        server: true,
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
-    {CoreWeb.FileUploader, [max_file_size: 200_000_000]},
-    {Frameworks.UserCheck, [api_key: "USERCHECK_API_KEY"]},
-    {Oban,
-     [
-       plugins: [
-         {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
-         {Oban.Plugins.Cron,
-          [
-            crontab: [
-              {"*/5 * * * *", Systems.Advert.ExpirationWorker},
-              {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
-              {"* * * * *", Systems.Fund.PayInExpirationWorker},
-              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-              {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
-              {"0 * * * *", Systems.Fund.AutoApproveWorker}
-            ]
-          ]}
-       ],
-       queues: [
-         default: 5,
-         email_delivery: 1,
-         email_dispatchers: 1,
-         ris_import: 1,
-         storage_delivery_local_nonode@nohost: 1
-       ]
-     ]},
+    {MicaWeb.FileUploader, [max_file_size: 200_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],
@@ -98,7 +78,7 @@
      ]},
     {Systems.Storage.BuiltIn, [special: Systems.Storage.BuiltIn.S3]},
     {Systems.Storage.BuiltIn.S3, [bucket: "AWS_S3_BUCKET", prefix: "STORAGE_S3_PREFIX"]},
-    {:admins, ~r/^[\w_.-]+@APP_ADMINS$/},
+    {:admins, ~r/^(?:[\w_.-]+@APP_ADMINS)$/},
     {:auto_approve_timeout, 14},
     {:base_url, "https://APP_DOMAIN"},
     {:content,
@@ -122,7 +102,20 @@
     {:feldspar_data_donation, [path: "/home/next/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "APP_NAME"},
-    {:oban_unknown_plugins, []},
+    {:oban_plugins,
+     [
+       enabled: [
+         "pruner",
+         "lifeline",
+         "advert_expiration",
+         "data_donation_cleanup",
+         "pay_in_expiration",
+         "payment_reconciliation",
+         "auth_code_cleanup",
+         "auto_approve"
+       ],
+       schedule_overrides: []
+     ]},
     {:paper,
      [
        import_batch_size: 101,
@@ -145,10 +138,5 @@
      ]},
     {:storage, [services: [:builtin, :yoda]]},
     {:upload_path, "/home/next/uploads"}
-  ],
-  ex_aws: [
-    access_key_id: "AWS_ACCESS_KEY_ID",
-    region: "AWS_REGION",
-    secret_access_key: "AWS_SECRET_ACCESS_KEY"
   ]
 ]

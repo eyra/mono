@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.FormFieldLabel do
+defmodule Frameworks.Storybook.Pixel.Text.FormFieldLabel do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.form_field_label/1

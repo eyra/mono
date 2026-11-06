@@ -1,11 +1,11 @@
 defmodule Systems.Account.Public do
-  use Core, :public
-  use CoreWeb.StartPageProvider
+  use Mica, :public
+  use MicaWeb.StartPageProvider
   require Logger
 
   import Ecto.Query
   import Systems.Account.Queries
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
 
@@ -489,11 +489,66 @@ defmodule Systems.Account.Public do
     :ok
   end
 
+  ## One-time tokens
+
+  @doc """
+  Generates a token for a one-time step of `context`, replacing the user's
+  earlier token of that context. Redeem it with `take_one_time_token/3`.
+  """
+  def generate_one_time_token(user, context) when is_binary(context) do
+    {token, user_token} = Account.UserTokenModel.build_one_time_token(user, context)
+
+    {:ok, _} =
+      Multi.new()
+      |> Multi.delete_all(
+        :earlier,
+        Account.UserTokenModel.user_and_contexts_query(user, [context])
+      )
+      |> Multi.insert(:token, user_token)
+      |> Repo.commit()
+
+    token
+  end
+
+  @doc """
+  Redeems a token of `generate_one_time_token/2` that is younger than `max_age`
+  seconds. Deleting the token is what makes it single-use: only the call that
+  deletes it gets the user.
+  """
+  def take_one_time_token(token, context, max_age)
+      when is_binary(token) and is_binary(context) and is_integer(max_age) do
+    with {:ok, query} <- Account.UserTokenModel.one_time_token_query(token, context, max_age),
+         {1, [user_id]} <- Repo.delete_all(select(query, [t], t.user_id)) do
+      {:ok, get_user!(user_id)}
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
   ## OTP
 
-  def generate_otp(email) when is_binary(email) do
-    Rate.Public.request_permission(:otp_request, email, 1)
+  @doc """
+  Emails a new sign-in code to `email`, replacing any earlier code for it.
+  `remote_ip` is the client's address (`MicaWeb.Plug.RemoteIp`), which the
+  limits of `Account.AuthCodeLimits` count by.
+  """
+  def generate_otp(email, remote_ip) when is_binary(email) and is_binary(remote_ip) do
+    email = Account.AuthCodeModel.normalize_email(email)
 
+    # The totals per email address count last, so only requests that send a
+    # code use them up.
+    with true <- Account.AuthCodeLimits.allow_request?(email, remote_ip),
+         :granted <- Rate.Public.request_permission(:otp_request, email, 1),
+         true <- Account.AuthCodeLimits.count_request?(email) do
+      send_otp(email)
+    else
+      false -> {:error, :rate_limited}
+    end
+  rescue
+    Rate.Public.RateLimitError -> {:error, :rate_limited}
+  end
+
+  defp send_otp(email) do
     Repo.delete_all(from(t in Account.AuthCodeModel, where: t.email == ^email))
 
     user = get_user_by_email(email)
@@ -502,8 +557,6 @@ defmodule Systems.Account.Public do
 
     Account.UserNotifier.deliver_otp(email, code)
     :ok
-  rescue
-    Rate.Public.RateLimitError -> {:error, :rate_limited}
   end
 
   @doc """
@@ -517,25 +570,53 @@ defmodule Systems.Account.Public do
     deleted_count
   end
 
-  def verify_otp(email, code) when is_binary(email) and is_binary(code) do
+  @doc """
+  Checks `code` against the active sign-in code of `email`. When a limit of
+  `Account.AuthCodeLimits` refuses the check, the result is
+  `{:error, :max_attempts}` and the code's own attempts stay unused.
+  """
+  def verify_otp(email, code, remote_ip)
+      when is_binary(email) and is_binary(code) and is_binary(remote_ip) do
+    email = Account.AuthCodeModel.normalize_email(email)
+
     case Account.AuthCodeModel.active_query(email) |> Repo.one() do
       nil ->
         {:error, :not_found}
 
-      token ->
-        case Account.AuthCodeModel.verify(token, code) do
-          :ok ->
-            Repo.delete!(token)
-            user = token.user_id && get_user!(token.user_id)
-            {:ok, user}
+      auth_code ->
+        if Account.AuthCodeModel.attempts_left?(auth_code) and
+             Account.AuthCodeLimits.allow_check?(email, remote_ip) and
+             Account.AuthCodeLimits.count_check?(email),
+           do: verify_otp_attempt(auth_code, email, code),
+           else: {:error, :max_attempts}
+    end
+  end
 
-          {:error, reason} ->
-            token
-            |> Ecto.Changeset.change(attempts: token.attempts + 1)
-            |> Repo.update!()
+  # The attempt is counted before the code is compared, whether it matches or
+  # not. A check that finds no attempts left after all (another request took
+  # the last one) is taken back from the totals per email address.
+  defp verify_otp_attempt(%{id: id}, email, code) do
+    case Repo.update_all(Account.AuthCodeModel.attempt_query(id), inc: [attempts: 1]) do
+      {1, [token]} ->
+        if Account.AuthCodeModel.matches?(token, code),
+          do: redeem_otp(token),
+          else: {:error, :invalid}
 
-            {:error, reason}
-        end
+      {0, _} ->
+        Account.AuthCodeLimits.uncount_check(email)
+
+        if Repo.exists?(from(t in Account.AuthCodeModel, where: t.id == ^id)),
+          do: {:error, :max_attempts},
+          else: {:error, :not_found}
+    end
+  end
+
+  # Deleting the row is what makes a code single-use: only the request that
+  # deletes it signs in.
+  defp redeem_otp(%{id: id, user_id: user_id}) do
+    case Repo.delete_all(from(t in Account.AuthCodeModel, where: t.id == ^id)) do
+      {1, _} -> {:ok, user_id && get_user!(user_id)}
+      {0, _} -> {:error, :not_found}
     end
   end
 
@@ -733,7 +814,7 @@ defmodule Systems.Account.Public do
   defp page_key({page, id}) when is_atom(page) and is_integer(id), do: "#{page}_#{id}"
 end
 
-defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do
+defimpl Mica.Persister, for: Systems.Account.UserProfileEditModel do
   alias Systems.Account.UserProfileEditModel
   alias Systems.Account
 
@@ -756,7 +837,7 @@ defimpl Core.Persister, for: Systems.Account.UserProfileEditModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Account.FeaturesModel do
+defimpl Mica.Persister, for: Systems.Account.FeaturesModel do
   alias Systems.Account
 
   def save(features, changeset) do

@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Onyx.CardView.Dynamic do
+defmodule Next.Storybook.Systems.Onyx.CardView.Dynamic do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Onyx.CardView.dynamic/1
+  def function, do: &Next.Systems.Onyx.CardView.dynamic/1
 
   def template do
     """

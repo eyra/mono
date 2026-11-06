@@ -2,10 +2,10 @@ defmodule Systems.NextAction.Public do
   @moduledoc """
   The NextActions context.
   """
-  # This is a macro that imports the Core module and the public macro from the Core module.
-  use Core, :public
+  # This is a macro that imports the Mica module and the public macro from the Mica module.
+  use Mica, :public
   import Ecto.Query, warn: false
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
   alias Frameworks.Signal
 
@@ -22,6 +22,7 @@ defmodule Systems.NextAction.Public do
   """
   def list_next_actions(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
+    |> by_priority()
     |> Repo.all()
     |> Enum.map(&to_view_model(&1))
   end
@@ -30,6 +31,7 @@ defmodule Systems.NextAction.Public do
   """
   def next_best_action(%User{} = user) do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -46,6 +48,7 @@ defmodule Systems.NextAction.Public do
   """
   def next_best_action_for_key(%User{id: user_id}, key) do
     from(na in NextAction.Model, where: na.user_id == ^user_id and na.key == ^key, limit: 1)
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -64,6 +67,7 @@ defmodule Systems.NextAction.Public do
       where: na.user_id == ^user_id and na.action == ^action_string and na.key in ^keys,
       limit: 1
     )
+    |> by_priority()
     |> Repo.one()
     |> to_view_model()
   end
@@ -78,12 +82,21 @@ defmodule Systems.NextAction.Public do
       where: na.user_id == ^user_id and na.action == ^action_string,
       limit: 10
     )
+    |> by_priority()
     |> Repo.all()
     |> Enum.map(&to_view_model(&1))
   end
 
   @doc """
   Creates a next action for the audience.
+
+  Options:
+    * `:key` - distinguishes several next actions of the same type for one user
+    * `:params` - passed to the action's `to_view_model/2`
+    * `:priority` - `:high`, `:normal` (default) or `:low`; lists show higher
+      priorities first. Creating an existing next action again increases its
+      count and only changes its priority when `:priority` is given. Leave the
+      option out instead of passing `nil`, which the changeset refuses.
   """
   def create_next_action(audience, action, opts \\ [])
 
@@ -93,24 +106,23 @@ defmodule Systems.NextAction.Public do
 
   def create_next_action(%User{} = user, action, opts) when is_atom(action) do
     key = Keyword.get(opts, :key)
-
-    conflict_target_fragment =
-      if is_nil(key) do
-        "(user_id,action) WHERE key is NULL"
-      else
-        "(user_id,action,key) WHERE key is not NULL"
-      end
+    priority_attrs = Map.new(Keyword.take(opts, [:priority]))
 
     %NextAction.Model{}
-    |> NextAction.Model.changeset(%{
-      user: user,
-      action: Atom.to_string(action),
-      key: key,
-      params: Keyword.get(opts, :params)
-    })
+    |> NextAction.Model.changeset(
+      Map.merge(
+        %{
+          user: user,
+          action: Atom.to_string(action),
+          key: key,
+          params: Keyword.get(opts, :params)
+        },
+        priority_attrs
+      )
+    )
     |> Repo.insert!(
-      on_conflict: [inc: [count: 1]],
-      conflict_target: {:unsafe_fragment, conflict_target_fragment}
+      on_conflict: [inc: [count: 1], set: Map.to_list(priority_attrs)],
+      conflict_target: {:unsafe_fragment, conflict_target_fragment(key)}
     )
     |> tap(
       &Signal.Public.dispatch!({:next_action, :created}, %{
@@ -121,6 +133,53 @@ defmodule Systems.NextAction.Public do
       })
     )
   end
+
+  @batch_size 1_000
+
+  @doc """
+  Creates the same next action for every user in `user_ids` with batched
+  inserts, for audiences too large for `create_next_action/3`. Takes the same
+  options. Users who already have it get its count increased, as with
+  `create_next_action/3`.
+
+  No `{:next_action, :created}` signal is sent: open pages and menu counters
+  show the new next actions on their next load. Returns the number of rows
+  inserted or updated.
+  """
+  def create_next_actions(user_ids, action, opts \\ [])
+      when is_list(user_ids) and is_atom(action) do
+    key = Keyword.get(opts, :key)
+    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    priority_attrs = Keyword.take(opts, [:priority])
+
+    row = %{
+      action: Atom.to_string(action),
+      key: key,
+      params: Keyword.get(opts, :params),
+      count: 1,
+      priority: Keyword.get(opts, :priority, :normal),
+      inserted_at: now,
+      updated_at: now
+    }
+
+    user_ids
+    |> Enum.uniq()
+    |> Enum.chunk_every(@batch_size)
+    |> Enum.reduce(0, fn chunk, total ->
+      rows = Enum.map(chunk, &Map.put(row, :user_id, &1))
+
+      {count, _} =
+        Repo.insert_all(NextAction.Model, rows,
+          on_conflict: [inc: [count: 1], set: [updated_at: now] ++ priority_attrs],
+          conflict_target: {:unsafe_fragment, conflict_target_fragment(key)}
+        )
+
+      total + count
+    end)
+  end
+
+  defp conflict_target_fragment(nil), do: "(user_id,action) WHERE key is NULL"
+  defp conflict_target_fragment(_key), do: "(user_id,action,key) WHERE key is not NULL"
 
   def clear_next_action(audience, action, opts \\ [])
 
@@ -142,6 +201,12 @@ defmodule Systems.NextAction.Public do
         key: key
       })
     end)
+  end
+
+  defp by_priority(query) do
+    from(na in query,
+      order_by: [desc: na.priority, desc: na.inserted_at, asc: na.action, asc: na.key]
+    )
   end
 
   defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.ImageInput do
+defmodule Frameworks.Storybook.Pixel.Form.ImageInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.image_input/1

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.TextArea do
+defmodule Frameworks.Storybook.Pixel.Form.TextArea do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.text_area/1

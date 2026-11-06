@@ -1,9 +1,9 @@
-defmodule Systems.Paper.RISImportCommitJob do
+defmodule Next.Systems.Paper.RISImportCommitJob do
   use Oban.Worker, queue: :ris_import
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   @impl Oban.Worker
   def perform(%Oban.Job{args: %{"session_id" => session_id}}) do

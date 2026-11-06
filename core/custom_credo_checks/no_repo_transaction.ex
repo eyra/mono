@@ -71,20 +71,20 @@ defmodule Credo.Check.Warning.NoRepoTransaction do
     {ast, [issue_for(issue_meta, meta[:line]) | issues]}
   end
 
-  # Don't match Core.Repo.transaction() with no arguments - that's not a valid call
+  # Don't match Mica.Repo.transaction() with no arguments - that's not a valid call
 
-  # Match Core.Repo.commit(arg) with one argument
+  # Match Mica.Repo.commit(arg) with one argument
   defp traverse(
-         {{:., meta, [{:__aliases__, _, [:Core, :Repo]}, :transaction]}, _, [_arg]} = ast,
+         {{:., meta, [{:__aliases__, _, [:Mica, :Repo]}, :transaction]}, _, [_arg]} = ast,
          issues,
          issue_meta
        ) do
     {ast, [issue_for(issue_meta, meta[:line]) | issues]}
   end
 
-  # Match Core.Repo.commit(arg1, arg2) with two arguments
+  # Match Mica.Repo.commit(arg1, arg2) with two arguments
   defp traverse(
-         {{:., meta, [{:__aliases__, _, [:Core, :Repo]}, :transaction]}, _, [_arg1, _arg2]} = ast,
+         {{:., meta, [{:__aliases__, _, [:Mica, :Repo]}, :transaction]}, _, [_arg1, _arg2]} = ast,
          issues,
          issue_meta
        ) do
@@ -105,19 +105,19 @@ defmodule Credo.Check.Warning.NoRepoTransaction do
     end
   end
 
-  # Match direct transaction/1 calls (likely from import Core.Repo)
+  # Match direct transaction/1 calls (likely from import Mica.Repo)
   # But not when it's inside a type spec (meta will be nil for type specs)
   defp traverse({:transaction, meta, [_arg]} = ast, issues, issue_meta) when is_list(meta) do
     {ast, [issue_for(issue_meta, meta[:line]) | issues]}
   end
 
-  # Match direct transaction/2 calls (likely from import Core.Repo)
+  # Match direct transaction/2 calls (likely from import Mica.Repo)
   defp traverse({:transaction, meta, [_arg1, _arg2]} = ast, issues, issue_meta)
        when is_list(meta) do
     {ast, [issue_for(issue_meta, meta[:line]) | issues]}
   end
 
-  # Match direct transaction/3 calls (likely from import Core.Repo)
+  # Match direct transaction/3 calls (likely from import Mica.Repo)
   defp traverse({:transaction, meta, [_arg1, _arg2, _arg3]} = ast, issues, issue_meta)
        when is_list(meta) do
     {ast, [issue_for(issue_meta, meta[:line]) | issues]}

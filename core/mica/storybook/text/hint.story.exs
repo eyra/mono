@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Hint do
+defmodule Frameworks.Storybook.Pixel.Text.Hint do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.hint/1

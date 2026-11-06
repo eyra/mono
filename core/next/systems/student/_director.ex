@@ -1,4 +1,4 @@
-defmodule Systems.Student.Director do
+defmodule Next.Systems.Student.Director do
   defmodule Error do
     @moduledoc false
     defexception [:message]
@@ -6,13 +6,10 @@ defmodule Systems.Student.Director do
 
   @behaviour Frameworks.Concept.PoolDirector
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
-  alias Systems.{
-    Student,
-    Pool,
-    Fund
-  }
+  alias Next.Systems.Student
+  alias Systems.{Pool, Fund}
 
   @impl true
   def overview_plugin(user) do

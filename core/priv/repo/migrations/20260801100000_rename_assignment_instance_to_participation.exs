@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameAssignmentInstanceToParticipation do
+defmodule Mica.Repo.Migrations.RenameAssignmentInstanceToParticipation do
   use Ecto.Migration
 
   def up do

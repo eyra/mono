@@ -1,0 +1,184 @@
+## "msgid"s in this file come from POT (.pot) files.
+###
+### Do not add, change, or remove "msgid"s manually here as
+### they're tied to the ones in the corresponding POT file
+### (with the same domain).
+###
+### Use "mix gettext.extract --merge" or "mix gettext.merge"
+### to merge POT files into PO files.
+msgid ""
+msgstr ""
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.kind"
+msgstr "Kind"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.priority"
+msgstr "Priority"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.published"
+msgstr "Published"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.recipients"
+msgstr "Recipients"
+
+#, elixir-autogen, elixir-format
+msgid "admin.column.title"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "admin.empty"
+msgstr "No announcements yet."
+
+#, elixir-autogen, elixir-format
+msgid "admin.new.button"
+msgstr "New announcement"
+
+#, elixir-autogen, elixir-format
+msgid "admin.not.published"
+msgstr "Not published"
+
+#, elixir-autogen, elixir-format
+msgid "admin.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "form.body.label"
+msgstr "Text"
+
+#, elixir-autogen, elixir-format
+msgid "form.cancel.button"
+msgstr "Cancel"
+
+#, elixir-autogen, elixir-format
+msgid "form.kind.label"
+msgstr "Kind"
+
+#, elixir-autogen, elixir-format
+msgid "form.priority.label"
+msgstr "Priority"
+
+#, elixir-autogen, elixir-format
+msgid "form.save.button"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format
+msgid "form.summary.label"
+msgstr "Short summary"
+
+#, elixir-autogen, elixir-format
+msgid "form.title.label"
+msgstr "Title"
+
+#, elixir-autogen, elixir-format
+msgid "kind.release_notes"
+msgstr "Release notes"
+
+#, elixir-autogen, elixir-format
+msgid "priority.high"
+msgstr "High"
+
+#, elixir-autogen, elixir-format
+msgid "priority.normal"
+msgstr "Normal"
+
+#, elixir-autogen, elixir-format
+msgid "next_action.cta"
+msgstr "Read announcement"
+
+#, elixir-autogen, elixir-format
+msgid "page.published"
+msgstr "Published on %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "page.title"
+msgstr "Announcement"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.count.one"
+msgid_plural "form.audience.count.other"
+msgstr[0] "%{count} creator will receive this announcement."
+msgstr[1] "%{count} creators will receive this announcement."
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.creators"
+msgstr "Creators"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.label"
+msgstr "Audience"
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.none"
+msgstr "No creators match these filters and search."
+
+#, elixir-autogen, elixir-format
+msgid "form.audience.search.placeholder"
+msgstr "Search on email or name"
+
+#, elixir-autogen, elixir-format
+msgid "form.email.high"
+msgstr "Each recipient also gets an email."
+
+#, elixir-autogen, elixir-format
+msgid "form.email.normal"
+msgstr "No email is sent."
+
+#, elixir-autogen, elixir-format
+msgid "form.publish.button"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.title"
+msgstr "Announcements"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.unread"
+msgstr "Unread"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.already_published"
+msgstr "This announcement was published in the meantime, so your changes were not saved."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.audience_changed.one"
+msgid_plural "form.notice.audience_changed.other"
+msgstr[0] "The audience changed to %{count} creator. Press Publish again to send it."
+msgstr[1] "The audience changed to %{count} creators. Press Publish again to send it."
+
+#, elixir-autogen, elixir-format
+msgid "form.published.notice"
+msgstr "This announcement is published. Saving shows your changes to its recipients at once; it isn't sent again. Its priority and recipients can't change."
+
+#, elixir-autogen, elixir-format
+msgid "email.link"
+msgstr "Read this announcement in Next"
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.changed_since_loaded"
+msgstr "This announcement was changed in the meantime, so your changes were not saved. Cancel and open it again to see the latest version."
+
+#, elixir-autogen, elixir-format
+msgid "form.notice.no_recipients"
+msgstr "No creators match these filters and search, so nothing was published. Change the filters or search and press Publish again."
+
+#, elixir-autogen, elixir-format
+msgid "compose.edit"
+msgstr "Edit announcement"
+
+#, elixir-autogen, elixir-format
+msgid "compose.new"
+msgstr "New announcement"
+
+#, elixir-autogen, elixir-format
+msgid "desktop.view_all"
+msgstr "View all"
+
+#, elixir-autogen, elixir-format
+msgid "list.empty"
+msgstr "You have no announcements yet."

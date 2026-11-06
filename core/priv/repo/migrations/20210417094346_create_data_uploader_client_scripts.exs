@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateDataUploaderClientScripts do
+defmodule Mica.Repo.Migrations.CreateDataUploaderClientScripts do
   use Ecto.Migration
 
   def change do

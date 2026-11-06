@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Hero.LandingPage do
+defmodule Frameworks.Storybook.Pixel.Hero.LandingPage do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Hero.landing_page/1

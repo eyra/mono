@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateTestEntities do
+defmodule Mica.Repo.Migrations.CreateTestEntities do
   use Ecto.Migration
 
   def change do

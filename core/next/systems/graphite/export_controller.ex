@@ -1,9 +1,9 @@
-defmodule Systems.Graphite.ExportController do
-  use CoreWeb,
+defmodule Next.Systems.Graphite.ExportController do
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 
@@ -32,12 +32,12 @@ defmodule Systems.Graphite.ExportController do
   end
 
   defp authorized?(%{assigns: %{current_user: user}}, leaderboard),
-    do: Core.Authorization.can_access?(user, leaderboard, Graphite.LeaderboardContentPage)
+    do: Mica.Authorization.can_access?(user, leaderboard, Graphite.LeaderboardContentPage)
 
   defp forbidden(conn) do
     conn
     |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"403")
   end
 

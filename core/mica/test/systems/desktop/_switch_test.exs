@@ -5,10 +5,10 @@ defmodule Systems.Desktop.SwitchTest do
   next-best-action banner disappears live (in addition to the to-do
   count badge that the menus live-hook already refreshes).
   """
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
-  alias Core.Factories
-  alias CoreWeb.Endpoint
+  alias Mica.Factories
+  alias MicaWeb.Endpoint
   alias Systems.Desktop
 
   describe "intercept/2" do

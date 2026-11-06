@@ -13,7 +13,7 @@ end
 
 defmodule Systems.Account.Auth.Apple.CallbackPlug.Test do
   use ExUnit.Case, async: true
-  use Core.DataCase
+  use Mica.DataCase
   import Plug.Test
   alias Systems.Account.Auth.Apple.CallbackPlug
 
@@ -73,7 +73,7 @@ defmodule Systems.Account.Auth.Apple.CallbackPlug.Test do
     end
 
     test "offers transfer for an existing account without an Apple satellite" do
-      Core.Factories.insert!(:creator, %{email: "apple@example.com"})
+      Mica.Factories.insert!(:creator, %{email: "apple@example.com"})
 
       conn =
         conn(:post, "/apple/auth")

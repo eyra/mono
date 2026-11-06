@@ -1,8 +1,8 @@
 defmodule Systems.Account.FeaturesViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Enums.Genders
+  alias Mica.Enums.Genders
   alias Systems.Account
 
   describe "view_model/2" do

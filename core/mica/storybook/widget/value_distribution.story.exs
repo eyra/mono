@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Widget.ValueDistribution do
+defmodule Frameworks.Storybook.Pixel.Widget.ValueDistribution do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Widget.value_distribution/1

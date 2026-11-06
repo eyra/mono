@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Caption do
+defmodule Frameworks.Storybook.Pixel.Text.Caption do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.caption/1

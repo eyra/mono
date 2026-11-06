@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Card.PrimaryCta do
+defmodule Frameworks.Storybook.Pixel.Card.PrimaryCta do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Card.primary_cta/1

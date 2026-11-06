@@ -4,19 +4,16 @@ defmodule Systems.Account.Auth.Centerdata.PlugUtils do
   def config(otp_app), do: Application.fetch_env!(otp_app, Auth.Centerdata)
   def oidc_module(config), do: Keyword.get(config, :oidc_module, Assent.Strategy.OIDC)
 
-  def log_in_user(config, conn, user, first_time?),
-    do:
-      Keyword.get(config, :log_in_user, &Systems.Account.UserAuth.log_in_user/3).(
-        conn,
-        user,
-        first_time?
-      )
+  def log_in_user(config, conn, user, first_time?) do
+    log_in_user = Keyword.get(config, :log_in_user, &Systems.Account.UserAuth.log_in_user/3)
+    Systems.Account.SignInHandoff.sign_in(conn, :centerdata, user, first_time?, log_in_user)
+  end
 end
 
 defmodule Systems.Account.Auth.Centerdata.AuthorizePlug do
   import Plug.Conn
   import Systems.Account.Auth.Centerdata.PlugUtils
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   def init(otp_app) when is_atom(otp_app), do: otp_app
 
@@ -45,11 +42,11 @@ end
 defmodule Systems.Account.Auth.Centerdata.CallbackController do
   require Logger
   use Phoenix.Controller, formats: [:html]
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
   import Systems.Account.Auth.Centerdata.PlugUtils
-  use Core.FeatureFlags
+  use Mica.FeatureFlags
 
   alias Systems.Account.Auth
 
@@ -66,7 +63,7 @@ defmodule Systems.Account.Auth.Centerdata.CallbackController do
 
   defp authenticate(conn, params, session_params) do
     config =
-      config(:core)
+      config(:mica)
       |> Keyword.put(:session_params, session_params)
       |> Keyword.put(:nonce, session_params.nonce)
 
@@ -88,7 +85,7 @@ defmodule Systems.Account.Auth.Centerdata.CallbackController do
           log_in_user(config, conn, user, first_time?)
 
         {:error, changeset} ->
-          Auth.SSOHelpers.handle_registration_error(conn, changeset)
+          Auth.SSOHelpers.handle_registration_error(conn, :centerdata, changeset)
       end
     else
       reason ->
@@ -103,9 +100,6 @@ defmodule Systems.Account.Auth.Centerdata.CallbackController do
 
   defp validate_userinfo(_userinfo), do: {:error, :missing_verified_identity}
 
-  defp redirect_with_error(conn, error) do
-    conn
-    |> put_flash(:error, Auth.SSOHelpers.error_message(error))
-    |> redirect(to: ~p"/user/signin")
-  end
+  defp redirect_with_error(conn, error),
+    do: Auth.SSOHelpers.redirect_with_error(conn, :centerdata, error)
 end

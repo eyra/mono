@@ -1,8 +1,8 @@
 defmodule Systems.Org.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
   alias Ecto.Multi
 
@@ -357,7 +357,7 @@ defmodule Systems.Org.Public do
 
   def list_members_with_added_at(%Node{auth_node_id: auth_node_id}) do
     rows =
-      from(ra in Core.Authorization.RoleAssignment,
+      from(ra in Mica.Authorization.RoleAssignment,
         join: u in User,
         on: u.id == ra.principal_id,
         where: ra.node_id == ^auth_node_id and ra.role == :member,
@@ -525,7 +525,7 @@ defmodule Systems.Org.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Org.NodeModel do
+defimpl Mica.Persister, for: Systems.Org.NodeModel do
   def save(_node, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :org_node) do
       {:ok, %{org_node: org_node}} -> {:ok, org_node}

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Selector.Item.Label do
+defmodule Frameworks.Storybook.Pixel.Selector.Item.Label do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Selector.Item.label/1

@@ -1,7 +1,7 @@
 defmodule Systems.Org.NextActions.AddDomainMembers do
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Content
   alias Systems.Org

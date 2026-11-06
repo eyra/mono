@@ -41,7 +41,7 @@ defmodule Systems.Manual.ChapterModel do
   def preload_graph(:manual), do: [manual: Manual.Model.preload_graph(:up)]
 end
 
-defimpl Core.Persister, for: Systems.Manual.ChapterModel do
+defimpl Mica.Persister, for: Systems.Manual.ChapterModel do
   def save(_chapter, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :manual_chapter) do
       {:ok, %{manual_chapter: manual_chapter}} -> {:ok, manual_chapter}

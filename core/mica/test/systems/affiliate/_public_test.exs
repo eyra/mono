@@ -1,5 +1,5 @@
 defmodule Systems.Affiliate.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   @moduletag :capture_log
 
@@ -89,12 +89,12 @@ defmodule Systems.Affiliate.PublicTest do
                Affiliate.Public.send_event(affiliate, "test_event", user)
     end
 
-    test "http error if all is given", %{
+    test "refuses an http callback URL if all is given", %{
       affiliate: affiliate,
       affiliate_user: %{user: user},
       event: event
     } do
-      assert {:error, :econnrefused} = Affiliate.Public.send_event(affiliate, event, user)
+      assert {:error, :scheme_not_allowed} = Affiliate.Public.send_event(affiliate, event, user)
     end
   end
 

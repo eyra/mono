@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Line.Line do
+defmodule Frameworks.Storybook.Pixel.Line.Line do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Line.line/1

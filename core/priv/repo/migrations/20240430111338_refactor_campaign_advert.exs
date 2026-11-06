@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorCampaignAdvertisement do
+defmodule Mica.Repo.Migrations.RefactorCampaignAdvertisement do
   use Ecto.Migration
 
   def up do

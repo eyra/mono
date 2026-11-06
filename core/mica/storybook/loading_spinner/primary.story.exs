@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.LoadingSpinner.Primary do
+defmodule Frameworks.Storybook.Pixel.LoadingSpinner.Primary do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.LoadingSpinner.primary/1

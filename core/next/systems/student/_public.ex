@@ -1,20 +1,15 @@
-defmodule Systems.Student.Public do
-  use Core, :public
+defmodule Next.Systems.Student.Public do
+  use Mica, :public
   require Logger
 
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
 
   alias Frameworks.Utility.Identifier
 
-  alias Systems.{
-    Org,
-    Fund,
-    Bookkeeping,
-    Pool,
-    Student
-  }
+  alias Next.Systems.Student
+  alias Systems.{Org, Fund, Bookkeeping, Pool}
 
   @pool_director_key "student"
 

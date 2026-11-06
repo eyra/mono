@@ -1,5 +1,5 @@
 defmodule Systems.Lab.PublicPageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

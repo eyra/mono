@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Graphite.LeaderboardScoreHTML.Html do
+defmodule Next.Storybook.Systems.Graphite.LeaderboardScoreHTML.Html do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Graphite.LeaderboardScoreHTML.html/1
+  def function, do: &Next.Systems.Graphite.LeaderboardScoreHTML.html/1
 
   def variations do
     [

@@ -1,13 +1,14 @@
 defmodule Systems.Account.AuthCodeCleanupWorkerTest do
-  use Core.DataCase, async: true
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase, async: true
+  use Oban.Testing, repo: Mica.Repo
 
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeCleanupWorker
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
 
   @validity_in_minutes 10
 
@@ -25,6 +26,10 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
 
     Repo.get!(AuthCodeModel, inserted.id)
   end
+
+  # Async test modules write rate_counters in parallel transactions; a shared
+  # key makes their upserts wait on each other, in opposite order a deadlock.
+  defp unique_key(name), do: "#{name}-#{System.unique_integer([:positive])}"
 
   defp auth_code_count do
     Repo.aggregate(AuthCodeModel, :count)
@@ -58,6 +63,23 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
 
     test "returns :ok when there is nothing to delete" do
       assert :ok = perform_job(AuthCodeCleanupWorker, %{})
+    end
+
+    test "deletes rate counters whose window has ended" do
+      ended = unique_key("ended")
+      current = unique_key("current")
+
+      Rate.Public.increment_counter(ended, 3600)
+
+      Repo.update_all(Rate.CounterModel,
+        set: [window_start: ~U[2000-01-01 00:00:00Z], expires_at: ~U[2000-01-01 01:00:00Z]]
+      )
+
+      Rate.Public.increment_counter(current, 3600)
+
+      assert :ok = perform_job(AuthCodeCleanupWorker, %{})
+      assert 1 = Rate.Public.counter(current, 3600)
+      assert 1 = Repo.aggregate(Rate.CounterModel, :count)
     end
   end
 

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.LoadingSpinner do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   attr(:size, :string, default: "w-6 h-6")
   attr(:show_loading_text?, :boolean, default: false)

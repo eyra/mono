@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Card.Normal do
+defmodule Frameworks.Storybook.Pixel.Card.Normal do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Card.normal/1

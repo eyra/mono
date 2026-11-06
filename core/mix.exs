@@ -1,4 +1,4 @@
-defmodule Core.MixProject do
+defmodule Mica.MixProject do
   use Mix.Project
 
   def cli do
@@ -14,7 +14,7 @@ defmodule Core.MixProject do
 
   def project do
     [
-      app: :core,
+      app: :mica,
       version: "0.1.0",
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
@@ -26,7 +26,9 @@ defmodule Core.MixProject do
       aliases: aliases(),
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
-      # The storybook reads component docs from the Docs chunks.
+      # The release keeps the name `core` (bin/core): the Dockerfile, predeploy and
+      # Eyra's AWS deploy tooling call it. The storybook reads component docs from the
+      # Docs chunks.
       releases: [core: [strip_beams: [keep: ["Docs"]]]],
       # The main page in the docs
       docs: [
@@ -67,7 +69,7 @@ defmodule Core.MixProject do
   # Type `mix help compile.app` for more information.
   def application do
     [
-      mod: {Core.Application, []},
+      mod: {Mica.Application, []},
       extra_applications: [:logger, :runtime_tools, :csv, :ssl]
     ]
   end
@@ -75,7 +77,7 @@ defmodule Core.MixProject do
   # Specifies which paths to compile per environment.
   # Mica, the Next SaaS and the Self reference SaaS (mica_saas) live side by side
   # in one Mix project until Nova migration step code-split.
-  @source_paths ~w(mica/lib mica/systems mica/frameworks next/bundle next/lib next/systems mica_saas/bundle)
+  @source_paths ~w(mica/lib mica/systems mica/frameworks next/lib next/systems mica_saas/lib mica_saas/systems)
 
   defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test"]
   defp elixirc_paths(_), do: @source_paths
@@ -86,78 +88,96 @@ defmodule Core.MixProject do
   defp deps do
     [
       # Deps
-      {:appsignal_phoenix, "2.7.0"},
-      {:assent, "0.3.1"},
+      {:appsignal_phoenix, "== 2.8.2"},
+      {:assent, "0.3.2"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
-       github: "eyra/bamboo_phoenix", ref: "59d3961228cb8bd315403cfbf48415aae19f25f1"},
+       github: "eyra/bamboo_phoenix", ref: "faff46acfeea40b1348f9f70eea84436a1524568"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
-      {:bamboo, "2.5.0"},
+      {:bamboo, "== 2.5.1"},
       {:bcrypt_elixir, "3.3.2"},
-      {:cldr_utils, "2.28.3", override: true},
+      {:cldr_utils, "== 2.29.7", override: true},
       {:csv, "3.2.2"},
-      {:ecto_sql, "3.13.2"},
-      {:esbuild, "0.10.0", runtime: Mix.env() == :dev},
-      {:ex_aws_s3, "2.5.8"},
+      {:ecto_sql, "== 3.14.0"},
+      {:esbuild, "== 0.10.1", runtime: Mix.env() == :dev},
+      {:ex_aws_s3, "== 2.5.9"},
       # Unreleased commit fixes build warnings in the original repo
       {:faker, "== 0.19.0"},
+      {:floki, "== 0.38.5"},
       {:gen_smtp, "1.3.0"},
       {:gettext, "0.26.2"},
-      {:hackney, "1.25.0"},
-      {:httpoison, "2.2.3"},
-      {:image, "0.62.0"},
-      {:jason, "1.4.4"},
-      {:libcluster, "3.5.0"},
+      {:hackney, "4.9.1"},
+      # Frameworks.Pixel.RichText relies on internals of these two; re-check
+      # them on a bump of either (rich_text_test.exs and
+      # rich_text_timing_test.exs cover each):
+      # - html_sanitize_ex: the scrubber's overridable `scrub/1` (its text
+      #   clauses remove its whitespace placeholders) and HtmlSanitizeEx.Traverser.
+      # - mochiweb_html: `tokens/1`, `parse_tokens/1` and `to_html/1`; the tree
+      #   builder searches all open elements for each end tag (quadratic on end
+      #   tags that close nothing), closes li/option/dd/dt implicitly and has
+      #   no end tags for its void elements; whitespace-only text is dropped
+      #   unless written as references; character references are quadratic on
+      #   bare `&` and raise above U+10FFFF.
+      {:html_sanitize_ex, "== 1.5.6"},
+      {:mochiweb, "== 3.5.0"},
+      {:httpoison, "3.0.0"},
+      {:image, "== 0.73.0"},
+      {:jason, "1.4.5"},
+      {:libcluster, "== 3.5.1"},
       {:logger_json, "7.0.4"},
       {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
       {:mime, "2.0.7"},
       {:nimble_parsec, "1.4.2"},
-      {:nimble_options, "1.1.1"},
-      {:oban, "2.20.1"},
+      {:nimble_options, "== 1.2.0"},
+      {:oban, "== 2.24.2"},
       {:packmatic, "2.1.0"},
-      {:phoenix_ecto, "4.6.5"},
-      {:phoenix_html, "4.3.0"},
+      {:phoenix_ecto, "== 4.7.0"},
+      {:phoenix_html, "4.4.0"},
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
       {:phoenix_live_view, "1.1.33"},
       {:phoenix_storybook, "1.5.0"},
       {:phoenix_view, "2.0.4"},
-      {:phoenix, "1.8.1"},
-      {:plug_cowboy, "2.7.4"},
-      {:postgrex, "0.21.1"},
+      {:phoenix, "1.8.16"},
+      {:plug_cowboy, "2.9.0"},
+      {:postgrex, "0.22.4"},
+      # Prism's design: the components at compile time, and the CSS and the Tailwind
+      # preset from deps/prism_design/targets/web, so one pin decides both.
+      {:prism_design,
+       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.2.0", subdir: "design"},
       {:remote_ip, "1.2.0"},
       {:slugify, "1.3.1"},
-      {:sqids, "0.2.1"},
+      {:sqids, "== 0.2.2"},
       {:statistics, "0.6.3"},
-      {:tailwind, "0.4.0", runtime: Mix.env() == :dev},
-      {:telemetry_metrics, "1.1.0"},
+      {:tailwind, "0.5.2", runtime: Mix.env() == :dev},
+      {:telemetry_metrics, "== 1.2.0"},
       {:telemetry_poller, "1.3.0"},
       {:timex, "3.7.13"},
       {:typed_struct, "0.3.0"},
-      {:tzdata, "1.1.3"},
+      {:tzdata, "== 1.2.2"},
       # i18n
-      {:ex_cldr, "2.43.2"},
-      {:ex_cldr_numbers, "2.35.2"},
-      {:ex_cldr_dates_times, "2.24.0"},
-      {:ex_cldr_plugs, "1.3.4"},
+      {:ex_cldr, "== 2.47.5"},
+      {:ex_cldr_numbers, "== 2.38.3"},
+      {:ex_cldr_dates_times, "2.25.6"},
+      {:ex_cldr_plugs, "== 1.4.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:certifi, "2.15.0"},
+      {:certifi, "2.18.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
-      {:ssl_verify_fun, "1.1.7"},
+      {:ssl_verify_fun, "== 1.1.9"},
       # Dev and test deps
-      {:ex_machina, "2.8.0", only: :test},
+      {:ex_machina, "== 2.8.2", only: :test},
       {:file_system, "1.1.1", only: [:dev, :test]},
       {:bypass, "2.1.0", only: :test},
-      {:lazy_html, "0.1.8", only: :test},
-      {:mox, "1.2.0", only: :test},
+      {:lazy_html, "== 0.1.14", only: :test},
+      {:mox, "== 1.3.2", only: :test},
       {:promox, "0.1.4", only: :test},
       {:mock, "0.3.9", only: :test},
-      {:wallaby, "0.30.9", only: :test, runtime: false},
-      {:phoenix_live_reload, "1.6.1", only: :dev},
+      {:wallaby, "0.31.0", only: :test, runtime: false},
+      {:phoenix_live_reload, "== 1.7.0", only: :dev},
       {:credo, "1.7.19", only: [:dev, :test], runtime: false},
-      {:ex_doc, "0.38.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, "== 0.40.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
-      {:dialyxir, "1.4.6", only: [:dev, :test], runtime: false},
+      {:dialyxir, "== 1.4.8", only: [:dev, :test], runtime: false},
       {:browser, "0.5.5"}
     ]
   end
@@ -195,6 +215,9 @@ defmodule Core.MixProject do
       "test.smoke": "cmd ./test/smoke/run.sh",
       # Usage: mix test.smoke dev | staging | prod
       seed: "cmd ./scripts/seed",
+      "ecto.migrate": &with_migrations_paths("ecto.migrate", &1),
+      "ecto.rollback": &with_migrations_paths("ecto.rollback", &1),
+      "ecto.migrations": &with_migrations_paths("ecto.migrations", &1),
       "ecto.setup": ["ecto.create", "ecto.migrate"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       i18n: [
@@ -215,11 +238,11 @@ defmodule Core.MixProject do
       # One story per function component; the check fails CI when one is missing.
       "storybook.stories": [
         "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel",
-        "storybook.gen next next/storybook --prefix Systems"
+        "storybook.gen next next/storybook --prefix Next.Systems"
       ],
       "storybook.check": [
         "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel --check",
-        "storybook.gen next next/storybook --prefix Systems --check"
+        "storybook.gen next next/storybook --prefix Next.Systems --check"
       ],
       run: "phx.server",
       github_release: "cmd ./scripts/github-release",
@@ -231,5 +254,19 @@ defmodule Core.MixProject do
       "test.e2e.headed":
         "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
     ]
+  end
+
+  # Runs the Ecto task over `Mica.SaaS.migrations_paths/0`, the migrations of Mica
+  # and the SaaS's systems, unless the paths are given. The task module is run
+  # directly: running it by name would run this alias again.
+  defp with_migrations_paths(task, args) do
+    Mix.Task.run("app.config", args)
+
+    paths =
+      if Enum.any?(args, &String.starts_with?(&1, "--migrations-path")),
+        do: [],
+        else: Enum.flat_map(Mica.SaaS.migrations_paths(), &["--migrations-path", &1])
+
+    Mix.Task.get!(task).run(args ++ paths)
   end
 end

@@ -1,10 +1,10 @@
 defmodule Systems.Lab.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Lab.VUDaySchedule, as: DaySchedule
 
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Frameworks.{
     Signal
@@ -61,7 +61,7 @@ defmodule Systems.Lab.Public do
       reservation_count = Lab.TimeSlotModel.count_reservations(time_slot, [:reserved, :completed])
 
       time_slot.number_of_seats > reservation_count &&
-        not CoreWeb.UI.Timestamp.past?(time_slot.start_time)
+        not MicaWeb.UI.Timestamp.past?(time_slot.start_time)
     end)
   end
 
@@ -381,7 +381,7 @@ defmodule Systems.Lab.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Lab.ToolModel do
+defimpl Mica.Persister, for: Systems.Lab.ToolModel do
   def save(_tool, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :lab_tool) do
       {:ok, %{lab_tool: lab_tool}} -> {:ok, lab_tool}

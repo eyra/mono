@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ClickableCard.HideButton do
+defmodule Frameworks.Storybook.Pixel.ClickableCard.HideButton do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ClickableCard.hide_button/1

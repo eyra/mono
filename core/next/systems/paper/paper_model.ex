@@ -1,9 +1,9 @@
-defmodule Systems.Paper.Model do
+defmodule Next.Systems.Paper.Model do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  alias Systems.Paper
+  alias Next.Systems.Paper
   alias Systems.Version
 
   @type t :: %__MODULE__{

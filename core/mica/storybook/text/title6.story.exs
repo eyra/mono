@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Title6 do
+defmodule Frameworks.Storybook.Pixel.Text.Title6 do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.title6/1

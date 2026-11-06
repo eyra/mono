@@ -6,8 +6,8 @@ defmodule Systems.Assignment.TemplateQuestionnaire do
   defstruct [:id]
 
   defimpl Assignment.Template do
-    use Gettext, backend: CoreWeb.Gettext
-    use Core.FeatureFlags
+    use Gettext, backend: MicaWeb.Gettext
+    use Mica.FeatureFlags
     alias Systems.Assignment
 
     def title(t), do: Assignment.Templates.translate(t.id)

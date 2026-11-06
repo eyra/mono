@@ -1,5 +1,5 @@
 defmodule Systems.Advert.SettingsView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
   require Systems.Advert.Themes
 
   alias Frameworks.Pixel.AlertBanner
@@ -42,7 +42,7 @@ defmodule Systems.Advert.SettingsView do
 
   defp assign_invite_url(%{assigns: %{advert: %{promotion_id: promotion_id}}} = socket) do
     path = ~p"/promotion/#{promotion_id}"
-    url = (Core.Env.get(:base_url) || "") <> path
+    url = (Mica.Env.get(:base_url) || "") <> path
 
     assign(socket,
       invite_title: dgettext("eyra-advert", "settings.invite.title"),

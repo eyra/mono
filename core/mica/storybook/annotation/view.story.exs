@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Annotation.View do
+defmodule Frameworks.Storybook.Pixel.Annotation.View do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Annotation.view/1

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Hero.Dynamic do
+defmodule Frameworks.Storybook.Pixel.Hero.Dynamic do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Hero.dynamic/1

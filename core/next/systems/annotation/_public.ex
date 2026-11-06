@@ -1,19 +1,19 @@
-defmodule Systems.Annotation.Public do
-  use Core, :auth
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Annotation.Public do
+  use Mica, :auth
+  use Gettext, backend: MicaWeb.Gettext
 
   import Ecto.Query, only: [from: 2, order_by: 3]
   import Ecto.Changeset, only: [put_assoc: 3]
-  import Systems.Annotation.Queries
+  import Next.Systems.Annotation.Queries
 
-  import Systems.Ontology.Public,
+  import Next.Systems.Ontology.Public,
     only: [upsert_ontology_ref: 3, obtain_concept!: 2, obtain_ontology_ref!: 1]
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   @annotation :annotation
   @annotation_resource :annotation_resource
@@ -314,7 +314,7 @@ defmodule Systems.Annotation.Public do
   end
 
   def obtain_annotation(pattern) do
-    Systems.Annotation.Pattern.obtain(pattern)
+    Next.Systems.Annotation.Pattern.obtain(pattern)
   end
 
   def summarize(%Annotation.RefModel{

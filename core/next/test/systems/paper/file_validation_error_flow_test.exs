@@ -1,4 +1,4 @@
-defmodule Systems.Paper.FileValidationErrorFlowTest do
+defmodule Next.Systems.Paper.FileValidationErrorFlowTest do
   @moduledoc """
   Test the complete flow when a file-level validation error occurs.
   Ensures that:
@@ -8,19 +8,19 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
   4. The error message is stored and can be displayed
   """
 
-  use Core.DataCase
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase
+  use Oban.Testing, repo: Mica.Repo
 
   import Frameworks.Signal.TestHelper
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   setup do
     isolate_signals()
     on_exit(&restore_signal_handlers/0)
 
     # Use LocalFS backend for tests with real files
-    Application.put_env(:core, :content, backend: Systems.Content.LocalFS)
+    Application.put_env(:mica, :content, backend: Systems.Content.LocalFS)
 
     # Create paper set
     paper_set = Factories.insert!(:paper_set)
@@ -52,7 +52,7 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
 
       # Create import session
       session =
-        Core.Repo.insert!(%Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -68,14 +68,14 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
       assert error_msg =~ "doesn't appear to be a valid RIS file"
 
       # Session should be failed, not in prompting
-      updated_session = Core.Repo.get!(Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       refute updated_session.status == :activated
       refute updated_session.phase == :prompting
       assert Enum.any?(updated_session.errors, &(&1 =~ "doesn't appear to be a valid RIS file"))
 
       # Reference file should be marked as failed
-      updated_file = Core.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Mica.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # No entries should have been created (no prompting data)
@@ -104,7 +104,7 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
 
       # Create import session
       session =
-        Core.Repo.insert!(%Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -120,12 +120,12 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
       assert error_msg =~ "image or document file"
 
       # Session should be failed
-      updated_session = Core.Repo.get!(Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :failed
       assert Enum.any?(updated_session.errors, &(&1 =~ "image or document file"))
 
       # Reference file should be marked as failed
-      updated_file = Core.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Mica.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
       assert updated_file.status == :failed
 
       # Clean up
@@ -167,7 +167,7 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
 
       # Create import session
       session =
-        Core.Repo.insert!(%Paper.RISImportSessionModel{
+        Mica.Repo.insert!(%Paper.RISImportSessionModel{
           paper_set_id: paper_set.id,
           reference_file_id: reference_file.id,
           status: :activated,
@@ -182,7 +182,7 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
       assert :ok = result
 
       # Session should be in prompting phase
-      updated_session = Core.Repo.get!(Paper.RISImportSessionModel, session.id)
+      updated_session = Mica.Repo.get!(Paper.RISImportSessionModel, session.id)
       assert updated_session.status == :activated
       assert updated_session.phase == :prompting
 
@@ -190,7 +190,7 @@ defmodule Systems.Paper.FileValidationErrorFlowTest do
       assert length(updated_session.entries) == 3
 
       # Reference file should still be uploaded (not failed)
-      updated_file = Core.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
+      updated_file = Mica.Repo.get!(Paper.ReferenceFileModel, reference_file.id)
       assert updated_file.status == :uploaded
 
       # Clean up

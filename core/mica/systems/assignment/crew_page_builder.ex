@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewPageBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
@@ -58,7 +58,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp apply_language(language) do
-    CoreWeb.Live.Hook.Locale.put_locale(language)
+    MicaWeb.Live.Hook.Locale.put_locale(language)
   end
 
   # State machine - determines which view to show based on current state and action
@@ -114,6 +114,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
     %{current_user: user} = assigns
 
     cond do
+      contribution_reviewed?(assignment, user) ->
+        participation_view(assignment, assigns)
+
       not intro_visited?(assignment, user) ->
         intro_view(assignment, assigns)
 
@@ -195,7 +198,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp intro_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "onboarding_view_#{assignment_id}",
       Assignment.OnboardingView,
       live_context: context
@@ -203,7 +206,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp consent_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "onboarding_consent_view_#{assignment_id}",
       Assignment.OnboardingConsentView,
       live_context: context
@@ -214,7 +217,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
          %{id: assignment_id} = _assignment,
          %{live_context: context} = _assigns
        ) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "activate_account_view_#{assignment_id}",
       Assignment.ActivateAccountView,
       live_context: context
@@ -222,7 +225,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp work_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "crew_work_view_#{assignment_id}",
       Assignment.CrewWorkView,
       live_context: context
@@ -230,7 +233,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
   end
 
   defp finished_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "finished_view_#{assignment_id}",
       Assignment.FinishedView,
       live_context: context
@@ -242,15 +245,25 @@ defmodule Systems.Assignment.CrewPageBuilder do
   # message + navigate-home. Falls through to the finished_view for the still-
   # pending / no-review-yet state.
   defp participation_or_finished_view(assignment, %{current_user: user} = assigns) do
+    if contribution_reviewed?(assignment, user) do
+      participation_view(assignment, assigns)
+    else
+      finished_view(assignment, assigns)
+    end
+  end
+
+  # A participant can finish with tasks still pending, so a review is read from
+  # the participation, not from the task state.
+  defp contribution_reviewed?(assignment, user) do
     case Assignment.Public.get_participation(assignment, user) do
-      %{rejected_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
-      %{accepted_at: %NaiveDateTime{}} -> participation_view(assignment, assigns)
-      _ -> finished_view(assignment, assigns)
+      %{rejected_at: %NaiveDateTime{}} -> true
+      %{accepted_at: %NaiveDateTime{}} -> true
+      _ -> false
     end
   end
 
   defp participation_view(%{id: assignment_id} = _assignment, %{live_context: context} = _assigns) do
-    CoreWeb.Live.Element.prepare_live_view(
+    MicaWeb.Live.Element.prepare_live_view(
       "participation_view_#{assignment_id}",
       Assignment.ParticipationView,
       live_context: context

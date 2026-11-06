@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddProgressToPaperRisImportSession do
+defmodule Mica.Repo.Migrations.AddProgressToPaperRisImportSession do
   use Ecto.Migration
 
   def change do

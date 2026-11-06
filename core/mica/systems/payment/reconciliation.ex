@@ -10,7 +10,7 @@ defmodule Systems.Payment.Reconciliation do
   """
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Payment
   alias Systems.Rate
   alias Systems.Payment.ReconciliationState, as: State
@@ -119,7 +119,7 @@ defmodule Systems.Payment.Reconciliation do
   end
 
   defp backoff_ms(attempt) do
-    base = Core.Env.get(:reconciliation, [])[:backoff_ms] || 200
+    base = Mica.Env.get(:reconciliation, [])[:backoff_ms] || 200
     base * attempt
   end
 

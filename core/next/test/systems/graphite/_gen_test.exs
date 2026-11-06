@@ -1,12 +1,12 @@
-defmodule Systems.Graphite.GenTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.GenTest do
+  use Mica.DataCase
 
   import Ecto.Query
-  import Systems.Graphite.Gen
+  import Next.Systems.Graphite.Gen
 
-  alias Core.Repo
-  alias Systems.Graphite
-  alias Systems.Graphite.Factories
+  alias Mica.Repo
+  alias Next.Systems.Graphite
+  alias Next.Systems.Graphite.Factories
 
   describe "create_submissions/3" do
     test "create 2 submissions" do
@@ -14,24 +14,24 @@ defmodule Systems.Graphite.GenTest do
       create_submissions(leaderboard_id, 2, "aap")
 
       assert [
-               %Systems.Graphite.SubmissionModel{
+               %Next.Systems.Graphite.SubmissionModel{
                  description: "aap-1",
-                 auth_node: %Core.Authorization.Node{
+                 auth_node: %Mica.Authorization.Node{
                    parent_id: nil,
                    role_assignments: [
-                     %Core.Authorization.RoleAssignment{
+                     %Mica.Authorization.RoleAssignment{
                        principal_id: principal_1_id,
                        role: :owner
                      }
                    ]
                  }
                },
-               %Systems.Graphite.SubmissionModel{
+               %Next.Systems.Graphite.SubmissionModel{
                  description: "aap-2",
-                 auth_node: %Core.Authorization.Node{
+                 auth_node: %Mica.Authorization.Node{
                    parent_id: nil,
                    role_assignments: [
-                     %Core.Authorization.RoleAssignment{
+                     %Mica.Authorization.RoleAssignment{
                        principal_id: principal_2_id,
                        role: :owner
                      }

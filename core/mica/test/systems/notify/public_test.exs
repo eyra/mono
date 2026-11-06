@@ -1,8 +1,8 @@
 defmodule Systems.Notify.PublicTest do
-  use Core.DataCase, async: false
+  use Mica.DataCase, async: false
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Notify
 
   describe "record_event/1" do

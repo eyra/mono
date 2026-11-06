@@ -4,10 +4,10 @@ defmodule Systems.Payment.PartnerFeeTest do
   alias Systems.Payment
 
   setup do
-    original = Application.get_env(:core, Payment.Provider.OPP, [])
+    original = Application.get_env(:mica, Payment.Provider.OPP, [])
 
     on_exit(fn ->
-      Application.put_env(:core, Payment.Provider.OPP, original)
+      Application.put_env(:mica, Payment.Provider.OPP, original)
     end)
 
     %{original: original}
@@ -16,7 +16,7 @@ defmodule Systems.Payment.PartnerFeeTest do
   describe "partner_fee_percentage/0" do
     test "returns 0 when not configured", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.delete(original, :partner_fee_percentage)
       )
@@ -26,7 +26,7 @@ defmodule Systems.Payment.PartnerFeeTest do
 
     test "returns configured value", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.put(original, :partner_fee_percentage, 5)
       )
@@ -38,7 +38,7 @@ defmodule Systems.Payment.PartnerFeeTest do
   describe "partner_fee_amount/1" do
     test "returns 0 when percentage is 0", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.put(original, :partner_fee_percentage, 0)
       )
@@ -48,7 +48,7 @@ defmodule Systems.Payment.PartnerFeeTest do
 
     test "returns rounded-down percentage of base", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.put(original, :partner_fee_percentage, 5)
       )
@@ -58,7 +58,7 @@ defmodule Systems.Payment.PartnerFeeTest do
 
     test "truncates fractional cents (integer division)", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.put(original, :partner_fee_percentage, 3)
       )
@@ -68,7 +68,7 @@ defmodule Systems.Payment.PartnerFeeTest do
 
     test "returns 0 for zero base", %{original: original} do
       Application.put_env(
-        :core,
+        :mica,
         Payment.Provider.OPP,
         Keyword.put(original, :partner_fee_percentage, 10)
       )

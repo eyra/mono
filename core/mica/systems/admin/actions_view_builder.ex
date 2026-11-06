@@ -7,7 +7,7 @@ defmodule Systems.Admin.ActionsViewBuilder do
   - Marking expired tasks
   - Debug tools (crash button, force expire)
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @doc """
   Builds the view model for the ActionsView.

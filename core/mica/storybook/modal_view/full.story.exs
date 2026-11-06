@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ModalView.Full do
+defmodule Frameworks.Storybook.Pixel.ModalView.Full do
   use PhoenixStorybook.Story, :component
   import Phoenix.Component, only: [sigil_H: 2]
 

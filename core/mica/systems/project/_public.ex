@@ -1,19 +1,19 @@
 defmodule Systems.Project.Public do
-  use Core, :public
-  use CoreWeb, :verified_routes
+  use Mica, :public
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Query, warn: false
   import Systems.Project.Queries
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
 
   alias Frameworks.Signal
 
   alias Systems.Advert
   alias Systems.Assignment
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Project
   alias Systems.Storage
   alias Systems.Workflow
@@ -365,7 +365,7 @@ defmodule Systems.Project.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Project.Model do
+defimpl Mica.Persister, for: Systems.Project.Model do
   def save(_project, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :project) do
       {:ok, %{project: project}} -> {:ok, project}
@@ -374,7 +374,7 @@ defimpl Core.Persister, for: Systems.Project.Model do
   end
 end
 
-defimpl Core.Persister, for: Systems.Project.ItemModel do
+defimpl Mica.Persister, for: Systems.Project.ItemModel do
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Signal
   alias Systems.Project
@@ -382,10 +382,10 @@ defimpl Core.Persister, for: Systems.Project.ItemModel do
   def save(_project_item, changeset) do
     result =
       Ecto.Multi.new()
-      |> Core.Repo.multi_update(:project_item, changeset)
+      |> Mica.Repo.multi_update(:project_item, changeset)
       |> EctoHelper.run(:project_node, &load_node!/1)
       |> Signal.Public.multi_dispatch({:project_node, :update})
-      |> Core.Repo.commit()
+      |> Mica.Repo.commit()
 
     case result do
       {:ok, %{project_item: project_item}} -> {:ok, project_item}

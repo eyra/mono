@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameParsedReferencesToEntries do
+defmodule Mica.Repo.Migrations.RenameParsedReferencesToEntries do
   use Ecto.Migration
 
   def change do

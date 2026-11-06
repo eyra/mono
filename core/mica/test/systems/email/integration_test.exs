@@ -1,7 +1,7 @@
 defmodule Systems.Email.IntegrationTest do
   use ExUnit.Case, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Email.Factory
 
   describe "bamboo_phoenix 2.0 integration" do
@@ -61,6 +61,36 @@ defmodule Systems.Email.IntegrationTest do
       assert email.html_body =~ byline
       assert email.text_body =~ title
       assert email.text_body =~ byline
+    end
+
+    test "notification without a byline has no subheader" do
+      email = Factory.notification("Title", nil, "Message", "user@example.com")
+
+      refute email.html_body =~ ~s(class="subheader")
+      assert email.html_body =~ "<p>Message</p>"
+      assert email.text_body =~ "Title\n\nMessage"
+    end
+
+    test "notification with a byline has a subheader" do
+      email = Factory.notification("Title", "Byline", "Message", "user@example.com")
+
+      assert email.html_body =~ ~s(<div class="subheader">Byline</div>)
+      assert email.text_body =~ "Title\n\nByline\n\nMessage"
+    end
+
+    test "notification with a subject and its own HTML part" do
+      html_message = "<div>Rich <strong>text</strong></div>"
+
+      email =
+        Factory.notification("Title", "Byline", "Rich text", "user@example.com",
+          subject: "Custom subject",
+          html_message: html_message
+        )
+
+      assert email.subject == "Custom subject"
+      assert email.html_body =~ html_message
+      assert email.text_body =~ "Rich text"
+      refute email.text_body =~ "<strong>"
     end
 
     test "debug email renders correctly with custom from address" do

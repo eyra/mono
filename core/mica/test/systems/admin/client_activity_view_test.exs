@@ -1,11 +1,11 @@
 defmodule Systems.Admin.ClientActivityViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   require LiveNest.Constants
 
   import Systems.Admin.ClientActivityTestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Admin
 

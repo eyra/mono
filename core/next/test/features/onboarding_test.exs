@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.OnboardingTest do
+defmodule NextWeb.Features.OnboardingTest do
   @moduledoc """
   Feature test for the PANL participant onboarding flow.
 
@@ -7,7 +7,7 @@ defmodule CoreWeb.Features.OnboardingTest do
   - Features step is displayed for PANL participants after profile
   - User can complete onboarding and navigate to home
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   alias Systems.Pool
 
@@ -31,7 +31,7 @@ defmodule CoreWeb.Features.OnboardingTest do
     |> assert_has(Query.css("[data-testid='profile-view']"))
     |> assert_connected("[phx-click='continue']")
     |> click(Query.css("[phx-click='continue']"))
-    |> assert_has(Query.css("[data-testid='pool-join-consent-view']"))
+    |> assert_connected("[data-testid='pool-join-consent-view']")
     |> click(Query.css("[data-testid='pool-join-consent-accept-button']"))
     |> assert_has(Query.css("[data-testid='features-view']"))
     |> click(Query.css("[data-testid='pool-onboarding-continue']"))

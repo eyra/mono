@@ -1,8 +1,8 @@
-defmodule Systems.Student.Filters do
+defmodule Next.Systems.Student.Filters do
   @moduledoc """
   Defines filters used to filter students in the overview page of the pool.
   """
-  use Core.Enums.Base,
+  use Mica.Enums.Base,
       {:student_filters, [:inactive, :active, :passed]}
 
   alias Systems.{

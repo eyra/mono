@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ModalView.Dynamic do
+defmodule Frameworks.Storybook.Pixel.ModalView.Dynamic do
   use PhoenixStorybook.Story, :component
   import Phoenix.Component, only: [sigil_H: 2]
 

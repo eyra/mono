@@ -1,5 +1,5 @@
 defmodule Systems.Admin.SystemView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Square

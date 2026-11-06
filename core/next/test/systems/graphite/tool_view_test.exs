@@ -1,11 +1,11 @@
-defmodule Systems.Graphite.ToolViewTest do
-  use CoreWeb.ConnCase, async: false
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Graphite.ToolViewTest do
+  use MicaWeb.ConnCase, async: false
+  use Gettext, backend: MicaWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
-  alias Systems.Graphite
+  alias Mica.Repo
+  alias Next.Systems.Graphite
   alias Systems.Workflow
 
   setup do

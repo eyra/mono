@@ -1,6 +1,6 @@
 defmodule Next.StorybookTest do
-  use CoreWeb.ConnCase, async: false
-  use Core.FeatureFlags.Test
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   setup do
     set_feature_flag(:storybook, true)

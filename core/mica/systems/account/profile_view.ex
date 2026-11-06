@@ -3,8 +3,8 @@ defmodule Systems.Account.ProfileView do
   Embedded LiveView for editing user profile (name, photo, etc.).
   Used in both Account.Page (as a tab) and OnboardingPage (as a step).
   """
-  use CoreWeb, :embedded_live_view
-  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
+  use MicaWeb, :embedded_live_view
+  use MicaWeb.FileUploader, accept: ~w(.png .jpg .jpeg)
 
   import Frameworks.Pixel.Form
 
@@ -64,7 +64,7 @@ defmodule Systems.Account.ProfileView do
   defp save(socket, %Account.UserProfileEditModel{} = entity, type, attrs) do
     changeset = Account.UserProfileEditModel.changeset(entity, type, attrs)
 
-    case Core.Persister.save(entity, changeset) do
+    case Mica.Persister.save(entity, changeset) do
       {:ok, updated_entity} ->
         socket
         |> assign(model: updated_entity)
@@ -92,7 +92,7 @@ defmodule Systems.Account.ProfileView do
       <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
         <.form id="main_form" :let={form} for={@vm.changeset} phx-submit="save" phx-change="save">
           <.photo_input
-            static_path={&CoreWeb.Endpoint.static_path/1}
+            static_path={&MicaWeb.Endpoint.static_path/1}
             photo_url={@vm.photo_url}
             uploads={@uploads}
             primary_button_text={@vm.choose_photo_text}

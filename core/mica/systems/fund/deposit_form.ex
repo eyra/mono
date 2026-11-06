@@ -1,5 +1,5 @@
 defmodule Systems.Fund.DepositForm do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   import Ecto.Changeset
 

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Panel.Usp do
+defmodule Frameworks.Storybook.Pixel.Panel.Usp do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Panel.usp/1

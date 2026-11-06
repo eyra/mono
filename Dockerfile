@@ -51,7 +51,8 @@ COPY core/mix.exs core/mix.lock ./
 
 # 2) Install and compile dependencies (cached until mix files change)
 RUN mix deps.get
-RUN mix deps.compile
+COPY core/scripts/prefetch-nifs ./scripts/
+RUN scripts/prefetch-nifs && mix deps.compile
 
 # 3) Copy asset dependency files
 COPY core/assets/package.json core/assets/package-lock.json ./assets/
@@ -67,7 +68,7 @@ COPY core/assets/ ./assets/
 
 # 7) Copy other necessary files
 COPY core/priv/ ./priv/
-COPY core/.formatter.exs core/.credo.exs core/.bundle.ex core/boundary_allowlist.exs ./
+COPY core/.formatter.exs core/.credo.exs core/boundary_allowlist.exs ./
 COPY core/custom_credo_checks/ ./custom_credo_checks/
 
 # 8) Copy source code (this changes most frequently, so put it last)
@@ -127,7 +128,10 @@ RUN echo "Release build info:" && \
 # =======================
 FROM debian:12-slim AS prod
 
+# ca-certificates fills the OS trust store that OTP's public_key:cacerts_get/0 reads, so
+# :httpc (tzdata's default client) can verify TLS.
 RUN apt-get update && apt-get install -y \
+      ca-certificates \
       libssl-dev \
       libncurses-dev \
       tzdata \

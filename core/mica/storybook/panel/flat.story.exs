@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Panel.Flat do
+defmodule Frameworks.Storybook.Pixel.Panel.Flat do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Panel.flat/1

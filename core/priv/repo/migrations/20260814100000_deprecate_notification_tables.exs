@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.DeprecateNotificationTables do
+defmodule Mica.Repo.Migrations.DeprecateNotificationTables do
   use Ecto.Migration
 
   # Systems.Notification has been retired in favour of Systems.Notify.

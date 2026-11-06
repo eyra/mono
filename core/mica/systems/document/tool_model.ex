@@ -3,18 +3,18 @@ defmodule Systems.Document.ToolModel do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Workflow
 
-  require Core.Env
-  @tool_directors Core.Env.compile_env(:tool_directors)
+  require Mica.Env
+  @tool_directors Mica.Env.compile_env(:tool_directors)
 
   schema "document_tools" do
     field(:name, :string)
     field(:ref, :string)
     field(:director, Ecto.Enum, values: @tool_directors)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_one(:tool_ref, Workflow.ToolRefModel, foreign_key: :document_tool_id)
 
@@ -45,7 +45,7 @@ defmodule Systems.Document.ToolModel do
   def preload_graph(:down), do: preload_graph([])
 
   defimpl Frameworks.Concept.ToolModel do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     alias Systems.Document
     def key(_), do: :document

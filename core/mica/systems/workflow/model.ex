@@ -10,7 +10,7 @@ defmodule Systems.Workflow.Model do
   schema "workflows" do
     has_many(:items, Workflow.ItemModel, foreign_key: :workflow_id)
     has_one(:assignment, Assignment.Model, foreign_key: :workflow_id)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     timestamps()
   end
 

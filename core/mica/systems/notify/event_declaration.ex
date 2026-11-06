@@ -10,15 +10,12 @@ defmodule Systems.Notify.EventDeclaration do
         event(:contribution_declined, channels: [:email, :na])
       end
 
-  Then register the notifier module in application config so
+  Then list the notifier module in the system's `_system.ex` so
   `Systems.Notify.EventType` finds it:
 
-      config :core, Systems.Notify,
-        notifiers: [Systems.Assignment.Notify, ...]
+      def notifiers, do: [Systems.Assignment.Notify]
 
-  Only systems that actually publish events need a `_notify.ex`; adding one
-  later requires no changes elsewhere except a single line in that config
-  list.
+  Only systems that actually publish events need a `_notify.ex`.
   """
 
   defmacro __using__(_opts) do

@@ -3,10 +3,10 @@ defmodule Next.Storybook do
   Component storybook for Next-owned components, served at `/admin/storybook-next`.
 
   Stories live in `next/storybook`; `mix storybook.gen` writes one for every component that lacks
-  it. Access goes through `CoreWeb.StorybookGuard`.
+  it. Access goes through `MicaWeb.StorybookGuard`.
   """
   use PhoenixStorybook,
-    otp_app: :core,
+    otp_app: :mica,
     title: "Next",
     content_path: Path.expand("../storybook", __DIR__),
     css_path: "/assets/app.css",

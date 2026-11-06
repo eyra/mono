@@ -1,7 +1,7 @@
 defmodule Systems.Assignment.CrewTaskListViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Assignment
 
   describe "view_model/2" do

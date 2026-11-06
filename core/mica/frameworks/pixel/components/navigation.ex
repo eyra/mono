@@ -1,6 +1,6 @@
 defmodule Frameworks.Pixel.Navigation do
   @moduledoc false
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Logo

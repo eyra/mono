@@ -1,5 +1,5 @@
 defmodule Systems.Advert.Builders.Highlight do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.{
     Assignment,
@@ -9,7 +9,7 @@ defmodule Systems.Advert.Builders.Highlight do
 
   defp vm(%Fund.CurrencyModel{} = currency, amount, :reward) do
     reward_title = dgettext("eyra-alliance", "reward.highlight.title")
-    locale = Gettext.get_locale(CoreWeb.Gettext)
+    locale = Gettext.get_locale(MicaWeb.Gettext)
     reward_text = Fund.CurrencyModel.label(currency, locale, amount || 0)
     %{title: reward_title, text: reward_text}
   end

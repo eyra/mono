@@ -1,11 +1,11 @@
-defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
-  use Core.DataCase
-  alias Systems.Zircon.Screening.CriteriaViewBuilder
+defmodule Next.Systems.Zircon.Screening.CriteriaViewBuilderTest do
+  use Mica.DataCase
+  alias Next.Systems.Zircon.Screening.CriteriaViewBuilder
 
   setup do
     # Create required authentication entities
-    actor = Core.Authentication.obtain_actor!(:system, "Zircon")
-    entity = Core.Authentication.obtain_entity!(actor)
+    actor = Mica.Authentication.obtain_actor!(:system, "Zircon")
+    entity = Mica.Authentication.obtain_entity!(actor)
 
     %{actor: actor, entity: entity}
   end
@@ -27,7 +27,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
 
     test "filters annotations by parameter type", %{entity: _entity} do
       # Create annotations with different types
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Next.Systems.Annotation.Pattern.Parameter.type_phrase()}
       other_type = %{phrase: "other_type"}
 
       annotations = [
@@ -45,12 +45,12 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
       assert length(result.criteria_list) == 2
 
       assert Enum.all?(result.criteria_list, fn ann ->
-               ann.type.phrase == Systems.Annotation.Pattern.Parameter.type_phrase()
+               ann.type.phrase == Next.Systems.Annotation.Pattern.Parameter.type_phrase()
              end)
     end
 
     test "sorts criteria by insertion time ascending", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Next.Systems.Annotation.Pattern.Parameter.type_phrase()}
 
       annotations = [
         %{type: parameter_type, inserted_at: ~N[2024-01-03 10:00:00], id: 3},
@@ -110,7 +110,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
 
       assert is_list(result.dimension_list)
       # The dimension list should match what's returned by list_research_dimensions()
-      expected_dimensions = Systems.Zircon.Private.list_research_dimensions()
+      expected_dimensions = Next.Systems.Zircon.Private.list_research_dimensions()
       assert length(result.dimension_list) == length(expected_dimensions)
     end
   end
@@ -158,7 +158,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
 
   describe "integration with annotations" do
     test "processes real annotation data correctly", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Next.Systems.Annotation.Pattern.Parameter.type_phrase()}
 
       # Create more realistic annotation data
       annotations = [
@@ -192,7 +192,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
     end
 
     test "handles mixed annotation types correctly", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Next.Systems.Annotation.Pattern.Parameter.type_phrase()}
       tag_type = %{phrase: "tag"}
       category_type = %{phrase: "category"}
 
@@ -238,7 +238,7 @@ defmodule Systems.Zircon.Screening.CriteriaViewBuilderTest do
     end
 
     test "preserves all annotation fields", %{entity: _entity} do
-      parameter_type = %{phrase: Systems.Annotation.Pattern.Parameter.type_phrase()}
+      parameter_type = %{phrase: Next.Systems.Annotation.Pattern.Parameter.type_phrase()}
 
       annotation = %{
         id: 123,

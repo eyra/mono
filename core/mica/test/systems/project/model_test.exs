@@ -1,6 +1,6 @@
 defmodule Systems.Project.ModelTest do
-  alias Core.Authorization
-  use Core.DataCase
+  alias Mica.Authorization
+  use Mica.DataCase
 
   alias Systems.{
     Project

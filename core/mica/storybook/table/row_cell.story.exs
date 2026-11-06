@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Table.RowCell do
+defmodule Frameworks.Storybook.Pixel.Table.RowCell do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Table.row_cell/1

@@ -8,7 +8,7 @@ defmodule Frameworks.Utility.Schema do
       use Ecto.Schema
 
       import Ecto.Changeset
-      alias Core.Repo
+      alias Mica.Repo
 
       def preload_graph(fields) when is_list(fields) do
         fields

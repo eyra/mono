@@ -1,9 +1,9 @@
 defmodule Systems.Admin.ClientActivityViewBuilderTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   import Systems.Admin.ClientActivityTestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Admin.ClientActivityViewBuilder
 
   @today ~D[2026-10-08]

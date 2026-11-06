@@ -415,3 +415,7 @@ msgstr "Overdracht bevestigen"
 #, elixir-autogen, elixir-format
 msgid "idp.transfer.decline"
 msgstr "Weigeren"
+
+#, elixir-autogen, elixir-format
+msgid "auth.password.link"
+msgstr "Inloggen met wachtwoord"

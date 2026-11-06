@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.WysiwygArea do
+defmodule Frameworks.Storybook.Pixel.Form.WysiwygArea do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.wysiwyg_area/1

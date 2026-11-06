@@ -1,5 +1,5 @@
 defmodule Systems.Pool.CriteriaModelTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Account
   alias Systems.Pool

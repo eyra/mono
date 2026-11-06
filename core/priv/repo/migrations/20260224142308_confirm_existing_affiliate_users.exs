@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.ConfirmExistingAffiliateUsers do
+defmodule Mica.Repo.Migrations.ConfirmExistingAffiliateUsers do
   use Ecto.Migration
 
   def up do

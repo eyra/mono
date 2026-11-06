@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Status.Warning do
+defmodule Frameworks.Storybook.Pixel.Status.Warning do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Status.warning/1

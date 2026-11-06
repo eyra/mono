@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Grid.Dynamic do
+defmodule Frameworks.Storybook.Pixel.Grid.Dynamic do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Grid.dynamic/1

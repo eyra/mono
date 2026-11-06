@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Paginator.PreviousPageButton do
+defmodule Frameworks.Storybook.Pixel.Paginator.PreviousPageButton do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Paginator.previous_page_button/1

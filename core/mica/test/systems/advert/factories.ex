@@ -1,13 +1,13 @@
 defmodule Systems.Advert.Factories do
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
 
   alias Systems.{
     Assignment,
     Crew
   }
 
-  alias Core.Factories
-  use Core, :auth
+  alias Mica.Factories
+  use Mica, :auth
 
   def create_advert(
         researcher,
@@ -64,7 +64,7 @@ defmodule Systems.Advert.Factories do
   end
 
   def create_task(identifier, crew, status, expired, minutes_ago) when is_boolean(expired) do
-    user = Core.Factories.insert!(:member, %{creator: false})
+    user = Mica.Factories.insert!(:member, %{creator: false})
     create_task(identifier, user, crew, status, expired, minutes_ago)
   end
 

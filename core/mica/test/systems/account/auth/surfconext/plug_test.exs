@@ -83,13 +83,13 @@ defmodule Systems.Account.Auth.Surfconext.AuthorizePlug.Test do
 end
 
 defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   setup do
-    conf = Application.get_env(:core, Systems.Account.Auth.Surfconext, [])
+    conf = Application.get_env(:mica, Systems.Account.Auth.Surfconext, [])
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Account.Auth.Surfconext, conf)
+      Application.put_env(:mica, Systems.Account.Auth.Surfconext, conf)
     end)
 
     domain = Faker.Internet.domain_name()
@@ -102,10 +102,10 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
     ]
 
-    Application.put_env(:core, Systems.Account.Auth.Surfconext, test_conf)
+    Application.put_env(:mica, Systems.Account.Auth.Surfconext, test_conf)
 
     conn =
-      CoreWeb.ConnCase.build_conn()
+      MicaWeb.ConnCase.build_conn()
       |> init_test_session(%{surfconext: %{state: "test-state"}})
 
     {:ok, conn: conn, conf: test_conf}
@@ -116,7 +116,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
 
-      assert [user] = Core.Repo.all(Systems.Account.User)
+      assert [user] = Mica.Repo.all(Systems.Account.User)
       assert user.verified_at == nil
       assert user.confirmed_at != nil
       assert user.creator == true
@@ -132,7 +132,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       })
 
       Application.put_env(
-        :core,
+        :mica,
         Systems.Account.Auth.Surfconext,
         Keyword.put(conf, :email, email)
       )
@@ -152,7 +152,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       })
 
       Application.put_env(
-        :core,
+        :mica,
         Systems.Account.Auth.Surfconext,
         Keyword.put(conf, :email, email)
       )
@@ -172,7 +172,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       })
 
       Application.put_env(
-        :core,
+        :mica,
         Systems.Account.Auth.Surfconext,
         Keyword.put(conf, :email, email)
       )
@@ -187,7 +187,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
         |> Keyword.put(:sub, "researcher")
         |> Keyword.put(:token, "researcher-token")
 
-      Application.put_env(:core, Systems.Account.Auth.Surfconext, conf)
+      Application.put_env(:mica, Systems.Account.Auth.Surfconext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
@@ -199,7 +199,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
         |> Keyword.put(:sub, "student")
         |> Keyword.put(:token, "student-token")
 
-      Application.put_env(:core, Systems.Account.Auth.Surfconext, conf)
+      Application.put_env(:mica, Systems.Account.Auth.Surfconext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
       assert redirected_to(conn) == "/user/onboarding"
@@ -221,7 +221,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
         |> Keyword.put(:token, "student-token")
         |> Keyword.put(:email, email)
 
-      Application.put_env(:core, Systems.Account.Auth.Surfconext, conf)
+      Application.put_env(:mica, Systems.Account.Auth.Surfconext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
 
@@ -237,14 +237,14 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       conf: conf
     } do
       existing_email = "duplicate@example.com"
-      existing = Core.Factories.insert!(:member, %{email: existing_email, creator: true})
+      existing = Mica.Factories.insert!(:member, %{email: existing_email, creator: true})
 
       conf =
         conf
         |> Keyword.put(:sub, "new-sso-user-different-sub")
         |> Keyword.put(:email, existing_email)
 
-      Application.put_env(:core, Systems.Account.Auth.Surfconext, conf)
+      Application.put_env(:mica, Systems.Account.Auth.Surfconext, conf)
 
       conn = conn |> get("/auth/surfconext/callback")
 
@@ -262,7 +262,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       log =
         capture_log([level: :error], fn ->
           conn =
-            CoreWeb.ConnCase.build_conn()
+            MicaWeb.ConnCase.build_conn()
             |> init_test_session(%{})
             |> get("/auth/surfconext/callback?code=abc&state=xyz")
 

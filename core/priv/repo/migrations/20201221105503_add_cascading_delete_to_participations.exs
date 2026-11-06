@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddCascadingDeleteToParticipations do
+defmodule Mica.Repo.Migrations.AddCascadingDeleteToParticipations do
   use Ecto.Migration
 
   def up do

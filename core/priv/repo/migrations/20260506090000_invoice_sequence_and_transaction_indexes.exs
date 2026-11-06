@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.InvoiceSequenceAndTransactionIndexes do
+defmodule Mica.Repo.Migrations.InvoiceSequenceAndTransactionIndexes do
   use Ecto.Migration
 
   def up do
@@ -17,8 +17,8 @@ defmodule Core.Repo.Migrations.InvoiceSequenceAndTransactionIndexes do
     )
     """)
 
-    create unique_index(:transactions, [:invoice_id])
-    create unique_index(:transactions, [:transaction_id])
+    create(unique_index(:transactions, [:invoice_id]))
+    create(unique_index(:transactions, [:transaction_id]))
   end
 
   def down do

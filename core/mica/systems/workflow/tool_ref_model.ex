@@ -5,7 +5,7 @@ defmodule Systems.Workflow.ToolRefModel do
   require Logger
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept
 
@@ -15,9 +15,9 @@ defmodule Systems.Workflow.ToolRefModel do
   alias Systems.Lab
   alias Systems.Manual
   alias Systems.Feldspar
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
   alias Systems.Instruction
-  alias Systems.Zircon
+  alias Next.Systems.Zircon
 
   @tools [
     :alliance_tool,

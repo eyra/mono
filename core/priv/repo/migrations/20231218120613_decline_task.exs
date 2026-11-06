@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.DeclineTask do
+defmodule Mica.Repo.Migrations.DeclineTask do
   use Ecto.Migration
 
   def up do

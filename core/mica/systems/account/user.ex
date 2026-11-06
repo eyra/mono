@@ -144,7 +144,7 @@ defmodule Systems.Account.User do
     |> validate_required([:email])
     |> validate_format(:email, email_format(), message: "must have the @ sign and no spaces")
     |> validate_length(:email, max: email_max_length())
-    |> unsafe_validate_unique(:email, Core.Repo)
+    |> unsafe_validate_unique(:email, Mica.Repo)
     |> unique_constraint(:email)
   end
 
@@ -310,7 +310,7 @@ defmodule Systems.Account.User do
 
   def user_id(_), do: nil
 
-  defimpl Core.Authentication.Subject do
+  defimpl Mica.Authentication.Subject do
     def name(%{profile: %{fullname: fullname}}) when is_binary(fullname) and fullname != "",
       do: fullname
 

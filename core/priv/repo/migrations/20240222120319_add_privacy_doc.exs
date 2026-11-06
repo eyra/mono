@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddPrivacyDoc do
+defmodule Mica.Repo.Migrations.AddPrivacyDoc do
   use Ecto.Migration
 
   def up do

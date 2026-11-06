@@ -3,7 +3,7 @@ defmodule Frameworks.Pixel.FabricBridge do
   Temporary shim while Fabric is being retired.
 
   Pixel live_components emit events to their parent LiveView. During the
-  Fabric-retirement window a parent may still be Fabric-based (`use CoreWeb,
+  Fabric-retirement window a parent may still be Fabric-based (`use MicaWeb,
   :live_view_fabric`, populates a `:fabric` assign on any child it renders
   via compose_child) or already migrated to pure LiveNest (no `:fabric`
   assign). This helper picks the right transport at runtime so a Pixel

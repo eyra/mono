@@ -1,5 +1,5 @@
 defmodule Systems.Project.CardView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.ClickableCard

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.BodyLarge do
+defmodule Frameworks.Storybook.Pixel.Text.BodyLarge do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.body_large/1

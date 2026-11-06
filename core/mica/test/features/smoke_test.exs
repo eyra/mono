@@ -1,5 +1,5 @@
-defmodule CoreWeb.Features.SmokeTest do
-  use CoreWeb.FeatureCase
+defmodule MicaWeb.Features.SmokeTest do
+  use MicaWeb.FeatureCase
 
   @tag :feature
   feature "homepage loads", %{session: session} do

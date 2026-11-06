@@ -1,10 +1,11 @@
 defmodule Systems.Manual.Html do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.NumberIcon
   import Frameworks.Pixel.Line
   import Frameworks.Pixel.Image, only: [blurhash: 1]
+  import Frameworks.Pixel.WysiwygAreaHelpers, only: [render_wysiwyg: 1]
 
   attr(:items, :list, required: true)
   attr(:selected_chapter_id, :integer, default: nil)
@@ -151,7 +152,7 @@ defmodule Systems.Manual.Html do
         </div>
       <% end %>
       <div class="wysiwyg">
-        <%= raw @page.text %>
+        <%= render_wysiwyg(@page.text) %>
       </div>
     </div>
     """

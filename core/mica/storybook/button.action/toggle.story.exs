@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.Toggle do
+defmodule Frameworks.Storybook.Pixel.Button.Action.Toggle do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.toggle/1

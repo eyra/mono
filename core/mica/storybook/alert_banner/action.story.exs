@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.AlertBanner.Action do
+defmodule Frameworks.Storybook.Pixel.AlertBanner.Action do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.AlertBanner.action/1

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Tabbed.Dropdown do
+defmodule Frameworks.Storybook.Pixel.Tabbed.Dropdown do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Tabbed.dropdown/1

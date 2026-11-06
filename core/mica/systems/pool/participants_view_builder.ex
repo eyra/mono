@@ -8,10 +8,10 @@ defmodule Systems.Pool.ParticipantsViewBuilder do
   - participant_count: total after search filter (uncapped) — drives the count next to the title
   - search_placeholder / query_string: powers the SearchBar
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.ImageHelpers
-  alias CoreWeb.UI.Timestamp
+  alias Mica.ImageHelpers
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Pool
 

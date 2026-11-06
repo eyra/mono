@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Empty.Empty do
+defmodule Frameworks.Storybook.Pixel.Empty.Empty do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Empty.empty/1

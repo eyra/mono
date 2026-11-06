@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Graphite.SubmissionView.ListItem do
+defmodule Next.Storybook.Systems.Graphite.SubmissionView.ListItem do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Graphite.SubmissionView.list_item/1
+  def function, do: &Next.Systems.Graphite.SubmissionView.list_item/1
 
   def template do
     """

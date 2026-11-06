@@ -1,14 +1,14 @@
-defmodule Mix.Tasks.Core.Graphite.Gen.Submissions do
+defmodule Mix.Tasks.Next.Graphite.Gen.Submissions do
   @moduledoc """
   Generate a number of submissions for a `leaderboard`.
 
   Usage:
-    $ mix core.graphite.gen.submissions -l LEADERBOARD -n AMOUNT -p PREFIX
+    $ mix next.graphite.gen.submissions -l LEADERBOARD -n AMOUNT -p PREFIX
   """
 
   use Mix.Task
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @options [
     strict: [leaderboard: :integer, amount: :integer, prefix: :string],

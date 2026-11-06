@@ -1,5 +1,5 @@
 defmodule Systems.Userflow.AssemblyTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   alias Systems.Userflow.Assembly
 

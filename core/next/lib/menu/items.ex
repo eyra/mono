@@ -1,0 +1,69 @@
+defmodule NextWeb.Menu.Items do
+  use MicaWeb, :verified_routes
+  @behaviour MicaWeb.Menu.ItemsProvider
+
+  use Gettext, backend: MicaWeb.Gettext
+  alias Phoenix.LiveView.JS
+
+  @impl true
+  def values() do
+    %{
+      next: %{action: %{type: :http_get, to: ~p"/"}, title: "Next"},
+      desktop: %{
+        action: %{type: :redirect, to: ~p"/desktop"},
+        title: dgettext("eyra-ui", "menu.item.desktop")
+      },
+      workspace: %{
+        action: %{type: :redirect, to: ~p"/desktop"},
+        title: dgettext("eyra-ui", "menu.item.workspace")
+      },
+      admin: %{
+        action: %{type: :redirect, to: ~p"/admin/config"},
+        title: dgettext("eyra-ui", "menu.item.admin")
+      },
+      onyx: %{
+        action: %{type: :redirect, to: ~p"/onyx"},
+        title: dgettext("eyra-ui", "menu.item.onyx")
+      },
+      helpdesk: %{
+        action: %{type: :redirect, to: ~p"/support/helpdesk"},
+        title: dgettext("eyra-ui", "menu.item.helpdesk")
+      },
+      support: %{
+        action: %{type: :redirect, to: ~p"/support/ticket"},
+        title: dgettext("eyra-ui", "menu.item.support")
+      },
+      todo: %{
+        action: %{type: :redirect, to: ~p"/todo"},
+        title: dgettext("eyra-ui", "menu.item.todo")
+      },
+      profile: %{
+        action: %{type: :redirect, to: ~p"/user/account"},
+        title: dgettext("eyra-ui", "menu.item.profile")
+      },
+      signout: %{
+        action: %{type: :http_delete, to: ~p"/user/session"},
+        title: dgettext("eyra-ui", "menu.item.signout")
+      },
+      signin: %{
+        action: %{type: :redirect, to: Next.SaaS.sign_in_page()},
+        title: dgettext("eyra-ui", "menu.item.signin")
+      },
+      menu: %{
+        action: %{
+          type: :phoenix_js,
+          js: JS.toggle(to: "#mobile-menu") |> JS.toggle(to: "#mobile-menu-backdrop")
+        },
+        title: dgettext("eyra-ui", "menu.item.menu")
+      },
+      payments: %{
+        action: %{type: :redirect, to: "/payment"},
+        title: dgettext("eyra-ui", "menu.item.payments")
+      },
+      projects: %{
+        action: %{type: :redirect, to: "/project"},
+        title: dgettext("eyra-ui", "menu.item.projects")
+      }
+    }
+  end
+end

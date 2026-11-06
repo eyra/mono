@@ -1,5 +1,5 @@
 defmodule Systems.Pool.MarketplaceViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   def view_model(_items, years) do
     %{

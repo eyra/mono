@@ -13,9 +13,9 @@ cd "$(dirname "$0")/.."
 echo "Running seeds (MIX_ENV=${MIX_ENV:-dev})..."
 
 mix eval "
-  Application.put_env(:core, CoreWeb.Endpoint, server: false)
-  {:ok, _} = Application.ensure_all_started(:core)
-  Core.Seeds.seed()
+  Application.put_env(:mica, MicaWeb.Endpoint, server: false)
+  {:ok, _} = Application.ensure_all_started(:mica)
+  Mica.Seeds.seed()
 "
 
 echo "Done."

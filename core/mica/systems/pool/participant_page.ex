@@ -1,7 +1,7 @@
 defmodule Systems.Pool.ParticipantPage do
   use Systems.Content.Composer, :live_workspace
 
-  import CoreWeb.UI.Member
+  import MicaWeb.UI.Member
   import Frameworks.Pixel.Content
 
   alias Frameworks.Pixel.Text

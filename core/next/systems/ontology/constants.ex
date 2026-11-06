@@ -1,4 +1,4 @@
-defmodule Systems.Ontology.Constants do
+defmodule Next.Systems.Ontology.Constants do
   @moduledoc """
   This module contains the Ontology constants.
   """
@@ -17,8 +17,8 @@ defmodule Systems.Ontology.Constants do
 
   defmacro __using__(_) do
     quote do
-      require Systems.Ontology.Constants
-      alias Systems.Ontology.Constants
+      require Next.Systems.Ontology.Constants
+      alias Next.Systems.Ontology.Constants
 
       @subsumes Constants.subsumes()
       @definition Constants.definition()

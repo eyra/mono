@@ -1,6 +1,6 @@
-defmodule Systems.Graphite.Factories do
-  alias Core.Factories
-  alias Systems.Graphite
+defmodule Next.Systems.Graphite.Factories do
+  alias Mica.Factories
+  alias Next.Systems.Graphite
   alias Systems.Workflow
   alias Systems.Assignment
 

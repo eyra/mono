@@ -1,4 +1,4 @@
-defmodule Systems.Ontology.RefModel do
+defmodule Next.Systems.Ontology.RefModel do
   @moduledoc """
     A module referencing a model in the Ontology.
 
@@ -10,7 +10,7 @@ defmodule Systems.Ontology.RefModel do
 
   import Ecto.Changeset
 
-  alias Systems.Ontology
+  alias Next.Systems.Ontology
 
   schema "ontology_ref" do
     belongs_to(:concept, Ontology.ConceptModel)
@@ -47,7 +47,8 @@ defmodule Systems.Ontology.RefModel do
   def preload_graph(:concept), do: [concept: Ontology.ConceptModel.preload_graph(:up)]
   def preload_graph(:predicate), do: [predicate: Ontology.PredicateModel.preload_graph(:up)]
 
-  def get_target(%Systems.Ontology.RefModel{} = ontology_ref) when not is_nil(ontology_ref) do
+  def get_target(%Next.Systems.Ontology.RefModel{} = ontology_ref)
+      when not is_nil(ontology_ref) do
     if target =
          Enum.find(@target_fields, [], fn ref ->
            not is_nil(Map.get(ontology_ref, ref))
@@ -58,8 +59,8 @@ defmodule Systems.Ontology.RefModel do
     end
   end
 
-  defimpl Systems.Ontology.Element do
-    alias Systems.Ontology
+  defimpl Next.Systems.Ontology.Element do
+    alias Next.Systems.Ontology
 
     def flatten(%{} = ontology_ref) do
       [ontology_ref] ++ Ontology.Element.flatten(Ontology.RefModel.get_target(ontology_ref))

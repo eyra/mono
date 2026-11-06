@@ -5,10 +5,10 @@ defmodule Systems.Org.ContentPageTest do
   happen to own (or used to own) another org and therefore carry the
   global :admin role.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
 
   describe "access control" do

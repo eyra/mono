@@ -1,7 +1,7 @@
-defmodule Systems.Zircon.SwitchTest do
-  use Core.DataCase
+defmodule Next.Systems.Zircon.SwitchTest do
+  use Mica.DataCase
 
-  alias Systems.Zircon.Switch
+  alias Next.Systems.Zircon.Switch
   alias Systems.Observatory.UpdateCollector
 
   setup do
@@ -13,22 +13,22 @@ defmodule Systems.Zircon.SwitchTest do
   describe "processing_progress signal handling" do
     test "collects Observatory update for processing progress" do
       # Create test data
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       # Create a session in processing phase with progress
       session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :activated,
@@ -62,7 +62,7 @@ defmodule Systems.Zircon.SwitchTest do
       [{target, args, collected_message}] = updates
 
       # Check target is correct
-      assert target == {:embedded_live_view, Systems.Zircon.Screening.ImportView}
+      assert target == {:embedded_live_view, Next.Systems.Zircon.Screening.ImportView}
 
       # Check args contains tool id
       assert args == [tool.id]
@@ -76,15 +76,15 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles processing progress at different stages" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
@@ -103,7 +103,7 @@ defmodule Systems.Zircon.SwitchTest do
         UpdateCollector.clear()
 
         session =
-          Core.Factories.insert!(:paper_ris_import_session, %{
+          Mica.Factories.insert!(:paper_ris_import_session, %{
             paper_set: paper_set,
             reference_file: reference_file,
             status: :activated,
@@ -132,10 +132,10 @@ defmodule Systems.Zircon.SwitchTest do
   describe "batch_completed signal handling with Observatory verification" do
     test "collects Observatory update with correct batch progress data" do
       # Create test data
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -172,7 +172,7 @@ defmodule Systems.Zircon.SwitchTest do
       [{target, args, collected_message}] = updates
 
       # Check target is correct
-      assert target == {:embedded_live_view, Systems.Zircon.Screening.ImportView}
+      assert target == {:embedded_live_view, Next.Systems.Zircon.Screening.ImportView}
 
       # Check args contains tool id
       assert args == [tool.id]
@@ -192,10 +192,10 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "collects Observatory update with zero skipped papers" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -232,10 +232,10 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles batch_completed with all papers skipped" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       _tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -259,10 +259,10 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "correctly extracts progress data from session in message" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       _tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -300,10 +300,10 @@ defmodule Systems.Zircon.SwitchTest do
   describe "other signal handling" do
     test "handles paper_reference_file updated signal" do
       # Create test data
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -320,21 +320,21 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles paper_ris_import_session status changes" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
       paper_set =
-        Core.Factories.insert!(:paper_set, %{
+        Mica.Factories.insert!(:paper_set, %{
           category: :zircon_screening_tool,
           identifier: tool.id
         })
 
       session =
-        Core.Factories.insert!(:paper_ris_import_session, %{
+        Mica.Factories.insert!(:paper_ris_import_session, %{
           paper_set: paper_set,
           reference_file: reference_file,
           status: :succeeded,
@@ -365,9 +365,9 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles zircon_screening_tool_annotation_assoc inserted signal" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
       # Annotation requires a statement
-      annotation = Core.Factories.insert!(:annotation, %{statement: "test"})
+      annotation = Mica.Factories.insert!(:annotation, %{statement: "test"})
 
       assoc = %{
         tool: tool,
@@ -384,7 +384,7 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles zircon_screening_tool_annotation_assoc deleted signal" do
-      tool = Core.Factories.insert!(:zircon_screening_tool)
+      tool = Mica.Factories.insert!(:zircon_screening_tool)
 
       message = %{
         zircon_screening_tool: tool,
@@ -410,10 +410,10 @@ defmodule Systems.Zircon.SwitchTest do
 
   describe "edge cases" do
     test "handles missing progress data gracefully" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       _tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 
@@ -432,10 +432,10 @@ defmodule Systems.Zircon.SwitchTest do
     end
 
     test "handles nil values in progress data" do
-      reference_file = Core.Factories.insert!(:paper_reference_file)
+      reference_file = Mica.Factories.insert!(:paper_reference_file)
 
       _tool =
-        Core.Factories.insert!(:zircon_screening_tool, %{
+        Mica.Factories.insert!(:zircon_screening_tool, %{
           reference_files: [reference_file]
         })
 

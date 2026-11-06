@@ -20,9 +20,9 @@ msgid "tool.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
+msgid "workflow_item.cognitive_tool.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
+msgid "workflow_item.cognitive_tool.title"
 msgstr ""

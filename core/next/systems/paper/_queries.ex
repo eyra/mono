@@ -1,10 +1,10 @@
-defmodule Systems.Paper.Queries do
+defmodule Next.Systems.Paper.Queries do
   import Ecto.Query
   require Frameworks.Utility.Query
 
   import Frameworks.Utility.Query, only: [build: 3]
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   # PAPER
   def paper_query() do

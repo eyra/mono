@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Zircon.HTML.RisSelectorForm do
+defmodule Next.Storybook.Systems.Zircon.HTML.RisSelectorForm do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Zircon.HTML.ris_selector_form/1
+  def function, do: &Next.Systems.Zircon.HTML.ris_selector_form/1
 
   def variations do
     [
@@ -19,7 +19,7 @@ defmodule Storybook.Systems.Zircon.HTML.RisSelectorForm do
     ]
   end
 
-  # Same config CoreWeb.FileUploader registers via allow_upload/3 in the import view
+  # Same config MicaWeb.FileUploader registers via allow_upload/3 in the import view
   defp upload do
     Phoenix.LiveView.UploadConfig.build(:file, "phx-ris-file",
       accept: ~w(.ris),

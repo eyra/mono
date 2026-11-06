@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.Redirect do
+defmodule Frameworks.Storybook.Pixel.Button.Action.Redirect do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.redirect/1

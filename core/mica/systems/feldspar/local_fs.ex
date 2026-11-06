@@ -1,5 +1,5 @@
 defmodule Systems.Feldspar.LocalFS do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   def public_path, do: "/feldspar/apps"
 
@@ -104,6 +104,6 @@ defmodule Systems.Feldspar.LocalFS do
   end
 
   def get_root_path do
-    Core.Env.get(:upload_path)
+    Mica.Env.get(:upload_path)
   end
 end

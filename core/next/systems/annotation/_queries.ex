@@ -1,12 +1,12 @@
-defmodule Systems.Annotation.Queries do
-  use Core, :auth
+defmodule Next.Systems.Annotation.Queries do
+  use Mica, :auth
   require Frameworks.Utility.Query
 
   import Ecto.Query, warn: true
   import Frameworks.Utility.Query, only: [build: 3]
 
   def annotation_query do
-    from(a in Systems.Annotation.Model, as: :annotation)
+    from(a in Next.Systems.Annotation.Model, as: :annotation)
   end
 
   def annotation_query_include(query, _, nil) do
@@ -17,7 +17,7 @@ defmodule Systems.Annotation.Queries do
     build(query, :annotation, [statement == ^statement])
   end
 
-  def annotation_query_include(query, :entity, %Core.Authentication.Entity{} = entity) do
+  def annotation_query_include(query, :entity, %Mica.Authentication.Entity{} = entity) do
     annotation_query_include(query, :entities, [entity])
   end
 
@@ -29,7 +29,7 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        %Systems.Annotation.Model{id: annotation_id}
+        %Next.Systems.Annotation.Model{id: annotation_id}
       ) do
     query
     |> where(
@@ -41,7 +41,7 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        %Systems.Ontology.PredicateModel{id: predicate_id}
+        %Next.Systems.Ontology.PredicateModel{id: predicate_id}
       ) do
     build(query, :annotation_ref,
       ontology_ref: [
@@ -53,7 +53,7 @@ defmodule Systems.Annotation.Queries do
   def annotation_query_include(
         query,
         :reference,
-        %Systems.Ontology.ConceptModel{id: concept_id}
+        %Next.Systems.Ontology.ConceptModel{id: concept_id}
       ) do
     build(query, :annotation_ref,
       ontology_ref: [
@@ -76,7 +76,7 @@ defmodule Systems.Annotation.Queries do
     query
   end
 
-  def annotation_query_include(query, :type, %Systems.Ontology.ConceptModel{} = type) do
+  def annotation_query_include(query, :type, %Next.Systems.Ontology.ConceptModel{} = type) do
     build(query, :annotation, [type_id == ^type.id])
   end
 
@@ -84,17 +84,17 @@ defmodule Systems.Annotation.Queries do
     build(query, :annotation, type: [phrase == ^phrase])
   end
 
-  def annotation_query_include(query, :annotation, %Systems.Annotation.Model{} = annotation) do
+  def annotation_query_include(query, :annotation, %Next.Systems.Annotation.Model{} = annotation) do
     build(query, :annotation_ref, [annotation_id == ^annotation.id])
   end
 
   def annotation_query_join(query, :annotation_ref) do
     query
-    |> join(:inner, [annotation: a], aa in Systems.Annotation.Assoc,
+    |> join(:inner, [annotation: a], aa in Next.Systems.Annotation.Assoc,
       on: aa.annotation_id == a.id,
       as: :annotation_assoc
     )
-    |> join(:inner, [annotation_assoc: aa], ref in Systems.Annotation.RefModel,
+    |> join(:inner, [annotation_assoc: aa], ref in Next.Systems.Annotation.RefModel,
       on: ref.id == aa.ref_id,
       as: :annotation_ref
     )
@@ -102,7 +102,7 @@ defmodule Systems.Annotation.Queries do
 
   def annotation_query_join(query, :ontology_refs) do
     query
-    |> join(:inner, [annotation_ref: ar], orm in Systems.Ontology.RefModel,
+    |> join(:inner, [annotation_ref: ar], orm in Next.Systems.Ontology.RefModel,
       on: orm.id == ar.ontology_ref_id,
       as: :ontology_refs
     )
@@ -110,7 +110,7 @@ defmodule Systems.Annotation.Queries do
 
   def annotation_query_join(query, :ontology_concept) do
     query
-    |> join(:inner, [ontology_refs: orm], oc in Systems.Ontology.ConceptModel,
+    |> join(:inner, [ontology_refs: orm], oc in Next.Systems.Ontology.ConceptModel,
       on: oc.id == orm.concept_id,
       as: :ontology_concept
     )
@@ -118,7 +118,7 @@ defmodule Systems.Annotation.Queries do
 
   def annotation_query_join(query, :ontology_predicate) do
     query
-    |> join(:inner, [ontology_refs: orm], op in Systems.Ontology.PredicateModel,
+    |> join(:inner, [ontology_refs: orm], op in Next.Systems.Ontology.PredicateModel,
       on: op.id == orm.predicate_id,
       as: :ontology_predicate
     )

@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.ContributionsViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   import Systems.Fund.TestHelper
   import Systems.NextAction.TestHelper
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
   alias Systems.Crew
@@ -150,7 +150,7 @@ defmodule Systems.Assignment.ContributionsViewTest do
            member: member_a
          } do
       # Signed-in user is the assignment's owner (inherited from auth tree).
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
 
       {_, _} = create_pending_contribution(assignment, participant_a, crew, member_a)
 
@@ -173,6 +173,27 @@ defmodule Systems.Assignment.ContributionsViewTest do
       _ = render(view)
 
       refute_next_action(user, "/assignment/#{id}/content?tab=contributions")
+    end
+
+    test "survives the acceptance email the test mailer sends back to it",
+         %{
+           conn: conn,
+           context: context,
+           assignment: assignment,
+           participant: participant,
+           crew: crew,
+           member: member
+         } do
+      create_pending_contribution(assignment, participant, crew, member)
+
+      {:ok, view, _html} = mount_view(conn, context)
+      send(view.pid, :confirm_all)
+
+      # The first render is answered before the LV reads the
+      # `{:delivered_email, _}` it sent itself while confirming; the second
+      # render is queued after it.
+      _ = render(view)
+      assert render(view) =~ "Contributions"
     end
   end
 

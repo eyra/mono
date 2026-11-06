@@ -5,9 +5,9 @@ defmodule Systems.Org.MemberViewBuilderTest do
   set) and by search query, cap the rendered list at 50, and report the
   uncapped count.
   """
-  use Core.DataCase
+  use Mica.DataCase
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Org
 
   setup do
@@ -154,12 +154,12 @@ defmodule Systems.Org.MemberViewBuilderTest do
     import Ecto.Query, only: [from: 2]
 
     {1, _} =
-      from(ra in Core.Authorization.RoleAssignment,
+      from(ra in Mica.Authorization.RoleAssignment,
         where:
           ra.node_id == ^org.auth_node_id and
             ra.principal_id == ^user.id and
             ra.role == :member
       )
-      |> Core.Repo.update_all(set: [inserted_at: at])
+      |> Mica.Repo.update_all(set: [inserted_at: at])
   end
 end

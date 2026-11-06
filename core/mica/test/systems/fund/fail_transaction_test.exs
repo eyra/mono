@@ -1,10 +1,10 @@
 defmodule Systems.Fund.FailTransactionTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
   import ExUnit.CaptureLog
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
   alias Systems.Fund
 

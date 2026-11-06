@@ -1,7 +1,7 @@
-defmodule Systems.Graphite.ExportControllerTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.ExportControllerTest do
+  use Mica.DataCase
 
-  alias Systems.{
+  alias Next.Systems.{
     Graphite
   }
 

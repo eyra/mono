@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.FixWebPushSubscriptions do
+defmodule Mica.Repo.Migrations.FixWebPushSubscriptions do
   use Ecto.Migration
 
   def change do

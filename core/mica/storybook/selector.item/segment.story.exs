@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Selector.Item.Segment do
+defmodule Frameworks.Storybook.Pixel.Selector.Item.Segment do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Selector.Item.segment/1

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.EmailInput do
+defmodule Frameworks.Storybook.Pixel.Form.EmailInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.email_input/1

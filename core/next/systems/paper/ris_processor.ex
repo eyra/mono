@@ -1,4 +1,4 @@
-defmodule Systems.Paper.RISProcessor do
+defmodule Next.Systems.Paper.RISProcessor do
   @moduledoc """
   Business logic for processing parsed RIS references.
 
@@ -9,8 +9,8 @@ defmodule Systems.Paper.RISProcessor do
   """
 
   require Logger
-  use Gettext, backend: CoreWeb.Gettext
-  alias Systems.Paper
+  use Gettext, backend: MicaWeb.Gettext
+  alias Next.Systems.Paper
 
   @doc """
   Process parsed RIS references and categorize them.

@@ -1,14 +1,21 @@
 defmodule Systems.Desktop.PageTest do
   @moduledoc """
-  Regression coverage for FX#9905887344 — when a user's AddDomainMembers
-  NextAction is cleared in another process (e.g. their :owner role is
-  revoked), the next-best-action banner on /desktop must disappear
+  The banner tests are regression coverage for FX#9905887344 — when a user's
+  AddDomainMembers NextAction is cleared in another process (e.g. their :owner
+  role is revoked), the next-best-action banner on /desktop must disappear
   without a manual refresh.
+
+  The section tests contribute `Systems.Desktop.TestSection` through
+  `config :mica, Systems.Desktop, sections: [...]`.
   """
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
-  alias Core.Factories
+  import Frameworks.Signal.TestHelper
+
+  alias Mica.Factories
+  alias Frameworks.Signal
+  alias Systems.Desktop
   alias Systems.Org
 
   describe "next-best-action banner" do
@@ -35,5 +42,110 @@ defmodule Systems.Desktop.PageTest do
 
       refute render(view) =~ "New members available for"
     end
+  end
+
+  describe "sections" do
+    setup ctx do
+      user = Factories.insert!(:creator)
+      {:ok, ctx} = login(user, ctx)
+      {:ok, Keyword.put(ctx, :user, user)}
+    end
+
+    test "without contributed sections, Desktop shows only Recent items", %{conn: conn} do
+      put_env(Systems.Desktop, sections: [])
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert html =~ "Recent items"
+      refute has_element?(view, "[id^=desktop_section_]")
+    end
+
+    test "a contributed section shows after Recent items", %{conn: conn} do
+      contribute_test_section(message: "Hello from the test section")
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert has_element?(view, "#desktop_section_test", "Test section")
+      assert has_element?(view, "#desktop_section_test", "Hello from the test section")
+
+      {recent_items, _} = :binary.match(html, "Recent items")
+      {section, _} = :binary.match(html, "desktop_section_test")
+      assert recent_items < section
+    end
+
+    test "a section placed before Recent items shows above them", %{conn: conn} do
+      contribute_test_section(
+        message: "Hello from the test section",
+        placement: :before_recent_items
+      )
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert has_element?(view, "#desktop_section_test", "Hello from the test section")
+
+      {section, _} = :binary.match(html, "desktop_section_test")
+      {recent_items, _} = :binary.match(html, "Recent items")
+      assert section < recent_items
+      assert html =~ ~r/Recent items\s*<span class="text-primary"> 0<\/span>/
+    end
+
+    test "a section without a view model is hidden", %{conn: conn} do
+      contribute_test_section([])
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      refute has_element?(view, "#desktop_section_test")
+    end
+
+    test "a section can link to its full list with its own label", %{conn: conn} do
+      contribute_test_section(
+        message: "Preview",
+        full_list: %{label: "See all notes", to: "/todo"}
+      )
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      link = "#desktop_section_test [data-testid=section-full-list]"
+      assert has_element?(view, "#{link}[href='/todo']", "See all notes")
+      assert has_element?(view, "#{link} img[src='/images/icons/forward.svg']")
+      view |> element(link) |> render_click()
+      assert_redirect(view, "/todo")
+    end
+
+    test "a section without a full-list destination has no header action", %{conn: conn} do
+      contribute_test_section(message: "Preview")
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+      refute has_element?(view, "#desktop_section_test [data-testid=section-full-list]")
+    end
+
+    test "a contributed section refreshes live through its own Switch", %{conn: conn, user: user} do
+      contribute_test_section(message: "Before")
+      override_signal_handlers(Mica.SaaS.signal_handlers() ++ [Desktop.TestSection.Switch])
+      on_exit(&restore_signal_handlers/0)
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+      assert has_element?(view, "#desktop_section_test", "Before")
+
+      put_env(Desktop.TestSection, message: "After")
+      Signal.Public.dispatch!({:desktop_test_section, :updated}, %{user: user, from_pid: self()})
+
+      assert has_element?(view, "#desktop_section_test", "After")
+    end
+  end
+
+  defp contribute_test_section(config) do
+    put_env(Systems.Desktop, sections: [Desktop.TestSection])
+    put_env(Desktop.TestSection, config)
+  end
+
+  defp put_env(key, value) do
+    original = Application.get_env(:mica, key)
+    Application.put_env(:mica, key, value)
+
+    on_exit(fn ->
+      if original,
+        do: Application.put_env(:mica, key, original),
+        else: Application.delete_env(:mica, key)
+    end)
   end
 end

@@ -1,7 +1,7 @@
-defmodule Storybook.Systems.Zircon.HTML.RisEntryTable do
+defmodule Next.Storybook.Systems.Zircon.HTML.RisEntryTable do
   use PhoenixStorybook.Story, :component
 
-  def function, do: &Systems.Zircon.HTML.ris_entry_table/1
+  def function, do: &Next.Systems.Zircon.HTML.ris_entry_table/1
 
   def variations do
     [

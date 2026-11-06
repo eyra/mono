@@ -1,16 +1,18 @@
 defmodule Systems.Affiliate.Public do
   use Systems.Affiliate.Constants
-  use CoreWeb, :verified_routes
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb, :verified_routes
+  use Gettext, backend: MicaWeb.Gettext
 
   require Logger
 
   import Ecto.Query, warn: true
   import Ecto.Changeset
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
+
+  alias Frameworks.Utility.OutboundUrl
 
   alias Systems.Account
   alias Systems.Affiliate
@@ -36,6 +38,39 @@ defmodule Systems.Affiliate.Public do
       {:error, :user_not_found} ->
         {:error, :user_not_found}
     end
+  end
+
+  @doc """
+  Queues `event` for the affiliate's callback URL (`Affiliate.CallbackWorker`).
+  Inside a transaction the callback is sent only after it commits. `affiliate`
+  is the affiliate or a struct that has one, such as an assignment.
+  """
+  def queue_event(%{affiliate: affiliate}, event, user), do: queue_event(affiliate, event, user)
+  def queue_event(nil, _event, _user), do: {:error, :affiliate_url_missing}
+  def queue_event(_affiliate, nil, _user), do: {:error, :event_missing}
+
+  def queue_event(_affiliate, event, _user) when not is_map(event),
+    do: {:error, :event_invalid_format}
+
+  def queue_event(_affiliate, _event, nil), do: {:error, :user_missing}
+
+  def queue_event(%Affiliate.Model{callback_url: callback_url}, _event, _user)
+      when callback_url in [nil, ""],
+      do: {:error, :callback_url_missing}
+
+  def queue_event(%Affiliate.Model{} = affiliate, %{} = event, %Account.User{} = user) do
+    with {:ok, _affiliate_user} <- get_user(user) do
+      affiliate
+      |> Affiliate.CallbackWorker.new_event(event, user)
+      |> Oban.insert()
+    end
+  end
+
+  @doc """
+  Sends an event that `queue_event/3` queued.
+  """
+  def deliver_event(affiliate_id, %{} = event, user_id) do
+    send_event(Repo.get(Affiliate.Model, affiliate_id), event, Repo.get(Account.User, user_id))
   end
 
   def url_for_resource(%resource_type{} = %{id: id}) do
@@ -147,6 +182,18 @@ defmodule Systems.Affiliate.Public do
     end
   end
 
+  @doc """
+  The identifier the affiliate knows the user by, or nil.
+  """
+  def get_identifier(%Affiliate.Model{id: affiliate_id}, %Account.User{id: user_id}) do
+    from(au in Affiliate.User,
+      where: au.affiliate_id == ^affiliate_id and au.user_id == ^user_id,
+      select: au.identifier,
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
   def get_user(_affiliate, _identifier, preload \\ [])
 
   def get_user(_, nil, _preload), do: nil
@@ -248,8 +295,12 @@ defmodule Systems.Affiliate.Public do
   end
 
   def validate_url(url) do
-    case :hackney.request(:head, url, [], "", []) do
-      {:ok, status, _} ->
+    case OutboundUrl.request(:head, url, [], "", []) do
+      {:ok, status, _headers} ->
+        {:ok, status}
+
+      # hackney 4 answers a HEAD redirect it doesn't follow with an empty body.
+      {:ok, status, _headers, _body} ->
         {:ok, status}
 
       {:error, reason} ->
@@ -258,6 +309,6 @@ defmodule Systems.Affiliate.Public do
   end
 
   defp get_base_url do
-    Core.Env.get(:base_url)
+    Mica.Env.get(:base_url)
   end
 end

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.Content do
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   import Frameworks.Pixel.Image
   alias Frameworks.Pixel.Text

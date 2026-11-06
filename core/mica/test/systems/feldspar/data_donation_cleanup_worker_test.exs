@@ -1,6 +1,6 @@
 defmodule Systems.Feldspar.DataDonationCleanupWorkerTest do
-  use Core.DataCase, async: false
-  use Oban.Testing, repo: Core.Repo
+  use Mica.DataCase, async: false
+  use Oban.Testing, repo: Mica.Repo
 
   alias Systems.Feldspar.DataDonationCleanupWorker
   alias Systems.Feldspar.DataDonationFolder
@@ -78,7 +78,7 @@ defmodule Systems.Feldspar.DataDonationCleanupWorkerTest do
   describe "node job" do
     setup do
       on_exit(fn -> Enum.each(["cleanup-old", "cleanup-new"], &DataDonationFolder.delete/1) end)
-      %{folder: Application.get_env(:core, :feldspar_data_donation)[:path]}
+      %{folder: Application.get_env(:mica, :feldspar_data_donation)[:path]}
     end
 
     test "deletes local files older than the retention period", %{folder: folder} do

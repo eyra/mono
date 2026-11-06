@@ -1,5 +1,5 @@
 defmodule Systems.Advert.FundingView do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   import Frameworks.Pixel.Form
 
@@ -58,7 +58,7 @@ defmodule Systems.Advert.FundingView do
         changeset: changeset,
         selected_fund: fund,
         user: user,
-        locale: CoreWeb.Live.Hook.Locale.get_locale()
+        locale: MicaWeb.Live.Hook.Locale.get_locale()
       )
       |> update_state()
       |> update_reward()

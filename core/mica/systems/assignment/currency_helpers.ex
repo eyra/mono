@@ -17,7 +17,7 @@ defmodule Systems.Assignment.CurrencyHelpers do
   def cents_to_display(cents) when is_integer(cents) do
     decimal = cents_to_decimal(cents)
 
-    case CoreWeb.Cldr.Number.to_string(decimal, locale: locale()) do
+    case MicaWeb.Cldr.Number.to_string(decimal, locale: locale()) do
       {:ok, formatted} -> formatted
       _ -> Decimal.to_string(decimal, :normal)
     end
@@ -68,7 +68,7 @@ defmodule Systems.Assignment.CurrencyHelpers do
   end
 
   defp format_currency(%Decimal{} = amount, locale) do
-    case CoreWeb.Cldr.Number.to_string(amount,
+    case MicaWeb.Cldr.Number.to_string(amount,
            format: :currency,
            currency: @currency,
            locale: locale
@@ -79,6 +79,6 @@ defmodule Systems.Assignment.CurrencyHelpers do
   end
 
   defp locale do
-    Gettext.get_locale(CoreWeb.Gettext)
+    Gettext.get_locale(MicaWeb.Gettext)
   end
 end

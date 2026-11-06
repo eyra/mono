@@ -1,10 +1,10 @@
 defmodule Systems.Pool.AdvertItemBuilder do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Utility.Guards
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
 
   alias Systems.Pool
   alias Systems.Assignment
@@ -44,8 +44,8 @@ defmodule Systems.Pool.AdvertItemBuilder do
 
     quick_summery =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
 
     image_info = ImageHelpers.get_image_info(image_id, 120, 115)
     image = %{type: :catalog, info: image_info}

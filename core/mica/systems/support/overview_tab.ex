@@ -1,9 +1,9 @@
 defmodule Systems.Support.OverviewTab do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   import Frameworks.Pixel.Content
-  alias CoreWeb.UI.Area
+  alias MicaWeb.UI.Area
 
   alias Systems.Support
 
@@ -54,8 +54,8 @@ defmodule Systems.Support.OverviewTab do
 
     quick_summery =
       updated_at
-      |> CoreWeb.UI.Timestamp.apply_timezone()
-      |> CoreWeb.UI.Timestamp.humanize()
+      |> MicaWeb.UI.Timestamp.apply_timezone()
+      |> MicaWeb.UI.Timestamp.humanize()
 
     image = %{
       type: :avatar,

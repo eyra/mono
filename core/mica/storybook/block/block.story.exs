@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Block.Block do
+defmodule Frameworks.Storybook.Pixel.Block.Block do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Block.block/1

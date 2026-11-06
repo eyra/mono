@@ -1,5 +1,5 @@
 defmodule Systems.NextAction.View do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   attr(:title, :string, required: true)
   attr(:description, :string, required: true)
@@ -14,7 +14,9 @@ defmodule Systems.NextAction.View do
 
   def highlight(assigns) do
     ~H"""
-    <.normal {assign(assigns, :style, :tertiary)} />
+    <div data-testid="next-action-highlight">
+      <.normal {assign(assigns, :style, :tertiary)} />
+    </div>
     """
   end
 

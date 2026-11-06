@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Bullet do
+defmodule Frameworks.Storybook.Pixel.Text.Bullet do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.bullet/1

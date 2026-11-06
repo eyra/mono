@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Card.Highlight do
+defmodule Frameworks.Storybook.Pixel.Card.Highlight do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Card.highlight/1

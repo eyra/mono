@@ -1,5 +1,5 @@
 defmodule Systems.Admin.LoginPageTest do
-  use CoreWeb.ConnCase
+  use MicaWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

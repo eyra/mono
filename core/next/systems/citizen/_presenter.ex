@@ -1,10 +1,8 @@
-defmodule Systems.Citizen.Presenter do
+defmodule Next.Systems.Citizen.Presenter do
   @behaviour Frameworks.Concept.Presenter
 
-  alias Systems.{
-    Citizen,
-    Pool
-  }
+  alias Next.Systems.Citizen
+  alias Systems.Pool
 
   @impl true
   def view_model(Pool.SubmissionPage, %Pool.SubmissionModel{} = submission, assigns) do

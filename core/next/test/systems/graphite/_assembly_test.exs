@@ -1,10 +1,10 @@
-defmodule Systems.Graphite.AssemblyTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.AssemblyTest do
+  use Mica.DataCase
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Project
-  alias Systems.Graphite.Assembly
-  alias Systems.Graphite.Factories
+  alias Next.Systems.Graphite.Assembly
+  alias Next.Systems.Graphite.Factories
 
   describe "get_leaderboard_name/1" do
     test "without other leaderboard" do
@@ -66,9 +66,9 @@ defmodule Systems.Graphite.AssemblyTest do
       assert %Systems.Project.ItemModel{
                name: "name",
                project_path: [^project_root_id],
-               leaderboard: %Systems.Graphite.LeaderboardModel{
-                 tool: %Systems.Graphite.ToolModel{id: ^tool_id},
-                 auth_node: %Core.Authorization.Node{},
+               leaderboard: %Next.Systems.Graphite.LeaderboardModel{
+                 tool: %Next.Systems.Graphite.ToolModel{id: ^tool_id},
+                 auth_node: %Mica.Authorization.Node{},
                  project_item: %Ecto.Association.NotLoaded{}
                }
              } = project_item

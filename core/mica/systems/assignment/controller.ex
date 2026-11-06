@@ -1,12 +1,12 @@
 defmodule Systems.Assignment.Controller do
-  use CoreWeb,
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   import Frameworks.Utility.List, only: [append: 2, append_if: 3]
   import Systems.Assignment.Private, only: [task_identifier: 3, no_consent?: 2]
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Frameworks.Concept
   alias Systems.Assignment
   alias Systems.Crew
@@ -124,12 +124,12 @@ defmodule Systems.Assignment.Controller do
   defp branch_name(_conn, id), do: "assignment_#{id}"
 
   defp authorized?(%{assigns: %{current_user: user}}, %Assignment.Model{} = assignment),
-    do: Core.Authorization.can_access?(user, assignment, Assignment.ContentPage)
+    do: Mica.Authorization.can_access?(user, assignment, Assignment.ContentPage)
 
   defp forbidden(conn) do
     conn
     |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"403")
   end
 
@@ -270,7 +270,7 @@ defmodule Systems.Assignment.Controller do
   defp service_unavailable(conn) do
     conn
     |> put_status(:service_unavailable)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"503")
   end
 

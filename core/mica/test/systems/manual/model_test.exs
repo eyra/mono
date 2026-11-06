@@ -1,5 +1,5 @@
 defmodule Systems.Manual.ModelTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   alias Systems.Manual.Model
   alias Systems.Userflow

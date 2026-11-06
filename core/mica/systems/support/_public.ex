@@ -1,12 +1,12 @@
 defmodule Systems.Support.Public do
-  use Core, :public
+  use Mica, :public
 
   @moduledoc """
   The Support context.
   """
 
   import Ecto.Query, warn: false
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Systems.Support.TicketModel
 

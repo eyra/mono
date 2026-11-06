@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Face.MenuHome do
+defmodule Frameworks.Storybook.Pixel.Button.Face.MenuHome do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Face.menu_home/1

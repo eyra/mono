@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Selector.Item.Checkbox do
+defmodule Frameworks.Storybook.Pixel.Selector.Item.Checkbox do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Selector.Item.checkbox/1

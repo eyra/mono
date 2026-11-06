@@ -1,11 +1,11 @@
 defmodule Systems.Assignment.BrandingForm do
-  use CoreWeb.LiveForm
-  use CoreWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
+  use MicaWeb.LiveForm
+  use MicaWeb.FileUploader, accept: ~w(.png .jpg .jpeg .svg)
 
-  import Core.ImageCatalog, only: [image_catalog: 0]
+  import Mica.ImageCatalog, only: [image_catalog: 0]
   import Frameworks.Pixel.Form
   alias Frameworks.Pixel.Text
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.ImageCatalogPicker
   alias Frameworks.Pixel.Image
 
@@ -56,7 +56,7 @@ defmodule Systems.Assignment.BrandingForm do
       params: %{
         viewport: viewport,
         breakpoint: breakpoint,
-        static_path: &CoreWeb.Endpoint.static_path/1,
+        static_path: &MicaWeb.Endpoint.static_path/1,
         initial_query: title,
         image_catalog: image_catalog(),
         state: state
@@ -170,7 +170,7 @@ defmodule Systems.Assignment.BrandingForm do
           <Text.title5 align="text-left"><%= dgettext("eyra-assignment", "settings.logo.title") %></Text.title5>
           <.spacing value="XS" />
           <.photo_input
-            static_path={&CoreWeb.Endpoint.static_path/1}
+            static_path={&MicaWeb.Endpoint.static_path/1}
             photo_url={@entity.logo_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-assignment", "choose.logo.file")}

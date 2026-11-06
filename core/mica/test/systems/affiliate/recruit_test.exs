@@ -1,5 +1,5 @@
 defmodule Systems.Affiliate.RecruitTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   @moduletag :capture_log
@@ -42,7 +42,7 @@ defmodule Systems.Affiliate.RecruitTest do
       assignment =
         Assignment.Factories.create_assignment_with_affiliate()
         |> Ecto.Changeset.change(status: :idle)
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
       conn = get(conn, "/r/#{sqid}")
@@ -54,7 +54,7 @@ defmodule Systems.Affiliate.RecruitTest do
       assignment =
         Assignment.Factories.create_assignment_with_affiliate()
         |> Ecto.Changeset.change(status: :concept)
-        |> Core.Repo.update!()
+        |> Mica.Repo.update!()
 
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
       conn = get(conn, "/r/#{sqid}")
@@ -91,11 +91,47 @@ defmodule Systems.Affiliate.RecruitTest do
       assert redirected_to(conn) == "/assignment/#{assignment.id}"
     end
 
+    test "refuses a p that is a map", %{conn: conn, assignment: assignment} do
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p[x]=y")
+
+      assert conn.status == 403
+    end
+
+    test "refuses a p that is a list", %{conn: conn, assignment: assignment} do
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p[]=y")
+
+      assert conn.status == 403
+    end
+
+    test "starts the participant without another param that is a map", %{conn: conn} do
+      assignment = assignment_with_redirect_url()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-map-1&x[y]=z&code=1")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirect_query(conn) == %{"p" => "participant-map-1", "code" => "1"}
+    end
+
+    test "starts the participant without another param that is a list", %{conn: conn} do
+      assignment = assignment_with_redirect_url()
+      sqid = Affiliate.Sqids.encode!([0, assignment.id])
+
+      conn = get(conn, "/a/#{sqid}?p=participant-list-1&x[]=z&code=1")
+
+      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirect_query(conn) == %{"p" => "participant-list-1", "code" => "1"}
+    end
+
     test "shows a friendly 'not available' page to a signed out visitor",
          %{conn: conn, assignment: assignment} do
       assignment
       |> Ecto.Changeset.change(status: :concept)
-      |> Core.Repo.update!()
+      |> Mica.Repo.update!()
 
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
 
@@ -112,7 +148,7 @@ defmodule Systems.Affiliate.RecruitTest do
 
     test "an owner can preview a new unpublished assignment", %{conn: conn, user: user} do
       assignment = unpublished_assignment()
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
 
       conn = get(conn, "/a/#{sqid}?p=preview")
@@ -124,7 +160,7 @@ defmodule Systems.Affiliate.RecruitTest do
     test "an owner who never opened the CMS page sees the tasks in the preview",
          %{conn: conn, user: user} do
       assignment = unpublished_assignment()
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
 
       conn = get(conn, "/a/#{sqid}?p=preview")
@@ -136,7 +172,7 @@ defmodule Systems.Affiliate.RecruitTest do
     test "an owner who is already a crew member can preview without the tester role",
          %{conn: conn, user: user} do
       assignment = unpublished_assignment()
-      :ok = Core.Authorization.assign_role(user, assignment, :owner)
+      :ok = Mica.Authorization.assign_role(user, assignment, :owner)
       Systems.Crew.Factories.create_member(assignment.crew, user)
       refute Assignment.Public.tester?(assignment, user)
       sqid = Affiliate.Sqids.encode!([0, assignment.id])
@@ -191,11 +227,20 @@ defmodule Systems.Affiliate.RecruitTest do
     assignment
   end
 
+  defp assignment_with_redirect_url do
+    Assignment.Factories.create_assignment_with_affiliate("https://panel.example.org/done")
+  end
+
+  defp redirect_query(conn) do
+    %{redirect_url: redirect_url} = get_session(conn, :panel_info)
+    redirect_url |> URI.parse() |> Map.fetch!(:query) |> URI.decode_query()
+  end
+
   defp unpublished_assignment do
     Assignment.Factories.create_assignment_with_affiliate()
     |> Ecto.Changeset.change(status: :concept)
-    |> Core.Repo.update!()
-    |> Core.Repo.preload([:crew], force: true)
+    |> Mica.Repo.update!()
+    |> Mica.Repo.preload([:crew], force: true)
   end
 
   defp make_paid(%{info: info} = assignment, subject_reward) do
@@ -204,10 +249,10 @@ defmodule Systems.Affiliate.RecruitTest do
 
     assignment
     |> Assignment.Model.changeset(fund)
-    |> Core.Repo.update!()
+    |> Mica.Repo.update!()
 
     info
     |> Ecto.Changeset.change(subject_reward: subject_reward)
-    |> Core.Repo.update!()
+    |> Mica.Repo.update!()
   end
 end

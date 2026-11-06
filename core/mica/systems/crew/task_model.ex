@@ -17,7 +17,7 @@ defmodule Systems.Crew.TaskModel do
     field(:expired, :boolean, default: false)
 
     belongs_to(:crew, Crew.Model)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     timestamps()
   end

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateNotifyTables do
+defmodule Mica.Repo.Migrations.CreateNotifyTables do
   use Ecto.Migration
 
   def change do

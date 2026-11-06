@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddTimestampsToTask do
+defmodule Mica.Repo.Migrations.AddTimestampsToTask do
   use Ecto.Migration
 
   def up do

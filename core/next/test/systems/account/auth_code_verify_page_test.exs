@@ -1,0 +1,135 @@
+defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
+  @moduledoc """
+  Wires up the rate-limit path end-to-end at the LiveView level: hitting
+  the attempts limit on the verify page must bounce back to
+  /user/auth/identify with the RATE-LIMIT flash, not the "code expired"
+  one. See Flux 10025618754.
+  """
+  use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
+  use Gettext, backend: MicaWeb.Gettext
+
+  import Phoenix.LiveViewTest
+
+  alias Mica.Repo
+  alias Systems.Account.AuthCodeLimits
+  alias Systems.Account.AuthCodeModel
+
+  describe "/user/auth/verify rate limit" do
+    test "a network address past its check limit gets the attempts message and keeps its code",
+         %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      for i <- 1..200,
+          do: assert(AuthCodeLimits.allow_check?("other-#{i}@example.com", "198.51.100.7"))
+
+      email = "network-limited@example.com"
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(auth_code)
+
+      conn = put_req_header(conn, "x-forwarded-for", "198.51.100.7")
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+
+      result = render_submit(view, "verify", %{"code" => code})
+      assert {:error, {:live_redirect, %{to: "/user/auth/identify"}}} = result
+
+      {:ok, _view, html} = follow_redirect(result, conn)
+      assert html =~ dgettext("eyra-account", "auth.code.max_attempts")
+      assert Repo.one(AuthCodeModel.active_query(email)).attempts == 0
+    end
+
+    test "redirects to /user/auth/identify with the rate-limit message after exhausting attempts",
+         %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      email = "rate-limited@example.com"
+      {_code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 5})
+
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+
+      result = render_submit(view, "verify", %{"code" => "999999"})
+      assert {:error, {:live_redirect, %{to: "/user/auth/identify"}}} = result
+
+      {:ok, _view, html} = follow_redirect(result, conn)
+
+      assert html =~ dgettext("eyra-account", "auth.code.max_attempts")
+      refute html =~ dgettext("eyra-account", "auth.code.expired")
+    end
+
+    test "a participant at the limit returns to the participant entry with its return_to",
+         %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      email = "participant-limited@example.com"
+      {_code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 5})
+
+      {:ok, view, _html} =
+        live(
+          conn,
+          ~p"/user/auth/verify?email=#{email}&creator=false&return_to=/assignment/1/invite"
+        )
+
+      result = render_submit(view, "verify", %{"code" => "999999"})
+
+      assert {:error,
+              {:live_redirect,
+               %{to: "/user/auth/identify/participant?return_to=%2Fassignment%2F1%2Finvite"}}} =
+               result
+    end
+
+    test "with attempts: 4, a wrong code stays on the page with the invalid message",
+         %{conn: conn} do
+      # Pins the boundary the other way: the user still has one attempt on
+      # attempt #5, so a wrong code shows the inline error — no redirect,
+      # no rate-limit flash.
+      set_feature_flag(:otp, true)
+
+      email = "boundary@example.com"
+      {_code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(%{auth_code | attempts: 4})
+
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+
+      html = render_submit(view, "verify", %{"code" => "999999"})
+
+      assert html =~ dgettext("eyra-account", "auth.code.invalid")
+      refute html =~ dgettext("eyra-account", "auth.code.max_attempts")
+      refute html =~ dgettext("eyra-account", "auth.code.expired")
+      refute html =~ "prism-button--loading"
+    end
+  end
+
+  test "the code form submits in place so the code field keeps its focus", %{conn: conn} do
+    set_feature_flag(:otp, true)
+
+    {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=focus@example.com")
+
+    assert has_element?(
+             view,
+             "form#auth_code_form[phx-hook='SubmitInPlace'][phx-submit='verify']"
+           )
+  end
+
+  describe "/user/auth/verify success" do
+    test "renders the standard loading button before redeeming the OTP", %{conn: conn} do
+      set_feature_flag(:otp, true)
+
+      email = "success@example.com"
+      {code, auth_code} = AuthCodeModel.build(email, nil)
+      Repo.insert!(auth_code)
+      {:ok, view, _html} = live(conn, ~p"/user/auth/verify?email=#{email}")
+
+      html = render_submit(view, "verify", %{"code" => code})
+
+      assert html =~ "prism-button--loading"
+      refute html =~ "spinner_static_white"
+      refute html =~ ~r/<button[^>]*disabled/
+
+      assert_push_event(view, "auth_code:redeem", %{url: redeem_url})
+      assert URI.parse(redeem_url).path == "/user/auth/redeem"
+      assert URI.decode_query(URI.parse(redeem_url).query)["token"]
+    end
+  end
+end

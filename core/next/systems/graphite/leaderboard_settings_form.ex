@@ -1,11 +1,11 @@
-defmodule Systems.Graphite.LeaderboardSettingsForm do
-  use CoreWeb.LiveForm
+defmodule Next.Systems.Graphite.LeaderboardSettingsForm do
+  use MicaWeb.LiveForm
 
   import Frameworks.Pixel.Form
 
   alias Frameworks.Pixel.Text
 
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   @impl true
   def update(%{id: id, leaderboard: leaderboard}, socket) do

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Panel.Clickable do
+defmodule Frameworks.Storybook.Pixel.Panel.Clickable do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Panel.clickable/1

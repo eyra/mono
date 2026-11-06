@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.SubmitWide do
+defmodule Frameworks.Storybook.Pixel.Button.SubmitWide do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.submit_wide/1

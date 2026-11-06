@@ -1,10 +1,10 @@
 defmodule Systems.Monitor.PublicTest do
-  use Core.DataCase
+  use Mica.DataCase
 
   import Ecto.Query
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Monitor
 
   describe "Monitor events" do

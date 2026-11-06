@@ -17,12 +17,12 @@ msgstr "Cognitive screening"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "You are about to start a test. Follow the instructions on the screen. The page may take a moment to load — thank you for your patience."
+msgstr "You are about to start a task. Follow the instructions on the screen. The page may take a moment to load — thank you for your patience."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Upload the zip file of a Probe tool. Participants take the test in their browser."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Upload the zip file of a cognitive tool. Participants complete the task in their browser."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Cognitive test"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Cognitive task"

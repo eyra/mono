@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.Screening.ImportSessionWarningsView do
-  use CoreWeb, :embedded_live_view
-  use Gettext, backend: CoreWeb.Gettext
+defmodule Next.Systems.Zircon.Screening.ImportSessionWarningsView do
+  use MicaWeb, :embedded_live_view
+  use Gettext, backend: MicaWeb.Gettext
 
   import Frameworks.Pixel.Paginator, only: [paginator: 1]
-  import Systems.Zircon.HTML, only: [ris_entry_error_table: 1]
+  import Next.Systems.Zircon.HTML, only: [ris_entry_error_table: 1]
 
   alias Frameworks.Pixel.Text
 

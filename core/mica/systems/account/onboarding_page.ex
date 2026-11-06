@@ -7,21 +7,21 @@ defmodule Systems.Account.OnboardingPage do
   sent to that URL instead of the default signed-in landing. Used by CTAs
   that chain the user into a subsequent flow (e.g. `/pool/panl/join`).
   """
-  use CoreWeb, :routed_live_view
-  use CoreWeb.Layouts.Stripped.Composer
+  use MicaWeb, :routed_live_view
+  use MicaWeb.Layouts.Stripped.Composer
 
   import LiveNest.HTML
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text
   alias Systems.Account
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
 
   @impl true
   def get_model(_params, _session, %{assigns: %{current_user: user}} = _socket) do
-    Core.Repo.preload(user, [:features, :profile])
+    Mica.Repo.preload(user, [:features, :profile])
   end
 
   @impl true

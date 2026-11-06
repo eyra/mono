@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Content.Tag do
+defmodule Frameworks.Storybook.Pixel.Content.Tag do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Content.tag/1

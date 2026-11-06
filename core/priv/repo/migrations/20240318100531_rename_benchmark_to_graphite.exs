@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RenameBenchmarkToGraphite do
+defmodule Mica.Repo.Migrations.RenameBenchmarkToGraphite do
   use Ecto.Migration
 
   def up do

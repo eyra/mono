@@ -1,5 +1,5 @@
 defmodule Systems.Desktop.View do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text
@@ -34,6 +34,12 @@ defmodule Systems.Desktop.View do
             <.spacing value="XL" />
           </div>
         <% end %>
+        <%= for section <- @vm.sections_before_recent_items do %>
+          <div id={"desktop_section_#{section.id}"}>
+            <.section section={section} />
+            <.spacing value="XL" />
+          </div>
+        <% end %>
         <Text.title2>
           <%= dgettext("eyra-dashboard", "recent-items.title") %>
           <span class="text-primary"> <%= Enum.count(@vm.content_items) %></span>
@@ -44,8 +50,35 @@ defmodule Systems.Desktop.View do
             <Project.CardView.dynamic card={card} />
           <% end %>
         </Grid.dynamic>
+        <%= for section <- @vm.sections_after_recent_items do %>
+          <div id={"desktop_section_#{section.id}"}>
+            <.spacing value="XL" />
+            <.section section={section} />
+          </div>
+        <% end %>
       </Area.content>
     </div>
+    """
+  end
+
+  attr(:section, :map, required: true)
+
+  defp section(assigns) do
+    ~H"""
+    <div class="flex items-center justify-between gap-4" data-testid="section-header">
+      <div class="min-w-0"><Text.title2><%= @section.title %></Text.title2></div>
+      <.link
+        :if={@section.full_list}
+        navigate={@section.full_list.to}
+        aria-label={"#{@section.full_list.label} — #{@section.title}"}
+        class="shrink-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        data-testid="section-full-list"
+      >
+        <Button.Face.plain_icon label={@section.full_list.label} icon={:forward} />
+      </.link>
+    </div>
+    <Margin.y id={:title2_bottom} />
+    <%= @section.module.render(%{vm: @section.vm}) %>
     """
   end
 end

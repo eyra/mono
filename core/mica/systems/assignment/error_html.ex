@@ -4,14 +4,14 @@ defmodule Systems.Assignment.ErrorHTML do
   the assignment has no budget capacity left, the assignment is not published,
   or an external survey returns to a task the researcher has removed.
 
-  It lives in the Assignment system rather than the generic `CoreWeb.ErrorHTML`
+  It lives in the Assignment system rather than the generic `MicaWeb.ErrorHTML`
   because both the copy and the meaning are assignment-specific; it reuses the
-  shared `CoreWeb.ErrorHTML.error/1` chrome for the layout.
+  shared `MicaWeb.ErrorHTML.error/1` chrome for the layout.
   """
-  use CoreWeb, :html
+  use MicaWeb, :html
 
-  import CoreWeb.Layouts.Stripped.Composer
-  import CoreWeb.Menus
+  import MicaWeb.Layouts.Stripped.Composer
+  import MicaWeb.Menus
 
   def full(conn) do
     conn
@@ -65,7 +65,7 @@ defmodule Systems.Assignment.ErrorHTML do
       |> Map.put(:menus, build_menus(stripped_menus_config(), nil, nil))
 
     ~H"""
-    <CoreWeb.ErrorHTML.error
+    <MicaWeb.ErrorHTML.error
       title={@title}
       menus={@menus}
       body={@body}

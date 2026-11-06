@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.PhoenixJs do
+defmodule Frameworks.Storybook.Pixel.Button.Action.PhoenixJs do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.phoenix_js/1

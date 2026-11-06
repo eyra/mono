@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ModalView.Title2 do
+defmodule Frameworks.Storybook.Pixel.ModalView.Title2 do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ModalView.title2/1

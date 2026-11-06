@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddEmailSignUpUser do
+defmodule Mica.Repo.Migrations.AddEmailSignUpUser do
   use Ecto.Migration
 
   def change do

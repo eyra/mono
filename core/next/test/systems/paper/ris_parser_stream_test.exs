@@ -1,6 +1,6 @@
-defmodule Systems.Paper.RISParserStreamTest do
-  use Core.DataCase
-  alias Systems.Paper.RISParserStream
+defmodule Next.Systems.Paper.RISParserStreamTest do
+  use Mica.DataCase
+  alias Next.Systems.Paper.RISParserStream
 
   describe "parse_stream/1" do
     test "parses single complete RIS record from stream" do

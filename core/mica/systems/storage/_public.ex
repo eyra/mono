@@ -1,10 +1,10 @@
 defmodule Systems.Storage.Public do
-  use Core, :public
+  use Mica, :public
   require Logger
 
   alias Ecto.Multi
   alias Ecto.Changeset
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Signal
   alias Systems.Rate
   alias Systems.Storage
@@ -55,11 +55,19 @@ defmodule Systems.Storage.Public do
   Schedules delivery of a file to a storage endpoint.
   The file_id refers to a file in the configured temp file store.
   """
-  def deliver_file(
-        %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        file_id,
-        meta_data
-      ) do
+  def deliver_file(endpoint, file_id, %{identifier: identifier} = meta_data) do
+    if Storage.Filename.valid_identifier?(identifier) do
+      deliver_valid_file(endpoint, file_id, meta_data)
+    else
+      invalid_identifier("deliver_file")
+    end
+  end
+
+  defp deliver_valid_file(
+         %Storage.EndpointModel{id: endpoint_id} = endpoint,
+         file_id,
+         meta_data
+       ) do
     %{backend: backend, special: special} = storage_info(endpoint)
 
     result =
@@ -95,12 +103,20 @@ defmodule Systems.Storage.Public do
     result
   end
 
-  def store(
-        %Storage.EndpointModel{id: endpoint_id} = endpoint,
-        %{key: key, backend: backend, special: special},
-        data,
-        %{remote_ip: remote_ip, identifier: identifier} = meta_data
-      ) do
+  def store(endpoint, storage_info, data, %{identifier: identifier} = meta_data) do
+    if Storage.Filename.valid_identifier?(identifier) do
+      store_valid(endpoint, storage_info, data, meta_data)
+    else
+      invalid_identifier("store")
+    end
+  end
+
+  defp store_valid(
+         %Storage.EndpointModel{id: endpoint_id} = endpoint,
+         %{key: key, backend: backend, special: special},
+         data,
+         %{remote_ip: remote_ip, identifier: identifier} = meta_data
+       ) do
     packet_size = byte_size(data)
 
     # raises error when request is denied
@@ -152,6 +168,11 @@ defmodule Systems.Storage.Public do
     end
   end
 
+  defp invalid_identifier(function) do
+    Logger.error("[Storage.Public.#{function}] Identifier contains a control character")
+    {:error, :identifier, :invalid, %{}}
+  end
+
   def list_files(endpoint) do
     apply_on_special_backend(endpoint, :list_files)
   end
@@ -198,7 +219,7 @@ defmodule Systems.Storage.Public do
   end
 
   defp temp_file_store do
-    Core.Env.get(:temp_file_store)[:module]
+    Mica.Env.get(:temp_file_store)[:module]
   end
 
   @doc """
@@ -211,7 +232,7 @@ defmodule Systems.Storage.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Storage.EndpointModel do
+defimpl Mica.Persister, for: Systems.Storage.EndpointModel do
   def save(_endpoint, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :storage_endpoint) do
       {:ok, %{storage_endpoint: storage_endpoint}} -> {:ok, storage_endpoint}
@@ -220,7 +241,7 @@ defimpl Core.Persister, for: Systems.Storage.EndpointModel do
   end
 end
 
-defimpl Core.Persister, for: Systems.Storage.Yoda.EndpointModel do
+defimpl Mica.Persister, for: Systems.Storage.Yoda.EndpointModel do
   def save(_endpoint, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :yoda_endpoint) do
       {:ok, %{yoda_endpoint: yoda_endpoint}} -> {:ok, yoda_endpoint}

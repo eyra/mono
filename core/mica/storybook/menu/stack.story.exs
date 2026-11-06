@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Menu.Stack do
+defmodule Frameworks.Storybook.Pixel.Menu.Stack do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Menu.stack/1

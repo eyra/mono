@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddApprovedRequiresPaymentCheckToFundRewards do
+defmodule Mica.Repo.Migrations.AddApprovedRequiresPaymentCheckToFundRewards do
   use Ecto.Migration
 
   # Enforce, at the database, the invariant that an :approved reward always has a

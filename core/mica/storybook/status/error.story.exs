@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Status.Error do
+defmodule Frameworks.Storybook.Pixel.Status.Error do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Status.error/1

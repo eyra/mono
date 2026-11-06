@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddParticipationLifecycle do
+defmodule Mica.Repo.Migrations.AddParticipationLifecycle do
   use Ecto.Migration
 
   def up do

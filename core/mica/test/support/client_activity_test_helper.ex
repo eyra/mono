@@ -3,7 +3,7 @@ defmodule Systems.Admin.ClientActivityTestHelper do
   Builds project assignments with explicit project owners for the
   Client activity tests.
   """
-  alias Core.Factories
+  alias Mica.Factories
 
   @doc """
   Inserts a project with one assignment item.

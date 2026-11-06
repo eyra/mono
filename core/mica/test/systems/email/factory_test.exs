@@ -1,7 +1,7 @@
 defmodule Systems.Email.Factory.Test do
   use ExUnit.Case, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Email.Factory
 
   describe("account_confirmation_instructions/2") do

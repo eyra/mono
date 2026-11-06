@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.Footnote do
+defmodule Frameworks.Storybook.Pixel.Text.Footnote do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.footnote/1

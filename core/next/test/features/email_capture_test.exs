@@ -1,4 +1,4 @@
-defmodule CoreWeb.Features.EmailCaptureTest do
+defmodule NextWeb.Features.EmailCaptureTest do
   @moduledoc """
   Feature test for the pre-launch email capture flow on the finished screen.
 
@@ -6,8 +6,8 @@ defmodule CoreWeb.Features.EmailCaptureTest do
   questionnaire assignment sees an email capture form on the finished screen,
   submits their email, and sees the submitted state.
   """
-  use CoreWeb.FeatureCase
-  use Core.FeatureFlags.Test
+  use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
   alias Systems.Account
   alias Systems.Affiliate

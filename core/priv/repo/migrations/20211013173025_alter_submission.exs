@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AlterSubmission do
+defmodule Mica.Repo.Migrations.AlterSubmission do
   use Ecto.Migration
 
   def up do

@@ -1,8 +1,8 @@
 defmodule Frameworks.GreenLight.Test do
   # alias Frameworks.GreenLight.Permissions
   # use Frameworks.GreenLight.DataCase
-  use Core.DataCase
+  use Mica.DataCase
   # require Ecto.Query
-  # alias Core.Repo
-  # alias Core.Factories
+  # alias Mica.Repo
+  # alias Mica.Factories
 end

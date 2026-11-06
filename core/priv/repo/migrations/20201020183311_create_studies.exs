@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.CreateStudies do
+defmodule Mica.Repo.Migrations.CreateStudies do
   use Ecto.Migration
 
   def change do

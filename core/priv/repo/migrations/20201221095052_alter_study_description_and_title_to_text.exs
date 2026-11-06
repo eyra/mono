@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AlterStudyDescriptionAndTitleToText do
+defmodule Mica.Repo.Migrations.AlterStudyDescriptionAndTitleToText do
   use Ecto.Migration
 
   def change do

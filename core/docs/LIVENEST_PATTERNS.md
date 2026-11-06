@@ -1,6 +1,6 @@
 # LiveNest & LiveHooks Architecture Guide
 
-This document captures patterns for building LiveView hierarchies using LiveNest and the CoreWeb hook system.
+This document captures patterns for building LiveView hierarchies using LiveNest and the MicaWeb hook system.
 
 ## Two Types of LiveViews
 
@@ -15,7 +15,7 @@ A **Routed LiveView** is mounted directly by the router. It:
 
 ```elixir
 defmodule Systems.MySystem.ContentPage do
-  use CoreWeb, :live_view  # or use Systems.Content.Composer, :some_layout
+  use MicaWeb, :live_view  # or use Systems.Content.Composer, :some_layout
 
   # Routed views get params and session
   def get_model(params, _session, _socket) do
@@ -40,7 +40,7 @@ An **Embedded LiveView** is rendered inside a parent LiveView. It:
 
 ```elixir
 defmodule Systems.MySystem.MyView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   # Declare what to extract from LiveContext
   def dependencies(), do: [:current_user, :locale, :some_data]
@@ -232,7 +232,7 @@ end
 
 ```elixir
 defmodule Systems.MySystem.DetailsView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   # Declare dependencies to extract from LiveContext
   def dependencies(), do: [:current_user, :locale, :model_id, :items]
@@ -277,7 +277,7 @@ end
 
 ```elixir
 defmodule Systems.MySystem.DetailsViewBuilder do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   def view_model(model, assigns) do
     # Use Map.get with defaults for safety
@@ -372,7 +372,7 @@ The component receives params as direct assigns:
 
 ```elixir
 defmodule EntityFormComponent do
-  use CoreWeb, :live_component
+  use MicaWeb, :live_component
 
   @impl true
   def update(%{id: id, entity: entity, user: user}, socket) do
@@ -472,7 +472,7 @@ end
 
 | Aspect | Routed LiveView | Embedded LiveView |
 |--------|-----------------|-------------------|
-| Use macro | `use CoreWeb, :live_view` | `use CoreWeb, :embedded_live_view` |
+| Use macro | `use MicaWeb, :live_view` | `use MicaWeb, :embedded_live_view` |
 | Router entry | Yes | No |
 | get_model first arg | `params` (map) | `:not_mounted_at_router` |
 | mount first arg | `params` (map) | `:not_mounted_at_router` |

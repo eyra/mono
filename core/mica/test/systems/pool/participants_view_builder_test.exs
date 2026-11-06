@@ -1,8 +1,8 @@
 defmodule Systems.Pool.ParticipantsViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Fund
   alias Systems.Pool
 

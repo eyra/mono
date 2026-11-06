@@ -1,8 +1,8 @@
 defmodule Systems.Instruction.DownloadForm do
-  use CoreWeb, :live_component_fabric
-  use CoreWeb.FileUploader, accept: ~w(.zip)
+  use MicaWeb, :live_component_fabric
+  use MicaWeb.FileUploader, accept: ~w(.zip)
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Pixel.FileSelector
 
   alias Systems.Instruction

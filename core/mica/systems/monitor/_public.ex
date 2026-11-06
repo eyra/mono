@@ -1,7 +1,7 @@
 defmodule Systems.Monitor.Public do
-  use Core, :public
+  use Mica, :public
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account.User
   alias Systems.Monitor.Queries
   alias Frameworks.Utility.Module

@@ -1,9 +1,9 @@
-defmodule Systems.Zircon.HTML do
-  use CoreWeb, :html
+defmodule Next.Systems.Zircon.HTML do
+  use MicaWeb, :html
 
   import Frameworks.Pixel.Table
 
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   attr(:items, :list, required: true)
 

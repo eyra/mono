@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.HttpGet do
+defmodule Frameworks.Storybook.Pixel.Button.Action.HttpGet do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.http_get/1

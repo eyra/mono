@@ -4,10 +4,10 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
   carries — the restore case that strands a participant, unable to be paid out
   and unable to re-register under the same email.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account
   alias Systems.Payment
   alias Systems.Payment.ProviderMock
@@ -103,15 +103,15 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
 
   describe "the platform merchant" do
     setup do
-      previous = Application.get_env(:core, Systems.Payment.Provider.OPP)
+      previous = Application.get_env(:mica, Systems.Payment.Provider.OPP)
 
       Application.put_env(
-        :core,
+        :mica,
         Systems.Payment.Provider.OPP,
         Keyword.merge(previous || [], merchant_uid: "mer_platform")
       )
 
-      on_exit(fn -> Application.put_env(:core, Systems.Payment.Provider.OPP, previous) end)
+      on_exit(fn -> Application.put_env(:mica, Systems.Payment.Provider.OPP, previous) end)
       :ok
     end
 

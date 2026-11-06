@@ -7,15 +7,15 @@ defmodule Repo.Seeds.Zircon do
   Includes PICO, PICo, SPICE, SPIDER frameworks and related research concepts.
   """
 
-  import Systems.Ontology.Public
+  import Next.Systems.Ontology.Public
 
   require Logger
-  require Systems.Onyx.SeedBase
-  import Systems.Onyx.SeedBase
+  require Next.Systems.Onyx.SeedBase
+  import Next.Systems.Onyx.SeedBase
 
-  use Systems.Ontology.Constants
+  use Next.Systems.Ontology.Constants
 
-  alias Core.Authentication
+  alias Mica.Authentication
 
   def run do
     # System actor / entity

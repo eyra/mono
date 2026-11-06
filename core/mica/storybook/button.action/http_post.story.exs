@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.HttpPost do
+defmodule Frameworks.Storybook.Pixel.Button.Action.HttpPost do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.http_post/1

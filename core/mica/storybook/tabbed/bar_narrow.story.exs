@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Tabbed.BarNarrow do
+defmodule Frameworks.Storybook.Pixel.Tabbed.BarNarrow do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Tabbed.bar_narrow/1

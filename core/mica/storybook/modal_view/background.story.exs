@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ModalView.Background do
+defmodule Frameworks.Storybook.Pixel.ModalView.Background do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ModalView.background/1

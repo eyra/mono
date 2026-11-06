@@ -17,12 +17,12 @@ msgstr "Kognityvinė patikra"
 
 #, elixir-autogen, elixir-format
 msgid "tool.description"
-msgstr "Netrukus pradėsite testą. Vadovaukitės instrukcijomis ekrane. Puslapio įkėlimas gali šiek tiek užtrukti – dėkojame už kantrybę."
+msgstr "Netrukus pradėsite užduotį. Vadovaukitės instrukcijomis ekrane. Puslapio įkėlimas gali šiek tiek užtrukti – dėkojame už kantrybę."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.description"
-msgstr "Įkelkite Probe įrankio ZIP failą. Dalyviai atlieka testą savo naršyklėje."
+msgid "workflow_item.cognitive_tool.description"
+msgstr "Įkelkite kognityvinio įrankio ZIP failą. Dalyviai atlieka užduotį savo naršyklėje."
 
 #, elixir-autogen, elixir-format
-msgid "workflow_item.probe.title"
-msgstr "Kognityvinis testas"
+msgid "workflow_item.cognitive_tool.title"
+msgstr "Kognityvinė užduotis"

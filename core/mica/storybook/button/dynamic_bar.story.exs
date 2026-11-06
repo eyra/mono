@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.DynamicBar do
+defmodule Frameworks.Storybook.Pixel.Button.DynamicBar do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.dynamic_bar/1

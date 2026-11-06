@@ -1,11 +1,11 @@
-defmodule Systems.Zircon.Screening.HumanAgent do
+defmodule Next.Systems.Zircon.Screening.HumanAgent do
   @moduledoc """
   Human agent for the Zircon screening process.
   """
 
-  @behaviour Frameworks.Concept.ScreeningAgent
+  @behaviour Next.Frameworks.Concept.ScreeningAgent
 
-  @impl Frameworks.Concept.ScreeningAgent
+  @impl Next.Frameworks.Concept.ScreeningAgent
   def start(session_id, papers, _criteria) do
     paper_ids = Enum.map(papers, & &1.id)
 
@@ -17,7 +17,7 @@ defmodule Systems.Zircon.Screening.HumanAgent do
      }}
   end
 
-  @impl Frameworks.Concept.ScreeningAgent
+  @impl Next.Frameworks.Concept.ScreeningAgent
   def next_paper(%{"screened_papers" => screened_papers, "papers" => papers} = state) do
     next_paper_id =
       Enum.find(papers, fn paper_id -> not Enum.member?(screened_papers, paper_id) end)
@@ -25,7 +25,7 @@ defmodule Systems.Zircon.Screening.HumanAgent do
     {:ok, {state, next_paper_id}}
   end
 
-  @impl Frameworks.Concept.ScreeningAgent
+  @impl Next.Frameworks.Concept.ScreeningAgent
   def update_paper(
         %{"screened_papers" => screened_papers} = state,
         paper_id,

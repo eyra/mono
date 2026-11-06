@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Face do
+defmodule Frameworks.Storybook.Pixel.Button.Face do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.face/1

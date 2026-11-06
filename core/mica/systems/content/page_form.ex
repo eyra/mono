@@ -1,5 +1,5 @@
 defmodule Systems.Content.PageForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   use Frameworks.Pixel.WysiwygAreaHelpers
 
   alias Systems.Content

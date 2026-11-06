@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
+defmodule Mica.Repo.Migrations.RefactorCampaignPart2 do
   use Ecto.Migration
 
   import Ecto.Adapters.SQL
@@ -13,7 +13,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
   end
 
   defp migrate_tools(tool_type) do
-    tools = query(Core.Repo, "SELECT id,campaign_id FROM #{tool_type}s;")
+    tools = query(Mica.Repo, "SELECT id,campaign_id FROM #{tool_type}s;")
     migrate_tools(tools, tool_type)
   end
 
@@ -147,7 +147,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
 
   defp exist?(table, where) do
     {:ok, %{rows: [[count]]}} =
-      query(Core.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
+      query(Mica.Repo, "SELECT count(*) FROM #{table} WHERE #{where};")
 
     count > 0
   end
@@ -158,7 +158,7 @@ defmodule Core.Repo.Migrations.RefactorCampaignPart2 do
 
   defp query_field(table, field, where) do
     {:ok, %{rows: [[id] | _]}} =
-      query(Core.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
+      query(Mica.Repo, "SELECT #{field} FROM #{table} WHERE #{where}")
 
     id
   end

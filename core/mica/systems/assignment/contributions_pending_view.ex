@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.ContributionsPendingView do
   use Phoenix.LiveComponent
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.List, as: PixelList

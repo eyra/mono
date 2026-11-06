@@ -15,7 +15,7 @@ defmodule Systems.Notify.Channel.Email do
 
   require Logger
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Email
   alias Systems.Notify.EventModel

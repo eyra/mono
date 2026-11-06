@@ -6,7 +6,7 @@ defmodule Systems.Admin.OrgViewBuilder do
   - Organisation list with filtering and search
   - Organisation item view models
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Content
   alias Systems.NextAction

@@ -6,7 +6,7 @@ defmodule Systems.Assignment.Model do
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept
 
@@ -32,7 +32,7 @@ defmodule Systems.Assignment.Model do
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:crew, Systems.Crew.Model)
     belongs_to(:fund, Fund.Model, on_replace: :update)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
 
     has_one(:project_item, Project.ItemModel, foreign_key: :assignment_id)
     has_many(:page_refs, Assignment.PageRefModel, foreign_key: :assignment_id)
@@ -56,7 +56,7 @@ defmodule Systems.Assignment.Model do
   end
 
   defimpl Frameworks.Concept.Leaf do
-    use Gettext, backend: CoreWeb.Gettext
+    use Gettext, backend: MicaWeb.Gettext
 
     def resource_id(%{id: id}), do: "assignment/#{id}"
     def tag(_), do: dgettext("eyra-assignment", "leaf.tag")

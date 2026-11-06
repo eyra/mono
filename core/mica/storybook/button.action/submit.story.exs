@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Action.Submit do
+defmodule Frameworks.Storybook.Pixel.Button.Action.Submit do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.Action.submit/1

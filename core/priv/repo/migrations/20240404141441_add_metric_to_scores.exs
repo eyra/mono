@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddMetricToScores do
+defmodule Mica.Repo.Migrations.AddMetricToScores do
   use Ecto.Migration
 
   def up do

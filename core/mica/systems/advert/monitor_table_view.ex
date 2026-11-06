@@ -1,5 +1,5 @@
 defmodule Systems.Advert.MonitorTableView do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Systems.{
     Crew

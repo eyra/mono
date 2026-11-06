@@ -1,5 +1,5 @@
 defmodule Systems.Affiliate.Form do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
 
   alias Systems.Affiliate
 
@@ -34,6 +34,7 @@ defmodule Systems.Affiliate.Form do
     {
       :noreply,
       socket
+      |> assign(changeset: changeset)
       |> save(changeset)
       |> test_urls()
     }
@@ -45,31 +46,34 @@ defmodule Systems.Affiliate.Form do
     |> test_url(:redirect_url)
   end
 
-  defp test_url(%{assigns: %{entity: entity, test: test}} = socket, field) do
-    url = Map.get(entity, field)
+  # A URL the changeset refuses shows its error at the input instead.
+  defp test_url(
+         %{assigns: %{changeset: %{errors: errors} = changeset, test: test}} = socket,
+         field
+       ) do
+    result =
+      if Keyword.has_key?(errors, field),
+        do: %{success: false, error: nil},
+        else: changeset |> Ecto.Changeset.get_field(field) |> url_status()
 
-    test =
-      case Affiliate.Model.validate_url(url) do
-        {:ok, url} ->
-          case Affiliate.Public.validate_url(url) do
-            {:ok, _} ->
-              %{test | field => %{success: true, error: nil}}
+    assign(socket, test: %{test | field => result})
+  end
 
-            {:error, _error} ->
-              %{
-                test
-                | field => %{
-                    success: false,
-                    error: dgettext("eyra-affiliate", "invalid_url.unreachable")
-                  }
-              }
-          end
+  defp url_status(url) do
+    case Affiliate.Model.validate_url(url) do
+      {:ok, url} -> reachable_status(url)
+      {:error, message} -> %{success: false, error: message}
+    end
+  end
 
-        {:error, error} ->
-          %{test | field => %{success: false, error: error}}
-      end
+  defp reachable_status(url) do
+    case Affiliate.Public.validate_url(url) do
+      {:ok, _status} ->
+        %{success: true, error: nil}
 
-    socket |> assign(test: test)
+      {:error, _reason} ->
+        %{success: false, error: dgettext("eyra-affiliate", "invalid_url.unreachable")}
+    end
   end
 
   @impl true

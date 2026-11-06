@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Hero.ImageBanner do
+defmodule Frameworks.Storybook.Pixel.Hero.ImageBanner do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Hero.image_banner/1

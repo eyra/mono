@@ -3,14 +3,14 @@ defmodule Systems.Test.RoutedLiveView do
   Generic routed LiveView for testing purposes.
   Can optionally render embedded child views based on configuration.
   """
-  use CoreWeb, :routed_live_view
+  use MicaWeb, :routed_live_view
 
   import LiveNest.HTML
 
   alias Systems.Test
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Model, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Model, __MODULE__})
   on_mount({Systems.Observatory.LiveHook, __MODULE__})
 
   @impl true

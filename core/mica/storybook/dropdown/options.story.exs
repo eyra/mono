@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Dropdown.Options do
+defmodule Frameworks.Storybook.Pixel.Dropdown.Options do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Dropdown.options/1

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.DatetimeInput do
+defmodule Frameworks.Storybook.Pixel.Form.DatetimeInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.datetime_input/1

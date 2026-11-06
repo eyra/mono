@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AdvertProjectItem do
+defmodule Mica.Repo.Migrations.AdvertProjectItem do
   use Ecto.Migration
 
   def up do

@@ -1,14 +1,14 @@
-defmodule Systems.Paper.RISImportSessionModel do
+defmodule Next.Systems.Paper.RISImportSessionModel do
   use Ecto.Schema
   use Frameworks.Utility.Schema
 
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Ecto.Multi
   alias Frameworks.Signal
-  alias Systems.Paper
+  alias Next.Systems.Paper
 
   schema "paper_ris_import_session" do
     field(:status, Ecto.Enum,

@@ -1,20 +1,22 @@
 defmodule Systems.Assignment.CrewPage do
-  use CoreWeb, :routed_live_view
-  use CoreWeb.Layouts.Stripped.Composer
+  use MicaWeb, :routed_live_view
+  use MicaWeb.Layouts.Stripped.Composer
 
   import LiveNest.HTML
 
-  on_mount({CoreWeb.Live.Hook.Base, __MODULE__})
-  on_mount({CoreWeb.Live.Hook.Viewport, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
+  on_mount({MicaWeb.Live.Hook.Viewport, __MODULE__})
 
   require Logger
 
-  alias Core.ImageHelpers
+  alias Mica.ImageHelpers
   alias Frameworks.Pixel.Hero
 
   alias Systems.Assignment
   alias Systems.Project
   alias Systems.Storage
+
+  @preview_participant "preview"
 
   @impl true
   def get_authorization_context(%{"id" => id}, _session, _socket) do
@@ -168,32 +170,49 @@ defmodule Systems.Assignment.CrewPage do
     |> update_view_model()
   end
 
-  defp onboarding_identifier(%{
-         assigns: %{model: assignment, panel_info: panel_info, vm: %{session_id: session_id}}
-       }) do
+  defp onboarding_identifier(
+         %{assigns: %{model: assignment, vm: %{session_id: session_id}}} = socket
+       ) do
     [
       [:assignment, assignment.id],
-      [:participant, Map.get(panel_info, :participant, "")],
+      [:participant, participant(socket)],
       [:key, "#{session_id}-onboarding"]
     ]
   end
 
-  defp task_identifier(%{assigns: %{model: assignment, panel_info: panel_info}}, task, group, key) do
+  defp task_identifier(%{assigns: %{model: assignment}} = socket, task, group, key) do
     [
       [:assignment, assignment.id],
-      [:participant, Map.get(panel_info, :participant, "")],
+      [:participant, participant(socket)],
       [:task, task],
       [:source, group],
       [:key, key]
     ]
   end
 
+  # The id this assignment knows the user by; the session's panel info isn't tied to an
+  # assignment, so it only tells whether a tester of this assignment is previewing it.
+  defp participant(%{assigns: %{model: assignment, current_user: user, panel_info: panel_info}}) do
+    if preview?(assignment, user, panel_info) do
+      @preview_participant
+    else
+      case Assignment.Public.participant_identifier(assignment, user) do
+        {:ok, participant} -> participant
+        :error -> ""
+      end
+    end
+  end
+
+  defp preview?(assignment, user, panel_info) do
+    match?(%{participant: @preview_participant}, panel_info) and
+      Assignment.Public.tester?(assignment, user)
+  end
+
   defp store(socket, identifier, data) do
-    %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket
+    %{assigns: %{model: assignment, remote_ip: remote_ip}} = socket
 
     meta_data = %{
       remote_ip: remote_ip,
-      panel_info: panel_info,
       identifier: identifier
     }
 
@@ -219,11 +238,10 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   defp deliver_blob(socket, identifier, blob_id) do
-    %{assigns: %{panel_info: panel_info, model: assignment, remote_ip: remote_ip}} = socket
+    %{assigns: %{model: assignment, remote_ip: remote_ip}} = socket
 
     meta_data = %{
       remote_ip: remote_ip,
-      panel_info: panel_info,
       identifier: identifier
     }
 

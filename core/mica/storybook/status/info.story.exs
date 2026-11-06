@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Status.Info do
+defmodule Frameworks.Storybook.Pixel.Status.Info do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Status.info/1

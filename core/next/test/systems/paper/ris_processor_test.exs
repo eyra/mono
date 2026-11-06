@@ -1,7 +1,7 @@
-defmodule Systems.Paper.RISProcessorTest do
-  use Core.DataCase
+defmodule Next.Systems.Paper.RISProcessorTest do
+  use Mica.DataCase
 
-  alias Systems.Paper.RISProcessor
+  alias Next.Systems.Paper.RISProcessor
 
   describe "process_references/2" do
     setup do
@@ -332,7 +332,7 @@ defmodule Systems.Paper.RISProcessorTest do
 
       # Verify using Private.check_paper_exists directly
       result =
-        Systems.Paper.Private.check_paper_exists(
+        Next.Systems.Paper.Private.check_paper_exists(
           %{title: "Exercise and Diabetes", doi: "10.1016/s0733-8651(05)70231-9"},
           paper_set
         )
@@ -387,7 +387,7 @@ defmodule Systems.Paper.RISProcessorTest do
 
     test "marks intrinsic duplicates as errors when using parser output", %{paper_set: paper_set} do
       # Use the actual parser to ensure we test with real data structure
-      alias Systems.Paper.RISParser
+      alias Next.Systems.Paper.RISParser
 
       ris_content = """
       TY  - JOUR
@@ -426,7 +426,7 @@ defmodule Systems.Paper.RISProcessorTest do
     test "intrinsic duplicate errors have proper structure for display", %{paper_set: paper_set} do
       # This test ensures intrinsic duplicate errors have the same structure as parsing errors
       # so they can be displayed properly in ImportSessionWarningsView
-      alias Systems.Paper.RISParser
+      alias Next.Systems.Paper.RISParser
 
       ris_content = """
       TY  - JOUR

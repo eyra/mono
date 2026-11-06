@@ -9,7 +9,7 @@ defmodule Systems.Consent.AgreementModel do
   }
 
   schema "consent_agreements" do
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     has_many(:revisions, Consent.RevisionModel, foreign_key: :agreement_id)
     timestamps()
   end

@@ -1,5 +1,5 @@
 defmodule Systems.Fund.Public do
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   import Ecto.Changeset
 
@@ -8,7 +8,7 @@ defmodule Systems.Fund.Public do
   require Logger
 
   alias Ecto.Multi
-  alias Core.Repo
+  alias Mica.Repo
 
   alias Frameworks.Signal
   alias Frameworks.Utility.Identifier
@@ -1669,7 +1669,7 @@ defmodule Systems.Fund.Public do
       "subject_reward" => reward,
       "aim_of_study" => aim
     })
-    |> then(&Core.Persister.save(&1.data, &1))
+    |> then(&Mica.Persister.save(&1.data, &1))
   end
 
   defp do_create_pay_in(
@@ -1939,7 +1939,7 @@ defmodule Systems.Fund.Public do
   end
 
   defp generate_invoice_id do
-    env_id = Core.Env.get(:invoice_environment, "DEV")
+    env_id = Mica.Env.get(:invoice_environment, "DEV")
     %{rows: [[number]]} = Repo.query!("SELECT nextval('invoice_number_seq')")
     padded = number |> Integer.to_string() |> String.pad_leading(4, "0")
     "NEXT-#{env_id}-#{padded}"
@@ -1947,8 +1947,8 @@ defmodule Systems.Fund.Public do
 
   defp return_url(%Assignment.Model{id: assignment_id}) do
     base_url =
-      Core.Env.get(:payment_webhook_base_url) ||
-        Core.Env.fetch!(:base_url)
+      Mica.Env.get(:payment_webhook_base_url) ||
+        Mica.Env.fetch!(:base_url)
 
     "#{base_url}/assignment/#{assignment_id}/content"
   end

@@ -11,9 +11,9 @@ defmodule Systems.Admin.ClientActivityViewBuilder do
 
   Who the client of an assignment is, is decided in `Systems.Admin.Queries.assignment_client_query/0`.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Admin
 

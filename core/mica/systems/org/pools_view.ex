@@ -6,7 +6,7 @@ defmodule Systems.Org.PoolsView do
   links are managed via `Pool.Assembly` / seeds today; an interactive linking
   UI will be added later via the API/CLI.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Grid
   alias Frameworks.Pixel.Text

@@ -1,5 +1,5 @@
 defmodule Systems.Lab.TaskView do
-  use CoreWeb, :live_component_fabric
+  use MicaWeb, :live_component_fabric
 
   import Frameworks.Pixel.Navigation, only: [button_bar: 1]
   alias Frameworks.Utility.LiveCommand
@@ -146,13 +146,13 @@ defmodule Systems.Lab.TaskView do
 
   defp date(%Lab.TimeSlotModel{start_time: start_time}) do
     start_time
-    |> CoreWeb.UI.Timestamp.to_date()
-    |> CoreWeb.UI.Timestamp.humanize_date()
+    |> MicaWeb.UI.Timestamp.to_date()
+    |> MicaWeb.UI.Timestamp.humanize_date()
   end
 
   defp time(%Lab.TimeSlotModel{start_time: start_time}) do
     start_time
-    |> CoreWeb.UI.Timestamp.humanize_time()
+    |> MicaWeb.UI.Timestamp.humanize_time()
   end
 
   defp location(%Lab.TimeSlotModel{location: location}), do: location

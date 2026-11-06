@@ -11,7 +11,7 @@ alwaysApply: false
 2. Use ExMachina.Ecto as the factory framework:
    ```elixir
    defmodule Systems.YourSystem.Factory do
-     use ExMachina.Ecto, repo: Core.Repo
+     use ExMachina.Ecto, repo: Mica.Repo
 
      alias Systems.YourSystem
    end
@@ -87,10 +87,10 @@ alwaysApply: false
 Example Implementation:
 ```elixir
 defmodule Systems.YourSystem.Factory do
-  use ExMachina.Ecto, repo: Core.Repo
+  use ExMachina.Ecto, repo: Mica.Repo
 
   alias Systems.YourSystem
-  alias Core.Repo
+  alias Mica.Repo
 
   def model_factory do
     %YourSystem.Model{

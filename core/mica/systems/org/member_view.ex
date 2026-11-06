@@ -6,7 +6,7 @@ defmodule Systems.Org.MemberView do
   above a reusable `Account.PeopleEditorComponent`, which handles the
   add/remove flow.
   """
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
 
   alias Frameworks.Pixel.AlertBanner
   alias Frameworks.Pixel.SearchBar

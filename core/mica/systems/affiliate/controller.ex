@@ -1,9 +1,9 @@
 defmodule Systems.Affiliate.Controller do
   use Systems.Affiliate.Constants
 
-  use CoreWeb,
+  use MicaWeb,
       {:controller,
-       [formats: [:html, :json], layouts: [html: CoreWeb.Layouts], namespace: CoreWeb]}
+       [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
   import Systems.Account.UserAuth, only: [log_in_user_without_redirect: 2]
 
@@ -13,7 +13,7 @@ defmodule Systems.Affiliate.Controller do
 
   require Logger
 
-  @id_valid_regex ~r/^[A-Za-z0-9_-]+$/
+  @id_valid_regex ~r/\A[A-Za-z0-9_-]+\z/
   @id_max_lenght 64
 
   # Recruit action: generates a participant ID on the fly for organic recruitment
@@ -26,7 +26,7 @@ defmodule Systems.Affiliate.Controller do
         too_many_requests(conn)
 
       {:error, _} ->
-        Logger.error("Invalid recruit sqid=#{sqid}")
+        Logger.error("Invalid recruit sqid=#{inspect(sqid)}")
         forbidden(conn)
     end
   end
@@ -73,7 +73,7 @@ defmodule Systems.Affiliate.Controller do
   defp too_many_requests(conn) do
     conn
     |> put_status(:too_many_requests)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"429")
   end
 
@@ -83,7 +83,10 @@ defmodule Systems.Affiliate.Controller do
         start(conn, params, numbers)
 
       {:error, error} ->
-        Logger.error("#{inspect(error)}, someone is trying to hack us, params=#{inspect(params)}")
+        Logger.error(
+          "Affiliate entry refused: #{inspect(error)}; param keys=#{inspect(param_keys(params))}"
+        )
+
         forbidden(conn)
     end
   end
@@ -125,13 +128,21 @@ defmodule Systems.Affiliate.Controller do
 
       # Invalid ID and not a tester -> forbidden
       true ->
-        Logger.error("Access denied invalid id #{inspect(params)}")
+        Logger.error(
+          "Affiliate entry refused: invalid participant id for assignment #{assignment.id}; " <>
+            "param keys=#{inspect(param_keys(params))}"
+        )
+
         forbidden(conn)
     end
   end
 
   defp start(conn, params, numbers) do
-    Logger.error("Access denied params=#{inspect(params)} numbers=#{inspect(numbers)}")
+    Logger.error(
+      "Affiliate entry refused: unexpected sqid numbers=#{inspect(numbers)}; " <>
+        "param keys=#{inspect(param_keys(params))}"
+    )
+
     forbidden(conn)
   end
 
@@ -141,13 +152,13 @@ defmodule Systems.Affiliate.Controller do
   def validation_error_callback(conn, _errors) do
     conn
     |> put_status(:not_found)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"400")
     |> halt()
   end
 
   defp preview_access?(assignment, %{assigns: %{current_user: %{} = user}}) do
-    Core.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
+    Mica.Authorization.can_access?(user, assignment, Assignment.ContentPage) and
       match?({:ok, _}, Assignment.Public.ensure_tester(assignment, user))
   end
 
@@ -162,15 +173,17 @@ defmodule Systems.Affiliate.Controller do
     status != :online
   end
 
-  def valid_id?(nil), do: false
   def valid_id?("participant_id"), do: false
   def valid_id?("null"), do: false
   def valid_id?("undefined"), do: false
   def valid_id?("preview"), do: false
 
-  def valid_id?(id) do
+  def valid_id?(id) when is_binary(id) do
     String.length(id) <= @id_max_lenght and Regex.match?(@id_valid_regex, id)
   end
+
+  # nil, or a map or list from a query like `p[x]=y`
+  def valid_id?(_), do: false
 
   defp start_tester(conn, params, %{affiliate: affiliate} = assignment) do
     redirect_url = Affiliate.Public.get_redirect_url(affiliate)
@@ -207,14 +220,14 @@ defmodule Systems.Affiliate.Controller do
   defp not_found(conn) do
     conn
     |> put_status(:not_found)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"404")
   end
 
   defp forbidden(conn) do
     conn
     |> put_status(:forbidden)
-    |> put_view(html: CoreWeb.ErrorHTML)
+    |> put_view(html: MicaWeb.ErrorHTML)
     |> render(:"403")
   end
 
@@ -281,8 +294,13 @@ defmodule Systems.Affiliate.Controller do
 
   defp get_participant(_), do: nil
 
+  defp param_keys(params), do: params |> Map.keys() |> Enum.sort()
+
+  # Only string values can be merged back into the redirect and callback URLs;
+  # a map or list (from `x[y]=z` or `x[]=z`) would crash the merge.
   defp strip_query_string(params) do
     params
     |> Map.delete("sqid")
+    |> Map.filter(fn {_key, value} -> is_binary(value) end)
   end
 end

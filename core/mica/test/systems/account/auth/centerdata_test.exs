@@ -1,7 +1,7 @@
 defmodule Systems.Account.Auth.CenterdataTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
+  alias Mica.Factories
   alias Systems.Account.Auth.Centerdata
 
   test "uses a verified email for the account" do

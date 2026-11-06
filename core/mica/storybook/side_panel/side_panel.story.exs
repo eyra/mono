@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.SidePanel.SidePanel do
+defmodule Frameworks.Storybook.Pixel.SidePanel.SidePanel do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.SidePanel.side_panel/1

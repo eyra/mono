@@ -1,9 +1,9 @@
-defmodule Systems.Graphite.ScoresParserTest do
-  use Core.DataCase
+defmodule Next.Systems.Graphite.ScoresParserTest do
+  use Mica.DataCase
 
-  alias Systems.Graphite
-  alias Systems.Graphite.ScoresParser
-  alias Systems.Graphite.Factories
+  alias Next.Systems.Graphite
+  alias Next.Systems.Graphite.ScoresParser
+  alias Next.Systems.Graphite.Factories
 
   defp add_newlines(lines), do: Enum.map(lines, &(&1 <> "\n"))
 
@@ -19,7 +19,7 @@ defmodule Systems.Graphite.ScoresParserTest do
 
       leaderboard = Factories.create_leaderboard(%{})
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error:
                  {[],
                   [
@@ -51,7 +51,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {
                  [
                    {1,
@@ -86,7 +86,7 @@ defmodule Systems.Graphite.ScoresParserTest do
       leaderboard =
         Factories.create_leaderboard(%{metrics: ["accuracy", "precision", "recall", "f1_score"]})
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success:
                  {[],
@@ -126,7 +126,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success: {
                  [
@@ -173,7 +173,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success: {
                  [
@@ -218,7 +218,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success: {
                  [
@@ -263,7 +263,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success:
                  {[],
@@ -309,7 +309,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error: {[], []},
                success:
                  {[],
@@ -371,7 +371,7 @@ defmodule Systems.Graphite.ScoresParserTest do
         |> add_newlines()
         |> CSV.decode(headers: true)
 
-      assert %Systems.Graphite.ScoresParseResult{
+      assert %Next.Systems.Graphite.ScoresParseResult{
                error:
                  {[
                     {4,

@@ -1,5 +1,5 @@
 defmodule Frameworks.Pixel.WysiwygAreaHelpers do
-  alias Frameworks.Pixel.TrixPostProcessor
+  alias Frameworks.Pixel.RichText
 
   import Phoenix.Component, only: [assign: 3]
   import Phoenix.HTML, only: [raw: 1]
@@ -34,11 +34,12 @@ defmodule Frameworks.Pixel.WysiwygAreaHelpers do
     end
   end
 
+  # Text over the limit isn't cleaned; the field's changeset refuses it.
   def post_process(content) do
-    TrixPostProcessor.add_target_blank(content)
+    if RichText.too_large?(content), do: content, else: RichText.clean(content)
   end
 
   def render_wysiwyg(wysiwyg_text) do
-    raw(wysiwyg_text)
+    wysiwyg_text |> RichText.clean_stored() |> raw()
   end
 end

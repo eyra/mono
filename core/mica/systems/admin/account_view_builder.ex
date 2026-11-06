@@ -9,17 +9,14 @@ defmodule Systems.Admin.AccountViewBuilder do
   The user list is capped at @max_users; user_count reflects the
   unfiltered match count so admins can tell when results were trimmed.
 
-  Performance: when :affiliate or :in_pool filters are active, the
-  membership lookup is pre-built into a MapSet (one bulk query per
-  filter) instead of N+1 queries per user.
+  The matching itself is `Systems.Admin.Public.list_matching_users/2`.
   """
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias Core.ImageHelpers
-  alias CoreWeb.UI.Timestamp
+  alias Mica.ImageHelpers
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Admin
-  alias Systems.Affiliate
   alias Systems.Pool
 
   @max_users 50
@@ -56,87 +53,8 @@ defmodule Systems.Admin.AccountViewBuilder do
   end
 
   defp filter_user_list(active_filters, query) do
-    Account.Public.list_users([:profile])
-    |> Enum.sort(&(Account.User.label(&1) <= Account.User.label(&2)))
-    |> filter_users(active_filters, build_filter_index(active_filters))
-    |> filter_users(query)
+    Admin.Public.list_matching_users(active_filters, query)
   end
-
-  defp build_filter_index(filters) do
-    index = %{}
-
-    index =
-      if :affiliate in filters do
-        Map.put(index, :affiliate_user_ids, MapSet.new(Affiliate.Public.list_user_ids()))
-      else
-        index
-      end
-
-    if :in_pool in filters do
-      Map.put(index, :pool_user_ids, MapSet.new(Pool.Public.list_participant_ids()))
-    else
-      index
-    end
-  end
-
-  defp filter_users(users, nil), do: users
-  defp filter_users(users, []), do: users
-
-  defp filter_users(users, query) when is_list(query) do
-    Enum.filter(users, &matches?(&1, query))
-  end
-
-  defp filter_users(users, filters, index) when is_list(filters) do
-    Enum.filter(users, &matches_filters?(&1, filters, index))
-  end
-
-  defp matches_filters?(_user, [], _index), do: true
-
-  defp matches_filters?(user, [filter | rest], index),
-    do: matches_filter?(user, filter, index) and matches_filters?(user, rest, index)
-
-  defp matches_filter?(%Account.User{id: id}, :affiliate, %{affiliate_user_ids: ids}),
-    do: MapSet.member?(ids, id)
-
-  defp matches_filter?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}),
-    do: MapSet.member?(ids, id)
-
-  defp matches_filter?(user, filter, _index) when is_atom(filter),
-    do: matches_filter?(user, filter)
-
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :verified),
-    do: verified_at != nil
-
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified),
-    do: verified_at == nil
-
-  defp matches_filter?(%Account.User{creator: creator}, :creator) when not is_nil(creator),
-    do: creator
-
-  defp matches_filter?(%Account.User{}, :affiliate), do: false
-  defp matches_filter?(%Account.User{}, :in_pool), do: false
-  defp matches_filter?(_user, _filter), do: false
-
-  defp matches?(_user, []), do: true
-
-  defp matches?(user, [term | rest]),
-    do: matches_word?(user, term) and matches?(user, rest)
-
-  defp matches_word?(_user, ""), do: true
-
-  defp matches_word?(%Account.User{email: email, profile: profile}, word) when is_binary(word) do
-    word = String.downcase(word)
-    String.contains?(String.downcase(email), word) or profile_matches?(profile, word)
-  end
-
-  defp matches_word?(_user, _word), do: false
-
-  defp profile_matches?(%Account.UserProfileModel{fullname: fullname}, word)
-       when not is_nil(fullname) do
-    String.contains?(String.downcase(fullname), word)
-  end
-
-  defp profile_matches?(_profile, _word), do: false
 
   @doc """
   Builds the view-model item for a single user. Public for direct testing.

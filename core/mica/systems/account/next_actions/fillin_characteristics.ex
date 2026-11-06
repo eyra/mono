@@ -1,8 +1,8 @@
 defmodule Systems.Account.NextActions.FillinCharacteristics do
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @impl Systems.NextAction.ViewModel
   def to_view_model(_count, _params) do

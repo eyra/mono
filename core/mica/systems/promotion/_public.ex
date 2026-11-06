@@ -2,10 +2,10 @@ defmodule Systems.Promotion.Public do
   @moduledoc """
 
   """
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Promotion
   alias Systems.Pool
 
@@ -61,9 +61,9 @@ defmodule Systems.Promotion.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Promotion.Model do
+defimpl Mica.Persister, for: Systems.Promotion.Model do
   alias Frameworks.Signal
-  alias Core.Repo
+  alias Mica.Repo
 
   def save(_promotion, changeset) do
     case Repo.update(changeset) do

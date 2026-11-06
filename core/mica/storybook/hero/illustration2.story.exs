@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Hero.Illustration2 do
+defmodule Frameworks.Storybook.Pixel.Hero.Illustration2 do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Hero.illustration2/1

@@ -1,6 +1,6 @@
 defmodule Systems.Assignment.OnboardingConsentViewBuilderTest do
-  use Core.DataCase
-  use Gettext, backend: CoreWeb.Gettext
+  use Mica.DataCase
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
   alias Systems.Consent

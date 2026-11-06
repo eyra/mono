@@ -2,7 +2,7 @@ defmodule Systems.Assignment.Public do
   @moduledoc """
   The assignment context.
   """
-  use Core, :public
+  use Mica, :public
   import Ecto.Query, warn: false
   import Systems.Assignment.Queries
   import Systems.Assignment.Private, only: [reward_idempotence_key: 1, reward_idempotence_key: 2]
@@ -10,8 +10,8 @@ defmodule Systems.Assignment.Public do
   require Logger
 
   alias Ecto.Multi
-  alias Core.Repo
-  alias CoreWeb.UI.Timestamp
+  alias Mica.Repo
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account.User
   alias Frameworks.Utility.EctoHelper
   alias Frameworks.Concept
@@ -432,7 +432,7 @@ defmodule Systems.Assignment.Public do
 
   def update(assignment, %{} = attrs) do
     changeset = Assignment.Model.changeset(assignment, attrs)
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update!(assignment, %{} = attrs) do
@@ -447,7 +447,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:fund, fund)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update_consent_agreement(assignment, consent_agreement) do
@@ -455,7 +455,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def update_storage_endpoint(assignment, storage_endpoint) do
@@ -463,7 +463,7 @@ defmodule Systems.Assignment.Public do
       Assignment.Model.changeset(assignment, %{})
       |> Ecto.Changeset.put_assoc(:storage_endpoint, storage_endpoint)
 
-    Core.Persister.save(assignment, changeset)
+    Mica.Persister.save(assignment, changeset)
   end
 
   def add_participant!(%Assignment.Model{} = assignment, user) do
@@ -542,6 +542,23 @@ defmodule Systems.Assignment.Public do
       _ -> :error
     end
   end
+
+  @doc """
+  The id a crew member is known by in the assignment's data, as in the participant
+  export: their identifier at the assignment's affiliate, else their crew member id.
+  Returns `:error` when the user is not a member of the crew.
+  """
+  def participant_identifier(%Assignment.Model{affiliate: affiliate} = assignment, user) do
+    with {:ok, public_id} <- participant_id(assignment, user) do
+      {:ok, affiliate_identifier(affiliate, user) || public_id}
+    end
+  end
+
+  defp affiliate_identifier(%Affiliate.Model{} = affiliate, %User{} = user) do
+    Affiliate.Public.get_identifier(affiliate, user)
+  end
+
+  defp affiliate_identifier(nil, _user), do: nil
 
   # Only entities that carry an auth node: a Workflow.ItemModel has none, so it
   # has no tree to resolve an owner from.
@@ -1156,7 +1173,7 @@ defmodule Systems.Assignment.Public do
   end
 end
 
-defimpl Core.Persister, for: Systems.Assignment.Model do
+defimpl Mica.Persister, for: Systems.Assignment.Model do
   def save(_assignment, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment) do
       {:ok, %{assignment: assignment}} ->
@@ -1171,7 +1188,7 @@ defimpl Core.Persister, for: Systems.Assignment.Model do
   end
 end
 
-defimpl Core.Persister, for: Systems.Assignment.InfoModel do
+defimpl Mica.Persister, for: Systems.Assignment.InfoModel do
   def save(_info, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :assignment_info) do
       {:ok, %{assignment_info: assignment_info}} -> {:ok, assignment_info}

@@ -3,6 +3,8 @@ defmodule Systems.Manual.PageModel do
   use Frameworks.Utility.Schema
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
+
   schema "manual_page" do
     field(:image, :string)
     field(:title, :string)
@@ -20,6 +22,7 @@ defmodule Systems.Manual.PageModel do
   def changeset(page, attrs \\ %{}) do
     page
     |> cast(attrs, @fields)
+    |> RichText.clean_change(:text)
   end
 
   def validate(changeset) do
@@ -33,7 +36,7 @@ defmodule Systems.Manual.PageModel do
   def preload_graph(:userflow_step), do: [userflow_step: []]
 end
 
-defimpl Core.Persister, for: Systems.Manual.PageModel do
+defimpl Mica.Persister, for: Systems.Manual.PageModel do
   def save(_page, changeset) do
     case Frameworks.Utility.EctoHelper.update_and_dispatch(changeset, :manual_page) do
       {:ok, %{manual_page: manual_page}} -> {:ok, manual_page}

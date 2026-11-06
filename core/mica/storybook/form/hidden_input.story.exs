@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.HiddenInput do
+defmodule Frameworks.Storybook.Pixel.Form.HiddenInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.hidden_input/1

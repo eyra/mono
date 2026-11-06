@@ -1,9 +1,9 @@
 defmodule Systems.Account.ProfileViewTest do
-  use CoreWeb.ConnCase, async: false
+  use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Frameworks.Concept.LiveContext
   alias Systems.Account
 
@@ -83,7 +83,7 @@ defmodule Systems.Account.ProfileViewTest do
 
       html = render_click(view, "signout")
 
-      assert html =~ "prism-btn-loading"
+      assert html =~ "prism-button--loading"
       refute html =~ "spinner_static_delete"
       assert_push_event(view, "auth:signout", %{url: "/user/session"})
     end

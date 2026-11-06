@@ -1,5 +1,5 @@
 defmodule Systems.Lab.ToolForm do
-  use CoreWeb.LiveForm
+  use MicaWeb.LiveForm
   alias Frameworks.Pixel.Text
 
   alias Systems.Lab

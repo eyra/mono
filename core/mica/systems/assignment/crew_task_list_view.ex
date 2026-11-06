@@ -1,5 +1,5 @@
 defmodule Systems.Assignment.CrewTaskListView do
-  use CoreWeb, :embedded_live_view
+  use MicaWeb, :embedded_live_view
   use Systems.Assignment.CrewTaskHelpers
 
   import Systems.Assignment.Html, only: [task_list: 1]

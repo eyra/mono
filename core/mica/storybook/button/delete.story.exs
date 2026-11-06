@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.Delete do
+defmodule Frameworks.Storybook.Pixel.Button.Delete do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.delete/1

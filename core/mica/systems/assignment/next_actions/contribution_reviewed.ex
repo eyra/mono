@@ -5,9 +5,9 @@ defmodule Systems.Assignment.NextActions.ContributionReviewed do
   assignment's participation outcome page.
   """
   @behaviour Systems.NextAction.ViewModel
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   @impl Systems.NextAction.ViewModel
   def to_view_model(_count, %{"assignment_id" => assignment_id, "outcome" => outcome}) do

@@ -1,11 +1,11 @@
-defmodule CoreWeb.Features.PanlSignupLocaleTest do
+defmodule NextWeb.Features.PanlSignupLocaleTest do
   @moduledoc """
   Regression: after registering via `/user/signup/participant`, the
   post-signup landing pages (`/user/onboarding` for PaNL,
   `/user/onboarding/await-confirmation` otherwise) should keep the browser locale
   (NL) instead of falling back to English.
   """
-  use CoreWeb.FeatureCase
+  use MicaWeb.FeatureCase
 
   alias Systems.Pool
 
@@ -33,7 +33,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant?post_signup_action=add_to_panl")
-    |> assert_has(Query.css("[data-testid='signup-page']"))
+    |> assert_connected("[data-testid='signup-page']")
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)
@@ -57,7 +57,7 @@ defmodule CoreWeb.Features.PanlSignupLocaleTest do
 
     session
     |> visit("/user/signup/participant")
-    |> assert_has(Query.css("[data-testid='signup-page']"))
+    |> assert_connected("[data-testid='signup-page']")
     |> assert_has(Query.text("Maak een account aan"))
     |> fill_in(Query.css("input[name='user[email]']"), with: email)
     |> fill_in(Query.css("input[name='user[password]']"), with: password)

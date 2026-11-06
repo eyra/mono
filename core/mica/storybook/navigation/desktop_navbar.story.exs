@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Navigation.DesktopNavbar do
+defmodule Frameworks.Storybook.Pixel.Navigation.DesktopNavbar do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Navigation.desktop_navbar/1

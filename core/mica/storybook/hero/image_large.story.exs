@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Hero.ImageLarge do
+defmodule Frameworks.Storybook.Pixel.Hero.ImageLarge do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Hero.image_large/1

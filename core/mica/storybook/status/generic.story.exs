@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Status.Generic do
+defmodule Frameworks.Storybook.Pixel.Status.Generic do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Status.generic/1

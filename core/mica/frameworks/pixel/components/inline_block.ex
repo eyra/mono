@@ -8,7 +8,7 @@ defmodule Frameworks.Pixel.InlineBlock do
   On small screens the icon sits next to the title only, with description
   below at full width.
   """
-  use CoreWeb, :pixel
+  use MicaWeb, :pixel
 
   alias Frameworks.Pixel.Text
   alias Frameworks.Pixel.Button

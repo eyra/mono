@@ -10,9 +10,9 @@ defmodule Systems.Pool.Controller do
       forwards to the pool-scoped onboarding LiveView or redirects
       home.
   """
-  use CoreWeb, {:controller, [formats: [:html]]}
+  use MicaWeb, {:controller, [formats: [:html]]}
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Systems.Pool
   alias Systems.Account
 

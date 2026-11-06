@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.InlineBlock.InlineBlock do
+defmodule Frameworks.Storybook.Pixel.InlineBlock.InlineBlock do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.InlineBlock.inline_block/1

@@ -1,11 +1,11 @@
 defmodule Systems.Account.UserAuth do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
 
   import Plug.Conn
   import Phoenix.Controller
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.ReturnTo
+  alias MicaWeb.ReturnTo
   alias Systems.Account
 
   # Make the remember me cookie valid for 60 days.
@@ -28,8 +28,6 @@ defmodule Systems.Account.UserAuth do
   if you are not using LiveView.
   """
   def log_in_user(conn, user, first_time?, params \\ %{}) do
-    token = Account.Public.generate_user_session_token(user, session_type(params))
-
     # For first-time users, we always land on onboarding — but if the caller
     # stashed a `:user_return_to` (e.g. an affiliate CTA that carried
     # `?return_to=/pool/panl/join` into the OTP flow), we forward it as a URL
@@ -43,20 +41,23 @@ defmodule Systems.Account.UserAuth do
       end
 
     conn
-    |> renew_session()
-    |> put_session(:user_token, token)
-    |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
-    |> maybe_write_remember_me_cookie(token, params)
+    |> log_in_user_without_redirect(user, params)
     |> redirect(to: redirect_to)
   end
 
-  def log_in_user_without_redirect(conn, user) do
-    token = Account.Public.generate_user_session_token(user)
+  @doc """
+  Starts a session for the user like `log_in_user/4`, but leaves the
+  response to the caller. `params` selects the session type and the
+  remember-me cookie the same way.
+  """
+  def log_in_user_without_redirect(conn, user, params \\ %{}) do
+    token = Account.Public.generate_user_session_token(user, session_type(params))
 
     conn
     |> renew_session()
     |> put_session(:user_token, token)
     |> put_session(:live_socket_id, "users_sessions:#{Base.url_encode64(token)}")
+    |> maybe_write_remember_me_cookie(token, params)
   end
 
   defp maybe_write_remember_me_cookie(conn, token, %{mobile_session?: true}) do
@@ -99,7 +100,7 @@ defmodule Systems.Account.UserAuth do
   """
   def sign_out_current_user(conn) do
     if live_socket_id = get_session(conn, :live_socket_id) do
-      CoreWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      MicaWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn
@@ -170,10 +171,8 @@ defmodule Systems.Account.UserAuth do
   """
   def redirect_if_user_is_authenticated(conn, _opts) do
     if user = conn.assigns[:current_user] do
-      path = signed_in_path(user) || Account.Public.start_page_path(user)
-
       conn
-      |> redirect(to: path)
+      |> redirect(to: signed_in_path(user))
       |> halt()
     else
       conn
@@ -197,6 +196,13 @@ defmodule Systems.Account.UserAuth do
   def require_authenticated_participant(conn, _opts),
     do: require_authenticated(conn, :participant)
 
+  @doc """
+  Like `require_authenticated_user/2`, for pages participants open (tasks,
+  pool and lab pages). Signed-out visitors go to the SaaS's
+  `member_sign_in_page/1`.
+  """
+  def require_authenticated_member(conn, _opts), do: require_authenticated(conn, :member)
+
   defp require_authenticated(conn, entry) do
     if conn.assigns[:current_user] do
       conn
@@ -209,10 +215,12 @@ defmodule Systems.Account.UserAuth do
     end
   end
 
-  defp signin_path(_conn, :user), do: ~p"/user/signin"
+  defp signin_path(_conn, :user), do: Mica.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
     do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
+
+  defp signin_path(conn, :member), do: Mica.SaaS.module().member_sign_in_page(current_path(conn))
 
   defp maybe_store_return_to(%{method: "GET"} = conn) do
     put_session(conn, :user_return_to, current_path(conn))
@@ -223,25 +231,11 @@ defmodule Systems.Account.UserAuth do
   defp redirect_path_after_signin(conn, user) do
     onboarding_path(user) ||
       get_session(conn, :user_return_to) ||
-      signed_in_path(user) ||
-      Account.Public.start_page_path(user)
+      signed_in_path(user)
   end
 
   defp onboarding_path(_), do: nil
 
-  def signed_in_path(%{creator: false}),
-    do: path(:member_signed_in_page)
-
-  def signed_in_path(%{creator: true}),
-    do: path(:creator_signed_in_page)
-
-  def signed_in_path(_user),
-    do: path(:member_signed_in_page)
-
-  defp path(key), do: auth_config(key)
-
-  defp auth_config(key) when is_atom(key) do
-    Core.Env.get(Systems.Account.UserAuth, [])
-    |> Keyword.get(key)
-  end
+  def signed_in_path(%{creator: true}), do: Mica.SaaS.module().signed_in_page(:creator)
+  def signed_in_path(_user), do: Mica.SaaS.module().signed_in_page(:member)
 end

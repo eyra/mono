@@ -9,7 +9,7 @@ defmodule Systems.Payment.ReconciliationTest do
   Retry counts are asserted with Mox arities — `verify_on_exit!` fails the test
   if the provider was called more or fewer times than declared.
   """
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
   import Mox
 
   alias Systems.Payment.Error

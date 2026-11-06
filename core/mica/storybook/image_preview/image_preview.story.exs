@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ImagePreview.ImagePreview do
+defmodule Frameworks.Storybook.Pixel.ImagePreview.ImagePreview do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ImagePreview.image_preview/1

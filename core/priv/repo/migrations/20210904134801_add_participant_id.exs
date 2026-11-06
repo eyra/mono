@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddParticipantId do
+defmodule Mica.Repo.Migrations.AddParticipantId do
   use Ecto.Migration
 
   def up do

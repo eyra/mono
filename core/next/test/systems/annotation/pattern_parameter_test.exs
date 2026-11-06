@@ -1,14 +1,14 @@
-defmodule Systems.Annotation.Pattern.ParameterTest do
-  use Core.DataCase
+defmodule Next.Systems.Annotation.Pattern.ParameterTest do
+  use Mica.DataCase
 
   import Ecto.Query, only: [from: 1]
-  import Systems.Annotation.Pattern
+  import Next.Systems.Annotation.Pattern
 
-  alias Core.Repo
-  alias Core.Factories
-  alias Core.Authentication
-  alias Systems.Annotation
-  alias Systems.Ontology
+  alias Mica.Repo
+  alias Mica.Factories
+  alias Mica.Authentication
+  alias Next.Systems.Annotation
+  alias Next.Systems.Ontology
 
   describe "obtain/1" do
     setup do

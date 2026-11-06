@@ -1,6 +1,6 @@
 # Self: the reference SaaS on Mica
 
-Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`; its bundle is in `bundle/`. In Nova migration step code-systems (`docs/nova-migration/plan.md`), `bundle/` is dissolved into `core/mica_saas/{lib,config}` when the bundle concept is replaced by `Core.SaaS` (`Self.SaaS`) and `Core.System`.
+Self is a self-hostable SaaS built on Mica. In this repository it lives in `core/mica_saas/` (future repository `novasoftwarefoundation/mica-saas`). It is selected at build time with `BUNDLE=self`, which imports `config/config.exs` (`config :mica, saas: MicaSaas.SaaS`). `lib/saas.ex` (`MicaSaas.SaaS`, a `Mica.SaaS`) lists the systems Self is made of and its SaaS-level config: start pages, menus, title and signed-in pages. Self's own systems live in `systems/`, such as `systems/account/` (`MicaSaas.Systems.Account.System`, a `Mica.System`) with the sign-in pages.
 
 All commands below run from the `core/` folder unless stated otherwise.
 
@@ -19,7 +19,7 @@ All commands below run from the `core/` folder unless stated otherwise.
 
     ```Elixir
     # Configure your database
-    config :core, Core.Repo,
+    config :mica, Mica.Repo,
     username: "postgres",
     password: "postgres",
     database: "self_dev",
@@ -70,7 +70,7 @@ All commands below run from the `core/` folder unless stated otherwise.
 
 ### Menu items
 
-* In [items.ex](bundle/lib/menu/items.ex) you will find all the menu items. Add custom items when required.
+* In [items.ex](lib/menu/items.ex) you will find all the menu items. Add custom items when required.
 
 Core supports the following page layouts:
 * Stripped: minimalistic page without menu
@@ -78,9 +78,9 @@ Core supports the following page layouts:
 * Workspace: menu on the left
 
 Change the menus here:
-* [Stripped](bundle/lib/layouts/stripped/menu_builder.ex)
-* [Website](bundle/lib/layouts/website/menu_builder.ex)
-* [Workspace](bundle/lib/layouts/workspace/menu_builder.ex)
+* [Stripped](lib/layouts/stripped/menu_builder.ex)
+* [Website](lib/layouts/website/menu_builder.ex)
+* [Workspace](lib/layouts/workspace/menu_builder.ex)
 
 ### Storage
 
@@ -138,7 +138,7 @@ defmodule Systems.Storage.BuiltIn.MyBackend do
   # Configuration
 
   defp config do
-    Application.fetch_env!(:core, Systems.Storage.BuiltIn.MyBackend)
+    Application.fetch_env!(:mica, Systems.Storage.BuiltIn.MyBackend)
   end
 
   defp var_1 do
@@ -216,13 +216,13 @@ The app never moves the files itself. Installations on S3 storage (`STORAGE_S3_P
 
 ```elixir
   if storage_s3_prefix = System.get_env("STORAGE_S3_PREFIX") do
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.S3
 
-    config :core, Systems.Storage.BuiltIn.S3,
+    config :mica, Systems.Storage.BuiltIn.S3,
       bucket: System.get_env("AWS_S3_BUCKET"),
       prefix: storage_s3_prefix
   else
-    config :core, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+    config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
   end
 ```
 
@@ -230,7 +230,7 @@ That config can be replace by:
 
 ```elixir
   if my_backend = System.get_env("STORAGE_BUILTIN_SPECIAL") do
-    config :core, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
+    config :mica, Systems.Storage.BuiltIn, special: String.to_atom(my_backend)
   end
 
   config Systems.Storage.BuiltIn.MyBackend,
@@ -254,9 +254,9 @@ We plan to support file transfer from the built-in storage to external systems (
 
 ### Rate limiters
 
-To prevent users from exhausting resources, Core uses rate limiters. The default quotas are in
-`core/config/config.exs` (`config :core, :rate, quotas: [...]`). A service without any quota is not
-limited.
+To prevent users from exhausting resources, Core uses rate limiters. The systems declare the default
+quotas of the services they limit (`rate_quotas/0` in their `_system.ex`). A service without any
+quota is not limited.
 
 Overrides replace the default quotas of the services they list; the other services keep their
 defaults. In a release, set them with the `RATE_QUOTAS` environment variable, a JSON list:
@@ -268,7 +268,7 @@ RATE_QUOTAS='[{"service": "signup", "limit": 10, "unit": "call", "window": "minu
 Locally, `core/config/dev.exs` sets them with `quota_overrides:`:
 
 ```Elixir
-config :core, :rate,
+config :mica, :rate,
   prune_interval: 5 * 60 * 1000,
   quota_overrides: [
     [service: "storage_export", limit: 1, unit: "call", window: "hour", scope: "local"]
@@ -355,12 +355,14 @@ Optional:
 | `STORAGE_S3_PREFIX`, `CONTENT_S3_PREFIX`, `FELDSPAR_S3_PREFIX` | env | Object prefixes; without them the app stores files on the local filesystem | `storage`, `content`, `feldspar` |
 | `PUBLIC_S3_URL` | env | Public URL of the public bucket | `https://fly.storage.tigris.dev/nova-mica-dev-storage` |
 | `FELDSPAR_DATA_DONATION_RETENTION` | env | Hours to keep data donation files | `336` |
-| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` and others in `runtime.fly.exs` | `pruner, lifeline` |
+| `ENABLED_OBAN_PLUGINS` | env | Comma-separated: `pruner`, `lifeline` (`Mica.ObanConfig.plugins/0`) and the crons the systems declare (`oban_crons/0`) | `pruner, lifeline` |
 | `GOOGLE_SIGN_IN_CLIENT_ID`, `GOOGLE_SIGN_IN_CLIENT_SECRET` | secret | Your own Google OAuth client | unset |
 | `SURFCONEXT_SITE`, `SURFCONEXT_CLIENT_ID`, `SURFCONEXT_CLIENT_SECRET` | secret | Your own SURFconext client | unset |
 | `UNSPLASH_ACCESS_KEY`, `UNSPLASH_APP_NAME` | secret | Your own Unsplash app, for the image catalog | unset |
 | `APPSIGNAL_PUSH_API_KEY` | secret | AppSignal monitoring | unset |
-| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (`config/config.exs`) of the services it lists; the other services keep their defaults | `[]` |
+| `RATE_QUOTAS` | env | JSON list of rate limiter quotas. Replaces the default quotas (the systems' `rate_quotas/0`) of the services it lists; the other services keep their defaults | `[]` |
+| `AUTH_CODE_LIMITS` | env | JSON list of sign-in code limits, e.g. `[{"action": "check", "by": "email_network", "limit": 20, "window": "hour"}]` (`action`: `request` or `check`; `by`: `email` (per email address, across network addresses), `email_network` (per email address and network address) or `network` (per network address); `window`: `minute`, `hour` or `day`). `limit` must be a positive integer. Defaults: `request` 10 per hour per `email_network`, 50 per day per `email`, 200 per hour per `network`; `check` 10 per hour and 30 per day per `email_network`, 100 per day per `email`, 200 per hour per `network`. Replaces the default limit (`Systems.Account.AuthCodeLimits`) with the same action, count and window; the other limits keep their defaults, so setting `check`/`email_network` per hour keeps its 30 per day cap. A window without a default adds a limit; a default can be raised but not removed | unset |
+| `TRUSTED_PROXIES` | env | Comma-separated addresses or CIDR ranges of the proxies in front of the app. Only a request from one of them has its client address read from `X-Forwarded-For`, which the proxy must set or append to. Replaces the default (the loopback and private ranges), so list those too if a proxy uses them. List only your own proxies, and only proxies that set or append to `X-Forwarded-For`; otherwise a client can choose the address it is counted as. Set it when a CDN or a load balancer with a public address forwards to the app; otherwise every user counts as that proxy's address for the sign-in code limits | unset |
 | `GETTEXT_FALLBACK_LOCALE` | env | Locale for untranslated strings. Unset renders the raw keys, which makes missing translations visible | unset |
 
 nova-mica-dev uses no Eyra OAuth clients: every integration above that is unset stays

@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Card.Label do
+defmodule Frameworks.Storybook.Pixel.Card.Label do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Card.label/1

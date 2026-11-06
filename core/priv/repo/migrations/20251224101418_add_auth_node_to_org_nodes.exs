@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.AddAuthNodeToOrgNodes do
+defmodule Mica.Repo.Migrations.AddAuthNodeToOrgNodes do
   use Ecto.Migration
 
   def change do

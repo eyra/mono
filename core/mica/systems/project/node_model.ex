@@ -15,7 +15,7 @@ defmodule Systems.Project.NodeModel do
     belongs_to(:parent, __MODULE__, foreign_key: :parent_id, references: :id, define_field: false)
     has_many(:children, __MODULE__, foreign_key: :parent_id)
     has_many(:items, Project.ItemModel, foreign_key: :node_id)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     timestamps()
   end
 
@@ -62,7 +62,7 @@ defmodule Systems.Project.NodeModel do
   end
 
   defimpl Frameworks.Utility.ViewModelBuilder do
-    use CoreWeb, :verified_routes
+    use MicaWeb, :verified_routes
 
     def view_model(%Project.NodeModel{} = node, page, %{user: user}) do
       vm(node, page, user)

@@ -1,4 +1,4 @@
-defmodule Core.Repo.Migrations.PortDemo do
+defmodule Mica.Repo.Migrations.PortDemo do
   use Ecto.Migration
 
   def change do

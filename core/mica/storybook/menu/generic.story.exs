@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Menu.Generic do
+defmodule Frameworks.Storybook.Pixel.Menu.Generic do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Menu.generic/1

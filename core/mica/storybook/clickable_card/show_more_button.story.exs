@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.ClickableCard.ShowMoreButton do
+defmodule Frameworks.Storybook.Pixel.ClickableCard.ShowMoreButton do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.ClickableCard.show_more_button/1

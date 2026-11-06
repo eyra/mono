@@ -1,5 +1,5 @@
 defmodule Systems.Content.S3 do
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
   alias ExAws.S3
 
   defmodule Error do
@@ -63,7 +63,7 @@ defmodule Systems.Content.S3 do
   end
 
   defp s3_settings do
-    Core.Env.fetch!(:content)
+    Mica.Env.fetch!(:content)
   end
 
   defp backend do
@@ -105,7 +105,7 @@ defmodule Systems.Content.S3 do
   end
 
   defp get_stream_chunk_size do
-    Core.Env.fetch!(:paper)
+    Mica.Env.fetch!(:paper)
     |> Keyword.fetch!(:ris_stream_chunk_size)
   end
 end

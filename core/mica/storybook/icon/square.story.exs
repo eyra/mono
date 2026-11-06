@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Icon.Square do
+defmodule Frameworks.Storybook.Pixel.Icon.Square do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Icon.square/1

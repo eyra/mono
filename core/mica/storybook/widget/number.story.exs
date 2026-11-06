@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Widget.Number do
+defmodule Frameworks.Storybook.Pixel.Widget.Number do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Widget.number/1

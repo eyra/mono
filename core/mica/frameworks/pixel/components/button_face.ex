@@ -1,18 +1,28 @@
 defmodule Frameworks.Pixel.Button.Face do
-  use CoreWeb, :pixel
+  @moduledoc """
+  The look of a button, inside a `Frameworks.Pixel.Button.Action`. Every face but
+  the menu faces renders Prism's button (`Frameworks.Pixel.button/1`) as a
+  `<div>`, since the action is the clickable element.
 
-  alias Frameworks.Pixel.Spinner
+  `bg_color`, `text_color`, `border_color` and `font` take Tailwind classes that
+  override Prism's look; without them a face has its Prism variant's colors and
+  typography.
+
+  Prism's button is inline (`inline-flex`); the icon, label and `*_icon` faces take
+  a line of their own (`flex`), so no line box adds height around them.
+  """
+  use MicaWeb, :pixel
+
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Logo
 
   attr(:text, :string, required: true)
-  attr(:font, :string, default: "text-link font-link")
+  attr(:font, :string, default: nil)
 
   def link(assigns) do
     ~H"""
-    <div class="prism-btn prism-btn-link">
-      <%= @text %>
-    </div>
+    <Pixel.button as="div" variant={:link} class={@font}><%= @text %></Pixel.button>
     """
   end
 
@@ -23,173 +33,132 @@ defmodule Frameworks.Pixel.Button.Face do
   attr(:icon, :atom, required: true)
   attr(:color, :string, default: nil)
   attr(:alt, :string, default: "")
-  attr(:size, :string, default: "h-6 w-6")
+  attr(:size, :string, default: nil)
 
   def icon(assigns) do
     ~H"""
-    <div class={"active:opacity-80 cursor-pointer #{@size}"}>
-      <img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}>
-    </div>
+    <Pixel.button as="div" variant={:icon} class={["flex", @size]}>
+      <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}></:icon>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, required: true)
   attr(:color, :string, default: nil)
-  attr(:text_color, :string, default: "text-grey1")
+  attr(:text_color, :string, default: nil)
   attr(:height, :string, default: "h-10")
 
   def label_icon(assigns) do
     ~H"""
-    <div class="pt-0 pb-1px active:pt-1px active:pb-0 font-button text-button rounded bg-opacity-0">
-      <div class="flex justify-left items-center w-full">
-        <div>
-          <img class="mr-2 -mt-2px" src={~p"/images/icons/#{icon_name(assigns)}"} alt={@label}>
-        </div>
-        <div class={"#{@height}"}>
-          <div class="flex flex-col justify-center h-full items-center">
-            <div class={"text-label font-label #{@text_color}"}>
-              <%= @label %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Pixel.button as="div" variant={:plain} padded={false} class={["flex w-fit font-label text-label", @height, @text_color]}>
+      <%= @label %>
+      <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@label}></:icon>
+    </Pixel.button>
     """
   end
 
-  def padding(%{wrap: true}), do: "pt-1px pb-1px active:pt-2px active:pb-0"
-  def padding(_), do: "pt-15px pb-15px active:pt-4 active:pb-14px pr-4 pl-4"
-
   attr(:label, :string, required: true)
   attr(:wrap, :boolean, default: false)
-  attr(:text_color, :string, default: "text-primary")
-  attr(:font, :string, default: "font-button text-button")
+  attr(:text_color, :string, default: nil)
+  attr(:font, :string, default: nil)
 
   def label(assigns) do
     ~H"""
-    <div class={"rounded bg-opacity-0 #{@font} #{padding(assigns)} #{@text_color}"}>
+    <Pixel.button as="div" variant={:text} padded={not @wrap} class={["flex w-fit", @font, @text_color]}>
       <%= @label %>
-    </div>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, default: :forward)
   attr(:icon_align, :atom, default: :right)
-  attr(:text_color, :string, default: "text-grey1")
+  attr(:text_color, :string, default: nil)
 
   def plain_icon(assigns) do
     ~H"""
-    <div class="pt-1 pb-1 active:pt-5px active:pb-3px rounded bg-opacity-0 focus:outline-none cursor-pointer">
-      <div class="flex items-center">
-        <%= if @icon_align != :right do %>
-          <div>
-            <img class="mr-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-          </div>
-        <% end %>
-        <div class="focus:outline-none">
-          <div class="flex flex-col justify-center h-full items-center">
-            <div class={"flex-wrap text-button font-button #{@text_color}"}>
-              <%= @label %>
-            </div>
-          </div>
-        </div>
-        <%= if @icon_align == :right do %>
-          <div>
-            <img class="ml-2 -mt-2px" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-          </div>
-        <% end %>
-      </div>
-    </div>
+    <Pixel.button
+      as="div"
+      variant={:plain}
+      padded={false}
+      icon_position={if @icon_align == :right, do: :end, else: :start}
+      class={["flex w-fit", @text_color]}
+    >
+      <%= @label %>
+      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
-  attr(:text_color, :string, default: "text-grey1")
+  attr(:text_color, :string, default: nil)
 
   def plain(assigns) do
     ~H"""
-    <div class={"prism-btn prism-btn-plain w-full #{@text_color}"}>
+    <Pixel.button as="div" variant={:plain} padded={false} class={["w-full", @text_color]}>
       <span class="whitespace-pre-wrap"><%= @label %></span>
-    </div>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, required: true)
-  attr(:bg_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-white")
+  attr(:bg_color, :string, default: nil)
+  attr(:text_color, :string, default: nil)
 
   def primary_icon(assigns) do
     ~H"""
-    <div class={"pt-1 pb-1 active:pt-5px active:pb-3px active:shadow-top4px w-full rounded cursor-pointer pl-4 pr-4 #{@bg_color}"}>
-      <div class="flex justify-center items-center w-full">
-        <div>
-          <img class="mr-3 -mt-[2px]" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-        </div>
-        <div class="h-10">
-          <div class="flex flex-col justify-center h-full items-center">
-            <div class={"text-button font-button #{@text_color}"}>
-              <%= @label %>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Pixel.button as="div" variant={:primary} class={["flex w-full h-12", @bg_color, @text_color]}>
+      <%= @label %>
+      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
-  attr(:bg_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-white")
+  attr(:bg_color, :string, default: nil)
+  attr(:text_color, :string, default: nil)
   attr(:loading, :boolean, default: false)
-  attr(:loading?, :boolean, default: false)
   attr(:full_width, :boolean, default: false)
 
   def primary(assigns) do
     ~H"""
-    <div class={"prism-btn prism-btn-primary #{if @full_width, do: "w-full"} #{if @loading, do: "prism-btn-loading"} #{@bg_color} #{@text_color}"}>
-      <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
-      <%= if @loading? do %>
-        <Spinner.static />
-      <% end %>
-    </div>
+    <Pixel.button
+      as="div"
+      variant={:primary}
+      loading={@loading}
+      class={[@full_width && "w-full", @bg_color, @text_color]}
+    >
+      <%= @label %>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
-  attr(:border_color, :string, default: "border-primary")
-  attr(:text_color, :string, default: "text-primary")
+  attr(:border_color, :string, default: nil)
+  attr(:text_color, :string, default: nil)
   attr(:loading, :boolean, default: false)
-  attr(:loading?, :boolean, default: false)
 
   def secondary(assigns) do
     ~H"""
-    <div class={"prism-btn prism-btn-secondary #{if @loading, do: "prism-btn-loading"} #{@border_color} #{@text_color}"}>
-      <span class={if @loading, do: "prism-btn-content"}><%= @label %></span>
-      <%= if @loading? do %>
-        <Spinner.static />
-      <% end %>
-    </div>
+    <Pixel.button as="div" variant={:secondary} loading={@loading} class={[@border_color, @text_color]}>
+      <%= @label %>
+    </Pixel.button>
     """
   end
 
   attr(:label, :string, required: true)
   attr(:icon, :atom, required: true)
-  attr(:border_color, :string, default: "bg-primary")
-  attr(:text_color, :string, default: "text-primary")
+  attr(:border_color, :string, default: nil)
+  attr(:text_color, :string, default: nil)
 
   def secondary_icon(assigns) do
     ~H"""
-    <div class={"text-center pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 pr-4 pl-4 #{@border_color} #{@text_color}"}>
-      <div class="flex flex-row items-center justify-center">
-        <div>
-          <img class="mr-3 -mt-[2px]" src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}>
-        </div>
-        <%= @label %>
-      </div>
-    </div>
+    <Pixel.button as="div" variant={:secondary} class={["flex", @border_color, @text_color]}>
+      <%= @label %>
+      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+    </Pixel.button>
     """
   end
 

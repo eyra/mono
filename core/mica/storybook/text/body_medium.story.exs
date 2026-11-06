@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Text.BodyMedium do
+defmodule Frameworks.Storybook.Pixel.Text.BodyMedium do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Text.body_medium/1

@@ -1,8 +1,8 @@
 defmodule Systems.Fund.PayInExpirationTest do
-  use Core.DataCase, async: true
+  use Mica.DataCase, async: true
 
-  alias Core.Factories
-  alias Core.Repo
+  alias Mica.Factories
+  alias Mica.Repo
   alias Systems.Fund
 
   describe "expire_stale_pay_ins/1" do

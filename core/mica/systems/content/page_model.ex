@@ -4,9 +4,11 @@ defmodule Systems.Content.PageModel do
 
   import Ecto.Changeset
 
+  alias Frameworks.Pixel.RichText
+
   schema "content_pages" do
     field(:body, :string)
-    belongs_to(:auth_node, Core.Authorization.Node)
+    belongs_to(:auth_node, Mica.Authorization.Node)
     timestamps()
   end
 
@@ -16,6 +18,7 @@ defmodule Systems.Content.PageModel do
   def changeset(page, attrs) do
     page
     |> cast(attrs, @fields)
+    |> RichText.clean_change(:body)
   end
 
   def validate(changeset) do

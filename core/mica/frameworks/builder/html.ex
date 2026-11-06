@@ -1,10 +1,10 @@
 defmodule Frameworks.Builder.HTML do
-  use CoreWeb, :html
+  use MicaWeb, :html
 
   alias Frameworks.Pixel.Panel
   alias Frameworks.Pixel.Align
 
-  import CoreWeb.UI.StepIndicator
+  import MicaWeb.UI.StepIndicator
   import Frameworks.Pixel.Tag
 
   attr(:title, :string, required: true)

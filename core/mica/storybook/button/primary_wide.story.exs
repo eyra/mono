@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Button.PrimaryWide do
+defmodule Frameworks.Storybook.Pixel.Button.PrimaryWide do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Button.primary_wide/1

@@ -1,8 +1,8 @@
 defmodule Systems.Advert.ContentPageBuilder do
-  use CoreWeb, :verified_routes
+  use MicaWeb, :verified_routes
   use Systems.Content.PageBuilder
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept
 

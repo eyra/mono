@@ -1,19 +1,19 @@
-defmodule Systems.Graphite.LeaderboardPageBuilder do
-  use Core, :auth
-  use CoreWeb, :verified_routes
+defmodule Next.Systems.Graphite.LeaderboardPageBuilder do
+  use Mica, :auth
+  use MicaWeb, :verified_routes
 
-  use Gettext, backend: CoreWeb.Gettext
+  use Gettext, backend: MicaWeb.Gettext
 
-  alias CoreWeb.UI.Timestamp
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account.User
-  alias Systems.Graphite
+  alias Next.Systems.Graphite
 
   def view_model(
         %Graphite.LeaderboardModel{id: id, title: title, metrics: metrics} = leaderboard,
         %{current_user: user} = _assigns
       ) do
     leaderboard =
-      Core.Repo.preload(
+      Mica.Repo.preload(
         leaderboard,
         [
           scores: [Graphite.ScoreModel.preload_graph(:down)],

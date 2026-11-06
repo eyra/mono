@@ -1,5 +1,5 @@
-defmodule Systems.Zircon.Factories do
-  alias Core.Factories
+defmodule Next.Systems.Zircon.Factories do
+  alias Mica.Factories
 
   def setup_ontology do
     context = %{

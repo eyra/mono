@@ -1,10 +1,10 @@
 defmodule Systems.Alliance.ToolViewTest do
-  use CoreWeb.ConnCase, async: false
-  use Gettext, backend: CoreWeb.Gettext
+  use MicaWeb.ConnCase, async: false
+  use Gettext, backend: MicaWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 
-  alias Core.Repo
+  alias Mica.Repo
   alias Systems.Alliance
   alias Systems.Workflow
 

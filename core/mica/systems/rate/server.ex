@@ -22,13 +22,16 @@ defmodule Systems.Rate.Server do
   @impl true
   def init(args) do
     prune_interval = Keyword.get(args, :prune_interval, 60 * 60 * 1000)
-
-    quotas =
-      Quota.merge(init_quotas(args, :quotas), init_quotas(args, :quota_overrides))
+    quotas = quotas(args)
 
     Logger.notice("[Rate] quotas:\n#{format_quotas(quotas)}")
 
     {:ok, State.init(prune_interval, quotas) |> schedule_prune()}
+  end
+
+  @doc "The quotas the server enforces: `quotas`, where `quota_overrides` replace a service's quotas."
+  def quotas(args) do
+    Quota.merge(init_quotas(args, :quotas), init_quotas(args, :quota_overrides))
   end
 
   defp init_quotas(args, key) do

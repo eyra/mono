@@ -1,4 +1,4 @@
-defmodule Storybook.Frameworks.Pixel.Form.PasswordInput do
+defmodule Frameworks.Storybook.Pixel.Form.PasswordInput do
   use PhoenixStorybook.Story, :component
 
   def function, do: &Frameworks.Pixel.Form.password_input/1
