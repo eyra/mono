@@ -133,6 +133,10 @@ jobs:
       - name: Env-name parity script tests
         run: cd core && elixir scripts/env_names_test.exs
 
+      # Every function component has a story (`mix storybook.stories` writes missing ones).
+      - name: Storybook stories
+        run: cd core && mix storybook.check
+
       # Routes, grants, handlers, SaaS config and counts of the Next build.
       - name: Nova snapshots (Next)
         run: cd core && mix nova.snapshot

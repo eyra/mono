@@ -7,5 +7,6 @@
   onyx: false,
   opp_phase_3: false,
   otp: true,
-  password_sign_in: true
+  password_sign_in: true,
+  storybook: false
 ]

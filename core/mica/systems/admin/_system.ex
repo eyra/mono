@@ -3,6 +3,7 @@ defmodule Systems.Admin.System do
 
   def routes do
     quote do
+      require PhoenixStorybook.Router
       require Systems.Admin.Routes
       Systems.Admin.Routes.routes()
     end
@@ -13,8 +14,7 @@ defmodule Systems.Admin.System do
       [
         {Systems.Admin.ConfigPage, [:admin]},
         {Systems.Admin.ImportRewardsPage, [:admin]},
-        {Systems.Admin.LoginPage, [:visitor, :member]},
-        {Systems.Admin.TypographyPage, [:admin]}
+        {Systems.Admin.LoginPage, [:visitor, :member]}
       ]
     end
   end
@@ -31,5 +31,5 @@ defmodule Systems.Admin.System do
     ]
   end
 
-  def feature_flags, do: [:debug_expire_force]
+  def feature_flags, do: [:debug_expire_force, :storybook]
 end

@@ -48,7 +48,8 @@
          onyx: false,
          opp_phase_3: false,
          otp: true,
-         password_sign_in: true
+         password_sign_in: true,
+         storybook: false
        ]
      ]},
     {"prod-all-oban-plugins",
@@ -100,7 +101,8 @@
          onyx: false,
          opp_phase_3: false,
          otp: true,
-         password_sign_in: true
+         password_sign_in: true,
+         storybook: false
        ]
      ]},
     {"prod-migrate",
@@ -137,7 +139,8 @@
          onyx: false,
          opp_phase_3: false,
          otp: true,
-         password_sign_in: true
+         password_sign_in: true,
+         storybook: false
        ]
      ]},
     {"staging",
@@ -178,7 +181,8 @@
          opp_phase_3: false,
          otp: true,
          panl: true,
-         password_sign_in: true
+         password_sign_in: true,
+         storybook: false
        ]
      ]},
     {"dev",
@@ -231,7 +235,8 @@
          opp_phase_3: false,
          otp: true,
          panl: true,
-         password_sign_in: true
+         password_sign_in: true,
+         storybook: false
        ]
      ]},
     {"local",
@@ -285,6 +290,7 @@
          panl_post_launch: true,
          password_sign_in: true,
          probe: true,
+         storybook: true,
          surfconext_sign_in: true
        ]
      ]}

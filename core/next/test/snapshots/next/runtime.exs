@@ -54,6 +54,7 @@
          panl_post_launch: false,
          password_sign_in: true,
          probe: false,
+         storybook: false,
          surfconext_sign_in: false
        ]
      ]},
@@ -112,6 +113,7 @@
          panl_post_launch: false,
          password_sign_in: true,
          probe: false,
+         storybook: false,
          surfconext_sign_in: false
        ]
      ]},
@@ -155,6 +157,7 @@
          panl_post_launch: false,
          password_sign_in: true,
          probe: false,
+         storybook: false,
          surfconext_sign_in: false
        ]
      ]},
@@ -201,6 +204,7 @@
          panl_post_launch: false,
          password_sign_in: true,
          probe: false,
+         storybook: false,
          surfconext_sign_in: false
        ]
      ]},
@@ -258,6 +262,7 @@
          panl_post_launch: false,
          password_sign_in: true,
          probe: false,
+         storybook: false,
          surfconext_sign_in: false
        ]
      ]},
@@ -312,6 +317,7 @@
          panl_post_launch: true,
          password_sign_in: true,
          probe: true,
+         storybook: true,
          surfconext_sign_in: true
        ]
      ]}

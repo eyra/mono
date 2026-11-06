@@ -27,8 +27,9 @@ defmodule Mica.MixProject do
       deps: deps(),
       listeners: [Phoenix.CodeReloader],
       # The release keeps the name `core` (bin/core): the Dockerfile, predeploy and
-      # Eyra's AWS deploy tooling call it.
-      releases: [core: []],
+      # Eyra's AWS deploy tooling call it. The storybook reads component docs from the
+      # Docs chunks.
+      releases: [core: [strip_beams: [keep: ["Docs"]]]],
       # The main page in the docs
       docs: [
         main: "readme",
@@ -135,6 +136,7 @@ defmodule Mica.MixProject do
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
       {:phoenix_live_view, "1.1.33"},
+      {:phoenix_storybook, "1.5.0"},
       {:phoenix_view, "2.0.4"},
       {:phoenix, "1.8.16"},
       {:plug_cowboy, "2.9.0"},
@@ -232,6 +234,15 @@ defmodule Mica.MixProject do
         "tailwind default --minify",
         "esbuild default --minify",
         "phx.digest"
+      ],
+      # One story per function component; the check fails CI when one is missing.
+      "storybook.stories": [
+        "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel",
+        "storybook.gen next next/storybook --prefix Next.Systems"
+      ],
+      "storybook.check": [
+        "storybook.gen mica/frameworks/pixel mica/storybook --prefix Frameworks.Pixel --check",
+        "storybook.gen next next/storybook --prefix Next.Systems --check"
       ],
       run: "phx.server",
       github_release: "cmd ./scripts/github-release",

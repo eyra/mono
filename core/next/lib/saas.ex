@@ -17,7 +17,8 @@ defmodule Next.SaaS do
         Next.Systems.Student.System,
         Next.Systems.Zircon.System,
         Next.Systems.Paper.System,
-        Next.Systems.Probe.System
+        Next.Systems.Probe.System,
+        Next.Systems.Storybook.System
       ]
   end
 
@@ -38,7 +39,8 @@ defmodule Next.SaaS do
       onyx: false,
       otp: false,
       probe: false,
-      e2e: false
+      e2e: false,
+      storybook: false
     ]
   end
 
