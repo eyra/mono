@@ -7,7 +7,7 @@
   ],
   "timezone": "Europe/Amsterdam",
   "constraints": {
-    "erlang": "28.1.0.0",
+    "erlang": "29.1.2.0",
     "elixir": "1.19.6"
   },
   "ignoreDeps": [
