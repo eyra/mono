@@ -25,25 +25,66 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
     vm = view_model(assignment, user)
 
     assert [
-             %{id: first_id, status: :current, label: "Task 1 of 2"},
-             %{id: second_id, status: :incomplete, label: "Task 2 of 2"}
+             %{id: first_id, number: 1, status: :current, label: "Task 1 of 2"},
+             %{id: second_id, number: 2, status: :incomplete, label: "Task 2 of 2"}
            ] = vm.steps
 
     assert {first_id, second_id} == {first.id, second.id}
     assert {%{id: ^first_id}, _task} = vm.work_item
   end
 
-  test "loads the current task's start view on the page, one view per task", %{
+  test "the intro shows the current task's number, title and start button", %{
+    user: user,
+    assignment: assignment
+  } do
+    assert %{
+             intro: %{
+               number: 1,
+               title: "Task 1",
+               button: %{action: %{type: :send, event: "start_task"}}
+             }
+           } = view_model(assignment, user)
+  end
+
+  test "the intro shows the researcher's description of the task", %{
+    user: user,
+    assignment: assignment,
+    first: first
+  } do
+    first |> Ecto.Changeset.change(description: "Listen to a short story.") |> Repo.update!()
+    assignment = Repo.preload(assignment, Assignment.Model.preload_graph(:down), force: true)
+
+    assert %{intro: %{description: "Listen to a short story."}} = view_model(assignment, user)
+  end
+
+  test "no tool before the participant starts the current task", %{
+    user: user,
+    assignment: assignment
+  } do
+    assert %{tool_modal: nil} = view_model(assignment, user)
+  end
+
+  test "the started task's tool opens in the full-screen modal and starts at once", %{
     user: user,
     assignment: assignment,
     first: %{id: first_id}
   } do
-    %{tool_view: tool_view} = view_model(assignment, user)
+    %{tool_modal: tool_modal} = view_model(assignment, user, %{task: first_id})
 
-    assert tool_view.id == "tool_view_#{first_id}"
+    assert %{style: :full, element: %{id: "tool_modal", options: options}} = tool_modal
 
-    assert %{presentation: :start_on_page, workflow_item_id: ^first_id} =
-             tool_view.options[:live_context].data
+    assert %{presentation: :modal, autostart: true, workflow_item_id: ^first_id} =
+             options[:live_context].data
+  end
+
+  test "no tool for a started task that isn't current any more", %{
+    user: user,
+    assignment: assignment,
+    first: %{id: first_id}
+  } do
+    complete_task(assignment, user, 0)
+
+    assert %{tool_modal: nil} = view_model(assignment, user, %{task: first_id})
   end
 
   test "lands on the first unfinished task", %{
@@ -57,7 +98,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
 
     assert [%{status: :complete}, %{status: :current}] = vm.steps
     assert {%{id: ^second_id}, _task} = vm.work_item
-    assert vm.tool_view.id == "tool_view_#{second_id}"
+    assert %{number: 2, title: "Task 2"} = vm.intro
   end
 
   test "an earlier unfinished task comes before a later finished one", %{
@@ -81,7 +122,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
 
     assert [%{status: :complete}, %{status: :complete}] = vm.steps
     assert vm.work_item == nil
-    assert vm.tool_view == nil
+    assert vm.intro == nil
   end
 
   test "finished after the last task", %{user: user, assignment: assignment} do
@@ -113,17 +154,19 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
     |> Enum.map(fn {_item, task} -> task end)
   end
 
-  defp view_model(assignment, user) do
+  defp view_model(assignment, user, user_state \\ %{}) do
     live_context =
       Frameworks.Concept.LiveContext.new(%{
         current_user: user,
         timezone: "UTC",
+        user_state: user_state,
         panel_info: nil
       })
 
     Assignment.CrewTaskHorizontalListViewBuilder.view_model(assignment, %{
       assignment_id: assignment.id,
       current_user: user,
+      user_state: user_state,
       live_context: live_context
     })
   end

@@ -809,3 +809,7 @@ msgstr "This study has no tasks."
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr "Task %{index} of %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Start"

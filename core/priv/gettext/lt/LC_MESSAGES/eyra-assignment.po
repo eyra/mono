@@ -821,3 +821,7 @@ msgstr "Šiame tyrime nėra užduočių."
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr "Užduotis %{index} iš %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Pradėti"

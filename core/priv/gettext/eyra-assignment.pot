@@ -809,3 +809,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr ""

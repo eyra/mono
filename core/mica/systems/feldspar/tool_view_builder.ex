@@ -7,8 +7,8 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   ## Parameters
   - tool: The Feldspar tool model
   - assigns: Contains presentation data, an opaque recovery context and an optional
-    start screen description from the host. With `presentation: :start_on_page` the
-    start screen sits on the page and the app opens in a modal over it.
+    start screen description from the host. With `autostart: true` in the live context
+    the host has shown its own start screen, and the app starts without this one.
   """
   def view_model(
         tool,
@@ -35,14 +35,14 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       recovery_on_entry: on_entry,
       button: build_button(loading, assigns),
       app_view: app_view,
-      tool_in_modal?: presentation(assigns) == :start_on_page,
+      autostart?: autostart?(assigns),
       error: error
     }
   end
 
-  # Optional, so not a dependency of the view: hosts that don't set it get the default
-  defp presentation(%{live_context: %{data: %{presentation: presentation}}}), do: presentation
-  defp presentation(_assigns), do: nil
+  # Optional, so not a dependency of the view: hosts that don't set it get the start screen
+  defp autostart?(%{live_context: %{data: %{autostart: true}}}), do: true
+  defp autostart?(_assigns), do: false
 
   defp build_recovery(true, support_url) do
     %{

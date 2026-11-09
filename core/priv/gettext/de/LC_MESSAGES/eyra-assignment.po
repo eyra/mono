@@ -810,3 +810,7 @@ msgstr "Diese Studie enthält keine Aufgaben."
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr "Aufgabe %{index} von %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Starten"

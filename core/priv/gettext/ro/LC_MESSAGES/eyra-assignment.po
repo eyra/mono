@@ -821,3 +821,7 @@ msgstr "Acest studiu nu are sarcini."
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr "Sarcina %{index} din %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Începe"

@@ -24,7 +24,11 @@
     });
 
     window.parent.postMessage({ action: "app-loaded" }, "*");
-    window.parent.postMessage({ action: "resize", height: document.body.scrollHeight }, "*");
+    // Like a Feldspar app: report the content height, and again whenever it changes
+    const reportHeight = () =>
+      window.parent.postMessage({ action: "resize", height: document.body.scrollHeight }, "*");
+    new ResizeObserver(reportHeight).observe(document.body);
+    reportHeight();
   </script>
 </body>
 </html>

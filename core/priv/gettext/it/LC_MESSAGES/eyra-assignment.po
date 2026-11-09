@@ -810,3 +810,7 @@ msgstr "Questo studio non ha task."
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"
 msgstr "Attività %{index} di %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Inizia"

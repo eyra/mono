@@ -1,18 +1,21 @@
 defmodule Systems.Assignment.CrewTaskHorizontalListView do
   @moduledoc """
   The horizontal task list. Shows the participant's position in the tasks and
-  the current task's start view below it. Tasks are done in order, without a done
-  button: participation finishes when the last task is done.
+  the current task's intro below it. Its start button opens the tool in the same
+  modal as the vertical task list. Tasks are done in order, without a done button:
+  participation finishes when the last task is done.
   """
   use MicaWeb, :embedded_live_view
   use Systems.Assignment.CrewTaskHelpers
 
   import MicaWeb.UI.StepProgress
 
+  alias Frameworks.Pixel.Button
+  alias Frameworks.Pixel.Text
   alias Systems.Assignment
   alias Systems.Crew
 
-  def dependencies(), do: [:assignment_id, :current_user, :panel_info]
+  def dependencies(), do: [:assignment_id, :current_user, {:user_state, :task}, :panel_info]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{assignment_id: assignment_id}}) do
     Assignment.Public.get!(assignment_id, [
@@ -32,14 +35,86 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
   def handle_view_model_updated(%{assigns: %{vm: %{work_item: work_item}}} = socket) do
     socket
     |> assign(work_item: work_item)
-    |> maybe_start_task()
+    |> update_tool_modal()
     |> maybe_finish()
   end
+
+  # Same modal already presented, do nothing
+  defp update_tool_modal(
+         %{
+           assigns: %{
+             vm: %{tool_modal: %{element: %{id: id}}},
+             tool_modal: %{element: %{id: current_id}}
+           }
+         } = socket
+       )
+       when id == current_id,
+       do: socket
+
+  defp update_tool_modal(%{assigns: %{vm: %{tool_modal: tool_modal}}} = socket)
+       when not is_nil(tool_modal) do
+    socket
+    |> assign(tool_modal: tool_modal)
+    |> present_modal(tool_modal)
+  end
+
+  # The open task finished elsewhere or left the participant's task list: close its modal
+  defp update_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
+       when not is_nil(tool_modal) do
+    socket
+    |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
+  end
+
+  defp update_tool_modal(socket), do: assign(socket, tool_modal: nil)
 
   # Behaviours
 
   @impl true
   def handle_tool_completed(%{assigns: %{work_item: {_, task}}} = socket) do
+    socket
+    |> close_tool_modal()
+    |> complete_task(task)
+  end
+
+  # The task left the participant's task list while the tool was open
+  def handle_tool_completed(socket), do: close_tool_modal(socket)
+
+  @impl true
+  def handle_tool_initialized(socket), do: socket
+
+  # Events
+
+  @impl true
+  def handle_event("start_task", _, %{assigns: %{work_item: {%{id: item_id}, _}}} = socket) do
+    {:noreply, socket |> start_item(item_id)}
+  end
+
+  def handle_event("start_task", _, socket), do: {:noreply, socket}
+
+  # Called by LiveNest Modal Presenter when modal is closed: back to the task's intro
+  @impl true
+  def consume_event(%{name: :modal_closed, payload: %{modal_id: _modal_id}}, socket) do
+    {:stop, socket |> assign(tool_modal: nil) |> clear_task()}
+  end
+
+  # Private
+
+  defp start_item(%{assigns: %{user_state: user_state}} = socket, item_id) do
+    socket
+    |> assign(user_state: Map.put(user_state, :task, item_id))
+    |> update_view_model()
+    |> handle_view_model_updated()
+    |> start_task()
+    |> publish_user_state_change(:task, item_id)
+  end
+
+  defp start_task(%{assigns: %{work_item: {_, task}}} = socket) do
+    Assignment.Public.start_task(task)
+    socket
+  end
+
+  defp complete_task(socket, task) do
     {:ok, _} = Crew.Public.complete_task(task)
 
     socket
@@ -47,20 +122,23 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
     |> handle_view_model_updated()
   end
 
-  # The task left the participant's task list while the tool was open
-  def handle_tool_completed(socket), do: socket
-
-  @impl true
-  def handle_tool_initialized(socket), do: socket
-
-  # Private
-
-  defp maybe_start_task(%{assigns: %{work_item: {_, %{started_at: nil} = task}}} = socket) do
-    Assignment.Public.start_task(task)
+  defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)
+       when not is_nil(tool_modal) do
     socket
+    |> hide_modal(tool_modal)
+    |> assign(tool_modal: nil)
+    |> clear_task()
   end
 
-  defp maybe_start_task(socket), do: socket
+  defp close_tool_modal(socket), do: clear_task(socket)
+
+  defp clear_task(%{assigns: %{user_state: user_state}} = socket) do
+    socket
+    |> assign(user_state: Map.put(user_state, :task, nil))
+    |> update_view_model()
+    |> handle_view_model_updated()
+    |> publish_user_state_change(:task, nil)
+  end
 
   # The last task is done: participation finishes, once
   defp maybe_finish(%{assigns: %{vm: %{finished?: true}, work_done?: false}} = socket) do
@@ -75,14 +153,21 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
   def render(assigns) do
     ~H"""
       <div data-testid="crew-task-horizontal-list-view" class="w-full h-full flex flex-col">
-        <div class="flex-shrink-0 px-6 py-6 sm:px-12">
+        <div class="flex-shrink-0 px-6 py-3 sm:px-12">
           <.step_progress steps={@vm.steps} />
         </div>
         <.line />
-        <div class="flex-1 min-h-0">
-          <%= if @vm.tool_view do %>
-            <.element {Map.from_struct(@vm.tool_view)} socket={@socket} />
-          <% end %>
+        <div :if={@vm.intro} class="flex flex-col gap-6 w-full max-w-[720px] p-6 sm:p-12" data-testid="task-intro">
+          <div class="flex flex-row items-center gap-4">
+            <.step_number number={@vm.intro.number} />
+            <Text.title3 margin=""><%= @vm.intro.title %></Text.title3>
+          </div>
+          <div :if={@vm.intro.description} class="text-bodysmall sm:text-bodymedium font-body text-grey1">
+            <%= @vm.intro.description %>
+          </div>
+          <div class="pt-2">
+            <Button.dynamic {@vm.intro.button} />
+          </div>
         </div>
       </div>
     """

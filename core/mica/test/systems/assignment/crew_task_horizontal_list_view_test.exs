@@ -5,9 +5,9 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
 
   alias Systems.Assignment
   alias Systems.Crew
-  alias Systems.Workflow
 
   @current_step "[data-testid='step-progress-step'][aria-current='step']"
+  @intro "[data-testid='task-intro']"
 
   # Tests tagged :signals keep the real signal handlers, so a task completed outside the
   # view reaches it through the Switch and the Observatory
@@ -17,17 +17,15 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
     user = Factories.insert!(:member)
     assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
     assignment = Assignment.Factories.add_participant(assignment, user)
-    [first, second] = Workflow.Model.ordered_items(assignment.workflow)
     conn = Map.put(conn, :request_path, "/assignment/tasks")
 
-    %{conn: conn, user: user, assignment: assignment, first: first, second: second}
+    %{conn: conn, user: user, assignment: assignment}
   end
 
-  test "shows one step per task and the first task's start view", %{
+  test "shows one step per task and the first task's intro", %{
     conn: conn,
     user: user,
-    assignment: assignment,
-    first: first
+    assignment: assignment
   } do
     view = mount_view(conn, user, assignment)
 
@@ -38,7 +36,8 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
            |> length() == 2
 
     assert view |> element(@current_step) |> render() =~ "Task 1 of 2"
-    assert has_element?(view, "##{tool_view_id(first)}")
+    assert has_element?(view, @intro, "Task 1")
+    assert has_element?(view, "#{@intro} [data-testid='task-intro-start']")
   end
 
   test "has no done button", %{conn: conn, user: user, assignment: assignment} do
@@ -47,29 +46,75 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
     refute has_element?(view, "[phx-click='done']")
   end
 
-  test "starts the current task", %{conn: conn, user: user, assignment: assignment} do
-    mount_view(conn, user, assignment)
+  test "opens no tool before the participant starts the task", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
 
+    assert %{tool_modal: nil} = assigns(view)
+    assert [%{started_at: nil}, %{started_at: nil}] = tasks(assignment, user)
+  end
+
+  test "starting the task opens its tool in the full-screen modal", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+
+    render_click(view, "start_task")
+
+    assert %{tool_modal: %{style: :full, element: %{id: "tool_modal"}}} = assigns(view)
     assert [%{started_at: %NaiveDateTime{}}, %{started_at: nil}] = tasks(assignment, user)
   end
 
-  test "a finished task moves the list to the next task", %{
+  test "closing the modal brings the participant back to the task's intro", %{
     conn: conn,
     user: user,
-    assignment: assignment,
-    second: second
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+    render_click(view, "start_task")
+
+    send(
+      view.pid,
+      {:live_nest_event, %LiveNest.Event{name: :modal_closed, payload: %{modal_id: "tool_modal"}}}
+    )
+
+    assert %{tool_modal: nil} = assigns(view)
+    assert has_element?(view, @intro, "Task 1")
+    assert [%{status: :pending}, %{status: :pending}] = tasks(assignment, user)
+  end
+
+  test "a finished task moves the list to the next task's intro", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
   } do
     view = mount_view(conn, user, assignment)
     :erlang.trace(view.pid, true, [:receive])
 
     complete_tool(view)
 
-    assert [%{status: :completed}, %{status: :pending, started_at: %NaiveDateTime{}}] =
-             tasks(assignment, user)
-
+    assert [%{status: :completed}, %{status: :pending}] = tasks(assignment, user)
+    assert %{tool_modal: nil} = assigns(view)
     assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
-    assert has_element?(view, "##{tool_view_id(second)}")
+    assert has_element?(view, @intro, "Task 2")
     refute_received {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}}
+  end
+
+  test "the next task's intro shows its own number", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+
+    complete_tool(view)
+
+    assert view |> element("#{@intro} [data-testid='step-number']") |> render() =~ ~r/>\s*2\s*</
   end
 
   test "participation finishes after the last task", %{
@@ -90,30 +135,28 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
   test "coming back lands on the first unfinished task", %{
     conn: conn,
     user: user,
-    assignment: assignment,
-    second: second
+    assignment: assignment
   } do
     {:ok, _} = assignment |> tasks(user) |> List.first() |> Crew.Public.complete_task()
 
     view = mount_view(conn, user, assignment)
 
     assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
-    assert has_element?(view, "##{tool_view_id(second)}")
+    assert has_element?(view, @intro, "Task 2")
   end
 
   @tag :signals
   test "a task completed outside the view moves the list to the next task", %{
     conn: conn,
     user: user,
-    assignment: assignment,
-    second: second
+    assignment: assignment
   } do
     view = mount_view(conn, user, assignment)
 
     # Completed the way a questionnaire callback or another device completes it
     {:ok, _} = assignment |> tasks(user) |> List.first() |> Crew.Public.complete_task()
 
-    assert eventually(fn -> has_element?(view, "##{tool_view_id(second)}") end)
+    assert eventually(fn -> has_element?(view, @intro, "Task 2") end)
     assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
   end
 
@@ -159,12 +202,14 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
     end
   end
 
+  # The participant starts the current task and its tool reports completion
   defp complete_tool(view) do
+    render_click(view, "start_task")
     send(view.pid, {:live_nest_event, %LiveNest.Event{name: :tool_completed, payload: %{}}})
     render(view)
   end
 
-  defp tool_view_id(%{id: id}), do: "tool_view_#{id}"
+  defp assigns(view), do: :sys.get_state(view.pid).socket.assigns
 
   defp tasks(assignment, user) do
     assignment
@@ -177,6 +222,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
       Frameworks.Concept.LiveContext.new(%{
         assignment_id: assignment.id,
         current_user: user,
+        user_state: %{},
         panel_info: nil
       })
 

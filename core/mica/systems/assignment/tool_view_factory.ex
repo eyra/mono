@@ -18,16 +18,14 @@ defmodule Systems.Assignment.ToolViewFactory do
 
   Uses naming convention: ToolModel → ToolView
   Passes CrewTaskContext in session; ToolView uses ViewBuilder + LiveContext.
-  A view that shows one task after another passes an id per task, so each task
-  mounts its own tool view.
   """
-  def prepare(tool_ref, task_context, id \\ "tool_view") do
+  def prepare(tool_ref, task_context) do
     tool = Workflow.ToolRefModel.tool(tool_ref)
     view_module = tool_model_to_view_module(tool.__struct__)
     task_context = extend_context_for_tool(tool, tool_ref, task_context)
 
     MicaWeb.Live.Element.prepare_live_view(
-      id,
+      "tool_view",
       view_module,
       live_context: task_context
     )

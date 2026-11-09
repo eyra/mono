@@ -11,8 +11,9 @@ defmodule NextWeb.Features.ProbeTaskListTest do
   @mock_app_id "probe_mock_cognitive_app"
   @mock_app_source_path "next/test/systems/probe/mock_cognitive_app"
 
-  @start "[data-testid='feldspar-start']:not([disabled])"
-  @app_modal "[data-testid='app-modal']:not(.opacity-0)"
+  @begin "[data-testid='task-intro-start']"
+  @running_app "[data-testid='feldspar-tool-view'] [data-testid='app-container'].block"
+  @close_modal "[data-testid='toolbar'] [phx-click='close_modal']"
 
   setup do
     upload_path = Application.get_env(:mica, :upload_path)
@@ -38,16 +39,22 @@ defmodule NextWeb.Features.ProbeTaskListTest do
     session
     |> visit("/assignment/#{id}")
     |> assert_has(current_step(1))
-    |> assert_connected(@start)
-    |> click(Query.css(@start))
-    |> assert_has(Query.css(@app_modal))
+    |> assert_connected(@begin)
+    |> click(Query.css(@begin))
+    |> assert_app_running()
+    |> click(Query.css(@close_modal))
+    |> assert_has(Query.css(@running_app, count: 0))
+    |> assert_has(Query.css("[data-testid='task-intro']"))
+    |> assert_has(current_step(1))
+    |> click(Query.css(@begin))
+    |> assert_app_running()
     |> finish_app()
     |> assert_has(current_step(2))
     |> visit("/assignment/#{id}")
     |> assert_has(current_step(2))
-    |> assert_connected(@start)
-    |> click(Query.css(@start))
-    |> assert_has(Query.css(@app_modal))
+    |> assert_connected(@begin)
+    |> click(Query.css(@begin))
+    |> assert_app_running()
     |> finish_app()
     |> assert_has(Query.css("[data-testid='finished-title']"))
   end
@@ -56,9 +63,19 @@ defmodule NextWeb.Features.ProbeTaskListTest do
     Query.css("[data-testid='step-progress-step']:nth-child(#{position})[data-status='current']")
   end
 
+  # The app loads in a fresh iframe and starts after the recovery check, which can take
+  # longer than Wallaby's default wait, so allow up to three waits for it
+  defp assert_app_running(session, waits \\ 3) do
+    if waits > 1 and not has?(session, Query.css(@running_app)) do
+      assert_app_running(session, waits - 1)
+    else
+      assert_has(session, Query.css(@running_app))
+    end
+  end
+
   defp finish_app(session) do
     session
-    |> focus_frame(Query.css("[data-testid='app-modal'] iframe"))
+    |> focus_frame(Query.css("[data-testid='feldspar-tool-view'] iframe"))
     |> click(Query.css("[data-testid='mock-finish']"))
     |> focus_default_frame()
   end

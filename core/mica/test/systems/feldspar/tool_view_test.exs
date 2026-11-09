@@ -23,7 +23,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         participant: "test_participant",
         workflow_item_id: 456,
         description: Map.get(test_context, :description),
-        presentation: Map.get(test_context, :presentation, :embedded),
+        autostart: Map.get(test_context, :autostart, false),
         current_user: user,
         recovery: %{
           scope: "external-run/opaque-scope",
@@ -115,47 +115,25 @@ defmodule Systems.Feldspar.ToolViewTest do
     refute has_element?(view, "[data-testid='start-container']", "donate your data")
   end
 
-  test "the app takes the start screen's place", %{view: view} do
-    start_app(view)
-
-    refute has_element?(view, "[data-testid='app-modal']")
-    assert has_element?(view, "[data-testid='start-container'].hidden")
+  @tag autostart: true
+  test "with autostart, the start screen is left out", %{view: view} do
+    assert has_element?(view, "[data-testid='feldspar-autostart']")
+    refute has_element?(view, "[data-testid='feldspar-start']")
   end
 
-  @tag presentation: :start_on_page
-  test "with the start screen on the page, the app opens in a modal over it", %{view: view} do
+  @tag autostart: true
+  test "with autostart, the app starts once recovery is checked", %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
-    render_click(view, "prepare_start")
+    assert_push_event(view, "feldspar:prepare", %{id: _})
+
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
+  end
+
+  test "without autostart, checking recovery doesn't start the app", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
-    assert has_element?(view, "[data-testid='app-modal'].opacity-0 iframe")
-
-    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
-
-    assert has_element?(
-             view,
-             "[data-testid='app-modal'].fixed [data-testid='app-container'].block"
-           )
-
-    refute has_element?(view, "[data-testid='app-modal'].opacity-0")
-    assert has_element?(view, "[data-testid='start-container'].flex")
-  end
-
-  # A Feldspar app sizes its iframe to its content, so a tall app must scroll in the modal
-  @tag presentation: :start_on_page
-  test "the app modal scrolls an app taller than the modal", %{view: view} do
-    start_app(view)
-
-    assert has_element?(
-             view,
-             "[data-testid='app-modal'] [data-testid='app-modal-body'].overflow-y-scroll [data-testid='app-container']"
-           )
-  end
-
-  defp start_app(view) do
-    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
-    render_click(view, "prepare_start")
-    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
-    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
+    refute has_element?(view, "iframe")
   end
 end

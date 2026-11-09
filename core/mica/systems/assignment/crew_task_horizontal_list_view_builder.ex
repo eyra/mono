@@ -2,7 +2,8 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
   @moduledoc """
   The horizontal task list: one step per task, done in order. The current task
   is the first one that isn't finished, so a participant who comes back lands on
-  it. Its tool view loads below the steps.
+  it. Its intro shows below the steps; its start button opens the tool in the same
+  modal as the vertical task list, through the participant's `user_state` task.
   """
   use Gettext, backend: MicaWeb.Gettext
 
@@ -35,7 +36,8 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
     %{
       steps: build_steps(work_items, current_index),
       work_item: work_item,
-      tool_view: build_tool_view(work_item, context),
+      intro: build_intro(work_item, current_index),
+      tool_modal: build_tool_modal(work_item, Map.get(assigns, :user_state), context),
       finished?: work_items != [] and is_nil(current_index)
     }
   end
@@ -47,13 +49,13 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
     count = length(work_items)
 
     work_items
-    |> Enum.with_index()
-    |> Enum.map(fn {{%{id: id}, _task}, index} ->
+    |> Enum.with_index(1)
+    |> Enum.map(fn {{%{id: id}, _task}, number} ->
       %{
         id: id,
-        label:
-          dgettext("eyra-assignment", "task_steps.step.label", index: index + 1, count: count),
-        status: step_status(index, current_index)
+        number: number,
+        label: dgettext("eyra-assignment", "task_steps.step.label", index: number, count: count),
+        status: step_status(number - 1, current_index)
       }
     end)
   end
@@ -63,21 +65,48 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
   defp step_status(index, current_index) when index == current_index, do: :current
   defp step_status(_index, _current_index), do: :incomplete
 
-  # The tool's start view loads on the page; the tool itself opens in a modal over it
-  defp build_tool_view({workflow_item, _task}, context) do
-    %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item
+  defp build_intro({workflow_item, _task}, current_index) do
+    %{title: title} = workflow_item
 
-    context =
+    %{
+      number: current_index + 1,
+      title: title,
+      description: intro_description(workflow_item),
+      button: %{
+        action: %{type: :send, event: "start_task"},
+        face: %{type: :primary, label: dgettext("eyra-assignment", "task_steps.start.button")},
+        testid: "task-intro-start"
+      }
+    }
+  end
+
+  defp build_intro(nil, _current_index), do: nil
+
+  # The researcher's description of the task, else the template's text for its tool
+  defp intro_description(%{description: description})
+       when is_binary(description) and description != "",
+       do: description
+
+  defp intro_description(%{tool_ref: %{special: special}}),
+    do: Assignment.TemplateExtension.tool_description(special)
+
+  # The tool opens in a modal once the participant starts the current task. Its intro
+  # is on the page, so the tool starts without a start screen of its own.
+  defp build_tool_modal({%{id: id} = workflow_item, _task}, %{task: id}, context) do
+    %{tool_ref: tool_ref, title: title, group: icon} = workflow_item
+
+    task_context =
       LiveContext.extend(context, %{
-        workflow_item_id: workflow_item_id,
+        workflow_item_id: id,
         title: title,
         icon: icon,
         tool_ref: tool_ref,
-        presentation: :start_on_page
+        presentation: :modal,
+        autostart: true
       })
 
-    Assignment.ToolViewFactory.prepare(tool_ref, context, "tool_view_#{workflow_item_id}")
+    Assignment.ToolViewFactory.prepare_modal(tool_ref, task_context, "tool_modal")
   end
 
-  defp build_tool_view(nil, _context), do: nil
+  defp build_tool_modal(_work_item, _user_state, _context), do: nil
 end
