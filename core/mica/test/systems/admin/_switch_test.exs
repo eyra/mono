@@ -30,4 +30,18 @@ defmodule Systems.Admin.SwitchTest do
       assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
     end
   end
+
+  # FX#10491517688: an admin's change to a user reaches Admin.AccountView.
+  describe "an admin's change to a user" do
+    test "broadcasts an Admin.AccountView observation" do
+      topic = "signal:#{Systems.Admin.AccountView}:singleton"
+      Endpoint.subscribe(topic)
+      user = Factories.insert!(:member, %{creator: true, verified_at: nil})
+
+      {:ok, _} =
+        Systems.Account.Public.admin_update_user(user, %{verified_at: NaiveDateTime.utc_now()})
+
+      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+    end
+  end
 end

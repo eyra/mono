@@ -26,9 +26,8 @@ defmodule Systems.Admin.AccountView do
 
   defp save(socket, user_id_string, attrs) do
     user = Account.Public.get_user!(String.to_integer(user_id_string))
-    changeset = Account.User.admin_changeset(user, attrs)
-    {:ok, _} = Mica.Persister.save(user, changeset)
-    socket |> update_view_model()
+    {:ok, _} = Account.Public.admin_update_user(user, attrs)
+    socket
   end
 
   # Events

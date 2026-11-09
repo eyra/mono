@@ -25,6 +25,12 @@ defmodule Systems.Admin.Switch do
   end
 
   @impl true
+  def intercept({:user, :update_and_dispatch}, %{user: _user, from_pid: from_pid}) do
+    update_embedded(Admin.AccountView, Observatory.SingletonModel.instance(), from_pid)
+    :ok
+  end
+
+  @impl true
   def intercept({:next_action, _}, %{from_pid: from_pid}) do
     update_embedded(Admin.OrgView, Observatory.SingletonModel.instance(), from_pid)
     :ok
