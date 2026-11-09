@@ -179,7 +179,7 @@ defmodule Frameworks.Pixel.Navigation do
 
   def desktop_menu(assigns) do
     ~H"""
-    <div class="hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-desktop-menu-bottom-padding">
+    <div class="hidden lg:block w-desktop-menu-width h-full pl-10 pr-8 pt-10 pb-desktop-menu-bottom-padding" data-testid="desktop-menu">
       <Menu.generic {assigns} />
     </div>
     """
