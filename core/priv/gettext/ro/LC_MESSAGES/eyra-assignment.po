@@ -817,3 +817,7 @@ msgstr "Această sarcină nu mai este disponibilă"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Acest studiu nu are sarcini."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Sarcina %{index} din %{count}"

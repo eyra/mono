@@ -817,3 +817,7 @@ msgstr "Ši užduotis nebepasiekiama"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Šiame tyrime nėra užduočių."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Užduotis %{index} iš %{count}"

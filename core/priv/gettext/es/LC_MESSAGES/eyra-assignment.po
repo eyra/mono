@@ -806,3 +806,7 @@ msgstr "Esta tarea ya no está disponible"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Este estudio no tiene tareas."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Tarea %{index} de %{count}"

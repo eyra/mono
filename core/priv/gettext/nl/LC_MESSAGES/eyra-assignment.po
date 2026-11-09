@@ -805,3 +805,7 @@ msgstr "Deze taak is niet meer beschikbaar"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Deze studie heeft geen taken."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Taak %{index} van %{count}"

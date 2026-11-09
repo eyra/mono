@@ -23,6 +23,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         participant: "test_participant",
         workflow_item_id: 456,
         description: Map.get(test_context, :description),
+        presentation: Map.get(test_context, :presentation, :embedded),
         current_user: user,
         recovery: %{
           scope: "external-run/opaque-scope",
@@ -112,5 +113,38 @@ defmodule Systems.Feldspar.ToolViewTest do
   test "the start screen shows the description from the host", %{view: view} do
     assert has_element?(view, "[data-testid='start-container']", "You are about to start a test.")
     refute has_element?(view, "[data-testid='start-container']", "donate your data")
+  end
+
+  test "the app takes the start screen's place", %{view: view} do
+    start_app(view)
+
+    refute has_element?(view, "[data-testid='app-modal']")
+    assert has_element?(view, "[data-testid='start-container'].hidden")
+  end
+
+  @tag presentation: :start_on_page
+  test "with the start screen on the page, the app opens in a modal over it", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+
+    assert has_element?(view, "[data-testid='app-modal'].opacity-0 iframe")
+
+    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
+
+    assert has_element?(
+             view,
+             "[data-testid='app-modal'].fixed [data-testid='app-container'].block"
+           )
+
+    refute has_element?(view, "[data-testid='app-modal'].opacity-0")
+    assert has_element?(view, "[data-testid='start-container'].flex")
+  end
+
+  defp start_app(view) do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
   end
 end

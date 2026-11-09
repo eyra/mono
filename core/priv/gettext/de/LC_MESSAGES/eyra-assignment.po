@@ -806,3 +806,7 @@ msgstr "Diese Aufgabe ist nicht mehr verfügbar"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Diese Studie enthält keine Aufgaben."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Aufgabe %{index} von %{count}"

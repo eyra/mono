@@ -6,7 +6,6 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
 
   def view_model(
         %{
-          id: assignment_id,
           privacy_doc: privacy_doc,
           consent_agreement: consent_agreement,
           page_refs: page_refs,
@@ -27,7 +26,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
       intro_page_ref: intro_page_ref,
       support_page_ref: support_page_ref,
       user: user,
-      task_view: task_view(item_count, assignment_id, user_state, context),
+      task_view: task_view(item_count, assignment, user_state, context),
       empty_message: empty_message(item_count)
     }
   end
@@ -78,13 +77,13 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   end
 
   # No items - no task view
-  defp task_view(0, _assignment_id, _user_state, _context), do: nil
+  defp task_view(0, _assignment, _user_state, _context), do: nil
 
   # Waiting for user_state
-  defp task_view(_item_count, _assignment_id, nil, _context), do: nil
+  defp task_view(_item_count, _assignment, nil, _context), do: nil
 
   # Single item - show single view
-  defp task_view(1, assignment_id, _user_state, context) do
+  defp task_view(1, %{id: assignment_id}, _user_state, context) do
     MicaWeb.Live.Element.prepare_live_view(
       "crew_task_single_view_#{assignment_id}",
       Assignment.CrewTaskSingleView,
@@ -92,8 +91,21 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
     )
   end
 
-  # Multiple items - show list view
-  defp task_view(_item_count, assignment_id, _user_state, context) do
+  # Multiple items - show the list the template chose
+  defp task_view(_item_count, assignment, _user_state, context) do
+    %{task_list: task_list} = Assignment.Private.runtime_config(assignment)
+    task_list_view(task_list, assignment, context)
+  end
+
+  defp task_list_view(:horizontal, %{id: assignment_id}, context) do
+    MicaWeb.Live.Element.prepare_live_view(
+      "crew_task_horizontal_list_view_#{assignment_id}",
+      Assignment.CrewTaskHorizontalListView,
+      live_context: context
+    )
+  end
+
+  defp task_list_view(:vertical, %{id: assignment_id}, context) do
     MicaWeb.Live.Element.prepare_live_view(
       "crew_task_list_view_#{assignment_id}",
       Assignment.CrewTaskListView,

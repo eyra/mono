@@ -132,6 +132,16 @@ defmodule Systems.Assignment.CrewWorkViewBuilderTest do
       assert vm.task_view.implementation == Assignment.CrewTaskListView
       assert String.starts_with?(vm.task_view.id, "crew_task_list_view_")
     end
+
+    for special <- [:data_donation, :questionnaire, :benchmark_challenge, :paper_screening] do
+      test "#{special} keeps the vertical task list", %{assignment: assignment, user: user} do
+        assignment = %{assignment | special: unquote(special)}
+
+        vm = Assignment.CrewWorkViewBuilder.view_model(assignment, build_assigns(user, %{}))
+
+        assert vm.task_view.implementation == Assignment.CrewTaskListView
+      end
+    end
   end
 
   # Helper functions

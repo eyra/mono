@@ -806,3 +806,7 @@ msgstr "Questo task non è più disponibile"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Questo studio non ha task."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Attività %{index} di %{count}"

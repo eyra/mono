@@ -43,6 +43,35 @@ defmodule Next.Systems.Probe.AssignmentTemplateTest do
     end
   end
 
+  describe "task list" do
+    test "chooses the horizontal task list" do
+      assert %Assignment.RuntimeConfig{task_list: :horizontal} =
+               Assignment.Template.runtime_config(Assignment.Private.get_template(:probe))
+    end
+
+    test "a Probe assignment with more than one task shows the horizontal task list" do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          current_user: user,
+          user_state: %{},
+          panel_info: nil
+        })
+
+      %{task_view: task_view} =
+        Assignment.CrewWorkViewBuilder.view_model(%{assignment | special: :probe}, %{
+          current_user: user,
+          user_state: %{},
+          live_context: live_context
+        })
+
+      assert task_view.implementation == Assignment.CrewTaskHorizontalListView
+    end
+  end
+
   describe "feature flag" do
     test "the template is offered for new items when :probe is on" do
       set_feature_flag(:probe, true)
