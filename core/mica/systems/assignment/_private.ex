@@ -49,10 +49,27 @@ defmodule Systems.Assignment.Private do
   end
 
   @doc """
-  Whether the task list shows its done button. The done screen shows Back
-  exactly then, so the participant can undo the click.
+  Which task view the participant gets: none without tasks, the single task
+  view for one task, the task list for more.
+  """
+  def task_view(%Assignment.Model{workflow: workflow}) do
+    case workflow |> Workflow.Model.ordered_items() |> length() do
+      0 -> :none
+      1 -> :single
+      _ -> :list
+    end
+  end
+
+  @doc """
+  Whether the participant sees the "Next, I am done" button. Only the task
+  list has it. The done screen shows Back exactly then, so the participant
+  can undo the click.
   """
   def done_button?(%Assignment.Model{} = assignment, panel_info) do
+    task_view(assignment) == :list and done_button_allowed?(assignment, panel_info)
+  end
+
+  defp done_button_allowed?(assignment, panel_info) do
     case runtime_config(assignment) do
       %{done_button_requires_redirect?: true} -> redirect_url?(panel_info)
       _ -> true

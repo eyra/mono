@@ -52,24 +52,54 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.body == "Bedankt voor je deelname. Je kunt deze pagina nu sluiten."
     end
 
-    test "questionnaire without a redirect URL: back button", %{user: user} do
-      assignment = Assignment.Factories.create_questionnaire_assignment()
+    test "multi-task questionnaire without a redirect URL: back button", %{user: user} do
+      assignment =
+        Assignment.Factories.create_questionnaire_assignment()
+        |> Assignment.Factories.add_task()
+
       assigns = build_assigns(user)
 
       assert %{back_button: %{action: %{type: :send, event: "retry"}, face: %{icon: :back}}} =
                Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
-    test "questionnaire with a redirect URL: back button", %{user: user} do
+    test "multi-task questionnaire with a redirect URL: back button", %{user: user} do
       redirect_url = "https://example.com/return"
-      assignment = Assignment.Factories.create_questionnaire_assignment()
+
+      assignment =
+        Assignment.Factories.create_questionnaire_assignment()
+        |> Assignment.Factories.add_task()
+
       assigns = build_assigns(user, redirect_url)
 
       assert %{back_button: %{action: %{type: :send, event: "retry"}}} =
                Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
-    test "data donation with a redirect URL: back button", %{user: user} do
+    test "multi-task data donation with a redirect URL: back button", %{user: user} do
+      redirect_url = "https://example.com/return"
+
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, nil, %{
+          special: :data_donation
+        })
+        |> Assignment.Factories.add_affiliate_user(user)
+        |> Assignment.Factories.add_task()
+
+      assigns = build_assigns(user, redirect_url)
+
+      assert %{back_button: %{action: %{type: :send, event: "retry"}, face: %{icon: :back}}} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+    end
+
+    test "single-task questionnaire: no back button", %{user: user} do
+      assignment = Assignment.Factories.create_questionnaire_assignment()
+      assigns = build_assigns(user)
+
+      assert %{back_button: nil} = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+    end
+
+    test "single-task data donation with a redirect URL: no back button", %{user: user} do
       redirect_url = "https://example.com/return"
 
       assignment =
@@ -80,8 +110,7 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
 
       assigns = build_assigns(user, redirect_url)
 
-      assert %{back_button: %{action: %{type: :send, event: "retry"}, face: %{icon: :back}}} =
-               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+      assert %{back_button: nil} = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
     test "builds correct VM with redirect URL", %{user: user} do

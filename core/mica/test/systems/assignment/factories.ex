@@ -43,6 +43,20 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
+  def add_task(%{workflow: %{items: items} = workflow} = assignment) do
+    tool = create_tool(Factories.insert!(:auth_node))
+
+    create_workflow_item(
+      workflow,
+      create_tool_ref(tool),
+      "Task #{length(items) + 1}",
+      length(items)
+    )
+
+    assignment
+    |> Mica.Repo.preload([workflow: Systems.Workflow.Model.preload_graph(:down)], force: true)
+  end
+
   def create_assignment(info, consent_agreement, workflow, auth_node, %Fund.Model{} = fund) do
     crew = Factories.insert!(:crew)
 
