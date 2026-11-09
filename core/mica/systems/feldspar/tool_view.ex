@@ -190,12 +190,16 @@ defmodule Systems.Feldspar.ToolView do
         <%= if @started and @vm.app_view do %>
           <%!-- With the start view on the page, the app opens in a modal over it.
           Otherwise both wrappers are display:contents and the app takes the start
-          view's place. --%>
+          view's place. The app sizes its iframe to its content, so the modal scrolls a
+          tall app, as Pixel's :full modal body does. --%>
           <div
             data-testid={if @vm.tool_in_modal?, do: "app-modal"}
             class={if @vm.tool_in_modal?, do: "fixed z-50 inset-0 p-4 xl:p-20 backdrop-blur-md bg-black/30 #{if not @initialized, do: "opacity-0 pointer-events-none"}", else: "contents"}
           >
-            <div class={if @vm.tool_in_modal?, do: "relative w-full h-full bg-white rounded shadow-floating overflow-hidden", else: "contents"}>
+            <div
+              data-testid={if @vm.tool_in_modal?, do: "app-modal-body"}
+              class={if @vm.tool_in_modal?, do: "relative w-full h-full bg-white rounded shadow-floating overflow-y-scroll overscroll-contain", else: "contents"}
+            >
               <%!-- While starting, keep the app full size in the viewport and only make it
               transparent: browsers stop rendering cross-site iframes that are display:none,
               visibility:hidden or zero-sized, and legacy apps only announce that they are

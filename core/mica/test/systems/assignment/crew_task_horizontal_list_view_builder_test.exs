@@ -84,6 +84,25 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
     assert vm.tool_view == nil
   end
 
+  test "finished after the last task", %{user: user, assignment: assignment} do
+    complete_task(assignment, user, 0)
+    complete_task(assignment, user, 1)
+
+    assert %{finished?: true} = view_model(assignment, user)
+  end
+
+  test "not finished while a task is left", %{user: user, assignment: assignment} do
+    complete_task(assignment, user, 0)
+
+    assert %{finished?: false} = view_model(assignment, user)
+  end
+
+  test "not finished without tasks for the user", %{assignment: assignment} do
+    other_user = Factories.insert!(:member)
+
+    assert %{steps: [], finished?: false} = view_model(assignment, other_user)
+  end
+
   defp complete_task(assignment, user, index) do
     {:ok, _} = assignment |> tasks(user) |> Enum.at(index) |> Crew.Public.complete_task()
   end

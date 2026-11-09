@@ -23,14 +23,17 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
 
   @impl true
   def mount(:not_mounted_at_router, _session, socket) do
-    {:ok, socket |> handle_view_model_updated()}
+    {:ok, socket |> assign(work_done?: false) |> handle_view_model_updated()}
   end
 
+  # Tasks also complete outside this view (a questionnaire's callback, another device), so
+  # the list follows the view model: on to the next unfinished task, or finish after the last
   @impl true
   def handle_view_model_updated(%{assigns: %{vm: %{work_item: work_item}}} = socket) do
     socket
     |> assign(work_item: work_item)
     |> maybe_start_task()
+    |> maybe_finish()
   end
 
   # Behaviours
@@ -42,7 +45,6 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
     socket
     |> update_view_model()
     |> handle_view_model_updated()
-    |> maybe_finish()
   end
 
   # The task left the participant's task list while the tool was open
@@ -60,8 +62,13 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
 
   defp maybe_start_task(socket), do: socket
 
-  # The last task is done: participation finishes
-  defp maybe_finish(%{assigns: %{work_item: nil}} = socket), do: publish_event(socket, :work_done)
+  # The last task is done: participation finishes, once
+  defp maybe_finish(%{assigns: %{vm: %{finished?: true}, work_done?: false}} = socket) do
+    socket
+    |> assign(work_done?: true)
+    |> publish_event(:work_done)
+  end
+
   defp maybe_finish(socket), do: socket
 
   @impl true

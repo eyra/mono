@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Mock cognitive task</title>
+</head>
+<body>
+  <h1>Mock cognitive task</h1>
+  <button data-testid="mock-finish" id="finish">Finish task</button>
+
+  <script>
+    let port = null;
+
+    // Feldspar protocol: the host sends live-init with a MessageChannel port
+    window.addEventListener("message", function (event) {
+      if (event.data.action === "live-init") {
+        port = event.ports[0];
+        port.postMessage({ __type__: "CommandSystemEvent", name: "initialized" });
+      }
+    });
+
+    document.getElementById("finish").addEventListener("click", function () {
+      if (port) port.postMessage({ __type__: "CommandSystemExit", code: 0, info: "done" });
+    });
+
+    window.parent.postMessage({ action: "app-loaded" }, "*");
+    window.parent.postMessage({ action: "resize", height: document.body.scrollHeight }, "*");
+  </script>
+</body>
+</html>

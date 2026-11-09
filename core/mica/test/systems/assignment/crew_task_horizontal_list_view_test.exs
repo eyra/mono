@@ -9,8 +9,10 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
 
   @current_step "[data-testid='step-progress-step'][aria-current='step']"
 
-  setup %{conn: conn} do
-    isolate_signals()
+  # Tests tagged :signals keep the real signal handlers, so a task completed outside the
+  # view reaches it through the Switch and the Observatory
+  setup %{conn: conn} = tags do
+    unless tags[:signals], do: isolate_signals()
 
     user = Factories.insert!(:member)
     assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
@@ -97,6 +99,64 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
 
     assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
     assert has_element?(view, "##{tool_view_id(second)}")
+  end
+
+  @tag :signals
+  test "a task completed outside the view moves the list to the next task", %{
+    conn: conn,
+    user: user,
+    assignment: assignment,
+    second: second
+  } do
+    view = mount_view(conn, user, assignment)
+
+    # Completed the way a questionnaire callback or another device completes it
+    {:ok, _} = assignment |> tasks(user) |> List.first() |> Crew.Public.complete_task()
+
+    assert eventually(fn -> has_element?(view, "##{tool_view_id(second)}") end)
+    assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
+  end
+
+  @tag :signals
+  test "participation finishes when the last task completes outside the view", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+    :erlang.trace(view.pid, true, [:receive])
+    complete_tool(view)
+
+    {:ok, _} = assignment |> tasks(user) |> List.last() |> Crew.Public.complete_task()
+
+    assert_receive {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}},
+                   1000
+  end
+
+  @tag :signals
+  test "participation finishes once when the last tool completes and its signal follows", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+    :erlang.trace(view.pid, true, [:receive])
+
+    complete_tool(view)
+    complete_tool(view)
+    Process.sleep(300)
+    render(view)
+
+    assert_received {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}}
+    refute_received {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}}
+  end
+
+  defp eventually(fun, attempts \\ 20) do
+    cond do
+      fun.() -> true
+      attempts == 0 -> false
+      true -> Process.sleep(50) && eventually(fun, attempts - 1)
+    end
   end
 
   defp complete_tool(view) do

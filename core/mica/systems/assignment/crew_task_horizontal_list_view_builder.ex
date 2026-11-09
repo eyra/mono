@@ -35,7 +35,8 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
     %{
       steps: build_steps(work_items, current_index),
       work_item: work_item,
-      tool_view: build_tool_view(work_item, context)
+      tool_view: build_tool_view(work_item, context),
+      finished?: work_items != [] and is_nil(current_index)
     }
   end
 

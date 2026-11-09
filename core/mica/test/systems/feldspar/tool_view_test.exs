@@ -141,6 +141,17 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "[data-testid='start-container'].flex")
   end
 
+  # A Feldspar app sizes its iframe to its content, so a tall app must scroll in the modal
+  @tag presentation: :start_on_page
+  test "the app modal scrolls an app taller than the modal", %{view: view} do
+    start_app(view)
+
+    assert has_element?(
+             view,
+             "[data-testid='app-modal'] [data-testid='app-modal-body'].overflow-y-scroll [data-testid='app-container']"
+           )
+  end
+
   defp start_app(view) do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
     render_click(view, "prepare_start")
