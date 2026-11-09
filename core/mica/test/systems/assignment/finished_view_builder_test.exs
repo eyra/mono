@@ -19,16 +19,49 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      # Should have illustration and retry button
+      # Should have illustration, no back or continue button
       assert vm.illustration == "/images/illustrations/finished.svg"
-      assert vm.back_button.action.type == :send
-      assert vm.back_button.action.event == "retry"
-      assert vm.back_button.face.icon == :back
+      assert vm.back_button == nil
       assert vm.continue_button == nil
 
       # Should use normal title and body
       assert vm.title == dgettext("eyra-assignment", "finished_view.title")
       assert vm.body == dgettext("eyra-assignment", "finished_view.body")
+    end
+
+    test "without a redirect URL the body says the page can be closed", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+      assigns = build_assigns(user)
+
+      assert %{title: "Done", body: body} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert body == "Thank you for your participation. You can now close this page."
+    end
+
+    test "without a redirect URL the body is translated into Dutch", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+      assigns = build_assigns(user)
+
+      vm =
+        Gettext.with_locale(MicaWeb.Gettext, "nl", fn ->
+          Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+        end)
+
+      assert vm.body == "Bedankt voor je deelname. Je kunt deze pagina nu sluiten."
+    end
+
+    test "with a redirect URL the back button returns to the task list", %{user: user} do
+      redirect_url = "https://example.com/return"
+
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url)
+        |> Assignment.Factories.add_affiliate_user(user)
+
+      assigns = build_assigns(user, redirect_url)
+
+      assert %{back_button: %{action: %{type: :send, event: "retry"}, face: %{icon: :back}}} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
     test "builds correct VM with redirect URL", %{user: user} do

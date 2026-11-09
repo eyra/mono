@@ -40,6 +40,14 @@ defmodule Systems.Assignment.Private do
 
   def ensure_affiliate(%Assignment.Model{} = assignment), do: {:ok, %{assignment: assignment}}
 
+  def runtime_config(%Assignment.Model{special: nil}), do: %Assignment.RuntimeConfig{}
+
+  def runtime_config(%Assignment.Model{} = assignment) do
+    assignment
+    |> get_template()
+    |> Assignment.Template.runtime_config()
+  end
+
   def get_template(%Assignment.Model{special: special}), do: get_template(special)
 
   def get_template(:data_donation), do: %Assignment.TemplateDataDonation{id: :data_donation}

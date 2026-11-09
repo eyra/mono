@@ -201,7 +201,7 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
       # Test FinishedViewBuilder separately
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
       assert vm.illustration == "/images/illustrations/finished.svg"
-      assert vm.back_button.face.label == dgettext("eyra-assignment", "back.button")
+      assert vm.back_button == nil
       assert vm.continue_button == nil
     end
 

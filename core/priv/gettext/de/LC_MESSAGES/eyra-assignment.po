@@ -189,7 +189,7 @@ msgstr "Einwilligung verweigert"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Vielen Dank für Ihre Teilnahme."
+msgstr "Vielen Dank für Ihre Teilnahme. Sie können diese Seite jetzt schließen."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"

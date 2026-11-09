@@ -188,7 +188,7 @@ msgstr "Consent declined"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Thank you for your participation."
+msgstr "Thank you for your participation. You can now close this page."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
