@@ -57,6 +57,7 @@ ENV TERM=xterm-256color
 LABEL org.opencontainers.image.revision=$GIT_COMMIT
 
 RUN apt-get update && apt-get install -y \
+    ca-certificates \
     inotify-tools \
     libssl-dev \
     locales \
