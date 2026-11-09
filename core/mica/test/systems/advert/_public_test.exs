@@ -290,8 +290,17 @@ defmodule Systems.Advert.PublicTest do
     defp reload(advert), do: Advert.Public.get!(advert.id, Advert.Model.preload_graph(:down))
 
     defp online(advert) do
+      assignment_status(advert, :online)
+      online_advert_only(advert)
+    end
+
+    defp online_advert_only(advert) do
       advert |> Ecto.Changeset.change(status: :online) |> Mica.Repo.update!()
       reload(advert)
+    end
+
+    defp assignment_status(advert, status) do
+      advert.assignment |> Ecto.Changeset.change(status: status) |> Mica.Repo.update!()
     end
 
     defp empty_fund(advert) do
@@ -384,6 +393,64 @@ defmodule Systems.Advert.PublicTest do
         |> online()
 
       assert Advert.Public.pool_visibility(reload(advert)) == nil
+    end
+
+    test "is :assignment_unpublished when online and funded but the assignment is not published",
+         %{currency: currency, user: user} do
+      for status <- [:concept, :offline, :private] do
+        fund = Fund.Factories.create_fund("unpublished_#{status}", currency)
+        advert = Advert.Factories.create_advert(user, :accepted, 1, fund)
+        assignment_status(advert, status)
+
+        assert Advert.Public.pool_visibility(online_advert_only(advert)) ==
+                 :assignment_unpublished
+      end
+    end
+
+    test "stays :visible when online and funded and the assignment is idle", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("idle", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund)
+      assignment_status(advert, :idle)
+
+      assert Advert.Public.pool_visibility(online_advert_only(advert)) == :visible
+    end
+
+    test "stays :not_funded when the fund is empty and the assignment is not published", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("empty_unpublished", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online_advert_only()
+      empty_fund(advert)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :not_funded
+    end
+
+    test "stays nil when the submission is not released and the assignment is not published",
+         %{currency: currency, user: user} do
+      fund = Fund.Factories.create_fund("scheduled_unpublished", currency)
+
+      advert =
+        Advert.Factories.create_advert(user, :accepted, 1, fund, "2099-01-01", nil)
+        |> online_advert_only()
+
+      assert Advert.Public.pool_visibility(advert) == nil
+    end
+
+    test "stays :filled when all spots are reserved and the assignment is not published", %{
+      currency: currency,
+      user: user
+    } do
+      fund = Fund.Factories.create_fund("filled_unpublished", currency)
+      advert = Advert.Factories.create_advert(user, :accepted, 1, fund) |> online_advert_only()
+
+      participant = Factories.insert!(:member)
+      Systems.Assignment.Public.add_participant!(advert.assignment, participant)
+
+      assert Advert.Public.pool_visibility(reload(advert)) == :filled
     end
   end
 end

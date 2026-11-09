@@ -174,3 +174,19 @@ msgstr "Din păcate, toate locurile pentru acest studiu au fost ocupate. Rămâi
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "Acest studiu este complet ocupat"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr ""

@@ -42,4 +42,69 @@ defmodule Systems.Advert.ContentPageTest do
       end
     end
   end
+
+  describe "pool visibility banner on the settings tab" do
+    setup [:login_as_creator]
+
+    setup do
+      branch =
+        Promox.new()
+        |> Promox.stub(Frameworks.Concept.Branch, :hierarchy, fn _ -> [] end)
+
+      {:ok, branch: branch}
+    end
+
+    defp online_advert(researcher, assignment_status) do
+      currency = Systems.Fund.Factories.create_currency("banner_currency", :legal, "ƒ", 2)
+      fund = Systems.Fund.Factories.create_fund("banner_fund", currency)
+      advert = Advert.Factories.create_advert(researcher, :accepted, 1, fund)
+      advert.assignment |> Ecto.Changeset.change(status: assignment_status) |> Mica.Repo.update!()
+      advert |> Ecto.Changeset.change(status: :online) |> Mica.Repo.update!()
+    end
+
+    defp render_content_page(conn, branch, advert) do
+      with_mock Systems.Project.LiveHook,
+        on_mount: fn _live_view_module, _params, _session, socket ->
+          {:cont, socket |> assign(branch: branch)}
+        end do
+        {:ok, _view, html} = live(conn, ~p"/advert/#{advert.id}/content")
+        html
+      end
+    end
+
+    test "shows the publish-your-study banner when the assignment is not published", %{
+      conn: %{assigns: %{current_user: researcher}} = conn,
+      branch: branch
+    } do
+      advert = online_advert(researcher, :concept)
+      html = render_content_page(conn, branch, advert)
+
+      assert html =~ "data-testid=\"advert-assignment-unpublished-banner\""
+      assert html =~ "data-testid=\"advert-publish-assignment-button\""
+      assert html =~ "/assignment/#{advert.assignment_id}/content\""
+      refute html =~ "This advert is visible in the pool."
+    end
+
+    test "shows the visible banner once the assignment is published", %{
+      conn: %{assigns: %{current_user: researcher}} = conn,
+      branch: branch
+    } do
+      html = render_content_page(conn, branch, online_advert(researcher, :online))
+
+      assert html =~ "This advert is visible in the pool."
+      refute html =~ "advert-assignment-unpublished-banner"
+      refute html =~ "advert-publish-assignment-button"
+    end
+
+    test "keeps the visible banner when the assignment is idle", %{
+      conn: %{assigns: %{current_user: researcher}} = conn,
+      branch: branch
+    } do
+      html = render_content_page(conn, branch, online_advert(researcher, :idle))
+
+      assert html =~ "This advert is visible in the pool."
+      refute html =~ "advert-assignment-unpublished-banner"
+      refute html =~ "advert-publish-assignment-button"
+    end
+  end
 end

@@ -173,3 +173,19 @@ msgstr "Helaas zijn alle plekken voor deze studie inmiddels vergeven. Blijf ons 
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "Deze studie is volgeboekt"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr "Deelnemers zien je advertentie al in de pool, maar kunnen pas beginnen als je de studie publiceert."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr "Je advertentie staat live, maar je studie is nog niet gepubliceerd"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr "Publiceer je studie"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr "Zichtbaar in pool – studie niet gepubliceerd"

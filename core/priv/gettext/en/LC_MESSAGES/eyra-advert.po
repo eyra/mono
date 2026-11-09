@@ -173,3 +173,19 @@ msgstr "Unfortunately, all spots have been taken. Stay tuned — more studies ar
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "This study is fully booked"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr "Participants can already see your advert in the pool, but can't start until you publish the study."
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr "Your advert is live, but your study isn't published yet"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr "Publish your study"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr "Visible in Pool – study not published"

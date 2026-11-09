@@ -174,3 +174,19 @@ msgstr "Deja, visos vietos šiame tyrime jau užimtos. Sekite naujienas — netr
 #, elixir-autogen, elixir-format
 msgid "promotion.full.inform.title"
 msgstr "Šis tyrimas jau užpildytas"
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.subtitle"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.banner.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "pool.visibility.assignment_unpublished.label"
+msgstr ""
