@@ -13,7 +13,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
     redirect_url = get_redirect_url(panel_info)
-    runtime_config = runtime_config(assignment)
+    runtime_config = Assignment.Private.runtime_config(assignment)
     submitting? = Map.get(assigns, :submitting, false)
 
     email_capture = build_email_capture(declined?, runtime_config, user, submitting?)
@@ -31,13 +31,6 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   # Fallback when no panel_info (direct access without affiliate flow)
   def view_model(%{} = assignment, %{current_user: _user} = assigns) do
     view_model(assignment, Map.put(assigns, :live_context, %{data: %{panel_info: nil}}))
-  end
-
-  defp runtime_config(%{special: nil}), do: %Assignment.RuntimeConfig{}
-
-  defp runtime_config(assignment) do
-    template = Assignment.Private.get_template(assignment)
-    Assignment.Template.runtime_config(template)
   end
 
   # The finished-page Panl block. States chosen by feature flags + Panl

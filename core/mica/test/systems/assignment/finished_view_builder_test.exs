@@ -31,6 +31,28 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assert vm.body == dgettext("eyra-assignment", "finished_view.body")
     end
 
+    test "without a redirect URL the body says the page can be closed", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+      assigns = build_assigns(user)
+
+      assert %{title: "Done", body: body} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+
+      assert body == "Thank you for your participation. You can now close this page."
+    end
+
+    test "without a redirect URL the body is translated into Dutch", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+      assigns = build_assigns(user)
+
+      vm =
+        Gettext.with_locale(MicaWeb.Gettext, "nl", fn ->
+          Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+        end)
+
+      assert vm.body == "Bedankt voor je deelname. Je kunt deze pagina nu sluiten."
+    end
+
     test "builds correct VM with redirect URL", %{user: user} do
       redirect_url = "https://example.com/return"
 

@@ -188,7 +188,7 @@ msgstr "Geen toestemming"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Bedankt voor je deelname."
+msgstr "Bedankt voor je deelname. Je kunt deze pagina nu sluiten."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"
