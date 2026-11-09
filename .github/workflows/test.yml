@@ -11,6 +11,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  runtime-tls:
+    runs-on: ubuntu-26.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7.0.1
+
+      - uses: erlef/setup-elixir@v1.24.1
+        with:
+          otp-version: "27.3.4"
+          elixir-version: "1.19.6-otp-27"
+
+      - name: Build runtime image
+        run: >-
+          docker build --build-arg BUNDLE=next --build-arg VERSION=tls-test
+          --build-arg GIT_COMMIT=${{ github.sha }} -t runtime-tls-test core
+
+      - name: Verify runtime OS trust store and HTTPS
+        run: elixir core/scripts/runtime_tls_test.exs runtime-tls-test
+
   test:
     runs-on: ubuntu-26.04
 
