@@ -76,11 +76,15 @@ defmodule Systems.Assignment.RequiredTasksTest do
       complete(participant, :donate)
       complete(participant, :questionnaire)
       participation = Assignment.Public.get_participation(assignment, participant.user)
+      finished_events = progress_events(participant.user, "assignment_finished")
+      finished_count = finished_count(assignment)
       complete(participant, :manual)
 
       participant
       |> Map.put(:assignment, assignment)
       |> Map.put(:participation_before, participation)
+      |> Map.put(:finished_events_before, finished_events)
+      |> Map.put(:finished_count_before, finished_count)
     end
 
     test "queues the manual's task_finished", %{user: user} do
@@ -88,7 +92,10 @@ defmodule Systems.Assignment.RequiredTasksTest do
                progress_events(user, "task_finished")
     end
 
-    test "queues no second assignment_finished", %{user: user} do
+    test "queues no second assignment_finished", %{
+      user: user,
+      finished_events_before: ["assignment_finished"]
+    } do
       assert ["assignment_finished"] = progress_events(user, "assignment_finished")
     end
 
@@ -101,7 +108,10 @@ defmodule Systems.Assignment.RequiredTasksTest do
                Assignment.Public.get_participation(assignment, user)
     end
 
-    test "counts the participant once in the Monitor", %{assignment: assignment} do
+    test "counts the participant once in the Monitor", %{
+      assignment: assignment,
+      finished_count_before: 1
+    } do
       assert 1 = finished_count(assignment)
     end
   end
