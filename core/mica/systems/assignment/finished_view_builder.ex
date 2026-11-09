@@ -22,7 +22,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
       title: build_title(declined?),
       body: build_body(declined?, redirect_url, platform_name),
       illustration: build_illustration(declined?, redirect_url),
-      back_button: build_back_button(),
+      back_button: build_back_button(declined?, redirect_url),
       continue_button: build_continue_button(redirect_url),
       email_capture: email_capture
     }
@@ -212,7 +212,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
   defp build_illustration(_declined?, _redirect_url), do: nil
 
-  defp build_back_button do
+  defp build_back_button(false = _declined?, nil = _redirect_url), do: nil
+
+  defp build_back_button(_declined?, _redirect_url) do
     %{
       action: %{type: :send, event: "retry"},
       face: %{

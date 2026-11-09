@@ -19,11 +19,9 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       assigns = build_assigns(user)
       vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
 
-      # Should have illustration and retry button
+      # Should have illustration, no back or continue button
       assert vm.illustration == "/images/illustrations/finished.svg"
-      assert vm.back_button.action.type == :send
-      assert vm.back_button.action.event == "retry"
-      assert vm.back_button.face.icon == :back
+      assert vm.back_button == nil
       assert vm.continue_button == nil
 
       # Should use normal title and body
@@ -51,6 +49,19 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
         end)
 
       assert vm.body == "Bedankt voor je deelname. Je kunt deze pagina nu sluiten."
+    end
+
+    test "with a redirect URL the back button returns to the task list", %{user: user} do
+      redirect_url = "https://example.com/return"
+
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url)
+        |> Assignment.Factories.add_affiliate_user(user)
+
+      assigns = build_assigns(user, redirect_url)
+
+      assert %{back_button: %{action: %{type: :send, event: "retry"}, face: %{icon: :back}}} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
     test "builds correct VM with redirect URL", %{user: user} do
