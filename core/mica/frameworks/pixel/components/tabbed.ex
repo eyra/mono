@@ -274,7 +274,7 @@ defmodule Frameworks.Pixel.Tabbed do
       data-tab-id={@id}
       data-bar-id={@bar_id}
       phx-hook="Tab"
-      class={"tab flex flex-row gap-3 items-center justify-start focus:outline-none cursor-pointer #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
+      class={"tab flex flex-row gap-3 items-center justify-start cursor-pointer #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
       idle-class={idle_shape(@size, @type, @ready, @show_errors)}
       active-class={active_shape(@size, @type)}
       data-testid={@testid}

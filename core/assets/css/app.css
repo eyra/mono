@@ -4,6 +4,17 @@
 
 @tailwind base;
 
+/* One focus indicator for every element, shown for keyboard focus only
+ * (WCAG 2.4.7). Prism has no focus token yet; primary keeps at least 3:1
+ * against white, grey5 (menu), grey4 (active menu item) and grey1 (dark
+ * surfaces). Form fields keep `focus:outline-none` with their primary border.
+ */
+@layer base {
+  :focus-visible {
+    @apply outline outline-2 outline-offset-2 outline-primary;
+  }
+}
+
 @tailwind components;
 
 trix-toolbar {

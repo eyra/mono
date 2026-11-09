@@ -71,7 +71,7 @@ defmodule Systems.Desktop.View do
         :if={@section.full_list}
         navigate={@section.full_list.to}
         aria-label={"#{@section.full_list.label} — #{@section.title}"}
-        class="shrink-0 rounded focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary"
+        class="shrink-0 rounded"
         data-testid="section-full-list"
       >
         <Button.Face.plain_icon label={@section.full_list.label} icon={:forward} />

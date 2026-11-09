@@ -26,7 +26,7 @@ defmodule Frameworks.Pixel.Button.Action do
 
   def fake(assigns) do
     ~H"""
-    <div class="cursor-pointer focus:outline-none" data-testid={@testid}>
+    <div class="cursor-pointer" data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -38,7 +38,7 @@ defmodule Frameworks.Pixel.Button.Action do
 
   def phoenix_js(assigns) do
     ~H"""
-    <div phx-click={@js} class="cursor-pointer focus:outline-none" data-testid={@testid}>
+    <div phx-click={@js} class="cursor-pointer" data-testid={@testid}>
       <%= render_slot(@inner_block) %>
     </div>
     """
@@ -53,7 +53,7 @@ defmodule Frameworks.Pixel.Button.Action do
     ~H"""
     <a
       href={@to}
-      class="cursor-pointer focus:outline-none block"
+      class="cursor-pointer block"
       data-phx-link="redirect"
       data-phx-link-state={if @replace do "replace" else "push" end}
       data-testid={@testid}
@@ -80,7 +80,7 @@ defmodule Frameworks.Pixel.Button.Action do
         phx-value-item={@item}
         phx-target={@target}
         phx-debounce={@debounce}
-        class="touchstart-sensitive cursor-pointer focus:outline-none"
+        class="touchstart-sensitive cursor-pointer"
         data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
@@ -102,7 +102,7 @@ defmodule Frameworks.Pixel.Button.Action do
     <%= if @form_id != nil do %>
       <button
         type="submit"
-        class="cursor-pointer focus:outline-none"
+        class="cursor-pointer"
         form={@form_id}
         data-testid={@testid}
       >
@@ -111,7 +111,7 @@ defmodule Frameworks.Pixel.Button.Action do
     <% else %>
       <button
         type="submit"
-        class="cursor-pointer focus:outline-none"
+        class="cursor-pointer"
         data-testid={@testid}
       >
         <%= render_slot(@inner_block) %>
@@ -143,7 +143,7 @@ defmodule Frameworks.Pixel.Button.Action do
       id={@id}
       phx-hook="Toggle"
       target={@target}
-      class="cursor-pointer focus:outline-none"
+      class="cursor-pointer"
       data-testid={@testid}
     >
       <%= render_slot(@inner_block) %>

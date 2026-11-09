@@ -237,7 +237,7 @@ defmodule Frameworks.Pixel.Button do
       phx-target={@target}
       phx-click={@event}
       data-testid={@testid}
-      class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded bg-primary #{@width}"}
+      class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white rounded bg-primary #{@width}"}
     >
       <%= @label %>
     </button>
@@ -279,7 +279,7 @@ defmodule Frameworks.Pixel.Button do
     <button
       phx-target={@target}
       phx-click={@event}
-      class={"pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button focus:outline-none rounded bg-opacity-0 #{@color} #{@width}"}
+      class={"pt-13px pb-13px active:pt-14px active:pb-3 active:shadow-top2px border-2 font-button text-button rounded bg-opacity-0 #{@color} #{@width}"}
     >
       <%= @label %>
     </button>
@@ -295,7 +295,7 @@ defmodule Frameworks.Pixel.Button do
 
     ~H"""
     <button
-      class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
+      class={"pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white rounded pr-4 pl-4 #{@bg_color}"}
       type="submit"
       phx-target={@target}
     >
@@ -313,7 +313,7 @@ defmodule Frameworks.Pixel.Button do
 
     ~H"""
     <button
-      class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white focus:outline-none rounded pr-4 pl-4 #{@bg_color}"}
+      class={"w-full pt-15px pb-15px active:pt-4 active:pb-14px active:shadow-top4px leading-none font-button text-button text-white rounded pr-4 pl-4 #{@bg_color}"}
       type="submit"
       data-testid={@testid}
     >
