@@ -101,11 +101,13 @@ defmodule Systems.Workflow.Public do
 
   def add_item(
         %Workflow.Model{auth_node: workflow_auth_node} = workflow,
-        %{type: tool_type, id: special} = _item,
+        %{type: tool_type, id: special} = item,
         director,
         user
       )
       when is_atom(director) do
+    required? = Map.get(item, :required?, true)
+
     Multi.new()
     |> Multi.run(:position, fn _, _ ->
       {:ok, item_count(workflow)}
@@ -116,7 +118,7 @@ defmodule Systems.Workflow.Public do
     )
     |> Multi.insert(:workflow_item, fn %{position: position, tool: tool} ->
       tool_ref = prepare_tool_ref(special, tool_type, tool)
-      prepare_item(workflow, position, tool_ref)
+      prepare_item(workflow, position, tool_ref, required?)
     end)
     |> Signal.Public.multi_dispatch({:workflow_item, :added})
     |> Repo.commit()
@@ -140,9 +142,10 @@ defmodule Systems.Workflow.Public do
     |> Repo.one()
   end
 
-  def prepare_item(%Workflow.Model{} = workflow, position, tool_ref) do
+  def prepare_item(%Workflow.Model{} = workflow, position, tool_ref, required? \\ true) do
     %Workflow.ItemModel{}
     |> Workflow.ItemModel.changeset(%{position: position})
+    |> Ecto.Changeset.put_change(:required, required?)
     |> Ecto.Changeset.put_assoc(:workflow, workflow)
     |> Ecto.Changeset.put_assoc(:tool_ref, tool_ref)
   end

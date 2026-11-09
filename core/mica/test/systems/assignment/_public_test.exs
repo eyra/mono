@@ -931,32 +931,25 @@ defmodule Systems.Assignment.PublicTest do
     end
   end
 
-  describe "auto reward transition on task completion (guarded by finished?)" do
+  describe "auto reward transition on task completion (guarded by required_tasks_finished_by?)" do
     setup do
       user = Factories.insert!(:member)
       %{fund: fund, crew: crew} = assignment = Assignment.Factories.create_assignment(31, 1)
 
       assignment = Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
-      [%{id: workflow_item_id} | _] = assignment.workflow.items
+      [%{tool_ref: tool_ref} = item_a] = assignment.workflow.items
+      item_b = Assignment.Factories.create_workflow_item(assignment.workflow, tool_ref, "B", 1)
 
       member = Crew.Factories.create_member(crew, user)
 
       idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
       {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
 
-      task_a =
-        Crew.Factories.create_task(
-          crew,
-          member,
-          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=a"]
-        )
-
-      task_b =
-        Crew.Factories.create_task(
-          crew,
-          member,
-          ["item=#{workflow_item_id}", "member=#{member.id}", "seq=b"]
-        )
+      [task_a, task_b] =
+        for item <- [item_a, item_b] do
+          identifier = Assignment.Private.task_identifier(assignment, item, member)
+          Crew.Factories.create_task(crew, member, identifier)
+        end
 
       {:ok, task_a: task_a, task_b: task_b, idempotence_key: idempotence_key}
     end

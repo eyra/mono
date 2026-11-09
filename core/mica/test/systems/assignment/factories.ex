@@ -343,4 +343,29 @@ defmodule Systems.Assignment.Factories do
 
     assignment |> Mica.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
+
+  @doc """
+  An online assignment of the template, with the template's library items `item_ids`
+  added in that order the way the workflow builder adds them.
+  """
+  def create_template_assignment(template, item_ids, owner \\ Factories.insert!(:member)) do
+    {:ok, assignment} = Systems.Assignment.Assembly.create(template, :assignment, owner)
+
+    %{library: %{items: library}} =
+      template
+      |> Systems.Assignment.Private.get_template()
+      |> Systems.Assignment.Template.workflow_config()
+
+    for item_id <- item_ids do
+      library_item = Enum.find(library, &(&1.id == item_id))
+
+      {:ok, _} =
+        Systems.Workflow.Public.add_item(assignment.workflow_id, library_item, :assignment, owner)
+    end
+
+    assignment
+    |> Ecto.Changeset.change(status: :online)
+    |> Mica.Repo.update!()
+    |> Mica.Repo.preload(Systems.Assignment.Model.preload_graph(:down), force: true)
+  end
 end

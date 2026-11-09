@@ -6,7 +6,6 @@ defmodule Systems.Assignment.CrewPageBuilder do
   alias Systems.Assignment
   alias Systems.Consent
   alias Systems.Crew
-  alias Systems.Workflow
 
   def view_model(%{crew: crew, id: assignment_id} = assignment, %{current_user: user} = assigns) do
     language = Assignment.Model.language(assignment)
@@ -162,9 +161,9 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp tasks_finished?(assignment, %{current_user: user}) do
-    work_items = work_items(assignment, %{current_user: user})
-    work_items_finished?(work_items)
+  defp tasks_finished?(%{crew: crew} = assignment, %{current_user: user}) do
+    member = Crew.Public.get_member_including_expired(crew, user)
+    Assignment.Public.required_tasks_finished?(assignment, member)
   end
 
   defp consent_signed?(%{consent_agreement: nil}, _user, _tester?), do: true
@@ -268,47 +267,6 @@ defmodule Systems.Assignment.CrewPageBuilder do
       Assignment.ParticipationView,
       live_context: context
     )
-  end
-
-  defp work_items(%{status: status, crew: crew} = assignment, %{current_user: user}) do
-    if Assignment.Public.tester?(assignment, user) or status == :online do
-      member = Crew.Public.get_member_including_expired(crew, user)
-      work_items(assignment, member, user)
-    else
-      []
-    end
-  end
-
-  defp work_items(%{workflow: workflow} = assignment, %{} = member, %{} = user) do
-    ordered_items = Workflow.Model.ordered_items(workflow)
-    Enum.map(ordered_items, &{&1, get_or_create_task(&1, assignment, member, user)})
-  end
-
-  defp work_items(_assignment, nil, _), do: []
-
-  defp get_or_create_task(item, %{crew: crew} = assignment, member, user) do
-    identifier = Assignment.Private.task_identifier(assignment, item, member)
-
-    if task = Crew.Public.get_task(crew, identifier) do
-      task
-    else
-      Crew.Public.create_task!(crew, [user], identifier)
-    end
-  end
-
-  defp work_items_finished?([]), do: false
-
-  defp work_items_finished?(work_items) do
-    task_ids =
-      work_items
-      |> Enum.reject(fn {_, task} -> task == nil end)
-      |> Enum.map(fn {_, task} -> task.id end)
-
-    if Enum.empty?(task_ids) do
-      false
-    else
-      Crew.Public.tasks_finished?(task_ids)
-    end
   end
 
   # Extract previous view module from vm.view (which becomes previous during round trip)

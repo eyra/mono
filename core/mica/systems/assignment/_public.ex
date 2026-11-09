@@ -922,6 +922,62 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Whether the member finished the required tasks of the assignment: the tasks of the
+  workflow items marked required are all finished (completed, accepted or rejected).
+  A workflow without required items counts all its items; an empty one is never finished.
+  """
+  def required_tasks_finished?(%Assignment.Model{} = assignment, %Crew.MemberModel{} = member) do
+    %{crew: crew, workflow: workflow} =
+      assignment = Repo.preload(assignment, [:crew, workflow: :items])
+
+    case counted_items(workflow) do
+      [] -> false
+      items -> Enum.all?(items, &task_finished?(crew, assignment, &1, member))
+    end
+  end
+
+  def required_tasks_finished?(%Assignment.Model{}, nil), do: false
+
+  @doc """
+  Whether completing the task finishes its member's required tasks: the task, as it was
+  before its completion, wasn't finished, it counts for `required_tasks_finished?/2`, and
+  now all of them are finished.
+  """
+  def required_tasks_finished_by?(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{status: status} = task_before
+      ) do
+    status not in Crew.TaskStatus.finished_states() and
+      required_task?(assignment, task_before) and
+      required_tasks_finished?(assignment, get_member_by_task(task_before))
+  end
+
+  defp required_task?(assignment, task) do
+    %{workflow: workflow} = Repo.preload(assignment, workflow: :items)
+    item_id = Assignment.Private.workflow_item_id(task)
+
+    workflow
+    |> counted_items()
+    |> Enum.any?(&("#{&1.id}" == item_id))
+  end
+
+  defp task_finished?(crew, assignment, item, member) do
+    identifier = Assignment.Private.task_identifier(assignment, item, member)
+
+    case Crew.Public.get_task(crew, identifier) do
+      %{status: status} -> status in Crew.TaskStatus.finished_states()
+      nil -> false
+    end
+  end
+
+  defp counted_items(%Workflow.Model{items: items}) do
+    case Enum.filter(items, & &1.required) do
+      [] -> items
+      required_items -> required_items
+    end
+  end
+
   # Assignable
 
   def ready?(%{workflow: workflow}) do

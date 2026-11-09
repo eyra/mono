@@ -65,7 +65,8 @@ defmodule Systems.Assignment.TemplateDataDonation do
               id: :manual,
               type: :manual_tool,
               title: Assignment.WorkflowItemSpecials.translate(:manual),
-              description: dgettext("eyra-assignment", "workflow_item.manual.description")
+              description: dgettext("eyra-assignment", "workflow_item.manual.description"),
+              required?: false
             },
             %Builder.LibraryItemModel{
               id: :donate,
@@ -83,13 +84,15 @@ defmodule Systems.Assignment.TemplateDataDonation do
               id: :request_manual,
               type: :document_tool,
               title: Assignment.WorkflowItemSpecials.translate(:request_manual),
-              description: dgettext("eyra-assignment", "workflow_item.request.description")
+              description: dgettext("eyra-assignment", "workflow_item.request.description"),
+              required?: false
             },
             %Builder.LibraryItemModel{
               id: :download_manual,
               type: :document_tool,
               title: Assignment.WorkflowItemSpecials.translate(:download_manual),
-              description: dgettext("eyra-assignment", "workflow_item.download.description")
+              description: dgettext("eyra-assignment", "workflow_item.download.description"),
+              required?: false
             }
           ]
         },
