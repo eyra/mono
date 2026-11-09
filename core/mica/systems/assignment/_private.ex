@@ -48,6 +48,20 @@ defmodule Systems.Assignment.Private do
     |> Assignment.Template.runtime_config()
   end
 
+  @doc """
+  Whether the task list shows its done button. The done screen shows Back
+  exactly then, so the participant can undo the click.
+  """
+  def done_button?(%Assignment.Model{} = assignment, panel_info) do
+    case runtime_config(assignment) do
+      %{done_button_requires_redirect?: true} -> redirect_url?(panel_info)
+      _ -> true
+    end
+  end
+
+  defp redirect_url?(%{redirect_url: url}) when is_binary(url) and url != "", do: true
+  defp redirect_url?(_), do: false
+
   def get_template(%Assignment.Model{special: special}), do: get_template(special)
 
   def get_template(:data_donation), do: %Assignment.TemplateDataDonation{id: :data_donation}
