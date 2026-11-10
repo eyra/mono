@@ -22,7 +22,7 @@
 * Changed - Rich-text (Trix) fields are cleaned by one shared cleaner on save and on display. A new or edited text may be at most 2 MB; older, longer texts still display in full. Upgrading: no action needed.
 * Fixed - Yoda: only a 2xx answer counts as a delivered donation; any other answer keeps the delivery for a retry. Upgrading: no action needed.
 * Fixed - Next: the contribution banner on Home opens the outcome page of an accepted or declined contribution. An affiliate entry with a malformed `p` gets a 403 instead of an error page. Upgrading: no action needed.
-* Changed - Buttons render with Prism 0.2.0's button. Upgrading: no action needed.
+* Changed - Buttons render with Prism 0.4.0's button. Upgrading: no action needed.
 * Changed - The images built from the root `Dockerfile` and `core/Dockerfile` install the OS CA certificates. Upgrading: if you build your own image, use the updated Dockerfiles.
 * Changed - Dependency updates. Upgrading: no action needed.
 * Added - Component storybook (`phoenix_storybook`): Pixel components at `/admin/storybook`, Next components at `/admin/storybook-next`, with docs, variations and a playground per component. Only admins can open it, and only while the `:storybook` feature is on; prod never turns it on. `mix storybook.stories` writes a story for every function component that lacks one, and CI fails (`mix storybook.check`) when one is missing. Upgrading: add `storybook` to `ENABLED_APP_FEATURES` on environments that should serve it.
