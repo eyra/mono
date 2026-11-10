@@ -208,8 +208,8 @@ defmodule Systems.Project.ItemModel do
     defp card_label(%Project.ItemModel{storage_endpoint: storage_endpoint} = item) do
       cond do
         not Project.ItemModel.data?(item) -> label(Concept.Leaf.status(item))
-        Storage.EndpointModel.file_count(storage_endpoint) == 0 -> label(:empty)
-        true -> label(:online)
+        Storage.EndpointModel.file_count(storage_endpoint) == 0 -> label(:no_data)
+        true -> label(:has_data)
       end
     end
 
@@ -219,7 +219,10 @@ defmodule Systems.Project.ItemModel do
     defp label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
 
-    defp label(:empty), do: %{type: :idle, text: dgettext("eyra-project", "label.empty")}
+    defp label(:no_data), do: %{type: :idle, text: dgettext("eyra-project", "label.no_data")}
+
+    defp label(:has_data),
+      do: %{type: :success, text: dgettext("eyra-project", "label.has_data")}
 
     defp label(:online), do: %{type: :success, text: dgettext("eyra-project", "label.online")}
 

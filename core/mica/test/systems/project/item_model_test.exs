@@ -37,14 +37,14 @@ defmodule Systems.Project.ItemModelTest do
     assert %{image_info: nil} = item_card(item)
   end
 
-  test "Data item card without donations is Empty" do
+  test "Data item card without donations says No data" do
     creator = Factories.insert!(:creator)
     {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
 
-    assert %{label: %{type: :idle, text: "Empty"}} = item_card(item)
+    assert %{label: %{type: :idle, text: "No data"}} = item_card(item)
   end
 
-  test "Data item card with donations is Online" do
+  test "Data item card with donations says Has data" do
     creator = Factories.insert!(:creator)
 
     {:ok, %{storage_setup: %{item: item, endpoint: endpoint}}} =
@@ -52,7 +52,7 @@ defmodule Systems.Project.ItemModelTest do
 
     Systems.Monitor.Public.log({endpoint, :files})
 
-    assert %{label: %{type: :success, text: "Online"}} = item_card(item)
+    assert %{label: %{type: :success, text: "Has data"}} = item_card(item)
   end
 
   test "item named Data without storage keeps rename and delete" do

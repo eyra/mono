@@ -164,5 +164,9 @@ msgid "admins.title"
 msgstr "Admins"
 
 #, elixir-autogen, elixir-format
-msgid "label.empty"
-msgstr "Empty"
+msgid "label.has_data"
+msgstr "Has data"
+
+#, elixir-autogen, elixir-format
+msgid "label.no_data"
+msgstr "No data"
