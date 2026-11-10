@@ -37,11 +37,22 @@ defmodule Systems.Project.ItemModelTest do
     assert %{image_info: nil} = item_card(item)
   end
 
-  test "Data item card has a tertiary Storage label instead of a status" do
+  test "Data item card without donations is Empty" do
     creator = Factories.insert!(:creator)
     {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
 
-    assert %{label: %{type: :tertiary, text: "Storage"}} = item_card(item)
+    assert %{label: %{type: :idle, text: "Empty"}} = item_card(item)
+  end
+
+  test "Data item card with donations is Online" do
+    creator = Factories.insert!(:creator)
+
+    {:ok, %{storage_setup: %{item: item, endpoint: endpoint}}} =
+      Project.Assembly.create("Project", creator, :empty)
+
+    Systems.Monitor.Public.log({endpoint, :files})
+
+    assert %{label: %{type: :success, text: "Online"}} = item_card(item)
   end
 
   test "item named Data without storage keeps rename and delete" do

@@ -162,3 +162,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "admins.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.empty"
+msgstr ""

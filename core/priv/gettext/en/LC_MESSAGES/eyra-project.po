@@ -162,3 +162,7 @@ msgstr "No storage created"
 #, elixir-autogen, elixir-format
 msgid "admins.title"
 msgstr "Admins"
+
+#, elixir-autogen, elixir-format
+msgid "label.empty"
+msgstr "Empty"

@@ -204,10 +204,13 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
-    defp card_label(%Project.ItemModel{} = item) do
-      if Project.ItemModel.data?(item),
-        do: %{type: :tertiary, text: Concept.Leaf.tag(item)},
-        else: label(Concept.Leaf.status(item))
+    # The Data card shows whether donations have arrived; built-in storage is always online.
+    defp card_label(%Project.ItemModel{storage_endpoint: storage_endpoint} = item) do
+      cond do
+        not Project.ItemModel.data?(item) -> label(Concept.Leaf.status(item))
+        Storage.EndpointModel.file_count(storage_endpoint) == 0 -> label(:empty)
+        true -> label(:online)
+      end
     end
 
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
@@ -215,6 +218,8 @@ defmodule Systems.Project.ItemModel do
 
     defp label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
+
+    defp label(:empty), do: %{type: :idle, text: dgettext("eyra-project", "label.empty")}
 
     defp label(:online), do: %{type: :success, text: dgettext("eyra-project", "label.online")}
 
