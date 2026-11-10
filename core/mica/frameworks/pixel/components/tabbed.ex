@@ -273,11 +273,10 @@ defmodule Frameworks.Pixel.Tabbed do
     ~H"""
     <.link
       navigate={@path}
-      class={"flex flex-row gap-2 items-center focus:outline-none #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
+      class={"flex flex-row items-center focus:outline-none #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
       data-testid={@testid}
     >
       <div class={"text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}><%= @title %></div>
-      <img src={~p"/images/icons/forward_grey2.svg"} alt="" class="w-4 h-4" />
     </.link>
     """
   end

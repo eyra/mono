@@ -23,6 +23,14 @@ defmodule Systems.Project.ItemModelTest do
     assert %{left_actions: [], right_actions: [], path: ^expected_path} = item_card(item)
   end
 
+  test "Data item card shows the built-in storage's product logo" do
+    creator = Factories.insert!(:creator)
+    {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
+
+    assert %{icon_url: "/images/logos/products/next.svg"} = item_card(item)
+    assert File.exists?(Path.join(:code.priv_dir(:mica), "static/images/logos/products/next.svg"))
+  end
+
   test "item named Data without storage keeps rename and delete" do
     item =
       Project.Factories.build_assignment()
