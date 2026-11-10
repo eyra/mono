@@ -64,6 +64,12 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:storage_endpoint),
     do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
+  # Next recognises the project's storage item by its name "Data".
+  def data?(%Project.ItemModel{name: "Data", storage_endpoint_id: id}) when not is_nil(id),
+    do: true
+
+  def data?(%Project.ItemModel{}), do: false
+
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
   end
@@ -135,22 +141,26 @@ defmodule Systems.Project.ItemModel do
 
     # ACTIONS
 
-    defp left_actions(%Project.ItemModel{id: id}) do
-      edit = %{
+    defp left_actions(%Project.ItemModel{id: id} = item) do
+      if Project.ItemModel.data?(item), do: [], else: [rename_action(id)]
+    end
+
+    defp rename_action(id) do
+      %{
         action: %{type: :send, event: "rename", item: id},
         face: %{type: :label, label: "Rename", wrap: true}
       }
-
-      [edit]
     end
 
-    defp right_actions(%Project.ItemModel{id: id}) do
-      delete = %{
+    defp right_actions(%Project.ItemModel{id: id} = item) do
+      if Project.ItemModel.data?(item), do: [], else: [delete_action(id)]
+    end
+
+    defp delete_action(id) do
+      %{
         action: %{type: :send, event: "delete", item: id},
         face: %{type: :icon, icon: :delete}
       }
-
-      [delete]
     end
 
     # IMAGE

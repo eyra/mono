@@ -74,7 +74,7 @@ defmodule Systems.Project.NodePageBuilder do
          show_errors,
          %{fabric: fabric, timezone: timezone, node: node} = _assigns
        ) do
-    case Enum.find(node.items, &(&1.name == "Data" and &1.storage_endpoint)) do
+    case Enum.find(node.items, &Project.ItemModel.data?/1) do
       %{storage_endpoint: storage_endpoint} ->
         ready? = true
         branch = %Project.Branch{node_id: node.id}
