@@ -12,9 +12,7 @@ defmodule Systems.Project.NodePageTest do
     {:ok, %{project: project, storage_setup: %{item: item, endpoint: endpoint}}} =
       Project.Assembly.create("Project", user, :empty)
 
-    project = Repo.preload(project, Project.Model.preload_graph(:down), force: true)
-    # Assembly.create/3 links the root before the Data item exists; link the full tree.
-    {:ok, _} = project |> Project.Model.auth_tree() |> Mica.Authorization.link()
+    project = Repo.preload(project, :root)
 
     %{node: project.root, item: item, endpoint: endpoint}
   end

@@ -45,23 +45,13 @@ defmodule Systems.Storage.EndpointContentPageTest do
     setup [:login_as_creator]
 
     test "opens on Participants without a tab in the url", %{conn: conn, user: user} do
-      {:ok, %{project: project, storage_setup: %{endpoint: endpoint}}} =
+      {:ok, %{storage_setup: %{endpoint: endpoint}}} =
         Project.Assembly.create("Project", user, :empty)
-
-      link_auth_tree(project)
 
       {:ok, _view, html} = live(conn, ~p"/storage/endpoint/#{endpoint.id}/content")
 
       assert html =~ ~s(data-initial-tab="participants_view")
     end
-  end
-
-  # Assembly.create/3 links the root before the Data item exists; link the full tree.
-  defp link_auth_tree(project) do
-    project
-    |> Mica.Repo.preload(Project.Model.preload_graph(:down), force: true)
-    |> Project.Model.auth_tree()
-    |> Mica.Authorization.link()
   end
 
   defp tab_ids(%{node_id: node_id, id: item_id}, endpoint_id) do

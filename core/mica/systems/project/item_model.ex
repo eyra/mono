@@ -64,7 +64,7 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:storage_endpoint),
     do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
-  # Next recognises the project's storage item by its name "Data".
+  # The project's storage item is recognised by its name "Data".
   def data?(%Project.ItemModel{name: "Data", storage_endpoint_id: id}) when not is_nil(id),
     do: true
 
