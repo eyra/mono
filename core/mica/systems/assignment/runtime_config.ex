@@ -4,8 +4,9 @@ defmodule Systems.Assignment.RuntimeConfig do
 
   Returned by `Assignment.Template.runtime_config/1` and consumed by the
   parts of the system that need to know how a template behaves for
-  participants — today: the finished view (post-completion email capture),
-  the participants view (advert-in-pool CTA) and the task list (done button).
+  participants — today: the finished view (post-completion email capture,
+  and Back, shown exactly when the task list showed the done button), the
+  participants view (advert-in-pool CTA) and the task list (done button).
 
   ## Fields
 

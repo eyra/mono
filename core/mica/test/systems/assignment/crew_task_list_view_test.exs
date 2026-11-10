@@ -82,7 +82,10 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
     end
 
     test "questionnaire without a redirect URL: done button", %{conn: conn, user: user} do
-      assignment = Assignment.Factories.create_questionnaire_assignment()
+      assignment =
+        Assignment.Factories.create_questionnaire_assignment()
+        |> Assignment.Factories.add_task()
+
       panel_info = %{panel: :next, redirect_url: nil, participant: "p-1"}
 
       view = mount_task_list(conn, user, assignment, panel_info)

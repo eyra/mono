@@ -13,6 +13,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
     redirect_url = get_redirect_url(panel_info)
+    done_button? = Assignment.Private.done_button?(assignment, panel_info)
     runtime_config = Assignment.Private.runtime_config(assignment)
     submitting? = Map.get(assigns, :submitting, false)
 
@@ -22,7 +23,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
       title: build_title(declined?),
       body: build_body(declined?, redirect_url, platform_name),
       illustration: build_illustration(declined?, redirect_url),
-      back_button: build_back_button(declined?, redirect_url),
+      back_button: build_back_button(declined?, done_button?),
       continue_button: build_continue_button(redirect_url),
       email_capture: email_capture
     }
@@ -212,9 +213,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
   defp build_illustration(_declined?, _redirect_url), do: nil
 
-  defp build_back_button(false = _declined?, nil = _redirect_url), do: nil
+  defp build_back_button(false = _declined?, false = _done_button?), do: nil
 
-  defp build_back_button(_declined?, _redirect_url) do
+  defp build_back_button(_declined?, _done_button?) do
     %{
       action: %{type: :send, event: "retry"},
       face: %{
