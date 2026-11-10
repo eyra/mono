@@ -92,6 +92,16 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
                Assignment.FinishedViewBuilder.view_model(assignment, assigns)
     end
 
+    test "multi-task data donation without a redirect URL: no back button", %{user: user} do
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(nil, nil, %{special: :data_donation})
+        |> Assignment.Factories.add_task()
+
+      assigns = build_assigns(user)
+
+      assert %{back_button: nil} = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+    end
+
     test "single-task questionnaire: no back button", %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()
       assigns = build_assigns(user)
