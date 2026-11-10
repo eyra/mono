@@ -58,9 +58,9 @@ defmodule Systems.Assignment.StorageView do
     assign(socket, storage_button: storage_button)
   end
 
-  def update_storage_button(%{assigns: %{project_node: %{id: project_node_id}}} = socket) do
+  def update_storage_button(%{assigns: %{storage_endpoint: %{id: endpoint_id}}} = socket) do
     storage_button = %{
-      action: %{type: :redirect, to: ~p"/project/node/#{project_node_id}?tab=data"},
+      action: %{type: :redirect, to: ~p"/storage/endpoint/#{endpoint_id}/content"},
       face: %{
         type: :plain,
         icon: :forward,
