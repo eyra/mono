@@ -18,6 +18,7 @@
 * Changed - The storage export (built-in storage) puts each participant's donations in a folder named after the participant id; donations without a participant go to `(no participant)`. Upgrading: no action needed; scripts that read the export zip look one folder deeper.
 * Fixed - Built-in storage on the local filesystem (no S3) stores donations whose key contains `/`, such as `run1/summary`, in subfolders and lists them; before, such a donation failed to store. A key whose `..` segments lead out of the endpoint's folder is refused. Upgrading: no action needed.
 * Added - A storage endpoint on built-in storage has a "Participants" tab: per participant the number of sessions (the part of the donation key before the first `/`, or before the first `-` in a key without `/`, as Feldspar apps name them), the tasks, the number of files and the last donation. It reads the file names only, not the donations. Upgrading: no action needed.
+* Changed - A project's Data is one click away: the Data item shows as a card among the items (without Rename or delete, and counted in the project card's items), and the project page's second segment, "Data", opens the storage endpoint page; without a Data item it still offers to create storage. The storage endpoint page opens on "Participants" (then "Files") unless the link names a tab, the assignment's storage button goes there too, and the "Monitor" tab is gone for every storage type. Upgrading: no action needed.
 
 ## \#35 2026-11-11
 
