@@ -130,6 +130,19 @@ defmodule Systems.Feldspar.ToolViewTest do
     assert has_element?(view, "iframe")
   end
 
+  # After a reload or a crash the modal reopens; the notice must be readable before a
+  # new attempt, as on the vertical list's start screen
+  @tag autostart: true
+  test "with autostart, an unfinished attempt shows the start screen with its notice instead",
+       %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+
+    refute_push_event(view, "feldspar:prepare", %{id: _})
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
+    refute has_element?(view, "[data-testid='feldspar-autostart']")
+  end
+
   test "without autostart, checking recovery doesn't start the app", %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})

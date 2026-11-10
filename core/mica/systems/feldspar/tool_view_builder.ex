@@ -8,7 +8,8 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   - tool: The Feldspar tool model
   - assigns: Contains presentation data, an opaque recovery context and an optional
     start screen description from the host. With `autostart: true` in the live context
-    the host has shown its own start screen, and the app starts without this one.
+    the host has shown its own start screen, and the app starts without this one,
+    unless a previous attempt didn't finish: then this start screen shows its notice.
   """
   def view_model(
         tool,
@@ -35,7 +36,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
       recovery_on_entry: on_entry,
       button: build_button(loading, assigns),
       app_view: app_view,
-      autostart?: autostart?(assigns),
+      autostart?: autostart?(assigns) and not unfinished_attempt?,
       error: error
     }
   end
