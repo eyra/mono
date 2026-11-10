@@ -176,7 +176,7 @@ defmodule Systems.Content.Html do
             <div class="native:hidden">
               <div class="bg-white">
                 <Area.content>
-                  <div class="py-4">
+                  <div class="flex items-center h-[64px]">
                     <.live_component id="path" module={Breadcrumbs} elements={@breadcrumbs}/>
                   </div>
                 </Area.content>
