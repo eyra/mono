@@ -131,7 +131,7 @@ defmodule Systems.Project.ItemModel do
         path: "/#{Concept.Leaf.resource_id(item)}/content",
         image_info: image_info(item),
         icon_url: logo_url(item),
-        label: label(Concept.Leaf.status(item)),
+        label: card_label(item),
         tags: [Concept.Leaf.tag(item)],
         info: Concept.Leaf.info(item, timezone),
         left_actions: left_actions(item),
@@ -195,9 +195,7 @@ defmodule Systems.Project.ItemModel do
       logo_url(Project.ItemModel.special(item))
     end
 
-    defp logo_url(%Storage.EndpointModel{} = storage_endpoint) do
-      Storage.EndpointModel.asset_image_src(storage_endpoint, :icon)
-    end
+    defp logo_url(%Storage.EndpointModel{}), do: nil
 
     defp logo_url(%Assignment.Model{info: %{logo_url: logo_url}}) do
       logo_url
@@ -210,6 +208,10 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
+    defp card_label(%Project.ItemModel{} = item) do
+      if Project.ItemModel.data?(item), do: nil, else: label(Concept.Leaf.status(item))
+    end
+
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
       do: label(status)
 

@@ -64,9 +64,7 @@ defmodule Systems.Storage.EndpointModel do
     asset_image_src(special_field(endpoint), type)
   end
 
-  def asset_image_src(:builtin, :icon), do: Logo.path(:next, :product)
   def asset_image_src(:builtin, {:logo, type}), do: Logo.path(:next, type)
-  def asset_image_src(special, :icon), do: Logo.path(:"#{special}", :product)
   def asset_image_src(special, {:logo, type}), do: Logo.path(:"#{special}", type)
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
