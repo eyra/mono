@@ -169,11 +169,7 @@ defmodule Systems.Project.ItemModel do
       image_info(Project.ItemModel.special(item))
     end
 
-    defp image_info(%Storage.EndpointModel{}) do
-      image_info(
-        "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1622986819498-60765a6e52c0%3Fixid%3DM3w1MzYyOTF8MHwxfHNlYXJjaHwzOXx8Zm9sZGVyc3xlbnwwfHx8fDE3MTg3OTEyOTB8MA%26ixlib%3Drb-4.0.3&username=_sycthe_&name=Tanay+Shah&blur_hash=LCH%5En%5DActRkV%2AH%25yM%7BsD%5BBNMkYkU"
-      )
-    end
+    defp image_info(%Storage.EndpointModel{}), do: nil
 
     defp image_info(%Assignment.Model{info: %{image_id: image_id}}) do
       image_info(image_id)
@@ -209,7 +205,9 @@ defmodule Systems.Project.ItemModel do
 
     # LABEL
     defp card_label(%Project.ItemModel{} = item) do
-      if Project.ItemModel.data?(item), do: nil, else: label(Concept.Leaf.status(item))
+      if Project.ItemModel.data?(item),
+        do: %{type: :tertiary, text: Concept.Leaf.tag(item)},
+        else: label(Concept.Leaf.status(item))
     end
 
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
