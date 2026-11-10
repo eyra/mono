@@ -10,13 +10,11 @@ defmodule Systems.Admin.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Admin.ConfigPage, [:admin]},
-        {Systems.Admin.ImportRewardsPage, [:admin]},
-        {Systems.Admin.LoginPage, [:visitor, :member]}
-      ]
-    end
+    [
+      {Systems.Admin.ConfigPage, [:admin]},
+      {Systems.Admin.ImportRewardsPage, [:admin]},
+      {Systems.Admin.LoginPage, [:visitor, :member]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Admin.Switch]

@@ -9,11 +9,9 @@ defmodule Systems.Home.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Home.Page, [:visitor, :member, :creator]}
-      ]
-    end
+    [
+      {Systems.Home.Page, [:visitor, :member, :creator]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Home.Switch]

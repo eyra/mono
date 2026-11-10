@@ -9,12 +9,10 @@ defmodule Next.Systems.Graphite.System do
   end
 
   def grants do
-    quote do
-      [
-        {Next.Systems.Graphite.LeaderboardContentPage, [:owner]},
-        {Next.Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester]}
-      ]
-    end
+    [
+      {Next.Systems.Graphite.LeaderboardContentPage, [:owner]},
+      {Next.Systems.Graphite.LeaderboardPage, [:owner, :participant, :tester]}
+    ]
   end
 
   def signal_handlers, do: [Next.Systems.Graphite.Switch]

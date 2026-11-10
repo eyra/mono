@@ -8,9 +8,8 @@ defmodule Mica.Authorization do
   use Frameworks.GreenLight.Public,
     repo: Mica.Repo,
     roles: [:visitor, :member, :creator, :owner, :participant, :admin],
-    role_assignment_schema: Mica.Authorization.RoleAssignment
-
-  require Mica.SaaS
+    role_assignment_schema: Mica.Authorization.RoleAssignment,
+    grants: {Mica.SaaS, :grants, []}
 
   require Logger
 
@@ -20,8 +19,6 @@ defmodule Mica.Authorization do
   alias Frameworks.GreenLight
 
   Frameworks.GreenLight.Permissions.grant(__MODULE__, "test-auth", [:owner])
-
-  Mica.SaaS.grants()
 
   grant_access(MicaWeb.FakeQualtrics, [:member])
   grant_access(Systems.Test.Page, [:visitor, :member])

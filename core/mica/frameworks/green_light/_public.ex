@@ -9,6 +9,10 @@ defmodule Frameworks.GreenLight.Public do
   (`Frameworks.GreenLight.Permissions.grant_access/2`,
   `Frameworks.GreenLight.Permissions.grant_actions/2`).
 
+  The `grants: {module, function, args}` option adds grants given as data at
+  runtime (see `Frameworks.GreenLight.Permissions.grants_permission_map/2`).
+  `permission_map/0` merges them into the compiled grants on its first call and
+  caches the result until the node restarts.
 
   """
   use Mica, :public
@@ -16,7 +20,7 @@ defmodule Frameworks.GreenLight.Public do
   @doc false
   defmacro __using__(config) do
     quote do
-      unquote(__MODULE__).__register_permission_map()
+      unquote(__MODULE__).__register_permission_map(unquote(config))
       unquote(__MODULE__).__register_schema_and_roles(unquote(config))
       unquote(__MODULE__).__register_helpers()
       unquote(__MODULE__).__register_authorization_check_functions()
@@ -25,8 +29,13 @@ defmodule Frameworks.GreenLight.Public do
     end
   end
 
-  defmacro __register_permission_map do
+  defmacro __register_permission_map(config) do
+    # Kept quoted: the attribute is read at compile time, and an evaluated
+    # module name in it would make the grants module a compile-time dependency.
+    grants = Macro.escape(Keyword.get(config, :grants))
+
     quote do
+      @green_light_grants unquote(grants)
       @before_compile Frameworks.GreenLight.Permissions
       import Frameworks.GreenLight.Permissions, only: [grant_access: 2, grant_actions: 2]
 

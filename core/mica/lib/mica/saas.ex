@@ -8,10 +8,10 @@ defmodule Mica.SaaS do
 
       config :mica, saas: Next.SaaS
 
-  The value is read at compile time: the router and `Mica.Authorization` splice
-  the routes and grants of all systems (`override_routes/0`, `routes/0`,
-  `grants/0`). Never set `:saas` in `runtime.exs`; a release refuses to boot
-  when it differs from the compiled value.
+  The value is read at compile time: the router splices the routes of all
+  systems (`override_routes/0`, `routes/0`). `Mica.Authorization` reads their
+  grants at boot (`grants/0`). Never set `:saas` in `runtime.exs`; a release
+  refuses to boot when it differs from the compiled value.
   """
 
   @doc "The systems the SaaS is made of: `Mica.Systems.all() ++` its own systems."
@@ -220,9 +220,9 @@ defmodule Mica.SaaS do
 
   @doc """
   The channel names of `notify_channels/0`, sorted, for use at compile time (an
-  `Ecto.Enum`). Editing a system recompiles the caller. Like the route and grant
-  macros, it compiles the SaaS module and its systems first, so they must not
-  depend on the caller at compile time.
+  `Ecto.Enum`). Editing a system recompiles the caller. Like the route macros,
+  it compiles the SaaS module and its systems first, so they must not depend on
+  the caller at compile time.
   """
   defmacro notify_channel_names do
     systems = checked_systems(module())
@@ -249,23 +249,15 @@ defmodule Mica.SaaS do
   @doc "Splices `routes/0` of all systems, in `systems/0` order."
   defmacro routes, do: splice(:routes)
 
-  @doc "Expands to `grant_access/2` or `grant_actions/2` for every system grant."
-  defmacro grants do
-    systems = checked_systems(module())
+  @doc """
+  The page grants of all systems, in `systems/0` order: `{module, roles}` or
+  `{module, %{action => roles}}`. `Mica.Authorization` merges them into its
+  permission map at boot, and raises when two grants name the same permission.
+  """
+  def grants, do: collect_grants(systems())
 
-    grants =
-      for system <- systems, grant <- system_grants(system) do
-        case grant do
-          {module, {:%{}, _, _} = action_roles} ->
-            quote do: grant_actions(unquote(module), unquote(action_roles))
-
-          {module, roles} ->
-            quote do: grant_access(unquote(module), unquote(roles))
-        end
-      end
-
-    {:__block__, [], external_resources(systems) ++ grants}
-  end
+  @doc false
+  def collect_grants(systems), do: Enum.flat_map(systems, &system_grants/1)
 
   defp splice(callback) do
     systems = checked_systems(module())
@@ -274,20 +266,19 @@ defmodule Mica.SaaS do
   end
 
   defp system_grants(system) do
-    case call(system, :grants) do
+    case system.grants() do
       grants when is_list(grants) ->
         Enum.map(grants, fn
-          {_module, _roles} = grant ->
+          {module, roles} = grant when is_atom(module) and (is_list(roles) or is_map(roles)) ->
             grant
 
           other ->
-            raise ArgumentError,
-                  "#{inspect(system)}.grants/0: not a grant: #{Macro.to_string(other)}"
+            raise ArgumentError, "#{inspect(system)}.grants/0: not a grant: #{inspect(other)}"
         end)
 
       other ->
         raise ArgumentError,
-              "#{inspect(system)}.grants/0 must return a quoted list, got: #{Macro.to_string(other)}"
+              "#{inspect(system)}.grants/0 must return a list, got: #{inspect(other)}"
     end
   end
 
