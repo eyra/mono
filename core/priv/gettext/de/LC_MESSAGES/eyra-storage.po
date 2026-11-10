@@ -103,14 +103,6 @@ msgstr ""
 msgid "tabbar.item.settings.forward"
 msgstr ""
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.monitor"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.monitor.forward"
-msgstr ""
-
 #, elixir-autogen, elixir-format
 msgid "table.date.label"
 msgstr ""
@@ -125,18 +117,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "files.metric.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "bytes.kb.metric.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "bytes.mb.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
@@ -185,10 +165,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "files.empty.description"
-msgstr ""
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "bytes.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
