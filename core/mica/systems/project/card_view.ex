@@ -79,6 +79,7 @@ defmodule Systems.Project.CardView do
         id={@id}
         left_actions={@left_actions}
         right_actions={@right_actions}
+        reserve_actions_space={true}
       >
         <:top>
           <div class="relative">
