@@ -126,12 +126,14 @@ defmodule Systems.Assignment.CrewWorkViewTest do
       assert html =~ "Privacy"
     end
 
-    test "shows consent context menu item when consent agreement exists", %{
+    test "shows consent context menu item when the participant signed the consent", %{
       conn: conn,
       user: user
     } do
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
+      revision = Systems.Consent.Public.latest_revision(assignment.consent_agreement)
+      {:ok, _} = Systems.Consent.Public.create_signature(revision, user)
 
       conn = conn |> Map.put(:request_path, "/assignment/work")
 
