@@ -176,6 +176,10 @@ defmodule Systems.Assignment.SettingsView do
           <:header>
             <Text.title3><%= dgettext("eyra-assignment", "settings.consent.title") %></Text.title3>
             <Text.body><%= dgettext("eyra-assignment", "settings.consent.body") %></Text.body>
+            <.spacing value="XS" />
+            <div data-testid="consent-existing-participants">
+              <Text.body><%= dgettext("eyra-assignment", "settings.consent.existing_participants") %></Text.body>
+            </div>
             <.spacing value="M" />
           </:header>
           <:footer>

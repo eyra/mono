@@ -805,3 +805,7 @@ msgstr "This task is no longer available"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "This study has no tasks."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Participants who are already taking part when you choose 'Show' won't see this page. Only participants who join after that are asked for consent."

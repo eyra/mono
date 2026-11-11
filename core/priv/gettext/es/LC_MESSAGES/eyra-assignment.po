@@ -806,3 +806,7 @@ msgstr "Esta tarea ya no está disponible"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Este estudio no tiene tareas."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Los participantes que ya están participando cuando eliges 'Mostrar' no verán esta página. Solo se pide el consentimiento a quienes se unan después."

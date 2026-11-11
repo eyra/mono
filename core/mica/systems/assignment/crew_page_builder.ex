@@ -91,7 +91,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
        when not is_nil(action) do
     case action do
       :onboarding_continue ->
-        consent_or_work_view(assignment, assigns)
+        consent_or_work_view(assignment, assigns, tester?)
 
       :accept ->
         email_or_work_view(assignment, assigns, tester?)
@@ -137,7 +137,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
     end
   end
 
-  defp consent_or_work_view(assignment, assigns, tester? \\ false) do
+  defp consent_or_work_view(assignment, assigns, tester?) do
     %{current_user: user} = assigns
 
     cond do

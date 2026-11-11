@@ -817,3 +817,7 @@ msgstr "Această sarcină nu mai este disponibilă"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Acest studiu nu are sarcini."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Participanții care participă deja atunci când alegeți „Arată” nu vor vedea această pagină. Consimțământul este cerut doar celor care se alătură după aceea."

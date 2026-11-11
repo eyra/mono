@@ -817,3 +817,7 @@ msgstr "Ši užduotis nebepasiekiama"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Šiame tyrime nėra užduočių."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Dalyviai, kurie jau dalyvauja, kai pasirenkama „Rodyti“, šio puslapio nematys. Sutikimo prašoma tik vėliau prisijungusių dalyvių."

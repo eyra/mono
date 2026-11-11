@@ -195,6 +195,17 @@ defmodule Systems.Assignment.Factories do
     reload(assignment)
   end
 
+  @doc """
+  Switches consent off as older code does: it only unlinks the agreement.
+  Returns the reloaded assignment.
+  """
+  def switch_consent_off_as_old_code(%{id: id} = assignment) do
+    from(a in "assignments", where: a.id == ^id)
+    |> Mica.Repo.update_all(set: [consent_agreement_id: nil])
+
+    reload(assignment)
+  end
+
   defp reload(%{id: id}) do
     Systems.Assignment.Public.get!(id, Systems.Assignment.Model.preload_graph(:down))
   end

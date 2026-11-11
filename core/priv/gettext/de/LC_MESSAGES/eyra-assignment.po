@@ -806,3 +806,7 @@ msgstr "Diese Aufgabe ist nicht mehr verfügbar"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Diese Studie enthält keine Aufgaben."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Teilnehmende, die bereits teilnehmen, wenn Sie 'Anzeigen' wählen, sehen diese Seite nicht. Nur wer danach teilnimmt, wird um Einwilligung gebeten."

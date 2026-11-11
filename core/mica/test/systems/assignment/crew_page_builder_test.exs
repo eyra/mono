@@ -473,6 +473,53 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     end
   end
 
+  describe "an assignment that older code switched off and on after this code switched it off" do
+    test "asks a participant who joined after older code switched it on" do
+      user = Factories.insert!(:member)
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(300)
+
+      assignment
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_embed(:consent_periods, [
+        %Assignment.ConsentPeriodModel{
+          started_at: NaiveDateTime.add(now, -300),
+          ended_at: NaiveDateTime.add(now, -200)
+        }
+      ])
+      |> Repo.update!()
+
+      assignment =
+        assignment
+        |> Assignment.Factories.switch_consent_off_as_old_code()
+        |> Assignment.Factories.switch_consent_on_as_old_code(100)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 50)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "a tester who joined while consent was off" do
+    test "previews the consent when continuing from the intro page" do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_base_assignment()
+      Assignment.Public.ensure_tester(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+      assigns = build_assigns(user, %{action: :onboarding_continue})
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
   describe "an assignment that older code switched on" do
     test "asks a participant who joined after its agreement was created" do
       user = Factories.insert!(:member)

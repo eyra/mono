@@ -805,3 +805,7 @@ msgstr "Deze taak is niet meer beschikbaar"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Deze studie heeft geen taken."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Deelnemers die al meedoen op het moment dat je 'Tonen' kiest, zien deze pagina niet. Alleen deelnemers die daarna meedoen, wordt om toestemming gevraagd."
