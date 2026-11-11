@@ -37,6 +37,23 @@ defmodule Systems.Feldspar.S3Test do
       refute id == ""
     end
 
+    # bsdtar_app.zip is made by bsdtar (`tar -a -cf app.zip .`), which names
+    # the entries `./`, `./index.html`, `./assets/`, `./assets/app.js`.
+    test "stores a zip whose entry names start with ./ under keys without ./" do
+      zip = Path.join(__DIR__, "bsdtar_app.zip")
+      test_pid = self()
+
+      expect(MockAws, :request!, 2, fn %ExAws.Operation.S3{http_method: :put, path: path} ->
+        send(test_pid, {:put, path})
+      end)
+
+      id = S3.store(zip, "app.zip")
+
+      assert_received {:put, first}
+      assert_received {:put, second}
+      assert Enum.sort([first, second]) == ["#{id}/assets/app.js", "#{id}/index.html"]
+    end
+
     # Mox fails the test on any unexpected S3 request, so nothing is uploaded.
     @tag :tmp_dir
     test "refuses a zip without index.html and uploads nothing", %{tmp_dir: tmp_dir} do

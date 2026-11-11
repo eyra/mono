@@ -19,6 +19,16 @@ defmodule Systems.Feldspar.LocalFSTest do
       assert File.read!(Path.join(LocalFS.storage_path(id), "assets/app.js")) == "app"
     end
 
+    # bsdtar_app.zip is made by bsdtar (`tar -a -cf app.zip .`), which names
+    # the entries `./`, `./index.html`, `./assets/`, `./assets/app.js`.
+    test "stores a zip whose entry names start with ./" do
+      id = LocalFS.store(Path.join(__DIR__, "bsdtar_app.zip"), "app.zip")
+
+      assert is_binary(id)
+      assert File.read!(Path.join(LocalFS.storage_path(id), "index.html")) == "app\n"
+      assert File.read!(Path.join(LocalFS.storage_path(id), "assets/app.js")) == "js\n"
+    end
+
     @tag :tmp_dir
     test "refuses a zip without index.html and leaves no app folder", %{tmp_dir: tmp_dir} do
       name = "no_index_#{System.unique_integer([:positive])}"

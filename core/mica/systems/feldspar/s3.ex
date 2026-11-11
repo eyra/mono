@@ -53,7 +53,7 @@ defmodule Systems.Feldspar.S3 do
 
       S3.put_object(
         Access.fetch!(settings, :bucket),
-        "#{object_key(target)}/#{name}",
+        "#{object_key(target)}/#{Private.entry_path(name)}",
         data,
         content_type: content_type(name)
       )
