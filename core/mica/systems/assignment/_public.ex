@@ -933,28 +933,67 @@ defmodule Systems.Assignment.Public do
 
     case counted_items(workflow) do
       [] -> false
-      items -> Enum.all?(items, &task_finished?(crew, assignment, &1, member))
+      items -> items_finished?(crew, assignment, items, member)
     end
   end
 
   def required_tasks_finished?(%Assignment.Model{}, nil), do: false
 
   @doc """
+  Finishes the task's member when completing it finished their required tasks (see
+  `required_tasks_finished_by?/2`; `task_before` is the task as it was before). Called in
+  the transaction that completes the task. It first takes a lock per member for the rest of
+  that transaction, so of two completions in overlapping transactions the later one sees
+  the other's task finished.
+  """
+  def finish_if_required_tasks_finished_by(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{} = task_before
+      ) do
+    if member = get_member_by_task(task_before) do
+      lock_finishing(member)
+
+      if required_tasks_finished_by?(assignment, task_before) do
+        finish_member(assignment, member)
+      end
+    end
+
+    :ok
+  end
+
+  @doc """
   Finishes a member whose required tasks are finished but who wasn't finished when their
   last required task completed, such as one who finished the tasks that count now before
-  their manuals stopped counting. Completes their participation and dispatches
-  `{:crew_member, :finished_tasks}`, which logs the Monitor's finished event and queues
-  `assignment_finished` for the panel. The participation's `completed_at` marks a finished
-  member: running this again, also concurrently, dispatches nothing.
+  their manuals stopped counting. It acts only while a task that doesn't count is still
+  open. A member whose tasks are all finished was already finished by the rule before
+  this one, which counted every task the member had, also when their participation has
+  no `completed_at` (from before it existed); they get no second `assignment_finished`.
   """
   def finish_if_required_tasks_finished(
         %Assignment.Model{} = assignment,
         %Crew.MemberModel{} = member
       ) do
+    %{crew: crew, workflow: %{items: items}} =
+      assignment = Repo.preload(assignment, [:crew, workflow: :items])
+
+    if required_tasks_finished?(assignment, member) and
+         not existing_tasks_finished?(crew, assignment, items, member) do
+      finish_member(assignment, member)
+    end
+
+    :ok
+  end
+
+  def finish_if_required_tasks_finished(%Assignment.Model{}, nil), do: :ok
+
+  # Completes the member's participation and dispatches `{:crew_member, :finished_tasks}`,
+  # which logs the Monitor's finished event and queues `assignment_finished` for the panel.
+  # The participation's `completed_at` marks a finished member: only the call that sets it
+  # dispatches, so a later or concurrent call dispatches nothing.
+  defp finish_member(assignment, member) do
     %{user: user} = member = Repo.preload(member, :user)
 
-    with true <- required_tasks_finished?(assignment, member),
-         false <- participation_completed?(get_participation(assignment, user)) do
+    unless participation_completed?(get_participation(assignment, user)) do
       {:ok, participation} = obtain_participation(assignment, user)
 
       {:ok, _} =
@@ -967,14 +1006,18 @@ defmodule Systems.Assignment.Public do
         )
         |> Repo.commit()
     end
-
-    :ok
   end
-
-  def finish_if_required_tasks_finished(%Assignment.Model{}, nil), do: :ok
 
   defp participation_completed?(%{completed_at: %NaiveDateTime{}}), do: true
   defp participation_completed?(_participation), do: false
+
+  # A transaction-scoped advisory lock, so it can't deadlock with the row locks that
+  # expiring or rejecting a member takes on the member, its participation and its tasks.
+  defp lock_finishing(%Crew.MemberModel{id: member_id}) do
+    Repo.query!("SELECT pg_advisory_xact_lock(hashtextextended($1, 0))", [
+      "assignment_finish:member=#{member_id}"
+    ])
+  end
 
   @doc """
   Whether completing the task finishes its member's required tasks: the task, as it was
@@ -999,14 +1042,28 @@ defmodule Systems.Assignment.Public do
     |> Enum.any?(&("#{&1.id}" == item_id))
   end
 
-  defp task_finished?(crew, assignment, item, member) do
+  defp items_finished?(crew, assignment, items, member) do
+    Enum.all?(items, &(task_status(crew, assignment, &1, member) in finished_states()))
+  end
+
+  # The rule before required items: every task the member has is finished.
+  defp existing_tasks_finished?(crew, assignment, items, member) do
+    items
+    |> Enum.map(&task_status(crew, assignment, &1, member))
+    |> Enum.reject(&is_nil/1)
+    |> Enum.all?(&(&1 in finished_states()))
+  end
+
+  defp task_status(crew, assignment, item, member) do
     identifier = Assignment.Private.task_identifier(assignment, item, member)
 
     case Crew.Public.get_task(crew, identifier) do
-      %{status: status} -> status in Crew.TaskStatus.finished_states()
-      nil -> false
+      %{status: status} -> status
+      nil -> nil
     end
   end
+
+  defp finished_states, do: Crew.TaskStatus.finished_states()
 
   defp counted_items(%Workflow.Model{items: items}) do
     case Enum.filter(items, & &1.required) do

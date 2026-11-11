@@ -122,6 +122,7 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
 
       # Before the migration every item counted, so the open manual kept them unfinished
       set_required(assignment, :manual, true)
+      open_tasks(assignment, user)
       complete_task(assignment, user, :donate)
       complete_task(assignment, user, :questionnaire)
       set_required(assignment, :manual, false)
@@ -170,12 +171,59 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     end
   end
 
+  # Before the participation had `completed_at`, the rule then (all tasks finished) already
+  # sent these participants assignment_finished, so a visit must not send it again.
+  for participation <- [:without_completed_at, :without_participation] do
+    @participation participation
+
+    describe "a participant who finished all tasks before completion was recorded (#{participation})" do
+      setup %{assignment: assignment, revision: revision, user: user} do
+        join_from_panel(assignment, user)
+        {:ok, _} = Consent.Public.create_signature(revision, user)
+        open_tasks(assignment, user)
+        finish_without_signals(assignment, user)
+
+        if @participation == :without_completed_at do
+          {:ok, %{completed_at: nil}} = Assignment.Public.obtain_participation(assignment, user)
+        end
+
+        :ok
+      end
+
+      test "gets no assignment_finished when they open the assignment", %{
+        conn: conn,
+        assignment: assignment,
+        user: user
+      } do
+        open_crew_page(conn, assignment)
+        assert [] = progress_events(user, "assignment_finished")
+      end
+
+      test "gets no Monitor finished event when they open the assignment", %{
+        conn: conn,
+        assignment: assignment
+      } do
+        open_crew_page(conn, assignment)
+        assert 0 = finished_count(assignment)
+      end
+
+      test "is not completed when they open the assignment", %{
+        conn: conn,
+        assignment: assignment,
+        user: user
+      } do
+        open_crew_page(conn, assignment)
+        refute completed?(assignment, user)
+      end
+    end
+  end
+
   describe "a researcher removing a participant's last open required item" do
     setup %{assignment: assignment, revision: revision, user: user} do
       join_from_panel(assignment, user)
       {:ok, _} = Consent.Public.create_signature(revision, user)
+      open_tasks(assignment, user)
       complete_task(assignment, user, :donate)
-      _questionnaire_task = task(assignment, user, :questionnaire)
 
       {:ok, _} = Workflow.Public.delete(item(assignment, :questionnaire))
       :ok
@@ -233,6 +281,22 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     member = Crew.Public.get_member(crew, user)
     identifier = Assignment.Private.task_identifier(assignment, item(assignment, special), member)
     Crew.Public.get_task(crew, identifier) || Crew.Public.create_task!(crew, [user], identifier)
+  end
+
+  # As the task list does when it renders: every item gets its task
+  defp open_tasks(assignment, user) do
+    for special <- [:manual, :donate, :questionnaire], do: task(assignment, user, special)
+  end
+
+  # Finishes every task the way the data looks for a participant from before completion
+  # was recorded: the task rows only, no participation and no new events.
+  defp finish_without_signals(assignment, user) do
+    for special <- [:manual, :donate, :questionnaire] do
+      assignment
+      |> task(user, special)
+      |> Ecto.Changeset.change(status: :completed)
+      |> Repo.update!()
+    end
   end
 
   defp complete_task(assignment, user, special) do

@@ -529,11 +529,10 @@ defmodule Systems.Assignment.Switch do
   # and sends {:crew_member, :finished_tasks}: not a task that doesn't count (such as an
   # optional manual) nor a task that was already finished.
   defp finish_member_if_required_tasks_finished(assignment, crew_task, message) do
-    if Assignment.Public.required_tasks_finished_by?(assignment, task_before(crew_task, message)) do
-      member = Assignment.Public.get_member_by_task(crew_task, [:user])
-      Assignment.Public.complete_participation(assignment, member.user)
-      Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: member})
-    end
+    Assignment.Public.finish_if_required_tasks_finished_by(
+      assignment,
+      task_before(crew_task, message)
+    )
   end
 
   # A task completed again is dispatched without a changeset.

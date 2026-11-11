@@ -131,6 +131,23 @@ defmodule Systems.Assignment.RequiredTasksTest do
     end
   end
 
+  describe "completing the last required task twice from the same pending task" do
+    # As two requests at once do: both load the task while it is still pending
+    test "queues one assignment_finished" do
+      assignment =
+        Assignment.Factories.create_template_assignment(:data_donation, @data_donation_items)
+
+      participant = join_from_panel(assignment)
+      complete(participant, :donate)
+      pending = Repo.reload!(participant.tasks.questionnaire)
+
+      {:ok, _} = Crew.Public.complete_task(pending)
+      {:ok, _} = Crew.Public.complete_task(pending)
+
+      assert ["assignment_finished"] = progress_events(participant.user, "assignment_finished")
+    end
+  end
+
   describe "leaving the donation unfinished" do
     setup do
       assignment =
