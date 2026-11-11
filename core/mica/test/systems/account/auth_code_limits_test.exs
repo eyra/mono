@@ -8,10 +8,27 @@ defmodule Systems.Account.AuthCodeLimitsTest do
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
   alias Systems.Rate.CounterModel
 
   @remote_ip "203.0.113.10"
   @other_ip "198.51.100.20"
+
+  # Far more than the slowest test takes, and short of the test timeout.
+  @window_margin_ms 10_000
+
+  # The counters count in fixed windows that start on the hour, and a day
+  # starts on the hour too. A test that runs into the next hour counts on from
+  # zero there, so a limit it filled no longer refuses. Close to the end of an
+  # hour, wait for the next one.
+  setup do
+    hour_ms = :timer.hours(1)
+    now_ms = Rate.Private.datetime_now() |> DateTime.to_unix(:millisecond)
+    left_ms = hour_ms - rem(now_ms, hour_ms)
+
+    if left_ms < @window_margin_ms, do: Process.sleep(left_ms)
+    :ok
+  end
 
   defp unique_email(prefix) do
     "#{prefix}-#{System.unique_integer([:positive])}@example.com"
