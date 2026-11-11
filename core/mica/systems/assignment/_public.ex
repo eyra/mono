@@ -941,10 +941,10 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Finishes the task's member when completing it finished their required tasks (see
-  `required_tasks_finished_by?/2`; `task_before` is the task as it was before). Called in
-  the transaction that completes the task. It first takes a lock per member for the rest of
-  that transaction, so of two completions in overlapping transactions the later one sees
-  the other's task finished.
+  `required_tasks_finished_by?/2`; `task_before` is the task as it was before) and they
+  weren't notified yet (see `finish_member/2`). Called in the transaction that completes
+  the task. It first takes a lock per member for the rest of that transaction, so of two
+  completions in overlapping transactions the later one sees the other's task finished.
   """
   def finish_if_required_tasks_finished_by(
         %Assignment.Model{} = assignment,
@@ -963,22 +963,22 @@ defmodule Systems.Assignment.Public do
 
   @doc """
   Finishes a member whose required tasks are finished but who wasn't finished when their
-  last required task completed, such as one who finished the tasks that count now before
-  their manuals stopped counting. It acts only while a task that doesn't count is still
-  open. A member whose tasks are all finished was already finished by the rule before
-  this one, which counted every task the member had, also when their participation has
-  no `completed_at` (from before it existed); they get no second `assignment_finished`.
+  last required task completed: one who finished the tasks that count now before their
+  manuals stopped counting, or whose last open required item a researcher removed. Called
+  when the member opens the assignment. Testers are skipped: they get no Monitor event,
+  so nothing would stop every visit from notifying them again.
   """
   def finish_if_required_tasks_finished(
         %Assignment.Model{} = assignment,
         %Crew.MemberModel{} = member
       ) do
-    %{crew: crew, workflow: %{items: items}} =
-      assignment = Repo.preload(assignment, [:crew, workflow: :items])
+    %{user: user} = member = Repo.preload(member, :user)
 
-    if required_tasks_finished?(assignment, member) and
-         not existing_tasks_finished?(crew, assignment, items, member) do
-      finish_member(assignment, member)
+    unless tester?(assignment, user) do
+      {:ok, _} =
+        Multi.new()
+        |> Multi.run(:finish, fn _, _ -> finish_locked(assignment, member) end)
+        |> Repo.commit()
     end
 
     :ok
@@ -986,30 +986,30 @@ defmodule Systems.Assignment.Public do
 
   def finish_if_required_tasks_finished(%Assignment.Model{}, nil), do: :ok
 
-  # Completes the member's participation and dispatches `{:crew_member, :finished_tasks}`,
-  # which logs the Monitor's finished event and queues `assignment_finished` for the panel.
-  # The participation's `completed_at` marks a finished member: only the call that sets it
-  # dispatches, so a later or concurrent call dispatches nothing.
+  # In a transaction, so the lock holds until the finish commits
+  defp finish_locked(assignment, member) do
+    lock_finishing(member)
+
+    if required_tasks_finished?(assignment, member) do
+      finish_member(assignment, member)
+    end
+
+    {:ok, member}
+  end
+
+  # Notifies the member once: dispatches `{:crew_member, :finished_tasks}`, which queues
+  # `assignment_finished` for the panel and logs the Monitor's finished event, and completes
+  # the participation (left as is when the Done button completed it already). The Monitor
+  # event marks a notified member: every dispatch has logged it, also before the
+  # participation recorded completion, so a member who has it gets nothing new.
   defp finish_member(assignment, member) do
     %{user: user} = member = Repo.preload(member, :user)
 
-    unless participation_completed?(get_participation(assignment, user)) do
-      {:ok, participation} = obtain_participation(assignment, user)
-
-      {:ok, _} =
-        participation
-        |> complete_participation_multi(
-          &Signal.Public.multi_dispatch(&1, {:crew_member, :finished_tasks},
-            name: :finished_tasks,
-            message: %{crew_member: member}
-          )
-        )
-        |> Repo.commit()
+    unless Assignment.Private.finished_logged?(assignment, user) do
+      {:ok, _} = complete_participation(assignment, user)
+      Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: member})
     end
   end
-
-  defp participation_completed?(%{completed_at: %NaiveDateTime{}}), do: true
-  defp participation_completed?(_participation), do: false
 
   # A transaction-scoped advisory lock, so it can't deadlock with the row locks that
   # expiring or rejecting a member takes on the member, its participation and its tasks.
@@ -1044,14 +1044,6 @@ defmodule Systems.Assignment.Public do
 
   defp items_finished?(crew, assignment, items, member) do
     Enum.all?(items, &(task_status(crew, assignment, &1, member) in finished_states()))
-  end
-
-  # The rule before required items: every task the member has is finished.
-  defp existing_tasks_finished?(crew, assignment, items, member) do
-    items
-    |> Enum.map(&task_status(crew, assignment, &1, member))
-    |> Enum.reject(&is_nil/1)
-    |> Enum.all?(&(&1 in finished_states()))
   end
 
   defp task_status(crew, assignment, item, member) do
@@ -1178,7 +1170,7 @@ defmodule Systems.Assignment.Public do
 
   def complete_participation(%Assignment.ParticipationModel{} = participation) do
     participation
-    |> complete_participation_multi(& &1)
+    |> complete_participation_multi()
     |> Repo.commit()
     |> case do
       {:ok, %{assignment_participation: participation}} -> {:ok, participation}
@@ -1187,13 +1179,10 @@ defmodule Systems.Assignment.Public do
   end
 
   # Sets `completed_at` only where it is still empty, so of concurrent calls exactly one
-  # completes the participation; only that one adds the reward step, the signal and
-  # `on_completed`. The other calls change nothing and don't fail, so they never roll
-  # back a transaction they run in (such as the one completing a crew task).
-  defp complete_participation_multi(
-         %Assignment.ParticipationModel{} = participation,
-         on_completed
-       ) do
+  # completes the participation; only that one adds the reward step and the signal. The
+  # other calls change nothing and don't fail, so they never roll back a transaction they
+  # run in (such as the one completing a crew task).
+  defp complete_participation_multi(%Assignment.ParticipationModel{} = participation) do
     %{id: id} = participation = Repo.preload(participation, :assignment)
     completed_at = Timestamp.naive_now()
     open = from(p in Assignment.ParticipationModel, where: p.id == ^id and is_nil(p.completed_at))
@@ -1208,7 +1197,6 @@ defmodule Systems.Assignment.Public do
         |> Multi.put(:assignment_participation, %{participation | completed_at: completed_at})
         |> maybe_reward_step(participation, &Fund.Public.mark_pending_approval/2)
         |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
-        |> on_completed.()
 
       %{completed: {0, _}} ->
         Multi.put(Multi.new(), :assignment_participation, Repo.reload!(participation))

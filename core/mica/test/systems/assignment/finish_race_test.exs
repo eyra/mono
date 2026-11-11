@@ -3,8 +3,8 @@ defmodule Systems.Assignment.FinishRaceTest do
   Proves that when a member's last two required tasks complete in overlapping
   transactions, exactly one of them finishes the member.
 
-  Runs outside the SQL sandbox (`:auto` mode, truncating the tables it filled
-  afterwards): the two completions have to run on *separate* database connections,
+  Runs outside the SQL sandbox (`:auto` mode, deleting the rows it added afterwards):
+  the two completions have to run on *separate* database connections,
   which a single shared sandbox connection cannot express. The test holds a lock on
   `monitor_events`, which each completion writes after updating its task and before
   checking whether the member is finished, so both are in the middle of their
@@ -25,8 +25,8 @@ defmodule Systems.Assignment.FinishRaceTest do
 
   setup do
     Sandbox.mode(Repo, :auto)
-    empty_tables = empty_tables()
-    on_exit(fn -> reset_sandbox(empty_tables) end)
+    snapshot = snapshot()
+    on_exit(fn -> reset_sandbox(snapshot) end)
 
     assignment =
       Assignment.Factories.create_template_assignment(:data_donation, [
@@ -116,30 +116,57 @@ defmodule Systems.Assignment.FinishRaceTest do
         do: progress
   end
 
-  defp empty_tables do
+  # What each table holds before the test: the highest id, or for a table without an id
+  # column its rows, so afterwards exactly the rows the test added can be deleted, also
+  # from tables the migrations or seeds already filled.
+  defp snapshot do
     %{rows: rows} =
       Repo.query!("""
-      SELECT relname FROM pg_class
-      WHERE relkind = 'r' AND relnamespace = 'public'::regnamespace
-        AND relname <> 'schema_migrations'
+      SELECT t.relname, EXISTS (
+        SELECT 1 FROM pg_attribute a
+        WHERE a.attrelid = t.oid AND a.attname = 'id' AND NOT a.attisdropped
+      )
+      FROM pg_class t
+      WHERE t.relkind = 'r' AND t.relnamespace = 'public'::regnamespace
+        AND t.relname <> 'schema_migrations'
       """)
 
-    Enum.filter(List.flatten(rows), &(row_count(&1) == 0))
+    Map.new(rows, fn
+      [table, true] -> {table, {:max_id, max_id(table)}}
+      [table, false] -> {table, {:rows, rows(table)}}
+    end)
   end
 
-  defp row_count(table) do
-    %{rows: [[count]]} = Repo.query!(~s|SELECT count(*) FROM "#{table}"|)
-    count
+  defp max_id(table) do
+    %{rows: [[max_id]]} = Repo.query!(~s|SELECT coalesce(max(id), 0) FROM "#{table}"|)
+    max_id
   end
 
-  # Empties the tables this test filled, so later sandboxed tests start from the same data
-  defp reset_sandbox(empty_tables) do
-    filled = Enum.filter(empty_tables, &(row_count(&1) > 0))
+  defp rows(table) do
+    %{rows: rows} = Repo.query!(~s|SELECT to_jsonb(t) FROM "#{table}" AS t|)
+    List.flatten(rows)
+  end
 
-    unless filled == [] do
-      Repo.query!("TRUNCATE #{Enum.map_join(filled, ", ", &~s|"#{&1}"|)} CASCADE")
-    end
+  # Deletes the rows this test added, so later sandboxed tests start from the same data.
+  # Foreign key triggers are off for this transaction only, so the order doesn't matter.
+  defp reset_sandbox(snapshot) do
+    # credo:disable-for-next-line Credo.Check.Warning.NoRepoTransaction
+    {:ok, _} = Repo.transaction(fn -> delete_added_rows(snapshot) end)
   after
     Sandbox.mode(Repo, :manual)
+  end
+
+  defp delete_added_rows(snapshot) do
+    Repo.query!("SET LOCAL session_replication_role = replica")
+
+    Enum.each(snapshot, fn
+      {table, {:max_id, max_id}} ->
+        Repo.query!(~s|DELETE FROM "#{table}" WHERE id > $1|, [max_id])
+
+      {table, {:rows, rows}} ->
+        Repo.query!(~s|DELETE FROM "#{table}" AS t WHERE NOT (to_jsonb(t) = ANY($1::jsonb[]))|, [
+          rows
+        ])
+    end)
   end
 end

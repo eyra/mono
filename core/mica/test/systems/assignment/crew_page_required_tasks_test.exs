@@ -172,19 +172,26 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
   end
 
   # Before the participation had `completed_at`, the rule then (all tasks finished) already
-  # sent these participants assignment_finished, so a visit must not send it again.
-  for participation <- [:without_completed_at, :without_participation] do
+  # sent these participants assignment_finished and logged the Monitor event, so a visit
+  # must not send it again; also not after a manual was added to the workflow later.
+  for participation <- [:without_completed_at, :without_participation],
+      workflow <- [:unchanged, :manual_added_later] do
     @participation participation
+    @workflow workflow
 
-    describe "a participant who finished all tasks before completion was recorded (#{participation})" do
+    describe "a participant who finished all tasks before completion was recorded (#{participation}, #{workflow})" do
       setup %{assignment: assignment, revision: revision, user: user} do
         join_from_panel(assignment, user)
         {:ok, _} = Consent.Public.create_signature(revision, user)
         open_tasks(assignment, user)
-        finish_without_signals(assignment, user)
+        finish_as_before_completion_was_recorded(assignment, user)
 
         if @participation == :without_completed_at do
           {:ok, %{completed_at: nil}} = Assignment.Public.obtain_participation(assignment, user)
+        end
+
+        if @workflow == :manual_added_later do
+          add_download_manual_and_open_it(assignment, user)
         end
 
         :ok
@@ -199,12 +206,12 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
         assert [] = progress_events(user, "assignment_finished")
       end
 
-      test "gets no Monitor finished event when they open the assignment", %{
+      test "gets no second Monitor finished event when they open the assignment", %{
         conn: conn,
         assignment: assignment
       } do
         open_crew_page(conn, assignment)
-        assert 0 = finished_count(assignment)
+        assert 1 = finished_rows(assignment)
       end
 
       test "is not completed when they open the assignment", %{
@@ -242,6 +249,86 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
       open_crew_page(conn, assignment)
       assert completed?(assignment, user)
       assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+  end
+
+  describe "a researcher removing a participant's last open required item, with nothing else open" do
+    setup %{assignment: assignment, revision: revision, user: user} do
+      join_from_panel(assignment, user)
+      {:ok, _} = Consent.Public.create_signature(revision, user)
+      open_tasks(assignment, user)
+      complete_task(assignment, user, :manual)
+      complete_task(assignment, user, :donate)
+
+      {:ok, _} = Workflow.Public.delete(item(assignment, :questionnaire))
+      :ok
+    end
+
+    test "finishes the participant once they open the assignment", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      assert completed?(assignment, user)
+    end
+
+    test "sends one assignment_finished once they open the assignment", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+  end
+
+  describe "a participant who presses Done before their last required task" do
+    setup %{conn: conn, assignment: assignment, revision: revision, user: user} do
+      join_from_panel(assignment, user)
+      {:ok, _} = Consent.Public.create_signature(revision, user)
+      page = open_crew_page(conn, assignment)
+      complete_in_task_list(page, item(assignment, :donate))
+
+      # The task list's "Next, I am done" button
+      send_event(page, :work_done)
+      completed_after_done = completed?(assignment, user)
+
+      complete_task(assignment, user, :questionnaire)
+      %{completed_after_done: completed_after_done}
+    end
+
+    test "is completed by Done", %{completed_after_done: completed_after_done} do
+      assert completed_after_done
+    end
+
+    test "gets assignment_finished once their last required task completes", %{user: user} do
+      assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+  end
+
+  describe "a tester whose required tasks are done but who wasn't finished then" do
+    setup %{assignment: assignment, revision: revision, user: user} do
+      join_from_panel(assignment, user)
+      Assignment.Factories.add_tester(assignment, user)
+      {:ok, _} = Consent.Public.create_signature(revision, user)
+
+      set_required(assignment, :manual, true)
+      open_tasks(assignment, user)
+      complete_task(assignment, user, :donate)
+      complete_task(assignment, user, :questionnaire)
+      set_required(assignment, :manual, false)
+      :ok
+    end
+
+    test "gets no assignment_finished on their visits", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      open_crew_page(conn, assignment)
+      assert [] = progress_events(user, "assignment_finished")
     end
   end
 
@@ -288,15 +375,35 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     for special <- [:manual, :donate, :questionnaire], do: task(assignment, user, special)
   end
 
-  # Finishes every task the way the data looks for a participant from before completion
-  # was recorded: the task rows only, no participation and no new events.
-  defp finish_without_signals(assignment, user) do
+  # The data of a participant who finished before completion was recorded: every task
+  # finished and the Monitor event the old rule's dispatch logged, but no completed_at.
+  defp finish_as_before_completion_was_recorded(%{crew: crew} = assignment, user) do
     for special <- [:manual, :donate, :questionnaire] do
       assignment
       |> task(user, special)
       |> Ecto.Changeset.change(status: :completed)
       |> Repo.update!()
     end
+
+    member = Crew.Public.get_member(crew, user)
+    Assignment.Private.log_performance_event(assignment, :finished, member)
+  end
+
+  defp add_download_manual_and_open_it(%{workflow_id: workflow_id} = assignment, user) do
+    %{library: %{items: library}} =
+      :data_donation
+      |> Assignment.Private.get_template()
+      |> Assignment.Template.workflow_config()
+
+    download_manual = Enum.find(library, &(&1.id == :download_manual))
+    owner = Factories.insert!(:member)
+
+    {:ok, %{workflow_item: item}} =
+      Workflow.Public.add_item(workflow_id, download_manual, :assignment, owner)
+
+    member = Crew.Public.get_member(assignment.crew, user)
+    identifier = Assignment.Private.task_identifier(assignment, item, member)
+    Crew.Public.create_task!(assignment.crew, [user], identifier)
   end
 
   defp complete_task(assignment, user, special) do
@@ -325,6 +432,10 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     for %{args: %{"user_id" => ^user_id, "event" => %{"progress" => ^progress}}} <-
           all_enqueued(worker: Systems.Affiliate.CallbackWorker),
         do: progress
+  end
+
+  defp finished_rows(assignment) do
+    Systems.Monitor.Public.event({assignment, :finished}) |> Systems.Monitor.Public.count()
   end
 
   defp finished_count(assignment) do
