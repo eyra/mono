@@ -808,4 +808,4 @@ msgstr "Deze studie heeft geen taken."
 
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
-msgstr "Deelnemers die al meedoen op het moment dat je 'Tonen' kiest, zien deze pagina niet. Alleen deelnemers die daarna meedoen, wordt om toestemming gevraagd."
+msgstr "Kies je 'Tonen', dan worden deelnemers die zich aanmeldden terwijl deze pagina werd overgeslagen, of die al toestemming gaven, niet gevraagd. Wie zich aanmeldde toen de pagina eerder werd getoond en nooit ja zei, wordt opnieuw gevraagd."

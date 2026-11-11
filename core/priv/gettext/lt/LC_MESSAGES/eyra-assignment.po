@@ -820,4 +820,4 @@ msgstr "Šiame tyrime nėra užduočių."
 
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
-msgstr "Dalyviai, kurie jau dalyvauja, kai pasirenkama „Rodyti“, šio puslapio nematys. Sutikimo prašoma tik vėliau prisijungusių dalyvių."
+msgstr "Pasirinkus „Rodyti“, neklausiama dalyvių, kurie prisijungė, kai šis puslapis buvo praleidžiamas, arba kurie jau davė sutikimą. Dalyvių, kurie prisijungė, kai puslapis anksčiau buvo rodomas, ir niekada nesutiko, klausiama dar kartą."

@@ -400,7 +400,7 @@ defmodule Systems.Assignment.Public do
   defp update_consent(id, changeset_fun) do
     Multi.new()
     |> Multi.run(:stored, fn repo, _ ->
-      from(a in Assignment.Model, where: a.id == ^id, lock: "FOR UPDATE")
+      from(a in Assignment.Model, where: a.id == ^id, lock: "FOR NO KEY UPDATE")
       |> repo.one!()
       |> repo.preload([:consent_agreement, :auth_node])
       |> then(&{:ok, &1})

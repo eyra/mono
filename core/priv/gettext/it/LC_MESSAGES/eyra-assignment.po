@@ -809,4 +809,4 @@ msgstr "Questo studio non ha task."
 
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
-msgstr "I partecipanti che stanno già partecipando quando scegli 'Mostra' non vedranno questa pagina. Il consenso viene chiesto solo a chi si unisce dopo."
+msgstr "Quando scegli 'Mostra', non viene chiesto il consenso ai partecipanti che si sono uniti mentre questa pagina veniva saltata o che l'hanno già dato. A chi si è unito quando la pagina veniva mostrata in precedenza e non ha mai detto sì viene chiesto di nuovo."

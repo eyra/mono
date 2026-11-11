@@ -67,6 +67,6 @@ defmodule Systems.Assignment.SettingsViewTest do
     assert view
            |> element("[data-testid='consent-existing-participants']")
            |> render() =~
-             "Only participants who join after that are asked for consent."
+             "Participants who joined while it was shown before and never said yes are asked again."
   end
 end
