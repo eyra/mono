@@ -34,9 +34,18 @@ defmodule Systems.Account.SignupPage do
 
   @impl true
   def mount(%{"user_type" => user_type} = params, _session, socket) do
-    require_feature(:password_sign_in)
     creator? = user_type == "creator"
-    post_signup_action = parse_post_signup_action(params)
+    user_type = if creator?, do: :creator, else: :participant
+    post_signup_action = Params.parse_string_param(params, "post_signup_action")
+
+    case Mica.SaaS.module().sign_up_page(user_type, post_signup_action) do
+      nil -> mount_signup(creator?, parse_post_signup_action(post_signup_action), socket)
+      sign_up_page -> {:ok, redirect(socket, to: sign_up_page)}
+    end
+  end
+
+  defp mount_signup(creator?, post_signup_action, socket) do
+    require_feature(:password_sign_in)
     changeset = Account.Public.change_user_registration(%User{})
 
     {
@@ -220,12 +229,10 @@ defmodule Systems.Account.SignupPage do
     ~p"/user/onboarding/await-confirmation"
   end
 
-  defp parse_post_signup_action(params) do
-    case Params.parse_string_param(params, "post_signup_action") do
-      "add_to_panl" -> if feature_enabled?(:panl), do: "add_to_panl", else: nil
-      other -> other
-    end
-  end
+  defp parse_post_signup_action("add_to_panl"),
+    do: if(feature_enabled?(:panl), do: "add_to_panl", else: nil)
+
+  defp parse_post_signup_action(post_signup_action), do: post_signup_action
 
   @impl true
   def render(assigns) do

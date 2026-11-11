@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import { waitForLiveView, waitForNavigation, debugLiveViewState } from './lib/liveview';
-import { missingFeaturesReason } from './lib/features';
+import { featureEnabled, missingFeaturesReason } from './lib/features';
 
 /**
  * PaNL Onboarding E2E Test
@@ -18,7 +18,10 @@ import { missingFeaturesReason } from './lib/features';
 // Skip all tests in this file when required features are not enabled.
 // `missingFeaturesReason` reads from ENABLED_APP_FEATURES, which is
 // populated by global-setup from the server's /api/e2e/features.
-const SKIP_REASON = missingFeaturesReason('panl', 'panl_post_launch');
+// With sign-in codes on, `/user/signup` sends to the code page instead.
+const SKIP_REASON =
+  missingFeaturesReason('panl', 'panl_post_launch') ||
+  (featureEnabled('otp') ? 'otp is on: the password sign-up page sends to the code page' : '');
 
 function generateTestEmail(): string {
   const timestamp = Date.now();

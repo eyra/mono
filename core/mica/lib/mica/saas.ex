@@ -39,12 +39,26 @@ defmodule Mica.SaaS do
   @callback member_sign_in_page(return_to :: String.t()) :: String.t()
 
   @doc """
+  Where a signed-out user is sent to sign up instead of the password sign-up
+  page (`/user/signup/:user_type`), or nil to keep that page. The page's
+  `post_signup_action` param is passed along, nil when it has none.
+  """
+  @callback sign_up_page(
+              user_type :: :creator | :participant,
+              post_signup_action :: String.t() | nil
+            ) :: String.t() | nil
+
+  @doc """
   The SaaS defaults of declared feature flags: `[password_sign_in: true]`. Every
   name must be declared by one of its systems (`c:Mica.System.feature_flags/0`).
   """
   @callback feature_flags() :: keyword(boolean())
 
-  @optional_callbacks title: 0, sign_in_page: 0, member_sign_in_page: 1, feature_flags: 0
+  @optional_callbacks title: 0,
+                      sign_in_page: 0,
+                      member_sign_in_page: 1,
+                      sign_up_page: 2,
+                      feature_flags: 0
 
   defmacro __using__(_opts) do
     quote do
@@ -57,7 +71,13 @@ defmodule Mica.SaaS do
 
       def member_sign_in_page(_return_to), do: sign_in_page()
 
-      defoverridable title: 0, sign_in_page: 0, member_sign_in_page: 1, feature_flags: 0
+      def sign_up_page(_user_type, _post_signup_action), do: nil
+
+      defoverridable title: 0,
+                     sign_in_page: 0,
+                     member_sign_in_page: 1,
+                     sign_up_page: 2,
+                     feature_flags: 0
     end
   end
 

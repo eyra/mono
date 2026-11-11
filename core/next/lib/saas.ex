@@ -73,4 +73,27 @@ defmodule Next.SaaS do
       do: MicaWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
       else: "/user/signin"
   end
+
+  # With sign-in codes on, the code page signs new users up too.
+  @impl true
+  def sign_up_page(user_type, post_signup_action) do
+    if feature_enabled?(:otp), do: code_sign_up_page(user_type, post_signup_action)
+  end
+
+  defp code_sign_up_page(:creator, _post_signup_action), do: "/user/auth/identify"
+
+  defp code_sign_up_page(:participant, post_signup_action) do
+    MicaWeb.ReturnTo.append(
+      "/user/auth/identify/participant",
+      post_signup_return_to(post_signup_action)
+    )
+  end
+
+  # The code flow joins Panl through its join page, where the password sign-up
+  # page took `post_signup_action=add_to_panl`.
+  defp post_signup_return_to("add_to_panl") do
+    if feature_enabled?(:panl), do: "/pool/panl/join"
+  end
+
+  defp post_signup_return_to(_post_signup_action), do: nil
 end
