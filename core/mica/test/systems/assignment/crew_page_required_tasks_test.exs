@@ -3,6 +3,7 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
   use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
 
+  alias Mica.Repo
   alias Systems.Account
   alias Systems.Assignment
   alias Systems.Consent
@@ -114,6 +115,88 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     end
   end
 
+  describe "a participant who did the donation and questionnaire before the manuals stopped counting" do
+    setup %{assignment: assignment, revision: revision, user: user} do
+      join_from_panel(assignment, user)
+      {:ok, _} = Consent.Public.create_signature(revision, user)
+
+      # Before the migration every item counted, so the open manual kept them unfinished
+      set_required(assignment, :manual, true)
+      complete_task(assignment, user, :donate)
+      complete_task(assignment, user, :questionnaire)
+      set_required(assignment, :manual, false)
+      :ok
+    end
+
+    test "is not finished before they open the assignment", %{assignment: assignment, user: user} do
+      refute completed?(assignment, user)
+      assert [] = progress_events(user, "assignment_finished")
+    end
+
+    test "is finished when they open the assignment", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      assert completed?(assignment, user)
+    end
+
+    test "gets one assignment_finished when they open the assignment", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+
+    test "is counted as finished in the Monitor when they open the assignment", %{
+      conn: conn,
+      assignment: assignment
+    } do
+      open_crew_page(conn, assignment)
+      assert 1 = finished_count(assignment)
+    end
+
+    test "gets no second assignment_finished on a second visit", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      open_crew_page(conn, assignment)
+      assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+  end
+
+  describe "a researcher removing a participant's last open required item" do
+    setup %{assignment: assignment, revision: revision, user: user} do
+      join_from_panel(assignment, user)
+      {:ok, _} = Consent.Public.create_signature(revision, user)
+      complete_task(assignment, user, :donate)
+      _questionnaire_task = task(assignment, user, :questionnaire)
+
+      {:ok, _} = Workflow.Public.delete(item(assignment, :questionnaire))
+      :ok
+    end
+
+    test "finishes nobody", %{assignment: assignment, user: user} do
+      refute completed?(assignment, user)
+      assert [] = progress_events(user, "assignment_finished")
+    end
+
+    test "finishes the participant once they open the assignment", %{
+      conn: conn,
+      assignment: assignment,
+      user: user
+    } do
+      open_crew_page(conn, assignment)
+      assert completed?(assignment, user)
+      assert ["assignment_finished"] = progress_events(user, "assignment_finished")
+    end
+  end
+
   defp open_crew_page(conn, assignment, redirect_url \\ nil) do
     panel_info = %{panel: :affiliate, redirect_url: redirect_url, participant: "p1"}
 
@@ -154,5 +237,33 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
 
   defp complete_task(assignment, user, special) do
     {:ok, _} = Crew.Public.complete_task(task(assignment, user, special))
+  end
+
+  # A participant who entered through a panel link with a callback URL
+  defp join_from_panel(%{affiliate: affiliate} = assignment, user) do
+    Repo.update!(Ecto.Changeset.change(affiliate, callback_url: "https://panel.example/cb"))
+    Assignment.Factories.add_affiliate_user(assignment, user, "p1")
+  end
+
+  defp set_required(assignment, special, required) do
+    item = Repo.reload!(item(assignment, special))
+    Repo.update!(Ecto.Changeset.change(item, required: required))
+  end
+
+  defp completed?(assignment, user) do
+    match?(
+      %{completed_at: %NaiveDateTime{}},
+      Assignment.Public.get_participation(assignment, user)
+    )
+  end
+
+  defp progress_events(%{id: user_id}, progress) do
+    for %{args: %{"user_id" => ^user_id, "event" => %{"progress" => ^progress}}} <-
+          all_enqueued(worker: Systems.Affiliate.CallbackWorker),
+        do: progress
+  end
+
+  defp finished_count(assignment) do
+    Systems.Monitor.Public.event({assignment, :finished}) |> Systems.Monitor.Public.unique()
   end
 end

@@ -222,6 +222,42 @@ defmodule Systems.Assignment.RequiredTasksTest do
     end
   end
 
+  describe "finish_if_required_tasks_finished/2 guards" do
+    test "crashes without an assignment" do
+      assert_raise FunctionClauseError, fn ->
+        apply(Assignment.Public, :finish_if_required_tasks_finished, [nil, %Crew.MemberModel{}])
+      end
+    end
+
+    test "does nothing without a member" do
+      assignment = Assignment.Factories.create_template_assignment(:data_donation, [:donate])
+      assert :ok = Assignment.Public.finish_if_required_tasks_finished(assignment, nil)
+    end
+  end
+
+  describe "finish_if_required_tasks_finished/2" do
+    setup do
+      assignment =
+        Assignment.Factories.create_template_assignment(:data_donation, @data_donation_items)
+
+      Map.put(join_from_panel(assignment), :assignment, assignment)
+    end
+
+    test "does nothing while a required task is open", %{assignment: assignment} = participant do
+      complete(participant, :donate)
+      :ok = Assignment.Public.finish_if_required_tasks_finished(assignment, participant.member)
+      assert [] = progress_events(participant.user, "assignment_finished")
+    end
+
+    test "does nothing for a member finished at their last required task",
+         %{assignment: assignment} = participant do
+      complete(participant, :donate)
+      complete(participant, :questionnaire)
+      :ok = Assignment.Public.finish_if_required_tasks_finished(assignment, participant.member)
+      assert ["assignment_finished"] = progress_events(participant.user, "assignment_finished")
+    end
+  end
+
   defp item(%{workflow: %{id: workflow_id}}, special) do
     workflow_id
     |> Workflow.Public.list_items([:tool_ref])
