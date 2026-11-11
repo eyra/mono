@@ -70,6 +70,37 @@ defmodule Next.Systems.Probe.AssignmentTemplateTest do
 
       assert task_view.implementation == Assignment.CrewTaskHorizontalListView
     end
+
+    test "a Probe assignment with more than one task has no done button" do
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(nil, nil, %{special: :probe})
+        |> Assignment.Factories.add_task()
+
+      assert Assignment.Private.task_view(assignment) == :horizontal_list
+      refute Assignment.Private.done_button?(assignment, %{redirect_url: nil})
+    end
+
+    # The done screen shows Back exactly when the task list showed the done button
+    test "the done screen of a Probe assignment has no Back, also with a redirect URL" do
+      user = Factories.insert!(:member)
+      redirect_url = "https://example.com/return"
+
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, nil, %{
+          special: :probe
+        })
+        |> Assignment.Factories.add_affiliate_user(user)
+        |> Assignment.Factories.add_task()
+
+      assigns = %{
+        current_user: user,
+        timezone: "UTC",
+        live_context: %{data: %{panel_info: %{redirect_url: redirect_url}}}
+      }
+
+      assert %{back_button: nil, continue_button: %{}} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+    end
   end
 
   describe "feature flag" do

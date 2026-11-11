@@ -16,8 +16,12 @@ defmodule Systems.Assignment.FinishedViewTest do
   end
 
   describe "normal completion without redirect" do
-    test "renders finished view with illustration and no back button", %{conn: conn, user: user} do
-      assignment = Assignment.Factories.create_assignment_with_affiliate(nil)
+    test "data donation: renders finished view with illustration and no back button", %{
+      conn: conn,
+      user: user
+    } do
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(nil, nil, %{special: :data_donation})
 
       conn = conn |> Map.put(:request_path, "/assignment/finished")
 
@@ -50,6 +54,29 @@ defmodule Systems.Assignment.FinishedViewTest do
       # Should NOT show continue button
       refute view |> has_element?("[data-testid='continue-button']")
     end
+
+    test "multi-task questionnaire: renders finished view with back button", %{
+      conn: conn,
+      user: user
+    } do
+      assignment =
+        Assignment.Factories.create_questionnaire_assignment()
+        |> Assignment.Factories.add_task()
+
+      conn = conn |> Map.put(:request_path, "/assignment/finished")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Assignment.FinishedView, session: %{"live_context" => live_context})
+
+      assert view |> has_element?("[data-testid='back-button']")
+      refute view |> has_element?("[data-testid='continue-button']")
+    end
   end
 
   describe "back button" do
@@ -59,6 +86,7 @@ defmodule Systems.Assignment.FinishedViewTest do
       assignment =
         Assignment.Factories.create_assignment_with_affiliate(redirect_url)
         |> Assignment.Factories.add_affiliate_user(user)
+        |> Assignment.Factories.add_task()
 
       conn = conn |> Map.put(:request_path, "/assignment/finished")
 
@@ -123,8 +151,8 @@ defmodule Systems.Assignment.FinishedViewTest do
       # Should NOT show illustration
       refute view |> has_element?("[data-testid='finished-illustration']")
 
-      # Should show back button
-      assert view |> has_element?("[data-testid='back-button']")
+      # Single task: no done button, so no back button
+      refute view |> has_element?("[data-testid='back-button']")
 
       # Should show continue button
       assert view |> has_element?("[data-testid='continue-button']")

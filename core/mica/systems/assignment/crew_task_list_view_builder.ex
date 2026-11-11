@@ -36,7 +36,7 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
       work_list: %{
         items: Enum.map(work_items, &map_item/1),
         selected_item_id: nil,
-        done_button?: done_button?(assignment, context)
+        done_button?: Assignment.Private.done_button?(assignment, context.data[:panel_info])
       },
       work_items: work_items,
       work_item_id: work_item_id,
@@ -52,17 +52,6 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
   end
 
   defp find_work_item(_, _), do: nil
-
-  defp done_button?(assignment, %{data: data}) do
-    case Assignment.Private.runtime_config(assignment) do
-      %{done_button_requires_redirect?: true} -> redirect_url?(Map.get(data, :panel_info))
-      _ -> true
-    end
-  end
-
-  defp redirect_url?(%{redirect_url: url}) when is_binary(url) and url != "", do: true
-
-  defp redirect_url?(_), do: false
 
   defp build_tool_modal({workflow_item, _task}, context) do
     %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item

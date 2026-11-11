@@ -43,6 +43,20 @@ defmodule Systems.Assignment.Factories do
     })
   end
 
+  def add_task(%{workflow: %{items: items} = workflow} = assignment) do
+    tool = create_tool(Factories.insert!(:auth_node))
+
+    create_workflow_item(
+      workflow,
+      create_tool_ref(tool),
+      "Task #{length(items) + 1}",
+      length(items)
+    )
+
+    assignment
+    |> Mica.Repo.preload([workflow: Systems.Workflow.Model.preload_graph(:down)], force: true)
+  end
+
   def create_assignment(info, consent_agreement, workflow, auth_node, %Fund.Model{} = fund) do
     crew = Factories.insert!(:crew)
 
@@ -126,7 +140,7 @@ defmodule Systems.Assignment.Factories do
     assignment |> Mica.Repo.preload([:crew], force: true)
   end
 
-  def create_assignment_with_affiliate(redirect_url \\ nil, platform_name \\ nil) do
+  def create_assignment_with_affiliate(redirect_url \\ nil, platform_name \\ nil, attrs \\ %{}) do
     affiliate =
       Factories.insert!(:affiliate, %{redirect_url: redirect_url, platform_name: platform_name})
 
@@ -141,15 +155,21 @@ defmodule Systems.Assignment.Factories do
     crew = Factories.insert!(:crew)
 
     assignment =
-      Factories.insert!(:assignment, %{
-        info: info,
-        consent_agreement: nil,
-        workflow: workflow,
-        crew: crew,
-        auth_node: auth_node,
-        affiliate: affiliate,
-        status: :online
-      })
+      Factories.insert!(
+        :assignment,
+        Map.merge(
+          %{
+            info: info,
+            consent_agreement: nil,
+            workflow: workflow,
+            crew: crew,
+            auth_node: auth_node,
+            affiliate: affiliate,
+            status: :online
+          },
+          attrs
+        )
+      )
 
     assignment |> Mica.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
