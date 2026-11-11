@@ -2,8 +2,6 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   use Mica.DataCase
   use Gettext, backend: MicaWeb.Gettext
 
-  import Ecto.Query
-
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Account
@@ -395,16 +393,109 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     end
   end
 
+  describe "participants who never consented are asked again" do
+    setup do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(120)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      %{user: user, assignment: assignment}
+    end
+
+    test "a participant who joined while consent was on and didn't sign, after off and on", %{
+      user: user,
+      assignment: assignment
+    } do
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a participant who declined and came back through the panel link, after off and on", %{
+      user: user,
+      assignment: assignment
+    } do
+      Assignment.Public.expire_member(assignment, user)
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a second switch-on from a view loaded while consent was off changes nothing", %{
+      user: user,
+      assignment: assignment
+    } do
+      stale_view = %{assignment | consent_agreement_id: nil, consent_agreement: nil}
+      Assignment.Factories.switch_consent(stale_view, :on)
+
+      %{view: view} =
+        Assignment.CrewPageBuilder.view_model(reload(assignment), build_assigns(user))
+
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "participants who joined while consent was off" do
+    test "are not asked when consent is switched on again" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(120)
+
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      assignment
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_embed(:consent_periods, [
+        %Assignment.ConsentPeriodModel{
+          started_at: NaiveDateTime.add(now, -120),
+          ended_at: NaiveDateTime.add(now, -90)
+        }
+      ])
+      |> Repo.update!()
+
+      assignment = assignment |> reload() |> Assignment.Factories.add_participant(user)
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+    end
+  end
+
+  describe "an assignment that older code switched on" do
+    test "asks a participant who joined after its agreement was created" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_base_assignment()
+        |> Assignment.Factories.switch_consent_on_as_old_code(120)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
   # Helper functions
   defp switch_consent_on(assignment), do: Assignment.Factories.switch_consent(assignment, :on)
   defp switch_consent_off(assignment), do: Assignment.Factories.switch_consent(assignment, :off)
 
-  defp join_earlier(%{crew: %{id: crew_id}}, %{id: user_id}) do
-    joined_at = NaiveDateTime.add(NaiveDateTime.utc_now(), -60) |> NaiveDateTime.truncate(:second)
+  defp join_earlier(assignment, user), do: Assignment.Factories.joined_since(assignment, user, 60)
 
-    from(m in Crew.MemberModel, where: m.crew_id == ^crew_id and m.user_id == ^user_id)
-    |> Repo.update_all(set: [inserted_at: joined_at])
-  end
+  defp reload(%{id: id}), do: Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
 
   defp mark_intro_visited(%{id: assignment_id}, user) do
     Account.Public.mark_as_visited(user, {:assignment_information, assignment_id})

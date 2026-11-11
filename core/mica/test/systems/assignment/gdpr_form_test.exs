@@ -71,6 +71,16 @@ defmodule Systems.Assignment.GdprFormTest do
     end
   end
 
+  describe "an assignment that older code switched on" do
+    test "shows consent on" do
+      assignment =
+        Assignment.Factories.create_base_assignment()
+        |> Assignment.Factories.switch_consent_on_as_old_code(120)
+
+      assert status(assignment) == :on
+    end
+  end
+
   defp assert_off_and_kept(assignment, agreement, revision, participant) do
     assert status(assignment) == :off
     assert assignment.consent_agreement_id == agreement.id

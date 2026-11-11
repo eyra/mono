@@ -24,9 +24,10 @@ defmodule Systems.Assignment.Model do
     field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     # external_panel is deprecated, use affiliate association instead
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
-    # Consent is on since this moment; nil means off. The agreement stays linked
+    # When consent was on. Empty means on since the agreement was created, which is
+    # how a new assignment, and older code, leave it. The agreement stays linked
     # while consent is off, so its texts and signatures are kept.
-    field(:consent_enabled_at, :naive_datetime)
+    embeds_many(:consent_periods, Assignment.ConsentPeriodModel, on_replace: :delete)
 
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:affiliate, Affiliate.Model)
@@ -87,8 +88,23 @@ defmodule Systems.Assignment.Model do
   end
 
   def consent_on?(%Assignment.Model{consent_agreement_id: nil}), do: false
-  def consent_on?(%Assignment.Model{consent_enabled_at: nil}), do: false
-  def consent_on?(%Assignment.Model{}), do: true
+  def consent_on?(%Assignment.Model{consent_periods: []}), do: true
+
+  def consent_on?(%Assignment.Model{consent_periods: periods}),
+    do: match?(%{ended_at: nil}, List.last(periods))
+
+  @doc """
+  The periods in which consent was on, oldest first.
+  """
+  def consent_periods(%Assignment.Model{consent_agreement_id: nil}), do: []
+
+  def consent_periods(%Assignment.Model{
+        consent_periods: [],
+        consent_agreement: %Consent.AgreementModel{inserted_at: inserted_at}
+      }),
+      do: [%Assignment.ConsentPeriodModel{started_at: inserted_at}]
+
+  def consent_periods(%Assignment.Model{consent_periods: periods}), do: periods
 
   def language(%Assignment.Model{info: info}), do: language(info)
   def language(%Assignment.InfoModel{language: language}), do: language(language)

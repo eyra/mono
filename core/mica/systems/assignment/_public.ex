@@ -264,12 +264,8 @@ defmodule Systems.Assignment.Public do
     |> Ecto.Changeset.put_assoc(:crew, crew)
     |> Ecto.Changeset.put_assoc(:fund, fund)
     |> Ecto.Changeset.put_assoc(:consent_agreement, consent_agreement)
-    |> Ecto.Changeset.put_change(:consent_enabled_at, consent_enabled_at(consent_agreement))
     |> Ecto.Changeset.put_assoc(:auth_node, auth_node)
   end
-
-  defp consent_enabled_at(nil), do: nil
-  defp consent_enabled_at(_consent_agreement), do: Timestamp.naive_now()
 
   def prepare_participation(%Assignment.Model{} = assignment, %User{} = user) do
     %Assignment.ParticipationModel{}
@@ -388,35 +384,80 @@ defmodule Systems.Assignment.Public do
   Switches consent on. Reuses the assignment's agreement, so its texts and
   signatures come back; creates one when the assignment has none yet.
   """
-  def enable_consent(
-        %Assignment.Model{consent_agreement_id: nil, auth_node: auth_node} = assignment
-      ) do
-    assignment
-    |> Repo.preload(:consent_agreement)
-    |> Assignment.Model.changeset(%{})
-    |> Ecto.Changeset.put_assoc(:consent_agreement, Consent.Public.prepare_agreement(auth_node))
-    |> Ecto.Changeset.put_change(:consent_enabled_at, Timestamp.naive_now())
-    |> then(&Mica.Persister.save(assignment, &1))
-  end
-
-  def enable_consent(%Assignment.Model{} = assignment) do
-    update_consent_enabled_at(assignment, Timestamp.naive_now())
+  def enable_consent(%Assignment.Model{id: id}) do
+    update_consent(id, &enable_consent_changeset/1)
   end
 
   @doc """
   Switches consent off. The agreement stays linked, with its texts and signatures.
   """
-  def disable_consent(%Assignment.Model{} = assignment) do
-    update_consent_enabled_at(assignment, nil)
+  def disable_consent(%Assignment.Model{id: id}) do
+    update_consent(id, &disable_consent_changeset/1)
   end
 
-  defp update_consent_enabled_at(assignment, consent_enabled_at) do
-    changeset =
-      assignment
-      |> Assignment.Model.changeset(%{})
-      |> Ecto.Changeset.put_change(:consent_enabled_at, consent_enabled_at)
+  # Decides on the stored assignment, not on the caller's copy, so a switch from a
+  # stale view that repeats the current state changes nothing.
+  defp update_consent(id, changeset_fun) do
+    Multi.new()
+    |> Multi.run(:stored, fn repo, _ ->
+      from(a in Assignment.Model, where: a.id == ^id, lock: "FOR UPDATE")
+      |> repo.one!()
+      |> repo.preload([:consent_agreement, :auth_node])
+      |> then(&{:ok, &1})
+    end)
+    |> Multi.run(:assignment, fn _repo, %{stored: assignment} ->
+      save_consent(assignment, changeset_fun.(assignment))
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{assignment: assignment}} -> {:ok, assignment}
+      {:error, _operation, error, _changes} -> {:error, error}
+    end
+  end
 
-    Mica.Persister.save(assignment, changeset)
+  defp save_consent(assignment, nil), do: {:ok, assignment}
+  defp save_consent(assignment, changeset), do: Mica.Persister.save(assignment, changeset)
+
+  defp enable_consent_changeset(
+         %Assignment.Model{consent_agreement_id: nil, auth_node: auth_node} = assignment
+       ) do
+    assignment
+    |> Assignment.Model.changeset(%{})
+    |> Ecto.Changeset.put_assoc(:consent_agreement, Consent.Public.prepare_agreement(auth_node))
+    |> Ecto.Changeset.put_embed(:consent_periods, [])
+  end
+
+  defp enable_consent_changeset(%Assignment.Model{consent_periods: periods} = assignment) do
+    if Assignment.Model.consent_on?(assignment) do
+      nil
+    else
+      started = %Assignment.ConsentPeriodModel{started_at: Timestamp.naive_now()}
+      put_consent_periods(assignment, periods ++ [started])
+    end
+  end
+
+  defp disable_consent_changeset(%Assignment.Model{} = assignment) do
+    if Assignment.Model.consent_on?(assignment) do
+      now = Timestamp.naive_now()
+
+      periods =
+        assignment
+        |> Assignment.Model.consent_periods()
+        |> Enum.map(&%{&1 | ended_at: &1.ended_at || now})
+
+      put_consent_periods(assignment, periods)
+    end
+  end
+
+  defp put_consent_periods(assignment, periods) do
+    periods =
+      Enum.map(periods, fn %{started_at: started_at, ended_at: ended_at} ->
+        %Assignment.ConsentPeriodModel{started_at: started_at, ended_at: ended_at}
+      end)
+
+    assignment
+    |> Assignment.Model.changeset(%{})
+    |> Ecto.Changeset.put_embed(:consent_periods, periods)
   end
 
   def copy(

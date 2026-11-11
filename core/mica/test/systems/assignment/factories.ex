@@ -1,4 +1,6 @@
 defmodule Systems.Assignment.Factories do
+  import Ecto.Query, only: [from: 2]
+
   alias Mica.Factories
 
   alias Systems.Alliance
@@ -158,6 +160,47 @@ defmodule Systems.Assignment.Factories do
       %{source: %{name: :confirmation_modal}},
       gdpr_socket(assignment)
     )
+  end
+
+  @doc """
+  Moves the creation of the assignment's agreement `seconds` into the past, so
+  consent has been on since then. Returns the reloaded assignment.
+  """
+  def consent_since(%{consent_agreement_id: agreement_id} = assignment, seconds) do
+    from(a in Systems.Consent.AgreementModel, where: a.id == ^agreement_id)
+    |> Mica.Repo.update_all(set: [inserted_at: seconds_ago(seconds)])
+
+    reload(assignment)
+  end
+
+  @doc """
+  Moves the participant's join `seconds` into the past.
+  """
+  def joined_since(%{crew_id: crew_id}, %{id: user_id}, seconds) do
+    from(m in Systems.Crew.MemberModel, where: m.crew_id == ^crew_id and m.user_id == ^user_id)
+    |> Mica.Repo.update_all(set: [inserted_at: seconds_ago(seconds)])
+  end
+
+  @doc """
+  Switches consent on as older code does: it only links a new agreement, created
+  `seconds` ago. Returns the reloaded assignment.
+  """
+  def switch_consent_on_as_old_code(%{id: id} = assignment, seconds) do
+    agreement = Factories.insert!(:consent_agreement, %{inserted_at: seconds_ago(seconds)})
+    _revision = Factories.insert!(:consent_revision, %{agreement: agreement})
+
+    from(a in "assignments", where: a.id == ^id)
+    |> Mica.Repo.update_all(set: [consent_agreement_id: agreement.id])
+
+    reload(assignment)
+  end
+
+  defp reload(%{id: id}) do
+    Systems.Assignment.Public.get!(id, Systems.Assignment.Model.preload_graph(:down))
+  end
+
+  defp seconds_ago(seconds) do
+    NaiveDateTime.utc_now() |> NaiveDateTime.add(-seconds) |> NaiveDateTime.truncate(:second)
   end
 
   def gdpr_socket(assignment) do

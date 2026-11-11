@@ -639,7 +639,6 @@ defmodule Mica.Factories do
       excluded: []
     }
     |> struct!(attributes)
-    |> default_consent_enabled_at()
   end
 
   def build(:assignment_participation, %{} = attributes) do
@@ -1231,13 +1230,4 @@ defmodule Mica.Factories do
       {nil, attributes}
     end
   end
-
-  defp default_consent_enabled_at(
-         %Assignment.Model{consent_agreement: %Consent.AgreementModel{}, consent_enabled_at: nil} =
-           assignment
-       ) do
-    %{assignment | consent_enabled_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)}
-  end
-
-  defp default_consent_enabled_at(assignment), do: assignment
 end

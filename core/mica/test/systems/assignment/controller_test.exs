@@ -222,6 +222,28 @@ defmodule Systems.Assignment.ControllerTest do
     end
   end
 
+  describe "progress_csv_data/1 consent" do
+    test "a participant who declined shows no after consent was switched off and on" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(120)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 60)
+      Assignment.Public.expire_member(assignment, user)
+
+      assignment =
+        assignment
+        |> Assignment.Factories.switch_consent(:off)
+        |> Assignment.Factories.switch_consent(:on)
+
+      assert [_header, row] = Assignment.Controller.progress_csv_data(assignment)
+      assert [_participant, "no" | _tasks] = row |> String.trim() |> String.split(",")
+    end
+  end
+
   describe "export progress report" do
     setup :login_as_member
 

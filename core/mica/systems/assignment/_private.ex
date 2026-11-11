@@ -5,7 +5,7 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
-  import Ecto.Query, only: [where: 3]
+  import Ecto.Query, only: [where: 3, select: 3]
 
   alias Mica.Repo
   alias Ecto.Multi
@@ -95,13 +95,13 @@ defmodule Systems.Assignment.Private do
   def get_template(special), do: Assignment.TemplateExtension.template!(special)
 
   @doc """
-  True when the participant has to give consent and hasn't. Consent changes only
-  apply to future participants: whoever joined before consent was switched on is
-  never asked.
+  True when the participant has to give consent and hasn't. Nobody has to consent
+  again: a signature on any revision counts. Whoever joined while consent was off
+  is never asked.
   """
   def no_consent?(%Assignment.Model{consent_agreement: consent_agreement} = assignment, user_ref) do
     Assignment.Model.consent_on?(assignment) and
-      not joined_before_consent?(assignment, user_ref) and
+      joined_while_consent_on?(assignment, user_ref) and
       not consent?(consent_agreement, user_ref)
   end
 
@@ -114,14 +114,23 @@ defmodule Systems.Assignment.Private do
 
   # Joining is the first time the participant entered the crew: coming back
   # after an expiry (such as declining consent) resets the same membership.
-  defp joined_before_consent?(
-         %Assignment.Model{crew_id: crew_id, consent_enabled_at: consent_enabled_at},
-         user_ref
-       ) do
+  defp joined_while_consent_on?(%Assignment.Model{crew_id: crew_id} = assignment, user_ref) do
+    case joined_at(crew_id, user_ref) do
+      nil ->
+        true
+
+      joined_at ->
+        assignment
+        |> Assignment.Model.consent_periods()
+        |> Enum.any?(&Assignment.ConsentPeriodModel.during?(&1, joined_at))
+    end
+  end
+
+  defp joined_at(crew_id, user_ref) do
     Crew.MemberModel
     |> where([m], m.crew_id == ^crew_id and m.user_id == ^user_ref)
-    |> where([m], m.inserted_at < ^consent_enabled_at)
-    |> Repo.exists?()
+    |> select([m], m.inserted_at)
+    |> Repo.one()
   end
 
   def queue_progress_event(
