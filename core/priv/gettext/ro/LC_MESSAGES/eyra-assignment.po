@@ -353,7 +353,7 @@ msgstr "Temă"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters, precum și înregistrarea asociată cu persoanele care și-au dat consimțământul."
+msgstr "Participanții nu vor mai vedea această pagină. Textul de consimțământ și înregistrarea persoanelor care și-au dat consimțământul se păstrează și revin atunci când afișați din nou pagina."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"

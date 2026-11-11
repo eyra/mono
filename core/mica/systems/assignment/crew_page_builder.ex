@@ -167,23 +167,19 @@ defmodule Systems.Assignment.CrewPageBuilder do
     work_items_finished?(work_items)
   end
 
-  defp consent_signed?(%{consent_agreement: nil}, _user, _tester?), do: true
+  defp consent_signed?(assignment, user, false) do
+    not Assignment.Private.no_consent?(assignment, user.id)
+  end
 
-  defp consent_signed?(%{consent_agreement: consent_agreement}, user, tester?) do
-    revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
-    signature = Consent.Public.get_signature(consent_agreement, user)
+  defp consent_signed?(%{consent_agreement: consent_agreement} = assignment, user, true) do
+    if Assignment.Model.consent_on?(assignment) do
+      # preview flow: consent signed if signature on latest version
+      revision = Consent.Public.latest_revision(consent_agreement, [:signatures])
+      signature = Consent.Public.get_signature(consent_agreement, user)
 
-    case {revision, signature, tester?} do
-      {_, signature, false} when not is_nil(signature) ->
-        # normal flow: consent signed if signature exists
-        true
-
-      {%{id: id}, %{revision_id: revision_id}, true} when id == revision_id ->
-        # preview flow: consent signed if signature on latest version
-        true
-
-      _ ->
-        false
+      match?({%{id: id}, %{revision_id: id}}, {revision, signature})
+    else
+      true
     end
   end
 

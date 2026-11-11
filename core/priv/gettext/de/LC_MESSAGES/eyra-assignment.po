@@ -343,7 +343,7 @@ msgstr "Aufgabe"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Bitte beachten Sie, dass bei einer Bestätigung der Seiteninhalt gelöscht wird, einschließlich des zugehörigen Eintrags darüber, wer eingewilligt hat."
+msgstr "Teilnehmende sehen diese Seite dann nicht mehr. Der Einwilligungstext und der Eintrag darüber, wer eingewilligt hat, bleiben erhalten und erscheinen wieder, wenn Sie die Seite erneut anzeigen."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"

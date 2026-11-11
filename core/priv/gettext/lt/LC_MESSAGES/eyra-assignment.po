@@ -353,7 +353,7 @@ msgstr "Paskyrimas"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas, taip pat ir susijęs įrašas apie tai, kas davė sutikimą."
+msgstr "Dalyviai šio puslapio nebematys. Sutikimo tekstas ir įrašas apie tai, kas davė sutikimą, išsaugomi ir grįš, kai puslapis vėl bus rodomas."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"

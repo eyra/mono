@@ -135,6 +135,37 @@ defmodule Systems.Assignment.Factories do
     assignment |> Mica.Repo.preload(Systems.Assignment.Model.preload_graph(:down))
   end
 
+  @doc """
+  Switches consent as the researcher does in the settings: `:on`, or `:off`
+  through the confirmation modal. Returns the reloaded assignment.
+  """
+  def switch_consent(%Systems.Assignment.Model{} = assignment, status) do
+    {:noreply, _} = handle_gdpr_switch(assignment, status)
+
+    Systems.Assignment.Public.get!(
+      assignment.id,
+      Systems.Assignment.Model.preload_graph(:down)
+    )
+  end
+
+  defp handle_gdpr_switch(assignment, :on) do
+    Systems.Assignment.GdprForm.handle_event("update", %{status: :on}, gdpr_socket(assignment))
+  end
+
+  defp handle_gdpr_switch(assignment, :off) do
+    Systems.Assignment.GdprForm.handle_event(
+      "confirmed",
+      %{source: %{name: :confirmation_modal}},
+      gdpr_socket(assignment)
+    )
+  end
+
+  def gdpr_socket(assignment) do
+    %Phoenix.LiveView.Socket{
+      assigns: %{__changed__: %{}, entity: assignment, fabric: Fabric.Factories.create_fabric()}
+    }
+  end
+
   def add_participant(%{} = assignment, user) do
     Systems.Assignment.Public.add_participant!(assignment, user)
     assignment |> Mica.Repo.preload([:crew], force: true)

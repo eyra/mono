@@ -343,7 +343,7 @@ msgstr "Incarico"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Si noti che, se sceglie di confermare, il contenuto della pagina sarà eliminato, così come la registrazione associata di chi ha prestato il consenso."
+msgstr "I partecipanti non vedranno più questa pagina. Il testo del consenso e la registrazione di chi ha dato il consenso vengono conservati e tornano quando mostri di nuovo la pagina."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"

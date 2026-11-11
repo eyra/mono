@@ -94,17 +94,33 @@ defmodule Systems.Assignment.Private do
 
   def get_template(special), do: Assignment.TemplateExtension.template!(special)
 
-  def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
-
-  def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
-    # If assignment requires consent but user hasn't signed, there's no consent
-    not consent?(consent_agreement, user_ref)
+  @doc """
+  True when the participant has to give consent and hasn't. Consent changes only
+  apply to future participants: whoever joined before consent was switched on is
+  never asked.
+  """
+  def no_consent?(%Assignment.Model{consent_agreement: consent_agreement} = assignment, user_ref) do
+    Assignment.Model.consent_on?(assignment) and
+      not joined_before_consent?(assignment, user_ref) and
+      not consent?(consent_agreement, user_ref)
   end
 
   defp consent?(consent_agreement, user_ref) do
     consent_agreement
     |> Consent.Queries.signature_query()
     |> where([signature: s], s.user_id == ^user_ref)
+    |> Repo.exists?()
+  end
+
+  # Joining is the first time the participant entered the crew: coming back
+  # after an expiry (such as declining consent) resets the same membership.
+  defp joined_before_consent?(
+         %Assignment.Model{crew_id: crew_id, consent_enabled_at: consent_enabled_at},
+         user_ref
+       ) do
+    Crew.MemberModel
+    |> where([m], m.crew_id == ^crew_id and m.user_id == ^user_ref)
+    |> where([m], m.inserted_at < ^consent_enabled_at)
     |> Repo.exists?()
   end
 

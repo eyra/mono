@@ -343,7 +343,7 @@ msgstr "Asignación"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Tenga en cuenta que, si decide confirmar, se eliminará el contenido de la página, así como el registro asociado de quién prestó su consentimiento."
+msgstr "Los participantes ya no verán esta página. El texto de consentimiento y el registro de quién dio su consentimiento se conservan y vuelven cuando muestres la página de nuevo."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"

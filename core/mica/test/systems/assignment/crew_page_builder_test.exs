@@ -2,6 +2,8 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
   use Mica.DataCase
   use Gettext, backend: MicaWeb.Gettext
 
+  import Ecto.Query
+
   alias Systems.Assignment
   alias Systems.Crew
   alias Systems.Account
@@ -315,7 +317,95 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     end
   end
 
+  describe "consent changes only apply to future participants" do
+    setup do
+      %{user: Factories.insert!(:member)}
+    end
+
+    test "consent switched on for the first time does not ask participants already in", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+
+      new_user = Factories.insert!(:member)
+      assignment = Assignment.Factories.add_participant(assignment, new_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(new_user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "consent switched off and on does not ask a participant who consented before", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      sign_consent(assignment, user)
+
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+    end
+
+    test "a participant who finished before consent was switched on sees the finished view", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      finish_all_tasks(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.FinishedView
+    end
+
+    test "a participant who declined and came back through the panel link is asked again", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
+
+      Assignment.Factories.add_participant(assignment, user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a tester who was in before consent was switched on still previews the consent", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      Assignment.Public.ensure_tester(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
   # Helper functions
+  defp switch_consent_on(assignment), do: Assignment.Factories.switch_consent(assignment, :on)
+  defp switch_consent_off(assignment), do: Assignment.Factories.switch_consent(assignment, :off)
+
+  defp join_earlier(%{crew: %{id: crew_id}}, %{id: user_id}) do
+    joined_at = NaiveDateTime.add(NaiveDateTime.utc_now(), -60) |> NaiveDateTime.truncate(:second)
+
+    from(m in Crew.MemberModel, where: m.crew_id == ^crew_id and m.user_id == ^user_id)
+    |> Repo.update_all(set: [inserted_at: joined_at])
+  end
+
   defp mark_intro_visited(%{id: assignment_id}, user) do
     Account.Public.mark_as_visited(user, {:assignment_information, assignment_id})
   end

@@ -24,6 +24,9 @@ defmodule Systems.Assignment.Model do
     field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     # external_panel is deprecated, use affiliate association instead
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
+    # Consent is on since this moment; nil means off. The agreement stays linked
+    # while consent is off, so its texts and signatures are kept.
+    field(:consent_enabled_at, :naive_datetime)
 
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:affiliate, Affiliate.Model)
@@ -82,6 +85,10 @@ defmodule Systems.Assignment.Model do
     assignment
     |> cast(attrs, @fields)
   end
+
+  def consent_on?(%Assignment.Model{consent_agreement_id: nil}), do: false
+  def consent_on?(%Assignment.Model{consent_enabled_at: nil}), do: false
+  def consent_on?(%Assignment.Model{}), do: true
 
   def language(%Assignment.Model{info: info}), do: language(info)
   def language(%Assignment.InfoModel{language: language}), do: language(language)
