@@ -66,6 +66,7 @@ defmodule Systems.Account.AuthCodeCleanupWorkerTest do
     end
 
     test "deletes rate counters whose window has ended" do
+      Rate.TestHelper.wait_out_window_end(3600)
       ended = unique_key("ended")
       current = unique_key("current")
 
