@@ -5,10 +5,14 @@ import { featureEnabled, missingFeaturesReason } from './lib/features';
 /**
  * PaNL Onboarding E2E Test
  *
- * Tests the complete PaNL participant onboarding flow:
+ * With sign-in codes (otp) off, tests the complete PaNL participant onboarding flow:
  * 1. Sign up as a new participant with add_to_panl post action
  * 2. Complete onboarding (profile -> features steps)
  * 3. Verify PaNL advert is visible on home page
+ *
+ * With otp on, the same sign-up link goes to the code page, which carries the
+ * Panl join on as return_to. The spec follows it up to the code entry page: the
+ * e2e API has no way to read the emailed code.
  *
  * Prerequisites:
  * - PaNL feature flag must be enabled on the environment (E2E_PANL_ENABLED=true)
@@ -18,10 +22,9 @@ import { featureEnabled, missingFeaturesReason } from './lib/features';
 // Skip all tests in this file when required features are not enabled.
 // `missingFeaturesReason` reads from ENABLED_APP_FEATURES, which is
 // populated by global-setup from the server's /api/e2e/features.
-// With sign-in codes on, `/user/signup` sends to the code page instead.
-const SKIP_REASON =
-  missingFeaturesReason('panl', 'panl_post_launch') ||
-  (featureEnabled('otp') ? 'otp is on: the password sign-up page sends to the code page' : '');
+const SKIP_REASON = missingFeaturesReason('panl', 'panl_post_launch');
+
+const PANL_SIGNUP_PATH = '/user/signup/participant?post_signup_action=add_to_panl';
 
 function generateTestEmail(): string {
   const timestamp = Date.now();
@@ -33,6 +36,7 @@ const TEST_PASSWORD = 'TestPassword123!';
 
 test.describe('PaNL Onboarding Flow', () => {
   test.skip(SKIP_REASON !== '', SKIP_REASON);
+  test.skip(featureEnabled('otp'), 'otp is on: the password sign-up page sends to the code page');
   test('new participant can sign up, complete onboarding, and see PaNL advert', async ({ page }) => {
     const testEmail = generateTestEmail();
     console.log(`[TEST] Starting with email: ${testEmail}`);
@@ -46,7 +50,7 @@ test.describe('PaNL Onboarding Flow', () => {
 
     // Step 1: Navigate to signup page
     console.log('[TEST] Step 1: Navigating to signup page...');
-    await page.goto('/user/signup/participant?post_signup_action=add_to_panl');
+    await page.goto(PANL_SIGNUP_PATH);
 
     const signupState = await waitForLiveView(page, { timeout: 5000, requireConnection: true });
     console.log(`[TEST] Signup page ready, connected: ${signupState.connected}`);
@@ -110,7 +114,7 @@ test.describe('PaNL Onboarding Flow', () => {
   test('signup page shows participant tab by default with add_to_panl', async ({ page }) => {
     console.log('[TEST] Checking signup page...');
 
-    await page.goto('/user/signup/participant?post_signup_action=add_to_panl');
+    await page.goto(PANL_SIGNUP_PATH);
     await waitForLiveView(page, { timeout: 3000, requireConnection: true });
 
     await expect(page.locator('#signup_form')).toBeVisible();
@@ -118,5 +122,30 @@ test.describe('PaNL Onboarding Flow', () => {
     await expect(page.locator("[data-selector-item='panl_privacy_policy_accepted']")).toBeVisible();
 
     console.log('[TEST] Signup page check completed!');
+  });
+});
+
+test.describe('PaNL Onboarding Flow with sign-in codes', () => {
+  test.skip(SKIP_REASON !== '', SKIP_REASON);
+  test.skip(!featureEnabled('otp'), 'otp is off: the password sign-up page stays');
+
+  test('the PaNL sign-up link goes to the code page and keeps the Panl join', async ({ page }) => {
+    const testEmail = generateTestEmail();
+
+    await page.goto(PANL_SIGNUP_PATH);
+    await page.waitForURL('**/user/auth/identify/participant?return_to=%2Fpool%2Fpanl%2Fjoin');
+    await waitForLiveView(page, { timeout: 5000, requireConnection: true });
+
+    await page.locator('[data-testid="auth-email-input"]').fill(testEmail);
+    await page.locator('[data-testid="auth-continue-button"]').click();
+
+    await page.waitForURL(
+      (url) =>
+        url.pathname === '/user/auth/verify' &&
+        url.searchParams.get('email') === testEmail &&
+        url.searchParams.get('return_to') === '/pool/panl/join' &&
+        url.searchParams.get('creator') === 'false'
+    );
+    await expect(page.locator('[data-testid="auth-code-input"]')).toBeVisible();
   });
 });
