@@ -1,10 +1,15 @@
 defmodule Systems.Feldspar.S3 do
   alias ExAws.S3
+  alias Systems.Feldspar.Private
 
   def store(zip_file, _original_filename) do
-    id = Ecto.UUID.generate()
-    :ok = upload_zip_content(zip_file, id)
-    id
+    if Private.index_html?(zip_file) do
+      id = Ecto.UUID.generate()
+      :ok = upload_zip_content(zip_file, id)
+      id
+    else
+      {:error, :no_index_html}
+    end
   end
 
   def get_public_url(id) do

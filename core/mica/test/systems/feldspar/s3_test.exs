@@ -36,6 +36,28 @@ defmodule Systems.Feldspar.S3Test do
       assert is_binary(id)
       refute id == ""
     end
+
+    # Mox fails the test on any unexpected S3 request, so nothing is uploaded.
+    @tag :tmp_dir
+    test "refuses a zip without index.html and uploads nothing", %{tmp_dir: tmp_dir} do
+      zip = create_zip(tmp_dir, ["export/a.json", "export/b.json"])
+
+      assert {:error, :no_index_html} = S3.store(zip, "app.zip")
+    end
+
+    @tag :tmp_dir
+    test "refuses a zip with index.html only in a subfolder and uploads nothing",
+         %{tmp_dir: tmp_dir} do
+      zip = create_zip(tmp_dir, ["app/index.html"])
+
+      assert {:error, :no_index_html} = S3.store(zip, "app.zip")
+    end
+  end
+
+  defp create_zip(dir, names) do
+    path = Path.join(dir, "app.zip")
+    {:ok, _} = :zip.create(to_charlist(path), Enum.map(names, &{to_charlist(&1), "x"}))
+    path
   end
 
   describe "get_public_url/1 (without prefix)" do
