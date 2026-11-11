@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Frameworks.Pixel — core v0.1.0</title>
+    <title>Frameworks.Pixel — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Frameworks.Pixel</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Frameworks.<wbr />Pixel</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Frameworks.Pixel.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -92,31 +117,490 @@ core
   </div>
 
 
+    <section id="moduledoc">
+<p>Mica's UI framework. <code class="inline">use Frameworks.Pixel</code> brings Pixel's helpers and aliases
+into a view.</p><p>Prism's components are function components of this module (<code class="inline">Pixel.button/1</code>,
+<code class="inline">Pixel.tag/1</code>, …), built from Prism's design while Mica compiles. See
+<a href="https://prism-generator.hexdocs.pm/0.2.0/Prism.Generator.Phoenix.html"><code class="inline">Prism.Generator.Phoenix</code></a>.</p>
+    </section>
+
 </div>
 
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#button/1" data-no-tooltip="" translate="no">button(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">button</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#checkbox/1" data-no-tooltip="" translate="no">checkbox(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">checkbox</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#field/1" data-no-tooltip="" translate="no">field(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">field</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#image_picker/1" data-no-tooltip="" translate="no">image_picker(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">image_picker</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#message_bar/1" data-no-tooltip="" translate="no">message_bar(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">message_bar</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#radio/1" data-no-tooltip="" translate="no">radio(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">radio</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#radio_group/1" data-no-tooltip="" translate="no">radio_group(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">radio_group</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#select/1" data-no-tooltip="" translate="no">select(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">select</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#spinner/1" data-no-tooltip="" translate="no">spinner(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">spinner</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#step_indicator/1" data-no-tooltip="" translate="no">step_indicator(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">step_indicator</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tag/1" data-no-tooltip="" translate="no">tag(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">tag</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_area/1" data-no-tooltip="" translate="no">text_area(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">text_area</code> component.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#text_field/1" data-no-tooltip="" translate="no">text_field(assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The design's <code class="inline">text_field</code> component.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="button/1">
+
+  <div class="detail-header">
+    <a href="#button/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">button(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">button</code> component.</p><h2 id="button/1-attributes" class="section-heading"><a href="#button/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:primary</code>, <code class="inline">:secondary</code>, <code class="inline">:plain</code>, <code class="inline">:link</code>, <code class="inline">:text</code>, <code class="inline">:soft</code>, <code class="inline">:icon</code>. Must be one of <code class="inline">:primary</code>, <code class="inline">:secondary</code>, <code class="inline">:plain</code>, <code class="inline">:link</code>, <code class="inline">:text</code>, <code class="inline">:soft</code>, or <code class="inline">:icon</code>.</li><li><code class="inline">tone</code> (<code class="inline">:atom</code>) - One of <code class="inline">:accent</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, <code class="inline">:danger</code>, <code class="inline">:neutral</code>, <code class="inline">:highlight</code>. Defaults to <code class="inline">:accent</code>. Must be one of <code class="inline">:accent</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, <code class="inline">:danger</code>, <code class="inline">:neutral</code>, or <code class="inline">:highlight</code>.</li><li><code class="inline">padded</code> (<code class="inline">:boolean</code>) - While true, adds <code class="inline">prism-button--padded</code> with variant <code class="inline">:plain</code> or <code class="inline">:text</code>. Defaults to <code class="inline">true</code>.</li><li><code class="inline">icon_position</code> (<code class="inline">:atom</code>) - The icon part's side of the content: <code class="inline">:start</code> or <code class="inline">:end</code>. Defaults to <code class="inline">:start</code>. Must be one of <code class="inline">:start</code>, or <code class="inline">:end</code>.</li><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">loading</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">as</code> (<code class="inline">:string</code>) - The element. Defaults to <code class="inline">&quot;button&quot;</code>. Must be one of <code class="inline">&quot;button&quot;</code>, <code class="inline">&quot;a&quot;</code>, <code class="inline">&quot;span&quot;</code>, or <code class="inline">&quot;div&quot;</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted. Supports all globals plus: <code class="inline">[&quot;type&quot;, &quot;form&quot;, &quot;formaction&quot;, &quot;formenctype&quot;, &quot;formmethod&quot;, &quot;formnovalidate&quot;, &quot;formtarget&quot;, &quot;name&quot;, &quot;value&quot;, &quot;autofocus&quot;, &quot;href&quot;, &quot;target&quot;, &quot;rel&quot;, &quot;download&quot;]</code>.</li></ul><h2 id="button/1-slots" class="section-heading"><a href="#button/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">icon</code> - The icon part; its attributes go on the part's element.</li><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="checkbox/1">
+
+  <div class="detail-header">
+    <a href="#checkbox/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">checkbox(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">checkbox</code> component.</p><h2 id="checkbox/1-attributes" class="section-heading"><a href="#checkbox/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">checked</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted. Supports all globals plus: <code class="inline">[&quot;accept&quot;, &quot;autocomplete&quot;, &quot;autofocus&quot;, &quot;form&quot;, &quot;list&quot;, &quot;max&quot;, &quot;maxlength&quot;, &quot;min&quot;, &quot;minlength&quot;, &quot;multiple&quot;, &quot;name&quot;, &quot;pattern&quot;, &quot;placeholder&quot;, &quot;readonly&quot;, &quot;required&quot;, &quot;size&quot;, &quot;step&quot;, &quot;type&quot;, &quot;value&quot;]</code>.</li></ul>
+  </section>
+</section>
+<section class="detail" id="field/1">
+
+  <div class="detail-header">
+    <a href="#field/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">field(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">field</code> component.</p><h2 id="field/1-attributes" class="section-heading"><a href="#field/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:inverse</code>. Must be one of <code class="inline">:inverse</code>.</li><li><code class="inline">invalid</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="field/1-slots" class="section-heading"><a href="#field/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">label</code> - The label part; its attributes go on the part's element.</li><li><code class="inline">inner_block</code></li><li><code class="inline">error_message</code> - The error_message part; its attributes go on the part's element.</li></ul>
+  </section>
+</section>
+<section class="detail" id="image_picker/1">
+
+  <div class="detail-header">
+    <a href="#image_picker/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">image_picker(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">image_picker</code> component.</p><h2 id="image_picker/1-attributes" class="section-heading"><a href="#image_picker/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">shape</code> (<code class="inline">:atom</code>) - One of <code class="inline">:rectangular</code>, <code class="inline">:round</code>. Defaults to <code class="inline">:rectangular</code>. Must be one of <code class="inline">:rectangular</code>, or <code class="inline">:round</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="image_picker/1-slots" class="section-heading"><a href="#image_picker/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">preview</code> - The preview part; its attributes go on the part's element.</li><li><code class="inline">button</code> - The button part: the app's own button component, in its place.</li></ul>
+  </section>
+</section>
+<section class="detail" id="message_bar/1">
+
+  <div class="detail-header">
+    <a href="#message_bar/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">message_bar(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">message_bar</code> component.</p><h2 id="message_bar/1-attributes" class="section-heading"><a href="#message_bar/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">tone</code> (<code class="inline">:atom</code>) - One of <code class="inline">:info</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, <code class="inline">:danger</code>. Defaults to <code class="inline">:info</code>. Must be one of <code class="inline">:info</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, or <code class="inline">:danger</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="message_bar/1-slots" class="section-heading"><a href="#message_bar/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="radio/1">
+
+  <div class="detail-header">
+    <a href="#radio/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">radio(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">radio</code> component.</p><h2 id="radio/1-attributes" class="section-heading"><a href="#radio/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">checked</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted. Supports all globals plus: <code class="inline">[&quot;accept&quot;, &quot;autocomplete&quot;, &quot;autofocus&quot;, &quot;form&quot;, &quot;list&quot;, &quot;max&quot;, &quot;maxlength&quot;, &quot;min&quot;, &quot;minlength&quot;, &quot;multiple&quot;, &quot;name&quot;, &quot;pattern&quot;, &quot;placeholder&quot;, &quot;readonly&quot;, &quot;required&quot;, &quot;size&quot;, &quot;step&quot;, &quot;type&quot;, &quot;value&quot;]</code>.</li></ul><h2 id="radio/1-slots" class="section-heading"><a href="#radio/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="radio_group/1">
+
+  <div class="detail-header">
+    <a href="#radio_group/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">radio_group(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">radio_group</code> component.</p><h2 id="radio_group/1-attributes" class="section-heading"><a href="#radio_group/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="radio_group/1-slots" class="section-heading"><a href="#radio_group/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="select/1">
+
+  <div class="detail-header">
+    <a href="#select/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">select(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">select</code> component.</p><h2 id="select/1-attributes" class="section-heading"><a href="#select/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:inverse</code>. Must be one of <code class="inline">:inverse</code>.</li><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">invalid</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="select/1-slots" class="section-heading"><a href="#select/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li><li><code class="inline">icon</code> - The icon part; its attributes go on the part's element.</li><li><code class="inline">option</code> - One option; its attributes go on the option's element, and <code class="inline">selected</code> adds its selected look.</li></ul>
+  </section>
+</section>
+<section class="detail" id="spinner/1">
+
+  <div class="detail-header">
+    <a href="#spinner/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">spinner(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">spinner</code> component.</p><h2 id="spinner/1-attributes" class="section-heading"><a href="#spinner/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:accent</code>, <code class="inline">:inverse</code>. Must be one of <code class="inline">:accent</code>, or <code class="inline">:inverse</code>.</li><li><code class="inline">size</code> (<code class="inline">:integer</code>) - One of <code class="inline">16</code>, <code class="inline">20</code>, <code class="inline">24</code>, <code class="inline">32</code>. Defaults to <code class="inline">24</code>. Must be one of <code class="inline">16</code>, <code class="inline">20</code>, <code class="inline">24</code>, or <code class="inline">32</code>.</li><li><code class="inline">progress</code> (<code class="inline">:any</code>) - A number from 0 to 100 (clamped), or <code class="inline">nil</code>: with one, adds <code class="inline">prism-spinner--progress</code> and <code class="inline">role=&quot;progressbar&quot;</code>. Defaults to <code class="inline">nil</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul>
+  </section>
+</section>
+<section class="detail" id="step_indicator/1">
+
+  <div class="detail-header">
+    <a href="#step_indicator/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">step_indicator(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">step_indicator</code> component.</p><h2 id="step_indicator/1-attributes" class="section-heading"><a href="#step_indicator/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">status</code> (<code class="inline">:atom</code>) - One of <code class="inline">:incomplete</code>, <code class="inline">:current</code>, <code class="inline">:complete</code>. Defaults to <code class="inline">:incomplete</code>. Must be one of <code class="inline">:incomplete</code>, <code class="inline">:current</code>, or <code class="inline">:complete</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="step_indicator/1-slots" class="section-heading"><a href="#step_indicator/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="tag/1">
+
+  <div class="detail-header">
+    <a href="#tag/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tag(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">tag</code> component.</p><h2 id="tag/1-attributes" class="section-heading"><a href="#tag/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">tone</code> (<code class="inline">:atom</code>) - One of <code class="inline">:accent</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, <code class="inline">:danger</code>, <code class="inline">:neutral</code>. Defaults to <code class="inline">:accent</code>. Must be one of <code class="inline">:accent</code>, <code class="inline">:success</code>, <code class="inline">:warning</code>, <code class="inline">:danger</code>, or <code class="inline">:neutral</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted.</li></ul><h2 id="tag/1-slots" class="section-heading"><a href="#tag/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="text_area/1">
+
+  <div class="detail-header">
+    <a href="#text_area/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_area(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">text_area</code> component.</p><h2 id="text_area/1-attributes" class="section-heading"><a href="#text_area/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:inverse</code>. Must be one of <code class="inline">:inverse</code>.</li><li><code class="inline">editor</code> (<code class="inline">:atom</code>) - One of <code class="inline">:plain</code>, <code class="inline">:rich_text</code>. Defaults to <code class="inline">:plain</code>. Must be one of <code class="inline">:plain</code>, or <code class="inline">:rich_text</code>.</li><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">invalid</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">value</code> (<code class="inline">:any</code>) - Defaults to <code class="inline">nil</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted. Supports all globals plus: <code class="inline">[&quot;autocomplete&quot;, &quot;autofocus&quot;, &quot;cols&quot;, &quot;form&quot;, &quot;maxlength&quot;, &quot;minlength&quot;, &quot;name&quot;, &quot;placeholder&quot;, &quot;readonly&quot;, &quot;required&quot;, &quot;rows&quot;, &quot;wrap&quot;]</code>.</li></ul><h2 id="text_area/1-slots" class="section-heading"><a href="#text_area/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">inner_block</code></li></ul>
+  </section>
+</section>
+<section class="detail" id="text_field/1">
+
+  <div class="detail-header">
+    <a href="#text_field/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">text_field(assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/pixel.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The design's <code class="inline">text_field</code> component.</p><h2 id="text_field/1-attributes" class="section-heading"><a href="#text_field/1-attributes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Attributes</span></h2><ul><li><code class="inline">variant</code> (<code class="inline">:atom</code>) - One of <code class="inline">:inverse</code>. Must be one of <code class="inline">:inverse</code>.</li><li><code class="inline">disabled</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">invalid</code> (<code class="inline">:boolean</code>) - Defaults to <code class="inline">false</code>.</li><li><code class="inline">class</code> (<code class="inline">:any</code>) - Classes after the component's own. Defaults to <code class="inline">nil</code>.</li><li>Global attributes are accepted. Supports all globals plus: <code class="inline">[&quot;accept&quot;, &quot;autocomplete&quot;, &quot;autofocus&quot;, &quot;form&quot;, &quot;list&quot;, &quot;max&quot;, &quot;maxlength&quot;, &quot;min&quot;, &quot;minlength&quot;, &quot;multiple&quot;, &quot;name&quot;, &quot;pattern&quot;, &quot;placeholder&quot;, &quot;readonly&quot;, &quot;required&quot;, &quot;size&quot;, &quot;step&quot;, &quot;type&quot;, &quot;value&quot;, &quot;checked&quot;]</code>.</li></ul><h2 id="text_field/1-slots" class="section-heading"><a href="#text_field/1-slots" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Slots</span></h2><ul><li><code class="inline">prefix</code> - The prefix part; its attributes go on the part's element.</li></ul>
+  </section>
+</section>
+
+    </div>
+  </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Payment.Public — core v0.1.0</title>
+    <title>Systems.Payment.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Payment.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Payment.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Payment.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -187,7 +212,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.finish_run/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#finish_run/2"><code class="inline">Systems.Payment.Reconciliation.finish_run/2</code></a>.</p></div>
 
     </div>
 
@@ -291,7 +316,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p></d
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.new_state/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#new_state/0"><code class="inline">Systems.Payment.Reconciliation.new_state/0</code></a>.</p></div>
 
     </div>
 
@@ -301,7 +326,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p></d
 
       </div>
 
-        <div class="summary-synopsis"><p>Partner fee in cents for the given base amount, based on <a><code class="inline">partner_fee_percentage/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Partner fee in cents for the given base amount, based on <a href="#partner_fee_percentage/0"><code class="inline">partner_fee_percentage/0</code></a>.</p></div>
 
     </div>
 
@@ -342,7 +367,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.get_transaction/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#get_transaction/2"><code class="inline">Systems.Payment.Reconciliation.get_transaction/2</code></a>.</p></div>
 
     </div>
 
@@ -352,7 +377,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.get_withdrawal/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#get_withdrawal/2"><code class="inline">Systems.Payment.Reconciliation.get_withdrawal/2</code></a>.</p></div>
 
     </div>
 
@@ -362,7 +387,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.list_recent_merchants/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#list_recent_merchants/2"><code class="inline">Systems.Payment.Reconciliation.list_recent_merchants/2</code></a>.</p></div>
 
     </div>
 
@@ -372,7 +397,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.list_recent_transactions/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#list_recent_transactions/2"><code class="inline">Systems.Payment.Reconciliation.list_recent_transactions/2</code></a>.</p></div>
 
     </div>
 
@@ -382,7 +407,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.list_recent_transfers/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#list_recent_transfers/2"><code class="inline">Systems.Payment.Reconciliation.list_recent_transfers/2</code></a>.</p></div>
 
     </div>
 
@@ -392,7 +417,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.list_recent_withdrawals/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#list_recent_withdrawals/2"><code class="inline">Systems.Payment.Reconciliation.list_recent_withdrawals/2</code></a>.</p></div>
 
     </div>
 
@@ -402,7 +427,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.scan_window/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#scan_window/1"><code class="inline">Systems.Payment.Reconciliation.scan_window/1</code></a>.</p></div>
 
     </div>
 
@@ -423,7 +448,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       </div>
 
-        <div class="summary-synopsis"><p>See <a><code class="inline">Systems.Payment.Reconciliation.start_run/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>See <a href="Systems.Payment.Reconciliation.html#start_run/1"><code class="inline">Systems.Payment.Reconciliation.start_run/1</code></a>.</p></div>
 
     </div>
 
@@ -449,12 +474,12 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="auth_module/0">
@@ -467,7 +492,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -489,7 +514,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">charge_to_partner(from_owner_uid, amount, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L348" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L348" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -501,9 +526,9 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> charge_to_partner(
-  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  from_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:transfer/0">Systems.Payment.Provider.transfer</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
@@ -523,7 +548,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">create_bank_account(merchant_uid, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L198" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L198" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -534,7 +559,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> create_bank_account(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> create_bank_account(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:bank_account/0">Systems.Payment.Provider.bank_account</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -553,7 +578,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">create_merchant(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L16" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L16" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -564,7 +589,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> create_merchant(attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> create_merchant(attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -583,7 +608,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">create_transaction(request)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L250" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L250" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -613,7 +638,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">create_withdrawal(merchant_uid, currency, attrs, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L277" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L277" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -625,10 +650,10 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> create_withdrawal(
-  merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  currency :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
-  attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  currency :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(),
+  attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:withdrawal/0">Systems.Payment.Provider.withdrawal</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
@@ -648,7 +673,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">ensure_bank_account_for(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L214" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L214" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -659,7 +684,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> ensure_bank_account_for(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> ensure_bank_account_for(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:bank_account/0">Systems.Payment.Provider.bank_account</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -681,7 +706,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">ensure_merchant_for(user, phone \\ nil)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L42" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -692,7 +717,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> ensure_merchant_for(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil) ::
+          <pre translate="no"><span class="attribute">@spec</span> ensure_merchant_for(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil) ::
   {:ok, {<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>()}}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -711,7 +736,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">find_merchant_by_email(email)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L27" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L27" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -722,7 +747,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> find_merchant_by_email(email :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> find_merchant_by_email(email :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -741,7 +766,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">finish_reconciliation_run(run, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L329" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L329" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -763,7 +788,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">get_merchant(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L21" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L21" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -774,7 +799,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> get_merchant(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> get_merchant(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -793,7 +818,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">get_transaction(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L255" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -804,7 +829,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> get_transaction(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> get_transaction(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:transaction/0">Systems.Payment.Provider.transaction</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -823,7 +848,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">get_withdrawal(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L282" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L282" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -834,7 +859,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> get_withdrawal(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> get_withdrawal(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:withdrawal/0">Systems.Payment.Provider.withdrawal</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -853,7 +878,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">list_bank_accounts(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L204" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L204" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -864,7 +889,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_bank_accounts(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_bank_accounts(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="Systems.Payment.Provider.html#t:bank_account/0">Systems.Payment.Provider.bank_account</a>()]}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -883,7 +908,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">list_charges_to_merchant(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L354" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L354" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -894,7 +919,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_charges_to_merchant(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_charges_to_merchant(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="Systems.Payment.Provider.html#t:transfer/0">Systems.Payment.Provider.transfer</a>()]}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -913,7 +938,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
       <h1 class="signature" translate="no">list_recent_merchants(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L36" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L36" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -924,7 +949,7 @@ or only <code class="inline">disapproved</code> ones. Returns <code class="inlin
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_recent_merchants(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_recent_merchants(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) ::
   <a href="Systems.Payment.Provider.html#t:listing/1">Systems.Payment.Provider.listing</a>(<a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>())</pre>
 
       </div>
@@ -943,7 +968,7 @@ input to the provider→local merchant scan.</p>
       <h1 class="signature" translate="no">list_recent_transactions(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L265" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -954,7 +979,7 @@ input to the provider→local merchant scan.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_recent_transactions(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_recent_transactions(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) ::
   <a href="Systems.Payment.Provider.html#t:listing/1">Systems.Payment.Provider.listing</a>(<a href="Systems.Payment.Provider.html#t:transaction/0">Systems.Payment.Provider.transaction</a>())</pre>
 
       </div>
@@ -973,7 +998,7 @@ merchants — the provider-side input to the provider→local pay-in scan.</p>
       <h1 class="signature" translate="no">list_recent_transfers(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L362" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L362" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -984,7 +1009,7 @@ merchants — the provider-side input to the provider→local pay-in scan.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_recent_transfers(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_recent_transfers(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) ::
   <a href="Systems.Payment.Provider.html#t:listing/1">Systems.Payment.Provider.listing</a>(<a href="Systems.Payment.Provider.html#t:transfer/0">Systems.Payment.Provider.transfer</a>())</pre>
 
       </div>
@@ -1002,7 +1027,7 @@ merchants — the provider-side input to the provider→local pay-in scan.</p>
       <h1 class="signature" translate="no">list_recent_withdrawals(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L301" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L301" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1013,7 +1038,7 @@ merchants — the provider-side input to the provider→local pay-in scan.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_recent_withdrawals(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_recent_withdrawals(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) ::
   <a href="Systems.Payment.Provider.html#t:listing/1">Systems.Payment.Provider.listing</a>(<a href="Systems.Payment.Provider.html#t:withdrawal/0">Systems.Payment.Provider.withdrawal</a>())</pre>
 
       </div>
@@ -1032,7 +1057,7 @@ merchants — the provider-side input to the provider→local pass.</p>
       <h1 class="signature" translate="no">list_withdrawals(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L292" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L292" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1043,7 +1068,7 @@ merchants — the provider-side input to the provider→local pass.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> list_withdrawals(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> list_withdrawals(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="Systems.Payment.Provider.html#t:withdrawal/0">Systems.Payment.Provider.withdrawal</a>()]}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -1063,7 +1088,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p>
       <h1 class="signature" translate="no">new_reconciliation_state()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L307" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1085,7 +1110,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p>
       <h1 class="signature" translate="no">partner_fee_amount(base_amount)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L399" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L399" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1096,7 +1121,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> partner_fee_amount(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> partner_fee_amount(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>()</pre>
 
       </div>
 
@@ -1113,7 +1138,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p>
       <h1 class="signature" translate="no">partner_fee_percentage()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L390" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L390" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1124,7 +1149,7 @@ recorded can still be found by its <code class="inline">reference</code>.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> partner_fee_percentage() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> partner_fee_percentage() :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>()</pre>
 
       </div>
 
@@ -1142,7 +1167,7 @@ Returns 0 when not configured. Integer in range 0..100.</p>
       <h1 class="signature" translate="no">platform_merchant_uid()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L372" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L372" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1153,7 +1178,7 @@ Returns 0 when not configured. Integer in range 0..100.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> platform_merchant_uid() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil</pre>
+          <pre translate="no"><span class="attribute">@spec</span> platform_merchant_uid() :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil</pre>
 
       </div>
 
@@ -1172,7 +1197,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1194,7 +1219,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_get_transaction(state, uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L310" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L310" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1216,7 +1241,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_get_withdrawal(state, uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L309" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L309" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1238,7 +1263,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_list_recent_merchants(state, since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L324" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L324" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1260,7 +1285,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_list_recent_transactions(state, since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L320" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L320" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1282,7 +1307,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_list_recent_transfers(state, since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L316" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L316" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1304,7 +1329,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconcile_list_recent_withdrawals(state, since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L312" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L312" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1326,7 +1351,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">reconciliation_scan_window(opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L308" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L308" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1348,7 +1373,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">set_merchant_phone(merchant_uid, phone)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L55" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1359,7 +1384,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> set_merchant_phone(<a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> set_merchant_phone(<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:merchant/0">Systems.Payment.Provider.merchant</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
@@ -1379,7 +1404,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">start_reconciliation_run(run_type)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L328" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L328" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1401,7 +1426,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L339" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1413,10 +1438,10 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> transfer_to_merchant(
-  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  to_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  from_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  to_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) ::
   {:ok, <a href="Systems.Payment.Provider.html#t:transfer/0">Systems.Payment.Provider.transfer</a>()}
   | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
@@ -1436,7 +1461,7 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
       <h1 class="signature" translate="no">webhook_url()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L377" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/_public.ex#L377" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1453,27 +1478,34 @@ participant payout transfers. Sourced from the OPP <code class="inline">merchant
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

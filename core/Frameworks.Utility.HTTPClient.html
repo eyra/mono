@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Frameworks.Utility.HTTPClient — core v0.1.0</title>
+    <title>Frameworks.Utility.HTTPClient — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Frameworks.Utility.HTTPClient</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Frameworks.<wbr />Utility.<wbr />HTTPClient</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Frameworks.Utility.HTTPClient.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-types summary">
-  <h2>
+  <h3>
     <a href="#types">Types</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -164,9 +189,9 @@ core
 
 </div>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -302,7 +327,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_headers/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_headers/1"><code class="inline">HTTPoison.Base.process_headers/1</code></a>.</p></div>
 
     </div>
 
@@ -312,7 +337,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_request_headers/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_headers/1"><code class="inline">HTTPoison.Base.process_request_headers/1</code></a>.</p></div>
 
     </div>
 
@@ -322,7 +347,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_request_options/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_options/1"><code class="inline">HTTPoison.Base.process_request_options/1</code></a>.</p></div>
 
     </div>
 
@@ -332,7 +357,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_request_params/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_params/1"><code class="inline">HTTPoison.Base.process_request_params/1</code></a>.</p></div>
 
     </div>
 
@@ -342,7 +367,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_request_url/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_url/1"><code class="inline">HTTPoison.Base.process_request_url/1</code></a>.</p></div>
 
     </div>
 
@@ -352,7 +377,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_response/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response/1"><code class="inline">HTTPoison.Base.process_response/1</code></a>.</p></div>
 
     </div>
 
@@ -362,7 +387,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_response_body/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_body/1"><code class="inline">HTTPoison.Base.process_response_body/1</code></a>.</p></div>
 
     </div>
 
@@ -372,7 +397,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_response_chunk/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_chunk/1"><code class="inline">HTTPoison.Base.process_response_chunk/1</code></a>.</p></div>
 
     </div>
 
@@ -382,7 +407,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_response_headers/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_headers/1"><code class="inline">HTTPoison.Base.process_response_headers/1</code></a>.</p></div>
 
     </div>
 
@@ -392,7 +417,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_response_status_code/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_status_code/1"><code class="inline">HTTPoison.Base.process_response_status_code/1</code></a>.</p></div>
 
     </div>
 
@@ -404,7 +429,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_status_code/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_status_code/1"><code class="inline">HTTPoison.Base.process_status_code/1</code></a>.</p></div>
 
     </div>
 
@@ -416,7 +441,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">HTTPoison.Base.process_url/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_url/1"><code class="inline">HTTPoison.Base.process_url/1</code></a>.</p></div>
 
     </div>
 
@@ -447,7 +472,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Issues an HTTP request using an <a><code class="inline">HTTPoison.Request</code></a> struct.</p></div>
+        <div class="summary-synopsis"><p>Issues an HTTP request using an <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.</p></div>
 
     </div>
 
@@ -467,7 +492,7 @@ failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Issues an HTTP request an <a><code class="inline">HTTPoison.Request</code></a> struct.
+        <div class="summary-synopsis"><p>Issues an HTTP request an <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.
 exception in case of failure.</p></div>
 
     </div>
@@ -499,7 +524,7 @@ exception in case of failure.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Requests the next message to be streamed for a given <a><code class="inline">HTTPoison.AsyncResponse</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Requests the next message to be streamed for a given <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html"><code class="inline">HTTPoison.AsyncResponse</code></a>.</p></div>
 
     </div>
 
@@ -509,12 +534,12 @@ exception in case of failure.</p></div>
 
 
   <section id="types" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Types</span>
-    </h1>
+    </h2>
 
     <div class="types-list">
 <section class="detail" id="t:body/0">
@@ -527,7 +552,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">body()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -538,7 +563,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> body() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:body/0">HTTPoison.Base.body</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> body() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:body/0">HTTPoison.Base.body</a>()</pre>
 
       </div>
 
@@ -555,7 +580,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">headers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -566,7 +591,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> headers() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:headers/0">HTTPoison.Base.headers</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> headers() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:headers/0">HTTPoison.Base.headers</a>()</pre>
 
       </div>
 
@@ -583,7 +608,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">method()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -594,7 +619,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> method() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:method/0">HTTPoison.Base.method</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> method() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:method/0">HTTPoison.Base.method</a>()</pre>
 
       </div>
 
@@ -611,7 +636,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">options()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -622,7 +647,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> options() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:options/0">HTTPoison.Base.options</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> options() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:options/0">HTTPoison.Base.options</a>()</pre>
 
       </div>
 
@@ -639,7 +664,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">params()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -650,7 +675,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> params() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:params/0">HTTPoison.Base.params</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> params() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:params/0">HTTPoison.Base.params</a>()</pre>
 
       </div>
 
@@ -667,7 +692,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">request()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -678,7 +703,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> request() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:request/0">HTTPoison.Base.request</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> request() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:request/0">HTTPoison.Base.request</a>()</pre>
 
       </div>
 
@@ -695,7 +720,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">url()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -706,7 +731,7 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> url() :: <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:url/0">HTTPoison.Base.url</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> url() :: <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:url/0">HTTPoison.Base.url</a>()</pre>
 
       </div>
 
@@ -718,12 +743,12 @@ exception in case of failure.</p></div>
   </section>
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="delete/3">
@@ -740,7 +765,7 @@ exception in case of failure.</p></div>
       <h1 class="signature" translate="no">delete(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -751,12 +776,12 @@ exception in case of failure.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> delete(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> delete(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -778,7 +803,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">delete!(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -789,10 +814,10 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> delete!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> delete!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -814,7 +839,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">get(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -825,9 +850,9 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> get(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  {:ok, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+          <pre translate="no"><span class="attribute">@spec</span> get(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  {:ok, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -849,7 +874,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">get!(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -860,8 +885,8 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> get!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> get!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()</pre>
 
       </div>
 
@@ -883,7 +908,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">head(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -894,9 +919,9 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> head(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  {:ok, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+          <pre translate="no"><span class="attribute">@spec</span> head(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  {:ok, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -918,7 +943,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">head!(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -929,8 +954,8 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> head!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> head!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>() | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()</pre>
 
       </div>
 
@@ -952,7 +977,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">options(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -963,12 +988,12 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> options(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> options(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -990,7 +1015,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">options!(url, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1001,10 +1026,10 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> options!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> options!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -1026,7 +1051,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">patch(url, body, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1037,12 +1062,12 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> patch(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> patch(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -1064,7 +1089,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">patch!(url, body, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1075,10 +1100,10 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> patch!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> patch!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -1100,7 +1125,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">post(url, body, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1111,12 +1136,12 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> post(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> post(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -1138,7 +1163,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">post!(url, body, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1149,10 +1174,10 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> post!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> post!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -1170,7 +1195,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_headers(headers)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1185,11 +1210,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_headers(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_headers(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">list</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_headers/1"><code class="inline">HTTPoison.Base.process_headers/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_headers/1"><code class="inline">HTTPoison.Base.process_headers/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_request_headers/1">
@@ -1202,7 +1227,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_request_headers(headers)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1217,7 +1242,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_request_headers/1"><code class="inline">HTTPoison.Base.process_request_headers/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_headers/1"><code class="inline">HTTPoison.Base.process_request_headers/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_request_options/1">
@@ -1230,7 +1255,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_request_options(options)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1245,7 +1270,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_request_options/1"><code class="inline">HTTPoison.Base.process_request_options/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_options/1"><code class="inline">HTTPoison.Base.process_request_options/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_request_params/1">
@@ -1258,7 +1283,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_request_params(params)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1273,7 +1298,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_request_params/1"><code class="inline">HTTPoison.Base.process_request_params/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_params/1"><code class="inline">HTTPoison.Base.process_request_params/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_request_url/1">
@@ -1286,7 +1311,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_request_url(url)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1301,7 +1326,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_request_url/1"><code class="inline">HTTPoison.Base.process_request_url/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_request_url/1"><code class="inline">HTTPoison.Base.process_request_url/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_response/1">
@@ -1314,7 +1339,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_response(response)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1325,11 +1350,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_response(<a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#t:response/0">HTTPoison.Base.response</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_response(<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#t:response/0">HTTPoison.Base.response</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_response/1"><code class="inline">HTTPoison.Base.process_response/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response/1"><code class="inline">HTTPoison.Base.process_response/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_response_body/1">
@@ -1342,7 +1367,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_response_body(body)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1353,11 +1378,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_response_body(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_response_body(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_response_body/1"><code class="inline">HTTPoison.Base.process_response_body/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_body/1"><code class="inline">HTTPoison.Base.process_response_body/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_response_chunk/1">
@@ -1370,7 +1395,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_response_chunk(chunk)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1381,11 +1406,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_response_chunk(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_response_chunk(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_response_chunk/1"><code class="inline">HTTPoison.Base.process_response_chunk/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_chunk/1"><code class="inline">HTTPoison.Base.process_response_chunk/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_response_headers/1">
@@ -1398,7 +1423,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_response_headers(headers)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1409,11 +1434,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_response_headers(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">list</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_response_headers(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">list</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_response_headers/1"><code class="inline">HTTPoison.Base.process_response_headers/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_headers/1"><code class="inline">HTTPoison.Base.process_response_headers/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_response_status_code/1">
@@ -1426,7 +1451,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_response_status_code(status_code)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1437,11 +1462,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_response_status_code(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_response_status_code(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_response_status_code/1"><code class="inline">HTTPoison.Base.process_response_status_code/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_response_status_code/1"><code class="inline">HTTPoison.Base.process_response_status_code/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_status_code/1">
@@ -1454,7 +1479,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_status_code(status_code)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1469,11 +1494,11 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> process_status_code(<a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> process_status_code(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>()</pre>
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_status_code/1"><code class="inline">HTTPoison.Base.process_status_code/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_status_code/1"><code class="inline">HTTPoison.Base.process_status_code/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="process_url/1">
@@ -1486,7 +1511,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">process_url(url)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1505,7 +1530,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       </div>
 
-<p>Callback implementation for <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Base.html#c:process_url/1"><code class="inline">HTTPoison.Base.process_url/1</code></a>.</p>
+<p>Callback implementation for <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Base.html#c:process_url/1"><code class="inline">HTTPoison.Base.process_url/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="put/4">
@@ -1524,7 +1549,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">put(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1535,12 +1560,12 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> put(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> put(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
@@ -1564,7 +1589,7 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
       <h1 class="signature" translate="no">put!(url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1575,10 +1600,10 @@ otherwise.</p><p>See <a href="#request/5"><code class="inline">request/5</code><
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> put!(<a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> put!(<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -1596,7 +1621,7 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
       <h1 class="signature" translate="no">request(request)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1607,29 +1632,30 @@ failure.</p><p>If the request does not fail, the response is returned.</p><p>See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> request(<a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html#t:t/0">HTTPoison.Request.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> request(<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html#t:t/0">HTTPoison.Request.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
-<p>Issues an HTTP request using an <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.</p><p>This function returns <code class="inline">{:ok, response}</code>, <code class="inline">{:ok, async_response}</code>, or <code class="inline">{:ok, maybe_redirect}</code>
-if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/1-redirect-handling" class="section-heading"><a href="#request/1-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Redirect handling</span></h2><p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are automatically follow if
-the method is set to <code class="inline">:get</code> or <code class="inline">:head</code> and the response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or
-<code class="inline">307</code>.</p><p>If the method is set to <code class="inline">:post</code>, then the only <code class="inline">status_code</code> that get's automatically
-followed is <code class="inline">303</code>.</p><p>If any other method or <code class="inline">status_code</code> is returned, then this function returns a
-returns a <code class="inline">{:ok, %HTTPoison.MaybeRedirect{}}</code> containing the <code class="inline">redirect_url</code> for you to
-re-request with the method set to <code class="inline">:get</code>.</p><h2 id="request/1-examples" class="section-heading"><a href="#request/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="1356825659-1">%</span><span class="nc" data-group-id="1356825659-1">HTTPoison.Request</span><span class="p" data-group-id="1356825659-1">{</span><span class="w">
+<p>Issues an HTTP request using an <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.</p><p>This function returns <code class="inline">{:ok, response}</code> or <code class="inline">{:ok, async_response}</code>
+if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/1-redirect-handling" class="section-heading"><a href="#request/1-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Redirect handling</span></h2><p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are followed
+internally by hackney when the method is <code class="inline">:get</code> or <code class="inline">:head</code> and the
+response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or <code class="inline">307</code>, and when the method is
+<code class="inline">:post</code> and the <code class="inline">status_code</code> is <code class="inline">303</code>. Redirects are resolved up to
+<code class="inline">:max_redirect</code> hops and the final response is returned.</p><p>As of hackney 4.0 redirects are resolved inside hackney, so a
+<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html"><code class="inline">HTTPoison.MaybeRedirect</code></a> is no longer returned. The struct is retained
+only for backward compatibility.</p><h2 id="request/1-examples" class="section-heading"><a href="#request/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p" data-group-id="group-1">%</span><span class="nc" data-group-id="group-1">HTTPoison.Request</span><span class="p" data-group-id="group-1">{</span><span class="w">
   </span><span class="ss">method</span><span class="p">:</span><span class="w"> </span><span class="ss">:post</span><span class="p">,</span><span class="w">
   </span><span class="ss">url</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w">
-  </span><span class="ss">headers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="1356825659-2">[</span><span class="p" data-group-id="1356825659-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="1356825659-3">}</span><span class="p" data-group-id="1356825659-2">]</span><span class="w">
-</span><span class="p" data-group-id="1356825659-1">}</span><span class="w">
+  </span><span class="ss">headers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-2">[</span><span class="p" data-group-id="group-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">]</span><span class="w">
+</span><span class="p" data-group-id="group-1">}</span><span class="w">
 
-</span><span class="n">request</span><span class="p" data-group-id="1356825659-4">(</span><span class="n">request</span><span class="p" data-group-id="1356825659-4">)</span></code></pre>
+</span><span class="n">request</span><span class="p" data-group-id="group-4">(</span><span class="n">request</span><span class="p" data-group-id="group-4">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="request/5">
@@ -1648,7 +1674,7 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
       <h1 class="signature" translate="no">request(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1659,23 +1685,24 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> request(<a href="#t:method/0">method</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> request(<a href="#t:method/0">method</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok,
-   <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-   | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
-  | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+   <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+   | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()}
+  | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
 <p>Issues an HTTP request with the given method to the given url.</p><p>This function is usually used indirectly by <a href="#get/3"><code class="inline">get/3</code></a>, <a href="#post/4"><code class="inline">post/4</code></a>, <a href="#put/4"><code class="inline">put/4</code></a>, etc</p><p>Args:</p><ul><li><code class="inline">method</code> - HTTP method as an atom (<code class="inline">:get</code>, <code class="inline">:head</code>, <code class="inline">:post</code>, <code class="inline">:put</code>,
-<code class="inline">:delete</code>, etc.)</li><li><code class="inline">url</code> - target url as a binary string or char list</li><li><code class="inline">body</code> - request body. See more below</li><li><code class="inline">headers</code> - HTTP headers as an orddict (e.g., <code class="inline">[{&quot;Accept&quot;, &quot;application/json&quot;}]</code>)</li><li><code class="inline">options</code> - Keyword list of options</li></ul><p>Body: see type <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>Options: see type <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>This function returns <code class="inline">{:ok, response}</code>, <code class="inline">{:ok, async_response}</code>, or <code class="inline">{:ok, maybe_redirect}</code>
-if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/5-redirect-handling" class="section-heading"><a href="#request/5-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Redirect handling</span></h2><p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are automatically follow if
-the method is set to <code class="inline">:get</code> or <code class="inline">:head</code> and the response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or
-<code class="inline">307</code>.</p><p>If the method is set to <code class="inline">:post</code>, then the only <code class="inline">status_code</code> that get's automatically
-followed is <code class="inline">303</code>.</p><p>If any other method or <code class="inline">status_code</code> is returned, then this function returns a
-returns a <code class="inline">{:ok, %HTTPoison.MaybeRedirect{}}</code> containing the <code class="inline">redirect_url</code> for you to
-re-request with the method set to <code class="inline">:get</code>.</p><h2 id="request/5-examples" class="section-heading"><a href="#request/5-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="p" data-group-id="6548465386-1">(</span><span class="ss">:post</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6548465386-2">[</span><span class="p" data-group-id="6548465386-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="6548465386-3">}</span><span class="p" data-group-id="6548465386-2">]</span><span class="p" data-group-id="6548465386-1">)</span></code></pre>
+<code class="inline">:delete</code>, etc.)</li><li><code class="inline">url</code> - target url as a binary string or char list</li><li><code class="inline">body</code> - request body. See more below</li><li><code class="inline">headers</code> - HTTP headers as an orddict (e.g., <code class="inline">[{&quot;Accept&quot;, &quot;application/json&quot;}]</code>)</li><li><code class="inline">options</code> - Keyword list of options</li></ul><p>Body: see type <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>Options: see type <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a></p><p>This function returns <code class="inline">{:ok, response}</code> or <code class="inline">{:ok, async_response}</code>
+if the request is successful, <code class="inline">{:error, reason}</code> otherwise.</p><h2 id="request/5-redirect-handling" class="section-heading"><a href="#request/5-redirect-handling" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Redirect handling</span></h2><p>If the option <code class="inline">:follow_redirect</code> is given, HTTP redirects are followed
+internally by hackney when the method is <code class="inline">:get</code> or <code class="inline">:head</code> and the
+response's <code class="inline">status_code</code> is <code class="inline">301</code>, <code class="inline">302</code> or <code class="inline">307</code>, and when the method is
+<code class="inline">:post</code> and the <code class="inline">status_code</code> is <code class="inline">303</code>. Redirects are resolved up to
+<code class="inline">:max_redirect</code> hops and the final response is returned.</p><p>As of hackney 4.0 redirects are resolved inside hackney, so a
+<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html"><code class="inline">HTTPoison.MaybeRedirect</code></a> is no longer returned. The struct is retained
+only for backward compatibility.</p><h2 id="request/5-examples" class="section-heading"><a href="#request/5-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="n">request</span><span class="p" data-group-id="group-1">(</span><span class="ss">:post</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;https://my.website.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;{</span><span class="se">\&quot;</span><span class="s">foo</span><span class="se">\&quot;</span><span class="s">: 3}&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">[</span><span class="p" data-group-id="group-3">{</span><span class="s">&quot;Accept&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;application/json&quot;</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">]</span><span class="p" data-group-id="group-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="request!/1">
@@ -1688,7 +1715,7 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
       <h1 class="signature" translate="no">request!(request)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1699,14 +1726,14 @@ re-request with the method set to <code class="inline">:get</code>.</p><h2 id="r
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> request!(<a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html#t:t/0">HTTPoison.Request.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> request!(<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html#t:t/0">HTTPoison.Request.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
-<p>Issues an HTTP request an <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.
+<p>Issues an HTTP request an <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Request.html"><code class="inline">HTTPoison.Request</code></a> struct.
 exception in case of failure.</p><p><a href="#request!/1"><code class="inline">request!/1</code></a> works exactly like <a href="#request/1"><code class="inline">request/1</code></a> but it returns just the
 response in case of a successful request, raising an exception in case the
 request fails.</p>
@@ -1728,7 +1755,7 @@ request fails.</p>
       <h1 class="signature" translate="no">request!(method, url, body \\ &quot;&quot;, headers \\ [], options \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1739,10 +1766,10 @@ request fails.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> request!(<a href="#t:method/0">method</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">binary</a>(), <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://hexdocs.pm/elixir/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
-  | <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@spec</span> request!(<a href="#t:method/0">method</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">binary</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">any</a>(), <a href="#t:headers/0">headers</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+  <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Response.html#t:t/0">HTTPoison.Response.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()
+  | <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.MaybeRedirect.html#t:t/0">HTTPoison.MaybeRedirect.t</a>()</pre>
 
       </div>
 
@@ -1762,7 +1789,7 @@ request fails.</p>
       <h1 class="signature" translate="no">start()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1784,7 +1811,7 @@ request fails.</p>
       <h1 class="signature" translate="no">stream_next(resp)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/http_client.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1795,12 +1822,12 @@ request fails.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> stream_next(<a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()) ::
-  {:ok, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()} | {:error, <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
+          <pre translate="no"><span class="attribute">@spec</span> stream_next(<a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()) ::
+  {:ok, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html#t:t/0">HTTPoison.AsyncResponse.t</a>()} | {:error, <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.Error.html#t:t/0">HTTPoison.Error.t</a>()}</pre>
 
       </div>
 
-<p>Requests the next message to be streamed for a given <a href="https://hexdocs.pm/httpoison/2.2.3/HTTPoison.AsyncResponse.html"><code class="inline">HTTPoison.AsyncResponse</code></a>.</p><p>See <a href="#request!/5"><code class="inline">request!/5</code></a> for more detailed information.</p>
+<p>Requests the next message to be streamed for a given <a href="https://httpoison.hexdocs.pm/3.0.0/HTTPoison.AsyncResponse.html"><code class="inline">HTTPoison.AsyncResponse</code></a>.</p><p>See <a href="#request!/5"><code class="inline">request!/5</code></a> for more detailed information.</p>
   </section>
 </section>
 
@@ -1808,27 +1835,34 @@ request fails.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

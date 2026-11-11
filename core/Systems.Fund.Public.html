@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Fund.Public — core v0.1.0</title>
+    <title>Systems.Fund.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Fund.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Fund.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Fund.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -507,7 +532,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
 
       </div>
 
-        <div class="summary-synopsis"><p>Pure pre-flight threshold check (no side effects), used by <a><code class="inline">prepare_payout/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Pure pre-flight threshold check (no side effects), used by <a href="#prepare_payout/2"><code class="inline">prepare_payout/2</code></a>.</p></div>
 
     </div>
 
@@ -590,7 +615,7 @@ account exist, then reports payout readiness via <code class="inline">payout_rea
       </div>
 
         <div class="summary-synopsis"><p>Flags provider withdrawals and transfers that have no local payout row.
-See <a><code class="inline">Systems.Fund.PayoutOrphanReconciliation</code></a>.</p></div>
+See <a href="Systems.Fund.PayoutOrphanReconciliation.html"><code class="inline">Systems.Fund.PayoutOrphanReconciliation</code></a>.</p></div>
 
     </div>
 
@@ -601,7 +626,7 @@ See <a><code class="inline">Systems.Fund.PayoutOrphanReconciliation</code></a>.<
       </div>
 
         <div class="summary-synopsis"><p>Flags provider transactions that have no local pay-in row.
-See <a><code class="inline">Systems.Fund.TransactionOrphanReconciliation</code></a>.</p></div>
+See <a href="Systems.Fund.TransactionOrphanReconciliation.html"><code class="inline">Systems.Fund.TransactionOrphanReconciliation</code></a>.</p></div>
 
     </div>
 
@@ -612,7 +637,7 @@ See <a><code class="inline">Systems.Fund.TransactionOrphanReconciliation</code><
       </div>
 
         <div class="summary-synopsis"><p>Reconciles <code class="inline">:pending</code> payouts against the payment provider.
-See <a><code class="inline">Systems.Fund.PayoutReconciliation</code></a>.</p></div>
+See <a href="Systems.Fund.PayoutReconciliation.html"><code class="inline">Systems.Fund.PayoutReconciliation</code></a>.</p></div>
 
     </div>
 
@@ -666,7 +691,7 @@ them, then transfers and withdraws via the payment provider. Returns <code class
       </div>
 
         <div class="summary-synopsis"><p>Drives a stranded payout forward, without ever re-moving money.
-See <a><code class="inline">Systems.Fund.PayoutWithdrawal.resume/1</code></a>.</p></div>
+See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">Systems.Fund.PayoutWithdrawal.resume/1</code></a>.</p></div>
 
     </div>
 
@@ -767,12 +792,12 @@ earning anything.</p></div>
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="apply_withdrawal_status/2">
@@ -785,7 +810,7 @@ earning anything.</p></div>
       <h1 class="signature" translate="no">apply_withdrawal_status(provider_uid, map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1516" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1516" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -809,7 +834,7 @@ payout was found, <code class="inline">{:ok, nil}</code> when none matched the u
       <h1 class="signature" translate="no">approve_pending_rewards(cutoff)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L379" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L379" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -831,7 +856,7 @@ payout was found, <code class="inline">{:ok, nil}</code> when none matched the u
       <h1 class="signature" translate="no">approve_reward(multi, reward)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L410" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L410" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -860,7 +885,7 @@ balance; <code class="inline">:virtual</code> currencies have no such constraint
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -882,7 +907,7 @@ balance; <code class="inline">:virtual</code> currencies have no such constraint
       <h1 class="signature" translate="no">complete_transaction(provider_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1816" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1816" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -910,7 +935,7 @@ the researcher's payment did succeed at OPP and we credit it. Only
       <h1 class="signature" translate="no">create_bank_account(name, icon, type, decimal_scale, label_bundle)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L216" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L216" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -932,7 +957,7 @@ the researcher's payment did succeed at OPP and we credit it. Only
       <h1 class="signature" translate="no">create_currency_and_fund(name, icon, type, decimal_scale, label)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L231" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -954,7 +979,7 @@ the researcher's payment did succeed at OPP and we credit it. Only
       <h1 class="signature" translate="no">create_fund(currency, name, icon)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L221" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L221" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -976,7 +1001,7 @@ the researcher's payment did succeed at OPP and we credit it. Only
       <h1 class="signature" translate="no">create_fund(currency, name, icon, owner)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L226" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L226" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -998,7 +1023,7 @@ the researcher's payment did succeed at OPP and we credit it. Only
       <h1 class="signature" translate="no">create_pay_in(assignment, user, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1635" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1635" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1022,7 +1047,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">create_reward(fund, amount, user, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L297" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L297" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1044,7 +1069,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">create_reward(multi, fund, amount, user, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L309" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L309" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1068,7 +1093,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">expire_stale_pay_ins(max_age_minutes \\ 15)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1890" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1890" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1090,7 +1115,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">fail_transaction(provider_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1864" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1864" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1114,7 +1139,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get!(id, preload \\ [:available, :pending])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L153" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1138,7 +1163,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_bank_account!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L168" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L168" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1162,7 +1187,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_by_currency!(currency_model, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L158" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L158" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1186,7 +1211,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_by_name(name, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L163" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L163" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1210,7 +1235,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_currency!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L173" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L173" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1234,7 +1259,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_currency_by_name(name, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L178" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L178" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1256,7 +1281,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_reward(idempotence_key, preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L188" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L188" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1278,7 +1303,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_reward(model, user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L196" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1302,7 +1327,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_reward!(id, preload \\ [:fund, :deposit, :payment, :user])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L183" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L183" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1324,7 +1349,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_transaction_by_provider_uid!(provider_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1624" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1624" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1346,7 +1371,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">get_wallet_identifier(user, currency_name)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L206" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L206" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1368,7 +1393,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">has_pay_ins?(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L124" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L124" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1392,7 +1417,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">list(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L35" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L35" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1416,7 +1441,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">list_bank_accounts(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1440,7 +1465,7 @@ Returns {:ok, %{transaction: transaction, payment_url: url}} or {:error, reason}
       <h1 class="signature" translate="no">list_confirmed_rewards(model, preload \\ [:user, :payment])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L139" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L139" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1465,7 +1490,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_currencies(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L72" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1489,7 +1514,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_currencies_by_type(type, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L78" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L78" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1513,7 +1538,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_owned(user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L39" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L39" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1537,7 +1562,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_owned_by_currency(user, currency_model, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L53" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1561,7 +1586,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_paid_rewards(fund, preload \\ [:user, :payment])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1583,7 +1608,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_payouts_for_user(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L110" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1608,7 +1633,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_pending_approvals(fund, preload \\ [:user])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L118" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L118" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1632,7 +1657,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_rejected_rewards(fund, preload \\ [:user])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L147" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L147" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1656,7 +1681,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_rewards(user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L98" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L98" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1678,7 +1703,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_transactions_by_fund(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1616" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1616" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1700,7 +1725,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">list_wallets(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L88" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1722,7 +1747,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">make_deposit(multi)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L688" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L688" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1744,7 +1769,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">make_test_deposit(model, deposit_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L653" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L653" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1766,7 +1791,7 @@ contribution and everything downstream (pending payout, paid).</p>
       <h1 class="signature" translate="no">mark_pending_approval(multi, reward_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L370" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L370" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1790,7 +1815,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">move_wallet_balance(from, to, idempotence_key, limit)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L236" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L236" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1812,7 +1837,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">move_wallet_balance(arg1, to, idempotence_key, limit, amount)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L265" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L265" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1834,7 +1859,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">multiply_rewards(currency_name, multiplier)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L521" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L521" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1856,7 +1881,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">payout_eligibility(user, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1023" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1023" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1878,7 +1903,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">payout_reward(idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L358" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L358" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1900,7 +1925,7 @@ is <code class="inline">:reserved</code>, so it's idempotent (no-op if already p
       <h1 class="signature" translate="no">payout_status(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1006" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1006" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1930,7 +1955,7 @@ stranded payout the reward-status columns don't show:</p><ul><li><code class="in
       <h1 class="signature" translate="no">payout_threshold_cents()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L949" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L949" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1952,7 +1977,7 @@ stranded payout the reward-status columns don't show:</p><ul><li><code class="in
       <h1 class="signature" translate="no">pending_rewards(currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L899" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L899" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1974,7 +1999,7 @@ stranded payout the reward-status columns don't show:</p><ul><li><code class="in
       <h1 class="signature" translate="no">pending_rewards(student, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L891" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L891" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1996,7 +2021,7 @@ stranded payout the reward-status columns don't show:</p><ul><li><code class="in
       <h1 class="signature" translate="no">pending_rewards_query(currency_name)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L905" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L905" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2018,7 +2043,7 @@ stranded payout the reward-status columns don't show:</p><ul><li><code class="in
       <h1 class="signature" translate="no">prepare_payout(user, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1039" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1039" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2041,7 +2066,7 @@ account exist, then reports payout readiness via <code class="inline">payout_rea
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2063,7 +2088,7 @@ account exist, then reports payout readiness via <code class="inline">payout_rea
       <h1 class="signature" translate="no">reconcile_orphaned_payouts(opts, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1593" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1593" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2086,7 +2111,7 @@ See <a href="Systems.Fund.PayoutOrphanReconciliation.html"><code class="inline">
       <h1 class="signature" translate="no">reconcile_orphaned_transactions(opts, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1915" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1915" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2109,7 +2134,7 @@ See <a href="Systems.Fund.TransactionOrphanReconciliation.html"><code class="inl
       <h1 class="signature" translate="no">reconcile_pending_payouts(opts, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1587" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1587" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2132,7 +2157,7 @@ See <a href="Systems.Fund.PayoutReconciliation.html"><code class="inline">System
       <h1 class="signature" translate="no">reconcile_transactions(opts, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1909" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1909" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2154,7 +2179,7 @@ See <a href="Systems.Fund.PayoutReconciliation.html"><code class="inline">System
       <h1 class="signature" translate="no">reject_reward(multi, reward)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L505" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L505" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2183,7 +2208,7 @@ Fund only records the outcome.</p>
       <h1 class="signature" translate="no">request_donation(user, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1339" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1339" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2212,7 +2237,7 @@ cost money; a donation has no such floor, so donating €0.50 is fine.</p><p>Ret
       <h1 class="signature" translate="no">request_payout(user, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L956" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L956" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2236,7 +2261,7 @@ them, then transfers and withdraws via the payment provider. Returns <code class
       <h1 class="signature" translate="no">resume_payout(payout)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1581" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1581" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2259,7 +2284,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <h1 class="signature" translate="no">reward_has_outstanding_deposit?(idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L602" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L602" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2281,7 +2306,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <h1 class="signature" translate="no">rewarded_amount(idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1596" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1596" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2303,7 +2328,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <h1 class="signature" translate="no">rollback_deposit(idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L611" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L611" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2325,7 +2350,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <h1 class="signature" translate="no">rollback_deposit(multi, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L624" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L624" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2347,7 +2372,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <h1 class="signature" translate="no">start_bank_verification(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1116" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1116" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2359,7 +2384,7 @@ See <a href="Systems.Fund.PayoutWithdrawal.html#resume/1"><code class="inline">S
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> start_bank_verification(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>()) ::
-  {:bank, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+  {:bank, <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">term</a>()}</pre>
 
       </div>
 
@@ -2382,7 +2407,7 @@ not re-push (the phone was pushed to OPP when first collected).</p>
       <h1 class="signature" translate="no">start_bank_verification(user, phone)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1122" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1122" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2393,8 +2418,8 @@ not re-push (the phone was pushed to OPP when first collected).</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> start_bank_verification(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil) ::
-  {:bank, <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">term</a>()}</pre>
+          <pre translate="no"><span class="attribute">@spec</span> start_bank_verification(<a href="Systems.Account.User.html#t:t/0">Systems.Account.User.t</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil) ::
+  {:bank, <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()} | :verified | {:error, <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">term</a>()}</pre>
 
       </div>
 
@@ -2411,7 +2436,7 @@ not re-push (the phone was pushed to OPP when first collected).</p>
       <h1 class="signature" translate="no">summarize_rewards(user, currency)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L923" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L923" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2433,7 +2458,7 @@ not re-push (the phone was pushed to OPP when first collected).</p>
       <h1 class="signature" translate="no">verification_status(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1077" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L1077" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2466,7 +2491,7 @@ to OPP that is still being reviewed — so the UI can show &quot;Wordt geverifi�
       <h1 class="signature" translate="no">wallet_is_active?(wallet)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L293" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L293" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2488,7 +2513,7 @@ to OPP that is still being reviewed — so the UI can show &quot;Wordt geverifi�
       <h1 class="signature" translate="no">wallet_is_passive?(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L285" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/fund/_public.ex#L285" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2505,27 +2530,34 @@ to OPP that is still being reviewed — so the UI can show &quot;Wordt geverifi�
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

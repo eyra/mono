@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
+
+
+    <title>Next.Systems.Announcement.Public — mica v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
+
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="mica" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+mica
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Next.<wbr />Systems.<wbr />Announcement.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
+
+    </h1>
+
+<a href="Next.Systems.Announcement.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Create, change and read announcements and their recipients.</p><p>A recipient row (<a href="Next.Systems.Announcement.RecipientModel.html"><code class="inline">Next.Systems.Announcement.RecipientModel</code></a>) records that one user
+received an announcement and when they read it. Only users with a recipient
+row may open a published announcement (<a href="#get_received/2"><code class="inline">get_received/2</code></a>).</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#audience_filters/0" data-no-tooltip="" translate="no">audience_filters()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The filters that narrow the audience of an announcement. The audience is
+always creators; these come on top, combined with AND.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#count_audiences/1" data-no-tooltip="" translate="no">count_audiences(announcements)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The number of recipients each published announcement was published to, as
+a map from announcement id to count. Unpublished announcements count 0.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#create_announcement/2" data-no-tooltip="" translate="no">create_announcement(user, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Creates an announcement by <code class="inline">author</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#deliver_announcement/1" data-no-tooltip="" translate="no">deliver_announcement(announcement_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Gives every recipient of a published announcement a recipient row and a
+To-do, with one insert for the rows and batched inserts for the To-dos.
+For a high-priority announcement it also queues one email per recipient
+(<a href="Next.Systems.Announcement.EmailTemplate.html"><code class="inline">Next.Systems.Announcement.EmailTemplate</code></a>), in batches. Recipients who already
+have a row are skipped, so running it again adds and sends nothing. Users
+deleted since publication are left out. Returns <code class="inline">{:ok, count}</code> with the
+number of recipients added.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_announcement/2" data-no-tooltip="" translate="no">get_announcement(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_announcement!/2" data-no-tooltip="" translate="no">get_announcement!(id, preload \\ [])</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#get_received/2" data-no-tooltip="" translate="no">get_received(user, announcement_id)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The recipient row of <code class="inline">user</code> for the announcement with <code class="inline">announcement_id</code>, with
+the announcement preloaded, or <code class="inline">nil</code> when the user did not receive it or it
+is not published.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_announcements/1" data-no-tooltip="" translate="no">list_announcements(preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>All announcements, newest first.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_audience_ids/2" data-no-tooltip="" translate="no">list_audience_ids(filters, query)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The ids of the users an announcement for the audience of <code class="inline">filters</code> and
+<code class="inline">query</code> reaches: creators with a confirmed account that match every filter
+and every word of the search, with the matching of Admin → Users
+(<a href="Systems.Admin.Public.html#list_matching_users/2"><code class="inline">Systems.Admin.Public.list_matching_users/2</code></a>). Filters other than
+<a href="#audience_filters/0"><code class="inline">audience_filters/0</code></a> are ignored.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_received/2" data-no-tooltip="" translate="no">list_received(user, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The published announcements <code class="inline">user</code> received, as recipient rows with the announcement
+preloaded, newest publication first. <code class="inline">limit: n</code> returns only the <code class="inline">n</code> newest.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#list_recipients/2" data-no-tooltip="" translate="no">list_recipients(announcement, preload \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The recipient rows of <code class="inline">announcement</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#mark_read/1" data-no-tooltip="" translate="no">mark_read(recipient)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks the announcement read for the recipient and clears its To-do.
+<code class="inline">read_at</code> is set only once and keeps the time of the first opening. The
+To-do is cleared on every call, so one that is left or comes back after
+the first opening goes too. Returns the recipient with <code class="inline">read_at</code> set.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#publish_announcement/4" data-no-tooltip="" translate="no">publish_announcement(announcement, filters, query, shown_count)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Publishes an unpublished announcement to the audience of <code class="inline">filters</code> and
+<code class="inline">query</code> (<a href="#list_audience_ids/2"><code class="inline">list_audience_ids/2</code></a>). The audience is resolved here, once, and
+stored on the announcement; a job then gives every recipient a recipient
+row and a To-do (<a href="#deliver_announcement/1"><code class="inline">deliver_announcement/1</code></a>).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#update_announcement/2" data-no-tooltip="" translate="no">update_announcement(loaded, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Changes an announcement and dispatches <code class="inline">{:announcement, :updated}</code>, so the
+pages that show it refresh. Nothing is sent again and the recipients keep
+their read status.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="audience_filters/0">
+
+  <div class="detail-header">
+    <a href="#audience_filters/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">audience_filters()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L160" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The filters that narrow the audience of an announcement. The audience is
+always creators; these come on top, combined with AND.</p>
+  </section>
+</section>
+<section class="detail" id="count_audiences/1">
+
+  <div class="detail-header">
+    <a href="#count_audiences/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">count_audiences(announcements)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L252" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The number of recipients each published announcement was published to, as
+a map from announcement id to count. Unpublished announcements count 0.</p>
+  </section>
+</section>
+<section class="detail" id="create_announcement/2">
+
+  <div class="detail-header">
+    <a href="#create_announcement/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">create_announcement(user, attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L23" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Creates an announcement by <code class="inline">author</code>.</p>
+  </section>
+</section>
+<section class="detail" id="deliver_announcement/1">
+
+  <div class="detail-header">
+    <a href="#deliver_announcement/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">deliver_announcement(announcement_id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L271" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Gives every recipient of a published announcement a recipient row and a
+To-do, with one insert for the rows and batched inserts for the To-dos.
+For a high-priority announcement it also queues one email per recipient
+(<a href="Next.Systems.Announcement.EmailTemplate.html"><code class="inline">Next.Systems.Announcement.EmailTemplate</code></a>), in batches. Recipients who already
+have a row are skipped, so running it again adds and sends nothing. Users
+deleted since publication are left out. Returns <code class="inline">{:ok, count}</code> with the
+number of recipients added.</p>
+  </section>
+</section>
+<section class="detail" id="get_announcement/2">
+
+    <span id="get_announcement/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_announcement/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_announcement(id, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L114" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_announcement!/2">
+
+    <span id="get_announcement!/1"></span>
+
+  <div class="detail-header">
+    <a href="#get_announcement!/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_announcement!(id, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L108" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="get_received/2">
+
+  <div class="detail-header">
+    <a href="#get_received/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">get_received(user, announcement_id)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L139" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The recipient row of <code class="inline">user</code> for the announcement with <code class="inline">announcement_id</code>, with
+the announcement preloaded, or <code class="inline">nil</code> when the user did not receive it or it
+is not published.</p>
+  </section>
+</section>
+<section class="detail" id="list_announcements/1">
+
+    <span id="list_announcements/0"></span>
+
+  <div class="detail-header">
+    <a href="#list_announcements/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_announcements(preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L147" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>All announcements, newest first.</p>
+  </section>
+</section>
+<section class="detail" id="list_audience_ids/2">
+
+  <div class="detail-header">
+    <a href="#list_audience_ids/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_audience_ids(filters, query)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L169" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The ids of the users an announcement for the audience of <code class="inline">filters</code> and
+<code class="inline">query</code> reaches: creators with a confirmed account that match every filter
+and every word of the search, with the matching of Admin → Users
+(<a href="Systems.Admin.Public.html#list_matching_users/2"><code class="inline">Systems.Admin.Public.list_matching_users/2</code></a>). Filters other than
+<a href="#audience_filters/0"><code class="inline">audience_filters/0</code></a> are ignored.</p>
+  </section>
+</section>
+<section class="detail" id="list_received/2">
+
+    <span id="list_received/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_received/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_received(user, opts \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L124" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The published announcements <code class="inline">user</code> received, as recipient rows with the announcement
+preloaded, newest publication first. <code class="inline">limit: n</code> returns only the <code class="inline">n</code> newest.</p>
+  </section>
+</section>
+<section class="detail" id="list_recipients/2">
+
+    <span id="list_recipients/1"></span>
+
+  <div class="detail-header">
+    <a href="#list_recipients/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">list_recipients(announcement, preload \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L385" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The recipient rows of <code class="inline">announcement</code>.</p>
+  </section>
+</section>
+<section class="detail" id="mark_read/1">
+
+  <div class="detail-header">
+    <a href="#mark_read/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">mark_read(recipient)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L355" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks the announcement read for the recipient and clears its To-do.
+<code class="inline">read_at</code> is set only once and keeps the time of the first opening. The
+To-do is cleared on every call, so one that is left or comes back after
+the first opening goes too. Returns the recipient with <code class="inline">read_at</code> set.</p>
+  </section>
+</section>
+<section class="detail" id="publish_announcement/4">
+
+  <div class="detail-header">
+    <a href="#publish_announcement/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">publish_announcement(announcement, filters, query, shown_count)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L192" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Publishes an unpublished announcement to the audience of <code class="inline">filters</code> and
+<code class="inline">query</code> (<a href="#list_audience_ids/2"><code class="inline">list_audience_ids/2</code></a>). The audience is resolved here, once, and
+stored on the announcement; a job then gives every recipient a recipient
+row and a To-do (<a href="#deliver_announcement/1"><code class="inline">deliver_announcement/1</code></a>).</p><p><code class="inline">shown_count</code> is the recipient count the admin saw and confirmed. When the
+audience has changed since, nothing is published and the result is
+<code class="inline">{:error, {:audience_changed, count}}</code> with the current count.</p><p>Returns <code class="inline">{:error, :no_recipients}</code> when the audience is empty and
+<code class="inline">{:error, :already_published}</code> when it was published before.</p>
+  </section>
+</section>
+<section class="detail" id="update_announcement/2">
+
+  <div class="detail-header">
+    <a href="#update_announcement/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">update_announcement(loaded, attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/announcement/_public.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Changes an announcement and dispatches <code class="inline">{:announcement, :updated}</code>, so the
+pages that show it refresh. Nothing is sent again and the recipients keep
+their read status.</p><p><code class="inline">announcement</code> is the copy the change was made on, such as the one a form
+opened. Returns <code class="inline">{:error, :changed_since_loaded}</code> when the announcement was
+saved since that copy was loaded, so two forms can't undo each other's
+changes. After publication only the title, summary and body may change
+(<a href="Next.Systems.Announcement.Model.html#fixed_after_publishing/0"><code class="inline">Next.Systems.Announcement.Model.fixed_after_publishing/0</code></a>). Returns
+<code class="inline">{:error, :already_published}</code> when the change touches another field, and
+when the copy was loaded before it was published. The row is locked and
+checked in the same transaction as the update.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="mica.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

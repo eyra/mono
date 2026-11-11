@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Assignment.System — core v0.1.0</title>
+    <title>Systems.Assignment.System — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Assignment.System</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Assignment.<wbr />System</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Assignment.System.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -112,7 +137,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.account_tabs/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:account_tabs/0"><code class="inline">Mica.System.account_tabs/0</code></a>.</p></div>
 
     </div>
 
@@ -122,7 +147,17 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.admin_panels/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:admin_panels/0"><code class="inline">Mica.System.admin_panels/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#bff_pages/0" data-no-tooltip="" translate="no">bff_pages()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>.</p></div>
 
     </div>
 
@@ -132,7 +167,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.children/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:children/0"><code class="inline">Mica.System.children/0</code></a>.</p></div>
 
     </div>
 
@@ -142,7 +177,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.desktop_sections/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:desktop_sections/0"><code class="inline">Mica.System.desktop_sections/0</code></a>.</p></div>
 
     </div>
 
@@ -152,7 +187,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.feature_flags/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:feature_flags/0"><code class="inline">Mica.System.feature_flags/0</code></a>.</p></div>
 
     </div>
 
@@ -162,7 +197,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.grants/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:grants/0"><code class="inline">Mica.System.grants/0</code></a>.</p></div>
 
     </div>
 
@@ -172,7 +207,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.migrations_path/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:migrations_path/0"><code class="inline">Mica.System.migrations_path/0</code></a>.</p></div>
 
     </div>
 
@@ -182,7 +217,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.notifiers/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:notifiers/0"><code class="inline">Mica.System.notifiers/0</code></a>.</p></div>
 
     </div>
 
@@ -192,7 +227,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.notify_channels/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:notify_channels/0"><code class="inline">Mica.System.notify_channels/0</code></a>.</p></div>
 
     </div>
 
@@ -202,7 +237,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.oban_crons/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:oban_crons/0"><code class="inline">Mica.System.oban_crons/0</code></a>.</p></div>
 
     </div>
 
@@ -212,7 +247,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.oban_queues/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:oban_queues/0"><code class="inline">Mica.System.oban_queues/0</code></a>.</p></div>
 
     </div>
 
@@ -222,7 +257,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.override_routes/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:override_routes/0"><code class="inline">Mica.System.override_routes/0</code></a>.</p></div>
 
     </div>
 
@@ -232,7 +267,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.rate_quotas/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:rate_quotas/0"><code class="inline">Mica.System.rate_quotas/0</code></a>.</p></div>
 
     </div>
 
@@ -242,7 +277,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.routes/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:routes/0"><code class="inline">Mica.System.routes/0</code></a>.</p></div>
 
     </div>
 
@@ -252,7 +287,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.seeds/1</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:seeds/1"><code class="inline">Mica.System.seeds/1</code></a>.</p></div>
 
     </div>
 
@@ -262,7 +297,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.sign_in_handoffs/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:sign_in_handoffs/0"><code class="inline">Mica.System.sign_in_handoffs/0</code></a>.</p></div>
 
     </div>
 
@@ -272,7 +307,7 @@ core
 
       </div>
 
-        <div class="summary-synopsis"><p>Callback implementation for <a><code class="inline">Core.System.signal_handlers/0</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:signal_handlers/0"><code class="inline">Mica.System.signal_handlers/0</code></a>.</p></div>
 
     </div>
 
@@ -282,12 +317,12 @@ core
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="account_tabs/0">
@@ -300,7 +335,7 @@ core
       <h1 class="signature" translate="no">account_tabs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -309,7 +344,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:account_tabs/0"><code class="inline">Core.System.account_tabs/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:account_tabs/0"><code class="inline">Mica.System.account_tabs/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="admin_panels/0">
@@ -322,7 +357,7 @@ core
       <h1 class="signature" translate="no">admin_panels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -331,7 +366,29 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:admin_panels/0"><code class="inline">Core.System.admin_panels/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:admin_panels/0"><code class="inline">Mica.System.admin_panels/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="bff_pages/0">
+
+  <div class="detail-header">
+    <a href="#bff_pages/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">bff_pages()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="children/0">
@@ -344,7 +401,7 @@ core
       <h1 class="signature" translate="no">children()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -353,7 +410,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:children/0"><code class="inline">Core.System.children/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:children/0"><code class="inline">Mica.System.children/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="desktop_sections/0">
@@ -366,7 +423,7 @@ core
       <h1 class="signature" translate="no">desktop_sections()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -375,7 +432,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:desktop_sections/0"><code class="inline">Core.System.desktop_sections/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:desktop_sections/0"><code class="inline">Mica.System.desktop_sections/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="feature_flags/0">
@@ -388,7 +445,7 @@ core
       <h1 class="signature" translate="no">feature_flags()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -397,7 +454,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:feature_flags/0"><code class="inline">Core.System.feature_flags/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:feature_flags/0"><code class="inline">Mica.System.feature_flags/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="grants/0">
@@ -410,7 +467,7 @@ core
       <h1 class="signature" translate="no">grants()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L11" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L11" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -419,7 +476,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:grants/0"><code class="inline">Core.System.grants/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:grants/0"><code class="inline">Mica.System.grants/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="migrations_path/0">
@@ -432,7 +489,7 @@ core
       <h1 class="signature" translate="no">migrations_path()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -441,7 +498,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:migrations_path/0"><code class="inline">Core.System.migrations_path/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:migrations_path/0"><code class="inline">Mica.System.migrations_path/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="notifiers/0">
@@ -454,7 +511,7 @@ core
       <h1 class="signature" translate="no">notifiers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L23" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L23" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -463,7 +520,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:notifiers/0"><code class="inline">Core.System.notifiers/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:notifiers/0"><code class="inline">Mica.System.notifiers/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="notify_channels/0">
@@ -476,7 +533,7 @@ core
       <h1 class="signature" translate="no">notify_channels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -485,7 +542,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:notify_channels/0"><code class="inline">Core.System.notify_channels/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:notify_channels/0"><code class="inline">Mica.System.notify_channels/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="oban_crons/0">
@@ -498,7 +555,7 @@ core
       <h1 class="signature" translate="no">oban_crons()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -507,7 +564,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:oban_crons/0"><code class="inline">Core.System.oban_crons/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:oban_crons/0"><code class="inline">Mica.System.oban_crons/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="oban_queues/0">
@@ -520,7 +577,7 @@ core
       <h1 class="signature" translate="no">oban_queues()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -529,7 +586,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:oban_queues/0"><code class="inline">Core.System.oban_queues/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:oban_queues/0"><code class="inline">Mica.System.oban_queues/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="override_routes/0">
@@ -542,7 +599,7 @@ core
       <h1 class="signature" translate="no">override_routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -551,7 +608,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:override_routes/0"><code class="inline">Core.System.override_routes/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:override_routes/0"><code class="inline">Mica.System.override_routes/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="rate_quotas/0">
@@ -564,7 +621,7 @@ core
       <h1 class="signature" translate="no">rate_quotas()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -573,7 +630,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:rate_quotas/0"><code class="inline">Core.System.rate_quotas/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:rate_quotas/0"><code class="inline">Mica.System.rate_quotas/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="routes/0">
@@ -586,7 +643,7 @@ core
       <h1 class="signature" translate="no">routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L4" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L4" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -595,7 +652,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:routes/0"><code class="inline">Core.System.routes/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:routes/0"><code class="inline">Mica.System.routes/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="seeds/1">
@@ -608,7 +665,7 @@ core
       <h1 class="signature" translate="no">seeds(deploy_env)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -617,7 +674,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:seeds/1"><code class="inline">Core.System.seeds/1</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:seeds/1"><code class="inline">Mica.System.seeds/1</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="sign_in_handoffs/0">
@@ -630,7 +687,7 @@ core
       <h1 class="signature" translate="no">sign_in_handoffs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -639,7 +696,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:sign_in_handoffs/0"><code class="inline">Core.System.sign_in_handoffs/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:sign_in_handoffs/0"><code class="inline">Mica.System.sign_in_handoffs/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="signal_handlers/0">
@@ -652,7 +709,7 @@ core
       <h1 class="signature" translate="no">signal_handlers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L21" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_system.ex#L21" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -661,7 +718,7 @@ core
 
   <section class="docstring">
 
-<p>Callback implementation for <a href="Core.System.html#c:signal_handlers/0"><code class="inline">Core.System.signal_handlers/0</code></a>.</p>
+<p>Callback implementation for <a href="Mica.System.html#c:signal_handlers/0"><code class="inline">Mica.System.signal_handlers/0</code></a>.</p>
   </section>
 </section>
 
@@ -669,27 +726,34 @@ core
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

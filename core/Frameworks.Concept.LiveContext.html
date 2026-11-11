@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Frameworks.Concept.LiveContext — core v0.1.0</title>
+    <title>Frameworks.Concept.LiveContext — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Frameworks.Concept.LiveContext</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Frameworks.<wbr />Concept.<wbr />LiveContext</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Frameworks.Concept.LiveContext.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -94,38 +119,38 @@ core
 
     <section id="moduledoc">
 <p>Context container that holds shared state across a view hierarchy.</p><p>Backed by a map for maximum flexibility - can store any data at any level.
-All contexts are stored under the &quot;live_context&quot; session key.</p><h2 id="module-two-context-patterns" class="section-heading"><a href="#module-two-context-patterns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Two Context Patterns</span></h2><p>LiveContext supports two patterns for managing data ownership:</p><h3 id="module-pattern-1-parent-managed-full-objects" class="section-heading"><a href="#module-pattern-1-parent-managed-full-objects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pattern 1: Parent-Managed (Full Objects)</span></h3><p>Context contains full objects. Parent manages all data updates, child views are passive consumers.</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="7891558630-1">(</span><span class="p" data-group-id="7891558630-2">%{</span><span class="w">
+All contexts are stored under the &quot;live_context&quot; session key.</p><h2 id="module-two-context-patterns" class="section-heading"><a href="#module-two-context-patterns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Two Context Patterns</span></h2><p>LiveContext supports two patterns for managing data ownership:</p><h3 id="module-pattern-1-parent-managed-full-objects" class="section-heading"><a href="#module-pattern-1-parent-managed-full-objects" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pattern 1: Parent-Managed (Full Objects)</span></h3><p>Context contains full objects. Parent manages all data updates, child views are passive consumers.</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">%{</span><span class="w">
   </span><span class="ss">assignment</span><span class="p">:</span><span class="w"> </span><span class="n">assignment</span><span class="p">,</span><span class="w">     </span><span class="c1"># Full object</span><span class="w">
   </span><span class="ss">crew</span><span class="p">:</span><span class="w"> </span><span class="n">crew</span><span class="p">,</span><span class="w">                 </span><span class="c1"># Full object</span><span class="w">
   </span><span class="ss">current_user</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w">         </span><span class="c1"># Full object</span><span class="w">
   </span><span class="ss">user_state_data</span><span class="p">:</span><span class="w"> </span><span class="n">data</span><span class="w">
-</span><span class="p" data-group-id="7891558630-2">}</span><span class="p" data-group-id="7891558630-1">)</span></code></pre><ul><li><strong>Ownership</strong>: Parent owns the data lifecycle</li><li><strong>Updates</strong>: Parent updates context, child re-renders</li><li><strong>Observatory</strong>: Optional (updates redundant)</li><li><strong>Use when</strong>: Tight parent-child coupling, parent controls all state</li></ul><h3 id="module-pattern-2-child-managed-ids" class="section-heading"><a href="#module-pattern-2-child-managed-ids" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pattern 2: Child-Managed (IDs)</span></h3><p>Context contains IDs. Child views fetch and manage their own models independently.</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="9523340935-1">(</span><span class="p" data-group-id="9523340935-2">%{</span><span class="w">
+</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span></code></pre><ul><li><strong>Ownership</strong>: Parent owns the data lifecycle</li><li><strong>Updates</strong>: Parent updates context, child re-renders</li><li><strong>Observatory</strong>: Optional (updates redundant)</li><li><strong>Use when</strong>: Tight parent-child coupling, parent controls all state</li></ul><h3 id="module-pattern-2-child-managed-ids" class="section-heading"><a href="#module-pattern-2-child-managed-ids" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Pattern 2: Child-Managed (IDs)</span></h3><p>Context contains IDs. Child views fetch and manage their own models independently.</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">%{</span><span class="w">
   </span><span class="ss">assignment_id</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">         </span><span class="c1"># Just ID</span><span class="w">
   </span><span class="ss">crew_id</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span><span class="p">,</span><span class="w">               </span><span class="c1"># Just ID</span><span class="w">
   </span><span class="ss">user_id</span><span class="p">:</span><span class="w"> </span><span class="mi">789</span><span class="p">,</span><span class="w">               </span><span class="c1"># Just ID</span><span class="w">
   </span><span class="ss">user_state_data</span><span class="p">:</span><span class="w"> </span><span class="n">data</span><span class="w">
-</span><span class="p" data-group-id="9523340935-2">}</span><span class="p" data-group-id="9523340935-1">)</span></code></pre><ul><li><strong>Ownership</strong>: Child owns the data lifecycle</li><li><strong>Updates</strong>: Observatory signals child directly</li><li><strong>Observatory</strong>: Required (child manages updates)</li><li><strong>Use when</strong>: Autonomous child views, independent update cycles</li></ul><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><p>Embedded live views declare their dependencies:</p><pre><code class="makeup elixir" translate="no"><span class="n">on_mount</span><span class="p" data-group-id="7518082744-1">(</span><span class="p" data-group-id="7518082744-2">{</span><span class="nc">CoreWeb.Live.Hook.Context</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7518082744-3">[</span><span class="ss">:crew</span><span class="p">,</span><span class="w"> </span><span class="ss">:current_user</span><span class="p" data-group-id="7518082744-3">]</span><span class="p" data-group-id="7518082744-2">}</span><span class="p" data-group-id="7518082744-1">)</span></code></pre><p>The hook extracts these from context and assigns to socket.assigns.</p><h2 id="module-liveview-responsibilities-with-ids" class="section-heading"><a href="#module-liveview-responsibilities-with-ids" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">LiveView Responsibilities with IDs</span></h2><p>When context contains IDs (Pattern 2), the LiveView must fetch the full object:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># In LiveView mount or get_model</span><span class="w">
-</span><span class="kd">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p" data-group-id="7193225360-1">(</span><span class="ss">:not_mounted_at_router</span><span class="p">,</span><span class="w"> </span><span class="c">_session</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7193225360-2">%{</span><span class="ss">assigns</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="7193225360-3">%{</span><span class="ss">crew_id</span><span class="p">:</span><span class="w"> </span><span class="n">crew_id</span><span class="p" data-group-id="7193225360-3">}</span><span class="p" data-group-id="7193225360-2">}</span><span class="p" data-group-id="7193225360-1">)</span><span class="w"> </span><span class="k" data-group-id="7193225360-4">do</span><span class="w">
-  </span><span class="nc">Crew.Public</span><span class="o">.</span><span class="n">get!</span><span class="p" data-group-id="7193225360-5">(</span><span class="n">crew_id</span><span class="p" data-group-id="7193225360-5">)</span><span class="w">  </span><span class="c1"># LiveView fetches, not LiveContext</span><span class="w">
-</span><span class="k" data-group-id="7193225360-4">end</span></code></pre><p>This keeps LiveContext generic and dependency-free.</p><h2 id="module-retrieval-strategy" class="section-heading"><a href="#module-retrieval-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Retrieval Strategy</span></h2><p>Simple value lookup:</p><ol><li>Check context data</li><li>Fallback to socket.assigns (populated by Observatory or parent)</li></ol><h2 id="module-future-preloading-pattern-not-yet-implemented" class="section-heading"><a href="#module-future-preloading-pattern-not-yet-implemented" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Future: Preloading Pattern (Not Yet Implemented)</span></h2><p>Similar to Ecto associations, context could support both ID and object:</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1843378372-1">(</span><span class="p" data-group-id="1843378372-2">%{</span><span class="w">
+</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span></code></pre><ul><li><strong>Ownership</strong>: Child owns the data lifecycle</li><li><strong>Updates</strong>: Observatory signals child directly</li><li><strong>Observatory</strong>: Required (child manages updates)</li><li><strong>Use when</strong>: Autonomous child views, independent update cycles</li></ul><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><p>Embedded live views declare their dependencies:</p><pre><code class="makeup elixir" translate="no"><span class="n">on_mount</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">{</span><span class="nc">MicaWeb.Live.Hook.Context</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-3">[</span><span class="ss">:crew</span><span class="p">,</span><span class="w"> </span><span class="ss">:current_user</span><span class="p" data-group-id="group-3">]</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span></code></pre><p>The hook extracts these from context and assigns to socket.assigns.</p><h2 id="module-liveview-responsibilities-with-ids" class="section-heading"><a href="#module-liveview-responsibilities-with-ids" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">LiveView Responsibilities with IDs</span></h2><p>When context contains IDs (Pattern 2), the LiveView must fetch the full object:</p><pre><code class="makeup elixir" translate="no"><span class="c1"># In LiveView mount or get_model</span><span class="w">
+</span><span class="kd">def</span><span class="w"> </span><span class="nf">get_model</span><span class="p" data-group-id="group-1">(</span><span class="ss">:not_mounted_at_router</span><span class="p">,</span><span class="w"> </span><span class="c">_session</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">%{</span><span class="ss">assigns</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">%{</span><span class="ss">crew_id</span><span class="p">:</span><span class="w"> </span><span class="n">crew_id</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w"> </span><span class="k" data-group-id="group-4">do</span><span class="w">
+  </span><span class="nc">Crew.Public</span><span class="o">.</span><span class="n">get!</span><span class="p" data-group-id="group-5">(</span><span class="n">crew_id</span><span class="p" data-group-id="group-5">)</span><span class="w">  </span><span class="c1"># LiveView fetches, not LiveContext</span><span class="w">
+</span><span class="k" data-group-id="group-4">end</span></code></pre><p>This keeps LiveContext generic and dependency-free.</p><h2 id="module-retrieval-strategy" class="section-heading"><a href="#module-retrieval-strategy" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Retrieval Strategy</span></h2><p>Simple value lookup:</p><ol><li>Check context data</li><li>Fallback to socket.assigns (populated by Observatory or parent)</li></ol><h2 id="module-future-preloading-pattern-not-yet-implemented" class="section-heading"><a href="#module-future-preloading-pattern-not-yet-implemented" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Future: Preloading Pattern (Not Yet Implemented)</span></h2><p>Similar to Ecto associations, context could support both ID and object:</p><pre><code class="makeup elixir" translate="no"><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">%{</span><span class="w">
   </span><span class="ss">assignment_id</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">         </span><span class="c1"># Always present</span><span class="w">
   </span><span class="ss">assignment</span><span class="p">:</span><span class="w"> </span><span class="n">assignment</span><span class="w">      </span><span class="c1"># Optional &quot;preloaded&quot; object</span><span class="w">
-</span><span class="p" data-group-id="1843378372-2">}</span><span class="p" data-group-id="1843378372-1">)</span></code></pre><p>Then <code class="inline">retrieve(:assignment, ...)</code> would:</p><ol><li>Return full object if present (no fetch needed)</li><li>Fetch by assignment_id if object is nil</li><li>Cache in socket.assigns for subsequent calls</li></ol><p>This avoids repetitive database calls while maintaining the ID-based pattern.</p>
+</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span></code></pre><p>Then <code class="inline">retrieve(:assignment, ...)</code> would:</p><ol><li>Return full object if present (no fetch needed)</li><li>Fetch by assignment_id if object is nil</li><li>Cache in socket.assigns for subsequent calls</li></ol><p>This avoids repetitive database calls while maintaining the ID-based pattern.</p>
     </section>
 
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -183,12 +208,12 @@ All contexts are stored under the &quot;live_context&quot; session key.</p><h2 i
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="extend/2">
@@ -201,7 +226,7 @@ All contexts are stored under the &quot;live_context&quot; session key.</p><h2 i
       <h1 class="signature" translate="no">extend(arg1, new_data)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L127" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L127" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -212,17 +237,17 @@ All contexts are stored under the &quot;live_context&quot; session key.</p><h2 i
 
 <p>Extends a parent context with new data, inheriting all parent values.</p><p>This enables automatic flow of common context data (timezone, current_user, user_state_data)
 through the view hierarchy without explicit pass-through at each level.</p><h2 id="extend/2-examples" class="section-heading"><a href="#extend/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Parent context has timezone, current_user, user_state_data</span><span class="w">
-</span><span class="n">parent_context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="6966356551-1">(</span><span class="p" data-group-id="6966356551-2">%{</span><span class="w">
+</span><span class="n">parent_context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">%{</span><span class="w">
   </span><span class="ss">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p">,</span><span class="w">
   </span><span class="ss">current_user</span><span class="p">:</span><span class="w"> </span><span class="n">user</span><span class="p">,</span><span class="w">
-  </span><span class="ss">user_state_data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="6966356551-3">%{</span><span class="ss">tab</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;overview&quot;</span><span class="p" data-group-id="6966356551-3">}</span><span class="w">
-</span><span class="p" data-group-id="6966356551-2">}</span><span class="p" data-group-id="6966356551-1">)</span><span class="w">
+  </span><span class="ss">user_state_data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">%{</span><span class="ss">tab</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;overview&quot;</span><span class="p" data-group-id="group-3">}</span><span class="w">
+</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
 
 </span><span class="c1"># Child extends with only new data - inherits everything else</span><span class="w">
-</span><span class="n">child_context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">extend</span><span class="p" data-group-id="6966356551-4">(</span><span class="n">parent_context</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6966356551-5">%{</span><span class="w">
+</span><span class="n">child_context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">extend</span><span class="p" data-group-id="group-4">(</span><span class="n">parent_context</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-5">%{</span><span class="w">
   </span><span class="ss">assignment_id</span><span class="p">:</span><span class="w"> </span><span class="mi">123</span><span class="p">,</span><span class="w">
   </span><span class="ss">crew_id</span><span class="p">:</span><span class="w"> </span><span class="mi">456</span><span class="w">
-</span><span class="p" data-group-id="6966356551-5">}</span><span class="p" data-group-id="6966356551-4">)</span><span class="w">
+</span><span class="p" data-group-id="group-5">}</span><span class="p" data-group-id="group-4">)</span><span class="w">
 
 </span><span class="c1"># Result: child_context.data == %{</span><span class="w">
 </span><span class="c1">#   timezone: &quot;UTC&quot;,           # inherited</span><span class="w">
@@ -233,7 +258,7 @@ through the view hierarchy without explicit pass-through at each level.</p><h2 i
 </span><span class="c1"># }</span><span class="w">
 
 </span><span class="c1"># When no parent context exists (top level), creates new context</span><span class="w">
-</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">extend</span><span class="p" data-group-id="6966356551-6">(</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6966356551-7">%{</span><span class="ss">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p" data-group-id="6966356551-7">}</span><span class="p" data-group-id="6966356551-6">)</span></code></pre>
+</span><span class="n">context</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">LiveContext</span><span class="o">.</span><span class="n">extend</span><span class="p" data-group-id="group-6">(</span><span class="no">nil</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-7">%{</span><span class="ss">timezone</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;UTC&quot;</span><span class="p" data-group-id="group-7">}</span><span class="p" data-group-id="group-6">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="missing_dependencies/2">
@@ -246,7 +271,7 @@ through the view hierarchy without explicit pass-through at each level.</p><h2 i
       <h1 class="signature" translate="no">missing_dependencies(live_context, dependencies)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L152" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L152" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -268,7 +293,7 @@ through the view hierarchy without explicit pass-through at each level.</p><h2 i
       <h1 class="signature" translate="no">new(data)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L91" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L91" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -290,7 +315,7 @@ through the view hierarchy without explicit pass-through at each level.</p><h2 i
       <h1 class="signature" translate="no">ready?(live_context, dependencies)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L141" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L141" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -313,7 +338,7 @@ Supports tuple dependencies like <code class="inline">{:user_state, :chapter_id}
       <h1 class="signature" translate="no">retrieve(context, dependency, socket)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L186" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/concept/live_context.ex#L186" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -324,10 +349,10 @@ Supports tuple dependencies like <code class="inline">{:user_state, :chapter_id}
 
 <p>Retrieve a dependency from context.</p><p>Simply returns the value from context data or socket.assigns.
 No database fetching - LiveViews are responsible for fetching if they receive IDs.</p><h2 id="retrieve/3-examples" class="section-heading"><a href="#retrieve/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Pattern 1: Full object in context</span><span class="w">
-</span><span class="n">retrieve</span><span class="p" data-group-id="6589682394-1">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="ss">:assignment</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="6589682394-1">)</span><span class="w">  </span><span class="c1"># Returns assignment from data</span><span class="w">
+</span><span class="n">retrieve</span><span class="p" data-group-id="group-1">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="ss">:assignment</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="group-1">)</span><span class="w">  </span><span class="c1"># Returns assignment from data</span><span class="w">
 
 </span><span class="c1"># Pattern 2: ID in context, LiveView fetches</span><span class="w">
-</span><span class="n">retrieve</span><span class="p" data-group-id="6589682394-2">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="ss">:assignment_id</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="6589682394-2">)</span><span class="w">  </span><span class="c1"># Returns ID</span><span class="w">
+</span><span class="n">retrieve</span><span class="p" data-group-id="group-2">(</span><span class="n">ctx</span><span class="p">,</span><span class="w"> </span><span class="ss">:assignment_id</span><span class="p">,</span><span class="w"> </span><span class="n">socket</span><span class="p" data-group-id="group-2">)</span><span class="w">  </span><span class="c1"># Returns ID</span><span class="w">
 </span><span class="c1"># LiveView then: Assignment.Public.get!(assignment_id)</span></code></pre>
   </section>
 </section>
@@ -336,27 +361,34 @@ No database fetching - LiveViews are responsible for fetching if they receive ID
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>mix nova.snapshot — core v0.1.0</title>
+    <title>mix nova.snapshot — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">mix nova.snapshot</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">mix nova.<wbr />snapshot</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Mix.Tasks.Nova.Snapshot.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -97,36 +122,36 @@ core
 (plan step code-systems) can move routes, grants, handlers and SaaS config
 between modules and show that nothing changed. The snapshots per SaaS are
 committed in <code class="inline">next/test/snapshots/&lt;saas&gt;/</code>:</p><ul><li><code class="inline">routes.exs</code>: every route as <code class="inline">{verb, path, plug, plug_opts, helper, module}</code>,
-in router order</li><li><code class="inline">permissions.exs</code>: <a href="Core.Authorization.html#permission_map/0"><code class="inline">Core.Authorization.permission_map/0</code></a></li><li><code class="inline">signal.exs</code>: signal handlers (in order), notifiers and notify channels</li><li><code class="inline">flags.exs</code>: the effective feature flags at compile time</li><li><code class="inline">saas_config.exs</code>: the <a href="Core.SaaS.html"><code class="inline">Core.SaaS</code></a> callbacks (start pages, menus, title,
-signed-in pages), the SaaS app config and account and admin tab order</li><li><code class="inline">runtime.exs</code>: the children <code class="inline">Core.Application</code> starts, and per env fixture
+in router order</li><li><code class="inline">permissions.exs</code>: <a href="Mica.Authorization.html#permission_map/0"><code class="inline">Mica.Authorization.permission_map/0</code></a></li><li><code class="inline">signal.exs</code>: signal handlers (in order), notifiers and notify channels</li><li><code class="inline">flags.exs</code>: the effective feature flags at compile time</li><li><code class="inline">saas_config.exs</code>: the <a href="Mica.SaaS.html"><code class="inline">Mica.SaaS</code></a> callbacks (start pages, menus, title,
+signed-in pages), the SaaS app config and account and admin tab order</li><li><code class="inline">runtime.exs</code>: the children <code class="inline">Mica.Application</code> starts, and per env fixture
 of <a href="Mix.Tasks.Config.Snapshot.html"><code class="inline">mix config.snapshot</code></a> the Oban queues and plugins (crontab sorted), the
 unknown names in <code class="inline">ENABLED_OBAN_PLUGINS</code>, the rate quotas and the effective
 feature flags</li><li><code class="inline">counts.exs</code>: boundary allowlist size, <code class="inline">no route path</code> compile warnings and
-the files <a href="CoreWeb.Router.html"><code class="inline">CoreWeb.Router</code></a> is compile-connected to</li></ul><p>Config-derived snapshots read <code class="inline">config/config.exs</code> as a prod build would
-(<a href="https://hexdocs.pm/elixir/Config.Reader.html"><code class="inline">Config.Reader</code></a>, env <code class="inline">:prod</code>). <code class="inline">runtime.exs</code> adds <code class="inline">config/runtime.exs</code> for each
+the files <a href="MicaWeb.Router.html"><code class="inline">MicaWeb.Router</code></a> is compile-connected to</li></ul><p>Config-derived snapshots read <code class="inline">config/config.exs</code> as a prod build would
+(<a href="https://elixir.hexdocs.pm/Config.Reader.html"><code class="inline">Config.Reader</code></a>, env <code class="inline">:prod</code>). <code class="inline">runtime.exs</code> adds <code class="inline">config/runtime.exs</code> for each
 env fixture; the rest of the runtime config and the runtime flag list are
 covered by <a href="Mix.Tasks.Config.Snapshot.html"><code class="inline">mix config.snapshot</code></a>, not here. The node-local storage queue is
 rendered as <code class="inline">storage_delivery_local_&lt;node&gt;</code>.</p><pre><code class="makeup elixir" translate="no"><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w">                              </span><span class="c1"># Next: fail on drift</span><span class="w">
 </span><span class="nc">BUNDLE</span><span class="o">=</span><span class="n">self</span><span class="w"> </span><span class="nc">MIX_ENV</span><span class="o">=</span><span class="n">dev</span><span class="w"> </span><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w">      </span><span class="c1"># Self: fail on drift</span><span class="w">
 </span><span class="n">mix</span><span class="w"> </span><span class="n">nova</span><span class="o">.</span><span class="n">snapshot</span><span class="w"> </span><span class="o">--</span><span class="n">update</span><span class="w">                     </span><span class="c1"># rewrite the snapshots</span></code></pre><p>Self needs <code class="inline">MIX_ENV=dev</code>: <code class="inline">config/test.exs</code> pins <code class="inline">:saas</code> to <a href="Next.SaaS.html"><code class="inline">Next.SaaS</code></a>.</p><p>Routes pass when the route set is identical and every two routes that can
 match the same request keep their relative order; other reordering is allowed.
-Everything else must be identical. Next is also checked in <a href="https://hexdocs.pm/mix/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>
+Everything else must be identical. Next is also checked in <a href="https://mix.hexdocs.pm/Mix.Tasks.Test.html"><code class="inline">mix test</code></a>
 (<code class="inline">next/test/snapshots/nova_snapshot_test.exs</code>), Self in the <code class="inline">snapshot-self</code> CI job.</p>
     </section>
 
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -163,7 +188,7 @@ Everything else must be identical. Next is also checked in <a href="https://hexd
       </div>
 
         <div class="summary-synopsis"><p>Renders the snapshots of the current build as <code class="inline">{file name, text}</code>. <code class="inline">counts: false</code>
-leaves out <code class="inline">counts.exs</code>, which runs <a><code class="inline">mix compile</code></a> and <a><code class="inline">mix xref</code></a> in a subprocess.</p></div>
+leaves out <code class="inline">counts.exs</code>, which runs <a href="https://mix.hexdocs.pm/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a> and <a href="https://mix.hexdocs.pm/Mix.Tasks.Xref.html"><code class="inline">mix xref</code></a> in a subprocess.</p></div>
 
     </div>
 
@@ -183,12 +208,12 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="compare/3">
@@ -201,7 +226,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
       <h1 class="signature" translate="no">compare(name, path, rendered)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L124" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L127" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -223,7 +248,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
       <h1 class="signature" translate="no">overlap?(arg1, arg2)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L380" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L390" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -245,7 +270,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
       <h1 class="signature" translate="no">path(saas, name)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L121" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L124" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -269,7 +294,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
       <h1 class="signature" translate="no">render(saas, opts \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L143" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -279,7 +304,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a><code class="in
   <section class="docstring">
 
 <p>Renders the snapshots of the current build as <code class="inline">{file name, text}</code>. <code class="inline">counts: false</code>
-leaves out <code class="inline">counts.exs</code>, which runs <a href="https://hexdocs.pm/mix/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a> and <a href="https://hexdocs.pm/mix/Mix.Tasks.Xref.html"><code class="inline">mix xref</code></a> in a subprocess.</p>
+leaves out <code class="inline">counts.exs</code>, which runs <a href="https://mix.hexdocs.pm/Mix.Tasks.Compile.html"><code class="inline">mix compile</code></a> and <a href="https://mix.hexdocs.pm/Mix.Tasks.Xref.html"><code class="inline">mix xref</code></a> in a subprocess.</p>
   </section>
 </section>
 <section class="detail" id="saas!/0">
@@ -292,7 +317,7 @@ leaves out <code class="inline">counts.exs</code>, which runs <a href="https://h
       <h1 class="signature" translate="no">saas!()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L94" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/nova.snapshot.ex#L97" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -309,27 +334,34 @@ leaves out <code class="inline">counts.exs</code>, which runs <a href="https://h
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

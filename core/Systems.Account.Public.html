@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Account.Public — core v0.1.0</title>
+    <title>Systems.Account.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Account.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Account.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Account.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,22 +120,33 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#activated?/1" data-no-tooltip="" translate="no">activated?(user_id)</a>
 
       </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#admin_update_user/2" data-no-tooltip="" translate="no">admin_update_user(user, attrs)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Saves an admin's change to a user (creator, verified, activated) and signals
+<code class="inline">{:user, :update_and_dispatch}</code>, so views that show the user update.</p></div>
 
     </div>
 
@@ -270,7 +306,7 @@ it in the database.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Generates a token for a one-time step of <code class="inline">context</code>, replacing the user's
-earlier token of that context. Redeem it with <a><code class="inline">take_one_time_token/3</code></a>.</p></div>
+earlier token of that context. Redeem it with <a href="#take_one_time_token/3"><code class="inline">take_one_time_token/3</code></a>.</p></div>
 
     </div>
 
@@ -281,7 +317,7 @@ earlier token of that context. Redeem it with <a><code class="inline">take_one_t
       </div>
 
         <div class="summary-synopsis"><p>Emails a new sign-in code to <code class="inline">email</code>, replacing any earlier code for it.
-<code class="inline">remote_ip</code> is the client's address (<a><code class="inline">CoreWeb.Plug.RemoteIp</code></a>), which the
+<code class="inline">remote_ip</code> is the client's address (<a href="MicaWeb.Plug.RemoteIp.html"><code class="inline">MicaWeb.Plug.RemoteIp</code></a>), which the
 limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p></div>
 
     </div>
@@ -476,7 +512,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p></di
       </div>
 
         <div class="summary-synopsis"><p>Flags provider merchants that no user carries.
-See <a><code class="inline">Systems.Account.MerchantOrphanReconciliation</code></a>.</p></div>
+See <a href="Systems.Account.MerchantOrphanReconciliation.html"><code class="inline">Systems.Account.MerchantOrphanReconciliation</code></a>.</p></div>
 
     </div>
 
@@ -575,7 +611,7 @@ immediately usable. Dispatches <code class="inline">{:user, :created}</code>.</p
 
       </div>
 
-        <div class="summary-synopsis"><p>Redeems a token of <a><code class="inline">generate_one_time_token/2</code></a> that is younger than <code class="inline">max_age</code>
+        <div class="summary-synopsis"><p>Redeems a token of <a href="#generate_one_time_token/2"><code class="inline">generate_one_time_token/2</code></a> that is younger than <code class="inline">max_age</code>
 seconds. Deleting the token is what makes it single-use: only the call that
 deletes it gets the user.</p></div>
 
@@ -662,12 +698,12 @@ deletes it gets the user.</p></div>
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="activated?/1">
@@ -680,7 +716,7 @@ deletes it gets the user.</p></div>
       <h1 class="signature" translate="no">activated?(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L180" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -690,6 +726,29 @@ deletes it gets the user.</p></div>
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="admin_update_user/2">
+
+  <div class="detail-header">
+    <a href="#admin_update_user/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">admin_update_user(user, attrs)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L104" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Saves an admin's change to a user (creator, verified, activated) and signals
+<code class="inline">{:user, :update_and_dispatch}</code>, so views that show the user update.</p>
   </section>
 </section>
 <section class="detail" id="affiliate?/1">
@@ -702,7 +761,7 @@ deletes it gets the user.</p></div>
       <h1 class="signature" translate="no">affiliate?(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -724,7 +783,7 @@ deletes it gets the user.</p></div>
       <h1 class="signature" translate="no">apply_user_email(user, password, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L359" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L369" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -734,11 +793,11 @@ deletes it gets the user.</p></div>
   <section class="docstring">
 
 <p>Emulates that the email will change without actually changing
-it in the database.</p><h2 id="apply_user_email/3-examples" class="section-heading"><a href="#apply_user_email/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="3802283459-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3802283459-2">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3802283459-2">}</span><span class="p" data-group-id="3802283459-1">)</span><span class="w">
-</span><span class="p" data-group-id="3802283459-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3802283459-4">%</span><span class="nc" data-group-id="3802283459-4">User</span><span class="p" data-group-id="3802283459-4">{</span><span class="p" data-group-id="3802283459-4">}</span><span class="p" data-group-id="3802283459-3">}</span><span class="w">
+it in the database.</p><h2 id="apply_user_email/3-examples" class="section-heading"><a href="#apply_user_email/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%</span><span class="nc" data-group-id="group-4">User</span><span class="p" data-group-id="group-4">{</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="3802283459-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3802283459-6">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3802283459-6">}</span><span class="p" data-group-id="3802283459-5">)</span><span class="w">
-</span><span class="p" data-group-id="3802283459-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3802283459-8">%</span><span class="nc" data-group-id="3802283459-8">Ecto.Changeset</span><span class="p" data-group-id="3802283459-8">{</span><span class="p" data-group-id="3802283459-8">}</span><span class="p" data-group-id="3802283459-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">apply_user_email</span><span class="p" data-group-id="group-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-6">%{</span><span class="ss">email</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-6">}</span><span class="p" data-group-id="group-5">)</span><span class="w">
+</span><span class="p" data-group-id="group-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">%</span><span class="nc" data-group-id="group-8">Ecto.Changeset</span><span class="p" data-group-id="group-8">{</span><span class="p" data-group-id="group-8">}</span><span class="p" data-group-id="group-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="auth_module/0">
@@ -751,7 +810,7 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -775,7 +834,7 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
       <h1 class="signature" translate="no">change_user_email(user, attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L342" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L352" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -784,8 +843,8 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
 
   <section class="docstring">
 
-<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user email.</p><h2 id="change_user_email/2-examples" class="section-heading"><a href="#change_user_email/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_email</span><span class="p" data-group-id="3507226619-1">(</span><span class="n">user</span><span class="p" data-group-id="3507226619-1">)</span><span class="w">
-</span><span class="p" data-group-id="3507226619-2">%</span><span class="nc" data-group-id="3507226619-2">Ecto.Changeset</span><span class="p" data-group-id="3507226619-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3507226619-3">%</span><span class="nc" data-group-id="3507226619-3">User</span><span class="p" data-group-id="3507226619-3">{</span><span class="p" data-group-id="3507226619-3">}</span><span class="p" data-group-id="3507226619-2">}</span></code></pre>
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user email.</p><h2 id="change_user_email/2-examples" class="section-heading"><a href="#change_user_email/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_email</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">Ecto.Changeset</span><span class="p" data-group-id="group-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">%</span><span class="nc" data-group-id="group-3">User</span><span class="p" data-group-id="group-3">{</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_user_password/2">
@@ -800,7 +859,7 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
       <h1 class="signature" translate="no">change_user_password(user, attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L426" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L436" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -809,8 +868,8 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
 
   <section class="docstring">
 
-<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user password.</p><h2 id="change_user_password/2-examples" class="section-heading"><a href="#change_user_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_password</span><span class="p" data-group-id="3217904093-1">(</span><span class="n">user</span><span class="p" data-group-id="3217904093-1">)</span><span class="w">
-</span><span class="p" data-group-id="3217904093-2">%</span><span class="nc" data-group-id="3217904093-2">Ecto.Changeset</span><span class="p" data-group-id="3217904093-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="3217904093-3">%</span><span class="nc" data-group-id="3217904093-3">User</span><span class="p" data-group-id="3217904093-3">{</span><span class="p" data-group-id="3217904093-3">}</span><span class="p" data-group-id="3217904093-2">}</span></code></pre>
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for changing the user password.</p><h2 id="change_user_password/2-examples" class="section-heading"><a href="#change_user_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_password</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">Ecto.Changeset</span><span class="p" data-group-id="group-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">%</span><span class="nc" data-group-id="group-3">User</span><span class="p" data-group-id="group-3">{</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="change_user_registration/2">
@@ -825,7 +884,7 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
       <h1 class="signature" translate="no">change_user_registration(user, attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L327" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L337" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -834,8 +893,8 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
 
   <section class="docstring">
 
-<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking user changes.</p><h2 id="change_user_registration/2-examples" class="section-heading"><a href="#change_user_registration/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_registration</span><span class="p" data-group-id="0046062549-1">(</span><span class="n">user</span><span class="p" data-group-id="0046062549-1">)</span><span class="w">
-</span><span class="p" data-group-id="0046062549-2">%</span><span class="nc" data-group-id="0046062549-2">Ecto.Changeset</span><span class="p" data-group-id="0046062549-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="0046062549-3">%</span><span class="nc" data-group-id="0046062549-3">User</span><span class="p" data-group-id="0046062549-3">{</span><span class="p" data-group-id="0046062549-3">}</span><span class="p" data-group-id="0046062549-2">}</span></code></pre>
+<p>Returns an <code class="inline">%Ecto.Changeset{}</code> for tracking user changes.</p><h2 id="change_user_registration/2-examples" class="section-heading"><a href="#change_user_registration/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">change_user_registration</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">Ecto.Changeset</span><span class="p" data-group-id="group-2">{</span><span class="ss">data</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">%</span><span class="nc" data-group-id="group-3">User</span><span class="p" data-group-id="group-3">{</span><span class="p" data-group-id="group-3">}</span><span class="p" data-group-id="group-2">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="cleanup_expired_auth_codes/0">
@@ -848,7 +907,7 @@ it in the database.</p><h2 id="apply_user_email/3-examples" class="section-headi
       <h1 class="signature" translate="no">cleanup_expired_auth_codes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L568" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L578" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -871,7 +930,7 @@ so the rows are dead weight. Returns the number of rows deleted.</p>
       <h1 class="signature" translate="no">confirm_user(token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L662" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L672" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -894,7 +953,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">confirmed?(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L167" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L177" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -916,7 +975,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">create_profile!(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L17" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L17" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -938,7 +997,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">delete_session_token(token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L487" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L497" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -960,7 +1019,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">deliver_already_activated_notification(user, login_url)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L652" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L662" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -982,7 +1041,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">deliver_update_email_instructions(user, current_email, update_email_url_fun)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L404" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L414" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -991,8 +1050,8 @@ and the token is deleted.</p>
 
   <section class="docstring">
 
-<p>Delivers the update email instructions to the given user.</p><h2 id="deliver_update_email_instructions/3-examples" class="section-heading"><a href="#deliver_update_email_instructions/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_update_email_instructions</span><span class="p" data-group-id="7289381816-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">current_email</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="7289381816-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/update-email/</span><span class="si" data-group-id="7289381816-3">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="7289381816-3">}</span><span class="sx">&quot;</span><span class="w">
-</span><span class="p" data-group-id="7289381816-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7289381816-5">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="7289381816-5">}</span><span class="p" data-group-id="7289381816-4">}</span></code></pre>
+<p>Delivers the update email instructions to the given user.</p><h2 id="deliver_update_email_instructions/3-examples" class="section-heading"><a href="#deliver_update_email_instructions/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_update_email_instructions</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="n">current_email</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="group-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/update-email/</span><span class="si" data-group-id="group-3">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="group-3">}</span><span class="sx">&quot;</span><span class="w">
+</span><span class="p" data-group-id="group-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-5">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-5">}</span><span class="p" data-group-id="group-4">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="deliver_user_confirmation_instructions/2">
@@ -1005,7 +1064,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">deliver_user_confirmation_instructions(user, confirmation_url_fun)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L637" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L647" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1014,11 +1073,11 @@ and the token is deleted.</p>
 
   <section class="docstring">
 
-<p>Delivers the confirmation email instructions to the given user.</p><h2 id="deliver_user_confirmation_instructions/2-examples" class="section-heading"><a href="#deliver_user_confirmation_instructions/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="8943791183-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="8943791183-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/settings/activate-account/</span><span class="si" data-group-id="8943791183-3">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="8943791183-3">}</span><span class="sx">&quot;</span><span class="p" data-group-id="8943791183-2">)</span><span class="p" data-group-id="8943791183-1">)</span><span class="w">
-</span><span class="p" data-group-id="8943791183-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8943791183-5">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="8943791183-5">}</span><span class="p" data-group-id="8943791183-4">}</span><span class="w">
+<p>Delivers the confirmation email instructions to the given user.</p><h2 id="deliver_user_confirmation_instructions/2-examples" class="section-heading"><a href="#deliver_user_confirmation_instructions/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="group-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/settings/activate-account/</span><span class="si" data-group-id="group-3">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="group-3">}</span><span class="sx">&quot;</span><span class="p" data-group-id="group-2">)</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-4">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-5">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-5">}</span><span class="p" data-group-id="group-4">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="8943791183-6">(</span><span class="n">confirmed_user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="8943791183-7">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/settings/activate-account/</span><span class="si" data-group-id="8943791183-8">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="8943791183-8">}</span><span class="sx">&quot;</span><span class="p" data-group-id="8943791183-7">)</span><span class="p" data-group-id="8943791183-6">)</span><span class="w">
-</span><span class="p" data-group-id="8943791183-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:already_confirmed</span><span class="p" data-group-id="8943791183-9">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_confirmation_instructions</span><span class="p" data-group-id="group-6">(</span><span class="n">confirmed_user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="group-7">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="sx">~p&quot;/user/settings/activate-account/</span><span class="si" data-group-id="group-8">#{</span><span class="ni">&amp;1</span><span class="si" data-group-id="group-8">}</span><span class="sx">&quot;</span><span class="p" data-group-id="group-7">)</span><span class="p" data-group-id="group-6">)</span><span class="w">
+</span><span class="p" data-group-id="group-9">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="ss">:already_confirmed</span><span class="p" data-group-id="group-9">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="deliver_user_reset_password_instructions/2">
@@ -1031,7 +1090,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">deliver_user_reset_password_instructions(user, reset_password_url_fun)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L692" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L702" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1040,8 +1099,8 @@ and the token is deleted.</p>
 
   <section class="docstring">
 
-<p>Delivers the reset password email to the given user.</p><h2 id="deliver_user_reset_password_instructions/2-examples" class="section-heading"><a href="#deliver_user_reset_password_instructions/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_reset_password_instructions</span><span class="p" data-group-id="3052209439-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="3052209439-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="err">~</span><span class="n">p</span><span class="err">&quot;</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">reset</span><span class="o">-</span><span class="n">password</span><span class="o">/</span><span class="c1">#{&amp;1}))</span><span class="w">
-</span><span class="p" data-group-id="3052209439-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3052209439-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="3052209439-4">}</span><span class="p" data-group-id="3052209439-3">}</span></code></pre>
+<p>Delivers the reset password email to the given user.</p><h2 id="deliver_user_reset_password_instructions/2-examples" class="section-heading"><a href="#deliver_user_reset_password_instructions/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">deliver_user_reset_password_instructions</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="o">&amp;</span><span class="n">url</span><span class="p" data-group-id="group-2">(</span><span class="n">conn</span><span class="p">,</span><span class="w"> </span><span class="err">~</span><span class="n">p</span><span class="err">&quot;</span><span class="o">/</span><span class="n">user</span><span class="o">/</span><span class="n">reset</span><span class="o">-</span><span class="n">password</span><span class="o">/</span><span class="c1">#{&amp;1}))</span><span class="w">
+</span><span class="p" data-group-id="group-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%{</span><span class="ss">to</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p">,</span><span class="w"> </span><span class="ss">body</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-3">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="external?/1">
@@ -1054,7 +1113,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">external?(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L140" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1076,7 +1135,7 @@ and the token is deleted.</p>
       <h1 class="signature" translate="no">generate_one_time_token(user, context)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L498" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L508" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1099,7 +1158,7 @@ earlier token of that context. Redeem it with <a href="#take_one_time_token/3"><
       <h1 class="signature" translate="no">generate_otp(email, remote_ip)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L535" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L545" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1109,7 +1168,7 @@ earlier token of that context. Redeem it with <a href="#take_one_time_token/3"><
   <section class="docstring">
 
 <p>Emails a new sign-in code to <code class="inline">email</code>, replacing any earlier code for it.
-<code class="inline">remote_ip</code> is the client's address (<a href="CoreWeb.Plug.RemoteIp.html"><code class="inline">CoreWeb.Plug.RemoteIp</code></a>), which the
+<code class="inline">remote_ip</code> is the client's address (<a href="MicaWeb.Plug.RemoteIp.html"><code class="inline">MicaWeb.Plug.RemoteIp</code></a>), which the
 limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
   </section>
 </section>
@@ -1125,7 +1184,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">generate_user_session_token(user, type \\ :browser)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L463" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L473" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1149,7 +1208,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L22" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L22" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1171,7 +1230,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_display_label(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L38" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L38" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1193,7 +1252,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_features(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L749" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L759" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1215,7 +1274,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_profile(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L28" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L28" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1239,7 +1298,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_user!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L248" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1248,10 +1307,10 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
 
   <section class="docstring">
 
-<p>Gets a single user.</p><p>Raises <a href="https://hexdocs.pm/ecto/3.13.6/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the User does not exist.</p><h2 id="get_user!/2-examples" class="section-heading"><a href="#get_user!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="5891004774-1">(</span><span class="mi">123</span><span class="p" data-group-id="5891004774-1">)</span><span class="w">
-</span><span class="p" data-group-id="5891004774-2">%</span><span class="nc" data-group-id="5891004774-2">User</span><span class="p" data-group-id="5891004774-2">{</span><span class="p" data-group-id="5891004774-2">}</span><span class="w">
+<p>Gets a single user.</p><p>Raises <a href="https://ecto.hexdocs.pm/3.14.2/Ecto.NoResultsError.html"><code class="inline">Ecto.NoResultsError</code></a> if the User does not exist.</p><h2 id="get_user!/2-examples" class="section-heading"><a href="#get_user!/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="group-1">(</span><span class="mi">123</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">User</span><span class="p" data-group-id="group-2">{</span><span class="p" data-group-id="group-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="5891004774-3">(</span><span class="mi">456</span><span class="p" data-group-id="5891004774-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user!</span><span class="p" data-group-id="group-3">(</span><span class="mi">456</span><span class="p" data-group-id="group-3">)</span><span class="w">
 </span><span class="gt">** (Ecto.NoResultsError)</span></code></pre>
   </section>
 </section>
@@ -1265,7 +1324,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_user_by_email(email)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L195" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L205" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1274,10 +1333,10 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
 
   <section class="docstring">
 
-<p>Gets a user by email.</p><h2 id="get_user_by_email/1-examples" class="section-heading"><a href="#get_user_by_email/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="3706358060-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p" data-group-id="3706358060-1">)</span><span class="w">
-</span><span class="p" data-group-id="3706358060-2">%</span><span class="nc" data-group-id="3706358060-2">User</span><span class="p" data-group-id="3706358060-2">{</span><span class="p" data-group-id="3706358060-2">}</span><span class="w">
+<p>Gets a user by email.</p><h2 id="get_user_by_email/1-examples" class="section-heading"><a href="#get_user_by_email/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="group-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">User</span><span class="p" data-group-id="group-2">{</span><span class="p" data-group-id="group-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="3706358060-3">(</span><span class="s">&quot;unknown@example.com&quot;</span><span class="p" data-group-id="3706358060-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email</span><span class="p" data-group-id="group-3">(</span><span class="s">&quot;unknown@example.com&quot;</span><span class="p" data-group-id="group-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -1291,7 +1350,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_user_by_email_and_password(email, password)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L226" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L236" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1300,10 +1359,10 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
 
   <section class="docstring">
 
-<p>Gets a user by email and password.</p><h2 id="get_user_by_email_and_password/2-examples" class="section-heading"><a href="#get_user_by_email_and_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="0539305076-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;correct_password&quot;</span><span class="p" data-group-id="0539305076-1">)</span><span class="w">
-</span><span class="p" data-group-id="0539305076-2">%</span><span class="nc" data-group-id="0539305076-2">User</span><span class="p" data-group-id="0539305076-2">{</span><span class="p" data-group-id="0539305076-2">}</span><span class="w">
+<p>Gets a user by email and password.</p><h2 id="get_user_by_email_and_password/2-examples" class="section-heading"><a href="#get_user_by_email_and_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="group-1">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;correct_password&quot;</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">User</span><span class="p" data-group-id="group-2">{</span><span class="p" data-group-id="group-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="0539305076-3">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid_password&quot;</span><span class="p" data-group-id="0539305076-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_email_and_password</span><span class="p" data-group-id="group-3">(</span><span class="s">&quot;foo@example.com&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid_password&quot;</span><span class="p" data-group-id="group-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -1317,7 +1376,7 @@ limits of <code class="inline">Account.AuthCodeLimits</code> count by.</p>
       <h1 class="signature" translate="no">get_user_by_merchant_uid(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L203" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L213" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1340,7 +1399,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">get_user_by_reset_password_token(token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L715" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L725" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1349,10 +1408,10 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
 
   <section class="docstring">
 
-<p>Gets the user by reset password token.</p><h2 id="get_user_by_reset_password_token/1-examples" class="section-heading"><a href="#get_user_by_reset_password_token/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="7136243387-1">(</span><span class="s">&quot;validtoken&quot;</span><span class="p" data-group-id="7136243387-1">)</span><span class="w">
-</span><span class="p" data-group-id="7136243387-2">%</span><span class="nc" data-group-id="7136243387-2">User</span><span class="p" data-group-id="7136243387-2">{</span><span class="p" data-group-id="7136243387-2">}</span><span class="w">
+<p>Gets the user by reset password token.</p><h2 id="get_user_by_reset_password_token/1-examples" class="section-heading"><a href="#get_user_by_reset_password_token/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="group-1">(</span><span class="s">&quot;validtoken&quot;</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">%</span><span class="nc" data-group-id="group-2">User</span><span class="p" data-group-id="group-2">{</span><span class="p" data-group-id="group-2">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="7136243387-3">(</span><span class="s">&quot;invalidtoken&quot;</span><span class="p" data-group-id="7136243387-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="n">get_user_by_reset_password_token</span><span class="p" data-group-id="group-3">(</span><span class="s">&quot;invalidtoken&quot;</span><span class="p" data-group-id="group-3">)</span><span class="w">
 </span><span class="no">nil</span></code></pre>
   </section>
 </section>
@@ -1366,7 +1425,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">get_user_by_session_token(token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L472" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L482" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1388,7 +1447,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">internal?(user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L154" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L164" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1412,7 +1471,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_affiliate_users(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L59" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L59" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1436,7 +1495,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_creators(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L77" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L77" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1460,7 +1519,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_external_users(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L65" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L65" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1484,7 +1543,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_internal_users(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L71" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L71" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1508,7 +1567,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_pool_admins(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L83" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L83" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1532,7 +1591,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">list_users(preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L53" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1554,7 +1613,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">mark_as_visited(user, page)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L778" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L788" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1576,7 +1635,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">passwordless?(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L186" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1598,7 +1657,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1620,7 +1679,7 @@ route a bank-account/merchant KYC change back to the owning participant.</p>
       <h1 class="signature" translate="no">reconcile_orphaned_merchants(opts, state)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L211" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L221" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1643,7 +1702,7 @@ See <a href="Systems.Account.MerchantOrphanReconciliation.html"><code class="inl
       <h1 class="signature" translate="no">register_user(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L267" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L277" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1652,11 +1711,11 @@ See <a href="Systems.Account.MerchantOrphanReconciliation.html"><code class="inl
 
   <section class="docstring">
 
-<p>Registers a user.</p><h2 id="register_user/1-examples" class="section-heading"><a href="#register_user/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="7463810242-1">(</span><span class="p" data-group-id="7463810242-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="7463810242-2">}</span><span class="p" data-group-id="7463810242-1">)</span><span class="w">
-</span><span class="p" data-group-id="7463810242-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7463810242-4">%</span><span class="nc" data-group-id="7463810242-4">User</span><span class="p" data-group-id="7463810242-4">{</span><span class="p" data-group-id="7463810242-4">}</span><span class="p" data-group-id="7463810242-3">}</span><span class="w">
+<p>Registers a user.</p><h2 id="register_user/1-examples" class="section-heading"><a href="#register_user/1-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">value</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%</span><span class="nc" data-group-id="group-4">User</span><span class="p" data-group-id="group-4">{</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="7463810242-5">(</span><span class="p" data-group-id="7463810242-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="7463810242-6">}</span><span class="p" data-group-id="7463810242-5">)</span><span class="w">
-</span><span class="p" data-group-id="7463810242-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="7463810242-8">%</span><span class="nc" data-group-id="7463810242-8">Ecto.Changeset</span><span class="p" data-group-id="7463810242-8">{</span><span class="p" data-group-id="7463810242-8">}</span><span class="p" data-group-id="7463810242-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">register_user</span><span class="p" data-group-id="group-5">(</span><span class="p" data-group-id="group-6">%{</span><span class="ss">field</span><span class="p">:</span><span class="w"> </span><span class="n">bad_value</span><span class="p" data-group-id="group-6">}</span><span class="p" data-group-id="group-5">)</span><span class="w">
+</span><span class="p" data-group-id="group-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">%</span><span class="nc" data-group-id="group-8">Ecto.Changeset</span><span class="p" data-group-id="group-8">{</span><span class="p" data-group-id="group-8">}</span><span class="p" data-group-id="group-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="register_user_with_email/2">
@@ -1671,7 +1730,7 @@ See <a href="Systems.Account.MerchantOrphanReconciliation.html"><code class="inl
       <h1 class="signature" translate="no">register_user_with_email(email, creator? \\ true)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L308" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L318" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1697,7 +1756,7 @@ the inbox). The account stays unconfirmed until the user accepts terms
       <h1 class="signature" translate="no">register_via_sso(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L284" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L294" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1725,7 +1784,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">renew_mobile_session_token(token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L480" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L490" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1747,7 +1806,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">reset_user_password(user, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L736" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L746" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1756,11 +1815,11 @@ concern handled here, not something the IdP has to know about. See
 
   <section class="docstring">
 
-<p>Resets the user password.</p><h2 id="reset_user_password/2-examples" class="section-heading"><a href="#reset_user_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="8051442670-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8051442670-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p" data-group-id="8051442670-2">}</span><span class="p" data-group-id="8051442670-1">)</span><span class="w">
-</span><span class="p" data-group-id="8051442670-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8051442670-4">%</span><span class="nc" data-group-id="8051442670-4">User</span><span class="p" data-group-id="8051442670-4">{</span><span class="p" data-group-id="8051442670-4">}</span><span class="p" data-group-id="8051442670-3">}</span><span class="w">
+<p>Resets the user password.</p><h2 id="reset_user_password/2-examples" class="section-heading"><a href="#reset_user_password/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;new long password&quot;</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%</span><span class="nc" data-group-id="group-4">User</span><span class="p" data-group-id="group-4">{</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="8051442670-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8051442670-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;valid&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;not the same&quot;</span><span class="p" data-group-id="8051442670-6">}</span><span class="p" data-group-id="8051442670-5">)</span><span class="w">
-</span><span class="p" data-group-id="8051442670-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="8051442670-8">%</span><span class="nc" data-group-id="8051442670-8">Ecto.Changeset</span><span class="p" data-group-id="8051442670-8">{</span><span class="p" data-group-id="8051442670-8">}</span><span class="p" data-group-id="8051442670-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">reset_user_password</span><span class="p" data-group-id="group-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;valid&quot;</span><span class="p">,</span><span class="w"> </span><span class="ss">password_confirmation</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;not the same&quot;</span><span class="p" data-group-id="group-6">}</span><span class="p" data-group-id="group-5">)</span><span class="w">
+</span><span class="p" data-group-id="group-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">%</span><span class="nc" data-group-id="group-8">Ecto.Changeset</span><span class="p" data-group-id="group-8">{</span><span class="p" data-group-id="group-8">}</span><span class="p" data-group-id="group-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="search/2">
@@ -1775,7 +1834,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">search(query, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L88" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1797,7 +1856,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">show_profile_menu_item?(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L179" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L189" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1819,7 +1878,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">start_page_path(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L3" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1841,7 +1900,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">start_page_title(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L3" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1863,7 +1922,7 @@ concern handled here, not something the IdP has to know about. See
       <h1 class="signature" translate="no">take_one_time_token(token, context, max_age)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L518" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L528" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1887,7 +1946,7 @@ deletes it gets the user.</p>
       <h1 class="signature" translate="no">update_features(features, changeset)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L764" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L774" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1909,7 +1968,7 @@ deletes it gets the user.</p>
       <h1 class="signature" translate="no">update_phone(user, phone)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L104" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L114" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1932,7 +1991,7 @@ deletes it gets the user.</p>
       <h1 class="signature" translate="no">update_user(user_changeset)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L94" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L94" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1954,7 +2013,7 @@ deletes it gets the user.</p>
       <h1 class="signature" translate="no">update_user_email(user, token)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L372" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L382" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1977,7 +2036,7 @@ The confirmed_at date is also updated to the current time.</p>
       <h1 class="signature" translate="no">update_user_password(user, password, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L442" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L452" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1986,11 +2045,11 @@ The confirmed_at date is also updated to the current time.</p>
 
   <section class="docstring">
 
-<p>Updates the user password.</p><h2 id="update_user_password/3-examples" class="section-heading"><a href="#update_user_password/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="4197376030-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4197376030-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="4197376030-2">}</span><span class="p" data-group-id="4197376030-1">)</span><span class="w">
-</span><span class="p" data-group-id="4197376030-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4197376030-4">%</span><span class="nc" data-group-id="4197376030-4">User</span><span class="p" data-group-id="4197376030-4">{</span><span class="p" data-group-id="4197376030-4">}</span><span class="p" data-group-id="4197376030-3">}</span><span class="w">
+<p>Updates the user password.</p><h2 id="update_user_password/3-examples" class="section-heading"><a href="#update_user_password/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="group-1">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;valid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-2">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-3">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%</span><span class="nc" data-group-id="group-4">User</span><span class="p" data-group-id="group-4">{</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-3">}</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="4197376030-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4197376030-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="4197376030-6">}</span><span class="p" data-group-id="4197376030-5">)</span><span class="w">
-</span><span class="p" data-group-id="4197376030-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="4197376030-8">%</span><span class="nc" data-group-id="4197376030-8">Ecto.Changeset</span><span class="p" data-group-id="4197376030-8">{</span><span class="p" data-group-id="4197376030-8">}</span><span class="p" data-group-id="4197376030-7">}</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="n">update_user_password</span><span class="p" data-group-id="group-5">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;invalid password&quot;</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-6">%{</span><span class="ss">password</span><span class="p">:</span><span class="w"> </span><span class="n">...</span><span class="p" data-group-id="group-6">}</span><span class="p" data-group-id="group-5">)</span><span class="w">
+</span><span class="p" data-group-id="group-7">{</span><span class="ss">:error</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">%</span><span class="nc" data-group-id="group-8">Ecto.Changeset</span><span class="p" data-group-id="group-8">{</span><span class="p" data-group-id="group-8">}</span><span class="p" data-group-id="group-7">}</span></code></pre>
   </section>
 </section>
 <section class="detail" id="update_user_profile/2">
@@ -2003,7 +2062,7 @@ The confirmed_at date is also updated to the current time.</p>
       <h1 class="signature" translate="no">update_user_profile(user_changeset, profile_changeset)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L120" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2025,7 +2084,7 @@ The confirmed_at date is also updated to the current time.</p>
       <h1 class="signature" translate="no">verify_otp(email, code, remote_ip)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L578" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L588" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2049,7 +2108,7 @@ The confirmed_at date is also updated to the current time.</p>
       <h1 class="signature" translate="no">visited?(user, page_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L805" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/_public.ex#L815" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2066,27 +2125,34 @@ The confirmed_at date is also updated to the current time.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

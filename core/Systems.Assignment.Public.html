@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Assignment.Public — core v0.1.0</title>
+    <title>Systems.Assignment.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Assignment.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Assignment.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Assignment.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -99,16 +124,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -952,12 +977,12 @@ otherwise the participant can never finish again.</p></div>
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="accept_member/2">
@@ -970,7 +995,7 @@ otherwise the participant can never finish again.</p></div>
       <h1 class="signature" translate="no">accept_member(model, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L670" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L670" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -992,7 +1017,7 @@ otherwise the participant can never finish again.</p></div>
       <h1 class="signature" translate="no">accept_participation(id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1060" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1060" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1021,7 +1046,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">add_participant!(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L469" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L469" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1043,7 +1068,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">apply_member(id, user, identifier, reward_amount)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L648" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L648" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1065,7 +1090,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">assign_tester_role(tool, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L568" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L568" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1087,7 +1112,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">attention_list_enabled?(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L829" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L829" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1109,7 +1134,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L5" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L5" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1131,7 +1156,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">cancel(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L728" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L728" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1153,7 +1178,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">complete_participation(p)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1026" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1026" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1175,7 +1200,7 @@ outside the system.</p>
       <h1 class="signature" translate="no">complete_participation(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1015" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1015" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1203,7 +1228,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">complete_task(crew, identifier)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L802" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L802" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1225,7 +1250,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">copy(assignment, info, workflow, fund, auth_node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L387" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L387" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1247,7 +1272,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">copy_info(info)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L407" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L407" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1269,7 +1294,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">copy_workflow(workflow)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L413" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L413" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1291,7 +1316,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">count_participants(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L624" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L624" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1313,7 +1338,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">count_participants_finished(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L628" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L628" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1335,7 +1360,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">create_page_ref(assignment, key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L328" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L328" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1357,7 +1382,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">delete_consent_agreement(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L383" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L383" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1379,7 +1404,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">delete_page_ref(page_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L339" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L339" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1401,7 +1426,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">delete_storage_endpoint!(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L358" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L358" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1423,7 +1448,7 @@ transaction; a failure anywhere rolls the whole thing back.</p><p>Idempotent on 
       <h1 class="signature" translate="no">ensure_tester(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L644" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L644" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1447,7 +1472,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">exclude(assignment1, assignment2)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L419" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L419" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1469,7 +1494,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">excluded?(assignment, map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L813" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L813" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1491,7 +1516,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">expiration_timestamp(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L590" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L590" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1513,7 +1538,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">expire_member(model, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L676" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L676" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1535,7 +1560,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">expired_user_assignments(from)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L949" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L949" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1557,7 +1582,7 @@ concurrently.</p>
       <h1 class="signature" translate="no">funded?(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L54" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L54" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1584,7 +1609,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L37" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L37" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1608,7 +1633,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L32" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L32" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1632,7 +1657,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by(association, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L77" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L77" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1654,7 +1679,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by(field_name, id, preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L95" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L95" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1678,7 +1703,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by_content_page(page, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L42" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1702,7 +1727,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by_tool(tool, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L116" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1726,7 +1751,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by_tool_ref(workflow, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L107" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L107" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1750,7 +1775,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_by_workflow_item_id(workflow_item_id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L100" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L100" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1772,7 +1797,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_crew(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L904" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L904" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1796,7 +1821,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_member_by_task(task, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L912" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L912" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1818,7 +1843,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_participation(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L176" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L176" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1842,7 +1867,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_reward(assignment, user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L998" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L998" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1864,7 +1889,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_task(tool, identifier)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L765" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L765" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1888,7 +1913,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">get_workflow!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L57" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1910,7 +1935,7 @@ that money is actually involved.</p>
       <h1 class="signature" translate="no">has_budget_capacity?(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L870" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L870" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1937,7 +1962,7 @@ only the genuinely unreserved balance.</p>
       <h1 class="signature" translate="no">has_open_spots?(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L839" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L839" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1959,7 +1984,7 @@ only the genuinely unreserved balance.</p>
       <h1 class="signature" translate="no">include(assignment1, assignment2)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L426" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L426" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1983,7 +2008,7 @@ only the genuinely unreserved balance.</p>
       <h1 class="signature" translate="no">list_accepted_participations(assignment, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L213" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L213" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2008,7 +2033,7 @@ section. Most-recently-accepted first.</p>
       <h1 class="signature" translate="no">list_by_crew(crew, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L62" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L62" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2032,7 +2057,7 @@ section. Most-recently-accepted first.</p>
       <h1 class="signature" translate="no">list_by_participant(user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L71" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L71" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2054,7 +2079,7 @@ section. Most-recently-accepted first.</p>
       <h1 class="signature" translate="no">list_participants(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L747" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L747" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2079,7 +2104,7 @@ section. Most-recently-accepted first.</p>
       <h1 class="signature" translate="no">list_participations(assignment, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L184" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L184" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2103,7 +2128,7 @@ section. Most-recently-accepted first.</p>
       <h1 class="signature" translate="no">list_pending_participations(assignment, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L198" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L198" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2129,7 +2154,7 @@ reviewer works through them FIFO.</p>
       <h1 class="signature" translate="no">list_rejected_participations(assignment, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L226" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L226" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2152,7 +2177,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">list_signatures(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L752" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L752" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2174,7 +2199,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">list_tasks(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L761" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L761" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2196,7 +2221,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">list_user_ids(assignment_ids)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L235" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L235" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2218,7 +2243,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">mark_expired_debug(assignment, force)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L898" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L898" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2240,7 +2265,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">member?(map, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L620" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L620" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2262,7 +2287,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">obtain_participation(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L155" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L155" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2284,7 +2309,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">obtain_participation!(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L150" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2306,7 +2331,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">open_spot_count(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L848" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L848" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2328,7 +2353,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">owner!(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L565" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L565" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2352,7 +2377,7 @@ section. Most-recently-rejected first.</p>
       <h1 class="signature" translate="no">owners(assignment, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1166" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1166" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2376,7 +2401,7 @@ assignments; inheritance is via the project node.</p>
       <h1 class="signature" translate="no">participant_id(model, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L539" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L539" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2398,7 +2423,7 @@ assignments; inheritance is via the project node.</p>
       <h1 class="signature" translate="no">participant_identifier(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L551" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L551" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2422,7 +2447,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare(attrs, crew, info, affiliate, page_refs, workflow, fund, consent_agreement, auth_node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L247" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L247" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2444,7 +2469,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_info(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L277" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L277" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2466,7 +2491,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_page_ref(auth_node, key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L318" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L318" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2488,7 +2513,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_page_refs(template, auth_node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L312" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L312" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2510,7 +2535,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_participation(assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L270" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L270" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2532,7 +2557,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_tool_ref(special, tool)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L307" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2554,7 +2579,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_workflow(special, items, auth_node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L282" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L282" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2578,7 +2603,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_workflow_item(tool_ref, attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L301" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L301" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2600,7 +2625,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">prepare_workflow_items(tool_refs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L295" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L295" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2622,7 +2647,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L5" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L5" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2644,7 +2669,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">query_by_tool(field_name, id, preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L125" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2666,7 +2691,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">query_by_tool_ref(tool_ref_id, preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L138" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L138" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2688,7 +2713,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">ready?(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L927" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L927" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2710,7 +2735,7 @@ Returns <code class="inline">:error</code> when the user is not a member of the 
       <h1 class="signature" translate="no">reject_participation(id, message)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1104" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1104" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2741,7 +2766,7 @@ admin intervention at the Fund layer, not a routine reject.</p>
       <h1 class="signature" translate="no">reset_member(assignment, user, opts \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L708" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L708" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2763,7 +2788,7 @@ admin intervention at the Fund layer, not a routine reject.</p>
       <h1 class="signature" translate="no">reset_opts(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L723" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L723" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2787,7 +2812,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">rewarded_amount(model, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1170" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L1170" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2809,7 +2834,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">rollback_deposit(multi, assignment, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L981" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L981" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2831,7 +2856,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">rollback_expired_deposits()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L960" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L960" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2853,7 +2878,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">rollback_expired_deposits(from)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L966" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L966" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2875,7 +2900,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">run_apply_member(crew, user, identifier, expire_at, reset_opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L701" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L701" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2897,7 +2922,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">search_subject(tool, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L931" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L931" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2919,7 +2944,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">start_task(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L774" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L774" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2941,7 +2966,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">start_task(tool, identifier)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L770" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L770" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2963,7 +2988,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">status(map, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L597" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L597" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -2985,7 +3010,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">task_labels(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L834" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L834" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3007,7 +3032,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">tester?(arg1, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L632" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L632" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3029,7 +3054,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">timestamp(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L617" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L617" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3051,7 +3076,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">timestamp(map, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L610" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L610" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3073,7 +3098,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">update(assignment, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L433" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L433" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3095,7 +3120,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">update!(assignment, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L438" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L438" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3117,7 +3142,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">update_consent_agreement(assignment, consent_agreement)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L453" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L453" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3139,7 +3164,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">update_fund(assignment, fund)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L445" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L445" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3161,7 +3186,7 @@ otherwise the participant can never finish again.</p>
       <h1 class="signature" translate="no">update_storage_endpoint(assignment, storage_endpoint)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L461" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_public.ex#L461" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -3178,27 +3203,34 @@ otherwise the participant can never finish again.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Crew.Public — core v0.1.0</title>
+    <title>Systems.Crew.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Crew.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Crew.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Crew.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -566,12 +591,12 @@ Missing keys mean zero.</p></div>
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="active?/1">
@@ -584,7 +609,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">active?(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L34" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L34" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -610,7 +635,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">apply_member(crew, user, identifier, expire_at \\ nil, reset_opts \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L274" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L274" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -638,7 +663,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">apply_member_with_role(crew, user, role \\ :participant, expire_at \\ nil, reset_opts \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L297" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L297" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -660,7 +685,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -682,7 +707,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">cancel(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L217" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L217" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -704,7 +729,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">cancel(multi, crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L223" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L223" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -726,7 +751,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">cancel_task(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L150" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -748,7 +773,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">complete_task(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L158" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L158" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -770,7 +795,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">complete_task!(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L185" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L185" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -792,7 +817,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">completed_tasks(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L138" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L138" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -814,7 +839,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">count_members(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L232" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L232" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -836,7 +861,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">count_participants(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L239" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L239" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -858,7 +883,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">count_participants_finished(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L246" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L246" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -880,7 +905,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">count_pending_tasks(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L144" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -902,7 +927,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">count_tasks(crew, status_list)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L115" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L115" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -926,7 +951,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">create_task(crew, users, identifier, expire_at \\ nil)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L57" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -950,7 +975,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">create_task!(crew, users, identifier, expire_at \\ nil)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L72" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L72" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -972,7 +997,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">delete_task(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L209" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L209" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -996,7 +1021,7 @@ Missing keys mean zero.</p></div>
       <h1 class="signature" translate="no">ensure_member_with_role(crew, user, role, reset_opts \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L319" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L319" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1019,7 +1044,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">expire_member(multi, member)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L334" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L334" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1041,7 +1066,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">expire_tasks_by_template(crew, task_template)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L101" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L101" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1064,7 +1089,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">expired_member?(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L485" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L485" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1086,7 +1111,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">expired_pending_started_tasks(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L133" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L133" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1108,7 +1133,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">finished?(member)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L360" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L360" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1132,7 +1157,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get!(id, preload \\ [:tasks, :members])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L23" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L23" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1156,7 +1181,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_expired_member(crew, user_ref, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L408" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L408" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1180,7 +1205,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_member(crew, user_ref, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L262" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L262" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1204,7 +1229,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_member!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L258" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L258" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1228,7 +1253,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_member_including_expired(crew, user_ref, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L268" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L268" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1250,7 +1275,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_task(crew, identifier)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1274,7 +1299,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">get_task!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L53" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1298,7 +1323,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">list(preload \\ [:tasks, :members])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L18" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L18" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1320,7 +1345,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">list_members(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L414" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L414" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1344,7 +1369,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">list_tasks(crew, order_by \\ {:desc, :id})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L88" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1368,7 +1393,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">list_tasks_for_user(crew, user_ref, order_by \\ {:desc, :id})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L110" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1390,7 +1415,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">mark_expired()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L504" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L504" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1412,7 +1437,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">mark_expired_debug(crew, expiration_timeout, force)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L525" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L525" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1434,7 +1459,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">member(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L475" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L475" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1456,7 +1481,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">member?(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L480" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L480" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1480,7 +1505,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">multi_update(multi, atom, changeset, event \\ :updated)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L203" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L203" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1502,7 +1527,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">multi_update(multi, atom, task, attrs, event)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L198" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L198" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1524,7 +1549,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">pending_tasks_query(crew)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L521" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L521" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1548,7 +1573,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">prepare(auth_node, attrs \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L28" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L28" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1570,7 +1595,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1592,7 +1617,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">public_id(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L253" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L253" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1614,7 +1639,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">reset_member(member, expire_at, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L425" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L425" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1636,7 +1661,7 @@ repeatedly and concurrently: existing rows are kept as they are.</p>
       <h1 class="signature" translate="no">reset_member(multi, member, expire_at, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L431" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L431" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1659,7 +1684,7 @@ tasks it returns true for; the others stay expired.</p>
       <h1 class="signature" translate="no">reset_member!(member, expire_at, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L420" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L420" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1681,7 +1706,7 @@ tasks it returns true for; the others stay expired.</p>
       <h1 class="signature" translate="no">start_task(task)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L154" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L154" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1703,7 +1728,7 @@ tasks it returns true for; the others stay expired.</p>
       <h1 class="signature" translate="no">started?(member)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L352" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L352" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1725,7 +1750,7 @@ tasks it returns true for; the others stay expired.</p>
       <h1 class="signature" translate="no">subject(crew, public_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L490" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L490" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1747,7 +1772,7 @@ tasks it returns true for; the others stay expired.</p>
       <h1 class="signature" translate="no">task_status_counts_by_user(crew, status_list)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L126" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L126" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1771,7 +1796,7 @@ Missing keys mean zero.</p>
       <h1 class="signature" translate="no">tasks_finished?(task_ids)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L368" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L368" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1793,7 +1818,7 @@ Missing keys mean zero.</p>
       <h1 class="signature" translate="no">update_task(task, attrs, event)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L192" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L192" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1815,7 +1840,7 @@ Missing keys mean zero.</p>
       <h1 class="signature" translate="no">user_finished?(crew, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L39" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/crew/_public.ex#L39" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1832,27 +1857,34 @@ Missing keys mean zero.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

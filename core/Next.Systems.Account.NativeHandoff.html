@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
+
+
+    <title>Next.Systems.Account.NativeHandoff — mica v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
+
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="mica" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+mica
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Next.<wbr />Systems.<wbr />Account.<wbr />NativeHandoff</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
+
+    </h1>
+
+<a href="Next.Systems.Account.NativeHandoff.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Hands a sign-in through an identity provider back to the Next native apps.</p><p>The app opens the provider in the system sign-in sheet, which keeps its own
+cookies. <code class="inline">NativeProviderController.start/2</code> marks the sheet with a cookie
+that holds the provider and the app's code challenge. When that provider's
+flow signs the user in, <code class="inline">hand_off/4</code> redirects the sheet to the app's
+callback URL with a one-time token instead of starting a session there; when
+it ends without signing in, <code class="inline">hand_off_unfinished/3</code> sends the result there.
+Other sign-ins in the same browser are left alone. The app redeems the token
+in its own web view (<code class="inline">NativeSigninController.redeem/2</code>) together with the
+code verifier.</p><p>See the &quot;Identity providers in the sign-in sheet&quot; section of
+<code class="inline">docs/architecture/mobile/designs/authentication-session.md</code>.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#callback_url/1" data-no-tooltip="" translate="no">callback_url(params)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The app's callback URL, on Mica's own host; the sheet catches it before it
+loads.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#redeem/2" data-no-tooltip="" translate="no">redeem(token, code_verifier)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Redeems a token of <code class="inline">hand_off/4</code> with the app's code verifier. The token is
+used up by the first attempt, whether the verifier matches or not.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#return_error/2" data-no-tooltip="" translate="no">return_error(conn, error)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Sends the sheet back to the app with an <code class="inline">error</code> instead of a token.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#start/4" data-no-tooltip="" translate="no">start(conn, provider, code_challenge, return_to)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Marks the sheet: the next sign-in through <code class="inline">provider</code> in it goes back to the app.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#valid_code_challenge?/1" data-no-tooltip="" translate="no">valid_code_challenge?(code_challenge)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether <code class="inline">code_challenge</code> is a Base64url SHA-256 digest, as <code class="inline">S256</code> sends it.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="callback_url/1">
+
+  <div class="detail-header">
+    <a href="#callback_url/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">callback_url(params)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The app's callback URL, on Mica's own host; the sheet catches it before it
+loads.</p>
+  </section>
+</section>
+<section class="detail" id="redeem/2">
+
+  <div class="detail-header">
+    <a href="#redeem/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">redeem(token, code_verifier)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L91" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Redeems a token of <code class="inline">hand_off/4</code> with the app's code verifier. The token is
+used up by the first attempt, whether the verifier matches or not.</p>
+  </section>
+</section>
+<section class="detail" id="return_error/2">
+
+  <div class="detail-header">
+    <a href="#return_error/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">return_error(conn, error)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L78" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Sends the sheet back to the app with an <code class="inline">error</code> instead of a token.</p>
+  </section>
+</section>
+<section class="detail" id="start/4">
+
+  <div class="detail-header">
+    <a href="#start/4" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">start(conn, provider, code_challenge, return_to)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L39" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Marks the sheet: the next sign-in through <code class="inline">provider</code> in it goes back to the app.</p>
+  </section>
+</section>
+<section class="detail" id="valid_code_challenge?/1">
+
+  <div class="detail-header">
+    <a href="#valid_code_challenge?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">valid_code_challenge?(code_challenge)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/systems/account/native_handoff.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether <code class="inline">code_challenge</code> is a Base64url SHA-256 digest, as <code class="inline">S256</code> sends it.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="mica.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

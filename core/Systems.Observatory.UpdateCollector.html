@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Observatory.UpdateCollector — core v0.1.0</title>
+    <title>Systems.Observatory.UpdateCollector — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Observatory.UpdateCollector</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Observatory.<wbr />UpdateCollector</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Observatory.UpdateCollector.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -96,31 +121,31 @@ core
 <p>Collects Observatory updates during a transaction and dispatches them together.</p><p>This module uses the Process dictionary to collect LiveView updates that should
 be dispatched together after a database transaction commits. This prevents race
 conditions where LiveViews would query the database before changes are committed.</p><h2 id="module-usage" class="section-heading"><a href="#module-usage" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Usage</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># In a Switch handler:</span><span class="w">
-</span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="1172201600-1">(</span><span class="p" data-group-id="1172201600-2">{</span><span class="ss">:embedded_live_view</span><span class="p">,</span><span class="w"> </span><span class="nc">MyView</span><span class="p" data-group-id="1172201600-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1172201600-3">[</span><span class="n">id</span><span class="p" data-group-id="1172201600-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="1172201600-4">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="1172201600-4">}</span><span class="p" data-group-id="1172201600-1">)</span><span class="w">
+</span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">{</span><span class="ss">:embedded_live_view</span><span class="p">,</span><span class="w"> </span><span class="nc">MyView</span><span class="p" data-group-id="group-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-3">[</span><span class="n">id</span><span class="p" data-group-id="group-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
 
 </span><span class="c1"># In a Multi transaction:</span><span class="w">
-</span><span class="nc">Multi</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="1172201600-5">(</span><span class="p" data-group-id="1172201600-5">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Multi</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="1172201600-6">(</span><span class="ss">:model</span><span class="p">,</span><span class="w"> </span><span class="n">changeset</span><span class="p" data-group-id="1172201600-6">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Multi</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="1172201600-7">(</span><span class="ss">:commit_observatory</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="1172201600-8">fn</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
-  </span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">dispatch_all</span><span class="p" data-group-id="1172201600-9">(</span><span class="p" data-group-id="1172201600-9">)</span><span class="w">
-  </span><span class="p" data-group-id="1172201600-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:dispatched</span><span class="p" data-group-id="1172201600-10">}</span><span class="w">
-</span><span class="k" data-group-id="1172201600-8">end</span><span class="p" data-group-id="1172201600-7">)</span><span class="w">
-</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Repo</span><span class="o">.</span><span class="n">commit</span><span class="p" data-group-id="1172201600-11">(</span><span class="p" data-group-id="1172201600-11">)</span></code></pre>
+</span><span class="nc">Multi</span><span class="o">.</span><span class="n">new</span><span class="p" data-group-id="group-5">(</span><span class="p" data-group-id="group-5">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Multi</span><span class="o">.</span><span class="n">update</span><span class="p" data-group-id="group-6">(</span><span class="ss">:model</span><span class="p">,</span><span class="w"> </span><span class="n">changeset</span><span class="p" data-group-id="group-6">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Multi</span><span class="o">.</span><span class="n">run</span><span class="p" data-group-id="group-7">(</span><span class="ss">:commit_observatory</span><span class="p">,</span><span class="w"> </span><span class="k" data-group-id="group-8">fn</span><span class="w"> </span><span class="bp">_</span><span class="p">,</span><span class="w"> </span><span class="bp">_</span><span class="w"> </span><span class="o">-&gt;</span><span class="w">
+  </span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">dispatch_all</span><span class="p" data-group-id="group-9">(</span><span class="p" data-group-id="group-9">)</span><span class="w">
+  </span><span class="p" data-group-id="group-10">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="ss">:dispatched</span><span class="p" data-group-id="group-10">}</span><span class="w">
+</span><span class="k" data-group-id="group-8">end</span><span class="p" data-group-id="group-7">)</span><span class="w">
+</span><span class="o">|&gt;</span><span class="w"> </span><span class="nc">Repo</span><span class="o">.</span><span class="n">commit</span><span class="p" data-group-id="group-11">(</span><span class="p" data-group-id="group-11">)</span></code></pre>
     </section>
 
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -188,12 +213,12 @@ conditions where LiveViews would query the database before changes are committed
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="clear/0">
@@ -206,7 +231,7 @@ conditions where LiveViews would query the database before changes are committed
       <h1 class="signature" translate="no">clear()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L90" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L90" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -228,7 +253,7 @@ conditions where LiveViews would query the database before changes are committed
       <h1 class="signature" translate="no">collect(target, args, message)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L44" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -238,8 +263,8 @@ conditions where LiveViews would query the database before changes are committed
   <section class="docstring">
 
 <p>Collects an Observatory update to be dispatched later.</p><p>Updates are stored in the Process dictionary and will be dispatched
-when <a href="#dispatch_all/0"><code class="inline">dispatch_all/0</code></a> is called.</p><h2 id="collect/3-parameters" class="section-heading"><a href="#collect/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">target</code> - The target tuple like <code class="inline">{:page, MyPage}</code> or <code class="inline">{:embedded_live_view, MyView}</code></li><li><code class="inline">args</code> - Arguments for Observatory.Public.dispatch (typically [id] or [id, user_id])</li><li><code class="inline">message</code> - The message map to send</li></ul><h2 id="collect/3-examples" class="section-heading"><a href="#collect/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="6549151165-1">(</span><span class="p" data-group-id="6549151165-2">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="6549151165-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6549151165-3">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p" data-group-id="6549151165-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6549151165-4">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="6549151165-4">}</span><span class="p" data-group-id="6549151165-1">)</span><span class="w">
-</span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="6549151165-5">(</span><span class="p" data-group-id="6549151165-6">{</span><span class="ss">:embedded_live_view</span><span class="p">,</span><span class="w"> </span><span class="nc">MyView</span><span class="p" data-group-id="6549151165-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6549151165-7">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p" data-group-id="6549151165-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="6549151165-8">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="6549151165-8">}</span><span class="p" data-group-id="6549151165-5">)</span></code></pre>
+when <a href="#dispatch_all/0"><code class="inline">dispatch_all/0</code></a> is called.</p><h2 id="collect/3-parameters" class="section-heading"><a href="#collect/3-parameters" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Parameters</span></h2><ul><li><code class="inline">target</code> - The target tuple like <code class="inline">{:page, MyPage}</code> or <code class="inline">{:embedded_live_view, MyView}</code></li><li><code class="inline">args</code> - Arguments for Observatory.Public.dispatch (typically [id] or [id, user_id])</li><li><code class="inline">message</code> - The message map to send</li></ul><h2 id="collect/3-examples" class="section-heading"><a href="#collect/3-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-2">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="group-2">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-3">[</span><span class="n">model</span><span class="o">.</span><span class="n">id</span><span class="p" data-group-id="group-3">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-4">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="group-4">}</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="group-5">(</span><span class="p" data-group-id="group-6">{</span><span class="ss">:embedded_live_view</span><span class="p">,</span><span class="w"> </span><span class="nc">MyView</span><span class="p" data-group-id="group-6">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-7">[</span><span class="n">id</span><span class="p">,</span><span class="w"> </span><span class="n">user_id</span><span class="p" data-group-id="group-7">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="group-8">}</span><span class="p" data-group-id="group-5">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="count/0">
@@ -252,7 +277,7 @@ when <a href="#dispatch_all/0"><code class="inline">dispatch_all/0</code></a> is
       <h1 class="signature" translate="no">count()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L100" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L100" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -274,7 +299,7 @@ when <a href="#dispatch_all/0"><code class="inline">dispatch_all/0</code></a> is
       <h1 class="signature" translate="no">current_transaction_id()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L110" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L110" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -297,7 +322,7 @@ updates for different processes.</p>
       <h1 class="signature" translate="no">dispatch_all()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L61" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L61" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -308,7 +333,7 @@ updates for different processes.</p>
 
 <p>Dispatches all collected Observatory updates.</p><p>This is automatically called by <code class="inline">setup_after_commit/1</code> after the transaction commits.
 Can also be called manually if needed.</p><h2 id="dispatch_all/0-examples" class="section-heading"><a href="#dispatch_all/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="c1"># Manual dispatch (not recommended)</span><span class="w">
-</span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">dispatch_all</span><span class="p" data-group-id="9794536593-1">(</span><span class="p" data-group-id="9794536593-1">)</span></code></pre>
+</span><span class="nc">Observatory.UpdateCollector</span><span class="o">.</span><span class="n">dispatch_all</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-1">)</span></code></pre>
   </section>
 </section>
 <section class="detail" id="get_all/0">
@@ -321,7 +346,7 @@ Can also be called manually if needed.</p><h2 id="dispatch_all/0-examples" class
       <h1 class="signature" translate="no">get_all()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/observatory/update_collector.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -331,12 +356,12 @@ Can also be called manually if needed.</p><h2 id="dispatch_all/0-examples" class
   <section class="docstring">
 
 <p>Returns all currently collected updates.</p><p>Useful for testing and debugging to inspect what updates have been
-collected but not yet dispatched.</p><h2 id="get_all/0-examples" class="section-heading"><a href="#get_all/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">get_all</span><span class="p" data-group-id="3204529010-1">(</span><span class="p" data-group-id="3204529010-1">)</span><span class="w">
-</span><span class="p" data-group-id="3204529010-2">[</span><span class="p" data-group-id="3204529010-2">]</span><span class="w">
+collected but not yet dispatched.</p><h2 id="get_all/0-examples" class="section-heading"><a href="#get_all/0-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">get_all</span><span class="p" data-group-id="group-1">(</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="p" data-group-id="group-2">[</span><span class="p" data-group-id="group-2">]</span><span class="w">
 
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="3204529010-3">(</span><span class="p" data-group-id="3204529010-4">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="3204529010-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3204529010-5">[</span><span class="mi">1</span><span class="p" data-group-id="3204529010-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3204529010-6">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="3204529010-6">}</span><span class="p" data-group-id="3204529010-3">)</span><span class="w">
-</span><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">get_all</span><span class="p" data-group-id="3204529010-7">(</span><span class="p" data-group-id="3204529010-7">)</span><span class="w">
-</span><span class="p" data-group-id="3204529010-8">[</span><span class="p" data-group-id="3204529010-9">{</span><span class="p" data-group-id="3204529010-10">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="3204529010-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3204529010-11">[</span><span class="mi">1</span><span class="p" data-group-id="3204529010-11">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="3204529010-12">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="3204529010-12">}</span><span class="p" data-group-id="3204529010-9">}</span><span class="p" data-group-id="3204529010-8">]</span></code></pre>
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">collect</span><span class="p" data-group-id="group-3">(</span><span class="p" data-group-id="group-4">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="group-4">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-5">[</span><span class="mi">1</span><span class="p" data-group-id="group-5">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-6">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="group-6">}</span><span class="p" data-group-id="group-3">)</span><span class="w">
+</span><span class="gp unselectable">iex&gt; </span><span class="nc">UpdateCollector</span><span class="o">.</span><span class="n">get_all</span><span class="p" data-group-id="group-7">(</span><span class="p" data-group-id="group-7">)</span><span class="w">
+</span><span class="p" data-group-id="group-8">[</span><span class="p" data-group-id="group-9">{</span><span class="p" data-group-id="group-10">{</span><span class="ss">:page</span><span class="p">,</span><span class="w"> </span><span class="nc">MyPage</span><span class="p" data-group-id="group-10">}</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-11">[</span><span class="mi">1</span><span class="p" data-group-id="group-11">]</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-12">%{</span><span class="ss">model</span><span class="p">:</span><span class="w"> </span><span class="n">model</span><span class="p" data-group-id="group-12">}</span><span class="p" data-group-id="group-9">}</span><span class="p" data-group-id="group-8">]</span></code></pre>
   </section>
 </section>
 
@@ -344,27 +369,34 @@ collected but not yet dispatched.</p><h2 id="get_all/0-examples" class="section-
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

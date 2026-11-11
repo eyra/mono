@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Org.Public — core v0.1.0</title>
+    <title>Systems.Org.Public — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Org.Public</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Org.<wbr />Public</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Org.Public.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -293,7 +318,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Like <a><code class="inline">list_members/1</code></a> but returns <code class="inline">{user, added_at}</code> tuples where
+        <div class="summary-synopsis"><p>Like <a href="#list_members/1"><code class="inline">list_members/1</code></a> but returns <code class="inline">{user, added_at}</code> tuples where
 <code class="inline">added_at</code> is the timestamp at which the <code class="inline">:member</code> role was granted on
 the org's auth_node. Used by the Members tab to power the &quot;Recent&quot;
 filter.</p></div>
@@ -438,12 +463,12 @@ Finds orgs whose domains match the user's email and notifies their owners.</p></
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="add_member/2">
@@ -456,7 +481,7 @@ Finds orgs whose domains match the user's email and notifies their owners.</p></
       <h1 class="signature" translate="no">add_member(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L383" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L383" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -479,7 +504,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">add_user(identifier, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L102" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -501,7 +526,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">archive(node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L204" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L204" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -523,7 +548,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">assign_owner(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L255" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L255" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -548,7 +573,7 @@ without waiting for a registration event.</p>
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -570,7 +595,7 @@ without waiting for a registration event.</p>
       <h1 class="signature" translate="no">can_manage?(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L501" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L501" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -596,7 +621,7 @@ sessions where a user's role was revoked while the page was still open.</p>
       <h1 class="signature" translate="no">clear_domain_match_next_action(org_id, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L450" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L450" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -620,7 +645,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">create_link!(from, to)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L94" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L94" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -642,7 +667,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">create_node(identifier, short_name, full_name)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -664,7 +689,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">create_node!(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L76" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L76" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -686,7 +711,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">create_node!(identifier, short_name, full_name)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L40" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L40" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -708,7 +733,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">delete_user(identifier, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L116" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -730,7 +755,7 @@ immediately instead of lingering until the next sync pass.</p>
       <h1 class="signature" translate="no">find_domain_matched_users(domains, current_members)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L321" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L321" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -755,7 +780,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">get_link(node_model1, node_model2, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L85" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L85" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -779,7 +804,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">get_node(identifier, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L17" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L17" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -803,7 +828,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">get_node!(id, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L25" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L25" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -825,7 +850,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">list_all_nodes(preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L150" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -847,7 +872,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">list_archived_nodes(preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L191" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L191" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -869,7 +894,7 @@ Returns users that could be suggested for membership based on email domain match
       <h1 class="signature" translate="no">list_members(org)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L341" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L341" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -892,7 +917,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">list_members_with_added_at(node_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L356" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L356" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -917,7 +942,7 @@ filter.</p>
       <h1 class="signature" translate="no">list_nodes(preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L129" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -939,7 +964,7 @@ filter.</p>
       <h1 class="signature" translate="no">list_nodes(user, preload)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -963,7 +988,7 @@ filter.</p>
       <h1 class="signature" translate="no">list_orgs(user, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L291" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L291" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -985,7 +1010,7 @@ filter.</p>
       <h1 class="signature" translate="no">list_owners(org)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L279" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L279" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1007,7 +1032,7 @@ filter.</p>
       <h1 class="signature" translate="no">member?(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L398" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L398" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1029,7 +1054,7 @@ filter.</p>
       <h1 class="signature" translate="no">owns_any?(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L304" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1051,7 +1076,7 @@ filter.</p>
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L2" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1073,7 +1098,7 @@ filter.</p>
       <h1 class="signature" translate="no">remove_member(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L391" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L391" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1096,7 +1121,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">restore(node)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L227" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L227" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1118,7 +1143,7 @@ Auth roles are the source of truth for membership (Option C pattern).</p>
       <h1 class="signature" translate="no">revoke_owner(org, user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L270" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L270" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1142,7 +1167,7 @@ are no longer responsible for adding domain-matched members here.</p>
       <h1 class="signature" translate="no">sync_all_domain_match_next_actions(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L513" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L513" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1169,7 +1194,7 @@ Used as a fallback when opening admin pages.</p>
       <h1 class="signature" translate="no">sync_domain_match_next_action(node, user, locale \\ :en)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L416" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L416" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1192,7 +1217,7 @@ Creates the action if domain-matched users exist, clears it otherwise.</p>
       <h1 class="signature" translate="no">sync_next_actions_for_new_user(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L462" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/org/_public.ex#L462" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1210,27 +1235,34 @@ Finds orgs whose domains match the user's email and notifies their owners.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

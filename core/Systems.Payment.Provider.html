@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Payment.Provider — core v0.1.0</title>
+    <title>Systems.Payment.Provider — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Payment.Provider</span> <small>behaviour</small>
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Payment.<wbr />Provider</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Payment.Provider.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-types summary">
-  <h2>
+  <h3>
     <a href="#types">Types</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -189,9 +214,9 @@ rewinds — so it is what a provider→local scan matches on.</p></div>
 
 </div>
 <div class="summary-callbacks summary">
-  <h2>
+  <h3>
     <a href="#callbacks">Callbacks</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -386,12 +411,12 @@ merchants — the provider-side half of the provider→local reconciliation pass
 
 
   <section id="types" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Types</span>
-    </h1>
+    </h2>
 
     <div class="types-list">
 <section class="detail" id="t:bank_account/0">
@@ -404,7 +429,7 @@ merchants — the provider-side half of the provider→local reconciliation pass
       <h1 class="signature" translate="no">bank_account()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L84" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -416,10 +441,10 @@ merchants — the provider-side half of the provider→local reconciliation pass
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> bank_account() :: %{
-  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  uid: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
   status: <a href="#t:kyc_status/0">kyc_status</a>(),
-  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  verification_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil
+  raw_status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  verification_url: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil
 }</pre>
 
       </div>
@@ -437,7 +462,7 @@ merchants — the provider-side half of the provider→local reconciliation pass
       <h1 class="signature" translate="no">kyc_status()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L82" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L82" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -469,7 +494,7 @@ provider's own word is kept alongside it as <code class="inline">raw_status</cod
       <h1 class="signature" translate="no">lifecycle_status()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L120" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L120" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -502,7 +527,7 @@ can record that OPP said &quot;disapproved&quot; rather than the collapsed <code
       <h1 class="signature" translate="no">listing(object)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L15" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -536,7 +561,7 @@ provider holds more than we can walk.</p>
       <h1 class="signature" translate="no">merchant()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L19" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L19" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -548,12 +573,12 @@ provider holds more than we can walk.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> merchant() :: %{
-  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  kyc_level: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
-  compliance_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  overview_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
-  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+  uid: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  kyc_level: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>(),
+  compliance_status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  overview_url: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil,
+  created: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>() | nil
 }</pre>
 
       </div>
@@ -571,7 +596,7 @@ provider holds more than we can walk.</p>
       <h1 class="signature" translate="no">transaction()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L128" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L128" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -583,13 +608,13 @@ provider holds more than we can walk.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> transaction() :: %{
-  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  uid: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
   status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
-  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  payment_url: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
-  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
-  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
-  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+  raw_status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  payment_url: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil,
+  amount: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>(),
+  reference: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil,
+  created: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>() | nil
 }</pre>
 
       </div>
@@ -610,7 +635,7 @@ rewinds — so it is what a provider→local scan matches on.</p>
       <h1 class="signature" translate="no">transfer()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L231" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L231" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -622,13 +647,13 @@ rewinds — so it is what a provider→local scan matches on.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> transfer() :: %{
-  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  uid: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
   status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
-  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
-  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
-  settled: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>() | nil,
-  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+  raw_status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  amount: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>(),
+  reference: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil,
+  settled: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>() | nil,
+  created: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>() | nil
 }</pre>
 
       </div>
@@ -646,7 +671,7 @@ rewinds — so it is what a provider→local scan matches on.</p>
       <h1 class="signature" translate="no">withdrawal()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L170" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L170" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -658,12 +683,12 @@ rewinds — so it is what a provider→local scan matches on.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> withdrawal() :: %{
-  uid: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
+  uid: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
   status: <a href="#t:lifecycle_status/0">lifecycle_status</a>(),
-  raw_status: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  reference: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>() | nil,
-  amount: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">integer</a>(),
-  created: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>() | nil
+  raw_status: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  reference: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil,
+  amount: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">integer</a>(),
+  created: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>() | nil
 }</pre>
 
       </div>
@@ -676,12 +701,12 @@ rewinds — so it is what a provider→local scan matches on.</p>
   </section>
 
   <section id="callbacks" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#callbacks">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Callbacks</span>
-    </h1>
+    </h2>
 
     <div class="callbacks-list">
 <section class="detail" id="c:add_merchant_phone/2">
@@ -694,7 +719,7 @@ rewinds — so it is what a provider→local scan matches on.</p>
       <h1 class="signature" translate="no">add_merchant_phone(merchant_uid, phone)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L63" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L63" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -705,7 +730,7 @@ rewinds — so it is what a provider→local scan matches on.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> add_merchant_phone(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), phone :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> add_merchant_phone(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), phone :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -726,7 +751,7 @@ participant is not redirected to OPP's hosted merchant-overview page.</p>
       <h1 class="signature" translate="no">charge_to_partner(from_owner_uid, amount, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L273" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L273" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -738,9 +763,9 @@ participant is not redirected to OPP's hosted merchant-overview page.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@callback</span> charge_to_partner(
-  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  from_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) :: {:ok, <a href="#t:transfer/0">transfer</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -764,7 +789,7 @@ logical charge never takes the money twice.</p>
       <h1 class="signature" translate="no">create_bank_account(merchant_uid, attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L102" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L102" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -775,7 +800,7 @@ logical charge never takes the money twice.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> create_bank_account(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(), attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> create_bank_account(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) ::
   {:ok, <a href="#t:bank_account/0">bank_account</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -795,7 +820,7 @@ complete the bank-verification step of KYC.</p><h2 id="c:create_bank_account/2-a
       <h1 class="signature" translate="no">create_merchant(attrs)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L45" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -806,7 +831,7 @@ complete the bank-verification step of KYC.</p><h2 id="c:create_bank_account/2-a
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> create_merchant(attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> create_merchant(attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) ::
   {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -826,7 +851,7 @@ OPP's hosted page to enter one)</li><li><code class="inline">locale</code> - lan
       <h1 class="signature" translate="no">create_transaction(request)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L157" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -859,7 +884,7 @@ transactions on retry.</p><h2 id="c:create_transaction/1-opts" class="section-he
       <h1 class="signature" translate="no">create_withdrawal(merchant_uid, currency, attrs, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L194" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L194" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -871,10 +896,10 @@ transactions on retry.</p><h2 id="c:create_transaction/1-opts" class="section-he
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@callback</span> create_withdrawal(
-  merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  currency :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
-  attrs :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  currency :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(),
+  attrs :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) :: {:ok, <a href="#t:withdrawal/0">withdrawal</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -895,7 +920,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">find_merchant_by_email(email)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -906,7 +931,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> find_merchant_by_email(email :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> find_merchant_by_email(email :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -924,7 +949,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">get_merchant(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L46" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -935,7 +960,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> get_merchant(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> get_merchant(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="#t:merchant/0">merchant</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -953,7 +978,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">get_transaction(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L159" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L159" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -964,7 +989,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> get_transaction(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> get_transaction(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="#t:transaction/0">transaction</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -982,7 +1007,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">get_withdrawal(uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L201" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L201" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -993,7 +1018,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> get_withdrawal(uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> get_withdrawal(uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, <a href="#t:withdrawal/0">withdrawal</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -1011,7 +1036,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">list_bank_accounts(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L105" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L105" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1022,7 +1047,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_bank_accounts(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> list_bank_accounts(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="#t:bank_account/0">bank_account</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -1040,7 +1065,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
       <h1 class="signature" translate="no">list_charges_to_merchant(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L299" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L299" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1051,7 +1076,7 @@ never creates a duplicate withdrawal.</p><h2 id="c:create_withdrawal/4-attrs" cl
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_charges_to_merchant(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> list_charges_to_merchant(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="#t:transfer/0">transfer</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -1078,7 +1103,7 @@ balances actually change.</p>
       <h1 class="signature" translate="no">list_recent_merchants(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L55" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1089,7 +1114,7 @@ balances actually change.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_recent_merchants(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:merchant/0">merchant</a>())</pre>
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_merchants(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:merchant/0">merchant</a>())</pre>
 
       </div>
 
@@ -1109,7 +1134,7 @@ recorded the merchant uid.</p>
       <h1 class="signature" translate="no">list_recent_transactions(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L166" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L166" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1120,7 +1145,7 @@ recorded the merchant uid.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_recent_transactions(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transaction/0">transaction</a>())</pre>
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_transactions(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transaction/0">transaction</a>())</pre>
 
       </div>
 
@@ -1139,7 +1164,7 @@ merchants — the provider-side half of the provider→local pay-in scan. See
       <h1 class="signature" translate="no">list_recent_transfers(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L307" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L307" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1150,7 +1175,7 @@ merchants — the provider-side half of the provider→local pay-in scan. See
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_recent_transfers(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transfer/0">transfer</a>())</pre>
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_transfers(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:transfer/0">transfer</a>())</pre>
 
       </div>
 
@@ -1169,7 +1194,7 @@ this is not anchored to local state.</p>
       <h1 class="signature" translate="no">list_recent_withdrawals(since)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L227" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L227" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1180,7 +1205,7 @@ this is not anchored to local state.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_recent_withdrawals(since :: <a href="https://hexdocs.pm/elixir/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:withdrawal/0">withdrawal</a>())</pre>
+          <pre translate="no"><span class="attribute">@callback</span> list_recent_withdrawals(since :: <a href="https://elixir.hexdocs.pm/DateTime.html#t:t/0">DateTime.t</a>()) :: <a href="#t:listing/1">listing</a>(<a href="#t:withdrawal/0">withdrawal</a>())</pre>
 
       </div>
 
@@ -1202,7 +1227,7 @@ callers get a complete list, oldest-cutoff enforced, no pagination to thread.</p
       <h1 class="signature" translate="no">list_withdrawals(merchant_uid)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L212" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L212" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1213,7 +1238,7 @@ callers get a complete list, oldest-cutoff enforced, no pagination to thread.</p
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> list_withdrawals(merchant_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()) ::
+          <pre translate="no"><span class="attribute">@callback</span> list_withdrawals(merchant_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) ::
   {:ok, [<a href="#t:withdrawal/0">withdrawal</a>()]} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -1235,7 +1260,7 @@ need to depend on a provider's filter vocabulary.</p>
       <h1 class="signature" translate="no">transfer_to_merchant(from_owner_uid, to_owner_uid, amount, idempotence_key)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L253" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/payment/provider.ex#L253" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1247,10 +1272,10 @@ need to depend on a provider's filter vocabulary.</p>
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@callback</span> transfer_to_merchant(
-  from_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  to_owner_uid :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  amount :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">non_neg_integer</a>(),
-  idempotence_key :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()
+  from_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  to_owner_uid :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  amount :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">non_neg_integer</a>(),
+  idempotence_key :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ) :: {:ok, <a href="#t:transfer/0">transfer</a>()} | {:error, <a href="Systems.Payment.Error.html#t:t/0">Systems.Payment.Error.t</a>()}</pre>
 
       </div>
@@ -1268,27 +1293,34 @@ logical transfer never moves the money twice.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

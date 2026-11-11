@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Account.Tab — core v0.1.0</title>
+    <title>Systems.Account.Tab — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Account.Tab</span> <small>behaviour</small>
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Account.<wbr />Tab</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Account.Tab.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -93,23 +118,23 @@ core
 
 
     <section id="moduledoc">
-<p>A tab on the account page (<a href="Systems.Account.Page.html"><code class="inline">Systems.Account.Page</code></a>): Profile, Payouts, Features, ….</p><p>Systems contribute tabs with <a href="Core.System.html#c:account_tabs/0"><code class="inline">Core.System.account_tabs/0</code></a>; the page shows
-the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Core.SaaS.systems/0</code></a> order.</p><p>Each tab module must implement:</p><ul><li>key/0: Returns the unique key for this tab</li><li>visible?/1: Determines if this tab should be visible for the given user</li><li>build/2: Builds the tab data structure with a LiveNest element</li></ul>
+<p>A tab on the account page (<a href="Systems.Account.Page.html"><code class="inline">Systems.Account.Page</code></a>): Profile, Payouts, Features, ….</p><p>Systems contribute tabs with <a href="Mica.System.html#c:account_tabs/0"><code class="inline">Mica.System.account_tabs/0</code></a>; the page shows
+the visible ones in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p><p>Each tab module must implement:</p><ul><li>key/0: Returns the unique key for this tab</li><li>visible?/1: Determines if this tab should be visible for the given user</li><li>build/2: Builds the tab data structure with a LiveNest element</li></ul>
     </section>
 
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-types summary">
-  <h2>
+  <h3>
     <a href="#types">Types</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -137,9 +162,9 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
 
 </div>
 <div class="summary-callbacks summary">
-  <h2>
+  <h3>
     <a href="#callbacks">Callbacks</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -171,12 +196,12 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
 
 
   <section id="types" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Types</span>
-    </h1>
+    </h2>
 
     <div class="types-list">
 <section class="detail" id="t:live_context/0">
@@ -189,7 +214,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">live_context()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L15" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -200,7 +225,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> live_context() :: %Frameworks.Concept.LiveContext{data: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()}</pre>
+          <pre translate="no"><span class="attribute">@type</span> live_context() :: %Frameworks.Concept.LiveContext{data: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()}</pre>
 
       </div>
 
@@ -217,7 +242,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">tab_spec()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L16" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L16" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -229,11 +254,11 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@type</span> tab_spec() :: %{
-  id: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
-  title: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>(),
-  type: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>(),
-  element: <a href="https://hexdocs.pm/live_nest/0.1.5/LiveNest.Element.html#t:t/0">LiveNest.Element.t</a>(),
-  ready?: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()
+  id: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(),
+  title: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(),
+  type: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(),
+  element: <a href="https://live-nest.hexdocs.pm/0.1.5/LiveNest.Element.html#t:t/0">LiveNest.Element.t</a>(),
+  ready?: <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">boolean</a>()
 }</pre>
 
       </div>
@@ -251,7 +276,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">user()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L14" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L14" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -274,12 +299,12 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
   </section>
 
   <section id="callbacks" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#callbacks">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Callbacks</span>
-    </h1>
+    </h2>
 
     <div class="callbacks-list">
 <section class="detail" id="c:build/2">
@@ -292,7 +317,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">build(user, live_context)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L26" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L26" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -320,7 +345,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">key()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L24" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L24" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -331,7 +356,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> key() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> key() :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()</pre>
 
       </div>
 
@@ -348,7 +373,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
       <h1 class="signature" translate="no">visible?(user)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L25" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/tab.ex#L25" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -359,7 +384,7 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> visible?(<a href="#t:user/0">user</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#built-in-types">boolean</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> visible?(<a href="#t:user/0">user</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">boolean</a>()</pre>
 
       </div>
 
@@ -371,27 +396,34 @@ the visible ones in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Co
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

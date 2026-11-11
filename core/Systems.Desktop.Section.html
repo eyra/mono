@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Desktop.Section — core v0.1.0</title>
+    <title>Systems.Desktop.Section — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Desktop.Section</span> <small>behaviour</small>
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Desktop.<wbr />Section</span> <small>behaviour</small>
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Desktop.Section.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -93,10 +118,11 @@ core
 
 
     <section id="moduledoc">
-<p>A section on the Desktop page (<code class="inline">/desktop</code>), shown after Recent items.</p><p>Systems contribute sections with <a href="Core.System.html#c:desktop_sections/0"><code class="inline">Core.System.desktop_sections/0</code></a>; the page
-shows them in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Core.SaaS.systems/0</code></a> order.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Systems.Notes.DesktopSection</span><span class="w"> </span><span class="k" data-group-id="3539238167-1">do</span><span class="w">
+<p>A section on the Desktop page (<code class="inline">/desktop</code>), shown after Recent items, or
+before them when <a href="#c:placement/0"><code class="inline">placement/0</code></a> says so.</p><p>Systems contribute sections with <a href="Mica.System.html#c:desktop_sections/0"><code class="inline">Mica.System.desktop_sections/0</code></a>; the page
+shows the sections of each placement in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p><pre><code class="makeup elixir" translate="no"><span class="kd">defmodule</span><span class="w"> </span><span class="nc">Systems.Notes.DesktopSection</span><span class="w"> </span><span class="k" data-group-id="group-1">do</span><span class="w">
   </span><span class="kn">use</span><span class="w"> </span><span class="nc">Systems.Desktop.Section</span><span class="w">
-  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Gettext</span><span class="p">,</span><span class="w"> </span><span class="ss">backend</span><span class="p">:</span><span class="w"> </span><span class="nc">CoreWeb.Gettext</span><span class="w">
+  </span><span class="kn">use</span><span class="w"> </span><span class="nc">Gettext</span><span class="p">,</span><span class="w"> </span><span class="ss">backend</span><span class="p">:</span><span class="w"> </span><span class="nc">MicaWeb.Gettext</span><span class="w">
 
   </span><span class="kn">alias</span><span class="w"> </span><span class="nc">Systems.Notes</span><span class="w">
 
@@ -104,25 +130,30 @@ shows them in <a href="Core.SaaS.html#c:systems/0"><code class="inline">Core.Saa
   </span><span class="kd">def</span><span class="w"> </span><span class="nf">id</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="ss">:notes</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">title</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">dgettext</span><span class="p" data-group-id="3539238167-2">(</span><span class="s">&quot;eyra-notes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;desktop.title&quot;</span><span class="p" data-group-id="3539238167-2">)</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">title</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="n">dgettext</span><span class="p" data-group-id="group-2">(</span><span class="s">&quot;eyra-notes&quot;</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;desktop.title&quot;</span><span class="p" data-group-id="group-2">)</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">view_model</span><span class="p" data-group-id="3539238167-3">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="c">_assigns</span><span class="p" data-group-id="3539238167-3">)</span><span class="w"> </span><span class="k" data-group-id="3539238167-4">do</span><span class="w">
-    </span><span class="k">case</span><span class="w"> </span><span class="nc">Notes.Public</span><span class="o">.</span><span class="n">list_unread</span><span class="p" data-group-id="3539238167-5">(</span><span class="n">user</span><span class="p" data-group-id="3539238167-5">)</span><span class="w"> </span><span class="k" data-group-id="3539238167-6">do</span><span class="w">
-      </span><span class="p" data-group-id="3539238167-7">[</span><span class="p" data-group-id="3539238167-7">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="no">nil</span><span class="w">
-      </span><span class="n">notes</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="3539238167-8">%{</span><span class="ss">notes</span><span class="p">:</span><span class="w"> </span><span class="n">notes</span><span class="p" data-group-id="3539238167-8">}</span><span class="w">
-    </span><span class="k" data-group-id="3539238167-6">end</span><span class="w">
-  </span><span class="k" data-group-id="3539238167-4">end</span><span class="w">
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">view_model</span><span class="p" data-group-id="group-3">(</span><span class="n">user</span><span class="p">,</span><span class="w"> </span><span class="c">_assigns</span><span class="p" data-group-id="group-3">)</span><span class="w"> </span><span class="k" data-group-id="group-4">do</span><span class="w">
+    </span><span class="k">case</span><span class="w"> </span><span class="nc">Notes.Public</span><span class="o">.</span><span class="n">list_unread</span><span class="p" data-group-id="group-5">(</span><span class="n">user</span><span class="p" data-group-id="group-5">)</span><span class="w"> </span><span class="k" data-group-id="group-6">do</span><span class="w">
+      </span><span class="p" data-group-id="group-7">[</span><span class="p" data-group-id="group-7">]</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="no">nil</span><span class="w">
+      </span><span class="n">notes</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="p" data-group-id="group-8">%{</span><span class="ss">notes</span><span class="p">:</span><span class="w"> </span><span class="n">notes</span><span class="p" data-group-id="group-8">}</span><span class="w">
+    </span><span class="k" data-group-id="group-6">end</span><span class="w">
+  </span><span class="k" data-group-id="group-4">end</span><span class="w">
 
   </span><span class="na">@impl</span><span class="w"> </span><span class="no">true</span><span class="w">
-  </span><span class="kd">def</span><span class="w"> </span><span class="nf">render</span><span class="p" data-group-id="3539238167-9">(</span><span class="n">assigns</span><span class="p" data-group-id="3539238167-9">)</span><span class="w"> </span><span class="k" data-group-id="3539238167-10">do</span><span class="w">
-    </span><span class="sx">~H&quot;&quot;&quot;
-    &lt;Notes.View.list notes={@vm.notes} /&gt;
-    &quot;&quot;&quot;</span><span class="w">
-  </span><span class="k" data-group-id="3539238167-10">end</span><span class="w">
-</span><span class="k" data-group-id="3539238167-1">end</span></code></pre><p>Sections are display-only: they render inside <a href="Systems.Desktop.View.html"><code class="inline">Systems.Desktop.View</code></a>, which
+  </span><span class="kd">def</span><span class="w"> </span><span class="nf">render</span><span class="p" data-group-id="group-9">(</span><span class="n">assigns</span><span class="p" data-group-id="group-9">)</span><span class="w"> </span><span class="k" data-group-id="group-10">do</span><span class="w">
+    </span><span class="sx">~H&quot;&quot;&quot;</span><span class="w">
+    </span><span class="p" data-group-id="0000164830-out-1">&lt;</span><span class="nc">Notes.View</span><span class="o">.</span><span class="n">list</span><span class="w"> </span><span class="na">notes</span><span class="o">=</span><span class="p" data-group-id="0000164830-1">{</span><span class="na">@vm</span><span class="o">.</span><span class="n">notes</span><span class="p" data-group-id="0000164830-1">}</span><span class="s"> </span><span class="p" data-group-id="0000164830-out-1">/&gt;</span><span class="w">
+    </span><span class="sx">&quot;&quot;&quot;</span><span class="w">
+  </span><span class="k" data-group-id="group-10">end</span><span class="w">
+</span><span class="k" data-group-id="group-1">end</span></code></pre><p>Sections are display-only: they render inside <a href="Systems.Desktop.View.html"><code class="inline">Systems.Desktop.View</code></a>, which
 handles none of their events, so a <code class="inline">phx-click</code> in a section crashes the view.
-Links to other pages work.</p><p>The page builds the section's view model with the page's, so a section
+Links to other pages work.</p><p>A preview can expose a full-list link with <a href="#c:full_list/1"><code class="inline">full_list/1</code></a>. To reuse the
+generic full-list page, route <a href="Systems.Desktop.FullListPage.html"><code class="inline">Systems.Desktop.FullListPage</code></a> with this
+section's id as its LiveView action and implement <a href="#c:full_view_model/2"><code class="inline">full_view_model/2</code></a>.
+The same <a href="#c:render/1"><code class="inline">render/1</code></a> renders that content, including its empty state.
+Returning nil makes the full page unavailable. Updates can target the
+generic page with the current user, just like Desktop updates.</p><p>The page builds the section's view model with the page's, so a section
 refreshes when the page does. To refresh it live, the section's system has
 its own Switch that intercepts the signals of its data and calls
 <code class="inline">update_routed(Systems.Desktop.Page, user, from_pid)</code> for the affected user.</p>
@@ -131,16 +162,50 @@ its own Switch that intercepts the signals of its data and calls
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:placement/0" data-no-tooltip="" translate="no">placement()</a>
+
+      </div>
+
+    </div>
+
+</div>
 <div class="summary-callbacks summary">
-  <h2>
+  <h3>
     <a href="#callbacks">Callbacks</a>
-  </h2>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:full_list/1" data-no-tooltip="" translate="no">full_list(vm)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Optional navigation from a preview section to its full list.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:full_view_model/2" data-no-tooltip="" translate="no">full_view_model(user, assigns)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Full-list content for this section; nil means the full page is unavailable.</p></div>
+
+    </div>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -154,11 +219,21 @@ its own Switch that intercepts the signals of its data and calls
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#c:placement/0" data-no-tooltip="" translate="no">placement()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Where the section goes relative to Recent items. Defaults to <code class="inline">:after_recent_items</code>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#c:render/1" data-no-tooltip="" translate="no">render(assigns)</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>Renders the section's content. <code class="inline">@vm</code> is the result of <a><code class="inline">view_model/2</code></a>.</p></div>
+        <div class="summary-synopsis"><p>Renders the section's content. <code class="inline">@vm</code> is the result of <a href="#c:view_model/2"><code class="inline">view_model/2</code></a>.</p></div>
 
     </div>
 
@@ -186,26 +261,26 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
   </section>
 
 
-  <section id="callbacks" class="details-list">
-    <h1 class="section-heading">
-      <a class="hover-link" href="#callbacks">
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
-      <span class="text">Callbacks</span>
-    </h1>
+      <span class="text">Types</span>
+    </h2>
 
-    <div class="callbacks-list">
-<section class="detail" id="c:id/0">
+    <div class="types-list">
+<section class="detail" id="t:placement/0">
 
   <div class="detail-header">
-    <a href="#c:id/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+    <a href="#t:placement/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
     <div class="heading-with-actions">
-      <h1 class="signature" translate="no">id()</h1>
+      <h1 class="signature" translate="no">placement()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L47" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L68" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -216,11 +291,136 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> id() :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">atom</a>()</pre>
+          <pre translate="no"><span class="attribute">@type</span> placement() :: :before_recent_items | :after_recent_items</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="callbacks" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#callbacks">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Callbacks</span>
+    </h2>
+
+    <div class="callbacks-list">
+<section class="detail" id="c:full_list/1">
+
+  <div class="detail-header">
+    <a href="#c:full_list/1" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">full_list(vm)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L74" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> full_list(vm :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) :: %{label: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), to: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()} | nil</pre>
+
+      </div>
+
+<p>Optional navigation from a preview section to its full list.</p>
+  </section>
+</section>
+<section class="detail" id="c:full_view_model/2">
+
+  <div class="detail-header">
+    <a href="#c:full_view_model/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">full_view_model(user, assigns)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L77" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> full_view_model(user :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>(), assigns :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>() | nil</pre>
+
+      </div>
+
+<p>Full-list content for this section; nil means the full page is unavailable.</p>
+  </section>
+</section>
+<section class="detail" id="c:id/0">
+
+  <div class="detail-header">
+    <a href="#c:id/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">id()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L55" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> id() :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()</pre>
 
       </div>
 
 <p>The section id. The section's element id is <code class="inline">desktop_section_&lt;id&gt;</code>.</p>
+  </section>
+</section>
+<section class="detail" id="c:placement/0">
+
+  <div class="detail-header">
+    <a href="#c:placement/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">placement()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L71" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> placement() :: <a href="#t:placement/0">placement</a>()</pre>
+
+      </div>
+
+<p>Where the section goes relative to Recent items. Defaults to <code class="inline">:after_recent_items</code>.</p>
   </section>
 </section>
 <section class="detail" id="c:render/1">
@@ -233,7 +433,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
       <h1 class="signature" translate="no">render(assigns)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L58" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L66" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -244,7 +444,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> render(assigns :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/phoenix_live_view/1.1.13/Phoenix.LiveView.Rendered.html#t:t/0">Phoenix.LiveView.Rendered.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> render(assigns :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) :: <a href="https://phoenix-live-view.hexdocs.pm/1.1.33/Phoenix.LiveView.Rendered.html#t:t/0">Phoenix.LiveView.Rendered.t</a>()</pre>
 
       </div>
 
@@ -261,7 +461,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
       <h1 class="signature" translate="no">title()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L49" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -272,7 +472,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> title() :: <a href="https://hexdocs.pm/elixir/String.html#t:t/0">String.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> title() :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()</pre>
 
       </div>
 
@@ -289,7 +489,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
       <h1 class="signature" translate="no">view_model(user, assigns)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L55" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/desktop/section.ex#L63" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -300,7 +500,7 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> view_model(user :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>(), assigns :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>()) :: <a href="https://hexdocs.pm/elixir/typespecs.html#basic-types">map</a>() | nil</pre>
+          <pre translate="no"><span class="attribute">@callback</span> view_model(user :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>(), assigns :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>() | nil</pre>
 
       </div>
 
@@ -313,27 +513,34 @@ the page's <code class="inline">assigns</code>. <code class="inline">nil</code> 
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>

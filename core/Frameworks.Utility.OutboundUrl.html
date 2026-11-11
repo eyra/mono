@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
+
+
+    <title>Frameworks.Utility.OutboundUrl — mica v0.1.0</title>
+
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
+
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="docs_config.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
+
+  </head>
+  <body>
+    <script>(()=>{var t="ex_doc:settings",e="dark";var o="dark",s="light";var E="sidebar_state",n="closed";var r="sidebar_width";var a="sidebar-open";var i=new URLSearchParams(window.location.search),S=i.get("theme")||JSON.parse(localStorage.getItem(t)||"{}").theme;(S===o||S!==s&&window.matchMedia("(prefers-color-scheme: dark)").matches)&&document.body.classList.add(e);var d=sessionStorage.getItem(E),A=d!==n&&!window.matchMedia(`screen and (max-width: ${768}px)`).matches;document.body.classList.toggle(a,A);var c=sessionStorage.getItem(r);c&&document.body.style.setProperty("--sidebarWidth",`${c}px`);var p=/(Macintosh|iPhone|iPad|iPod)/.test(window.navigator.userAgent);document.documentElement.classList.toggle("apple-os",p);})();
+</script>
+
+<div class="body-wrapper">
+
+<button id="sidebar-menu" class="sidebar-button sidebar-toggle" aria-label="toggle sidebar" aria-controls="sidebar">
+  <i class="ri-menu-line ri-lg" title="Collapse/expand sidebar"></i>
+</button>
+
+<nav id="sidebar" class="sidebar">
+
+  <div class="sidebar-header">
+    <div class="sidebar-projectInfo">
+
+        <a href="readme.html" class="sidebar-projectImage">
+          <img src="assets/logo.svg" alt="mica" />
+        </a>
+
+      <div>
+        <a href="readme.html" class="sidebar-projectName" translate="no">
+mica
+        </a>
+        <div class="sidebar-projectVersion" translate="no">
+          v0.1.0
+        </div>
+      </div>
+    </div>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
+  </div>
+</nav>
+
+<output role="status" id="toast"></output>
+
+<main class="content page-module" id="main" data-type="modules">
+  <div id="content" class="content-inner">
+    <div class="top-search">
+      <div class="search-settings">
+        <form class="search-bar" action="search.html">
+          <label class="search-label">
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
+          </label>
+        </form>
+        <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
+        </div>
+        <button class="icon-settings display-settings">
+          <i class="ri-settings-3-line"></i>
+          <span class="sr-only">Settings</span>
+        </button>
+      </div>
+    </div>
+
+<div id="top-content">
+  <div class="heading-with-actions top-heading">
+    <h1>
+      <span translate="no">Frameworks.<wbr />Utility.<wbr />OutboundUrl</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
+
+    </h1>
+
+<a href="Frameworks.Utility.OutboundUrl.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/outbound_url.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
+        <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        <span class="sr-only">View Source</span>
+      </a>
+
+  </div>
+
+
+    <section id="moduledoc">
+<p>Requests to URLs that users enter, such as an affiliate's callback URL.</p><p>Only <code class="inline">https</code> URLs on port 443 whose host resolves to public addresses are
+allowed: no loopback, private, link-local, CGNAT, multicast, reserved or
+cloud metadata addresses, IPv4 or IPv6. <a href="#request/5"><code class="inline">request/5</code></a> resolves the host again
+and connects to the address it checked, so a name can't resolve to a public
+address when the URL is saved and to a private one when it is requested.
+TLS still verifies the certificate against the host name. Redirects are
+never followed.</p><p>Host names are looked up with <code class="inline">:inet_res</code>, which asks the name servers of
+<code class="inline">/etc/resolv.conf</code> from the caller's own process, not through OTP's native
+resolver: that is a small worker pool every lookup on the node shares, so a
+name server that never answers would hold a worker after the check gave up.</p>
+    </section>
+
+</div>
+
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-types summary">
+  <h3>
+    <a href="#types">Types</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:reason/0" data-no-tooltip="" translate="no">reason()</a>
+
+      </div>
+
+    </div>
+
+</div>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#check/2" data-no-tooltip="" translate="no">check(url, opts \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Checks that <code class="inline">url</code> is an <code class="inline">https</code> URL on port 443 whose host resolves to
+public addresses only. A host that doesn't resolve gives
+<code class="inline">{:error, :host_not_found}</code>, and a lookup that takes longer than
+<code class="inline">opts[:timeout]</code> ms (default 5 s) gives <code class="inline">{:error, :timeout}</code>.
+<code class="inline">opts[:resolver]</code> replaces the DNS lookup, and <code class="inline">opts[:nameservers]</code>
+(<code class="inline">[{address, port}]</code>) the name servers it asks, for tests.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#public_address?/1" data-no-tooltip="" translate="no">public_address?(address)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>True for an address on the public internet. IPv4-mapped, NAT64 and 6to4
+IPv6 addresses are judged by the IPv4 address they carry.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#request/5" data-no-tooltip="" translate="no">request(method, url, headers, body, options)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><a href="https://hackney.hexdocs.pm/4.9.1/hackney.html#request/5"><code class="inline">:hackney.request/5</code></a> to <code class="inline">url</code> after <a href="#check/2"><code class="inline">check/2</code></a>, connected to the checked
+address and without following redirects. With <code class="inline">options[:deadline]</code> (ms) the
+DNS lookup and connecting together take at most that long; a lookup that
+uses it up gives <code class="inline">{:error, :timeout}</code>.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="types" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#types">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Types</span>
+    </h2>
+
+    <div class="types-list">
+<section class="detail" id="t:reason/0">
+
+  <div class="detail-header">
+    <a href="#t:reason/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">reason()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/outbound_url.ex#L21" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> reason() ::
+  :invalid_url
+  | :scheme_not_allowed
+  | :port_not_allowed
+  | :host_not_found
+  | :address_not_allowed
+  | :timeout</pre>
+
+      </div>
+
+
+  </section>
+</section>
+
+    </div>
+  </section>
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="check/2">
+
+    <span id="check/1"></span>
+
+  <div class="detail-header">
+    <a href="#check/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">check(url, opts \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/outbound_url.ex#L75" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> check(<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">keyword</a>()) ::
+  {:ok, <a href="https://elixir.hexdocs.pm/URI.html#t:t/0">URI.t</a>(), <a href="https://www.erlang.org/doc/apps/kernel/inet.html#t:ip_address/0">:inet.ip_address</a>()} | {:error, <a href="#t:reason/0">reason</a>()}</pre>
+
+      </div>
+
+<p>Checks that <code class="inline">url</code> is an <code class="inline">https</code> URL on port 443 whose host resolves to
+public addresses only. A host that doesn't resolve gives
+<code class="inline">{:error, :host_not_found}</code>, and a lookup that takes longer than
+<code class="inline">opts[:timeout]</code> ms (default 5 s) gives <code class="inline">{:error, :timeout}</code>.
+<code class="inline">opts[:resolver]</code> replaces the DNS lookup, and <code class="inline">opts[:nameservers]</code>
+(<code class="inline">[{address, port}]</code>) the name servers it asks, for tests.</p>
+  </section>
+</section>
+<section class="detail" id="public_address?/1">
+
+  <div class="detail-header">
+    <a href="#public_address?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">public_address?(address)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/outbound_url.ex#L123" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> public_address?(<a href="https://www.erlang.org/doc/apps/kernel/inet.html#t:ip_address/0">:inet.ip_address</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>True for an address on the public internet. IPv4-mapped, NAT64 and 6to4
+IPv6 addresses are judged by the IPv4 address they carry.</p>
+  </section>
+</section>
+<section class="detail" id="request/5">
+
+  <div class="detail-header">
+    <a href="#request/5" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">request(method, url, headers, body, options)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/utility/outbound_url.ex#L93" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p><a href="https://hackney.hexdocs.pm/4.9.1/hackney.html#request/5"><code class="inline">:hackney.request/5</code></a> to <code class="inline">url</code> after <a href="#check/2"><code class="inline">check/2</code></a>, connected to the checked
+address and without following redirects. With <code class="inline">options[:deadline]</code> (ms) the
+DNS lookup and connecting together take at most that long; a lookup that
+uses it up gives <code class="inline">{:error, :timeout}</code>.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
+
+    <footer class="footer">
+
+        <p>
+
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
+
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
+
+
+              <a href="mica.epub">
+                Download ePub version
+              </a>
+
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
+
+    </footer>
+  </div>
+</main>
+</div>
+
+  </body>
+</html>

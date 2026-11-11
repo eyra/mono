@@ -1,0 +1,1748 @@
+# mica v0.1.0 - Table of Contents
+
+## Pages
+
+- [Self hosting](selfhosting.md)
+- [Eyra Mono](readme.md)
+- [Development Setup](development_setup.md)
+- [Authorization](authorization.md)
+
+## Modules
+
+- [Ecto.Atom](Ecto.Atom.md): Custom Type to support `:atom`
+defmodule Post do
+  use Ecto.Schema
+  schema "posts" do
+    field :atom_field, Ecto.Atom
+  end
+end
+
+- [Fabric](Fabric.md)
+- [Fabric.Html](Fabric.Html.md)
+- [Fabric.LiveComponent](Fabric.LiveComponent.md)
+- [Fabric.LiveComponent.Model](Fabric.LiveComponent.Model.md)
+- [Fabric.LiveComponent.RefModel](Fabric.LiveComponent.RefModel.md)
+- [Fabric.LiveView](Fabric.LiveView.md)
+- [Fabric.LiveView.RefModel](Fabric.LiveView.RefModel.md)
+- [Fabric.ModalController](Fabric.ModalController.md)
+- [Fabric.ModalPresenter](Fabric.ModalPresenter.md)
+- [Fabric.Model](Fabric.Model.md)
+- [Frameworks.Builder.HTML](Frameworks.Builder.HTML.md)
+- [Frameworks.Builder.LibraryItemModel](Frameworks.Builder.LibraryItemModel.md)
+- [Frameworks.Builder.LibraryModel](Frameworks.Builder.LibraryModel.md)
+- [Frameworks.Concept.Branch](Frameworks.Concept.Branch.md)
+- [Frameworks.Concept.ContentModel](Frameworks.Concept.ContentModel.md)
+- [Frameworks.Concept.Directable](Frameworks.Concept.Directable.md)
+- [Frameworks.Concept.Leaf](Frameworks.Concept.Leaf.md)
+- [Frameworks.Concept.Leaf.Status](Frameworks.Concept.Leaf.Status.md)
+- [Frameworks.Concept.LiveContext](Frameworks.Concept.LiveContext.md): Context container that holds shared state across a view hierarchy.
+- [Frameworks.Concept.LiveHook](Frameworks.Concept.LiveHook.md)
+- [Frameworks.Concept.PoolDirector](Frameworks.Concept.PoolDirector.md)
+- [Frameworks.Concept.Presenter](Frameworks.Concept.Presenter.md)
+- [Frameworks.Concept.Special](Frameworks.Concept.Special.md)
+- [Frameworks.Concept.Switch](Frameworks.Concept.Switch.md): Base module for system switches that handle signal routing.
+- [Frameworks.Concept.System](Frameworks.Concept.System.md)
+- [Frameworks.Concept.ToolDirector](Frameworks.Concept.ToolDirector.md)
+- [Frameworks.Concept.ToolModel](Frameworks.Concept.ToolModel.md)
+- [Frameworks.Fabric.LiveHook](Frameworks.Fabric.LiveHook.md)
+- [Frameworks.GreenLight.Access](Frameworks.GreenLight.Access.md): Helper functions to check if a given user can access / invoke something.
+
+- [Frameworks.GreenLight.AuthorizationNode](Frameworks.GreenLight.AuthorizationNode.md)
+- [Frameworks.GreenLight.Config](Frameworks.GreenLight.Config.md)
+- [Frameworks.GreenLight.Ecto.Query](Frameworks.GreenLight.Ecto.Query.md): Query functions around role assignments.
+
+- [Frameworks.GreenLight.Ecto.RoleAssignment](Frameworks.GreenLight.Ecto.RoleAssignment.md): A role assignment entity is used to assign a role to a principal on a
+specific entity.
+
+- [Frameworks.GreenLight.LiveFeature](Frameworks.GreenLight.LiveFeature.md)
+- [Frameworks.GreenLight.LiveHook](Frameworks.GreenLight.LiveHook.md):   Live Hook that enables automatic authorization checks.
+
+- [Frameworks.GreenLight.Loaders](Frameworks.GreenLight.Loaders.md): This is module that automates the loading of entities based on path parameters.
+- [Frameworks.GreenLight.PermissionMap](Frameworks.GreenLight.PermissionMap.md): The permission map holds a mapping of permissions to roles. The permission map
+is intended to be an implementation detail of the authorization framework.
+Convenience functions to build it are provided in other modules.
+
+- [Frameworks.GreenLight.Permissions](Frameworks.GreenLight.Permissions.md): The permissions module provides several functions that create permission
+strings and `GreenLight.PermissionMap`s.
+
+- [Frameworks.GreenLight.Plug](Frameworks.GreenLight.Plug.md): This Plug validates the permissions before the request is allowed to proceed.
+
+- [Frameworks.GreenLight.Principal](Frameworks.GreenLight.Principal.md): The principal is used as a representation for any person / thing that can
+interact with the system.
+- [Frameworks.GreenLight.Public](Frameworks.GreenLight.Public.md): Defines an authorization module.
+- [Frameworks.Pixel](Frameworks.Pixel.md): Mica's UI framework. `use Frameworks.Pixel` brings Pixel's helpers and aliases
+into a view.
+- [Frameworks.Pixel.AlertBanner](Frameworks.Pixel.AlertBanner.md)
+- [Frameworks.Pixel.Align](Frameworks.Pixel.Align.md): Centers content along the x-axis.
+
+- [Frameworks.Pixel.Annotation](Frameworks.Pixel.Annotation.md): A pixel component for displaying an annotation.
+Note: this has no relation to the annotation system.
+
+- [Frameworks.Pixel.Block](Frameworks.Pixel.Block.md): The Unique Selling Point Card highlights a reason for taking an action.
+
+- [Frameworks.Pixel.Breadcrumbs](Frameworks.Pixel.Breadcrumbs.md)
+- [Frameworks.Pixel.Button](Frameworks.Pixel.Button.md): A colored button with white text.
+
+- [Frameworks.Pixel.Button.Action](Frameworks.Pixel.Button.Action.md): Button action components that handle different interaction types.
+- [Frameworks.Pixel.Button.Face](Frameworks.Pixel.Button.Face.md): The look of a button, inside a `Frameworks.Pixel.Button.Action`. Every face but
+the menu faces renders Prism's button (`Frameworks.Pixel.button/1`) as a
+`<div>`, since the action is the clickable element.
+- [Frameworks.Pixel.Card](Frameworks.Pixel.Card.md): The Unique Selling Point Card highlights a reason for taking an action.
+
+- [Frameworks.Pixel.ClickableCard](Frameworks.Pixel.ClickableCard.md): The Unique Selling Point Card highlights a reason for taking an action.
+
+- [Frameworks.Pixel.ConfirmationModal](Frameworks.Pixel.ConfirmationModal.md)
+- [Frameworks.Pixel.Content](Frameworks.Pixel.Content.md)
+- [Frameworks.Pixel.Create](Frameworks.Pixel.Create.md): Provides support for creating "new" views the Eyra way.
+
+- [Frameworks.Pixel.Dropdown](Frameworks.Pixel.Dropdown.md)
+- [Frameworks.Pixel.DropdownSelector](Frameworks.Pixel.DropdownSelector.md)
+- [Frameworks.Pixel.Empty](Frameworks.Pixel.Empty.md)
+- [Frameworks.Pixel.ErrorHelpers](Frameworks.Pixel.ErrorHelpers.md): Conveniences for translating and building error messages.
+
+- [Frameworks.Pixel.FabricBridge](Frameworks.Pixel.FabricBridge.md): Temporary shim while Fabric is being retired.
+- [Frameworks.Pixel.FileSelector](Frameworks.Pixel.FileSelector.md)
+- [Frameworks.Pixel.Flash](Frameworks.Pixel.Flash.md): Provides support for flash messages.
+
+- [Frameworks.Pixel.Form.CheckboxHelpers](Frameworks.Pixel.Form.CheckboxHelpers.md)
+- [Frameworks.Pixel.FormHelpers](Frameworks.Pixel.FormHelpers.md): Conveniences for accessing the form.
+
+- [Frameworks.Pixel.Hero](Frameworks.Pixel.Hero.md): The hero is to be used as a large decorative header with page title.
+
+- [Frameworks.Pixel.Icon](Frameworks.Pixel.Icon.md)
+- [Frameworks.Pixel.Image](Frameworks.Pixel.Image.md)
+- [Frameworks.Pixel.ImageCatalogPicker](Frameworks.Pixel.ImageCatalogPicker.md)
+- [Frameworks.Pixel.InlineBlock](Frameworks.Pixel.InlineBlock.md): A self-contained content block with a border, used to visually
+distinguish a specific context from surrounding content.
+- [Frameworks.Pixel.Line](Frameworks.Pixel.Line.md): A line.
+
+- [Frameworks.Pixel.List](Frameworks.Pixel.List.md): A generic list LiveComponent with optional search + pagination.
+- [Frameworks.Pixel.LoadingSpinner](Frameworks.Pixel.LoadingSpinner.md)
+- [Frameworks.Pixel.Logo](Frameworks.Pixel.Logo.md): Logo component for product, platform, and pool logos.
+- [Frameworks.Pixel.Menu](Frameworks.Pixel.Menu.md)
+- [Frameworks.Pixel.ModalButton](Frameworks.Pixel.ModalButton.md): Button configuration for modal toolbars.
+- [Frameworks.Pixel.ModalView](Frameworks.Pixel.ModalView.md)
+- [Frameworks.Pixel.NotificationView](Frameworks.Pixel.NotificationView.md)
+- [Frameworks.Pixel.NumberIcon](Frameworks.Pixel.NumberIcon.md)
+- [Frameworks.Pixel.Panel](Frameworks.Pixel.Panel.md):   Grouping information in a card-like fashion.
+
+- [Frameworks.Pixel.RadioGroup](Frameworks.Pixel.RadioGroup.md)
+- [Frameworks.Pixel.RichText](Frameworks.Pixel.RichText.md): Cleans the HTML of the rich-text editor (Trix, `Frameworks.Pixel.Form.wysiwyg_area/1`).
+- [Frameworks.Pixel.Separator](Frameworks.Pixel.Separator.md)
+- [Frameworks.Pixel.Spinner](Frameworks.Pixel.Spinner.md)
+- [Frameworks.Pixel.Square](Frameworks.Pixel.Square.md)
+- [Frameworks.Pixel.Status](Frameworks.Pixel.Status.md): A colored button with white text
+
+- [Frameworks.Pixel.Switch](Frameworks.Pixel.Switch.md)
+- [Frameworks.Pixel.Table](Frameworks.Pixel.Table.md)
+- [Frameworks.Pixel.Tag](Frameworks.Pixel.Tag.md): A colored tag/badge component.
+
+- [Frameworks.Pixel.Text](Frameworks.Pixel.Text.md): Text components with various typography styles.
+- [Frameworks.Pixel.Toolbar](Frameworks.Pixel.Toolbar.md): Toolbar LiveComponent that centralizes button event handling and forwards events
+to the parent via LiveNest events.
+
+- [Frameworks.Pixel.UserListItem](Frameworks.Pixel.UserListItem.md):   User list item
+
+- [Frameworks.Pixel.ViewModel](Frameworks.Pixel.ViewModel.md)
+- [Frameworks.Pixel.Widget](Frameworks.Pixel.Widget.md)
+- [Frameworks.Pixel.WysiwygAreaHelpers](Frameworks.Pixel.WysiwygAreaHelpers.md)
+- [Frameworks.Promotable.Director](Frameworks.Promotable.Director.md)
+- [Frameworks.Signal.Handler](Frameworks.Signal.Handler.md)
+- [Frameworks.Signal.LiveFeature](Frameworks.Signal.LiveFeature.md): Swallows the `{:signal_test, _}` message that `Frameworks.Signal.TestRecorder`
+sends back to the dispatching process during tests with `isolate_signals/1`.
+- [Frameworks.Signal.Private](Frameworks.Signal.Private.md)
+- [Frameworks.Signal.Public](Frameworks.Signal.Public.md)
+- [Frameworks.UserCheck](Frameworks.UserCheck.md): Email validation framework wrapping the UserCheck API.
+- [Frameworks.UserCheck.Client](Frameworks.UserCheck.Client.md): Behaviour for UserCheck email validation clients.
+- [Frameworks.UserCheck.HTTPClient](Frameworks.UserCheck.HTTPClient.md): Real HTTP client for the UserCheck email validation API.
+- [Frameworks.UserCheck.MockClient](Frameworks.UserCheck.MockClient.md): Deterministic mock client for dev and test environments.
+- [Frameworks.UserCheck.ResultModel](Frameworks.UserCheck.ResultModel.md): Parsed result from the UserCheck email validation API.
+- [Frameworks.UserState](Frameworks.UserState.md): Helpers for working with scoped user state in LiveViews.
+- [Frameworks.UserState.LiveFeature](Frameworks.UserState.LiveFeature.md): LiveView feature for persisting user state changes.
+- [Frameworks.UserState.LiveHook](Frameworks.UserState.LiveHook.md): LiveView hook that loads user state from localStorage on mount.
+- [Frameworks.UserState.LocalStorage](Frameworks.UserState.LocalStorage.md): LocalStorage backend for user state persistence.
+- [Frameworks.UserState.Storage](Frameworks.UserState.Storage.md): Behaviour for user state storage backends.
+- [Frameworks.Utility.ConfigHelpers](Frameworks.Utility.ConfigHelpers.md)
+- [Frameworks.Utility.EctoHelper](Frameworks.Utility.EctoHelper.md)
+- [Frameworks.Utility.EctoTuple](Frameworks.Utility.EctoTuple.md)
+- [Frameworks.Utility.EnumHelpers](Frameworks.Utility.EnumHelpers.md)
+- [Frameworks.Utility.Guards](Frameworks.Utility.Guards.md)
+- [Frameworks.Utility.HTTPClient](Frameworks.Utility.HTTPClient.md)
+- [Frameworks.Utility.Identifier](Frameworks.Utility.Identifier.md)
+- [Frameworks.Utility.List](Frameworks.Utility.List.md)
+- [Frameworks.Utility.LiveCommand](Frameworks.Utility.LiveCommand.md)
+- [Frameworks.Utility.Model](Frameworks.Utility.Model.md): The content node schema.
+
+- [Frameworks.Utility.Module](Frameworks.Utility.Module.md)
+- [Frameworks.Utility.OutboundUrl](Frameworks.Utility.OutboundUrl.md): Requests to URLs that users enter, such as an affiliate's callback URL.
+- [Frameworks.Utility.PackmaticURLSource](Frameworks.Utility.PackmaticURLSource.md): Packmatic source that downloads a URL, used instead of Packmatic's own
+`{:url, url}` source. Use it in a manifest entry as
+`source: {Frameworks.Utility.PackmaticURLSource, url}` or
+`{Frameworks.Utility.PackmaticURLSource, {url, max_bytes: n}}`.
+- [Frameworks.Utility.PaginationHelper](Frameworks.Utility.PaginationHelper.md): Helper module for pagination and search functionality in view builders.
+Reduces code duplication across view builders that need pagination.
+
+- [Frameworks.Utility.Params](Frameworks.Utility.Params.md): Utilities for consistent parameter parsing.
+
+- [Frameworks.Utility.PrettyPrint](Frameworks.Utility.PrettyPrint.md)
+- [Frameworks.Utility.Query](Frameworks.Utility.Query.md)
+- [Frameworks.Utility.Schema](Frameworks.Utility.Schema.md)
+- [Frameworks.Utility.ViewModel](Frameworks.Utility.ViewModel.md)
+- [Frameworks.Utility.ViewModelBuilder](Frameworks.Utility.ViewModelBuilder.md)
+- [Mica](Mica.md): Mica keeps the contexts that define your domain
+and business logic.
+- [Mica.AppSignal.TelemetryHandler](Mica.AppSignal.TelemetryHandler.md): General telemetry handler that forwards events to AppSignal as custom metrics.
+- [Mica.Authentication](Mica.Authentication.md)
+- [Mica.Authentication.Actor](Mica.Authentication.Actor.md): Actor is a representation of an actor that can be authenticated.
+
+- [Mica.Authentication.Entity](Mica.Authentication.Entity.md): Entity is a representation of an entity that can be authenticated.
+
+- [Mica.Authentication.Subject](Mica.Authentication.Subject.md): Subject is a representation of a subject that can be authenticated.
+
+- [Mica.Authorization](Mica.Authorization.md): The authorization system for Mica.
+- [Mica.Authorization.Node](Mica.Authorization.Node.md): An authorization node represents a context where principals can gain
+additional roles. They can be nested to create a tree structure.
+
+- [Mica.Authorization.Queries](Mica.Authorization.Queries.md)
+- [Mica.Authorization.RoleAssignment](Mica.Authorization.RoleAssignment.md): A role assignment entity is used to assign a role to a principal on a
+specific entity.
+
+- [Mica.Config](Mica.Config.md)
+- [Mica.Content.Node](Mica.Content.Node.md): The content node schema.
+
+- [Mica.Content.Nodes](Mica.Content.Nodes.md): 
+
+- [Mica.Enums.Base](Mica.Enums.Base.md)
+- [Mica.Enums.Devices](Mica.Enums.Devices.md): Defines device categories for participants.
+
+- [Mica.Enums.DominantHands](Mica.Enums.DominantHands.md): Defines hands used as user feature.
+
+- [Mica.Enums.Genders](Mica.Enums.Genders.md): Defines genders used as user feature.
+
+- [Mica.Enums.NativeLanguages](Mica.Enums.NativeLanguages.md):   Defines languages used as user feature.
+
+- [Mica.Enums.Themes](Mica.Enums.Themes.md): Defines themes used to categorize studies or tools wihin studies.
+
+- [Mica.Enums.TicketTypes](Mica.Enums.TicketTypes.md): Defines the different types of support tickets.
+
+- [Mica.Env](Mica.Env.md): The one place that names the OTP application whose config Mica reads.
+- [Mica.ExAws.Hackney](Mica.ExAws.Hackney.md): The `ExAws.Request.HttpClient` for hackney 4.
+- [Mica.Factories](Mica.Factories.md): This module provides factory function to be used for tests.
+
+- [Mica.FeatureFlags](Mica.FeatureFlags.md): Feature flags. Systems declare the flags they read (`c:Mica.System.feature_flags/0`),
+the SaaS sets their defaults (`c:Mica.SaaS.feature_flags/0`), and the app config
+(`config :mica, :features`, and `ENABLED_APP_FEATURES` at runtime) has the final say.
+- [Mica.FeatureFlags.Test](Mica.FeatureFlags.Test.md)
+- [Mica.ImageCatalog](Mica.ImageCatalog.md)
+- [Mica.ImageCatalog.Local](Mica.ImageCatalog.Local.md)
+- [Mica.ImageCatalog.Unsplash](Mica.ImageCatalog.Unsplash.md)
+- [Mica.ImageCatalog.Unsplash.Client](Mica.ImageCatalog.Unsplash.Client.md)
+- [Mica.ImageCatalog.Unsplash.HTTP](Mica.ImageCatalog.Unsplash.HTTP.md)
+- [Mica.ImageHelpers](Mica.ImageHelpers.md)
+- [Mica.ObanConfig](Mica.ObanConfig.md): Builds the Oban config that `Mica.Application` starts, from `config :mica, Oban`,
+the queues and crons the systems declare (`c:Mica.System.oban_queues/0`,
+`c:Mica.System.oban_crons/0`) and the plugin names `config :mica, :oban_plugins`
+enables.
+- [Mica.Persister](Mica.Persister.md)
+- [Mica.Release](Mica.Release.md)
+- [Mica.Repo](Mica.Repo.md)
+- [Mica.RuntimeConfig](Mica.RuntimeConfig.md): Building blocks for a SaaS's `config/runtime.exs`.
+- [Mica.RuntimeConfig.Check](Mica.RuntimeConfig.Check.md): Checks the runtime config of a release before it is started, without starting
+the app or connecting to the database
+- [Mica.RuntimeConfig.Snapshot](Mica.RuntimeConfig.Snapshot.md): Evaluates a runtime config file against a fixed set of environment variables
+and renders the result as stable text, so a change in what an environment
+gets shows up as a diff.
+- [Mica.SaaS](Mica.SaaS.md): A SaaS built on Mica, and the composition of the configured one.
+- [Mica.Seeder](Mica.Seeder.md)
+- [Mica.Seeds](Mica.Seeds.md): Idempotent seed orchestration.
+- [Mica.Seeds.Base](Mica.Seeds.Base.md): Seeds that must exist in every deploy environment (local, dev, test, staging, prod).
+- [Mica.Seeds.Dev](Mica.Seeds.Dev.md): Seeds for the dev server (Fly).
+- [Mica.Seeds.Helpers](Mica.Seeds.Helpers.md): Generic helpers for idempotent seed operations.
+- [Mica.Seeds.Local](Mica.Seeds.Local.md): Seeds for the local developer environment (mix dev, mix test).
+All operations must be idempotent.
+- [Mica.Seeds.Prod](Mica.Seeds.Prod.md): Seeds for production (AWS).
+- [Mica.Seeds.Staging](Mica.Seeds.Staging.md): Seeds for the staging server (Fly).
+- [Mica.Seeds.Test](Mica.Seeds.Test.md): Seeds for the test servers (Fly, multiple testN environments).
+- [Mica.System](Mica.System.md): The contract of one system: what it contributes to the SaaS it is part of.
+- [Mica.Systems](Mica.Systems.md): Mica's own systems (`Mica.System`), the start of every `c:Mica.SaaS.systems/0`.
+- [MicaSaas.SaaS](MicaSaas.SaaS.md): Self, the reference SaaS on Mica.
+- [MicaSaas.StartPageTranslations](MicaSaas.StartPageTranslations.md)
+- [MicaSaas.StartPages](MicaSaas.StartPages.md)
+- [MicaSaas.Systems.Account.AuthCodeVerifyPage](MicaSaas.Systems.Account.AuthCodeVerifyPage.md)
+- [MicaSaas.Systems.Account.AuthIdentifyPage](MicaSaas.Systems.Account.AuthIdentifyPage.md)
+- [MicaSaas.Systems.Account.SessionController](MicaSaas.Systems.Account.SessionController.md)
+- [MicaSaas.Systems.Account.SigninPage](MicaSaas.Systems.Account.SigninPage.md)
+- [MicaSaas.Systems.Account.System](MicaSaas.Systems.Account.System.md): Self's sign-in pages, which shadow Mica's sign-in routes.
+- [MicaSaasWeb.Layouts.Stripped.MenuBuilder](MicaSaasWeb.Layouts.Stripped.MenuBuilder.md)
+- [MicaSaasWeb.Layouts.Website.MenuBuilder](MicaSaasWeb.Layouts.Website.MenuBuilder.md)
+- [MicaSaasWeb.Layouts.Workspace.MenuBuilder](MicaSaasWeb.Layouts.Workspace.MenuBuilder.md)
+- [MicaSaasWeb.Menu.Items](MicaSaasWeb.Menu.Items.md)
+- [MicaWeb](MicaWeb.md): The entrypoint for defining your web interface, such
+as controllers, views, channels and so on.
+- [MicaWeb.Cldr](MicaWeb.Cldr.md): Provides the core functions to retrieve and manage
+the CLDR data that supports formatting and localisation.
+- [MicaWeb.Cldr.AcceptLanguage](MicaWeb.Cldr.AcceptLanguage.md): Parses HTTP `Accept-Language` header values as defined in
+[rfc2616](https://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.4).
+- [MicaWeb.Cldr.Currency](MicaWeb.Cldr.Currency.md)
+- [MicaWeb.Cldr.Date](MicaWeb.Cldr.Date.md)
+- [MicaWeb.Cldr.Date.Interval](MicaWeb.Cldr.Date.Interval.md): Interval formats allow for software to format intervals like "Jan 10-12, 2008" as a
+shorter and more natural format than "Jan 10, 2008 - Jan 12, 2008". They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.
+- [MicaWeb.Cldr.DateTime](MicaWeb.Cldr.DateTime.md)
+- [MicaWeb.Cldr.DateTime.Format](MicaWeb.Cldr.DateTime.Format.md): Manages the Date, TIme and DateTime formats
+defined by CLDR.
+- [MicaWeb.Cldr.DateTime.Formatter](MicaWeb.Cldr.DateTime.Formatter.md): Implements the compilation and execution of
+date, time and datetime formats.
+- [MicaWeb.Cldr.DateTime.Interval](MicaWeb.Cldr.DateTime.Interval.md): Interval formats allow for software to format intervals like "Jan 10-12, 2008" as a
+shorter and more natural format than "Jan 10, 2008 - Jan 12, 2008". They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.
+- [MicaWeb.Cldr.DateTime.Relative](MicaWeb.Cldr.DateTime.Relative.md)
+- [MicaWeb.Cldr.Interval](MicaWeb.Cldr.Interval.md): Interval formats allow for software to format intervals like "Jan 10-12, 2008" as a
+shorter and more natural format than "Jan 10, 2008 - Jan 12, 2008". They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.
+- [MicaWeb.Cldr.Locale](MicaWeb.Cldr.Locale.md): Backend module that provides functions
+to define new locales and display human-readable
+locale names for presentation purposes.
+- [MicaWeb.Cldr.Number](MicaWeb.Cldr.Number.md): Formats numbers and currencies based upon CLDR's decimal formats specification.
+- [MicaWeb.Cldr.Number.Cardinal](MicaWeb.Cldr.Number.Cardinal.md): Implements cardinal plural rules for numbers.
+
+- [MicaWeb.Cldr.Number.Format](MicaWeb.Cldr.Number.Format.md): Functions to manage the collection of number patterns defined in Cldr.
+- [MicaWeb.Cldr.Number.Formatter.Decimal](MicaWeb.Cldr.Number.Formatter.Decimal.md)
+- [MicaWeb.Cldr.Number.Ordinal](MicaWeb.Cldr.Number.Ordinal.md): Implements ordinal plural rules for numbers.
+
+- [MicaWeb.Cldr.Number.PluralRule.Range](MicaWeb.Cldr.Number.PluralRule.Range.md): Implements plural rules for ranges
+- [MicaWeb.Cldr.Number.Symbol](MicaWeb.Cldr.Number.Symbol.md)
+- [MicaWeb.Cldr.Number.System](MicaWeb.Cldr.Number.System.md)
+- [MicaWeb.Cldr.Number.Transliterate](MicaWeb.Cldr.Number.Transliterate.md): Transliteration for digits and separators.
+- [MicaWeb.Cldr.Rbnf.NumberSystem](MicaWeb.Cldr.Rbnf.NumberSystem.md): Functions to implement the number system rule-based-number-format rules of CLDR.
+- [MicaWeb.Cldr.Rbnf.Ordinal](MicaWeb.Cldr.Rbnf.Ordinal.md): Functions to implement the ordinal rule-based-number-format rules of CLDR.
+- [MicaWeb.Cldr.Rbnf.Spellout](MicaWeb.Cldr.Rbnf.Spellout.md): Functions to implement the spellout rule-based-number-format rules of CLDR.
+- [MicaWeb.Cldr.Time](MicaWeb.Cldr.Time.md)
+- [MicaWeb.Cldr.Time.Interval](MicaWeb.Cldr.Time.Interval.md): Interval formats allow for software to format intervals like "Jan 10-12, 2008" as a
+shorter and more natural format than "Jan 10, 2008 - Jan 12, 2008". They are designed
+to take a start and end date, time or datetime plus a formatting pattern
+and use that information to produce a localized format.
+- [MicaWeb.Devices](MicaWeb.Devices.md): 
+- [MicaWeb.Endpoint](MicaWeb.Endpoint.md)
+- [MicaWeb.ErrorController](MicaWeb.ErrorController.md)
+- [MicaWeb.ErrorHTML](MicaWeb.ErrorHTML.md)
+- [MicaWeb.ErrorJSON](MicaWeb.ErrorJSON.md): JSON error responses for API endpoints.
+
+- [MicaWeb.FakeAllianceController](MicaWeb.FakeAllianceController.md)
+- [MicaWeb.FakeAllianceHTML](MicaWeb.FakeAllianceHTML.md)
+- [MicaWeb.FakeQualtrics](MicaWeb.FakeQualtrics.md): The home screen.
+
+- [MicaWeb.FallbackController](MicaWeb.FallbackController.md): Translates controller action results into valid `Plug.Conn` responses.
+- [MicaWeb.FallbackHTML](MicaWeb.FallbackHTML.md)
+- [MicaWeb.FeaturesController](MicaWeb.FeaturesController.md): Returns the set of enabled feature flags for this deployment.
+- [MicaWeb.FileUploader](MicaWeb.FileUploader.md): 
+- [MicaWeb.Gettext](MicaWeb.Gettext.md): A module providing Internationalization with a gettext-based API.
+- [MicaWeb.HealthController](MicaWeb.HealthController.md)
+- [MicaWeb.Language](MicaWeb.Language.md): 
+- [MicaWeb.Layouts](MicaWeb.Layouts.md)
+- [MicaWeb.Layouts.App.Html](MicaWeb.Layouts.App.Html.md):   Wrapper component used at the root of a page to create a menu + detail layout
+
+- [MicaWeb.Layouts.Stripped.Composer](MicaWeb.Layouts.Stripped.Composer.md)
+- [MicaWeb.Layouts.Stripped.Html](MicaWeb.Layouts.Stripped.Html.md):   Wrapper component used at the root of a page to create a menu + detail layout
+
+- [MicaWeb.Layouts.Website.Composer](MicaWeb.Layouts.Website.Composer.md)
+- [MicaWeb.Layouts.Website.Html](MicaWeb.Layouts.Website.Html.md):   Wrapper component used at the root of a page to create a menu + detail layout
+
+- [MicaWeb.Layouts.Workspace.Composer](MicaWeb.Layouts.Workspace.Composer.md): Workspace layout composer for LiveView pages.
+- [MicaWeb.Layouts.Workspace.Html](MicaWeb.Layouts.Workspace.Html.md): Wrapper component used at the root of a page to create a menu + detail layout
+
+- [MicaWeb.Live.Element](MicaWeb.Live.Element.md): Thin wrapper around `LiveNest.Element.prepare_live_view/3` that stamps the
+parent's current process locale into the session passed to the embedded view.
+- [MicaWeb.Live.Feature.Actions](MicaWeb.Live.Feature.Actions.md)
+- [MicaWeb.Live.Feature.Menus](MicaWeb.Live.Feature.Menus.md)
+- [MicaWeb.Live.Feature.Model](MicaWeb.Live.Feature.Model.md)
+- [MicaWeb.Live.Feature.Stack](MicaWeb.Live.Feature.Stack.md): LiveView helper functions for working with block-based stack architecture.
+- [MicaWeb.Live.Feature.Uri](MicaWeb.Live.Feature.Uri.md)
+- [MicaWeb.Live.Feature.Viewport](MicaWeb.Live.Feature.Viewport.md)
+- [MicaWeb.Live.FlashHelpers](MicaWeb.Live.FlashHelpers.md): Reusable flash message helpers for LiveView and LiveComponent.
+- [MicaWeb.Live.FormHelpers](MicaWeb.Live.FormHelpers.md): Reusable form helpers with auto-save functionality.
+- [MicaWeb.Live.Hook.Actions](MicaWeb.Live.Hook.Actions.md)
+- [MicaWeb.Live.Hook.Base](MicaWeb.Live.Hook.Base.md)
+- [MicaWeb.Live.Hook.Context](MicaWeb.Live.Hook.Context.md): LiveView hook that automatically extracts dependencies from live context.
+- [MicaWeb.Live.Hook.Language](MicaWeb.Live.Hook.Language.md): LiveView hook that applies language/locale from live_context.
+- [MicaWeb.Live.Hook.Locale](MicaWeb.Live.Hook.Locale.md): Live hook that pins the LiveView process's locale.
+- [MicaWeb.Live.Hook.Menus](MicaWeb.Live.Hook.Menus.md)
+- [MicaWeb.Live.Hook.Model](MicaWeb.Live.Hook.Model.md): A Live Hook that injects the LiveView data model
+- [MicaWeb.Live.Hook.RemoteIp](MicaWeb.Live.Hook.RemoteIp.md): A Live Hook that injects the remote_ip from a session variable.
+- [MicaWeb.Live.Hook.Timezone](MicaWeb.Live.Hook.Timezone.md)
+- [MicaWeb.Live.Hook.Uri](MicaWeb.Live.Hook.Uri.md): A LiveView helper that automatically sets the current locale from a session variable.
+- [MicaWeb.Live.Hook.User](MicaWeb.Live.Hook.User.md):   Live Hook that injects the current user.
+
+- [MicaWeb.Live.Hook.Viewport](MicaWeb.Live.Hook.Viewport.md):   Live Hook that injects the current viewport and breakpoint.
+
+- [MicaWeb.Live.Routes](MicaWeb.Live.Routes.md)
+- [MicaWeb.Live.Subroutes](MicaWeb.Live.Subroutes.md)
+- [MicaWeb.Live.User.Routes](MicaWeb.Live.User.Routes.md)
+- [MicaWeb.LiveDefaults](MicaWeb.LiveDefaults.md)
+- [MicaWeb.LiveForm](MicaWeb.LiveForm.md): A macro for creating live form components with auto-save functionality.
+- [MicaWeb.Loaders](MicaWeb.Loaders.md): The loaders for the Link application. They integrate with the GreenLight
+framework.
+
+- [MicaWeb.LocalImageCatalogPlug](MicaWeb.LocalImageCatalogPlug.md)
+- [MicaWeb.Menu.Builder](MicaWeb.Menu.Builder.md)
+- [MicaWeb.Menu.Helpers](MicaWeb.Menu.Helpers.md)
+- [MicaWeb.Menu.ItemsProvider](MicaWeb.Menu.ItemsProvider.md)
+- [MicaWeb.Menus](MicaWeb.Menus.md)
+- [MicaWeb.Meta](MicaWeb.Meta.md)
+- [MicaWeb.Plug.PersistLocale](MicaWeb.Plug.PersistLocale.md): Persists the locale that Cldr.Plug.PutLocale just resolved into the
+session.
+- [MicaWeb.Plug.RemoteIp](MicaWeb.Plug.RemoteIp.md): Sets `conn.remote_ip` to the client's address, keeps it in the session as a
+string for LiveViews (`MicaWeb.Live.Hook.RemoteIp`), and adds it to the
+Logger metadata as `remote_ip`.
+- [MicaWeb.Plug.ResolveLocale](MicaWeb.Plug.ResolveLocale.md): Pins the session locale to English for creators; clears it for
+everyone else so the rest of the locale pipeline (Cldr, Hook.Locale,
+Gettext) resolves from Accept-Language.
+- [MicaWeb.ResourceExistsPlug](MicaWeb.ResourceExistsPlug.md): A plug that checks if a resource exists before continuing.
+- [MicaWeb.ReturnTo](MicaWeb.ReturnTo.md): Same-origin `return_to` handling shared across auth, onboarding, and
+pool-join flows.
+- [MicaWeb.Router](MicaWeb.Router.md)
+- [MicaWeb.Routes](MicaWeb.Routes.md)
+- [MicaWeb.StartPageProvider](MicaWeb.StartPageProvider.md)
+- [MicaWeb.Storybook](MicaWeb.Storybook.md): Component storybook for Pixel, served at `/admin/storybook`.
+- [MicaWeb.StorybookGuard](MicaWeb.StorybookGuard.md): Opens the component storybooks to admins, and only while the `:storybook` feature is on.
+Prod never turns the feature on (see `Mica.RuntimeConfig.features/2`).
+
+- [MicaWeb.Telemetry](MicaWeb.Telemetry.md): The Telemtry configuration for the Link application.
+
+- [MicaWeb.UI](MicaWeb.UI.md)
+- [MicaWeb.UI.Area](MicaWeb.UI.Area.md)
+- [MicaWeb.UI.Dialog](MicaWeb.UI.Dialog.md)
+- [MicaWeb.UI.Dialog.Plain](MicaWeb.UI.Dialog.Plain.md)
+- [MicaWeb.UI.Footer](MicaWeb.UI.Footer.md)
+- [MicaWeb.UI.FunctionComponent](MicaWeb.UI.FunctionComponent.md)
+- [MicaWeb.UI.Language](MicaWeb.UI.Language.md)
+- [MicaWeb.UI.Margin](MicaWeb.UI.Margin.md)
+- [MicaWeb.UI.Member](MicaWeb.UI.Member.md):   Label with a pill formed background.
+
+- [MicaWeb.UI.OldSkool](MicaWeb.UI.OldSkool.md): Conveniences for reusable UI components
+
+- [MicaWeb.UI.ProgressBar](MicaWeb.UI.ProgressBar.md):   Progress bar capable of stacking multiple bars.
+  The bars will be sorted on size and will be stacked from large to small.
+
+- [MicaWeb.UI.Responsive.Breakpoint](MicaWeb.UI.Responsive.Breakpoint.md)
+- [MicaWeb.UI.Responsive.Viewport](MicaWeb.UI.Responsive.Viewport.md)
+- [MicaWeb.UI.Spacing](MicaWeb.UI.Spacing.md)
+- [MicaWeb.UI.StepIndicator](MicaWeb.UI.StepIndicator.md):   Circle with a number
+
+- [MicaWeb.UI.Timestamp](MicaWeb.UI.Timestamp.md):   Helper functions for displaying timestamps
+
+- [MicaWeb.UI.Wrap](MicaWeb.UI.Wrap.md)
+- [MicaWeb.UploadedFileController](MicaWeb.UploadedFileController.md)
+- [MicaWeb.Validator.Boolean](MicaWeb.Validator.Boolean.md)
+- [MicaWeb.Validator.Float](MicaWeb.Validator.Float.md)
+- [MicaWeb.Validator.Integer](MicaWeb.Validator.Integer.md)
+- [MicaWeb.Validator.Plug](MicaWeb.Validator.Plug.md): A plug to validate input path/query params on your routers.
+- [MicaWeb.Validator.String](MicaWeb.Validator.String.md)
+- [MicaWeb.ViewportController](MicaWeb.ViewportController.md)
+- [MicaWeb.WWWRedirect](MicaWeb.WWWRedirect.md)
+- [MicaWeb.WakeupController](MicaWeb.WakeupController.md): Endpoint to wake up a suspended Fly Postgres database.
+- [Next.Frameworks.Concept.ScreeningAgent](Next.Frameworks.Concept.ScreeningAgent.md)
+- [Next.Frameworks.E2E.Controller](Next.Frameworks.E2E.Controller.md): API endpoint for E2E test fixture setup.
+- [Next.SaaS](Next.SaaS.md): Next, Eyra's SaaS on Mica.
+- [Next.StartPageTranslations](Next.StartPageTranslations.md)
+- [Next.StartPages](Next.StartPages.md)
+- [Next.Storybook](Next.Storybook.md): Component storybook for Next-owned components, served at `/admin/storybook-next`.
+- [Next.Systems.Account.AuthCodeVerifyPage](Next.Systems.Account.AuthCodeVerifyPage.md)
+- [Next.Systems.Account.AuthIdentifyPage](Next.Systems.Account.AuthIdentifyPage.md)
+- [Next.Systems.Account.AuthProviderPage](Next.Systems.Account.AuthProviderPage.md)
+- [Next.Systems.Account.CreatorSigninView](Next.Systems.Account.CreatorSigninView.md)
+- [Next.Systems.Account.NativeApp](Next.Systems.Account.NativeApp.md): Recognises requests from the Next native apps by their
+`NextApp/<version> iOS|Android` user-agent suffix.
+
+- [Next.Systems.Account.NativeHandoff](Next.Systems.Account.NativeHandoff.md): Hands a sign-in through an identity provider back to the Next native apps.
+- [Next.Systems.Account.NativeProviderController](Next.Systems.Account.NativeProviderController.md): The pages the Next native apps open in the system sign-in sheet to sign in
+through an identity provider; see `Next.Systems.Account.NativeHandoff`.
+
+- [Next.Systems.Account.NativeSigninController](Next.Systems.Account.NativeSigninController.md): JSON calls behind the native Sign-in screen of the Next apps: identify
+(send a sign-in code to an email, or point to its identity provider), then
+verify the code; or redeem the token of an identity-provider sign-in (see
+`Next.Systems.Account.NativeHandoff`). They follow the participant
+path of the LiveView flow (`AuthIdentifyPage`, `AuthCodeVerifyPage`, the
+redeem step) and share its steps through `Next.Systems.Account.OtpSignin`.
+- [Next.Systems.Account.NativeSigninGuard](Next.Systems.Account.NativeSigninGuard.md): Admits only same-origin JSON requests from the Next native apps to the
+native sign-in calls.
+- [Next.Systems.Account.OtpSignin](Next.Systems.Account.OtpSignin.md): Steps of the email-first OTP sign-in shared by the LiveView pages
+(`AuthIdentifyPage`, `AuthCodeVerifyPage` and the redeem step in
+`SessionController`) and the native app's JSON calls
+(`NativeSigninController`), so both follow the same rules.
+
+- [Next.Systems.Account.ParticipantSigninView](Next.Systems.Account.ParticipantSigninView.md)
+- [Next.Systems.Account.SessionController](Next.Systems.Account.SessionController.md)
+- [Next.Systems.Account.SigninPage](Next.Systems.Account.SigninPage.md)
+- [Next.Systems.Account.SigninPageBuilder](Next.Systems.Account.SigninPageBuilder.md)
+- [Next.Systems.Account.System](Next.Systems.Account.System.md): Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's sign-in calls.
+- [Next.Systems.Annotation.Assoc](Next.Systems.Annotation.Assoc.md): A module for associating an annotation with an annotation reference   .
+
+- [Next.Systems.Annotation.Constants](Next.Systems.Annotation.Constants.md): This module contains the Annotation constants.
+
+- [Next.Systems.Annotation.Form](Next.Systems.Annotation.Form.md)
+- [Next.Systems.Annotation.Model](Next.Systems.Annotation.Model.md)
+- [Next.Systems.Annotation.Pattern](Next.Systems.Annotation.Pattern.md): A protocol for creating Annotation Patterns.
+Naming convention:
+- Each pattern is named after the type of annotation it creates.
+- Each pattern name is a noun, like "Definition", "Parameter", "Retraction", etc.
+
+- [Next.Systems.Annotation.Pattern.Connection](Next.Systems.Annotation.Pattern.Connection.md): A pattern for creating a Connection Annotation.
+A Connection is way to express that two annotations are related.
+
+- [Next.Systems.Annotation.Pattern.Definition](Next.Systems.Annotation.Pattern.Definition.md)
+- [Next.Systems.Annotation.Pattern.Helpers](Next.Systems.Annotation.Pattern.Helpers.md)
+- [Next.Systems.Annotation.Pattern.Parameter](Next.Systems.Annotation.Pattern.Parameter.md): A pattern for creating a Parameter Annotation.
+- [Next.Systems.Annotation.Pattern.Relevance](Next.Systems.Annotation.Pattern.Relevance.md): A pattern for creating a Relevance Annotation.
+A Relevance Annotation states the relevance between a parameter and a resource.
+
+- [Next.Systems.Annotation.Public](Next.Systems.Annotation.Public.md)
+- [Next.Systems.Annotation.Queries](Next.Systems.Annotation.Queries.md)
+- [Next.Systems.Annotation.RefModel](Next.Systems.Annotation.RefModel.md): A module for referencing an Annotation or Ontology Association.
+
+- [Next.Systems.Annotation.ResourceModel](Next.Systems.Annotation.ResourceModel.md): A module for managing annotations.
+
+- [Next.Systems.Announcement.AdminPanel](Next.Systems.Announcement.AdminPanel.md): The Announcements tab on the Admin page, for system admins only.
+- [Next.Systems.Announcement.AdminView](Next.Systems.Announcement.AdminView.md): The Announcements tab on the Admin page: the list of announcements. A row
+opens its announcement, and New announcement a new one, on the page to
+compose it (`Next.Systems.Announcement.ComposePage`).
+- [Next.Systems.Announcement.AdminViewBuilder](Next.Systems.Announcement.AdminViewBuilder.md): View model of the Announcements tab: every announcement, newest first, each
+with the path of the page that opens it, and the link to compose a new one
+(`Next.Systems.Announcement.ComposePage`). Only system admins with the
+`announcements` flag on get announcements (`allowed?`).
+
+- [Next.Systems.Announcement.Cards](Next.Systems.Announcement.Cards.md): Announcement cards shared by the Desktop preview and the full list.
+- [Next.Systems.Announcement.ComposePage](Next.Systems.Announcement.ComposePage.md): The page to compose an announcement: `/admin/announcement/new` for a new one,
+`/admin/announcement/:id` to open one from the list on the Admin page.
+Saving stores the announcement unpublished. Publishing sends it to the
+audience chosen below the form: creators, narrowed by the Admin → Users
+filters and search. The server resolves the audience itself
+(`Next.Systems.Announcement.Public.publish_announcement/4`). Saved,
+published or cancelled, it goes back to the list.
+- [Next.Systems.Announcement.ComposePageBuilder](Next.Systems.Announcement.ComposePageBuilder.md): View model of the page to compose an announcement
+(`Next.Systems.Announcement.ComposePage`): the labels of the form and, for an
+unpublished one, the audience: who it reaches with the chosen filters and
+search, and whether they get an email.
+- [Next.Systems.Announcement.DeliverJob](Next.Systems.Announcement.DeliverJob.md): Gives the recipients of a just-published announcement their recipient rows
+and To-dos, and for a high-priority announcement their emails
+(`Next.Systems.Announcement.Public.deliver_announcement/1`). Running it again
+adds and sends nothing, so a retry is safe.
+
+- [Next.Systems.Announcement.DesktopSection](Next.Systems.Announcement.DesktopSection.md): The Announcements section on Desktop, above Recent items: the newest
+announcements the user received, read and unread, as cards that each open
+the announcement page. Hidden while
+the `:announcements` flag is off and for users without announcements.
+- [Next.Systems.Announcement.EmailTemplate](Next.Systems.Announcement.EmailTemplate.md): The email of a high-priority announcement, readable on its own: the title,
+the full body and a link to the announcement page, without the summary. The
+HTML part has the cleaned body; the plain-text part has its text.
+- [Next.Systems.Announcement.Model](Next.Systems.Announcement.Model.md): An announcement written by a system admin for a group of creators. The body is
+the HTML of the rich-text editor (Trix), stored cleaned
+(`Frameworks.Pixel.RichText.clean/1`).
+- [Next.Systems.Announcement.NextActions.ReadAnnouncement](Next.Systems.Announcement.NextActions.ReadAnnouncement.md): The To-do of one unread announcement. There is one per recipient, keyed by
+the announcement (`key/1`). Title and summary are read from the announcement
+when the To-do is shown, so edits show at once. Opening the announcement
+page clears it (`Next.Systems.Announcement.Public.mark_read/1`).
+
+- [Next.Systems.Announcement.Page](Next.Systems.Announcement.Page.md): An announcement as its recipient reads it: title, publication date and the
+rich-text body. Opening it marks it read and clears its To-do
+(`Next.Systems.Announcement.Public.mark_read/1`); Desktop and the To-do counter
+refresh through their own switches on `{:next_action, :cleared}`.
+- [Next.Systems.Announcement.PageBuilder](Next.Systems.Announcement.PageBuilder.md)
+- [Next.Systems.Announcement.Presenter](Next.Systems.Announcement.Presenter.md)
+- [Next.Systems.Announcement.Private](Next.Systems.Announcement.Private.md)
+- [Next.Systems.Announcement.Public](Next.Systems.Announcement.Public.md): Create, change and read announcements and their recipients.
+- [Next.Systems.Announcement.Queries](Next.Systems.Announcement.Queries.md)
+- [Next.Systems.Announcement.RecipientModel](Next.Systems.Announcement.RecipientModel.md): One user who received an announcement. `read_at` is set the first time the
+user opens it.
+
+- [Next.Systems.Announcement.Routes](Next.Systems.Announcement.Routes.md)
+- [Next.Systems.Announcement.Switch](Next.Systems.Announcement.Switch.md): Refreshes the Desktop of every recipient when an announcement changes, so
+its Desktop section and To-do show the new title and summary at once, and
+the announcement page of a recipient who has it open, so it shows the new
+text. Both read the text from the database when the message arrives, so a
+message that arrives late never brings back older text.
+
+- [Next.Systems.Announcement.System](Next.Systems.Announcement.System.md): Announcements that system admins write for creators, such as release notes:
+the announcement, its rich-text body and the users who received it.
+- [Next.Systems.Citizen.CriteriaFilters](Next.Systems.Citizen.CriteriaFilters.md): Defines filters used to filter citizens in the overview page of the pool.
+
+- [Next.Systems.Citizen.Director](Next.Systems.Citizen.Director.md)
+- [Next.Systems.Citizen.Overview](Next.Systems.Citizen.Overview.md)
+- [Next.Systems.Citizen.Pool.DetailPageBuilder](Next.Systems.Citizen.Pool.DetailPageBuilder.md)
+- [Next.Systems.Citizen.Pool.Form](Next.Systems.Citizen.Pool.Form.md)
+- [Next.Systems.Citizen.Pool.OverviewPlugin](Next.Systems.Citizen.Pool.OverviewPlugin.md)
+- [Next.Systems.Citizen.Pool.SubmissionPageBuilder](Next.Systems.Citizen.Pool.SubmissionPageBuilder.md)
+- [Next.Systems.Citizen.Presenter](Next.Systems.Citizen.Presenter.md)
+- [Next.Systems.Citizen.Public](Next.Systems.Citizen.Public.md)
+- [Next.Systems.E2E.System](Next.Systems.E2E.System.md): The E2E test API (`/api/e2e/*`) that the Playwright suite uses to set up its
+fixtures. The controller answers only when the `:e2e` feature is on.
+
+- [Next.Systems.Graphite.Assembly](Next.Systems.Graphite.Assembly.md)
+- [Next.Systems.Graphite.ExportController](Next.Systems.Graphite.ExportController.md)
+- [Next.Systems.Graphite.Gen](Next.Systems.Graphite.Gen.md)
+- [Next.Systems.Graphite.LeaderboardContentPage](Next.Systems.Graphite.LeaderboardContentPage.md)
+- [Next.Systems.Graphite.LeaderboardContentPageBuilder](Next.Systems.Graphite.LeaderboardContentPageBuilder.md)
+- [Next.Systems.Graphite.LeaderboardModel](Next.Systems.Graphite.LeaderboardModel.md): Data model for the `graphite_leaderboard` table.
+# Fields
+- title: :string, Title of the leaderboard as will be displayed on the platform
+- subtitle: :string, Short subtitle for the leaderboard
+- status: :enum (?)
+- metrics: {:array, :string}, List of metrics that will be tracked for
+  leaderboard.
+- visibility: Enum with values
+  - public: everybody (including anonymous users) can see team names
+  - private: team names are hidden for everybody
+- open_date: :naive_datetime, datetime after which everybody can see team names
+  for the scores on the leaderboard.
+- generation_date: :naive_datetime, the day the scores for the leaderboard were
+  generated
+- tool_id: connects to `Next.Systems.Graphite.ToolModel`
+- auth_node_id: connects to `Mica.Authorization.Node`
+
+- [Next.Systems.Graphite.LeaderboardPage](Next.Systems.Graphite.LeaderboardPage.md)
+- [Next.Systems.Graphite.LeaderboardPageBuilder](Next.Systems.Graphite.LeaderboardPageBuilder.md)
+- [Next.Systems.Graphite.LeaderboardScoreHTML](Next.Systems.Graphite.LeaderboardScoreHTML.md)
+- [Next.Systems.Graphite.LeaderboardScoresForm](Next.Systems.Graphite.LeaderboardScoresForm.md)
+- [Next.Systems.Graphite.LeaderboardScoresView](Next.Systems.Graphite.LeaderboardScoresView.md)
+- [Next.Systems.Graphite.LeaderboardSettingsForm](Next.Systems.Graphite.LeaderboardSettingsForm.md)
+- [Next.Systems.Graphite.LeaderboardSettingsView](Next.Systems.Graphite.LeaderboardSettingsView.md)
+- [Next.Systems.Graphite.LeaderboardSubmissionsForm](Next.Systems.Graphite.LeaderboardSubmissionsForm.md)
+- [Next.Systems.Graphite.LeaderboardSubmissionsView](Next.Systems.Graphite.LeaderboardSubmissionsView.md)
+- [Next.Systems.Graphite.LeaderboardTableView](Next.Systems.Graphite.LeaderboardTableView.md)
+- [Next.Systems.Graphite.LeaderboardVisibility](Next.Systems.Graphite.LeaderboardVisibility.md):   Leaderboard visibility values.
+
+- [Next.Systems.Graphite.Presenter](Next.Systems.Graphite.Presenter.md)
+- [Next.Systems.Graphite.Private](Next.Systems.Graphite.Private.md)
+- [Next.Systems.Graphite.Public](Next.Systems.Graphite.Public.md)
+- [Next.Systems.Graphite.Queries](Next.Systems.Graphite.Queries.md)
+- [Next.Systems.Graphite.Routes](Next.Systems.Graphite.Routes.md)
+- [Next.Systems.Graphite.ScoreModel](Next.Systems.Graphite.ScoreModel.md)
+- [Next.Systems.Graphite.ScoresParseResult](Next.Systems.Graphite.ScoresParseResult.md)
+- [Next.Systems.Graphite.ScoresParser](Next.Systems.Graphite.ScoresParser.md)
+- [Next.Systems.Graphite.SubmissionForm](Next.Systems.Graphite.SubmissionForm.md)
+- [Next.Systems.Graphite.SubmissionModel](Next.Systems.Graphite.SubmissionModel.md)
+- [Next.Systems.Graphite.SubmissionOverview](Next.Systems.Graphite.SubmissionOverview.md)
+- [Next.Systems.Graphite.SubmissionView](Next.Systems.Graphite.SubmissionView.md)
+- [Next.Systems.Graphite.Switch](Next.Systems.Graphite.Switch.md)
+- [Next.Systems.Graphite.System](Next.Systems.Graphite.System.md)
+- [Next.Systems.Graphite.ToolController](Next.Systems.Graphite.ToolController.md)
+- [Next.Systems.Graphite.ToolForm](Next.Systems.Graphite.ToolForm.md)
+- [Next.Systems.Graphite.ToolModel](Next.Systems.Graphite.ToolModel.md): The benchmark tool schema.
+
+- [Next.Systems.Graphite.ToolView](Next.Systems.Graphite.ToolView.md)
+- [Next.Systems.Graphite.ToolViewBuilder](Next.Systems.Graphite.ToolViewBuilder.md)
+- [Next.Systems.Ontology.ConceptModel](Next.Systems.Ontology.ConceptModel.md)
+- [Next.Systems.Ontology.Constants](Next.Systems.Ontology.Constants.md): This module contains the Ontology constants.
+
+- [Next.Systems.Ontology.Element](Next.Systems.Ontology.Element.md): A protocol for elements in the knowledge graph.
+
+- [Next.Systems.Ontology.PredicateModel](Next.Systems.Ontology.PredicateModel.md)
+- [Next.Systems.Ontology.Public](Next.Systems.Ontology.Public.md)
+- [Next.Systems.Ontology.Queries](Next.Systems.Ontology.Queries.md)
+- [Next.Systems.Ontology.RefModel](Next.Systems.Ontology.RefModel.md):   A module referencing a model in the Ontology.
+- [Next.Systems.Onyx.BrowserView](Next.Systems.Onyx.BrowserView.md)
+- [Next.Systems.Onyx.BrowserViewBuilder](Next.Systems.Onyx.BrowserViewBuilder.md)
+- [Next.Systems.Onyx.CardView](Next.Systems.Onyx.CardView.md)
+- [Next.Systems.Onyx.ConceptTab](Next.Systems.Onyx.ConceptTab.md)
+- [Next.Systems.Onyx.LandingPage](Next.Systems.Onyx.LandingPage.md)
+- [Next.Systems.Onyx.LandingPageBuilder](Next.Systems.Onyx.LandingPageBuilder.md)
+- [Next.Systems.Onyx.Presenter](Next.Systems.Onyx.Presenter.md)
+- [Next.Systems.Onyx.Private](Next.Systems.Onyx.Private.md)
+- [Next.Systems.Onyx.Routes](Next.Systems.Onyx.Routes.md)
+- [Next.Systems.Onyx.SeedBase](Next.Systems.Onyx.SeedBase.md): Base macros and functions for seeding ontology concepts and annotations.
+- [Next.Systems.Onyx.System](Next.Systems.Onyx.System.md)
+- [Next.Systems.Panl.System](Next.Systems.Panl.System.md): The PaNL flags. Mica's Account, Assignment, Home, Pool and Project systems
+still read them; they are declared here so that no PaNL name is added to Mica,
+and move with that code in plan step code-instance.
+
+- [Next.Systems.Paper.Config](Next.Systems.Paper.Config.md): Runtime configuration for the Paper system.
+Provides access to paper import settings.
+
+- [Next.Systems.Paper.Model](Next.Systems.Paper.Model.md)
+- [Next.Systems.Paper.Private](Next.Systems.Paper.Private.md)
+- [Next.Systems.Paper.Public](Next.Systems.Paper.Public.md)
+- [Next.Systems.Paper.Queries](Next.Systems.Paper.Queries.md)
+- [Next.Systems.Paper.RISEntry](Next.Systems.Paper.RISEntry.md): Struct representing a bibliographic entry from a RIS file.
+Used to maintain consistent data structure across the import pipeline.
+
+- [Next.Systems.Paper.RISEntryError](Next.Systems.Paper.RISEntryError.md): Struct representing a parsing error for a specific line in a RIS file.
+
+- [Next.Systems.Paper.RISFetcherBackendStream](Next.Systems.Paper.RISFetcherBackendStream.md): Streaming fetcher that uses the configured storage backend.
+This is the recommended approach as it respects the application's storage configuration.
+
+- [Next.Systems.Paper.RISImportCommitJob](Next.Systems.Paper.RISImportCommitJob.md)
+- [Next.Systems.Paper.RISImportPrepareJob](Next.Systems.Paper.RISImportPrepareJob.md)
+- [Next.Systems.Paper.RISImportSessionModel](Next.Systems.Paper.RISImportSessionModel.md)
+- [Next.Systems.Paper.RISModel](Next.Systems.Paper.RISModel.md)
+- [Next.Systems.Paper.RISParser](Next.Systems.Paper.RISParser.md): Pure module for parsing RIS file content.
+- [Next.Systems.Paper.RISParserStream](Next.Systems.Paper.RISParserStream.md): Streaming RIS parser that processes records one at a time without loading
+the entire file into memory. Designed for handling large files with 100k+ references.
+
+- [Next.Systems.Paper.RISProcessor](Next.Systems.Paper.RISProcessor.md): Business logic for processing parsed RIS references.
+- [Next.Systems.Paper.RISValidator](Next.Systems.Paper.RISValidator.md): Validates RIS files before parsing to prevent crashes from invalid files.
+
+- [Next.Systems.Paper.ReferenceFileErrorModel](Next.Systems.Paper.ReferenceFileErrorModel.md)
+- [Next.Systems.Paper.ReferenceFileModel](Next.Systems.Paper.ReferenceFileModel.md)
+- [Next.Systems.Paper.ReferenceFilePaperAssoc](Next.Systems.Paper.ReferenceFilePaperAssoc.md)
+- [Next.Systems.Paper.SetAssoc](Next.Systems.Paper.SetAssoc.md)
+- [Next.Systems.Paper.SetModel](Next.Systems.Paper.SetModel.md)
+- [Next.Systems.Paper.System](Next.Systems.Paper.System.md)
+- [Next.Systems.Probe.AssignmentTemplate](Next.Systems.Probe.AssignmentTemplate.md): Assignment template for cognitive tools: zip apps that run like Feldspar apps
+but are cognitive tasks, not data donations. Consent, storage of results and
+completion are those of the Feldspar tool, as in the Data donation template;
+only the texts differ. Behind the `:probe` feature flag.
+
+- [Next.Systems.Probe.System](Next.Systems.Probe.System.md): The Probe assignment template (`config :mica, assignment_templates:`).
+- [Next.Systems.Storybook.System](Next.Systems.Storybook.System.md): The component storybook of Next's own components (`Next.Storybook`), next to Mica's Pixel storybook.
+- [Next.Systems.Student.Class](Next.Systems.Student.Class.md):   Defines study program using organisation nodes.
+
+- [Next.Systems.Student.Codes](Next.Systems.Student.Codes.md):   Defines study program codes used as user feature for vu students.
+
+- [Next.Systems.Student.Course](Next.Systems.Student.Course.md):   Defines student course using organisation nodes.
+
+- [Next.Systems.Student.CriteriaFilters](Next.Systems.Student.CriteriaFilters.md): Defines filters used to filter students in the overview page of the pool.
+
+- [Next.Systems.Student.Director](Next.Systems.Student.Director.md)
+- [Next.Systems.Student.Filters](Next.Systems.Student.Filters.md): Defines filters used to filter students in the overview page of the pool.
+
+- [Next.Systems.Student.Overview](Next.Systems.Student.Overview.md)
+- [Next.Systems.Student.Pool.DashboardView](Next.Systems.Student.Pool.DashboardView.md)
+- [Next.Systems.Student.Pool.DetailPageBuilder](Next.Systems.Student.Pool.DetailPageBuilder.md)
+- [Next.Systems.Student.Pool.OverviewPlugin](Next.Systems.Student.Pool.OverviewPlugin.md)
+- [Next.Systems.Student.Pool.SubmissionForm](Next.Systems.Student.Pool.SubmissionForm.md)
+- [Next.Systems.Student.Pool.SubmissionPageBuilder](Next.Systems.Student.Pool.SubmissionPageBuilder.md)
+- [Next.Systems.Student.Presenter](Next.Systems.Student.Presenter.md)
+- [Next.Systems.Student.Public](Next.Systems.Student.Public.md)
+- [Next.Systems.Student.Switch](Next.Systems.Student.Switch.md)
+- [Next.Systems.Student.System](Next.Systems.Student.System.md)
+- [Next.Systems.Student.UserForm](Next.Systems.Student.UserForm.md)
+- [Next.Systems.Student.Years](Next.Systems.Student.Years.md):   Defines student years supported by the studentpool app.
+
+- [Next.Systems.WellKnown.Controller](Next.Systems.WellKnown.Controller.md): Serves the apple-app-site-association file, so iOS opens invitation links
+(`/assignment/*`) in the Next app (UC-SENSE-03), and so the sign-in sheet may
+hand an identity-provider sign-in back to the app on this host
+(`webcredentials`, see `Next.Systems.Account.NativeHandoff`).
+- [Next.Systems.WellKnown.System](Next.Systems.WellKnown.System.md): The `/.well-known` files of Next's domains, such as the iOS app-site association.
+- [Next.Systems.Zircon.Constants](Next.Systems.Zircon.Constants.md): This module contains the Zircon constants.
+
+- [Next.Systems.Zircon.HTML](Next.Systems.Zircon.HTML.md)
+- [Next.Systems.Zircon.Presenter](Next.Systems.Zircon.Presenter.md)
+- [Next.Systems.Zircon.Private](Next.Systems.Zircon.Private.md)
+- [Next.Systems.Zircon.Public](Next.Systems.Zircon.Public.md)
+- [Next.Systems.Zircon.Queries](Next.Systems.Zircon.Queries.md)
+- [Next.Systems.Zircon.Screening.Categories](Next.Systems.Zircon.Screening.Categories.md): Defines the screening criteria categories used in the TIAB screening phase of the literature review process.
+- [Next.Systems.Zircon.Screening.CriteriaView](Next.Systems.Zircon.Screening.CriteriaView.md)
+- [Next.Systems.Zircon.Screening.CriteriaViewBuilder](Next.Systems.Zircon.Screening.CriteriaViewBuilder.md)
+- [Next.Systems.Zircon.Screening.HTML](Next.Systems.Zircon.Screening.HTML.md)
+- [Next.Systems.Zircon.Screening.HumanAgent](Next.Systems.Zircon.Screening.HumanAgent.md): Human agent for the Zircon screening process.
+
+- [Next.Systems.Zircon.Screening.ImportSessionPapersView](Next.Systems.Zircon.Screening.ImportSessionPapersView.md)
+- [Next.Systems.Zircon.Screening.ImportSessionPapersViewBuilder](Next.Systems.Zircon.Screening.ImportSessionPapersViewBuilder.md)
+- [Next.Systems.Zircon.Screening.ImportSessionWarningsView](Next.Systems.Zircon.Screening.ImportSessionWarningsView.md)
+- [Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilder](Next.Systems.Zircon.Screening.ImportSessionWarningsViewBuilder.md)
+- [Next.Systems.Zircon.Screening.ImportView](Next.Systems.Zircon.Screening.ImportView.md)
+- [Next.Systems.Zircon.Screening.ImportViewBuilder](Next.Systems.Zircon.Screening.ImportViewBuilder.md)
+- [Next.Systems.Zircon.Screening.PaperSetView](Next.Systems.Zircon.Screening.PaperSetView.md)
+- [Next.Systems.Zircon.Screening.PaperSetViewBuilder](Next.Systems.Zircon.Screening.PaperSetViewBuilder.md)
+- [Next.Systems.Zircon.Screening.SessionModel](Next.Systems.Zircon.Screening.SessionModel.md): Model for the screening process.
+
+- [Next.Systems.Zircon.Screening.ToolAnnotationAssoc](Next.Systems.Zircon.Screening.ToolAnnotationAssoc.md)
+- [Next.Systems.Zircon.Screening.ToolForm](Next.Systems.Zircon.Screening.ToolForm.md)
+- [Next.Systems.Zircon.Screening.ToolModel](Next.Systems.Zircon.Screening.ToolModel.md)
+- [Next.Systems.Zircon.Screening.ToolReferenceFileAssoc](Next.Systems.Zircon.Screening.ToolReferenceFileAssoc.md)
+- [Next.Systems.Zircon.Screening.ToolView](Next.Systems.Zircon.Screening.ToolView.md)
+- [Next.Systems.Zircon.Screening.ToolViewBuilder](Next.Systems.Zircon.Screening.ToolViewBuilder.md)
+- [Next.Systems.Zircon.Sqids](Next.Systems.Zircon.Sqids.md)
+- [Next.Systems.Zircon.Switch](Next.Systems.Zircon.Switch.md)
+- [Next.Systems.Zircon.System](Next.Systems.Zircon.System.md)
+- [NextWeb.Layouts.Stripped.MenuBuilder](NextWeb.Layouts.Stripped.MenuBuilder.md)
+- [NextWeb.Layouts.Website.MenuBuilder](NextWeb.Layouts.Website.MenuBuilder.md)
+- [NextWeb.Layouts.Workspace.MenuBuilder](NextWeb.Layouts.Workspace.MenuBuilder.md)
+- [NextWeb.Menu.Items](NextWeb.Menu.Items.md)
+- [Systems.Account.Auth](Systems.Account.Auth.md): Orchestrates federated authentication against an external Identity
+Provider (IdP).
+- [Systems.Account.Auth.Apple](Systems.Account.Auth.Apple.md)
+- [Systems.Account.Auth.Apple.Backend](Systems.Account.Auth.Apple.Backend.md)
+- [Systems.Account.Auth.Apple.CallbackPlug](Systems.Account.Auth.Apple.CallbackPlug.md)
+- [Systems.Account.Auth.Apple.Helpers](Systems.Account.Auth.Apple.Helpers.md)
+- [Systems.Account.Auth.Apple.UserModel](Systems.Account.Auth.Apple.UserModel.md)
+- [Systems.Account.Auth.Centerdata](Systems.Account.Auth.Centerdata.md): Centerdata/LISS Panel identity provider.
+- [Systems.Account.Auth.Centerdata.AuthorizePlug](Systems.Account.Auth.Centerdata.AuthorizePlug.md)
+- [Systems.Account.Auth.Centerdata.CallbackController](Systems.Account.Auth.Centerdata.CallbackController.md)
+- [Systems.Account.Auth.Centerdata.PlugUtils](Systems.Account.Auth.Centerdata.PlugUtils.md)
+- [Systems.Account.Auth.Centerdata.UserModel](Systems.Account.Auth.Centerdata.UserModel.md)
+- [Systems.Account.Auth.Email](Systems.Account.Auth.Email.md): Email-first signup identity provider.
+- [Systems.Account.Auth.Email.DefaultRejectionPolicy](Systems.Account.Auth.Email.DefaultRejectionPolicy.md): Default rejection policy for email-first signups.
+- [Systems.Account.Auth.Email.RejectionPolicy](Systems.Account.Auth.Email.RejectionPolicy.md): Behaviour for email rejection policies.
+- [Systems.Account.Auth.Email.UserModel](Systems.Account.Auth.Email.UserModel.md): Satellite identity record for email-first signups.
+- [Systems.Account.Auth.External](Systems.Account.Auth.External.md)
+- [Systems.Account.Auth.External.UserModel](Systems.Account.Auth.External.UserModel.md)
+- [Systems.Account.Auth.Google](Systems.Account.Auth.Google.md): Google identity provider. Implements `Systems.Account.Auth.Provider` — the
+orchestration of "find user by email, attach or refresh satellite"
+lives in `Systems.Account.Auth`.
+- [Systems.Account.Auth.Google.AuthorizePlug](Systems.Account.Auth.Google.AuthorizePlug.md)
+- [Systems.Account.Auth.Google.CallbackPlug](Systems.Account.Auth.Google.CallbackPlug.md)
+- [Systems.Account.Auth.Google.PlugUtils](Systems.Account.Auth.Google.PlugUtils.md)
+- [Systems.Account.Auth.Google.UserModel](Systems.Account.Auth.Google.UserModel.md)
+- [Systems.Account.Auth.IdentityProviderTransferController](Systems.Account.Auth.IdentityProviderTransferController.md)
+- [Systems.Account.Auth.IdentityProviderTransferPage](Systems.Account.Auth.IdentityProviderTransferPage.md)
+- [Systems.Account.Auth.Methods](Systems.Account.Auth.Methods.md)
+- [Systems.Account.Auth.Mock](Systems.Account.Auth.Mock.md)
+- [Systems.Account.Auth.Mock.CallbackController](Systems.Account.Auth.Mock.CallbackController.md)
+- [Systems.Account.Auth.Mock.InitiatorPlug](Systems.Account.Auth.Mock.InitiatorPlug.md)
+- [Systems.Account.Auth.Mock.ResetController](Systems.Account.Auth.Mock.ResetController.md)
+- [Systems.Account.Auth.Mock.SigninPage](Systems.Account.Auth.Mock.SigninPage.md)
+- [Systems.Account.Auth.Mock.UserModel](Systems.Account.Auth.Mock.UserModel.md)
+- [Systems.Account.Auth.Provider](Systems.Account.Auth.Provider.md): Behaviour for Identity Provider satellite modules (SURFconext, Google, …).
+- [Systems.Account.Auth.SSOHelpers](Systems.Account.Auth.SSOHelpers.md): Shared helpers for SSO registration across different providers.
+- [Systems.Account.Auth.Surfconext](Systems.Account.Auth.Surfconext.md): SURFconext identity provider. Implements `Systems.Account.Auth.Provider` —
+the orchestration of "find user by email, attach or refresh satellite"
+lives in `Systems.Account.Auth`.
+
+- [Systems.Account.Auth.Surfconext.AuthorizePlug](Systems.Account.Auth.Surfconext.AuthorizePlug.md): This controller manages the OpenID Connect flow with Surfconext.
+- [Systems.Account.Auth.Surfconext.CallbackController](Systems.Account.Auth.Surfconext.CallbackController.md)
+- [Systems.Account.Auth.Surfconext.PlugUtils](Systems.Account.Auth.Surfconext.PlugUtils.md)
+- [Systems.Account.Auth.Surfconext.UserModel](Systems.Account.Auth.Surfconext.UserModel.md)
+- [Systems.Account.AuthCodeCleanupWorker](Systems.Account.AuthCodeCleanupWorker.md): Scheduled Oban worker that prunes auth_codes past their validity window,
+and the rate counters whose window has ended.
+- [Systems.Account.AuthCodeLimits](Systems.Account.AuthCodeLimits.md): Limits on sign-in codes on top of the checks each single code allows
+(`Systems.Account.AuthCodeModel`). They count per email address, per email
+address and network address together, and per network address, in the
+database (`Rate.Public.increment_counter/2`), so all nodes share them and
+restarts don't reset them. Windows are fixed: a refused address or network
+is allowed again when the window ends.
+- [Systems.Account.AuthCodeModel](Systems.Account.AuthCodeModel.md)
+- [Systems.Account.AwaitConfirmation](Systems.Account.AwaitConfirmation.md)
+- [Systems.Account.ConfirmToken](Systems.Account.ConfirmToken.md)
+- [Systems.Account.EmailRouter](Systems.Account.EmailRouter.md)
+- [Systems.Account.FeaturesForm](Systems.Account.FeaturesForm.md)
+- [Systems.Account.FeaturesModel](Systems.Account.FeaturesModel.md): This schema contains features of members.
+
+- [Systems.Account.FeaturesTab](Systems.Account.FeaturesTab.md): Features tab implementation.
+This tab is only visible for PANL participants.
+
+- [Systems.Account.FeaturesView](Systems.Account.FeaturesView.md): Embedded LiveView for editing user features (gender, birth_year).
+Used in both Account.Page (as a tab) and OnboardingPage (as a step).
+
+- [Systems.Account.FeaturesViewBuilder](Systems.Account.FeaturesViewBuilder.md): Builder for FeaturesView that constructs the view model for user features editing.
+
+- [Systems.Account.MerchantOrphanReconciliation](Systems.Account.MerchantOrphanReconciliation.md): Provider→local reconciliation for merchants: lists the merchants the provider
+created inside the window and flags any whose uid no user carries.
+- [Systems.Account.NativeController](Systems.Account.NativeController.md): Authenticated account data and profile actions for native clients sharing the web session.
+- [Systems.Account.NextActions.CompleteProfile](Systems.Account.NextActions.CompleteProfile.md)
+- [Systems.Account.NextActions.FillinCharacteristics](Systems.Account.NextActions.FillinCharacteristics.md)
+- [Systems.Account.NextActions.PromotePushStudent](Systems.Account.NextActions.PromotePushStudent.md)
+- [Systems.Account.NextActions.SelectStudyStudent](Systems.Account.NextActions.SelectStudyStudent.md)
+- [Systems.Account.OnboardingController](Systems.Account.OnboardingController.md): Controller to handle onboarding entry for Panl participants.
+- [Systems.Account.OnboardingPage](Systems.Account.OnboardingPage.md): Onboarding page for new users (especially PANL participants).
+Shows required profile steps sequentially before allowing access to the app.
+- [Systems.Account.OnboardingPageBuilder](Systems.Account.OnboardingPageBuilder.md): Builder for OnboardingPage that determines which steps to show and manages step progression.
+
+- [Systems.Account.Page](Systems.Account.Page.md): The Account page (`/user/account`).
+- [Systems.Account.PageBuilder](Systems.Account.PageBuilder.md)
+- [Systems.Account.PayoutsTab](Systems.Account.PayoutsTab.md): Payouts (Uitbetalingen) tab implementation: shows the bank-account
+verification status and the payout history.
+- [Systems.Account.PayoutsView](Systems.Account.PayoutsView.md): Embedded LiveView for the "Uitbetalingen" (payouts) tab.
+- [Systems.Account.PayoutsViewBuilder](Systems.Account.PayoutsViewBuilder.md): Builds the view model for the "Uitbetalingen" (payouts) tab
+- [Systems.Account.PeopleEditorComponent](Systems.Account.PeopleEditorComponent.md): Reusable LiveComponent for managing a list of people (add/remove).
+- [Systems.Account.PeopleEditorModalView](Systems.Account.PeopleEditorModalView.md): Modal LiveView for managing people (add/remove).
+- [Systems.Account.PeopleHelpers](Systems.Account.PeopleHelpers.md): Shared helpers for building people/user display items with confirmation rows.
+
+- [Systems.Account.PeopleView](Systems.Account.PeopleView.md): DEPRECATED: Use `Systems.Account.PeopleEditorComponent` instead.
+- [Systems.Account.PhoneForm](Systems.Account.PhoneForm.md): In-platform modal that collects the participant's phone number for the payouts
+("Uitbetalingen") flow.
+- [Systems.Account.Plug](Systems.Account.Plug.md)
+- [Systems.Account.Presenter](Systems.Account.Presenter.md)
+- [Systems.Account.ProfileTab](Systems.Account.ProfileTab.md): Profile tab implementation.
+This tab is always visible for all users.
+
+- [Systems.Account.ProfileView](Systems.Account.ProfileView.md): Embedded LiveView for editing user profile (name, photo, etc.).
+Used in both Account.Page (as a tab) and OnboardingPage (as a step).
+
+- [Systems.Account.ProfileViewBuilder](Systems.Account.ProfileViewBuilder.md): Builder for ProfileView that constructs the view model for user profile editing.
+
+- [Systems.Account.Public](Systems.Account.Public.md)
+- [Systems.Account.Queries](Systems.Account.Queries.md)
+- [Systems.Account.ResetPassword](Systems.Account.ResetPassword.md): The home screen.
+
+- [Systems.Account.ResetPasswordToken](Systems.Account.ResetPasswordToken.md): The password reset token.
+
+- [Systems.Account.ServiceLoginController](Systems.Account.ServiceLoginController.md)
+- [Systems.Account.SettingsController](Systems.Account.SettingsController.md)
+- [Systems.Account.SettingsHTML](Systems.Account.SettingsHTML.md)
+- [Systems.Account.SignInHandoff](Systems.Account.SignInHandoff.md): Takes over the end of an identity-provider sign-in, for example to hand it
+to a native app instead of continuing on the site. Systems list their
+handoffs in `c:Mica.System.sign_in_handoffs/0`.
+- [Systems.Account.SignupPage](Systems.Account.SignupPage.md): The home screen.
+
+- [Systems.Account.Switch](Systems.Account.Switch.md)
+- [Systems.Account.System](Systems.Account.System.md)
+- [Systems.Account.Tab](Systems.Account.Tab.md): A tab on the account page (`Systems.Account.Page`): Profile, Payouts, Features, ….
+- [Systems.Account.TermsAndPrivacyView](Systems.Account.TermsAndPrivacyView.md): Onboarding step shown to first-time SSO users: welcome + terms acceptance.
+Embedded in OnboardingPage as the :terms_and_privacy step.
+- [Systems.Account.TermsAndPrivacyViewBuilder](Systems.Account.TermsAndPrivacyViewBuilder.md): Builder for TermsAndPrivacyView. The view manages its own UI state
+(terms_accepted, policy URLs), so the view model only carries the
+current user reference for use by event handlers.
+
+- [Systems.Account.User](Systems.Account.User.md): The User module encapsulates the changesets for creating and updating users.
+- [Systems.Account.UserAuth](Systems.Account.UserAuth.md)
+- [Systems.Account.UserForm](Systems.Account.UserForm.md)
+- [Systems.Account.UserFormDebug](Systems.Account.UserFormDebug.md)
+- [Systems.Account.UserNotifier](Systems.Account.UserNotifier.md)
+- [Systems.Account.UserProfileEditModel](Systems.Account.UserProfileEditModel.md): The study type.
+
+- [Systems.Account.UserProfileForm](Systems.Account.UserProfileForm.md)
+- [Systems.Account.UserProfileModel](Systems.Account.UserProfileModel.md): This schema contains profile related data for members.
+
+- [Systems.Account.UserService](Systems.Account.UserService.md)
+- [Systems.Account.UserSocket](Systems.Account.UserSocket.md)
+- [Systems.Account.UserTokenModel](Systems.Account.UserTokenModel.md)
+- [Systems.Admin.AccountPanel](Systems.Admin.AccountPanel.md)
+- [Systems.Admin.AccountView](Systems.Admin.AccountView.md)
+- [Systems.Admin.AccountViewBuilder](Systems.Admin.AccountViewBuilder.md): ViewBuilder for the Admin AccountView.
+- [Systems.Admin.ActionsPanel](Systems.Admin.ActionsPanel.md)
+- [Systems.Admin.ActionsView](Systems.Admin.ActionsView.md)
+- [Systems.Admin.ActionsViewBuilder](Systems.Admin.ActionsViewBuilder.md): ViewBuilder for the Admin ActionsView.
+- [Systems.Admin.ClientActivityFilters](Systems.Admin.ClientActivityFilters.md)
+- [Systems.Admin.ClientActivityPanel](Systems.Admin.ClientActivityPanel.md)
+- [Systems.Admin.ClientActivityView](Systems.Admin.ClientActivityView.md)
+- [Systems.Admin.ClientActivityViewBuilder](Systems.Admin.ClientActivityViewBuilder.md): ViewBuilder for the Admin ClientActivityView.
+- [Systems.Admin.ConfigPage](Systems.Admin.ConfigPage.md)
+- [Systems.Admin.ConfigPageBuilder](Systems.Admin.ConfigPageBuilder.md)
+- [Systems.Admin.LoginPage](Systems.Admin.LoginPage.md)
+- [Systems.Admin.OrgPanel](Systems.Admin.OrgPanel.md)
+- [Systems.Admin.OrgView](Systems.Admin.OrgView.md)
+- [Systems.Admin.OrgViewBuilder](Systems.Admin.OrgViewBuilder.md): ViewBuilder for the Admin OrgView.
+- [Systems.Admin.Panel](Systems.Admin.Panel.md): A tab on the Admin page (`/admin/config`), with an embedded live view.
+- [Systems.Admin.Presenter](Systems.Admin.Presenter.md)
+- [Systems.Admin.Public](Systems.Admin.Public.md)
+- [Systems.Admin.Queries](Systems.Admin.Queries.md)
+- [Systems.Admin.Routes](Systems.Admin.Routes.md)
+- [Systems.Admin.Switch](Systems.Admin.Switch.md)
+- [Systems.Admin.System](Systems.Admin.System.md)
+- [Systems.Admin.SystemPanel](Systems.Admin.SystemPanel.md)
+- [Systems.Admin.SystemView](Systems.Admin.SystemView.md)
+- [Systems.Admin.SystemViewBuilder](Systems.Admin.SystemViewBuilder.md): ViewBuilder for the Admin SystemView.
+- [Systems.Admin.UserFilters](Systems.Admin.UserFilters.md)
+- [Systems.Advert.Assembly](Systems.Advert.Assembly.md)
+- [Systems.Advert.Builders.Highlight](Systems.Advert.Builders.Highlight.md)
+- [Systems.Advert.CardView](Systems.Advert.CardView.md): A large eye-catcher meant to call a user into taking an action.
+
+- [Systems.Advert.ContentPage](Systems.Advert.ContentPage.md): The CMS page for Advert tool
+
+- [Systems.Advert.ContentPageBuilder](Systems.Advert.ContentPageBuilder.md)
+- [Systems.Advert.Director](Systems.Advert.Director.md)
+- [Systems.Advert.ExpirationWorker](Systems.Advert.ExpirationWorker.md)
+- [Systems.Advert.FundingView](Systems.Advert.FundingView.md)
+- [Systems.Advert.ListView](Systems.Advert.ListView.md)
+- [Systems.Advert.Model](Systems.Advert.Model.md): The advert type.
+
+- [Systems.Advert.MonitorTableView](Systems.Advert.MonitorTableView.md)
+- [Systems.Advert.MonitorView](Systems.Advert.MonitorView.md)
+- [Systems.Advert.Presenter](Systems.Advert.Presenter.md)
+- [Systems.Advert.PromotionLandingPageBuilder](Systems.Advert.PromotionLandingPageBuilder.md)
+- [Systems.Advert.Public](Systems.Advert.Public.md): The Studies context.
+
+- [Systems.Advert.Queries](Systems.Advert.Queries.md)
+- [Systems.Advert.Routes](Systems.Advert.Routes.md)
+- [Systems.Advert.SettingsView](Systems.Advert.SettingsView.md)
+- [Systems.Advert.SubmissionView](Systems.Advert.SubmissionView.md)
+- [Systems.Advert.SubmissionViewBuilder](Systems.Advert.SubmissionViewBuilder.md)
+- [Systems.Advert.Switch](Systems.Advert.Switch.md)
+- [Systems.Advert.System](Systems.Advert.System.md)
+- [Systems.Advert.Themes](Systems.Advert.Themes.md): Defines themes used to categorize adverts.
+
+- [Systems.Affiliate.CallbackWorker](Systems.Affiliate.CallbackWorker.md): Sends an event to the affiliate's callback URL (`Systems.Affiliate.Public.queue_event/3`).
+- [Systems.Affiliate.Constants](Systems.Affiliate.Constants.md)
+- [Systems.Affiliate.Controller](Systems.Affiliate.Controller.md)
+- [Systems.Affiliate.Form](Systems.Affiliate.Form.md)
+- [Systems.Affiliate.Html](Systems.Affiliate.Html.md): HTML components for the Affiliate system.
+
+- [Systems.Affiliate.Model](Systems.Affiliate.Model.md)
+- [Systems.Affiliate.Private](Systems.Affiliate.Private.md)
+- [Systems.Affiliate.Public](Systems.Affiliate.Public.md)
+- [Systems.Affiliate.Routes](Systems.Affiliate.Routes.md)
+- [Systems.Affiliate.Sqids](Systems.Affiliate.Sqids.md)
+- [Systems.Affiliate.System](Systems.Affiliate.System.md)
+- [Systems.Affiliate.User](Systems.Affiliate.User.md)
+- [Systems.Affiliate.UserInfoModel](Systems.Affiliate.UserInfoModel.md)
+- [Systems.Alliance.CallbackPage](Systems.Alliance.CallbackPage.md): The redirect page to complete a task
+
+- [Systems.Alliance.ContentPage](Systems.Alliance.ContentPage.md)
+- [Systems.Alliance.ContentPageBuilder](Systems.Alliance.ContentPageBuilder.md)
+- [Systems.Alliance.Controller](Systems.Alliance.Controller.md)
+- [Systems.Alliance.Presenter](Systems.Alliance.Presenter.md)
+- [Systems.Alliance.Public](Systems.Alliance.Public.md): 
+Alliance tools allow a researcher to setup a link to an external web
+tool. The participant goes through the flow described below
+- [Systems.Alliance.Routes](Systems.Alliance.Routes.md)
+- [Systems.Alliance.Switch](Systems.Alliance.Switch.md)
+- [Systems.Alliance.System](Systems.Alliance.System.md)
+- [Systems.Alliance.TaskView](Systems.Alliance.TaskView.md)
+- [Systems.Alliance.ToolForm](Systems.Alliance.ToolForm.md)
+- [Systems.Alliance.ToolModel](Systems.Alliance.ToolModel.md): The alliance tool schema.
+
+- [Systems.Alliance.ToolView](Systems.Alliance.ToolView.md)
+- [Systems.Alliance.ToolViewBuilder](Systems.Alliance.ToolViewBuilder.md)
+- [Systems.Alliance.VariableParser](Systems.Alliance.VariableParser.md)
+- [Systems.Alliance.WorkView](Systems.Alliance.WorkView.md)
+- [Systems.Assignment.ActivateAccountView](Systems.Assignment.ActivateAccountView.md)
+- [Systems.Assignment.ActivateAccountViewBuilder](Systems.Assignment.ActivateAccountViewBuilder.md)
+- [Systems.Assignment.AffiliateView](Systems.Assignment.AffiliateView.md)
+- [Systems.Assignment.AllianceCallbackPageBuilder](Systems.Assignment.AllianceCallbackPageBuilder.md)
+- [Systems.Assignment.Assembly](Systems.Assignment.Assembly.md)
+- [Systems.Assignment.BrandingForm](Systems.Assignment.BrandingForm.md)
+- [Systems.Assignment.CheckRejection](Systems.Assignment.CheckRejection.md)
+- [Systems.Assignment.ConnectionView](Systems.Assignment.ConnectionView.md)
+- [Systems.Assignment.ConnectionViewStorage](Systems.Assignment.ConnectionViewStorage.md)
+- [Systems.Assignment.ConnectorPopupStorage](Systems.Assignment.ConnectorPopupStorage.md)
+- [Systems.Assignment.ConnectorView](Systems.Assignment.ConnectorView.md)
+- [Systems.Assignment.ContentPage](Systems.Assignment.ContentPage.md)
+- [Systems.Assignment.ContentPageBuilder](Systems.Assignment.ContentPageBuilder.md):   Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
+  This builder module supports several specials with each a specific View Model.
+  For a full overview of the template feature see `Systems.Assignment.Template`.
+
+- [Systems.Assignment.ContentPageForm](Systems.Assignment.ContentPageForm.md)
+- [Systems.Assignment.ContributionsConfirmedView](Systems.Assignment.ContributionsConfirmedView.md)
+- [Systems.Assignment.ContributionsDeclinedView](Systems.Assignment.ContributionsDeclinedView.md)
+- [Systems.Assignment.ContributionsPendingView](Systems.Assignment.ContributionsPendingView.md)
+- [Systems.Assignment.ContributionsView](Systems.Assignment.ContributionsView.md)
+- [Systems.Assignment.ContributionsViewBuilder](Systems.Assignment.ContributionsViewBuilder.md)
+- [Systems.Assignment.Controller](Systems.Assignment.Controller.md)
+- [Systems.Assignment.CrewPage](Systems.Assignment.CrewPage.md)
+- [Systems.Assignment.CrewPageBuilder](Systems.Assignment.CrewPageBuilder.md)
+- [Systems.Assignment.CrewTaskHelpers](Systems.Assignment.CrewTaskHelpers.md)
+- [Systems.Assignment.CrewTaskListView](Systems.Assignment.CrewTaskListView.md)
+- [Systems.Assignment.CrewTaskListViewBuilder](Systems.Assignment.CrewTaskListViewBuilder.md)
+- [Systems.Assignment.CrewTaskSingleView](Systems.Assignment.CrewTaskSingleView.md)
+- [Systems.Assignment.CrewTaskSingleViewBuilder](Systems.Assignment.CrewTaskSingleViewBuilder.md)
+- [Systems.Assignment.CrewWorkView](Systems.Assignment.CrewWorkView.md)
+- [Systems.Assignment.CrewWorkViewBuilder](Systems.Assignment.CrewWorkViewBuilder.md)
+- [Systems.Assignment.DeclineContributionForm](Systems.Assignment.DeclineContributionForm.md): Modal-hosted form for declining a single pending contribution. Presented via
+`LiveNest.Modal.prepare_live_component/3` from `Systems.Assignment.ContributionsView`.
+- [Systems.Assignment.DeclinedView](Systems.Assignment.DeclinedView.md)
+- [Systems.Assignment.Director](Systems.Assignment.Director.md)
+- [Systems.Assignment.ErrorHTML](Systems.Assignment.ErrorHTML.md): Renders the pages shown when a participant follows a link that leads nowhere:
+the assignment has no budget capacity left, the assignment is not published,
+or an external survey returns to a task the researcher has removed.
+- [Systems.Assignment.ExcludeModel](Systems.Assignment.ExcludeModel.md)
+- [Systems.Assignment.ExternalPanelIds](Systems.Assignment.ExternalPanelIds.md): Defines list of supported panel agencies
+
+- [Systems.Assignment.FinishedView](Systems.Assignment.FinishedView.md)
+- [Systems.Assignment.FinishedViewBuilder](Systems.Assignment.FinishedViewBuilder.md)
+- [Systems.Assignment.GdprForm](Systems.Assignment.GdprForm.md)
+- [Systems.Assignment.GeneralForm](Systems.Assignment.GeneralForm.md)
+- [Systems.Assignment.Html](Systems.Assignment.Html.md)
+- [Systems.Assignment.InfoModel](Systems.Assignment.InfoModel.md)
+- [Systems.Assignment.LandingPage](Systems.Assignment.LandingPage.md)
+- [Systems.Assignment.LandingPageBuilder](Systems.Assignment.LandingPageBuilder.md)
+- [Systems.Assignment.Languages](Systems.Assignment.Languages.md)
+- [Systems.Assignment.Model](Systems.Assignment.Model.md): The assignment type.
+
+- [Systems.Assignment.MonitorView](Systems.Assignment.MonitorView.md)
+- [Systems.Assignment.NextActions.ContributionReviewed](Systems.Assignment.NextActions.ContributionReviewed.md): Next-action surfaced to a participant after the owner has reviewed their
+contribution — variants for `accepted` and `declined`. Links back to the
+assignment's participation outcome page.
+
+- [Systems.Assignment.NextActions.PendingContributions](Systems.Assignment.NextActions.PendingContributions.md): Next-action surfaced to the owner when one or more participant rewards
+on an assignment are awaiting approval (status `:pending_approval`).
+- [Systems.Assignment.Notify](Systems.Assignment.Notify.md): Notification events published by the Assignment system.
+- [Systems.Assignment.OnboardingConsentView](Systems.Assignment.OnboardingConsentView.md)
+- [Systems.Assignment.OnboardingConsentViewBuilder](Systems.Assignment.OnboardingConsentViewBuilder.md)
+- [Systems.Assignment.OnboardingView](Systems.Assignment.OnboardingView.md)
+- [Systems.Assignment.OnboardingViewBuilder](Systems.Assignment.OnboardingViewBuilder.md)
+- [Systems.Assignment.OnlineStudyLanguages](Systems.Assignment.OnlineStudyLanguages.md): Defines themes used to categorize adverts.
+
+- [Systems.Assignment.PageRefModel](Systems.Assignment.PageRefModel.md)
+- [Systems.Assignment.PaidSlotsHtml](Systems.Assignment.PaidSlotsHtml.md): Functional components for the paid-slots block on the participants tab.
+All state and event handling live in the parent (ParticipantsView).
+
+- [Systems.Assignment.PaidSlotsLogic](Systems.Assignment.PaidSlotsLogic.md): Paid-slots concerns mixed into the parent LiveComponent (typically
+ParticipantsView)
+- [Systems.Assignment.ParticipantsView](Systems.Assignment.ParticipantsView.md)
+- [Systems.Assignment.ParticipationModel](Systems.Assignment.ParticipationModel.md)
+- [Systems.Assignment.ParticipationView](Systems.Assignment.ParticipationView.md): Terminal outcome page for a reviewed contribution: :accepted or :rejected.
+No retry affordance. A "back to home" plain-arrow button lets the participant
+navigate away.
+
+- [Systems.Assignment.ParticipationViewBuilder](Systems.Assignment.ParticipationViewBuilder.md): View model for `Systems.Assignment.ParticipationView` — shown after the owner
+has reviewed a participant's contribution (accepted or rejected). Terminal
+from the participant's perspective; no retry.
+
+- [Systems.Assignment.Presenter](Systems.Assignment.Presenter.md)
+- [Systems.Assignment.PrivacyForm](Systems.Assignment.PrivacyForm.md)
+- [Systems.Assignment.Private](Systems.Assignment.Private.md)
+- [Systems.Assignment.Public](Systems.Assignment.Public.md): The assignment context.
+
+- [Systems.Assignment.Queries](Systems.Assignment.Queries.md)
+- [Systems.Assignment.Routes](Systems.Assignment.Routes.md)
+- [Systems.Assignment.RuntimeConfig](Systems.Assignment.RuntimeConfig.md): Configuration for participant-facing runtime behavior of an assignment.
+- [Systems.Assignment.SettingsView](Systems.Assignment.SettingsView.md)
+- [Systems.Assignment.SetupExporter](Systems.Assignment.SetupExporter.md): Serializes the configuration of an assignment for the study setup export.
+- [Systems.Assignment.StorageView](Systems.Assignment.StorageView.md)
+- [Systems.Assignment.Switch](Systems.Assignment.Switch.md)
+- [Systems.Assignment.System](Systems.Assignment.System.md)
+- [Systems.Assignment.Template](Systems.Assignment.Template.md)
+- [Systems.Assignment.Template.Flags](Systems.Assignment.Template.Flags.md): A macro for creating flag structs that control feature availability.
+- [Systems.Assignment.Template.Flags.Affiliate](Systems.Assignment.Template.Flags.Affiliate.md): Feature flags for controlling affiliate/partner functionality.
+Currently has no flags defined.
+
+- [Systems.Assignment.Template.Flags.Contributions](Systems.Assignment.Template.Flags.Contributions.md): Feature flags for the Contributions tab (researcher-side review of
+participant contributions ready for approval / decline / payout).
+- [Systems.Assignment.Template.Flags.Criteria](Systems.Assignment.Template.Flags.Criteria.md): Feature flags for controlling participant criteria functionality.
+Currently has no flags defined.
+
+- [Systems.Assignment.Template.Flags.Import](Systems.Assignment.Template.Flags.Import.md): Feature flags for controlling data import functionality.
+Currently has no flags defined.
+
+- [Systems.Assignment.Template.Flags.Monitor](Systems.Assignment.Template.Flags.Monitor.md): Feature flags for controlling monitoring and tracking functionality.
+- [Systems.Assignment.Template.Flags.Participants](Systems.Assignment.Template.Flags.Participants.md): Feature flags for controlling participant management functionality.
+- [Systems.Assignment.Template.Flags.Settings](Systems.Assignment.Template.Flags.Settings.md): Feature flags for controlling template settings functionality.
+- [Systems.Assignment.Template.Flags.Workflow](Systems.Assignment.Template.Flags.Workflow.md): Feature flags for controlling workflow functionality.
+- [Systems.Assignment.TemplateBenchmarkChallenge](Systems.Assignment.TemplateBenchmarkChallenge.md)
+- [Systems.Assignment.TemplateDataDonation](Systems.Assignment.TemplateDataDonation.md)
+- [Systems.Assignment.TemplateExtension](Systems.Assignment.TemplateExtension.md): An assignment template that a SaaS adds next to the built-in
+`Systems.Assignment.Templates`.
+- [Systems.Assignment.TemplatePaperScreening](Systems.Assignment.TemplatePaperScreening.md)
+- [Systems.Assignment.TemplateQuestionnaire](Systems.Assignment.TemplateQuestionnaire.md)
+- [Systems.Assignment.Templates](Systems.Assignment.Templates.md):   Defines different templates used by Systems.Assignment.Assembly to initialize specials.
+
+- [Systems.Assignment.TicketView](Systems.Assignment.TicketView.md)
+- [Systems.Assignment.ToolViewFactory](Systems.Assignment.ToolViewFactory.md): Utility for preparing tool live views in Assignment/Crew context.
+- [Systems.Assignment.WorkflowItemSpecials](Systems.Assignment.WorkflowItemSpecials.md):   Defines the types of workflow items supported by.
+
+- [Systems.BFF.Blocks](Systems.BFF.Blocks.md): The BFF spec's pages: each is a GET at its path that returns a flat list of blocks.
+- [Systems.BFF.Blocks.Card](Systems.BFF.Blocks.Card.md): Block `card`.
+- [Systems.BFF.Blocks.Section](Systems.BFF.Blocks.Section.md): Block `section`.
+- [Systems.BFF.Page](Systems.BFF.Page.md): A page the BFF serves: the blocks it shows the signed-in `user`, in order.
+- [Systems.BFF.PageController](Systems.BFF.PageController.md)
+- [Systems.BFF.System](Systems.BFF.System.md): The backend for frontend (BFF) of the native apps: `GET /bff/page/:page`
+answers `{"blocks": [...]}` for a page of the mica-bff spec. Systems serve the
+pages through `c:Mica.System.bff_pages/0`; the blocks are the generated
+`Systems.BFF.Blocks.*` modules. The app sends the spec version it implements in
+the `x-bff-spec` header, which is only recorded for now.
+
+- [Systems.Bookkeeping.AccountModel](Systems.Bookkeeping.AccountModel.md)
+- [Systems.Bookkeeping.AccountStrategy](Systems.Bookkeeping.AccountStrategy.md)
+- [Systems.Bookkeeping.EntryModel](Systems.Bookkeeping.EntryModel.md)
+- [Systems.Bookkeeping.LineModel](Systems.Bookkeeping.LineModel.md)
+- [Systems.Bookkeeping.Public](Systems.Bookkeeping.Public.md): The bookkeeping system.
+
+- [Systems.Consent.AgreementModel](Systems.Consent.AgreementModel.md)
+- [Systems.Consent.ClickWrapView](Systems.Consent.ClickWrapView.md)
+- [Systems.Consent.Public](Systems.Consent.Public.md)
+- [Systems.Consent.Queries](Systems.Consent.Queries.md)
+- [Systems.Consent.RevisionForm](Systems.Consent.RevisionForm.md)
+- [Systems.Consent.RevisionModel](Systems.Consent.RevisionModel.md)
+- [Systems.Consent.SignatureModel](Systems.Consent.SignatureModel.md)
+- [Systems.Consent.SignatureView](Systems.Consent.SignatureView.md)
+- [Systems.Consent.Switch](Systems.Consent.Switch.md)
+- [Systems.Consent.System](Systems.Consent.System.md)
+- [Systems.Consent.WysiwygTestForm](Systems.Consent.WysiwygTestForm.md)
+- [Systems.Content.Adaptable](Systems.Content.Adaptable.md): Adaptable layout system that adjusts presentation based on item count.
+- [Systems.Content.Adaptable.Creatable](Systems.Content.Adaptable.Creatable.md): A creatable type that can be added via the layout's add button.
+- [Systems.Content.Adaptable.Item](Systems.Content.Adaptable.Item.md): An item to display in the adaptable layout.
+- [Systems.Content.Composer](Systems.Content.Composer.md)
+- [Systems.Content.ContextMenu](Systems.Content.ContextMenu.md)
+- [Systems.Content.FileCopyView](Systems.Content.FileCopyView.md)
+- [Systems.Content.FileModel](Systems.Content.FileModel.md)
+- [Systems.Content.Html](Systems.Content.Html.md)
+- [Systems.Content.LocalFS](Systems.Content.LocalFS.md)
+- [Systems.Content.PageBuilder](Systems.Content.PageBuilder.md)
+- [Systems.Content.PageForm](Systems.Content.PageForm.md)
+- [Systems.Content.PageModel](Systems.Content.PageModel.md)
+- [Systems.Content.PageView](Systems.Content.PageView.md)
+- [Systems.Content.Plug](Systems.Content.Plug.md)
+- [Systems.Content.Private](Systems.Content.Private.md)
+- [Systems.Content.Public](Systems.Content.Public.md)
+- [Systems.Content.RepositoryModel](Systems.Content.RepositoryModel.md)
+- [Systems.Content.S3](Systems.Content.S3.md)
+- [Systems.Content.TextBundleModel](Systems.Content.TextBundleModel.md)
+- [Systems.Content.TextItemModel](Systems.Content.TextItemModel.md)
+- [Systems.Crew.MemberModel](Systems.Crew.MemberModel.md): The schema for a participant.
+
+- [Systems.Crew.Model](Systems.Crew.Model.md): The schema for a group of participants with (assigned) tasks
+
+- [Systems.Crew.Public](Systems.Crew.Public.md)
+- [Systems.Crew.Queries](Systems.Crew.Queries.md)
+- [Systems.Crew.Selector](Systems.Crew.Selector.md)
+- [Systems.Crew.Switch](Systems.Crew.Switch.md)
+- [Systems.Crew.System](Systems.Crew.System.md)
+- [Systems.Crew.TaskItemView](Systems.Crew.TaskItemView.md)
+- [Systems.Crew.TaskModel](Systems.Crew.TaskModel.md): A task to be completed by a crew member.
+
+- [Systems.Crew.TaskStatus](Systems.Crew.TaskStatus.md)
+- [Systems.Desktop.FullListPage](Systems.Desktop.FullListPage.md): A full list supplied by a registered Desktop section, with the same recipient rules and content renderer.
+- [Systems.Desktop.FullListPageBuilder](Systems.Desktop.FullListPageBuilder.md)
+- [Systems.Desktop.Page](Systems.Desktop.Page.md)
+- [Systems.Desktop.PageBuilder](Systems.Desktop.PageBuilder.md)
+- [Systems.Desktop.Presenter](Systems.Desktop.Presenter.md)
+- [Systems.Desktop.Routes](Systems.Desktop.Routes.md)
+- [Systems.Desktop.Section](Systems.Desktop.Section.md): A section on the Desktop page (`/desktop`), shown after Recent items, or
+before them when `c:placement/0` says so.
+- [Systems.Desktop.Switch](Systems.Desktop.Switch.md): Signal handler for the Desktop system.
+- [Systems.Desktop.System](Systems.Desktop.System.md)
+- [Systems.Desktop.View](Systems.Desktop.View.md)
+- [Systems.Document.ContentPage](Systems.Document.ContentPage.md)
+- [Systems.Document.ContentPageBuilder](Systems.Document.ContentPageBuilder.md)
+- [Systems.Document.PDFNavView](Systems.Document.PDFNavView.md)
+- [Systems.Document.PDFView](Systems.Document.PDFView.md)
+- [Systems.Document.Presenter](Systems.Document.Presenter.md)
+- [Systems.Document.Public](Systems.Document.Public.md)
+- [Systems.Document.Routes](Systems.Document.Routes.md)
+- [Systems.Document.System](Systems.Document.System.md)
+- [Systems.Document.ToolForm](Systems.Document.ToolForm.md)
+- [Systems.Document.ToolModel](Systems.Document.ToolModel.md)
+- [Systems.Document.ToolView](Systems.Document.ToolView.md)
+- [Systems.Document.ToolViewBuilder](Systems.Document.ToolViewBuilder.md)
+- [Systems.Email.DebugForm](Systems.Email.DebugForm.md)
+- [Systems.Email.DebugModel](Systems.Email.DebugModel.md)
+- [Systems.Email.Delivery](Systems.Email.Delivery.md)
+- [Systems.Email.Dialog](Systems.Email.Dialog.md)
+- [Systems.Email.Dispatcher](Systems.Email.Dispatcher.md)
+- [Systems.Email.EmailHTML](Systems.Email.EmailHTML.md)
+- [Systems.Email.EmailLayoutHTML](Systems.Email.EmailLayoutHTML.md)
+- [Systems.Email.Factory](Systems.Email.Factory.md)
+- [Systems.Email.Form](Systems.Email.Form.md)
+- [Systems.Email.LiveFeature](Systems.Email.LiveFeature.md): Swallows the `{:delivered_email, email}` message that `Bamboo.TestAdapter`
+sends to the delivering process during tests.
+- [Systems.Email.Mailer](Systems.Email.Mailer.md)
+- [Systems.Email.Model](Systems.Email.Model.md): A notification email, as `Systems.Email.Public.deliver_later!/1` queues it.
+- [Systems.Email.Public](Systems.Email.Public.md)
+- [Systems.Email.System](Systems.Email.System.md)
+- [Systems.Feldspar.AppPage](Systems.Feldspar.AppPage.md)
+- [Systems.Feldspar.AppView](Systems.Feldspar.AppView.md)
+- [Systems.Feldspar.ContentPage](Systems.Feldspar.ContentPage.md)
+- [Systems.Feldspar.ContentPageBuilder](Systems.Feldspar.ContentPageBuilder.md)
+- [Systems.Feldspar.Controller](Systems.Feldspar.Controller.md): HTTP API endpoints for Feldspar client communication.
+- [Systems.Feldspar.DataDonationCleanupWorker](Systems.Feldspar.DataDonationCleanupWorker.md): Scheduled Oban worker that cleans up old data donation files.
+- [Systems.Feldspar.DataDonationFolder](Systems.Feldspar.DataDonationFolder.md): Manages a folder of data donation files.
+- [Systems.Feldspar.LocalFS](Systems.Feldspar.LocalFS.md)
+- [Systems.Feldspar.Plug](Systems.Feldspar.Plug.md)
+- [Systems.Feldspar.Presenter](Systems.Feldspar.Presenter.md)
+- [Systems.Feldspar.Private](Systems.Feldspar.Private.md)
+- [Systems.Feldspar.Public](Systems.Feldspar.Public.md)
+- [Systems.Feldspar.Routes](Systems.Feldspar.Routes.md)
+- [Systems.Feldspar.S3](Systems.Feldspar.S3.md)
+- [Systems.Feldspar.Switch](Systems.Feldspar.Switch.md)
+- [Systems.Feldspar.System](Systems.Feldspar.System.md)
+- [Systems.Feldspar.ToolForm](Systems.Feldspar.ToolForm.md)
+- [Systems.Feldspar.ToolModel](Systems.Feldspar.ToolModel.md)
+- [Systems.Feldspar.ToolView](Systems.Feldspar.ToolView.md)
+- [Systems.Feldspar.ToolViewBuilder](Systems.Feldspar.ToolViewBuilder.md)
+- [Systems.Fund.AccountStrategy](Systems.Fund.AccountStrategy.md)
+- [Systems.Fund.Assembly](Systems.Fund.Assembly.md): Assembly module for creating and managing fund-related entities.
+
+- [Systems.Fund.AutoApproveWorker](Systems.Fund.AutoApproveWorker.md): Worker responsible for automatically approving pending rewards
+after n days
+
+- [Systems.Fund.BalanceView](Systems.Fund.BalanceView.md)
+- [Systems.Fund.BankAccountForm](Systems.Fund.BankAccountForm.md)
+- [Systems.Fund.BankAccountModel](Systems.Fund.BankAccountModel.md)
+- [Systems.Fund.CurrencyLedgerModel](Systems.Fund.CurrencyLedgerModel.md)
+- [Systems.Fund.CurrencyModel](Systems.Fund.CurrencyModel.md)
+- [Systems.Fund.CurrencySelector](Systems.Fund.CurrencySelector.md)
+- [Systems.Fund.CurrencyTypes](Systems.Fund.CurrencyTypes.md): Defines valid types of currencies.
+
+- [Systems.Fund.DepositForm](Systems.Fund.DepositForm.md)
+- [Systems.Fund.DepositModel](Systems.Fund.DepositModel.md)
+- [Systems.Fund.DonationModel](Systems.Fund.DonationModel.md): Aggregates the `Fund.RewardModel` rows a participant donated to Eyra in a
+single provider charge, waiving the right to have them paid out.
+- [Systems.Fund.Form](Systems.Fund.Form.md)
+- [Systems.Fund.FundingPage](Systems.Fund.FundingPage.md)
+- [Systems.Fund.FundingPageBuilder](Systems.Fund.FundingPageBuilder.md)
+- [Systems.Fund.Model](Systems.Fund.Model.md): The fund type.
+
+- [Systems.Fund.PayInExpirationWorker](Systems.Fund.PayInExpirationWorker.md): Sweeper that marks pending pay-in transactions older than 15 minutes as `:failed`.
+- [Systems.Fund.PayInRequestForm](Systems.Fund.PayInRequestForm.md)
+- [Systems.Fund.PayInRequestModel](Systems.Fund.PayInRequestModel.md): Form-object for `Fund.Public.create_pay_in/3`. Holds the researcher's
+input in the "Add participants" modal: how many participants they want
+to fund, at what fee, plus the (persisted) study aim.
+- [Systems.Fund.PayoutModel](Systems.Fund.PayoutModel.md): Aggregates the `Fund.RewardModel` rows paid out in a single provider withdrawal.
+- [Systems.Fund.PayoutOrphanReconciliation](Systems.Fund.PayoutOrphanReconciliation.md): Provider→local reconciliation for payouts: lists the withdrawals and transfers
+the provider created inside the window and flags any whose payout has no local
+row at all.
+- [Systems.Fund.PayoutReconciliation](Systems.Fund.PayoutReconciliation.md): Reconciliation for participant payouts. Dispatches on `PayoutModel.phase/1`:
+a payout in flight is driven to its terminal state from the provider's
+withdrawal status; a stranded one (funds moved but the withdrawal never
+completed) is healed via `Fund.Public.resume_payout/1`; and only a truly
+unrecoverable one (an unconfirmed transfer with no findable charge) is flagged
+for manual review. Driven by `Systems.Payment.ReconciliationWorker`.
+
+- [Systems.Fund.PayoutWithdrawal](Systems.Fund.PayoutWithdrawal.md): The withdrawal leg of a payout, and its recovery.
+- [Systems.Fund.Presenter](Systems.Fund.Presenter.md)
+- [Systems.Fund.Public](Systems.Fund.Public.md)
+- [Systems.Fund.Queries](Systems.Fund.Queries.md)
+- [Systems.Fund.RewardModel](Systems.Fund.RewardModel.md): The fund reward type.
+
+- [Systems.Fund.Routes](Systems.Fund.Routes.md)
+- [Systems.Fund.System](Systems.Fund.System.md)
+- [Systems.Fund.TransactionModel](Systems.Fund.TransactionModel.md)
+- [Systems.Fund.TransactionOrphanReconciliation](Systems.Fund.TransactionOrphanReconciliation.md): Provider→local reconciliation for pay-ins: lists the transactions the provider
+created inside the window and flags any with no local row.
+- [Systems.Fund.TransactionReconciliation](Systems.Fund.TransactionReconciliation.md): Reconciliation for pay-in transactions. Re-applies the provider's current
+status to `:pending`/`:failed` transactions whose webhook was lost (including
+rescuing one the expiry worker marked `:failed` while the provider actually
+completed it), and flags `:completed` transactions the provider has no record
+of — a critical discrepancy. Driven by `Systems.Payment.ReconciliationWorker`;
+provider calls go through `Systems.Payment.Reconciliation`
+(throttle / back-off / circuit breaker) and the shared `ReconciliationState`
+is threaded through and returned.
+
+- [Systems.Fund.WalletView](Systems.Fund.WalletView.md)
+- [Systems.Fund.WalletViewBuilder](Systems.Fund.WalletViewBuilder.md)
+- [Systems.Home.AdvertsView](Systems.Home.AdvertsView.md)
+- [Systems.Home.BFFPage](Systems.Home.BFFPage.md): The BFF's home page: the user's To-dos, one card each, in the To-do page's order.
+- [Systems.Home.GuestView](Systems.Home.GuestView.md)
+- [Systems.Home.HTML](Systems.Home.HTML.md)
+- [Systems.Home.LoggedInView](Systems.Home.LoggedInView.md)
+- [Systems.Home.NextBestActionView](Systems.Home.NextBestActionView.md)
+- [Systems.Home.Page](Systems.Home.Page.md)
+- [Systems.Home.PageBuilder](Systems.Home.PageBuilder.md)
+- [Systems.Home.ParticipatedView](Systems.Home.ParticipatedView.md)
+- [Systems.Home.Presenter](Systems.Home.Presenter.md)
+- [Systems.Home.RewardsSummaryView](Systems.Home.RewardsSummaryView.md): "Vergoedingen" card on the participant home page. Three columns — pending,
+approved, rejected — each showing the per-status amount (cents) and a label.
+- [Systems.Home.Routes](Systems.Home.Routes.md)
+- [Systems.Home.Switch](Systems.Home.Switch.md): Routes Fund-side signals to Home page observers so the participant's
+home (rewards summary card in particular) re-renders without a page
+reload after webhook-driven state changes.
+
+- [Systems.Home.System](Systems.Home.System.md)
+- [Systems.Instruction.AssetModel](Systems.Instruction.AssetModel.md)
+- [Systems.Instruction.DownloadForm](Systems.Instruction.DownloadForm.md)
+- [Systems.Instruction.ForkForm](Systems.Instruction.ForkForm.md)
+- [Systems.Instruction.GeneralForm](Systems.Instruction.GeneralForm.md)
+- [Systems.Instruction.PageModel](Systems.Instruction.PageModel.md)
+- [Systems.Instruction.Presenter](Systems.Instruction.Presenter.md)
+- [Systems.Instruction.Public](Systems.Instruction.Public.md)
+- [Systems.Instruction.Queries](Systems.Instruction.Queries.md)
+- [Systems.Instruction.Switch](Systems.Instruction.Switch.md)
+- [Systems.Instruction.System](Systems.Instruction.System.md)
+- [Systems.Instruction.ToolModel](Systems.Instruction.ToolModel.md)
+- [Systems.Instruction.ToolView](Systems.Instruction.ToolView.md)
+- [Systems.Instruction.ToolViewBuilder](Systems.Instruction.ToolViewBuilder.md)
+- [Systems.Lab.CheckInItem](Systems.Lab.CheckInItem.md)
+- [Systems.Lab.CheckInModel](Systems.Lab.CheckInModel.md)
+- [Systems.Lab.CheckInView](Systems.Lab.CheckInView.md)
+- [Systems.Lab.ContentPage](Systems.Lab.ContentPage.md)
+- [Systems.Lab.ContentPageBuilder](Systems.Lab.ContentPageBuilder.md)
+- [Systems.Lab.DayEntryView](Systems.Lab.DayEntryView.md)
+- [Systems.Lab.DayList](Systems.Lab.DayList.md)
+- [Systems.Lab.DayListItemModel](Systems.Lab.DayListItemModel.md)
+- [Systems.Lab.DayModel](Systems.Lab.DayModel.md)
+- [Systems.Lab.DayView](Systems.Lab.DayView.md)
+- [Systems.Lab.ItemContentPageBuilder](Systems.Lab.ItemContentPageBuilder.md)
+- [Systems.Lab.Presenter](Systems.Lab.Presenter.md)
+- [Systems.Lab.Public](Systems.Lab.Public.md)
+- [Systems.Lab.PublicPage](Systems.Lab.PublicPage.md): The public lab screen.
+
+- [Systems.Lab.ReservationModel](Systems.Lab.ReservationModel.md)
+- [Systems.Lab.Routes](Systems.Lab.Routes.md)
+- [Systems.Lab.System](Systems.Lab.System.md)
+- [Systems.Lab.TaskView](Systems.Lab.TaskView.md)
+- [Systems.Lab.TimeSlotModel](Systems.Lab.TimeSlotModel.md)
+- [Systems.Lab.ToolForm](Systems.Lab.ToolForm.md)
+- [Systems.Lab.ToolModel](Systems.Lab.ToolModel.md)
+- [Systems.Lab.VUDaySchedule](Systems.Lab.VUDaySchedule.md)
+- [Systems.Manual.Assembly](Systems.Manual.Assembly.md)
+- [Systems.Manual.Builder.ChapterForm](Systems.Manual.Builder.ChapterForm.md)
+- [Systems.Manual.Builder.ChapterListView](Systems.Manual.Builder.ChapterListView.md)
+- [Systems.Manual.Builder.Html](Systems.Manual.Builder.Html.md)
+- [Systems.Manual.Builder.PageForm](Systems.Manual.Builder.PageForm.md)
+- [Systems.Manual.Builder.PageListView](Systems.Manual.Builder.PageListView.md)
+- [Systems.Manual.Builder.PublicPage](Systems.Manual.Builder.PublicPage.md)
+- [Systems.Manual.Builder.PublicPageBuilder](Systems.Manual.Builder.PublicPageBuilder.md)
+- [Systems.Manual.Builder.ToolForm](Systems.Manual.Builder.ToolForm.md)
+- [Systems.Manual.Builder.View](Systems.Manual.Builder.View.md)
+- [Systems.Manual.ChapterListView](Systems.Manual.ChapterListView.md)
+- [Systems.Manual.ChapterModel](Systems.Manual.ChapterModel.md)
+- [Systems.Manual.ChapterView](Systems.Manual.ChapterView.md):   Chapter View divided into Desktop and Mobile views.
+
+- [Systems.Manual.Html](Systems.Manual.Html.md)
+- [Systems.Manual.Model](Systems.Manual.Model.md)
+- [Systems.Manual.PageModel](Systems.Manual.PageModel.md)
+- [Systems.Manual.Presenter](Systems.Manual.Presenter.md)
+- [Systems.Manual.Public](Systems.Manual.Public.md)
+- [Systems.Manual.Queries](Systems.Manual.Queries.md)
+- [Systems.Manual.Routes](Systems.Manual.Routes.md)
+- [Systems.Manual.Switch](Systems.Manual.Switch.md)
+- [Systems.Manual.System](Systems.Manual.System.md)
+- [Systems.Manual.ToolModel](Systems.Manual.ToolModel.md)
+- [Systems.Manual.ToolView](Systems.Manual.ToolView.md)
+- [Systems.Manual.ToolViewBuilder](Systems.Manual.ToolViewBuilder.md)
+- [Systems.Manual.View](Systems.Manual.View.md)
+- [Systems.Manual.ViewBuilder](Systems.Manual.ViewBuilder.md)
+- [Systems.Monitor.EventModel](Systems.Monitor.EventModel.md)
+- [Systems.Monitor.Public](Systems.Monitor.Public.md)
+- [Systems.Monitor.Queries](Systems.Monitor.Queries.md)
+- [Systems.NextAction.Model](Systems.NextAction.Model.md): A next action (To-do) of a user.
+- [Systems.NextAction.OverviewPage](Systems.NextAction.OverviewPage.md):  The todo screen.
+
+- [Systems.NextAction.OverviewPageBuilder](Systems.NextAction.OverviewPageBuilder.md)
+- [Systems.NextAction.Presenter](Systems.NextAction.Presenter.md)
+- [Systems.NextAction.Public](Systems.NextAction.Public.md): The NextActions context.
+
+- [Systems.NextAction.Routes](Systems.NextAction.Routes.md)
+- [Systems.NextAction.Switch](Systems.NextAction.Switch.md)
+- [Systems.NextAction.System](Systems.NextAction.System.md)
+- [Systems.NextAction.View](Systems.NextAction.View.md)
+- [Systems.NextAction.ViewModel](Systems.NextAction.ViewModel.md)
+- [Systems.Notify.Channel](Systems.Notify.Channel.md): Channel-adapter behaviour. A channel takes a persisted `MessageModel` (with
+its event context) and ships it. The dispatcher handles status transitions
+based on the return value — adapters just focus on delivery.
+- [Systems.Notify.Channel.Email](Systems.Notify.Channel.Email.md): Email channel adapter. Builds a Bamboo email per event and ships it via the
+existing `Systems.Email` pipeline.
+- [Systems.Notify.Channel.NA](Systems.Notify.Channel.NA.md): Next-Action channel adapter. Creates an NBA on the recipient's Home for the
+event, via the existing `Systems.NextAction` infrastructure.
+- [Systems.Notify.Dispatcher](Systems.Notify.Dispatcher.md): Event → Messages → Channel delivery.
+- [Systems.Notify.EventAttrs](Systems.Notify.EventAttrs.md): Input struct for `Systems.Notify.Public.record_event/1`. Keeps the
+contract explicit so callers get a `FunctionClauseError` on the wrong
+shape instead of a silent `nil` deep in normalize.
+
+- [Systems.Notify.EventDeclaration](Systems.Notify.EventDeclaration.md): Per-system notification event registration, mirroring the `_routes.ex`
+convention. A system opts in by dropping a `_notify.ex`
+- [Systems.Notify.EventModel](Systems.Notify.EventModel.md): A raw fact that something happened. Records the "what + who + when" —
+channels + timing are decided later by `Systems.Notify.Scheduler`.
+- [Systems.Notify.EventType](Systems.Notify.EventType.md): Global registry of notification event types → channel routing.
+- [Systems.Notify.MessageModel](Systems.Notify.MessageModel.md): A message produced from an event for one specific channel. Channel adapters
+interpret `payload` shape (e.g. email carries `%{subject, text, html}`, NA
+carries `%{action_module, key, params}`).
+
+- [Systems.Notify.Public](Systems.Notify.Public.md): Public API for `Systems.Notify`. Domain code calls `record_event/1` from
+wherever a notifiable thing happens; the scheduler + channels take it from
+there.
+
+- [Systems.Notify.Scheduler](Systems.Notify.Scheduler.md): Decides when + how an event turns into messages.
+- [Systems.Notify.System](Systems.Notify.System.md)
+- [Systems.Observatory.LiveFeature](Systems.Observatory.LiveFeature.md)
+- [Systems.Observatory.LiveHook](Systems.Observatory.LiveHook.md)
+- [Systems.Observatory.Public](Systems.Observatory.Public.md)
+- [Systems.Observatory.SingletonModel](Systems.Observatory.SingletonModel.md)
+- [Systems.Observatory.Switch](Systems.Observatory.Switch.md): Handles Observatory signals for updating LiveViews.
+- [Systems.Observatory.System](Systems.Observatory.System.md)
+- [Systems.Observatory.UpdateCollector](Systems.Observatory.UpdateCollector.md): Collects Observatory updates during a transaction and dispatches them together.
+- [Systems.Org.AdminsModalView](Systems.Org.AdminsModalView.md): Modal view for managing organisation admins.
+- [Systems.Org.AdminsModalViewBuilder](Systems.Org.AdminsModalViewBuilder.md): ViewBuilder for the AdminsModalView.
+- [Systems.Org.ArchiveModalView](Systems.Org.ArchiveModalView.md): Modal view for displaying and restoring archived organisations.
+- [Systems.Org.ArchiveModalViewBuilder](Systems.Org.ArchiveModalViewBuilder.md): ViewBuilder for the ArchiveModalView.
+- [Systems.Org.ContentPage](Systems.Org.ContentPage.md)
+- [Systems.Org.ContentPageBuilder](Systems.Org.ContentPageBuilder.md)
+- [Systems.Org.Internals](Systems.Org.Internals.md)
+- [Systems.Org.ItemView](Systems.Org.ItemView.md)
+- [Systems.Org.LinkModel](Systems.Org.LinkModel.md)
+- [Systems.Org.MemberFilters](Systems.Org.MemberFilters.md)
+- [Systems.Org.MemberView](Systems.Org.MemberView.md): Embedded LiveView for managing organisation members.
+- [Systems.Org.MemberViewBuilder](Systems.Org.MemberViewBuilder.md): ViewBuilder for Org.MemberView (members tab).
+- [Systems.Org.NextActions.AddDomainMembers](Systems.Org.NextActions.AddDomainMembers.md)
+- [Systems.Org.NodeModel](Systems.Org.NodeModel.md)
+- [Systems.Org.NodeView](Systems.Org.NodeView.md)
+- [Systems.Org.NodeViewBuilder](Systems.Org.NodeViewBuilder.md)
+- [Systems.Org.OwnersView](Systems.Org.OwnersView.md)
+- [Systems.Org.OwnersViewBuilder](Systems.Org.OwnersViewBuilder.md)
+- [Systems.Org.PoolsView](Systems.Org.PoolsView.md): Embedded LiveView for the Pools tab on the Org page.
+- [Systems.Org.PoolsViewBuilder](Systems.Org.PoolsViewBuilder.md)
+- [Systems.Org.Presenter](Systems.Org.Presenter.md)
+- [Systems.Org.Public](Systems.Org.Public.md)
+- [Systems.Org.Routes](Systems.Org.Routes.md)
+- [Systems.Org.Switch](Systems.Org.Switch.md)
+- [Systems.Org.System](Systems.Org.System.md)
+- [Systems.Org.UserAssociation](Systems.Org.UserAssociation.md)
+- [Systems.Payment.Controller](Systems.Payment.Controller.md)
+- [Systems.Payment.Error](Systems.Payment.Error.md)
+- [Systems.Payment.OrphanScan](Systems.Payment.OrphanScan.md): Shared scaffolding for the provider→local passes (`Fund.PayoutOrphanReconciliation`,
+`Fund.TransactionOrphanReconciliation`, `Account.MerchantOrphanReconciliation`).
+- [Systems.Payment.Plug](Systems.Payment.Plug.md): Caches the raw request body for webhook signature verification.
+- [Systems.Payment.Private](Systems.Payment.Private.md)
+- [Systems.Payment.Provider](Systems.Payment.Provider.md)
+- [Systems.Payment.Provider.Local](Systems.Payment.Provider.Local.md)
+- [Systems.Payment.Provider.LocalController](Systems.Payment.Provider.LocalController.md)
+- [Systems.Payment.Provider.OPP](Systems.Payment.Provider.OPP.md)
+- [Systems.Payment.Provider.OPP.HTTP](Systems.Payment.Provider.OPP.HTTP.md)
+- [Systems.Payment.Provider.OPP.Webhook](Systems.Payment.Provider.OPP.Webhook.md)
+- [Systems.Payment.Public](Systems.Payment.Public.md)
+- [Systems.Payment.Reconciliation](Systems.Payment.Reconciliation.md): Support for the reconciliation sweep: provider calls wrapped with throttling,
+back-off and a circuit breaker, plus the run/finding persistence lifecycle.
+- [Systems.Payment.ReconciliationFindingModel](Systems.Payment.ReconciliationFindingModel.md): One row per non-trivial reconciliation outcome (anything that was resolved,
+could not be resolved, errored, or diverged from the provider). Trivial
+outcomes (`:still_pending`, `:verified`) are counted on the run but not stored
+here.
+- [Systems.Payment.ReconciliationRunModel](Systems.Payment.ReconciliationRunModel.md): One row per reconciliation sweep, recording when it ran and the aggregate
+outcome tally. Lets us query reconciliation history without grepping logs.
+
+- [Systems.Payment.ReconciliationState](Systems.Payment.ReconciliationState.md): Accumulator threaded through a reconciliation sweep. Carries the running
+`ReconciliationSummary` tally, the list of non-trivial findings to persist,
+and the provider circuit-breaker state (consecutive failures → open).
+
+- [Systems.Payment.ReconciliationSummary](Systems.Payment.ReconciliationSummary.md): Tally of a reconciliation run, shared by the per-type reconcilers
+(`Fund.Public.reconcile_pending_payouts/1`, `Fund.Public.reconcile_transactions/1`)
+and aggregated by `Systems.Payment.ReconciliationWorker`.
+- [Systems.Payment.ReconciliationWorker](Systems.Payment.ReconciliationWorker.md): Daily reconciliation sweep. Compares our pay-in (`Budget`) and payout
+(`Fund`) state against the payment provider and resolves safe discrepancies — a
+lost or failed webhook that left a transaction/payout stuck, or a pay-in the
+expiry worker marked `:failed` while the provider actually completed it. It
+also flags the critical case the synchronous path can't: local terminal state
+the provider has no record of.
+- [Systems.Payment.Routes](Systems.Payment.Routes.md)
+- [Systems.Payment.System](Systems.Payment.System.md)
+- [Systems.Payment.Webhook](Systems.Payment.Webhook.md)
+- [Systems.Pool.AccountPostActionHandler](Systems.Pool.AccountPostActionHandler.md): Handles post account actions intercepted by the Pool switch.
+
+- [Systems.Pool.AdvertItemBuilder](Systems.Pool.AdvertItemBuilder.md)
+- [Systems.Pool.Assembly](Systems.Pool.Assembly.md): Assembly module for creating and managing pool-related entities.
+
+- [Systems.Pool.BrandingModel](Systems.Pool.BrandingModel.md): This schema contains branding fields of pools.
+
+- [Systems.Pool.ContentPage](Systems.Pool.ContentPage.md): Pool-scoped admin page (a "Pool Admin" view). Mirrors `Systems.Org.ContentPage`'s
+tabbar structure but scoped to a single pool. Reached from the Org page's
+Pools tab. Tabs (Participants, …) land in follow-up commits — this commit
+ships the scaffold + auth + breadcrumb.
+
+- [Systems.Pool.ContentPageBuilder](Systems.Pool.ContentPageBuilder.md)
+- [Systems.Pool.Controller](Systems.Pool.Controller.md): Phoenix controller for Pool-scoped HTTP entry points that are not
+themselves LiveViews.
+- [Systems.Pool.CriteriaModel](Systems.Pool.CriteriaModel.md): This schema contains features of members.
+
+- [Systems.Pool.DetailPage](Systems.Pool.DetailPage.md):  The pool details screen.
+
+- [Systems.Pool.DetailPageBuilder](Systems.Pool.DetailPageBuilder.md)
+- [Systems.Pool.ItemView](Systems.Pool.ItemView.md): The Pool Card displays information about a participant pool.
+
+- [Systems.Pool.JoinConsentView](Systems.Pool.JoinConsentView.md): Informed-consent view for joining a pool.
+- [Systems.Pool.LandingPage](Systems.Pool.LandingPage.md):  The pool details screen.
+
+- [Systems.Pool.LandingPageBuilder](Systems.Pool.LandingPageBuilder.md)
+- [Systems.Pool.MarketplacePage](Systems.Pool.MarketplacePage.md)
+- [Systems.Pool.MarketplacePageBuilder](Systems.Pool.MarketplacePageBuilder.md)
+- [Systems.Pool.MarketplaceView](Systems.Pool.MarketplaceView.md)
+- [Systems.Pool.MarketplaceViewBuilder](Systems.Pool.MarketplaceViewBuilder.md)
+- [Systems.Pool.Model](Systems.Pool.Model.md): The pool schema.
+
+- [Systems.Pool.OnboardingPage](Systems.Pool.OnboardingPage.md): Pool-scoped onboarding at `/pool/:slug/onboarding`.
+- [Systems.Pool.OnboardingPageBuilder](Systems.Pool.OnboardingPageBuilder.md): View model builder for `Systems.Pool.OnboardingPage`. Mirrors the shape
+of `Systems.Account.OnboardingPageBuilder` for the page-owned parts
+(steps + current step_view + optional info block + continue button),
+so both pages can share render conventions.
+- [Systems.Pool.ParticipantItemBuilder](Systems.Pool.ParticipantItemBuilder.md)
+- [Systems.Pool.ParticipantPage](Systems.Pool.ParticipantPage.md)
+- [Systems.Pool.ParticipantPageBuilder](Systems.Pool.ParticipantPageBuilder.md)
+- [Systems.Pool.ParticipantsView](Systems.Pool.ParticipantsView.md): Embedded LiveView for the Participants tab on the Pool Admin page.
+- [Systems.Pool.ParticipantsViewBuilder](Systems.Pool.ParticipantsViewBuilder.md): ViewBuilder for `Pool.ParticipantsView` — read-only list of pool participants.
+- [Systems.Pool.Presenter](Systems.Pool.Presenter.md)
+- [Systems.Pool.Public](Systems.Pool.Public.md)
+- [Systems.Pool.Queries](Systems.Pool.Queries.md)
+- [Systems.Pool.ResearcherItemBuilder](Systems.Pool.ResearcherItemBuilder.md)
+- [Systems.Pool.ReviewSubmission](Systems.Pool.ReviewSubmission.md)
+- [Systems.Pool.Routes](Systems.Pool.Routes.md)
+- [Systems.Pool.SettingsView](Systems.Pool.SettingsView.md): Embedded LiveView for the Settings tab on the Pool Admin page.
+- [Systems.Pool.SettingsViewBuilder](Systems.Pool.SettingsViewBuilder.md)
+- [Systems.Pool.SubmissionModel](Systems.Pool.SubmissionModel.md): A task (donate data) to be completed by a participant.
+
+- [Systems.Pool.SubmissionPage](Systems.Pool.SubmissionPage.md):  The submission page for a advert.
+
+- [Systems.Pool.SubmissionPageBuilder](Systems.Pool.SubmissionPageBuilder.md)
+- [Systems.Pool.SubmissionStatus](Systems.Pool.SubmissionStatus.md)
+- [Systems.Pool.SubmissionView](Systems.Pool.SubmissionView.md)
+- [Systems.Pool.Switch](Systems.Pool.Switch.md)
+- [Systems.Pool.System](Systems.Pool.System.md)
+- [Systems.Project.Assembly](Systems.Project.Assembly.md)
+- [Systems.Project.Branch](Systems.Project.Branch.md)
+- [Systems.Project.BranchPlug](Systems.Project.BranchPlug.md)
+- [Systems.Project.CardView](Systems.Project.CardView.md)
+- [Systems.Project.CreateItemView](Systems.Project.CreateItemView.md)
+- [Systems.Project.Form](Systems.Project.Form.md)
+- [Systems.Project.ItemConfigForm](Systems.Project.ItemConfigForm.md)
+- [Systems.Project.ItemForm](Systems.Project.ItemForm.md)
+- [Systems.Project.ItemModel](Systems.Project.ItemModel.md)
+- [Systems.Project.ItemMonitorView](Systems.Project.ItemMonitorView.md)
+- [Systems.Project.ItemTemplates](Systems.Project.ItemTemplates.md)
+- [Systems.Project.LiveHook](Systems.Project.LiveHook.md): A Live Hook that injects the correct Branch (Project.NodeModel) for each Leaf
+- [Systems.Project.Model](Systems.Project.Model.md)
+- [Systems.Project.NodeModel](Systems.Project.NodeModel.md)
+- [Systems.Project.NodePage](Systems.Project.NodePage.md)
+- [Systems.Project.NodePageBuilder](Systems.Project.NodePageBuilder.md)
+- [Systems.Project.NodePageEmptyDataView](Systems.Project.NodePageEmptyDataView.md)
+- [Systems.Project.NodePageGridView](Systems.Project.NodePageGridView.md)
+- [Systems.Project.OverviewPage](Systems.Project.OverviewPage.md)
+- [Systems.Project.OverviewPageBuilder](Systems.Project.OverviewPageBuilder.md)
+- [Systems.Project.Presenter](Systems.Project.Presenter.md)
+- [Systems.Project.Private](Systems.Project.Private.md)
+- [Systems.Project.Public](Systems.Project.Public.md)
+- [Systems.Project.Queries](Systems.Project.Queries.md)
+- [Systems.Project.Routes](Systems.Project.Routes.md)
+- [Systems.Project.Switch](Systems.Project.Switch.md)
+- [Systems.Project.System](Systems.Project.System.md)
+- [Systems.Promotion.BannerView](Systems.Promotion.BannerView.md): The Unique Selling Point Card highlights a reason for taking an action.
+
+- [Systems.Promotion.FormView](Systems.Promotion.FormView.md)
+- [Systems.Promotion.LandingPage](Systems.Promotion.LandingPage.md): The public promotion screen.
+
+- [Systems.Promotion.Model](Systems.Promotion.Model.md): The promotion schema.
+
+- [Systems.Promotion.Presenter](Systems.Promotion.Presenter.md)
+- [Systems.Promotion.Private](Systems.Promotion.Private.md)
+- [Systems.Promotion.Public](Systems.Promotion.Public.md): 
+
+- [Systems.Promotion.Routes](Systems.Promotion.Routes.md)
+- [Systems.Promotion.System](Systems.Promotion.System.md)
+- [Systems.Promotion.WysiwygForm](Systems.Promotion.WysiwygForm.md)
+- [Systems.Rate.Algorithm](Systems.Rate.Algorithm.md)
+- [Systems.Rate.CounterModel](Systems.Rate.CounterModel.md): A count of events per key in fixed time windows, kept in the database so
+every node shares it and it survives restarts and deploys. The key is
+stored hashed.
+
+- [Systems.Rate.LeakyBucket](Systems.Rate.LeakyBucket.md)
+- [Systems.Rate.LeakyBucketAlgorithm](Systems.Rate.LeakyBucketAlgorithm.md)
+- [Systems.Rate.LeakyBucketState](Systems.Rate.LeakyBucketState.md)
+- [Systems.Rate.Private](Systems.Rate.Private.md)
+- [Systems.Rate.Public](Systems.Rate.Public.md)
+- [Systems.Rate.Quota](Systems.Rate.Quota.md)
+- [Systems.Rate.Server](Systems.Rate.Server.md)
+- [Systems.Storage.AWS.Backend](Systems.Storage.AWS.Backend.md)
+- [Systems.Storage.AWS.EndpointForm](Systems.Storage.AWS.EndpointForm.md)
+- [Systems.Storage.AWS.EndpointModel](Systems.Storage.AWS.EndpointModel.md)
+- [Systems.Storage.Assembly](Systems.Storage.Assembly.md)
+- [Systems.Storage.Azure.Backend](Systems.Storage.Azure.Backend.md)
+- [Systems.Storage.Azure.EndpointForm](Systems.Storage.Azure.EndpointForm.md)
+- [Systems.Storage.Azure.EndpointModel](Systems.Storage.Azure.EndpointModel.md)
+- [Systems.Storage.Backend](Systems.Storage.Backend.md)
+- [Systems.Storage.BuiltIn.Backend](Systems.Storage.BuiltIn.Backend.md)
+- [Systems.Storage.BuiltIn.EndpointForm](Systems.Storage.BuiltIn.EndpointForm.md)
+- [Systems.Storage.BuiltIn.EndpointModel](Systems.Storage.BuiltIn.EndpointModel.md)
+- [Systems.Storage.BuiltIn.LocalFS](Systems.Storage.BuiltIn.LocalFS.md): Stores donations on the local filesystem under the configured `root_path`.
+- [Systems.Storage.BuiltIn.S3](Systems.Storage.BuiltIn.S3.md)
+- [Systems.Storage.BuiltIn.Special](Systems.Storage.BuiltIn.Special.md)
+- [Systems.Storage.Controller](Systems.Storage.Controller.md)
+- [Systems.Storage.Delivery](Systems.Storage.Delivery.md)
+- [Systems.Storage.EmptyConfirmationView](Systems.Storage.EmptyConfirmationView.md)
+- [Systems.Storage.EndpointContentPage](Systems.Storage.EndpointContentPage.md)
+- [Systems.Storage.EndpointContentPageBuilder](Systems.Storage.EndpointContentPageBuilder.md)
+- [Systems.Storage.EndpointDataView](Systems.Storage.EndpointDataView.md)
+- [Systems.Storage.EndpointFilesView](Systems.Storage.EndpointFilesView.md)
+- [Systems.Storage.EndpointForm](Systems.Storage.EndpointForm.md)
+- [Systems.Storage.EndpointForm.Helper](Systems.Storage.EndpointForm.Helper.md)
+- [Systems.Storage.EndpointModel](Systems.Storage.EndpointModel.md)
+- [Systems.Storage.EndpointMonitorView](Systems.Storage.EndpointMonitorView.md)
+- [Systems.Storage.EndpointSettingsView](Systems.Storage.EndpointSettingsView.md)
+- [Systems.Storage.FakeBackend](Systems.Storage.FakeBackend.md)
+- [Systems.Storage.Filename](Systems.Storage.Filename.md): Generates filenames for storage backends.
+
+- [Systems.Storage.Html](Systems.Storage.Html.md)
+- [Systems.Storage.JobScheduler](Systems.Storage.JobScheduler.md): Behaviour for scheduling storage delivery jobs.
+Wraps Oban to allow mocking in tests.
+
+- [Systems.Storage.JobScheduler.Oban](Systems.Storage.JobScheduler.Oban.md): Default JobScheduler implementation using Oban.
+
+- [Systems.Storage.Presenter](Systems.Storage.Presenter.md)
+- [Systems.Storage.Private](Systems.Storage.Private.md)
+- [Systems.Storage.Public](Systems.Storage.Public.md)
+- [Systems.Storage.Routes](Systems.Storage.Routes.md)
+- [Systems.Storage.ServiceIds](Systems.Storage.ServiceIds.md): Defines list of supported storage services
+
+- [Systems.Storage.Switch](Systems.Storage.Switch.md)
+- [Systems.Storage.System](Systems.Storage.System.md)
+- [Systems.Storage.TempFileStore](Systems.Storage.TempFileStore.md): Behaviour for temporary file storage used by data donation.
+
+- [Systems.Storage.Yoda.Backend](Systems.Storage.Yoda.Backend.md)
+- [Systems.Storage.Yoda.Client](Systems.Storage.Yoda.Client.md)
+- [Systems.Storage.Yoda.EndpointForm](Systems.Storage.Yoda.EndpointForm.md)
+- [Systems.Storage.Yoda.EndpointModel](Systems.Storage.Yoda.EndpointModel.md)
+- [Systems.Support.Form](Systems.Support.Form.md)
+- [Systems.Support.HelpdeskForm](Systems.Support.HelpdeskForm.md)
+- [Systems.Support.HelpdeskPage](Systems.Support.HelpdeskPage.md)
+- [Systems.Support.HelpdeskPageBuilder](Systems.Support.HelpdeskPageBuilder.md)
+- [Systems.Support.OverviewPage](Systems.Support.OverviewPage.md)
+- [Systems.Support.OverviewPageBuilder](Systems.Support.OverviewPageBuilder.md)
+- [Systems.Support.OverviewTab](Systems.Support.OverviewTab.md)
+- [Systems.Support.Presenter](Systems.Support.Presenter.md)
+- [Systems.Support.Public](Systems.Support.Public.md): The Support context.
+
+- [Systems.Support.Routes](Systems.Support.Routes.md)
+- [Systems.Support.System](Systems.Support.System.md)
+- [Systems.Support.TicketModel](Systems.Support.TicketModel.md)
+- [Systems.Support.TicketPage](Systems.Support.TicketPage.md)
+- [Systems.Support.TicketPageBuilder](Systems.Support.TicketPageBuilder.md)
+- [Systems.Support.TicketStatus](Systems.Support.TicketStatus.md):   Ticket status values.
+
+- [Systems.Test.EmbeddedLiveView](Systems.Test.EmbeddedLiveView.md): Generic embedded LiveView for testing purposes.
+Can optionally render a nested child and publish events.
+
+- [Systems.Test.EmbeddedLiveViewBuilder](Systems.Test.EmbeddedLiveViewBuilder.md)
+- [Systems.Test.EmbeddedModel](Systems.Test.EmbeddedModel.md): Simple struct model for testing embedded LiveViews.
+
+- [Systems.Test.ModalLiveView](Systems.Test.ModalLiveView.md): Embedded LiveView for testing modal toolbar button functionality.
+Publishes toolbar buttons and handles toolbar events.
+
+- [Systems.Test.ModalLiveViewBuilder](Systems.Test.ModalLiveViewBuilder.md)
+- [Systems.Test.ModalModel](Systems.Test.ModalModel.md): Model for testing modal toolbar button functionality.
+
+- [Systems.Test.Model](Systems.Test.Model.md)
+- [Systems.Test.Page](Systems.Test.Page.md): The page for testing the view model observations
+
+- [Systems.Test.Presenter](Systems.Test.Presenter.md)
+- [Systems.Test.Public](Systems.Test.Public.md)
+- [Systems.Test.RoutedLiveView](Systems.Test.RoutedLiveView.md): Generic routed LiveView for testing purposes.
+Can optionally render embedded child views based on configuration.
+
+- [Systems.Test.RoutedLiveViewBuilder](Systems.Test.RoutedLiveViewBuilder.md)
+- [Systems.Test.RoutedModel](Systems.Test.RoutedModel.md): Simple struct model for testing routed LiveViews.
+
+- [Systems.Userflow.Assembly](Systems.Userflow.Assembly.md)
+- [Systems.Userflow.Model](Systems.Userflow.Model.md)
+- [Systems.Userflow.ProgressModel](Systems.Userflow.ProgressModel.md)
+- [Systems.Userflow.Public](Systems.Userflow.Public.md)
+- [Systems.Userflow.Queries](Systems.Userflow.Queries.md)
+- [Systems.Userflow.StepForm](Systems.Userflow.StepForm.md)
+- [Systems.Userflow.StepModel](Systems.Userflow.StepModel.md)
+- [Systems.Version.Model](Systems.Version.Model.md)
+- [Systems.Version.Public](Systems.Version.Public.md)
+- [Systems.Version.Queries](Systems.Version.Queries.md)
+- [Systems.Workflow.BuilderView](Systems.Workflow.BuilderView.md)
+- [Systems.Workflow.Config](Systems.Workflow.Config.md)
+- [Systems.Workflow.HTML](Systems.Workflow.HTML.md)
+- [Systems.Workflow.ItemCell](Systems.Workflow.ItemCell.md)
+- [Systems.Workflow.ItemForm](Systems.Workflow.ItemForm.md)
+- [Systems.Workflow.ItemModel](Systems.Workflow.ItemModel.md)
+- [Systems.Workflow.Model](Systems.Workflow.Model.md)
+- [Systems.Workflow.Platforms](Systems.Workflow.Platforms.md): Defines DDP platforms that are supported out of the box.
+Make sure to add logos for each platform in the `priv/static/images/logos/platforms` directory:
+* <platform>.svg (circle variant)
+* <platform>_square.svg (square variant)
+See Figma https://www.figma.com/design/RXKuvMFGz3Eln5MNPJ1q6a/Design-system?node-id=470-10741&t=XxCVZd4kNTsfcQP7-1 for reference.
+
+- [Systems.Workflow.Public](Systems.Workflow.Public.md)
+- [Systems.Workflow.Queries](Systems.Workflow.Queries.md)
+- [Systems.Workflow.Switch](Systems.Workflow.Switch.md)
+- [Systems.Workflow.System](Systems.Workflow.System.md)
+- [Systems.Workflow.ToolRefModel](Systems.Workflow.ToolRefModel.md)
+- [Systems.Workflow.WorkListView](Systems.Workflow.WorkListView.md)
+
+- Exceptions
+  - [Frameworks.GreenLight.AccessDeniedError](Frameworks.GreenLight.AccessDeniedError.md)
+  - [Systems.Account.Auth.Centerdata.CenterdataError](Systems.Account.Auth.Centerdata.CenterdataError.md)
+  - [Systems.Account.Auth.Surfconext.SurfconextError](Systems.Account.Auth.Surfconext.SurfconextError.md)
+  - [Systems.Content.LocalFS.Error](Systems.Content.LocalFS.Error.md)
+  - [Systems.Content.S3.Error](Systems.Content.S3.Error.md)
+  - [Systems.Rate.Public.RateLimitError](Systems.Rate.Public.RateLimitError.md)
+
+## Mix Tasks
+
+- [mix config.snapshot](Mix.Tasks.Config.Snapshot.md): Evaluates `config/runtime.exs` with the environment variables of each
+deployment (fixtures in `next/test/config/env/`) and compares the result
+with the committed snapshots in `next/test/config/snapshots/`.
+- [mix e2e](Mix.Tasks.E2e.md): Run Playwright E2E tests in `core/test/e2e/` against any environment.
+- [mix next.graphite.del.submissions](Mix.Tasks.Next.Graphite.Del.Submissions.md): Remove Submissions generated with the generate submissions command.
+- [mix next.graphite.gen.submissions](Mix.Tasks.Next.Graphite.Gen.Submissions.md): Generate a number of submissions for a `leaderboard`.
+- [mix nova.snapshot](Mix.Tasks.Nova.Snapshot.md): Captures what a SaaS build wires together, so that the Nova migration
+(plan step code-systems) can move routes, grants, handlers and SaaS config
+between modules and show that nothing changed. The snapshots per SaaS are
+committed in `next/test/snapshots/<saas>/`
+- [mix seed](Mix.Tasks.Seed.md): Runs `Mica.Seeds.seed/0` which executes base seeds plus
+environment-specific seeds based on the `:deploy_env` config.
+- [mix storybook.gen](Mix.Tasks.Storybook.Gen.md): Writes a `*.story.exs` for every public function component (`def` with `attr`/`slot`
+declarations) defined under SOURCE_DIR that has no story in CONTENT_DIR yet. Existing stories are
+never touched, so curate a story by editing its generated file.
+

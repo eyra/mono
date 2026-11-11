@@ -4,17 +4,17 @@
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="generator" content="ExDoc v0.38.4">
-    <meta name="project" content="core v0.1.0">
+    <meta name="generator" content="ExDoc v0.40.4">
+    <meta name="project" content="mica v0.1.0">
 
 
-    <title>Systems.Account.UserAuth — core v0.1.0</title>
+    <title>Systems.Account.UserAuth — mica v0.1.0</title>
 
-    <link rel="stylesheet" href="dist/html-elixir-RLZO5U2C.css" />
+    <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-F789C0DE.js"></script>
+    <script defer src="dist/sidebar_items-84CBF401.js"></script>
     <script defer src="docs_config.js"></script>
-    <script defer src="dist/html-Y223O6DN.js"></script>
+    <script defer src="dist/html-MI33G4N7.js"></script>
 
   </head>
   <body>
@@ -33,19 +33,19 @@
     <div class="sidebar-projectInfo">
 
         <a href="readme.html" class="sidebar-projectImage">
-          <img src="assets/logo.svg" alt="core" />
+          <img src="assets/logo.svg" alt="mica" />
         </a>
 
       <div>
         <a href="readme.html" class="sidebar-projectName" translate="no">
-core
+mica
         </a>
         <div class="sidebar-projectVersion" translate="no">
           v0.1.0
         </div>
       </div>
     </div>
-    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras=""></ul>
+    <ul id="sidebar-list-nav" class="sidebar-list-nav" role="tablist" data-extras="Pages"></ul>
   </div>
 </nav>
 
@@ -57,17 +57,35 @@ core
       <div class="search-settings">
         <form class="search-bar" action="search.html">
           <label class="search-label">
-            <span class="sr-only">Search documentation of core</span>
-            <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+            <span class="sr-only">Search documentation of mica</span>
+            <div class="search-input-wrapper">
+              <input name="q" type="text" class="search-input" placeholder="Press / to search" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" />
+              <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
+                <i class="ri-close-line ri-lg" title="Cancel search"></i>
+              </button>
+            </div>
           </label>
-          <button type="submit" class="search-button" aria-label="Submit Search" tabindex="-1">
-            <i class="ri-search-2-line ri-lg" aria-hidden="true"></i>
-          </button>
-          <button type="button" tabindex="-1" class="search-close-button" aria-hidden="true">
-            <i class="ri-close-line ri-lg" title="Cancel search"></i>
-          </button>
         </form>
         <div class="autocomplete">
+        </div>
+        <div class="engine-selector" data-multiple="false">
+          <button type="button" class="engine-button" aria-label="Select search engine" aria-haspopup="true" aria-expanded="false">
+            <i class="ri-search-2-line" aria-hidden="true"></i>
+            <span class="engine-name">Default</span>
+            <i class="ri-arrow-down-s-line" aria-hidden="true"></i>
+          </button>
+          <div class="engine-dropdown" hidden role="menu">
+
+              <button type="button"
+                      class="engine-option"
+                      data-engine-url="search.html?q="
+                      role="menuitemradio"
+                      aria-checked="true">
+                <span class="name">Default</span>
+                <span class="help">In-browser search</span>
+              </button>
+
+          </div>
         </div>
         <button class="icon-settings display-settings">
           <i class="ri-settings-3-line"></i>
@@ -79,12 +97,19 @@ core
 <div id="top-content">
   <div class="heading-with-actions top-heading">
     <h1>
-      <span translate="no">Systems.Account.UserAuth</span> 
-      <small class="app-vsn" translate="no">(core v0.1.0)</small>
+      <span translate="no">Systems.<wbr />Account.<wbr />UserAuth</span> 
+      <small class="app-vsn" translate="no">(mica v0.1.0)</small>
 
     </h1>
 
-      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L1" title="View Source" class="icon-action" rel="help">
+<a href="Systems.Account.UserAuth.md" title="Copy Markdown (hold Ctrl/Cmd and click it to open as Markdown)" class="copy-markdown icon-action" rel="help">
+  <i class="ri-markdown-line" aria-hidden="true"></i>
+  <span class="sr-only">Copy Markdown</span>
+</a>
+
+
+
+      <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L1" title="View Source" class="icon-action" rel="help nofollow">
         <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         <span class="sr-only">View Source</span>
       </a>
@@ -95,16 +120,16 @@ core
 </div>
 
   <section id="summary" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#summary">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Summary</span>
-    </h1>
+    </h2>
 <div class="summary-functions summary">
-  <h2>
+  <h3>
     <a href="#functions">Functions</a>
-  </h2>
+  </h3>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -143,7 +168,7 @@ and remember me token.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Starts a session for the user like <a><code class="inline">log_in_user/4</code></a>, but leaves the
+        <div class="summary-synopsis"><p>Starts a session for the user like <a href="#log_in_user/4"><code class="inline">log_in_user/4</code></a>, but leaves the
 response to the caller. <code class="inline">params</code> selects the session type and the
 remember-me cookie the same way.</p></div>
 
@@ -175,7 +200,7 @@ remember-me cookie the same way.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Like <a><code class="inline">require_authenticated_user/2</code></a>, for pages participants open (tasks,
+        <div class="summary-synopsis"><p>Like <a href="#require_authenticated_user/2"><code class="inline">require_authenticated_user/2</code></a>, for pages participants open (tasks,
 pool and lab pages). Signed-out visitors go to the SaaS's
 <code class="inline">member_sign_in_page/1</code>.</p></div>
 
@@ -187,7 +212,7 @@ pool and lab pages). Signed-out visitors go to the SaaS's
 
       </div>
 
-        <div class="summary-synopsis"><p>Like <a><code class="inline">require_authenticated_user/2</code></a>, but sends signed-out visitors to the
+        <div class="summary-synopsis"><p>Like <a href="#require_authenticated_user/2"><code class="inline">require_authenticated_user/2</code></a>, but sends signed-out visitors to the
 participant entry page with the requested path as <code class="inline">return_to</code>. Used for
 assignment invitation links.</p></div>
 
@@ -227,12 +252,12 @@ assignment invitation links.</p></div>
 
 
   <section id="functions" class="details-list">
-    <h1 class="section-heading">
+    <h2 class="section-heading">
       <a class="hover-link" href="#functions">
         <i class="ri-link-m" aria-hidden="true"></i>
       </a>
       <span class="text">Functions</span>
-    </h1>
+    </h2>
 
     <div class="functions-list">
 <section class="detail" id="fetch_current_user/2">
@@ -245,7 +270,7 @@ assignment invitation links.</p></div>
       <h1 class="signature" translate="no">fetch_current_user(conn, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L135" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -268,7 +293,7 @@ and remember me token.</p>
       <h1 class="signature" translate="no">forget_user(conn)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L125" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L125" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -292,7 +317,7 @@ and remember me token.</p>
       <h1 class="signature" translate="no">log_in_user(conn, user, first_time?, params \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L30" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L30" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -321,7 +346,7 @@ if you are not using LiveView.</p>
       <h1 class="signature" translate="no">log_in_user_without_redirect(conn, user, params \\ %{})</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L53" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L53" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -345,7 +370,7 @@ remember-me cookie the same way.</p>
       <h1 class="signature" translate="no">log_out_user(conn)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L116" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L116" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -367,7 +392,7 @@ remember-me cookie the same way.</p>
       <h1 class="signature" translate="no">redirect_if_user_is_authenticated(conn, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L172" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L172" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -389,7 +414,7 @@ remember-me cookie the same way.</p>
       <h1 class="signature" translate="no">require_authenticated_member(conn, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L204" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L204" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -413,7 +438,7 @@ pool and lab pages). Signed-out visitors go to the SaaS's
       <h1 class="signature" translate="no">require_authenticated_participant(conn, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L196" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L196" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -437,7 +462,7 @@ assignment invitation links.</p>
       <h1 class="signature" translate="no">require_authenticated_user(conn, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L189" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L189" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -460,7 +485,7 @@ they use the application at all, here would be a good place.</p>
       <h1 class="signature" translate="no">sign_out_current_user(conn)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L101" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L101" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -483,7 +508,7 @@ user (deletes token and remember-me cookie) and renews the session.</p>
       <h1 class="signature" translate="no">signed_in_path(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L239" class="icon-action" rel="help" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/account/user_auth.ex#L239" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -500,27 +525,34 @@ user (deletes token and remember-me cookie) and renews the session.</p>
   </section>
 
     <footer class="footer">
-      <p>
 
-        <span class="line">
-          <button class="a-main footer-button display-quick-switch" title="Search HexDocs packages">
-            Search HexDocs
-          </button>
+        <p>
 
-            <a href="core.epub" title="ePub version">
-              Download ePub version
-            </a>
+          <span class="line">
+            <button class="a-main footer-button display-quick-switch" title="Go to package docs">
+              Go to package docs
+            </button>
 
-        </span>
-      </p>
+              <a href="llms.txt" target="_blank">
+                View llms.txt
+              </a>
 
-      <p class="built-using">
-        Built using
-        <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.38.4) for the
 
-          <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+              <a href="mica.epub">
+                Download ePub version
+              </a>
 
-      </p>
+          </span>
+        </p>
+
+        <p class="built-using">
+          Built using
+          <a href="https://github.com/elixir-lang/ex_doc" title="ExDoc" target="_blank" rel="help noopener" translate="no">ExDoc</a> (v0.40.4) for the
+
+            <a href="https://elixir-lang.org" title="Elixir" target="_blank" translate="no">Elixir programming language</a>
+
+        </p>
+
 
     </footer>
   </div>
