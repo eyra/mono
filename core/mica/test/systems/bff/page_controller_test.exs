@@ -89,10 +89,7 @@ defmodule Systems.BFF.PageControllerTest do
 
       assert types(page) == [
                "next_best_action",
-               "section",
-               "reward_amount",
-               "reward_amount",
-               "reward_amount",
+               "rewards",
                "section",
                "advert",
                "section",
@@ -110,12 +107,18 @@ defmodule Systems.BFF.PageControllerTest do
                      "to" => "/todo/first"
                    }
                  },
-                 %{"props" => %{"title" => "Rewards"}},
-                 %{"props" => %{"label" => "Awaiting", "tone" => "warning", "amount" => pending}},
                  %{
-                   "props" => %{"label" => "Approved", "tone" => "success", "amount" => approved}
+                   "props" => %{
+                     "title" => "Rewards",
+                     "pending_label" => "Awaiting",
+                     "pending_amount" => pending,
+                     "approved_label" => "Approved",
+                     "approved_amount" => approved,
+                     "rejected_label" => "Rejected",
+                     "rejected_amount" => rejected,
+                     "notes" => []
+                   }
                  },
-                 %{"props" => %{"label" => "Rejected", "tone" => "danger", "amount" => rejected}},
                  %{
                    "props" => %{
                      "title" => "Marketplace",
