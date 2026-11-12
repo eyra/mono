@@ -28,7 +28,7 @@ defmodule Systems.Assignment.NextActions.PendingContributions do
       cta_label: dgettext("eyra-nextaction", "assignment.pending_contributions.cta"),
       cta_action: %{
         type: :redirect,
-        to: ~p"/assignment/#{assignment_id}/content?tab=contributions"
+        to: ~m"/assignment/#{assignment_id}/content?tab=contributions"
       }
     }
   end

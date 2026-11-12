@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ToolForm do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   @impl true
   def update(_params, socket) do

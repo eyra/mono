@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.LeaderboardSubmissionsView do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   alias Next.Systems.Graphite
 

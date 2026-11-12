@@ -7,7 +7,7 @@ defmodule MicaWeb.Live.MobileMenuTest do
     setup [:login_as_member]
 
     test "mobile menu HTML structure is correct", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/")
+      {:ok, _view, html} = live(conn, ~m"/")
 
       # Check that mobile menu div exists with correct ID and hidden class
       assert html =~ ~r/id="mobile-menu"/
@@ -19,7 +19,7 @@ defmodule MicaWeb.Live.MobileMenuTest do
     end
 
     test "menu button has Phoenix.JS commands", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/")
+      {:ok, view, _html} = live(conn, ~m"/")
 
       html = render(view)
 
@@ -33,7 +33,7 @@ defmodule MicaWeb.Live.MobileMenuTest do
     end
 
     test "backdrop has Phoenix.JS hide commands", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/")
+      {:ok, view, _html} = live(conn, ~m"/")
 
       html = render(view)
 
@@ -46,7 +46,7 @@ defmodule MicaWeb.Live.MobileMenuTest do
     end
 
     test "mobile menu uses Phoenix.JS for toggle", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/")
+      {:ok, view, _html} = live(conn, ~m"/")
 
       html = render(view)
 
@@ -63,7 +63,7 @@ defmodule MicaWeb.Live.MobileMenuTest do
     end
 
     test "menu structure contains navigation items", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/")
+      {:ok, view, _html} = live(conn, ~m"/")
 
       html = render(view)
 

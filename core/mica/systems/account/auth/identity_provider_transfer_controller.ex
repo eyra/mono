@@ -70,7 +70,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
         |> SignInHandoff.end_sign_in(
           provider(idp),
           :cancelled,
-          &redirect(&1, to: ~p"/user/auth/identify")
+          &redirect(&1, to: ~m"/user/auth/identify")
         )
 
       _ ->

@@ -35,7 +35,7 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: nil,
       view_type: :guest,
-      sign_up_url: Mica.SaaS.module().sign_up_page(:creator, nil) || ~p"/user/signup/creator",
+      sign_up_url: Mica.SaaS.module().sign_up_page(:creator, nil) || ~m"/user/signup/creator",
       include_right_sidepadding?: false
     }
   end
@@ -114,7 +114,7 @@ defmodule Systems.Home.PageBuilder do
       title: dgettext("eyra-pool", "marketplace.title"),
       cards: adverts |> Enum.take(@home_card_limit) |> Enum.map(&to_card(&1, assigns)),
       count: Enum.count(adverts),
-      more_path: ~p"/pool/#{panl_id}/marketplace",
+      more_path: ~m"/pool/#{panl_id}/marketplace",
       pool_slug: Pool.Model.slug(panl)
     }
   end
@@ -240,7 +240,7 @@ defmodule Systems.Home.PageBuilder do
     reward_row = Assignment.Public.get_reward(assignment, user)
 
     %{
-      path: ~p"/assignment/#{assignment_id}",
+      path: ~m"/assignment/#{assignment_id}",
       title: title || dgettext("eyra-home", "activities.fallback_title"),
       subtitle: subtitle || activity_quick_summary(crew, user),
       image_info: image_info(image_id),

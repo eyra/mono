@@ -94,15 +94,15 @@ defmodule Systems.Account.UserForm do
   def password_signin(assigns) do
     signup_url =
       if assigns.post_signup_action do
-        ~p"/user/signup/#{assigns.user_type}?post_signup_action=#{assigns.post_signup_action}"
+        ~m"/user/signup/#{assigns.user_type}?post_signup_action=#{assigns.post_signup_action}"
       else
-        ~p"/user/signup/#{assigns.user_type}"
+        ~m"/user/signup/#{assigns.user_type}"
       end
 
     assigns = assign(assigns, :signup_url, signup_url)
 
     ~H"""
-    <.form id="signin_form" :let={form} for={@for} action={~p"/user/session"} data-testid="signin-form" >
+    <.form id="signin_form" :let={form} for={@for} action={~m"/user/session"} data-testid="signin-form" >
       <%= if @status == "account_activated_successfully" do %>
         <AlertBanner.success>
           <%= dgettext("eyra-account", "Account activated successfully.") %>
@@ -127,7 +127,7 @@ defmodule Systems.Account.UserForm do
         />
         <div class="ml-2"></div>|<div class="ml-2"></div>
         <Button.dynamic
-          action={%{type: :redirect, to: ~p"/user/reset-password"}}
+          action={%{type: :redirect, to: ~m"/user/reset-password"}}
           face={%{type: :link, text: dgettext("eyra-user", "reset.link")}}
         />
       </div>
@@ -155,7 +155,7 @@ defmodule Systems.Account.UserForm do
       <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-google rounded pl-4 pr-4">
         <div class="flex w-full justify-center items-center">
           <div>
-            <img class="mr-3 -mt-1" src={~p"/images/google.svg"} alt="">
+            <img class="mr-3 -mt-1" src={~m"/images/google.svg"} alt="">
           </div>
           <div class="h-11 focus:outline-none">
             <div class="flex flex-col justify-center h-full items-center rounded">
@@ -176,7 +176,7 @@ defmodule Systems.Account.UserForm do
         <div class="pt-2px pb-2px active:pt-3px active:pb-1px active:shadow-top4px bg-surfconext rounded pl-4 pr-4">
           <div class="flex w-full justify-center items-center">
             <div>
-              <img class="mr-3 h-6" src={~p"/images/surfconext.svg"} alt="">
+              <img class="mr-3 h-6" src={~m"/images/surfconext.svg"} alt="">
             </div>
             <div class="h-11 focus:outline-none">
               <div class="flex flex-col justify-center h-full items-center rounded">

@@ -20,7 +20,7 @@ defmodule Systems.Account.SettingsController do
         Account.Public.deliver_update_email_instructions(
           applied_user,
           email,
-          &url(conn, ~p"/user/settings/activate-account/#{&1}")
+          &url(conn, ~m"/user/settings/activate-account/#{&1}")
         )
 
         conn
@@ -28,7 +28,7 @@ defmodule Systems.Account.SettingsController do
           :info,
           "A link to confirm your email change has been sent to the new address."
         )
-        |> redirect(to: ~p"/user/settings")
+        |> redirect(to: ~m"/user/settings")
 
       {:error, changeset} ->
         render(conn, "edit.html", email_changeset: changeset)
@@ -43,7 +43,7 @@ defmodule Systems.Account.SettingsController do
       {:ok, user} ->
         conn
         |> put_flash(:info, dgettext("eyra-user", "password.updated.successfully"))
-        |> put_session(:user_return_to, ~p"/user/settings")
+        |> put_session(:user_return_to, ~m"/user/settings")
         |> Account.UserAuth.log_in_user(user, false)
 
       {:error, changeset} ->
@@ -56,12 +56,12 @@ defmodule Systems.Account.SettingsController do
       :ok ->
         conn
         |> put_flash(:info, dgettext("eyra-user", "email.changed.successfully"))
-        |> redirect(to: ~p"/user/settings")
+        |> redirect(to: ~m"/user/settings")
 
       :error ->
         conn
         |> put_flash(:error, "Email change link is invalid or it has expired.")
-        |> redirect(to: ~p"/user/settings")
+        |> redirect(to: ~m"/user/settings")
     end
   end
 

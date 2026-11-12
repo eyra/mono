@@ -7,7 +7,7 @@ defmodule Systems.Support.OverviewPageTest do
     setup [:login_as_member]
 
     test "deny access to non-admin", %{conn: conn} do
-      assert {:error, {:redirect, %{to: "/access_denied"}}} = live(conn, ~p"/support/ticket")
+      assert {:error, {:redirect, %{to: "/access_denied"}}} = live(conn, ~m"/support/ticket")
     end
   end
 
@@ -16,7 +16,7 @@ defmodule Systems.Support.OverviewPageTest do
 
     test "list open tickets", %{conn: conn} do
       ticket = Factories.insert!(:helpdesk_ticket)
-      {:ok, _view, html} = live(conn, ~p"/support/ticket")
+      {:ok, _view, html} = live(conn, ~m"/support/ticket")
       assert html =~ ticket.title
     end
   end

@@ -27,7 +27,7 @@ defmodule Systems.Storage.ControllerTest do
     test "denies a member without access to the endpoint", %{conn: conn, endpoint: endpoint} do
       expect(MockSpecial, :list_files, 0, fn _folder -> [] end)
 
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       assert conn.status == 403
     end
@@ -46,7 +46,7 @@ defmodule Systems.Storage.ControllerTest do
         ]
       end)
 
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       assert conn.status == 200
       assert [disposition] = get_resp_header(conn, "content-disposition")

@@ -61,7 +61,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}
     open_action = %{type: :send, event: "action_click", item: :open}
-    export_setup_action = %{type: :http_download, to: ~p"/assignment/#{id}/export"}
+    export_setup_action = %{type: :http_download, to: ~m"/assignment/#{id}/export"}
 
     %{
       preview: %{

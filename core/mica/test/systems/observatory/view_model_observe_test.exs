@@ -10,7 +10,7 @@ defmodule Systems.Observatory.ViewModelObserveTest do
     setup [:login_as_member]
 
     test "View model initialize", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/test/page/1")
+      {:ok, _view, html} = live(conn, ~m"/test/page/1")
 
       assert html =~ "John Doe"
       assert html =~ "Age: 56 - Works at: The Basement"
@@ -18,7 +18,7 @@ defmodule Systems.Observatory.ViewModelObserveTest do
     end
 
     test "View model update", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/test/page/1")
+      {:ok, view, _html} = live(conn, ~m"/test/page/1")
 
       model = Test.Public.get(1)
       Test.Public.update(model, %{age: 57})

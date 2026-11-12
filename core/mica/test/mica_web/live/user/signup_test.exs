@@ -18,7 +18,7 @@ defmodule MicaWeb.Live.User.SignupPage.Test do
       conn: conn
     } do
       email = Faker.Internet.email()
-      {:ok, view, _html} = live(conn, ~p"/user/signup/creator")
+      {:ok, view, _html} = live(conn, ~m"/user/signup/creator")
 
       user_count_before = Mica.Repo.aggregate(User, :count, :id)
 
@@ -43,7 +43,7 @@ defmodule MicaWeb.Live.User.SignupPage.Test do
       conn: conn
     } do
       email = Faker.Internet.email()
-      {:ok, view, _html} = live(conn, ~p"/user/signup/creator?post_signup_action=add_to_panl")
+      {:ok, view, _html} = live(conn, ~m"/user/signup/creator?post_signup_action=add_to_panl")
 
       view
       |> element("[data-selector-item='next_privacy_policy_accepted']")
@@ -69,7 +69,7 @@ defmodule MicaWeb.Live.User.SignupPage.Test do
     end
 
     test "signup with low-quality password fails", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/signup/participant")
+      {:ok, view, _html} = live(conn, ~m"/user/signup/participant")
 
       view
       |> element("[data-selector-item='next_privacy_policy_accepted']")
@@ -86,7 +86,7 @@ defmodule MicaWeb.Live.User.SignupPage.Test do
     test "signup with accepted next privacy policy redirects to confirmation view", %{
       conn: conn
     } do
-      {:ok, view, _html} = live(conn, ~p"/user/signup/creator")
+      {:ok, view, _html} = live(conn, ~m"/user/signup/creator")
 
       view
       |> element("[data-selector-item='next_privacy_policy_accepted']")

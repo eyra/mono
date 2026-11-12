@@ -23,7 +23,7 @@ defmodule Systems.Advert.ContentPageTest do
         end do
         %{id: id} = Advert.Factories.create_advert(researcher, :accepted, 1)
 
-        {:ok, _view, html} = live(conn, ~p"/advert/#{id}/content")
+        {:ok, _view, html} = live(conn, ~m"/advert/#{id}/content")
 
         assert html =~
                  "tab_panel_settings\" data-tab-id=\"settings\" class=\"tab-panel hidden"
@@ -67,7 +67,7 @@ defmodule Systems.Advert.ContentPageTest do
         on_mount: fn _live_view_module, _params, _session, socket ->
           {:cont, socket |> assign(branch: branch)}
         end do
-        {:ok, _view, html} = live(conn, ~p"/advert/#{advert.id}/content")
+        {:ok, _view, html} = live(conn, ~m"/advert/#{advert.id}/content")
         html
       end
     end

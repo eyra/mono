@@ -1,5 +1,5 @@
 defmodule Next.Systems.Account.SigninPage do
-  use MicaWeb, :live_view_fabric
+  use NextWeb, :live_view_fabric
 
   on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
   on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})

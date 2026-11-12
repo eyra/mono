@@ -1,5 +1,5 @@
 defmodule Next.Systems.Citizen.Pool.Form do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   require Logger
 

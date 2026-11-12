@@ -15,13 +15,13 @@ defmodule Systems.Pool.OnboardingPageTest do
 
   describe "mount as non-participant" do
     test "renders the join consent view first", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       assert view |> has_element?("[data-testid='pool-join-consent-view']")
     end
 
     test "does not render the features view yet", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       refute view |> has_element?("[data-testid='features-view']")
     end
@@ -34,14 +34,14 @@ defmodule Systems.Pool.OnboardingPageTest do
     end
 
     test "renders the already-member info view (not the join prompt)", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       assert view |> has_element?("[data-testid='pool-already-member-view']")
       refute view |> has_element?("[data-testid='pool-join-consent-view']")
     end
 
     test "home button on the info view redirects to home", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       assert {:error, {:live_redirect, %{to: "/"}}} = render_click(view, "continue")
     end
@@ -53,7 +53,7 @@ defmodule Systems.Pool.OnboardingPageTest do
   # the async chain.
   describe "join consent accepted" do
     test "adds the user as a participant", %{conn: conn, user: user, pool: pool} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       refute Pool.Public.participant?(pool, user)
 
@@ -69,7 +69,7 @@ defmodule Systems.Pool.OnboardingPageTest do
     end
 
     test "advances to the features step (does not redirect)", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       view
       |> element("[data-testid='pool-join-consent-accept-button']")
@@ -86,7 +86,7 @@ defmodule Systems.Pool.OnboardingPageTest do
   describe "join consent has no decline action" do
     test "does not render a decline button (users hit browser Back to exit)",
          %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       refute view |> has_element?("[data-testid='pool-join-consent-decline-button']")
     end
@@ -94,7 +94,7 @@ defmodule Systems.Pool.OnboardingPageTest do
 
   describe "join consent renders the pool icon" do
     test "shows the pool avatar next to the title", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, _view, html} = live(conn, ~m"/pool/panl/onboarding")
 
       assert html =~ ~s(src="/images/logos/pools/panl_wide.svg")
     end
@@ -102,7 +102,7 @@ defmodule Systems.Pool.OnboardingPageTest do
 
   describe "features step" do
     test "continue on features redirects to home (last step)", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/pool/panl/onboarding")
+      {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
 
       # Advance to features by accepting the consent.
       view

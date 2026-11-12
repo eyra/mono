@@ -17,7 +17,7 @@ defmodule Systems.Assignment.NextActions.ContributionReviewed do
       cta_label: dgettext("eyra-nextaction", "assignment.contribution_reviewed.cta"),
       cta_action: %{
         type: :redirect,
-        to: ~p"/assignment/#{assignment_id}"
+        to: ~m"/assignment/#{assignment_id}"
       }
     }
   end

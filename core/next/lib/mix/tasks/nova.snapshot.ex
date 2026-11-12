@@ -36,7 +36,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
 
   Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
   Before rendering, the task runs the boot's composition checks
-  (`Mica.SaaS.validate!/0`).
+  (`Mica.SaaS.validate!/0`) and the Mica path check (`MicaWeb.PathCheck`): every
+  `~m` must match a route of the build's router that Mica serves.
 
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
@@ -60,8 +61,10 @@ defmodule Mix.Tasks.Nova.Snapshot do
     Mix.Task.run("compile")
 
     saas = saas!()
-    # The checks a boot runs: the Self build has no tests of its own (snapshot-self CI job).
+    # The checks a boot runs, and the Mica path check: the Self build has no tests
+    # of its own (snapshot-self CI job).
     Mica.SaaS.validate!()
+    check_mica_paths!()
     started = System.monotonic_time(:millisecond)
 
     failures =
@@ -97,6 +100,16 @@ defmodule Mix.Tasks.Nova.Snapshot do
       The #{saas} build differs from its Nova snapshots. If the change is intended,
       run `#{update_command(saas)}` and commit the reviewed diff.
       """)
+    end
+  end
+
+  # Every Mica path (`~m`) must match a route of this build's router that Mica serves.
+  defp check_mica_paths! do
+    router = MicaWeb.Router
+
+    case MicaWeb.PathCheck.unmatched(router) do
+      [] -> Mix.shell().info("nova.snapshot: every Mica path matches #{inspect(router)}")
+      issues -> Mix.raise(MicaWeb.PathCheck.format(issues, router))
     end
   end
 

@@ -103,7 +103,7 @@ defmodule Systems.Assignment.ParticipantsView do
 
   def update_advert_button(%{assigns: %{assignment: %{adverts: [%{id: advert_id} | _]}}} = socket) do
     advert_button = %{
-      action: %{type: :redirect, to: ~p"/advert/#{advert_id}/content"},
+      action: %{type: :redirect, to: ~m"/advert/#{advert_id}/content"},
       face: %{
         type: :plain,
         icon: :forward,

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.SubmissionForm do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   import Frameworks.Pixel.Form
 

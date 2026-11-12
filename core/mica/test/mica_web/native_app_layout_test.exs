@@ -8,13 +8,13 @@ defmodule MicaWeb.NativeAppLayoutTest do
     setup [:login_as_member]
 
     test "the NextApp user agent flags the page as native", %{conn: conn} do
-      html = get_html(conn, ~p"/", @native_user_agent)
+      html = get_html(conn, ~m"/", @native_user_agent)
 
       assert html =~ "data-native-app"
     end
 
     test "a browser user agent keeps the web chrome", %{conn: conn} do
-      html = get_html(conn, ~p"/", @browser_user_agent)
+      html = get_html(conn, ~m"/", @browser_user_agent)
 
       refute html =~ "data-native-app"
     end
@@ -25,7 +25,7 @@ defmodule MicaWeb.NativeAppLayoutTest do
 
     test "the NextApp user agent hides the hero", %{conn: conn} do
       document =
-        conn |> get_html(~p"/user/account", @native_user_agent) |> Floki.parse_document!()
+        conn |> get_html(~m"/user/account", @native_user_agent) |> Floki.parse_document!()
 
       assert Floki.find(document, "body[data-native-app]") != []
       assert Floki.find(document, ~s{[class~="native:hidden"] [data-native-title]}) != []
@@ -33,7 +33,7 @@ defmodule MicaWeb.NativeAppLayoutTest do
 
     test "a browser user agent shows the hero", %{conn: conn} do
       document =
-        conn |> get_html(~p"/user/account", @browser_user_agent) |> Floki.parse_document!()
+        conn |> get_html(~m"/user/account", @browser_user_agent) |> Floki.parse_document!()
 
       assert Floki.find(document, "body[data-native-app]") == []
       assert Floki.find(document, "[data-native-title]") != []
@@ -45,7 +45,7 @@ defmodule MicaWeb.NativeAppLayoutTest do
 
     test "the NextApp user agent renders no hero", %{conn: conn} do
       document =
-        conn |> get_html(~p"/user/account", @native_user_agent) |> Floki.parse_document!()
+        conn |> get_html(~m"/user/account", @native_user_agent) |> Floki.parse_document!()
 
       assert Floki.find(document, "body[data-native-app]") != []
       assert Floki.find(document, "[data-native-title]") == []

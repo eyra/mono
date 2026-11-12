@@ -24,7 +24,7 @@ defmodule Systems.Pool.Controller do
     if Pool.Public.participant?(pool, user) do
       redirect(conn, to: ReturnTo.resolve(return_to, Account.UserAuth.signed_in_path(user)))
     else
-      redirect(conn, to: ReturnTo.append(~p"/pool/#{slug}/onboarding", return_to))
+      redirect(conn, to: ReturnTo.append(~m"/pool/#{slug}/onboarding", return_to))
     end
   end
 end

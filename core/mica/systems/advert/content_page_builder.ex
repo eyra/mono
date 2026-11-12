@@ -147,7 +147,7 @@ defmodule Systems.Advert.ContentPageBuilder do
   end
 
   defp action_map(%{promotion: %{id: promotion_id}}, _) do
-    preview_action = %{type: :http_get, to: ~p"/promotion/#{promotion_id}", target: "_blank"}
+    preview_action = %{type: :http_get, to: ~m"/promotion/#{promotion_id}", target: "_blank"}
     publish_action = %{type: :send, event: "action_click", item: :publish}
     retract_action = %{type: :send, event: "action_click", item: :retract}
     close_action = %{type: :send, event: "action_click", item: :close}

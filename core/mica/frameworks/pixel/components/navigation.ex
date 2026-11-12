@@ -127,7 +127,7 @@ defmodule Frameworks.Pixel.Navigation do
               >
                 <img
                   class="pointer-events-none"
-                  src={~p"/images/icons/more.svg"}
+                  src={~m"/images/icons/more.svg"}
                   alt={dgettext("eyra-ui", "action_menu.alt")}
                 >
               </div>

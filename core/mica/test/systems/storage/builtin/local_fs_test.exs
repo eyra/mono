@@ -50,7 +50,7 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
     setup :login_as_member
 
     test "denies a member without access to the endpoint", %{conn: conn, endpoint: endpoint} do
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       assert conn.status == 403
       refute conn.resp_body =~ "donation"
@@ -59,7 +59,7 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
     test "sends the donations to the endpoint owner", %{conn: conn, endpoint: endpoint} do
       :ok = Mica.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
 
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       assert conn.status == 200
       {:ok, [{path, content}]} = :zip.unzip(conn.resp_body, [:memory])

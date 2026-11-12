@@ -71,6 +71,6 @@ defmodule Systems.Pool.SubmissionPageBuilder do
 
   defp create_preview_path(submission, uri_path) do
     %{promotion: %{id: promotion_id}} = Advert.Public.get_by_submission(submission, [:promotion])
-    ~p"/promotion/#{promotion_id}?preview=true&back=#{uri_path}"
+    ~m"/promotion/#{promotion_id}?preview=true&back=#{uri_path}"
   end
 end

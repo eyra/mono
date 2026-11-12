@@ -89,7 +89,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     %{
       type: type,
       id: id,
-      path: ~p"/advert/#{id}/content",
+      path: ~m"/advert/#{id}/content",
       title: title,
       image_info: image_info,
       tags: tags,
@@ -164,7 +164,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
     %{
       type: :primary,
       id: id,
-      path: ~p"/promotion/#{promotion_id}",
+      path: ~m"/promotion/#{promotion_id}",
       title: title,
       tags: tags,
       image_info: image_info,
@@ -186,7 +186,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          {Fund.FundingPage, :fund_adverts},
          _assigns
        ) do
-    path = ~p"/advert/#{id}/content?tab=#{:funding}"
+    path = ~m"/advert/#{id}/content?tab=#{:funding}"
     tag = funding_tag(advert)
     subtitle = required_funding(advert)
     quick_summary = get_quick_summary(updated_at)
@@ -209,7 +209,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
          {Pool.ParticipantPage, :contribution},
          user
        ) do
-    path = ~p"/pool/advert/#{submission.id}"
+    path = ~m"/pool/advert/#{submission.id}"
     vm(advert, :contribution, user, path)
   end
 

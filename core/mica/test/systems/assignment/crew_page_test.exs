@@ -41,7 +41,7 @@ defmodule Systems.Assignment.CrewPageTest do
       conn = put_session(conn, :panel_info, %{redirect?: false, participant: "test"})
       Assignment.Public.add_participant!(assignment, user)
 
-      {:ok, _view, html} = live(conn, ~p"/assignment/#{assignment.id}")
+      {:ok, _view, html} = live(conn, ~m"/assignment/#{assignment.id}")
       assert html =~ "<div id=\"crew_page\""
     end
   end
@@ -99,7 +99,7 @@ defmodule Systems.Assignment.CrewPageTest do
       {:ok, _view, html} =
         conn
         |> put_connect_params(%{"user_state" => user_state})
-        |> live(~p"/assignment/#{assignment.id}")
+        |> live(~m"/assignment/#{assignment.id}")
 
       assert html =~ "crew_page"
     end
@@ -235,7 +235,7 @@ defmodule Systems.Assignment.CrewPageTest do
     panel_info = %{panel: :affiliate, redirect_url: nil, participant: panel_participant}
 
     {:ok, view, _html} =
-      conn |> put_session(:panel_info, panel_info) |> live(~p"/assignment/#{assignment.id}")
+      conn |> put_session(:panel_info, panel_info) |> live(~m"/assignment/#{assignment.id}")
 
     view
   end

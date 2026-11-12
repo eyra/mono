@@ -17,7 +17,7 @@ defmodule Systems.Pool.ControllerTest do
       pool = panl_pool()
       refute Pool.Public.participant?(pool, user)
 
-      conn = get(conn, ~p"/pool/panl/join")
+      conn = get(conn, ~m"/pool/panl/join")
 
       assert redirected_to(conn) == "/pool/panl/onboarding"
     end
@@ -29,7 +29,7 @@ defmodule Systems.Pool.ControllerTest do
       pool = panl_pool()
       refute Pool.Public.participant?(pool, user)
 
-      conn = get(conn, ~p"/pool/panl/join?return_to=/assignment/42/apply")
+      conn = get(conn, ~m"/pool/panl/join?return_to=/assignment/42/apply")
 
       assert redirected_to(conn) == "/pool/panl/onboarding?return_to=%2Fassignment%2F42%2Fapply"
     end
@@ -38,7 +38,7 @@ defmodule Systems.Pool.ControllerTest do
       pool = panl_pool()
       Pool.Public.add_participant!(pool, user)
 
-      conn = get(conn, ~p"/pool/panl/join")
+      conn = get(conn, ~m"/pool/panl/join")
 
       # Home lives at "/" for members via Account.UserAuth.signed_in_path/1.
       assert redirected_to(conn) == "/"
@@ -48,7 +48,7 @@ defmodule Systems.Pool.ControllerTest do
       pool = panl_pool()
       Pool.Public.add_participant!(pool, user)
 
-      conn = get(conn, ~p"/pool/panl/join?return_to=/assignment/42/apply")
+      conn = get(conn, ~m"/pool/panl/join?return_to=/assignment/42/apply")
 
       assert redirected_to(conn) == "/assignment/42/apply"
     end
@@ -57,7 +57,7 @@ defmodule Systems.Pool.ControllerTest do
       pool = panl_pool()
       refute Pool.Public.participant?(pool, user)
 
-      conn = get(conn, ~p"/pool/panl/join?return_to=https://evil.example.com/steal")
+      conn = get(conn, ~m"/pool/panl/join?return_to=https://evil.example.com/steal")
 
       assert redirected_to(conn) == "/pool/panl/onboarding"
     end
@@ -65,7 +65,7 @@ defmodule Systems.Pool.ControllerTest do
 
   describe "GET /pool/:slug/join without authentication" do
     test "redirects to the signin page", %{conn: conn} do
-      conn = get(conn, ~p"/pool/panl/join")
+      conn = get(conn, ~m"/pool/panl/join")
 
       assert redirected_to(conn) =~ "/user"
     end

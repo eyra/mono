@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.SubmissionView do
-  use MicaWeb, :html
+  use NextWeb, :html
 
   alias MicaWeb.UI.Timestamp
   alias Frameworks.Pixel.Panel

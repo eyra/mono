@@ -40,4 +40,8 @@ defmodule MicaWeb.Router do
   if Mica.Env.compile_env(:enable_e2e_support, false) do
     forward("/sent_emails", Bamboo.SentEmailViewerPlug)
   end
+
+  # Checks every Mica path (`~m`) against this router. Moves to each SaaS's
+  # router once Mica's is gone (code-compose PR 8).
+  use MicaWeb.PathCheck
 end

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ToolView do
-  use MicaWeb, :modal_live_view
+  use NextWeb, :modal_live_view
   use Frameworks.Pixel
 
   alias Next.Systems.Paper

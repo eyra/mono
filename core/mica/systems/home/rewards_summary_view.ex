@@ -94,7 +94,7 @@ defmodule Systems.Home.RewardsSummaryView do
           body: labels.payout_verify_body,
           confirm_label: labels.payout_verify_confirm,
           cancel_label: labels.payout_handoff_cancel,
-          confirm_action: %{type: :http_get, to: ~p"/user/account?tab=payouts"}
+          confirm_action: %{type: :http_get, to: ~m"/user/account?tab=payouts"}
         }
       }
     }

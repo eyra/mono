@@ -24,7 +24,8 @@
         # Shared with scripts/boundary_check.exs; MicaBoundary uses it.
         "./scripts/boundary_rules.ex",
         "./custom_credo_checks/mica_boundary.ex",
-        "./custom_credo_checks/mica_env_access.ex"
+        "./custom_credo_checks/mica_env_access.ex",
+        "./custom_credo_checks/saas_web_module.ex"
       ],
       strict: false,
       parse_timeout: 5000,
@@ -36,6 +37,7 @@
         {Credo.Check.Warning.NoRepoTransaction, []},
         {Credo.Check.Warning.MicaBoundary, []},
         {Credo.Check.Warning.MicaEnvAccess, []},
+        {Credo.Check.Warning.SaasWebModule, []},
 
         #
         ## Consistency Checks

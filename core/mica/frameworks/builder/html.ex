@@ -87,7 +87,7 @@ defmodule Frameworks.Builder.HTML do
               </div>
             <% else %>
               <div class="h-6 w-6 flex-shrink-0">
-                <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
+                <img class="h-6 w-6" src={~m"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>
             <div class="flex-grow">
@@ -100,7 +100,7 @@ defmodule Frameworks.Builder.HTML do
             </div>
             <%= if @icon do %>
               <div class="w-8 h-8 flex-shrink-0">
-                <img src={~p"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
+                <img src={~m"/images/icons/#{"#{String.downcase(@icon)}.svg"}"} onerror="this.src='/images/icons/placeholder.svg';" alt={@icon}>
               </div>
             <% end %>
           </div>

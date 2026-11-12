@@ -11,7 +11,7 @@ defmodule Next.Systems.Account.NativeSigninController do
   the body carries no credential. See the "Native sign-in" section of
   `docs/architecture/mobile/designs/authentication-session.md`.
   """
-  use MicaWeb, {:controller, [formats: [:json]]}
+  use NextWeb, {:controller, [formats: [:json]]}
 
   alias MicaWeb.ReturnTo
   alias Next.Systems.Account.NativeHandoff

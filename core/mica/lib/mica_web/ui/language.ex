@@ -13,8 +13,8 @@ defmodule MicaWeb.UI.Language do
       |> assign(:icon, "#{locale.id}.svg")
 
     ~H"""
-    <a href={~p"/switch-language/#{@locale_id}?redir=#{@redir}"}>
-      <img src={~p"/images/icons/#{@icon}"} alt={"Switch language to #{@locale_name}"}/>
+    <a href={~m"/switch-language/#{@locale_id}?redir=#{@redir}"}>
+      <img src={~m"/images/icons/#{@icon}"} alt={"Switch language to #{@locale_name}"}/>
     </a>
     """
   end

@@ -7,7 +7,7 @@ defmodule Next.Systems.Announcement.AdminView do
   Only system admins with the `announcements` flag on see the list
   (`@vm.allowed?`).
   """
-  use MicaWeb, :embedded_live_view
+  use NextWeb, :embedded_live_view
 
   alias Frameworks.Pixel.Button
   alias Frameworks.Pixel.Text

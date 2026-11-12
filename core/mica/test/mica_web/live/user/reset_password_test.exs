@@ -9,7 +9,7 @@ defmodule MicaWeb.Live.User.ResetPassword.Test do
 
   describe "as a visitor" do
     test "reset form validates the email field", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password")
 
       html =
         view
@@ -20,7 +20,7 @@ defmodule MicaWeb.Live.User.ResetPassword.Test do
     end
 
     test "reset form fakes sending mail when user does not exist", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password")
 
       html =
         view
@@ -33,7 +33,7 @@ defmodule MicaWeb.Live.User.ResetPassword.Test do
 
     test "reset form sends token to user", %{conn: conn} do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password")
 
       html =
         view
@@ -46,7 +46,7 @@ defmodule MicaWeb.Live.User.ResetPassword.Test do
 
     test "survives the reset email the test mailer sends back to it", %{conn: conn} do
       user = Factories.insert!(:member, %{confirmed_at: nil})
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password")
 
       view
       |> element("form")
