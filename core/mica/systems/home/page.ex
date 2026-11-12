@@ -19,10 +19,10 @@ defmodule Systems.Home.Page do
   end
 
   @impl true
-  def compose(:home_view, %{vm: %{view_type: :guest}}) do
+  def compose(:home_view, %{vm: %{view_type: :guest, sign_up_url: sign_up_url}}) do
     %{
       module: Home.GuestView,
-      params: %{}
+      params: %{sign_up_url: sign_up_url}
     }
   end
 
