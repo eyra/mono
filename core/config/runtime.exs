@@ -205,7 +205,7 @@ if config_env() == :prod do
     client_id: System.get_env("CENTERDATA_CLIENT_ID"),
     client_secret: System.get_env("CENTERDATA_CLIENT_SECRET"),
     authorization_params: [scope: "email"],
-    client_authentication_method: "client_secret_post",
+    client_authentication_method: :client_secret_post,
     code_verifier: true
 
   config :mica, Mica.ImageCatalog.Unsplash,
