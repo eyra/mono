@@ -8,10 +8,14 @@ defmodule Systems.Account.AuthCodeLimitsTest do
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
   alias Systems.Rate.CounterModel
 
   @remote_ip "203.0.113.10"
   @other_ip "198.51.100.20"
+
+  # The limits count per hour and per day, and a day starts on the hour.
+  setup do: Rate.TestHelper.wait_out_window_end(3600)
 
   defp unique_email(prefix) do
     "#{prefix}-#{System.unique_integer([:positive])}@example.com"

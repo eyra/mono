@@ -76,9 +76,71 @@ defmodule Frameworks.GreenLight.Permissions do
     end
   end
 
-  defmacro __before_compile__(_env) do
-    quote do
-      def permission_map, do: @permission_map |> PermissionMap.new_t()
+  @doc """
+  The permission map of grants given as data: `{module, roles}` as for
+  `grant_access/2`, `{module, %{action => roles}}` as for `grant_actions/2`.
+  Raises when a permission is in `permission_map` already or granted twice: a
+  grant never widens another one silently.
+  """
+  def grants_permission_map(permission_map, grants) do
+    Enum.reduce(grants, permission_map, fn
+      {module, %{} = action_to_roles}, acc ->
+        Enum.reduce(action_to_roles, acc, fn {action, roles}, acc ->
+          grant_once(acc, action_permission(module, action), roles)
+        end)
+
+      {module, roles}, acc when is_list(roles) ->
+        grant_once(acc, access_permission(module), roles)
+
+      other, _acc ->
+        raise ArgumentError, "not a grant: #{inspect(other)}"
+    end)
+  end
+
+  defp grant_once(permission_map, permission, roles) do
+    if PermissionMap.granted?(permission_map, permission) do
+      raise ArgumentError, "#{permission} is granted more than once"
+    end
+
+    PermissionMap.grant(permission_map, permission, roles)
+  end
+
+  @doc false
+  # The compiled permission map of `module` merged with the grants that `{m, f, a}`
+  # returns, built on the first call and cached until the node restarts. The
+  # cache is rebuilt when the compiled map changes (a recompile in dev).
+  def runtime_permission_map(module, permission_map, {m, f, a}) do
+    key = {__MODULE__, module}
+
+    case :persistent_term.get(key, nil) do
+      {^permission_map, merged} ->
+        merged
+
+      _ ->
+        merged = grants_permission_map(permission_map, apply(m, f, a))
+        :persistent_term.put(key, {permission_map, merged})
+        merged
+    end
+  end
+
+  defmacro __before_compile__(env) do
+    case Module.get_attribute(env.module, :green_light_grants) do
+      nil ->
+        quote do
+          def permission_map, do: @permission_map |> PermissionMap.new_t()
+        end
+
+      grants ->
+        quote do
+          def permission_map do
+            Permissions.runtime_permission_map(
+              __MODULE__,
+              @permission_map,
+              unquote(grants)
+            )
+            |> PermissionMap.new_t()
+          end
+        end
     end
   end
 end

@@ -9,11 +9,9 @@ defmodule Next.Systems.Onyx.System do
   end
 
   def grants do
-    quote do
-      [
-        {Next.Systems.Onyx.LandingPage, [:admin]}
-      ]
-    end
+    [
+      {Next.Systems.Onyx.LandingPage, [:admin]}
+    ]
   end
 
   def feature_flags, do: [:onyx]

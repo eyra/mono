@@ -14,6 +14,9 @@ defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
   alias Mica.Repo
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
+
+  setup do: Rate.TestHelper.wait_out_window_end(3600)
 
   describe "/user/auth/verify rate limit" do
     test "a network address past its check limit gets the attempts message and keeps its code",

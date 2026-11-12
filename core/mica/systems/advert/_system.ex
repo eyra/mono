@@ -9,12 +9,10 @@ defmodule Systems.Advert.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Advert.Model, [:visitor, :member]},
-        {Systems.Advert.ContentPage, [:owner]}
-      ]
-    end
+    [
+      {Systems.Advert.Model, [:visitor, :member]},
+      {Systems.Advert.ContentPage, [:owner]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Advert.Switch]

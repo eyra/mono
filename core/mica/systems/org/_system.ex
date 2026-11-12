@@ -9,11 +9,9 @@ defmodule Systems.Org.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Org.ContentPage, [:admin]}
-      ]
-    end
+    [
+      {Systems.Org.ContentPage, [:admin]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Org.Switch]

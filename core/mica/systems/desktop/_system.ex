@@ -9,12 +9,10 @@ defmodule Systems.Desktop.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Desktop.Page, [:creator]},
-        {Systems.Desktop.FullListPage, [:member]}
-      ]
-    end
+    [
+      {Systems.Desktop.Page, [:creator]},
+      {Systems.Desktop.FullListPage, [:member]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Desktop.Switch]

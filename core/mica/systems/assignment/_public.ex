@@ -990,6 +990,148 @@ defmodule Systems.Assignment.Public do
     |> Repo.preload(preload)
   end
 
+  @doc """
+  Whether the member finished the required tasks of the assignment: the tasks of the
+  workflow items marked required are all finished (completed, accepted or rejected).
+  A workflow without required items counts all its items; an empty one is never finished.
+  """
+  def required_tasks_finished?(%Assignment.Model{} = assignment, %Crew.MemberModel{} = member) do
+    %{crew: crew, workflow: workflow} =
+      assignment = Repo.preload(assignment, [:crew, workflow: :items])
+
+    case counted_items(workflow) do
+      [] -> false
+      items -> items_finished?(crew, assignment, items, member)
+    end
+  end
+
+  def required_tasks_finished?(%Assignment.Model{}, nil), do: false
+
+  @doc """
+  Finishes the task's member when completing it finished their required tasks (see
+  `required_tasks_finished_by?/2`; `task_before` is the task as it was before) and they
+  weren't notified yet (see `finish_member/2`). Called in the transaction that completes
+  the task. It first takes a lock per member for the rest of that transaction, so of two
+  completions in overlapping transactions the later one sees the other's task finished.
+  """
+  def finish_if_required_tasks_finished_by(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{} = task_before
+      ) do
+    if member = get_member_by_task(task_before) do
+      lock_finishing(member)
+
+      if required_tasks_finished_by?(assignment, task_before) do
+        finish_member(assignment, member)
+      end
+    end
+
+    :ok
+  end
+
+  @doc """
+  Finishes a member whose required tasks are finished but who wasn't finished when their
+  last required task completed: one who finished the tasks that count now before their
+  manuals stopped counting, or whose last open required item a researcher removed. Called
+  when the member opens the assignment. Testers are skipped: they get no Monitor event,
+  so nothing would stop every visit from notifying them again.
+  """
+  def finish_if_required_tasks_finished(
+        %Assignment.Model{} = assignment,
+        %Crew.MemberModel{} = member
+      ) do
+    %{user: user} = member = Repo.preload(member, :user)
+
+    unless tester?(assignment, user) do
+      {:ok, _} =
+        Multi.new()
+        |> Multi.run(:finish, fn _, _ -> finish_locked(assignment, member) end)
+        |> Repo.commit()
+    end
+
+    :ok
+  end
+
+  def finish_if_required_tasks_finished(%Assignment.Model{}, nil), do: :ok
+
+  # In a transaction, so the lock holds until the finish commits
+  defp finish_locked(assignment, member) do
+    lock_finishing(member)
+
+    if required_tasks_finished?(assignment, member) do
+      finish_member(assignment, member)
+    end
+
+    {:ok, member}
+  end
+
+  # Notifies the member once: dispatches `{:crew_member, :finished_tasks}`, which queues
+  # `assignment_finished` for the panel and logs the Monitor's finished event, and completes
+  # the participation (left as is when the Done button completed it already). The Monitor
+  # event marks a notified member: every dispatch has logged it, also before the
+  # participation recorded completion, so a member who has it gets nothing new.
+  defp finish_member(assignment, member) do
+    %{user: user} = member = Repo.preload(member, :user)
+
+    unless Assignment.Private.finished_logged?(assignment, user) do
+      {:ok, _} = complete_participation(assignment, user)
+      Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: member})
+    end
+  end
+
+  # A transaction-scoped advisory lock, so it can't deadlock with the row locks that
+  # expiring or rejecting a member takes on the member, its participation and its tasks.
+  defp lock_finishing(%Crew.MemberModel{id: member_id}) do
+    Repo.query!("SELECT pg_advisory_xact_lock(hashtextextended($1, 0))", [
+      "assignment_finish:member=#{member_id}"
+    ])
+  end
+
+  @doc """
+  Whether completing the task finishes its member's required tasks: the task, as it was
+  before its completion, wasn't finished, it counts for `required_tasks_finished?/2`, and
+  now all of them are finished.
+  """
+  def required_tasks_finished_by?(
+        %Assignment.Model{} = assignment,
+        %Crew.TaskModel{status: status} = task_before
+      ) do
+    status not in Crew.TaskStatus.finished_states() and
+      required_task?(assignment, task_before) and
+      required_tasks_finished?(assignment, get_member_by_task(task_before))
+  end
+
+  defp required_task?(assignment, task) do
+    %{workflow: workflow} = Repo.preload(assignment, workflow: :items)
+    item_id = Assignment.Private.workflow_item_id(task)
+
+    workflow
+    |> counted_items()
+    |> Enum.any?(&("#{&1.id}" == item_id))
+  end
+
+  defp items_finished?(crew, assignment, items, member) do
+    Enum.all?(items, &(task_status(crew, assignment, &1, member) in finished_states()))
+  end
+
+  defp task_status(crew, assignment, item, member) do
+    identifier = Assignment.Private.task_identifier(assignment, item, member)
+
+    case Crew.Public.get_task(crew, identifier) do
+      %{status: status} -> status
+      nil -> nil
+    end
+  end
+
+  defp finished_states, do: Crew.TaskStatus.finished_states()
+
+  defp counted_items(%Workflow.Model{items: items}) do
+    case Enum.filter(items, & &1.required) do
+      [] -> items
+      required_items -> required_items
+    end
+  end
+
   # Assignable
 
   def ready?(%{workflow: workflow}) do
@@ -1095,22 +1237,38 @@ defmodule Systems.Assignment.Public do
     do: {:ok, p}
 
   def complete_participation(%Assignment.ParticipationModel{} = participation) do
-    participation = Repo.preload(participation, :assignment)
-
-    changeset =
-      Assignment.ParticipationModel.changeset(participation, %{
-        completed_at: Timestamp.naive_now()
-      })
-
-    Multi.new()
-    |> Multi.update(:assignment_participation, changeset)
-    |> maybe_reward_step(participation, &Fund.Public.mark_pending_approval/2)
-    |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
+    participation
+    |> complete_participation_multi()
     |> Repo.commit()
     |> case do
       {:ok, %{assignment_participation: participation}} -> {:ok, participation}
       error -> error
     end
+  end
+
+  # Sets `completed_at` only where it is still empty, so of concurrent calls exactly one
+  # completes the participation; only that one adds the reward step and the signal. The
+  # other calls change nothing and don't fail, so they never roll back a transaction they
+  # run in (such as the one completing a crew task).
+  defp complete_participation_multi(%Assignment.ParticipationModel{} = participation) do
+    %{id: id} = participation = Repo.preload(participation, :assignment)
+    completed_at = Timestamp.naive_now()
+    open = from(p in Assignment.ParticipationModel, where: p.id == ^id and is_nil(p.completed_at))
+
+    Multi.new()
+    |> Multi.update_all(:completed, open,
+      set: [completed_at: completed_at, updated_at: completed_at]
+    )
+    |> Multi.merge(fn
+      %{completed: {1, _}} ->
+        Multi.new()
+        |> Multi.put(:assignment_participation, %{participation | completed_at: completed_at})
+        |> maybe_reward_step(participation, &Fund.Public.mark_pending_approval/2)
+        |> Signal.Public.multi_dispatch({:assignment_participation, :completed})
+
+      %{completed: {0, _}} ->
+        Multi.put(Multi.new(), :assignment_participation, Repo.reload!(participation))
+    end)
   end
 
   @doc """

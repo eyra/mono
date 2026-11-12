@@ -9,17 +9,15 @@ defmodule Systems.Pool.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Pool.ContentPage, [:admin]},
-        {Systems.Pool.DetailPage, [:creator]},
-        {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
-        {Systems.Pool.MarketplacePage, [:visitor, :member, :owner]},
-        {Systems.Pool.OnboardingPage, [:member]},
-        {Systems.Pool.ParticipantPage, [:creator]},
-        {Systems.Pool.SubmissionPage, [:creator]}
-      ]
-    end
+    [
+      {Systems.Pool.ContentPage, [:admin]},
+      {Systems.Pool.DetailPage, [:creator]},
+      {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
+      {Systems.Pool.MarketplacePage, [:visitor, :member, :owner]},
+      {Systems.Pool.OnboardingPage, [:member]},
+      {Systems.Pool.ParticipantPage, [:creator]},
+      {Systems.Pool.SubmissionPage, [:creator]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Pool.Switch]

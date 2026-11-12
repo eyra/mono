@@ -14,6 +14,7 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
   alias Mica.Repo
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
 
   @email_field "[data-testid='auth-email-input']"
   @email_error "#email_error_message"
@@ -40,7 +41,9 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
 
   setup do
     set_feature_flag(:otp, true)
-    :ok
+    # The email address's daily total refuses the requests; a browser test
+    # takes seconds, well within the module's 120 s timeout.
+    Rate.TestHelper.wait_out_window_end(86_400, 60_000)
   end
 
   @sessions [[capabilities: @phone_nl_capabilities]]

@@ -9,11 +9,9 @@ defmodule Systems.Feldspar.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Feldspar.AppPage, [:visitor, :member]}
-      ]
-    end
+    [
+      {Systems.Feldspar.AppPage, [:visitor, :member]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Feldspar.Switch]

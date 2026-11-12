@@ -9,11 +9,9 @@ defmodule Systems.Storage.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Storage.EndpointContentPage, [:owner]}
-      ]
-    end
+    [
+      {Systems.Storage.EndpointContentPage, [:owner]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Storage.Switch]
