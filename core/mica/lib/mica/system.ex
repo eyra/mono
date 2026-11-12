@@ -28,8 +28,7 @@ defmodule Mica.System do
   System modules are data modules and never call system code. The router reads
   `override_routes/0` and `routes/0` at compile time, so these return quoted
   code. The other callbacks return plain values, which `Mica.SaaS` collects
-  (`notify_channels/0` also at compile time, for the `Systems.Notify.MessageModel`
-  enum; `grants/0` at boot, for `Mica.Authorization`).
+  (`grants/0` at boot, for `Mica.Authorization`).
 
   A SaaS extends Mica's systems only through its own systems, for example by
   shadowing Mica's sign-in routes with `override_routes/0`.

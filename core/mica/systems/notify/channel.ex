@@ -24,6 +24,15 @@ defmodule Systems.Notify.Channel do
   @callback mark_seen(%MessageModel{}) :: :ok | {:error, term()}
   @optional_callbacks [mark_seen: 1]
 
-  @doc "The channel module for a channel name, from `Mica.SaaS.notify_channels/0`."
-  def adapter(name), do: Map.fetch!(Mica.SaaS.notify_channels(), name)
+  @doc """
+  The channel module for a channel name, from `Mica.SaaS.notify_channels/0`.
+  A name the composition doesn't have (such as a stored channel that a later
+  build dropped) is `{:error, :unknown_channel}`.
+  """
+  def adapter(name) do
+    case Map.fetch(Mica.SaaS.notify_channels(), name) do
+      {:ok, adapter} -> {:ok, adapter}
+      :error -> {:error, :unknown_channel}
+    end
+  end
 end
