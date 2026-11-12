@@ -1,6 +1,6 @@
 defmodule Next.Systems.Announcement.Cards do
   @moduledoc "Announcement cards shared by the Desktop preview and the full list."
-  use MicaWeb, :html
+  use NextWeb, :html
 
   alias Frameworks.Pixel.Card
   alias Frameworks.Pixel.Grid

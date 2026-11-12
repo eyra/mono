@@ -10,7 +10,7 @@ defmodule Next.Systems.WellKnown.Controller do
   (`co.eyra.next.dev`) never claims links on other environments. Local, Staging,
   and Prod builds share `co.eyra.next`.
   """
-  use MicaWeb, {:controller, [formats: [:json]]}
+  use NextWeb, {:controller, [formats: [:json]]}
 
   @app_ids ["XNWQJGGM96.co.eyra.next", "XNWQJGGM96.co.eyra.next.dev"]
 

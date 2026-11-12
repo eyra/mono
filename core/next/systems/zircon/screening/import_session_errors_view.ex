@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportSessionWarningsView do
-  use MicaWeb, :embedded_live_view
+  use NextWeb, :embedded_live_view
   use Gettext, backend: MicaWeb.Gettext
 
   import Frameworks.Pixel.Paginator, only: [paginator: 1]

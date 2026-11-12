@@ -5,6 +5,7 @@
   router_compile_connected: [
     "mica/lib/mica/saas.ex",
     "mica/lib/mica_web.ex",
+    "mica/lib/mica_web/web.ex",
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",
     "mica/systems/account/auth/surfconext.ex"

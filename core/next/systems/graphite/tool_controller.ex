@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.ToolController do
-  use MicaWeb,
+  use NextWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 

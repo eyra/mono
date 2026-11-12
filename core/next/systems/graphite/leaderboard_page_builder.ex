@@ -1,6 +1,6 @@
 defmodule Next.Systems.Graphite.LeaderboardPageBuilder do
   use Mica, :auth
-  use MicaWeb, :verified_routes
+  use NextWeb, :verified_routes
 
   use Gettext, backend: MicaWeb.Gettext
 

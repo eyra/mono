@@ -1,5 +1,5 @@
 defmodule NextWeb.Menu.Items do
-  use MicaWeb, :verified_routes
+  use NextWeb, :verified_routes
   @behaviour MicaWeb.Menu.ItemsProvider
 
   use Gettext, backend: MicaWeb.Gettext

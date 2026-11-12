@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.HTML do
-  use MicaWeb, :html
+  use NextWeb, :html
 
   attr(:id, :string, required: true)
   attr(:title, :string, required: true)

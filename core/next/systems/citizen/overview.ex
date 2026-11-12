@@ -1,5 +1,5 @@
 defmodule Next.Systems.Citizen.Overview do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   alias Frameworks.Pixel.SearchBar
   alias Frameworks.Pixel.Text

@@ -1,7 +1,7 @@
 defmodule MicaSaasWeb.Menu.Items do
   @behaviour MicaWeb.Menu.ItemsProvider
 
-  use MicaWeb, :verified_routes
+  use MicaSaasWeb, :verified_routes
   use Gettext, backend: MicaWeb.Gettext
   alias Phoenix.LiveView.JS
 

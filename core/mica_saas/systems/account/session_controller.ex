@@ -1,5 +1,5 @@
 defmodule MicaSaas.Systems.Account.SessionController do
-  use MicaWeb,
+  use MicaSaasWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 
