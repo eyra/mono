@@ -39,7 +39,7 @@
      [
        authorization_params: [scope: "email"],
        base_url: "https://messpanel.test.centerdata.nl",
-       client_authentication_method: "client_secret_post",
+       client_authentication_method: :client_secret_post,
        client_id: "CENTERDATA_CLIENT_ID",
        client_secret: "CENTERDATA_CLIENT_SECRET",
        code_verifier: true,
