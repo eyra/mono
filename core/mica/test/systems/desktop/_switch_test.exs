@@ -8,14 +8,13 @@ defmodule Systems.Desktop.SwitchTest do
   use Mica.DataCase, async: false
 
   alias Mica.Factories
-  alias MicaWeb.Endpoint
   alias Systems.Desktop
 
   describe "intercept/2" do
     setup do
       user = Factories.insert!(:member)
       topic = "signal:#{Systems.Desktop.Page}:#{user.id}"
-      Endpoint.subscribe(topic)
+      Mica.SaaS.endpoint().subscribe(topic)
       {:ok, user: user, topic: topic}
     end
 

@@ -27,7 +27,7 @@ defmodule Systems.Account.UserSocket do
   # Would allow you to broadcast a "disconnect" event and terminate
   # all active sockets and channels for a given user:
   #
-  #     MicaWeb.EndpointProxy.broadcast("user_socket:#{user.id}", "disconnect", %{})
+  #     Mica.SaaS.endpoint().broadcast("user_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
   @impl true

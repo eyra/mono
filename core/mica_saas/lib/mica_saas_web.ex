@@ -8,5 +8,5 @@ defmodule MicaSaasWeb do
   The blocks are `MicaWeb.Web`'s; `~p` is verified against the router given here.
   """
 
-  use MicaWeb.Web, router: MicaWeb.Router, endpoint: MicaWeb.Endpoint
+  use MicaWeb.Web, router: MicaWeb.Router, endpoint: MicaSaasWeb.Endpoint
 end

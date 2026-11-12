@@ -82,9 +82,6 @@ config :plug, :statuses, %{
 
 config :mica, MicaWeb.FileUploader, max_file_size: 100_000_000
 
-# Maximum HTTP body size for uploads (Plug.Parsers)
-config :mica, MicaWeb.Endpoint, http_body_max_size: 210_000_000
-
 config :mica, :policy_urls,
   next_terms: "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c",
   next_privacy: "https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752",
@@ -176,24 +173,6 @@ config :mica, Mica.ImageCatalog.Unsplash,
   app_name: "Mica"
 
 config :mica, :s3, bucket: "port"
-
-config :mica, MicaWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
-  server: true,
-  force_ssl: false,
-  render_errors: [
-    formats: [html: MicaWeb.ErrorHTML, json: MicaWeb.ErrorJSON],
-    layout: [html: {MicaWeb.Layouts, :error}]
-  ],
-  pubsub_server: Mica.PubSub,
-  live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
-  http: [
-    port: 4000,
-    protocol_options: [
-      idle_timeout: :infinity
-    ]
-  ]
 
 config :mica, :ssl,
   client: :native,

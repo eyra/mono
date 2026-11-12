@@ -1,14 +1,13 @@
 defmodule Systems.Observatory.Public do
   use Mica, :public
-  alias MicaWeb.Endpoint
   alias Systems.Observatory.UpdateCollector
 
   def subscribe(signal, key \\ []) do
-    Endpoint.subscribe(topic_key(signal, key))
+    Mica.SaaS.endpoint().subscribe(topic_key(signal, key))
   end
 
   def dispatch(signal, key, data) do
-    Endpoint.broadcast(
+    Mica.SaaS.endpoint().broadcast(
       topic_key(signal, key),
       "observation",
       {signal, data}
@@ -16,7 +15,7 @@ defmodule Systems.Observatory.Public do
   end
 
   def local_dispatch(signal, key, data) do
-    Endpoint.local_broadcast(
+    Mica.SaaS.endpoint().local_broadcast(
       topic_key(signal, key),
       "observation",
       {signal, data}

@@ -6,7 +6,7 @@
     MicaWeb.Telemetry,
     Phoenix.PubSub.Supervisor,
     Oban,
-    MicaWeb.Endpoint,
+    MicaSaasWeb.Endpoint,
     Systems.Rate.Server
   ],
   deployments: [

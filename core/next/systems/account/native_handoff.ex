@@ -19,7 +19,7 @@ defmodule Next.Systems.Account.NativeHandoff do
 
   import Plug.Conn
 
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Systems.Account
 
   @cookie "_next_native_sign_in"

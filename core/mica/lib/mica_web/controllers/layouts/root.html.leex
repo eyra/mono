@@ -16,9 +16,9 @@
     <link rel="manifest" href="/manifest.json">
     <link
       rel="stylesheet"
-      href="<%= MicaWeb.Endpoint.static_path("/assets/app.css") %>"
+      href="<%= Mica.SaaS.endpoint().static_path("/assets/app.css") %>"
     />
-    <script src="<%= MicaWeb.Endpoint.static_path("/assets/app.js") %>" defer></script>
+    <script src="<%= Mica.SaaS.endpoint().static_path("/assets/app.js") %>" defer></script>
   </head>
   <body class="font-body <%= if MicaWeb.UI.OldSkool.native_web?(@conn), do: "bg-white", else: "bg-grey5" %> scrollbar-hidden" <%= if MicaWeb.UI.OldSkool.native_web?(@conn), do: "data-native-app" %>>
     <div class="flex flex-row">

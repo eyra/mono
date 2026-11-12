@@ -87,7 +87,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       # Verify using the same salt and endpoint
       result =
         Phoenix.Token.verify(
-          MicaWeb.Endpoint,
+          Mica.SaaS.endpoint(),
           "onboarding_token",
           token,
           max_age: 300
@@ -102,7 +102,7 @@ defmodule Systems.Account.OnboardingControllerTest do
 
       {:ok, user_id} =
         Phoenix.Token.verify(
-          MicaWeb.Endpoint,
+          Mica.SaaS.endpoint(),
           "onboarding_token",
           token,
           max_age: 300

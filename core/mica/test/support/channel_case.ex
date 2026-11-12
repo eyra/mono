@@ -24,7 +24,7 @@ defmodule MicaWeb.ChannelCase do
       import MicaWeb.ChannelCase
 
       # The default endpoint for testing
-      @endpoint MicaWeb.Endpoint
+      @endpoint NextWeb.Endpoint
     end
   end
 

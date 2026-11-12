@@ -1,8 +1,6 @@
 defmodule MicaWeb.Live.Hook.Menus do
   use Frameworks.Concept.LiveHook
 
-  alias MicaWeb.Endpoint
-
   @impl true
   def mount(live_view_module, _params, _session, socket) do
     {
@@ -21,7 +19,7 @@ defmodule MicaWeb.Live.Hook.Menus do
 
   defp subscribe_to_next_actions(%{assigns: %{current_user: %{id: user_id}}} = socket) do
     if Phoenix.LiveView.connected?(socket) do
-      Endpoint.subscribe("next_actions:#{user_id}")
+      Mica.SaaS.endpoint().subscribe("next_actions:#{user_id}")
     end
 
     socket

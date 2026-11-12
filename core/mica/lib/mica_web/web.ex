@@ -5,7 +5,7 @@ defmodule MicaWeb.Web do
   Mica and every SaaS have their own web module, built with this one:
 
       defmodule NextWeb do
-        use MicaWeb.Web, router: MicaWeb.Router, endpoint: MicaWeb.Endpoint
+        use MicaWeb.Web, router: MicaWeb.Router, endpoint: NextWeb.Endpoint
       end
 
   Code then uses its owner's web module, `use NextWeb, :routed_live_view` or

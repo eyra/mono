@@ -204,7 +204,7 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp publisher do
     %{
-      "@id" => MicaWeb.Endpoint.url(),
+      "@id" => Mica.SaaS.endpoint().url(),
       "@type" => "Organization",
       "name" => MicaWeb.Meta.bundle_title()
     }

@@ -97,7 +97,7 @@ defmodule Next.Systems.Announcement.EmailTest do
 
     test "sends the title, the full body and a link", %{author: author} do
       %{id: id} = publish!(announcement!(author))
-      url = MicaWeb.Endpoint.url() <> "/announcement/#{id}"
+      url = NextWeb.Endpoint.url() <> "/announcement/#{id}"
 
       assert [
                %{to: [nil: "anna@example.org"], subject: "Release notes"},
@@ -228,7 +228,7 @@ defmodule Next.Systems.Announcement.EmailTest do
                Announcement.EmailTemplate.email(announcement)
 
       assert [url] = Regex.run(~r/href="([^"]+announcement[^"]*)"/, html, capture: :all_but_first)
-      assert url == MicaWeb.Endpoint.url() <> "/announcement/#{id}"
+      assert url == NextWeb.Endpoint.url() <> "/announcement/#{id}"
     end
 
     test "a body stored before cleaning existed is sent cleaned", %{author: author} do

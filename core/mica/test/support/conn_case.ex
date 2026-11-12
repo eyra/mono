@@ -28,7 +28,7 @@ defmodule MicaWeb.ConnCase do
       alias Mica.Factories
 
       # The default endpoint for testing
-      @endpoint MicaWeb.Endpoint
+      @endpoint NextWeb.Endpoint
       import Mica.AuthTestHelpers
 
       use MicaWeb, :verified_routes

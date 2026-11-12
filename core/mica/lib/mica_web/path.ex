@@ -24,9 +24,6 @@ defmodule MicaWeb.Path do
 
   @statics ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
 
-  # The endpoint the paths are built for.
-  @endpoint MicaWeb.Endpoint
-
   @doc "The top-level folders whose paths are static files."
   def statics, do: @statics
 
@@ -102,10 +99,10 @@ defmodule MicaWeb.Path do
   end
 
   @doc false
-  def __path__(path), do: Phoenix.VerifiedRoutes.unverified_path(@endpoint, nil, path)
+  def __path__(path), do: Phoenix.VerifiedRoutes.unverified_path(Mica.SaaS.endpoint(), nil, path)
 
   @doc false
-  def __static_path__(path), do: Phoenix.VerifiedRoutes.static_path(@endpoint, path)
+  def __static_path__(path), do: Phoenix.VerifiedRoutes.static_path(Mica.SaaS.endpoint(), path)
 
   @doc false
   def __encode_segment__(data) do

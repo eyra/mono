@@ -188,7 +188,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
         capture_log([level: :error], fn ->
           conn =
             conn(:get, "/google?code=abc&state=xyz")
-            |> Map.replace!(:secret_key_base, MicaWeb.Endpoint.config(:secret_key_base))
+            |> Map.replace!(:secret_key_base, Mica.SaaS.endpoint().config(:secret_key_base))
             |> init_test_session(%{})
             |> Plug.Conn.fetch_query_params()
             |> Phoenix.Controller.fetch_flash([])

@@ -75,11 +75,6 @@ config :mica, :paper,
   # Use smaller chunk size for tests (1KB)
   ris_stream_chunk_size: 1_024
 
-config :mica, MicaWeb.Endpoint,
-  http: [port: feature_test_port],
-  force_ssl: false,
-  server: true
-
 # Wallaby configuration
 config :wallaby,
   otp_app: :mica,

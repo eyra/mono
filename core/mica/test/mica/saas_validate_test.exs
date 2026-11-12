@@ -152,6 +152,7 @@ defmodule Mica.SaaSValidateTest.SaaS do
   use Mica.SaaS
   def systems, do: Process.get(:validate_test_systems)
   def feature_flags, do: Process.get(:validate_test_flags, [])
+  def endpoint, do: Process.get(:validate_test_endpoint, NextWeb.Endpoint)
   def start_pages, do: nil
   def menu_items, do: nil
   def menu_builder(_), do: nil
@@ -188,6 +189,30 @@ defmodule Mica.SaaSValidateTest do
     assert_raise ArgumentError, ~r/does not `use Mica.SaaS`/, fn ->
       SaaS.validate!(Systems.Switch)
     end
+  end
+
+  test "the composition holds the SaaS's endpoint" do
+    assert %{endpoint: NextWeb.Endpoint} = validate!([Systems.Plain])
+    assert SaaS.endpoint() == SaaS.module().endpoint()
+  end
+
+  test "an endpoint that is no MicaWeb.Endpoint" do
+    Process.put(:validate_test_endpoint, Systems.Plain)
+
+    assert_raise ArgumentError,
+                 "Mica.SaaSValidateTest.SaaS.endpoint/0 names Mica.SaaSValidateTest.Systems.Plain, " <>
+                   "which does not `use MicaWeb.Endpoint`",
+                 fn -> validate!([Systems.Plain]) end
+  end
+
+  test "an endpoint that is no module" do
+    Process.put(:validate_test_endpoint, Mica.SaaSValidateTest.Missing)
+
+    assert_raise ArgumentError,
+                 ~r/endpoint\/0 names Mica.SaaSValidateTest.Missing, which is not a module/,
+                 fn ->
+                   validate!([Systems.Plain])
+                 end
   end
 
   test "a system that is no Mica.System" do

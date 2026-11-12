@@ -20,6 +20,9 @@ defmodule Mica.SaaS do
   @doc "The systems the SaaS is made of: `Mica.Systems.all() ++` its own systems."
   @callback systems() :: [module()]
 
+  @doc "The SaaS's endpoint, built with `use MicaWeb.Endpoint`."
+  @callback endpoint() :: module()
+
   @doc "The `MicaWeb.StartPageProvider` implementation."
   @callback start_pages() :: module()
 
@@ -115,6 +118,7 @@ defmodule Mica.SaaS do
   The composition of `saas`, after checking it. Raises on:
 
     * a SaaS module that is no `Mica.SaaS`, or a system that is no `Mica.System`
+    * an endpoint that is no `MicaWeb.Endpoint`
     * a system, signal handler, notifier, sign-in handoff or assignment template
       listed twice, or an event type that two notifiers declare
     * a notify channel, Oban queue, Oban cron, Desktop section id or BFF page
@@ -184,6 +188,7 @@ defmodule Mica.SaaS do
     systems = checked_systems(saas)
 
     derive(%{
+      endpoint: checked_endpoint(saas),
       systems: systems,
       signal_handlers: collect_signal_handlers(systems),
       notifiers: Enum.flat_map(systems, & &1.notifiers()),
@@ -248,6 +253,9 @@ defmodule Mica.SaaS do
 
     :ok
   end
+
+  @doc "The endpoint of the SaaS (`c:endpoint/0`). Mica reaches the endpoint only through this."
+  def endpoint, do: fetch(:endpoint)
 
   @doc "The systems the SaaS is made of, in `c:systems/0` order."
   def systems, do: fetch(:systems)
@@ -533,6 +541,19 @@ defmodule Mica.SaaS do
         raise ArgumentError,
               "#{inspect(saas)}.systems/0 lists #{inspect(Enum.uniq(duplicates))} more than once"
     end
+  end
+
+  defp checked_endpoint(saas) do
+    endpoint = saas.endpoint()
+
+    ensure_implements!(
+      endpoint,
+      :__mica_endpoint__,
+      "MicaWeb.Endpoint",
+      "#{inspect(saas)}.endpoint/0"
+    )
+
+    endpoint
   end
 
   # Checked by a callback, not by the behaviour attribute: naming the behaviour
