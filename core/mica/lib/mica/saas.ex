@@ -8,10 +8,13 @@ defmodule Mica.SaaS do
 
       config :mica, saas: Next.SaaS
 
-  The value is read at compile time: the router splices the routes of all
-  systems (`override_routes/0`, `routes/0`). `Mica.Authorization` reads their
-  grants at boot (`grants/0`). Never set `:saas` in `runtime.exs`; a release
-  refuses to boot when it differs from the compiled value.
+  Mica reads the value at runtime. At boot `validate!/0` builds the
+  composition, the contributions of all systems, checks it and caches it; the
+  readers below (`signal_handlers/0`, `grants/0`, ...) take their part from
+  that cache. Only `MicaWeb.Router` still reads the value at compile time, to
+  splice the routes of all systems (`override_routes/0`, `routes/0`). Never set
+  `:saas` in `runtime.exs`; a release refuses to boot when it differs from the
+  value the router was compiled with.
   """
 
   @doc "The systems the SaaS is made of: `Mica.Systems.all() ++` its own systems."
@@ -81,33 +84,184 @@ defmodule Mica.SaaS do
     end
   end
 
-  require Mica.Env
+  require Logger
 
-  @saas Mica.Env.compile_env(:saas) ||
-          raise(
-            "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
-              "mica_saas/config/config.exs) names the SaaS module"
-          )
+  @key {__MODULE__, :composition}
 
   # Mica.Systems, by path: naming it here would make it a dependency of the callers.
   @core_systems_source Path.expand("systems.ex", __DIR__)
 
-  # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
-  # changed the value; this recompiles Mica.SaaS and so the router.
-  def __mix_recompile__?, do: Mica.Env.get(:saas) != @saas
+  @doc "The configured SaaS module (`config :mica, saas:`)."
+  def module do
+    Mica.Env.get(:saas) ||
+      raise "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
+              "mica_saas/config/config.exs) names the SaaS module"
+  end
 
-  @doc "The configured SaaS module."
-  def module, do: @saas
+  @doc """
+  Builds the composition of the configured SaaS, checks it (`validate!/1`) and
+  caches it. `Mica.Application` runs it at boot, before the children start, so
+  a broken composition stops the boot.
+  """
+  def validate! do
+    saas = module()
+    composition = validate!(saas)
+    :persistent_term.put(@key, composition)
+    Logger.info("#{inspect(saas)}: #{length(composition.systems)} systems, composition valid")
+    :ok
+  end
 
-  def systems, do: module().systems()
+  @doc """
+  The composition of `saas`, after checking it. Raises on:
+
+    * a SaaS module that is no `Mica.SaaS`, or a system that is no `Mica.System`
+    * a system, signal handler, notifier, sign-in handoff or assignment template
+      listed twice, or an event type that two notifiers declare
+    * a notify channel, Oban queue, Oban cron, Desktop section id or BFF page
+      that two systems declare
+    * a flag default that no system declares
+    * a permission granted twice, unless the later grant says `widen: true`;
+      each widening is logged
+    * a notifier event routed to a channel that no system declares
+  """
+  def validate!(saas) do
+    composition = build(saas)
+    collect_oban_queues(composition.systems)
+    collect_oban_crons(composition.systems)
+
+    unique!(composition.signal_handlers, "signal handler")
+    unique!(composition.notifiers, "notifier")
+    unique!(Enum.map(notify_events(composition.notifiers), &elem(&1, 0)), "notify event type")
+    unique!(composition.sign_in_handoffs, "sign-in handoff")
+    unique!(Enum.map(composition.assignment_templates, & &1.id()), "assignment template id")
+    check_event_channels!(composition)
+    check_grants!(saas, composition.grants)
+
+    composition
+  end
+
+  # The composition the readers below take their parts from: built on first use,
+  # or by `validate!/0` at boot, and cached until the node restarts. A dev server
+  # picks up a changed contribution on restart.
+  defp composition do
+    case :persistent_term.get(@key, nil) do
+      nil ->
+        composition = validate!(module())
+        :persistent_term.put(@key, composition)
+        composition
+
+      composition ->
+        composition
+    end
+  end
+
+  defp fetch(part), do: Map.fetch!(composition(), part)
+
+  @doc """
+  Test hook: replaces parts of the composition for every process. Returns the
+  composition it replaced, to put back when the test ends:
+
+      previous = Mica.SaaS.put_composition(signal_handlers: [MyTest.Switch])
+      on_exit(fn -> Mica.SaaS.put_composition(previous) end)
+
+  The result is not checked, so a test can put a broken composition. A test
+  that calls it must not be `async`.
+  """
+  def put_composition(parts) do
+    previous = composition()
+    parts = Map.new(parts)
+
+    case Map.keys(parts) -- Map.keys(previous) do
+      [] -> :persistent_term.put(@key, previous |> Map.merge(parts) |> derive())
+      unknown -> raise ArgumentError, "not a part of the composition: #{inspect(unknown)}"
+    end
+
+    previous
+  end
+
+  @doc false
+  def build(saas) do
+    systems = checked_systems(saas)
+
+    derive(%{
+      systems: systems,
+      signal_handlers: collect_signal_handlers(systems),
+      notifiers: Enum.flat_map(systems, & &1.notifiers()),
+      notify_channels: collect_notify_channels(systems),
+      admin_panels: Enum.flat_map(systems, & &1.admin_panels()),
+      account_tabs: Enum.flat_map(systems, & &1.account_tabs()),
+      desktop_sections: collect_desktop_sections(systems),
+      sign_in_handoffs: Enum.flat_map(systems, & &1.sign_in_handoffs()),
+      bff_pages: collect_bff_pages(systems),
+      assignment_templates: Enum.flat_map(systems, & &1.assignment_templates()),
+      feature_flags: collect_feature_flags(saas, systems),
+      grants: collect_grants(systems),
+      schemas: saas |> composition_apps(systems) |> collect_schemas()
+    })
+  end
+
+  # Parts computed from other parts, so that `put_composition/1` keeps them in step.
+  defp derive(composition),
+    do: Map.put(composition, :notify_events, Map.new(notify_events(composition.notifiers)))
+
+  defp notify_events(notifiers) do
+    for notifier <- notifiers,
+        {type, opts} <- notifier.notify_events(),
+        do: {to_string(type), Keyword.get(opts, :channels, [])}
+  end
+
+  defp unique!(list, what) do
+    case list -- Enum.uniq(list) do
+      [] ->
+        :ok
+
+      duplicates ->
+        raise ArgumentError,
+              "#{what} #{inspect(Enum.uniq(duplicates))} is listed more than once"
+    end
+  end
+
+  defp check_event_channels!(%{notify_events: events, notify_channels: channels}) do
+    for {type, event_channels} <- events,
+        channel <- event_channels,
+        not Map.has_key?(channels, channel) do
+      raise ArgumentError,
+            "notify event #{inspect(type)} is routed to channel #{inspect(channel)}, " <>
+              "which no system declares"
+    end
+
+    :ok
+  end
+
+  # The merge `Mica.Authorization.permission_map/0` makes of its own grants and these.
+  defp check_grants!(saas, grants) do
+    Frameworks.GreenLight.Permissions.grants_permission_map(
+      Mica.Authorization.compiled_permission_map(),
+      grants
+    )
+
+    for {module, roles, widen: true} <- grants do
+      Logger.info(
+        "#{inspect(saas)}: the grant of #{inspect(module)} to #{inspect(roles)} widens another grant"
+      )
+    end
+
+    :ok
+  end
+
+  @doc "The systems the SaaS is made of, in `c:systems/0` order."
+  def systems, do: fetch(:systems)
 
   @doc """
   The signal handlers of all systems, sorted by module name within the system
   namespaces: a SaaS system's handler (`Next.Systems.<System>.Switch`) sorts as
   `Systems.<System>.Switch`, among Mica's.
   """
-  def signal_handlers,
-    do: systems() |> Enum.flat_map(& &1.signal_handlers()) |> Enum.sort_by(&handler_order/1)
+  def signal_handlers, do: fetch(:signal_handlers)
+
+  @doc false
+  def collect_signal_handlers(systems),
+    do: systems |> Enum.flat_map(& &1.signal_handlers()) |> Enum.sort_by(&handler_order/1)
 
   defp handler_order(handler) do
     case Module.split(handler) do
@@ -117,36 +271,42 @@ defmodule Mica.SaaS do
   end
 
   @doc "The notifiers of all systems, in `systems/0` order."
-  def notifiers, do: Enum.flat_map(systems(), & &1.notifiers())
+  def notifiers, do: fetch(:notifiers)
 
-  @doc "The notification channels of all systems. Raises when two systems name the same channel."
-  def notify_channels, do: collect_notify_channels(systems())
+  @doc "The notify event types of all notifiers, to the channels each is routed to: `%{\"type\" => [:email]}`."
+  def notify_events, do: fetch(:notify_events)
+
+  @doc "The notification channels of all systems."
+  def notify_channels, do: fetch(:notify_channels)
 
   @doc "The admin panels of all systems, in `systems/0` order."
-  def admin_panels, do: Enum.flat_map(systems(), & &1.admin_panels())
+  def admin_panels, do: fetch(:admin_panels)
 
   @doc "The account tabs of all systems, in `systems/0` order."
-  def account_tabs, do: Enum.flat_map(systems(), & &1.account_tabs())
+  def account_tabs, do: fetch(:account_tabs)
 
-  @doc "The Desktop sections of all systems, in `systems/0` order. Raises when two sections have the same id."
-  def desktop_sections, do: collect_desktop_sections(systems())
+  @doc "The Desktop sections of all systems, in `systems/0` order."
+  def desktop_sections, do: fetch(:desktop_sections)
 
   @doc "The sign-in handoffs of all systems, in `systems/0` order."
-  def sign_in_handoffs, do: Enum.flat_map(systems(), & &1.sign_in_handoffs())
+  def sign_in_handoffs, do: fetch(:sign_in_handoffs)
 
-  @doc "The BFF pages of all systems. Raises when two systems serve the same page."
-  def bff_pages, do: collect_bff_pages(systems())
+  @doc "The BFF pages of all systems."
+  def bff_pages, do: fetch(:bff_pages)
 
-  @doc "The children of all systems, in `systems/0` order."
+  @doc "The assignment templates of all systems, in `systems/0` order."
+  def assignment_templates, do: fetch(:assignment_templates)
+
+  @doc "The children of all systems, in `systems/0` order. Read once, at boot."
   def children, do: collect_children(systems())
 
-  @doc "The Oban queues of all systems. Raises when two systems declare the same queue."
+  @doc "The Oban queues of all systems. Read once, at boot."
   def oban_queues, do: collect_oban_queues(systems())
 
-  @doc "The Oban crons of all systems, in `systems/0` order. Raises when two systems declare the same name."
+  @doc "The Oban crons of all systems, in `systems/0` order. Read once, at boot."
   def oban_crons, do: collect_oban_crons(systems())
 
-  @doc "The default rate quotas of all systems, in `systems/0` order."
+  @doc "The default rate quotas of all systems, in `systems/0` order. Read once, at boot."
   def rate_quotas, do: Enum.flat_map(systems(), & &1.rate_quotas())
 
   @doc """
@@ -169,7 +329,7 @@ defmodule Mica.SaaS do
   system can't leave one of its schemas out. A schema in an application that
   holds neither the SaaS module nor any of its systems is not in it.
   """
-  def schemas, do: module() |> composition_apps(systems()) |> collect_schemas()
+  def schemas, do: fetch(:schemas)
 
   @doc false
   def composition_apps(saas, systems) do
@@ -192,9 +352,9 @@ defmodule Mica.SaaS do
 
   @doc """
   The declared feature flags of all systems, off unless the SaaS turns them on,
-  sorted by name. Raises when the SaaS sets a flag that no system declares.
+  sorted by name.
   """
-  def feature_flags, do: collect_feature_flags(module(), systems())
+  def feature_flags, do: fetch(:feature_flags)
 
   @doc false
   def collect_feature_flags(saas, systems) do
@@ -285,10 +445,11 @@ defmodule Mica.SaaS do
 
   @doc """
   The page grants of all systems, in `systems/0` order: `{module, roles}` or
-  `{module, %{action => roles}}`. `Mica.Authorization` merges them into its
-  permission map at boot, and raises when two grants name the same permission.
+  `{module, %{action => roles}}`, with `widen: true` as a third element when
+  the grant widens another one. `Mica.Authorization` merges them into its
+  permission map at boot.
   """
-  def grants, do: collect_grants(systems())
+  def grants, do: fetch(:grants)
 
   @doc false
   def collect_grants(systems), do: Enum.flat_map(systems, &system_grants/1)
@@ -304,6 +465,10 @@ defmodule Mica.SaaS do
       grants when is_list(grants) ->
         Enum.map(grants, fn
           {module, roles} = grant when is_atom(module) and (is_list(roles) or is_map(roles)) ->
+            grant
+
+          {module, roles, [widen: true]} = grant
+          when is_atom(module) and (is_list(roles) or is_map(roles)) ->
             grant
 
           other ->

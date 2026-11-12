@@ -35,6 +35,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       mix nova.snapshot --update                     # rewrite the snapshots
 
   Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+  Before rendering, the task runs the boot's composition checks
+  (`Mica.SaaS.validate!/0`).
 
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
@@ -58,6 +60,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
     Mix.Task.run("compile")
 
     saas = saas!()
+    # The checks a boot runs: the Self build has no tests of its own (snapshot-self CI job).
+    Mica.SaaS.validate!()
     started = System.monotonic_time(:millisecond)
 
     failures =

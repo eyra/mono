@@ -48,9 +48,25 @@ defmodule Mica.FeatureFlags do
   end
 
   def conf_enabled?(feature_id) do
+    defaults = Mica.SaaS.feature_flags()
+    warn_undeclared_read(feature_id, defaults)
+
     case Keyword.fetch(Mica.Env.get(:features, []), feature_id) do
       {:ok, enabled?} -> enabled?
-      :error -> Keyword.get(saas_defaults(), feature_id, false)
+      :error -> Keyword.get(defaults, feature_id, false)
+    end
+  end
+
+  # In dev and test (`config :mica, warn_undeclared_flag_reads: true`), once per
+  # flag name: a typo in a flag name reads as off, like a flag no system declares.
+  defp warn_undeclared_read(feature_id, defaults) do
+    key = {__MODULE__, :warned, feature_id}
+
+    if Mica.Env.get(:warn_undeclared_flag_reads, false) and
+         not Keyword.has_key?(defaults, feature_id) and
+         not :persistent_term.get(key, false) do
+      :persistent_term.put(key, true)
+      Logger.warning("Feature flag #{inspect(feature_id)} is read, but no system declares it")
     end
   end
 
@@ -80,17 +96,5 @@ defmodule Mica.FeatureFlags do
     |> Enum.reject(&(&1 == :"" or Keyword.has_key?(declared, &1)))
   end
 
-  # The SaaS is fixed at compile time, so its declared flags and defaults only
-  # change with a new build; a dev server picks up a changed default on restart.
-  defp saas_defaults do
-    case :persistent_term.get(__MODULE__, nil) do
-      nil ->
-        defaults = Mica.SaaS.feature_flags()
-        :persistent_term.put(__MODULE__, defaults)
-        defaults
-
-      defaults ->
-        defaults
-    end
-  end
+  defp saas_defaults, do: Mica.SaaS.feature_flags()
 end

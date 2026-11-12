@@ -106,19 +106,8 @@ defmodule Systems.Notify.ChannelNameTest do
 
   describe "dispatch" do
     setup do
-      original = Mica.Env.get(Notify)
-      Mica.Env.put(Notify, notifiers: [UnknownChannelNotifier])
-      Notify.EventType.reset()
-
-      on_exit(fn ->
-        if original,
-          do: Mica.Env.put(Notify, original),
-          else: Application.delete_env(Mica.Env.app(), Notify)
-
-        Notify.EventType.reset()
-      end)
-
-      :ok
+      previous = Mica.SaaS.put_composition(notifiers: [UnknownChannelNotifier])
+      on_exit(fn -> Mica.SaaS.put_composition(previous) end)
     end
 
     test "an event routed to an unknown channel still delivers on its known channels" do
