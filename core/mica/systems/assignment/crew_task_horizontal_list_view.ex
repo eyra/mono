@@ -70,14 +70,19 @@ defmodule Systems.Assignment.CrewTaskHorizontalListView do
 
   # Behaviours
 
+  # Completes only the task whose tool is open: a second completion from the same tool
+  # (a double click on Done) or one for a task already finished elsewhere must not
+  # complete the task the list has moved on to
   @impl true
-  def handle_tool_completed(%{assigns: %{work_item: {_, task}}} = socket) do
+  def handle_tool_completed(
+        %{assigns: %{work_item: {%{id: id}, task}, user_state: %{task: id}}} = socket
+      ) do
     socket
     |> close_tool_modal()
     |> complete_task(task)
   end
 
-  # The task left the participant's task list while the tool was open
+  # The open task isn't the current one any more (finished, or it left the task list)
   def handle_tool_completed(socket), do: close_tool_modal(socket)
 
   @impl true

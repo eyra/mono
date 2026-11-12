@@ -105,6 +105,26 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
     refute_received {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}}
   end
 
+  # E.g. a double click on a manual's Done, or an app exiting after its task was
+  # completed on another device: only the task whose tool was open completes
+  test "a second completion from the same tool doesn't complete the next task", %{
+    conn: conn,
+    user: user,
+    assignment: assignment
+  } do
+    view = mount_view(conn, user, assignment)
+    :erlang.trace(view.pid, true, [:receive])
+
+    render_click(view, "start_task")
+    send(view.pid, {:live_nest_event, %LiveNest.Event{name: :tool_completed, payload: %{}}})
+    send(view.pid, {:live_nest_event, %LiveNest.Event{name: :tool_completed, payload: %{}}})
+    render(view)
+
+    assert [%{status: :completed}, %{status: :pending}] = tasks(assignment, user)
+    assert has_element?(view, @intro, "Task 2")
+    refute_received {:trace, _, :receive, {:live_nest_event, %LiveNest.Event{name: :work_done}}}
+  end
+
   test "the next task's intro shows its own number", %{
     conn: conn,
     user: user,
@@ -158,6 +178,21 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
 
     assert eventually(fn -> has_element?(view, @intro, "Task 2") end)
     assert view |> element(@current_step) |> render() =~ "Task 2 of 2"
+  end
+
+  @tag :signals
+  test "a tool that completes after its task finished elsewhere doesn't complete the next task",
+       %{conn: conn, user: user, assignment: assignment} do
+    view = mount_view(conn, user, assignment)
+    render_click(view, "start_task")
+
+    {:ok, _} = assignment |> tasks(user) |> List.first() |> Crew.Public.complete_task()
+    assert eventually(fn -> has_element?(view, @intro, "Task 2") end)
+
+    send(view.pid, {:live_nest_event, %LiveNest.Event{name: :tool_completed, payload: %{}}})
+    render(view)
+
+    assert [%{status: :completed}, %{status: :pending}] = tasks(assignment, user)
   end
 
   @tag :signals
