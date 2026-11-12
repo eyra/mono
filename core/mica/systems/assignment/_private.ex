@@ -5,7 +5,7 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
-  import Ecto.Query, only: [where: 3]
+  import Ecto.Query, only: [where: 3, select: 3]
 
   alias Mica.Repo
   alias Ecto.Multi
@@ -94,11 +94,15 @@ defmodule Systems.Assignment.Private do
 
   def get_template(special), do: Assignment.TemplateExtension.template!(special)
 
-  def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
-
-  def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
-    # If assignment requires consent but user hasn't signed, there's no consent
-    not consent?(consent_agreement, user_ref)
+  @doc """
+  True when the participant has to give consent and hasn't. Nobody has to consent
+  again: a signature on any revision counts. Whoever joined while consent was off
+  is never asked.
+  """
+  def no_consent?(%Assignment.Model{consent_agreement: consent_agreement} = assignment, user_ref) do
+    Assignment.Model.consent_on?(assignment) and
+      joined_while_consent_on?(assignment, user_ref) and
+      not consent?(consent_agreement, user_ref)
   end
 
   defp consent?(consent_agreement, user_ref) do
@@ -106,6 +110,27 @@ defmodule Systems.Assignment.Private do
     |> Consent.Queries.signature_query()
     |> where([signature: s], s.user_id == ^user_ref)
     |> Repo.exists?()
+  end
+
+  # Joining is the first time the participant entered the crew: coming back
+  # after an expiry (such as declining consent) resets the same membership.
+  defp joined_while_consent_on?(%Assignment.Model{crew_id: crew_id} = assignment, user_ref) do
+    case joined_at(crew_id, user_ref) do
+      nil ->
+        true
+
+      joined_at ->
+        assignment
+        |> Assignment.Model.consent_periods()
+        |> Enum.any?(&Assignment.ConsentPeriodModel.during?(&1, joined_at))
+    end
+  end
+
+  defp joined_at(crew_id, user_ref) do
+    Crew.MemberModel
+    |> where([m], m.crew_id == ^crew_id and m.user_id == ^user_ref)
+    |> select([m], m.inserted_at)
+    |> Repo.one()
   end
 
   def queue_progress_event(

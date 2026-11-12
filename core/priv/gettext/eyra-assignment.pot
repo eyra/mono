@@ -805,3 +805,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr ""

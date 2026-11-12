@@ -342,7 +342,7 @@ msgstr "Opdracht"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Let op: als u bevestigt, wordt de pagina-inhoud verwijderd, evenals de bijbehorende registratie van wie toestemming heeft gegeven."
+msgstr "Deelnemers zien deze pagina dan niet meer. De toestemmingstekst en de registratie van wie toestemming heeft gegeven blijven bewaard en komen terug als je de pagina weer toont."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"
@@ -805,3 +805,7 @@ msgstr "Deze taak is niet meer beschikbaar"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Deze studie heeft geen taken."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Kies je 'Tonen', dan worden deelnemers die zich aanmeldden terwijl deze pagina werd overgeslagen, of die al toestemming gaven, niet gevraagd. Wie zich aanmeldde toen de pagina eerder werd getoond en nooit ja zei, wordt opnieuw gevraagd."

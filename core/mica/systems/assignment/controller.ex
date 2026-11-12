@@ -182,10 +182,7 @@ defmodule Systems.Assignment.Controller do
 
   defp show_consent?(_assignment, [_ | _] = _signatures), do: true
 
-  defp show_consent?(%Assignment.Model{consent_agreement_id: id}, _signatures) when is_number(id),
-    do: true
-
-  defp show_consent?(_, _), do: false
+  defp show_consent?(assignment, _signatures), do: Assignment.Model.consent_on?(assignment)
 
   defp consent(%{user_id: user_id}, signatures, show_consent?) do
     if show_consent? do
