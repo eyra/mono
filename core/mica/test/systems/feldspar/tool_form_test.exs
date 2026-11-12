@@ -33,6 +33,9 @@ defmodule Systems.Feldspar.ToolFormTest do
       {:noreply, assign(socket, flash_message: message)}
     end
 
+    # A successful save also sends :hide_flash and {:handle_auto_save_done, id}.
+    def handle_info(_message, socket), do: {:noreply, socket}
+
     def render(assigns) do
       ~H"""
       <div id="flash-message">{@flash_message}</div>
@@ -57,6 +60,38 @@ defmodule Systems.Feldspar.ToolFormTest do
                "The selected file is not a valid app zip"
 
       assert Mica.Repo.reload!(tool).archive_ref == tool.archive_ref
+    end
+
+    test "shows an error for a zip without index.html at its root", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"export/data.json", "{}"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert view |> element("#flash-message") |> render() =~
+               "The selected file is not a Feldspar app: it has no index.html at the top level"
+
+      assert Mica.Repo.reload!(tool).archive_ref == tool.archive_ref
+    end
+
+    test "stores a zip with index.html at its root", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"index.html", "app"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert %{archive_name: "app.zip", archive_ref: archive_ref} = Mica.Repo.reload!(tool)
+      refute archive_ref == tool.archive_ref
     end
   end
 

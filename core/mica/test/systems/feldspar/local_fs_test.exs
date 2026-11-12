@@ -12,11 +12,40 @@ defmodule Systems.Feldspar.LocalFSTest do
 
     @tag :tmp_dir
     test "extracts entries in subfolders", %{tmp_dir: tmp_dir} do
-      zip = create_zip(tmp_dir, [{"assets/app.js", "app"}])
+      zip = create_zip(tmp_dir, [{"index.html", "app"}, {"assets/app.js", "app"}])
 
       id = LocalFS.store(zip, "app.zip")
 
       assert File.read!(Path.join(LocalFS.storage_path(id), "assets/app.js")) == "app"
+    end
+
+    # bsdtar_app.zip is made by bsdtar (`tar -a -cf app.zip .`), which names
+    # the entries `./`, `./index.html`, `./assets/`, `./assets/app.js`.
+    test "stores a zip whose entry names start with ./" do
+      id = LocalFS.store(Path.join(__DIR__, "bsdtar_app.zip"), "app.zip")
+
+      assert is_binary(id)
+      assert File.read!(Path.join(LocalFS.storage_path(id), "index.html")) == "app\n"
+      assert File.read!(Path.join(LocalFS.storage_path(id), "assets/app.js")) == "js\n"
+    end
+
+    @tag :tmp_dir
+    test "refuses a zip without index.html and leaves no app folder", %{tmp_dir: tmp_dir} do
+      name = "no_index_#{System.unique_integer([:positive])}"
+      zip = create_zip(tmp_dir, [{"export/a.json", "{}"}, {"export/b.json", "{}"}])
+
+      assert {:error, :no_index_html} = LocalFS.store(zip, "#{name}.zip")
+      assert Path.wildcard(Path.join(LocalFS.get_root_path(), "*_#{name}")) == []
+    end
+
+    @tag :tmp_dir
+    test "refuses a zip with index.html only in a subfolder and leaves no app folder",
+         %{tmp_dir: tmp_dir} do
+      name = "nested_index_#{System.unique_integer([:positive])}"
+      zip = create_zip(tmp_dir, [{"app/index.html", "app"}, {"app/assets/app.js", "app"}])
+
+      assert {:error, :no_index_html} = LocalFS.store(zip, "#{name}.zip")
+      assert Path.wildcard(Path.join(LocalFS.get_root_path(), "*_#{name}")) == []
     end
 
     @tag :tmp_dir

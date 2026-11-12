@@ -9,6 +9,10 @@
 * Removed - This notes any features that have been deleted and removed from the software
 * Security - This acts as an invitation to users who want to upgrade and avoid any software vulnerabilities
 
+## Unreleased
+
+* Fixed - Uploading a Feldspar app refuses a zip without `index.html` at its top level, with the message that the file isn't a Feldspar app; the task keeps its earlier app. Before, any valid zip was accepted (for example a data export), and the participant's task then showed a spinner that never ended. A zip whose entries start with `./` (as `tar -a -cf app.zip .` makes them) counts as having `index.html` at its top level, and the S3 storage now stores its files without the `./`; before, such an app didn't load from S3. For a SaaS: `Systems.Feldspar.Public.store/2` returns `{:error, :no_index_html}` for such a zip, on both the local and the S3 storage. Upgrading: no action needed; apps already uploaded are not checked.
+
 ## \#35 2026-11-11
 
 * Changed - Mica: the OTP app `:core` is now `:mica`. Mica's modules are `Mica.*` and `MicaWeb.*` (before `Core.*` and `CoreWeb.*`), Next's own systems (such as Graphite, Paper and Zircon) are `Next.Systems.*`, and the Self reference SaaS is `MicaSaas`. The release and its binary `bin/core`, the environment variables, the cookie names (so nobody is signed out) and `BUNDLE=self` are unchanged. A migration rewrites the module names stored in `oban_jobs.worker` and `authentication_entity.identifier`. AppSignal action names follow the modules (`CoreWeb.*` → `MicaWeb.*`, Next's `Systems.*` → `Next.Systems.*`). Upgrading: call `Mica.Release.migrate/0` and `Mica.Release.seed/0` instead of `Core.Release`, use `Mica.*` in `bin/core rpc` and `eval` snippets, and update AppSignal dashboards and alerts that filter on the old names.
