@@ -12,6 +12,7 @@ This codebase is being split into **Mica** (generic, owned by Nova Software Foun
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `mica/`, `next/`, or `mica_saas/` for the Self reference SaaS. Code under `mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `next/` and `mica_saas/` must not name each other's modules. CI enforces this with `scripts/boundary_check.exs` and `boundary_allowlist.exs`; the allowlist may only shrink.
 - Read and write application config through `Mica.Env` (`get/2`, `fetch!/1`, `put/2`, the `compile_env/2` macro, `app/0`), never `Application.*(:mica, ...)`. Config files and tests are exempt; the credo check `Credo.Check.Warning.MicaEnvAccess` enforces it.
+- SaaS code uses its own web module, so its `~p` is verified against that SaaS's router: `use NextWeb, :routed_live_view` under `next/`, `use MicaSaasWeb, …` under `mica_saas/`, never `use MicaWeb, …` (Mica's other modules, such as `use MicaWeb.LiveForm`, are fine). The credo check `Credo.Check.Warning.SaasWebModule` enforces it; `elixir scripts/use_saas_web.exs` rewrites the old form.
 
 ## CRITICAL DEBUGGING PRINCIPLE
 

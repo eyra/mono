@@ -14,6 +14,7 @@
     "mica/lib/mica_web/resource_exists_plug.ex",
     "mica/lib/mica_web/storybook_guard.ex",
     "mica/lib/mica_web/validator/plug.ex",
+    "mica/lib/mica_web/web.ex",
     "mica/systems/account/_plug.ex",
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",
