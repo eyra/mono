@@ -39,6 +39,9 @@ config :mica,
 # flows local unless `core/start` explicitly selects a configured provider.
 config :mica, payment_provider: Systems.Payment.Provider.Local
 
+# Logs a flag read that no system declares (Mica.FeatureFlags).
+config :mica, warn_undeclared_flag_reads: true
+
 config :mica, Systems.Storage.BuiltIn.LocalFS, root_path: storage_path
 
 config :mica, :feldspar_data_donation,

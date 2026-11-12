@@ -8,6 +8,12 @@ defmodule MicaWeb.Router do
   require MicaWeb.Routes
   require MicaWeb.LocalImageCatalogPlug
 
+  # The routes come from the systems of the configured SaaS, so the router is
+  # compiled against `config :mica, saas:`. Mix does not recompile when only an
+  # env var (BUNDLE) changed the value; this recompiles the router.
+  @saas Mica.Env.compile_env(:saas)
+  def __mix_recompile__?, do: Mica.Env.get(:saas) != @saas
+
   Mica.SaaS.override_routes()
 
   require Systems.Account.Auth.Google

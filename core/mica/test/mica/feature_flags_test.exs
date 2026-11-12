@@ -3,6 +3,10 @@ defmodule Mica.FeatureFlagsTest do
   use Mica.FeatureFlags
   use Mica.FeatureFlags.Test
 
+  import ExUnit.CaptureLog
+
+  require Logger
+
   describe "feature_enabled?/1" do
     test "return false for a flag that is neither declared nor configured" do
       refute feature_enabled?(:some_unconfigured_flag)
@@ -21,6 +25,29 @@ defmodule Mica.FeatureFlagsTest do
 
       refute feature_enabled?(:password_sign_in)
       assert feature_enabled?(:a_feature_used_by_this_test)
+    end
+  end
+
+  describe "a read of a flag that no system declares" do
+    setup do
+      # The test config logs errors only.
+      level = Logger.level()
+      Logger.configure(level: :warning)
+      on_exit(fn -> Logger.configure(level: level) end)
+    end
+
+    test "logs a warning" do
+      log = capture_log(fn -> feature_enabled?(:undeclared_flag_read_test) end)
+      assert log =~ "Feature flag :undeclared_flag_read_test is read, but no system declares it"
+    end
+
+    test "logs it once per flag name" do
+      capture_log(fn -> feature_enabled?(:undeclared_flag_read_once_test) end)
+      assert capture_log(fn -> feature_enabled?(:undeclared_flag_read_once_test) end) == ""
+    end
+
+    test "logs nothing for a declared flag" do
+      assert capture_log(fn -> feature_enabled?(:password_sign_in) end) == ""
     end
   end
 
