@@ -78,3 +78,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "zip-invalid"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "zip-no-index-html"
+msgstr ""
