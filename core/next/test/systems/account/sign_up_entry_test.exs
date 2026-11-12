@@ -8,6 +8,8 @@ defmodule Next.Systems.Account.SignUpEntryTest do
 
   import Phoenix.LiveViewTest
 
+  alias Systems.Pool
+
   describe "with sign-in codes on" do
     setup do
       set_feature_flag(:otp, true)
@@ -62,6 +64,22 @@ defmodule Next.Systems.Account.SignUpEntryTest do
                  conn,
                  ~p"/user/signup/participant?post_signup_action=join_pool:#{slug}"
                )
+    end
+
+    test "join_pool:panl follows the Panl flag", %{conn: conn} do
+      Pool.Assembly.get_or_create_panl()
+
+      set_feature_flag(:panl, false)
+
+      assert {:error, {:redirect, %{to: "/user/auth/identify/participant"}}} =
+               live(conn, ~p"/user/signup/participant?post_signup_action=join_pool:panl")
+
+      set_feature_flag(:panl, true)
+
+      assert {:error,
+              {:redirect,
+               %{to: "/user/auth/identify/participant?return_to=%2Fpool%2Fpanl%2Fjoin"}}} =
+               live(conn, ~p"/user/signup/participant?post_signup_action=join_pool:panl")
     end
 
     test "join_pool with an unknown pool is dropped", %{conn: conn} do

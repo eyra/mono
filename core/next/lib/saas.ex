@@ -98,15 +98,20 @@ defmodule Next.SaaS do
   end
 
   defp post_signup_return_to("join_pool:" <> slug) do
-    if existing_pool_slug?(slug), do: "/pool/#{slug}/join"
+    if joinable_pool?(existing_pool(slug)), do: "/pool/#{slug}/join"
   end
 
   defp post_signup_return_to(_post_signup_action), do: nil
 
   # The join page takes only a slug that is an existing atom naming a pool.
-  defp existing_pool_slug?(slug) do
-    match?(%Pool.Model{}, Pool.Public.get_by_slug(String.to_existing_atom(slug)))
+  defp existing_pool(slug) do
+    Pool.Public.get_by_slug(String.to_existing_atom(slug))
   rescue
-    ArgumentError -> false
+    ArgumentError -> nil
   end
+
+  # As the password sign-up page's post-signup handler: no Panl join while Panl is off.
+  defp joinable_pool?(%Pool.Model{name: "Panl"}), do: feature_enabled?(:panl)
+  defp joinable_pool?(%Pool.Model{}), do: true
+  defp joinable_pool?(nil), do: false
 end
