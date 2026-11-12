@@ -79,6 +79,20 @@ defmodule Frameworks.GreenLight.RuntimeGrantsTest do
     end
   end
 
+  test "a recompiled module's changed compiled grants replace the cached map" do
+    # A module name of its own: the cache is per module.
+    module = Frameworks.GreenLight.RuntimeGrantsTest.Recompiled
+    grants = {Frameworks.GreenLight.PermissionsTest.Grants, :grants, []}
+    before = PermissionMap.new(%{"access/some_app_web/owner_page" => [:owner]})
+    edited = PermissionMap.new(%{"access/some_app_web/owner_page" => [:owner, :member]})
+
+    Permissions.runtime_permission_map(module, before, grants)
+    merged = Permissions.runtime_permission_map(module, edited, grants)
+
+    assert PermissionMap.roles(merged, "access/some_app_web/owner_page") ==
+             MapSet.new([:owner, :member])
+  end
+
   test "the grants option merges runtime grants into the compiled ones, read once" do
     expected =
       PermissionMap.new(%{

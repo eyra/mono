@@ -107,17 +107,18 @@ defmodule Frameworks.GreenLight.Permissions do
 
   @doc false
   # The compiled permission map of `module` merged with the grants that `{m, f, a}`
-  # returns, built on the first call and cached until the node restarts.
+  # returns, built on the first call and cached until the node restarts. The
+  # cache is rebuilt when the compiled map changes (a recompile in dev).
   def runtime_permission_map(module, permission_map, {m, f, a}) do
     key = {__MODULE__, module}
 
     case :persistent_term.get(key, nil) do
-      nil ->
-        merged = grants_permission_map(permission_map, apply(m, f, a))
-        :persistent_term.put(key, merged)
+      {^permission_map, merged} ->
         merged
 
-      merged ->
+      _ ->
+        merged = grants_permission_map(permission_map, apply(m, f, a))
+        :persistent_term.put(key, {permission_map, merged})
         merged
     end
   end

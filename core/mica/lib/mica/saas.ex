@@ -73,7 +73,8 @@ defmodule Mica.SaaS do
   @core_systems_source Path.expand("systems.ex", __DIR__)
 
   # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
-  # changed the value; this recompiles Mica.SaaS and so the router and authorization.
+  # changed the value; this recompiles Mica.SaaS and so the router and
+  # Systems.Notify.MessageModel.
   def __mix_recompile__?, do: Mica.Env.get(:saas) != @saas
 
   @doc "The configured SaaS module."
@@ -291,11 +292,11 @@ defmodule Mica.SaaS do
               __STACKTRACE__
   end
 
-  # The macros run while the router and authorization compile, so they take no
-  # compile-time dependency on the SaaS module and its systems. Their source
-  # files are external resources instead: editing one recompiles the caller,
-  # without connecting the caller to everything the SaaS module names (start
-  # pages, menus).
+  # The macros run while the router and Systems.Notify.MessageModel compile, so
+  # they take no compile-time dependency on the SaaS module and its systems.
+  # Their source files are external resources instead: editing one recompiles
+  # the caller, without connecting the caller to everything the SaaS module
+  # names (start pages, menus).
   defp external_resources(systems) do
     sources =
       for module <- [module() | systems],

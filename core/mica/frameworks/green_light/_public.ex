@@ -12,7 +12,7 @@ defmodule Frameworks.GreenLight.Public do
   The `grants: {module, function, args}` option adds grants given as data at
   runtime (see `Frameworks.GreenLight.Permissions.grants_permission_map/2`).
   `permission_map/0` merges them into the compiled grants on its first call and
-  caches the result until the node restarts.
+  caches the result until the node restarts or the compiled grants change.
 
   """
   use Mica, :public
