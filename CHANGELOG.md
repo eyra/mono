@@ -11,6 +11,7 @@
 
 ## Unreleased
 
+* Changed - Counting monitor events (views and clicks on promotions, started and finished participants on an assignment, stored files per endpoint) uses a new index on `monitor_events.identifier` instead of reading the whole table. Upgrading: no action needed; the migration builds the index concurrently on deploy, without locking the table.
 * Fixed - Uploading a Feldspar app refuses a zip without `index.html` at its top level, with the message that the file isn't a Feldspar app; the task keeps its earlier app. Before, any valid zip was accepted (for example a data export), and the participant's task then showed a spinner that never ended. A zip whose entries start with `./` (as `tar -a -cf app.zip .` makes them) counts as having `index.html` at its top level, and the S3 storage now stores its files without the `./`; before, such an app didn't load from S3. For a SaaS: `Systems.Feldspar.Public.store/2` returns `{:error, :no_index_html}` for such a zip, on both the local and the S3 storage. Upgrading: no action needed; apps already uploaded are not checked.
 
 ## \#35 2026-11-11
