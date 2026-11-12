@@ -87,3 +87,7 @@ msgstr "Pagalba"
 #, elixir-autogen, elixir-format
 msgid "zip-invalid"
 msgstr "Pasirinkta byla nėra tinkamas programėlės ZIP failas"
+
+#, elixir-autogen, elixir-format
+msgid "zip-no-index-html"
+msgstr "Pasirinkta byla nėra Feldspar programėlė: aukščiausiame lygyje nėra index.html failo"

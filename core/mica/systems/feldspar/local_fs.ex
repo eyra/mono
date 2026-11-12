@@ -1,6 +1,8 @@
 defmodule Systems.Feldspar.LocalFS do
   use MicaWeb, :verified_routes
 
+  alias Systems.Feldspar.Private
+
   def public_path, do: "/feldspar/apps"
 
   def get_public_url(id) do
@@ -12,7 +14,8 @@ defmodule Systems.Feldspar.LocalFS do
   @doc """
   Extracts the zip into a new app folder and returns the folder name, or
   `{:error, :invalid_zip}` when the file is no zip, has an entry that would
-  be written outside the app folder, or can't be extracted.
+  be written outside the app folder, or can't be extracted, and
+  `{:error, :no_index_html}` when it has no `index.html` at its root.
   """
   def store(zip_file, original_filename) do
     uuid = Ecto.UUID.generate()
@@ -20,10 +23,10 @@ defmodule Systems.Feldspar.LocalFS do
     folder = "#{uuid}_#{base_folder}"
     path = get_path(folder)
 
-    if valid_zip?(zip_file, path) do
-      extract(zip_file, path, folder)
-    else
-      {:error, :invalid_zip}
+    cond do
+      not valid_zip?(zip_file, path) -> {:error, :invalid_zip}
+      not Private.index_html?(zip_file) -> {:error, :no_index_html}
+      true -> extract(zip_file, path, folder)
     end
   end
 
