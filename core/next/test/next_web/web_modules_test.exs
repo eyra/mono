@@ -1,4 +1,4 @@
-defmodule NextWebTest do
+defmodule NextWeb.WebModulesTest do
   use ExUnit.Case, async: true
 
   @blocks ~w(utility ui pixel html live_component live_component_fabric live_view_fabric
