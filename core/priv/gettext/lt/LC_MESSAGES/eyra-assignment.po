@@ -821,3 +821,11 @@ msgstr "Šiame tyrime nėra užduočių."
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
 msgstr "Pasirinkus „Rodyti“, neklausiama dalyvių, kurie prisijungė, kai šis puslapis buvo praleidžiamas, arba kurie jau davė sutikimą. Dalyvių, kurie prisijungė, kai puslapis anksčiau buvo rodomas, ir niekada nesutiko, klausiama dar kartą."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Užduotis %{index} iš %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Pradėti"

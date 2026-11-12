@@ -92,6 +92,15 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
     )
   end
 
+  # Multiple items, the template chose the horizontal list
+  defp task_view(:horizontal_list, assignment_id, _user_state, context) do
+    MicaWeb.Live.Element.prepare_live_view(
+      "crew_task_horizontal_list_view_#{assignment_id}",
+      Assignment.CrewTaskHorizontalListView,
+      live_context: context
+    )
+  end
+
   # Multiple items - show list view
   defp task_view(:list, assignment_id, _user_state, context) do
     MicaWeb.Live.Element.prepare_live_view(

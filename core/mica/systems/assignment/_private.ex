@@ -50,20 +50,28 @@ defmodule Systems.Assignment.Private do
 
   @doc """
   Which task view the participant gets: none without tasks, the single task
-  view for one task, the task list for more.
+  view for one task, and for more the task list the template chose: the
+  vertical `:list` or the `:horizontal_list`.
   """
-  def task_view(%Assignment.Model{workflow: workflow}) do
+  def task_view(%Assignment.Model{workflow: workflow} = assignment) do
     case workflow |> Workflow.Model.ordered_items() |> length() do
       0 -> :none
       1 -> :single
+      _ -> task_list(assignment)
+    end
+  end
+
+  defp task_list(assignment) do
+    case runtime_config(assignment) do
+      %{task_list: :horizontal} -> :horizontal_list
       _ -> :list
     end
   end
 
   @doc """
-  Whether the participant sees the "Next, I am done" button. Only the task
-  list has it. The done screen shows Back exactly then, so the participant
-  can undo the click.
+  Whether the participant sees the "Next, I am done" button. Only the vertical
+  task list has it; the horizontal list finishes after its last task. The done
+  screen shows Back exactly then, so the participant can undo the click.
   """
   def done_button?(%Assignment.Model{} = assignment, panel_info) do
     task_view(assignment) == :list and done_button_allowed?(assignment, panel_info)

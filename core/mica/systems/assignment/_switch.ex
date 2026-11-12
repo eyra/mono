@@ -461,6 +461,12 @@ defmodule Systems.Assignment.Switch do
       model: assignment,
       from_pid: from_pid
     })
+
+    dispatch!({:embedded_live_view, Assignment.CrewTaskHorizontalListView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
   end
 
   defp update_assignment_embedded_views(assignment, from_pid) do

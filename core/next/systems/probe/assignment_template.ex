@@ -67,7 +67,7 @@ defmodule Next.Systems.Probe.AssignmentTemplate do
       ]
     end
 
-    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{task_list: :horizontal}
 
     def currency(_t), do: :EUR
 

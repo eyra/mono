@@ -809,3 +809,11 @@ msgstr "Deze studie heeft geen taken."
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
 msgstr "Kies je 'Tonen', dan worden deelnemers die zich aanmeldden terwijl deze pagina werd overgeslagen, of die al toestemming gaven, niet gevraagd. Wie zich aanmeldde toen de pagina eerder werd getoond en nooit ja zei, wordt opnieuw gevraagd."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Taak %{index} van %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Begin"

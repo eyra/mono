@@ -810,3 +810,11 @@ msgstr "Este estudio no tiene tareas."
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
 msgstr "Cuando eliges 'Mostrar', no se pregunta a los participantes que se unieron mientras esta página se omitía ni a quienes ya dieron su consentimiento. A quienes se unieron cuando la página se mostraba antes y nunca dijeron que sí se les vuelve a preguntar."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Tarea %{index} de %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Empezar"

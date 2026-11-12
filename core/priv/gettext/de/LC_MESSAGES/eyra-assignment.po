@@ -810,3 +810,11 @@ msgstr "Diese Studie enthält keine Aufgaben."
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
 msgstr "Wenn Sie 'Anzeigen' wählen, werden Teilnehmende, die beigetreten sind, während diese Seite übersprungen wurde, oder die bereits eingewilligt haben, nicht gefragt. Wer beigetreten ist, als die Seite zuvor angezeigt wurde, und nie zugestimmt hat, wird erneut gefragt."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Aufgabe %{index} von %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Starten"

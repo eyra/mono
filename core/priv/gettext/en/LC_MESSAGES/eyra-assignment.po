@@ -809,3 +809,11 @@ msgstr "This study has no tasks."
 #, elixir-autogen, elixir-format
 msgid "settings.consent.existing_participants"
 msgstr "When you choose 'Show', participants who joined while this page was skipped, or who already gave consent, aren't asked. Participants who joined while it was shown before and never said yes are asked again."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Task %{index} of %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Start"
