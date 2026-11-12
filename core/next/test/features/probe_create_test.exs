@@ -53,7 +53,7 @@ defmodule NextWeb.Features.ProbeCreateTest do
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
+    |> click(Query.css("[data-testid='add-item-button']"))
   end
 end

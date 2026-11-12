@@ -29,6 +29,8 @@ defmodule MicaWeb.Features.FundAssignmentTest do
   end
 
   @card_selector "[data-testid^='card_']"
+  # A project also shows its Data card; unlike that one, an item's card has actions.
+  @item_card_selector "[id^='card-']:has([data-testid^='show_more__action__card_']) [data-testid^='card_']"
 
   @tag :feature
   feature "researcher can assign budget to a questionnaire and complete local payment",
@@ -76,13 +78,13 @@ defmodule MicaWeb.Features.FundAssignmentTest do
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
+    |> click(Query.css("[data-testid='add-item-button']"))
     |> assert_has(Query.css("[data-testid='selector-item-questionnaire']"))
     |> click(Query.css("[data-testid='selector-item-questionnaire']"))
     |> click(Query.css("[data-testid='create-item-button']"))
-    |> assert_has(Query.css(@card_selector, count: 1))
-    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css(@item_card_selector, count: 1))
+    |> click(Query.css(@item_card_selector))
     |> click_tab("assignment-tab-participants")
     |> assert_has(Query.css("[data-testid='pay-add-participants-button']"))
     |> click(Query.css("[data-testid='pay-add-participants-button']"))
