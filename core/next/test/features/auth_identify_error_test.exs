@@ -25,19 +25,19 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
 
   # Headless Chrome keeps its window at least 500px wide; the device metrics
   # give the page a phone's width.
-  @phone_nl_capabilities %{
-    chromeOptions: %{
-      args: [
-        "--lang=nl-NL",
-        "--headless",
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu"
-      ],
-      prefs: %{"intl.accept_languages" => "nl-NL,nl"},
-      mobileEmulation: %{deviceMetrics: %{width: 360, height: 800, pixelRatio: 1}}
-    }
-  }
+  @phone_nl_capabilities chrome_capabilities(%{
+                           args: [
+                             "--lang=nl-NL",
+                             "--headless",
+                             "--no-sandbox",
+                             "--disable-dev-shm-usage",
+                             "--disable-gpu"
+                           ],
+                           prefs: %{"intl.accept_languages" => "nl-NL,nl"},
+                           mobileEmulation: %{
+                             deviceMetrics: %{width: 360, height: 800, pixelRatio: 1}
+                           }
+                         })
 
   setup do
     set_feature_flag(:otp, true)
