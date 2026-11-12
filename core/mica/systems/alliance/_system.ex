@@ -9,11 +9,9 @@ defmodule Systems.Alliance.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Alliance.CallbackPage, [:owner]}
-      ]
-    end
+    [
+      {Systems.Alliance.CallbackPage, [:owner]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Alliance.Switch]

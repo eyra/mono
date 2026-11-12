@@ -18,22 +18,18 @@ defmodule Mica.System do
         end
 
         def grants do
-          quote do
-            [
-              {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
-              {Systems.Pool.ContentPage, [:admin]}
-            ]
-          end
+          [
+            {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
+            {Systems.Pool.ContentPage, [:admin]}
+          ]
         end
       end
 
-  System modules are data modules and never call system code. The router and
-  `Mica.Authorization` read `override_routes/0`, `routes/0` and `grants/0` at
-  compile time, so these return quoted code. `grants/0` is quoted too: a module
-  name used as a value is a runtime dependency, and that would make the router
-  recompile whenever any granted page changes. The other callbacks return plain
-  values, which `Mica.SaaS` collects (`notify_channels/0` also at compile time,
-  for the `Systems.Notify.MessageModel` enum).
+  System modules are data modules and never call system code. The router reads
+  `override_routes/0` and `routes/0` at compile time, so these return quoted
+  code. The other callbacks return plain values, which `Mica.SaaS` collects
+  (`notify_channels/0` also at compile time, for the `Systems.Notify.MessageModel`
+  enum; `grants/0` at boot, for `Mica.Authorization`).
 
   A SaaS extends Mica's systems only through its own systems, for example by
   shadowing Mica's sign-in routes with `override_routes/0`.
@@ -52,10 +48,11 @@ defmodule Mica.System do
   @callback routes() :: Macro.t() | nil
 
   @doc """
-  Quoted list of page grants: `{module, roles}` for `grant_access/2`, or
-  `{module, %{action => roles}}` for `grant_actions/2`.
+  The system's page grants: `{module, roles}` as for `grant_access/2`, or
+  `{module, %{action => roles}}` as for `grant_actions/2`. A permission is
+  granted by one system only.
   """
-  @callback grants() :: Macro.t()
+  @callback grants() :: [{module(), [atom()] | %{atom() => [atom()]}}]
 
   @doc """
   The system's `Frameworks.Signal.Handler` modules (its `_switch.ex`).
@@ -154,7 +151,7 @@ defmodule Mica.System do
 
       def override_routes, do: nil
       def routes, do: nil
-      def grants, do: quote(do: [])
+      def grants, do: []
       def signal_handlers, do: []
       def notifiers, do: []
       def notify_channels, do: %{}
