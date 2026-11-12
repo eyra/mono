@@ -3,6 +3,8 @@ defmodule Next.SaaS do
   use Mica.SaaS
   use Mica.FeatureFlags
 
+  alias Systems.Pool
+
   @impl true
   def systems do
     Mica.Systems.all() ++
@@ -89,11 +91,22 @@ defmodule Next.SaaS do
     )
   end
 
-  # The code flow joins Panl through its join page, where the password sign-up
-  # page took `post_signup_action=add_to_panl`.
+  # The code flow joins a pool through its join page, where the password sign-up
+  # page took `post_signup_action=add_to_panl` or `join_pool:<slug>`.
   defp post_signup_return_to("add_to_panl") do
     if feature_enabled?(:panl), do: "/pool/panl/join"
   end
 
+  defp post_signup_return_to("join_pool:" <> slug) do
+    if existing_pool_slug?(slug), do: "/pool/#{slug}/join"
+  end
+
   defp post_signup_return_to(_post_signup_action), do: nil
+
+  # The join page takes only a slug that is an existing atom naming a pool.
+  defp existing_pool_slug?(slug) do
+    match?(%Pool.Model{}, Pool.Public.get_by_slug(String.to_existing_atom(slug)))
+  rescue
+    ArgumentError -> false
+  end
 end

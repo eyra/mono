@@ -47,6 +47,31 @@ defmodule Next.Systems.Account.SignUpEntryTest do
                live(conn, ~p"/user/signup/participant?post_signup_action=add_to_panl")
     end
 
+    test "join_pool carries on as a return to that pool's join page", %{conn: conn} do
+      # The join page takes only a slug that is an existing atom, as `panl` is.
+      slug = Atom.to_string(:sign_up_entry_pool)
+      Factories.insert!(:pool, %{name: "Sign up entry pool", director: :citizen})
+
+      assert {:error,
+              {:redirect,
+               %{
+                 to:
+                   "/user/auth/identify/participant?return_to=%2Fpool%2Fsign_up_entry_pool%2Fjoin"
+               }}} =
+               live(
+                 conn,
+                 ~p"/user/signup/participant?post_signup_action=join_pool:#{slug}"
+               )
+    end
+
+    test "join_pool with an unknown pool is dropped", %{conn: conn} do
+      # One slug is not an atom at all; the other is an atom that names no pool.
+      for slug <- ["sign_up_entry_unknown_pool", Atom.to_string(:sign_up_entry_no_pool)] do
+        assert {:error, {:redirect, %{to: "/user/auth/identify/participant"}}} =
+                 live(conn, ~p"/user/signup/participant?post_signup_action=join_pool:#{slug}")
+      end
+    end
+
     test "the sign-up page sends to the code page with password sign-in off", %{conn: conn} do
       set_feature_flag(:password_sign_in, false)
 
