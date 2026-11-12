@@ -73,8 +73,7 @@ defmodule Mica.SaaS do
   @core_systems_source Path.expand("systems.ex", __DIR__)
 
   # Mix checks compile_env, but does not recompile when only an env var (BUNDLE)
-  # changed the value; this recompiles Mica.SaaS and so the router and
-  # Systems.Notify.MessageModel.
+  # changed the value; this recompiles Mica.SaaS and so the router.
   def __mix_recompile__?, do: Mica.Env.get(:saas) != @saas
 
   @doc "The configured SaaS module."
@@ -219,18 +218,6 @@ defmodule Mica.SaaS do
     end
   end
 
-  @doc """
-  The channel names of `notify_channels/0`, sorted, for use at compile time (an
-  `Ecto.Enum`). Editing a system recompiles the caller. Like the route macros,
-  it compiles the SaaS module and its systems first, so they must not depend on
-  the caller at compile time.
-  """
-  defmacro notify_channel_names do
-    systems = checked_systems(module())
-    names = systems |> collect_notify_channels() |> Map.keys() |> Enum.sort()
-    {:__block__, [], external_resources(systems) ++ [names]}
-  end
-
   @doc false
   def collect_notify_channels(systems) do
     for system <- systems, {name, channel} <- system.notify_channels(), reduce: %{} do
@@ -292,8 +279,8 @@ defmodule Mica.SaaS do
               __STACKTRACE__
   end
 
-  # The macros run while the router and Systems.Notify.MessageModel compile, so
-  # they take no compile-time dependency on the SaaS module and its systems.
+  # The macros run while the router compiles, so they take no compile-time
+  # dependency on the SaaS module and its systems.
   # Their source files are external resources instead: editing one recompiles
   # the caller, without connecting the caller to everything the SaaS module
   # names (start pages, menus).

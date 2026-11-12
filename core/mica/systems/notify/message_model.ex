@@ -11,13 +11,10 @@ defmodule Systems.Notify.MessageModel do
 
   alias Systems.Notify
 
-  require Mica.SaaS
-
-  @channels Mica.SaaS.notify_channel_names()
   @statuses ~w(pending sent failed skipped seen)a
 
   schema "notify_message" do
-    field(:channel, Ecto.Enum, values: @channels)
+    field(:channel, Notify.ChannelName)
     field(:payload, :map, default: %{})
     field(:status, Ecto.Enum, values: @statuses, default: :pending)
     field(:delivered_at, :utc_datetime_usec)
@@ -33,7 +30,7 @@ defmodule Systems.Notify.MessageModel do
   @fields ~w(channel payload status delivered_at seen_at failure_reason attempts event_id)a
   @required ~w(channel event_id)a
 
-  def channels, do: @channels
+  def channels, do: Mica.SaaS.notify_channels() |> Map.keys() |> Enum.sort()
   def statuses, do: @statuses
 
   def changeset(message, attrs) do
