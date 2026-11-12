@@ -32,7 +32,7 @@ defmodule Systems.Home.BFFPage do
   defp blocks(:rewards_summary, user) do
     case PageBuilder.rewards_summary(user) do
       nil -> []
-      summary -> [rewards(summary)]
+      summary -> rewards(summary)
     end
   end
 
@@ -78,28 +78,47 @@ defmodule Systems.Home.BFFPage do
          donated_cents: donated,
          payout_status: payout_status
        }) do
-    %{
-      title: title,
-      pending_pill: pending_label,
-      pending_caption: pending_caption,
-      approved_pill: approved_label,
-      approved_caption: approved_caption,
-      rejected_pill: rejected_label
-    } = labels = PageBuilder.rewards_summary_labels(approved)
+    labels = PageBuilder.rewards_summary_labels(approved)
 
-    %Blocks.Rewards{
-      title: title,
-      pending_label: pending_label,
-      pending_amount: CurrencyHelpers.format_cents(pending),
-      pending_caption: pending_caption,
-      approved_label: approved_label,
-      approved_amount: CurrencyHelpers.format_cents(approved),
-      approved_caption: approved_caption,
-      rejected_label: if(rejected > 0, do: rejected_label),
-      rejected_amount: if(rejected > 0, do: CurrencyHelpers.format_cents(rejected)),
-      notes: payout_note(payout_status, labels) ++ donation_note(donating, donated, labels)
-    }
+    amounts(pending, approved, labels) ++
+      rejected_amount(rejected, labels) ++
+      notes(payout_note(payout_status, labels) ++ donation_note(donating, donated, labels))
   end
+
+  defp amounts(pending, approved, %{
+         title: title,
+         pending_pill: pending_label,
+         pending_caption: pending_caption,
+         approved_pill: approved_label,
+         approved_caption: approved_caption
+       }) do
+    [
+      %Blocks.Section{title: title},
+      %Blocks.RewardAmount{
+        label: pending_label,
+        tone: :warning,
+        amount: CurrencyHelpers.format_cents(pending),
+        caption: pending_caption
+      },
+      %Blocks.RewardAmount{
+        label: approved_label,
+        tone: :success,
+        amount: CurrencyHelpers.format_cents(approved),
+        caption: approved_caption
+      }
+    ]
+  end
+
+  defp rejected_amount(0, _labels), do: []
+
+  defp rejected_amount(cents, %{rejected_pill: label}),
+    do: [
+      %Blocks.RewardAmount{
+        label: label,
+        tone: :danger,
+        amount: CurrencyHelpers.format_cents(cents)
+      }
+    ]
 
   defp payout_note(:in_progress, %{payout_in_progress: note}), do: [note]
   defp payout_note(:manual, %{payout_manual: note}), do: [note]
@@ -113,6 +132,8 @@ defmodule Systems.Home.BFFPage do
     do: ["#{total} #{CurrencyHelpers.format_cents(donated)}"]
 
   defp donation_note(_donating, _donated, _labels), do: []
+
+  defp notes(notes), do: Enum.map(notes, &%Blocks.Section{body: &1})
 
   defp advert(%{
          title: title,
