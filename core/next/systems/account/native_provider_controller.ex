@@ -3,7 +3,7 @@ defmodule Next.Systems.Account.NativeProviderController do
   The pages the Next native apps open in the system sign-in sheet to sign in
   through an identity provider; see `Next.Systems.Account.NativeHandoff`.
   """
-  use MicaWeb, {:controller, [formats: [:html]]}
+  use NextWeb, {:controller, [formats: [:html]]}
 
   alias MicaWeb.ReturnTo
   alias Next.Systems.Account.NativeHandoff

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.HTML do
-  use MicaWeb, :html
+  use NextWeb, :html
 
   import Frameworks.Pixel.Table
 

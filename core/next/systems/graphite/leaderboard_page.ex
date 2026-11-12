@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.LeaderboardPage do
-  use MicaWeb, :live_view_fabric
+  use NextWeb, :live_view_fabric
   use MicaWeb.Layouts.Stripped.Composer
 
   on_mount({MicaWeb.Live.Hook.Base, __MODULE__})

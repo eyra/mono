@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.ToolView do
-  use MicaWeb, :modal_live_view
+  use NextWeb, :modal_live_view
   use Mica.FeatureFlags
   use Frameworks.Pixel
 

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.LeaderboardTableView do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   alias Frameworks.Pixel.Selector
   alias Frameworks.Pixel.Align

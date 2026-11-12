@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.Private do
-  use MicaWeb, :verified_routes
+  use NextWeb, :verified_routes
 
   alias Next.Systems.{
     Graphite

@@ -1,5 +1,5 @@
 defmodule MicaSaas.Systems.Account.AuthIdentifyPage do
-  use MicaWeb, :live_view_fabric
+  use MicaSaasWeb, :live_view_fabric
 
   on_mount({MicaWeb.Live.Hook.Base, __MODULE__})
   on_mount({MicaWeb.Live.Hook.Uri, __MODULE__})

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Student.Pool.OverviewPlugin do
-  use MicaWeb, :live_component_fabric
+  use NextWeb, :live_component_fabric
 
   use Gettext, backend: MicaWeb.Gettext
 

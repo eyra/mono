@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportSessionPapersView do
-  use MicaWeb, :embedded_live_view
+  use NextWeb, :embedded_live_view
   use Gettext, backend: MicaWeb.Gettext
 
   import Next.Systems.Zircon.HTML, only: [ris_entry_table: 1]
