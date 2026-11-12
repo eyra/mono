@@ -81,6 +81,7 @@ defmodule NextWeb.MicaPathTest do
     defmodule Links do
       use MicaWeb.Path
 
+      def line, do: __ENV__.line + 1
       def page(id), do: ~m"/assignment/#{id}/landing?#{[tab: "x"]}"
       def icon, do: ~m"/images/icon.svg"
     end
@@ -91,7 +92,7 @@ defmodule NextWeb.MicaPathTest do
 
       assert route == ~S|~m"/assignment/#{id}/landing?#{[tab: "x"]}"|
       assert file == __ENV__.file
-      assert line == 75
+      assert line == Links.line()
     end
   end
 end

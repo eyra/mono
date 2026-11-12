@@ -45,6 +45,7 @@ defmodule NextWeb.PathCheckTest do
     def mica_page, do: ~m"/mica/page"
     def mica_live(id), do: ~m"/mica/live/#{id}?#{[tab: "x"]}"
     def mica_form, do: ~m"/mica/form"
+    def misspelled_line, do: __ENV__.line + 1
     def misspelled, do: ~m"/mica/pgae"
     def saas_page, do: ~m"/saas/page"
     def saas_live, do: ~m"/saas/live#top"
@@ -68,12 +69,13 @@ defmodule NextWeb.PathCheckTest do
                  reason: :no_route,
                  module: Links,
                  file: file,
-                 line: 48
+                 line: line
                }
              ] =
                PathCheck.unmatched(Router, [Links]) |> Enum.filter(&(&1.reason == :no_route))
 
       assert file == __ENV__.file
+      assert line == Links.misspelled_line()
     end
 
     test "fails a Mica path that only a SaaS module serves, controller or LiveView" do
@@ -113,14 +115,15 @@ defmodule NextWeb.PathCheckTest do
     assert output =~
              ~s|Mica path ~m"/saas/live#top" is served by Next.Systems.Account.SigninPage, not by Mica|
 
-    assert output =~ "next/test/next_web/path_check_test.exs:48"
+    assert output =~ "next/test/next_web/path_check_test.exs:#{Links.misspelled_line()}"
   end
 
   test "the test failure lists each path with file and line" do
     text = Router |> PathCheck.unmatched([Links]) |> PathCheck.format(Router)
 
     assert text =~
-             ~s|Mica path ~m"/mica/pgae" matches no route in NextWeb.PathCheckTest.Router\n  next/test/next_web/path_check_test.exs:48: NextWeb.PathCheckTest.Links|
+             "Mica path ~m\"/mica/pgae\" matches no route in NextWeb.PathCheckTest.Router\n" <>
+               "  next/test/next_web/path_check_test.exs:#{Links.misspelled_line()}: NextWeb.PathCheckTest.Links"
   end
 
   test "override routes are read from scopes, nested and with options" do

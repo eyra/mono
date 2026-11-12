@@ -1,5 +1,6 @@
 defmodule Next.Systems.Graphite.ToolForm do
   use MicaWeb.LiveForm
+  use NextWeb, :verified_routes
 
   use Gettext, backend: MicaWeb.Gettext
   import Frameworks.Pixel.Form
