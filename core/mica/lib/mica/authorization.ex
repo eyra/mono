@@ -361,8 +361,9 @@ defmodule Mica.Authorization do
     end)
   end
 
+  @doc false
   # Every schema that owns an auth node, from Mica and the SaaS alike.
-  defp entities do
+  def entities do
     {:ok, modules} = :application.get_key(:mica, :modules)
 
     modules

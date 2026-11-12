@@ -18,6 +18,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
       unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
       feature flags
+    * `schemas.exs`: the schemas `Mica.Repo.orphan?/2` scans and the schemas
+      that own an auth node (`Mica.Authorization.entities/0`), without test support
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `MicaWeb.Router` is compile-connected to
 
@@ -144,7 +146,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp update_command(:mica_saas), do: "BUNDLE=self MIX_ENV=dev mix nova.snapshot --update"
 
   defp render_names,
-    do: ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs runtime.exs counts.exs)
+    do:
+      ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs runtime.exs schemas.exs counts.exs)
 
   @doc """
   Renders the snapshots of the current build as `{file name, text}`. `counts: false`
@@ -159,7 +162,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       {"signal.exs", format(signal())},
       {"flags.exs", format(features(prod))},
       {"saas_config.exs", format(saas_config(prod))},
-      {"runtime.exs", format(runtime(saas))}
+      {"runtime.exs", format(runtime(saas))},
+      {"schemas.exs", format(schemas())}
     ]
 
     snapshots =
@@ -271,6 +275,22 @@ defmodule Mix.Tasks.Nova.Snapshot do
     |> Systems.Rate.Server.quotas()
     |> Enum.map(&{&1.service, &1.limit, &1.unit, &1.window, &1.scope})
     |> Enum.sort_by(&elem(&1, 0))
+  end
+
+  defp schemas do
+    {:ok, modules} = :application.get_key(:mica, :modules)
+    orphan_scan = Enum.filter(modules, &({:__schema__, 1} in &1.__info__(:functions)))
+
+    [
+      schemas: orphan_scan |> Enum.reject(&test_support?/1) |> Enum.sort(),
+      auth_entities: Enum.reject(Mica.Authorization.entities(), &test_support?/1)
+    ]
+  end
+
+  # Test support is compiled into the test build only (`elixirc_paths`).
+  defp test_support?(module) do
+    source = module.module_info(:compile)[:source] |> to_string() |> Path.relative_to_cwd()
+    String.starts_with?(source, ["mica/test/", "next/test/", "mica_saas/test/"])
   end
 
   defp counts do
