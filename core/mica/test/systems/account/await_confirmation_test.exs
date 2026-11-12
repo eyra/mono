@@ -4,7 +4,7 @@ defmodule Systems.Account.AwaitConfirmationTest do
   import Phoenix.LiveViewTest
 
   test "render", %{conn: conn} do
-    {:ok, _view, html} = live(conn, ~p"/user/onboarding/await-confirmation")
+    {:ok, _view, html} = live(conn, ~m"/user/onboarding/await-confirmation")
     assert html =~ "Activate your account"
   end
 end

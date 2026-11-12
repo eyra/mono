@@ -8,14 +8,14 @@ defmodule Systems.Account.SettingsControllerTest do
 
   describe "GET /users/settings" do
     test "renders settings page", %{conn: conn} do
-      conn = get(conn, ~p"/user/settings")
+      conn = get(conn, ~m"/user/settings")
       response = html_response(conn, 200)
       assert response =~ "<h1>Settings</h1>"
     end
 
     test "redirects if user is not logged in" do
       conn = MicaWeb.ConnCase.build_conn()
-      conn = get(conn, ~p"/user/settings")
+      conn = get(conn, ~m"/user/settings")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end
   end
@@ -29,7 +29,7 @@ defmodule Systems.Account.SettingsControllerTest do
       _new_password = Factories.valid_user_password()
 
       new_password_conn =
-        put(conn, ~p"/user/settings", %{
+        put(conn, ~m"/user/settings", %{
           "action" => "update_password",
           "current_password" => password,
           "user" => %{
@@ -39,7 +39,7 @@ defmodule Systems.Account.SettingsControllerTest do
         })
 
       assert redirected_to(new_password_conn) ==
-               ~p"/user/settings"
+               ~m"/user/settings"
 
       assert get_session(new_password_conn, :user_token) != get_session(conn, :user_token)
 
@@ -51,7 +51,7 @@ defmodule Systems.Account.SettingsControllerTest do
 
     test "does not update password on invalid data", %{conn: conn} do
       old_password_conn =
-        put(conn, ~p"/user/settings", %{
+        put(conn, ~m"/user/settings", %{
           "action" => "update_password",
           "current_password" => "invalid",
           "user" => %{
@@ -74,20 +74,20 @@ defmodule Systems.Account.SettingsControllerTest do
     @tag :capture_log
     test "updates the user email", %{conn: conn, user: user, password: password} do
       conn =
-        put(conn, ~p"/user/settings", %{
+        put(conn, ~m"/user/settings", %{
           "action" => "update_email",
           "current_password" => password,
           "user" => %{"email" => Faker.Internet.email()}
         })
 
-      assert redirected_to(conn) == ~p"/user/settings"
+      assert redirected_to(conn) == ~m"/user/settings"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "A link to confirm your email"
       assert Account.Public.get_user_by_email(user.email)
     end
 
     test "does not update email on invalid data", %{conn: conn} do
       conn =
-        put(conn, ~p"/user/settings", %{
+        put(conn, ~m"/user/settings", %{
           "action" => "update_email",
           "current_password" => "invalid",
           "user" => %{"email" => "with spaces"}
@@ -117,22 +117,22 @@ defmodule Systems.Account.SettingsControllerTest do
     end
 
     test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
-      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == ~p"/user/settings"
+      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
+      assert redirected_to(conn) == ~m"/user/settings"
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Email address changed"
       refute Account.Public.get_user_by_email(user.email)
       assert Account.Public.get_user_by_email(email)
 
-      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == ~p"/user/settings"
+      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
+      assert redirected_to(conn) == ~m"/user/settings"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
                "Email change link is invalid or it has expired"
     end
 
     test "does not update email with invalid token", %{conn: conn, user: user} do
-      conn = get(conn, ~p"/user/settings/activate-account/oops")
-      assert redirected_to(conn) == ~p"/user/settings"
+      conn = get(conn, ~m"/user/settings/activate-account/oops")
+      assert redirected_to(conn) == ~m"/user/settings"
 
       assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
                "Email change link is invalid or it has expired"
@@ -142,7 +142,7 @@ defmodule Systems.Account.SettingsControllerTest do
 
     test "redirects if user is not logged in", %{token: token} do
       conn = MicaWeb.ConnCase.build_conn()
-      conn = get(conn, ~p"/user/settings/activate-account/#{token}")
+      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end
   end

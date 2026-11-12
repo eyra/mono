@@ -1,5 +1,6 @@
 defmodule Next.Systems.Graphite.ExportControllerAccessTest do
   use MicaWeb.ConnCase, async: true
+  use NextWeb, :verified_routes
 
   alias Next.Systems.Graphite
 

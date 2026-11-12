@@ -16,20 +16,39 @@ defmodule Credo.Check.Warning.SaasWebModule do
 
       Mica's other modules, such as `use MicaWeb.LiveForm`, are fine.
       `elixir scripts/use_saas_web.exs` rewrites the old form.
+
+      Mica has no router, so its code builds paths with `~m` (`MicaWeb.Path`),
+      which every SaaS checks against its own router, never with `~p`:
+
+      # Bad, in core/mica/
+      ~p"/assignment/\#{assignment}"
+
+      # Good
+      ~m"/assignment/\#{assignment}"
+
+      `elixir scripts/mica_paths.exs` rewrites the old form.
       """
     ]
 
   @web_modules %{"next" => "NextWeb", "mica_saas" => "MicaSaasWeb"}
+  # The sigil with any of its delimiters, also inside HEEx templates.
+  @sigil_p ~r/~p["'(\[{<|\/]/
 
   @doc false
   def run(%SourceFile{filename: filename} = source_file, params \\ []) do
-    case Map.fetch(@web_modules, BoundaryRules.owner(filename)) do
-      {:ok, web} ->
-        issue_meta = IssueMeta.for(source_file, params)
-        Credo.Code.prewalk(source_file, &traverse(&1, &2, web, issue_meta))
+    issue_meta = IssueMeta.for(source_file, params)
 
-      :error ->
-        []
+    case BoundaryRules.owner(filename) do
+      "mica" ->
+        for {line_no, line} <- SourceFile.lines(source_file),
+            Regex.match?(@sigil_p, line),
+            do: sigil_p_issue(issue_meta, line_no)
+
+      owner ->
+        case Map.fetch(@web_modules, owner) do
+          {:ok, web} -> Credo.Code.prewalk(source_file, &traverse(&1, &2, web, issue_meta))
+          :error -> []
+        end
     end
   end
 
@@ -43,6 +62,14 @@ defmodule Credo.Check.Warning.SaasWebModule do
     format_issue(issue_meta,
       message: "Use #{web}, this SaaS's web module, instead of MicaWeb.",
       trigger: "use MicaWeb",
+      line_no: line_no
+    )
+  end
+
+  defp sigil_p_issue(issue_meta, line_no) do
+    format_issue(issue_meta,
+      message: "Use ~m (MicaWeb.Path) for Mica's paths, not ~p: Mica has no router.",
+      trigger: "~p",
       line_no: line_no
     )
   end

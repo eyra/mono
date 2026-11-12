@@ -336,7 +336,7 @@ defmodule Systems.Assignment.CrewPageRequiredTasksTest do
     panel_info = %{panel: :affiliate, redirect_url: redirect_url, participant: "p1"}
 
     {:ok, page, _html} =
-      conn |> put_session(:panel_info, panel_info) |> live(~p"/assignment/#{assignment.id}")
+      conn |> put_session(:panel_info, panel_info) |> live(~m"/assignment/#{assignment.id}")
 
     page
   end

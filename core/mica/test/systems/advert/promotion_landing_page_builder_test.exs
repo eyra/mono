@@ -21,7 +21,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
     test "Render", %{conn: conn} do
       creator = Factories.insert!(:creator)
       %{promotion: %{id: promotion_id}} = Advert.Factories.create_advert(creator, :accepted, 1)
-      {:ok, _view, html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, _view, html} = live(conn, ~m"/promotion/#{promotion_id}")
       assert html =~ "Participate"
     end
 
@@ -33,7 +33,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       submission_id |> Pool.Public.get_by_submission!() |> promote_pool_to_panl!()
 
-      {:ok, _view, html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, _view, html} = live(conn, ~m"/promotion/#{promotion_id}")
       assert html =~ "/images/logos/pools/panl_wide_dark.svg"
     end
 
@@ -49,7 +49,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       |> Ecto.Changeset.change(subject_reward: 6000)
       |> Mica.Repo.update!()
 
-      {:ok, view, html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, view, html} = live(conn, ~m"/promotion/#{promotion_id}")
 
       refute html =~ "This study is fully booked"
       assert html =~ "promotion-apply-button-hero"
@@ -71,7 +71,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       pool = Pool.Public.get_by_submission!(submission_id)
       refute Pool.Public.participant?(pool, participant)
 
-      {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, view, _html} = live(conn, ~m"/promotion/#{promotion_id}")
 
       view |> render_click("call-to-action-1")
 
@@ -97,7 +97,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
       pool = Pool.Public.get_by_submission!(submission_id)
       Pool.Public.add_participant!(pool, participant)
 
-      {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, view, _html} = live(conn, ~m"/promotion/#{promotion_id}")
 
       view |> render_click("call-to-action-1")
 
@@ -114,7 +114,7 @@ defmodule Systems.Advert.PromotionLandingPageBuilderTest do
 
       slug = Pool.Model.slug(Pool.Public.get_by_submission!(submission_id))
 
-      {:ok, view, _html} = live(conn, ~p"/promotion/#{promotion_id}")
+      {:ok, view, _html} = live(conn, ~m"/promotion/#{promotion_id}")
 
       view |> render_click("call-to-action-1")
 

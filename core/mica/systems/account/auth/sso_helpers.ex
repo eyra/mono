@@ -38,7 +38,7 @@ defmodule Systems.Account.Auth.SSOHelpers do
     Enum.reduce(errors, conn, fn message, conn ->
       put_flash(conn, :error, message)
     end)
-    |> redirect(to: ~p"/user/signin")
+    |> redirect(to: ~m"/user/signin")
   end
 
   @doc """
@@ -63,7 +63,7 @@ defmodule Systems.Account.Auth.SSOHelpers do
     SignInHandoff.end_sign_in(conn, provider, :failed, fn conn ->
       conn
       |> put_flash(:error, error_message(error))
-      |> redirect(to: ~p"/user/signin")
+      |> redirect(to: ~m"/user/signin")
     end)
   end
 

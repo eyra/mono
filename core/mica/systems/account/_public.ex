@@ -407,7 +407,7 @@ defmodule Systems.Account.Public do
 
   ## Examples
 
-      iex> deliver_update_email_instructions(user, current_email, &url(conn, ~p"/user/update-email/\#{&1}"
+      iex> deliver_update_email_instructions(user, current_email, &url(conn, ~m"/user/update-email/\#{&1}"
       {:ok, %{to: ..., body: ...}}
 
   """
@@ -637,10 +637,10 @@ defmodule Systems.Account.Public do
 
   ## Examples
 
-      iex> deliver_user_confirmation_instructions(user, &url(conn, ~p"/user/settings/activate-account/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(user, &url(conn, ~m"/user/settings/activate-account/\#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
-      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~p"/user/settings/activate-account/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~m"/user/settings/activate-account/\#{&1}"))
       {:error, :already_confirmed}
 
   """
@@ -695,7 +695,7 @@ defmodule Systems.Account.Public do
 
   ## Examples
 
-      iex> deliver_user_reset_password_instructions(user, &url(conn, ~p"/user/reset-password/\#{&1}))
+      iex> deliver_user_reset_password_instructions(user, &url(conn, ~m"/user/reset-password/\#{&1}))
       {:ok, %{to: ..., body: ...}}
 
   """

@@ -10,19 +10,17 @@ defmodule MicaWeb.Web do
 
   Code then uses its owner's web module, `use NextWeb, :routed_live_view` or
   `use NextWeb, {:controller, formats: [:json]}`, and its `~p` is verified against
-  that `router:`. The blocks are the same for every web module; only the router
-  and endpoint of the verified routes differ.
+  that `router:`. The blocks are the same for every web module; only the paths
+  differ. Mica's web module, `use MicaWeb.Web` without a router, builds its paths
+  with `~m` (`MicaWeb.Path`), which each SaaS checks against its own router.
 
   Do NOT define functions inside the quoted expressions below. Instead, define any
   helper function in modules and import those modules here.
   """
 
   defmacro __using__(opts) do
-    router = Keyword.fetch!(opts, :router)
-    endpoint = Keyword.fetch!(opts, :endpoint)
-
     quote do
-      def verified_routes, do: MicaWeb.Web.verified_routes(unquote(router), unquote(endpoint))
+      def verified_routes, do: unquote(paths(opts))
 
       def utility, do: MicaWeb.Web.utility()
       def controller(opts), do: MicaWeb.Web.controller(opts, verified_routes())
@@ -52,12 +50,33 @@ defmodule MicaWeb.Web do
     end
   end
 
+  # A SaaS web module (`router:` and `endpoint:`) gets Phoenix's `~p`, verified
+  # against its router. Mica's web module, without them, gets `~m` (`MicaWeb.Path`).
+  defp paths(opts) do
+    case {Keyword.fetch(opts, :router), Keyword.fetch(opts, :endpoint)} do
+      {{:ok, router}, {:ok, endpoint}} ->
+        quote do: MicaWeb.Web.verified_routes(unquote(router), unquote(endpoint))
+
+      {:error, :error} ->
+        quote do: MicaWeb.Web.mica_paths()
+
+      _ ->
+        raise ArgumentError, "use MicaWeb.Web takes both :router and :endpoint, or neither"
+    end
+  end
+
   def verified_routes(router, endpoint) do
     quote do
       use Phoenix.VerifiedRoutes,
         endpoint: unquote(endpoint),
         router: unquote(router),
-        statics: MicaWeb.static_paths()
+        statics: MicaWeb.Path.statics()
+    end
+  end
+
+  def mica_paths do
+    quote do
+      use MicaWeb.Path
     end
   end
 

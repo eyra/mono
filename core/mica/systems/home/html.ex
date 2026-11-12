@@ -25,7 +25,7 @@ defmodule Systems.Home.HTML do
             </div>
           </div>
           <div class="w-full hidden lg:block pr-12">
-              <img src={~p"/images/landing_page/drawing.svg"} alt={dgettext("eyra-crew", "home.intro.image_alt")} class="w-full max-h-96" />
+              <img src={~m"/images/landing_page/drawing.svg"} alt={dgettext("eyra-crew", "home.intro.image_alt")} class="w-full max-h-96" />
           </div>
         </div>
     </section>
@@ -42,20 +42,20 @@ defmodule Systems.Home.HTML do
         </h2>
         <div class="mt-6 justify-around w-full flex flex-col lg:flex-row gap-8 lg:gap-16 px-6 ">
           <.step_card
-            image={~p"/images/landing_page/geel-abstract.svg"}
+            image={~m"/images/landing_page/geel-abstract.svg"}
             title={dgettext("eyra-crew", "home.steps.step1.title")}
             stepNumber={1}
             description={dgettext("eyra-crew", "home.steps.step1.description")}
             button={%{label: dgettext("eyra-crew", "home.steps.step1.button"), link: @sign_up_url}}
           />
           <.step_card
-            image={~p"/images/landing_page/hout-abstract.svg"}
+            image={~m"/images/landing_page/hout-abstract.svg"}
             title={dgettext("eyra-crew", "home.steps.step2.title")}
             stepNumber={2}
             description={dgettext("eyra-crew", "home.steps.step2.description")}
           />
           <.step_card
-            image={~p"/images/landing_page/blauw-abstract.svg"}
+            image={~m"/images/landing_page/blauw-abstract.svg"}
             title={dgettext("eyra-crew", "home.steps.step3.title")}
             stepNumber={3}
             description={dgettext("eyra-crew", "home.steps.step3.description")}
@@ -106,7 +106,7 @@ defmodule Systems.Home.HTML do
     ~H"""
     <section class="h-full pt-6 lg:pt-12 px-6 bg-white">
       <div class="lg:px-12 flex lg:flex-row justify-start items-center lg:gap-10">
-          <img class="h-64 hidden lg:block" src={~p"/images/landing_page/services-drawing.png"} alt={dgettext("eyra-crew", "home.services.image_alt")}/>
+          <img class="h-64 hidden lg:block" src={~m"/images/landing_page/services-drawing.png"} alt={dgettext("eyra-crew", "home.services.image_alt")}/>
           <div class="flex flex-col justify-start items-start lg:pr-8 lg:pr-20">
               <div class="pb-6 lg:pb-8 text-title4 font-title4 lg:text-title1 lg:font-title1 text-grey1">
                 <%= dgettext("eyra-crew", "home.services.title") %>

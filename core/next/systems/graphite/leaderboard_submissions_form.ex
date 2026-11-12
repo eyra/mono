@@ -1,5 +1,6 @@
 defmodule Next.Systems.Graphite.LeaderboardSubmissionsForm do
   use MicaWeb.LiveForm
+  use NextWeb, :verified_routes
 
   alias Frameworks.Pixel.Text
 

@@ -14,7 +14,7 @@ defmodule MicaWeb.Language do
           <%= @label %>:
         </div>
         <div>
-          <img src={~p"/images/icons/#{"#{@language}.svg"}"} alt={"#{@language}"}>
+          <img src={~m"/images/icons/#{"#{@language}.svg"}"} alt={"#{@language}"}>
         </div>
       </div>
     </div>

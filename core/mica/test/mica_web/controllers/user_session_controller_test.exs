@@ -13,7 +13,7 @@ defmodule Systems.Account.UserSessionControllerTest do
     # setup [:create_user]
 
     test "renders log in page", %{conn: conn} do
-      conn = get(conn, ~p"/user/signin")
+      conn = get(conn, ~m"/user/signin")
       response = html_response(conn, 200)
       assert response =~ "Sign in"
     end
@@ -23,7 +23,7 @@ defmodule Systems.Account.UserSessionControllerTest do
     setup [:login_as_member]
 
     test "redirects if already logged in", %{conn: conn} do
-      conn = get(conn, ~p"/user/signin")
+      conn = get(conn, ~m"/user/signin")
       assert redirected_to(conn) =~ "/"
     end
   end
@@ -33,7 +33,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
     test "logs the user in", %{conn: conn, user: user, password: password} do
       conn =
-        post(conn, ~p"/user/session", %{
+        post(conn, ~m"/user/session", %{
           "user" => %{"email" => user.email, "password" => password}
         })
 
@@ -47,7 +47,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
     test "logs the user in with remember me", %{conn: conn, user: user, password: password} do
       conn =
-        post(conn, ~p"/user/session", %{
+        post(conn, ~m"/user/session", %{
           "user" => %{
             "email" => user.email,
             "password" => password,
@@ -63,7 +63,7 @@ defmodule Systems.Account.UserSessionControllerTest do
       conn =
         conn
         |> init_test_session(user_return_to: "/foo/bar")
-        |> post(~p"/user/session", %{
+        |> post(~m"/user/session", %{
           "user" => %{
             "email" => user.email,
             "password" => password
@@ -75,7 +75,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
     test "emits error message with invalid credentials", %{conn: conn, user: user} do
       conn =
-        post(conn, ~p"/user/session", %{
+        post(conn, ~m"/user/session", %{
           "user" => %{"email" => user.email, "password" => "invalid_password"}
         })
 
@@ -88,7 +88,7 @@ defmodule Systems.Account.UserSessionControllerTest do
     setup [:login_as_member]
 
     test "logs the user out", %{conn: conn} do
-      conn = delete(conn, ~p"/user/session")
+      conn = delete(conn, ~m"/user/session")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
       refute get_session(conn, :user_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"
@@ -97,7 +97,7 @@ defmodule Systems.Account.UserSessionControllerTest do
 
   describe "DELETE /users/signout as visitor" do
     test "succeeds even if the user is not logged in", %{conn: conn} do
-      conn = delete(conn, ~p"/user/session")
+      conn = delete(conn, ~m"/user/session")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
       refute get_session(conn, :user_token)
       assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Signed out"

@@ -119,7 +119,7 @@ defmodule Frameworks.Pixel.Tabbed do
           <% end %>
         </div>
         <div class="pointer-events-none">
-          <img src={~p"/images/icons/dropdown.svg"} alt="Show tabbar dropdown">
+          <img src={~m"/images/icons/dropdown.svg"} alt="Show tabbar dropdown">
         </div>
       </div>
     </div>

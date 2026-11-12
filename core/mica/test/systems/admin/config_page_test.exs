@@ -7,18 +7,18 @@ defmodule Systems.Admin.ConfigPageTest do
     setup [:login_as_admin]
 
     test "render", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/admin/config")
+      {:ok, _view, html} = live(conn, ~m"/admin/config")
       assert html =~ "Admin"
     end
 
     test "shows the client activity tab", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/admin/config")
+      {:ok, view, _html} = live(conn, ~m"/admin/config")
 
       assert find_live_child(view, "admin_client_activity_view")
     end
 
     test "create bank account", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/admin/config")
+      {:ok, view, _html} = live(conn, ~m"/admin/config")
 
       # Get reference to embedded SystemView and send event there
       system_view = find_live_child(view, "admin_system_view")
@@ -31,7 +31,7 @@ defmodule Systems.Admin.ConfigPageTest do
     test "create citizen pool", %{conn: conn} do
       Factories.insert!(:currency, %{name: "euro", type: :legal, decimal_scale: 2})
 
-      {:ok, view, _html} = live(conn, ~p"/admin/config")
+      {:ok, view, _html} = live(conn, ~m"/admin/config")
 
       # Get reference to embedded SystemView and send event there
       system_view = find_live_child(view, "admin_system_view")
@@ -61,14 +61,14 @@ defmodule Systems.Admin.ConfigPageTest do
     end
 
     test "does not show the client activity tab", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/admin/config")
+      {:ok, view, _html} = live(conn, ~m"/admin/config")
 
       assert find_live_child(view, "admin_org_view")
       refute find_live_child(view, "admin_client_activity_view")
     end
 
     test "does not show the system admin tabs", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/admin/config")
+      {:ok, view, _html} = live(conn, ~m"/admin/config")
 
       for id <- ["admin_system_view", "admin_account_view", "admin_actions_view"] do
         refute find_live_child(view, id)

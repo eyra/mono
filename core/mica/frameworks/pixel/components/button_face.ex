@@ -38,7 +38,7 @@ defmodule Frameworks.Pixel.Button.Face do
   def icon(assigns) do
     ~H"""
     <Pixel.button as="div" variant={:icon} class={["flex", @size]}>
-      <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@alt}></:icon>
+      <:icon><img src={~m"/images/icons/#{icon_name(assigns)}"} alt={@alt}></:icon>
     </Pixel.button>
     """
   end
@@ -53,7 +53,7 @@ defmodule Frameworks.Pixel.Button.Face do
     ~H"""
     <Pixel.button as="div" variant={:plain} padded={false} class={["flex w-fit font-label text-label", @height, @text_color]}>
       <%= @label %>
-      <:icon><img src={~p"/images/icons/#{icon_name(assigns)}"} alt={@label}></:icon>
+      <:icon><img src={~m"/images/icons/#{icon_name(assigns)}"} alt={@label}></:icon>
     </Pixel.button>
     """
   end
@@ -86,7 +86,7 @@ defmodule Frameworks.Pixel.Button.Face do
       class={["flex w-fit", @text_color]}
     >
       <%= @label %>
-      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+      <:icon><img src={~m"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
     </Pixel.button>
     """
   end
@@ -111,7 +111,7 @@ defmodule Frameworks.Pixel.Button.Face do
     ~H"""
     <Pixel.button as="div" variant={:primary} class={["flex w-full h-12", @bg_color, @text_color]}>
       <%= @label %>
-      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+      <:icon><img src={~m"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
     </Pixel.button>
     """
   end
@@ -157,7 +157,7 @@ defmodule Frameworks.Pixel.Button.Face do
     ~H"""
     <Pixel.button as="div" variant={:secondary} class={["flex", @border_color, @text_color]}>
       <%= @label %>
-      <:icon><img src={~p"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
+      <:icon><img src={~m"/images/icons/#{"#{@icon}.svg"}"} alt={@label}></:icon>
     </Pixel.button>
     """
   end

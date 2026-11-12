@@ -1,5 +1,6 @@
 defmodule Next.Systems.Announcement.PageTest do
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   import ExUnit.CaptureLog

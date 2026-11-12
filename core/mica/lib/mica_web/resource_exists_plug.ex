@@ -42,7 +42,7 @@ defmodule MicaWeb.ResourceExistsPlug do
 
   defp redirect_not_found(conn) do
     conn
-    |> Phoenix.Controller.redirect(to: ~p"/not_found")
+    |> Phoenix.Controller.redirect(to: ~m"/not_found")
     |> halt()
   end
 end

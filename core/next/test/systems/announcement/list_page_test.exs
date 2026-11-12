@@ -1,5 +1,6 @@
 defmodule Next.Systems.Announcement.ListPageTest do
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest

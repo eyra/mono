@@ -16,7 +16,7 @@ defmodule MicaWeb.Devices do
           </div>
           <%= for device <- @devices do %>
             <div >
-              <img src={~p"/images/" <> "#{device}.svg"} alt={"Select #{device}"}>
+              <img src={~m"/images/" <> "#{device}.svg"} alt={"Select #{device}"}>
             </div>
           <% end %>
         </div>

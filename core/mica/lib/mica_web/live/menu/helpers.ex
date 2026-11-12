@@ -118,7 +118,7 @@ defmodule MicaWeb.Menu.Helpers do
 
     %{
       type: :http_get,
-      to: ~p"/switch-language/#{locale.id}?redir=#{redirect_url}"
+      to: ~m"/switch-language/#{locale.id}?redir=#{redirect_url}"
     }
   end
 

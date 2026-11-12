@@ -20,7 +20,7 @@ defmodule Systems.Org.ContentPageTest do
       {:ok, ctx} = login(user, ctx)
       conn = ctx[:conn]
 
-      assert {:ok, _view, _html} = live(conn, ~p"/org/node/#{org.id}")
+      assert {:ok, _view, _html} = live(conn, ~m"/org/node/#{org.id}")
     end
 
     test "owner of one org is denied access to an org they don't manage", ctx do
@@ -33,7 +33,7 @@ defmodule Systems.Org.ContentPageTest do
       conn = ctx[:conn]
 
       assert {:error, {:redirect, %{to: "/access_denied"}}} =
-               live(conn, ~p"/org/node/#{other_org.id}")
+               live(conn, ~m"/org/node/#{other_org.id}")
     end
 
     test "access is denied after the owner role is revoked", ctx do
@@ -44,12 +44,12 @@ defmodule Systems.Org.ContentPageTest do
       {:ok, ctx} = login(user, ctx)
       conn = ctx[:conn]
 
-      assert {:ok, _view, _html} = live(conn, ~p"/org/node/#{org.id}")
+      assert {:ok, _view, _html} = live(conn, ~m"/org/node/#{org.id}")
 
       :ok = Org.Public.revoke_owner(org, user)
 
       assert {:error, {:redirect, %{to: "/access_denied"}}} =
-               live(conn, ~p"/org/node/#{org.id}")
+               live(conn, ~m"/org/node/#{org.id}")
     end
   end
 end

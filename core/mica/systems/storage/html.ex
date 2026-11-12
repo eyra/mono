@@ -46,7 +46,7 @@ defmodule Systems.Storage.Html do
     ~H"""
     <div class="flex flex-row items-center gap-2">
       <div class="w-6 h-6">
-        <img src={~p"/images/icons/#{@icon}"} alt={@label}>
+        <img src={~m"/images/icons/#{@icon}"} alt={@label}>
       </div>
       <Text.caption color="text-grey2" padding=""><%= @label %></Text.caption>
     </div>

@@ -41,7 +41,7 @@ defmodule Systems.Account.ResetPassword do
           # FIXME: Log suspicous behavior?
           Account.Public.deliver_user_reset_password_instructions(
             user,
-            &url(socket, ~p"/user/reset-password/#{&1}")
+            &url(socket, ~m"/user/reset-password/#{&1}")
           )
         end
 

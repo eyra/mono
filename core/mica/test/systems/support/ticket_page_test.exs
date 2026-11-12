@@ -10,7 +10,7 @@ defmodule Systems.Support.TicketPageTest do
       ticket = Factories.insert!(:helpdesk_ticket)
 
       assert {:error, {:redirect, %{to: "/access_denied"}}} =
-               live(conn, ~p"/support/ticket/#{ticket.id}")
+               live(conn, ~m"/support/ticket/#{ticket.id}")
     end
   end
 
@@ -19,14 +19,14 @@ defmodule Systems.Support.TicketPageTest do
 
     test "show ticket", %{conn: conn} do
       ticket = Factories.insert!(:helpdesk_ticket)
-      {:ok, _view, html} = live(conn, ~p"/support/ticket/#{ticket.id}")
+      {:ok, _view, html} = live(conn, ~m"/support/ticket/#{ticket.id}")
       assert html =~ ticket.title
       assert html =~ ticket.description
     end
 
     test "closing a ticket", %{conn: conn} do
       ticket = Factories.insert!(:helpdesk_ticket)
-      {:ok, view, _html} = live(conn, ~p"/support/ticket/#{ticket.id}")
+      {:ok, view, _html} = live(conn, ~m"/support/ticket/#{ticket.id}")
 
       assert {:error, {:live_redirect, %{kind: :push, to: "/support/ticket"}}} =
                render_click(view, "close_ticket")

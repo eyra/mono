@@ -22,7 +22,7 @@ defmodule Systems.Account.Auth.Mock.SigninPage do
        |> assign(active_menu_item: nil, form: to_form(%{"email" => "example@mock.com"}))
        |> update_menus()}
     else
-      {:ok, Phoenix.LiveView.redirect(socket, to: ~p"/not_found")}
+      {:ok, Phoenix.LiveView.redirect(socket, to: ~m"/not_found")}
     end
   end
 
@@ -34,7 +34,7 @@ defmodule Systems.Account.Auth.Mock.SigninPage do
   def handle_event("sign_in", %{"email" => email}, socket) do
     if Systems.Account.Auth.Mock.valid_email?(email) do
       {:noreply,
-       Phoenix.LiveView.push_navigate(socket, to: ~p"/auth/mock/callback?email=#{email}")}
+       Phoenix.LiveView.push_navigate(socket, to: ~m"/auth/mock/callback?email=#{email}")}
     else
       {:noreply, Phoenix.LiveView.put_flash(socket, :error, "Use an @mock.com email address")}
     end

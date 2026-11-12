@@ -76,7 +76,7 @@ defmodule Systems.Project.NodeModel do
            {Project.NodePage, :node_card},
            _user
          ) do
-      path = ~p"/project/node/#{id}"
+      path = ~m"/project/node/#{id}"
 
       %{
         type: :primary,

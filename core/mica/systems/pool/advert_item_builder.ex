@@ -51,7 +51,7 @@ defmodule Systems.Pool.AdvertItemBuilder do
     image = %{type: :catalog, info: image_info}
 
     %{
-      path: ~p"/pool/advert/#{submission_id}",
+      path: ~m"/pool/advert/#{submission_id}",
       title: title,
       subtitle: subtitle,
       tag: tag,

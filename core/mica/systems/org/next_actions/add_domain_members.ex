@@ -16,7 +16,7 @@ defmodule Systems.Org.NextActions.AddDomainMembers do
         ),
       description: dgettext("eyra-org", "domain.match.next_action.description"),
       cta_label: dgettext("eyra-org", "domain.match.next_action.button"),
-      cta_action: %{type: :redirect, to: ~p"/org/node/#{org_id}"}
+      cta_action: %{type: :redirect, to: ~m"/org/node/#{org_id}"}
     }
   end
 

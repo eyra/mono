@@ -58,7 +58,7 @@ defmodule Systems.Fund.PayInRequestFormTest do
     {:ok, view, _html} =
       conn
       |> put_connect_params(%{"viewport" => %{"width" => 1280, "height" => 800}})
-      |> live(~p"/assignment/#{assignment_id}/content")
+      |> live(~m"/assignment/#{assignment_id}/content")
 
     view |> element(@add_button) |> render_click()
     view |> form(@confirm_form, pay_in_request: @request) |> render_submit()

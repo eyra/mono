@@ -29,7 +29,7 @@ defmodule Frameworks.Pixel.Empty do
       <div class="w-full mt-6 hidden md:block">
         <img
           class="object-fill w-full"
-          src={~p"/images/illustrations/#{"#{@illustration}.svg"}"}
+          src={~m"/images/illustrations/#{"#{@illustration}.svg"}"}
           alt=""
         />
       </div>
