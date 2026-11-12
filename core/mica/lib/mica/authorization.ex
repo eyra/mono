@@ -363,17 +363,14 @@ defmodule Mica.Authorization do
 
   @doc false
   # Every schema that owns an auth node, from Mica and the SaaS alike.
-  def entities do
-    {:ok, modules} = :application.get_key(:mica, :modules)
-
-    modules
+  def entities(schemas \\ Mica.SaaS.schemas()) do
+    schemas
     |> Enum.sort()
     |> Enum.filter(&owns_auth_node?/1)
   end
 
   defp owns_auth_node?(module) do
-    Code.ensure_loaded?(module) and function_exported?(module, :__schema__, 2) and
-      module.__schema__(:source) != nil and
+    module.__schema__(:source) != nil and
       match?(
         %Ecto.Association.BelongsTo{related: Mica.Authorization.Node},
         module.__schema__(:association, :auth_node)

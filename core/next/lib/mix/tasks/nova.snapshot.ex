@@ -278,11 +278,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
   end
 
   defp schemas do
-    {:ok, modules} = :application.get_key(:mica, :modules)
-    orphan_scan = Enum.filter(modules, &({:__schema__, 1} in &1.__info__(:functions)))
-
     [
-      schemas: orphan_scan |> Enum.reject(&test_support?/1) |> Enum.sort(),
+      schemas: Mica.SaaS.schemas() |> Enum.reject(&test_support?/1) |> Enum.sort(),
       auth_entities: Enum.reject(Mica.Authorization.entities(), &test_support?/1)
     ]
   end
