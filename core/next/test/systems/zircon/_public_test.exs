@@ -119,6 +119,15 @@ defmodule Next.Systems.Zircon.PublicTest do
   end
 
   describe "delete_screening_tool_criterion/2" do
+    # After code-split the tool's association is a schema of Next's application, not
+    # Mica's: the orphan check must still see it.
+    test "a criterion that only a screening tool refers to is not an orphan" do
+      annotation = Factories.insert!(:annotation, %{statement: "Population unspecified"})
+      Factories.insert!(:zircon_screening_tool, %{annotations: [annotation]})
+
+      refute Repo.orphan?(annotation, ignore: [Annotation.Assoc])
+    end
+
     test "deletes a criterion from the screening tool" do
       dimension = Factories.insert!(:ontology_concept, %{phrase: "Population"})
       ontology_ref = Factories.insert!(:ontology_ref, %{concept: dimension})

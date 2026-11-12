@@ -76,4 +76,20 @@ defmodule Systems.Assignment.PrivateTest do
               }} = Assignment.Private.get_crew_member(task, [])
     end
   end
+
+  describe "no_consent?/2" do
+    test "raises when the assignment's agreement isn't loaded" do
+      user = Factories.insert!(:member)
+
+      %{id: id} =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.add_participant(user)
+
+      assignment = Assignment.Public.get!(id)
+
+      assert_raise FunctionClauseError, fn ->
+        Assignment.Private.no_consent?(assignment, user.id)
+      end
+    end
+  end
 end

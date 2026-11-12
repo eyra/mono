@@ -13,6 +13,7 @@ defmodule Systems.Assignment.CrewPage do
   alias Frameworks.Pixel.Hero
 
   alias Systems.Assignment
+  alias Systems.Crew
   alias Systems.Project
   alias Systems.Storage
 
@@ -30,7 +31,10 @@ defmodule Systems.Assignment.CrewPage do
   end
 
   @impl true
-  def mount(%{"id" => id}, session, socket) do
+  def mount(%{"id" => id}, session, %{assigns: %{model: assignment, current_user: user}} = socket) do
+    # Fallback for a member who wasn't finished when their last required task completed
+    finish_if_required_tasks_finished(assignment, user)
+
     {
       :ok,
       socket
@@ -162,6 +166,11 @@ defmodule Systems.Assignment.CrewPage do
     )
 
     {:stop, deliver_blob(socket, task_identifier(socket, task, group, key), blob_id)}
+  end
+
+  defp finish_if_required_tasks_finished(%{crew: crew} = assignment, user) do
+    member = Crew.Public.get_member(crew, user)
+    Assignment.Public.finish_if_required_tasks_finished(assignment, member)
   end
 
   defp handle_action(socket, action) do

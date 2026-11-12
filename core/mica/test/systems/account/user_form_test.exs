@@ -1,10 +1,17 @@
 defmodule Systems.Account.UserFormTest do
   use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
   import Phoenix.LiveViewTest
 
   @policy_urls Application.compile_env(:mica, :policy_urls)
 
   describe "password_signup form" do
+    # With sign-in codes on, the SaaS sends sign-up to its code page.
+    setup do
+      set_feature_flag(:otp, false)
+      :ok
+    end
+
     test "renders Next policy links with configured URLs", %{conn: conn} do
       {:ok, _view, html} = live(conn, "/user/signup/participant")
 

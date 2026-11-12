@@ -1,5 +1,6 @@
 defmodule MicaWeb.Live.User.SignupPage.Test do
   use MicaWeb.ConnCase
+  use Mica.FeatureFlags.Test
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 
@@ -7,6 +8,12 @@ defmodule MicaWeb.Live.User.SignupPage.Test do
   alias Systems.Account.User
 
   describe "as a visitor" do
+    # With sign-in codes on, the SaaS sends sign-up to its code page.
+    setup do
+      set_feature_flag(:otp, false)
+      :ok
+    end
+
     test "signup without accepting next privacy policy shows error and does not create user", %{
       conn: conn
     } do

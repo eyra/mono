@@ -32,6 +32,8 @@ defmodule Systems.Home.HTML do
     """
   end
 
+  attr(:sign_up_url, :string, required: true)
+
   def steps(assigns) do
     ~H"""
     <section class="py-6 lg:py-16 lg:px-6">
@@ -44,7 +46,7 @@ defmodule Systems.Home.HTML do
             title={dgettext("eyra-crew", "home.steps.step1.title")}
             stepNumber={1}
             description={dgettext("eyra-crew", "home.steps.step1.description")}
-            button={%{label: dgettext("eyra-crew", "home.steps.step1.button"), link: "/user/signup/creator"}}
+            button={%{label: dgettext("eyra-crew", "home.steps.step1.button"), link: @sign_up_url}}
           />
           <.step_card
             image={~p"/images/landing_page/hout-abstract.svg"}

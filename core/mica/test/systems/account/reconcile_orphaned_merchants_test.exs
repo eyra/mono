@@ -102,32 +102,25 @@ defmodule Systems.Account.ReconcileOrphanedMerchantsTest do
   end
 
   describe "the platform merchant" do
+    # The uid config/test.exs configures. Overriding it here would change global
+    # config under the async modules running alongside this one.
     setup do
-      previous = Application.get_env(:mica, Systems.Payment.Provider.OPP)
-
-      Application.put_env(
-        :mica,
-        Systems.Payment.Provider.OPP,
-        Keyword.merge(previous || [], merchant_uid: "mer_platform")
-      )
-
-      on_exit(fn -> Application.put_env(:mica, Systems.Payment.Provider.OPP, previous) end)
-      :ok
+      %{platform_uid: Payment.Public.platform_merchant_uid()}
     end
 
-    test "is never flagged, having no user row by design" do
+    test "is never flagged, having no user row by design", %{platform_uid: platform_uid} do
       # Without this it would be reported on every single run, training whoever
       # reads the findings to ignore them.
-      %{summary: summary, findings: findings} = run([merchant("mer_platform")])
+      %{summary: summary, findings: findings} = run([merchant(platform_uid)])
 
       assert summary.missing_locally == 0
       assert summary.scanned == 0
       assert findings == []
     end
 
-    test "does not mask a real orphan alongside it" do
+    test "does not mask a real orphan alongside it", %{platform_uid: platform_uid} do
       %{summary: summary, findings: findings} =
-        run([merchant("mer_platform"), merchant("mer_lost")])
+        run([merchant(platform_uid), merchant("mer_lost")])
 
       assert summary.missing_locally == 1
       assert [%{provider_uid: "mer_lost"}] = findings

@@ -6,6 +6,7 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
   (NL) instead of falling back to English.
   """
   use MicaWeb.FeatureCase
+  use Mica.FeatureFlags.Test
 
   alias Systems.Pool
 
@@ -22,6 +23,12 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
       prefs: %{"intl.accept_languages" => "nl-NL,nl"}
     }
   }
+
+  # With sign-in codes on, `/user/signup` sends to the code page.
+  setup do
+    set_feature_flag(:otp, false)
+    :ok
+  end
 
   @sessions [[capabilities: @nl_capabilities]]
   @tag :feature

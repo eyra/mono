@@ -357,14 +357,6 @@ defmodule Systems.Crew.Public do
     |> Enum.any?(&(&1.started_at != nil))
   end
 
-  def finished?(%Crew.MemberModel{} = member) do
-    crew = get!(member.crew_id)
-
-    task_query(crew, member, false)
-    |> Repo.all()
-    |> Enum.all?(&(&1.status in Crew.TaskStatus.finished_states()))
-  end
-
   def tasks_finished?(task_ids) when is_list(task_ids) do
     tasks_pending(task_ids)
     |> Repo.all()

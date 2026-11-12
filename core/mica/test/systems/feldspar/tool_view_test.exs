@@ -23,6 +23,7 @@ defmodule Systems.Feldspar.ToolViewTest do
         participant: "test_participant",
         workflow_item_id: 456,
         description: Map.get(test_context, :description),
+        autostart: Map.get(test_context, :autostart, false),
         current_user: user,
         recovery: %{
           scope: "external-run/opaque-scope",
@@ -112,5 +113,40 @@ defmodule Systems.Feldspar.ToolViewTest do
   test "the start screen shows the description from the host", %{view: view} do
     assert has_element?(view, "[data-testid='start-container']", "You are about to start a test.")
     refute has_element?(view, "[data-testid='start-container']", "donate your data")
+  end
+
+  @tag autostart: true
+  test "with autostart, the start screen is left out", %{view: view} do
+    assert has_element?(view, "[data-testid='feldspar-autostart']")
+    refute has_element?(view, "[data-testid='feldspar-start']")
+  end
+
+  @tag autostart: true
+  test "with autostart, the app starts once recovery is checked", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    assert_push_event(view, "feldspar:prepare", %{id: _})
+
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
+  end
+
+  # After a reload or a crash the modal reopens; the notice must be readable before a
+  # new attempt, as on the vertical list's start screen
+  @tag autostart: true
+  test "with autostart, an unfinished attempt shows the start screen with its notice instead",
+       %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+
+    refute_push_event(view, "feldspar:prepare", %{id: _})
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
+    refute has_element?(view, "[data-testid='feldspar-autostart']")
+  end
+
+  test "without autostart, checking recovery doesn't start the app", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+
+    refute has_element?(view, "iframe")
   end
 end

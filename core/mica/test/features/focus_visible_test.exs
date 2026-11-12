@@ -26,7 +26,8 @@ defmodule MicaWeb.Features.FocusVisibleTest do
 
   setup do
     set_feature_flag(:password_sign_in, true)
-    put_env(Desktop, sections: [Desktop.TestSection])
+    previous = Mica.SaaS.put_composition(desktop_sections: [Desktop.TestSection])
+    on_exit(fn -> Mica.SaaS.put_composition(previous) end)
 
     put_env(Desktop.TestSection,
       message: "Focus test",

@@ -23,5 +23,6 @@
     admin: [:system, :account, :org, :actions, :client_activity, :announcements],
     org_admin: [:org]
   },
-  desktop_sections: [:announcements]
+  desktop_sections: [:announcements],
+  assignment_templates: [Next.Systems.Probe.AssignmentTemplate]
 ]

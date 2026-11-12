@@ -353,7 +353,7 @@ msgstr "Paskyrimas"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Atkreipkite dėmesį, kad jei nuspręsite patvirtinti, puslapio turinys bus ištrintas, taip pat ir susijęs įrašas apie tai, kas davė sutikimą."
+msgstr "Dalyviai šio puslapio nebematys. Sutikimo tekstas ir įrašas apie tai, kas davė sutikimą, išsaugomi ir grįš, kai puslapis vėl bus rodomas."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"
@@ -817,3 +817,15 @@ msgstr "Ši užduotis nebepasiekiama"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Šiame tyrime nėra užduočių."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Pasirinkus „Rodyti“, neklausiama dalyvių, kurie prisijungė, kai šis puslapis buvo praleidžiamas, arba kurie jau davė sutikimą. Dalyvių, kurie prisijungė, kai puslapis anksčiau buvo rodomas, ir niekada nesutiko, klausiama dar kartą."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Užduotis %{index} iš %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Pradėti"

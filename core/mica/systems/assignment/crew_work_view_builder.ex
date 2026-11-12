@@ -2,6 +2,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
+  alias Systems.Consent
 
   def view_model(
         %{
@@ -13,7 +14,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
         %{current_user: user, user_state: user_state, live_context: context} = _assigns
       ) do
     task_view = Assignment.Private.task_view(assignment)
-    context_menu_items = build_context_menu_items(assignment)
+    context_menu_items = build_context_menu_items(assignment, user)
 
     intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
     support_page_ref = Enum.find(page_refs, &(&1.key == :assignment_helpdesk))
@@ -33,13 +34,13 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   defp empty_message(:none), do: dgettext("eyra-assignment", "work.empty.message")
   defp empty_message(_task_view), do: nil
 
-  defp build_context_menu_items(assignment) do
+  defp build_context_menu_items(assignment, user) do
     [:assignment_information, :privacy, :consent, :assignment_helpdesk]
-    |> Enum.map(&context_menu_item(&1, assignment))
+    |> Enum.map(&context_menu_item(&1, assignment, user))
     |> Enum.filter(&(not is_nil(&1)))
   end
 
-  defp context_menu_item(:privacy = key, %{privacy_doc: privacy_doc}) do
+  defp context_menu_item(:privacy = key, %{privacy_doc: privacy_doc}, _user) do
     if privacy_doc do
       %{
         id: key,
@@ -51,15 +52,16 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
     end
   end
 
-  defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}) do
-    if consent_agreement do
+  # Shows the text the participant signed; participants who were never asked have none.
+  defp context_menu_item(:consent = key, %{consent_agreement: consent_agreement}, user) do
+    if consent_agreement && Consent.Public.has_signature(consent_agreement, user) do
       %{id: key, label: dgettext("eyra-assignment", "context.menu.consent.title")}
     else
       nil
     end
   end
 
-  defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}) do
+  defp context_menu_item(:assignment_information = key, %{page_refs: page_refs}, _user) do
     if Enum.find(page_refs, &(&1.key == :assignment_information)) != nil do
       %{id: key, label: dgettext("eyra-assignment", "context.menu.information.title")}
     else
@@ -67,7 +69,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
     end
   end
 
-  defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}) do
+  defp context_menu_item(:assignment_helpdesk = key, %{page_refs: page_refs}, _user) do
     if Enum.find(page_refs, &(&1.key == key)) != nil do
       %{id: key, label: dgettext("eyra-assignment", "context.menu.support.title")}
     else
@@ -86,6 +88,15 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
     MicaWeb.Live.Element.prepare_live_view(
       "crew_task_single_view_#{assignment_id}",
       Assignment.CrewTaskSingleView,
+      live_context: context
+    )
+  end
+
+  # Multiple items, the template chose the horizontal list
+  defp task_view(:horizontal_list, assignment_id, _user_state, context) do
+    MicaWeb.Live.Element.prepare_live_view(
+      "crew_task_horizontal_list_view_#{assignment_id}",
+      Assignment.CrewTaskHorizontalListView,
       live_context: context
     )
   end

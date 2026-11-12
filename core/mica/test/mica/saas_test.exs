@@ -214,7 +214,7 @@ defmodule Mica.SaaSTest do
            }
   end
 
-  test "the notify message channel enum has the collected channel names" do
+  test "the notify message channels are the collected channel names" do
     assert Systems.Notify.MessageModel.channels() == [:email, :na]
   end
 

@@ -2,8 +2,6 @@ import Config
 
 config :mica, saas: Next.SaaS
 
-config :mica, assignment_templates: [Next.Systems.Probe.AssignmentTemplate]
-
 config :mica, :account,
   auth_methods: %{
     surfconext: %{provider: true, satellite: true},

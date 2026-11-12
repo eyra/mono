@@ -6,21 +6,14 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
   alias Systems.Payment.Provider.OPP.Webhook
   alias Systems.Payment.Error
 
-  @secret Faker.String.base64(32)
   @host Faker.Internet.domain_name()
   @date "Mon, 09 Mar 2026 12-00-00 GMT"
 
-  setup do
-    original = Application.get_env(:mica, Systems.Payment.Provider.OPP, [])
-
-    Application.put_env(
-      :mica,
-      Systems.Payment.Provider.OPP,
-      Keyword.put(original, :notification_secret, @secret)
-    )
-
-    on_exit(fn -> Application.put_env(:mica, Systems.Payment.Provider.OPP, original) end)
-    :ok
+  # Signs with the secret config/test.exs configures. Overriding it here would
+  # change global config under the async modules running alongside this one.
+  defp secret do
+    Application.fetch_env!(:mica, Systems.Payment.Provider.OPP)
+    |> Keyword.fetch!(:notification_secret)
   end
 
   defp build_signed_conn(body) do
@@ -29,7 +22,7 @@ defmodule Systems.Payment.Provider.OPP.WebhookTest do
     signing_string =
       "(request-target): post #{"/webhook"}\nhost: #{@host}\ndate: #{@date}\ndigest: #{digest}"
 
-    signature = :crypto.mac(:hmac, :sha256, @secret, signing_string) |> Base.encode64()
+    signature = :crypto.mac(:hmac, :sha256, secret(), signing_string) |> Base.encode64()
 
     signature_header =
       "keyId=\"test\",algorithm=\"hmac-sha256\",headers=\"(request-target) host date digest\",signature=\"#{signature}\""

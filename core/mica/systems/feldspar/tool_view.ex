@@ -5,6 +5,7 @@ defmodule Systems.Feldspar.ToolView do
   require Logger
 
   alias Frameworks.Pixel.Logo
+  alias Frameworks.Pixel.Spinner
   alias Systems.NextAction
   alias Systems.Workflow
 
@@ -58,27 +59,14 @@ defmodule Systems.Feldspar.ToolView do
         socket
         |> assign(recovery_checked: true, unfinished_attempt?: unfinished == true)
         |> update_view_model()
+        |> maybe_autostart()
       end
 
     {:noreply, socket}
   end
 
   def handle_event("prepare_start", _, socket) do
-    cond do
-      socket.assigns.started or socket.assigns.preparing or
-          not socket.assigns.recovery_checked ->
-        {:noreply, socket}
-
-      socket.assigns.vm.error ->
-        {:noreply, Frameworks.Pixel.Flash.put_error(socket, socket.assigns.vm.error)}
-
-      true ->
-        {:noreply,
-         socket
-         |> assign(preparing: true)
-         |> update_view_model()
-         |> push_event("feldspar:prepare", %{id: socket.assigns.vm.recovery_id})}
-    end
+    {:noreply, prepare_start(socket)}
   end
 
   def handle_event(
@@ -115,6 +103,27 @@ defmodule Systems.Feldspar.ToolView do
 
   def handle_event("feldspar_event", event, socket) do
     {:noreply, handle_feldspar_event(socket, event)}
+  end
+
+  # The host already showed the start screen (e.g. a task intro on the page)
+  defp maybe_autostart(%{assigns: %{vm: %{autostart?: true}}} = socket), do: prepare_start(socket)
+  defp maybe_autostart(socket), do: socket
+
+  defp prepare_start(socket) do
+    cond do
+      socket.assigns.started or socket.assigns.preparing or
+          not socket.assigns.recovery_checked ->
+        socket
+
+      socket.assigns.vm.error ->
+        Frameworks.Pixel.Flash.put_error(socket, socket.assigns.vm.error)
+
+      true ->
+        socket
+        |> assign(preparing: true)
+        |> update_view_model()
+        |> push_event("feldspar:prepare", %{id: socket.assigns.vm.recovery_id})
+    end
   end
 
   defp parse_attempt_id(attempt_id) do
@@ -211,7 +220,10 @@ defmodule Systems.Feldspar.ToolView do
               </div>
             </Area.content>
           </div>
-          <div class="w-full flex-1 flex flex-col items-center justify-center">
+          <div :if={@vm.autostart?} class="w-full flex-1 flex flex-col items-center justify-center" data-testid="feldspar-autostart">
+            <Spinner.static size="w-8 h-8" color="primary" />
+          </div>
+          <div :if={not @vm.autostart?} class="w-full flex-1 flex flex-col items-center justify-center">
             <Area.sheet>
               <div class="flex flex-col gap-8 items-center px-8">
                 <div>

@@ -3,6 +3,8 @@ defmodule Next.SaaS do
   use Mica.SaaS
   use Mica.FeatureFlags
 
+  alias Systems.Pool
+
   @impl true
   def systems do
     Mica.Systems.all() ++
@@ -73,4 +75,43 @@ defmodule Next.SaaS do
       do: MicaWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
       else: "/user/signin"
   end
+
+  # With sign-in codes on, the code page signs new users up too.
+  @impl true
+  def sign_up_page(user_type, post_signup_action) do
+    if feature_enabled?(:otp), do: code_sign_up_page(user_type, post_signup_action)
+  end
+
+  defp code_sign_up_page(:creator, _post_signup_action), do: "/user/auth/identify"
+
+  defp code_sign_up_page(:participant, post_signup_action) do
+    MicaWeb.ReturnTo.append(
+      "/user/auth/identify/participant",
+      post_signup_return_to(post_signup_action)
+    )
+  end
+
+  # The code flow joins a pool through its join page, where the password sign-up
+  # page took `post_signup_action=add_to_panl` or `join_pool:<slug>`.
+  defp post_signup_return_to("add_to_panl") do
+    if feature_enabled?(:panl), do: "/pool/panl/join"
+  end
+
+  defp post_signup_return_to("join_pool:" <> slug) do
+    if joinable_pool?(existing_pool(slug)), do: "/pool/#{slug}/join"
+  end
+
+  defp post_signup_return_to(_post_signup_action), do: nil
+
+  # The join page takes only a slug that is an existing atom naming a pool.
+  defp existing_pool(slug) do
+    Pool.Public.get_by_slug(String.to_existing_atom(slug))
+  rescue
+    ArgumentError -> nil
+  end
+
+  # As the password sign-up page's post-signup handler: no Panl join while Panl is off.
+  defp joinable_pool?(%Pool.Model{name: "Panl"}), do: feature_enabled?(:panl)
+  defp joinable_pool?(%Pool.Model{}), do: true
+  defp joinable_pool?(nil), do: false
 end

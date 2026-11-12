@@ -12,6 +12,9 @@ defmodule Mica.Application do
 
     Mica.AppSignal.TelemetryHandler.attach()
 
+    # Checks and caches the composition, so a broken one stops the boot.
+    Mica.SaaS.validate!()
+
     Mica.RuntimeConfig.log_choices()
 
     Mica.FeatureFlags.warn_undeclared()

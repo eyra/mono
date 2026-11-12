@@ -28,8 +28,7 @@ defmodule Mica.System do
   System modules are data modules and never call system code. The router reads
   `override_routes/0` and `routes/0` at compile time, so these return quoted
   code. The other callbacks return plain values, which `Mica.SaaS` collects
-  (`notify_channels/0` also at compile time, for the `Systems.Notify.MessageModel`
-  enum; `grants/0` at boot, for `Mica.Authorization`).
+  (`grants/0` at boot, for `Mica.Authorization`).
 
   A SaaS extends Mica's systems only through its own systems, for example by
   shadowing Mica's sign-in routes with `override_routes/0`.
@@ -50,9 +49,15 @@ defmodule Mica.System do
   @doc """
   The system's page grants: `{module, roles}` as for `grant_access/2`, or
   `{module, %{action => roles}}` as for `grant_actions/2`. A permission is
-  granted by one system only.
+  granted once; a grant that adds roles to a permission granted before says so
+  with `widen: true` as a third element (`{module, roles, widen: true}`), and
+  is logged at boot.
   """
-  @callback grants() :: [{module(), [atom()] | %{atom() => [atom()]}}]
+  @callback grants() ::
+              [
+                {module(), [atom()] | %{atom() => [atom()]}}
+                | {module(), [atom()] | %{atom() => [atom()]}, [widen: true]}
+              ]
 
   @doc """
   The system's `Frameworks.Signal.Handler` modules (its `_switch.ex`).
@@ -92,6 +97,12 @@ defmodule Mica.System do
   of the site, in `c:Mica.SaaS.systems/0` order.
   """
   @callback sign_in_handoffs() :: [module()]
+
+  @doc """
+  The system's `Systems.Assignment.TemplateExtension` modules: assignment
+  templates offered next to the built-in `Systems.Assignment.Templates`.
+  """
+  @callback assignment_templates() :: [module()]
 
   @doc """
   The BFF pages the system serves: page name to `Systems.BFF.Page` module, for
@@ -159,6 +170,7 @@ defmodule Mica.System do
       def account_tabs, do: []
       def desktop_sections, do: []
       def sign_in_handoffs, do: []
+      def assignment_templates, do: []
       def bff_pages, do: %{}
       def children, do: []
       def oban_queues, do: []

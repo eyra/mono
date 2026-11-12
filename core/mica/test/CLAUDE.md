@@ -7,22 +7,25 @@ This file contains testing patterns and learnings specific to the test suite.
 ### Signal Isolation Challenges
 
 #### LiveView Process Isolation
-When testing LiveViews with signals, be aware that:
+`isolate_signals()` and `override_signal_handlers/1` replace the handlers of the
+composition (`Mica.SaaS.put_composition/1`) for every process, the LiveView's
+too, until the test ends; a test that uses them must not be `async`. Other
+process-specific state (for example a sandbox connection or a process
+dictionary entry) is not shared:
 - **LiveView runs in a separate process** from your test
-- `isolate_signals()` in the test setup only affects the test process
 - LiveView event handlers (like `handle_event("abort", ...)`) run in the LiveView process
 
 ```elixir
-# This WON'T work as expected:
 setup do
-  isolate_signals()  # Only affects test process
+  isolate_signals()  # Affects the LiveView too
   # ...
 end
 
 test "clicking abort", %{conn: conn} do
   {:ok, view, _html} = live_isolated(conn, MyLiveView)
 
-  # This runs in LiveView process - no signal isolation!
+  # The signal is recorded in the LiveView process, so assert_signal_dispatched
+  # in the test process sees nothing: verify the side effects instead.
   view |> element("[phx-click='abort']") |> render_click()
 end
 ```
@@ -72,8 +75,7 @@ end
 
 3. **Use `isolate_signals(except: [...])`** carefully:
 ```elixir
-# This attempts to allow certain switches through
-# BUT remember it still only works in test process!
+# Keeps these switches handling signals, next to the test recorder
 isolate_signals(except: [Next.Systems.Paper.Switch])
 ```
 
@@ -293,17 +295,8 @@ end
 
 ### Signal Flow Debugging
 ```elixir
-# Temporarily add logging to Signal.Private.dispatch
-defp signal_handlers do
-  case Process.get(:signal_handlers_override) || override_from_config() do
-    nil ->
-      IO.puts("PID #{inspect(self())}: Using default handlers")
-      Mica.SaaS.signal_handlers()
-    override ->
-      IO.puts("PID #{inspect(self())}: Using override: #{inspect(override)}")
-      # ...
-  end
-end
+# The handlers a dispatch reaches in this test
+IO.inspect(Mica.SaaS.signal_handlers(), label: "handlers")
 ```
 
 ## Test Organization

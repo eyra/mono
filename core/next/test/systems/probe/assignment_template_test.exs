@@ -43,6 +43,92 @@ defmodule Next.Systems.Probe.AssignmentTemplateTest do
     end
   end
 
+  describe "task list" do
+    test "chooses the horizontal task list" do
+      assert %Assignment.RuntimeConfig{task_list: :horizontal} =
+               Assignment.Template.runtime_config(Assignment.Private.get_template(:probe))
+    end
+
+    test "a Probe assignment with more than one task shows the horizontal task list" do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          current_user: user,
+          user_state: %{},
+          panel_info: nil
+        })
+
+      %{task_view: task_view} =
+        Assignment.CrewWorkViewBuilder.view_model(%{assignment | special: :probe}, %{
+          current_user: user,
+          user_state: %{},
+          live_context: live_context
+        })
+
+      assert task_view.implementation == Assignment.CrewTaskHorizontalListView
+    end
+
+    test "a Probe assignment with more than one task has no done button" do
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(nil, nil, %{special: :probe})
+        |> Assignment.Factories.add_task()
+
+      assert Assignment.Private.task_view(assignment) == :horizontal_list
+      refute Assignment.Private.done_button?(assignment, %{redirect_url: nil})
+    end
+
+    test "consent comes before the horizontal task list" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Ecto.Changeset.change(special: :probe)
+        |> Repo.update!()
+        |> Assignment.Factories.add_task()
+        |> Assignment.Factories.add_participant(user)
+        |> Repo.preload(Assignment.Model.preload_graph(:down), force: true)
+
+      assigns = %{current_user: user, user_state: %{}, live_context: nil, panel_info: nil}
+
+      assert %{view: %{implementation: Assignment.OnboardingConsentView}} =
+               Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      %{consent_agreement: consent_agreement} = assignment
+      revision = Systems.Consent.Public.latest_revision(consent_agreement)
+      {:ok, _} = Systems.Consent.Public.create_signature(revision, user)
+
+      assert %{view: %{implementation: Assignment.CrewWorkView}} =
+               Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert Assignment.Private.task_view(assignment) == :horizontal_list
+    end
+
+    # The done screen shows Back exactly when the task list showed the done button
+    test "the done screen of a Probe assignment has no Back, also with a redirect URL" do
+      user = Factories.insert!(:member)
+      redirect_url = "https://example.com/return"
+
+      assignment =
+        Assignment.Factories.create_assignment_with_affiliate(redirect_url, nil, %{
+          special: :probe
+        })
+        |> Assignment.Factories.add_affiliate_user(user)
+        |> Assignment.Factories.add_task()
+
+      assigns = %{
+        current_user: user,
+        timezone: "UTC",
+        live_context: %{data: %{panel_info: %{redirect_url: redirect_url}}}
+      }
+
+      assert %{back_button: nil, continue_button: %{}} =
+               Assignment.FinishedViewBuilder.view_model(assignment, assigns)
+    end
+  end
+
   describe "feature flag" do
     test "the template is offered for new items when :probe is on" do
       set_feature_flag(:probe, true)
