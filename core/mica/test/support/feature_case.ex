@@ -88,8 +88,14 @@ defmodule MicaWeb.FeatureCase do
   reason instead. It also refuses capabilities without the configured Chrome
   binary, so a feature that forgets `chrome_capabilities/1` fails on every run,
   not only on machines whose system Chrome is ahead of chromedriver.
+
+  Wallaby 0.31 calls it through `create_session_fn`, an option it marks as
+  deprecated and falls back from silently. It marks the calling process (the
+  test's), so `MicaWeb.Features.FeatureCaseSessionTest` fails when Wallaby
+  stops calling it.
   """
   def create_session(base_url, capabilities) do
+    Process.put({__MODULE__, :create_session}, true)
     binary = chrome_binary()
 
     if binary && get_in(capabilities, [:chromeOptions, :binary]) != binary do
