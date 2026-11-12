@@ -7,19 +7,6 @@
   code: [
     {"mica/frameworks/pixel/components/footer.ex", :eyra_domain, 1,
      "\"Powered by Eyra\" footer link; code-brand Mica.Brand"},
-    {"mica/lib/mica/authorization.ex", :next_reference,
-     [
-       "next/systems/account/auth_code_verify_page.ex",
-       "next/systems/account/auth_identify_page.ex",
-       "next/systems/account/auth_provider_page.ex",
-       "next/systems/account/signin_page.ex",
-       "next/systems/announcement/compose_page.ex",
-       "next/systems/announcement/page.ex",
-       "next/systems/graphite/leaderboard_content_page.ex",
-       "next/systems/graphite/leaderboard_page.ex",
-       "next/systems/onyx/landing_page.ex"
-     ],
-     "grants of Next's systems spliced by Mica.SaaS.grants(); spliced grants stay a compile-time reference until code-split"},
     {"mica/lib/mica/factories.ex", :next_reference,
      [
        "next/systems/annotation/model.ex",

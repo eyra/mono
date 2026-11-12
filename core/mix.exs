@@ -144,7 +144,7 @@ defmodule Mica.MixProject do
       # Prism's design: the components at compile time, and the CSS and the Tailwind
       # preset from deps/prism_design/targets/web, so one pin decides both.
       {:prism_design,
-       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.2.0", subdir: "design"},
+       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.4.0", subdir: "design"},
       # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
       {:mica_bff,
        github: "novasoftwarefoundation/mica-bff",

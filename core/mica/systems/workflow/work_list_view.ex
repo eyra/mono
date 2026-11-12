@@ -7,7 +7,17 @@ defmodule Systems.Workflow.WorkListView do
   alias Frameworks.Pixel.Button
 
   @impl true
-  def update(%{id: id, work_list: %{items: items, selected_item_id: selected_item_id}}, socket) do
+  def update(
+        %{
+          id: id,
+          work_list: %{
+            items: items,
+            selected_item_id: selected_item_id,
+            done_button?: done_button?
+          }
+        },
+        socket
+      ) do
     {
       :ok,
       socket
@@ -15,6 +25,7 @@ defmodule Systems.Workflow.WorkListView do
         id: id,
         items: items,
         selected_item_id: selected_item_id,
+        done_button?: done_button?,
         done_button: %{
           action: %{type: :send, event: "done"},
           face: %{
@@ -53,10 +64,12 @@ defmodule Systems.Workflow.WorkListView do
           <.work_list_item {item} index={index} selected?={item.id == @selected_item_id} target={@myself} />
         <% end %>
       </div>
-      <.spacing value="XS" />
-      <div class="w-full px-4">
-        <Button.dynamic {@done_button} />
-      </div>
+      <%= if @done_button? do %>
+        <.spacing value="XS" />
+        <div class="w-full px-4">
+          <Button.dynamic {@done_button} />
+        </div>
+      <% end %>
     </div>
     """
   end

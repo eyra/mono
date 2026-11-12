@@ -9,11 +9,9 @@ defmodule Systems.NextAction.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.NextAction.OverviewPage, [:member]}
-      ]
-    end
+    [
+      {Systems.NextAction.OverviewPage, [:member]}
+    ]
   end
 
   def signal_handlers, do: [Systems.NextAction.Switch]

@@ -40,6 +40,81 @@ defmodule Systems.Assignment.CrewTaskListViewTest do
     end
   end
 
+  describe "done button" do
+    @done_button "[phx-click='done']"
+
+    test "data donation via a panel link without a redirect URL: no done button", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      panel_info = %{panel: :affiliate, redirect_url: nil, participant: "p-1"}
+
+      view = mount_task_list(conn, user, assignment, panel_info)
+
+      refute has_element?(view, @done_button)
+    end
+
+    test "data donation entered through Next: no done button", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+      panel_info = %{panel: :next, redirect_url: nil, participant: "p-1"}
+
+      view = mount_task_list(conn, user, assignment, panel_info)
+
+      refute has_element?(view, @done_button)
+    end
+
+    test "data donation via a panel link with a redirect URL: done button", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_multiple_tasks()
+
+      panel_info = %{
+        panel: :affiliate,
+        redirect_url: "https://example.com/end",
+        participant: "p-1"
+      }
+
+      view = mount_task_list(conn, user, assignment, panel_info)
+
+      assert has_element?(view, @done_button)
+    end
+
+    test "questionnaire without a redirect URL: done button", %{conn: conn, user: user} do
+      assignment =
+        Assignment.Factories.create_questionnaire_assignment()
+        |> Assignment.Factories.add_task()
+
+      panel_info = %{panel: :next, redirect_url: nil, participant: "p-1"}
+
+      view = mount_task_list(conn, user, assignment, panel_info)
+
+      assert has_element?(view, @done_button)
+    end
+
+    defp mount_task_list(conn, user, assignment, panel_info) do
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user,
+          user_state: %{},
+          panel_info: panel_info
+        })
+
+      {:ok, view, _html} =
+        conn
+        |> Map.put(:request_path, "/assignment/tasks")
+        |> live_isolated(Assignment.CrewTaskListView,
+          session: %{"live_context" => live_context}
+        )
+
+      view
+    end
+  end
+
   describe "event handlers" do
     setup %{user: user} do
       assignment = Assignment.Factories.create_assignment_with_multiple_tasks()

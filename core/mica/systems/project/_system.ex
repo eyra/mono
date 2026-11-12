@@ -9,12 +9,10 @@ defmodule Systems.Project.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Project.NodePage, [:owner]},
-        {Systems.Project.OverviewPage, [:admin, :creator]}
-      ]
-    end
+    [
+      {Systems.Project.NodePage, [:owner]},
+      {Systems.Project.OverviewPage, [:admin, :creator]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Project.Switch]

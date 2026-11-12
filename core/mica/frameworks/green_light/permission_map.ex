@@ -41,6 +41,10 @@ defmodule Frameworks.GreenLight.PermissionMap do
     Map.get(permission_map, permission, MapSet.new())
   end
 
+  @doc "Whether any role holds the given permission."
+  @spec granted?(t, permission) :: boolean
+  def granted?(permission_map, permission), do: Map.has_key?(permission_map, permission)
+
   def list_permission_assignments(permission_map) do
     permission_map
     |> Enum.sort()

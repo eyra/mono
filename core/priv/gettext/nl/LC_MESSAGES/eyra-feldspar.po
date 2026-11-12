@@ -78,3 +78,7 @@ msgstr "Support"
 #, elixir-autogen, elixir-format
 msgid "zip-invalid"
 msgstr "Het geselecteerde bestand is geen geldige app-zip"
+
+#, elixir-autogen, elixir-format
+msgid "zip-no-index-html"
+msgstr "Het geselecteerde bestand is geen Feldspar-app: er staat geen index.html op het hoogste niveau"

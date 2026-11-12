@@ -2,19 +2,17 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment
-  alias Systems.Workflow
 
   def view_model(
         %{
           id: assignment_id,
           privacy_doc: privacy_doc,
           consent_agreement: consent_agreement,
-          page_refs: page_refs,
-          workflow: workflow
+          page_refs: page_refs
         } = assignment,
         %{current_user: user, user_state: user_state, live_context: context} = _assigns
       ) do
-    item_count = workflow |> Workflow.Model.ordered_items() |> length()
+    task_view = Assignment.Private.task_view(assignment)
     context_menu_items = build_context_menu_items(assignment)
 
     intro_page_ref = Enum.find(page_refs, &(&1.key == :assignment_information))
@@ -27,13 +25,13 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
       intro_page_ref: intro_page_ref,
       support_page_ref: support_page_ref,
       user: user,
-      task_view: task_view(item_count, assignment_id, user_state, context),
-      empty_message: empty_message(item_count)
+      task_view: task_view(task_view, assignment_id, user_state, context),
+      empty_message: empty_message(task_view)
     }
   end
 
-  defp empty_message(0), do: dgettext("eyra-assignment", "work.empty.message")
-  defp empty_message(_item_count), do: nil
+  defp empty_message(:none), do: dgettext("eyra-assignment", "work.empty.message")
+  defp empty_message(_task_view), do: nil
 
   defp build_context_menu_items(assignment) do
     [:assignment_information, :privacy, :consent, :assignment_helpdesk]
@@ -78,13 +76,13 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   end
 
   # No items - no task view
-  defp task_view(0, _assignment_id, _user_state, _context), do: nil
+  defp task_view(:none, _assignment_id, _user_state, _context), do: nil
 
   # Waiting for user_state
-  defp task_view(_item_count, _assignment_id, nil, _context), do: nil
+  defp task_view(_task_view, _assignment_id, nil, _context), do: nil
 
   # Single item - show single view
-  defp task_view(1, assignment_id, _user_state, context) do
+  defp task_view(:single, assignment_id, _user_state, context) do
     MicaWeb.Live.Element.prepare_live_view(
       "crew_task_single_view_#{assignment_id}",
       Assignment.CrewTaskSingleView,
@@ -93,7 +91,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilder do
   end
 
   # Multiple items - show list view
-  defp task_view(_item_count, assignment_id, _user_state, context) do
+  defp task_view(:list, assignment_id, _user_state, context) do
     MicaWeb.Live.Element.prepare_live_view(
       "crew_task_list_view_#{assignment_id}",
       Assignment.CrewTaskListView,

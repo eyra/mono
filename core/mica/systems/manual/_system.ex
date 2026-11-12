@@ -9,11 +9,9 @@ defmodule Systems.Manual.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Manual.Builder.PublicPage, [:creator]}
-      ]
-    end
+    [
+      {Systems.Manual.Builder.PublicPage, [:creator]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Manual.Switch]

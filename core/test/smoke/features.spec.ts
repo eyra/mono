@@ -15,6 +15,7 @@ const PROD_FEATURES = [
   'debug',
   'leaderboard',
   'member_google_sign_in',
+  'otp',
   'panl',
   'password_sign_in',
 ].sort();

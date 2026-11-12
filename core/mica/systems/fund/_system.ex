@@ -9,11 +9,9 @@ defmodule Systems.Fund.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Fund.FundingPage, [:admin, :creator]}
-      ]
-    end
+    [
+      {Systems.Fund.FundingPage, [:admin, :creator]}
+    ]
   end
 
   def oban_crons do

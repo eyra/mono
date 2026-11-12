@@ -27,13 +27,11 @@ defmodule MicaSaas.Systems.Account.System do
   end
 
   def grants do
-    quote do
-      [
-        {MicaSaas.Systems.Account.SigninPage, [:visitor, :user]},
-        {MicaSaas.Systems.Account.AuthIdentifyPage, [:visitor, :user]},
-        {MicaSaas.Systems.Account.AuthCodeVerifyPage, [:visitor, :user]}
-      ]
-    end
+    [
+      {MicaSaas.Systems.Account.SigninPage, [:visitor, :user]},
+      {MicaSaas.Systems.Account.AuthIdentifyPage, [:visitor, :user]},
+      {MicaSaas.Systems.Account.AuthCodeVerifyPage, [:visitor, :user]}
+    ]
   end
 
   def feature_flags, do: [:otp, :password_sign_in]

@@ -9,13 +9,11 @@ defmodule Systems.Assignment.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Assignment.ContentPage, [:owner]},
-        {Systems.Assignment.CrewPage, [:participant, :tester]},
-        {Systems.Assignment.LandingPage, [:participant, :tester]}
-      ]
-    end
+    [
+      {Systems.Assignment.ContentPage, [:owner]},
+      {Systems.Assignment.CrewPage, [:participant, :tester]},
+      {Systems.Assignment.LandingPage, [:participant, :tester]}
+    ]
   end
 
   def signal_handlers, do: [Systems.Assignment.Switch]

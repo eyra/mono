@@ -198,7 +198,7 @@ msgstr "Sutikimas atmestas"
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.body"
-msgstr "Ačiū už jūsų dalyvavimą."
+msgstr "Ačiū už dalyvavimą. Dabar šį puslapį galima uždaryti."
 
 #, elixir-autogen, elixir-format
 msgid "finished_view.title"

@@ -35,7 +35,8 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
     %{
       work_list: %{
         items: Enum.map(work_items, &map_item/1),
-        selected_item_id: nil
+        selected_item_id: nil,
+        done_button?: Assignment.Private.done_button?(assignment, context.data[:panel_info])
       },
       work_items: work_items,
       work_item_id: work_item_id,

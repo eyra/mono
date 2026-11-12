@@ -100,6 +100,21 @@ defmodule Mica.SaaSTest do
     def feature_flags, do: [:otp]
   end
 
+  defmodule GrantSystem do
+    use Mica.System
+    def grants, do: [{Mica.SaaSTest.Page, [:member]}]
+  end
+
+  defmodule ActionGrantSystem do
+    use Mica.System
+    def grants, do: [{Mica.SaaSTest.Controller, %{index: [:visitor]}}]
+  end
+
+  defmodule QuotedGrantSystem do
+    use Mica.System
+    def grants, do: quote(do: [{Mica.SaaSTest.Page, [:member]}])
+  end
+
   defmodule MigrationsSystem do
     use Mica.System
     def migrations_path, do: "/app/priv/tools/migrations"
@@ -209,6 +224,30 @@ defmodule Mica.SaaSTest do
                  fn -> Mica.SaaS.collect_notify_channels([EmailSystem, OtherEmailSystem]) end
   end
 
+  test "grants are collected from all systems as data, in system order" do
+    assert Mica.SaaS.collect_grants([GrantSystem, GoodSystem, ActionGrantSystem]) == [
+             {Mica.SaaSTest.Page, [:member]},
+             {Mica.SaaSTest.Controller, %{index: [:visitor]}}
+           ]
+  end
+
+  test "a quoted grant is an error" do
+    assert_raise ArgumentError,
+                 ~r/^Mica.SaaSTest.QuotedGrantSystem.grants\/0: not a grant: \{\{:__aliases__/,
+                 fn -> Mica.SaaS.collect_grants([QuotedGrantSystem]) end
+  end
+
+  test "the configured SaaS's grants are in the permission map" do
+    permission_map = Mica.Authorization.permission_map()
+
+    for {module, roles} when is_list(roles) <- Mica.SaaS.grants() do
+      assert Frameworks.GreenLight.PermissionMap.roles(
+               permission_map,
+               Frameworks.GreenLight.Permissions.access_permission(module)
+             ) == MapSet.new(roles)
+    end
+  end
+
   test "the migration paths of the systems that have their own are collected" do
     assert Mica.SaaS.collect_migrations_paths([GoodSystem, MigrationsSystem]) == [
              "/app/priv/tools/migrations"
@@ -293,7 +332,7 @@ defmodule Mica.SaaSTest do
       Mica.SaaS.collect_feature_flags(TypoFlagSaaS, TypoFlagSaaS.systems())
     end
 
-    # The route and grant macros check the SaaS while the router compiles.
+    # The route macros check the SaaS while the router compiles.
     assert_raise ArgumentError, message, fn -> Mica.SaaS.checked_systems(TypoFlagSaaS) end
   end
 
