@@ -6,6 +6,9 @@ defmodule Next.Systems.Account.AuthIdentifyPageTest do
   import Phoenix.LiveViewTest
 
   alias Systems.Account.AuthCodeLimits
+  alias Systems.Rate
+
+  setup do: Rate.TestHelper.wait_out_window_end(3600)
 
   test "participant entry uses the shared identify page", %{conn: conn} do
     set_feature_flag(:otp, true)
