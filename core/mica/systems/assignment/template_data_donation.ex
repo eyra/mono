@@ -52,7 +52,7 @@ defmodule Systems.Assignment.TemplateDataDonation do
       ]
     end
 
-    def runtime_config(_t), do: %Assignment.RuntimeConfig{}
+    def runtime_config(_t), do: %Assignment.RuntimeConfig{done_button_requires_redirect?: true}
 
     def currency(_t), do: :EUR
 

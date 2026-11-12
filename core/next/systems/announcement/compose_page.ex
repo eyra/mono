@@ -392,7 +392,7 @@ defmodule Next.Systems.Announcement.ComposePage do
           form="announcement_form"
           name="publish"
           value={@recipient_count}
-          class="cursor-pointer focus:outline-none"
+          class="cursor-pointer"
           data-testid="publish-announcement-button"
         >
           <Button.Face.primary label={@labels.publish_button} />

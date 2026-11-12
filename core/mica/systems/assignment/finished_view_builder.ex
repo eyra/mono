@@ -13,7 +13,8 @@ defmodule Systems.Assignment.FinishedViewBuilder do
     declined? = Assignment.Private.no_consent?(assignment, user.id)
     platform_name = get_platform_name(affiliate)
     redirect_url = get_redirect_url(panel_info)
-    runtime_config = runtime_config(assignment)
+    done_button? = Assignment.Private.done_button?(assignment, panel_info)
+    runtime_config = Assignment.Private.runtime_config(assignment)
     submitting? = Map.get(assigns, :submitting, false)
 
     email_capture = build_email_capture(declined?, runtime_config, user, submitting?)
@@ -22,7 +23,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
       title: build_title(declined?),
       body: build_body(declined?, redirect_url, platform_name),
       illustration: build_illustration(declined?, redirect_url),
-      back_button: build_back_button(),
+      back_button: build_back_button(declined?, done_button?),
       continue_button: build_continue_button(redirect_url),
       email_capture: email_capture
     }
@@ -31,13 +32,6 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   # Fallback when no panel_info (direct access without affiliate flow)
   def view_model(%{} = assignment, %{current_user: _user} = assigns) do
     view_model(assignment, Map.put(assigns, :live_context, %{data: %{panel_info: nil}}))
-  end
-
-  defp runtime_config(%{special: nil}), do: %Assignment.RuntimeConfig{}
-
-  defp runtime_config(assignment) do
-    template = Assignment.Private.get_template(assignment)
-    Assignment.Template.runtime_config(template)
   end
 
   # The finished-page Panl block. States chosen by feature flags + Panl
@@ -219,7 +213,9 @@ defmodule Systems.Assignment.FinishedViewBuilder do
 
   defp build_illustration(_declined?, _redirect_url), do: nil
 
-  defp build_back_button do
+  defp build_back_button(false = _declined?, false = _done_button?), do: nil
+
+  defp build_back_button(_declined?, _done_button?) do
     %{
       action: %{type: :send, event: "retry"},
       face: %{

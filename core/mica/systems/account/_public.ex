@@ -98,6 +98,16 @@ defmodule Systems.Account.Public do
   end
 
   @doc """
+  Saves an admin's change to a user (creator, verified, activated) and signals
+  `{:user, :update_and_dispatch}`, so views that show the user update.
+  """
+  def admin_update_user(%User{} = user, attrs) do
+    user
+    |> User.admin_changeset(attrs)
+    |> Frameworks.Utility.EctoHelper.update_and_dispatch(:user)
+  end
+
+  @doc """
   Persists the participant's phone number (payouts flow). Returns
   `{:ok, user}` or `{:error, changeset}`.
   """

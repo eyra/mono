@@ -20,6 +20,10 @@ defmodule Systems.Feldspar.ToolForm do
     Frameworks.Pixel.Flash.push_error(socket, dgettext("eyra-feldspar", "zip-invalid"))
   end
 
+  def file_upload_error(socket, :no_index_html) do
+    Frameworks.Pixel.Flash.push_error(socket, dgettext("eyra-feldspar", "zip-no-index-html"))
+  end
+
   @impl true
   def update(
         %{
