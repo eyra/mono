@@ -13,19 +13,33 @@ defmodule Systems.Payment.OPPConfigIsolationTest do
   @core Path.expand("../../../..", __DIR__)
   @opp_write ~r/(Application\.(put_env|delete_env)\(\s*:mica,|Mica\.Env\.put\()\s*[\w.]*\bOPP\b/
   @async ~r/async:\s*true/
+  @globs ["mica/test/**/*_test.exs", "next/test/**/*_test.exs", "mica_saas/test/**/*_test.exs"]
+  # The sync OPP writers: if the scan no longer finds them, the globs have gone
+  # stale and the guard would pass without checking anything.
+  @known_sync_writers [
+    "mica/test/systems/payment/opp_test.exs",
+    "mica/test/systems/payment/partner_fee_test.exs"
+  ]
 
-  test "no async test module writes the OPP provider config" do
-    offenders =
-      ["mica/test/**/*_test.exs", "next/test/**/*_test.exs", "mica_saas/test/**/*_test.exs"]
+  setup do
+    files =
+      @globs
       |> Enum.flat_map(&Path.wildcard(Path.join(@core, &1)))
-      |> Enum.filter(&async_opp_writer?/1)
       |> Enum.map(&Path.relative_to(&1, @core))
 
-    assert offenders == []
+    %{files: files}
+  end
+
+  test "the scan covers the known sync OPP writers", %{files: files} do
+    assert @known_sync_writers -- files == []
+  end
+
+  test "no async test module writes the OPP provider config", %{files: files} do
+    assert Enum.filter(files, &async_opp_writer?/1) == []
   end
 
   defp async_opp_writer?(path) do
-    source = File.read!(path)
+    source = File.read!(Path.join(@core, path))
     Regex.match?(@async, source) and Regex.match?(@opp_write, source)
   end
 end
