@@ -437,8 +437,18 @@ defmodule Mica.SaaS do
     end
   end
 
-  @doc "Splices `override_routes/0` of all systems."
-  defmacro override_routes, do: splice(:override_routes)
+  @doc """
+  Splices `override_routes/0` of all systems, and records their paths for
+  `MicaWeb.PathCheck` (a SaaS's own pages that shadow Mica's).
+  """
+  defmacro override_routes do
+    block = splice(:override_routes)
+
+    quote do
+      require MicaWeb.PathCheck
+      MicaWeb.PathCheck.overrides(do: unquote(block))
+    end
+  end
 
   @doc "Splices `routes/0` of all systems, in `systems/0` order."
   defmacro routes, do: splice(:routes)

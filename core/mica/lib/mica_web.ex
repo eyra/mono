@@ -12,6 +12,5 @@ defmodule MicaWeb do
 
   use MicaWeb.Web, router: MicaWeb.Router, endpoint: MicaWeb.Endpoint
 
-  def static_paths,
-    do: ~w(css assets fonts images js favicon logo icon apple-touch-icon robots manifest sw)
+  def static_paths, do: MicaWeb.Path.statics()
 end
