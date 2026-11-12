@@ -13,5 +13,6 @@
   pixel: [pool_assets: []],
   account_tabs: [:profile, :payouts, :features],
   admin_tabs: %{admin: [:system, :account, :org, :actions, :client_activity], org_admin: [:org]},
-  desktop_sections: []
+  desktop_sections: [],
+  assignment_templates: []
 ]

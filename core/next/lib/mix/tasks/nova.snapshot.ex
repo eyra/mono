@@ -13,7 +13,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `signal.exs`: signal handlers (in order), notifiers and notify channels
     * `flags.exs`: the effective feature flags at compile time
     * `saas_config.exs`: the `Mica.SaaS` callbacks (start pages, menus, title,
-      signed-in pages), the SaaS app config and account and admin tab order
+      signed-in pages), the SaaS app config, account and admin tab order, Desktop
+      sections and assignment templates
     * `runtime.exs`: the children `Mica.Application` starts, and per env fixture
       of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
       unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
@@ -211,7 +212,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       [
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
         admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids(),
-        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id())
+        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id()),
+        assignment_templates: Systems.Assignment.TemplateExtension.all()
       ]
   end
 
