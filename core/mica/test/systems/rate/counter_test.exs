@@ -9,6 +9,9 @@ defmodule Systems.Rate.CounterTest do
   # key makes their upserts wait on each other, in opposite order a deadlock.
   defp unique_key(name), do: "#{name}-#{System.unique_integer([:positive])}"
 
+  # The shortest window here is a minute, and every hour and day starts on one.
+  setup do: Rate.TestHelper.wait_out_window_end(60, 2_000)
+
   describe "increment_counter/2" do
     test "crashes on a window that isn't a positive number of seconds" do
       assert_raise FunctionClauseError, fn -> Rate.Public.increment_counter("k", 0) end

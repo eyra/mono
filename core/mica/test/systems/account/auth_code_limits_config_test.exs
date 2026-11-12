@@ -3,10 +3,12 @@ defmodule Systems.Account.AuthCodeLimitsConfigTest do
   use Mica.DataCase, async: false
 
   alias Systems.Account.AuthCodeLimits
+  alias Systems.Rate
 
   @remote_ip "203.0.113.10"
 
   setup do
+    Rate.TestHelper.wait_out_window_end(3600)
     original = Mica.Env.get(:auth_code_limits)
 
     on_exit(fn ->
