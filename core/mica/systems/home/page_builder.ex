@@ -35,6 +35,7 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: nil,
       view_type: :guest,
+      sign_up_url: Mica.SaaS.module().sign_up_page(:creator, nil) || ~p"/user/signup/creator",
       include_right_sidepadding?: false
     }
   end

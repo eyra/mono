@@ -364,11 +364,12 @@ defmodule Systems.Assignment.SetupExporter do
 
   defp privacy_statement(%Assignment.Model{}), do: {nil, []}
 
-  defp consent(%Assignment.Model{consent_agreement: %{revisions: revisions}})
-       when is_list(revisions) do
-    case Enum.max_by(revisions, & &1.id, fn -> nil end) do
-      %{source: source} -> source
-      nil -> nil
+  defp consent(
+         %Assignment.Model{consent_agreement: %{revisions: [_ | _] = revisions}} = assignment
+       ) do
+    if Assignment.Model.consent_on?(assignment) do
+      %{source: source} = Enum.max_by(revisions, & &1.id)
+      source
     end
   end
 

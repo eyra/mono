@@ -80,26 +80,48 @@ defmodule Frameworks.GreenLight.Permissions do
   The permission map of grants given as data: `{module, roles}` as for
   `grant_access/2`, `{module, %{action => roles}}` as for `grant_actions/2`.
   Raises when a permission is in `permission_map` already or granted twice: a
-  grant never widens another one silently.
+  grant never widens another one silently. A grant that does widen one says so
+  with a third element, `{module, roles, widen: true}`, and adds its roles to
+  that permission; it raises when it widens no permission.
   """
   def grants_permission_map(permission_map, grants) do
     Enum.reduce(grants, permission_map, fn
-      {module, %{} = action_to_roles}, acc ->
-        Enum.reduce(action_to_roles, acc, fn {action, roles}, acc ->
-          grant_once(acc, action_permission(module, action), roles)
-        end)
+      {module, roles, widen: true}, acc ->
+        grant(acc, module, roles, &widen/3)
 
-      {module, roles}, acc when is_list(roles) ->
-        grant_once(acc, access_permission(module), roles)
+      {module, roles}, acc ->
+        grant(acc, module, roles, &grant_once/3)
 
       other, _acc ->
         raise ArgumentError, "not a grant: #{inspect(other)}"
     end)
   end
 
+  defp grant(permission_map, module, %{} = action_to_roles, grant_fun) do
+    Enum.reduce(action_to_roles, permission_map, fn {action, roles}, acc ->
+      grant_fun.(acc, action_permission(module, action), roles)
+    end)
+  end
+
+  defp grant(permission_map, module, roles, grant_fun) when is_list(roles),
+    do: grant_fun.(permission_map, access_permission(module), roles)
+
+  defp grant(_permission_map, module, roles, _grant_fun),
+    do: raise(ArgumentError, "not a grant: #{inspect({module, roles})}")
+
   defp grant_once(permission_map, permission, roles) do
     if PermissionMap.granted?(permission_map, permission) do
-      raise ArgumentError, "#{permission} is granted more than once"
+      raise ArgumentError,
+            "#{permission} is granted more than once; a grant that widens another one " <>
+              "says `widen: true`"
+    end
+
+    PermissionMap.grant(permission_map, permission, roles)
+  end
+
+  defp widen(permission_map, permission, roles) do
+    unless PermissionMap.granted?(permission_map, permission) do
+      raise ArgumentError, "#{permission} is not granted before, so `widen: true` widens nothing"
     end
 
     PermissionMap.grant(permission_map, permission, roles)
@@ -108,17 +130,19 @@ defmodule Frameworks.GreenLight.Permissions do
   @doc false
   # The compiled permission map of `module` merged with the grants that `{m, f, a}`
   # returns, built on the first call and cached until the node restarts. The
-  # cache is rebuilt when the compiled map changes (a recompile in dev).
+  # cache is rebuilt when the compiled map or the grants change (a recompile in
+  # dev, a test that puts other grants).
   def runtime_permission_map(module, permission_map, {m, f, a}) do
     key = {__MODULE__, module}
+    grants = apply(m, f, a)
 
     case :persistent_term.get(key, nil) do
-      {^permission_map, merged} ->
+      {^permission_map, ^grants, merged} ->
         merged
 
       _ ->
-        merged = grants_permission_map(permission_map, apply(m, f, a))
-        :persistent_term.put(key, {permission_map, merged})
+        merged = grants_permission_map(permission_map, grants)
+        :persistent_term.put(key, {permission_map, grants, merged})
         merged
     end
   end
@@ -132,6 +156,10 @@ defmodule Frameworks.GreenLight.Permissions do
 
       grants ->
         quote do
+          @doc false
+          # The grants compiled into the module, without the runtime ones.
+          def compiled_permission_map, do: @permission_map
+
           def permission_map do
             Permissions.runtime_permission_map(
               __MODULE__,

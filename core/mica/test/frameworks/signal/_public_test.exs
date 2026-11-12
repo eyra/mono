@@ -2,16 +2,11 @@ defmodule Frameworks.Signal.PublicTest do
   use ExUnit.Case
 
   import Frameworks.Signal.Public
+  import Frameworks.Signal.TestHelper, only: [override_signal_handlers: 1]
 
   describe "without any handlers" do
     setup do
-      # Save original config and clear all handlers
-      original_config = Application.get_env(:mica, :signal)
-      Application.put_env(:mica, :signal, handlers: [])
-
-      on_exit(fn ->
-        Application.put_env(:mica, :signal, original_config || [])
-      end)
+      override_signal_handlers([])
     end
 
     test "dispatch/2 unhandled signal" do
@@ -25,13 +20,7 @@ defmodule Frameworks.Signal.PublicTest do
 
   describe "with TestForceSwitch only" do
     setup do
-      # Set only TestForceSwitch as handler
-      original_config = Application.get_env(:mica, :signal)
-      Application.put_env(:mica, :signal, handlers: ["Frameworks.Signal.TestForceSwitch"])
-
-      on_exit(fn ->
-        Application.put_env(:mica, :signal, original_config || [])
-      end)
+      override_signal_handlers([Frameworks.Signal.TestForceSwitch])
     end
 
     test "dispatch/2 handled signal: ok" do

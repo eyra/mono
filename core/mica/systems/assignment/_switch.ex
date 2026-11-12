@@ -323,10 +323,7 @@ defmodule Systems.Assignment.Switch do
           Assignment.Private.log_performance_event(assignment, crew_task, :finished)
           Assignment.Private.queue_progress_event(assignment, crew_task, @task_finished_event)
 
-          mark_participation_completed_if_finished(assignment, crew_task)
-
-          Assignment.Public.get_member_by_task(crew_task)
-          |> dispatch_finished_assignment()
+          finish_member_if_required_tasks_finished(assignment, crew_task, message)
 
         _ ->
           :ok
@@ -464,6 +461,12 @@ defmodule Systems.Assignment.Switch do
       model: assignment,
       from_pid: from_pid
     })
+
+    dispatch!({:embedded_live_view, Assignment.CrewTaskHorizontalListView}, %{
+      id: assignment.id,
+      model: assignment,
+      from_pid: from_pid
+    })
   end
 
   defp update_assignment_embedded_views(assignment, from_pid) do
@@ -528,13 +531,19 @@ defmodule Systems.Assignment.Switch do
 
   defp update_crew_task_next_action(_, _), do: nil
 
-  defp mark_participation_completed_if_finished(assignment, crew_task) do
-    member = Assignment.Public.get_member_by_task(crew_task, [:user])
-
-    if member && Crew.Public.finished?(member) do
-      Assignment.Public.complete_participation(assignment, member.user)
-    end
+  # Only the completion that finishes the member's required tasks completes the participation
+  # and sends {:crew_member, :finished_tasks}: not a task that doesn't count (such as an
+  # optional manual) nor a task that was already finished.
+  defp finish_member_if_required_tasks_finished(assignment, crew_task, message) do
+    Assignment.Public.finish_if_required_tasks_finished_by(
+      assignment,
+      task_before(crew_task, message)
+    )
   end
+
+  # A task completed again is dispatched without a changeset.
+  defp task_before(_crew_task, %{changeset: %{data: %Crew.TaskModel{} = task}}), do: task
+  defp task_before(crew_task, _message), do: crew_task
 
   defp notify_participant(
          type,
@@ -574,12 +583,6 @@ defmodule Systems.Assignment.Switch do
             "node_id" => Systems.Project.Public.get_node_id_by(assignment)
           }
         )
-    end
-  end
-
-  defp dispatch_finished_assignment(crew_member) do
-    if Crew.Public.finished?(crew_member) do
-      Signal.Public.dispatch!({:crew_member, :finished_tasks}, %{crew_member: crew_member})
     end
   end
 end

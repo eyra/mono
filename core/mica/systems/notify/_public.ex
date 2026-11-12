@@ -79,14 +79,17 @@ defmodule Systems.Notify.Public do
       * `correlation_id: "participation:42"` — match a specific correlation
       * `event_types: [:contribution_accepted, :contribution_declined]` — match by type
 
-  Idempotent: messages already `:seen` are ignored.
+  Idempotent: messages already `:seen` are ignored. A message whose channel the
+  composition doesn't have is marked `:failed` instead and not counted.
   """
   def mark_seen(%{id: user_id}, opts) when is_list(opts) do
-    messages = messages_to_mark_seen(user_id, opts)
+    seen =
+      user_id
+      |> messages_to_mark_seen(opts)
+      |> Enum.map(&mark_message_seen/1)
+      |> Enum.count(&(&1 == :seen))
 
-    Enum.each(messages, &mark_message_seen/1)
-
-    {:ok, length(messages)}
+    {:ok, seen}
   end
 
   defp messages_to_mark_seen(user_id, opts) do
@@ -119,8 +122,28 @@ defmodule Systems.Notify.Public do
   end
 
   defp mark_message_seen(%MessageModel{channel: channel} = message) do
-    adapter = Notify.Channel.adapter(channel)
+    case Notify.Channel.adapter(channel) do
+      {:ok, adapter} ->
+        run_mark_seen(adapter, message)
 
+        message
+        |> MessageModel.changeset(%{status: :seen, seen_at: DateTime.utc_now()})
+        |> Repo.update()
+
+        :seen
+
+      {:error, reason} ->
+        Logger.warning("[Notify] message #{message.id} has unknown channel #{inspect(channel)}")
+
+        message
+        |> MessageModel.changeset(%{status: :failed, failure_reason: inspect(reason)})
+        |> Repo.update()
+
+        :failed
+    end
+  end
+
+  defp run_mark_seen(adapter, %MessageModel{channel: channel} = message) do
     if function_exported?(adapter, :mark_seen, 1) do
       case safe_mark_seen(adapter, message) do
         :ok ->
@@ -132,10 +155,6 @@ defmodule Systems.Notify.Public do
           )
       end
     end
-
-    message
-    |> MessageModel.changeset(%{status: :seen, seen_at: DateTime.utc_now()})
-    |> Repo.update()
   end
 
   defp safe_mark_seen(adapter, message) do

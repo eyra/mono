@@ -353,7 +353,7 @@ msgstr "Temă"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Vă rugăm să rețineți că, dacă alegeți să confirmați, conținutul paginii va fi șters, precum și înregistrarea asociată cu persoanele care și-au dat consimțământul."
+msgstr "Participanții nu vor mai vedea această pagină. Textul de consimțământ și înregistrarea persoanelor care și-au dat consimțământul se păstrează și revin atunci când afișați din nou pagina."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"
@@ -817,3 +817,15 @@ msgstr "Această sarcină nu mai este disponibilă"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Acest studiu nu are sarcini."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Când alegeți „Arată”, participanții care s-au alăturat în timp ce această pagină era omisă sau care și-au dat deja consimțământul nu sunt întrebați. Cei care s-au alăturat când pagina era afișată anterior și nu au spus niciodată da sunt întrebați din nou."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Sarcina %{index} din %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Începe"

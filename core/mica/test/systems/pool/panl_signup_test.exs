@@ -1,12 +1,15 @@
 defmodule Systems.Pool.PanlSignupTest do
   # async: false because test relies on global Pool.Public.get_panl() lookup by name
   use MicaWeb.ConnCase, async: false
+  use Mica.FeatureFlags.Test
 
   alias Systems.Pool
   alias Systems.Account
 
   describe "PANL pool signup integration" do
     setup do
+      # With sign-in codes on, the SaaS sends sign-up to its code page.
+      set_feature_flag(:otp, false)
       panl_pool = Mica.Factories.insert!(:pool, %{name: "Panl", director: :citizen})
       {:ok, panl_pool: panl_pool}
     end

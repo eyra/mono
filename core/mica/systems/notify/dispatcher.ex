@@ -76,14 +76,14 @@ defmodule Systems.Notify.Dispatcher do
   end
 
   defp deliver(%MessageModel{} = message) do
-    adapter = Notify.Channel.adapter(message.channel)
-
     result =
-      try do
-        adapter.deliver(message)
-      rescue
-        error ->
-          {:error, Exception.message(error)}
+      with {:ok, adapter} <- Notify.Channel.adapter(message.channel) do
+        try do
+          adapter.deliver(message)
+        rescue
+          error ->
+            {:error, Exception.message(error)}
+        end
       end
 
     update_message_after_delivery(message, result)
@@ -116,8 +116,8 @@ defmodule Systems.Notify.Dispatcher do
   end
 
   defp build_payload(channel, event) do
-    channel
-    |> Notify.Channel.adapter()
-    |> apply(:build_payload, [event])
+    with {:ok, adapter} <- Notify.Channel.adapter(channel) do
+      adapter.build_payload(event)
+    end
   end
 end

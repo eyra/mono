@@ -6,7 +6,7 @@ defmodule Systems.Desktop.PageTest do
   without a manual refresh.
 
   The section tests contribute `Systems.Desktop.TestSection` through
-  `config :mica, Systems.Desktop, sections: [...]`.
+  `Mica.SaaS.put_composition/1`.
   """
   use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
@@ -52,7 +52,7 @@ defmodule Systems.Desktop.PageTest do
     end
 
     test "without contributed sections, Desktop shows only Recent items", %{conn: conn} do
-      put_env(Systems.Desktop, sections: [])
+      put_sections([])
 
       {:ok, view, html} = live(conn, ~p"/desktop")
 
@@ -134,8 +134,13 @@ defmodule Systems.Desktop.PageTest do
   end
 
   defp contribute_test_section(config) do
-    put_env(Systems.Desktop, sections: [Desktop.TestSection])
+    put_sections([Desktop.TestSection])
     put_env(Desktop.TestSection, config)
+  end
+
+  defp put_sections(sections) do
+    previous = Mica.SaaS.put_composition(desktop_sections: sections)
+    on_exit(fn -> Mica.SaaS.put_composition(previous) end)
   end
 
   defp put_env(key, value) do

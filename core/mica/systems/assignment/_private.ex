@@ -5,7 +5,7 @@ defmodule Systems.Assignment.Private do
 
   require Logger
 
-  import Ecto.Query, only: [where: 3]
+  import Ecto.Query, only: [where: 3, select: 3]
 
   alias Mica.Repo
   alias Ecto.Multi
@@ -50,20 +50,28 @@ defmodule Systems.Assignment.Private do
 
   @doc """
   Which task view the participant gets: none without tasks, the single task
-  view for one task, the task list for more.
+  view for one task, and for more the task list the template chose: the
+  vertical `:list` or the `:horizontal_list`.
   """
-  def task_view(%Assignment.Model{workflow: workflow}) do
+  def task_view(%Assignment.Model{workflow: workflow} = assignment) do
     case workflow |> Workflow.Model.ordered_items() |> length() do
       0 -> :none
       1 -> :single
+      _ -> task_list(assignment)
+    end
+  end
+
+  defp task_list(assignment) do
+    case runtime_config(assignment) do
+      %{task_list: :horizontal} -> :horizontal_list
       _ -> :list
     end
   end
 
   @doc """
-  Whether the participant sees the "Next, I am done" button. Only the task
-  list has it. The done screen shows Back exactly then, so the participant
-  can undo the click.
+  Whether the participant sees the "Next, I am done" button. Only the vertical
+  task list has it; the horizontal list finishes after its last task. The done
+  screen shows Back exactly then, so the participant can undo the click.
   """
   def done_button?(%Assignment.Model{} = assignment, panel_info) do
     task_view(assignment) == :list and done_button_allowed?(assignment, panel_info)
@@ -94,11 +102,15 @@ defmodule Systems.Assignment.Private do
 
   def get_template(special), do: Assignment.TemplateExtension.template!(special)
 
-  def no_consent?(%{consent_agreement: nil}, _user_ref), do: false
-
-  def no_consent?(%{consent_agreement: consent_agreement}, user_ref) do
-    # If assignment requires consent but user hasn't signed, there's no consent
-    not consent?(consent_agreement, user_ref)
+  @doc """
+  True when the participant has to give consent and hasn't. Nobody has to consent
+  again: a signature on any revision counts. Whoever joined while consent was off
+  is never asked.
+  """
+  def no_consent?(%Assignment.Model{consent_agreement: consent_agreement} = assignment, user_ref) do
+    Assignment.Model.consent_on?(assignment) and
+      joined_while_consent_on?(assignment, user_ref) and
+      not consent?(consent_agreement, user_ref)
   end
 
   defp consent?(consent_agreement, user_ref) do
@@ -106,6 +118,27 @@ defmodule Systems.Assignment.Private do
     |> Consent.Queries.signature_query()
     |> where([signature: s], s.user_id == ^user_ref)
     |> Repo.exists?()
+  end
+
+  # Joining is the first time the participant entered the crew: coming back
+  # after an expiry (such as declining consent) resets the same membership.
+  defp joined_while_consent_on?(%Assignment.Model{crew_id: crew_id} = assignment, user_ref) do
+    case joined_at(crew_id, user_ref) do
+      nil ->
+        true
+
+      joined_at ->
+        assignment
+        |> Assignment.Model.consent_periods()
+        |> Enum.any?(&Assignment.ConsentPeriodModel.during?(&1, joined_at))
+    end
+  end
+
+  defp joined_at(crew_id, user_ref) do
+    Crew.MemberModel
+    |> where([m], m.crew_id == ^crew_id and m.user_id == ^user_ref)
+    |> select([m], m.inserted_at)
+    |> Repo.one()
   end
 
   def queue_progress_event(
@@ -163,6 +196,14 @@ defmodule Systems.Assignment.Private do
       }
     )
     |> Repo.commit()
+  end
+
+  @doc """
+  Whether the Monitor has the member's finished event for the assignment, which every
+  `{:crew_member, :finished_tasks}` logs (testers excepted).
+  """
+  def finished_logged?(%Assignment.Model{} = assignment, user_ref) do
+    Monitor.Public.exists?(Monitor.Public.event({assignment, :finished, user_ref}))
   end
 
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do

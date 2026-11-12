@@ -3,8 +3,8 @@ defmodule Systems.Home.GuestView do
   import Systems.Home.HTML
 
   @impl true
-  def update(_params, socket) do
-    {:ok, socket}
+  def update(%{sign_up_url: sign_up_url}, socket) do
+    {:ok, assign(socket, sign_up_url: sign_up_url)}
   end
 
   @impl true
@@ -13,7 +13,7 @@ defmodule Systems.Home.GuestView do
     <div data-testid="home-guest-view">
       <div class="bg-grey6">
         <.intro />
-        <.steps />
+        <.steps sign_up_url={@sign_up_url} />
         <.available_services />
         <.video />
       </div>

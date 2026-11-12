@@ -111,11 +111,14 @@ defmodule Systems.Assignment.CrewTaskListView do
     socket
   end
 
-  defp complete_task(socket, task) do
+  defp complete_task(%{assigns: %{model: assignment}} = socket, task) do
     {:ok, _} = Crew.Public.complete_task(task)
 
-    socket
-    |> publish_event(:task_completed)
+    if Assignment.Public.required_tasks_finished_by?(assignment, task) do
+      publish_event(socket, :work_done)
+    else
+      publish_event(socket, :task_completed)
+    end
   end
 
   defp close_tool_modal(%{assigns: %{tool_modal: tool_modal}} = socket)

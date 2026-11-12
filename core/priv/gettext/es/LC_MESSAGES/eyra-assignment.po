@@ -343,7 +343,7 @@ msgstr "Asignación"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Tenga en cuenta que, si decide confirmar, se eliminará el contenido de la página, así como el registro asociado de quién prestó su consentimiento."
+msgstr "Los participantes ya no verán esta página. El texto de consentimiento y el registro de quién dio su consentimiento se conservan y vuelven cuando muestres la página de nuevo."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"
@@ -806,3 +806,15 @@ msgstr "Esta tarea ya no está disponible"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Este estudio no tiene tareas."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Cuando eliges 'Mostrar', no se pregunta a los participantes que se unieron mientras esta página se omitía ni a quienes ya dieron su consentimiento. A quienes se unieron cuando la página se mostraba antes y nunca dijeron que sí se les vuelve a preguntar."
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.step.label"
+msgstr "Tarea %{index} de %{count}"
+
+#, elixir-autogen, elixir-format
+msgid "task_steps.start.button"
+msgstr "Empezar"

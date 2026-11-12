@@ -13,11 +13,14 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `signal.exs`: signal handlers (in order), notifiers and notify channels
     * `flags.exs`: the effective feature flags at compile time
     * `saas_config.exs`: the `Mica.SaaS` callbacks (start pages, menus, title,
-      signed-in pages), the SaaS app config and account and admin tab order
+      signed-in pages), the SaaS app config, account and admin tab order, Desktop
+      sections and assignment templates
     * `runtime.exs`: the children `Mica.Application` starts, and per env fixture
       of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
       unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
       feature flags
+    * `schemas.exs`: the schemas `Mica.Repo.orphan?/2` scans and the schemas
+      that own an auth node (`Mica.Authorization.entities/0`), without test support
     * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
       the files `MicaWeb.Router` is compile-connected to
 
@@ -32,6 +35,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       mix nova.snapshot --update                     # rewrite the snapshots
 
   Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+  Before rendering, the task runs the boot's composition checks
+  (`Mica.SaaS.validate!/0`).
 
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
@@ -55,6 +60,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
     Mix.Task.run("compile")
 
     saas = saas!()
+    # The checks a boot runs: the Self build has no tests of its own (snapshot-self CI job).
+    Mica.SaaS.validate!()
     started = System.monotonic_time(:millisecond)
 
     failures =
@@ -144,7 +151,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
   defp update_command(:mica_saas), do: "BUNDLE=self MIX_ENV=dev mix nova.snapshot --update"
 
   defp render_names,
-    do: ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs runtime.exs counts.exs)
+    do:
+      ~w(routes.exs permissions.exs signal.exs flags.exs saas_config.exs runtime.exs schemas.exs counts.exs)
 
   @doc """
   Renders the snapshots of the current build as `{file name, text}`. `counts: false`
@@ -159,7 +167,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       {"signal.exs", format(signal())},
       {"flags.exs", format(features(prod))},
       {"saas_config.exs", format(saas_config(prod))},
-      {"runtime.exs", format(runtime(saas))}
+      {"runtime.exs", format(runtime(saas))},
+      {"schemas.exs", format(schemas())}
     ]
 
     snapshots =
@@ -207,7 +216,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       [
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
         admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids(),
-        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id())
+        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id()),
+        assignment_templates: Systems.Assignment.TemplateExtension.all()
       ]
   end
 
@@ -271,6 +281,19 @@ defmodule Mix.Tasks.Nova.Snapshot do
     |> Systems.Rate.Server.quotas()
     |> Enum.map(&{&1.service, &1.limit, &1.unit, &1.window, &1.scope})
     |> Enum.sort_by(&elem(&1, 0))
+  end
+
+  defp schemas do
+    [
+      schemas: Mica.SaaS.schemas() |> Enum.reject(&test_support?/1) |> Enum.sort(),
+      auth_entities: Enum.reject(Mica.Authorization.entities(), &test_support?/1)
+    ]
+  end
+
+  # Test support is compiled into the test build only (`elixirc_paths`).
+  defp test_support?(module) do
+    source = module.module_info(:compile)[:source] |> to_string() |> Path.relative_to_cwd()
+    String.starts_with?(source, ["mica/test/", "next/test/", "mica_saas/test/"])
   end
 
   defp counts do

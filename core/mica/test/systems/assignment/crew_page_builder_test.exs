@@ -315,7 +315,235 @@ defmodule Systems.Assignment.CrewPageBuilderTest do
     end
   end
 
+  describe "consent changes only apply to future participants" do
+    setup do
+      %{user: Factories.insert!(:member)}
+    end
+
+    test "consent switched on for the first time does not ask participants already in", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+
+      new_user = Factories.insert!(:member)
+      assignment = Assignment.Factories.add_participant(assignment, new_user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(new_user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "consent switched off and on does not ask a participant who consented before", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      sign_consent(assignment, user)
+
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+    end
+
+    test "a participant who finished before consent was switched on sees the finished view", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      finish_all_tasks(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.FinishedView
+    end
+
+    test "a participant who declined and came back through the panel link is asked again", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      Assignment.Public.expire_member(assignment, user)
+
+      Assignment.Factories.add_participant(assignment, user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a tester who was in before consent was switched on still previews the consent", %{
+      user: user
+    } do
+      assignment = Assignment.Factories.create_base_assignment()
+      Assignment.Public.ensure_tester(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "participants who never consented are asked again" do
+    setup do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(120)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      %{user: user, assignment: assignment}
+    end
+
+    test "a participant who joined while consent was on and didn't sign, after off and on", %{
+      user: user,
+      assignment: assignment
+    } do
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a participant who declined and came back through the panel link, after off and on", %{
+      user: user,
+      assignment: assignment
+    } do
+      Assignment.Public.expire_member(assignment, user)
+      assignment = assignment |> switch_consent_off() |> switch_consent_on()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+
+    test "a second switch-on from a view loaded while consent was off changes nothing", %{
+      user: user,
+      assignment: assignment
+    } do
+      stale_view = %{assignment | consent_agreement_id: nil, consent_agreement: nil}
+      Assignment.Factories.switch_consent(stale_view, :on)
+
+      %{view: view} =
+        Assignment.CrewPageBuilder.view_model(reload(assignment), build_assigns(user))
+
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "participants who joined while consent was off" do
+    test "are not asked when consent is switched on again" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(120)
+
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      assignment
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_embed(:consent_periods, [
+        %Assignment.ConsentPeriodModel{
+          started_at: NaiveDateTime.add(now, -120),
+          ended_at: NaiveDateTime.add(now, -90)
+        }
+      ])
+      |> Repo.update!()
+
+      assignment = assignment |> reload() |> Assignment.Factories.add_participant(user)
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      assignment = switch_consent_on(assignment)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.CrewWorkView
+    end
+  end
+
+  describe "an assignment that older code switched off and on after this code switched it off" do
+    test "asks a participant who joined after older code switched it on" do
+      user = Factories.insert!(:member)
+      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Assignment.Factories.consent_since(300)
+
+      assignment
+      |> Ecto.Changeset.change()
+      |> Ecto.Changeset.put_embed(:consent_periods, [
+        %Assignment.ConsentPeriodModel{
+          started_at: NaiveDateTime.add(now, -300),
+          ended_at: NaiveDateTime.add(now, -200)
+        }
+      ])
+      |> Repo.update!()
+
+      assignment =
+        assignment
+        |> Assignment.Factories.switch_consent_off_as_old_code()
+        |> Assignment.Factories.switch_consent_on_as_old_code(100)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 50)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "a tester who joined while consent was off" do
+    test "previews the consent when continuing from the intro page" do
+      user = Factories.insert!(:member)
+      assignment = Assignment.Factories.create_base_assignment()
+      Assignment.Public.ensure_tester(assignment, user)
+      join_earlier(assignment, user)
+
+      assignment = switch_consent_on(assignment)
+      assigns = build_assigns(user, %{action: :onboarding_continue})
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, assigns)
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
+  describe "an assignment that older code switched on" do
+    test "asks a participant who joined after its agreement was created" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_base_assignment()
+        |> Assignment.Factories.switch_consent_on_as_old_code(120)
+        |> Assignment.Factories.add_participant(user)
+
+      Assignment.Factories.joined_since(assignment, user, 60)
+
+      %{view: view} = Assignment.CrewPageBuilder.view_model(assignment, build_assigns(user))
+      assert view.implementation == Assignment.OnboardingConsentView
+    end
+  end
+
   # Helper functions
+  defp switch_consent_on(assignment), do: Assignment.Factories.switch_consent(assignment, :on)
+  defp switch_consent_off(assignment), do: Assignment.Factories.switch_consent(assignment, :off)
+
+  defp join_earlier(assignment, user), do: Assignment.Factories.joined_since(assignment, user, 60)
+
+  defp reload(%{id: id}), do: Assignment.Public.get!(id, Assignment.Model.preload_graph(:down))
+
   defp mark_intro_visited(%{id: assignment_id}, user) do
     Account.Public.mark_as_visited(user, {:assignment_information, assignment_id})
   end
