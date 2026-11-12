@@ -145,6 +145,11 @@ defmodule Mica.MixProject do
       # preset from deps/prism_design/targets/web, so one pin decides both.
       {:prism_design,
        git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.4.0", subdir: "design"},
+      # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
+      {:mica_bff,
+       github: "novasoftwarefoundation/mica-bff",
+       ref: "b90ded4d849eca8208527e926cc4482f1474be0b",
+       runtime: false},
       {:remote_ip, "== 1.3.0"},
       {:slugify, "1.3.1"},
       {:sqids, "== 0.2.2"},
