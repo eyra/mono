@@ -11,6 +11,7 @@
     "mica/lib/mica_web/gettext.ex",
     "mica/lib/mica_web/live/hook/locale.ex",
     "mica/lib/mica_web/live/hook/remote_ip.ex",
+    "mica/lib/mica_web/path.ex",
     "mica/lib/mica_web/resource_exists_plug.ex",
     "mica/lib/mica_web/storybook_guard.ex",
     "mica/lib/mica_web/validator/plug.ex",
