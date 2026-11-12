@@ -42,6 +42,8 @@ defmodule Mica.Repo do
   ## Options
   - `ignore`: A list of modules to ignore when checking for associations.
   Generally, this is a list of association/link tables
+  - `schemas`: The schemas to check, by default those of every application in
+  the composition (`Mica.SaaS.schemas/0`)
 
   ## Example
   ```elixir
@@ -51,11 +53,9 @@ defmodule Mica.Repo do
   def orphan?(%module_under_inspection{id: model_id}, opts \\ []) do
     ignore_modules = Keyword.get(opts, :ignore, [])
 
-    {:ok, modules} = :application.get_key(:mica, :modules)
-
-    modules
+    opts
+    |> Keyword.get_lazy(:schemas, &Mica.SaaS.schemas/0)
     |> Enum.reject(&(&1 in ignore_modules))
-    |> Enum.filter(&({:__schema__, 1} in &1.__info__(:functions)))
     |> map_associations()
     |> map_belongs_to_fields(module_under_inspection)
     |> create_queries(model_id)

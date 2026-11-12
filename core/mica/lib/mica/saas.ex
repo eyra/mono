@@ -160,6 +160,32 @@ defmodule Mica.SaaS do
     ]
   end
 
+  @doc """
+  The Ecto schemas of every application in the composition: Mica's and those of
+  the applications that hold the SaaS module or one of its systems.
+  `Mica.Repo.orphan?/2` and `Mica.Authorization` scan them.
+
+  The list comes from the applications, not from a callback per system, so a
+  system can't leave one of its schemas out. A schema in an application that
+  holds neither the SaaS module nor any of its systems is not in it.
+  """
+  def schemas, do: module() |> composition_apps(systems()) |> collect_schemas()
+
+  @doc false
+  def composition_apps(saas, systems) do
+    [Mica.Env.app() | Enum.map([saas | systems], &Application.get_application/1)]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.uniq()
+  end
+
+  @doc false
+  def collect_schemas(apps) do
+    for app <- apps,
+        module <- Application.spec(app, :modules) || [],
+        Code.ensure_loaded?(module) and function_exported?(module, :__schema__, 1),
+        do: module
+  end
+
   @doc false
   def collect_migrations_paths(systems),
     do: Enum.flat_map(systems, &List.wrap(&1.migrations_path()))
