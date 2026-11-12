@@ -8,9 +8,9 @@ defmodule Systems.Storage.EndpointContentPageTest do
   alias Systems.Storage.BuiltIn.LocalFS
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: LocalFS)
-    on_exit(fn -> Application.put_env(:core, Systems.Storage.BuiltIn, initial_config) end)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: LocalFS)
+    on_exit(fn -> Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config) end)
     :ok
   end
 
@@ -31,7 +31,7 @@ defmodule Systems.Storage.EndpointContentPageTest do
     test "external storage shows only Settings", %{item: item} do
       {:ok, yoda} =
         Storage.Public.prepare_endpoint(:yoda, %{
-          url: "https://yoda.example.org",
+          url: "https://1.1.1.1/research-group/folder",
           user: "user",
           password: "password"
         })

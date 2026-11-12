@@ -7,13 +7,13 @@ defmodule Systems.Storage.EndpointParticipantsViewTest do
   alias Systems.Storage.BuiltIn.LocalFS
 
   setup do
-    initial_config = Application.get_env(:core, Systems.Storage.BuiltIn)
-    Application.put_env(:core, Systems.Storage.BuiltIn, special: LocalFS)
+    initial_config = Application.get_env(:mica, Systems.Storage.BuiltIn)
+    Application.put_env(:mica, Systems.Storage.BuiltIn, special: LocalFS)
 
     folder = "project_node=#{System.unique_integer([:positive])}"
 
     on_exit(fn ->
-      Application.put_env(:core, Systems.Storage.BuiltIn, initial_config)
+      Application.put_env(:mica, Systems.Storage.BuiltIn, initial_config)
       File.rm_rf!(Path.join(LocalFS.get_root_path(), folder))
     end)
 
