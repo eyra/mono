@@ -16,8 +16,15 @@ defmodule Systems.Home.BFFPage do
 
   @impl true
   def blocks(user) do
-    Enum.flat_map(PageBuilder.block_keys(user), &blocks(&1, user))
+    Enum.flat_map(PageBuilder.block_keys(user), &(blocks(&1, user) |> card(&1)))
   end
+
+  # As on the web home, rewards, marketplace and history each sit in a bordered box.
+  defp card(blocks, :next_best_action), do: blocks
+  defp card([], _key), do: []
+
+  defp card(blocks, _key),
+    do: [%Blocks.SectionBegin{border: true} | blocks] ++ [%Blocks.SectionEnd{}]
 
   defp blocks(:next_best_action, user) do
     case NextAction.Public.next_best_action(user) do

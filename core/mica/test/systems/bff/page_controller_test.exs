@@ -89,46 +89,60 @@ defmodule Systems.BFF.PageControllerTest do
 
       assert types(page) == [
                "next_best_action",
+               "section_begin",
                "section",
                "reward_amount",
                "reward_amount",
                "reward_amount",
+               "section_end",
+               "section_begin",
                "section",
                "advert",
                "section",
+               "section_end",
+               "section_begin",
                "section",
-               "participation"
+               "participation",
+               "section_end"
              ]
 
-      assert %{
-               "blocks" => [
-                 %{
-                   "props" => %{
-                     "title" => "first",
-                     "body" => "About first",
-                     "cta" => "Open first",
-                     "to" => "/todo/first"
-                   }
-                 },
-                 %{"props" => %{"title" => "Rewards"}},
-                 %{"props" => %{"label" => "Awaiting", "tone" => "warning", "amount" => pending}},
-                 %{
-                   "props" => %{"label" => "Approved", "tone" => "success", "amount" => approved}
-                 },
-                 %{"props" => %{"label" => "Rejected", "tone" => "danger", "amount" => rejected}},
-                 %{
-                   "props" => %{
-                     "title" => "Marketplace",
-                     "count" => 1,
-                     "image_url" => "/images/logos/pools/panl_wide.png"
-                   }
-                 },
-                 %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
-                 %{"props" => %{"title" => "See all", "to" => see_all}},
-                 %{"props" => %{"title" => "History", "count" => 1}},
-                 %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
-               ]
-             } = page
+      %{"blocks" => blocks} = page
+
+      {groups, content} =
+        Enum.split_with(blocks, &(&1["type"] in ["section_begin", "section_end"]))
+
+      assert Enum.uniq(groups) == [
+               %{"type" => "section_begin", "props" => %{"border" => true}},
+               %{"type" => "section_end", "props" => %{}}
+             ]
+
+      assert [
+               %{
+                 "props" => %{
+                   "title" => "first",
+                   "body" => "About first",
+                   "cta" => "Open first",
+                   "to" => "/todo/first"
+                 }
+               },
+               %{"props" => %{"title" => "Rewards"}},
+               %{"props" => %{"label" => "Awaiting", "tone" => "warning", "amount" => pending}},
+               %{
+                 "props" => %{"label" => "Approved", "tone" => "success", "amount" => approved}
+               },
+               %{"props" => %{"label" => "Rejected", "tone" => "danger", "amount" => rejected}},
+               %{
+                 "props" => %{
+                   "title" => "Marketplace",
+                   "count" => 1,
+                   "image_url" => "/images/logos/pools/panl_wide.png"
+                 }
+               },
+               %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
+               %{"props" => %{"title" => "See all", "to" => see_all}},
+               %{"props" => %{"title" => "History", "count" => 1}},
+               %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
+             ] = content
 
       assert {pending, approved, rejected} == {"€2.50", "€12.00", "€3.00"}
       assert see_all == "/pool/#{panl_id}/marketplace"
