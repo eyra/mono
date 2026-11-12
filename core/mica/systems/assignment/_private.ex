@@ -165,6 +165,14 @@ defmodule Systems.Assignment.Private do
     |> Repo.commit()
   end
 
+  @doc """
+  Whether the Monitor has the member's finished event for the assignment, which every
+  `{:crew_member, :finished_tasks}` logs (testers excepted).
+  """
+  def finished_logged?(%Assignment.Model{} = assignment, user_ref) do
+    Monitor.Public.exists?(Monitor.Public.event({assignment, :finished, user_ref}))
+  end
+
   def clear_performance_event(%Assignment.Model{} = assignment, topic, user_ref) do
     Monitor.Public.event({assignment, topic, user_ref})
     |> Monitor.Public.clear()
