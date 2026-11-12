@@ -4,6 +4,7 @@ defmodule Next.Systems.Account.SignInEntryTest do
   sign-in codes (`:otp`) are on, the password page otherwise.
   """
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest

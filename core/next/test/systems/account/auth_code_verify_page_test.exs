@@ -6,6 +6,7 @@ defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
   one. See Flux 10025618754.
   """
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
   use Gettext, backend: MicaWeb.Gettext
 
