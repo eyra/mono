@@ -9,10 +9,8 @@ defmodule Systems.Promotion.System do
   end
 
   def grants do
-    quote do
-      [
-        {Systems.Promotion.LandingPage, [:visitor, :member]}
-      ]
-    end
+    [
+      {Systems.Promotion.LandingPage, [:visitor, :member]}
+    ]
   end
 end

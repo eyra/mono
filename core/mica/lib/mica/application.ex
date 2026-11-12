@@ -18,6 +18,9 @@ defmodule Mica.Application do
 
     Systems.Storage.BuiltIn.Backend.check_upload_path!()
 
+    # Merges the systems' grants now, so a broken grant stops the boot.
+    Mica.Authorization.permission_map()
+
     opts = [strategy: :one_for_one, name: Mica.Supervisor]
     Supervisor.start_link(children(), opts)
   end

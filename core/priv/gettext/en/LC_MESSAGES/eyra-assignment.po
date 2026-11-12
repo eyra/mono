@@ -342,7 +342,7 @@ msgstr "Assignment"
 
 #, elixir-autogen, elixir-format
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Please note that if you choose to confirm, the page content will be deleted, as well as the associated record of who gave their consent."
+msgstr "Participants will no longer see this page. The consent text and the record of who gave consent are kept, and come back when you show the page again."
 
 #, elixir-autogen
 msgid "export.progress.button"
@@ -805,6 +805,10 @@ msgstr "This task is no longer available"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "This study has no tasks."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "When you choose 'Show', participants who joined while this page was skipped, or who already gave consent, aren't asked. Participants who joined while it was shown before and never said yes are asked again."
 
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"

@@ -61,14 +61,12 @@ defmodule Next.Systems.Account.System do
   end
 
   def grants do
-    quote do
-      [
-        {Next.Systems.Account.SigninPage, [:visitor, :user]},
-        {Next.Systems.Account.AuthProviderPage, [:visitor, :user]},
-        {Next.Systems.Account.AuthIdentifyPage, [:visitor, :user]},
-        {Next.Systems.Account.AuthCodeVerifyPage, [:visitor, :user]}
-      ]
-    end
+    [
+      {Next.Systems.Account.SigninPage, [:visitor, :user]},
+      {Next.Systems.Account.AuthProviderPage, [:visitor, :user]},
+      {Next.Systems.Account.AuthIdentifyPage, [:visitor, :user]},
+      {Next.Systems.Account.AuthCodeVerifyPage, [:visitor, :user]}
+    ]
   end
 
   def sign_in_handoffs, do: [Next.Systems.Account.NativeHandoff]

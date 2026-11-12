@@ -41,6 +41,7 @@ defmodule Systems.Assignment.CrewWorkViewBuilderTest do
       # Create assignment with all context menu items
       assignment = Assignment.Factories.create_assignment_with_consent()
       assignment = Assignment.Factories.add_participant(assignment, user)
+      sign_consent(assignment, user)
 
       # Add privacy doc
       privacy_doc = Factories.insert!(:content_file, %{ref: "https://example.com/privacy.pdf"})
@@ -92,6 +93,15 @@ defmodule Systems.Assignment.CrewWorkViewBuilderTest do
       # Should have page refs
       assert vm.intro_page_ref.key == :assignment_information
       assert vm.support_page_ref.key == :assignment_helpdesk
+    end
+
+    test "leaves out the consent item for a participant who never signed", %{user: user} do
+      assignment = Assignment.Factories.create_assignment_with_consent()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+
+      vm = Assignment.CrewWorkViewBuilder.view_model(assignment, build_assigns(user, %{}))
+
+      refute Enum.find(vm.context_menu_items, &(&1.id == :consent))
     end
 
     test "builds minimal context menu when items missing", %{assignment: assignment, user: user} do
@@ -159,5 +169,10 @@ defmodule Systems.Assignment.CrewWorkViewBuilderTest do
       user_state: user_state,
       live_context: live_context
     }
+  end
+
+  defp sign_consent(%{consent_agreement: consent_agreement}, user) do
+    revision = Systems.Consent.Public.latest_revision(consent_agreement)
+    {:ok, _} = Systems.Consent.Public.create_signature(revision, user)
   end
 end

@@ -24,9 +24,9 @@ defmodule Systems.Assignment.GdprForm do
     socket |> assign(status: :off)
   end
 
-  def update_status(%{assigns: %{entity: %{consent_agreement: consent_agreement}}} = socket) do
+  def update_status(%{assigns: %{entity: assignment}} = socket) do
     status =
-      if consent_agreement do
+      if Assignment.Model.consent_on?(assignment) do
         :on
       else
         :off
@@ -49,51 +49,34 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   @impl true
-  def compose(:consent_revision_form, %{entity: %{consent_agreement: nil}}) do
-    %{
-      module: Consent.RevisionForm,
-      params: %{entity: nil}
-    }
-  end
+  def compose(:consent_revision_form, %{entity: %{consent_agreement: agreement} = assignment}) do
+    revision =
+      if Assignment.Model.consent_on?(assignment) do
+        Consent.Public.latest_revision(agreement)
+      end
 
-  @impl true
-  def compose(:consent_revision_form, %{entity: %{consent_agreement: consent_agreement}}) do
     %{
       module: Consent.RevisionForm,
-      params: %{
-        entity: Consent.Public.latest_revision(consent_agreement)
-      }
+      params: %{entity: revision}
     }
   end
 
   @impl true
   def compose(:confirmation_modal, %{entity: %{consent_agreement: consent_agreement}}) do
-    assigns = %{consent_agreement: consent_agreement}
-    signatures = Consent.Public.list_signatures(consent_agreement)
-
-    assigns =
-      if signatures != [] do
-        Map.put(assigns, :body, dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body"))
-      else
-        assigns
-      end
-
     %{
       module: Pixel.ConfirmationModal,
       params: %{
-        assigns: assigns
+        assigns: %{
+          consent_agreement: consent_agreement,
+          body: dgettext("eyra-assignment", "gdpr_form.confirmation_modal.body")
+        }
       }
     }
   end
 
   @impl true
-  def handle_event(
-        "update",
-        %{status: :on},
-        %{assigns: %{entity: %{auth_node: auth_node} = assignment}} = socket
-      ) do
-    consent_agreement = Consent.Public.prepare_agreement(auth_node)
-    {:ok, _} = Assignment.Public.update_consent_agreement(assignment, consent_agreement)
+  def handle_event("update", %{status: :on}, %{assigns: %{entity: assignment}} = socket) do
+    {:ok, _} = Assignment.Public.enable_consent(assignment)
 
     {
       :noreply,
@@ -131,7 +114,7 @@ defmodule Systems.Assignment.GdprForm do
         %{source: %{name: :confirmation_modal}},
         %{assigns: %{entity: assignment}} = socket
       ) do
-    {:ok, _} = Assignment.Public.delete_consent_agreement(assignment)
+    {:ok, _} = Assignment.Public.disable_consent(assignment)
 
     {
       :noreply,
@@ -149,7 +132,7 @@ defmodule Systems.Assignment.GdprForm do
   end
 
   defp handle_off_state(socket, _, _) do
-    {:ok, _} = Assignment.Public.delete_consent_agreement(socket.assigns.entity)
+    {:ok, _} = Assignment.Public.disable_consent(socket.assigns.entity)
     socket
   end
 

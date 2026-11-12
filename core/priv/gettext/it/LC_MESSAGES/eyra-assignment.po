@@ -343,7 +343,7 @@ msgstr "Incarico"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "gdpr_form.confirmation_modal.body"
-msgstr "Si noti che, se sceglie di confermare, il contenuto della pagina sarà eliminato, così come la registrazione associata di chi ha prestato il consenso."
+msgstr "I partecipanti non vedranno più questa pagina. Il testo del consenso e la registrazione di chi ha dato il consenso vengono conservati e tornano quando mostri di nuovo la pagina."
 
 #, elixir-autogen, fuzzy
 msgid "export.progress.button"
@@ -806,6 +806,10 @@ msgstr "Questo task non è più disponibile"
 #, elixir-autogen, elixir-format
 msgid "work.empty.message"
 msgstr "Questo studio non ha task."
+
+#, elixir-autogen, elixir-format
+msgid "settings.consent.existing_participants"
+msgstr "Quando scegli 'Mostra', non viene chiesto il consenso ai partecipanti che si sono uniti mentre questa pagina veniva saltata o che l'hanno già dato. A chi si è unito quando la pagina veniva mostrata in precedenza e non ha mai detto sì viene chiesto di nuovo."
 
 #, elixir-autogen, elixir-format
 msgid "task_steps.step.label"

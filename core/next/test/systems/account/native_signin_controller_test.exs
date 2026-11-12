@@ -7,6 +7,7 @@ defmodule Next.Systems.Account.NativeSigninControllerTest do
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
   alias Systems.Account.AuthCodeModel
+  alias Systems.Rate
 
   @remember_me_cookie "_core_web_user_remember_me"
   @mobile_user_agent "Mozilla/5.0 (iPhone; CPU iPhone OS 18_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Mobile/15E148 NextApp/0.1.0 iOS"
@@ -322,6 +323,8 @@ defmodule Next.Systems.Account.NativeSigninControllerTest do
   end
 
   describe "network address limits" do
+    setup do: Rate.TestHelper.wait_out_window_end(3600)
+
     test "identify counts code requests by the client's address", %{conn: conn} do
       for _ <- 1..200 do
         assert AuthCodeLimits.allow_request?(unique_email("other"), "198.51.100.30")

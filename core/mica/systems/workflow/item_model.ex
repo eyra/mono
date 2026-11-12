@@ -11,6 +11,7 @@ defmodule Systems.Workflow.ItemModel do
     field(:position, :integer)
     field(:title, :string)
     field(:description, :string)
+    field(:required, :boolean, default: true)
 
     belongs_to(:workflow, Workflow.Model)
     belongs_to(:tool_ref, Workflow.ToolRefModel)

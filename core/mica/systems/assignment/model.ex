@@ -24,6 +24,10 @@ defmodule Systems.Assignment.Model do
     field(:status, Ecto.Enum, values: Concept.Leaf.Status.values(), default: :concept)
     # external_panel is deprecated, use affiliate association instead
     field(:external_panel, Ecto.Enum, values: Assignment.ExternalPanelIds.values())
+    # When consent was on. Empty means on since the agreement was created, which is
+    # how a new assignment, and older code, leave it. The agreement stays linked
+    # while consent is off, so its texts and signatures are kept.
+    embeds_many(:consent_periods, Assignment.ConsentPeriodModel, on_replace: :delete)
 
     belongs_to(:info, Assignment.InfoModel)
     belongs_to(:affiliate, Affiliate.Model)
@@ -81,6 +85,39 @@ defmodule Systems.Assignment.Model do
   def changeset(assignment, attrs) do
     assignment
     |> cast(attrs, @fields)
+  end
+
+  def consent_on?(%Assignment.Model{} = assignment) do
+    match?(%{ended_at: nil}, assignment |> consent_periods() |> List.last())
+  end
+
+  @doc """
+  The periods in which consent was on, oldest first. Raises when the agreement
+  isn't loaded.
+
+  Older code records no periods: switching consent on links a new agreement. So
+  an agreement created after the last period ended has been on since then.
+  """
+  def consent_periods(%Assignment.Model{consent_agreement_id: nil}), do: []
+
+  def consent_periods(%Assignment.Model{
+        consent_periods: periods,
+        consent_agreement: %Consent.AgreementModel{inserted_at: created_at}
+      }) do
+    if switched_on_since_last_period?(periods, created_at) do
+      periods ++ [%Assignment.ConsentPeriodModel{started_at: created_at}]
+    else
+      periods
+    end
+  end
+
+  defp switched_on_since_last_period?([], _created_at), do: true
+
+  defp switched_on_since_last_period?(periods, created_at) do
+    case List.last(periods) do
+      %{ended_at: nil} -> false
+      %{ended_at: ended_at} -> NaiveDateTime.compare(created_at, ended_at) == :gt
+    end
   end
 
   def language(%Assignment.Model{info: info}), do: language(info)

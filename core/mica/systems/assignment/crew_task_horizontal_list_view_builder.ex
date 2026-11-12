@@ -19,7 +19,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
         %{current_user: user, live_context: context} = assigns
       ) do
     work_items = build_work_items(assignment, user)
-    current_index = Enum.find_index(work_items, &(not finished?(&1)))
+    current_index = Enum.find_index(work_items, &(not task_finished?(&1)))
     work_item = current_index && Enum.at(work_items, current_index)
 
     # Compute participant here to avoid timing issues (mount runs AFTER ViewBuilder)
@@ -38,11 +38,18 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
       work_item: work_item,
       intro: build_intro(work_item, current_index),
       tool_modal: build_tool_modal(work_item, Map.get(assigns, :user_state), context),
-      finished?: work_items != [] and is_nil(current_index)
+      finished?: finished?(assignment, user, work_items)
     }
   end
 
-  defp finished?({_workflow_item, %{status: status}}),
+  # The participant's required tasks decide, as for every task view
+  defp finished?(_assignment, _user, []), do: false
+
+  defp finished?(%{crew: crew} = assignment, user, _work_items) do
+    Assignment.Public.required_tasks_finished?(assignment, Crew.Public.get_member(crew, user))
+  end
+
+  defp task_finished?({_workflow_item, %{status: status}}),
     do: status in Crew.TaskStatus.finished_states()
 
   defp build_steps(work_items, current_index) do

@@ -21,12 +21,10 @@ defmodule Next.Systems.Announcement.System do
   # compose page also checks for a system admin itself, as org admins have
   # the `:admin` role too.
   def grants do
-    quote do
-      [
-        {Next.Systems.Announcement.Page, [:member]},
-        {Next.Systems.Announcement.ComposePage, [:admin]}
-      ]
-    end
+    [
+      {Next.Systems.Announcement.Page, [:member]},
+      {Next.Systems.Announcement.ComposePage, [:admin]}
+    ]
   end
 
   def signal_handlers, do: [Next.Systems.Announcement.Switch]

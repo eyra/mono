@@ -138,6 +138,19 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilderTest do
     assert %{finished?: false} = view_model(assignment, user)
   end
 
+  # The required tasks decide, as everywhere else (Assignment.Public.required_tasks_finished?)
+  test "finished once the required tasks are, with an optional task left", %{
+    user: user,
+    assignment: assignment,
+    second: second
+  } do
+    second |> Ecto.Changeset.change(required: false) |> Repo.update!()
+    assignment = Repo.preload(assignment, Assignment.Model.preload_graph(:down), force: true)
+    complete_task(assignment, user, 0)
+
+    assert %{finished?: true} = view_model(assignment, user)
+  end
+
   test "not finished without tasks for the user", %{assignment: assignment} do
     other_user = Factories.insert!(:member)
 

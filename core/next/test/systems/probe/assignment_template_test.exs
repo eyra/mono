@@ -80,6 +80,32 @@ defmodule Next.Systems.Probe.AssignmentTemplateTest do
       refute Assignment.Private.done_button?(assignment, %{redirect_url: nil})
     end
 
+    test "consent comes before the horizontal task list" do
+      user = Factories.insert!(:member)
+
+      assignment =
+        Assignment.Factories.create_assignment_with_consent()
+        |> Ecto.Changeset.change(special: :probe)
+        |> Repo.update!()
+        |> Assignment.Factories.add_task()
+        |> Assignment.Factories.add_participant(user)
+        |> Repo.preload(Assignment.Model.preload_graph(:down), force: true)
+
+      assigns = %{current_user: user, user_state: %{}, live_context: nil, panel_info: nil}
+
+      assert %{view: %{implementation: Assignment.OnboardingConsentView}} =
+               Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      %{consent_agreement: consent_agreement} = assignment
+      revision = Systems.Consent.Public.latest_revision(consent_agreement)
+      {:ok, _} = Systems.Consent.Public.create_signature(revision, user)
+
+      assert %{view: %{implementation: Assignment.CrewWorkView}} =
+               Assignment.CrewPageBuilder.view_model(assignment, assigns)
+
+      assert Assignment.Private.task_view(assignment) == :horizontal_list
+    end
+
     # The done screen shows Back exactly when the task list showed the done button
     test "the done screen of a Probe assignment has no Back, also with a redirect URL" do
       user = Factories.insert!(:member)
