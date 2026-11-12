@@ -10,7 +10,7 @@ defmodule Systems.Account.NextActions.CompleteProfile do
       title: dgettext("eyra-nextaction", "complete.profile.title"),
       description: dgettext("eyra-nextaction", "complete.profile.description"),
       cta_label: dgettext("eyra-nextaction", "complete.profile.cta"),
-      cta_action: %{type: :redirect, to: ~p"/user/account"}
+      cta_action: %{type: :redirect, to: ~m"/user/account"}
     }
   end
 end

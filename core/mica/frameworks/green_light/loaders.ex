@@ -105,7 +105,7 @@ defmodule Frameworks.GreenLight.Loaders do
   # it's usage:
 
   #       <%= if can?(@conn, :show, assignment) do %>
-  #         <span><%= button "Show", method: :get, to: url(conn, ~p"/assignment/\#{assignment.id}" </span>
+  #         <span><%= button "Show", method: :get, to: url(conn, ~m"/assignment/\#{assignment.id}" </span>
   #       <% end %>
   # """
 

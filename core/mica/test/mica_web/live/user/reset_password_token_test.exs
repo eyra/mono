@@ -9,7 +9,7 @@ defmodule MicaWeb.Live.User.ResetPasswordToken.Test do
   describe "as a visitor" do
     test "reset form redirects on an invalid token", %{conn: conn} do
       {:error, {:redirect, %{to: "/user/reset-password"}}} =
-        live(conn, ~p"/user/reset-password/abc")
+        live(conn, ~m"/user/reset-password/abc")
     end
 
     test "reset form allows the user to alter their password", %{conn: conn} do
@@ -20,7 +20,7 @@ defmodule MicaWeb.Live.User.ResetPasswordToken.Test do
           Account.Public.deliver_user_reset_password_instructions(user, url)
         end)
 
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password/#{token}")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password/#{token}")
 
       password = Factories.valid_user_password()
 
@@ -38,7 +38,7 @@ defmodule MicaWeb.Live.User.ResetPasswordToken.Test do
           Account.Public.deliver_user_reset_password_instructions(user, url)
         end)
 
-      {:ok, view, _html} = live(conn, ~p"/user/reset-password/#{token}")
+      {:ok, view, _html} = live(conn, ~m"/user/reset-password/#{token}")
 
       password = Factories.valid_user_password()
 

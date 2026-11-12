@@ -33,7 +33,7 @@ defmodule Systems.Account.ResetPasswordToken do
         :ok,
         socket
         |> put_flash(:error, "Reset password link is invalid or it has expired.")
-        |> redirect(to: ~p"/user/reset-password")
+        |> redirect(to: ~m"/user/reset-password")
       }
     end
   end
@@ -54,7 +54,7 @@ defmodule Systems.Account.ResetPasswordToken do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-user", "password.reset.successfully"))
-         |> redirect(to: ~p"/user/signin")}
+         |> redirect(to: ~m"/user/signin")}
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

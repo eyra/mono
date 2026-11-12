@@ -112,7 +112,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug do
           "user_id" => user.id,
           "userinfo" => google_user
         })
-        |> redirect(to: ~p"/auth/google/transfer")
+        |> redirect(to: ~m"/auth/google/transfer")
 
       {:ok, %{user: user, first_time?: first_time?}} ->
         dispatch_post_signin_action(user, post_action)

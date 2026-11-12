@@ -221,7 +221,7 @@ defmodule Systems.Admin.ClientActivityView do
       phx-click="back"
       data-testid="client-activity-back"
     >
-      <img src={~p"/images/icons/back.svg"} alt="" />
+      <img src={~m"/images/icons/back.svg"} alt="" />
       <Text.label color="text-grey1"><%= @label %></Text.label>
     </div>
     """

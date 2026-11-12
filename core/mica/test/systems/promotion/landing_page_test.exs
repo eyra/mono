@@ -73,7 +73,7 @@ defmodule Systems.Promotion.LandingPageTest do
     # test "Initial", %{conn: conn, promotion: promotion} do
     #   assert_raise RuntimeError, fn ->
     #     {:ok, _view, html} =
-    #       live(conn, ~p"/promotion/#{promotion.id}")
+    #       live(conn, ~m"/promotion/#{promotion.id}")
 
     #     assert html =~ "This is a test title"
     #     assert html =~ "These are the expectations for the participants"
@@ -101,7 +101,7 @@ defmodule Systems.Promotion.LandingPageTest do
 
     #   assert_raise RuntimeError, fn ->
     #     {:ok, _view, html} =
-    #       live(conn, ~p"/promotion/#{promotion.id}")
+    #       live(conn, ~m"/promotion/#{promotion.id}")
 
     #     assert html =~ "Open voor deelname"
     #   end
@@ -110,7 +110,7 @@ defmodule Systems.Promotion.LandingPageTest do
     # test "Apply current user", %{conn: conn, promotion: promotion} do
     #   assert_raise RuntimeError, fn ->
     #     {:ok, view, _html} =
-    #       live(conn, ~p"/promotion/#{promotion.id}")
+    #       live(conn, ~m"/promotion/#{promotion.id}")
 
     #     html =
     #       view

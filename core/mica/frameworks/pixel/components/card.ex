@@ -136,7 +136,7 @@ defmodule Frameworks.Pixel.Card do
           <Text.title5 color={@text_color}><%= @text %></Text.title5>
         </div>
       </div>
-      <img src={~p"/images/#{@image}"} alt={@text}>
+      <img src={~m"/images/#{@image}"} alt={@text}>
     </div>
     """
   end

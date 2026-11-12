@@ -53,6 +53,6 @@ defimpl Frameworks.Concept.Branch, for: Systems.Project.Branch do
   end
 
   defp root_breadcrumb() do
-    %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~p"/project"}
+    %{label: dgettext("eyra-project", "first.breadcrumb.label"), path: ~m"/project"}
   end
 end

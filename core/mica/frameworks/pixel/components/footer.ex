@@ -11,12 +11,12 @@ defmodule MicaWeb.UI.Footer do
     <div class="h-footer sm:h-footer-sm lg:h-footer-lg">
       <div class="flex">
         <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={~p"/images/#{@left}"} alt=""/>
+            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={~m"/images/#{@left}"} alt=""/>
         </div>
         <div class="flex-grow">
         </div>
         <div class="flex-wrap">
-            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={~p"/images/#{@right}"} alt="" />
+            <img class="h-footer sm:h-footer-sm lg:h-footer-lg" src={~m"/images/#{@right}"} alt="" />
         </div>
       </div>
     </div>

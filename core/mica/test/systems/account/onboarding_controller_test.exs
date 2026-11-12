@@ -29,7 +29,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       user = Factories.insert!(:member)
       token = OnboardingController.generate_token(user)
 
-      conn = get(conn, ~p"/user/onboarding/start?token=#{token}")
+      conn = get(conn, ~m"/user/onboarding/start?token=#{token}")
 
       assert redirected_to(conn) == "/user/onboarding"
 
@@ -40,7 +40,7 @@ defmodule Systems.Account.OnboardingControllerTest do
 
   describe "start/2 with invalid token" do
     test "redirects to signin with error flash", %{conn: conn} do
-      conn = get(conn, ~p"/user/onboarding/start?token=invalid_token")
+      conn = get(conn, ~m"/user/onboarding/start?token=invalid_token")
 
       assert redirected_to(conn) == "/user/signin"
       assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil
@@ -52,14 +52,14 @@ defmodule Systems.Account.OnboardingControllerTest do
       # Tamper with the token
       tampered_token = token <> "tampered"
 
-      conn = get(conn, ~p"/user/onboarding/start?token=#{tampered_token}")
+      conn = get(conn, ~m"/user/onboarding/start?token=#{tampered_token}")
 
       assert redirected_to(conn) == "/user/signin"
       assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil
     end
 
     test "redirects to signin for empty token", %{conn: conn} do
-      conn = get(conn, ~p"/user/onboarding/start?token=")
+      conn = get(conn, ~m"/user/onboarding/start?token=")
 
       assert redirected_to(conn) == "/user/signin"
     end
@@ -72,7 +72,7 @@ defmodule Systems.Account.OnboardingControllerTest do
       # so we test that an invalid/old token format fails
       expired_token = "expired.token.here"
 
-      conn = get(conn, ~p"/user/onboarding/start?token=#{expired_token}")
+      conn = get(conn, ~m"/user/onboarding/start?token=#{expired_token}")
 
       assert redirected_to(conn) == "/user/signin"
       assert Phoenix.Flash.get(conn.assigns.flash, :error) != nil

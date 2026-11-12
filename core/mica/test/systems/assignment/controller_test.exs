@@ -455,7 +455,7 @@ defmodule Systems.Assignment.ControllerTest do
       assignment = Assignment.Factories.create_assignment(31, 10, :online)
       :ok = Mica.Authorization.assign_role(conn.assigns.current_user, assignment, :owner)
 
-      conn = get(conn, ~p"/assignment/#{assignment.id}/export")
+      conn = get(conn, ~m"/assignment/#{assignment.id}/export")
 
       assert conn.status == 200
       assert [content_type] = get_resp_header(conn, "content-type")
@@ -490,7 +490,7 @@ defmodule Systems.Assignment.ControllerTest do
     test "denies a member who does not own the assignment", %{conn: conn} do
       %{id: id} = Assignment.Factories.create_assignment(31, 10, :online)
 
-      conn = get(conn, ~p"/assignment/#{id}/export")
+      conn = get(conn, ~m"/assignment/#{id}/export")
 
       assert conn.status == 403
     end
@@ -502,7 +502,7 @@ defmodule Systems.Assignment.ControllerTest do
     test "denies a member who does not own the assignment", %{conn: conn} do
       %{id: id} = Assignment.Factories.create_assignment(31, 10, :online)
 
-      conn = get(conn, ~p"/assignment/#{id}/export-progress")
+      conn = get(conn, ~m"/assignment/#{id}/export-progress")
 
       assert conn.status == 403
     end

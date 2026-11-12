@@ -7,7 +7,7 @@ defmodule Systems.Admin.LoginPageTest do
     setup [:login_as_admin]
 
     test "render", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/admin/login")
+      {:ok, _view, html} = live(conn, ~m"/admin/login")
       assert html =~ "Sign in with Google account"
     end
   end

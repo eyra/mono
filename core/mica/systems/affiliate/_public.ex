@@ -74,12 +74,12 @@ defmodule Systems.Affiliate.Public do
   end
 
   def url_for_resource(%resource_type{} = %{id: id}) do
-    path = ~p"/a/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
+    path = ~m"/a/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
     get_base_url() <> path
   end
 
   def recruit_url_for_resource(%resource_type{} = %{id: id}) do
-    path = ~p"/r/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
+    path = ~m"/r/#{Affiliate.Sqids.encode!([@resource_map[resource_type], id])}"
     get_base_url() <> path
   end
 

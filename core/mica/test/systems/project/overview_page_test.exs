@@ -9,7 +9,7 @@ defmodule Systems.Project.OverviewPageTest do
     setup [:login_as_creator]
 
     test "render empty", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~p"/project")
+      {:ok, _view, html} = live(conn, ~m"/project")
       assert html =~ "My first project"
     end
 
@@ -25,12 +25,12 @@ defmodule Systems.Project.OverviewPageTest do
       })
       |> Repo.insert!()
 
-      {:ok, _view, html} = live(conn, ~p"/project")
+      {:ok, _view, html} = live(conn, ~m"/project")
       assert html =~ "Appelmoes"
     end
 
     test "create project", %{conn: conn} do
-      {:ok, view, html} = live(conn, ~p"/project")
+      {:ok, view, html} = live(conn, ~m"/project")
 
       refute html =~ "New project\n"
       refute html =~ "New project (2)\n"

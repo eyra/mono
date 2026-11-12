@@ -91,7 +91,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController do
             "user_id" => user.id,
             "userinfo" => userinfo
           })
-          |> redirect(to: ~p"/auth/surfconext/transfer")
+          |> redirect(to: ~m"/auth/surfconext/transfer")
 
         {:ok, %{user: user, first_time?: first_time?}} ->
           log_in_user(config, conn, user, first_time?)

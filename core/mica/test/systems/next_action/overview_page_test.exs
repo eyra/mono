@@ -23,13 +23,13 @@ defmodule Systems.NextAction.OverviewPageTest do
 
     test "shows a next action when available", %{conn: conn, user: user} do
       NextAction.Public.create_next_action(user, SomeAction)
-      {:ok, _view, html} = live(conn, ~p"/todo")
+      {:ok, _view, html} = live(conn, ~m"/todo")
 
       assert html =~ "Open test"
     end
 
     test "is updated when task is added", %{conn: conn, user: user} do
-      {:ok, view, _html} = live(conn, ~p"/todo")
+      {:ok, view, _html} = live(conn, ~m"/todo")
       assert has_element?(view, "#zero-todos")
       NextAction.Public.create_next_action(user, SomeAction)
       assert render(view) =~ "Open test"
@@ -37,7 +37,7 @@ defmodule Systems.NextAction.OverviewPageTest do
 
     test "is updated when task is completed", %{conn: conn, user: user} do
       NextAction.Public.create_next_action(user, SomeAction)
-      {:ok, view, _html} = live(conn, ~p"/todo")
+      {:ok, view, _html} = live(conn, ~m"/todo")
       NextAction.Public.clear_next_action(user, SomeAction)
       refute has_element?(view, "#next-actions")
     end

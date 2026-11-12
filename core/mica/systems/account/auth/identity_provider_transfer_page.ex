@@ -22,7 +22,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferPage do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, Phoenix.LiveView.redirect(socket, to: ~p"/user/auth/identify")}
+    {:ok, Phoenix.LiveView.redirect(socket, to: ~m"/user/auth/identify")}
   end
 
   defp idp_label("centerdata"), do: "Centerdata"
@@ -62,12 +62,12 @@ defmodule Systems.Account.Auth.IdentityProviderTransferPage do
               <.spacing value="S" />
               <Button.dynamic_bar buttons={[
                 %{
-                  action: %{type: :http_post, to: ~p"/auth/#{@idp_key}/transfer/confirm"},
+                  action: %{type: :http_post, to: ~m"/auth/#{@idp_key}/transfer/confirm"},
                   face: %{type: :primary, label: dgettext("eyra-account", "idp.transfer.confirm")},
                   testid: "idp-transfer-confirm"
                 },
                 %{
-                  action: %{type: :http_post, to: ~p"/auth/#{@idp_key}/transfer/decline"},
+                  action: %{type: :http_post, to: ~m"/auth/#{@idp_key}/transfer/decline"},
                   face: %{type: :secondary, label: dgettext("eyra-account", "idp.transfer.decline")},
                   testid: "idp-transfer-decline"
                 }

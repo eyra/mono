@@ -52,7 +52,7 @@ defmodule Systems.Workflow.ItemCell do
     tool = Workflow.ToolRefModel.flatten(tool_ref)
     tool_form_module = Workflow.ToolRefModel.form(tool_ref)
 
-    callback_path = ~p"/assignment/callback/#{item_id}"
+    callback_path = ~m"/assignment/callback/#{item_id}"
     callback_url = uri_origin <> callback_path
 
     %{
@@ -172,7 +172,7 @@ defmodule Systems.Workflow.ItemCell do
         <Text.title3 margin=""><%= @type %></Text.title3>
         <%= if @ready? do %>
           <div>
-            <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
+            <img class="h-6 w-6" src={~m"/images/icons/ready.svg"} alt="ready">
           </div>
         <% end %>
         <div class="flex-grow" />

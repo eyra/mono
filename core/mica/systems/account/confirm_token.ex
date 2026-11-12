@@ -63,7 +63,7 @@ defmodule Systems.Account.ConfirmToken do
     Logger.notice("Confirm user: handle_succeeded #{email}")
 
     socket
-    |> redirect(to: ~p"/user/signin?email=#{email}&status=account_activated_successfully")
+    |> redirect(to: ~m"/user/signin?email=#{email}&status=account_activated_successfully")
   end
 
   defp handle_failed(socket) do
@@ -95,14 +95,14 @@ defmodule Systems.Account.ConfirmToken do
             # FIXME: Add lockout logic
             Account.Public.deliver_user_confirmation_instructions(
               user,
-              &~p"/user/onboarding/confirm/#{&1}"
+              &~m"/user/onboarding/confirm/#{&1}"
             )
 
           user ->
             # FIXME: Log suspicous behavior?
             Account.Public.deliver_already_activated_notification(
               user,
-              ~p"/user/signin"
+              ~m"/user/signin"
             )
         end
 

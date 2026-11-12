@@ -80,7 +80,7 @@ defmodule Systems.Account.Auth.Mock.CallbackController do
           conn
           |> Systems.Account.UserAuth.sign_out_current_user()
           |> put_session(:idp_transfer, %{"email" => email, "idp" => "mock", "user_id" => user.id})
-          |> redirect(to: ~p"/auth/mock/transfer")
+          |> redirect(to: ~m"/auth/mock/transfer")
       end
     else
       conn |> send_resp(404, "Not found") |> halt()
@@ -105,7 +105,7 @@ defmodule Systems.Account.Auth.Mock.ResetController do
 
       conn
       |> Systems.Account.UserAuth.sign_out_current_user()
-      |> redirect(to: ~p"/auth/mock")
+      |> redirect(to: ~m"/auth/mock")
     else
       conn |> send_resp(404, "Not found") |> halt()
     end

@@ -27,7 +27,7 @@ defmodule Systems.Pool.ParticipantItemBuilder do
       |> MicaWeb.UI.Timestamp.humanize()
 
     %{
-      path: ~p"/pool/participant/#{user_id}",
+      path: ~m"/pool/participant/#{user_id}",
       title: fullname,
       subtitle: subtitle,
       quick_summary: quick_summery,

@@ -12,7 +12,7 @@ defmodule Systems.Pool.ReviewSubmission do
       cta_label: dgettext("eyra-nextaction", "review.submission.cta"),
       cta_action: %{
         type: :redirect,
-        to: ~p"/pool/#{id}/detail?tab=adverts"
+        to: ~m"/pool/#{id}/detail?tab=adverts"
       }
     }
   end

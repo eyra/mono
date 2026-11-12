@@ -17,7 +17,7 @@ defmodule Systems.Admin.ConfigPage do
     else
       case Org.Public.list_orgs(user) do
         [%{id: org_id}] ->
-          {:ok, push_navigate(socket, to: ~p"/org/node/#{org_id}")}
+          {:ok, push_navigate(socket, to: ~m"/org/node/#{org_id}")}
 
         _ ->
           mount_with_tabs(params, socket)

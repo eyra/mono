@@ -27,7 +27,7 @@ defmodule Systems.Org.PoolsView do
 
   @impl true
   def handle_event("card_clicked", %{"item" => pool_id}, socket) do
-    {:noreply, push_navigate(socket, to: ~p"/pool/#{pool_id}/content")}
+    {:noreply, push_navigate(socket, to: ~m"/pool/#{pool_id}/content")}
   end
 
   @impl true

@@ -44,7 +44,7 @@ defmodule Systems.Home.Page do
   # Bubbled up by `RewardsSummaryView` after a successful payout — redirecting
   # has to happen here (a routed LiveView), not inside the component's update/2.
   def handle_info(:payout_completed, socket) do
-    {:noreply, push_navigate(socket, to: ~p"/user/account?tab=payouts")}
+    {:noreply, push_navigate(socket, to: ~m"/user/account?tab=payouts")}
   end
 
   @impl true

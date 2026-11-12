@@ -35,7 +35,7 @@ defmodule Systems.Storage.EndpointSettingsViewTest do
 
   describe "the owner saving the Yoda folder url" do
     test "is refused for a private address", %{conn: conn, endpoint: endpoint} do
-      {:ok, view, _html} = live(conn, ~p"/storage/endpoint/#{endpoint.id}/content")
+      {:ok, view, _html} = live(conn, ~m"/storage/endpoint/#{endpoint.id}/content")
 
       html = view |> element(@form) |> render_submit(params("https://10.1.2.3/folder"))
 
@@ -44,7 +44,7 @@ defmodule Systems.Storage.EndpointSettingsViewTest do
     end
 
     test "is refused for a plain http address", %{conn: conn, endpoint: endpoint} do
-      {:ok, view, _html} = live(conn, ~p"/storage/endpoint/#{endpoint.id}/content")
+      {:ok, view, _html} = live(conn, ~m"/storage/endpoint/#{endpoint.id}/content")
 
       html = view |> element(@form) |> render_submit(params("http://1.1.1.1/folder"))
 
@@ -54,7 +54,7 @@ defmodule Systems.Storage.EndpointSettingsViewTest do
 
     test "is saved for a public address", %{conn: conn, endpoint: endpoint} do
       with_mock OutboundUrl, [:passthrough], request: fn _, _, _, _, _ -> {:ok, 200, []} end do
-        {:ok, view, _html} = live(conn, ~p"/storage/endpoint/#{endpoint.id}/content")
+        {:ok, view, _html} = live(conn, ~m"/storage/endpoint/#{endpoint.id}/content")
 
         view |> element(@form) |> render_submit(params("https://1.1.1.1/folder"))
 

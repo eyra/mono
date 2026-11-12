@@ -34,7 +34,7 @@ defmodule Systems.Workflow.HTML do
               </div>
             <% else %>
               <div class="h-6 w-6 flex-shrink-0">
-                <img class="h-6 w-6" src={~p"/images/icons/ready.svg"} alt="ready">
+                <img class="h-6 w-6" src={~m"/images/icons/ready.svg"} alt="ready">
               </div>
             <% end %>
             <div class="flex-grow">

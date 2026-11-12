@@ -6,7 +6,7 @@ defmodule Systems.Feldspar.LocalFS do
   def public_path, do: "/feldspar/apps"
 
   def get_public_url(id) do
-    ~p"/feldspar/apps/#{id}"
+    ~m"/feldspar/apps/#{id}"
   end
 
   @local_file_header 0x04034B50
