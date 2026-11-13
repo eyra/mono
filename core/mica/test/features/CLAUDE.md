@@ -30,7 +30,7 @@ WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
 `mix test.unit` runs `test --exclude feature`.
 `mix test.ci` runs both halves + JS, each in its own Mix invocation (Mix runs `test` only once per invocation).
 
-Chrome and chromedriver must have the same major version. When they don't (e.g. brew's chromedriver lags Chrome), download a matching pair from Chrome for Testing and point Wallaby at it with `CHROMEDRIVER_PATH=<path>` and, if needed, `CHROME_BINARY=<path>`. CI does the same.
+Chrome and chromedriver must have the same major version. When they don't (e.g. brew's chromedriver lags Chrome), download a matching pair from Chrome for Testing and point Wallaby at it with `CHROMEDRIVER_PATH=<path>` and, if needed, `CHROME_BINARY=<path>`. CI does the same. A feature that needs its own Chrome settings (a locale, a phone's screen) builds them with `chrome_capabilities/1`: Wallaby drops `CHROME_BINARY` from capabilities a feature passes itself, and chromedriver then starts the system Chrome.
 
 LiveView drops `phx-click` events (and `JS` commands) until the page's WebSocket has connected. Before the first click on such an element on a freshly loaded page, wait with `assert_connected(session, "[data-testid='…']")`: the element inside a connected LiveView. This is a pre-click wait on the destination, not the post-navigation `.phx-connected` wait that rule 2 below forbids.
 

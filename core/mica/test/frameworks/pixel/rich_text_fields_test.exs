@@ -89,17 +89,24 @@ defmodule Frameworks.Pixel.RichTextFieldsTest do
     @paragraph ~s|<div>Some <strong>bold</strong> and <em>italic</em> text with | <>
                  ~s|<a href="https://example.org/docs">a link</a>.<br>Next line</div>|
 
+    # At the limit as sent, ending in 1000 characters that cleaning writes
+    # longer. Cleaning a body of only those characters takes seconds and
+    # hundreds of MB, too much for a busy test runner.
     test "over the limit because every & is written as &amp; is an error" do
-      body = String.duplicate("&", RichText.max_bytes())
+      body = at_the_limit_ending_in("&")
       changeset = Content.PageModel.changeset(%Content.PageModel{}, %{body: body})
 
+      assert byte_size(body) == RichText.max_bytes()
+      assert byte_size(get_change(changeset, :body)) == RichText.max_bytes() + 4_000
       assert %{body: ["should be at most 2000000 byte(s)"]} = errors_on(changeset)
     end
 
     test "over the limit because every < is written as &lt; is an error" do
-      body = String.duplicate("<", RichText.max_bytes())
+      body = at_the_limit_ending_in("<")
       changeset = Content.PageModel.changeset(%Content.PageModel{}, %{body: body})
 
+      assert byte_size(body) == RichText.max_bytes()
+      assert byte_size(get_change(changeset, :body)) == RichText.max_bytes() + 3_000
       assert %{body: ["should be at most 2000000 byte(s)"]} = errors_on(changeset)
     end
 
@@ -213,5 +220,9 @@ defmodule Frameworks.Pixel.RichTextFieldsTest do
     test "render_wysiwyg/1 renders nothing for nil" do
       assert nil |> WysiwygAreaHelpers.render_wysiwyg() |> Phoenix.HTML.safe_to_string() == ""
     end
+  end
+
+  defp at_the_limit_ending_in(char) do
+    String.duplicate("a", RichText.max_bytes() - 1_000) <> String.duplicate(char, 1_000)
   end
 end

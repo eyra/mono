@@ -203,4 +203,63 @@ defmodule Systems.Consent.PublicTest do
 
     assert not Consent.Public.has_signature(revision, user_b)
   end
+
+  test "get_agreement!/2 preloads revisions oldest first, also when an older row is stored last" do
+    agreement = Factories.insert!(:consent_agreement)
+
+    %{id: revision_1_id} =
+      revision_1 = Factories.insert!(:consent_revision, %{agreement: agreement})
+
+    %{id: revision_2_id} = Factories.insert!(:consent_revision, %{agreement: agreement})
+    move_to_end_of_table(revision_1)
+
+    assert %{revisions: [%{id: ^revision_1_id}, %{id: ^revision_2_id}]} =
+             Consent.Public.get_agreement!(agreement.id, [:revisions])
+  end
+
+  test "get_revision!/2 preloads signatures oldest first, also when an older row is stored last" do
+    # The later signature gets the user with the lower id, so the order of the
+    # (revision_id, user_id) index differs from the signature order too.
+    user_b = Factories.insert!(:member)
+    user_a = Factories.insert!(:member)
+    revision = Factories.insert!(:consent_revision)
+    signature_a = Factories.insert!(:consent_signature, %{revision: revision, user: user_a})
+    signature_b = Factories.insert!(:consent_signature, %{revision: revision, user: user_b})
+    move_to_end_of_table(signature_a)
+
+    signature_a_id = signature_a.id
+    signature_b_id = signature_b.id
+
+    assert %{signatures: [%{id: ^signature_a_id}, %{id: ^signature_b_id}]} =
+             Consent.Public.get_revision!(revision.id, [:signatures])
+  end
+
+  test "get_signature/2 returns the signature on the latest signed revision, also when an older row is stored last" do
+    user = Factories.insert!(:member)
+    agreement = Factories.insert!(:consent_agreement)
+    revision_1 = Factories.insert!(:consent_revision, %{agreement: agreement})
+
+    %{id: revision_2_id} =
+      revision_2 = Factories.insert!(:consent_revision, %{agreement: agreement})
+
+    signature_1 = Factories.insert!(:consent_signature, %{revision: revision_1, user: user})
+    _signature_2 = Factories.insert!(:consent_signature, %{revision: revision_2, user: user})
+    move_to_end_of_table(revision_1)
+    move_to_end_of_table(signature_1)
+
+    assert %{revision_id: ^revision_2_id} = Consent.Public.get_signature(agreement, user)
+  end
+
+  # Deletes the row and inserts it again, unchanged, in one statement. Postgres
+  # stores it after the rows that were inserted later, with new index entries,
+  # so a query without ORDER BY returns it after them.
+  defp move_to_end_of_table(%schema{id: id}) do
+    table = schema.__schema__(:source)
+
+    Repo.query!(
+      "WITH moved AS (DELETE FROM #{table} WHERE id = $1 RETURNING *) " <>
+        "INSERT INTO #{table} SELECT * FROM moved",
+      [id]
+    )
+  end
 end

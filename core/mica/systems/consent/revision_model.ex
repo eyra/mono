@@ -13,7 +13,12 @@ defmodule Systems.Consent.RevisionModel do
   schema "consent_revisions" do
     field(:source, :string)
     belongs_to(:agreement, Consent.AgreementModel)
-    has_many(:signatures, Consent.SignatureModel, foreign_key: :revision_id)
+
+    has_many(:signatures, Consent.SignatureModel,
+      foreign_key: :revision_id,
+      preload_order: [asc: :id]
+    )
+
     timestamps()
   end
 

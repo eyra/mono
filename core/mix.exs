@@ -92,7 +92,7 @@ defmodule Mica.MixProject do
       {:assent, "== 0.4.0"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
-       github: "eyra/bamboo_phoenix", ref: "faff46acfeea40b1348f9f70eea84436a1524568"},
+       github: "eyra/bamboo_phoenix", ref: "014b4d8cef46ddd9dad4c2f7103659aa46764e25"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "== 2.5.1"},
       {:bcrypt_elixir, "3.3.2"},
