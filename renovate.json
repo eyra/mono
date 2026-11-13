@@ -5,6 +5,16 @@
     "schedule:earlyMondays",
     "group:allNonMajor"
   ],
+  "description": "ignorePaths is config:recommended's list without **/test/**, so core/test/{e2e,smoke,load} get updates: the E2E runner moved to Ubuntu 26.04 while Playwright, unseen there, stayed on 1.58 without chromium for it",
+  "ignorePaths": [
+    "**/node_modules/**",
+    "**/bower_components/**",
+    "**/vendor/**",
+    "**/examples/**",
+    "**/__tests__/**",
+    "**/tests/**",
+    "**/__fixtures__/**"
+  ],
   "timezone": "Europe/Amsterdam",
   "constraints": {
     "erlang": "28.1.0.0",
