@@ -18,7 +18,7 @@ defmodule Systems.Project.NodePageTest do
   end
 
   test "Data segment links to the storage endpoint", %{conn: conn, node: node, endpoint: endpoint} do
-    {:ok, view, _html} = live(conn, ~p"/project/node/#{node.id}")
+    {:ok, view, _html} = live(conn, ~m"/project/node/#{node.id}")
 
     assert has_element?(view, ~s(a[href="/storage/endpoint/#{endpoint.id}/content"]), "Data")
   end
@@ -30,7 +30,7 @@ defmodule Systems.Project.NodePageTest do
   } do
     Repo.delete!(item)
 
-    {:ok, view, html} = live(conn, ~p"/project/node/#{node.id}")
+    {:ok, view, html} = live(conn, ~m"/project/node/#{node.id}")
 
     refute has_element?(view, ~s(a[href^="/storage/endpoint/"]))
     assert html =~ "Create a storage now."

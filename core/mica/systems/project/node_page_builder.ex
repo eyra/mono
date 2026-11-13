@@ -81,7 +81,7 @@ defmodule Systems.Project.NodePageBuilder do
           show_errors: show_errors,
           title: dgettext("eyra-projects", "items.data"),
           type: :fullpage,
-          path: ~p"/storage/endpoint/#{endpoint_id}/content"
+          path: ~m"/storage/endpoint/#{endpoint_id}/content"
         }
 
       nil ->

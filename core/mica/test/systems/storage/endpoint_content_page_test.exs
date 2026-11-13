@@ -48,7 +48,7 @@ defmodule Systems.Storage.EndpointContentPageTest do
       {:ok, %{storage_setup: %{endpoint: endpoint}}} =
         Project.Assembly.create("Project", user, :empty)
 
-      {:ok, _view, html} = live(conn, ~p"/storage/endpoint/#{endpoint.id}/content")
+      {:ok, _view, html} = live(conn, ~m"/storage/endpoint/#{endpoint.id}/content")
 
       assert html =~ ~s(data-initial-tab="participants_view")
     end

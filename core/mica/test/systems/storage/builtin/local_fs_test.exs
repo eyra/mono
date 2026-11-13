@@ -94,7 +94,7 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
       :ok = LocalFS.store(folder, "participant=2_key=run1/summary.json", "{}")
       :ok = LocalFS.store(folder, "participant=3_key=run1/summary.json", "{}")
 
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
 
@@ -115,7 +115,7 @@ defmodule Systems.Storage.BuiltIn.LocalFSTest do
       :ok = Mica.Authorization.assign_role(conn.assigns.current_user, endpoint, :owner)
       :ok = LocalFS.store(folder, "assignment=5_key=run1/summary.json", "{}")
 
-      conn = get(conn, ~p"/storage/endpoint/#{endpoint.id}/export")
+      conn = get(conn, ~m"/storage/endpoint/#{endpoint.id}/export")
 
       {:ok, files} = :zip.unzip(conn.resp_body, [:memory])
       paths = Enum.map(files, fn {path, _} -> to_string(path) end)
