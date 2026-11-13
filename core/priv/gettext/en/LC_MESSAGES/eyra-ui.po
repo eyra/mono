@@ -209,3 +209,11 @@ msgstr "Onyx"
 #, elixir-autogen, elixir-format
 msgid "action_menu.alt"
 msgstr "More actions"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr "Hide actions"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr "Show actions"

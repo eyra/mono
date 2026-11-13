@@ -16,6 +16,7 @@ import { ResetScroll } from "./reset_scroll";
 import { FullscreenImage } from "./fullscreen_image";
 import { Blurhash } from "./blurhash";
 import { UserState } from "./user_state";
+import { KeyboardClick } from "./keyboard_click";
 
 // Shared by app.js and storybook.js.
 export const Hooks = {
@@ -24,6 +25,7 @@ export const Hooks = {
   Clipboard,
   FeldsparApp,
   FeldsparRecovery,
+  KeyboardClick,
   LiveContent,
   LiveField,
   PDFViewer,

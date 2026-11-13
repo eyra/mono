@@ -12,10 +12,12 @@ defmodule Frameworks.Pixel.ClickableCard do
   defp has_actions?(_), do: false
 
   # Helper function to show actions
+  # The toggle that has focus hides itself, so focus moves to the other one.
   defp show_actions_js(card_id) do
     JS.hide(to: "#card-#{card_id}-show-more")
     |> JS.show(to: "#card-#{card_id}-hide-more")
     |> JS.show(to: ".card-#{card_id}-actions")
+    |> JS.focus(to: "#card-#{card_id}-hide-more")
   end
 
   # Helper function to hide actions
@@ -23,6 +25,7 @@ defmodule Frameworks.Pixel.ClickableCard do
     JS.show(to: "#card-#{card_id}-show-more")
     |> JS.hide(to: "#card-#{card_id}-hide-more")
     |> JS.hide(to: ".card-#{card_id}-actions")
+    |> JS.focus(to: "#card-#{card_id}-show-more")
   end
 
   # Component for the show more button
@@ -30,11 +33,12 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   def show_more_button(assigns) do
     ~H"""
-    <div id={"card-#{@card_id}-show-more"}
+    <button type="button"
+         id={"card-#{@card_id}-show-more"}
          phx-click={show_actions_js(@card_id)}
          data-testid={"show_more__action__card_#{@card_id}"}>
-      <Button.Face.icon icon={:more_horizontal} />
-    </div>
+      <Button.Face.icon icon={:more_horizontal} alt={dgettext("eyra-ui", "card.actions.show")} />
+    </button>
     """
   end
 
@@ -43,11 +47,12 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   def hide_button(assigns) do
     ~H"""
-    <div id={"card-#{@card_id}-hide-more"}
+    <button type="button"
+         id={"card-#{@card_id}-hide-more"}
          phx-click={hide_actions_js(@card_id)}
          class="hidden">
-      <Button.Face.icon icon={:close} />
-    </div>
+      <Button.Face.icon icon={:close} alt={dgettext("eyra-ui", "card.actions.hide")} />
+    </button>
     """
   end
 
@@ -86,13 +91,18 @@ defmodule Frameworks.Pixel.ClickableCard do
   def clickable_card(assigns) do
     ~H"""
     <div
-      class={"h-full overflow-hidden rounded-lg bg-#{@bg_color} #{@size}"}
+      class={"h-full rounded-lg bg-#{@bg_color} #{@size}"}
       id={"card-#{@id}"}
     >
       <div class="flex flex-col h-full">
         <div class="flex-grow">
           <div
-            class="flex flex-col cursor-pointer h-full"
+            id={"card-#{@id}-open"}
+            class="flex flex-col cursor-pointer h-full overflow-hidden rounded-lg"
+            role="button"
+            tabindex="0"
+            aria-labelledby={if @title != [], do: "card-#{@id}-title"}
+            phx-hook="KeyboardClick"
             phx-target={@target}
             phx-click="card_clicked"
             phx-value-item={@id}
@@ -100,7 +110,7 @@ defmodule Frameworks.Pixel.ClickableCard do
           >
             <%= render_slot(@top) %>
             <%= if @title != [] do %>
-              <div class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
+              <div id={"card-#{@id}-title"} class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
                 <%= render_slot(@title) %>
               </div>
             <% else %>
