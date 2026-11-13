@@ -50,6 +50,7 @@ defmodule MicaWeb.FeatureCase do
       # natural variability headroom while still failing hard on a genuine
       # hang.
       @moduletag timeout: 120_000
+      @moduletag create_session_fn: &MicaWeb.FeatureCase.create_session/2
     end
   end
 
@@ -58,6 +59,62 @@ defmodule MicaWeb.FeatureCase do
   # - Single session via `%{session: session}` in feature tests
   # - Multiple sessions via `@sessions N` and `%{sessions: [s1, s2, ...]}` in feature tests
   # - Ecto sandbox checkout for database isolation
+
+  @doc """
+  Chrome capabilities for a feature that needs its own browser settings, such
+  as a locale or a phone's screen:
+
+      @sessions [[capabilities: chrome_capabilities(%{args: ["--lang=nl-NL", "--headless"]})]]
+
+  Wallaby leaves out the configured Chrome binary (`CHROME_BINARY`) when a
+  feature passes its own capabilities. chromedriver then starts the system
+  Chrome, which refuses the session as soon as its version is ahead of
+  chromedriver's. These capabilities add the configured binary back.
+  """
+  def chrome_capabilities(chrome_options) do
+    case chrome_binary() do
+      nil -> %{chromeOptions: chrome_options}
+      binary -> %{chromeOptions: Map.put(chrome_options, :binary, binary)}
+    end
+  end
+
+  @doc """
+  Starts the Chrome session of every feature, in place of Wallaby's own
+  `create_session`.
+
+  chromedriver answers a refused session with a session id and a non-zero
+  status. Wallaby takes that for a session, so every later command fails with
+  "invalid session id" and chromedriver's reason is lost. This raises the
+  reason instead. It also refuses capabilities without the configured Chrome
+  binary, so a feature that forgets `chrome_capabilities/1` fails on every run,
+  not only on machines whose system Chrome is ahead of chromedriver.
+
+  Wallaby 0.31 calls it through `create_session_fn`, an option it marks as
+  deprecated and falls back from silently. It marks the calling process (the
+  test's), so `MicaWeb.Features.FeatureCaseSessionTest` fails when Wallaby
+  stops calling it.
+  """
+  def create_session(base_url, capabilities) do
+    Process.put({__MODULE__, :create_session}, true)
+    binary = chrome_binary()
+
+    if binary && get_in(capabilities, [:chromeOptions, :binary]) != binary do
+      raise "Chrome capabilities without the configured binary #{binary}; " <>
+              "build them with MicaWeb.FeatureCase.chrome_capabilities/1"
+    end
+
+    case Wallaby.WebdriverClient.create_session(base_url, capabilities) do
+      {:ok, %{"status" => status, "value" => %{"message" => message}}} when status != 0 ->
+        raise "chromedriver didn't start a session: #{message}"
+
+      result ->
+        result
+    end
+  end
+
+  defp chrome_binary do
+    :wallaby |> Application.get_env(:chromedriver, []) |> Keyword.get(:binary)
+  end
 
   @doc """
   Signs in a user through the browser login form.

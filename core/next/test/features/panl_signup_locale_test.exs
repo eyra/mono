@@ -10,19 +10,17 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
 
   alias Systems.Pool
 
-  @nl_capabilities %{
-    chromeOptions: %{
-      args: [
-        "--lang=nl-NL",
-        "--headless",
-        "--no-sandbox",
-        "--disable-dev-shm-usage",
-        "--disable-gpu",
-        "--window-size=1280,800"
-      ],
-      prefs: %{"intl.accept_languages" => "nl-NL,nl"}
-    }
-  }
+  @nl_capabilities chrome_capabilities(%{
+                     args: [
+                       "--lang=nl-NL",
+                       "--headless",
+                       "--no-sandbox",
+                       "--disable-dev-shm-usage",
+                       "--disable-gpu",
+                       "--window-size=1280,800"
+                     ],
+                     prefs: %{"intl.accept_languages" => "nl-NL,nl"}
+                   })
 
   # With sign-in codes on, `/user/signup` sends to the code page.
   setup do
