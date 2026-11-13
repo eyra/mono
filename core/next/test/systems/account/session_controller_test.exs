@@ -3,6 +3,7 @@ defmodule Next.Systems.Account.SessionControllerTest do
   Integration coverage for the redeem step of the email-first OTP flow.
   """
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   alias MicaWeb.Endpoint

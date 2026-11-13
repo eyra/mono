@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportView do
-  use MicaWeb, :embedded_live_view
+  use NextWeb, :embedded_live_view
   use MicaWeb.FileUploader, accept: ~w(.ris)
 
   import Frameworks.Pixel.FileSelector, only: [file_selector: 1]

@@ -66,7 +66,7 @@ defmodule Systems.Payment.ControllerTest do
 
     conn
     |> Plug.Conn.put_req_header("content-type", "application/json")
-    |> post(~p"/api/payment/webhook/opp", Jason.encode!(body))
+    |> post(~m"/api/payment/webhook/opp", Jason.encode!(body))
   end
 
   describe "POST /api/payment/webhook/opp — withdrawal.status.changed" do
@@ -196,7 +196,7 @@ defmodule Systems.Payment.ControllerTest do
           conn =
             conn
             |> Plug.Conn.put_req_header("content-type", "application/json")
-            |> post(~p"/api/payment/webhook/opp", Jason.encode!(body))
+            |> post(~m"/api/payment/webhook/opp", Jason.encode!(body))
 
           assert json_response(conn, 200) == %{"status" => "ok"}
         end)

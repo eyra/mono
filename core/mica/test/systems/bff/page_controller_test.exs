@@ -1,7 +1,15 @@
 defmodule Systems.BFF.PageControllerTest do
-  use MicaWeb.ConnCase, async: true
+  # Not async: the flags-off test changes the app's feature flags.
+  use MicaWeb.ConnCase
+  use Mica.FeatureFlags.Test
 
+  alias Mica.Factories
+  alias Mica.Repo
+  alias Systems.Advert
+  alias Systems.Assignment
+  alias Systems.Fund
   alias Systems.NextAction
+  alias Systems.Pool
 
   defmodule TodoAction do
     @behaviour Systems.NextAction.ViewModel
@@ -25,27 +33,132 @@ defmodule Systems.BFF.PageControllerTest do
     )
   end
 
+  defp give_reward(user, fund, status, amount) do
+    Factories.insert!(:reward, %{
+      user: user,
+      fund: fund,
+      amount: amount,
+      status: status,
+      idempotence_key: "test=#{System.unique_integer([:positive])}"
+    })
+  end
+
+  # An online advert in Panl that is open to the user; reward_value 0 skips the funding check.
+  defp create_panl_advert(panl) do
+    advert = Advert.Factories.create_advert(Factories.insert!(:creator), :accepted, 1)
+    {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
+
+    {:ok, _} =
+      advert.submission
+      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl.id)
+      |> Repo.update()
+
+    advert
+  end
+
+  defp home_with_everything(user) do
+    create_todo(user, "later")
+    create_todo(user, "first", priority: :high)
+    euro = Fund.Factories.create_currency("euro", :legal, "€", 2)
+    fund = Fund.Factories.create_fund("euro-fund", euro)
+
+    for {status, cents} <- [pending_approval: 250, approved: 1200, rejected: 300],
+        do: give_reward(user, fund, status, cents)
+
+    panl = Pool.Public.get_panl() || Factories.insert!(:pool, %{name: "Panl", director: :citizen})
+    Pool.Public.add_participant!(panl, user)
+    create_panl_advert(panl)
+
+    assignment = Assignment.Factories.create_assignment(31, 1)
+    Assignment.Public.add_participant!(assignment, user)
+
+    {panl, assignment}
+  end
+
+  defp types(%{"blocks" => blocks}), do: Enum.map(blocks, & &1["type"])
+
   describe "signed in" do
     setup :login_as_member
 
-    test "home shows the user's To-dos as cards, in priority order", %{conn: conn, user: user} do
-      create_todo(user, "later")
-      create_todo(user, "first", priority: :high)
+    test "home shows what the web home shows: next action, rewards, marketplace, history",
+         %{conn: conn, user: user} do
+      {%Pool.Model{id: panl_id}, %Assignment.Model{id: assignment_id}} =
+        home_with_everything(user)
 
-      assert %{
-               "blocks" => [
-                 %{
-                   "type" => "card",
-                   "props" => %{
-                     "title" => "first",
-                     "body" => "About first",
-                     "cta" => "Open first",
-                     "to" => "/todo/first"
-                   }
-                 },
-                 %{"type" => "card", "props" => %{"title" => "later"}}
-               ]
-             } = conn |> get("/bff/page/home") |> json_response(200)
+      page = conn |> get("/bff/page/home") |> json_response(200)
+
+      assert types(page) == [
+               "next_best_action",
+               "section_begin",
+               "section",
+               "reward_amount",
+               "reward_amount",
+               "reward_amount",
+               "section_end",
+               "section_begin",
+               "section",
+               "advert",
+               "section",
+               "section_end",
+               "section_begin",
+               "section",
+               "participation",
+               "section_end"
+             ]
+
+      %{"blocks" => blocks} = page
+
+      {groups, content} =
+        Enum.split_with(blocks, &(&1["type"] in ["section_begin", "section_end"]))
+
+      assert Enum.uniq(groups) == [
+               %{"type" => "section_begin", "props" => %{"border" => true}},
+               %{"type" => "section_end", "props" => %{}}
+             ]
+
+      assert [
+               %{
+                 "props" => %{
+                   "title" => "first",
+                   "body" => "About first",
+                   "cta" => "Open first",
+                   "to" => "/todo/first"
+                 }
+               },
+               %{"props" => %{"title" => "Rewards"}},
+               %{"props" => %{"label" => "Awaiting", "tone" => "warning", "amount" => pending}},
+               %{
+                 "props" => %{"label" => "Approved", "tone" => "success", "amount" => approved}
+               },
+               %{"props" => %{"label" => "Rejected", "tone" => "danger", "amount" => rejected}},
+               %{
+                 "props" => %{
+                   "title" => "Marketplace",
+                   "count" => 1,
+                   "image_url" => "/images/logos/pools/panl_wide.png"
+                 }
+               },
+               %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
+               %{"props" => %{"title" => "See all", "to" => see_all}},
+               %{"props" => %{"title" => "History", "count" => 1}},
+               %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
+             ] = content
+
+      assert {pending, approved, rejected} == {"€2.50", "€12.00", "€3.00"}
+      assert see_all == "/pool/#{panl_id}/marketplace"
+      assert participation_to == "/assignment/#{assignment_id}"
+    end
+
+    test "without panl_post_launch home shows only the next action", %{conn: conn, user: user} do
+      home_with_everything(user)
+      set_feature_flag(:panl_post_launch, false)
+
+      assert %{"blocks" => [%{"type" => "next_best_action", "props" => %{"title" => "first"}}]} =
+               conn |> get("/bff/page/home") |> json_response(200)
+    end
+
+    test "home leaves out what the user doesn't have", %{conn: conn} do
+      assert %{"blocks" => []} = conn |> get("/bff/page/home") |> json_response(200)
     end
 
     test "a page the spec doesn't list is not found", %{conn: conn} do

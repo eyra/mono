@@ -25,8 +25,8 @@ defmodule Systems.Advert.SettingsView do
        ) do
     assign(socket,
       pool_visibility: Advert.Public.pool_visibility(advert),
-      manage_participants_path: ~p"/assignment/#{assignment_id}/content?tab=#{:participants}",
-      assignment_path: ~p"/assignment/#{assignment_id}/content"
+      manage_participants_path: ~m"/assignment/#{assignment_id}/content?tab=#{:participants}",
+      assignment_path: ~m"/assignment/#{assignment_id}/content"
     )
   end
 
@@ -42,7 +42,7 @@ defmodule Systems.Advert.SettingsView do
   end
 
   defp assign_invite_url(%{assigns: %{advert: %{promotion_id: promotion_id}}} = socket) do
-    path = ~p"/promotion/#{promotion_id}"
+    path = ~m"/promotion/#{promotion_id}"
     url = (Mica.Env.get(:base_url) || "") <> path
 
     assign(socket,

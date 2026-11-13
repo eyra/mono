@@ -138,6 +138,9 @@ config :mica, Systems.Account.Auth.Centerdata,
 # Tests always build Next
 config :mica, saas: Next.SaaS
 
+# Logs a flag read that no system declares (Mica.FeatureFlags).
+config :mica, warn_undeclared_flag_reads: true
+
 config :mica, :content, backend: Systems.Content.LocalFS
 
 config :mica, :feldspar, backend: Systems.Feldspar.LocalFS

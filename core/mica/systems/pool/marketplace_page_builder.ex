@@ -19,10 +19,10 @@ defmodule Systems.Pool.MarketplacePageBuilder do
         }
       },
       breadcrumbs: [
-        %{label: dgettext("eyra-home", "member.title"), path: ~p"/"},
+        %{label: dgettext("eyra-home", "member.title"), path: ~m"/"},
         %{
           label: dgettext("eyra-pool", "marketplace.title"),
-          path: ~p"/pool/#{pool.id}/marketplace"
+          path: ~m"/pool/#{pool.id}/marketplace"
         }
       ],
       active_menu_item: :home,

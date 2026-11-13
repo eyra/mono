@@ -16,6 +16,7 @@ defmodule Next.Systems.Announcement.ComposePage do
   every event checks both again.
   """
   use Systems.Content.Composer, {:live_workspace, :live_nest}
+  use NextWeb, :verified_routes
 
   import Frameworks.Pixel.Form
 

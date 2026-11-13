@@ -19,14 +19,14 @@ defmodule Systems.Assignment.LandingPageTest do
       conn: conn,
       assignment: assignment
     } do
-      {:ok, _view, html} = live(conn, ~p"/assignment/#{assignment.id}/landing")
+      {:ok, _view, html} = live(conn, ~m"/assignment/#{assignment.id}/landing")
 
       # Info title might be nil, so just check that the page renders with Continue button
       assert html =~ "Continue"
     end
 
     test "continue button navigates to join", %{conn: conn, assignment: assignment} do
-      {:ok, view, _html} = live(conn, ~p"/assignment/#{assignment.id}/landing")
+      {:ok, view, _html} = live(conn, ~m"/assignment/#{assignment.id}/landing")
 
       assert view
              |> element("button", "Continue")

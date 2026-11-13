@@ -89,10 +89,10 @@ defmodule Mica.MixProject do
     [
       # Deps
       {:appsignal_phoenix, "== 2.8.2"},
-      {:assent, "0.3.2"},
+      {:assent, "== 0.4.0"},
       # Fork supports Phoenix 1.8
       {:bamboo_phoenix,
-       github: "eyra/bamboo_phoenix", ref: "faff46acfeea40b1348f9f70eea84436a1524568"},
+       github: "eyra/bamboo_phoenix", ref: "014b4d8cef46ddd9dad4c2f7103659aa46764e25"},
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "== 2.5.1"},
       {:bcrypt_elixir, "3.3.2"},
@@ -123,7 +123,7 @@ defmodule Mica.MixProject do
       {:httpoison, "3.0.0"},
       {:image, "== 0.73.0"},
       {:jason, "1.4.5"},
-      {:libcluster, "== 3.5.1"},
+      {:libcluster, "== 3.6.0"},
       {:logger_json, "7.0.4"},
       {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
       {:mime, "2.0.7"},
@@ -145,7 +145,12 @@ defmodule Mica.MixProject do
       # preset from deps/prism_design/targets/web, so one pin decides both.
       {:prism_design,
        git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.4.0", subdir: "design"},
-      {:remote_ip, "1.2.0"},
+      # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
+      {:mica_bff,
+       github: "novasoftwarefoundation/mica-bff",
+       ref: "7973601b6ac667d6ca9a36ed27ba50ddeedc1992",
+       runtime: false},
+      {:remote_ip, "== 1.3.0"},
       {:slugify, "1.3.1"},
       {:sqids, "== 0.2.2"},
       {:statistics, "0.6.3"},
@@ -157,8 +162,8 @@ defmodule Mica.MixProject do
       {:tzdata, "== 1.2.2"},
       # i18n
       {:ex_cldr, "== 2.47.5"},
-      {:ex_cldr_numbers, "== 2.38.3"},
-      {:ex_cldr_dates_times, "2.25.6"},
+      {:ex_cldr_numbers, "== 2.38.4"},
+      {:ex_cldr_dates_times, "== 2.25.8"},
       {:ex_cldr_plugs, "== 1.4.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
       {:certifi, "2.18.0"},
@@ -177,7 +182,7 @@ defmodule Mica.MixProject do
       {:credo, "1.7.19", only: [:dev, :test], runtime: false},
       {:ex_doc, "== 0.40.4", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
-      {:dialyxir, "== 1.4.8", only: [:dev, :test], runtime: false},
+      {:dialyxir, "== 1.4.9", only: [:dev, :test], runtime: false},
       {:browser, "0.5.5"}
     ]
   end

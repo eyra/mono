@@ -12,7 +12,7 @@ defmodule Frameworks.GreenLight.LiveHook do
     if access_allowed?(live_view_module, params, session, socket) do
       {:cont, socket}
     else
-      {:halt, redirect(socket, to: ~p"/access_denied")}
+      {:halt, redirect(socket, to: ~m"/access_denied")}
     end
   end
 

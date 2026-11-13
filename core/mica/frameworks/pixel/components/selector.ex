@@ -274,13 +274,13 @@ defmodule Frameworks.Pixel.Selector.Item do
         <img
           class="selector-icon-active"
           style={!@item.active && "display: none"}
-          src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
+          src={~m"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
           class="selector-icon-inactive"
           style={@item.active && "display: none"}
-          src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
+          src={~m"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />
       </div>
@@ -384,13 +384,13 @@ defmodule Frameworks.Pixel.Selector.Item do
         <img
           class="selector-icon-active"
           style={!@item.active && "display: none"}
-          src={~p"/images/icons/#{"#{@active_icon}.svg"}"}
+          src={~m"/images/icons/#{"#{@active_icon}.svg"}"}
           alt={"#{@value} is selected"}
         />
         <img
           class="selector-icon-inactive"
           style={@item.active && "display: none"}
-          src={~p"/images/icons/#{"#{@inactive_icon}.svg"}"}
+          src={~m"/images/icons/#{"#{@inactive_icon}.svg"}"}
           alt={"Select #{@value}"}
         />
       </div>

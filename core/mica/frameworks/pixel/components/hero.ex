@@ -153,7 +153,7 @@ defmodule Frameworks.Pixel.Hero do
         </p>
       </div>
       <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={ ~p"/images/#{@illustration}"} alt="">
+        <img src={ ~m"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """
@@ -184,7 +184,7 @@ defmodule Frameworks.Pixel.Hero do
 
       </div>
       <div class="flex-none h-full w-illustration sm:w-illustration-sm lg:w-illustration-lg flex-shrink-0">
-        <img src={~p"/images/#{@illustration}"} alt="">
+        <img src={~m"/images/#{@illustration}"} alt="">
       </div>
     </div>
     """
@@ -211,7 +211,7 @@ defmodule Frameworks.Pixel.Hero do
         <% end %>
       </div>
       <div class="w-1/5 flex">
-        <img class="object-cover flex-grow md:object-fill" src={~p"/images/#{@illustration}"} />
+        <img class="object-cover flex-grow md:object-fill" src={~m"/images/#{@illustration}"} />
       </div>
     </div>
     """

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.ExportController do
-  use MicaWeb,
+  use NextWeb,
       {:controller,
        [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
 

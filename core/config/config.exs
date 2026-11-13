@@ -159,7 +159,7 @@ config :mica, Systems.Account.Auth.Centerdata,
   base_url: "https://messpanel.test.centerdata.nl",
   redirect_uri: "not-set",
   authorization_params: [scope: "email"],
-  client_authentication_method: "client_secret_post",
+  client_authentication_method: :client_secret_post,
   code_verifier: true
 
 # Domains routed to Surfconext SSO on the email-first auth page.

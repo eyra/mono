@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.CriteriaView do
-  use MicaWeb, :embedded_live_view
+  use NextWeb, :embedded_live_view
 
   import Frameworks.Pixel.SidePanel, only: [side_panel: 1]
   import Frameworks.Builder.HTML, only: [library: 1]

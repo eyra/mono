@@ -1,5 +1,6 @@
 defmodule Next.Systems.Announcement.ComposePageTest do
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
   use Oban.Testing, repo: Mica.Repo
 

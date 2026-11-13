@@ -6,7 +6,7 @@ defmodule Systems.Desktop.PageTest do
   without a manual refresh.
 
   The section tests contribute `Systems.Desktop.TestSection` through
-  `config :mica, Systems.Desktop, sections: [...]`.
+  `Mica.SaaS.put_composition/1`.
   """
   use MicaWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
@@ -31,7 +31,7 @@ defmodule Systems.Desktop.PageTest do
       {:ok, ctx} = login(owner, ctx)
       conn = ctx[:conn]
 
-      {:ok, view, html} = live(conn, ~p"/desktop")
+      {:ok, view, html} = live(conn, ~m"/desktop")
       assert html =~ "New members available for"
 
       # Revoke in this process: clear_next_action dispatches
@@ -52,9 +52,9 @@ defmodule Systems.Desktop.PageTest do
     end
 
     test "without contributed sections, Desktop shows only Recent items", %{conn: conn} do
-      put_env(Systems.Desktop, sections: [])
+      put_sections([])
 
-      {:ok, view, html} = live(conn, ~p"/desktop")
+      {:ok, view, html} = live(conn, ~m"/desktop")
 
       assert html =~ "Recent items"
       refute has_element?(view, "[id^=desktop_section_]")
@@ -63,7 +63,7 @@ defmodule Systems.Desktop.PageTest do
     test "a contributed section shows after Recent items", %{conn: conn} do
       contribute_test_section(message: "Hello from the test section")
 
-      {:ok, view, html} = live(conn, ~p"/desktop")
+      {:ok, view, html} = live(conn, ~m"/desktop")
 
       assert has_element?(view, "#desktop_section_test", "Test section")
       assert has_element?(view, "#desktop_section_test", "Hello from the test section")
@@ -79,7 +79,7 @@ defmodule Systems.Desktop.PageTest do
         placement: :before_recent_items
       )
 
-      {:ok, view, html} = live(conn, ~p"/desktop")
+      {:ok, view, html} = live(conn, ~m"/desktop")
 
       assert has_element?(view, "#desktop_section_test", "Hello from the test section")
 
@@ -92,7 +92,7 @@ defmodule Systems.Desktop.PageTest do
     test "a section without a view model is hidden", %{conn: conn} do
       contribute_test_section([])
 
-      {:ok, view, _html} = live(conn, ~p"/desktop")
+      {:ok, view, _html} = live(conn, ~m"/desktop")
 
       refute has_element?(view, "#desktop_section_test")
     end
@@ -103,7 +103,7 @@ defmodule Systems.Desktop.PageTest do
         full_list: %{label: "See all notes", to: "/todo"}
       )
 
-      {:ok, view, _html} = live(conn, ~p"/desktop")
+      {:ok, view, _html} = live(conn, ~m"/desktop")
 
       link = "#desktop_section_test [data-testid=section-full-list]"
       assert has_element?(view, "#{link}[href='/todo']", "See all notes")
@@ -114,7 +114,7 @@ defmodule Systems.Desktop.PageTest do
 
     test "a section without a full-list destination has no header action", %{conn: conn} do
       contribute_test_section(message: "Preview")
-      {:ok, view, _html} = live(conn, ~p"/desktop")
+      {:ok, view, _html} = live(conn, ~m"/desktop")
       refute has_element?(view, "#desktop_section_test [data-testid=section-full-list]")
     end
 
@@ -123,7 +123,7 @@ defmodule Systems.Desktop.PageTest do
       override_signal_handlers(Mica.SaaS.signal_handlers() ++ [Desktop.TestSection.Switch])
       on_exit(&restore_signal_handlers/0)
 
-      {:ok, view, _html} = live(conn, ~p"/desktop")
+      {:ok, view, _html} = live(conn, ~m"/desktop")
       assert has_element?(view, "#desktop_section_test", "Before")
 
       put_env(Desktop.TestSection, message: "After")
@@ -134,8 +134,13 @@ defmodule Systems.Desktop.PageTest do
   end
 
   defp contribute_test_section(config) do
-    put_env(Systems.Desktop, sections: [Desktop.TestSection])
+    put_sections([Desktop.TestSection])
     put_env(Desktop.TestSection, config)
+  end
+
+  defp put_sections(sections) do
+    previous = Mica.SaaS.put_composition(desktop_sections: sections)
+    on_exit(fn -> Mica.SaaS.put_composition(previous) end)
   end
 
   defp put_env(key, value) do

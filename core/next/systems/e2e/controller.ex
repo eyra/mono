@@ -18,7 +18,7 @@ defmodule Next.Frameworks.E2E.Controller do
     "pdf_assignment_path": "/a/pdf123"
   }
   """
-  use MicaWeb, {:controller, [formats: [:json]]}
+  use NextWeb, {:controller, [formats: [:json]]}
   use Mica.FeatureFlags
 
   require Logger

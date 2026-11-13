@@ -227,7 +227,7 @@ defmodule Systems.Content.Html do
               <div class="flex flex-row items-center gap-4">
                 <%= if @back_path do %>
                   <a href={@back_path} class="text-grey2 hover:text-primary">
-                    <img src={~p"/images/icons/back.svg"} alt="Back" class="w-6 h-6" />
+                    <img src={~m"/images/icons/back.svg"} alt="Back" class="w-6 h-6" />
                   </a>
                 <% end %>
                 <Text.title2><%= @title %></Text.title2>

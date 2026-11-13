@@ -26,7 +26,7 @@ defmodule Systems.Assignment.LandingPage do
 
   @impl true
   def handle_event("continue", _params, %{assigns: %{id: id}} = socket) do
-    {:noreply, socket |> push_navigate(to: ~p"/assignment/#{id}/join")}
+    {:noreply, socket |> push_navigate(to: ~m"/assignment/#{id}/join")}
   end
 
   @impl true

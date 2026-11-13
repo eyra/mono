@@ -60,7 +60,7 @@ defmodule Systems.Assignment.StorageView do
 
   def update_storage_button(%{assigns: %{storage_endpoint: %{id: endpoint_id}}} = socket) do
     storage_button = %{
-      action: %{type: :redirect, to: ~p"/storage/endpoint/#{endpoint_id}/content"},
+      action: %{type: :redirect, to: ~m"/storage/endpoint/#{endpoint_id}/content"},
       face: %{
         type: :plain,
         icon: :forward,

@@ -28,12 +28,12 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("handle_item_click", %{"item" => org_id}, socket) do
-    {:noreply, push_navigate(socket, to: ~p"/org/node/#{org_id}")}
+    {:noreply, push_navigate(socket, to: ~m"/org/node/#{org_id}")}
   end
 
   @impl true
   def handle_event("card_clicked", %{"item" => org_id}, socket) do
-    {:noreply, push_navigate(socket, to: ~p"/org/node/#{org_id}")}
+    {:noreply, push_navigate(socket, to: ~m"/org/node/#{org_id}")}
   end
 
   @impl true
@@ -50,7 +50,7 @@ defmodule Systems.Admin.OrgView do
     {
       :noreply,
       socket
-      |> push_navigate(to: ~p"/org/node/#{org_id}")
+      |> push_navigate(to: ~m"/org/node/#{org_id}")
     }
   end
 

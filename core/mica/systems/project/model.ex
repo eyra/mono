@@ -59,7 +59,7 @@ defmodule Systems.Project.Model do
            {Project.OverviewPage, :card},
            _user
          ) do
-      path = ~p"/project/node/#{root_node_id}"
+      path = ~m"/project/node/#{root_node_id}"
 
       people = %{
         action: %{type: :send, event: "setup_people", item: id},

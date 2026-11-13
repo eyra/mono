@@ -35,7 +35,7 @@ defmodule Systems.Account.UserAuth do
     # straight to their return_to via `redirect_path_after_signin/2`.
     redirect_to =
       if first_time? do
-        ReturnTo.append(~p"/user/onboarding", get_session(conn, :user_return_to))
+        ReturnTo.append(~m"/user/onboarding", get_session(conn, :user_return_to))
       else
         redirect_path_after_signin(conn, user)
       end
@@ -116,7 +116,7 @@ defmodule Systems.Account.UserAuth do
   def log_out_user(conn) do
     conn
     |> sign_out_current_user()
-    |> redirect(to: ~p"/user/signin")
+    |> redirect(to: ~m"/user/signin")
   end
 
   @doc """
@@ -218,7 +218,7 @@ defmodule Systems.Account.UserAuth do
   defp signin_path(_conn, :user), do: Mica.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
-    do: ReturnTo.append(~p"/user/auth/identify/participant", current_path(conn))
+    do: ReturnTo.append(~m"/user/auth/identify/participant", current_path(conn))
 
   defp signin_path(conn, :member), do: Mica.SaaS.module().member_sign_in_page(current_path(conn))
 

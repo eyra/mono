@@ -79,7 +79,7 @@ defmodule Systems.Account.Auth.Centerdata.CallbackController do
             "user_id" => user.id,
             "userinfo" => userinfo
           })
-          |> redirect(to: ~p"/auth/centerdata/transfer")
+          |> redirect(to: ~m"/auth/centerdata/transfer")
 
         {:ok, %{user: user, first_time?: first_time?}} ->
           log_in_user(config, conn, user, first_time?)

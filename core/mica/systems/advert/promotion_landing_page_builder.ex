@@ -89,19 +89,19 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
         } = socket
       ) do
     Promotion.Private.log_performance_event(promotion, :clicks)
-    apply_path = ~p"/assignment/#{id}/apply"
+    apply_path = ~m"/assignment/#{id}/apply"
     slug = Pool.Model.slug(pool)
 
     cond do
       is_nil(current_user) ->
-        join_path = ReturnTo.append(~p"/pool/#{slug}/join", apply_path)
-        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/user/auth/identify", join_path))
+        join_path = ReturnTo.append(~m"/pool/#{slug}/join", apply_path)
+        LiveView.push_navigate(socket, to: ReturnTo.append(~m"/user/auth/identify", join_path))
 
       Pool.Public.participant?(pool, current_user) ->
         LiveView.push_navigate(socket, to: apply_path)
 
       true ->
-        LiveView.push_navigate(socket, to: ReturnTo.append(~p"/pool/#{slug}/join", apply_path))
+        LiveView.push_navigate(socket, to: ReturnTo.append(~m"/pool/#{slug}/join", apply_path))
     end
   end
 end

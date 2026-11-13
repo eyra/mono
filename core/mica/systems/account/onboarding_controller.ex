@@ -22,12 +22,12 @@ defmodule Systems.Account.OnboardingController do
 
         conn
         |> Account.UserAuth.log_in_user_without_redirect(user)
-        |> redirect(to: ~p"/user/onboarding")
+        |> redirect(to: ~m"/user/onboarding")
 
       {:error, _reason} ->
         conn
         |> put_flash(:error, dgettext("eyra-account", "onboarding.token.invalid"))
-        |> redirect(to: ~p"/user/signin")
+        |> redirect(to: ~m"/user/signin")
     end
   end
 

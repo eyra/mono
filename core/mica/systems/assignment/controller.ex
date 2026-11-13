@@ -38,7 +38,7 @@ defmodule Systems.Assignment.Controller do
     Process.sleep(100)
 
     conn
-    |> redirect(to: ~p"/assignment/#{id}")
+    |> redirect(to: ~m"/assignment/#{id}")
   end
 
   def invite(conn, %{"id" => id}), do: participate(conn, id)
@@ -275,7 +275,7 @@ defmodule Systems.Assignment.Controller do
     conn
     |> authorize_user(assignment)
     |> add_panel_info(assignment)
-    |> redirect(to: ~p"/assignment/#{id}")
+    |> redirect(to: ~m"/assignment/#{id}")
   end
 
   defp add_panel_info(%{assigns: %{current_user: user}} = conn, assignment) do

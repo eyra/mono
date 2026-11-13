@@ -74,7 +74,7 @@ defmodule Systems.Home.AdvertsView do
           <.link navigate={@more_path}>
             <div class="flex flex-row items-center gap-2 text-button font-button text-primary">
               <%= dgettext("eyra-pool", "marketplace.see_all") %>
-              <img src={~p"/images/icons/forward.svg"} alt="" />
+              <img src={~m"/images/icons/forward.svg"} alt="" />
             </div>
           </.link>
         </div>

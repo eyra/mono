@@ -3,13 +3,6 @@ defmodule Systems.Notify.EventTypeTest do
 
   alias Systems.Notify.EventType
 
-  setup do
-    # Ensure the persistent_term cache is fresh — other tests may have primed it
-    on_exit(fn -> EventType.reset() end)
-    EventType.reset()
-    :ok
-  end
-
   test "channels_for/1 reads from configured notifiers" do
     assert EventType.channels_for(:contribution_accepted) == [:email, :na]
     assert EventType.channels_for(:contribution_declined) == [:email, :na]

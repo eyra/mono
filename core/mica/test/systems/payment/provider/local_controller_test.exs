@@ -19,7 +19,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
     test "renders the simulator with a complete and a fail action", %{conn: conn} do
       %{transaction: transaction} = setup_transaction()
 
-      html = conn |> get(~p"/payment/local/#{transaction.transaction_id}") |> html_response(200)
+      html = conn |> get(~m"/payment/local/#{transaction.transaction_id}") |> html_response(200)
 
       assert html =~ transaction.transaction_id
       assert html =~ "local-payment-complete-button"
@@ -60,7 +60,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
 
     test "404s on an unknown provider uid", %{conn: conn} do
       %{transaction: transaction} = setup_transaction()
-      conn = get(conn, ~p"/payment/local/#{transaction.transaction_id}")
+      conn = get(conn, ~m"/payment/local/#{transaction.transaction_id}")
 
       assert_error_sent(404, fn ->
         post(recycle(conn), "/payment/local/does-not-exist/complete", %{
@@ -93,7 +93,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   # The simulator posts from its own rendered form, so drive it the same way:
   # GET the page to establish the session, then post back its CSRF token.
   defp simulate(conn, %{transaction_id: uid}, action) do
-    conn = get(conn, ~p"/payment/local/#{uid}")
+    conn = get(conn, ~m"/payment/local/#{uid}")
 
     recycle(conn)
     |> post("/payment/local/#{uid}/#{action}", %{"_csrf_token" => csrf_token(conn)})

@@ -15,7 +15,7 @@ defmodule Systems.Pool.MarketplacePage do
     if Pool.Public.participant?(pool, user) do
       {:ok, socket |> compose_child(:marketplace_view)}
     else
-      {:ok, socket |> push_navigate(to: ~p"/")}
+      {:ok, socket |> push_navigate(to: ~m"/")}
     end
   end
 

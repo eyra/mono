@@ -52,10 +52,5 @@ defmodule Systems.Desktop.PageBuilder do
 
   defp placed(sections, placement), do: Enum.filter(sections, &(&1.placement == placement))
 
-  # The SaaS's sections, unless a test overrides them with
-  # `config :mica, Systems.Desktop, sections: [...]`.
-  defp section_modules do
-    Mica.Env.get(Systems.Desktop, [])
-    |> Keyword.get_lazy(:sections, &Mica.SaaS.desktop_sections/0)
-  end
+  defp section_modules, do: Mica.SaaS.desktop_sections()
 end

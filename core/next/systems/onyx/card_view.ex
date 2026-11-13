@@ -1,5 +1,5 @@
 defmodule Next.Systems.Onyx.CardView do
-  use MicaWeb, :html
+  use NextWeb, :html
 
   import Frameworks.Pixel.Tag
   import Frameworks.Pixel.ClickableCard

@@ -13,7 +13,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
     * `signal.exs`: signal handlers (in order), notifiers and notify channels
     * `flags.exs`: the effective feature flags at compile time
     * `saas_config.exs`: the `Mica.SaaS` callbacks (start pages, menus, title,
-      signed-in pages), the SaaS app config and account and admin tab order
+      signed-in pages), the SaaS app config, account and admin tab order, Desktop
+      sections and assignment templates
     * `runtime.exs`: the children `Mica.Application` starts, and per env fixture
       of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
       unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
@@ -34,6 +35,9 @@ defmodule Mix.Tasks.Nova.Snapshot do
       mix nova.snapshot --update                     # rewrite the snapshots
 
   Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+  Before rendering, the task runs the boot's composition checks
+  (`Mica.SaaS.validate!/0`) and the Mica path check (`MicaWeb.PathCheck`): every
+  `~m` must match a route of the build's router that Mica serves.
 
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
@@ -57,6 +61,10 @@ defmodule Mix.Tasks.Nova.Snapshot do
     Mix.Task.run("compile")
 
     saas = saas!()
+    # The checks a boot runs, and the Mica path check: the Self build has no tests
+    # of its own (snapshot-self CI job).
+    Mica.SaaS.validate!()
+    check_mica_paths!()
     started = System.monotonic_time(:millisecond)
 
     failures =
@@ -92,6 +100,16 @@ defmodule Mix.Tasks.Nova.Snapshot do
       The #{saas} build differs from its Nova snapshots. If the change is intended,
       run `#{update_command(saas)}` and commit the reviewed diff.
       """)
+    end
+  end
+
+  # Every Mica path (`~m`) must match a route of this build's router that Mica serves.
+  defp check_mica_paths! do
+    router = MicaWeb.Router
+
+    case MicaWeb.PathCheck.unmatched(router) do
+      [] -> Mix.shell().info("nova.snapshot: every Mica path matches #{inspect(router)}")
+      issues -> Mix.raise(MicaWeb.PathCheck.format(issues, router))
     end
   end
 
@@ -211,7 +229,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       [
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
         admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids(),
-        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id())
+        desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id()),
+        assignment_templates: Systems.Assignment.TemplateExtension.all()
       ]
   end
 

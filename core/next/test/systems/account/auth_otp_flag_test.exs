@@ -1,5 +1,6 @@
 defmodule Next.Systems.Account.AuthOtpFlagTest do
   use MicaWeb.ConnCase, async: false
+  use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest
