@@ -102,10 +102,11 @@ defmodule Systems.Consent.Public do
       on: r.id == s.revision_id,
       where: s.user_id == ^user_id,
       where: r.agreement_id == ^agreement_id,
+      order_by: [desc: r.id],
+      limit: 1,
       preload: [:revision]
     )
-    |> Repo.all()
-    |> List.last()
+    |> Repo.one()
   end
 
   def get_signature(%Consent.RevisionModel{id: revision_id}, user_ref) do
