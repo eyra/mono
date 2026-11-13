@@ -42,8 +42,6 @@ defmodule Systems.Home.PageBuilder do
 
   # For logged in users
   def view_model(_, %{current_user: user} = assigns) do
-    panl_member? = Pool.Public.participant?(:panl, user)
-
     %{
       hero: %{
         type: :landing_page,
@@ -54,29 +52,31 @@ defmodule Systems.Home.PageBuilder do
       active_menu_item: :home,
       next_best_action: NextAction.Public.next_best_action(user),
       view_type: :logged_in,
-      blocks: blocks(user, assigns, panl_member?: panl_member?),
+      blocks: blocks(user, assigns),
       include_right_sidepadding?: false
     }
   end
 
-  defp block_keys(%Account.User{}, opts) do
-    panl_member? = Keyword.get(opts, :panl_member?, false)
-
+  @doc """
+  The blocks of the home of a signed-in user, in order, behind the home's feature
+  flags. The web home and the BFF's home page (`Systems.Home.BFFPage`) both show these.
+  """
+  def block_keys(%Account.User{} = user) do
     [:next_best_action]
     |> append_if(:rewards_summary, feature_enabled?(:panl_post_launch))
-    |> append_if(:panl_marketplace, feature_enabled?(:panl_post_launch) and panl_member?)
+    |> append_if(
+      :panl_marketplace,
+      feature_enabled?(:panl_post_launch) and Pool.Public.participant?(:panl, user)
+    )
     |> append_if(:participated, feature_enabled?(:panl_post_launch))
   end
 
-  defp blocks(model, assigns, opts) do
-    block_keys(model, opts)
-    |> Enum.map(&{&1, block(&1, model, assigns, opts)})
-    |> Enum.reject(fn {_, map} -> map == nil end)
-  end
-
-  defp block(:rewards_summary, %Account.User{} = user, _assigns, _opts) do
+  @doc """
+  The user's reward totals per status with their `payout_status`, or nil when there
+  are no rewards and no unresolved payout.
+  """
+  def rewards_summary(%Account.User{} = user) do
     case {Fund.Public.summarize_rewards(user, @payout_currency), Fund.Public.payout_status(user)} do
-      # No rewards and no unresolved payout — nothing to show.
       {%{
          pending_cents: 0,
          approved_cents: 0,
@@ -86,13 +86,56 @@ defmodule Systems.Home.PageBuilder do
        }, :none} ->
         nil
 
-      {%{approved_cents: approved_cents} = totals, payout_status} ->
+      {totals, payout_status} ->
+        Map.put(totals, :payout_status, payout_status)
+    end
+  end
+
+  @doc "The assignments the user took part in, as content items."
+  def participated(%Account.User{} = user) do
+    Assignment.Public.list_by_participant(user, Assignment.Model.preload_graph(:down))
+    |> Enum.map(&to_content_item(&1, user))
+  end
+
+  @doc """
+  The Panl marketplace: up to #{@home_card_limit} cards of the studies open to the
+  user, the count of all of them and the path to the whole marketplace.
+  """
+  def panl_marketplace(%Account.User{} = user, assigns) do
+    %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
+
+    adverts =
+      Advert.Public.list_by_pool_and_status(panl, :online,
+        preload: Advert.Model.preload_graph(:down)
+      )
+      |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
+
+    %{
+      title: dgettext("eyra-pool", "marketplace.title"),
+      cards: adverts |> Enum.take(@home_card_limit) |> Enum.map(&to_card(&1, assigns)),
+      count: Enum.count(adverts),
+      more_path: ~m"/pool/#{panl_id}/marketplace",
+      pool_slug: Pool.Model.slug(panl)
+    }
+  end
+
+  defp blocks(user, assigns) do
+    block_keys(user)
+    |> Enum.map(&{&1, block(&1, user, assigns)})
+    |> Enum.reject(fn {_, map} -> map == nil end)
+  end
+
+  defp block(:rewards_summary, %Account.User{} = user, _assigns) do
+    case rewards_summary(user) do
+      nil ->
+        nil
+
+      %{approved_cents: approved_cents} = summary ->
         %{
           module: Home.RewardsSummaryView,
           params:
-            totals
+            summary
             |> Map.put(:labels, rewards_summary_labels(approved_cents))
-            |> Map.put(:payout_status, payout_status)
             |> Map.put(:user, user)
             |> Map.put(:payout_currency, @payout_currency)
             |> Map.put(:donate_enabled?, feature_enabled?(:opp_phase_3))
@@ -100,7 +143,7 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:next_best_action, %Account.User{} = user, _assigns, _opts) do
+  defp block(:next_best_action, %Account.User{} = user, _assigns) do
     if next_best_action = NextAction.Public.next_best_action(user) do
       %{
         module: Home.NextBestActionView,
@@ -113,53 +156,27 @@ defmodule Systems.Home.PageBuilder do
     end
   end
 
-  defp block(:participated, %Account.User{} = user, _assigns, _opts) do
-    content_items =
-      Assignment.Public.list_by_participant(user, Assignment.Model.preload_graph(:down))
-      |> Enum.map(&to_content_item(&1, user))
+  defp block(:participated, %Account.User{} = user, _assigns) do
+    case participated(user) do
+      [] ->
+        nil
 
-    if Enum.empty?(content_items) do
-      nil
-    else
-      %{
-        module: Home.ParticipatedView,
-        params: %{
-          content_items: content_items,
-          labels: participated_labels()
+      content_items ->
+        %{
+          module: Home.ParticipatedView,
+          params: %{
+            content_items: content_items,
+            labels: participated_labels()
+          }
         }
-      }
     end
   end
 
-  defp block(:panl_marketplace, %Account.User{} = user, assigns, _opts) do
-    %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
-
-    adverts =
-      Advert.Public.list_by_pool_and_status(panl, :online,
-        preload: Advert.Model.preload_graph(:down)
-      )
-      |> Enum.filter(&(Advert.Public.validate_open(&1, user) == :ok))
-
-    cards =
-      adverts
-      |> Enum.take(@home_card_limit)
-      |> Enum.map(&to_card(&1, assigns))
-
-    %{
-      module: Home.AdvertsView,
-      params: %{
-        title: dgettext("eyra-pool", "marketplace.title"),
-        cards: cards,
-        count: Enum.count(adverts),
-        more_path: ~m"/pool/#{panl_id}/marketplace",
-        pool_slug: Pool.Model.slug(panl)
-      }
-    }
+  defp block(:panl_marketplace, %Account.User{} = user, assigns) do
+    %{module: Home.AdvertsView, params: panl_marketplace(user, assigns)}
   end
 
-  defp block(_, _, _assigns, _opts), do: nil
-
-  defp rewards_summary_labels(approved_cents) do
+  def rewards_summary_labels(approved_cents) do
     %{
       title: dgettext("eyra-fund", "rewards_summary.title"),
       pending_pill: dgettext("eyra-fund", "rewards_summary.pending.pill"),
@@ -200,7 +217,7 @@ defmodule Systems.Home.PageBuilder do
     }
   end
 
-  defp participated_labels do
+  def participated_labels do
     %{
       title: dgettext("eyra-home", "participated.title"),
       reward_label: dgettext("eyra-home", "participated.reward.label"),
