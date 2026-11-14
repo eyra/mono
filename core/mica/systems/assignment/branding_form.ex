@@ -56,7 +56,7 @@ defmodule Systems.Assignment.BrandingForm do
       params: %{
         viewport: viewport,
         breakpoint: breakpoint,
-        static_path: &MicaWeb.Endpoint.static_path/1,
+        static_path: &Mica.SaaS.endpoint().static_path(&1),
         initial_query: title,
         image_catalog: image_catalog(),
         state: state
@@ -170,7 +170,7 @@ defmodule Systems.Assignment.BrandingForm do
           <Text.title5 align="text-left"><%= dgettext("eyra-assignment", "settings.logo.title") %></Text.title5>
           <.spacing value="XS" />
           <.photo_input
-            static_path={&MicaWeb.Endpoint.static_path/1}
+            static_path={&Mica.SaaS.endpoint().static_path(&1)}
             photo_url={@entity.logo_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-assignment", "choose.logo.file")}

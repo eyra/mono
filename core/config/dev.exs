@@ -89,31 +89,6 @@ config :mica, Mica.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-config :mica, MicaWeb.Endpoint,
-  reloadable_compilers: [:elixir],
-  force_ssl: false,
-  debug_errors: true,
-  code_reloader: true,
-  check_origin: false,
-  live_reload: [
-    patterns: [
-      ~r"priv/static/(?!uploads)/.*(js|css|png|jpeg|jpg|gif|svg)$",
-      ~r"priv/gettext/.*(po)$",
-      ~r"lib/mica_web/(live|views|components)/.*(ex|sface|js)$",
-      ~r"lib/mica_web/templates/*/.*(eex)$",
-      ~r"systems/*/.*(ex)$",
-      ~r"systems/*/templates/.*(eex)$",
-      ~r"frameworks/*/.*(ex)$",
-      ~r"frameworks/*/templates/.*(eex)$",
-      ~r"(next|mica_saas)/lib/.*(ex)$",
-      ~r"(mica|next)/storybook/.*(exs)$"
-    ]
-  ],
-  watchers: [
-    esbuild: {Esbuild, :install_and_run, [:default, ~w(--sourcemap=inline --watch)]},
-    tailwind: {Tailwind, :install_and_run, [:default, ~w(--watch)]}
-  ]
-
 # Every Oban plugin and cron of Mica and the systems runs (Mica.ObanConfig).
 config :mica, :oban_plugins, enabled: :all
 
@@ -182,15 +157,14 @@ rescue
     nil
 end
 
-# HTTP_PORT moves this server off 4000, e.g. for a second local Mica. Set after
-# dev.secret.exs, so the port set here wins over the one there; without
-# HTTP_PORT that file's port and Google redirect stay.
+# HTTP_PORT moves this server off 4000, e.g. for a second local Mica (runtime.exs
+# moves the endpoint). Set after dev.secret.exs, so the Google redirect set here
+# wins over the one there; without HTTP_PORT that file's port and Google
+# redirect stay.
 http_port = System.get_env("HTTP_PORT")
 local_url = "http://localhost:#{http_port || 4000}"
 
 if http_port do
-  config :mica, MicaWeb.Endpoint, http: [port: String.to_integer(http_port)]
-
   config :mica, Systems.Account.Auth.Google, redirect_uri: "#{local_url}/auth/google/callback"
 end
 

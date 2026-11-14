@@ -63,8 +63,10 @@ defmodule Mica.RuntimeConfig.Check do
     end
   end
 
+  # The SaaS module names the endpoint: the app isn't started, so there is no
+  # composition to ask (`Mica.SaaS.endpoint/0`).
   defp endpoint(app) do
-    case app[MicaWeb.Endpoint][:secret_key_base] do
+    case app[Mica.SaaS.module().endpoint()][:secret_key_base] do
       key when is_binary(key) and byte_size(key) >= 64 -> []
       key when is_binary(key) -> ["SECRET_KEY_BASE: must be at least 64 bytes"]
       _ -> ["SECRET_KEY_BASE: not set"]

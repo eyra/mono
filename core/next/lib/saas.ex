@@ -47,6 +47,9 @@ defmodule Next.SaaS do
   end
 
   @impl true
+  def endpoint, do: NextWeb.Endpoint
+
+  @impl true
   def start_pages, do: Next.StartPages
 
   @impl true

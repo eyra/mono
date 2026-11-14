@@ -70,6 +70,23 @@ if System.get_env("APPSIGNAL_SEND_SESSION_DATA") not in [nil, "false"] do
   raise "APPSIGNAL_SEND_SESSION_DATA must be unset or false: the session can carry participant ids and the session token"
 end
 
+# The endpoint of the SaaS that runs (`config :mica, saas:`). Its build-time
+# config is in the SaaS's config file; here it gets its port and, on a
+# deployment, its URL and secret.
+endpoint = Mica.SaaS.module().endpoint()
+
+# HTTP_PORT moves a dev server off 4000. Set here, so it wins over the port in
+# dev.secret.exs.
+if config_env() == :dev and System.get_env("HTTP_PORT") do
+  config :mica, endpoint, http: [port: String.to_integer(System.get_env("HTTP_PORT"))]
+end
+
+# Feature tests reach the endpoint at base_url, which FEATURE_TEST_SESSION sets
+# (config/test.exs).
+if config_env() == :test do
+  config :mica, endpoint, http: [port: URI.parse(Application.fetch_env!(:mica, :base_url)).port]
+end
+
 if config_env() == :prod do
   env = System.get_env()
 
@@ -102,7 +119,7 @@ if config_env() == :prod do
          :admins,
          System.get_env("APP_ADMINS", "") |> String.split() |> Systems.Admin.Public.compile()
 
-  config :mica, MicaWeb.Endpoint,
+  config :mica, endpoint,
     cache_static_manifest: "priv/static/cache_manifest.json",
     server: true,
     secret_key_base: System.fetch_env!("SECRET_KEY_BASE"),

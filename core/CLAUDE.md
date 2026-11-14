@@ -549,7 +549,8 @@ def process_data(list) when is_list(list), do: {:list, list}  # Wrong: same arit
 ## SaaS selection
 The build composes one SaaS on Mica:
 - `BUNDLE=next` (default) or `BUNDLE=self` picks the SaaS config that `config/config.exs` imports: `next/config/config.exs` or `mica_saas/config/config.exs`. Each sets `config :mica, saas: Next.SaaS` or `MicaSaas.SaaS`. Mica reads it at runtime: `Mica.SaaS.validate!/0` checks and caches the composition at boot. Only the router still reads it at compile time.
-- The SaaS module (`next/lib/saas.ex`, `mica_saas/lib/saas.ex`) lists its systems and carries the SaaS-level config: start pages, menus, title, signed-in pages, feature flag defaults.
+- The SaaS module (`next/lib/saas.ex`, `mica_saas/lib/saas.ex`) lists its systems and carries the SaaS-level config: its endpoint, start pages, menus, title, signed-in pages, feature flag defaults.
+- Each SaaS has its own endpoint, `NextWeb.Endpoint` or `MicaSaasWeb.Endpoint`, built with `use MicaWeb.Endpoint`. Its build-time config is in the SaaS's config file; `config/runtime.exs` sets its port and, on a deployment, its URL and secret. Mica code reaches it only through `Mica.SaaS.endpoint()`.
 - A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Systems.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
 - `config/test.exs` always builds Next. Run Self with `BUNDLE=self MIX_ENV=dev`.
 

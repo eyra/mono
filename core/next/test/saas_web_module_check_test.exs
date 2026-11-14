@@ -46,7 +46,7 @@ defmodule Next.SaasWebModuleCheckTest do
     defmodule Example do
       use NextWeb, {:controller, [formats: [:json]]}
       use MicaWeb.LiveForm
-      use MicaWeb.Web, router: MicaWeb.Router, endpoint: MicaWeb.Endpoint
+      use MicaWeb.Web, router: MicaWeb.Router, endpoint: NextWeb.Endpoint
     end
     """
     |> to_source_file("next/systems/widget/controller.ex")

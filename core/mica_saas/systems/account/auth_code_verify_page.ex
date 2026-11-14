@@ -10,7 +10,7 @@ defmodule MicaSaas.Systems.Account.AuthCodeVerifyPage do
   import MicaWeb.Layouts.Stripped.Composer
   import MicaWeb.Menus
 
-  alias MicaWeb.Endpoint
+  alias MicaSaasWeb.Endpoint
   alias MicaWeb.ReturnTo
   alias Frameworks.Pixel.Button
   alias Frameworks.Utility.Params

@@ -51,7 +51,7 @@ defmodule Mica.Application do
       Mica.SaaS.children() ++
       [
         {Oban, oban_config(Mica.Env.fetch!(Oban), Mica.Env.get(:oban_plugins, []))},
-        MicaWeb.Endpoint,
+        Mica.SaaS.endpoint(),
         {Rate.Server, rate_config(Mica.Env.fetch!(:rate))}
       ]
   end

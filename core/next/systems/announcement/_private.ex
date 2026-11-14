@@ -13,7 +13,7 @@ defmodule Next.Systems.Announcement.Private do
   def list_path, do: "/announcements"
 
   @doc "The full address of the announcement page, for use outside Next such as in email."
-  def page_url(announcement_id), do: MicaWeb.Endpoint.url() <> page_path(announcement_id)
+  def page_url(announcement_id), do: NextWeb.Endpoint.url() <> page_path(announcement_id)
 
   @doc """
   The path of the page to compose a new announcement (`:new`) or to open one, a

@@ -99,7 +99,8 @@ defmodule Next.Systems.Graphite.LeaderboardSubmissionsForm do
     download_button = %{
       action: %{
         type: :http_get,
-        to: ~p"/graphite/#{id}/export/submissions",
+        # Self composes this system too: build the path for the running SaaS's endpoint.
+        to: path(Mica.SaaS.endpoint(), ~p"/graphite/#{id}/export/submissions"),
         target: "_blank"
       },
       face: %{

@@ -103,7 +103,7 @@ defmodule Systems.Manual.Builder.PageForm do
       <.form id={"#{@id}_title_form"} :let={form} for={@changeset} phx-change="save" phx-submit="save" phx-target={@myself} >
         <.spacing value="M" />
         <.image_input
-            static_path={&MicaWeb.Endpoint.static_path/1}
+            static_path={&Mica.SaaS.endpoint().static_path(&1)}
             image_url={@image_url}
             uploads={@uploads}
             primary_button_text={dgettext("eyra-manual", "choose.image.file")}

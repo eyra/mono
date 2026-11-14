@@ -21,7 +21,7 @@ defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
       params: %{
         viewport: nil,
         breakpoint: nil,
-        static_path: &MicaWeb.Endpoint.static_path/1,
+        static_path: &Mica.SaaS.endpoint().static_path(&1),
         image_catalog: Mica.ImageCatalog.Local,
         initial_query: "",
         state: nil

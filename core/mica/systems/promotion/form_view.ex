@@ -198,7 +198,7 @@ defmodule Systems.Promotion.FormView do
       <.form id={"bottom_#{@id}"} :let={form} for={@changeset} phx-change="save" phx-target={@myself}>
         <Text.title3><%= dgettext("eyra-promotion", "banner.title") %></Text.title3>
         <.photo_input
-          static_path={&MicaWeb.Endpoint.static_path/1}
+          static_path={&Mica.SaaS.endpoint().static_path(&1)}
           photo_url={@entity.banner_photo_url}
           uploads={@uploads}
           primary_button_text={dgettext("eyra-promotion", "choose.banner.photo.file")}

@@ -32,10 +32,10 @@ defmodule Systems.Account.OnboardingController do
   end
 
   defp verify_token(token) do
-    Phoenix.Token.verify(MicaWeb.Endpoint, @token_salt, token, max_age: @token_max_age)
+    Phoenix.Token.verify(Mica.SaaS.endpoint(), @token_salt, token, max_age: @token_max_age)
   end
 
   def generate_token(user) do
-    Phoenix.Token.sign(MicaWeb.Endpoint, @token_salt, user.id)
+    Phoenix.Token.sign(Mica.SaaS.endpoint(), @token_salt, user.id)
   end
 end

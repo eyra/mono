@@ -213,7 +213,7 @@ defmodule Systems.Promotion.LandingPage do
 
         <.advert_banner
           photo_url={@vm.banner_photo_url}
-          placeholder_photo_url={MicaWeb.Endpoint.static_path("/images/profile_photo_default.svg")}
+          placeholder_photo_url={Mica.SaaS.endpoint().static_path("/images/profile_photo_default.svg")}
           title={@vm.banner_title}
           subtitle={@vm.banner_subtitle}
           url={@vm.banner_url}
