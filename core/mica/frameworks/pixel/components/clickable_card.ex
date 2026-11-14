@@ -11,6 +11,16 @@ defmodule Frameworks.Pixel.ClickableCard do
   defp has_actions?(%{right_actions: [_ | _]}), do: true
   defp has_actions?(_), do: false
 
+  # A card named by its title is described by the rest of its content (status,
+  # tags, counts). A card without a title is named by all of its content.
+  defp description_ids(%{title: []}), do: nil
+
+  defp description_ids(%{id: id, top: top}) do
+    [if(top != [], do: "card-#{id}-top"), "card-#{id}-body"]
+    |> Enum.reject(&is_nil/1)
+    |> Enum.join(" ")
+  end
+
   # Helper function to show actions
   # The toggle that has focus hides itself, so focus moves to the other one.
   defp show_actions_js(card_id) do
@@ -102,13 +112,16 @@ defmodule Frameworks.Pixel.ClickableCard do
             role="button"
             tabindex="0"
             aria-labelledby={if @title != [], do: "card-#{@id}-title"}
+            aria-describedby={description_ids(assigns)}
             phx-hook="KeyboardClick"
             phx-target={@target}
             phx-click="card_clicked"
             phx-value-item={@id}
             data-testid={"card_#{@id}"}
           >
-            <%= render_slot(@top) %>
+            <div :if={@top != []} id={"card-#{@id}-top"}>
+              <%= render_slot(@top) %>
+            </div>
             <%= if @title != [] do %>
               <div id={"card-#{@id}-title"} class="p-6 lg:pl-8 lg:pr-8 lg:pt-8">
                 <%= render_slot(@title) %>
@@ -120,7 +133,7 @@ defmodule Frameworks.Pixel.ClickableCard do
               <div
                 class="relative pl-6 pr-6 pb-6 lg:pl-8 lg:pr-8 lg:pb-8"
               >
-                <div>
+                <div id={"card-#{@id}-body"}>
                   <%= render_slot(@inner_block) %>
                 </div>
               </div>

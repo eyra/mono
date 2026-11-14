@@ -13,6 +13,7 @@ defmodule Frameworks.Pixel.ClickableCardTest do
   defp card(assigns) do
     ~H"""
     <.clickable_card id={7} left_actions={@left_actions}>
+      <:top :if={@top?}>Concept</:top>
       <:title :if={@title?}>Project title</:title>
       Body
     </.clickable_card>
@@ -20,8 +21,8 @@ defmodule Frameworks.Pixel.ClickableCardTest do
   end
 
   defp render_card(assigns) do
-    assigns
-    |> Map.merge(%{__changed__: nil})
+    %{__changed__: nil, top?: false}
+    |> Map.merge(assigns)
     |> card()
     |> rendered_to_string()
     |> Floki.parse_fragment!()
@@ -52,10 +53,26 @@ defmodule Frameworks.Pixel.ClickableCardTest do
     assert html |> Floki.find("#card-7-title") |> Floki.text() =~ "Project title"
   end
 
-  test "a card without a title has no aria-labelledby" do
-    card = render_card(%{title?: false, left_actions: []}) |> open()
+  test "a card without a title is named by its content, not described" do
+    card = render_card(%{title?: false, top?: true, left_actions: []}) |> open()
 
     assert attribute(card, "aria-labelledby") == nil
+    assert attribute(card, "aria-label") == nil
+    assert attribute(card, "aria-describedby") == nil
+  end
+
+  test "a titled card is described by its top and its body" do
+    html = render_card(%{title?: true, top?: true, left_actions: []})
+
+    assert html |> open() |> attribute("aria-describedby") == "card-7-top card-7-body"
+    assert html |> Floki.find("#card-7-top") |> Floki.text() =~ "Concept"
+    assert html |> Floki.find("#card-7-body") |> Floki.text() =~ "Body"
+  end
+
+  test "a titled card without a top is described by its body" do
+    card = render_card(%{title?: true, left_actions: []}) |> open()
+
+    assert attribute(card, "aria-describedby") == "card-7-body"
   end
 
   test "the show and hide toggles are buttons outside the card's button" do
