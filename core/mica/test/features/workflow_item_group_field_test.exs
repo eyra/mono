@@ -9,6 +9,8 @@ defmodule MicaWeb.Features.WorkflowItemGroupFieldTest do
   use MicaWeb.FeatureCase
 
   @card_selector "[data-testid^='card_']"
+  # A project also shows its Data card; unlike that one, an item's card has actions.
+  @item_card_selector "[id^='card-']:has([data-testid^='show_more__action__card_']) [data-testid^='card_']"
   @group_field_selector "[data-testid$='_item_form_group']"
 
   @tag :feature
@@ -67,13 +69,13 @@ defmodule MicaWeb.Features.WorkflowItemGroupFieldTest do
     |> click(Query.css("[data-testid='create-first-project-button']"))
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
   end
 
   defp create_project_item(session, template) do
     session
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
+    |> click(Query.css("[data-testid='add-item-button']"))
     |> assert_has(Query.css("[data-testid='selector-item-#{template}']"))
     |> click(Query.css("[data-testid='selector-item-#{template}']"))
     |> click(Query.css("[data-testid='create-item-button']"))
@@ -81,8 +83,8 @@ defmodule MicaWeb.Features.WorkflowItemGroupFieldTest do
 
   defp open_assignment_cms(session) do
     session
-    |> assert_has(Query.css(@card_selector, count: 1))
-    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css(@item_card_selector, count: 1))
+    |> click(Query.css(@item_card_selector))
     |> assert_has(Query.css("[data-tab-fit]"))
   end
 

@@ -103,14 +103,6 @@ msgstr "Account"
 msgid "tabbar.item.settings.forward"
 msgstr "Go to Settings"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.monitor"
-msgstr "Monitor"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "tabbar.item.monitor.forward"
-msgstr "Go to Monitor"
-
 #, elixir-autogen, elixir-format
 msgid "table.date.label"
 msgstr "Date"
@@ -126,18 +118,6 @@ msgstr "Size"
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
 msgstr "Export all"
-
-#, elixir-autogen, elixir-format
-msgid "files.metric.label"
-msgstr "Files"
-
-#, elixir-autogen, elixir-format
-msgid "bytes.kb.metric.label"
-msgstr "Kilobytes"
-
-#, elixir-autogen, elixir-format
-msgid "bytes.mb.metric.label"
-msgstr "Megabytes"
 
 #, elixir-autogen, elixir-format, fuzzy
 msgid "empty.files.button"
@@ -187,10 +167,6 @@ msgstr "Finder"
 msgid "files.empty.description"
 msgstr "No files stored yet. Once files are stored you will be able to search through the files by using the finder, export all files to your device of choice and remove all files from the storage."
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "bytes.metric.label"
-msgstr "Bytes"
-
 #, elixir-autogen, elixir-format
 msgid "account.status.invalid"
 msgstr "Invalid credentials"
@@ -228,3 +204,43 @@ msgstr "Please use an address that exists on the public internet"
 #, elixir-autogen, elixir-format
 msgid "url.port_not_allowed"
 msgstr "Please use an address without a port number"
+
+#, elixir-autogen, elixir-format
+msgid "participants.description"
+msgstr "Donations grouped per participant. A session is one run of a task; the last donation is the most recent file of the participant."
+
+#, elixir-autogen, elixir-format
+msgid "participants.empty.description"
+msgstr "No donations stored yet. Once participants donate, you will see per participant their sessions, tasks and files."
+
+#, elixir-autogen, elixir-format
+msgid "participants.unknown"
+msgstr "(no participant)"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr "Participants"
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
+msgstr "Go to Participants"
+
+#, elixir-autogen, elixir-format
+msgid "table.files.label"
+msgstr "Files"
+
+#, elixir-autogen, elixir-format
+msgid "table.last_donation.label"
+msgstr "Last donation"
+
+#, elixir-autogen, elixir-format
+msgid "table.participant.label"
+msgstr "Participant"
+
+#, elixir-autogen, elixir-format
+msgid "table.sessions.label"
+msgstr "Sessions"
+
+#, elixir-autogen, elixir-format
+msgid "table.tools.label"
+msgstr "Tasks"

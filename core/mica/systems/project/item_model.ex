@@ -64,6 +64,12 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:storage_endpoint),
     do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
+  # The project's storage item is recognised by its name "Data".
+  def data?(%Project.ItemModel{name: "Data", storage_endpoint_id: id}) when not is_nil(id),
+    do: true
+
+  def data?(%Project.ItemModel{}), do: false
+
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
   end
@@ -125,7 +131,7 @@ defmodule Systems.Project.ItemModel do
         path: "/#{Concept.Leaf.resource_id(item)}/content",
         image_info: image_info(item),
         icon_url: logo_url(item),
-        label: label(Concept.Leaf.status(item)),
+        label: card_label(item),
         tags: [Concept.Leaf.tag(item)],
         info: Concept.Leaf.info(item, timezone),
         left_actions: left_actions(item),
@@ -135,22 +141,26 @@ defmodule Systems.Project.ItemModel do
 
     # ACTIONS
 
-    defp left_actions(%Project.ItemModel{id: id}) do
-      edit = %{
+    defp left_actions(%Project.ItemModel{id: id} = item) do
+      if Project.ItemModel.data?(item), do: [], else: [rename_action(id)]
+    end
+
+    defp rename_action(id) do
+      %{
         action: %{type: :send, event: "rename", item: id},
         face: %{type: :label, label: "Rename", wrap: true}
       }
-
-      [edit]
     end
 
-    defp right_actions(%Project.ItemModel{id: id}) do
-      delete = %{
+    defp right_actions(%Project.ItemModel{id: id} = item) do
+      if Project.ItemModel.data?(item), do: [], else: [delete_action(id)]
+    end
+
+    defp delete_action(id) do
+      %{
         action: %{type: :send, event: "delete", item: id},
         face: %{type: :icon, icon: :delete}
       }
-
-      [delete]
     end
 
     # IMAGE
@@ -159,11 +169,7 @@ defmodule Systems.Project.ItemModel do
       image_info(Project.ItemModel.special(item))
     end
 
-    defp image_info(%Storage.EndpointModel{}) do
-      image_info(
-        "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1622986819498-60765a6e52c0%3Fixid%3DM3w1MzYyOTF8MHwxfHNlYXJjaHwzOXx8Zm9sZGVyc3xlbnwwfHx8fDE3MTg3OTEyOTB8MA%26ixlib%3Drb-4.0.3&username=_sycthe_&name=Tanay+Shah&blur_hash=LCH%5En%5DActRkV%2AH%25yM%7BsD%5BBNMkYkU"
-      )
-    end
+    defp image_info(%Storage.EndpointModel{}), do: nil
 
     defp image_info(%Assignment.Model{info: %{image_id: image_id}}) do
       image_info(image_id)
@@ -185,9 +191,7 @@ defmodule Systems.Project.ItemModel do
       logo_url(Project.ItemModel.special(item))
     end
 
-    defp logo_url(%Storage.EndpointModel{} = storage_endpoint) do
-      Storage.EndpointModel.asset_image_src(storage_endpoint, :icon)
-    end
+    defp logo_url(%Storage.EndpointModel{}), do: nil
 
     defp logo_url(%Assignment.Model{info: %{logo_url: logo_url}}) do
       logo_url
@@ -200,11 +204,25 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
+    # The Data card shows whether donations have arrived; built-in storage is always online.
+    defp card_label(%Project.ItemModel{storage_endpoint: storage_endpoint} = item) do
+      cond do
+        not Project.ItemModel.data?(item) -> label(Concept.Leaf.status(item))
+        Storage.EndpointModel.file_count(storage_endpoint) == 0 -> label(:no_data)
+        true -> label(:has_data)
+      end
+    end
+
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
       do: label(status)
 
     defp label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
+
+    defp label(:no_data), do: %{type: :idle, text: dgettext("eyra-project", "label.no_data")}
+
+    defp label(:has_data),
+      do: %{type: :success, text: dgettext("eyra-project", "label.has_data")}
 
     defp label(:online), do: %{type: :success, text: dgettext("eyra-project", "label.online")}
 

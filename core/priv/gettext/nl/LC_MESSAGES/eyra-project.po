@@ -162,3 +162,11 @@ msgstr "Geen opslag aangemaakt"
 #, elixir-autogen, elixir-format
 msgid "admins.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.has_data"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "label.no_data"
+msgstr ""

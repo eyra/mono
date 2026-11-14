@@ -2,8 +2,7 @@ defmodule Systems.Project.NodePageBuilder do
   use Mica.FeatureFlags
 
   use Gettext, backend: MicaWeb.Gettext
-
-  alias Systems.Storage.EndpointDataView
+  use MicaWeb, :verified_routes
 
   alias Systems.Project.NodePageEmptyDataView
   alias Systems.Project.NodePageGridView
@@ -72,29 +71,17 @@ defmodule Systems.Project.NodePageBuilder do
   defp create_tab(
          :data,
          show_errors,
-         %{fabric: fabric, timezone: timezone, node: node} = _assigns
+         %{fabric: fabric, node: node} = _assigns
        ) do
-    case Enum.find(node.items, &(&1.name == "Data" and &1.storage_endpoint)) do
-      %{storage_endpoint: storage_endpoint} ->
-        ready? = true
-        branch = %Project.Branch{node_id: node.id}
-        branch_name = Concept.Branch.name(branch, :parent)
-
-        child =
-          Fabric.prepare_child(fabric, :data, EndpointDataView, %{
-            endpoint: storage_endpoint,
-            branch_name: branch_name,
-            timezone: timezone
-          })
-
+    case Enum.find(node.items, &Project.ItemModel.data?/1) do
+      %{storage_endpoint: %{id: endpoint_id}} ->
         %{
           id: :data,
-          ready: ready?,
+          ready: true,
           show_errors: show_errors,
-          title: dgettext("eyra-storage", "tabbar.item.data"),
-          forward_title: dgettext("eyra-storage", "tabbar.item.data.forward"),
+          title: dgettext("eyra-projects", "items.data"),
           type: :fullpage,
-          child: child
+          path: ~m"/storage/endpoint/#{endpoint_id}/content"
         }
 
       nil ->
@@ -107,7 +94,7 @@ defmodule Systems.Project.NodePageBuilder do
           id: :data,
           ready: false,
           show_errors: show_errors,
-          title: dgettext("eyra-storage", "tabbar.item.data"),
+          title: dgettext("eyra-projects", "items.data"),
           type: :fullpage,
           child: child
         }

@@ -10,6 +10,8 @@ defmodule MicaWeb.Features.ProjectItemDataDonationDeleteTest do
 
   # CSS selector for main cards (action buttons use {event}__action__card_{id} pattern)
   @card_selector "[data-testid^='card_']"
+  # A project also shows its Data card; unlike that one, an item's card has actions.
+  @item_card_selector "[id^='card-']:has([data-testid^='show_more__action__card_']) [data-testid^='card_']"
 
   @sessions 2
   @tag :feature
@@ -45,16 +47,16 @@ defmodule MicaWeb.Features.ProjectItemDataDonationDeleteTest do
 
     # Step 3: Create assignment
     researcher
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
+    |> click(Query.css("[data-testid='add-item-button']"))
     |> assert_has(Query.css("[data-testid='selector-item-data_donation']"))
     |> click(Query.css("[data-testid='selector-item-data_donation']"))
     |> click(Query.css("[data-testid='create-item-button']"))
 
     # Step 4: Navigate to assignment and get affiliate URL
     researcher
-    |> assert_has(Query.css(@card_selector, count: 1))
-    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css(@item_card_selector, count: 1))
+    |> click(Query.css(@item_card_selector))
     |> click_tab("assignment-tab-participants")
     |> assert_has(Query.css("[data-testid='copy-affiliate-url-button']"))
 
@@ -101,9 +103,9 @@ defmodule MicaWeb.Features.ProjectItemDataDonationDeleteTest do
       researcher |> click(Query.css("[data-testid^='delete__action__card_']"))
     end
 
-    # Wait for the card to be removed - project should now show empty state
+    # Wait for the card to be removed - only the Data card is left
     researcher
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css(@item_card_selector, count: 0))
 
     # Step 8: Participant tries to access the affiliate URL again - should get 404
     participant

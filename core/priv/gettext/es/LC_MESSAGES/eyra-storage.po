@@ -104,14 +104,6 @@ msgid "tabbar.item.settings.forward"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "tabbar.item.monitor.forward"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "table.date.label"
 msgstr ""
 
@@ -125,18 +117,6 @@ msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "export.files.button"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "files.metric.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "bytes.kb.metric.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
-msgid "bytes.mb.metric.label"
 msgstr ""
 
 #, elixir-autogen, elixir-format
@@ -188,10 +168,6 @@ msgid "files.empty.description"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "bytes.metric.label"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "account.status.invalid"
 msgstr ""
 
@@ -228,3 +204,43 @@ msgstr "Usa una dirección que exista en internet público"
 #, elixir-autogen, elixir-format
 msgid "url.port_not_allowed"
 msgstr "Usa una dirección sin número de puerto"
+
+#, elixir-autogen, elixir-format
+msgid "participants.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.empty.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "participants.unknown"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "tabbar.item.participants.forward"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.files.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.last_donation.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.participant.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.sessions.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "table.tools.label"
+msgstr ""
