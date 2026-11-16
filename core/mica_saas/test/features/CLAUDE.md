@@ -20,15 +20,20 @@ When any one is false, narrow is enough. Don't preemptively add coverage for bre
 
 ## Running feature tests
 
+Feature tests run against a SaaS's router and endpoint: Self's are here, in
+`mica_saas/test/features` (`MicaSaasWeb.FeatureCase`, run with `BUNDLE=self`), and
+Next's in `next/test/features` (`NextWeb.FeatureCase`). Mica's own tests have none.
+
 ```bash
-mix test.feature                                       # all feature tests
-mix test.feature mica/test/features/smoke_test.exs     # one file
-WALLABY_HEADLESS=false mix test.feature ...            # with a visible browser
+BUNDLE=self mix test.feature                                   # Self's feature tests
+BUNDLE=self mix test.feature mica_saas/test/features/smoke_test.exs  # one file
+mix test.feature                                               # Next's feature tests
+WALLABY_HEADLESS=false BUNDLE=self mix test.feature ...        # with a visible browser
 ```
 
 `mix test.feature` runs `test --only feature` after `assets.build` (the browser needs current CSS and JS; run `npm ci` in `core/assets` once per worktree).
 `mix test.unit` runs `test --exclude feature`.
-`mix test.ci` runs both halves + JS, each in its own Mix invocation (Mix runs `test` only once per invocation).
+`mix test.ci` runs both halves of each suite (Mica and Next, then Self with `BUNDLE=self`) + JS, each in its own Mix invocation (Mix runs `test` only once per invocation).
 
 Chrome and chromedriver must have the same major version. When they don't (e.g. brew's chromedriver lags Chrome), download a matching pair from Chrome for Testing and point Wallaby at it with `CHROMEDRIVER_PATH=<path>` and, if needed, `CHROME_BINARY=<path>`. CI does the same. A feature that needs its own Chrome settings (a locale, a phone's screen) builds them with `chrome_capabilities/1`: Wallaby drops `CHROME_BINARY` from capabilities a feature passes itself, and chromedriver then starts the system Chrome.
 
@@ -143,7 +148,7 @@ CSS attribute selector reference:
 
 ### 5. Sign in via the helper, not inline steps
 
-`MicaWeb.FeatureCase` exposes `sign_in_as_participant/3` and `sign_in_as_creator/3`. The signin page renders both tab panels in the DOM, with tab-scoped testids. The helpers pick the right ones. **Don't** inline the visit + fill + click steps.
+`MicaSaasWeb.FeatureCase` (and Next's `NextWeb.FeatureCase`) exposes `sign_in_as_participant/3` and `sign_in_as_creator/3`. The signin page renders both tab panels in the DOM, with tab-scoped testids. The helpers pick the right ones. **Don't** inline the visit + fill + click steps.
 
 ### 6. Unique testids when a component is rendered twice
 
@@ -172,8 +177,8 @@ card_id = testid |> String.replace("card_", "")
 ## File template
 
 ```elixir
-defmodule MicaWeb.Features.MyFeatureTest do
-  use MicaWeb.FeatureCase
+defmodule MicaSaasWeb.Features.MyFeatureTest do
+  use MicaSaasWeb.FeatureCase
 
   @card_selector "[data-testid^='card_']"
 
