@@ -6,7 +6,7 @@
   ],
   "read": "sh .archplan/annotators/phoenix_routes.sh .archplan/annotators/phoenix_routes.exs {ctx}",
   "params": {
-    "router": "MicaWeb.Router",
+    "router": "NextWeb.Router",
     "authn_pipelines": [
       "require_authenticated_user"
     ],
