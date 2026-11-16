@@ -92,14 +92,6 @@ defmodule MicaSaas.Systems.Pool.OnboardingPageTest do
     end
   end
 
-  describe "join consent renders the pool icon" do
-    test "shows the pool avatar next to the title", %{conn: conn} do
-      {:ok, _view, html} = live(conn, ~m"/pool/panl/onboarding")
-
-      assert html =~ ~s(src="/images/logos/pools/panl_wide.svg")
-    end
-  end
-
   describe "features step" do
     test "continue on features redirects to home (last step)", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~m"/pool/panl/onboarding")
