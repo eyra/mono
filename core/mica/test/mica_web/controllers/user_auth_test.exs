@@ -9,7 +9,7 @@ defmodule Systems.Account.UserAuthTest do
   setup %{conn: conn} do
     conn =
       conn
-      |> Map.replace!(:secret_key_base, MicaWeb.Endpoint.config(:secret_key_base))
+      |> Map.replace!(:secret_key_base, Mica.SaaS.endpoint().config(:secret_key_base))
       |> init_test_session(%{})
 
     %{user: Mica.Factories.insert!(:member), conn: conn}
@@ -124,7 +124,7 @@ defmodule Systems.Account.UserAuthTest do
 
     test "broadcasts to the given live_socket_id", %{conn: conn} do
       live_socket_id = "users_sessions:abcdef-token"
-      MicaWeb.Endpoint.subscribe(live_socket_id)
+      Mica.SaaS.endpoint().subscribe(live_socket_id)
 
       conn
       |> put_session(:live_socket_id, live_socket_id)

@@ -24,7 +24,7 @@ defmodule Systems.Email.EmailLayoutHTML do
     [{url, _} | _] =
       urls_with_scales =
       for scale <- @scales do
-        url = "#{MicaWeb.Endpoint.static_url()}/images/email-#{image_name}#{scale}.png"
+        url = "#{Mica.SaaS.endpoint().static_url()}/images/email-#{image_name}#{scale}.png"
         {url, scale}
       end
 

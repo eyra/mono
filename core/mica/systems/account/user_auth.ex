@@ -100,7 +100,7 @@ defmodule Systems.Account.UserAuth do
   """
   def sign_out_current_user(conn) do
     if live_socket_id = get_session(conn, :live_socket_id) do
-      MicaWeb.Endpoint.broadcast(live_socket_id, "disconnect", %{})
+      Mica.SaaS.endpoint().broadcast(live_socket_id, "disconnect", %{})
     end
 
     conn

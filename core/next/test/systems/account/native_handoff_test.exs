@@ -25,7 +25,7 @@ defmodule Next.Systems.Account.NativeHandoffTest do
   import Ecto.Query, only: [from: 2]
 
   alias Mica.Repo
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Next.Systems.Account.NativeHandoffTest.FakeGoogle
   alias Next.Systems.Account.NativeHandoffTest.FakeOIDC
   alias Systems.Account

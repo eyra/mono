@@ -377,7 +377,7 @@ defimpl Frameworks.Utility.ViewModelBuilder, for: Systems.Advert.Model do
 
   def get_card_icon_url(marks) do
     case marks do
-      [mark] -> MicaWeb.Endpoint.static_path("/images/#{mark}.svg")
+      [mark] -> Mica.SaaS.endpoint().static_path("/images/#{mark}.svg")
       _ -> nil
     end
   end

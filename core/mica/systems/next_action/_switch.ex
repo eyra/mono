@@ -1,8 +1,6 @@
 defmodule Systems.NextAction.Switch do
   use Frameworks.Signal.Handler
 
-  alias MicaWeb.Endpoint
-
   alias Systems.{
     NextAction
   }
@@ -28,6 +26,6 @@ defmodule Systems.NextAction.Switch do
   end
 
   defp notify_menus(%{id: user_id}) do
-    Endpoint.broadcast("next_actions:#{user_id}", "next_actions_updated", %{})
+    Mica.SaaS.endpoint().broadcast("next_actions:#{user_id}", "next_actions_updated", %{})
   end
 end

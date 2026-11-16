@@ -7,7 +7,7 @@ defmodule Next.Systems.Announcement.PageTest do
   import Phoenix.LiveViewTest
 
   alias Mica.Repo
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Frameworks.Signal
   alias Next.Systems.Announcement
   alias Next.Systems.Announcement.NextActions.ReadAnnouncement

@@ -9,7 +9,6 @@ defmodule Systems.Admin.SwitchTest do
   alias Ecto.Adapters.SQL.Sandbox
   alias Frameworks.Signal
   alias Mica.Repo
-  alias MicaWeb.Endpoint
   alias Systems.Account
   alias Systems.Admin
   alias Systems.Observatory
@@ -17,7 +16,7 @@ defmodule Systems.Admin.SwitchTest do
   describe "intercept/2" do
     setup do
       topic = "signal:#{Systems.Admin.OrgView}:singleton"
-      Endpoint.subscribe(topic)
+      Mica.SaaS.endpoint().subscribe(topic)
       {:ok, topic: topic}
     end
 
@@ -40,7 +39,7 @@ defmodule Systems.Admin.SwitchTest do
   describe "an admin's change to a user" do
     test "broadcasts an Admin.AccountView observation" do
       topic = "signal:#{Systems.Admin.AccountView}:singleton"
-      Endpoint.subscribe(topic)
+      Mica.SaaS.endpoint().subscribe(topic)
       user = Factories.insert!(:member, %{creator: true, verified_at: nil})
 
       {:ok, _} =
@@ -79,7 +78,7 @@ defmodule Systems.Admin.SwitchTest do
 
       spawn(fn ->
         Sandbox.unboxed_run(Repo, fn ->
-          Endpoint.subscribe(topic)
+          Mica.SaaS.endpoint().subscribe(topic)
           send(test_pid, :subscribed)
 
           receive do

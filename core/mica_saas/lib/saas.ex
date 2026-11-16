@@ -22,6 +22,9 @@ defmodule MicaSaas.SaaS do
   def feature_flags, do: [password_sign_in: true, member_google_sign_in: true, otp: true]
 
   @impl true
+  def endpoint, do: MicaSaasWeb.Endpoint
+
+  @impl true
   def start_pages, do: MicaSaas.StartPages
 
   @impl true

@@ -9,7 +9,7 @@ defmodule Next.Systems.Account.SignInEntryTest do
 
   import Phoenix.LiveViewTest
 
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
 
   @token_salt "otp-redeem"
 

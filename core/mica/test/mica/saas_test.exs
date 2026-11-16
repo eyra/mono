@@ -124,6 +124,7 @@ defmodule Mica.SaaSTest do
     use Mica.SaaS
     def systems, do: [SignInSystem, OtpSystem]
     def feature_flags, do: [otp: true]
+    def endpoint, do: NextWeb.Endpoint
     def start_pages, do: nil
     def menu_items, do: nil
     def menu_builder(_), do: nil
@@ -134,6 +135,7 @@ defmodule Mica.SaaSTest do
     use Mica.SaaS
     def systems, do: [SignInSystem]
     def feature_flags, do: [opt: true]
+    def endpoint, do: NextWeb.Endpoint
     def start_pages, do: nil
     def menu_items, do: nil
     def menu_builder(_), do: nil
@@ -143,6 +145,7 @@ defmodule Mica.SaaSTest do
   defmodule DuplicateSaaS do
     use Mica.SaaS
     def systems, do: [GoodSystem, GoodSystem]
+    def endpoint, do: NextWeb.Endpoint
     def start_pages, do: nil
     def menu_items, do: nil
     def menu_builder(_), do: nil
@@ -152,6 +155,7 @@ defmodule Mica.SaaSTest do
   defmodule UnknownSaaS do
     use Mica.SaaS
     def systems, do: [Mica.SaaSTest.Missing.System]
+    def endpoint, do: NextWeb.Endpoint
     def start_pages, do: nil
     def menu_items, do: nil
     def menu_builder(_), do: nil
@@ -161,6 +165,7 @@ defmodule Mica.SaaSTest do
   defmodule NoSystemSaaS do
     use Mica.SaaS
     def systems, do: [NotASystem]
+    def endpoint, do: NextWeb.Endpoint
     def start_pages, do: nil
     def menu_items, do: nil
     def menu_builder(_), do: nil

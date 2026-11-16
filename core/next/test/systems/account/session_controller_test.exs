@@ -6,7 +6,7 @@ defmodule Next.Systems.Account.SessionControllerTest do
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Next.Systems.Account.AuthCodeVerifyPage
 
   @token_salt "otp-redeem"

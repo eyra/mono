@@ -92,7 +92,7 @@ defmodule Systems.Account.ProfileView do
       <div id="user_profile_content" phx-hook="LiveContent" data-show-errors={@show_errors}>
         <.form id="main_form" :let={form} for={@vm.changeset} phx-submit="save" phx-change="save">
           <.photo_input
-            static_path={&MicaWeb.Endpoint.static_path/1}
+            static_path={&Mica.SaaS.endpoint().static_path(&1)}
             photo_url={@vm.photo_url}
             uploads={@uploads}
             primary_button_text={@vm.choose_photo_text}

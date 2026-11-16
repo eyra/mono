@@ -6,6 +6,7 @@ defmodule Next.Systems.Graphite.Private do
   }
 
   def get_preview_url(%Graphite.LeaderboardModel{id: id}) do
-    ~p"/graphite/leaderboard/#{id}"
+    # Self composes this system too: build the path for the running SaaS's endpoint.
+    path(Mica.SaaS.endpoint(), ~p"/graphite/leaderboard/#{id}")
   end
 end

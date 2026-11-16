@@ -6,7 +6,7 @@ defmodule NextWeb.MicaPathTest do
   use MicaWeb.Path
 
   use Phoenix.VerifiedRoutes,
-    endpoint: MicaWeb.Endpoint,
+    endpoint: NextWeb.Endpoint,
     router: MicaWeb.Router,
     statics: MicaWeb.Path.statics()
 
@@ -57,10 +57,10 @@ defmodule NextWeb.MicaPathTest do
   end
 
   test "url/2 for a socket and a conn" do
-    socket = %Phoenix.LiveView.Socket{endpoint: MicaWeb.Endpoint}
+    socket = %Phoenix.LiveView.Socket{endpoint: NextWeb.Endpoint}
 
     conn =
-      Plug.Conn.put_private(Phoenix.ConnTest.build_conn(), :phoenix_endpoint, MicaWeb.Endpoint)
+      Plug.Conn.put_private(Phoenix.ConnTest.build_conn(), :phoenix_endpoint, NextWeb.Endpoint)
 
     token = "a/b c"
 

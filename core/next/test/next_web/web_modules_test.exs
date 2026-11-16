@@ -12,7 +12,7 @@ defmodule NextWeb.WebModulesTest do
       end
     end
 
-    for web <- [NextWeb, MicaSaasWeb] do
+    for {web, endpoint} <- [{NextWeb, NextWeb.Endpoint}, {MicaSaasWeb, MicaSaasWeb.Endpoint}] do
       test "#{inspect(web)}.controller is MicaWeb's block with its own paths" do
         opts = [formats: [:json]]
         assert unquote(web).controller(opts) == with_paths(MicaWeb.controller(opts), unquote(web))
@@ -23,7 +23,7 @@ defmodule NextWeb.WebModulesTest do
                  unquote(web).verified_routes()
 
         assert opts[:router] == MicaWeb.Router
-        assert opts[:endpoint] == MicaWeb.Endpoint
+        assert opts[:endpoint] == unquote(endpoint)
       end
     end
   end
