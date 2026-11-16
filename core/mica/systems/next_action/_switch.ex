@@ -25,7 +25,14 @@ defmodule Systems.NextAction.Switch do
     Signal.Public.dispatch!({:page, page}, %{id: id, model: model, from_pid: from_pid})
   end
 
+  # On Mica's PubSub, the SaaS endpoint's `pubsub_server` (MicaWeb.Live.Hook.Menus).
   defp notify_menus(%{id: user_id}) do
-    Mica.SaaS.endpoint().broadcast("next_actions:#{user_id}", "next_actions_updated", %{})
+    topic = "next_actions:#{user_id}"
+
+    Phoenix.PubSub.broadcast(Mica.PubSub, topic, %Phoenix.Socket.Broadcast{
+      topic: topic,
+      event: "next_actions_updated",
+      payload: %{}
+    })
   end
 end
