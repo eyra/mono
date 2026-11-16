@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.CrewTaskSingleViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.CrewTaskSingleViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Gettext, backend: MicaWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper

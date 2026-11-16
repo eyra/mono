@@ -1,5 +1,5 @@
-defmodule Systems.Account.OnboardingControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Account.OnboardingControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Systems.Account.OnboardingController
 

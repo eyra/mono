@@ -1,5 +1,5 @@
-defmodule Systems.Test.RoutedLiveViewTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Test.RoutedLiveViewTest do
+  use MicaSaasWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

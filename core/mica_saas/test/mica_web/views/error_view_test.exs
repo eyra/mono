@@ -1,5 +1,5 @@
-defmodule MicaWeb.ErrorHTMLTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.ErrorHTMLTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   test "renders 403.html", %{conn: conn} do
     html = Phoenix.Template.render_to_string(MicaWeb.ErrorHTML, "403", "html", conn: conn)

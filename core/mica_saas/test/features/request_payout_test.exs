@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.RequestPayoutTest do
+defmodule MicaSaasWeb.Features.RequestPayoutTest do
   @moduledoc """
   Wallaby version of the Playwright `request_payout.spec.ts` (UC-OPP-06).
 
@@ -17,7 +17,7 @@ defmodule MicaWeb.Features.RequestPayoutTest do
   modal is shown.
   """
 
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   import Mox
 

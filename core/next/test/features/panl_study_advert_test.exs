@@ -11,7 +11,7 @@ defmodule NextWeb.Features.PanlStudyAdvertTest do
   6. Navigate to the advert and publish it
   7. Login as a PaNL participant and see the advert on home page
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
 
   alias Systems.Pool
 

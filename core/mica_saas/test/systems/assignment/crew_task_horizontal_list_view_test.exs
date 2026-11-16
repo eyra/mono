@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.CrewTaskHorizontalListViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.CrewTaskHorizontalListViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 

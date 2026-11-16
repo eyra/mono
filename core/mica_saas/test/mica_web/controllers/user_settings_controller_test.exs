@@ -1,5 +1,5 @@
-defmodule Systems.Account.SettingsControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Account.SettingsControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Mica.Factories
   alias Systems.Account
@@ -14,7 +14,7 @@ defmodule Systems.Account.SettingsControllerTest do
     end
 
     test "redirects if user is not logged in" do
-      conn = MicaWeb.ConnCase.build_conn()
+      conn = MicaSaasWeb.ConnCase.build_conn()
       conn = get(conn, ~m"/user/settings")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end
@@ -141,7 +141,7 @@ defmodule Systems.Account.SettingsControllerTest do
     end
 
     test "redirects if user is not logged in", %{token: token} do
-      conn = MicaWeb.ConnCase.build_conn()
+      conn = MicaSaasWeb.ConnCase.build_conn()
       conn = get(conn, ~m"/user/settings/activate-account/#{token}")
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end

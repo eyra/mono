@@ -1,5 +1,5 @@
-defmodule MicaWeb.Live.MobileMenuTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaasWeb.Live.MobileMenuTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

@@ -1,5 +1,5 @@
-defmodule MicaWeb.Live.User.ResetPassword.Test do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.Live.User.ResetPassword.Test do
+  use MicaSaasWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

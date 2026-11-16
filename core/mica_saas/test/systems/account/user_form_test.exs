@@ -1,5 +1,5 @@
-defmodule Systems.Account.UserFormTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.UserFormTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
   import Phoenix.LiveViewTest
 

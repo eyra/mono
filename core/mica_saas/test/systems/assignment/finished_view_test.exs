@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.FinishedViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.FinishedViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper

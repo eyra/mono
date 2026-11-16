@@ -5,7 +5,7 @@ defmodule NextWeb.Features.PanlSignupLocaleTest do
   `/user/onboarding/await-confirmation` otherwise) should keep the browser locale
   (NL) instead of falling back to English.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Pool

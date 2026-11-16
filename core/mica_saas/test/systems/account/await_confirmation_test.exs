@@ -1,5 +1,5 @@
-defmodule Systems.Account.AwaitConfirmationTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Account.AwaitConfirmationTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

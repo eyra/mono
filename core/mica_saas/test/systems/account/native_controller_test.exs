@@ -1,5 +1,5 @@
-defmodule Systems.Account.NativeControllerTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.NativeControllerTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   alias Systems.Account
@@ -12,7 +12,7 @@ defmodule Systems.Account.NativeControllerTest do
 
   test "signed-out callers cannot read account data" do
     assert %{"error" => "Not authenticated"} =
-             MicaWeb.ConnCase.build_conn()
+             MicaSaasWeb.ConnCase.build_conn()
              |> get("/user/account/native/profile")
              |> json_response(401)
   end

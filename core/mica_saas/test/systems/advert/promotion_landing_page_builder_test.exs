@@ -1,5 +1,5 @@
-defmodule Systems.Advert.PromotionLandingPageBuilderTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Advert.PromotionLandingPageBuilderTest do
+  use MicaSaasWeb.ConnCase, async: true
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

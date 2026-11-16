@@ -1,5 +1,5 @@
 defmodule Next.Systems.Announcement.ListPageTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
@@ -102,7 +102,7 @@ defmodule Next.Systems.Announcement.ListPageTest do
 
   test "signed-out visitors must sign in", _ctx do
     assert {:error, {:redirect, %{to: to}}} =
-             live(MicaWeb.ConnCase.build_conn(), ~p"/announcements")
+             live(NextWeb.ConnCase.build_conn(), ~p"/announcements")
 
     assert to =~ "/user/"
   end

@@ -1,5 +1,5 @@
-defmodule MicaWeb.Live.Hook.TimezoneTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.Live.Hook.TimezoneTest do
+  use MicaSaasWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   alias MicaWeb.Live.Hook.Timezone

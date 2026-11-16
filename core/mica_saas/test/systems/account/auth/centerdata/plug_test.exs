@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.Centerdata.FakeOIDC do
+defmodule MicaSaas.Systems.Account.Auth.Centerdata.FakeOIDC do
   def authorize_url(config),
     do:
       {:ok,
@@ -7,8 +7,8 @@ defmodule Systems.Account.Auth.Centerdata.FakeOIDC do
   def callback(config, _params), do: {:ok, %{user: config[:userinfo]}}
 end
 
-defmodule Systems.Account.Auth.Centerdata.PlugTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.Auth.Centerdata.PlugTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   alias Systems.Account.Auth.Centerdata.AuthorizePlug
 
@@ -20,7 +20,7 @@ defmodule Systems.Account.Auth.Centerdata.PlugTest do
       client_secret: "test-secret",
       base_url: "https://messpanel.test.centerdata.nl",
       redirect_uri: "http://localhost/auth/centerdata/callback",
-      oidc_module: Systems.Account.Auth.Centerdata.FakeOIDC,
+      oidc_module: MicaSaas.Systems.Account.Auth.Centerdata.FakeOIDC,
       userinfo: %{"sub" => "-1", "email" => "panel@example.com", "email_verified" => true}
     ]
 

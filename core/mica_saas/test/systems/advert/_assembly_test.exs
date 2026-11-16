@@ -1,5 +1,5 @@
-defmodule Systems.Advert.AssemblyTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Advert.AssemblyTest do
+  use MicaSaasWeb.ConnCase
 
   import Mox
   # alias Mica.Repo

@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.PayoutFlowTest do
+defmodule MicaSaasWeb.Features.PayoutFlowTest do
   @moduledoc """
   Broad journey test for the payout flow: participant earns a reward,
   researcher approves it, participant requests payout.
@@ -23,7 +23,7 @@ defmodule MicaWeb.Features.PayoutFlowTest do
   top of narrow ones." All three conditions hold for this flow.
   """
 
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   import Mox
 

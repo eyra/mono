@@ -1,5 +1,5 @@
-defmodule MicaWeb.NativeAppLayoutTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaasWeb.NativeAppLayoutTest do
+  use MicaSaasWeb.ConnCase
 
   @native_user_agent "Mozilla/5.0 (iPhone) NextApp/1.0.0 iOS"
   @browser_user_agent "Mozilla/5.0 (iPhone) Safari/604.1"

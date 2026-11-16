@@ -1,5 +1,5 @@
 defmodule Next.Systems.Probe.ToolViewTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 

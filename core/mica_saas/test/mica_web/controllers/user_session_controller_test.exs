@@ -1,5 +1,5 @@
-defmodule Systems.Account.UserSessionControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Account.UserSessionControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Mica.Factories
 

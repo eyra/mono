@@ -1,10 +1,10 @@
-defmodule Systems.Org.MemberViewTest do
+defmodule MicaSaas.Systems.Org.MemberViewTest do
   @moduledoc """
   Regression coverage for FX#9905890143 — a stale LiveView session
   belonging to a user whose :owner role was revoked must not be able to
   mutate the org's membership.
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
   require LiveNest.Constants

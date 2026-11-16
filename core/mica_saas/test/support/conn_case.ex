@@ -1,4 +1,4 @@
-defmodule MicaWeb.ConnCase do
+defmodule MicaSaasWeb.ConnCase do
   @moduledoc """
   This module defines the test case to be used by
   tests that require setting up a connection.
@@ -11,7 +11,7 @@ defmodule MicaWeb.ConnCase do
   we enable the SQL sandbox, so changes done to the database
   are reverted at the end of every test. If you are using
   PostgreSQL, you can even run database tests asynchronously
-  by setting `use MicaWeb.ConnCase, async: true`, although
+  by setting `use MicaSaasWeb.ConnCase, async: true`, although
   this option is not recommended for other databases.
   """
 
@@ -22,7 +22,7 @@ defmodule MicaWeb.ConnCase do
       # Import conveniences for testing with connections
       import Plug.Conn
       import Phoenix.ConnTest
-      import MicaWeb.ConnCase
+      import MicaSaasWeb.ConnCase
 
       import Mica.TestHelpers
       alias Mica.Factories
@@ -31,7 +31,7 @@ defmodule MicaWeb.ConnCase do
       @endpoint NextWeb.Endpoint
       import Mica.AuthTestHelpers
 
-      use MicaWeb, :verified_routes
+      use MicaSaasWeb, :verified_routes
     end
   end
 
@@ -42,7 +42,7 @@ defmodule MicaWeb.ConnCase do
       Ecto.Adapters.SQL.Sandbox.mode(Mica.Repo, {:shared, self()})
     end
 
-    conn = MicaWeb.ConnCase.build_conn()
+    conn = MicaSaasWeb.ConnCase.build_conn()
 
     {:ok, conn: conn}
   end

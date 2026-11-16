@@ -1,5 +1,5 @@
-defmodule Systems.Org.ArchiveModalViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Org.ArchiveModalViewTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
 

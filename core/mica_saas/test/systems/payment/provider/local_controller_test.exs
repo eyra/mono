@@ -1,4 +1,4 @@
-defmodule Systems.Payment.Provider.LocalControllerTest do
+defmodule MicaSaas.Systems.Payment.Provider.LocalControllerTest do
   @moduledoc """
   The local payment simulator stands in for the OPP checkout page in dev/E2E.
   It is the only way a pay-in can be completed or failed without a real
@@ -8,7 +8,7 @@ defmodule Systems.Payment.Provider.LocalControllerTest do
   The routes are compiled in only when `:enable_e2e_support` is set, which is
   the case for :test (see config/test.exs).
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
 
   alias Mica.Repo
   alias Systems.Bookkeeping

@@ -1,5 +1,5 @@
-defmodule Systems.Org.OwnersViewTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Org.OwnersViewTest do
+  use MicaSaasWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

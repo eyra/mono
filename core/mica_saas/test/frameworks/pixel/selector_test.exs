@@ -1,5 +1,5 @@
-defmodule Frameworks.Pixel.SelectorTest.View do
-  use MicaWeb, :live_view_fabric
+defmodule MicaSaas.Frameworks.Pixel.SelectorTest.View do
+  use MicaSaasWeb, :live_view_fabric
 
   alias Frameworks.Pixel.Selector
 
@@ -65,11 +65,11 @@ defmodule Frameworks.Pixel.SelectorTest.View do
   end
 end
 
-defmodule Frameworks.Pixel.SelectorTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Frameworks.Pixel.SelectorTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.LiveViewTest
 
-  alias Frameworks.Pixel.SelectorTest.View
+  alias MicaSaas.Frameworks.Pixel.SelectorTest.View
 
   setup do
     conn = Phoenix.ConnTest.build_conn(:get, "/", nil)

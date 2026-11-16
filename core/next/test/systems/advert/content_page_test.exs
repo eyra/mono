@@ -1,5 +1,5 @@
-defmodule Systems.Advert.ContentPageTest do
-  use MicaWeb.ConnCase, async: false
+defmodule Next.Systems.Advert.ContentPageTest do
+  use NextWeb.ConnCase, async: false
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   import Phoenix.Component, only: [assign: 2]

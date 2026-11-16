@@ -1,11 +1,11 @@
-defmodule Systems.Assignment.SettingsViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.SettingsViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Systems.Assignment
 
   defmodule HostView do
-    use MicaWeb, :live_view_fabric
+    use MicaSaasWeb, :live_view_fabric
 
     @impl true
     def mount(_params, %{"assignment" => assignment}, socket) do

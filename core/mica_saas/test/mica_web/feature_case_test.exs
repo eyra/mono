@@ -1,7 +1,7 @@
-defmodule MicaWeb.FeatureCaseTest do
+defmodule MicaSaasWeb.FeatureCaseTest do
   use ExUnit.Case, async: false
 
-  alias MicaWeb.FeatureCase
+  alias MicaSaasWeb.FeatureCase
 
   @binary "/opt/chrome-for-testing/chrome"
 

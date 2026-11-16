@@ -1,5 +1,5 @@
-defmodule Systems.Affiliate.FormTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Affiliate.FormTest do
+  use MicaSaasWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   alias Mica.Repo

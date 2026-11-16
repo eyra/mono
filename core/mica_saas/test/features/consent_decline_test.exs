@@ -1,10 +1,10 @@
-defmodule MicaWeb.Features.ConsentDeclineTest do
+defmodule MicaSaasWeb.Features.ConsentDeclineTest do
   @moduledoc """
   Integration test for consent decline flow.
 
   Reproduces bug #9496247794: declining consent causes crash in logs
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Assignment

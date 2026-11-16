@@ -1,10 +1,10 @@
-defmodule MicaWeb.Features.CardKeyboardTest do
+defmodule MicaSaasWeb.Features.CardKeyboardTest do
   @moduledoc """
   A clickable card can be reached with Tab and opened with Enter or Space
   (WCAG 2.1.1), and shows the `:focus-visible` ring from `assets/css/app.css`.
   The card's show-more toggle is a separate Tab stop that doesn't open the card.
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   @card_selector "[data-testid^='card_']"

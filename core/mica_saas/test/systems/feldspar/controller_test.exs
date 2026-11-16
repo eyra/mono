@@ -1,5 +1,5 @@
-defmodule Systems.Feldspar.ControllerTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Feldspar.ControllerTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Oban.Testing, repo: Mica.Repo
 
   @moduletag :capture_log

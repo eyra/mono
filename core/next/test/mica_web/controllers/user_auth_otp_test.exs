@@ -1,8 +1,8 @@
-defmodule MicaWeb.UserAuthOtpTest do
+defmodule NextWeb.UserAuthOtpTest do
   # With sign-in codes on, the SaaS's sign_in_page/0 is its code page, but the
   # pages Mica sends users to after signing out stay on the page with every way
   # to sign in (sign_in_options_page/0). Sets the global :otp flag.
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   alias Systems.Account.UserAuth

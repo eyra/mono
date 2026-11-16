@@ -1,10 +1,10 @@
-defmodule Systems.Account.PayoutsReactiveTest do
+defmodule MicaSaas.Systems.Account.PayoutsReactiveTest do
   @moduledoc """
   Proves the webhook → signal → Observatory → re-render path: when OPP approves
   the bank account and `{:payment_kyc, :updated}` is dispatched, the mounted
   PayoutsView re-fetches its status and the badge flips without a reload.
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Mox
 

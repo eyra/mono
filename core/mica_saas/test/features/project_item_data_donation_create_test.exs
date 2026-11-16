@@ -1,8 +1,8 @@
-defmodule MicaWeb.Features.ProjectItemDataDonationCreateTest do
+defmodule MicaSaasWeb.Features.ProjectItemDataDonationCreateTest do
   @moduledoc """
   Feature test for creating a data donation project item.
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   @card_selector "[data-testid^='card_']"
 

@@ -1,5 +1,5 @@
-defmodule Systems.Account.ServiceLoginControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Account.ServiceLoginControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Systems.Account
 

@@ -1,5 +1,5 @@
-defmodule Systems.Storage.ControllerTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Storage.ControllerTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   import Mox
 

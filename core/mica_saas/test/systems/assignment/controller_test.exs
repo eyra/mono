@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.ControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Assignment.ControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Systems.Assignment
   alias Systems.Fund

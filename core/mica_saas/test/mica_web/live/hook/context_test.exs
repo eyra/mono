@@ -1,5 +1,5 @@
-defmodule MicaWeb.Live.Hook.ContextTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.Live.Hook.ContextTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   import Phoenix.LiveViewTest
 

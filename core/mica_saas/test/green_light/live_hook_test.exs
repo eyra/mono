@@ -1,5 +1,5 @@
-defmodule Frameworks.GreenLight.LiveHookTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Frameworks.GreenLight.LiveHookTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   alias Frameworks.GreenLight.LiveHook
 

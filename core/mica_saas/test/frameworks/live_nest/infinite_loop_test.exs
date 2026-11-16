@@ -1,4 +1,4 @@
-defmodule LiveNest.InfiniteLoopTest do
+defmodule MicaSaas.LiveNest.InfiniteLoopTest do
   @moduledoc """
   Test that demonstrates and prevents infinite event loops.
 
@@ -8,12 +8,12 @@ defmodule LiveNest.InfiniteLoopTest do
   to self(), creating an infinite loop.
   """
 
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   # Minimal routed LiveView that doesn't handle :unhandled_event
   defmodule UnhandledEventPage do
-    use MicaWeb, :routed_live_view
+    use MicaSaasWeb, :routed_live_view
 
     @impl true
     def mount(_params, _session, socket) do

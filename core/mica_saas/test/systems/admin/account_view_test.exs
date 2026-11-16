@@ -1,5 +1,5 @@
-defmodule Systems.Admin.AccountViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Admin.AccountViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   require LiveNest.Constants

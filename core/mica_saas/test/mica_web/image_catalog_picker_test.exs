@@ -1,4 +1,4 @@
-defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
+defmodule MicaSaas.Frameworks.Pixel.ImageCatalogPicker.Test.View do
   use Phoenix.LiveView, layout: {Fabric.TestLayouts, :live}
   use Fabric.LiveView
 
@@ -44,15 +44,15 @@ defmodule Frameworks.Pixel.ImageCatalogPicker.Test.View do
   end
 end
 
-defmodule Frameworks.Pixel.ImageCatalogPicker.Test do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Frameworks.Pixel.ImageCatalogPicker.Test do
+  use MicaSaasWeb.ConnCase
   import Phoenix.LiveViewTest
 
   setup do
     conn = Phoenix.ConnTest.build_conn(:get, "/", nil)
 
     {:ok, view, html} =
-      live_isolated(conn, Frameworks.Pixel.ImageCatalogPicker.Test.View,
+      live_isolated(conn, MicaSaas.Frameworks.Pixel.ImageCatalogPicker.Test.View,
         connect_params: %{testing: 1124}
       )
 

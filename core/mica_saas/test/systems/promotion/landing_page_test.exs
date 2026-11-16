@@ -1,5 +1,5 @@
-defmodule Systems.Promotion.LandingPageTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Promotion.LandingPageTest do
+  use MicaSaasWeb.ConnCase
   # import Phoenix.ConnTest
   # import Phoenix.LiveViewTest
 

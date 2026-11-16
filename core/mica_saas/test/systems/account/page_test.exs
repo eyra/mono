@@ -1,5 +1,5 @@
-defmodule Systems.Account.PageTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.PageTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 

@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.WorkflowItemGroupFieldTest do
+defmodule MicaSaasWeb.Features.WorkflowItemGroupFieldTest do
   @moduledoc """
   Verifies that the workflow item form's "group" (platform/source) field can be
   hidden per template via `Workflow.Config.group_enabled?`.
@@ -6,7 +6,7 @@ defmodule MicaWeb.Features.WorkflowItemGroupFieldTest do
   - Questionnaire template (used by Panl): group field hidden
   - Data donation template: group field visible
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   @card_selector "[data-testid^='card_']"
   @group_field_selector "[data-testid$='_item_form_group']"

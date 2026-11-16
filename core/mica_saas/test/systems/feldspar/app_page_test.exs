@@ -1,5 +1,5 @@
-defmodule Systems.Feldspar.AppPageTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Feldspar.AppPageTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

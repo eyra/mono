@@ -1,5 +1,5 @@
-defmodule Systems.Test.ModalToolbarTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Test.ModalToolbarTest do
+  use MicaSaasWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

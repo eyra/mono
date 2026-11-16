@@ -1,5 +1,5 @@
-defmodule Systems.Project.OverviewPageTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Project.OverviewPageTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

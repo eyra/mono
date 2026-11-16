@@ -1,5 +1,5 @@
-defmodule Systems.Account.Auth.MockTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.Auth.MockTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
   import Phoenix.LiveViewTest
 

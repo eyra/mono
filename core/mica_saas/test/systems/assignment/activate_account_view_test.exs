@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.ActivateAccountViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.ActivateAccountViewTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
 

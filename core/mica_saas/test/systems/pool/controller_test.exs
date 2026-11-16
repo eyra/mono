@@ -1,5 +1,5 @@
-defmodule Systems.Pool.ControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Pool.ControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Systems.Pool
   alias Mica.Factories

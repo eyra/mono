@@ -1,5 +1,5 @@
-defmodule MicaWeb.HealthControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.HealthControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
   alias MicaWeb.HealthController
 
   describe "get" do

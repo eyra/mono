@@ -1,5 +1,5 @@
-defmodule MicaWeb.StorybookTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaasWeb.StorybookTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   setup do

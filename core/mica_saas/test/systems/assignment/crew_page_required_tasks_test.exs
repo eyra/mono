@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.CrewPageRequiredTasksTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Assignment.CrewPageRequiredTasksTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
 

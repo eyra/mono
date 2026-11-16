@@ -1,4 +1,4 @@
-defmodule MicaWeb.FeatureCase do
+defmodule MicaSaasWeb.FeatureCase do
   @moduledoc """
   This module defines the test case to be used by
   browser-based feature tests using Wallaby.
@@ -8,7 +8,7 @@ defmodule MicaWeb.FeatureCase do
 
   ## Usage
 
-      use MicaWeb.FeatureCase
+      use MicaSaasWeb.FeatureCase
 
   ## Running tests
 
@@ -37,7 +37,7 @@ defmodule MicaWeb.FeatureCase do
       use Wallaby.Feature
 
       import Wallaby.Query
-      import MicaWeb.FeatureCase
+      import MicaSaasWeb.FeatureCase
 
       alias Mica.Factories
       alias Mica.Repo
@@ -50,7 +50,7 @@ defmodule MicaWeb.FeatureCase do
       # natural variability headroom while still failing hard on a genuine
       # hang.
       @moduletag timeout: 120_000
-      @moduletag create_session_fn: &MicaWeb.FeatureCase.create_session/2
+      @moduletag create_session_fn: &MicaSaasWeb.FeatureCase.create_session/2
     end
   end
 
@@ -100,7 +100,7 @@ defmodule MicaWeb.FeatureCase do
 
     if binary && get_in(capabilities, [:chromeOptions, :binary]) != binary do
       raise "Chrome capabilities without the configured binary #{binary}; " <>
-              "build them with MicaWeb.FeatureCase.chrome_capabilities/1"
+              "build them with MicaSaasWeb.FeatureCase.chrome_capabilities/1"
     end
 
     case Wallaby.WebdriverClient.create_session(base_url, capabilities) do
@@ -283,7 +283,7 @@ defmodule MicaWeb.FeatureCase do
   """
   defmacro retry_stale(do: block) do
     quote do
-      MicaWeb.FeatureCase.do_retry_stale(fn -> unquote(block) end)
+      MicaSaasWeb.FeatureCase.do_retry_stale(fn -> unquote(block) end)
     end
   end
 

@@ -1,5 +1,5 @@
-defmodule Systems.Admin.SystemViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Admin.SystemViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Mica.Factories

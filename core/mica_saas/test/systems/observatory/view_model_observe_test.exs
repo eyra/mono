@@ -1,5 +1,5 @@
-defmodule Systems.Observatory.ViewModelObserveTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Observatory.ViewModelObserveTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
   import Mica.AuthTestHelpers

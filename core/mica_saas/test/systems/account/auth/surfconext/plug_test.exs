@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.Surfconext.FakeOIDC do
+defmodule MicaSaas.Systems.Account.Auth.Surfconext.FakeOIDC do
   def callback(config, _params) do
     sub = Keyword.get(config, :sub, "test")
     token = Keyword.get(config, :token, "test-token")
@@ -51,7 +51,7 @@ defmodule Systems.Account.Auth.Surfconext.FakeOIDC do
   end
 end
 
-defmodule Systems.Account.Auth.Surfconext.AuthorizePlug.Test do
+defmodule MicaSaas.Systems.Account.Auth.Surfconext.AuthorizePlug.Test do
   use ExUnit.Case, async: false
   import Plug.Test
   import Plug.Conn
@@ -66,7 +66,7 @@ defmodule Systems.Account.Auth.Surfconext.AuthorizePlug.Test do
         client_secret: Faker.Lorem.sentence(),
         base_url: "https://connect.test.surfconext.nl",
         redirect_uri: "https://#{domain}/auth/surfconext/callback",
-        oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
+        oidc_module: MicaSaas.Systems.Account.Auth.Surfconext.FakeOIDC
       )
 
       conn =
@@ -82,8 +82,8 @@ defmodule Systems.Account.Auth.Surfconext.AuthorizePlug.Test do
   end
 end
 
-defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Account.Auth.Surfconext.CallbackController.Test do
+  use MicaSaasWeb.ConnCase, async: false
 
   setup do
     conf = Application.get_env(:mica, Systems.Account.Auth.Surfconext, [])
@@ -99,13 +99,13 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       client_secret: Faker.Lorem.sentence(),
       base_url: "https://connect.test.surfconext.nl",
       redirect_uri: "https://#{domain}/auth/surfconext/callback",
-      oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
+      oidc_module: MicaSaas.Systems.Account.Auth.Surfconext.FakeOIDC
     ]
 
     Application.put_env(:mica, Systems.Account.Auth.Surfconext, test_conf)
 
     conn =
-      MicaWeb.ConnCase.build_conn()
+      MicaSaasWeb.ConnCase.build_conn()
       |> init_test_session(%{surfconext: %{state: "test-state"}})
 
     {:ok, conn: conn, conf: test_conf}
@@ -262,7 +262,7 @@ defmodule Systems.Account.Auth.Surfconext.CallbackController.Test do
       log =
         capture_log([level: :error], fn ->
           conn =
-            MicaWeb.ConnCase.build_conn()
+            MicaSaasWeb.ConnCase.build_conn()
             |> init_test_session(%{})
             |> get("/auth/surfconext/callback?code=abc&state=xyz")
 

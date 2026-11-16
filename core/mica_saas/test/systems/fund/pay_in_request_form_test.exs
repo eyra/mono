@@ -1,10 +1,10 @@
-defmodule Systems.Fund.PayInRequestFormTest do
+defmodule MicaSaas.Systems.Fund.PayInRequestFormTest do
   @moduledoc """
   The pay-in form on the assignment's Participants tab, after the payment
   provider refuses the first pay-in (UC-OPP-01.A1).
   """
 
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Mox
   import Ecto.Query, only: [from: 2]

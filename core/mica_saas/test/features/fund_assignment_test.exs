@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.FundAssignmentTest do
+defmodule MicaSaasWeb.Features.FundAssignmentTest do
   @moduledoc """
   Wallaby version of the Playwright `fund_assignment.spec.ts` (UC-OPP-01).
 
@@ -14,7 +14,7 @@ defmodule MicaWeb.Features.FundAssignmentTest do
   deterministic and works on every dev/CI run.
   """
 
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   import Mox
 

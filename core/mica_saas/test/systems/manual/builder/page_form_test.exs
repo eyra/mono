@@ -1,5 +1,5 @@
-defmodule Systems.Manual.Builder.PageFormTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Manual.Builder.PageFormTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Mica.Repo

@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.TermsAndPrivacyOnboardingTest do
+defmodule NextWeb.Features.TermsAndPrivacyOnboardingTest do
   @moduledoc """
   Feature test for the terms-and-privacy onboarding flow using the Mock OAuth provider.
 
@@ -6,7 +6,7 @@ defmodule MicaWeb.Features.TermsAndPrivacyOnboardingTest do
   → onboarding page → Continue (with and without accepting terms) → signed-in
   page.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
 
   setup do
     account = Application.get_env(:mica, :account, [])

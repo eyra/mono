@@ -1,4 +1,4 @@
-defmodule Systems.Desktop.PageTest do
+defmodule MicaSaas.Systems.Desktop.PageTest do
   @moduledoc """
   The banner tests are regression coverage for FX#9905887344 — when a user's
   AddDomainMembers NextAction is cleared in another process (e.g. their :owner
@@ -8,7 +8,7 @@ defmodule Systems.Desktop.PageTest do
   The section tests contribute `Systems.Desktop.TestSection` through
   `Mica.SaaS.put_composition/1`.
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   import Frameworks.Signal.TestHelper

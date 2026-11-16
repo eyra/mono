@@ -1,5 +1,5 @@
-defmodule Systems.Affiliate.RecruitTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Affiliate.RecruitTest do
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   @moduletag :capture_log

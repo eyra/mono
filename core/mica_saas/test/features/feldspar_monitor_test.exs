@@ -1,11 +1,11 @@
-defmodule MicaWeb.Features.FeldsparMonitorTest do
+defmodule MicaSaasWeb.Features.FeldsparMonitorTest do
   @moduledoc """
   Feature test for Feldspar monitor:* protocol.
 
   Tests that monitor:log messages from Feldspar apps are correctly
   routed to the logging endpoint.
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   @mock_app_id "mock_monitor_app"
   @mock_app_source_path "mica/test/systems/feldspar/mock_monitor_app"

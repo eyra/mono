@@ -1,5 +1,5 @@
-defmodule Systems.Affiliate.EntryLogTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Affiliate.EntryLogTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   import ExUnit.CaptureLog
 

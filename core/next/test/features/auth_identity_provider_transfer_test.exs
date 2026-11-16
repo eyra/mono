@@ -1,5 +1,5 @@
-defmodule MicaWeb.Features.Auth.IdentityProviderTransferTest do
-  use MicaWeb.FeatureCase
+defmodule NextWeb.Features.Auth.IdentityProviderTransferTest do
+  use NextWeb.FeatureCase
 
   alias Mica.Repo
   alias Systems.Account.Auth.Email.UserModel

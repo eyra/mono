@@ -1,5 +1,5 @@
 defmodule Next.Systems.Account.AuthIdentifyPageTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
   use Gettext, backend: MicaWeb.Gettext
 

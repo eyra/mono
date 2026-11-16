@@ -1,11 +1,11 @@
-defmodule MicaWeb.LocaleResolutionTest do
+defmodule MicaSaasWeb.LocaleResolutionTest do
   @moduledoc """
   Verifies that the browser pipeline's locale resolution honours the
   Accept-Language header for anonymous visitors while keeping the
   session value as the higher-priority source.
   """
 
-  use MicaWeb.ConnCase, async: true
+  use MicaSaasWeb.ConnCase, async: true
 
   @plug_opts Cldr.Plug.PutLocale.init(
                apps: [

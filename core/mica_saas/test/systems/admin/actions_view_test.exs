@@ -1,5 +1,5 @@
-defmodule Systems.Admin.ActionsViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Admin.ActionsViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
 

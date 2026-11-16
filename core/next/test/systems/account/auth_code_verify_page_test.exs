@@ -5,7 +5,7 @@ defmodule Next.Systems.Account.AuthCodeVerifyPageTest do
   /user/auth/identify with the RATE-LIMIT flash, not the "code expired"
   one. See Flux 10025618754.
   """
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
   use Gettext, backend: MicaWeb.Gettext

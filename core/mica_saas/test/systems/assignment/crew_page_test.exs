@@ -1,5 +1,5 @@
-defmodule Systems.Assignment.CrewPageTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Assignment.CrewPageTest do
+  use MicaSaasWeb.ConnCase
   use Oban.Testing, repo: Mica.Repo
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest

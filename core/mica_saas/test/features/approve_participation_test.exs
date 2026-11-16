@@ -1,4 +1,4 @@
-defmodule MicaWeb.Features.ApproveParticipationTest do
+defmodule MicaSaasWeb.Features.ApproveParticipationTest do
   @moduledoc """
   Researcher's Contributions-tab happy path: a completed contribution
   shows up in the Pending section; clicking "Confirm all" drains it.
@@ -10,7 +10,7 @@ defmodule MicaWeb.Features.ApproveParticipationTest do
   and the assertion would fail.
   """
 
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
 
   alias Systems.Assignment
   alias Systems.Crew

@@ -1,11 +1,11 @@
-defmodule Systems.Org.ContentPageTest do
+defmodule MicaSaas.Systems.Org.ContentPageTest do
   @moduledoc """
   Regression coverage for FX#9905888394 — /org/node/{id} must not be
   accessible to users who don't manage that specific org, even if they
   happen to own (or used to own) another org and therefore carry the
   global :admin role.
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   alias Mica.Factories

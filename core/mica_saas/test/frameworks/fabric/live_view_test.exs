@@ -1,5 +1,5 @@
-defmodule Fabric.LiveViewTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Fabric.LiveViewTest do
+  use MicaSaasWeb.ConnCase, async: true
   import Phoenix.LiveViewTest
 
   test "launching live view mock", %{conn: conn} do

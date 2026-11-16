@@ -6,7 +6,7 @@ defmodule NextWeb.Features.EmailCaptureTest do
   questionnaire assignment sees an email capture form on the finished screen,
   submits their email, and sees the submitted state.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Account

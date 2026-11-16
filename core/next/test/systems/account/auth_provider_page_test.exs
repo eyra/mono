@@ -1,5 +1,5 @@
 defmodule Next.Systems.Account.AuthProviderPageTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
 
   setup do

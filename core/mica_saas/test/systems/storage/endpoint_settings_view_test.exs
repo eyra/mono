@@ -1,6 +1,6 @@
-defmodule Systems.Storage.EndpointSettingsViewTest do
+defmodule MicaSaas.Systems.Storage.EndpointSettingsViewTest do
   # Mocks the URL check.
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
 
   import Mock
   import Phoenix.LiveViewTest

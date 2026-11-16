@@ -1,4 +1,4 @@
-defmodule Systems.Payment.ControllerTest do
+defmodule MicaSaas.Systems.Payment.ControllerTest do
   @moduledoc """
   Integration tests for `Systems.Payment.Controller.webhook/2` — focused on
   the `"withdrawal.status.changed"` dispatch added for UC-OPP-06 MS.11.
@@ -7,7 +7,7 @@ defmodule Systems.Payment.ControllerTest do
   here we set `:skip_webhook_verification` so the assertions stay on the
   routing + downstream-effect side of the controller.
   """
-  use MicaWeb.ConnCase, async: false
+  use MicaSaasWeb.ConnCase, async: false
   import Mox
 
   alias Mica.Factories

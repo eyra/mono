@@ -1,5 +1,5 @@
-defmodule MicaWeb.Live.User.SignupPage.Test do
-  use MicaWeb.ConnCase
+defmodule MicaSaasWeb.Live.User.SignupPage.Test do
+  use MicaSaasWeb.ConnCase
   use Mica.FeatureFlags.Test
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest

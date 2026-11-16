@@ -1,5 +1,5 @@
-defmodule Systems.Account.UserAuthTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaas.Systems.Account.UserAuthTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias Systems.Account.UserAuth
   alias Systems.Account

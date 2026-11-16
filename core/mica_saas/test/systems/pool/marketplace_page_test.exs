@@ -1,5 +1,5 @@
-defmodule Systems.Pool.MarketplacePageTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Pool.MarketplacePageTest do
+  use MicaSaasWeb.ConnCase
   import Phoenix.ConnTest
   import Phoenix.LiveViewTest
 

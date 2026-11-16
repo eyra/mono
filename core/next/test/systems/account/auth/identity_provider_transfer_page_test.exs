@@ -1,5 +1,5 @@
-defmodule Systems.Account.Auth.IdentityProviderTransferPageTest do
-  use MicaWeb.ConnCase
+defmodule Next.Systems.Account.Auth.IdentityProviderTransferPageTest do
+  use NextWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

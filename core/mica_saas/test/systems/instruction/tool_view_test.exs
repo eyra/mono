@@ -1,5 +1,5 @@
-defmodule Systems.Instruction.ToolViewTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Instruction.ToolViewTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Gettext, backend: MicaWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper

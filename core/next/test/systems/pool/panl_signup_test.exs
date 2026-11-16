@@ -1,6 +1,6 @@
-defmodule Systems.Pool.PanlSignupTest do
+defmodule Next.Systems.Pool.PanlSignupTest do
   # async: false because test relies on global Pool.Public.get_panl() lookup by name
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   alias Systems.Pool

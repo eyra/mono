@@ -1,6 +1,6 @@
-defmodule Systems.BFF.PageControllerTest do
+defmodule Next.Systems.BFF.PageControllerTest do
   # Not async: the flags-off test changes the app's feature flags.
-  use MicaWeb.ConnCase
+  use NextWeb.ConnCase
   use Mica.FeatureFlags.Test
 
   alias Mica.Factories

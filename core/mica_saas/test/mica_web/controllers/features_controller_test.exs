@@ -1,5 +1,5 @@
-defmodule MicaWeb.FeaturesControllerTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaasWeb.FeaturesControllerTest do
+  use MicaSaasWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   test "lists the effective flags that are on, including SaaS defaults", %{conn: conn} do

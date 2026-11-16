@@ -1,9 +1,9 @@
-defmodule MicaWeb.Features.FocusVisibleTest do
+defmodule MicaSaasWeb.Features.FocusVisibleTest do
   @moduledoc """
   Keyboard focus is visible on every Tab stop (WCAG 2.4.7), and a mouse click
   adds no ring. The indicator is the `:focus-visible` rule in `assets/css/app.css`.
   """
-  use MicaWeb.FeatureCase
+  use MicaSaasWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Desktop

@@ -1,5 +1,5 @@
-defmodule Systems.Manual.ViewTest do
-  use MicaWeb.ConnCase
+defmodule MicaSaas.Systems.Manual.ViewTest do
+  use MicaSaasWeb.ConnCase
 
   import Phoenix.LiveViewTest
 

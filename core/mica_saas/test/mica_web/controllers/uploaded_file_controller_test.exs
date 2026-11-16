@@ -1,5 +1,5 @@
-defmodule MicaWeb.UploadedFileControllerTest do
-  use MicaWeb.ConnCase, async: true
+defmodule MicaSaasWeb.UploadedFileControllerTest do
+  use MicaSaasWeb.ConnCase, async: true
 
   alias MicaWeb.UploadedFileController
 
