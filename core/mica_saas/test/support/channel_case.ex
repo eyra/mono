@@ -23,8 +23,8 @@ defmodule MicaSaasWeb.ChannelCase do
       import Phoenix.ChannelTest
       import MicaSaasWeb.ChannelCase
 
-      # The default endpoint for testing
-      @endpoint NextWeb.Endpoint
+      # Self's endpoint
+      @endpoint MicaSaasWeb.Endpoint
     end
   end
 

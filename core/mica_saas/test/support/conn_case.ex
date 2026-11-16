@@ -27,11 +27,12 @@ defmodule MicaSaasWeb.ConnCase do
       import Mica.TestHelpers
       alias Mica.Factories
 
-      # The default endpoint for testing
-      @endpoint NextWeb.Endpoint
+      # Self's endpoint, with its router
+      @endpoint MicaSaasWeb.Endpoint
       import Mica.AuthTestHelpers
 
-      use MicaSaasWeb, :verified_routes
+      # Mica's paths, `~m`
+      use MicaWeb.Path
     end
   end
 

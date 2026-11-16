@@ -91,7 +91,7 @@ defmodule MicaSaasWeb.FeatureCase do
 
   Wallaby 0.31 calls it through `create_session_fn`, an option it marks as
   deprecated and falls back from silently. It marks the calling process (the
-  test's), so `MicaWeb.Features.FeatureCaseSessionTest` fails when Wallaby
+  test's), so `MicaSaasWeb.Features.FeatureCaseSessionTest` fails when Wallaby
   stops calling it.
   """
   def create_session(base_url, capabilities) do
