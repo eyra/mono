@@ -224,8 +224,8 @@ defmodule Mica.MixProject do
       "test.ci": [
         "cmd mix test.unit",
         "cmd mix test.feature",
-        "cmd BUNDLE=self mix test.unit",
-        "cmd BUNDLE=self mix test.feature",
+        "cmd env BUNDLE=self mix test.unit",
+        "cmd env BUNDLE=self mix test.feature",
         "test.js"
       ],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
