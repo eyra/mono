@@ -39,11 +39,15 @@ defmodule Mica.System do
 
   @doc """
   Routes that must match before every other route, such as a SaaS's own sign-in
-  pages. Spliced at the top of `MicaWeb.Router`, in `c:Mica.SaaS.systems/0` order.
+  pages. Spliced at the top of each SaaS router by
+  `Mica.SaaS.Routes.override_routes/1`, in `c:Mica.SaaS.systems/0` order.
   """
   @callback override_routes() :: Macro.t() | nil
 
-  @doc "The system's routes, spliced inside `MicaWeb.Routes` in `c:Mica.SaaS.systems/0` order."
+  @doc """
+  The system's routes, spliced into each SaaS router by
+  `Mica.SaaS.Routes.system_routes/1`, in `c:Mica.SaaS.systems/0` order.
+  """
   @callback routes() :: Macro.t() | nil
 
   @doc """

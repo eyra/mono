@@ -50,6 +50,9 @@ defmodule Next.SaaS do
   def endpoint, do: NextWeb.Endpoint
 
   @impl true
+  def router, do: NextWeb.Router
+
+  @impl true
   def start_pages, do: Next.StartPages
 
   @impl true
@@ -75,9 +78,19 @@ defmodule Next.SaaS do
   @impl true
   def member_sign_in_page(return_to) do
     if feature_enabled?(:otp),
-      do: MicaWeb.ReturnTo.append("/user/auth/identify/participant", return_to),
-      else: "/user/signin"
+      do: MicaWeb.ReturnTo.append(identify_page(:participant), return_to),
+      else: sign_in_options_page()
   end
+
+  @impl true
+  def sign_in_options_page, do: "/user/signin"
+
+  @impl true
+  def identify_page(:creator), do: "/user/auth/identify"
+  def identify_page(:participant), do: "/user/auth/identify/participant"
+
+  @impl true
+  def session_path, do: "/user/session"
 
   # With sign-in codes on, the code page signs new users up too.
   @impl true

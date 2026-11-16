@@ -39,7 +39,7 @@ defmodule Next.SelfCompositionTest do
     # built for it differs from one built for NextWeb.Endpoint.
     setup do
       config =
-        "mica_saas/config/config.exs"
+        "mica_saas/config/endpoint.exs"
         |> Config.Reader.read!(env: :test)
         |> get_in([:mica, MicaSaasWeb.Endpoint])
         |> Keyword.merge(server: false, url: [host: "localhost", path: "/self"])

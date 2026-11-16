@@ -116,7 +116,7 @@ defmodule Systems.Account.UserAuth do
   def log_out_user(conn) do
     conn
     |> sign_out_current_user()
-    |> redirect(to: ~m"/user/signin")
+    |> redirect(to: Mica.SaaS.module().sign_in_options_page())
   end
 
   @doc """
@@ -218,7 +218,7 @@ defmodule Systems.Account.UserAuth do
   defp signin_path(_conn, :user), do: Mica.SaaS.module().sign_in_page()
 
   defp signin_path(conn, :participant),
-    do: ReturnTo.append(~m"/user/auth/identify/participant", current_path(conn))
+    do: ReturnTo.append(Mica.SaaS.module().identify_page(:participant), current_path(conn))
 
   defp signin_path(conn, :member), do: Mica.SaaS.module().member_sign_in_page(current_path(conn))
 

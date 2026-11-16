@@ -98,8 +98,8 @@ config :mica,
   tool_directors: [:assignment]
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
-# Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
+# A config list, read at runtime, so Logo.pool doesn't stat the filesystem on
+# every render. Override per SaaS (see next/config/config.exs).
 config :mica, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -193,6 +193,10 @@ config :mica, :storage,
 
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
+
+# The endpoints of all SaaSes. Until step code-split every build compiles them all.
+import_config "../next/config/endpoint.exs"
+import_config "../mica_saas/config/endpoint.exs"
 
 # The SaaS config, which names the SaaS module (`config :mica, saas:`). The
 # BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step

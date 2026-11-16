@@ -1,3 +1,25 @@
+defmodule Mica.SaaSTest.Stub do
+  @moduledoc false
+  # A test SaaS, with the callbacks these tests don't read.
+  defmacro __using__(_opts) do
+    quote do
+      use Mica.SaaS
+      def endpoint, do: NextWeb.Endpoint
+      def router, do: NextWeb.Router
+      def start_pages, do: nil
+      def menu_items, do: nil
+      def menu_builder(_), do: nil
+      def title, do: "Test"
+      def signed_in_page(_), do: "/"
+      def sign_in_page, do: "/sign-in"
+      def member_sign_in_page(_return_to), do: "/sign-in"
+      def sign_in_options_page, do: "/sign-in"
+      def identify_page(_user_type), do: "/identify"
+      def session_path, do: "/session"
+    end
+  end
+end
+
 defmodule Mica.SaaSTest do
   use ExUnit.Case, async: true
 
@@ -121,55 +143,64 @@ defmodule Mica.SaaSTest do
   end
 
   defmodule FlagSaaS do
-    use Mica.SaaS
+    use Mica.SaaSTest.Stub
     def systems, do: [SignInSystem, OtpSystem]
     def feature_flags, do: [otp: true]
-    def endpoint, do: NextWeb.Endpoint
-    def start_pages, do: nil
-    def menu_items, do: nil
-    def menu_builder(_), do: nil
-    def signed_in_page(_), do: "/"
   end
 
   defmodule TypoFlagSaaS do
-    use Mica.SaaS
+    use Mica.SaaSTest.Stub
     def systems, do: [SignInSystem]
     def feature_flags, do: [opt: true]
-    def endpoint, do: NextWeb.Endpoint
-    def start_pages, do: nil
-    def menu_items, do: nil
-    def menu_builder(_), do: nil
-    def signed_in_page(_), do: "/"
   end
 
   defmodule DuplicateSaaS do
-    use Mica.SaaS
+    use Mica.SaaSTest.Stub
     def systems, do: [GoodSystem, GoodSystem]
-    def endpoint, do: NextWeb.Endpoint
-    def start_pages, do: nil
-    def menu_items, do: nil
-    def menu_builder(_), do: nil
-    def signed_in_page(_), do: "/"
   end
 
   defmodule UnknownSaaS do
-    use Mica.SaaS
+    use Mica.SaaSTest.Stub
     def systems, do: [Mica.SaaSTest.Missing.System]
-    def endpoint, do: NextWeb.Endpoint
-    def start_pages, do: nil
-    def menu_items, do: nil
-    def menu_builder(_), do: nil
-    def signed_in_page(_), do: "/"
   end
 
   defmodule NoSystemSaaS do
-    use Mica.SaaS
+    use Mica.SaaSTest.Stub
     def systems, do: [NotASystem]
-    def endpoint, do: NextWeb.Endpoint
-    def start_pages, do: nil
-    def menu_items, do: nil
-    def menu_builder(_), do: nil
-    def signed_in_page(_), do: "/"
+  end
+
+  # Mica has no sign-in pages, router or product name of its own (d-0011).
+  test "use Mica.SaaS gives no default for the router, the sign-in pages or the title" do
+    {_result, diagnostics} =
+      Code.with_diagnostics(fn ->
+        Code.compile_quoted(
+          quote do
+            defmodule Mica.SaaSTest.Bare do
+              use Mica.SaaS
+            end
+          end
+        )
+      end)
+
+    callbacks =
+      ~w(router/0 sign_in_page/0 member_sign_in_page/1 sign_in_options_page/0
+         identify_page/1 session_path/0 title/0)
+
+    for callback <- callbacks do
+      [name, arity] = String.split(callback, "/")
+
+      refute function_exported?(
+               Mica.SaaSTest.Bare,
+               String.to_atom(name),
+               String.to_integer(arity)
+             )
+
+      assert Enum.any?(
+               diagnostics,
+               &(&1.message =~ "function #{callback} required by behaviour")
+             ),
+             "no warning that #{callback} is required"
+    end
   end
 
   test "the configured SaaS lists Mica's systems first" do

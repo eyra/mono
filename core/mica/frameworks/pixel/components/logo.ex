@@ -39,23 +39,22 @@ defmodule Frameworks.Pixel.Logo do
   def path(name, {:pool}), do: pool_path(name, :default)
   def path(name, :pool), do: pool_path(name, :default)
 
-  # Pool assets are optional. Configured per bundle via
+  # Pool assets are optional. Configured per SaaS via
   # `config :mica, :pixel, pool_assets: […]`; returns nil for anything
   # not listed so callers can omit the icon slot instead of rendering
-  # a broken image. Compile-time list so we don't stat the filesystem
-  # on every render.
-  require Mica.Env
-
-  @pool_assets Mica.Env.compile_env([:pixel, :pool_assets], [])
-               |> Enum.map(&to_string/1)
-
+  # a broken image. A config list, so we don't stat the filesystem on
+  # every render. Read at runtime: Mica is compiled once for every SaaS.
   defp pool_path(name, variant) do
     path = build_path(:pools, name, variant)
     if pool_asset_exists?(path), do: path, else: nil
   end
 
   defp pool_asset_exists?("/images/logos/pools/" <> file_with_ext) do
-    Path.rootname(file_with_ext) in @pool_assets
+    Path.rootname(file_with_ext) in pool_assets()
+  end
+
+  defp pool_assets do
+    :pixel |> Mica.Env.get([]) |> Keyword.get(:pool_assets, []) |> Enum.map(&to_string/1)
   end
 
   defp build_path(type, name, variant) do

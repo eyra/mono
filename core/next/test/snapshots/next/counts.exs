@@ -4,7 +4,7 @@
   no_route_path_warnings: 0,
   router_compile_connected: [
     "mica/frameworks/pixel/flash.ex",
-    "mica/lib/mica/saas.ex",
+    "mica/lib/mica/saas/routes.ex",
     "mica/lib/mica_web.ex",
     "mica/lib/mica_web/cldr.ex",
     "mica/lib/mica_web/controllers/layouts.ex",
@@ -20,6 +20,7 @@
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",
     "mica/systems/account/auth/surfconext.ex",
-    "mica/systems/assignment/_public.ex"
+    "mica/systems/assignment/_public.ex",
+    "next/lib/next_web.ex"
   ]
 ]

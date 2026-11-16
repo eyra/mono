@@ -58,7 +58,7 @@ defmodule Systems.Account.ProfileView do
      socket
      |> assign(signout_loading: true)
      |> update_view_model()
-     |> push_event("auth:signout", %{url: "/user/session"})}
+     |> push_event("auth:signout", %{url: Mica.SaaS.module().session_path()})}
   end
 
   defp save(socket, %Account.UserProfileEditModel{} = entity, type, attrs) do

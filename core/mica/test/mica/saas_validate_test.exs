@@ -153,10 +153,17 @@ defmodule Mica.SaaSValidateTest.SaaS do
   def systems, do: Process.get(:validate_test_systems)
   def feature_flags, do: Process.get(:validate_test_flags, [])
   def endpoint, do: Process.get(:validate_test_endpoint, NextWeb.Endpoint)
+  def router, do: Process.get(:validate_test_router, NextWeb.Router)
   def start_pages, do: nil
   def menu_items, do: nil
   def menu_builder(_), do: nil
+  def title, do: "Test"
   def signed_in_page(_), do: "/"
+  def sign_in_page, do: "/sign-in"
+  def member_sign_in_page(_return_to), do: "/sign-in"
+  def sign_in_options_page, do: "/sign-in"
+  def identify_page(_user_type), do: "/identify"
+  def session_path, do: "/session"
 end
 
 defmodule Mica.SaaSValidateTest do
@@ -202,6 +209,28 @@ defmodule Mica.SaaSValidateTest do
     assert_raise ArgumentError,
                  "Mica.SaaSValidateTest.SaaS.endpoint/0 names Mica.SaaSValidateTest.Systems.Plain, " <>
                    "which does not `use MicaWeb.Endpoint`",
+                 fn -> validate!([Systems.Plain]) end
+  end
+
+  test "the composition holds the SaaS's router" do
+    assert %{router: NextWeb.Router} = validate!([Systems.Plain])
+    assert SaaS.router() == SaaS.module().router()
+  end
+
+  test "a router that is no Phoenix.Router" do
+    Process.put(:validate_test_router, Systems.Plain)
+
+    assert_raise ArgumentError,
+                 "Mica.SaaSValidateTest.SaaS.router/0 names Mica.SaaSValidateTest.Systems.Plain, " <>
+                   "which does not `use Phoenix.Router`",
+                 fn -> validate!([Systems.Plain]) end
+  end
+
+  test "a router that is no module" do
+    Process.put(:validate_test_router, Mica.SaaSValidateTest.Missing)
+
+    assert_raise ArgumentError,
+                 ~r/router\/0 names Mica.SaaSValidateTest.Missing, which is not a module/,
                  fn -> validate!([Systems.Plain]) end
   end
 

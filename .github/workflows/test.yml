@@ -164,10 +164,22 @@ jobs:
       - name: Dialyzer
         run: make dialyzer
 
-  # The Self build (BUNDLE=self) against its Nova snapshots. MIX_ENV=dev, because
-  # config/test.exs pins the bundle to Next. No database needed.
+  # The Self build (BUNDLE=self) against its Nova snapshots, and a smoke test
+  # that boots it: CI runs Next's tests only, so this is where a Self build runs.
+  # MIX_ENV=dev, because config/test.exs pins the bundle to Next. The database
+  # is for the smoke test (config/dev.exs: postgres/postgres, next_dev).
   snapshot-self:
     runs-on: ubuntu-26.04
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       MIX_ENV: dev
       BUNDLE: self
@@ -199,3 +211,11 @@ jobs:
 
       - name: Nova snapshots (Self)
         run: cd core && mix nova.snapshot
+
+      # Boots Self and requests its home, sign-in and two Mica LiveView pages.
+      - name: Smoke test (Self)
+        run: |
+          cd core
+          mix ecto.create
+          mix ecto.migrate
+          scripts/smoke-pages
