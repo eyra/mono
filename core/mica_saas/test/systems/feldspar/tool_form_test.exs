@@ -1,0 +1,138 @@
+defmodule MicaSaas.Systems.Feldspar.ToolFormTest do
+  use MicaSaasWeb.ConnCase, async: false
+  import Phoenix.LiveViewTest
+
+  alias Systems.Feldspar
+
+  # Wrapper that mounts two ToolForm components in the same LiveView.
+  # Before the fix, this crashed: "existing upload for file already allowed
+  # in another component" because both called allow_upload(:file).
+  defmodule TwoToolFormsView do
+    use Phoenix.LiveView
+
+    def mount(_params, %{"tool1" => tool1, "tool2" => tool2}, socket) do
+      {:ok, assign(socket, tool1: tool1, tool2: tool2)}
+    end
+
+    def render(assigns) do
+      ~H"""
+      <.live_component module={Feldspar.ToolForm} id="form_1" entity={@tool1} />
+      <.live_component module={Feldspar.ToolForm} id="form_2" entity={@tool2} />
+      """
+    end
+  end
+
+  defmodule OneToolFormView do
+    use Phoenix.LiveView
+
+    def mount(_params, %{"tool" => tool}, socket) do
+      {:ok, assign(socket, tool: tool, flash_message: nil)}
+    end
+
+    def handle_info({:show_flash, %{message: message}}, socket) do
+      {:noreply, assign(socket, flash_message: message)}
+    end
+
+    # A successful save also sends :hide_flash and {:handle_auto_save_done, id}.
+    def handle_info(_message, socket), do: {:noreply, socket}
+
+    def render(assigns) do
+      ~H"""
+      <div id="flash-message">{@flash_message}</div>
+      <.live_component module={Feldspar.ToolForm} id="form_1" entity={@tool} />
+      """
+    end
+  end
+
+  describe "uploading a zip" do
+    test "shows an error for a zip with an entry outside the app folder", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"../outside/x.json", "x"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert view |> element("#flash-message") |> render() =~
+               "The selected file is not a valid app zip"
+
+      assert Mica.Repo.reload!(tool).archive_ref == tool.archive_ref
+    end
+
+    test "shows an error for a zip without index.html at its root", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"export/data.json", "{}"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert view |> element("#flash-message") |> render() =~
+               "The selected file is not a Feldspar app: it has no index.html at the top level"
+
+      assert Mica.Repo.reload!(tool).archive_ref == tool.archive_ref
+    end
+
+    test "stores a zip with index.html at its root", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+      {:ok, view, _html} = live_isolated(conn, OneToolFormView, session: %{"tool" => tool})
+
+      upload = zip_upload([{~c"index.html", "app"}])
+
+      view
+      |> file_input("#form_1_file_selector_form", :file_form_1, [upload])
+      |> render_upload("app.zip")
+
+      assert %{archive_name: "app.zip", archive_ref: archive_ref} = Mica.Repo.reload!(tool)
+      refute archive_ref == tool.archive_ref
+    end
+  end
+
+  defp zip_upload(entries) do
+    {:ok, {_, zip}} = :zip.create(~c"app.zip", entries, [:memory])
+
+    %{
+      last_modified: 1_594_171_879_000,
+      name: "app.zip",
+      content: zip,
+      size: byte_size(zip),
+      type: "application/zip"
+    }
+  end
+
+  describe "multiple ToolForm components in the same LiveView" do
+    test "two instances with different ids render without crashing", %{conn: conn} do
+      tool1 = Factories.insert!(:feldspar_tool)
+      tool2 = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+
+      assert {:ok, _view, html} =
+               live_isolated(conn, TwoToolFormsView,
+                 session: %{"tool1" => tool1, "tool2" => tool2}
+               )
+
+      assert html =~ "form_1_file_selector_form"
+      assert html =~ "form_2_file_selector_form"
+    end
+
+    test "each instance gets an upload key scoped to its id", %{conn: conn} do
+      tool = Factories.insert!(:feldspar_tool)
+      conn = conn |> Map.put(:request_path, "/feldspar/tool_form")
+
+      # The file input name is derived from the upload key (file_<id>).
+      # If the key were the global :file, the name would be "file" instead.
+      assert {:ok, _view, html} =
+               live_isolated(conn, TwoToolFormsView, session: %{"tool1" => tool, "tool2" => tool})
+
+      assert html =~ "file_form_1"
+      assert html =~ "file_form_2"
+    end
+  end
+end

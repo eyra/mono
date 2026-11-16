@@ -1,0 +1,152 @@
+defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
+  use MicaSaasWeb.ConnCase, async: false
+  import Phoenix.LiveViewTest
+  import Frameworks.Signal.TestHelper
+
+  alias Mica.Repo
+  alias Frameworks.Concept.LiveContext
+  alias Systems.{Feldspar, Workflow}
+
+  setup %{conn: conn} = test_context do
+    isolate_signals()
+    tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+    tool_ref = Factories.insert!(:tool_ref, %{feldspar_tool: tool})
+    tool_ref = Repo.preload(tool_ref, Workflow.ToolRefModel.preload_graph(:down))
+    user = Factories.insert!(:member)
+
+    context =
+      LiveContext.new(%{
+        title: "Test Feldspar App",
+        icon: "TikTok",
+        tool_ref: tool_ref,
+        assignment_id: 123,
+        participant: "test_participant",
+        workflow_item_id: 456,
+        description: Map.get(test_context, :description),
+        autostart: Map.get(test_context, :autostart, false),
+        current_user: user,
+        recovery: %{
+          scope: "external-run/opaque-scope",
+          on_entry: Map.get(test_context, :on_entry, :check),
+          support_url: "mailto:support@eyra.co?subject=Help"
+        }
+      })
+
+    {:ok, view, _html} =
+      live_isolated(
+        Map.put(conn, :request_path, "/feldspar/tool"),
+        Feldspar.ToolView,
+        session: %{"live_context" => context}
+      )
+
+    %{view: view}
+  end
+
+  test "does not mount an iframe until checking recovery and explicitly starting", %{view: view} do
+    refute has_element?(view, "iframe")
+    refute has_element?(view, "[phx-click='prepare_start']")
+    assert has_element?(view, "img[src*='tiktok_square.svg']")
+
+    render_click(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    refute has_element?(view, "iframe")
+
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    assert has_element?(view, "[phx-click='prepare_start']")
+    refute has_element?(view, "iframe")
+
+    render_click(view, "prepare_start")
+    refute has_element?(view, "iframe")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
+
+    render_hook(view, "feldspar_event", %{
+      __type__: "CommandSystemEvent",
+      name: "initialized"
+    })
+
+    assert has_element?(view, "[data-testid='app-container'].block")
+    assert has_element?(view, "[data-testid='start-container'].hidden")
+  end
+
+  test "an unfinished attempt adds a recovery block to the start screen while a new attempt loads",
+       %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+
+    assert has_element?(
+             view,
+             "[data-testid='feldspar-recovery'] a[data-testid='feldspar-recovery-support'][href='mailto:support@eyra.co?subject=Help']"
+           )
+
+    assert has_element?(view, "[data-testid='start-container']", "Test Feldspar App")
+    assert has_element?(view, "[phx-click='prepare_start']")
+    refute has_element?(view, "iframe")
+
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'] .prism-button--loading")
+
+    render_hook(view, "feldspar_event", %{__type__: "CommandSystemEvent", name: "initialized"})
+    assert has_element?(view, "[data-testid='start-container'].hidden")
+  end
+
+  @tag on_entry: :clear_previous
+  test "an entry that clears old recovery still allows a deliberate new attempt", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+
+    refute has_element?(view, "[data-testid='feldspar-recovery']")
+    refute has_element?(view, "iframe")
+    assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
+
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+
+    assert has_element?(view, "iframe")
+  end
+
+  test "the start screen shows the default description", %{view: view} do
+    assert has_element?(view, "[data-testid='start-container']", "donate your data")
+  end
+
+  @tag description: "You are about to start a test."
+  test "the start screen shows the description from the host", %{view: view} do
+    assert has_element?(view, "[data-testid='start-container']", "You are about to start a test.")
+    refute has_element?(view, "[data-testid='start-container']", "donate your data")
+  end
+
+  @tag autostart: true
+  test "with autostart, the start screen is left out", %{view: view} do
+    assert has_element?(view, "[data-testid='feldspar-autostart']")
+    refute has_element?(view, "[data-testid='feldspar-start']")
+  end
+
+  @tag autostart: true
+  test "with autostart, the app starts once recovery is checked", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    assert_push_event(view, "feldspar:prepare", %{id: _})
+
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+    assert has_element?(view, "iframe")
+  end
+
+  # After a reload or a crash the modal reopens; the notice must be readable before a
+  # new attempt, as on the vertical list's start screen
+  @tag autostart: true
+  test "with autostart, an unfinished attempt shows the start screen with its notice instead",
+       %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: true})
+
+    refute_push_event(view, "feldspar:prepare", %{id: _})
+    assert has_element?(view, "[data-testid='feldspar-recovery']")
+    assert has_element?(view, "[data-testid='feldspar-start'][phx-click='prepare_start']")
+    refute has_element?(view, "[data-testid='feldspar-autostart']")
+  end
+
+  test "without autostart, checking recovery doesn't start the app", %{view: view} do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
+
+    refute has_element?(view, "iframe")
+  end
+end

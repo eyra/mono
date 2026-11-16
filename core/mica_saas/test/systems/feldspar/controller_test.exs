@@ -1,0 +1,1113 @@
+defmodule MicaSaas.Systems.Feldspar.ControllerTest do
+  use MicaSaasWeb.ConnCase, async: false
+  use Oban.Testing, repo: Mica.Repo
+
+  @moduletag :capture_log
+
+  alias Systems.Assignment
+  alias Systems.Crew
+  alias Systems.Project
+  alias Systems.Storage
+
+  # ============================================================================
+  # Donate endpoint tests
+  # ============================================================================
+
+  describe "donate/2 - missing required fields" do
+    setup :login_as_member
+
+    test "returns 400 when key is missing", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{"data" => upload, "context" => context})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: key"}
+    end
+
+    test "returns 400 when data is missing", %{conn: conn} do
+      context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{"key" => "test-key", "context" => context})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: data"}
+    end
+
+    test "returns 400 when both key and data are missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{})
+
+      assert json_response(conn, 400) == %{
+               "error" => "Missing required fields: key, data, context"
+             }
+    end
+  end
+
+  describe "donate/2 - invalid context" do
+    setup :login_as_member
+
+    test "returns 400 when context is nil", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{"key" => "test-key", "data" => upload})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: context"}
+    end
+
+    test "returns 400 when context is empty string", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => ""
+        })
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is empty JSON object", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => "{}"
+        })
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is a JSON array", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("[]"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is JSON null", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("null"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is a JSON number", %{conn: conn} do
+      conn = post(conn, "/api/feldspar/donate", donate_params("5"))
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+
+    test "returns 400 when context is invalid JSON", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => "not valid json"
+        })
+
+      assert json_response(conn, 400) == %{"error" => "Missing or invalid context"}
+    end
+  end
+
+  describe "donate/2 - authentication" do
+    test "returns 401 when user is not authenticated", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context = Jason.encode!(%{assignment_id: 1, task: "1", participant: "p1", group: "test"})
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      assert json_response(conn, 401) == %{"error" => "Not authenticated"}
+    end
+  end
+
+  describe "donate/2 - context keys" do
+    test "refuses an unauthenticated request before logging its context", %{conn: conn} do
+      keys = unique_keys()
+
+      conn = post_donation(conn, context_with_keys(keys) |> Map.put("assignment_id", 1))
+
+      assert json_response(conn, 401) == %{"error" => "Not authenticated"}
+      refute Keyword.has_key?(Logger.metadata(), :feldspar_assignment_id)
+      refute_atoms(keys)
+    end
+
+    test "creates no atoms from unknown context keys", %{conn: conn} do
+      {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+      # A first request loads modules, which adds atoms; count only the second one.
+      post_donation(conn, context_with_keys(unique_keys()))
+      keys = unique_keys()
+      atom_count = :erlang.system_info(:atom_count)
+
+      post_donation(conn, context_with_keys(keys))
+
+      assert :erlang.system_info(:atom_count) - atom_count < length(keys)
+      refute_atoms(keys)
+    end
+
+    test "keeps known context keys in the log metadata", %{conn: conn} do
+      {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+
+      post_donation(conn, %{assignment_id: 123, task: 9, group: "x"})
+
+      metadata = Logger.metadata()
+      assert metadata[:feldspar_assignment_id] == "123"
+      assert metadata[:feldspar_task] == "9"
+      assert metadata[:feldspar_group] == "x"
+    end
+
+    test "keeps the AppSignal telemetry handler attached for non-string values", %{conn: conn} do
+      {:ok, conn: conn, user: _user} = Factories.insert!(:member) |> login(%{conn: conn})
+
+      post_donation(conn, %{task: 9, group: "x"})
+
+      handlers = :telemetry.list_handlers([:feldspar, :donate, :exception])
+      assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
+    end
+  end
+
+  describe "donate/2 - no storage endpoint" do
+    setup :login_as_member
+
+    test "returns 422 when assignment has no storage endpoint", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_assignment(31, 0, :online)
+      Assignment.Public.add_participant!(assignment, user)
+
+      upload = %Plug.Upload{
+        path: create_temp_file("test data"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          assignment_id: assignment.id,
+          task: "1",
+          participant: "p1",
+          group: "test"
+        })
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      assert json_response(conn, 422) == %{"error" => "No storage endpoint configured"}
+    end
+  end
+
+  describe "donate/2 - success" do
+    setup :login_as_member
+
+    test "returns 200 when all inputs are valid", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      upload = %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          assignment_id: assignment.id,
+          task: "9",
+          participant: "test_participant",
+          group: "tiktok"
+        })
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      response = json_response(conn, 200)
+      assert response["status"] == "ok"
+    end
+
+    test "returns 400 without assignment_id in context", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          task: "9",
+          participant: "test_participant",
+          group: "tiktok"
+        })
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      response = json_response(conn, 400)
+      assert response["error"] == "Missing or invalid assignment_id"
+    end
+
+    test "returns 400 for an assignment_id that is not an id", %{conn: conn} do
+      for assignment_id <- ["abc", "1abc", -1, 0, 1.5, 9_223_372_036_854_775_808] do
+        response =
+          conn
+          |> post_donation(%{assignment_id: assignment_id})
+          |> json_response(400)
+
+        assert response["error"] == "Missing or invalid assignment_id"
+      end
+
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+  end
+
+  describe "donate/2 - participation" do
+    setup :login_as_member
+
+    test "refuses a user who does not participate in the assignment", %{conn: conn} do
+      assignment = create_assignment_with_storage()
+      other = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, other)
+      {:ok, other_id} = Assignment.Public.participant_id(assignment, other)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: other_id})
+
+      assert json_response(conn, 403) == %{"error" => "Not a participant of this assignment"}
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+
+    test "refuses an unknown assignment", %{conn: conn} do
+      conn = post_donation(conn, %{assignment_id: 999_999_999, participant: "p1"})
+
+      assert json_response(conn, 403) == %{"error" => "Not a participant of this assignment"}
+      assert all_enqueued(worker: Storage.Delivery) == []
+    end
+
+    test "accepts the assignment_id as a numeric string", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: to_string(assignment.id)})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "delivers a participant's donation with the participant's own id", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      # Same shape as the context the Feldspar tool view hands to the client
+      context = %{
+        assignment_id: assignment.id,
+        task: 9,
+        participant: public_id,
+        group: "tiktok",
+        panel_info: nil
+      }
+
+      conn = post_donation(conn, context)
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "ignores a participant id sent by the client", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: "someone_else"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "uses the participant's identifier at the study's affiliate", %{conn: conn, user: user} do
+      assignment =
+        create_assignment_with_storage(Assignment.Factories.create_assignment_with_affiliate())
+
+      Assignment.Public.add_participant!(assignment, user)
+      Assignment.Factories.add_affiliate_user(assignment, user, "ext_b")
+
+      conn =
+        conn
+        |> put_panel_participant("ext_a")
+        |> post_donation(%{assignment_id: assignment.id, participant: "ext_a"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == "ext_b"
+    end
+
+    test "stores under the study's own participant id, not the session's panel id", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = create_assignment_with_storage()
+      other = Factories.insert!(:member)
+      Assignment.Public.add_participant!(assignment, other)
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, other_id} = Assignment.Public.participant_id(assignment, other)
+      {:ok, own_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn =
+        conn
+        |> put_panel_participant(to_string(other_id))
+        |> post_donation(%{assignment_id: assignment.id, participant: other_id})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == own_id
+    end
+
+    test "delivers a tester's preview donation as preview", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Crew.Public.apply_member_with_role(assignment.crew, user, :tester)
+
+      conn =
+        conn
+        |> put_panel_participant("preview")
+        |> post_donation(%{assignment_id: assignment.id, participant: "preview"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == "preview"
+    end
+
+    test "delivers a participant's donation under their own id in preview mode", %{
+      conn: conn,
+      user: user
+    } do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn =
+        conn
+        |> put_panel_participant("preview")
+        |> post_donation(%{assignment_id: assignment.id, participant: "preview"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+
+    test "reports the participant's own id in telemetry", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+      attach_telemetry([[:feldspar, :donate, :start], [:feldspar, :donate, :stop]])
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: "someone_else"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert_received {:telemetry, [:feldspar, :donate, :start], %{participant: nil}}
+      assert_received {:telemetry, [:feldspar, :donate, :stop], %{participant: participant}}
+      assert to_string(participant) == to_string(public_id)
+    end
+
+    test "delivers the key, task and group as sent", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      context = %{assignment_id: assignment.id, task: 9, group: "whatsapp group chat"}
+
+      conn = post_donation(conn, context, "1761568123456-it's (a), b/c: {d} é")
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+
+      identifier = delivered_identifier()
+      assert ["task", 9] in identifier
+      assert ["source", "whatsapp group chat"] in identifier
+      assert ["key", "1761568123456-it's (a), b/c: {d} é"] in identifier
+    end
+
+    test "accepts a donation from a tester", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Crew.Public.apply_member_with_role(assignment.crew, user, :tester)
+      {:ok, public_id} = Assignment.Public.participant_id(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, participant: public_id})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      assert delivered_participant() == public_id
+    end
+  end
+
+  describe "donate/2 - control characters" do
+    setup :login_as_member
+
+    test "returns 400 when the key contains a line break", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9}, "test-key\r\nx")
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the task contains a line break", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: "9\n"})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the group contains a NUL byte", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9, group: "tik\0tok"})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the context key contains a line break", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9, key: "ctx\r\nkey"})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+  end
+
+  describe "donate/2 - value types" do
+    setup :login_as_member
+
+    test "returns 400 when the key is a list", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9}, ["a\r\nb"])
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the task is a JSON array", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: [13, 10]})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the group is a JSON array", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9, group: ["x\r\ny"]})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the task is a JSON object", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: %{a: 1}})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+
+    test "returns 400 when the group is a JSON object", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      conn = post_donation(conn, %{assignment_id: assignment.id, task: 9, group: %{a: 1}})
+
+      assert json_response(conn, 400) == %{"error" => "Invalid key or context"}
+      assert [] = all_enqueued(worker: Storage.Delivery)
+    end
+  end
+
+  describe "donate/2 - file read error" do
+    setup :login_as_member
+
+    test "returns 422 when file cannot be read", %{conn: conn} do
+      upload = %Plug.Upload{
+        path: "/nonexistent/path/to/file.json",
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          assignment_id: 1,
+          task: "1",
+          participant: "p1",
+          group: "test"
+        })
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      assert json_response(conn, 422) == %{"error" => "Failed to read upload"}
+    end
+  end
+
+  describe "donate/2 - scheduling failure" do
+    setup :login_as_member
+
+    setup do
+      # Save original config
+      original_storage_config = Application.get_env(:mica, :storage)
+
+      on_exit(fn ->
+        Application.put_env(:mica, :storage, original_storage_config)
+      end)
+
+      :ok
+    end
+
+    test "returns 422 when job scheduling fails", %{conn: conn, user: user} do
+      import Mox
+
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+
+      upload = %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      }
+
+      context =
+        Jason.encode!(%{
+          assignment_id: assignment.id,
+          task: "1",
+          participant: "test_participant",
+          group: "test"
+        })
+
+      # Configure mock job scheduler
+      storage_config = Application.get_env(:mica, :storage)
+
+      Application.put_env(
+        :mica,
+        :storage,
+        Keyword.put(storage_config, :job_scheduler, Systems.Storage.MockJobScheduler)
+      )
+
+      # Mock insert to return an error - this causes the Multi to fail with 4-tuple
+      expect(Systems.Storage.MockJobScheduler, :insert, fn _changeset ->
+        {:error, %Ecto.Changeset{valid?: false, errors: [queue: {"invalid", []}]}}
+      end)
+
+      conn =
+        conn
+        |> post("/api/feldspar/donate", %{
+          "key" => "test-key",
+          "data" => upload,
+          "context" => context
+        })
+
+      # Should return 422 with "Scheduling failed", not crash with 500
+      response = json_response(conn, 422)
+      assert response["error"] == "Scheduling failed"
+    end
+  end
+
+  describe "donate/2 - concurrent uploads" do
+    setup :login_as_member
+
+    @tag timeout: 120_000
+    @tag :slow
+    test "concurrent large file uploads all succeed", %{conn: conn, user: user} do
+      assignment = create_assignment_with_storage()
+      Assignment.Public.add_participant!(assignment, user)
+      num_requests = 20
+      line_count = 50_000
+
+      content = create_large_json_content(line_count)
+      IO.puts("\nContent size: #{Float.round(byte_size(content) / 1024 / 1024, 2)} MB")
+
+      temp_files =
+        for i <- 1..num_requests do
+          path =
+            Path.join(System.tmp_dir!(), "concurrent_test_#{i}_#{:erlang.unique_integer()}.json")
+
+          File.write!(path, content)
+          path
+        end
+
+      on_exit(fn -> Enum.each(temp_files, &File.rm/1) end)
+
+      IO.puts("Sending #{num_requests} concurrent requests...")
+      start_time = System.monotonic_time(:millisecond)
+
+      tasks =
+        temp_files
+        |> Enum.with_index(1)
+        |> Enum.map(fn {path, i} ->
+          Task.async(fn ->
+            upload = %Plug.Upload{
+              path: path,
+              filename: "data_#{i}.json",
+              content_type: "application/json"
+            }
+
+            context =
+              Jason.encode!(%{
+                assignment_id: assignment.id,
+                task: "#{i}",
+                participant: "participant_#{i}",
+                group: "concurrent_test"
+              })
+
+            result =
+              conn
+              |> post("/api/feldspar/donate", %{
+                "key" => "test-key-#{i}",
+                "data" => upload,
+                "context" => context
+              })
+
+            status = result.status
+            IO.puts("  Request #{i}: HTTP #{status}")
+            {i, status, result.resp_body}
+          end)
+        end)
+
+      results = Task.await_many(tasks, 120_000)
+
+      end_time = System.monotonic_time(:millisecond)
+      IO.puts("\nDuration: #{end_time - start_time}ms")
+
+      successes = Enum.filter(results, fn {_, status, _} -> status == 200 end)
+      failures = Enum.reject(results, fn {_, status, _} -> status == 200 end)
+
+      IO.puts("Successes: #{length(successes)}/#{num_requests}")
+
+      if failures != [] do
+        IO.puts("\nFailures:")
+
+        Enum.each(failures, fn {i, status, body} ->
+          IO.puts("  Request #{i}: HTTP #{status} - #{body}")
+        end)
+      end
+
+      assert length(successes) == num_requests,
+             "Expected #{num_requests} successes, got #{length(successes)}. Failures: #{inspect(failures)}"
+    end
+  end
+
+  # ============================================================================
+  # Log endpoint tests
+  # ============================================================================
+
+  describe "log/2 - missing required fields" do
+    setup :login_as_member
+
+    test "returns 400 when level is missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"message" => "test message"})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: level"}
+    end
+
+    test "returns 400 when message is missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info"})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: message"}
+    end
+
+    test "returns 400 when both level and message are missing", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{})
+
+      assert json_response(conn, 400) == %{"error" => "Missing required fields: level, message"}
+    end
+  end
+
+  describe "log/2 - invalid level" do
+    setup :login_as_member
+
+    test "returns 400 for invalid level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "invalid", "message" => "test"})
+
+      assert json_response(conn, 400) == %{
+               "error" => "Invalid level. Must be one of: debug, info, warn, error"
+             }
+    end
+
+    test "returns 400 for empty level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "", "message" => "test"})
+
+      assert json_response(conn, 400) == %{
+               "error" => "Invalid level. Must be one of: debug, info, warn, error"
+             }
+    end
+  end
+
+  describe "log/2 - authentication" do
+    test "returns 401 when user is not authenticated", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "test"})
+
+      assert json_response(conn, 401) == %{"error" => "Not authenticated"}
+    end
+  end
+
+  describe "log/2 - success cases" do
+    setup :login_as_member
+
+    test "accepts debug level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "debug", "message" => "debug message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts info level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "info message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts warn level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "warn", "message" => "warning message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "accepts error level", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "error", "message" => "error message"})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "keeps a nested context value in the log metadata", %{conn: conn} do
+      post(conn, "/api/feldspar/log", %{
+        "level" => "info",
+        "message" => "message with context",
+        "context" => %{"task" => %{"nested" => true}}
+      })
+
+      assert Logger.metadata()[:feldspar_task] == ~s(%{"nested" => true})
+    end
+
+    test "keeps the AppSignal telemetry handler attached for a nested context value", %{
+      conn: conn
+    } do
+      post(conn, "/api/feldspar/log", %{
+        "level" => "invalid",
+        "message" => "message with context",
+        "context" => %{"task" => %{"nested" => true}}
+      })
+
+      handlers = :telemetry.list_handlers([:feldspar, :log, :exception])
+      assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
+    end
+
+    test "accepts optional context", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with context",
+          "context" => %{
+            "assignment_id" => 123,
+            "participant" => "p1",
+            "key" => "test-key"
+          }
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "works without context", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message without context"
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+
+    test "handles empty message", %{conn: conn} do
+      conn =
+        conn
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => ""})
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+  end
+
+  describe "log/2 - context keys" do
+    setup :login_as_member
+
+    test "creates no atoms from unknown context keys", %{conn: conn} do
+      keys = unique_keys()
+
+      conn =
+        post(conn, "/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with unknown context keys",
+          "context" => context_with_keys(keys)
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+      refute_atoms(keys)
+    end
+
+    test "keeps the AppSignal telemetry handler attached for a non-string level", %{conn: conn} do
+      post(conn, "/api/feldspar/log", %{"level" => %{"a" => 1}, "message" => "x"})
+
+      handlers = :telemetry.list_handlers([:feldspar, :log, :exception])
+      assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
+    end
+
+    test "accepts a context that is not an object", %{conn: conn} do
+      conn =
+        post(conn, "/api/feldspar/log", %{
+          "level" => "info",
+          "message" => "message with a string context",
+          "context" => "not an object"
+        })
+
+      assert json_response(conn, 200) == %{"status" => "ok"}
+    end
+  end
+
+  describe "log/2 - rate limiting" do
+    @describetag :rate_limit_test
+
+    setup :login_as_member
+
+    setup do
+      # Set very low limit and restart Rate.Server with new config
+      low_limit_config = [
+        prune_interval: 60 * 60 * 1000,
+        quotas: [
+          [service: :feldspar_log, limit: 1, unit: :call, window: :minute, scope: :local]
+        ]
+      ]
+
+      # Stop, delete, and re-add with new config
+      Supervisor.terminate_child(Mica.Supervisor, Systems.Rate.Server)
+      Supervisor.delete_child(Mica.Supervisor, Systems.Rate.Server)
+      Supervisor.start_child(Mica.Supervisor, {Systems.Rate.Server, low_limit_config})
+
+      on_exit(fn ->
+        # Restore original config
+        original_config = Mica.Application.rate_config(Application.get_env(:mica, :rate))
+        Supervisor.terminate_child(Mica.Supervisor, Systems.Rate.Server)
+        Supervisor.delete_child(Mica.Supervisor, Systems.Rate.Server)
+        Supervisor.start_child(Mica.Supervisor, {Systems.Rate.Server, original_config})
+      end)
+
+      :ok
+    end
+
+    test "returns 429 when rate limit exceeded", %{conn: conn} do
+      # Use unique IP to avoid interference from other tests
+      unique_ip = {10, 0, 0, :erlang.unique_integer([:positive]) |> rem(255)}
+
+      # First request should succeed
+      assert conn
+             |> Map.put(:remote_ip, unique_ip)
+             |> post("/api/feldspar/log", %{"level" => "info", "message" => "first"})
+             |> json_response(200) == %{"status" => "ok"}
+
+      # Second request should be rate limited
+      response =
+        conn
+        |> Map.put(:remote_ip, unique_ip)
+        |> post("/api/feldspar/log", %{"level" => "info", "message" => "second"})
+        |> json_response(429)
+
+      assert response["error"] =~ "Rate limited"
+    end
+  end
+
+  # ============================================================================
+  # Helper functions
+  # ============================================================================
+
+  defp create_temp_file(content) do
+    path = Path.join(System.tmp_dir!(), "test_upload_#{:erlang.unique_integer()}.json")
+    File.write!(path, content)
+    on_exit(fn -> File.rm(path) end)
+    path
+  end
+
+  defp donate_params(context_json) do
+    %{
+      "key" => "test-key",
+      "data" => %Plug.Upload{
+        path: create_temp_file("{\"test\": \"data\"}"),
+        filename: "data.json",
+        content_type: "application/json"
+      },
+      "context" => context_json
+    }
+  end
+
+  defp post_donation(conn, context, key \\ "test-key") do
+    upload = %Plug.Upload{
+      path: create_temp_file("{\"test\": \"data\"}"),
+      filename: "data.json",
+      content_type: "application/json"
+    }
+
+    post(conn, "/api/feldspar/donate", %{
+      "key" => key,
+      "data" => upload,
+      "context" => Jason.encode!(context)
+    })
+  end
+
+  defp unique_keys do
+    for _ <- 1..100, do: "unknown_#{System.unique_integer([:positive])}"
+  end
+
+  defp context_with_keys(keys), do: Map.new(keys, &{&1, "value"})
+
+  defp refute_atoms(keys) do
+    for key <- keys, name <- [key, "feldspar_#{key}"] do
+      assert_raise ArgumentError, fn -> String.to_existing_atom(name) end
+    end
+  end
+
+  defp delivered_participant do
+    Enum.find_value(delivered_identifier(), fn
+      ["participant", participant] -> participant
+      _ -> nil
+    end)
+  end
+
+  defp delivered_identifier do
+    [%{args: %{"meta_data" => %{"identifier" => identifier}}}] =
+      all_enqueued(worker: Storage.Delivery)
+
+    identifier
+  end
+
+  defp create_large_json_content(line_count) do
+    entries =
+      Enum.map_join(1..line_count, ",\n", fn i ->
+        ~s({"id":#{i},"data":"entry_#{i}_with_some_padding_to_increase_size"})
+      end)
+
+    "[#{entries}]"
+  end
+
+  defp put_panel_participant(conn, participant) do
+    Plug.Conn.put_session(conn, :panel_info, %{
+      panel: :affiliate,
+      redirect_url: nil,
+      participant: participant
+    })
+  end
+
+  defp attach_telemetry(events) do
+    handler_id = "feldspar-controller-test-#{System.unique_integer([:positive])}"
+    test_pid = self()
+
+    :telemetry.attach_many(
+      handler_id,
+      events,
+      fn event, _measurements, metadata, _config ->
+        send(test_pid, {:telemetry, event, metadata})
+      end,
+      nil
+    )
+
+    on_exit(fn -> :telemetry.detach(handler_id) end)
+  end
+
+  defp create_assignment_with_storage(
+         assignment \\ Assignment.Factories.create_assignment(31, 0, :online)
+       ) do
+    Project.Factories.link_storage_endpoint(assignment)
+  end
+end

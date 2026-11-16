@@ -3,7 +3,7 @@ defmodule NextWeb.Features.ProbeCreateTest do
   Feature test for creating a Cognitive screening (Probe) project item,
   which is behind the `:probe` feature flag.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   @card_selector "[data-testid^='card_']"

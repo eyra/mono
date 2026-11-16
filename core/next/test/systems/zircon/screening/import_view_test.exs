@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportViewTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
   import Ecto.Query

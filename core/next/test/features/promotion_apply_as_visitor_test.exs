@@ -12,7 +12,7 @@ defmodule NextWeb.Features.PromotionApplyAsVisitorTest do
   by exercising the real-browser click + Phoenix routing so the
   URL-encoding survives an actual round-trip.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Advert

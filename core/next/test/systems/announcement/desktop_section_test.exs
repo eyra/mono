@@ -1,5 +1,5 @@
 defmodule Next.Systems.Announcement.DesktopSectionTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 

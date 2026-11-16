@@ -1,5 +1,5 @@
 defmodule Next.StorybookTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   setup do

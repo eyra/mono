@@ -19,7 +19,7 @@ defmodule Mica.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      test_paths: ["mica/test", "next/test"],
+      test_paths: test_paths(System.get_env("BUNDLE")),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
@@ -79,8 +79,13 @@ defmodule Mica.MixProject do
   # in one Mix project until Nova migration step code-split.
   @source_paths ~w(mica/lib mica/systems mica/frameworks next/lib next/systems mica_saas/lib mica_saas/systems)
 
-  defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test"]
+  defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test", "mica_saas/test"]
   defp elixirc_paths(_), do: @source_paths
+
+  # Self's suite runs against Self's router and endpoint, so on its own:
+  # `BUNDLE=self mix test`. Mica's and Next's suites run against Next's.
+  defp test_paths("self"), do: ["mica_saas/test"]
+  defp test_paths(_bundle), do: ["mica/test", "next/test"]
 
   # Specifies your project dependencies.
   #
@@ -215,7 +220,14 @@ defmodule Mica.MixProject do
       ],
       "test.js": "cmd --cd assets npm test",
       # Mix runs the `test` task once per invocation, so each half needs its own.
-      "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
+      # BUNDLE=self runs Self's suite (mica_saas/test).
+      "test.ci": [
+        "cmd mix test.unit",
+        "cmd mix test.feature",
+        "cmd env BUNDLE=self mix test.unit",
+        "cmd env BUNDLE=self mix test.feature",
+        "test.js"
+      ],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
       "test.smoke": "cmd ./test/smoke/run.sh",
       # Usage: mix test.smoke dev | staging | prod

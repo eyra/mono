@@ -117,6 +117,10 @@ jobs:
       - name: Unit tests
         run: cd core && mix test.unit
 
+      # Self's suite, core/mica_saas/test, against Self's router and endpoint.
+      - name: Unit tests (Self)
+        run: cd core && BUNDLE=self mix test.unit
+
       # Wallaby needs a chromedriver whose major version matches Chrome.
       - id: setup-chrome
         uses: browser-actions/setup-chrome@v2.2.0
@@ -127,6 +131,12 @@ jobs:
 
       - name: Feature tests
         run: cd core && mix test.feature
+        env:
+          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+
+      - name: Feature tests (Self)
+        run: cd core && BUNDLE=self mix test.feature
         env:
           CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
           CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
@@ -165,9 +175,9 @@ jobs:
         run: make dialyzer
 
   # The Self build (BUNDLE=self) against its Nova snapshots, and a smoke test
-  # that boots it: CI runs Next's tests only, so this is where a Self build runs.
-  # MIX_ENV=dev, because config/test.exs pins the bundle to Next. The database
-  # is for the smoke test (config/dev.exs: postgres/postgres, next_dev).
+  # that boots it. MIX_ENV=dev: Self's snapshots are of its dev build. Self's
+  # test suite runs in the test job. The database is for the smoke test
+  # (config/dev.exs: postgres/postgres, next_dev).
   snapshot-self:
     runs-on: ubuntu-26.04
 

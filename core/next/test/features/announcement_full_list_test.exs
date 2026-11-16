@@ -1,5 +1,5 @@
 defmodule NextWeb.Features.AnnouncementFullListTest do
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Next.Systems.Announcement

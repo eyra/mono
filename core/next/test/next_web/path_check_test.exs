@@ -1,7 +1,6 @@
 defmodule NextWeb.PathCheckTest do
-  # Every SaaS checks every Mica path (`~m`) against its own router. Self's
-  # router is compiled in every build until code-split, so its check runs here
-  # too; mix nova.snapshot runs it again in the Self build (snapshot-self).
+  # Every SaaS checks every Mica path (`~m`) against its own router; Self's
+  # check is in its own suite (mica_saas/test).
   use ExUnit.Case, async: true
 
   import ExUnit.CaptureIO
@@ -13,23 +12,11 @@ defmodule NextWeb.PathCheckTest do
     assert issues == [], PathCheck.format(issues, NextWeb.Router)
   end
 
-  test "every Mica path matches a route of Self's router that Mica serves" do
-    issues = PathCheck.unmatched(MicaSaasWeb.Router)
-    assert issues == [], PathCheck.format(issues, MicaSaasWeb.Router)
-  end
-
   test "Next's sign-in pages are recorded as its override routes" do
     overrides = NextWeb.Router.__mica_override_routes__()
     assert "/user/signin" in overrides
     assert "/user/auth/:provider" in overrides
     refute "/assignment/:id" in overrides
-  end
-
-  test "Self's sign-in pages are recorded as its override routes" do
-    overrides = MicaSaasWeb.Router.__mica_override_routes__()
-    assert "/user/signin" in overrides
-    assert "/user/auth/identify" in overrides
-    refute "/user/auth/:provider" in overrides
   end
 
   defmodule Router do

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.RISErrorContentTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
 
   alias Next.Systems.Paper
   alias Next.Systems.Paper.RISEntryError

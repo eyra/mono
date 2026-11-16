@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportSessionWarningsViewTest do
-  use MicaWeb.ConnCase
+  use NextWeb.ConnCase
   import Phoenix.LiveViewTest
 
   alias Next.Systems.Paper

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Account.NativeSigninControllerTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
   use Bamboo.Test
 
@@ -161,7 +161,7 @@ defmodule Next.Systems.Account.NativeSigninControllerTest do
       %{value: signed_token} = verify_conn.resp_cookies[@remember_me_cookie]
 
       status_conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
@@ -169,7 +169,7 @@ defmodule Next.Systems.Account.NativeSigninControllerTest do
       assert response(status_conn, 204) == ""
 
       account_conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/account")

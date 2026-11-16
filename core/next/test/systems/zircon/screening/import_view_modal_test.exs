@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportViewModalTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
   alias Mica.Factories

@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.PaperSetDeleteTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper
 

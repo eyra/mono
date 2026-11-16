@@ -34,7 +34,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
       BUNDLE=self MIX_ENV=dev mix nova.snapshot      # Self: fail on drift
       mix nova.snapshot --update                     # rewrite the snapshots
 
-  Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+  Self's snapshots are of its dev build (`MIX_ENV=dev`); the test env adds `/test`
+  routes.
   Before rendering, the task runs the boot's composition checks
   (`Mica.SaaS.validate!/0`) and the Mica path check (`MicaWeb.PathCheck`): every
   `~m` must match a route of the build's router (`Mica.SaaS.router/0`) that Mica
@@ -43,7 +44,8 @@ defmodule Mix.Tasks.Nova.Snapshot do
   Routes pass when the route set is identical and every two routes that can
   match the same request keep their relative order; other reordering is allowed.
   Everything else must be identical. Next is also checked in `mix test`
-  (`next/test/snapshots/nova_snapshot_test.exs`), Self in the `snapshot-self` CI job.
+  (`next/test/snapshots/nova_snapshot_test.exs`), Self in the `snapshot-self` CI job,
+  and its routes and permissions in `BUNDLE=self mix test` (`mica_saas/test/saas_test.exs`).
   """
 
   use Mix.Task

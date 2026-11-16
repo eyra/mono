@@ -1,0 +1,14 @@
+defmodule MicaSaas.Systems.Admin.LoginPageTest do
+  use MicaSaasWeb.ConnCase
+  import Phoenix.ConnTest
+  import Phoenix.LiveViewTest
+
+  describe "login page" do
+    setup [:login_as_admin]
+
+    test "render", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~m"/admin/login")
+      assert html =~ "Sign in with Google account"
+    end
+  end
+end

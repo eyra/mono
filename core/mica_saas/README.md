@@ -60,6 +60,15 @@ All commands below run from the `core/` folder unless stated otherwise.
 
     The Core app is running at: http://localhost:4000
 
+### Tests
+
+Self's suite, `test/`, runs against Self's router and endpoint: the tests of Mica's pages, controllers and feature journeys, and Self's own checks. From the core folder:
+
+```sh
+$ BUNDLE=self mix test.unit
+$ BUNDLE=self mix test.feature
+```
+
 
 ## Customizing
 

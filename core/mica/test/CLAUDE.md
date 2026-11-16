@@ -2,6 +2,15 @@
 
 This file contains testing patterns and learnings specific to the test suite.
 
+## Mica's tests need no SaaS
+
+A test in `mica/test` needs no router, no endpoint and no `Mica.SaaS` callback. A test
+that does (`ConnCase`, `FeatureCase`, `Phoenix.ConnTest`, Wallaby, `live/2`,
+`live_isolated/3`) is a SaaS test: it goes to Self's suite, `mica_saas/test`
+(`MicaSaasWeb.ConnCase`, run with `BUNDLE=self mix test`), or to `next/test`
+(`NextWeb.ConnCase`) when it tests Next's behaviour. The credo check
+`MicaTestNeedsNoSaas` enforces it; `elixir scripts/mica_saas_tests.exs` moves such tests.
+
 ## Signal Testing Patterns
 
 ### Signal Isolation Challenges
@@ -306,7 +315,7 @@ For complex signal flows, create focused integration tests:
 ```elixir
 # core/next/test/systems/zircon/screening/abort_prompting_integration_test.exs
 defmodule Next.Systems.Zircon.Screening.AbortPromptingIntegrationTest do
-  use MicaWeb.ConnCase, async: false  # async: false for signal tests
+  use NextWeb.ConnCase, async: false  # async: false for signal tests
 
   describe "abort from prompting phase" do
     test "complete flow", %{conn: conn} do
