@@ -561,7 +561,7 @@ defmodule Systems.Assignment.SetupExporterTest do
 
       {%{workflow: %{tasks: [task | _]}}, _assets} = metadata(assignment)
 
-      assert %{type: "questionnaire", link: "https://eyra.co/alliance/123"} = task
+      assert %{type: "questionnaire", link: "https://example.org/alliance/123"} = task
     end
 
     test "serializes a feldspar tool as a data donation task without bundling the app" do

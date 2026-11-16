@@ -10,7 +10,7 @@ defmodule Systems.Alliance.PublicTest do
   describe "alliance_tools" do
     alias Mica.Factories
 
-    @update_attrs %{url: "http://eyra.co/fake_alliance"}
+    @update_attrs %{url: "http://example.org/fake_alliance"}
 
     test "list_tools/0 returns all alliance_tools" do
       alliance_tool = Factories.insert!(:alliance_tool)
@@ -45,7 +45,7 @@ defmodule Systems.Alliance.PublicTest do
                  @update_attrs
                )
 
-      assert alliance_tool.url == "http://eyra.co/fake_alliance"
+      assert alliance_tool.url == "http://example.org/fake_alliance"
     end
 
     test "delete_tool/1 deletes the alliance_tool" do
