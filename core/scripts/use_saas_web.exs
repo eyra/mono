@@ -15,8 +15,9 @@
 defmodule UseSaasWeb do
   @source_exts ~w(.ex .exs .heex .eex)
   @web_modules %{"core/next/" => "NextWeb", "core/mica_saas/" => "MicaSaasWeb"}
-  # Its own test and the credo check's test name `use MicaWeb` on purpose.
-  @excluded ~r"(use_saas_web_script_test|saas_web_module_check_test)\.exs$"
+  # Its own test, the credo check's test and mica_saas_tests.exs's test name
+  # `use MicaWeb` on purpose.
+  @excluded ~r"(use_saas_web_script_test|saas_web_module_check_test|mica_saas_tests_script_test)\.exs$"
   @use_mica_web ~r/\buse MicaWeb(?![\w.])/
 
   def main(args) do
