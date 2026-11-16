@@ -17,7 +17,8 @@ defmodule Next.TestCiAliasTest do
   end
 
   test "test.ci runs the three suites: Mica's with no SaaS, Next's and Self's" do
-    assert "mix test.unit" in commands()
+    # Unset, so that a BUNDLE of the caller's shell doesn't run another suite twice.
+    assert "env -u BUNDLE mix test.unit" in commands()
     assert "env BUNDLE=next mix test.unit" in commands()
     assert "env BUNDLE=next mix test.feature" in commands()
     assert "env BUNDLE=self mix test.unit" in commands()

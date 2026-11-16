@@ -224,7 +224,7 @@ defmodule Mica.MixProject do
       # Mix runs the `test` task once per invocation, so each suite and half needs
       # its own: Mica's (no SaaS, no feature tests), Next's and Self's.
       "test.ci": [
-        "cmd mix test.unit",
+        "cmd env -u BUNDLE mix test.unit",
         "cmd env BUNDLE=next mix test.unit",
         "cmd env BUNDLE=next mix test.feature",
         "cmd env BUNDLE=self mix test.unit",
@@ -277,9 +277,24 @@ defmodule Mica.MixProject do
   end
 
   # Mica's own suite (`mix test`, no BUNDLE) boots on the composition that
-  # mica/test/test_helper.exs puts, so its helper starts the app.
-  defp mica_suite_aliases(nil), do: [test: "test --no-start"]
+  # mica/test/test_helper.exs puts, so its helper starts the app. A SaaS's test
+  # file needs its BUNDLE. The task module is run directly: running it by name
+  # would run this alias again.
+  defp mica_suite_aliases(nil), do: [test: &mica_suite_test/1]
   defp mica_suite_aliases(_bundle), do: []
+
+  defp mica_suite_test(args) do
+    case Enum.find(args, &String.starts_with?(&1, ["next/", "mica_saas/"])) do
+      nil ->
+        Mix.Task.get!("test").run(["--no-start" | args])
+
+      "next/" <> _ = path ->
+        Mix.raise("#{path} is in Next's suite: run it with BUNDLE=next mix test")
+
+      path ->
+        Mix.raise("#{path} is in Self's suite: run it with BUNDLE=self mix test")
+    end
+  end
 
   # Runs the Ecto task over `Mica.SaaS.migrations_paths/0`, the migrations of Mica
   # and the SaaS's systems, unless the paths are given. The task module is run

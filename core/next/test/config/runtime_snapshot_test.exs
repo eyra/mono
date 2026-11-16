@@ -10,7 +10,7 @@ defmodule Next.Config.RuntimeSnapshotTest do
     test "runtime config for #{fixture.name} matches its snapshot" do
       assert Snapshot.render(@fixture) == File.read!(@fixture.snapshot), """
       The runtime config for #{@fixture.name} changed. Review the change, then run
-      `mix config.snapshot --update` and commit the snapshot diff.
+      `BUNDLE=next mix config.snapshot --update` and commit the snapshot diff.
       """
     end
   end
@@ -69,5 +69,17 @@ defmodule Next.Config.RuntimeSnapshotTest do
     assert length(crontab) == 6
     assert Mica.ObanConfig.unknown_plugins(Mica.SaaS.oban_crons(), oban_plugins) == []
     assert :ok = Oban.Config.validate(oban)
+  end
+
+  # Without BUNDLE the test env has no SaaS, so no Next config: the snapshots would
+  # lose Next's auth methods, and --update would write them that way.
+  test "mix config.snapshot refuses a build without Next's config" do
+    assert :ok = Snapshot.check_saas!(Next.SaaS)
+
+    for saas <- [nil, MicaSaas.SaaS] do
+      assert_raise Mix.Error, ~r/run BUNDLE=next mix config.snapshot/, fn ->
+        Snapshot.check_saas!(saas)
+      end
+    end
   end
 end
