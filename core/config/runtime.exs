@@ -72,8 +72,11 @@ end
 
 # The endpoint of the SaaS that runs (`config :mica, saas:`). Its build-time
 # config is in `<saas>/config/endpoint.exs`; here it gets its port and, on a
-# deployment, its URL and secret.
-endpoint = Mica.SaaS.module().endpoint()
+# deployment, its URL and secret. Mica's own tests configure no SaaS, so no endpoint.
+endpoint =
+  if config_env() == :test and Application.get_env(:mica, :saas) == nil,
+    do: nil,
+    else: Mica.SaaS.module().endpoint()
 
 # HTTP_PORT moves a dev server off 4000. Set here, so it wins over the port in
 # dev.secret.exs.
@@ -83,7 +86,7 @@ end
 
 # Feature tests reach the endpoint at base_url, which FEATURE_TEST_SESSION sets
 # (config/test.exs).
-if config_env() == :test do
+if config_env() == :test and endpoint do
   config :mica, endpoint, http: [port: URI.parse(Application.fetch_env!(:mica, :base_url)).port]
 end
 

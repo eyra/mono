@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.ContributionsPendingViewTest do
+defmodule MicaSaas.Systems.Assignment.ContributionsPendingViewTest do
   use ExUnit.Case, async: true
 
   import Phoenix.LiveViewTest

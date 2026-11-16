@@ -3,6 +3,8 @@ defmodule NextWeb.EndpointTest do
   # (`MicaWeb.Endpoint`, `CoreWeb.Endpoint` before it): the session cookie, the
   # socket paths, the PubSub server and the telemetry prefix. Signed-in users,
   # connected LiveView clients and AppSignal's request metrics depend on them.
+  # Mica broadcasts observations and next-action updates on `Mica.PubSub` itself
+  # (`Systems.Observatory.Public`), so its LiveViews only get them on that server.
   use NextWeb.ConnCase, async: false
 
   @session_options [store: :cookie, key: "_core_key", signing_salt: "3oh1/4M5"]

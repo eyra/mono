@@ -46,8 +46,8 @@ Always investigate first, understand second, fix third.
 - `mix seed` - Run idempotent seeds for the current deploy environment (`Mica.Seeds.seed/0`)
 
 ### Testing
-- `mix test --warnings-as-errors` - Run all tests (ALWAYS use this)
-- `mix test test/path/to/specific_test.exs --warnings-as-errors` - Run a specific test file
+- `mix test --warnings-as-errors` - Run Mica's tests, `mica/test` (ALWAYS use `--warnings-as-errors`); `BUNDLE=next mix test` runs Next's, `BUNDLE=self mix test` Self's, `mix test.ci` all three
+- `mix test mica/test/path/to/specific_test.exs --warnings-as-errors` - Run a specific test file (`BUNDLE=next` for a file under `next/test`, `BUNDLE=self` under `mica_saas/test`)
 - `mix test --cover --warnings-as-errors` - Run tests with coverage
 
 ### Development Server
@@ -553,7 +553,7 @@ The build composes one SaaS on Mica:
 - Each SaaS has its own router, `NextWeb.Router` or `MicaSaasWeb.Router`: Mica's pipelines (`MicaWeb.Pipelines`), the routes of its systems (`Mica.SaaS.Routes`) and Mica's other routes (`MicaWeb.BaseRoutes`), in an order it writes itself. Mica has no router; Mica code reaches it only through `Mica.SaaS.router()`.
 - Each SaaS has its own endpoint, `NextWeb.Endpoint` or `MicaSaasWeb.Endpoint`, built with `use MicaWeb.Endpoint`, which plugs its router. Its build-time config is in `<saas>/config/endpoint.exs`, which every build imports for both SaaSes; `config/runtime.exs` sets its port and, on a deployment, its URL and secret. Mica code reaches it only through `Mica.SaaS.endpoint()`.
 - A SaaS's own systems live in `<saas>/systems/`, e.g. `next/systems/account/` (`Next.Systems.Account.System`) with the sign-in pages that shadow Mica's (`override_routes/0`).
-- Tests build Next: `mix test` runs `mica/test` and `next/test`. `BUNDLE=self mix test` runs Self's suite, `mica_saas/test`, against Self's router and endpoint. Run Self's server with `BUNDLE=self MIX_ENV=dev`.
+- Tests take `BUNDLE` only, one suite per run. `mix test` runs Mica's own suite, `mica/test`, with no SaaS: on a composition of Mica's systems (`Mica.SaaS.put_composition(systems: Mica.Systems.all())` in its test helper), with no SaaS module, router or endpoint, where every `Mica.SaaS` callback raises. `BUNDLE=next mix test` runs Next's suite, `next/test`, and `BUNDLE=self mix test` Self's, `mica_saas/test`, each against its own router and endpoint. Run Self's server with `BUNDLE=self MIX_ENV=dev`.
 
 ## Build Warning Fix Rule
 **CRITICAL**: When fixing compiler warnings, ALWAYS target the **exact line numbers** specified in the warning message. Never use find-and-replace-all approaches. Be surgical and precise - fix only the problematic lines mentioned in the compiler output.

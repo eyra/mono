@@ -22,10 +22,25 @@ defmodule Next.Systems.Graphite.Factories do
 
   def add_tool(%Assignment.Model{workflow: workflow}) do
     tool = Factories.insert!(:graphite_tool)
-    tool_ref = Workflow.Factories.create_tool_ref(tool, :submit)
+    tool_ref = create_tool_ref(tool, :submit)
     Workflow.Factories.create_item(workflow, tool_ref, 0)
 
     tool
+  end
+
+  def create_tool_ref(%Graphite.ToolModel{} = tool, special) do
+    Factories.insert!(:tool_ref, %{
+      special: special,
+      graphite_tool: tool
+    })
+  end
+
+  def build_item(%Graphite.LeaderboardModel{} = leaderboard, name \\ "project-item") do
+    Factories.build(:project_item, %{
+      name: name,
+      project_path: [],
+      leaderboard: leaderboard
+    })
   end
 
   def add_submission(%Graphite.ToolModel{} = tool) do

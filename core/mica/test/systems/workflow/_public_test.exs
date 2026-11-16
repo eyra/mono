@@ -10,8 +10,8 @@ defmodule Systems.Workflow.PublicTest do
     test "no matching tool" do
       workflow = Factories.create_workflow()
 
-      graphite_tool = Mica.Factories.build(:graphite_tool)
-      tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
+      feldspar_tool = Mica.Factories.build(:feldspar_tool)
+      tool_ref = Factories.create_tool_ref(feldspar_tool, :submit)
       Factories.create_item(workflow, tool_ref, 0)
 
       assert [] = Workflow.Public.list_tools(workflow, :fake_special)
@@ -20,19 +20,19 @@ defmodule Systems.Workflow.PublicTest do
     test "one matching tool" do
       workflow = Factories.create_workflow()
 
-      graphite_tool = Mica.Factories.build(:graphite_tool)
-      tool_ref = Factories.create_tool_ref(graphite_tool, :submit)
+      feldspar_tool = Mica.Factories.build(:feldspar_tool)
+      tool_ref = Factories.create_tool_ref(feldspar_tool, :submit)
       Factories.create_item(workflow, tool_ref, 0)
 
       assert [
-               %Next.Systems.Graphite.ToolModel{}
+               %Systems.Feldspar.ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 
     test "multiple matching tool" do
       workflow = Factories.create_workflow()
 
-      tool1 = Mica.Factories.build(:graphite_tool)
+      tool1 = Mica.Factories.build(:feldspar_tool)
       tool_ref1 = Factories.create_tool_ref(tool1, :submit)
       Factories.create_item(workflow, tool_ref1, 0)
 
@@ -40,7 +40,7 @@ defmodule Systems.Workflow.PublicTest do
       tool_ref2 = Factories.create_tool_ref(tool2, :request_manual)
       Factories.create_item(workflow, tool_ref2, 1)
 
-      tool3 = Mica.Factories.build(:graphite_tool)
+      tool3 = Mica.Factories.build(:feldspar_tool)
       tool_ref3 = Factories.create_tool_ref(tool3, :submit)
       Factories.create_item(workflow, tool_ref3, 2)
 
@@ -49,8 +49,8 @@ defmodule Systems.Workflow.PublicTest do
       Factories.create_item(workflow, tool_ref4, 3)
 
       assert [
-               %Next.Systems.Graphite.ToolModel{},
-               %Next.Systems.Graphite.ToolModel{}
+               %Systems.Feldspar.ToolModel{},
+               %Systems.Feldspar.ToolModel{}
              ] = Workflow.Public.list_tools(workflow, :submit)
     end
 

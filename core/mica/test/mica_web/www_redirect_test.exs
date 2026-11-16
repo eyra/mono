@@ -14,16 +14,16 @@ defmodule MicaWeb.WWWRedirect.Test do
                resp_headers: [
                  {"content-type", "text/html; charset=utf-8"},
                  {"cache-control", "max-age=0, private, must-revalidate"},
-                 {"location", "https://eyra.co/"}
+                 {"location", "https://example.org/"}
                ]
-             } = call(conn(:get, "https://www.eyra.co/"))
+             } = call(conn(:get, "https://www.example.org/"))
     end
 
     test "returns untouched conn" do
       assert %{
                status: nil,
                resp_headers: [{"cache-control", "max-age=0, private, must-revalidate"}]
-             } = call(conn(:get, "https://eyra.co/"))
+             } = call(conn(:get, "https://example.org/"))
     end
   end
 end

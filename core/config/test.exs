@@ -124,12 +124,6 @@ config :mica, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :mica, Oban, queues: false, plugins: false
 
-# Tests build Next, also with a local `.bundle` file, except Self's own suite:
-# `BUNDLE=self mix test` runs mica_saas/test on the SaaS that config.exs picks.
-if System.get_env("BUNDLE") != "self" do
-  config :mica, saas: Next.SaaS
-end
-
 # Logs a flag read that no system declares (Mica.FeatureFlags).
 config :mica, warn_undeclared_flag_reads: true
 

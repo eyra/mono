@@ -19,7 +19,7 @@ defmodule MicaWeb.Live.Hook.Menus do
 
   defp subscribe_to_next_actions(%{assigns: %{current_user: %{id: user_id}}} = socket) do
     if Phoenix.LiveView.connected?(socket) do
-      Mica.SaaS.endpoint().subscribe("next_actions:#{user_id}")
+      Phoenix.PubSub.subscribe(Mica.PubSub, "next_actions:#{user_id}")
     end
 
     socket

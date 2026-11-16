@@ -1,4 +1,4 @@
-defmodule Systems.Home.PageBuilderTest do
+defmodule MicaSaas.Systems.Home.PageBuilderTest do
   use Mica.DataCase
 
   alias Systems.Home

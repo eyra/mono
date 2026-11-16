@@ -166,4 +166,51 @@ defmodule BoundaryRulesTest do
       refute BoundaryRules.in_namespace?("Next.Systems.PaperTrail", ["Next.Systems.Paper"])
     end
   end
+
+  describe "unchecked_test?/1" do
+    test "checks Mica's own tests" do
+      refute BoundaryRules.unchecked_test?("mica/test/systems/pool/_public_test.exs")
+      refute BoundaryRules.unchecked_test?("mica/test/support/data_case.ex")
+    end
+
+    test "leaves out the tests of a SaaS" do
+      assert BoundaryRules.unchecked_test?("next/test/systems/pool/student_filters_test.exs")
+      assert BoundaryRules.unchecked_test?("mica_saas/test/saas_test.exs")
+    end
+
+    test "checks code outside the test folders" do
+      refute BoundaryRules.unchecked_test?("mica/systems/pool/_public.ex")
+      refute BoundaryRules.unchecked_test?("next/systems/student/_public.ex")
+    end
+  end
+
+  describe "section/1" do
+    test "puts each file in its allowlist section" do
+      assert BoundaryRules.section("mica/systems/pool/_public.ex") == :code
+      assert BoundaryRules.section("next/systems/student/_public.ex") == :code
+      assert BoundaryRules.section("config/test.exs") == :config
+      assert BoundaryRules.section("mica/test/systems/pool/_public_test.exs") == :mica_test
+    end
+  end
+
+  describe "read_allowlist/1" do
+    @tag :tmp_dir
+    test "reads the mica_test section with the others", %{tmp_dir: dir} do
+      file = Path.join(dir, "allowlist.exs")
+
+      File.write!(file, """
+      [
+        code: [{"mica/a.ex", :eyra_domain, 1, "a"}],
+        config: [{"config/test.exs", :next_name, ["Next.SaaS"], "b"}],
+        mica_test: [{"mica/test/a_test.exs", :panl_atom, 2, "c"}]
+      ]
+      """)
+
+      assert BoundaryRules.read_allowlist(file) == %{
+               {"mica/a.ex", :eyra_domain} => {1, "a"},
+               {"config/test.exs", :next_name} => {["Next.SaaS"], "b"},
+               {"mica/test/a_test.exs", :panl_atom} => {2, "c"}
+             }
+    end
+  end
 end

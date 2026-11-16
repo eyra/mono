@@ -4,12 +4,13 @@ defmodule Systems.Account.Auth.MethodsTest do
   alias Systems.Account.Auth.Methods
 
   setup do
-    account = Application.fetch_env!(:mica, :account)
+    # Mica's own suite configures no SaaS, so no account config.
+    account = Application.get_env(:mica, :account)
 
     Application.put_env(
       :mica,
       :account,
-      Keyword.put(account, :auth_methods, %{
+      Keyword.put(account || [], :auth_methods, %{
         surfconext: %{provider: true, satellite: true},
         centerdata: %{provider: true, satellite: true},
         google: %{provider: true, satellite: true, mx_provider: "google"},
@@ -18,7 +19,12 @@ defmodule Systems.Account.Auth.MethodsTest do
       })
     )
 
-    on_exit(fn -> Application.put_env(:mica, :account, account) end)
+    on_exit(fn ->
+      if account,
+        do: Application.put_env(:mica, :account, account),
+        else: Application.delete_env(:mica, :account)
+    end)
+
     :ok
   end
 

@@ -14,7 +14,7 @@ defmodule Systems.Desktop.SwitchTest do
     setup do
       user = Factories.insert!(:member)
       topic = "signal:#{Systems.Desktop.Page}:#{user.id}"
-      Mica.SaaS.endpoint().subscribe(topic)
+      Phoenix.PubSub.subscribe(Mica.PubSub, topic)
       {:ok, user: user, topic: topic}
     end
 

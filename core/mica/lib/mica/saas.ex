@@ -108,23 +108,55 @@ defmodule Mica.SaaS do
 
   @key {__MODULE__, :composition}
 
-  @doc "The configured SaaS module (`config :mica, saas:`)."
+  @no_saas "no SaaS: this is a mica-saas test. Mica's own tests run on a composition of " <>
+             "Mica's systems; run a test that needs a SaaS in Self's suite (BUNDLE=self) " <>
+             "or Next's (BUNDLE=next)"
+
+  @doc """
+  The configured SaaS module (`config :mica, saas:`). Raises in the composition
+  of Mica's own tests, which has no SaaS (`put_composition/1`), so every
+  callback reached through it raises there.
+  """
   def module do
-    Mica.Env.get(:saas) ||
-      raise "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
-              "mica_saas/config/config.exs) names the SaaS module"
+    case Mica.Env.get(:saas) do
+      nil ->
+        if saas?(),
+          do:
+            raise(
+              "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
+                "mica_saas/config/config.exs) names the SaaS module"
+            ),
+          else: raise(@no_saas)
+
+      saas ->
+        saas
+    end
   end
+
+  @doc """
+  False in the composition of Mica's own tests, which has no SaaS module, router
+  or endpoint (`put_composition/1`); true otherwise.
+  """
+  def saas?, do: not match?(%{saas?: false}, :persistent_term.get(@key, nil))
 
   @doc """
   Builds the composition of the configured SaaS, checks it (`validate!/1`) and
   caches it. `Mica.Application` runs it at boot, before the children start, so
-  a broken composition stops the boot.
+  a broken composition stops the boot. With no SaaS configured it checks the
+  composition of Mica's own tests instead, which their test helper puts before
+  the boot.
   """
   def validate! do
-    saas = module()
-    composition = validate!(saas)
+    {name, composition} =
+      if saas?() or Mica.Env.get(:saas) do
+        saas = module()
+        {inspect(saas), validate!(saas)}
+      else
+        {"Mica, no SaaS,", check!(nil, composition())}
+      end
+
     :persistent_term.put(@key, composition)
-    Logger.info("#{inspect(saas)}: #{length(composition.systems)} systems, composition valid")
+    Logger.info("#{name}: #{length(composition.systems)} systems, composition valid")
     :ok
   end
 
@@ -143,8 +175,9 @@ defmodule Mica.SaaS do
       each widening is logged
     * a notifier event routed to a channel that no system declares
   """
-  def validate!(saas) do
-    composition = build(saas)
+  def validate!(saas), do: check!(saas, build(saas))
+
+  defp check!(saas, composition) do
     collect_oban_queues(composition.systems)
     collect_oban_crons(composition.systems)
 
@@ -185,10 +218,16 @@ defmodule Mica.SaaS do
 
   The result is not checked, so a test can put a broken composition. A test
   that calls it must not be `async`.
+
+  With no SaaS configured and no composition yet, `systems:` builds a
+  composition of those systems that is not a SaaS's: Mica's own tests run on
+  `put_composition(systems: Mica.Systems.all())`. It has no SaaS module, router
+  or endpoint: `module/0`, `endpoint/0` and `router/0` raise in it, and so does
+  every `Mica.SaaS` callback.
   """
   def put_composition(parts) do
-    previous = composition()
     parts = Map.new(parts)
+    previous = current_or_saas_less(parts)
 
     case Map.keys(parts) -- Map.keys(previous) do
       [] -> :persistent_term.put(@key, previous |> Map.merge(parts) |> derive())
@@ -198,13 +237,36 @@ defmodule Mica.SaaS do
     previous
   end
 
+  defp current_or_saas_less(%{systems: systems}) do
+    case {:persistent_term.get(@key, nil), Mica.Env.get(:saas)} do
+      {nil, nil} -> build_saas_less(systems)
+      _ -> composition()
+    end
+  end
+
+  defp current_or_saas_less(_parts), do: composition()
+
   @doc false
   def build(saas) do
     systems = checked_systems(saas)
 
+    saas
+    |> collect(systems)
+    |> Map.merge(%{saas?: true, endpoint: checked_endpoint(saas), router: checked_router(saas)})
+  end
+
+  defp build_saas_less(systems) do
+    for system <- systems do
+      ensure_implements!(system, :routes, "Mica.System", "Mica.SaaS.put_composition/1")
+    end
+
+    nil
+    |> collect(systems)
+    |> Map.merge(%{saas?: false, endpoint: nil, router: nil})
+  end
+
+  defp collect(saas, systems) do
     derive(%{
-      endpoint: checked_endpoint(saas),
-      router: checked_router(saas),
       systems: systems,
       signal_handlers: collect_signal_handlers(systems),
       notifiers: Enum.flat_map(systems, & &1.notifiers()),
@@ -263,7 +325,7 @@ defmodule Mica.SaaS do
 
     for {module, roles, widen: true} <- grants do
       Logger.info(
-        "#{inspect(saas)}: the grant of #{inspect(module)} to #{inspect(roles)} widens another grant"
+        "#{inspect(saas || Mica)}: the grant of #{inspect(module)} to #{inspect(roles)} widens another grant"
       )
     end
 
@@ -271,10 +333,10 @@ defmodule Mica.SaaS do
   end
 
   @doc "The endpoint of the SaaS (`c:endpoint/0`). Mica reaches the endpoint only through this."
-  def endpoint, do: fetch(:endpoint)
+  def endpoint, do: fetch(:endpoint) || raise(@no_saas)
 
   @doc "The router of the SaaS (`c:router/0`), which its endpoint plugs."
-  def router, do: fetch(:router)
+  def router, do: fetch(:router) || raise(@no_saas)
 
   @doc "The systems the SaaS is made of, in `c:systems/0` order."
   def systems, do: fetch(:systems)
@@ -360,7 +422,7 @@ defmodule Mica.SaaS do
 
   @doc false
   def composition_apps(saas, systems) do
-    [Mica.Env.app() | Enum.map([saas | systems], &Application.get_application/1)]
+    [Mica.Env.app() | Enum.map(List.wrap(saas) ++ systems, &Application.get_application/1)]
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
   end
@@ -386,7 +448,7 @@ defmodule Mica.SaaS do
   @doc false
   def collect_feature_flags(saas, systems) do
     declared = systems |> Enum.flat_map(& &1.feature_flags()) |> Enum.uniq()
-    defaults = saas.feature_flags()
+    defaults = if saas, do: saas.feature_flags(), else: []
 
     case Keyword.keys(defaults) -- declared do
       [] ->

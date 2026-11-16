@@ -1,5 +1,12 @@
 require Promox
 
+# Mica's own suite runs with no SaaS (no BUNDLE): on a composition of Mica's
+# systems, with no SaaS module, router or endpoint. A `Mica.SaaS` callback
+# raises in it. `mix test` doesn't start the app for this suite (mix.exs), so it
+# starts here, on this composition.
+Mica.SaaS.put_composition(systems: Mica.Systems.all())
+{:ok, _} = Application.ensure_all_started(:mica)
+
 Promox.defmock(for: Frameworks.Concept.Branch)
 
 # Ensure test signal handlers are compiled and loaded

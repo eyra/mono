@@ -4,7 +4,7 @@
 #
 # Usage (from the core/ directory):
 #   scripts/seed            # uses MIX_ENV (default: dev)
-#   MIX_ENV=test scripts/seed
+#   BUNDLE=next MIX_ENV=test scripts/seed   # the test env takes its SaaS from BUNDLE only
 
 set -e
 

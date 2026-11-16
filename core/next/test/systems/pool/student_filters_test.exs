@@ -1,4 +1,4 @@
-defmodule Systems.Pool.StudentFiltersTest do
+defmodule Next.Systems.Pool.StudentFiltersTest do
   use Mica.DataCase, async: true
 
   alias Next.Systems.Student

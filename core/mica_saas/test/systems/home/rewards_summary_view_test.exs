@@ -1,4 +1,4 @@
-defmodule Systems.Home.RewardsSummaryViewTest do
+defmodule MicaSaas.Systems.Home.RewardsSummaryViewTest do
   @moduledoc """
   Unit coverage for the payout handoff modal *configuration*: compose/2 maps the
   payout handoff to the shared ConfirmationModal assigns. The handler dispatch —

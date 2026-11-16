@@ -12,7 +12,9 @@
 #      example a Registry name such as Next.Systems.Paper.ImportRegistry in mica/, an
 #      :"Elixir.…" atom, or a module or `config :mica, :<system>` key in config/), or
 #   3. a file under mica/ or config/ contains a PaNL, VU or Eyra literal,
-# unless boundary_allowlist.exs lists the file for that kind. Each entry also
+# unless boundary_allowlist.exs lists the file for that kind. Mica's own tests
+# (mica/test) are checked too, in their own allowlist section, mica_test; a
+# SaaS's tests are not. Each entry also
 # records the referenced files, the module names or the number of literal
 # matches, and the check fails when these grow. When they drop it passes and asks
 # for the entry to be lowered; when an entry no longer occurs it fails, so the
@@ -59,7 +61,7 @@ defmodule BoundaryCheck do
     ~r/^\s*"([^"]+)" -> "([^"]+)"/m
     |> Regex.scan(dot, capture: :all_but_first)
     |> Enum.filter(fn [from, to] ->
-      forbidden?(owner(from), owner(to)) and not test_file?(from)
+      forbidden?(owner(from), owner(to)) and not unchecked_test?(from)
     end)
     |> Enum.group_by(fn [from, to] -> {from, kind(owner(to), "reference")} end, fn [_, to] ->
       to
@@ -76,7 +78,7 @@ defmodule BoundaryCheck do
     for {root, from} <- roots(),
         to <- forbidden(from),
         file <- Path.wildcard(root <> "**/*.{ex,exs}"),
-        not test_file?(file),
+        not unchecked_test?(file),
         not MapSet.member?(xref_files, {file, kind(to, "reference")}),
         hits = hits(file, namespaces[to]),
         hits != [] do
@@ -97,7 +99,7 @@ defmodule BoundaryCheck do
     for {root, "mica"} <- roots(),
         file <- Path.wildcard(root <> "**/*"),
         Path.extname(file) in source_exts(),
-        not test_file?(file),
+        not unchecked_test?(file),
         content = File.read!(file),
         {kind, regex} <- literals(),
         Regex.match?(regex, content) do
@@ -158,7 +160,7 @@ defmodule BoundaryCheck do
       |> Enum.group_by(fn {file, _, _} -> section(file) end)
 
     body =
-      Enum.map_join([:code, :config], ",\n", fn section ->
+      Enum.map_join([:code, :config, :mica_test], ",\n", fn section ->
         entries =
           sections
           |> Map.get(section, [])
@@ -181,7 +183,7 @@ defmodule BoundaryCheck do
     # scripts/boundary_check.exs. Entries may only shrink. Format:
     # {file, kind, detail, reason}; detail is what the file had when it was listed:
     # the referenced files (*_reference), the module names (*_name) or the number of
-    # literal matches. code: mica/, next/ and mica_saas/; config: config/.
+    # literal matches. code: mica/, next/ and mica_saas/; config: config/; mica_test: mica/test/.
     [
     #{body}
     ]

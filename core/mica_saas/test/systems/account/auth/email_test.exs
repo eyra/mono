@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.EmailTest do
+defmodule MicaSaas.Systems.Account.Auth.EmailTest do
   use Mica.DataCase, async: false
 
   alias Systems.Account.User

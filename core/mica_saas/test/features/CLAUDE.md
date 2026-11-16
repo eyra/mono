@@ -27,7 +27,7 @@ Next's in `next/test/features` (`NextWeb.FeatureCase`). Mica's own tests have no
 ```bash
 BUNDLE=self mix test.feature                                   # Self's feature tests
 BUNDLE=self mix test.feature mica_saas/test/features/smoke_test.exs  # one file
-mix test.feature                                               # Next's feature tests
+BUNDLE=next mix test.feature                                   # Next's feature tests
 WALLABY_HEADLESS=false BUNDLE=self mix test.feature ...        # with a visible browser
 ```
 

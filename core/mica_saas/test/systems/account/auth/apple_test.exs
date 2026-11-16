@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.Apple.Test do
+defmodule MicaSaas.Systems.Account.Auth.Apple.Test do
   use Mica.DataCase, async: true
 
   alias Mica.Factories

@@ -1,4 +1,4 @@
-defmodule Systems.Account.UserNotifierTest do
+defmodule MicaSaas.Systems.Account.UserNotifierTest do
   use ExUnit.Case, async: true
   use Bamboo.Test
 

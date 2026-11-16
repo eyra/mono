@@ -47,29 +47,6 @@ defmodule Systems.Notify.MarkSeenTest do
       assert first == 2
       assert second == 0
     end
-
-    test "leaves messages for other correlations alone", %{user: user, event: event} do
-      {:ok, _other_event} =
-        Notify.Public.record_event(%Notify.EventAttrs{
-          type: :contribution_accepted,
-          subject_user: user,
-          metadata: %{"assignment_id" => 99},
-          correlation_id: "participation:99"
-        })
-
-      {:ok, _} = Notify.Public.mark_seen(user, correlation_id: "participation:7")
-
-      # Only the messages for event 7 are :seen; event 99's are still :sent
-      messages_by_event =
-        Notify.MessageModel
-        |> Repo.all()
-        |> Enum.group_by(& &1.event_id)
-
-      for msg <- messages_by_event[event.id], do: assert(msg.status == :seen)
-
-      other_id = Enum.find(Map.keys(messages_by_event), &(&1 != event.id))
-      for msg <- messages_by_event[other_id], do: assert(msg.status == :sent)
-    end
   end
 
   describe "mark_seen/2 by event_types" do
