@@ -1,12 +1,11 @@
 defmodule NextWeb.SignInPagesTest do
   # Mica links to a SaaS's sign-in pages only through its `Mica.SaaS` callbacks
   # (d-0011). Each SaaS must name pages that its own router serves, from its
-  # own override routes. Self's router is compiled in every build until
-  # code-split, so it is checked here too.
+  # own override routes; Self's are checked in its own suite (mica_saas/test).
   use ExUnit.Case, async: false
   use Mica.FeatureFlags.Test
 
-  @saases [{Next.SaaS, NextWeb.Router}, {MicaSaas.SaaS, MicaSaasWeb.Router}]
+  @saases [{Next.SaaS, NextWeb.Router}]
 
   for {saas, router} <- @saases, otp <- [false, true] do
     describe "#{inspect(saas)} with otp #{otp}" do
@@ -56,7 +55,7 @@ defmodule NextWeb.SignInPagesTest do
 
     case Phoenix.Router.route_info(router, verb, path, "") do
       :error -> false
-      route -> hd(Module.split(owner(route))) in ~w(Next MicaSaas)
+      route -> hd(Module.split(owner(route))) == "Next"
     end
   end
 
