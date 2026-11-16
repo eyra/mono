@@ -4,6 +4,7 @@ defmodule Frameworks.Pixel.Image do
   attr(:id, :any, required: true)
   attr(:image, :any, required: true)
   attr(:style, :string, default: "fixed")
+  attr(:alt, :string, default: nil, doc: "`\"\"` for a decorative image; nil adds no alt")
 
   @doc """
   An image with fancy features like blur-hash.
@@ -31,6 +32,7 @@ defmodule Frameworks.Pixel.Image do
         data-image-height={@image.height}
         data-style={@style}
         data-src={@src}
+        data-alt={@alt}
         class={"overflow-hidden w-full h-full relative"}
       />
     """

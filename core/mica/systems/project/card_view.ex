@@ -99,6 +99,7 @@ defmodule Systems.Project.CardView do
                 <Image.blurhash
                   id={Integer.to_string(@id)}
                   image={@image_info}
+                  alt=""
                 />
               </div>
             <% end %>
