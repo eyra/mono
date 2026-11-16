@@ -3,11 +3,11 @@
   boundary_allowlist: 40,
   no_route_path_warnings: 0,
   router_compile_connected: [
-    "mica/lib/mica/saas.ex",
-    "mica/lib/mica_web.ex",
+    "mica/lib/mica/saas/routes.ex",
     "mica/lib/mica_web/web.ex",
     "mica/systems/account/auth/centerdata.ex",
     "mica/systems/account/auth/google.ex",
-    "mica/systems/account/auth/surfconext.ex"
+    "mica/systems/account/auth/surfconext.ex",
+    "mica_saas/lib/mica_saas_web.ex"
   ]
 ]

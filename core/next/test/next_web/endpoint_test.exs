@@ -40,8 +40,8 @@ defmodule NextWeb.EndpointTest do
 
   # Each SaaS configures its own endpoint, in its config file.
   @config_files %{
-    NextWeb.Endpoint => "next/config/config.exs",
-    MicaSaasWeb.Endpoint => "mica_saas/config/config.exs"
+    NextWeb.Endpoint => "next/config/endpoint.exs",
+    MicaSaasWeb.Endpoint => "mica_saas/config/endpoint.exs"
   }
 
   for endpoint <- @endpoints, env <- [:dev, :test, :prod] do

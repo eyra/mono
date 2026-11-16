@@ -70,7 +70,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferController do
         |> SignInHandoff.end_sign_in(
           provider(idp),
           :cancelled,
-          &redirect(&1, to: ~m"/user/auth/identify")
+          &redirect(&1, to: Mica.SaaS.module().identify_page(:creator))
         )
 
       _ ->

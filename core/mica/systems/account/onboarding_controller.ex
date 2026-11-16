@@ -27,7 +27,7 @@ defmodule Systems.Account.OnboardingController do
       {:error, _reason} ->
         conn
         |> put_flash(:error, dgettext("eyra-account", "onboarding.token.invalid"))
-        |> redirect(to: ~m"/user/signin")
+        |> redirect(to: Mica.SaaS.module().sign_in_options_page())
     end
   end
 

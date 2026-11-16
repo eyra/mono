@@ -1,14 +1,28 @@
-defmodule MicaWeb.Routes do
-  defmacro routes() do
-    quote do
-      require MicaWeb.Live.Routes
+defmodule MicaWeb.Pipelines do
+  @moduledoc """
+  The pipelines Mica's routes `pipe_through`, for a SaaS router:
 
+      defmodule NextWeb.Router do
+        use NextWeb, :router
+        require MicaWeb.Pipelines
+
+        MicaWeb.Pipelines.define()
+        ...
+      end
+
+  Their names are part of the contract between Mica's systems and every SaaS
+  router: `:browser_base`, `:browser_secure`, `:browser`, `:browser_unprotected`,
+  `:api` and `:validator`. The router also gets the function plugs routes pipe
+  through, such as `:require_authenticated_user` (`Systems.Account.UserAuth`).
+  """
+
+  defmacro define do
+    quote do
       require MicaWeb.Cldr
       import Systems.Account.UserAuth
       import MicaWeb.Meta
 
       alias MicaWeb.Validator.Plug, as: Validator
-      alias Systems.Assignment
 
       pipeline :browser_base do
         plug(:accepts, ["html"])
@@ -74,23 +88,6 @@ defmodule MicaWeb.Routes do
 
       pipeline :validator do
         plug(Validator)
-      end
-
-      MicaWeb.Live.Routes.routes()
-
-      require Mica.SaaS
-      Mica.SaaS.routes()
-
-      scope "/", MicaWeb do
-        pipe_through(:browser_unprotected)
-        get("/access_denied", ErrorController, :access_denied)
-        get("/not_found", ErrorController, :not_found)
-      end
-
-      scope "/", MicaWeb do
-        pipe_through(:api)
-
-        post("/api/viewport", ViewportController, :put_session)
       end
     end
   end

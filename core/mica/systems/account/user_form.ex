@@ -102,7 +102,7 @@ defmodule Systems.Account.UserForm do
     assigns = assign(assigns, :signup_url, signup_url)
 
     ~H"""
-    <.form id="signin_form" :let={form} for={@for} action={~m"/user/session"} data-testid="signin-form" >
+    <.form id="signin_form" :let={form} for={@for} action={Mica.SaaS.module().session_path()} data-testid="signin-form" >
       <%= if @status == "account_activated_successfully" do %>
         <AlertBanner.success>
           <%= dgettext("eyra-account", "Account activated successfully.") %>

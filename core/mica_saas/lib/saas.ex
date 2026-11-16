@@ -25,6 +25,9 @@ defmodule MicaSaas.SaaS do
   def endpoint, do: MicaSaasWeb.Endpoint
 
   @impl true
+  def router, do: MicaSaasWeb.Router
+
+  @impl true
   def start_pages, do: MicaSaas.StartPages
 
   @impl true
@@ -41,4 +44,20 @@ defmodule MicaSaas.SaaS do
   @impl true
   def signed_in_page(:creator), do: "/project"
   def signed_in_page(:member), do: "/"
+
+  @impl true
+  def sign_in_page, do: sign_in_options_page()
+
+  @impl true
+  def member_sign_in_page(_return_to), do: sign_in_page()
+
+  @impl true
+  def sign_in_options_page, do: "/user/signin"
+
+  @impl true
+  def identify_page(:creator), do: "/user/auth/identify"
+  def identify_page(:participant), do: "/user/auth/identify/participant"
+
+  @impl true
+  def session_path, do: "/user/session"
 end

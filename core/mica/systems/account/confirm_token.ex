@@ -62,8 +62,10 @@ defmodule Systems.Account.ConfirmToken do
   defp handle_succeeded(socket, %{email: email}) do
     Logger.notice("Confirm user: handle_succeeded #{email}")
 
+    query = URI.encode_query(email: email, status: "account_activated_successfully")
+
     socket
-    |> redirect(to: ~m"/user/signin?email=#{email}&status=account_activated_successfully")
+    |> redirect(to: "#{Mica.SaaS.module().sign_in_options_page()}?#{query}")
   end
 
   defp handle_failed(socket) do
@@ -102,7 +104,7 @@ defmodule Systems.Account.ConfirmToken do
             # FIXME: Log suspicous behavior?
             Account.Public.deliver_already_activated_notification(
               user,
-              ~m"/user/signin"
+              Mica.SaaS.module().sign_in_options_page()
             )
         end
 

@@ -3,7 +3,7 @@ defmodule MicaWeb.Endpoint do
   Builds the endpoint of a SaaS. Each SaaS has its own:
 
       defmodule NextWeb.Endpoint do
-        use MicaWeb.Endpoint, otp_app: :mica, router: MicaWeb.Router
+        use MicaWeb.Endpoint, otp_app: :mica, router: NextWeb.Router
       end
 
   Every SaaS gets the same endpoint: the user and LiveView sockets, the WWW

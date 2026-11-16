@@ -8,13 +8,13 @@ defmodule Mica.SaaS do
 
       config :mica, saas: Next.SaaS
 
-  Mica reads the value at runtime. At boot `validate!/0` builds the
+  Mica reads the value at runtime only. At boot `validate!/0` builds the
   composition, the contributions of all systems, checks it and caches it; the
   readers below (`signal_handlers/0`, `grants/0`, ...) take their part from
-  that cache. Only `MicaWeb.Router` still reads the value at compile time, to
-  splice the routes of all systems (`override_routes/0`, `routes/0`). Never set
-  `:saas` in `runtime.exs`; a release refuses to boot when it differs from the
-  value the router was compiled with.
+  that cache. Each SaaS has its own router, which splices the routes of its
+  systems (`Mica.SaaS.Routes`), so no Mica module is compiled against the
+  configured SaaS. Set `:saas` only in the SaaS's config, not in `runtime.exs`:
+  the endpoint config of a build is the SaaS's.
   """
 
   @doc "The systems the SaaS is made of: `Mica.Systems.all() ++` its own systems."
@@ -22,6 +22,13 @@ defmodule Mica.SaaS do
 
   @doc "The SaaS's endpoint, built with `use MicaWeb.Endpoint`."
   @callback endpoint() :: module()
+
+  @doc """
+  The SaaS's router, `use Phoenix.Router` with Mica's pipelines and routes
+  (`MicaWeb.Pipelines`, `Mica.SaaS.Routes`, `MicaWeb.BaseRoutes`). The endpoint
+  plugs it.
+  """
+  @callback router() :: module()
 
   @doc "The `MicaWeb.StartPageProvider` implementation."
   @callback start_pages() :: module()
@@ -38,11 +45,34 @@ defmodule Mica.SaaS do
   @doc "Where a user lands after signing in, unless a return path is set."
   @callback signed_in_page(:creator | :member) :: String.t()
 
-  @doc "Where a signed-out user is sent to sign in."
+  @doc """
+  Where a signed-out user is sent to sign in. Mica has no sign-in pages of its
+  own: this callback and the four below name the SaaS's, and none has a default.
+  """
   @callback sign_in_page() :: String.t()
 
   @doc "Where a signed-out user is sent to sign in for a page participants open, which they return to."
   @callback member_sign_in_page(return_to :: String.t()) :: String.t()
+
+  @doc """
+  The page that offers every way the SaaS has to sign in (a password, identity
+  providers). Mica sends users there after they sign out, reset their password
+  or fail to sign in through a provider.
+  """
+  @callback sign_in_options_page() :: String.t()
+
+  @doc """
+  The page where a user enters an email address and is sent on to the way
+  they sign in (a one-time code or an identity provider), for a creator or a
+  participant. Mica appends a return path.
+  """
+  @callback identify_page(:creator | :participant) :: String.t()
+
+  @doc """
+  The path of the SaaS's session controller: the password sign-in form posts
+  to it, and signing out deletes it.
+  """
+  @callback session_path() :: String.t()
 
   @doc """
   Where a signed-out user is sent to sign up instead of the password sign-up
@@ -60,39 +90,23 @@ defmodule Mica.SaaS do
   """
   @callback feature_flags() :: keyword(boolean())
 
-  @optional_callbacks title: 0,
-                      sign_in_page: 0,
-                      member_sign_in_page: 1,
-                      sign_up_page: 2,
-                      feature_flags: 0
+  @optional_callbacks sign_up_page: 2, feature_flags: 0
 
   defmacro __using__(_opts) do
     quote do
       @behaviour Mica.SaaS
 
-      def title, do: "Mica"
       def feature_flags, do: []
-
-      def sign_in_page, do: "/user/signin"
-
-      def member_sign_in_page(_return_to), do: sign_in_page()
 
       def sign_up_page(_user_type, _post_signup_action), do: nil
 
-      defoverridable title: 0,
-                     sign_in_page: 0,
-                     member_sign_in_page: 1,
-                     sign_up_page: 2,
-                     feature_flags: 0
+      defoverridable sign_up_page: 2, feature_flags: 0
     end
   end
 
   require Logger
 
   @key {__MODULE__, :composition}
-
-  # Mica.Systems, by path: naming it here would make it a dependency of the callers.
-  @core_systems_source Path.expand("systems.ex", __DIR__)
 
   @doc "The configured SaaS module (`config :mica, saas:`)."
   def module do
@@ -118,7 +132,8 @@ defmodule Mica.SaaS do
   The composition of `saas`, after checking it. Raises on:
 
     * a SaaS module that is no `Mica.SaaS`, or a system that is no `Mica.System`
-    * an endpoint that is no `MicaWeb.Endpoint`
+    * an endpoint that is no `MicaWeb.Endpoint`, or a router that is no
+      `Phoenix.Router`
     * a system, signal handler, notifier, sign-in handoff or assignment template
       listed twice, or an event type that two notifiers declare
     * a notify channel, Oban queue, Oban cron, Desktop section id or BFF page
@@ -189,6 +204,7 @@ defmodule Mica.SaaS do
 
     derive(%{
       endpoint: checked_endpoint(saas),
+      router: checked_router(saas),
       systems: systems,
       signal_handlers: collect_signal_handlers(systems),
       notifiers: Enum.flat_map(systems, & &1.notifiers()),
@@ -256,6 +272,9 @@ defmodule Mica.SaaS do
 
   @doc "The endpoint of the SaaS (`c:endpoint/0`). Mica reaches the endpoint only through this."
   def endpoint, do: fetch(:endpoint)
+
+  @doc "The router of the SaaS (`c:router/0`), which its endpoint plugs."
+  def router, do: fetch(:router)
 
   @doc "The systems the SaaS is made of, in `c:systems/0` order."
   def systems, do: fetch(:systems)
@@ -446,22 +465,6 @@ defmodule Mica.SaaS do
   end
 
   @doc """
-  Splices `override_routes/0` of all systems, and records their paths for
-  `MicaWeb.PathCheck` (a SaaS's own pages that shadow Mica's).
-  """
-  defmacro override_routes do
-    block = splice(:override_routes)
-
-    quote do
-      require MicaWeb.PathCheck
-      MicaWeb.PathCheck.overrides(do: unquote(block))
-    end
-  end
-
-  @doc "Splices `routes/0` of all systems, in `systems/0` order."
-  defmacro routes, do: splice(:routes)
-
-  @doc """
   The page grants of all systems, in `systems/0` order: `{module, roles}` or
   `{module, %{action => roles}}`, with `widen: true` as a third element when
   the grant widens another one. `Mica.Authorization` merges them into its
@@ -471,12 +474,6 @@ defmodule Mica.SaaS do
 
   @doc false
   def collect_grants(systems), do: Enum.flat_map(systems, &system_grants/1)
-
-  defp splice(callback) do
-    systems = checked_systems(module())
-    body = for system <- systems, code = call(system, callback), code != nil, do: code
-    {:__block__, [], external_resources(systems) ++ body}
-  end
 
   defp system_grants(system) do
     case system.grants() do
@@ -497,29 +494,6 @@ defmodule Mica.SaaS do
         raise ArgumentError,
               "#{inspect(system)}.grants/0 must return a list, got: #{inspect(other)}"
     end
-  end
-
-  defp call(system, callback) do
-    apply(system, callback, [])
-  rescue
-    error ->
-      reraise ArgumentError,
-              "#{inspect(system)}.#{callback}/0 failed: #{Exception.message(error)}",
-              __STACKTRACE__
-  end
-
-  # The macros run while the router compiles, so they take no compile-time
-  # dependency on the SaaS module and its systems.
-  # Their source files are external resources instead: editing one recompiles
-  # the caller, without connecting the caller to everything the SaaS module
-  # names (start pages, menus).
-  defp external_resources(systems) do
-    sources =
-      for module <- [module() | systems],
-          do: module.module_info(:compile) |> Keyword.fetch!(:source) |> to_string()
-
-    for source <- [@core_systems_source | sources],
-        do: quote(do: @external_resource(unquote(source)))
   end
 
   @doc false
@@ -554,6 +528,12 @@ defmodule Mica.SaaS do
     )
 
     endpoint
+  end
+
+  defp checked_router(saas) do
+    router = saas.router()
+    ensure_implements!(router, :__routes__, "Phoenix.Router", "#{inspect(saas)}.router/0")
+    router
   end
 
   # Checked by a callback, not by the behaviour attribute: naming the behaviour

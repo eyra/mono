@@ -146,7 +146,7 @@ defmodule Systems.Assignment.FinishedViewBuilder do
   defp join_url(pool_slug, user) do
     case Affiliate.Public.get_user(user) do
       {:ok, _affiliate_user} ->
-        "/user/auth/identify?return_to=/pool/#{pool_slug}/join"
+        "#{Mica.SaaS.module().identify_page(:creator)}?return_to=/pool/#{pool_slug}/join"
 
       _ ->
         "/pool/#{pool_slug}/join"

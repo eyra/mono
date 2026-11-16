@@ -22,7 +22,7 @@ defmodule Systems.Account.Auth.IdentityProviderTransferPage do
   end
 
   def mount(_params, _session, socket) do
-    {:ok, Phoenix.LiveView.redirect(socket, to: ~m"/user/auth/identify")}
+    {:ok, Phoenix.LiveView.redirect(socket, to: Mica.SaaS.module().identify_page(:creator))}
   end
 
   defp idp_label("centerdata"), do: "Centerdata"

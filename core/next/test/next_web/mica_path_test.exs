@@ -7,7 +7,7 @@ defmodule NextWeb.MicaPathTest do
 
   use Phoenix.VerifiedRoutes,
     endpoint: NextWeb.Endpoint,
-    router: MicaWeb.Router,
+    router: NextWeb.Router,
     statics: MicaWeb.Path.statics()
 
   @assignment %Systems.Assignment.Model{id: 7}

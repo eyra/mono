@@ -194,6 +194,10 @@ config :mica, :storage,
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
+# The endpoints of all SaaSes. Until step code-split every build compiles them all.
+import_config "../next/config/endpoint.exs"
+import_config "../mica_saas/config/endpoint.exs"
+
 # The SaaS config, which names the SaaS module (`config :mica, saas:`). The
 # BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
 # code-split.

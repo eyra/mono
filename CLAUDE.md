@@ -3,7 +3,7 @@
 `core/` is being split into **Mica** (generic, owned by Nova Software Foundation) and **Next** (Eyra's SaaS on Mica). The [plan](docs/nova-migration/plan.md) and [design](docs/nova-migration/design.md) are the source of truth. Every change follows these rules now:
 
 - No new PaNL, VU or other Eyra specifics in generic systems.
-- Systems contribute through `Mica.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Mica.SaaS` (`Next.SaaS`, `MicaSaas.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `core/mica/lib/mica/authorization.ex` or `core/mica/lib/mica_web/routes.ex`.
+- Systems contribute through `Mica.System`: one `_system.ex` (`Systems.X.System`) per system; the SaaS composes them through `Mica.SaaS` (`Next.SaaS`, `MicaSaas.SaaS`). New pages, routes and grants go in the system's `_system.ex` (`routes/0`, `grants/0`), not in `core/mica/lib/mica/authorization.ex` or a SaaS router.
 - Mica only contains code under Nova governance; custom and experimental systems start in Next.
 - One database. Every table is owned by Mica or by the SaaS; foreign keys only point from the SaaS to Mica.
 - New code goes in the folder of its future owner: `core/mica/`, `core/next/`, or `core/mica_saas/` for the Self reference SaaS. Code under `core/mica/` must not name SaaS modules (Next or Self) or hard-code PaNL, VU or Eyra specifics, and `core/next/` and `core/mica_saas/` must not name each other's modules. CI enforces this with `core/scripts/boundary_check.exs` and `core/boundary_allowlist.exs`; the allowlist may only shrink.
