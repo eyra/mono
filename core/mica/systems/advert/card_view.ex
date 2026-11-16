@@ -112,6 +112,7 @@ defmodule Systems.Advert.CardView do
               <Image.blurhash
                 id={Integer.to_string(@id)}
                 image={@image_info}
+                alt=""
               />
             </div>
           </div>
