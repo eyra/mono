@@ -461,7 +461,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Module scans.** `Repo.orphan?/2` and the authorization entity list see the schemas of every application in the composition (`Mica.SaaS.schemas/0`), not only Mica's.
   - **Test overrides** of handlers, notifiers and Desktop sections leave the production paths. They become one test hook, `Mica.SaaS.put_composition/1`. `assignment_templates` becomes a `Mica.System` callback.
   - **Sign-in pages belong to the SaaS** (decided 2026-10-29, d-0011).
-    - Mica links to them through required `Mica.SaaS` callbacks: `sign_in_page/0`, `member_sign_in_page/1`, `identify_page/1`, `session_path/0`.
+    - Mica links to them through required `Mica.SaaS` callbacks: `sign_in_page/0`, `member_sign_in_page/1`, `sign_in_options_page/0` (the page with every way to sign in, where Mica sends users after sign-out, a password reset or a failed provider sign-in), `identify_page/1`, `session_path/0`.
     - None of these has a default in Mica, and the `title/0` default goes too.
   - **Mica's tests need no SaaS** (decided 2026-10-30: m-0460, and d-0012 for the composition).
     - **What stays in `mica/test`:** only tests that need no router, endpoint or `Mica.SaaS` callback, on a composition of Mica's own systems. `mica/test/test_helper.exs` sets it in one line, `Mica.SaaS.put_composition(systems: Mica.Systems.all())`, with no SaaS module, router or endpoint. `Mica.SaaS` callbacks raise in it.
@@ -494,7 +494,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Decisions/authorizations.** None.
 - **Done when:**
   - no Mica module reads the SaaS at compile time: no `compile_env(:mica, :saas)`, no `Mica.SaaS` route, grant or channel macros
-  - the `router.ex` and `authorization.ex` allowlist entries are gone (code section 36 → 34)
+  - the `router.ex` and `authorization.ex` allowlist entries are gone; Self's router (`mica_saas/lib/mica_saas_web/router.ex`) gets an entry for the routes of the Next systems Self keeps (E3), which goes with the `mica_saas/lib/saas.ex` entry in code-registry/code-instance (40 entries after PR 8)
   - `core/mica` has no router module, no `~p` and no `Phoenix.VerifiedRoutes`
   - every SaaS's path-check test passes, and `Mica.SaaS` has no default that points to a SaaS page
   - `mica/test` runs with no SaaS in CI and holds no router, endpoint or SaaS-callback test
