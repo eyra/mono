@@ -8,8 +8,22 @@ A test in `mica/test` needs no router, no endpoint and no `Mica.SaaS` callback. 
 that does (`ConnCase`, `FeatureCase`, `Phoenix.ConnTest`, Wallaby, `live/2`,
 `live_isolated/3`) is a SaaS test: it goes to Self's suite, `mica_saas/test`
 (`MicaSaasWeb.ConnCase`, run with `BUNDLE=self mix test`), or to `next/test`
-(`NextWeb.ConnCase`) when it tests Next's behaviour. The credo check
-`MicaTestNeedsNoSaas` enforces it; `elixir scripts/mica_saas_tests.exs` moves such tests.
+(`NextWeb.ConnCase`, run with `BUNDLE=next mix test`) when it tests Next's behaviour.
+The credo check `MicaTestNeedsNoSaas` enforces it; `elixir scripts/mica_saas_tests.exs`
+moves such tests.
+
+`mix test` runs this suite with no SaaS configured: `test_helper.exs` puts a
+composition of Mica's systems (`Mica.SaaS.put_composition(systems: Mica.Systems.all())`)
+and then starts the app. It has no SaaS module, router or endpoint, so
+`Mica.SaaS.endpoint/0`, `router/0` and every callback reached through
+`Mica.SaaS.module/0` raise "no SaaS: this is a mica-saas test". Code that builds a
+`~m` path, a static path or an absolute URL, renders an email or reads a sign-in
+page reaches the endpoint or a callback, so its tests go to `mica_saas/test` too.
+Observations (`Systems.Observatory.Public`) go through `Mica.PubSub`, not the endpoint:
+subscribe with `Phoenix.PubSub.subscribe(Mica.PubSub, topic)`. Flags, Next's config
+(`:account` auth methods) and other composition parts are passed explicitly
+(`Mica.SaaS.put_composition/1`, `Mica.Env.put/2`). The boundary check scans
+`mica/test` too (allowlist section `mica_test`): no Next or Self module names.
 
 ## Signal Testing Patterns
 
