@@ -14,7 +14,8 @@ defmodule BoundaryRules do
     "mica_saas/" => "mica_saas",
     "config/" => "mica"
   }
-  # Owner => owners it may not reference. Tests under <root>test/ are not checked.
+  # Owner => owners it may not reference. Tests under <root>test/ are not checked,
+  # except Mica's own (`checked_test?/1`).
   @forbidden %{
     "mica" => ["next", "mica_saas"],
     "next" => ["mica_saas"],
@@ -49,6 +50,12 @@ defmodule BoundaryRules do
   def kind(owner, what), do: String.to_atom(owner <> "_" <> what)
 
   def test_file?(path), do: Enum.any?(Map.keys(@roots), &String.starts_with?(path, &1 <> "test/"))
+
+  # Mica's own tests run with no SaaS, so they may not name one either; their
+  # entries are in the allowlist's mica_test section. A SaaS's tests are not checked.
+  def checked_test?(path), do: String.starts_with?(path, "mica/test/")
+
+  def unchecked_test?(path), do: test_file?(path) and not checked_test?(path)
 
   # Owner => the top-level namespaces its modules are in. Mica owns Mica, MicaWeb,
   # Systems and Frameworks, and every name no SaaS owns. Mix tasks keep Mix.Tasks.
@@ -262,7 +269,7 @@ defmodule BoundaryRules do
   defp nil_if_empty(list), do: list
 
   @doc """
-  Reads the allowlist: `[code: entries, config: entries]`, each entry
+  Reads the allowlist: `[code: entries, config: entries, mica_test: entries]`, each entry
   `{file, kind, detail, reason}`. Returns `{file, kind} => {detail, reason}`.
   """
   def read_allowlist(file) do
@@ -277,5 +284,11 @@ defmodule BoundaryRules do
     end
   end
 
-  def section(path), do: if(String.starts_with?(path, "config/"), do: :config, else: :code)
+  def section(path) do
+    cond do
+      String.starts_with?(path, "config/") -> :config
+      checked_test?(path) -> :mica_test
+      true -> :code
+    end
+  end
 end

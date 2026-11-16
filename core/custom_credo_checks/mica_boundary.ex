@@ -30,7 +30,7 @@ defmodule Credo.Check.Warning.MicaBoundary do
   def run(%SourceFile{filename: filename} = source_file, params \\ []) do
     owner = BoundaryRules.owner(filename)
 
-    if owner && not BoundaryRules.test_file?(filename) do
+    if owner && not BoundaryRules.unchecked_test?(filename) do
       %{allowlist: allowlist, namespaces: namespaces} =
         Keyword.get_lazy(params, :boundary, fn -> context(params) end)
 
