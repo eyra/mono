@@ -98,10 +98,11 @@ defmodule Systems.Home.PageBuilder do
   end
 
   @doc """
-  The Panl marketplace: up to #{@home_card_limit} cards of the studies open to the
-  user, the count of all of them and the path to the whole marketplace.
+  The Panl marketplace: up to `limit` cards (#{@home_card_limit} by default, `:all` for
+  every one) of the studies open to the user, the count of all of them and the path to
+  the whole marketplace.
   """
-  def panl_marketplace(%Account.User{} = user, assigns) do
+  def panl_marketplace(%Account.User{} = user, assigns, limit \\ @home_card_limit) do
     %Pool.Model{id: panl_id} = panl = Pool.Public.get_panl()
 
     adverts =
@@ -112,12 +113,15 @@ defmodule Systems.Home.PageBuilder do
 
     %{
       title: dgettext("eyra-pool", "marketplace.title"),
-      cards: adverts |> Enum.take(@home_card_limit) |> Enum.map(&to_card(&1, assigns)),
+      cards: adverts |> take(limit) |> Enum.map(&to_card(&1, assigns)),
       count: Enum.count(adverts),
       more_path: ~m"/pool/#{panl_id}/marketplace",
       pool_slug: Pool.Model.slug(panl)
     }
   end
+
+  defp take(list, :all), do: list
+  defp take(list, limit), do: Enum.take(list, limit)
 
   defp blocks(user, assigns) do
     block_keys(user)

@@ -82,8 +82,7 @@ defmodule Systems.BFF.PageControllerTest do
 
     test "home shows what the web home shows: next action, rewards, marketplace, history",
          %{conn: conn, user: user} do
-      {%Pool.Model{id: panl_id}, %Assignment.Model{id: assignment_id}} =
-        home_with_everything(user)
+      {_panl, %Assignment.Model{id: assignment_id}} = home_with_everything(user)
 
       page = conn |> get("/bff/page/home") |> json_response(200)
 
@@ -98,7 +97,6 @@ defmodule Systems.BFF.PageControllerTest do
                "section_begin",
                "section",
                "advert",
-               "section",
                "section_end",
                "section_begin",
                "section",
@@ -139,22 +137,54 @@ defmodule Systems.BFF.PageControllerTest do
                  }
                },
                %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
-               %{"props" => %{"title" => "See all", "to" => see_all}},
                %{"props" => %{"title" => "History", "count" => 1}},
                %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
              ] = content
 
       assert {pending, approved, rejected} == {"€2.50", "€12.00", "€3.00"}
-      assert see_all == "/pool/#{panl_id}/marketplace"
       assert participation_to == "/assignment/#{assignment_id}"
     end
 
-    test "without panl_post_launch home shows only the next action", %{conn: conn, user: user} do
+    test "home shows three studies of the marketplace and of the history and links to pages with all of them",
+         %{conn: conn, user: user} do
+      {panl, _assignment} = home_with_everything(user)
+
+      for _ <- 1..3 do
+        create_panl_advert(panl)
+        Assignment.Public.add_participant!(Assignment.Factories.create_assignment(31, 1), user)
+      end
+
+      home = conn |> get("/bff/page/home") |> json_response(200)
+
+      assert Enum.frequencies(types(home)) |> Map.take(["advert", "participation"]) ==
+               %{"advert" => 3, "participation" => 3}
+
+      assert [
+               %{"title" => "Rewards"},
+               %{"title" => "Marketplace", "count" => 4},
+               %{"title" => "See all", "to" => "/bff/page/marketplace"},
+               %{"title" => "History", "count" => 4},
+               %{"title" => "See all", "to" => "/bff/page/history"}
+             ] = for(%{"type" => "section", "props" => props} <- home["blocks"], do: props)
+
+      assert types(conn |> get("/bff/page/marketplace") |> json_response(200)) ==
+               ["section" | List.duplicate("advert", 4)]
+
+      assert types(conn |> get("/bff/page/history") |> json_response(200)) ==
+               ["section" | List.duplicate("participation", 4)]
+    end
+
+    test "without panl_post_launch home shows only the next action, history and marketplace nothing",
+         %{conn: conn, user: user} do
       home_with_everything(user)
       set_feature_flag(:panl_post_launch, false)
 
       assert %{"blocks" => [%{"type" => "next_best_action", "props" => %{"title" => "first"}}]} =
                conn |> get("/bff/page/home") |> json_response(200)
+
+      for page <- ["history", "marketplace"] do
+        assert %{"blocks" => []} = conn |> get("/bff/page/#{page}") |> json_response(200)
+      end
     end
 
     test "home leaves out what the user doesn't have", %{conn: conn} do
