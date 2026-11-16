@@ -138,14 +138,15 @@
         # Self copies Next's OTP sign-in screens on purpose; whether they move into Mica is
         # decided in Nova migration step code-brand. Storybook stories are fixture files; their
         # small per-story helpers stay local on purpose. Next and Self each have their own
-        # copy of the router and endpoint test cases (ConnCase, FeatureCase), as d-0011 allows.
+        # copy of the router and endpoint test cases (ConnCase, FeatureCase) and of the test
+        # helper's setup, as d-0011 allows.
         {Credo.Check.Design.DuplicatedCode,
          [
            files: %{
              excluded: [
                ~r"/mica_saas/systems/account/auth_",
                ~r"/storybook/",
-               ~r"/(next|mica_saas)/test/support/"
+               ~r"/(next|mica_saas)/test/(support/|test_helper\.exs$)"
              ]
            }
          ]},

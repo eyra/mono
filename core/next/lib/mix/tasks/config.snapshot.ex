@@ -51,6 +51,8 @@ defmodule Mix.Tasks.Config.Snapshot do
   def run(args) do
     {opts, _, _} = OptionParser.parse(args, switches: [update: :boolean])
     Mix.Task.run("app.config")
+    # The snapshots are Next's; the test env configures no SaaS without BUNDLE.
+    unless Mica.Env.get(:saas), do: Mica.Env.put(:saas, Next.SaaS)
 
     changed =
       for fixture <- fixtures(), reduce: [] do

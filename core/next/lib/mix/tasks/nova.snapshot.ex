@@ -117,6 +117,13 @@ defmodule Mix.Tasks.Nova.Snapshot do
 
   @doc "The SaaS the current build is for. Raises when config and `BUNDLE` disagree."
   def saas! do
+    unless Mica.Env.get(:saas) do
+      Mix.raise(
+        "the #{Mix.env()} config builds no SaaS: the test env takes BUNDLE only; " <>
+          "run Next with BUNDLE=next MIX_ENV=test, Self with BUNDLE=self MIX_ENV=dev"
+      )
+    end
+
     configured =
       Mica.SaaS.module() |> Module.split() |> hd() |> Macro.underscore() |> String.to_atom()
 

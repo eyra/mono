@@ -50,11 +50,14 @@ defmodule Mica.Application do
     ] ++
       Mica.SaaS.children() ++
       [
-        {Oban, oban_config(Mica.Env.fetch!(Oban), Mica.Env.get(:oban_plugins, []))},
-        Mica.SaaS.endpoint(),
-        {Rate.Server, rate_config(Mica.Env.fetch!(:rate))}
-      ]
+        {Oban, oban_config(Mica.Env.fetch!(Oban), Mica.Env.get(:oban_plugins, []))}
+      ] ++
+      endpoint() ++
+      [{Rate.Server, rate_config(Mica.Env.fetch!(:rate))}]
   end
+
+  # Mica's own tests run on a composition with no SaaS, so with no endpoint.
+  defp endpoint, do: if(Mica.SaaS.saas?(), do: [Mica.SaaS.endpoint()], else: [])
 
   @doc false
   # `config :mica, Oban` with Mica's and the systems' queues, and the plugins and

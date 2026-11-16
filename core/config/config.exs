@@ -200,17 +200,24 @@ import_config "../mica_saas/config/endpoint.exs"
 
 # The SaaS config, which names the SaaS module (`config :mica, saas:`). The
 # BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
-# code-split.
+# code-split. Tests take BUNDLE only: without it they configure no SaaS and
+# run Mica's own suite, mica/test (`mix test`); `BUNDLE=next mix test` runs
+# Next's, `BUNDLE=self mix test` Self's.
 default_bundle =
   case File.read(".bundle") do
     {:ok, bundle} -> String.trim(bundle)
     {:error, _} -> "next"
   end
 
-saas_dir =
-  Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, System.get_env("BUNDLE", default_bundle))
+bundle =
+  if config_env() == :test,
+    do: System.get_env("BUNDLE"),
+    else: System.get_env("BUNDLE", default_bundle)
 
-import_config "../#{saas_dir}/config/config.exs"
+if bundle do
+  saas_dir = Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, bundle)
+  import_config "../#{saas_dir}/config/config.exs"
+end
 
 config :mica, :zircon,
   screening: [
