@@ -3,6 +3,9 @@ defmodule Systems.Home.BFFPage do
   The BFF's home page: what the web home shows a signed-in user, in the same order and
   behind the same feature flags (`Systems.Home.PageBuilder.block_keys/1`), as a flat
   list of blocks. Pay out, Retry and Donate are not here yet.
+
+  Home shows the first three studies of the marketplace and of the history, then a link
+  to the BFF page with all of them (`history/1`, `marketplace/1`).
   """
   @behaviour Systems.BFF.Page
 
@@ -14,9 +17,22 @@ defmodule Systems.Home.BFFPage do
   alias Systems.Home.PageBuilder
   alias Systems.NextAction
 
+  @home_limit 3
+
   @impl true
   def blocks(user) do
-    Enum.flat_map(PageBuilder.block_keys(user), &(blocks(&1, user) |> card(&1)))
+    Enum.flat_map(PageBuilder.block_keys(user), &(blocks(&1, user, @home_limit) |> card(&1)))
+  end
+
+  @doc "The BFF's history page: every study the user took part in."
+  def history(user), do: all(:participated, user)
+
+  @doc "The BFF's marketplace page: every study open to the user in the marketplace Home shows."
+  def marketplace(user), do: all(:panl_marketplace, user)
+
+  # Behind the same flags as on home.
+  defp all(key, user) do
+    if key in PageBuilder.block_keys(user), do: blocks(key, user, :all), else: []
   end
 
   # As on the web home, rewards, marketplace and history each sit in a bordered box.
@@ -26,7 +42,7 @@ defmodule Systems.Home.BFFPage do
   defp card(blocks, _key),
     do: [%Blocks.SectionBegin{border: true} | blocks] ++ [%Blocks.SectionEnd{}]
 
-  defp blocks(:next_best_action, user) do
+  defp blocks(:next_best_action, user, _limit) do
     case NextAction.Public.next_best_action(user) do
       %{title: title, description: body, cta_label: cta, cta_action: action} ->
         [%Blocks.NextBestAction{title: title, body: body, cta: cta, to: to(action)}]
@@ -36,16 +52,16 @@ defmodule Systems.Home.BFFPage do
     end
   end
 
-  defp blocks(:rewards_summary, user) do
+  defp blocks(:rewards_summary, user, _limit) do
     case PageBuilder.rewards_summary(user) do
       nil -> []
       summary -> rewards(summary)
     end
   end
 
-  defp blocks(:panl_marketplace, user) do
-    %{title: title, cards: cards, count: count, more_path: more_path, pool_slug: pool_slug} =
-      PageBuilder.panl_marketplace(user, %{current_user: user})
+  defp blocks(:panl_marketplace, user, limit) do
+    %{title: title, cards: cards, count: count, pool_slug: pool_slug} =
+      PageBuilder.panl_marketplace(user, %{current_user: user}, limit)
 
     heading = %Blocks.Section{
       title: title,
@@ -54,28 +70,29 @@ defmodule Systems.Home.BFFPage do
       image_url: raster_logo(pool_slug)
     }
 
-    see_all =
-      if count > 0,
-        do: [%Blocks.Section{title: dgettext("eyra-pool", "marketplace.see_all"), to: more_path}],
-        else: []
-
-    [heading | Enum.map(cards, &advert/1)] ++ see_all
+    [heading | Enum.map(cards, &advert/1)] ++ see_all(count, limit, "/bff/page/marketplace")
   end
 
-  defp blocks(:participated, user) do
+  defp blocks(:participated, user, limit) do
     case PageBuilder.participated(user) do
       [] ->
         []
 
       items ->
         %{title: title} = labels = PageBuilder.participated_labels()
+        shown = if limit == :all, do: items, else: Enum.take(items, limit)
 
-        [
-          %Blocks.Section{title: title, count: length(items)}
-          | Enum.map(items, &participation(&1, labels))
-        ]
+        [%Blocks.Section{title: title, count: length(items)}] ++
+          Enum.map(shown, &participation(&1, labels)) ++
+          see_all(length(items), limit, "/bff/page/history")
     end
   end
+
+  # Only home has more than it shows, behind a link to the page with all of them.
+  defp see_all(count, limit, to) when is_integer(limit) and count > limit,
+    do: [%Blocks.Section{title: dgettext("eyra-pool", "marketplace.see_all"), to: to}]
+
+  defp see_all(_count, _limit, _to), do: []
 
   defp rewards(%{
          pending_cents: pending,
