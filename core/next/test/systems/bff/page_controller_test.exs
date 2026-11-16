@@ -44,14 +44,23 @@ defmodule Next.Systems.BFF.PageControllerTest do
   end
 
   # An online advert in Panl that is open to the user; reward_value 0 skips the funding check.
-  defp create_panl_advert(panl) do
+  defp create_panl_advert(panl, opts \\ []) do
     advert = Advert.Factories.create_advert(Factories.insert!(:creator), :accepted, 1)
     {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
 
     {:ok, _} =
       advert.submission
-      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl.id)
+      |> Ecto.Changeset.change(
+        reward_value: 0,
+        pool_id: panl.id,
+        submitted_at: opts[:submitted_at]
+      )
       |> Repo.update()
+
+    if title = opts[:title] do
+      %{promotion: promotion} = Repo.preload(advert, :promotion)
+      promotion |> Ecto.Changeset.change(title: title) |> Repo.update!()
+    end
 
     advert
   end
@@ -168,10 +177,58 @@ defmodule Next.Systems.BFF.PageControllerTest do
              ] = for(%{"type" => "section", "props" => props} <- home["blocks"], do: props)
 
       assert types(conn |> get("/bff/page/marketplace") |> json_response(200)) ==
-               ["section" | List.duplicate("advert", 4)]
+               ["section", "filter", "search" | List.duplicate("advert", 4)]
 
       assert types(conn |> get("/bff/page/history") |> json_response(200)) ==
                ["section" | List.duplicate("participation", 4)]
+    end
+
+    test "the marketplace filters on the year a study was published and searches its title, as on the web",
+         %{conn: conn, user: user} do
+      {panl, _assignment} = home_with_everything(user)
+      create_panl_advert(panl, title: "Sleep and screens", submitted_at: ~N[2024-06-15 12:00:00])
+      create_panl_advert(panl, title: "Screens at night", submitted_at: ~N[2025-03-01 09:00:00])
+      this_year = "#{NaiveDateTime.utc_now().year}"
+
+      marketplace = fn query ->
+        %{"blocks" => blocks} =
+          conn |> get("/bff/page/marketplace#{query}") |> json_response(200)
+
+        blocks
+      end
+
+      assert [
+               %{"props" => %{"title" => "Marketplace", "count" => 3}},
+               %{"type" => "filter", "props" => %{"name" => "year", "options" => options}},
+               %{"type" => "search", "props" => search} | adverts
+             ] = marketplace.("")
+
+      assert options == [
+               %{"value" => "", "label" => "All", "selected" => true},
+               %{"value" => this_year, "label" => this_year, "selected" => false},
+               %{"value" => "2025", "label" => "2025", "selected" => false},
+               %{"value" => "2024", "label" => "2024", "selected" => false}
+             ]
+
+      assert search == %{"name" => "query", "placeholder" => "Search"}
+      assert length(adverts) == 3
+
+      assert [
+               %{"props" => %{"count" => 1}},
+               %{"props" => %{"options" => [%{"selected" => false} | _] = options}},
+               %{"props" => %{"value" => "screens"}},
+               %{"type" => "advert", "props" => %{"title" => "Screens at night"}}
+             ] = marketplace.("?year=2025&query=+screens+")
+
+      assert %{"value" => "2025", "label" => "2025", "selected" => true} in options
+
+      assert [%{"props" => %{"count" => 0}}, _filter, _search, no_studies] =
+               marketplace.("?year=2025&query=sleep")
+
+      assert no_studies == %{"type" => "section", "props" => %{"body" => "No studies found."}}
+
+      # A year the marketplace doesn't have is no filter, as "All".
+      assert [%{"props" => %{"count" => 3}} | _] = marketplace.("?year=1999")
     end
 
     test "without panl_post_launch home shows only the next action, history and marketplace nothing",

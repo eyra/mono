@@ -5,7 +5,7 @@ defmodule Systems.Home.BFFPage do
   list of blocks. Pay out, Retry and Donate are not here yet.
 
   Home shows the first three studies of the marketplace and of the history, then a link
-  to the BFF page with all of them (`history/1`, `marketplace/1`).
+  to the BFF page with all of them (`history/1`, `marketplace/2`).
   """
   @behaviour Systems.BFF.Page
 
@@ -16,24 +16,99 @@ defmodule Systems.Home.BFFPage do
   alias Systems.BFF.Blocks
   alias Systems.Home.PageBuilder
   alias Systems.NextAction
+  alias Systems.Pool
 
   @home_limit 3
 
   @impl true
-  def blocks(user) do
+  def blocks(user, _params) do
     Enum.flat_map(PageBuilder.block_keys(user), &(blocks(&1, user, @home_limit) |> card(&1)))
   end
 
   @doc "The BFF's history page: every study the user took part in."
-  def history(user), do: all(:participated, user)
-
-  @doc "The BFF's marketplace page: every study open to the user in the marketplace Home shows."
-  def marketplace(user), do: all(:panl_marketplace, user)
-
-  # Behind the same flags as on home.
-  defp all(key, user) do
-    if key in PageBuilder.block_keys(user), do: blocks(key, user, :all), else: []
+  def history(user) do
+    if :participated in PageBuilder.block_keys(user),
+      do: blocks(:participated, user, :all),
+      else: []
   end
+
+  @doc """
+  The BFF's marketplace page: every study open to the user in the marketplace Home
+  shows, behind the same flags, narrowed down as on the web marketplace
+  (`Systems.Pool.MarketplaceViewBuilder`): the `year` filter keeps the studies
+  published that year, the `query` search those whose title has every word.
+  """
+  def marketplace(user, params) do
+    if :panl_marketplace in PageBuilder.block_keys(user),
+      do: marketplace_blocks(user, params),
+      else: []
+  end
+
+  defp marketplace_blocks(user, params) do
+    panl = Pool.Public.get_panl()
+
+    %{items: items, years: years} =
+      Pool.MarketplacePageBuilder.view_model(panl, %{current_user: user})
+
+    year = year(params["year"], years)
+    query = query(params["query"])
+    cards = Pool.MarketplaceViewBuilder.filtered_cards(items, year, String.split(query || ""))
+    heading = marketplace_heading(length(cards), Pool.Model.slug(panl))
+
+    if items == [],
+      do: [heading, %Blocks.Section{body: dgettext("eyra-pool", "marketplace.empty.message")}],
+      else: [heading, year_filter(years, year), search(query) | found(cards)]
+  end
+
+  # A year that isn't one of the marketplace's means no year filter, as "All".
+  defp year(value, years) when is_binary(value) do
+    case Integer.parse(value) do
+      {year, ""} -> if year in years, do: year
+      _ -> nil
+    end
+  end
+
+  defp year(_value, _years), do: nil
+
+  defp query(value) when is_binary(value) do
+    case String.trim(value) do
+      "" -> nil
+      query -> query
+    end
+  end
+
+  defp query(_value), do: nil
+
+  defp year_filter(years, year) do
+    all = %Blocks.FilterOption{
+      value: "",
+      label: dgettext("eyra-pool", "marketplace.filter.all"),
+      selected: year == nil
+    }
+
+    %Blocks.Filter{
+      name: "year",
+      label: dgettext("eyra-pool", "marketplace.filter.label"),
+      options: [
+        all
+        | for(
+            y <- years,
+            do: %Blocks.FilterOption{value: "#{y}", label: "#{y}", selected: y == year}
+          )
+      ]
+    }
+  end
+
+  defp search(query) do
+    %Blocks.Search{
+      name: "query",
+      placeholder: dgettext("eyra-pool", "marketplace.search.placeholder"),
+      value: query
+    }
+  end
+
+  defp found([]), do: [%Blocks.Section{body: dgettext("eyra-pool", "marketplace.filter.none")}]
+  defp found(cards), do: Enum.map(cards, &advert/1)
 
   # As on the web home, rewards, marketplace and history each sit in a bordered box.
   defp card(blocks, :next_best_action), do: blocks
@@ -60,17 +135,11 @@ defmodule Systems.Home.BFFPage do
   end
 
   defp blocks(:panl_marketplace, user, limit) do
-    %{title: title, cards: cards, count: count, pool_slug: pool_slug} =
-      PageBuilder.panl_marketplace(user, %{current_user: user}, limit)
+    %{cards: cards, count: count, pool_slug: pool_slug} =
+      PageBuilder.panl_marketplace(user, %{current_user: user})
 
-    heading = %Blocks.Section{
-      title: title,
-      body: dgettext("link-advert", "submission.available.sub_heading"),
-      count: count,
-      image_url: raster_logo(pool_slug)
-    }
-
-    [heading | Enum.map(cards, &advert/1)] ++ see_all(count, limit, "/bff/page/marketplace")
+    [marketplace_heading(count, pool_slug) | Enum.map(cards, &advert/1)] ++
+      see_all(count, limit, "/bff/page/marketplace")
   end
 
   defp blocks(:participated, user, limit) do
@@ -93,6 +162,15 @@ defmodule Systems.Home.BFFPage do
     do: [%Blocks.Section{title: dgettext("eyra-pool", "marketplace.see_all"), to: to}]
 
   defp see_all(_count, _limit, _to), do: []
+
+  defp marketplace_heading(count, pool_slug) do
+    %Blocks.Section{
+      title: dgettext("eyra-pool", "marketplace.title"),
+      body: dgettext("link-advert", "submission.available.sub_heading"),
+      count: count,
+      image_url: raster_logo(pool_slug)
+    }
+  end
 
   defp rewards(%{
          pending_cents: pending,

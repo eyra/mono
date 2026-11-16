@@ -6,8 +6,9 @@ defmodule Systems.BFF.PageController do
   alias Systems.BFF
 
   @doc """
-  The blocks of `page` as `%{"blocks" => [...]}`. 401 when signed out, before the
-  page is looked up; 404 for a page the spec doesn't list or no system serves.
+  The blocks of `page` as `%{"blocks" => [...]}`, given the request's query
+  parameters. 401 when signed out, before the page is looked up; 404 for a page the
+  spec doesn't list or no system serves.
   """
   def show(conn, %{"page" => page}) do
     Logger.metadata(bff_spec: conn |> get_req_header("x-bff-spec") |> List.first())
@@ -20,7 +21,7 @@ defmodule Systems.BFF.PageController do
         conn |> put_status(:not_found) |> json(%{error: "Not found"})
 
       {user, module} ->
-        json(conn, %{blocks: Enum.map(module.blocks(user), &to_map/1)})
+        json(conn, %{blocks: Enum.map(module.blocks(user, conn.query_params), &to_map/1)})
     end
   end
 

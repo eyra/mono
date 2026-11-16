@@ -1,7 +1,10 @@
 defmodule Systems.Home.MarketplaceBFFPage do
-  @moduledoc "The BFF's marketplace page: every study open to the user (`Systems.Home.BFFPage.marketplace/1`)."
+  @moduledoc """
+  The BFF's marketplace page: every study open to the user, with a year filter and a
+  search (`Systems.Home.BFFPage.marketplace/2`).
+  """
   @behaviour Systems.BFF.Page
 
   @impl true
-  defdelegate blocks(user), to: Systems.Home.BFFPage, as: :marketplace
+  defdelegate blocks(user, params), to: Systems.Home.BFFPage, as: :marketplace
 end
