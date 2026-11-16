@@ -1,4 +1,4 @@
-defmodule Systems.Assignment.NextActions.PendingContributionsTest do
+defmodule MicaSaas.Systems.Assignment.NextActions.PendingContributionsTest do
   use Mica.DataCase, async: true
 
   alias Systems.Assignment.NextActions.PendingContributions

@@ -1,4 +1,4 @@
-defmodule Systems.Pool.OnboardingPageBuilderTest do
+defmodule MicaSaas.Systems.Pool.OnboardingPageBuilderTest do
   use Mica.DataCase, async: true
   use Gettext, backend: MicaWeb.Gettext
 

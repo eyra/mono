@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.Google.FakeGoogle do
+defmodule MicaSaas.Systems.Account.Auth.Google.FakeGoogle do
   @sub Faker.UUID.v4()
   @email Faker.Internet.email()
 
@@ -30,7 +30,7 @@ defmodule Systems.Account.Auth.Google.FakeGoogle do
   end
 end
 
-defmodule Systems.Account.Auth.Google.AuthorizePlug.Test do
+defmodule MicaSaas.Systems.Account.Auth.Google.AuthorizePlug.Test do
   use ExUnit.Case, async: true
   import Plug.Test
   import Plug.Conn
@@ -45,7 +45,7 @@ defmodule Systems.Account.Auth.Google.AuthorizePlug.Test do
         client_secret: Faker.Lorem.sentence(),
         site: "https://connect.test.google_sign_in.nl",
         redirect_uri: "https://#{domain}/google_sign_in/auth",
-        google_module: Systems.Account.Auth.Google.FakeGoogle
+        google_module: MicaSaas.Systems.Account.Auth.Google.FakeGoogle
       )
 
       {:ok, domain: domain}
@@ -75,7 +75,7 @@ defmodule Systems.Account.Auth.Google.AuthorizePlug.Test do
   end
 end
 
-defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
+defmodule MicaSaas.Systems.Account.Auth.Google.CallbackPlug.Test do
   use ExUnit.Case, async: false
   use Mica.DataCase
   import Plug.Test
@@ -97,7 +97,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
       client_secret: Faker.Lorem.sentence(),
       site: "https://connect.test.google_sign_in.nl",
       redirect_uri: "https://#{domain}/google_sign_in/auth",
-      google_module: Systems.Account.Auth.Google.FakeGoogle,
+      google_module: MicaSaas.Systems.Account.Auth.Google.FakeGoogle,
       log_in_user: fn _conn, user, _first_time? -> user end
     )
 
@@ -115,7 +115,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
     end
 
     test "authenticates an existing user" do
-      email = Systems.Account.Auth.Google.FakeGoogle.email()
+      email = MicaSaas.Systems.Account.Auth.Google.FakeGoogle.email()
 
       given_name = Faker.Person.first_name()
       family_name = Faker.Person.last_name()
@@ -123,7 +123,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
       Systems.Account.Auth.authenticate(
         Systems.Account.Auth.Google,
         %{
-          "sub" => Systems.Account.Auth.Google.FakeGoogle.sub(),
+          "sub" => MicaSaas.Systems.Account.Auth.Google.FakeGoogle.sub(),
           "name" => "#{given_name} #{family_name}",
           "email" => email,
           "email_verified" => true,
@@ -145,7 +145,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
     end
 
     test "offers transfer for an existing account without a Google satellite" do
-      email = Systems.Account.Auth.Google.FakeGoogle.email()
+      email = MicaSaas.Systems.Account.Auth.Google.FakeGoogle.email()
       Mica.Factories.insert!(:creator, %{email: email})
 
       conn =
@@ -170,7 +170,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
       Application.put_env(
         :mica,
         :admins,
-        Systems.Admin.Public.compile([Systems.Account.Auth.Google.FakeGoogle.email()])
+        Systems.Admin.Public.compile([MicaSaas.Systems.Account.Auth.Google.FakeGoogle.email()])
       )
 
       set_feature_flag(:member_google_sign_in, false)
@@ -180,7 +180,7 @@ defmodule Systems.Account.Auth.Google.CallbackPlug.Test do
         |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
         |> CallbackPlug.call(:test)
 
-      assert user.email == Systems.Account.Auth.Google.FakeGoogle.email()
+      assert user.email == MicaSaas.Systems.Account.Auth.Google.FakeGoogle.email()
     end
 
     test "redirects to signin and logs error when session is missing" do
