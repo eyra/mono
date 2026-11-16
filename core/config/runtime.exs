@@ -71,7 +71,7 @@ if System.get_env("APPSIGNAL_SEND_SESSION_DATA") not in [nil, "false"] do
 end
 
 # The endpoint of the SaaS that runs (`config :mica, saas:`). Its build-time
-# config is in the SaaS's config file; here it gets its port and, on a
+# config is in `<saas>/config/endpoint.exs`; here it gets its port and, on a
 # deployment, its URL and secret.
 endpoint = Mica.SaaS.module().endpoint()
 

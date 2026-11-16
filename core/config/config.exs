@@ -98,8 +98,8 @@ config :mica,
   tool_directors: [:assignment]
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
-# Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
+# A config list, read at runtime, so Logo.pool doesn't stat the filesystem on
+# every render. Override per SaaS (see next/config/config.exs).
 config :mica, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
