@@ -2,25 +2,34 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { Blurhash } from "./blurhash";
 
 describe("Blurhash", () => {
-  let el;
-
-  beforeEach(() => {
-    vi.spyOn(console, "log").mockImplementation(() => {});
-
+  const mount = (attrs) => {
     document.body.innerHTML = `
       <div id="image" data-blurhash="LEHV6nWB2yk8pyo0adR*.7kCMdnj"
-           data-image-width="10" data-image-height="10" data-src="/image.png"></div>
+           data-image-width="10" data-image-height="10" data-src="/image.png"
+           ${attrs}></div>
     `;
-    el = document.getElementById("image");
+    const el = document.getElementById("image");
 
     const hook = Object.create(Blurhash);
     hook.el = el;
     hook.mounted();
+
+    return el.getElementsByTagName("img")[0];
+  };
+
+  beforeEach(() => {
+    vi.spyOn(console, "log").mockImplementation(() => {});
   });
 
-  it("adds a decorative image", () => {
-    const [img] = el.getElementsByTagName("img");
+  it("gives the image the alt it is given", () => {
+    const img = mount(`data-alt=""`);
 
     expect(img.getAttribute("alt")).toBe("");
+  });
+
+  it("adds no alt when none is given", () => {
+    const img = mount("");
+
+    expect(img.hasAttribute("alt")).toBe(false);
   });
 });

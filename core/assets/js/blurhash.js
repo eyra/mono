@@ -20,7 +20,9 @@ export const Blurhash = {
   },
   createImg() {
     this.img = document.createElement("img");
-    this.img.alt = "";
+    if (this.el.dataset.alt !== undefined) {
+      this.img.alt = this.el.dataset.alt;
+    }
     this.img.style.width = "100%";
     this.img.style.height = "100%";
     this.img.style.objectFit = "cover";
