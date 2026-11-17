@@ -35,8 +35,9 @@ defmodule Systems.Home.BFFPage do
   @doc """
   The BFF's marketplace page: every study open to the user in the marketplace Home
   shows, behind the same flags, narrowed down as on the web marketplace
-  (`Systems.Pool.MarketplaceViewBuilder`): the `year` filter keeps the studies
-  published that year, the `query` search those whose title has every word.
+  (`Systems.Pool.MarketplaceViewBuilder`): `year` keeps the studies published that
+  year, `query` those whose title has every word. The filter's options and the
+  search link back to this page, with the other param kept.
   """
   def marketplace(user, params) do
     if :panl_marketplace in PageBuilder.block_keys(user),
@@ -50,61 +51,54 @@ defmodule Systems.Home.BFFPage do
     %{items: items, years: years} =
       Pool.MarketplacePageBuilder.view_model(panl, %{current_user: user})
 
-    year = year(params["year"], years)
-    query = query(params["query"])
+    # A year the marketplace doesn't have counts as All.
+    year = if params[:year] in years, do: params[:year]
+    query = params[:query] && String.trim(params[:query])
     cards = Pool.MarketplaceViewBuilder.filtered_cards(items, year, String.split(query || ""))
     heading = marketplace_heading(length(cards), Pool.Model.slug(panl))
 
     if items == [],
       do: [heading, %Blocks.Section{body: dgettext("eyra-pool", "marketplace.empty.message")}],
-      else: [heading, year_filter(years, year), search(query) | found(cards)]
+      else: [heading, year_filter(years, year, query), search(year, query) | found(cards)]
   end
 
-  # A year that isn't one of the marketplace's means no year filter, as "All".
-  defp year(value, years) when is_binary(value) do
-    case Integer.parse(value) do
-      {year, ""} -> if year in years, do: year
-      _ -> nil
-    end
-  end
-
-  defp year(_value, _years), do: nil
-
-  defp query(value) when is_binary(value) do
-    case String.trim(value) do
-      "" -> nil
-      query -> query
-    end
-  end
-
-  defp query(_value), do: nil
-
-  defp year_filter(years, year) do
+  defp year_filter(years, year, query) do
     all = %Blocks.FilterOption{
-      value: "",
       label: dgettext("eyra-pool", "marketplace.filter.all"),
+      to: marketplace_path(nil, query),
       selected: year == nil
     }
 
     %Blocks.Filter{
-      name: "year",
       label: dgettext("eyra-pool", "marketplace.filter.label"),
       options: [
         all
         | for(
             y <- years,
-            do: %Blocks.FilterOption{value: "#{y}", label: "#{y}", selected: y == year}
+            do: %Blocks.FilterOption{
+              label: "#{y}",
+              to: marketplace_path(y, query),
+              selected: y == year
+            }
           )
       ]
     }
   end
 
-  defp search(query) do
+  defp search(year, query) do
     %Blocks.Search{
       name: "query",
+      to: marketplace_path(year, nil),
       placeholder: dgettext("eyra-pool", "marketplace.search.placeholder"),
-      value: query
+      value: if(query != "", do: query)
     }
+  end
+
+  defp marketplace_path(year, query) do
+    case for {key, value} <- [query: query, year: year], value not in [nil, ""], do: {key, value} do
+      [] -> "/bff/page/marketplace"
+      params -> "/bff/page/marketplace?" <> URI.encode_query(params, :rfc3986)
+    end
   end
 
   defp found([]), do: [%Blocks.Section{body: dgettext("eyra-pool", "marketplace.filter.none")}]

@@ -183,52 +183,69 @@ defmodule Next.Systems.BFF.PageControllerTest do
                ["section" | List.duplicate("participation", 4)]
     end
 
-    test "the marketplace filters on the year a study was published and searches its title, as on the web",
+    test "the marketplace filters on the year a study was published and searches its title, as on the web, through links to itself",
          %{conn: conn, user: user} do
       {panl, _assignment} = home_with_everything(user)
       create_panl_advert(panl, title: "Sleep and screens", submitted_at: ~N[2024-06-15 12:00:00])
       create_panl_advert(panl, title: "Screens at night", submitted_at: ~N[2025-03-01 09:00:00])
       this_year = "#{NaiveDateTime.utc_now().year}"
+      page = "/bff/page/marketplace"
 
       marketplace = fn query ->
-        %{"blocks" => blocks} =
-          conn |> get("/bff/page/marketplace#{query}") |> json_response(200)
-
+        %{"blocks" => blocks} = conn |> get(page <> query) |> json_response(200)
         blocks
       end
 
       assert [
                %{"props" => %{"title" => "Marketplace", "count" => 3}},
-               %{"type" => "filter", "props" => %{"name" => "year", "options" => options}},
+               %{"type" => "filter", "props" => %{"label" => "Filter:", "options" => options}},
                %{"type" => "search", "props" => search} | adverts
              ] = marketplace.("")
 
       assert options == [
-               %{"value" => "", "label" => "All", "selected" => true},
-               %{"value" => this_year, "label" => this_year, "selected" => false},
-               %{"value" => "2025", "label" => "2025", "selected" => false},
-               %{"value" => "2024", "label" => "2024", "selected" => false}
+               %{"label" => "All", "to" => page, "selected" => true},
+               %{"label" => this_year, "to" => "#{page}?year=#{this_year}", "selected" => false},
+               %{"label" => "2025", "to" => "#{page}?year=2025", "selected" => false},
+               %{"label" => "2024", "to" => "#{page}?year=2024", "selected" => false}
              ]
 
-      assert search == %{"name" => "query", "placeholder" => "Search"}
+      assert search == %{"name" => "query", "to" => page, "placeholder" => "Search"}
       assert length(adverts) == 3
 
+      # Each link keeps the other param: a year keeps the search, the search keeps the year.
       assert [
                %{"props" => %{"count" => 1}},
-               %{"props" => %{"options" => [%{"selected" => false} | _] = options}},
-               %{"props" => %{"value" => "screens"}},
+               %{"props" => %{"options" => [all | _] = options}},
+               %{"props" => search},
                %{"type" => "advert", "props" => %{"title" => "Screens at night"}}
              ] = marketplace.("?year=2025&query=+screens+")
 
-      assert %{"value" => "2025", "label" => "2025", "selected" => true} in options
+      assert all == %{"label" => "All", "to" => "#{page}?query=screens", "selected" => false}
+
+      assert %{"label" => "2025", "to" => "#{page}?query=screens&year=2025", "selected" => true} in options
+
+      assert search == %{
+               "name" => "query",
+               "to" => "#{page}?year=2025",
+               "placeholder" => "Search",
+               "value" => "screens"
+             }
 
       assert [%{"props" => %{"count" => 0}}, _filter, _search, no_studies] =
                marketplace.("?year=2025&query=sleep")
 
       assert no_studies == %{"type" => "section", "props" => %{"body" => "No studies found."}}
 
-      # A year the marketplace doesn't have is no filter, as "All".
-      assert [%{"props" => %{"count" => 3}} | _] = marketplace.("?year=1999")
+      # A year the marketplace doesn't have, or one that isn't a year, counts as All.
+      for query <- ["?year=1999", "?year=next", "?year=&query="] do
+        assert [%{"props" => %{"count" => 3}} | _] = marketplace.(query)
+      end
+
+      # The search text is encoded in the links.
+      assert [_heading, %{"props" => %{"options" => [all | _]}} | _] =
+               marketplace.("?query=c%2B%2B+%26+more")
+
+      assert all["to"] == "#{page}?query=c%2B%2B%20%26%20more"
     end
 
     test "without panl_post_launch home shows only the next action, history and marketplace nothing",
