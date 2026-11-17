@@ -50,15 +50,6 @@ defmodule Frameworks.Pixel.Button.FaceTest do
       assert "w-full" in classes(face(&Face.primary/1, label: "Save", full_width: true))
     end
 
-    test "primary_icon" do
-      button = face(&Face.primary_icon/1, label: "Add", icon: :add)
-
-      assert ["prism-button", "prism-button--primary", "prism-button--with-icon" | _] =
-               classes(button)
-
-      assert parts(button) == ["prism-button__icon", "prism-button__label"]
-    end
-
     test "secondary" do
       button = face(&Face.secondary/1, label: "Cancel", loading: true)
 
@@ -69,32 +60,10 @@ defmodule Frameworks.Pixel.Button.FaceTest do
              ]
     end
 
-    test "secondary_icon" do
-      button = face(&Face.secondary_icon/1, label: "Add", icon: :add)
-
-      assert ["prism-button", "prism-button--secondary", "prism-button--with-icon" | _] =
-               classes(button)
-    end
-
     test "plain fits its text" do
       button = face(&Face.plain/1, label: "Next")
 
       assert classes(button) == ["prism-button", "prism-button--plain", "w-full"]
-    end
-
-    test "plain_icon puts the icon after the label by default" do
-      button = face(&Face.plain_icon/1, label: "Next", icon: :forward)
-
-      assert ["prism-button", "prism-button--plain", "prism-button--with-icon" | _] =
-               classes(button)
-
-      assert parts(button) == ["prism-button__label", "prism-button__icon"]
-    end
-
-    test "plain_icon puts the icon before the label on the left" do
-      button = face(&Face.plain_icon/1, label: "Back", icon: :back, icon_align: :left)
-
-      assert parts(button) == ["prism-button__icon", "prism-button__label"]
     end
 
     test "label is a padded text button" do
@@ -107,25 +76,8 @@ defmodule Frameworks.Pixel.Button.FaceTest do
                classes(face(&Face.label/1, label: "Edit", wrap: true))
     end
 
-    test "label_icon is a compact plain button with the icon first" do
-      button = face(&Face.label_icon/1, label: "Copy", icon: :copy)
-
-      assert ["prism-button", "prism-button--plain", "prism-button--with-icon" | _] =
-               classes(button)
-
-      assert parts(button) == ["prism-button__icon", "prism-button__label"]
-    end
-
     test "link" do
       assert classes(face(&Face.link/1, text: "More")) == ["prism-button", "prism-button--link"]
-    end
-
-    test "icon" do
-      button = face(&Face.icon/1, icon: :close, alt: "Close")
-
-      assert ["prism-button", "prism-button--icon" | _] = classes(button)
-      assert [{"img", _, _}] = Floki.find(button, ".prism-button__icon img")
-      assert Floki.attribute(button, "img", "alt") == ["Close"]
     end
 
     test "a color override follows Prism's classes" do

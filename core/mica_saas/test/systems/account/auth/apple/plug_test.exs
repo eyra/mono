@@ -1,4 +1,4 @@
-defmodule Systems.Account.Auth.Apple.FakeBackend do
+defmodule MicaSaas.Systems.Account.Auth.Apple.FakeBackend do
   def callback(_config, _token) do
     {:ok,
      %{
@@ -11,7 +11,7 @@ defmodule Systems.Account.Auth.Apple.FakeBackend do
   end
 end
 
-defmodule Systems.Account.Auth.Apple.CallbackPlug.Test do
+defmodule MicaSaas.Systems.Account.Auth.Apple.CallbackPlug.Test do
   use ExUnit.Case, async: true
   use Mica.DataCase
   import Plug.Test
@@ -19,7 +19,7 @@ defmodule Systems.Account.Auth.Apple.CallbackPlug.Test do
 
   setup do
     Application.put_env(:test, Systems.Account.Auth.Apple,
-      apple_backend_module: Systems.Account.Auth.Apple.FakeBackend,
+      apple_backend_module: MicaSaas.Systems.Account.Auth.Apple.FakeBackend,
       log_in_user: fn _conn, user, _first_time? -> user end
     )
 

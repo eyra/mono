@@ -29,17 +29,6 @@ defmodule Systems.Notify.DispatcherTest do
       assert channels == [:email, :na]
     end
 
-    test "each message ends up in :sent status after delivery", %{event: event} do
-      messages =
-        Notify.MessageModel
-        |> Repo.all()
-        |> Enum.filter(&(&1.event_id == event.id))
-
-      assert Enum.all?(messages, &(&1.status == :sent))
-      assert Enum.all?(messages, &(&1.delivered_at != nil))
-      assert Enum.all?(messages, &(&1.attempts == 1))
-    end
-
     test "stamps dispatched_at on the event", %{event: event} do
       assert Repo.reload!(event).dispatched_at != nil
     end

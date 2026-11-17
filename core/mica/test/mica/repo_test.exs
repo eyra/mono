@@ -4,6 +4,7 @@ defmodule Mica.RepoTest do
   alias Mica.Repo
   alias Mica.Factories
   alias Ecto.Multi
+  alias Systems.Org
 
   describe "multi_update_guard/3" do
     setup do
@@ -54,40 +55,35 @@ defmodule Mica.RepoTest do
 
   describe "orphan?" do
     test "returns true if the entity is not referred to by any other entity" do
-      annotation = Factories.insert!(:annotation, %{statement: "test"})
-      assert Repo.orphan?(annotation, ignore: [Next.Systems.Annotation.Assoc])
+      node = Factories.insert!(:org_node, %{identifier: ["orphan_test_node"]})
+      assert Repo.orphan?(node, ignore: [Org.LinkModel])
     end
 
-    test "returns false if the Next.Systems.Annotation.Assoc association table is not ignored" do
-      # Annotation.Model -> Annotation.RefModel goes through the Next.Systems.Annotation.Assoc association table.
-      # By not ignoring the Next.Systems.Annotation.Assoc association table, an annotation with at least one reference
-      # will not be considered orphaned. The association table has a reference to this annotation.
+    test "returns false if the Systems.Org.LinkModel association table is not ignored" do
+      # Org.NodeModel -> Org.NodeModel goes through the Org.LinkModel association table.
+      # By not ignoring the Org.LinkModel association table, a node with at least one link
+      # will not be considered orphaned. The association table has a reference to this node.
       # This is a general phenomenon with association schemas.
 
-      annotation1 = Factories.insert!(:annotation, %{statement: "test"})
-      annotation_ref1 = Factories.insert!(:annotation_ref, %{annotation: annotation1})
+      node1 = Factories.insert!(:org_node, %{identifier: ["orphan_test_node1"]})
+      node2 = Factories.insert!(:org_node, %{identifier: ["orphan_test_node2"]})
+      Factories.insert!(:org_link, %{from: node2, to: node1})
 
-      annotation2 =
-        Factories.insert!(:annotation, %{statement: "test", references: [annotation_ref1]})
-
-      assert not Repo.orphan?(annotation2, ignore: [])
+      assert not Repo.orphan?(node2, ignore: [])
     end
 
     test "returns false if the entity is referred to by another entity" do
-      annotation1 = Factories.insert!(:annotation, %{statement: "test"})
-      annotation_ref1 = Factories.insert!(:annotation_ref, %{annotation: annotation1})
+      node1 = Factories.insert!(:org_node, %{identifier: ["orphan_test_node1"]})
+      Org.Public.add_user(node1, Factories.insert!(:member))
 
-      annotation2 =
-        Factories.insert!(:annotation, %{statement: "test", references: [annotation_ref1]})
+      node2 = Factories.insert!(:org_node, %{identifier: ["orphan_test_node2"]})
+      Factories.insert!(:org_link, %{from: node2, to: node1})
 
-      annotation_ref2 = Factories.insert!(:annotation_ref, %{annotation: annotation2})
+      node3 = Factories.insert!(:org_node, %{identifier: ["orphan_test_node3"]})
 
-      annotation3 =
-        Factories.insert!(:annotation, %{statement: "test", references: [annotation_ref2]})
-
-      assert not Repo.orphan?(annotation1, ignore: [Next.Systems.Annotation.Assoc])
-      assert not Repo.orphan?(annotation2, ignore: [Next.Systems.Annotation.Assoc])
-      assert Repo.orphan?(annotation3, ignore: [Next.Systems.Annotation.Assoc])
+      assert not Repo.orphan?(node1, ignore: [Org.LinkModel])
+      assert Repo.orphan?(node2, ignore: [Org.LinkModel])
+      assert Repo.orphan?(node3, ignore: [Org.LinkModel])
     end
   end
 end

@@ -4,8 +4,8 @@ defmodule Mica.SaaSTest.Stub do
   defmacro __using__(_opts) do
     quote do
       use Mica.SaaS
-      def endpoint, do: NextWeb.Endpoint
-      def router, do: NextWeb.Router
+      def endpoint, do: nil
+      def router, do: nil
       def start_pages, do: nil
       def menu_items, do: nil
       def menu_builder(_), do: nil
@@ -203,10 +203,35 @@ defmodule Mica.SaaSTest do
     end
   end
 
-  test "the configured SaaS lists Mica's systems first" do
-    assert Mica.SaaS.module() == Next.SaaS
-    assert List.starts_with?(Mica.SaaS.systems(), Mica.Systems.all())
-    assert Mica.SaaS.checked_systems(Next.SaaS) == Next.SaaS.systems()
+  describe "the composition of Mica's own tests" do
+    test "is made of Mica's systems, with no SaaS configured" do
+      assert Mica.Env.get(:saas) == nil
+      refute Mica.SaaS.saas?()
+      assert Mica.SaaS.systems() == Mica.Systems.all()
+    end
+
+    test "raises on every Mica.SaaS callback" do
+      for {name, arity} <- Mica.SaaS.behaviour_info(:callbacks) do
+        assert_raise RuntimeError, ~r/^no SaaS: this is a mica-saas test/, fn ->
+          apply(Mica.SaaS.module(), name, List.duplicate(nil, arity))
+        end
+      end
+    end
+
+    test "has no endpoint or router" do
+      assert_raise RuntimeError, ~r/^no SaaS: this is a mica-saas test/, &Mica.SaaS.endpoint/0
+      assert_raise RuntimeError, ~r/^no SaaS: this is a mica-saas test/, &Mica.SaaS.router/0
+    end
+
+    test "passes the boot's checks, and the app runs no endpoint" do
+      assert Mica.SaaS.validate!() == :ok
+      refute Mica.SaaS.saas?()
+
+      refute Enum.any?(Mica.Application.children(), fn child ->
+               module = with {module, _opts} <- child, do: module
+               is_atom(module) and function_exported?(module, :__mica_endpoint__, 0)
+             end)
+    end
   end
 
   test "a SaaS module that is no Mica.SaaS is named in the error" do
@@ -231,16 +256,6 @@ defmodule Mica.SaaSTest do
     assert_raise ArgumentError,
                  "Mica.SaaSTest.DuplicateSaaS.systems/0 lists [Mica.SaaSTest.GoodSystem] more than once",
                  fn -> Mica.SaaS.checked_systems(DuplicateSaaS) end
-  end
-
-  test "signal handlers are collected from all systems, sorted by module name within the systems" do
-    handlers = Mica.SaaS.signal_handlers()
-
-    assert handlers ==
-             Enum.sort_by(handlers, &String.replace(inspect(&1), ~r/^\w+\.(?=Systems\.)/, ""))
-
-    assert Systems.Assignment.Switch in handlers
-    assert Next.Systems.Zircon.Switch in handlers
   end
 
   test "notify channels are collected from all systems" do
@@ -370,31 +385,6 @@ defmodule Mica.SaaSTest do
 
     # The route macros check the SaaS while the router compiles.
     assert_raise ArgumentError, message, fn -> Mica.SaaS.checked_systems(TypoFlagSaaS) end
-  end
-
-  test "Next declares every flag it sets, and nothing more" do
-    assert Keyword.keys(Mica.SaaS.feature_flags()) ==
-             Enum.sort(Keyword.keys(Next.SaaS.feature_flags()))
-  end
-
-  test "the systems declare their queues and quotas" do
-    assert Mica.SaaS.oban_queues() == [
-             affiliate_callback: 10,
-             email_dispatchers: 1,
-             email_delivery: 1,
-             ris_import: 1
-           ]
-
-    assert Keyword.keys(Mica.SaaS.oban_crons()) == [
-             :advert_expiration,
-             :pay_in_expiration,
-             :auto_approve,
-             :data_donation_cleanup,
-             :payment_reconciliation,
-             :auth_code_cleanup
-           ]
-
-    assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Mica.SaaS.rate_quotas()
   end
 
   test "the Admin and Account systems declare the admin panels and account tabs, in order" do

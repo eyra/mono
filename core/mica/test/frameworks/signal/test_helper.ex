@@ -10,7 +10,7 @@ defmodule Frameworks.Signal.TestHelper do
       setup do
         Frameworks.Signal.TestHelper.override_signal_handlers([
           Frameworks.Signal.TestHelper,
-          Next.Systems.Paper.Switch
+          Systems.Assignment.Switch
         ])
       end
   """
@@ -36,12 +36,12 @@ defmodule Frameworks.Signal.TestHelper do
   Must be called from within a test setup block or test case.
 
   Options:
-    - `except: Next.Systems.Paper.Switch` - Also keep the specified switch active
-    - `except: [Next.Systems.Paper.Switch, Systems.Assignment.Switch]` - Keep multiple switches active
+    - `except: Systems.Assignment.Switch` - Also keep the specified switch active
+    - `except: [Systems.Crew.Switch, Systems.Assignment.Switch]` - Keep multiple switches active
 
   Examples:
       setup do
-        isolate_signals(except: [Next.Systems.Zircon.Switch])
+        isolate_signals(except: [Systems.Crew.Switch])
         # No need for on_exit - it's handled automatically
       end
   """

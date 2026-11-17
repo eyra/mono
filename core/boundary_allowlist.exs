@@ -2,7 +2,7 @@
 # scripts/boundary_check.exs. Entries may only shrink. Format:
 # {file, kind, detail, reason}; detail is what the file had when it was listed:
 # the referenced files (*_reference), the module names (*_name) or the number of
-# literal matches. code: mica/, next/ and mica_saas/; config: config/.
+# literal matches. code: mica/, next/ and mica_saas/; config: config/; mica_test: mica/test/.
 [
   code: [
     {"mica/frameworks/pixel/components/footer.ex", :eyra_domain, 1,
@@ -127,7 +127,27 @@
      "*@eyra.co dev admins; code-split moves dev config per SaaS"},
     {"config/runtime.exs", :next_name, ["Next.Systems.Paper"],
      "config :mica, :paper import limits from env; runtime.exs moves to next/ in code-split"},
-    {"config/test.exs", :next_name, ["Next.SaaS", "Next.Systems.Paper"],
-     "tests always build Next.SaaS and set :paper limits; code-instance (Mica tests on MicaSaas.SaaS)"}
+    {"config/test.exs", :next_name, ["Next.Systems.Paper"],
+     "config :mica, :paper test limits for Next's Paper system; code-split moves test config per SaaS"}
+  ],
+  mica_test: [
+    {"mica/test/systems/account/page_builder_test.exs", :panl_string, 3,
+     "tests Mica's account page with the PaNL pool; moves to Next with the PaNL sign-up flow (code-instance)"},
+    {"mica/test/systems/affiliate/_public_test.exs", :eyra_domain, 4,
+     "asserts the @next.eyra.co synthetic affiliate email; code-instance synthetic accounts"},
+    {"mica/test/systems/assignment/crew_task_helpers_test.exs", :eyra_domain, 1,
+     "asserts the support@eyra.co support address of crew_task_helpers.ex; code-brand Next.Brand support email"},
+    {"mica/test/systems/assignment/finished_view_builder_test.exs", :panl_atom, 6,
+     "tests the finished-view Join PaNL call to action; code-instance PaNL"},
+    {"mica/test/systems/pool/_assembly_test.exs", :panl_string, 3,
+     "tests the PaNL pool seed of Pool.Assembly; code-instance get_or_create_panl"},
+    {"mica/test/systems/pool/_public_test.exs", :panl_atom, 11,
+     "tests participant?(:panl) and the PaNL pool lookup; code-instance PaNL"},
+    {"mica/test/systems/pool/_public_test.exs", :panl_string, 4,
+     "tests participant?(:panl) and the PaNL pool lookup; code-instance PaNL"},
+    {"mica/test/systems/pool/account_post_action_handler_test.exs", :panl_atom, 11,
+     "tests the add_to_panl post-action; code-instance PaNL sign-up flow"},
+    {"mica/test/systems/pool/criteria_model_test.exs", :vu_code, 2,
+     "VU study program codes in pool criteria; code-instance VU"}
   ]
 ]

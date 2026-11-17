@@ -1,4 +1,4 @@
-defmodule Systems.Pool.MarketplacePageBuilderTest do
+defmodule MicaSaas.Systems.Pool.MarketplacePageBuilderTest do
   use Mica.DataCase
 
   alias Systems.Pool

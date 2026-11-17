@@ -1,4 +1,4 @@
-defmodule Systems.Email.Factory.Test do
+defmodule MicaSaas.Systems.Email.Factory.Test do
   use ExUnit.Case, async: true
 
   alias Mica.Factories

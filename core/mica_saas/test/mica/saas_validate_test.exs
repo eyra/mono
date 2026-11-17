@@ -1,4 +1,4 @@
-defmodule Mica.SaaSValidateTest.Systems do
+defmodule MicaSaas.SaaSValidateTest.Systems do
   @moduledoc false
 
   defmodule Switch do
@@ -46,13 +46,13 @@ defmodule Mica.SaaSValidateTest.Systems do
   defmodule NotifierTwice do
     use Mica.System
     def notifiers, do: [Notifier, Notifier]
-    def notify_channels, do: %{email: Mica.SaaSValidateTest.EmailChannel}
+    def notify_channels, do: %{email: MicaSaas.SaaSValidateTest.EmailChannel}
   end
 
   defmodule EventTwice do
     use Mica.System
     def notifiers, do: [Notifier, OtherNotifier]
-    def notify_channels, do: %{email: Mica.SaaSValidateTest.EmailChannel}
+    def notify_channels, do: %{email: MicaSaas.SaaSValidateTest.EmailChannel}
   end
 
   defmodule UnknownChannel do
@@ -62,7 +62,7 @@ defmodule Mica.SaaSValidateTest.Systems do
 
   defmodule Email do
     use Mica.System
-    def notify_channels, do: %{email: Mica.SaaSValidateTest.EmailChannel}
+    def notify_channels, do: %{email: MicaSaas.SaaSValidateTest.EmailChannel}
   end
 
   defmodule HandoffTwice do
@@ -87,7 +87,7 @@ defmodule Mica.SaaSValidateTest.Systems do
 
   defmodule Cron do
     use Mica.System
-    def oban_crons, do: [validate_test: {"0 * * * *", Mica.SaaSValidateTest.Worker}]
+    def oban_crons, do: [validate_test: {"0 * * * *", MicaSaas.SaaSValidateTest.Worker}]
   end
 
   defmodule BFF do
@@ -113,7 +113,7 @@ defmodule Mica.SaaSValidateTest.Systems do
   # Second systems that declare the same as the one above them.
   defmodule OtherEmail do
     use Mica.System
-    def notify_channels, do: %{email: Mica.SaaSValidateTest.OtherEmailChannel}
+    def notify_channels, do: %{email: MicaSaas.SaaSValidateTest.OtherEmailChannel}
   end
 
   defmodule OtherQueue do
@@ -123,12 +123,12 @@ defmodule Mica.SaaSValidateTest.Systems do
 
   defmodule OtherCron do
     use Mica.System
-    def oban_crons, do: [validate_test: {"* * * * *", Mica.SaaSValidateTest.Worker}]
+    def oban_crons, do: [validate_test: {"* * * * *", MicaSaas.SaaSValidateTest.Worker}]
   end
 
   defmodule OtherDesktop do
     use Mica.System
-    def desktop_sections, do: [Mica.SaaSValidateTest.Systems.OtherSection]
+    def desktop_sections, do: [MicaSaas.SaaSValidateTest.Systems.OtherSection]
   end
 
   defmodule OtherSection do
@@ -137,7 +137,7 @@ defmodule Mica.SaaSValidateTest.Systems do
 
   defmodule OtherBFF do
     use Mica.System
-    def bff_pages, do: %{validate_test: Mica.SaaSValidateTest.Systems.OtherPage}
+    def bff_pages, do: %{validate_test: MicaSaas.SaaSValidateTest.Systems.OtherPage}
   end
 
   defmodule OtherGrant do
@@ -146,14 +146,14 @@ defmodule Mica.SaaSValidateTest.Systems do
   end
 end
 
-defmodule Mica.SaaSValidateTest.SaaS do
+defmodule MicaSaas.SaaSValidateTest.SaaS do
   @moduledoc false
   # A SaaS made of the systems the test puts in its process.
   use Mica.SaaS
   def systems, do: Process.get(:validate_test_systems)
   def feature_flags, do: Process.get(:validate_test_flags, [])
-  def endpoint, do: Process.get(:validate_test_endpoint, NextWeb.Endpoint)
-  def router, do: Process.get(:validate_test_router, NextWeb.Router)
+  def endpoint, do: Process.get(:validate_test_endpoint, MicaSaasWeb.Endpoint)
+  def router, do: Process.get(:validate_test_router, MicaSaasWeb.Router)
   def start_pages, do: nil
   def menu_items, do: nil
   def menu_builder(_), do: nil
@@ -166,7 +166,7 @@ defmodule Mica.SaaSValidateTest.SaaS do
   def session_path, do: "/session"
 end
 
-defmodule Mica.SaaSValidateTest do
+defmodule MicaSaas.SaaSValidateTest do
   # Not async: a test changes the Logger level.
   use ExUnit.Case, async: false
 
@@ -175,12 +175,12 @@ defmodule Mica.SaaSValidateTest do
   require Logger
 
   alias Mica.SaaS
-  alias Mica.SaaSValidateTest.Systems
+  alias MicaSaas.SaaSValidateTest.Systems
 
   defp validate!(systems, flags \\ []) do
     Process.put(:validate_test_systems, systems)
     Process.put(:validate_test_flags, flags)
-    SaaS.validate!(Mica.SaaSValidateTest.SaaS)
+    SaaS.validate!(MicaSaas.SaaSValidateTest.SaaS)
   end
 
   test "the configured SaaS validates" do
@@ -199,7 +199,7 @@ defmodule Mica.SaaSValidateTest do
   end
 
   test "the composition holds the SaaS's endpoint" do
-    assert %{endpoint: NextWeb.Endpoint} = validate!([Systems.Plain])
+    assert %{endpoint: MicaSaasWeb.Endpoint} = validate!([Systems.Plain])
     assert SaaS.endpoint() == SaaS.module().endpoint()
   end
 
@@ -207,13 +207,13 @@ defmodule Mica.SaaSValidateTest do
     Process.put(:validate_test_endpoint, Systems.Plain)
 
     assert_raise ArgumentError,
-                 "Mica.SaaSValidateTest.SaaS.endpoint/0 names Mica.SaaSValidateTest.Systems.Plain, " <>
+                 "MicaSaas.SaaSValidateTest.SaaS.endpoint/0 names MicaSaas.SaaSValidateTest.Systems.Plain, " <>
                    "which does not `use MicaWeb.Endpoint`",
                  fn -> validate!([Systems.Plain]) end
   end
 
   test "the composition holds the SaaS's router" do
-    assert %{router: NextWeb.Router} = validate!([Systems.Plain])
+    assert %{router: MicaSaasWeb.Router} = validate!([Systems.Plain])
     assert SaaS.router() == SaaS.module().router()
   end
 
@@ -221,24 +221,24 @@ defmodule Mica.SaaSValidateTest do
     Process.put(:validate_test_router, Systems.Plain)
 
     assert_raise ArgumentError,
-                 "Mica.SaaSValidateTest.SaaS.router/0 names Mica.SaaSValidateTest.Systems.Plain, " <>
+                 "MicaSaas.SaaSValidateTest.SaaS.router/0 names MicaSaas.SaaSValidateTest.Systems.Plain, " <>
                    "which does not `use Phoenix.Router`",
                  fn -> validate!([Systems.Plain]) end
   end
 
   test "a router that is no module" do
-    Process.put(:validate_test_router, Mica.SaaSValidateTest.Missing)
+    Process.put(:validate_test_router, MicaSaas.SaaSValidateTest.Missing)
 
     assert_raise ArgumentError,
-                 ~r/router\/0 names Mica.SaaSValidateTest.Missing, which is not a module/,
+                 ~r/router\/0 names MicaSaas.SaaSValidateTest.Missing, which is not a module/,
                  fn -> validate!([Systems.Plain]) end
   end
 
   test "an endpoint that is no module" do
-    Process.put(:validate_test_endpoint, Mica.SaaSValidateTest.Missing)
+    Process.put(:validate_test_endpoint, MicaSaas.SaaSValidateTest.Missing)
 
     assert_raise ArgumentError,
-                 ~r/endpoint\/0 names Mica.SaaSValidateTest.Missing, which is not a module/,
+                 ~r/endpoint\/0 names MicaSaas.SaaSValidateTest.Missing, which is not a module/,
                  fn ->
                    validate!([Systems.Plain])
                  end
@@ -252,7 +252,7 @@ defmodule Mica.SaaSValidateTest do
 
   test "a system listed twice" do
     assert_raise ArgumentError,
-                 ~r/lists \[Mica.SaaSValidateTest.Systems.Plain\] more than once/,
+                 ~r/lists \[MicaSaas.SaaSValidateTest.Systems.Plain\] more than once/,
                  fn ->
                    validate!([Systems.Plain, Systems.Plain])
                  end
@@ -353,7 +353,7 @@ defmodule Mica.SaaSValidateTest do
     log = capture_log(fn -> validate!([Systems.Grant, Systems.Widen]) end)
 
     assert log =~
-             "the grant of Mica.SaaSValidateTest.Systems.Page to [:admin] widens another grant"
+             "the grant of MicaSaas.SaaSValidateTest.Systems.Page to [:admin] widens another grant"
   end
 
   test "a widening grant that widens nothing" do

@@ -1,4 +1,4 @@
-defmodule Systems.Account.SwitchTest do
+defmodule MicaSaas.Systems.Account.SwitchTest do
   use Mica.DataCase
   use Bamboo.Test
   alias Mica.Factories

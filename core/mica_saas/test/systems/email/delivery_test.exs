@@ -1,4 +1,4 @@
-defmodule Systems.Email.DeliveryTest do
+defmodule MicaSaas.Systems.Email.DeliveryTest do
   use Mica.DataCase, async: true
   use Oban.Testing, repo: Mica.Repo
   use Bamboo.Test

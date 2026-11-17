@@ -1,4 +1,4 @@
-defmodule Frameworks.Pixel.NavigationActionBarTest do
+defmodule MicaSaas.Frameworks.Pixel.NavigationActionBarTest do
   use ExUnit.Case, async: true
   import Phoenix.LiveViewTest
   import Phoenix.Component

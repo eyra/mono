@@ -104,27 +104,6 @@ defmodule Systems.Notify.ChannelNameTest do
     end
   end
 
-  describe "dispatch" do
-    setup do
-      previous = Mica.SaaS.put_composition(notifiers: [UnknownChannelNotifier])
-      on_exit(fn -> Mica.SaaS.put_composition(previous) end)
-    end
-
-    test "an event routed to an unknown channel still delivers on its known channels" do
-      user = Factories.insert!(:member)
-
-      {:ok, event} =
-        Notify.Public.record_event(%Notify.EventAttrs{
-          type: :contribution_accepted,
-          subject_user: user,
-          metadata: %{"assignment_id" => 42}
-        })
-
-      assert [%{channel: :email, status: :sent}] =
-               MessageModel |> where(event_id: ^event.id) |> Repo.all()
-    end
-  end
-
   test "every notifier event names a channel of the composition" do
     channels = Mica.SaaS.notify_channels()
 

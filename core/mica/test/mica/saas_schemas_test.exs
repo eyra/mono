@@ -39,14 +39,15 @@ defmodule Mica.SaaSSchemasTest do
     on_exit(fn -> :application.unload(@app) end)
   end
 
+  # Mica's own suite composes no SaaS module (nil).
   describe "composition_apps/2" do
     test "is Mica's application alone while everything is in one application" do
-      assert SaaS.composition_apps(SaaS.module(), SaaS.systems()) == [:mica]
+      assert SaaS.composition_apps(nil, SaaS.systems()) == [:mica]
     end
 
     test "adds the application of a system from another application" do
       systems = SaaS.systems() ++ [Mica.SaaSSchemasTest.System]
-      assert SaaS.composition_apps(SaaS.module(), systems) == [:mica, @app]
+      assert SaaS.composition_apps(nil, systems) == [:mica, @app]
     end
   end
 

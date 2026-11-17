@@ -1,6 +1,5 @@
 defmodule Systems.Assignment.PublicTest do
   use Mica.DataCase
-  import Systems.NextAction.TestHelper
   import Systems.Fund.TestHelper
 
   alias Systems.Account
@@ -656,28 +655,7 @@ defmodule Systems.Assignment.PublicTest do
   end
 
   describe "complete_participation/1" do
-    setup do
-      user = Factories.insert!(:member)
-      %{fund: fund} = assignment = Assignment.Factories.create_assignment(31, 1)
-
-      project_owner = Factories.insert!(:member)
-      :ok = Mica.Authorization.assign_role(project_owner, assignment, :owner)
-
-      assignment =
-        Assignment.Public.get!(assignment.id, Assignment.Model.preload_graph(:down))
-
-      idempotence_key = Assignment.Private.reward_idempotence_key(assignment, user)
-      {:ok, _} = Systems.Fund.Public.create_reward(fund, 1000, user, idempotence_key)
-      Systems.Fund.Factories.insert_pay_in!(fund, project_owner)
-      {:ok, participation} = Assignment.Public.obtain_participation(assignment, user)
-
-      {:ok,
-       user: user,
-       assignment: assignment,
-       participation: participation,
-       project_owner: project_owner,
-       idempotence_key: idempotence_key}
-    end
+    setup {Systems.Assignment.TestHelper, :completable_participation}
 
     test "sets completed_at on the participation", %{participation: participation} do
       {:ok, updated} = Assignment.Public.complete_participation(participation)
@@ -692,19 +670,6 @@ defmodule Systems.Assignment.PublicTest do
 
       assert %{status: :pending_approval} =
                Systems.Fund.Public.get_reward(idempotence_key, [])
-    end
-
-    test "creates a PendingContributions next-action for the owner", %{
-      assignment: %{id: id},
-      participation: participation,
-      project_owner: project_owner
-    } do
-      {:ok, _} = Assignment.Public.complete_participation(participation)
-
-      assert_next_action(
-        project_owner,
-        "/assignment/#{id}/content?tab=contributions"
-      )
     end
 
     test "is idempotent — second call is a no-op", %{

@@ -241,8 +241,9 @@ defmodule Systems.Home.BFFPage do
          tags: tags,
          info: info
        }) do
+    # The spec requires a title and the app drops an advert without one; show it anyway.
     %Blocks.Advert{
-      title: title,
+      title: title || "",
       to: path,
       image_url: image_url,
       logo_url: logo,

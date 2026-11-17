@@ -65,6 +65,12 @@ defmodule Next.Systems.BFF.PageControllerTest do
     advert
   end
 
+  defp create_untitled_panl_advert(panl) do
+    %{promotion: promotion} = advert = create_panl_advert(panl)
+    {:ok, _} = promotion |> Ecto.Changeset.change(title: nil) |> Repo.update()
+    advert
+  end
+
   defp home_with_everything(user) do
     create_todo(user, "later")
     create_todo(user, "first", priority: :high)
@@ -248,6 +254,27 @@ defmodule Next.Systems.BFF.PageControllerTest do
                marketplace.("?query=c%2B%2B+%26+more")
 
       assert all["to"] == "#{page}?query=c%2B%2B%20%26%20more"
+    end
+
+    test "an advert without a title shows with an empty title on home and the marketplace page",
+         %{conn: conn, user: user} do
+      {panl, _assignment} = home_with_everything(user)
+      for _ <- 1..3, do: create_untitled_panl_advert(panl)
+
+      home = conn |> get("/bff/page/home") |> json_response(200)
+      marketplace = conn |> get("/bff/page/marketplace") |> json_response(200)
+
+      titles = fn %{"blocks" => blocks} ->
+        for %{"type" => "advert", "props" => %{"title" => title}} <- blocks, do: title
+      end
+
+      # The app drops an advert block without a title, so the heading's count would lie.
+      assert [%{"type" => "section", "props" => %{"count" => 4}} | _] = marketplace["blocks"]
+      assert length(titles.(marketplace)) == 4
+      assert Enum.filter(titles.(marketplace), &(&1 in [nil, ""])) == ["", "", ""]
+
+      assert length(titles.(home)) == 3
+      assert Enum.reject(titles.(home), &is_binary/1) == []
     end
 
     test "without panl_post_launch home shows only the next action, history and marketplace nothing",

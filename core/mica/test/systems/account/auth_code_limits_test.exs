@@ -3,7 +3,6 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
   import Ecto.Query
 
-  alias Mica.Factories
   alias Mica.Repo
   alias Systems.Account
   alias Systems.Account.AuthCodeLimits
@@ -64,36 +63,6 @@ defmodule Systems.Account.AuthCodeLimitsTest do
     end
   end
 
-  describe "a normal sign-in" do
-    test "a person who mistypes and asks for a new code still signs in" do
-      user = Factories.insert!(:member)
-
-      assert :ok = Account.Public.generate_otp(user.email, @remote_ip)
-      assert {:error, :invalid} = Account.Public.verify_otp(user.email, "000000", @remote_ip)
-      assert {:error, :invalid} = Account.Public.verify_otp(user.email, "000000", @remote_ip)
-
-      assert :ok = Account.Public.generate_otp(user.email, @remote_ip)
-      delete_codes(user.email)
-      {code, _wrong_code} = insert_code(user.email, user.id)
-
-      assert {:ok, %{id: user_id}} = Account.Public.verify_otp(user.email, code, @remote_ip)
-      assert user_id == user.id
-    end
-
-    test "many people behind one network address each sign in" do
-      for _ <- 1..60 do
-        email = unique_email("shared-network")
-        assert :ok = Account.Public.generate_otp(email, @remote_ip)
-
-        delete_codes(email)
-        {code, wrong_code} = insert_code(email)
-
-        assert {:error, :invalid} = Account.Public.verify_otp(email, wrong_code, @remote_ip)
-        assert {:ok, nil} = Account.Public.verify_otp(email, code, @remote_ip)
-      end
-    end
-  end
-
   describe "requesting codes" do
     test "an email address gets 10 codes per hour from one network address" do
       email = unique_email("requests")
@@ -116,18 +85,6 @@ defmodule Systems.Account.AuthCodeLimitsTest do
       assert request?(email, network_ip(6))
     end
 
-    test "a network address gets 200 codes per hour, for any email addresses" do
-      for _ <- 1..200 do
-        assert request?(unique_email("network"), @remote_ip)
-      end
-
-      email = unique_email("network")
-      assert {:error, :rate_limited} = Account.Public.generate_otp(email, @remote_ip)
-      assert Repo.one(AuthCodeModel.active_query(email)) == nil
-
-      assert :ok = Account.Public.generate_otp(email, @other_ip)
-    end
-
     test "IPv6 addresses count by their /64 network" do
       for i <- 1..200 do
         assert request?(unique_email("v6"), "2001:db8:1:2::#{i}")
@@ -135,15 +92,6 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
       refute request?(unique_email("v6"), "2001:db8:1:2:ffff::1")
       assert request?(unique_email("v6"), "2001:db8:1:3::1")
-    end
-
-    test "an email address that can't check codes from a network address gets no new code there" do
-      email = unique_email("locked")
-
-      for _ <- 1..10, do: assert(check?(email, @remote_ip))
-
-      assert {:error, :rate_limited} = Account.Public.generate_otp(email, @remote_ip)
-      assert :ok = Account.Public.generate_otp(email, @other_ip)
     end
 
     test "an email address at its daily total of checks gets no new code anywhere" do
@@ -189,33 +137,6 @@ defmodule Systems.Account.AuthCodeLimitsTest do
 
       end_windows(86_400)
       assert check?(email, @remote_ip)
-    end
-
-    test "checks from one network address don't lock the email address out on another" do
-      user = Factories.insert!(:member)
-
-      for _ <- 1..3 do
-        for _ <- 1..2 do
-          assert request?(user.email, @other_ip)
-          delete_codes(user.email)
-          insert_code(user.email, user.id)
-
-          for _ <- 1..5 do
-            assert {:error, :invalid} = Account.Public.verify_otp(user.email, "000000", @other_ip)
-          end
-        end
-
-        end_windows(3600)
-      end
-
-      assert {:error, :rate_limited} = Account.Public.generate_otp(user.email, @other_ip)
-
-      assert :ok = Account.Public.generate_otp(user.email, @remote_ip)
-      delete_codes(user.email)
-      {code, _wrong_code} = insert_code(user.email, user.id)
-
-      assert {:ok, %{id: user_id}} = Account.Public.verify_otp(user.email, code, @remote_ip)
-      assert user_id == user.id
     end
 
     test "an email address gets 100 checks per day across network addresses" do

@@ -16,7 +16,7 @@ defmodule Systems.Admin.SwitchTest do
   describe "intercept/2" do
     setup do
       topic = "signal:#{Systems.Admin.OrgView}:singleton"
-      Mica.SaaS.endpoint().subscribe(topic)
+      Phoenix.PubSub.subscribe(Mica.PubSub, topic)
       {:ok, topic: topic}
     end
 
@@ -39,7 +39,7 @@ defmodule Systems.Admin.SwitchTest do
   describe "an admin's change to a user" do
     test "broadcasts an Admin.AccountView observation" do
       topic = "signal:#{Systems.Admin.AccountView}:singleton"
-      Mica.SaaS.endpoint().subscribe(topic)
+      Phoenix.PubSub.subscribe(Mica.PubSub, topic)
       user = Factories.insert!(:member, %{creator: true, verified_at: nil})
 
       {:ok, _} =
@@ -78,7 +78,7 @@ defmodule Systems.Admin.SwitchTest do
 
       spawn(fn ->
         Sandbox.unboxed_run(Repo, fn ->
-          Mica.SaaS.endpoint().subscribe(topic)
+          Phoenix.PubSub.subscribe(Mica.PubSub, topic)
           send(test_pid, :subscribed)
 
           receive do

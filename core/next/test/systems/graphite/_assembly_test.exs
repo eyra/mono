@@ -28,8 +28,8 @@ defmodule Next.Systems.Graphite.AssemblyTest do
       challenge_1_item = Project.Factories.build_item(challenge_1, "Benchmark Leaderboard")
       challenge_2_item = Project.Factories.build_item(challenge_2, "Benchmark Leaderboard (2)")
 
-      leaderboard_1_item = Project.Factories.build_item(leaderboard_1)
-      leaderboard_2_item = Project.Factories.build_item(leaderboard_2)
+      leaderboard_1_item = Factories.build_item(leaderboard_1)
+      leaderboard_2_item = Factories.build_item(leaderboard_2)
 
       project_node =
         Project.Factories.build_node(
