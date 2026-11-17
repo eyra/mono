@@ -566,7 +566,10 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - No data migration: the columns are strings already.
   - **Referential integrity without per-type foreign keys** (decided 2026-11-17, d-0027: the application checks type and id, no reverse foreign keys):
     - one ref per tool and one item per target, by unique indexes on `(type, id)`
-    - **no new deletes or cascades** (decided 2026-11-17, d-0030). Today's existing deletes go through one guarded registry path, with nothing added to it: deleting a tool (`Alliance.Public.delete_tool/1`, the only one) or an advert (`Advert.Assembly.delete/1`) refuses while a tool ref or project item still points to it, as today's foreign keys do. Deleting a workflow item keeps leaving its tool and tool ref behind, as today.
+    - **no new deletes or cascades** (decided 2026-11-17, d-0030). Today's existing deletes go through one guarded registry path, with nothing added to it.
+      - **No tool delete remains.** The only one, `Alliance.Public.delete_tool/1`, has no callers. PR-1 removes it, with its test. Today deleting an alliance tool would cascade to its tool ref (`ON DELETE CASCADE`, `20230711100350`), so the cascade goes with it.
+      - **Deleting an advert** (`Advert.Assembly.delete/1`, used only in a test) refuses while a project item points to it, as its `NO ACTION` foreign key does today.
+      - **Deleting a workflow item** keeps leaving its tool and tool ref behind, as today.
     - a daily integrity check (`mix mica.registry.check`, an Oban cron, and a test in each SaaS suite) **reports** refs and items whose target row is missing or whose type the composition doesn't have, and orphaned tools; it never removes anything
     - **ready for an archive feature** (d-0030: Melle prefers archiving to deleting, so nothing gets deleted at all). A type/id reference to an archived target stays valid, and nothing in the registry assumes hard deletes: the integrity check counts a missing row only, never an archived one, and loading returns an archived target like any other.
     - a dangling or unknown ref loads with a `nil` target and never crashes a page
@@ -623,7 +626,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **PRs, in order:**
     - **Release 1:**
       - PR-P, a mono test that pins a Feldspar item's platform group in the donation context and in the exact storage file name, unchanged through release 2;
-      - PR-1, the registry contract, behaviours and declarations, with no reads changed;
+      - PR-1, the registry contract, behaviours and declarations, with no reads changed; it also removes the unused `Alliance.Public.delete_tool/1`;
       - PR-2, the release-1 migrations, the integrity check and the verification SQL.
     - **Release 2:**
       - PR-3, tool reads;
