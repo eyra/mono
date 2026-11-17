@@ -32,6 +32,10 @@ defmodule Systems.Workflow.ToolRefModel do
 
   schema "tool_refs" do
     field(:special, Ecto.Atom)
+    # code-registry: the registered `Mica.Tool` type and the tool's id, kept equal to
+    # the per-type column below by the `registry_sync` trigger. Read from release 2 on.
+    field(:tool_type, :string)
+    field(:tool_id, :id)
 
     belongs_to(:alliance_tool, Alliance.ToolModel)
     belongs_to(:manual_tool, Manual.ToolModel)

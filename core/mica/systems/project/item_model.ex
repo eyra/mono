@@ -22,6 +22,10 @@ defmodule Systems.Project.ItemModel do
   schema "project_items" do
     field(:name, :string)
     field(:project_path, {:array, :integer})
+    # code-registry: the registered `Mica.ProjectItem` type and the target's id, kept
+    # equal to the per-type column below by the `registry_sync` trigger. Read from release 2 on.
+    field(:item_type, :string)
+    field(:item_id, :id)
     belongs_to(:node, Project.NodeModel)
     belongs_to(:storage_endpoint, Storage.EndpointModel)
     belongs_to(:assignment, Assignment.Model)

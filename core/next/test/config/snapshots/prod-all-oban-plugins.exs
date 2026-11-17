@@ -112,7 +112,8 @@
          "pay_in_expiration",
          "payment_reconciliation",
          "auth_code_cleanup",
-         "auto_approve"
+         "auto_approve",
+         "registry_integrity"
        ],
        schedule_overrides: []
      ]},
