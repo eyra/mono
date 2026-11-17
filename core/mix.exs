@@ -132,7 +132,7 @@ defmodule Mica.MixProject do
       {:jason, "1.4.5"},
       {:libcluster, "== 3.6.0"},
       {:logger_json, "7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
+      {:live_nest, github: "novasoftwarefoundation/live_nest", tag: "0.1.5"},
       {:mime, "2.0.7"},
       {:nimble_parsec, "1.4.2"},
       {:nimble_options, "== 1.2.0"},
