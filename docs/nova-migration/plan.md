@@ -550,6 +550,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - A name is data: it never follows a module rename.
     - No list of types lives in the database.
     - `Mica.Tool.Type` and `Mica.ProjectItem.Type` check the names against the composition at runtime, like the notify channel type. An unknown stored name loads; only its own row lacks a target.
+    - **The reserved type `none`** marks a row that references nothing (6 tool refs on production, left from 2023), with no id. No system may register it (`validate!/0` refuses), the types never cast it, and it loads with a `nil` target. The integrity check counts these rows separately, as expected, not as dangling.
   - **`Mica.Tool`, one module per tool type:** `type/0`, `schema/0`, `prepare/2`, `view/0`, and optional `view_attrs/2`, `export/2`, `external_path/2`, `groups/0`.
     - Per-struct behaviour (labels, `ready?`, `form/2`, …) stays in the `Frameworks.Concept.ToolModel` protocol.
     - **`Mica.ProjectItem`:** `type/0`, `schema/0`, `card/1`.
@@ -582,6 +583,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **The project's storage item** (input: mono#1984, "Show and export a storage endpoint's donations per participant"). A project has one storage item ("Data"), recognised today by its name plus a non-nil `storage_endpoint_id`.
     - The marker becomes the type: the item of type `storage_endpoint` on the project node, at most one per node (a partial unique index).
     - `Project.Public.storage_item/1` and `Project.ItemModel.storage?/1` replace the name matches. The name is a translated label and stays one.
+    - **A project may have no storage item** (289 on production, 17 Nov): `storage_item/1` returns `nil`, as `Project.Public.get_storage_endpoint_by/1` already returns `{:error, {:storage_endpoint, :not_available}}`. Nothing in release 2 or in mono#1984's path assumes one exists; #1984's Data tab has its own `nil` clause.
     - **mono#1984 can land at any point** (decided 2026-11-17, d-0029: there is no fixed moment). code-registry works in either order, and whichever lands second adapts:
       - **Before release 1:** its migration (`20261110160000_link_project_storage_to_project_node.exs`, which links the storage endpoint's authorization node to the project node) and its `data?/1` merge as they are. Release 1's backfill, trigger and per-node index accept them: a project has one storage item, which `Project.Public.get_storage_endpoint_by/1` already assumes. PR-4 then replaces `data?/1`'s name match with `storage?/1`.
       - **After release 1, before PR-4:** the same.
@@ -594,23 +596,28 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   1. **Release 1, M38 at the earliest (cut Mon 30 Nov):**
      - add the four columns;
      - add the sync trigger;
-     - backfill. The backfill refuses to run if a row sets 0 or 2+ per-type columns;
-     - add `CHECK` constraints (`tool_refs_tool_required`, `project_items_item_required`) that refuse a row without type and id, added `NOT VALID` and then validated. They take over from the `must_have_at_least_one_*` checks, which never fire (`x <> NULL`; Next 10517294829);
+     - backfill. The backfill refuses to run if a row sets 2+ per-type columns. A row that sets none gets the reserved type `none` and no id: production has 6 such tool refs, left from the `data_donation_tool_id` column that a 2023 migration removed. Nothing is deleted (d-0030), and the application never writes `none`;
+     - add `CHECK` constraints (`tool_refs_tool_required`, `project_items_item_required`) that refuse a row without a type, or without an id outside `none`, added `NOT VALID` and then validated. A newly written row that references nothing is refused. They take over from the `must_have_at_least_one_*` checks, which never fire (`x <> NULL`; Next 10517294829);
      - build the unique indexes concurrently.
 
      No code reads the new columns yet.
-  2. **Release 2, M39 and M40:** reads and writes switch to the registry, PR by PR. The last PR removes the per-type associations from `ToolRefModel` and `ItemModel` and sets the new columns `NOT NULL`. The per-type columns get deprecation comments and rows in [`core/docs/schema-deprecations.md`](../../core/docs/schema-deprecations.md).
+  2. **Release 2, M39 and M40:** reads and writes switch to the registry, PR by PR. The last PR removes the per-type associations from `ToolRefModel` and `ItemModel` and sets `tool_type` and `item_type` `NOT NULL`; the ids stay nullable for `none`, guarded by the checks. The per-type columns get deprecation comments and rows in [`core/docs/schema-deprecations.md`](../../core/docs/schema-deprecations.md).
   3. **Release 3, M42 or later** (M41 and M42 fall in the Christmas weeks), at least one full milestone after release 2 without issues (decided 2026-11-17, d-0031): drop the trigger, the per-type columns with their foreign keys, and the old checks.
 
-  - **Size.** Measured on eyra-next-dev: 129 tool refs, 404 project items. Every row sets exactly one column, no target is shared, and every project has one storage item. Every statement is sub-second at this size. The production count runs read-only before release 1.
+  - **Size and shape: production, counted read-only on 2026-11-17** (Next a-0056; migration level 20261104084719, Postgres 15.17):
+    - **`tool_refs`:** 1,751 rows (424 kB). 1,745 set exactly one tool column, and 6 set none (the type `none`). No row sets two. 7 have `special` NULL: the 6 empty ones and 1 Feldspar ref. 468 belong to no workflow item, left over from deleted workflow items; they are reported, never removed.
+    - **`project_items`:** 1,157 rows (280 kB), each setting exactly one column: 665 assignments, 484 storage endpoints, 8 leaderboards, 0 adverts.
+    - **No orphans and no shared targets.** No project node has two storage items. 289 root nodes have none, so nothing may assume a project has one. 1 storage item is not named "Data".
+    - **Directors:** document, manual and 1 Feldspar tool have director NULL, which `Mica.Director` loads as nil.
+    - Every statement is sub-second at this size, so batching isn't needed.
   - **Locks.**
     - Adding columns, the checks (`NOT VALID`), the trigger and the drops take brief locks, with a 5 s `lock_timeout` so they never queue behind a long transaction.
     - `VALIDATE` and the concurrent index builds let writes continue.
-    - `SET NOT NULL` uses the validated checks and skips the scan (Postgres 12+).
+    - `SET NOT NULL` uses the validated checks and skips the scan (Postgres 12+). The scripts use nothing newer than Postgres 12, and were rehearsed on 15 (production's version) and on 18.
   - **Rehearsal** (decided 2026-11-17, d-0028):
-    - One restored production snapshot, in an isolated database, serves the rehearsals of all three releases.
+    - A restored copy of production, in a throwaway database, serves the rehearsals of all three releases.
     - Next owns production data, so a Next thread restores it and runs the rehearsal scripts and the verification SQL (up, verify, down, up), then sends the outputs. The data never leaves Next.
-    - How (Next a-0060, approved by Melle): a manual RDS snapshot of production, restored as a private instance in the production VPC that only the bastion reaches, deleted the same day. One runner per release runs every step unattended and writes only DDL messages, timings and counts. The snapshot is kept at most 60 days; release 3 gets a fresh one if it comes later.
+    - How (Next a-0060, approved by Melle): one of production's hourly encrypted `pg_dump`s, restored with a plain `pg_restore` into a throwaway local Postgres 15 on Next's backup server, and dropped the same day. One runner per release runs every step unattended, and writes only DDL messages, timings and counts.
     - Staging rehearses each release too.
     - Release 1 merges only after its production-copy rehearsal.
   - **PRs, in order:**
@@ -627,7 +634,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
       - PR-8, which drops the per-type associations, sets `NOT NULL` and removes the five code-registry allowlist entries.
     - **Release 3:** PR-9, the drop.
 - **Verification.**
-  - After every migration step, the verification SQL shows 0 mismatches between old and new columns, 0 rows without type and id, and per-type counts equal to the production count.
+  - After every migration step, the verification SQL shows 0 mismatches between old and new columns, 0 rows without a type or (outside `none`) without an id, and per-type counts equal to the production count.
   - The guarded delete path is tested: a delete refuses while a reference exists, and no code path deletes more than today.
   - e2e passes for creating, running and exporting assignments with each tool type.
   - The setup export is unchanged for every tool type, before and after (replaces the export/import round-trip: there is no importer).
@@ -643,7 +650,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Decisions/authorizations.**
   - **The data migration plan and the sync trigger:** approved 2026-11-17 (d-0026).
   - **Integrity model:** decided 2026-11-17 (d-0027). The application checks type and id: unique `(type, id)`, deletes through the registry, a daily integrity check, no reverse foreign keys.
-  - **Rehearsal on one restored production snapshot for all three releases,** in an isolated database, run by Next: decided 2026-11-17 (d-0028).
+  - **Rehearsal on a restored copy of production for all three releases,** in a throwaway database, run by Next: decided 2026-11-17 (d-0028).
   - **mono#1984 has no fixed moment** (decided 2026-11-17, d-0029). code-registry works whichever lands first; see Scope.
   - **No new deletes or cascades; the integrity check reports and never removes; archive-ready:** decided 2026-11-17 (d-0030). Deleting a workflow item keeps leaving its tool and tool ref behind. Melle prefers a future archive feature over deleting, so references to archived targets must stay valid.
   - **Release 3 in M42 or later,** after one full milestone without issues: decided 2026-11-17 (d-0031).
