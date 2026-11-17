@@ -106,6 +106,7 @@ defmodule Next.Systems.BFF.PageControllerTest do
                "section_begin",
                "section",
                "advert",
+               "section",
                "section_end",
                "section_begin",
                "section",
@@ -146,6 +147,7 @@ defmodule Next.Systems.BFF.PageControllerTest do
                  }
                },
                %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
+               %{"props" => %{"title" => "See all", "to" => "/bff/page/marketplace"}},
                %{"props" => %{"title" => "History", "count" => 1}},
                %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
              ] = content

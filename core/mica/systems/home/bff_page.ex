@@ -128,12 +128,14 @@ defmodule Systems.Home.BFFPage do
     end
   end
 
-  defp blocks(:panl_marketplace, user, limit) do
+  # As on the web home, the marketplace's "See all" shows whenever it has a study: the
+  # marketplace page is also where its filters are.
+  defp blocks(:panl_marketplace, user, _limit) do
     %{cards: cards, count: count, pool_slug: pool_slug} =
       PageBuilder.panl_marketplace(user, %{current_user: user})
 
     [marketplace_heading(count, pool_slug) | Enum.map(cards, &advert/1)] ++
-      see_all(count, limit, "/bff/page/marketplace")
+      if(count > 0, do: [see_all("/bff/page/marketplace")], else: [])
   end
 
   defp blocks(:participated, user, limit) do
@@ -147,15 +149,15 @@ defmodule Systems.Home.BFFPage do
 
         [%Blocks.Section{title: title, count: length(items)}] ++
           Enum.map(shown, &participation(&1, labels)) ++
-          see_all(length(items), limit, "/bff/page/history")
+          if(is_integer(limit) and length(items) > limit,
+            do: [see_all("/bff/page/history")],
+            else: []
+          )
     end
   end
 
-  # Only home has more than it shows, behind a link to the page with all of them.
-  defp see_all(count, limit, to) when is_integer(limit) and count > limit,
-    do: [%Blocks.Section{title: dgettext("eyra-pool", "marketplace.see_all"), to: to}]
-
-  defp see_all(_count, _limit, _to), do: []
+  defp see_all(to),
+    do: %Blocks.Section{title: dgettext("eyra-pool", "marketplace.see_all"), to: to}
 
   defp marketplace_heading(count, pool_slug) do
     %Blocks.Section{
