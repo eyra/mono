@@ -24,5 +24,27 @@
     org_admin: [:org]
   },
   desktop_sections: [:announcements],
-  assignment_templates: [Next.Systems.Probe.AssignmentTemplate]
+  assignment_templates: [Next.Systems.Probe.AssignmentTemplate],
+  tools: %{
+    "alliance" => Systems.Alliance.Tool,
+    "document" => Systems.Document.Tool,
+    "feldspar" => Systems.Feldspar.Tool,
+    "graphite" => Next.Systems.Graphite.Tool,
+    "instruction" => Systems.Instruction.Tool,
+    "lab" => Systems.Lab.Tool,
+    "manual" => Systems.Manual.Tool,
+    "zircon_screening" => Next.Systems.Zircon.Tool
+  },
+  project_items: %{
+    "advert" => Systems.Advert.ProjectItem,
+    "assignment" => Systems.Assignment.ProjectItem,
+    "leaderboard" => Next.Systems.Graphite.LeaderboardItem,
+    "storage_endpoint" => Systems.Storage.ProjectItem
+  },
+  directors: %{
+    advert: Systems.Advert.Director,
+    assignment: Systems.Assignment.Director,
+    citizen: Next.Systems.Citizen.Director,
+    student: Next.Systems.Student.Director
+  }
 ]

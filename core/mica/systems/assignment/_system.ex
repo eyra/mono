@@ -1,6 +1,10 @@
 defmodule Systems.Assignment.System do
   use Mica.System
 
+  def project_items, do: [Systems.Assignment.ProjectItem]
+
+  def directors, do: %{assignment: Systems.Assignment.Director}
+
   def routes do
     quote do
       require Systems.Assignment.Routes

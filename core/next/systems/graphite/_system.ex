@@ -1,6 +1,10 @@
 defmodule Next.Systems.Graphite.System do
   use Mica.System
 
+  def tools, do: [Next.Systems.Graphite.Tool]
+
+  def project_items, do: [Next.Systems.Graphite.LeaderboardItem]
+
   def routes do
     quote do
       require Next.Systems.Graphite.Routes

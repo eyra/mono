@@ -109,6 +109,25 @@ defmodule Mica.System do
   @callback assignment_templates() :: [module()]
 
   @doc """
+  The system's `Mica.Tool` modules: the tool types a workflow item can hold.
+  Each type name is unique in the composition; `Mica.Tools` reads them.
+  """
+  @callback tools() :: [module()]
+
+  @doc """
+  The system's `Mica.ProjectItem` modules: the types a project item can hold.
+  Each type name is unique in the composition; `Mica.ProjectItems` reads them.
+  """
+  @callback project_items() :: [module()]
+
+  @doc """
+  The directors the system offers: name to module, for example
+  `%{assignment: Systems.Assignment.Director}`. The stored `director` of a tool,
+  pool or promotion names one of them; `Mica.Directors` reads them.
+  """
+  @callback directors() :: %{atom() => module()}
+
+  @doc """
   The BFF pages the system serves: page name to `Systems.BFF.Page` module, for
   example `%{home: Systems.Home.BFFPage}`. The BFF serves a page only when the
   mica-bff spec lists it (`Systems.BFF.Blocks.pages/0`).
@@ -175,6 +194,9 @@ defmodule Mica.System do
       def desktop_sections, do: []
       def sign_in_handoffs, do: []
       def assignment_templates, do: []
+      def tools, do: []
+      def project_items, do: []
+      def directors, do: %{}
       def bff_pages, do: %{}
       def children, do: []
       def oban_queues, do: []
