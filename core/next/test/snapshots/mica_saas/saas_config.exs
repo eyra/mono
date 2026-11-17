@@ -14,5 +14,26 @@
   account_tabs: [:profile, :payouts, :features],
   admin_tabs: %{admin: [:system, :account, :org, :actions, :client_activity], org_admin: [:org]},
   desktop_sections: [],
-  assignment_templates: []
+  assignment_templates: [],
+  tools: %{
+    "alliance" => Systems.Alliance.Tool,
+    "document" => Systems.Document.Tool,
+    "feldspar" => Systems.Feldspar.Tool,
+    "graphite" => Next.Systems.Graphite.Tool,
+    "instruction" => Systems.Instruction.Tool,
+    "lab" => Systems.Lab.Tool,
+    "manual" => Systems.Manual.Tool,
+    "zircon_screening" => Next.Systems.Zircon.Tool
+  },
+  project_items: %{
+    "advert" => Systems.Advert.ProjectItem,
+    "assignment" => Systems.Assignment.ProjectItem,
+    "leaderboard" => Next.Systems.Graphite.LeaderboardItem,
+    "storage_endpoint" => Systems.Storage.ProjectItem
+  },
+  directors: %{
+    advert: Systems.Advert.Director,
+    assignment: Systems.Assignment.Director,
+    student: Next.Systems.Student.Director
+  }
 ]

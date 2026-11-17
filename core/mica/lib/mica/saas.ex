@@ -174,6 +174,11 @@ defmodule Mica.SaaS do
     * a permission granted twice, unless the later grant says `widen: true`;
       each widening is logged
     * a notifier event routed to a channel that no system declares
+    * a tool or project item type that is no `Mica.Tool` or `Mica.ProjectItem`,
+      whose name two of them declare or is reserved (`"none"`), or whose schema
+      two of them share; a tool whose `Frameworks.Concept.ToolModel.key/1` is not
+      its type
+    * a director name that two systems declare
   """
   def validate!(saas), do: check!(saas, build(saas))
 
@@ -188,6 +193,7 @@ defmodule Mica.SaaS do
     unique!(Enum.map(composition.assignment_templates, & &1.id()), "assignment template id")
     check_event_channels!(composition)
     check_grants!(saas, composition.grants)
+    check_registry!(composition)
 
     composition
   end
@@ -277,6 +283,9 @@ defmodule Mica.SaaS do
       sign_in_handoffs: Enum.flat_map(systems, & &1.sign_in_handoffs()),
       bff_pages: collect_bff_pages(systems),
       assignment_templates: Enum.flat_map(systems, & &1.assignment_templates()),
+      tools: Enum.flat_map(systems, & &1.tools()),
+      project_items: Enum.flat_map(systems, & &1.project_items()),
+      directors: Enum.flat_map(systems, &Enum.to_list(&1.directors())),
       feature_flags: collect_feature_flags(saas, systems),
       grants: collect_grants(systems),
       schemas: saas |> composition_apps(systems) |> collect_schemas()
@@ -314,6 +323,42 @@ defmodule Mica.SaaS do
     end
 
     :ok
+  end
+
+  # Tool and project item types are stored by name, so a name is unique, never
+  # reserved, and maps to one schema; a tool's protocol key is its type until
+  # code-registry's release 2 replaces the key with the type.
+  defp check_registry!(%{tools: tools, project_items: items, directors: directors}) do
+    for tool <- tools,
+        do: ensure_implements!(tool, :type, "Mica.Tool", "a system's tools/0")
+
+    for item <- items,
+        do: ensure_implements!(item, :type, "Mica.ProjectItem", "a system's project_items/0")
+
+    check_types!(tools, Mica.Tool.reserved(), "tool type")
+    check_types!(items, Mica.ProjectItem.reserved(), "project item type")
+
+    for tool <- tools,
+        key = to_string(Frameworks.Concept.ToolModel.key(struct(tool.schema()))),
+        key != tool.type() do
+      raise ArgumentError,
+            "tool #{inspect(tool)} has type #{inspect(tool.type())}, " <>
+              "but its schema's Frameworks.Concept.ToolModel.key/1 is #{inspect(key)}"
+    end
+
+    unique!(Enum.map(directors, &elem(&1, 0)), "director")
+    :ok
+  end
+
+  defp check_types!(modules, reserved, what) do
+    types = Enum.map(modules, & &1.type())
+    unique!(types, what)
+    unique!(Enum.map(modules, & &1.schema()), "#{what} schema")
+
+    case Enum.filter(types, &(&1 in reserved)) do
+      [] -> :ok
+      names -> raise ArgumentError, "#{what} #{inspect(names)} is reserved"
+    end
   end
 
   # The merge `Mica.Authorization.permission_map/0` makes of its own grants and these.
@@ -385,6 +430,15 @@ defmodule Mica.SaaS do
 
   @doc "The assignment templates of all systems, in `systems/0` order."
   def assignment_templates, do: fetch(:assignment_templates)
+
+  @doc "The `Mica.Tool` modules of all systems, in `systems/0` order. Read through `Mica.Tools`."
+  def tools, do: fetch(:tools)
+
+  @doc "The `Mica.ProjectItem` modules of all systems, in `systems/0` order. Read through `Mica.ProjectItems`."
+  def project_items, do: fetch(:project_items)
+
+  @doc "The directors of all systems as `{name, module}`, in `systems/0` order. Read through `Mica.Directors`."
+  def directors, do: fetch(:directors)
 
   @doc "The children of all systems, in `systems/0` order. Read once, at boot."
   def children, do: collect_children(systems())

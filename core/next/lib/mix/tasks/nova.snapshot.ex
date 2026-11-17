@@ -239,7 +239,10 @@ defmodule Mix.Tasks.Nova.Snapshot do
         account_tabs: Systems.Account.PageBuilder.tab_keys(),
         admin_tabs: Systems.Admin.ConfigPageBuilder.tab_ids(),
         desktop_sections: Enum.map(Mica.SaaS.desktop_sections(), & &1.id()),
-        assignment_templates: Systems.Assignment.TemplateExtension.all()
+        assignment_templates: Systems.Assignment.TemplateExtension.all(),
+        tools: Map.new(Mica.SaaS.tools(), &{&1.type(), &1}),
+        project_items: Map.new(Mica.SaaS.project_items(), &{&1.type(), &1}),
+        directors: Map.new(Mica.SaaS.directors())
       ]
   end
 

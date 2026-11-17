@@ -17,6 +17,7 @@ defmodule Next.SaaS do
         Next.Systems.Graphite.System,
         Next.Systems.Onyx.System,
         Next.Systems.Student.System,
+        Next.Systems.Citizen.System,
         Next.Systems.Zircon.System,
         Next.Systems.Paper.System,
         Next.Systems.Probe.System,
