@@ -88,7 +88,7 @@ defmodule MicaSaas.Systems.Affiliate.RecruitTest do
 
       conn = get(conn, "/a/#{sqid}?p=participant-ok-1")
 
-      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirected_to(conn) == "/assignment/#{assignment.id}?via=affiliate"
     end
 
     test "refuses a p that is a map", %{conn: conn, assignment: assignment} do
@@ -113,7 +113,7 @@ defmodule MicaSaas.Systems.Affiliate.RecruitTest do
 
       conn = get(conn, "/a/#{sqid}?p=participant-map-1&x[y]=z&code=1")
 
-      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirected_to(conn) == "/assignment/#{assignment.id}?via=affiliate"
       assert redirect_query(conn) == %{"p" => "participant-map-1", "code" => "1"}
     end
 
@@ -123,7 +123,7 @@ defmodule MicaSaas.Systems.Affiliate.RecruitTest do
 
       conn = get(conn, "/a/#{sqid}?p=participant-list-1&x[]=z&code=1")
 
-      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirected_to(conn) == "/assignment/#{assignment.id}?via=affiliate"
       assert redirect_query(conn) == %{"p" => "participant-list-1", "code" => "1"}
     end
 
@@ -153,7 +153,7 @@ defmodule MicaSaas.Systems.Affiliate.RecruitTest do
 
       conn = get(conn, "/a/#{sqid}?p=preview")
 
-      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirected_to(conn) == "/assignment/#{assignment.id}?via=affiliate"
       assert Assignment.Public.tester?(assignment, user)
     end
 
@@ -179,7 +179,7 @@ defmodule MicaSaas.Systems.Affiliate.RecruitTest do
 
       conn = get(conn, "/a/#{sqid}?p=preview")
 
-      assert redirected_to(conn) == "/assignment/#{assignment.id}"
+      assert redirected_to(conn) == "/assignment/#{assignment.id}?via=affiliate"
       assert Assignment.Public.tester?(assignment, user)
     end
 

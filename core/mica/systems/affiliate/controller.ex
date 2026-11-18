@@ -215,7 +215,10 @@ defmodule Systems.Affiliate.Controller do
     end
   end
 
-  defp path(%{id: id}), do: "/assignment/#{id}"
+  # `via=affiliate` marks the page the entry signed this browser in for. A SaaS whose
+  # native app claims `/assignment/*` excludes it, so the page stays in this browser
+  # instead of opening in the app under another user.
+  defp path(%{id: id}), do: "/assignment/#{id}?via=affiliate"
 
   defp not_found(conn) do
     conn
