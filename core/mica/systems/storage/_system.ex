@@ -1,6 +1,8 @@
 defmodule Systems.Storage.System do
   use Mica.System
 
+  def project_items, do: [Systems.Storage.ProjectItem]
+
   def routes do
     quote do
       require Systems.Storage.Routes

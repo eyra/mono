@@ -1,6 +1,8 @@
 defmodule Systems.Manual.System do
   use Mica.System
 
+  def tools, do: [Systems.Manual.Tool]
+
   def routes do
     quote do
       require Systems.Manual.Routes

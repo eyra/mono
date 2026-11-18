@@ -25,7 +25,8 @@ org = 'eyra'
   # App configuration
   APP_NAME = 'Next [staging]'
   APP_DOMAIN = 'eyra-next-staging.fly.dev'
-  APP_MAIL_DOMAIN = 'eyra.dev'
+  # Must be the domain of this app's Mailgun sending key
+  APP_MAIL_DOMAIN = 'next.dev.eyra.co'
   APP_ADMINS = '*@eyra.co'
 
   # Storage paths (using Fly volume mounted at /app/data)

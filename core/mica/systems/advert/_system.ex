@@ -1,6 +1,10 @@
 defmodule Systems.Advert.System do
   use Mica.System
 
+  def project_items, do: [Systems.Advert.ProjectItem]
+
+  def directors, do: %{advert: Systems.Advert.Director}
+
   def routes do
     quote do
       require Systems.Advert.Routes

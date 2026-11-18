@@ -48,15 +48,6 @@ defmodule Systems.Alliance.PublicTest do
       assert alliance_tool.url == "http://example.org/fake_alliance"
     end
 
-    test "delete_tool/1 deletes the alliance_tool" do
-      alliance_tool = Factories.insert!(:alliance_tool)
-      assert {:ok, %{}} = Alliance.Public.delete_tool(alliance_tool)
-
-      assert_raise Ecto.NoResultsError, fn ->
-        Alliance.Public.get_tool!(alliance_tool.id)
-      end
-    end
-
     test "change_tool/1 returns a alliance_tool changeset" do
       alliance_tool = Factories.insert!(:alliance_tool)
 

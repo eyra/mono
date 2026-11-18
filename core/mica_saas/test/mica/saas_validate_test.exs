@@ -144,6 +144,104 @@ defmodule MicaSaas.SaaSValidateTest.Systems do
     use Mica.System
     def grants, do: [{Page, [:admin]}]
   end
+
+  # Tool, project item and director registrations.
+  defmodule ToolStub do
+    defmacro __using__(type: type, schema: schema) do
+      quote do
+        use Mica.Tool
+        def type, do: unquote(type)
+        def schema, do: unquote(schema)
+        def prepare(_attrs, _context), do: nil
+        def view, do: nil
+      end
+    end
+  end
+
+  defmodule FeldsparTool do
+    use ToolStub, type: "feldspar", schema: Systems.Feldspar.ToolModel
+  end
+
+  defmodule OtherFeldsparTool do
+    use ToolStub, type: "feldspar", schema: Systems.Document.ToolModel
+  end
+
+  defmodule FeldsparCopyTool do
+    use ToolStub, type: "feldspar_copy", schema: Systems.Feldspar.ToolModel
+  end
+
+  defmodule NoneTool do
+    use ToolStub, type: "none", schema: Systems.Document.ToolModel
+  end
+
+  defmodule WrongKeyTool do
+    use ToolStub, type: "feldspar_v2", schema: Systems.Document.ToolModel
+  end
+
+  defmodule StorageItem do
+    use Mica.ProjectItem
+    def type, do: "storage_endpoint"
+    def schema, do: Systems.Storage.EndpointModel
+  end
+
+  defmodule OtherStorageItem do
+    use Mica.ProjectItem
+    def type, do: "storage_endpoint"
+    def schema, do: Systems.Assignment.Model
+  end
+
+  defmodule NoneItem do
+    use Mica.ProjectItem
+    def type, do: "none"
+    def schema, do: Systems.Assignment.Model
+  end
+
+  defmodule Tools do
+    use Mica.System
+    def tools, do: [FeldsparTool]
+    def project_items, do: [StorageItem]
+    def directors, do: %{validate_test: Page}
+  end
+
+  defmodule OtherTools do
+    use Mica.System
+    def tools, do: [OtherFeldsparTool]
+  end
+
+  defmodule CopyTools do
+    use Mica.System
+    def tools, do: [FeldsparCopyTool]
+  end
+
+  defmodule NoneTools do
+    use Mica.System
+    def tools, do: [NoneTool]
+  end
+
+  defmodule WrongKeyTools do
+    use Mica.System
+    def tools, do: [WrongKeyTool]
+  end
+
+  defmodule NotATool do
+    use Mica.System
+    def tools, do: [Page]
+  end
+
+  defmodule OtherItems do
+    use Mica.System
+    def project_items, do: [OtherStorageItem]
+  end
+
+  defmodule NoneItems do
+    use Mica.System
+    def project_items, do: [NoneItem]
+  end
+
+  defmodule OtherDirectors do
+    use Mica.System
+    def directors, do: %{validate_test: Switch}
+  end
 end
 
 defmodule MicaSaas.SaaSValidateTest.SaaS do
@@ -359,6 +457,67 @@ defmodule MicaSaas.SaaSValidateTest do
   test "a widening grant that widens nothing" do
     assert_raise ArgumentError, ~r/is not granted before, so `widen: true` widens nothing/, fn ->
       validate!([Systems.Widen])
+    end
+  end
+
+  describe "tools, project items and directors" do
+    test "are collected from all systems" do
+      assert %{
+               tools: [Systems.FeldsparTool],
+               project_items: [Systems.StorageItem],
+               directors: [validate_test: Systems.Page]
+             } = validate!([Systems.Tools])
+    end
+
+    test "a tool type that two tools declare" do
+      assert_raise ArgumentError, ~s(tool type ["feldspar"] is listed more than once), fn ->
+        validate!([Systems.Tools, Systems.OtherTools])
+      end
+    end
+
+    test "a tool schema that two tools share" do
+      assert_raise ArgumentError,
+                   "tool type schema [Systems.Feldspar.ToolModel] is listed more than once",
+                   fn -> validate!([Systems.Tools, Systems.CopyTools]) end
+    end
+
+    test "the reserved tool type none" do
+      assert_raise ArgumentError, ~s(tool type ["none"] is reserved), fn ->
+        validate!([Systems.NoneTools])
+      end
+    end
+
+    test "a tool whose ToolModel key is not its type" do
+      assert_raise ArgumentError,
+                   ~s(tool MicaSaas.SaaSValidateTest.Systems.WrongKeyTool has type "feldspar_v2", ) <>
+                     ~s(but its schema's Frameworks.Concept.ToolModel.key/1 is "document"),
+                   fn -> validate!([Systems.WrongKeyTools]) end
+    end
+
+    test "a tool that is no Mica.Tool" do
+      assert_raise ArgumentError,
+                   ~r/names MicaSaas.SaaSValidateTest.Systems.Page, which does not `use Mica.Tool`/,
+                   fn ->
+                     validate!([Systems.NotATool])
+                   end
+    end
+
+    test "a project item type that two item types declare" do
+      assert_raise ArgumentError,
+                   ~s(project item type ["storage_endpoint"] is listed more than once),
+                   fn -> validate!([Systems.Tools, Systems.OtherItems]) end
+    end
+
+    test "the reserved project item type none" do
+      assert_raise ArgumentError, ~s(project item type ["none"] is reserved), fn ->
+        validate!([Systems.NoneItems])
+      end
+    end
+
+    test "a director that two systems declare" do
+      assert_raise ArgumentError, "director [:validate_test] is listed more than once", fn ->
+        validate!([Systems.Tools, Systems.OtherDirectors])
+      end
     end
   end
 end
