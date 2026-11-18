@@ -44,14 +44,23 @@ defmodule Next.Systems.BFF.PageControllerTest do
   end
 
   # An online advert in Panl that is open to the user; reward_value 0 skips the funding check.
-  defp create_panl_advert(panl) do
+  defp create_panl_advert(panl, opts \\ []) do
     advert = Advert.Factories.create_advert(Factories.insert!(:creator), :accepted, 1)
     {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
 
     {:ok, _} =
       advert.submission
-      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl.id)
+      |> Ecto.Changeset.change(
+        reward_value: 0,
+        pool_id: panl.id,
+        submitted_at: opts[:submitted_at]
+      )
       |> Repo.update()
+
+    if title = opts[:title] do
+      %{promotion: promotion} = Repo.preload(advert, :promotion)
+      promotion |> Ecto.Changeset.change(title: title) |> Repo.update!()
+    end
 
     advert
   end
@@ -103,6 +112,7 @@ defmodule Next.Systems.BFF.PageControllerTest do
                "section_begin",
                "section",
                "advert",
+               "section",
                "section_end",
                "section_begin",
                "section",
@@ -143,6 +153,7 @@ defmodule Next.Systems.BFF.PageControllerTest do
                  }
                },
                %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
+               %{"props" => %{"title" => "See all", "to" => "/bff/page/marketplace"}},
                %{"props" => %{"title" => "History", "count" => 1}},
                %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
              ] = content
@@ -174,10 +185,75 @@ defmodule Next.Systems.BFF.PageControllerTest do
              ] = for(%{"type" => "section", "props" => props} <- home["blocks"], do: props)
 
       assert types(conn |> get("/bff/page/marketplace") |> json_response(200)) ==
-               ["section" | List.duplicate("advert", 4)]
+               ["section", "filter", "search" | List.duplicate("advert", 4)]
 
       assert types(conn |> get("/bff/page/history") |> json_response(200)) ==
                ["section" | List.duplicate("participation", 4)]
+    end
+
+    test "the marketplace filters on the year a study was published and searches its title, as on the web, through links to itself",
+         %{conn: conn, user: user} do
+      {panl, _assignment} = home_with_everything(user)
+      create_panl_advert(panl, title: "Sleep and screens", submitted_at: ~N[2024-06-15 12:00:00])
+      create_panl_advert(panl, title: "Screens at night", submitted_at: ~N[2025-03-01 09:00:00])
+      this_year = "#{NaiveDateTime.utc_now().year}"
+      page = "/bff/page/marketplace"
+
+      marketplace = fn query ->
+        %{"blocks" => blocks} = conn |> get(page <> query) |> json_response(200)
+        blocks
+      end
+
+      assert [
+               %{"props" => %{"title" => "Marketplace", "count" => 3}},
+               %{"type" => "filter", "props" => %{"label" => "Filter:", "options" => options}},
+               %{"type" => "search", "props" => search} | adverts
+             ] = marketplace.("")
+
+      assert options == [
+               %{"label" => "All", "to" => page, "selected" => true},
+               %{"label" => this_year, "to" => "#{page}?year=#{this_year}", "selected" => false},
+               %{"label" => "2025", "to" => "#{page}?year=2025", "selected" => false},
+               %{"label" => "2024", "to" => "#{page}?year=2024", "selected" => false}
+             ]
+
+      assert search == %{"name" => "query", "to" => page, "placeholder" => "Search"}
+      assert length(adverts) == 3
+
+      # Each link keeps the other param: a year keeps the search, the search keeps the year.
+      assert [
+               %{"props" => %{"count" => 1}},
+               %{"props" => %{"options" => [all | _] = options}},
+               %{"props" => search},
+               %{"type" => "advert", "props" => %{"title" => "Screens at night"}}
+             ] = marketplace.("?year=2025&query=+screens+")
+
+      assert all == %{"label" => "All", "to" => "#{page}?query=screens", "selected" => false}
+
+      assert %{"label" => "2025", "to" => "#{page}?query=screens&year=2025", "selected" => true} in options
+
+      assert search == %{
+               "name" => "query",
+               "to" => "#{page}?year=2025",
+               "placeholder" => "Search",
+               "value" => "screens"
+             }
+
+      assert [%{"props" => %{"count" => 0}}, _filter, _search, no_studies] =
+               marketplace.("?year=2025&query=sleep")
+
+      assert no_studies == %{"type" => "section", "props" => %{"body" => "No studies found."}}
+
+      # A year the marketplace doesn't have, or one that isn't a year, counts as All.
+      for query <- ["?year=1999", "?year=next", "?year=&query="] do
+        assert [%{"props" => %{"count" => 3}} | _] = marketplace.(query)
+      end
+
+      # The search text is encoded in the links.
+      assert [_heading, %{"props" => %{"options" => [all | _]}} | _] =
+               marketplace.("?query=c%2B%2B+%26+more")
+
+      assert all["to"] == "#{page}?query=c%2B%2B%20%26%20more"
     end
 
     test "an advert without a title shows with an empty title on home and the marketplace page",

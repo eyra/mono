@@ -130,3 +130,7 @@ msgstr "Melden Sie sich an"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "Alle anzeigen"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "Keine Studien gefunden."

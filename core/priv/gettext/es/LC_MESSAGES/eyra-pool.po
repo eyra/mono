@@ -130,3 +130,7 @@ msgstr "Regístrate"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "Ver todo"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "No se encontraron estudios."
