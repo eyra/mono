@@ -9,6 +9,8 @@ and move with that code in plan step code-instance.
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

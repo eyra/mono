@@ -1,7 +1,9 @@
 # `Systems.Home.BFFPage`
 [🔗](https://github.com/eyra/mono/blob/main/mica/systems/home/bff_page.ex#L1)
 
-The BFF's home page: the user's To-dos, one card each, in the To-do page's order.
+The BFF's home page: what the web home shows a signed-in user, in the same order and
+behind the same feature flags (`Systems.Home.PageBuilder.block_keys/1`), as a flat
+list of blocks. Pay out, Retry and Donate are not here yet.
 
 ---
 

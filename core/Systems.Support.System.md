@@ -5,6 +5,8 @@
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

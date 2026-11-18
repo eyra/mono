@@ -7,6 +7,16 @@ The assignment type.
 
 # `changeset`
 
+# `consent_on?`
+
+# `consent_periods`
+
+The periods in which consent was on, oldest first. Raises when the agreement
+isn't loaded.
+
+Older code records no periods: switching consent on links a new agreement. So
+an agreement created after the last period ended has been on since then.
+
 # `language`
 
 # `preload_graph`

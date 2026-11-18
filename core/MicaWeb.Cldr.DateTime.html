@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -191,7 +191,7 @@ returning a formatted string or raising on error.</p></div>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="https://ex-cldr-calendars.hexdocs.pm/2.4.4/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> to_string(<a href="https://ex-cldr-calendars.hexdocs.pm/2.4.3/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   {:ok, <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
@@ -201,7 +201,7 @@ as defined in CLDR and described in <a rel="nofollow" href="http://unicode.org/r
 one or more of the keys <code class="inline">:year</code>, <code class="inline">:month</code>, <code class="inline">:day</code>, <code class="inline">:hour</code>, <code class="inline">:minute</code> and <code class="inline">:second</code> or
 <code class="inline">:microsecond</code> with optional <code class="inline">:time_zone</code>, <code class="inline">:zone_abbr</code>, <code class="inline">:utc_offset</code>, <code class="inline">:std_offset</code>
 and <code class="inline">:calendar</code> fields.</p></li><li><p><code class="inline">options</code> is a keyword list of options for formatting.</p></li></ul><h2 id="to_string/2-options" class="section-heading"><a href="#to_string/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><p><code class="inline">:format</code> is one of <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code> or a format skeleton or
-any of the keys in the map returned by <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.Format.html#date_time_formats/3"><code class="inline">Cldr.DateTime.Format.date_time_formats/3</code></a>.
+any of the keys in the map returned by <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.Format.html#date_time_formats/3"><code class="inline">Cldr.DateTime.Format.date_time_formats/3</code></a>.
 The default is <code class="inline">:medium</code>.</p></li><li><p><code class="inline">:date_format</code> is any one of <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code>. If defined,
 this option is used to format the date part of the date time. This option is
 only acceptable if the <code class="inline">:format</code> option is not specified, or is specified as either
@@ -212,10 +212,10 @@ only acceptable if the <code class="inline">:format</code> option is not specifi
 <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code>. If <code class="inline">:time_format</code> is not specified
 then the time format is defined by the <code class="inline">:format</code> option.</p></li><li><p><code class="inline">:style</code> is either <code class="inline">:at</code> or <code class="inline">:default</code>. When set to <code class="inline">:at</code> the date_time may
 be formatted with a localised string representing <code class="inline">&lt;date&gt; at &lt;time&gt;</code> if such
-a format exists. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.Format.html#date_time_at_formats/2"><code class="inline">Cldr.DateTime.Format.date_time_at_formats/2</code></a>.</p></li><li><p><code class="inline">:prefer</code> is either <code class="inline">:unicode</code> (the default) or <code class="inline">:ascii</code>. A small number of
+a format exists. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.Format.html#date_time_at_formats/2"><code class="inline">Cldr.DateTime.Format.date_time_at_formats/2</code></a>.</p></li><li><p><code class="inline">:prefer</code> is either <code class="inline">:unicode</code> (the default) or <code class="inline">:ascii</code>. A small number of
 formats have two variants - one using Unicode spaces (typically non-breaking space) and
 another using only ASCII whitespace. The <code class="inline">:ascii</code> format is primarily to support legacy
-use cases and is not recommended. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.html#available_formats/3"><code class="inline">Cldr.DateTime.available_formats/3</code></a>
+use cases and is not recommended. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.html#available_formats/3"><code class="inline">Cldr.DateTime.available_formats/3</code></a>
 to see which formats have these variants.</p></li><li><p><code class="inline">:locale</code> is any valid locale name returned by <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
 or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html#t:t/0"><code class="inline">Cldr.LanguageTag.t/0</code></a> struct.  The default is <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a>.</p></li><li><p><code class="inline">:number_system</code> a number system into which the formatted date_time digits should
 be transliterated.</p></li><li><p><code class="inline">:era</code> which, if set to <code class="inline">:variant</code>, will use a variant for the era if one
@@ -260,7 +260,7 @@ locale <code class="inline">period: :variant</code> will return &quot;pm&quot; i
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> to_string!(<a href="https://ex-cldr-calendars.hexdocs.pm/2.4.4/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
+          <pre translate="no"><span class="attribute">@spec</span> to_string!(<a href="https://ex-cldr-calendars.hexdocs.pm/2.4.3/Cldr.Calendar.html#t:any_date_time/0">Cldr.Calendar.any_date_time</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
   <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">no_return</a>()</pre>
 
       </div>
@@ -271,7 +271,7 @@ returning a formatted string or raising on error.</p><h2 id="to_string!/2-argume
 one or more of the keys <code class="inline">:year</code>, <code class="inline">:month</code>, <code class="inline">:day</code>, <code class="inline">:hour</code>, <code class="inline">:minute</code> and <code class="inline">:second</code> or
 <code class="inline">:microsecond</code> with optional <code class="inline">:time_zone</code>, <code class="inline">:zone_abbr</code>, <code class="inline">:utc_offset</code>, <code class="inline">:std_offset</code>
 and <code class="inline">:calendar</code> fields.</p></li><li><p><code class="inline">options</code> is a keyword list of options for formatting.</p></li></ul><h2 id="to_string!/2-options" class="section-heading"><a href="#to_string!/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><p><code class="inline">:format</code> is one of <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code> or a format string or
-any of the keys in the map returned by <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.Format.html#date_time_formats/3"><code class="inline">Cldr.DateTime.Format.date_time_formats/3</code></a>.
+any of the keys in the map returned by <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.Format.html#date_time_formats/3"><code class="inline">Cldr.DateTime.Format.date_time_formats/3</code></a>.
 The default is <code class="inline">:medium</code>. See <a href="https://hexdocs.pm/ex_cldr_dates_times/readme.html#date-time-and-datetime-localization-formats">here</a>
 for more information about specifying formats.</p></li><li><p><code class="inline">:date_format</code> is any one of <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code>. If defined,
 this option is used to format the date part of the date time. This option is
@@ -283,10 +283,10 @@ only acceptable if the <code class="inline">:format</code> option is not specifi
 <code class="inline">:short</code>, <code class="inline">:medium</code>, <code class="inline">:long</code>, <code class="inline">:full</code>. If <code class="inline">:time_format</code> is not specified
 then the time format is defined by the <code class="inline">:format</code> option.</p></li><li><p><code class="inline">:style</code> is either <code class="inline">:at</code> or <code class="inline">:default</code>. When set to <code class="inline">:at</code> the date_time may
 be formatted with a localised string representing <code class="inline">&lt;date&gt; at &lt;time&gt;</code> if such
-a format exists. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.Format.html#date_time_at_formats/2"><code class="inline">Cldr.DateTime.Format.date_time_at_formats/2</code></a>.</p></li><li><p><code class="inline">:prefer</code> is either <code class="inline">:unicode</code> (the default) or <code class="inline">:ascii</code>. A small number of
+a format exists. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.Format.html#date_time_at_formats/2"><code class="inline">Cldr.DateTime.Format.date_time_at_formats/2</code></a>.</p></li><li><p><code class="inline">:prefer</code> is either <code class="inline">:unicode</code> (the default) or <code class="inline">:ascii</code>. A small number of
 formats have two variants - one using Unicode spaces (typically non-breaking space) and
 another using only ASCII whitespace. The <code class="inline">:ascii</code> format is primarily to support legacy
-use cases and is not recommended. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.html#available_formats/3"><code class="inline">Cldr.DateTime.available_formats/3</code></a>
+use cases and is not recommended. See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.html#available_formats/3"><code class="inline">Cldr.DateTime.available_formats/3</code></a>
 to see which formats have these variants.</p></li><li><p><code class="inline">:locale</code> is any valid locale name returned by <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
 or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html#t:t/0"><code class="inline">Cldr.LanguageTag.t/0</code></a> struct.  The default is <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a>.</p></li><li><p><code class="inline">:number_system</code> a number system into which the formatted date_time digits should
 be transliterated.</p></li><li><p><code class="inline">:era</code> which, if set to <code class="inline">:variant</code>, will use a variant for the era if one

@@ -28,7 +28,9 @@ end
 - [Fabric.ModalPresenter](Fabric.ModalPresenter.md)
 - [Fabric.Model](Fabric.Model.md)
 - [Frameworks.Builder.HTML](Frameworks.Builder.HTML.md)
-- [Frameworks.Builder.LibraryItemModel](Frameworks.Builder.LibraryItemModel.md)
+- [Frameworks.Builder.LibraryItemModel](Frameworks.Builder.LibraryItemModel.md): An item a builder can add. `required?` is copied onto what is added: only required
+items count when deciding whether a participant finished their tasks.
+
 - [Frameworks.Builder.LibraryModel](Frameworks.Builder.LibraryModel.md)
 - [Frameworks.Concept.Branch](Frameworks.Concept.Branch.md)
 - [Frameworks.Concept.ContentModel](Frameworks.Concept.ContentModel.md)
@@ -273,12 +275,13 @@ All operations must be idempotent.
 - [MicaSaas.Systems.Account.SessionController](MicaSaas.Systems.Account.SessionController.md)
 - [MicaSaas.Systems.Account.SigninPage](MicaSaas.Systems.Account.SigninPage.md)
 - [MicaSaas.Systems.Account.System](MicaSaas.Systems.Account.System.md): Self's sign-in pages, which shadow Mica's sign-in routes.
+- [MicaSaasWeb](MicaSaasWeb.md): Self's web module. Self's code uses it instead of `MicaWeb`
 - [MicaSaasWeb.Layouts.Stripped.MenuBuilder](MicaSaasWeb.Layouts.Stripped.MenuBuilder.md)
 - [MicaSaasWeb.Layouts.Website.MenuBuilder](MicaSaasWeb.Layouts.Website.MenuBuilder.md)
 - [MicaSaasWeb.Layouts.Workspace.MenuBuilder](MicaSaasWeb.Layouts.Workspace.MenuBuilder.md)
 - [MicaSaasWeb.Menu.Items](MicaSaasWeb.Menu.Items.md)
-- [MicaWeb](MicaWeb.md): The entrypoint for defining your web interface, such
-as controllers, views, channels and so on.
+- [MicaWeb](MicaWeb.md): Mica's web module: the entrypoint for defining Mica's web interface, such as
+controllers, views, channels and so on.
 - [MicaWeb.Cldr](MicaWeb.Cldr.md): Provides the core functions to retrieve and manage
 the CLDR data that supports formatting and localisation.
 - [MicaWeb.Cldr.AcceptLanguage](MicaWeb.Cldr.AcceptLanguage.md): Parses HTTP `Accept-Language` header values as defined in
@@ -392,6 +395,8 @@ framework.
 - [MicaWeb.Menu.ItemsProvider](MicaWeb.Menu.ItemsProvider.md)
 - [MicaWeb.Menus](MicaWeb.Menus.md)
 - [MicaWeb.Meta](MicaWeb.Meta.md)
+- [MicaWeb.Path](MicaWeb.Path.md): Mica's paths: `~m`, "m for Mica path".
+- [MicaWeb.PathCheck](MicaWeb.PathCheck.md): Checks Mica's paths (`~m`, `MicaWeb.Path`) against a SaaS's router.
 - [MicaWeb.Plug.PersistLocale](MicaWeb.Plug.PersistLocale.md): Persists the locale that Cldr.Plug.PutLocale just resolved into the
 session.
 - [MicaWeb.Plug.RemoteIp](MicaWeb.Plug.RemoteIp.md): Sets `conn.remote_ip` to the client's address, keeps it in the session as a
@@ -432,6 +437,10 @@ Prod never turns the feature on (see `Mica.RuntimeConfig.features/2`).
 - [MicaWeb.UI.Spacing](MicaWeb.UI.Spacing.md)
 - [MicaWeb.UI.StepIndicator](MicaWeb.UI.StepIndicator.md):   Circle with a number
 
+- [MicaWeb.UI.StepProgress](MicaWeb.UI.StepProgress.md):   Horizontal progress through a fixed number of steps: one Prism step indicator per
+  step on a track that fills up to the current step. The steps are not selectable.
+  A finished step shows a check, the current step its number, an upcoming step a
+  grey check.
 - [MicaWeb.UI.Timestamp](MicaWeb.UI.Timestamp.md):   Helper functions for displaying timestamps
 
 - [MicaWeb.UI.Wrap](MicaWeb.UI.Wrap.md)
@@ -444,6 +453,7 @@ Prod never turns the feature on (see `Mica.RuntimeConfig.features/2`).
 - [MicaWeb.ViewportController](MicaWeb.ViewportController.md)
 - [MicaWeb.WWWRedirect](MicaWeb.WWWRedirect.md)
 - [MicaWeb.WakeupController](MicaWeb.WakeupController.md): Endpoint to wake up a suspended Fly Postgres database.
+- [MicaWeb.Web](MicaWeb.Web.md): The blocks of a web module: controllers, views, components, channels and so on.
 - [Next.Frameworks.Concept.ScreeningAgent](Next.Frameworks.Concept.ScreeningAgent.md)
 - [Next.Frameworks.E2E.Controller](Next.Frameworks.E2E.Controller.md): API endpoint for E2E test fixture setup.
 - [Next.SaaS](Next.SaaS.md): Next, Eyra's SaaS on Mica.
@@ -695,7 +705,7 @@ but are cognitive tasks, not data donations. Consent, storage of results and
 completion are those of the Feldspar tool, as in the Data donation template;
 only the texts differ. Behind the `:probe` feature flag.
 
-- [Next.Systems.Probe.System](Next.Systems.Probe.System.md): The Probe assignment template (`config :mica, assignment_templates:`).
+- [Next.Systems.Probe.System](Next.Systems.Probe.System.md): The Probe assignment template.
 - [Next.Systems.Storybook.System](Next.Systems.Storybook.System.md): The component storybook of Next's own components (`Next.Storybook`), next to Mica's Pixel storybook.
 - [Next.Systems.Student.Class](Next.Systems.Student.Class.md):   Defines study program using organisation nodes.
 
@@ -758,6 +768,7 @@ hand an identity-provider sign-in back to the app on this host
 - [Next.Systems.Zircon.Sqids](Next.Systems.Zircon.Sqids.md)
 - [Next.Systems.Zircon.Switch](Next.Systems.Zircon.Switch.md)
 - [Next.Systems.Zircon.System](Next.Systems.Zircon.System.md)
+- [NextWeb](NextWeb.md): Next's web module. Next's code uses it instead of `MicaWeb`
 - [NextWeb.Layouts.Stripped.MenuBuilder](NextWeb.Layouts.Stripped.MenuBuilder.md)
 - [NextWeb.Layouts.Website.MenuBuilder](NextWeb.Layouts.Website.MenuBuilder.md)
 - [NextWeb.Layouts.Workspace.MenuBuilder](NextWeb.Layouts.Workspace.MenuBuilder.md)
@@ -1000,6 +1011,9 @@ tool. The participant goes through the flow described below
 - [Systems.Assignment.ConnectionViewStorage](Systems.Assignment.ConnectionViewStorage.md)
 - [Systems.Assignment.ConnectorPopupStorage](Systems.Assignment.ConnectorPopupStorage.md)
 - [Systems.Assignment.ConnectorView](Systems.Assignment.ConnectorView.md)
+- [Systems.Assignment.ConsentPeriodModel](Systems.Assignment.ConsentPeriodModel.md): A span of time in which consent was on for an assignment. `ended_at` is nil
+while consent is still on.
+
 - [Systems.Assignment.ContentPage](Systems.Assignment.ContentPage.md)
 - [Systems.Assignment.ContentPageBuilder](Systems.Assignment.ContentPageBuilder.md):   Assignment is a generic concept with a template pattern. The content page is therefor rendered with optional components.
   This builder module supports several specials with each a specific View Model.
@@ -1015,6 +1029,16 @@ tool. The participant goes through the flow described below
 - [Systems.Assignment.CrewPage](Systems.Assignment.CrewPage.md)
 - [Systems.Assignment.CrewPageBuilder](Systems.Assignment.CrewPageBuilder.md)
 - [Systems.Assignment.CrewTaskHelpers](Systems.Assignment.CrewTaskHelpers.md)
+- [Systems.Assignment.CrewTaskHorizontalListView](Systems.Assignment.CrewTaskHorizontalListView.md): The horizontal task list. Shows the participant's position in the tasks and
+the current task's intro below it. Its start button opens the tool in the same
+modal as the vertical task list. Tasks are done in order, without a done button:
+participation finishes when the last task is done.
+
+- [Systems.Assignment.CrewTaskHorizontalListViewBuilder](Systems.Assignment.CrewTaskHorizontalListViewBuilder.md): The horizontal task list: one step per task, done in order. The current task
+is the first one that isn't finished, so a participant who comes back lands on
+it. Its intro shows below the steps; its start button opens the tool in the same
+modal as the vertical task list, through the participant's `user_state` task.
+
 - [Systems.Assignment.CrewTaskListView](Systems.Assignment.CrewTaskListView.md)
 - [Systems.Assignment.CrewTaskListViewBuilder](Systems.Assignment.CrewTaskListViewBuilder.md)
 - [Systems.Assignment.CrewTaskSingleView](Systems.Assignment.CrewTaskSingleView.md)
@@ -1114,15 +1138,21 @@ Currently has no flags defined.
 - [Systems.Assignment.ToolViewFactory](Systems.Assignment.ToolViewFactory.md): Utility for preparing tool live views in Assignment/Crew context.
 - [Systems.Assignment.WorkflowItemSpecials](Systems.Assignment.WorkflowItemSpecials.md):   Defines the types of workflow items supported by.
 
-- [Systems.BFF.Blocks](Systems.BFF.Blocks.md): The BFF spec's pages: each is a GET at its path that returns a flat list of blocks.
-- [Systems.BFF.Blocks.Card](Systems.BFF.Blocks.Card.md): Block `card`.
+- [Systems.BFF.Blocks](Systems.BFF.Blocks.md): The BFF blocks and pages, generated at compile time from the mica-bff spec.
+- [Systems.BFF.Blocks.Advert](Systems.BFF.Blocks.Advert.md): Block `advert`.
+- [Systems.BFF.Blocks.NextBestAction](Systems.BFF.Blocks.NextBestAction.md): Block `next_best_action`.
+- [Systems.BFF.Blocks.Participation](Systems.BFF.Blocks.Participation.md): Block `participation`.
+- [Systems.BFF.Blocks.RewardAmount](Systems.BFF.Blocks.RewardAmount.md): Block `reward_amount`.
 - [Systems.BFF.Blocks.Section](Systems.BFF.Blocks.Section.md): Block `section`.
+- [Systems.BFF.Blocks.SectionBegin](Systems.BFF.Blocks.SectionBegin.md): Block `section_begin`.
+- [Systems.BFF.Blocks.SectionEnd](Systems.BFF.Blocks.SectionEnd.md): Block `section_end`.
 - [Systems.BFF.Page](Systems.BFF.Page.md): A page the BFF serves: the blocks it shows the signed-in `user`, in order.
 - [Systems.BFF.PageController](Systems.BFF.PageController.md)
 - [Systems.BFF.System](Systems.BFF.System.md): The backend for frontend (BFF) of the native apps: `GET /bff/page/:page`
 answers `{"blocks": [...]}` for a page of the mica-bff spec. Systems serve the
-pages through `c:Mica.System.bff_pages/0`; the blocks are the generated
-`Systems.BFF.Blocks.*` modules. The app sends the spec version it implements in
+pages through `c:Mica.System.bff_pages/0`; the blocks are the
+`Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
+dependency. The app sends the spec version it implements in
 the `x-bff-spec` header, which is only recorded for now.
 
 - [Systems.Bookkeeping.AccountModel](Systems.Bookkeeping.AccountModel.md)
@@ -1295,7 +1325,10 @@ is threaded through and returned.
 - [Systems.Fund.WalletView](Systems.Fund.WalletView.md)
 - [Systems.Fund.WalletViewBuilder](Systems.Fund.WalletViewBuilder.md)
 - [Systems.Home.AdvertsView](Systems.Home.AdvertsView.md)
-- [Systems.Home.BFFPage](Systems.Home.BFFPage.md): The BFF's home page: the user's To-dos, one card each, in the To-do page's order.
+- [Systems.Home.BFFPage](Systems.Home.BFFPage.md): The BFF's home page: what the web home shows a signed-in user, in the same order and
+behind the same feature flags (`Systems.Home.PageBuilder.block_keys/1`), as a flat
+list of blocks. Pay out, Retry and Donate are not here yet.
+
 - [Systems.Home.GuestView](Systems.Home.GuestView.md)
 - [Systems.Home.HTML](Systems.Home.HTML.md)
 - [Systems.Home.LoggedInView](Systems.Home.LoggedInView.md)
@@ -1398,6 +1431,9 @@ based on the return value — adapters just focus on delivery.
 existing `Systems.Email` pipeline.
 - [Systems.Notify.Channel.NA](Systems.Notify.Channel.NA.md): Next-Action channel adapter. Creates an NBA on the recipient's Home for the
 event, via the existing `Systems.NextAction` infrastructure.
+- [Systems.Notify.ChannelName](Systems.Notify.ChannelName.md): The channel of a `Systems.Notify.MessageModel`: a string column whose names
+are checked against `Mica.SaaS.notify_channels/0` at runtime, not at compile
+time.
 - [Systems.Notify.Dispatcher](Systems.Notify.Dispatcher.md): Event → Messages → Channel delivery.
 - [Systems.Notify.EventAttrs](Systems.Notify.EventAttrs.md): Input struct for `Systems.Notify.Public.record_event/1`. Keeps the
 contract explicit so callers get a `FunctionClauseError` on the wrong
@@ -1407,7 +1443,10 @@ shape instead of a silent `nil` deep in normalize.
 convention. A system opts in by dropping a `_notify.ex`
 - [Systems.Notify.EventModel](Systems.Notify.EventModel.md): A raw fact that something happened. Records the "what + who + when" —
 channels + timing are decided later by `Systems.Notify.Scheduler`.
-- [Systems.Notify.EventType](Systems.Notify.EventType.md): Global registry of notification event types → channel routing.
+- [Systems.Notify.EventType](Systems.Notify.EventType.md): Notification event types and the channels each is routed to, from the
+notifiers of the SaaS's systems (`Mica.SaaS.notify_events/0`). Each notifier
+declares its events via `use Systems.Notify.EventDeclaration`.
+
 - [Systems.Notify.MessageModel](Systems.Notify.MessageModel.md): A message produced from an event for one specific channel. Channel adapters
 interpret `payload` shape (e.g. email carries `%{subject, text, html}`, NA
 carries `%{action_module, key, params}`).

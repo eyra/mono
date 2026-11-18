@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -119,10 +119,18 @@ mica
 
     <section id="moduledoc">
 <p>Configuration for participant-facing runtime behavior of an assignment.</p><p>Returned by <code class="inline">Assignment.Template.runtime_config/1</code> and consumed by the
-parts of the system that need to know which pool a template targets —
-today: the finished view (post-completion email capture) and the
-participants view (advert-in-pool CTA).</p><h2 id="module-fields" class="section-heading"><a href="#module-fields" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fields</span></h2><ul><li><code class="inline">:pool</code> — atom slug of the pool this template targets, e.g. <code class="inline">:panl</code>.
-<code class="inline">nil</code> means the template is not pool-scoped.</li></ul>
+parts of the system that need to know how a template behaves for
+participants — today: the finished view (post-completion email capture,
+and Back, shown exactly when the task list showed the done button), the
+participants view (advert-in-pool CTA) and the task list (layout and done
+button).</p><h2 id="module-fields" class="section-heading"><a href="#module-fields" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Fields</span></h2><ul><li><code class="inline">:pool</code> — atom slug of the pool this template targets, e.g. <code class="inline">:panl</code>.
+<code class="inline">nil</code> means the template is not pool-scoped.</li><li><code class="inline">:done_button_requires_redirect?</code> — when <code class="inline">true</code>, the task list shows its
+done button only when the participant's session has an end-of-workflow
+URL (<code class="inline">panel_info.redirect_url</code>). When <code class="inline">false</code>, the button is always shown.</li><li><code class="inline">:task_list</code> — the list an assignment with more than one task shows.
+<code class="inline">:vertical</code>: every task in a list, each opening in a modal, with a done
+button. <code class="inline">:horizontal</code>: one step per task showing the participant's
+position, the current task's start view below it, and every task done in
+order; participation finishes after the last task.</li></ul>
     </section>
 
 </div>
@@ -142,6 +150,14 @@ participants view (advert-in-pool CTA).</p><h2 id="module-fields" class="section
     <div class="summary-row">
       <div class="summary-signature">
         <a href="#t:t/0" data-no-tooltip="" translate="no">t()</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#t:task_list/0" data-no-tooltip="" translate="no">task_list()</a>
 
       </div>
 
@@ -171,7 +187,7 @@ participants view (advert-in-pool CTA).</p><h2 id="module-fields" class="section
       <h1 class="signature" translate="no">t()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/runtime_config.ex#L16" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/runtime_config.ex#L28" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -182,7 +198,39 @@ participants view (advert-in-pool CTA).</p><h2 id="module-fields" class="section
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@type</span> t() :: %Systems.Assignment.RuntimeConfig{pool: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>() | nil}</pre>
+          <pre translate="no"><span class="attribute">@type</span> t() :: %Systems.Assignment.RuntimeConfig{
+  done_button_requires_redirect?: <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">boolean</a>(),
+  pool: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>() | nil,
+  task_list: <a href="#t:task_list/0">task_list</a>()
+}</pre>
+
+      </div>
+
+
+  </section>
+</section>
+<section class="detail" id="t:task_list/0">
+
+  <div class="detail-header">
+    <a href="#t:task_list/0" class="detail-link" data-no-tooltip="" aria-label="Link to this type">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_list()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/runtime_config.ex#L26" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@type</span> task_list() :: :vertical | :horizontal</pre>
 
       </div>
 

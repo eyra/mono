@@ -7,6 +7,8 @@ The `/.well-known` files of Next's domains, such as the iOS app-site association
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

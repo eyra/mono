@@ -191,6 +191,7 @@ MicaSaasWeb.Layouts.Stripped.MenuBuilder.md
 MicaSaasWeb.Layouts.Website.MenuBuilder.md
 MicaSaasWeb.Layouts.Workspace.MenuBuilder.md
 MicaSaasWeb.Menu.Items.md
+MicaSaasWeb.md
 MicaWeb.Cldr.AcceptLanguage.md
 MicaWeb.Cldr.Currency.md
 MicaWeb.Cldr.Date.Interval.md
@@ -273,6 +274,8 @@ MicaWeb.Menu.Helpers.md
 MicaWeb.Menu.ItemsProvider.md
 MicaWeb.Menus.md
 MicaWeb.Meta.md
+MicaWeb.Path.md
+MicaWeb.PathCheck.md
 MicaWeb.Plug.PersistLocale.md
 MicaWeb.Plug.RemoteIp.md
 MicaWeb.Plug.ResolveLocale.md
@@ -298,6 +301,7 @@ MicaWeb.UI.Responsive.Breakpoint.md
 MicaWeb.UI.Responsive.Viewport.md
 MicaWeb.UI.Spacing.md
 MicaWeb.UI.StepIndicator.md
+MicaWeb.UI.StepProgress.md
 MicaWeb.UI.Timestamp.md
 MicaWeb.UI.Wrap.md
 MicaWeb.UI.md
@@ -310,6 +314,7 @@ MicaWeb.Validator.String.md
 MicaWeb.ViewportController.md
 MicaWeb.WWWRedirect.md
 MicaWeb.WakeupController.md
+MicaWeb.Web.md
 MicaWeb.md
 Mix.Tasks.Config.Snapshot.md
 Mix.Tasks.E2e.md
@@ -517,6 +522,7 @@ NextWeb.Layouts.Stripped.MenuBuilder.md
 NextWeb.Layouts.Website.MenuBuilder.md
 NextWeb.Layouts.Workspace.MenuBuilder.md
 NextWeb.Menu.Items.md
+NextWeb.md
 Systems.Account.Auth.Apple.Backend.md
 Systems.Account.Auth.Apple.CallbackPlug.md
 Systems.Account.Auth.Apple.Helpers.md
@@ -707,6 +713,7 @@ Systems.Assignment.ConnectionView.md
 Systems.Assignment.ConnectionViewStorage.md
 Systems.Assignment.ConnectorPopupStorage.md
 Systems.Assignment.ConnectorView.md
+Systems.Assignment.ConsentPeriodModel.md
 Systems.Assignment.ContentPage.md
 Systems.Assignment.ContentPageBuilder.md
 Systems.Assignment.ContentPageForm.md
@@ -719,6 +726,8 @@ Systems.Assignment.Controller.md
 Systems.Assignment.CrewPage.md
 Systems.Assignment.CrewPageBuilder.md
 Systems.Assignment.CrewTaskHelpers.md
+Systems.Assignment.CrewTaskHorizontalListView.md
+Systems.Assignment.CrewTaskHorizontalListViewBuilder.md
 Systems.Assignment.CrewTaskListView.md
 Systems.Assignment.CrewTaskListViewBuilder.md
 Systems.Assignment.CrewTaskSingleView.md
@@ -788,8 +797,13 @@ Systems.Assignment.Templates.md
 Systems.Assignment.TicketView.md
 Systems.Assignment.ToolViewFactory.md
 Systems.Assignment.WorkflowItemSpecials.md
-Systems.BFF.Blocks.Card.md
+Systems.BFF.Blocks.Advert.md
+Systems.BFF.Blocks.NextBestAction.md
+Systems.BFF.Blocks.Participation.md
+Systems.BFF.Blocks.RewardAmount.md
 Systems.BFF.Blocks.Section.md
+Systems.BFF.Blocks.SectionBegin.md
+Systems.BFF.Blocks.SectionEnd.md
 Systems.BFF.Blocks.md
 Systems.BFF.Page.md
 Systems.BFF.PageController.md
@@ -1025,6 +1039,7 @@ Systems.NextAction.ViewModel.md
 Systems.Notify.Channel.Email.md
 Systems.Notify.Channel.NA.md
 Systems.Notify.Channel.md
+Systems.Notify.ChannelName.md
 Systems.Notify.Dispatcher.md
 Systems.Notify.EventAttrs.md
 Systems.Notify.EventDeclaration.md

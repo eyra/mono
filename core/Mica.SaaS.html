@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -120,10 +120,13 @@ mica
     <section id="moduledoc">
 <p>A SaaS built on Mica, and the composition of the configured one.</p><p>Each SaaS has one module that implements this behaviour (<a href="Next.SaaS.html"><code class="inline">Next.SaaS</code></a>,
 <a href="MicaSaas.SaaS.html"><code class="inline">MicaSaas.SaaS</code></a>). It lists the systems the SaaS is made of and carries the
-SaaS-level config. The build picks one in its config:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:mica</span><span class="p">,</span><span class="w"> </span><span class="ss">saas</span><span class="p">:</span><span class="w"> </span><span class="nc">Next.SaaS</span></code></pre><p>The value is read at compile time: the router and <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> splice
-the routes and grants of all systems (<a href="#override_routes/0"><code class="inline">override_routes/0</code></a>, <a href="#routes/0"><code class="inline">routes/0</code></a>,
-<a href="#grants/0"><code class="inline">grants/0</code></a>). Never set <code class="inline">:saas</code> in <code class="inline">runtime.exs</code>; a release refuses to boot
-when it differs from the compiled value.</p>
+SaaS-level config. The build picks one in its config:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:mica</span><span class="p">,</span><span class="w"> </span><span class="ss">saas</span><span class="p">:</span><span class="w"> </span><span class="nc">Next.SaaS</span></code></pre><p>Mica reads the value at runtime. At boot <a href="#validate!/0"><code class="inline">validate!/0</code></a> builds the
+composition, the contributions of all systems, checks it and caches it; the
+readers below (<a href="#signal_handlers/0"><code class="inline">signal_handlers/0</code></a>, <a href="#grants/0"><code class="inline">grants/0</code></a>, ...) take their part from
+that cache. Only <a href="MicaWeb.Router.html"><code class="inline">MicaWeb.Router</code></a> still reads the value at compile time, to
+splice the routes of all systems (<a href="#override_routes/0"><code class="inline">override_routes/0</code></a>, <a href="#routes/0"><code class="inline">routes/0</code></a>). Never set
+<code class="inline">:saas</code> in <code class="inline">runtime.exs</code>; a release refuses to boot when it differs from the
+value the router was compiled with.</p>
     </section>
 
 </div>
@@ -188,6 +191,18 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       </div>
 
         <div class="summary-synopsis"><p>Where a signed-out user is sent to sign in.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:sign_up_page/2" data-no-tooltip="" translate="no">sign_up_page(user_type, post_signup_action)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Where a signed-out user is sent to sign up instead of the password sign-up
+page (<code class="inline">/user/signup/:user_type</code>), or nil to keep that page. The page's
+<code class="inline">post_signup_action</code> param is passed along, nil when it has none.</p></div>
 
     </div>
 
@@ -259,11 +274,21 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#assignment_templates/0" data-no-tooltip="" translate="no">assignment_templates()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The assignment templates of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#bff_pages/0" data-no-tooltip="" translate="no">bff_pages()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>The BFF pages of all systems. Raises when two systems serve the same page.</p></div>
+        <div class="summary-synopsis"><p>The BFF pages of all systems.</p></div>
 
     </div>
 
@@ -273,7 +298,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
       </div>
 
-        <div class="summary-synopsis"><p>The children of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p></div>
+        <div class="summary-synopsis"><p>The children of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p></div>
 
     </div>
 
@@ -283,7 +308,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
       </div>
 
-        <div class="summary-synopsis"><p>The Desktop sections of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Raises when two sections have the same id.</p></div>
+        <div class="summary-synopsis"><p>The Desktop sections of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p></div>
 
     </div>
 
@@ -294,7 +319,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       </div>
 
         <div class="summary-synopsis"><p>The declared feature flags of all systems, off unless the SaaS turns them on,
-sorted by name. Raises when the SaaS sets a flag that no system declares.</p></div>
+sorted by name.</p></div>
 
     </div>
 
@@ -304,7 +329,10 @@ sorted by name. Raises when the SaaS sets a flag that no system declares.</p></d
 
       </div>
 
-        <div class="summary-synopsis"><p>Expands to <code class="inline">grant_access/2</code> or <code class="inline">grant_actions/2</code> for every system grant.</p></div>
+        <div class="summary-synopsis"><p>The page grants of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order: <code class="inline">{module, roles}</code> or
+<code class="inline">{module, %{action =&gt; roles}}</code>, with <code class="inline">widen: true</code> as a third element when
+the grant widens another one. <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> merges them into its
+permission map at boot.</p></div>
 
     </div>
 
@@ -325,7 +353,7 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
 
       </div>
 
-        <div class="summary-synopsis"><p>The configured SaaS module.</p></div>
+        <div class="summary-synopsis"><p>The configured SaaS module (<code class="inline">config :mica, saas:</code>).</p></div>
 
     </div>
 
@@ -341,24 +369,21 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#notify_channel_names/0" data-no-tooltip="" translate="no">notify_channel_names()</a>
+        <a href="#notify_channels/0" data-no-tooltip="" translate="no">notify_channels()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>The channel names of <a href="#notify_channels/0"><code class="inline">notify_channels/0</code></a>, sorted, for use at compile time (an
-<a href="https://ecto.hexdocs.pm/3.14.2/Ecto.Enum.html"><code class="inline">Ecto.Enum</code></a>). Editing a system recompiles the caller. Like the route and grant
-macros, it compiles the SaaS module and its systems first, so they must not
-depend on the caller at compile time.</p></div>
+        <div class="summary-synopsis"><p>The notification channels of all systems.</p></div>
 
     </div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#notify_channels/0" data-no-tooltip="" translate="no">notify_channels()</a>
+        <a href="#notify_events/0" data-no-tooltip="" translate="no">notify_events()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>The notification channels of all systems. Raises when two systems name the same channel.</p></div>
+        <div class="summary-synopsis"><p>The notify event types of all notifiers, to the channels each is routed to: <code class="inline">%{&quot;type&quot; =&gt; [:email]}</code>.</p></div>
 
     </div>
 
@@ -368,7 +393,7 @@ depend on the caller at compile time.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The Oban crons of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Raises when two systems declare the same name.</p></div>
+        <div class="summary-synopsis"><p>The Oban crons of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p></div>
 
     </div>
 
@@ -378,7 +403,7 @@ depend on the caller at compile time.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The Oban queues of all systems. Raises when two systems declare the same queue.</p></div>
+        <div class="summary-synopsis"><p>The Oban queues of all systems. Read once, at boot.</p></div>
 
     </div>
 
@@ -388,7 +413,19 @@ depend on the caller at compile time.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Splices <a href="#override_routes/0"><code class="inline">override_routes/0</code></a> of all systems.</p></div>
+        <div class="summary-synopsis"><p>Splices <a href="#override_routes/0"><code class="inline">override_routes/0</code></a> of all systems, and records their paths for
+<a href="MicaWeb.PathCheck.html"><code class="inline">MicaWeb.PathCheck</code></a> (a SaaS's own pages that shadow Mica's).</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#put_composition/1" data-no-tooltip="" translate="no">put_composition(parts)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Test hook: replaces parts of the composition for every process. Returns the
+composition it replaced, to put back when the test ends</p></div>
 
     </div>
 
@@ -398,7 +435,7 @@ depend on the caller at compile time.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>The default rate quotas of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p></div>
+        <div class="summary-synopsis"><p>The default rate quotas of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p></div>
 
     </div>
 
@@ -409,6 +446,18 @@ depend on the caller at compile time.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Splices <a href="#routes/0"><code class="inline">routes/0</code></a> of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#schemas/0" data-no-tooltip="" translate="no">schemas()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The Ecto schemas of every application in the composition: Mica's and those of
+the applications that hold the SaaS module or one of its systems.
+<a href="Mica.Repo.html#orphan?/2"><code class="inline">Mica.Repo.orphan?/2</code></a> and <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> scan them.</p></div>
 
     </div>
 
@@ -440,6 +489,30 @@ namespaces: a SaaS system's handler (<code class="inline">Next.Systems.&lt;Syste
 
       </div>
 
+        <div class="summary-synopsis"><p>The systems the SaaS is made of, in <a href="#c:systems/0"><code class="inline">systems/0</code></a> order.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#validate!/0" data-no-tooltip="" translate="no">validate!()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Builds the composition of the configured SaaS, checks it (<a href="#validate!/1"><code class="inline">validate!/1</code></a>) and
+caches it. <code class="inline">Mica.Application</code> runs it at boot, before the children start, so
+a broken composition stops the boot.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#validate!/1" data-no-tooltip="" translate="no">validate!(saas)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The composition of <code class="inline">saas</code>, after checking it. Raises on</p></div>
+
     </div>
 
 </div>
@@ -468,7 +541,7 @@ namespaces: a SaaS system's handler (<code class="inline">Next.Systems.&lt;Syste
         <span class="note">(optional)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L58" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -499,7 +572,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
         <span class="note">(optional)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L39" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L42" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -527,7 +600,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">menu_builder(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L27" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L30" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -555,7 +628,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">menu_items()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L24" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L27" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -585,7 +658,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
         <span class="note">(optional)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L36" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L39" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -603,6 +676,42 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 <p>Where a signed-out user is sent to sign in.</p>
   </section>
 </section>
+<section class="detail" id="c:sign_up_page/2">
+
+  <div class="detail-header">
+    <a href="#c:sign_up_page/2" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">sign_up_page(user_type, post_signup_action)</h1>
+
+        <span class="note">(optional)</span>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L49" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> sign_up_page(
+  user_type :: :creator | :participant,
+  post_signup_action :: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil
+) ::
+  <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil</pre>
+
+      </div>
+
+<p>Where a signed-out user is sent to sign up instead of the password sign-up
+page (<code class="inline">/user/signup/:user_type</code>), or nil to keep that page. The page's
+<code class="inline">post_signup_action</code> param is passed along, nil when it has none.</p>
+  </section>
+</section>
 <section class="detail" id="c:signed_in_page/1">
 
   <div class="detail-header">
@@ -613,7 +722,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">signed_in_page(arg1)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L36" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -641,7 +750,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">start_pages()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L21" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L24" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -669,7 +778,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">systems()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L18" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L21" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -699,7 +808,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
         <span class="note">(optional)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L30" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -740,7 +849,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">account_tabs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L109" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L286" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -762,7 +871,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">admin_panels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L106" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L283" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -772,6 +881,28 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
   <section class="docstring">
 
 <p>The admin panels of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
+  </section>
+</section>
+<section class="detail" id="assignment_templates/0">
+
+  <div class="detail-header">
+    <a href="#assignment_templates/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">assignment_templates()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L298" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The assignment templates of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
   </section>
 </section>
 <section class="detail" id="bff_pages/0">
@@ -784,7 +915,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">bff_pages()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L118" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L295" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -793,7 +924,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
   <section class="docstring">
 
-<p>The BFF pages of all systems. Raises when two systems serve the same page.</p>
+<p>The BFF pages of all systems.</p>
   </section>
 </section>
 <section class="detail" id="children/0">
@@ -806,7 +937,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">children()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L301" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -815,7 +946,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
   <section class="docstring">
 
-<p>The children of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
+<p>The children of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p>
   </section>
 </section>
 <section class="detail" id="desktop_sections/0">
@@ -828,7 +959,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">desktop_sections()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L112" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L289" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -837,7 +968,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
 
   <section class="docstring">
 
-<p>The Desktop sections of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Raises when two sections have the same id.</p>
+<p>The Desktop sections of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
   </section>
 </section>
 <section class="detail" id="feature_flags/0">
@@ -850,7 +981,7 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
       <h1 class="signature" translate="no">feature_flags()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L151" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L357" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -860,22 +991,20 @@ name must be declared by one of its systems (<a href="Mica.System.html#c:feature
   <section class="docstring">
 
 <p>The declared feature flags of all systems, off unless the SaaS turns them on,
-sorted by name. Raises when the SaaS sets a flag that no system declares.</p>
+sorted by name.</p>
   </section>
 </section>
 <section class="detail" id="grants/0">
 
   <div class="detail-header">
-    <a href="#grants/0" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
+    <a href="#grants/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
     <div class="heading-with-actions">
       <h1 class="signature" translate="no">grants()</h1>
 
-        <span class="note">(macro)</span>
 
-
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L253" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L462" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -884,7 +1013,10 @@ sorted by name. Raises when the SaaS sets a flag that no system declares.</p>
 
   <section class="docstring">
 
-<p>Expands to <code class="inline">grant_access/2</code> or <code class="inline">grant_actions/2</code> for every system grant.</p>
+<p>The page grants of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order: <code class="inline">{module, roles}</code> or
+<code class="inline">{module, %{action =&gt; roles}}</code>, with <code class="inline">widen: true</code> as a third element when
+the grant widens another one. <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> merges them into its
+permission map at boot.</p>
   </section>
 </section>
 <section class="detail" id="migrations_paths/0">
@@ -897,7 +1029,7 @@ sorted by name. Raises when the SaaS sets a flag that no system declares.</p>
       <h1 class="signature" translate="no">migrations_paths()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L136" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L316" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -920,7 +1052,7 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
       <h1 class="signature" translate="no">module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L80" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L95" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -929,7 +1061,7 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
 
   <section class="docstring">
 
-<p>The configured SaaS module.</p>
+<p>The configured SaaS module (<code class="inline">config :mica, saas:</code>).</p>
   </section>
 </section>
 <section class="detail" id="notifiers/0">
@@ -942,7 +1074,7 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
       <h1 class="signature" translate="no">notifiers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L100" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L274" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -952,33 +1084,6 @@ have their own, in <a href="#systems/0"><code class="inline">systems/0</code></a
   <section class="docstring">
 
 <p>The notifiers of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
-  </section>
-</section>
-<section class="detail" id="notify_channel_names/0">
-
-  <div class="detail-header">
-    <a href="#notify_channel_names/0" class="detail-link" data-no-tooltip="" aria-label="Link to this macro">
-      <i class="ri-link-m" aria-hidden="true"></i>
-    </a>
-    <div class="heading-with-actions">
-      <h1 class="signature" translate="no">notify_channel_names()</h1>
-
-        <span class="note">(macro)</span>
-
-
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L227" class="icon-action" rel="help nofollow" aria-label="View Source">
-          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
-        </a>
-
-    </div>
-  </div>
-
-  <section class="docstring">
-
-<p>The channel names of <a href="#notify_channels/0"><code class="inline">notify_channels/0</code></a>, sorted, for use at compile time (an
-<a href="https://ecto.hexdocs.pm/3.14.2/Ecto.Enum.html"><code class="inline">Ecto.Enum</code></a>). Editing a system recompiles the caller. Like the route and grant
-macros, it compiles the SaaS module and its systems first, so they must not
-depend on the caller at compile time.</p>
   </section>
 </section>
 <section class="detail" id="notify_channels/0">
@@ -991,7 +1096,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">notify_channels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L103" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L280" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1000,7 +1105,29 @@ depend on the caller at compile time.</p>
 
   <section class="docstring">
 
-<p>The notification channels of all systems. Raises when two systems name the same channel.</p>
+<p>The notification channels of all systems.</p>
+  </section>
+</section>
+<section class="detail" id="notify_events/0">
+
+  <div class="detail-header">
+    <a href="#notify_events/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">notify_events()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L277" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The notify event types of all notifiers, to the channels each is routed to: <code class="inline">%{&quot;type&quot; =&gt; [:email]}</code>.</p>
   </section>
 </section>
 <section class="detail" id="oban_crons/0">
@@ -1013,7 +1140,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">oban_crons()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L127" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L307" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1022,7 +1149,7 @@ depend on the caller at compile time.</p>
 
   <section class="docstring">
 
-<p>The Oban crons of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Raises when two systems declare the same name.</p>
+<p>The Oban crons of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p>
   </section>
 </section>
 <section class="detail" id="oban_queues/0">
@@ -1035,7 +1162,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">oban_queues()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L124" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1044,7 +1171,7 @@ depend on the caller at compile time.</p>
 
   <section class="docstring">
 
-<p>The Oban queues of all systems. Raises when two systems declare the same queue.</p>
+<p>The Oban queues of all systems. Read once, at boot.</p>
   </section>
 </section>
 <section class="detail" id="override_routes/0">
@@ -1059,7 +1186,7 @@ depend on the caller at compile time.</p>
         <span class="note">(macro)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L247" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L444" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1068,7 +1195,33 @@ depend on the caller at compile time.</p>
 
   <section class="docstring">
 
-<p>Splices <a href="#override_routes/0"><code class="inline">override_routes/0</code></a> of all systems.</p>
+<p>Splices <a href="#override_routes/0"><code class="inline">override_routes/0</code></a> of all systems, and records their paths for
+<a href="MicaWeb.PathCheck.html"><code class="inline">MicaWeb.PathCheck</code></a> (a SaaS's own pages that shadow Mica's).</p>
+  </section>
+</section>
+<section class="detail" id="put_composition/1">
+
+  <div class="detail-header">
+    <a href="#put_composition/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">put_composition(parts)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L170" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Test hook: replaces parts of the composition for every process. Returns the
+composition it replaced, to put back when the test ends:</p><pre><code class="makeup elixir" translate="no"><span class="n">previous</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nc">Mica.SaaS</span><span class="o">.</span><span class="n">put_composition</span><span class="p" data-group-id="group-1">(</span><span class="ss">signal_handlers</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-2">[</span><span class="nc">MyTest.Switch</span><span class="p" data-group-id="group-2">]</span><span class="p" data-group-id="group-1">)</span><span class="w">
+</span><span class="n">on_exit</span><span class="p" data-group-id="group-3">(</span><span class="k" data-group-id="group-4">fn</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="nc">Mica.SaaS</span><span class="o">.</span><span class="n">put_composition</span><span class="p" data-group-id="group-5">(</span><span class="n">previous</span><span class="p" data-group-id="group-5">)</span><span class="w"> </span><span class="k" data-group-id="group-4">end</span><span class="p" data-group-id="group-3">)</span></code></pre><p>The result is not checked, so a test can put a broken composition. A test
+that calls it must not be <code class="inline">async</code>.</p>
   </section>
 </section>
 <section class="detail" id="rate_quotas/0">
@@ -1081,7 +1234,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">rate_quotas()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L130" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L310" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1090,7 +1243,7 @@ depend on the caller at compile time.</p>
 
   <section class="docstring">
 
-<p>The default rate quotas of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
+<p>The default rate quotas of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order. Read once, at boot.</p>
   </section>
 </section>
 <section class="detail" id="routes/0">
@@ -1105,7 +1258,7 @@ depend on the caller at compile time.</p>
         <span class="note">(macro)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L250" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L454" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1115,6 +1268,32 @@ depend on the caller at compile time.</p>
   <section class="docstring">
 
 <p>Splices <a href="#routes/0"><code class="inline">routes/0</code></a> of all systems, in <a href="#systems/0"><code class="inline">systems/0</code></a> order.</p>
+  </section>
+</section>
+<section class="detail" id="schemas/0">
+
+  <div class="detail-header">
+    <a href="#schemas/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">schemas()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L332" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The Ecto schemas of every application in the composition: Mica's and those of
+the applications that hold the SaaS module or one of its systems.
+<a href="Mica.Repo.html#orphan?/2"><code class="inline">Mica.Repo.orphan?/2</code></a> and <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> scan them.</p><p>The list comes from the applications, not from a callback per system, so a
+system can't leave one of its schemas out. A schema in an application that
+holds neither the SaaS module nor any of its systems is not in it.</p>
   </section>
 </section>
 <section class="detail" id="sign_in_handoffs/0">
@@ -1127,7 +1306,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">sign_in_handoffs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L115" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L292" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1149,7 +1328,7 @@ depend on the caller at compile time.</p>
       <h1 class="signature" translate="no">signal_handlers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L89" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L260" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1173,7 +1352,7 @@ namespaces: a SaaS system's handler (<code class="inline">Next.Systems.&lt;Syste
       <h1 class="signature" translate="no">systems()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L82" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L253" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -1182,7 +1361,56 @@ namespaces: a SaaS system's handler (<code class="inline">Next.Systems.&lt;Syste
 
   <section class="docstring">
 
+<p>The systems the SaaS is made of, in <a href="#c:systems/0"><code class="inline">systems/0</code></a> order.</p>
+  </section>
+</section>
+<section class="detail" id="validate!/0">
 
+  <div class="detail-header">
+    <a href="#validate!/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">validate!()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L106" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Builds the composition of the configured SaaS, checks it (<a href="#validate!/1"><code class="inline">validate!/1</code></a>) and
+caches it. <code class="inline">Mica.Application</code> runs it at boot, before the children start, so
+a broken composition stops the boot.</p>
+  </section>
+</section>
+<section class="detail" id="validate!/1">
+
+  <div class="detail-header">
+    <a href="#validate!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">validate!(saas)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/saas.ex#L127" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The composition of <code class="inline">saas</code>, after checking it. Raises on:</p><ul><li>a SaaS module that is no <a href="Mica.SaaS.html"><code class="inline">Mica.SaaS</code></a>, or a system that is no <a href="Mica.System.html"><code class="inline">Mica.System</code></a></li><li>a system, signal handler, notifier, sign-in handoff or assignment template
+listed twice, or an event type that two notifiers declare</li><li>a notify channel, Oban queue, Oban cron, Desktop section id or BFF page
+that two systems declare</li><li>a flag default that no system declares</li><li>a permission granted twice, unless the later grant says <code class="inline">widen: true</code>;
+each widening is logged</li><li>a notifier event routed to a channel that no system declares</li></ul>
   </section>
 </section>
 

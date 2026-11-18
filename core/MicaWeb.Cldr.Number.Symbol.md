@@ -56,6 +56,7 @@ of the number systems of a locale.
       :ok,
       %{
         latn: %Cldr.Number.Symbol{
+          approximately_sign: "~",
           decimal: %{standard: "."},
           exponential: "E",
           group: %{standard: ","},
@@ -70,6 +71,7 @@ of the number systems of a locale.
           time_separator: ":"
         },
         thai: %Cldr.Number.Symbol{
+          approximately_sign: "~",
           decimal: %{standard: "."},
           exponential: "E",
           group: %{standard: ","},

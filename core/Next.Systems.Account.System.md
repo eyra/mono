@@ -7,6 +7,8 @@ Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's s
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

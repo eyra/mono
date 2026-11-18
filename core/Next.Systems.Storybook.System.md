@@ -7,6 +7,8 @@ The component storybook of Next's own components (`Next.Storybook`), next to Mic
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

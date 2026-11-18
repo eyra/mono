@@ -59,6 +59,14 @@ permission.
 
 Add a mapping for the given role and permission if does not already exist.
 
+# `granted?`
+
+```elixir
+@spec granted?(t(), permission()) :: boolean()
+```
+
+Whether any role holds the given permission.
+
 # `list_permission_assignments`
 
 # `merge`

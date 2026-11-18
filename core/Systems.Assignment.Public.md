@@ -60,11 +60,18 @@ Downstream housekeeping (owner next-action, view refreshes) lives in
 
 # `create_page_ref`
 
-# `delete_consent_agreement`
-
 # `delete_page_ref`
 
 # `delete_storage_endpoint!`
+
+# `disable_consent`
+
+Switches consent off. The agreement stays linked, with its texts and signatures.
+
+# `enable_consent`
+
+Switches consent on. Reuses the assignment's agreement, so its texts and
+signatures come back; creates one when the assignment has none yet.
 
 # `ensure_tester`
 
@@ -83,6 +90,22 @@ concurrently.
 # `expire_member`
 
 # `expired_user_assignments`
+
+# `finish_if_required_tasks_finished`
+
+Finishes a member whose required tasks are finished but who wasn't finished when their
+last required task completed: one who finished the tasks that count now before their
+manuals stopped counting, or whose last open required item a researcher removed. Called
+when the member opens the assignment. Testers are skipped: they get no Monitor event,
+so nothing would stop every visit from notifying them again.
+
+# `finish_if_required_tasks_finished_by`
+
+Finishes the task's member when completing it finished their required tasks (see
+`required_tasks_finished_by?/2`; `task_before` is the task as it was before) and they
+weren't notified yet (see `finish_member/2`). Called in the transaction that completes
+the task. It first takes a lock per member for the rest of that transaction, so of two
+completions in overlapping transactions the later one sees the other's task finished.
 
 # `funded?`
 
@@ -238,6 +261,18 @@ participation was previously accepted. Business rule: once accepted
 the reward has been approved and paid out; reversing that requires
 admin intervention at the Fund layer, not a routine reject.
 
+# `required_tasks_finished?`
+
+Whether the member finished the required tasks of the assignment: the tasks of the
+workflow items marked required are all finished (completed, accepted or rejected).
+A workflow without required items counts all its items; an empty one is never finished.
+
+# `required_tasks_finished_by?`
+
+Whether completing the task finishes its member's required tasks: the task, as it was
+before its completion, wasn't finished, it counts for `required_tasks_finished?/2`, and
+now all of them are finished.
+
 # `reset_member`
 
 # `reset_opts`
@@ -275,8 +310,6 @@ otherwise the participant can never finish again.
 # `update`
 
 # `update!`
-
-# `update_consent_agreement`
 
 # `update_fund`
 

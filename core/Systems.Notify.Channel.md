@@ -79,6 +79,8 @@ Email is a no-op). Optional — dispatch handles absence as a no-op.
 # `adapter`
 
 The channel module for a channel name, from `Mica.SaaS.notify_channels/0`.
+A name the composition doesn't have (such as a stored channel that a later
+build dropped) is `{:error, :unknown_channel}`.
 
 ---
 

@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -121,7 +121,10 @@ mica
 <p>Defines an authorization module.</p><p>When used, the authorization module expects a list of possible roles.</p><p>An authorization module defines all the permissions with their role mappings.
 Permissions are defined by using the grant_* helpers
 (<a href="Frameworks.GreenLight.Permissions.html#grant_access/2"><code class="inline">Frameworks.GreenLight.Permissions.grant_access/2</code></a>,
-<a href="Frameworks.GreenLight.Permissions.html#grant_actions/2"><code class="inline">Frameworks.GreenLight.Permissions.grant_actions/2</code></a>).</p>
+<a href="Frameworks.GreenLight.Permissions.html#grant_actions/2"><code class="inline">Frameworks.GreenLight.Permissions.grant_actions/2</code></a>).</p><p>The <code class="inline">grants: {module, function, args}</code> option adds grants given as data at
+runtime (see <a href="Frameworks.GreenLight.Permissions.html#grants_permission_map/2"><code class="inline">Frameworks.GreenLight.Permissions.grants_permission_map/2</code></a>).
+<code class="inline">permission_map/0</code> merges them into the compiled grants on its first call and
+caches the result until the node restarts or the compiled grants change.</p>
     </section>
 
 </div>
@@ -178,7 +181,7 @@ Permissions are defined by using the grant_* helpers
       <h1 class="signature" translate="no">auth_module()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/_public.ex#L14" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/_public.ex#L18" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -200,7 +203,7 @@ Permissions are defined by using the grant_* helpers
       <h1 class="signature" translate="no">print_auth_roles(term)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/_public.ex#L14" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/_public.ex#L18" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

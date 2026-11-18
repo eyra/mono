@@ -1,21 +1,16 @@
 # `MicaWeb`
 [🔗](https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L1)
 
-The entrypoint for defining your web interface, such
-as controllers, views, channels and so on.
-
-This can be used in your application as:
+Mica's web module: the entrypoint for defining Mica's web interface, such as
+controllers, views, channels and so on.
 
     use MicaWeb, {:controller, [formats: [:html, :json], layouts: [html: MicaWeb.Layouts], namespace: MicaWeb]}
     use MicaWeb, :html
 
-The definitions below will be executed for every view,
-controller, etc, so keep them short and clean, focused
-on imports, uses and aliases.
-
-Do NOT define functions inside the quoted expressions
-below. Instead, define any helper function in modules
-and import those modules here.
+The blocks are defined in `MicaWeb.Web`. Mica has no router of its own, so its
+code builds paths with `~m` (`MicaWeb.Path`), which every SaaS checks against
+its router. Code of a SaaS uses its own web module (`NextWeb`, `MicaSaasWeb`),
+so its `~p` is verified against that SaaS's router.
 
 # `__using__`
 *macro* 

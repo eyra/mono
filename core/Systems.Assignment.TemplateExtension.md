@@ -4,9 +4,9 @@
 An assignment template that a SaaS adds next to the built-in
 `Systems.Assignment.Templates`.
 
-A SaaS registers its templates in config:
+A system offers its templates with `c:Mica.System.assignment_templates/0`:
 
-    config :mica, :assignment_templates, [MySaaS.SomeTemplate]
+    def assignment_templates, do: [MySaaS.Systems.Some.Template]
 
 Each module defines the template struct (`defstruct [:id]`), implements
 `Systems.Assignment.Template` for it and implements this behaviour.

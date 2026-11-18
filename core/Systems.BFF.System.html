@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -120,8 +120,9 @@ mica
     <section id="moduledoc">
 <p>The backend for frontend (BFF) of the native apps: <code class="inline">GET /bff/page/:page</code>
 answers <code class="inline">{&quot;blocks&quot;: [...]}</code> for a page of the mica-bff spec. Systems serve the
-pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks are the generated
-<code class="inline">Systems.BFF.Blocks.*</code> modules. The app sends the spec version it implements in
+pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks are the
+<code class="inline">Systems.BFF.Blocks.*</code> modules, generated at compile time by the mica_bff
+dependency. The app sends the spec version it implements in
 the <code class="inline">x-bff-spec</code> header, which is only recorded for now.</p>
     </section>
 
@@ -156,6 +157,16 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       </div>
 
         <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:admin_panels/0"><code class="inline">Mica.System.admin_panels/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#assignment_templates/0" data-no-tooltip="" translate="no">assignment_templates()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:assignment_templates/0"><code class="inline">Mica.System.assignment_templates/0</code></a>.</p></div>
 
     </div>
 
@@ -343,7 +354,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">account_tabs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -365,7 +376,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">admin_panels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -375,6 +386,28 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
   <section class="docstring">
 
 <p>Callback implementation for <a href="Mica.System.html#c:admin_panels/0"><code class="inline">Mica.System.admin_panels/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="assignment_templates/0">
+
+  <div class="detail-header">
+    <a href="#assignment_templates/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">assignment_templates()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Mica.System.html#c:assignment_templates/0"><code class="inline">Mica.System.assignment_templates/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="bff_pages/0">
@@ -387,7 +420,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">bff_pages()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -409,7 +442,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">children()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -431,7 +464,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">desktop_sections()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -453,7 +486,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">feature_flags()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -475,7 +508,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">grants()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -497,7 +530,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">migrations_path()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -519,7 +552,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">notifiers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -541,7 +574,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">notify_channels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -563,7 +596,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">oban_crons()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -585,7 +618,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">oban_queues()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -607,7 +640,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">override_routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -629,7 +662,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">rate_quotas()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -651,7 +684,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L11" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L12" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -673,7 +706,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">seeds(deploy_env)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -695,7 +728,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">sign_in_handoffs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -717,7 +750,7 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       <h1 class="signature" translate="no">signal_handlers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L9" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

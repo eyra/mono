@@ -12,6 +12,8 @@ first. The flag is off by default (`Next.SaaS.feature_flags/0`).
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

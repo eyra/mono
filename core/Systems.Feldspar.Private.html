@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -133,9 +133,30 @@ mica
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#entry_path/1" data-no-tooltip="" translate="no">entry_path(name)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The entry's path inside the app. Drops the leading <code class="inline">./</code> that bsdtar
+(<code class="inline">tar -a -cf app.zip .</code>) writes before every name.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#get_backend/0" data-no-tooltip="" translate="no">get_backend()</a>
 
       </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#index_html?/1" data-no-tooltip="" translate="no">index_html?(zip_file)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether the zip holds an <code class="inline">index.html</code> at its root, the page the task modal loads.</p></div>
 
     </div>
 
@@ -153,6 +174,29 @@ mica
     </h2>
 
     <div class="functions-list">
+<section class="detail" id="entry_path/1">
+
+  <div class="detail-header">
+    <a href="#entry_path/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">entry_path(name)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/feldspar/_private.ex#L24" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The entry's path inside the app. Drops the leading <code class="inline">./</code> that bsdtar
+(<code class="inline">tar -a -cf app.zip .</code>) writes before every name.</p>
+  </section>
+</section>
 <section class="detail" id="get_backend/0">
 
   <div class="detail-header">
@@ -173,6 +217,28 @@ mica
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="index_html?/1">
+
+  <div class="detail-header">
+    <a href="#index_html?/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">index_html?(zip_file)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/feldspar/_private.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether the zip holds an <code class="inline">index.html</code> at its root, the page the task modal loads.</p>
   </section>
 </section>
 

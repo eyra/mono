@@ -19,22 +19,17 @@ Every system that contributes something has one `_system.ex`, next to its
       end
 
       def grants do
-        quote do
-          [
-            {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
-            {Systems.Pool.ContentPage, [:admin]}
-          ]
-        end
+        [
+          {Systems.Pool.LandingPage, [:visitor, :member, :owner]},
+          {Systems.Pool.ContentPage, [:admin]}
+        ]
       end
     end
 
-System modules are data modules and never call system code. The router and
-`Mica.Authorization` read `override_routes/0`, `routes/0` and `grants/0` at
-compile time, so these return quoted code. `grants/0` is quoted too: a module
-name used as a value is a runtime dependency, and that would make the router
-recompile whenever any granted page changes. The other callbacks return plain
-values, which `Mica.SaaS` collects (`notify_channels/0` also at compile time,
-for the `Systems.Notify.MessageModel` enum).
+System modules are data modules and never call system code. The router reads
+`override_routes/0` and `routes/0` at compile time, so these return quoted
+code. The other callbacks return plain values, which `Mica.SaaS` collects
+(`grants/0` at boot, for `Mica.Authorization`).
 
 A SaaS extends Mica's systems only through its own systems, for example by
 shadowing Mica's sign-in routes with `override_routes/0`.
@@ -59,6 +54,15 @@ after the tabs of earlier systems in `c:Mica.SaaS.systems/0`.
 
 The system's `Systems.Admin.Panel` modules: tabs on the Admin page, shown
 after the panels of earlier systems in `c:Mica.SaaS.systems/0`.
+
+# `assignment_templates`
+
+```elixir
+@callback assignment_templates() :: [module()]
+```
+
+The system's `Systems.Assignment.TemplateExtension` modules: assignment
+templates offered next to the built-in `Systems.Assignment.Templates`.
 
 # `bff_pages`
 
@@ -103,11 +107,17 @@ may declare the same flag.
 # `grants`
 
 ```elixir
-@callback grants() :: Macro.t()
+@callback grants() :: [
+  {module(), [atom()] | %{required(atom()) =&gt; [atom()]}}
+  | {module(), [atom()] | %{required(atom()) =&gt; [atom()]}, [{:widen, true}]}
+]
 ```
 
-Quoted list of page grants: `{module, roles}` for `grant_access/2`, or
-`{module, %{action => roles}}` for `grant_actions/2`.
+The system's page grants: `{module, roles}` as for `grant_access/2`, or
+`{module, %{action => roles}}` as for `grant_actions/2`. A permission is
+granted once; a grant that adds roles to a permission granted before says so
+with `widen: true` as a third element (`{module, roles, widen: true}`), and
+is logged at boot.
 
 # `migrations_path`
 

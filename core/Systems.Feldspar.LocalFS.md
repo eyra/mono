@@ -15,7 +15,8 @@
 
 Extracts the zip into a new app folder and returns the folder name, or
 `{:error, :invalid_zip}` when the file is no zip, has an entry that would
-be written outside the app folder, or can't be extracted.
+be written outside the app folder, or can't be extracted, and
+`{:error, :no_index_html}` when it has no `index.html` at its root.
 
 ---
 

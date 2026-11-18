@@ -10,6 +10,11 @@ Permissions are defined by using the grant_* helpers
 (`Frameworks.GreenLight.Permissions.grant_access/2`,
 `Frameworks.GreenLight.Permissions.grant_actions/2`).
 
+The `grants: {module, function, args}` option adds grants given as data at
+runtime (see `Frameworks.GreenLight.Permissions.grants_permission_map/2`).
+`permission_map/0` merges them into the compiled grants on its first call and
+caches the result until the node restarts or the compiled grants change.
+
 # `auth_module`
 
 # `print_auth_roles`

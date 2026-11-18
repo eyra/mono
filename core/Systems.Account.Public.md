@@ -82,7 +82,7 @@ Delivers the update email instructions to the given user.
 
 ## Examples
 
-    iex> deliver_update_email_instructions(user, current_email, &url(conn, ~p"/user/update-email/#{&1}"
+    iex> deliver_update_email_instructions(user, current_email, &url(conn, ~m"/user/update-email/#{&1}"
     {:ok, %{to: ..., body: ...}}
 
 # `deliver_user_confirmation_instructions`
@@ -91,10 +91,10 @@ Delivers the confirmation email instructions to the given user.
 
 ## Examples
 
-    iex> deliver_user_confirmation_instructions(user, &url(conn, ~p"/user/settings/activate-account/#{&1}"))
+    iex> deliver_user_confirmation_instructions(user, &url(conn, ~m"/user/settings/activate-account/#{&1}"))
     {:ok, %{to: ..., body: ...}}
 
-    iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~p"/user/settings/activate-account/#{&1}"))
+    iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~m"/user/settings/activate-account/#{&1}"))
     {:error, :already_confirmed}
 
 # `deliver_user_reset_password_instructions`
@@ -103,7 +103,7 @@ Delivers the reset password email to the given user.
 
 ## Examples
 
-    iex> deliver_user_reset_password_instructions(user, &url(conn, ~p"/user/reset-password/#{&1}))
+    iex> deliver_user_reset_password_instructions(user, &url(conn, ~m"/user/reset-password/#{&1}))
     {:ok, %{to: ..., body: ...}}
 
 # `external?`

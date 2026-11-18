@@ -422,8 +422,8 @@ and any options provided are passed to that function.
   {:ok, String.t()} | {:error, {module(), String.t()}}
 ```
 
-Formats a number and applies the `:approximately` format for
-a locale and number system.
+Formats a number as approximate. The locale's approximately sign
+takes the place of the minus sign, as CLDR specifies.
 
 ## Arguments
 

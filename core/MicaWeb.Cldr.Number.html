@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -121,7 +121,7 @@ mica
 <p>Formats numbers and currencies based upon CLDR's decimal formats specification.</p><p>The format specification is documentated in <a rel="nofollow" href="http://unicode.org/reports/tr35/tr35-numbers.html#Number_Formats">Unicode TR35</a>.
 There are several classes of formatting including non-scientific, scientific,
 rules based (for spelling and ordinal formats), compact formats that display <code class="inline">1k</code>
-rather than <code class="inline">1,000</code> and so on.  See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.html#to_string/2"><code class="inline">Cldr.Number.to_string/2</code></a> for specific formatting
+rather than <code class="inline">1,000</code> and so on.  See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.html#to_string/2"><code class="inline">Cldr.Number.to_string/2</code></a> for specific formatting
 options.</p><h3 id="module-non-scientific-notation-formatting" class="section-heading"><a href="#module-non-scientific-notation-formatting" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Non-Scientific Notation Formatting</span></h3><p>The following description applies to formats that do not use scientific
 notation or significant digits:</p><ul><li><p>If the number of actual integer digits exceeds the maximum integer digits,
 then only the least significant digits are shown. For example, 1997 is
@@ -252,8 +252,8 @@ a list of strings and numbers.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Formats a number and applies the <code class="inline">:approximately</code> format for
-a locale and number system.</p></div>
+        <div class="summary-synopsis"><p>Formats a number as approximate. The locale's approximately sign
+takes the place of the minus sign, as CLDR specifies.</p></div>
 
     </div>
 
@@ -528,8 +528,8 @@ financial instruments.</p></li></ul><h2 id="resolve_currency/2-examples" class="
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> resolve_per(<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) ::
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>()
-  | [<a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>() | <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()]
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>()
+  | [<a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>() | <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()]
   | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
@@ -574,7 +574,7 @@ The default is <code class="inline">options[:backend].get_locale()</code></li></
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> resolve_pers([<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), ...], <a href="https://elixir.hexdocs.pm/Keyword.html#t:t/0">Keyword.t</a>()) :: [
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>() | <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Parser.html#t:per/0">Cldr.Number.Parser.per</a>() | <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()
 ]</pre>
 
       </div>
@@ -615,7 +615,7 @@ a list of strings and numbers.</p><h2 id="scan/2-arguments" class="section-headi
 <code class="inline">:decimal</code> or <code class="inline">nil</code>. The default is <code class="inline">nil</code>
 meaning that the type auto-detected as either
 an <code class="inline">integer</code> or a <code class="inline">float</code>.</p></li><li><p><code class="inline">:locale</code> is any locale returned by <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_locale_names/1"><code class="inline">Cldr.known_locale_names/1</code></a>
-or a <code class="inline">Cldr.LanguageTag.t</code>. The default is <a href="MicaWeb.Cldr.html#get_locale/0"><code class="inline">MicaWeb.Cldr.get_locale/0</code></a>.</p></li></ul><h2 id="scan/2-returns" class="section-heading"><a href="#scan/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li>A list of strings and numbers</li></ul><h2 id="scan/2-notes" class="section-heading"><a href="#scan/2-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><p>Number parsing is performed by <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Parser.html#parse/2"><code class="inline">Cldr.Number.Parser.parse/2</code></a>
+or a <code class="inline">Cldr.LanguageTag.t</code>. The default is <a href="MicaWeb.Cldr.html#get_locale/0"><code class="inline">MicaWeb.Cldr.get_locale/0</code></a>.</p></li></ul><h2 id="scan/2-returns" class="section-heading"><a href="#scan/2-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li>A list of strings and numbers</li></ul><h2 id="scan/2-notes" class="section-heading"><a href="#scan/2-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><p>Number parsing is performed by <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Parser.html#parse/2"><code class="inline">Cldr.Number.Parser.parse/2</code></a>
 and any options provided are passed to that function.</p><h2 id="scan/2-examples" class="section-heading"><a href="#scan/2-examples" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Examples</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MicaWeb.Cldr.Number</span><span class="o">.</span><span class="n">scan</span><span class="p" data-group-id="group-1">(</span><span class="s">&quot;£1_000_000.34&quot;</span><span class="p" data-group-id="group-1">)</span><span class="w">
 </span><span class="p" data-group-id="group-2">[</span><span class="s">&quot;£&quot;</span><span class="p">,</span><span class="w"> </span><span class="mf">1000000.34</span><span class="p" data-group-id="group-2">]</span><span class="w">
 
@@ -660,9 +660,9 @@ and any options provided are passed to that function.</p><h2 id="scan/2-examples
 
       </div>
 
-<p>Formats a number and applies the <code class="inline">:approximately</code> format for
-a locale and number system.</p><h2 id="to_approx_string/2-arguments" class="section-heading"><a href="#to_approx_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><p><code class="inline">number</code> is an integer, float or Decimal to be formatted</p></li><li><p><code class="inline">options</code> is a keyword list defining how the number is to be formatted.
-See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
+<p>Formats a number as approximate. The locale's approximately sign
+takes the place of the minus sign, as CLDR specifies.</p><h2 id="to_approx_string/2-arguments" class="section-heading"><a href="#to_approx_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><p><code class="inline">number</code> is an integer, float or Decimal to be formatted</p></li><li><p><code class="inline">options</code> is a keyword list defining how the number is to be formatted.
+See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
 options.</p></li></ul><h2 id="to_approx_string/2-example" class="section-heading"><a href="#to_approx_string/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MicaWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_approx_string</span><span class="w"> </span><span class="mi">1234</span><span class="w">
 </span><span class="p" data-group-id="group-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;~1,234&quot;</span><span class="p" data-group-id="group-1">}</span></code></pre>
   </section>
@@ -732,7 +732,7 @@ options.</p></li></ul><h2 id="to_at_least_string/2-example" class="section-headi
 
 <p>Formats a number and applies the <code class="inline">:at_most</code> format for
 a locale and number system.</p><h2 id="to_at_most_string/2-arguments" class="section-heading"><a href="#to_at_most_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><p><code class="inline">number</code> is an integer, float or Decimal to be formatted</p></li><li><p><code class="inline">options</code> is a keyword list defining how the number is to be formatted.
-See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
+See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
 options.</p></li></ul><h2 id="to_at_most_string/2-example" class="section-heading"><a href="#to_at_most_string/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MicaWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_at_most_string</span><span class="w"> </span><span class="mi">1234</span><span class="w">
 </span><span class="p" data-group-id="group-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;≤1,234&quot;</span><span class="p" data-group-id="group-1">}</span></code></pre>
   </section>
@@ -767,7 +767,7 @@ options.</p></li></ul><h2 id="to_at_most_string/2-example" class="section-headin
 
 <p>Formats the first and last numbers of a range and applies
 the <code class="inline">:range</code> format for a locale and number system.</p><h2 id="to_range_string/2-arguments" class="section-heading"><a href="#to_range_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><p><code class="inline">number</code> is an integer, float or Decimal to be formatted</p></li><li><p><code class="inline">options</code> is a keyword list defining how the number is to be formatted.
-See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
+See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.html#to_string/3"><code class="inline">Cldr.Number.to_string/3</code></a> for a description of the available
 options.</p></li></ul><h2 id="to_range_string/2-example" class="section-heading"><a href="#to_range_string/2-example" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Example</span></h2><pre><code class="makeup elixir" translate="no"><span class="gp unselectable">iex&gt; </span><span class="nc">MicaWeb.Cldr.Number</span><span class="o">.</span><span class="n">to_range_string</span><span class="w"> </span><span class="mi">1234</span><span class="o">..</span><span class="mi">5678</span><span class="w">
 </span><span class="p" data-group-id="group-1">{</span><span class="ss">:ok</span><span class="p">,</span><span class="w"> </span><span class="s">&quot;1,234–5,678&quot;</span><span class="p" data-group-id="group-1">}</span></code></pre>
   </section>
@@ -801,14 +801,14 @@ options.</p></li></ul><h2 id="to_range_string/2-example" class="section-heading"
       </div>
 
 <p>Returns a number formatted into a string according to a format pattern and options.</p><h2 id="to_string/2-arguments" class="section-heading"><a href="#to_string/2-arguments" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Arguments</span></h2><ul><li><p><code class="inline">number</code> is an integer, float or Decimal to be formatted</p></li><li><p><code class="inline">options</code> is a keyword list defining how the number is to be formatted.</p></li></ul><h2 id="to_string/2-options" class="section-heading"><a href="#to_string/2-options" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Options</span></h2><ul><li><p><code class="inline">format</code>: the format style or a format string defining how the number is
-formatted. See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Format.html"><code class="inline">Cldr.Number.Format</code></a> for how format strings can be constructed.
-See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Format.html#format_styles_for/3"><code class="inline">Cldr.Number.Format.format_styles_for/3</code></a> to return available format styles
+formatted. See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Format.html"><code class="inline">Cldr.Number.Format</code></a> for how format strings can be constructed.
+See <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Format.html#format_styles_for/3"><code class="inline">Cldr.Number.Format.format_styles_for/3</code></a> to return available format styles
 for a locale. The default <code class="inline">format</code> is <code class="inline">:standard</code>.</p></li><li><p>If <code class="inline">:format</code> is set to <code class="inline">:long</code> or <code class="inline">:short</code> then the formatting depends on
 whether <code class="inline">:currency</code> is specified. If not specified then the number is
 formatted as <code class="inline">:decimal_long</code> or <code class="inline">:decimal_short</code>. If <code class="inline">:currency</code> is
 specified the number is formatted as <code class="inline">:currency_long</code> or
 <code class="inline">:currency_short</code> and <code class="inline">:fractional_digits</code> is set to 0 as a default.</p></li><li><p><code class="inline">:format</code> may also be a format defined by CLDR's Rules Based Number
-Formats (RBNF).  Further information is found in the module <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a>.
+Formats (RBNF).  Further information is found in the module <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a>.
 The most commonly used formats in this category are to spell out the
 number in a the locales language.  The applicable formats are <code class="inline">:spellout</code>,
 <code class="inline">:spellout_year</code>, <code class="inline">:ordinal</code>.  A number can also be formatted as roman
@@ -835,7 +835,7 @@ should be used to define the separators and digits for the formatted
 number. If <code class="inline">number_system</code> is an <code class="inline">atom</code> then <code class="inline">number_system</code> is
 interpreted as a number system. If the <code class="inline">:number_system</code> is
 <code class="inline">binary</code> then it is interpreted as a number system name. See
-<a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#number_system_names_for/2"><code class="inline">Cldr.Number.System.number_system_names_for/2</code></a>. The default is <code class="inline">:default</code>.</p></li><li><p><code class="inline">:locale</code>: determines the locale in which the number is formatted. See
+<a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#number_system_names_for/2"><code class="inline">Cldr.Number.System.number_system_names_for/2</code></a>. The default is <code class="inline">:default</code>.</p></li><li><p><code class="inline">:locale</code>: determines the locale in which the number is formatted. See
 <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>. The default is<a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#get_locale/0"><code class="inline">Cldr.get_locale/0</code></a> which is the
 locale currently in affect for this <a href="https://elixir.hexdocs.pm/Process.html"><code class="inline">Process</code></a> and which is set by
 <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#put_locale/1"><code class="inline">Cldr.put_locale/1</code></a>.</p></li><li><p>If <code class="inline">:fractional_digits</code> is set to a positive integer value then the number
@@ -1017,8 +1017,8 @@ returned.</p><h2 id="to_string!/2-arguments" class="section-heading"><a href="#t
 
           <pre translate="no"><span class="attribute">@spec</span> validate_number_system(
   <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.Locale.html#t:locale_name/0">Cldr.Locale.locale_name</a>() | <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html#t:t/0">Cldr.LanguageTag.t</a>(),
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>() | <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:types/0">Cldr.Number.System.types</a>()
-) :: {:ok, <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>() | <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:types/0">Cldr.Number.System.types</a>()
+) :: {:ok, <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 

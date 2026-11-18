@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -173,6 +173,18 @@ mica
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#done_button?/2" data-no-tooltip="" translate="no">done_button?(assignment, panel_info)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether the participant sees the &quot;Next, I am done&quot; button. Only the vertical
+task list has it; the horizontal list finishes after its last task. The done
+screen shows Back exactly then, so the participant can undo the click.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#ensure_affiliate/1" data-no-tooltip="" translate="no">ensure_affiliate(assignment)</a>
 
       </div>
@@ -184,6 +196,17 @@ mica
         <a href="#ensure_affiliate!/1" data-no-tooltip="" translate="no">ensure_affiliate!(assignment)</a>
 
       </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#finished_logged?/2" data-no-tooltip="" translate="no">finished_logged?(assignment, user_ref)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether the Monitor has the member's finished event for the assignment, which every
+<code class="inline">{:crew_member, :finished_tasks}</code> logs (testers excepted).</p></div>
 
     </div>
 
@@ -248,9 +271,13 @@ has been deleted, which leaves its tasks orphaned.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
-        <a href="#no_consent?/2" data-no-tooltip="" translate="no">no_consent?(map, user_ref)</a>
+        <a href="#no_consent?/2" data-no-tooltip="" translate="no">no_consent?(assignment, user_ref)</a>
 
       </div>
+
+        <div class="summary-synopsis"><p>True when the participant has to give consent and hasn't. Nobody has to consent
+again: a signature on any revision counts. Whoever joined while consent was off
+is never asked.</p></div>
 
     </div>
 
@@ -296,6 +323,14 @@ has been deleted, which leaves its tasks orphaned.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#runtime_config/1" data-no-tooltip="" translate="no">runtime_config(assignment)</a>
+
+      </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#slugify/1" data-no-tooltip="" translate="no">slugify(title)</a>
 
       </div>
@@ -323,6 +358,18 @@ has been deleted, which leaves its tasks orphaned.</p></div>
         <a href="#task_template/2" data-no-tooltip="" translate="no">task_template(model, item_model)</a>
 
       </div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#task_view/1" data-no-tooltip="" translate="no">task_view(assignment)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Which task view the participant gets: none without tasks, the single task
+view for one task, and for more the task list the template chose: the
+vertical <code class="inline">:list</code> or the <code class="inline">:horizontal_list</code>.</p></div>
 
     </div>
 
@@ -358,7 +405,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">allowed_external_panel_ids()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L168" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L248" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -380,7 +427,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">clear_performance_event(assignment, topic, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L209" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -402,7 +449,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">connection_title(atom, storage_service_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L182" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L262" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -424,7 +471,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">connection_view_module(atom)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L179" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L259" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -446,7 +493,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">connector_popup_module(atom)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L176" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L256" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -456,6 +503,30 @@ has been deleted, which leaves its tasks orphaned.</p></div>
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="done_button?/2">
+
+  <div class="detail-header">
+    <a href="#done_button?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">done_button?(assignment, panel_info)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L76" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether the participant sees the &quot;Next, I am done&quot; button. Only the vertical
+task list has it; the horizontal list finishes after its last task. The done
+screen shows Back exactly then, so the participant can undo the click.</p>
   </section>
 </section>
 <section class="detail" id="ensure_affiliate/1">
@@ -502,6 +573,29 @@ has been deleted, which leaves its tasks orphaned.</p></div>
 
   </section>
 </section>
+<section class="detail" id="finished_logged?/2">
+
+  <div class="detail-header">
+    <a href="#finished_logged?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">finished_logged?(assignment, user_ref)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L205" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Whether the Monitor has the member's finished event for the assignment, which every
+<code class="inline">{:crew_member, :finished_tasks}</code> logs (testers excepted).</p>
+  </section>
+</section>
 <section class="detail" id="get_crew_member/2">
 
     <span id="get_crew_member/1"></span>
@@ -514,7 +608,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">get_crew_member(task, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L207" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L287" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -536,7 +630,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">get_preview_url(assignment)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L153" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L233" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -558,7 +652,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">get_template(special)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L90" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -582,7 +676,7 @@ has been deleted, which leaves its tasks orphaned.</p></div>
       <h1 class="signature" translate="no">get_workflow_item(task, preload \\ [])</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L197" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L277" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -605,7 +699,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">log_performance_event(assignment, event)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L117" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L189" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -627,7 +721,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">log_performance_event(assignment, crew_task, topic)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L99" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L171" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -649,7 +743,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">member_id(task_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L218" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L298" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -668,10 +762,10 @@ has been deleted, which leaves its tasks orphaned.</p>
       <i class="ri-link-m" aria-hidden="true"></i>
     </a>
     <div class="heading-with-actions">
-      <h1 class="signature" translate="no">no_consent?(map, user_ref)</h1>
+      <h1 class="signature" translate="no">no_consent?(assignment, user_ref)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L58" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L110" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -680,7 +774,9 @@ has been deleted, which leaves its tasks orphaned.</p>
 
   <section class="docstring">
 
-
+<p>True when the participant has to give consent and hasn't. Nobody has to consent
+again: a signature on any revision counts. Whoever joined while consent was off
+is never asked.</p>
   </section>
 </section>
 <section class="detail" id="page_body_default/1">
@@ -693,7 +789,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">page_body_default(atom)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L245" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -715,7 +811,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">page_title_default(atom)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L159" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L239" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -737,7 +833,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">queue_progress_event(assignment, event, crew_member)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L72" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -759,7 +855,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">reward_idempotence_key(participation_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L138" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L218" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -781,7 +877,29 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">reward_idempotence_key(assignment_id, user_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L224" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+
+  </section>
+</section>
+<section class="detail" id="runtime_config/1">
+
+  <div class="detail-header">
+    <a href="#runtime_config/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">runtime_config(assignment)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L43" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -803,7 +921,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">slugify(title)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L93" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -825,7 +943,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">storage_endpoint_key(model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L134" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L214" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -847,7 +965,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">task_identifier(assignment, workflow_item, member_id)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L228" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L308" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -869,7 +987,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">task_template(model, item_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L224" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L304" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -879,6 +997,30 @@ has been deleted, which leaves its tasks orphaned.</p>
   <section class="docstring">
 
 
+  </section>
+</section>
+<section class="detail" id="task_view/1">
+
+  <div class="detail-header">
+    <a href="#task_view/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">task_view(assignment)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Which task view the participant gets: none without tasks, the single task
+view for one task, and for more the task list the template chose: the
+vertical <code class="inline">:list</code> or the <code class="inline">:horizontal_list</code>.</p>
   </section>
 </section>
 <section class="detail" id="workflow_item_id/1">
@@ -891,7 +1033,7 @@ has been deleted, which leaves its tasks orphaned.</p>
       <h1 class="signature" translate="no">workflow_item_id(task_model)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L221" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/assignment/_private.ex#L301" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

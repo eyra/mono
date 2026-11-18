@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -276,7 +276,7 @@ string or raises on error.</p></div>
 
           <pre translate="no"><span class="attribute">@spec</span> number_system_for(
   <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
 ) ::
   {:ok, [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()]} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
@@ -329,7 +329,7 @@ it is returned as is.</p><h2 id="number_system_for/2-examples" class="section-he
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> number_system_from_locale(<a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()) ::
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>() | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>() | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
@@ -504,7 +504,7 @@ or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html"><code cla
 
           <pre translate="no"><span class="attribute">@spec</span> number_systems_like(
   <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>(),
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()
 ) ::
   {:ok, <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">list</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
@@ -535,10 +535,10 @@ or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html"><code cla
       <div class="specs">
 
           <pre translate="no"><span class="attribute">@spec</span> system_name_from(
-  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>(),
+  <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>(),
   <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.Locale.html#t:locale_reference/0">Cldr.Locale.locale_reference</a>()
 ) ::
-  {:ok, <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
+  {:ok, <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.System.html#t:system_name/0">Cldr.Number.System.system_name</a>()} | {:error, {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}}</pre>
 
       </div>
 
@@ -593,12 +593,12 @@ formatting.</p><ul><li><p><code class="inline">number</code> is a <code class="i
 returned by <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_number_system_types/0"><code class="inline">Cldr.known_number_system_types/0</code></a></p></li></ul><p>There are two types of number systems in CLDR:</p><ul><li><p><code class="inline">:numeric</code> in which the number system defines
 a direct mapping between the latin digits <code class="inline">0..9</code>
 into a the number system equivalent.  In this case,
-<a href="#to_system/2"><code class="inline">to_system/2</code></a> invokes <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Number.Transliterate.html#transliterate_digits/3"><code class="inline">Cldr.Number.Transliterate.transliterate_digits/3</code></a>
+<a href="#to_system/2"><code class="inline">to_system/2</code></a> invokes <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Number.Transliterate.html#transliterate_digits/3"><code class="inline">Cldr.Number.Transliterate.transliterate_digits/3</code></a>
 for the given number.</p></li><li><p><code class="inline">:algorithmic</code> in which the number system
 does not have the same structure as the <code class="inline">:latn</code>
 number system and therefore the conversion is
 done algorithmically.  For CLDR the algorithm
-is implemented through <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.3/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a> rulesets.
+is implemented through <a href="https://ex-cldr-numbers.hexdocs.pm/2.38.4/Cldr.Rbnf.html"><code class="inline">Cldr.Rbnf</code></a> rulesets.
 These rulesets are considered by CLDR to be
 less rigorous than the <code class="inline">:numeric</code> number systems
 and caution and testing for a specific use case

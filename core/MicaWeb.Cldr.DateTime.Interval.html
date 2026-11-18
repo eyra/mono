@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -121,7 +121,7 @@ mica
 <p>Interval formats allow for software to format intervals like &quot;Jan 10-12, 2008&quot; as a
 shorter and more natural format than &quot;Jan 10, 2008 - Jan 12, 2008&quot;. They are designed
 to take a start and end date, time or datetime plus a formatting pattern
-and use that information to produce a localized format.</p><p>See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.Interval.html#to_string/3"><code class="inline">Cldr.Interval.to_string/3</code></a> and <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.DateTime.Interval.html#to_string/3"><code class="inline">Cldr.DateTime.Interval.to_string/3</code></a></p>
+and use that information to produce a localized format.</p><p>See <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.Interval.html#to_string/3"><code class="inline">Cldr.Interval.to_string/3</code></a> and <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.DateTime.Interval.html#to_string/3"><code class="inline">Cldr.DateTime.Interval.to_string/3</code></a></p>
     </section>
 
 </div>
@@ -281,7 +281,7 @@ or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html#t:t/0"><co
 be transliterated</p></li></ul><h2 id="to_string/3-returns" class="section-heading"><a href="#to_string/3-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><p><code class="inline">{:ok, string}</code> or</p></li><li><p><code class="inline">{:error, {exception, reason}}</code></p></li></ul><h2 id="to_string/3-notes" class="section-heading"><a href="#to_string/3-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><ul><li><p><code class="inline">CalendarInterval</code> support requires adding the
 dependency <a href="https://hex.pm/packages/calendar_interval">calendar_interval</a>
 to the <code class="inline">deps</code> configuration in <code class="inline">mix.exs</code>.</p></li><li><p>For more information on interval format string
-see the <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.Interval.html"><code class="inline">Cldr.Interval</code></a>.</p></li><li><p>The available predefined formats that can be applied are the
+see the <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.Interval.html"><code class="inline">Cldr.Interval</code></a>.</p></li><li><p>The available predefined formats that can be applied are the
 keys of the map returned by <code class="inline">Cldr.DateTime.Format.interval_formats(&quot;en&quot;, :gregorian)</code>
 where <code class="inline">&quot;en&quot;</code> can be replaced by any configuration locale name and <code class="inline">:gregorian</code>
 is the underlying CLDR calendar type.</p></li><li><p>In the case where <code class="inline">from</code> and <code class="inline">to</code> are equal, a single
@@ -338,7 +338,7 @@ specific format type or a string representing of an interval
 format. The default is <code class="inline">:medium</code>.</p></li><li><p><code class="inline">locale</code> is any valid locale name returned by <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html#known_locale_names/0"><code class="inline">Cldr.known_locale_names/0</code></a>
 or a <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.LanguageTag.html#t:t/0"><code class="inline">Cldr.LanguageTag.t/0</code></a> struct.  The default is <a href="MicaWeb.Cldr.html#get_locale/0"><code class="inline">Elixir.MicaWeb.Cldr.get_locale/0</code></a>.</p></li><li><p><code class="inline">number_system:</code> a number system into which the formatted date digits should
 be transliterated.</p></li></ul><h2 id="to_string!/3-returns" class="section-heading"><a href="#to_string!/3-returns" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Returns</span></h2><ul><li><p><code class="inline">string</code> or</p></li><li><p>raises an exception</p></li></ul><h2 id="to_string!/3-notes" class="section-heading"><a href="#to_string!/3-notes" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Notes</span></h2><ul><li><p>For more information on interval format string
-see the <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.6/Cldr.Interval.html"><code class="inline">Cldr.Interval</code></a>.</p></li><li><p>The available predefined formats that can be applied are the
+see the <a href="https://ex-cldr-dates-times.hexdocs.pm/2.25.8/Cldr.Interval.html"><code class="inline">Cldr.Interval</code></a>.</p></li><li><p>The available predefined formats that can be applied are the
 keys of the map returned by <code class="inline">Cldr.DateTime.Format.interval_formats(&quot;en&quot;, :gregorian)</code>
 where <code class="inline">&quot;en&quot;</code> can be replaced by any configuration locale name and <code class="inline">:gregorian</code>
 is the underlying CLDR calendar type.</p></li><li><p>In the case where <code class="inline">from</code> and <code class="inline">to</code> are equal, a single

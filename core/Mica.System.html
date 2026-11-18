@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -132,20 +132,15 @@ mica
   </span><span class="k" data-group-id="group-2">end</span><span class="w">
 
   </span><span class="kd">def</span><span class="w"> </span><span class="nf">grants</span><span class="w"> </span><span class="k" data-group-id="group-5">do</span><span class="w">
-    </span><span class="k">quote</span><span class="w"> </span><span class="k" data-group-id="group-6">do</span><span class="w">
-      </span><span class="p" data-group-id="group-7">[</span><span class="w">
-        </span><span class="p" data-group-id="group-8">{</span><span class="nc">Systems.Pool.LandingPage</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-9">[</span><span class="ss">:visitor</span><span class="p">,</span><span class="w"> </span><span class="ss">:member</span><span class="p">,</span><span class="w"> </span><span class="ss">:owner</span><span class="p" data-group-id="group-9">]</span><span class="p" data-group-id="group-8">}</span><span class="p">,</span><span class="w">
-        </span><span class="p" data-group-id="group-10">{</span><span class="nc">Systems.Pool.ContentPage</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-11">[</span><span class="ss">:admin</span><span class="p" data-group-id="group-11">]</span><span class="p" data-group-id="group-10">}</span><span class="w">
-      </span><span class="p" data-group-id="group-7">]</span><span class="w">
-    </span><span class="k" data-group-id="group-6">end</span><span class="w">
+    </span><span class="p" data-group-id="group-6">[</span><span class="w">
+      </span><span class="p" data-group-id="group-7">{</span><span class="nc">Systems.Pool.LandingPage</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-8">[</span><span class="ss">:visitor</span><span class="p">,</span><span class="w"> </span><span class="ss">:member</span><span class="p">,</span><span class="w"> </span><span class="ss">:owner</span><span class="p" data-group-id="group-8">]</span><span class="p" data-group-id="group-7">}</span><span class="p">,</span><span class="w">
+      </span><span class="p" data-group-id="group-9">{</span><span class="nc">Systems.Pool.ContentPage</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-10">[</span><span class="ss">:admin</span><span class="p" data-group-id="group-10">]</span><span class="p" data-group-id="group-9">}</span><span class="w">
+    </span><span class="p" data-group-id="group-6">]</span><span class="w">
   </span><span class="k" data-group-id="group-5">end</span><span class="w">
-</span><span class="k" data-group-id="group-1">end</span></code></pre><p>System modules are data modules and never call system code. The router and
-<a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a> read <code class="inline">override_routes/0</code>, <code class="inline">routes/0</code> and <code class="inline">grants/0</code> at
-compile time, so these return quoted code. <code class="inline">grants/0</code> is quoted too: a module
-name used as a value is a runtime dependency, and that would make the router
-recompile whenever any granted page changes. The other callbacks return plain
-values, which <a href="Mica.SaaS.html"><code class="inline">Mica.SaaS</code></a> collects (<code class="inline">notify_channels/0</code> also at compile time,
-for the <a href="Systems.Notify.MessageModel.html"><code class="inline">Systems.Notify.MessageModel</code></a> enum).</p><p>A SaaS extends Mica's systems only through its own systems, for example by
+</span><span class="k" data-group-id="group-1">end</span></code></pre><p>System modules are data modules and never call system code. The router reads
+<code class="inline">override_routes/0</code> and <code class="inline">routes/0</code> at compile time, so these return quoted
+code. The other callbacks return plain values, which <a href="Mica.SaaS.html"><code class="inline">Mica.SaaS</code></a> collects
+(<code class="inline">grants/0</code> at boot, for <a href="Mica.Authorization.html"><code class="inline">Mica.Authorization</code></a>).</p><p>A SaaS extends Mica's systems only through its own systems, for example by
 shadowing Mica's sign-in routes with <code class="inline">override_routes/0</code>.</p><p>Callbacks are only ever added with a default; removing or changing one breaks
 the contract with every SaaS.</p>
     </section>
@@ -183,6 +178,17 @@ after the tabs of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code 
 
         <div class="summary-synopsis"><p>The system's <a href="Systems.Admin.Panel.html"><code class="inline">Systems.Admin.Panel</code></a> modules: tabs on the Admin page, shown
 after the panels of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:assignment_templates/0" data-no-tooltip="" translate="no">assignment_templates()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The system's <a href="Systems.Assignment.TemplateExtension.html"><code class="inline">Systems.Assignment.TemplateExtension</code></a> modules: assignment
+templates offered next to the built-in <a href="Systems.Assignment.Templates.html"><code class="inline">Systems.Assignment.Templates</code></a>.</p></div>
 
     </div>
 
@@ -240,8 +246,11 @@ may declare the same flag.</p></div>
 
       </div>
 
-        <div class="summary-synopsis"><p>Quoted list of page grants: <code class="inline">{module, roles}</code> for <code class="inline">grant_access/2</code>, or
-<code class="inline">{module, %{action =&gt; roles}}</code> for <code class="inline">grant_actions/2</code>.</p></div>
+        <div class="summary-synopsis"><p>The system's page grants: <code class="inline">{module, roles}</code> as for <code class="inline">grant_access/2</code>, or
+<code class="inline">{module, %{action =&gt; roles}}</code> as for <code class="inline">grant_actions/2</code>. A permission is
+granted once; a grant that adds roles to a permission granted before says so
+with <code class="inline">widen: true</code> as a third element (<code class="inline">{module, roles, widen: true}</code>), and
+is logged at boot.</p></div>
 
     </div>
 
@@ -392,7 +401,7 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
       <h1 class="signature" translate="no">account_tabs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L82" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -421,7 +430,7 @@ after the tabs of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code 
       <h1 class="signature" translate="no">admin_panels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L76" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L78" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -440,6 +449,35 @@ after the tabs of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code 
 after the panels of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a>.</p>
   </section>
 </section>
+<section class="detail" id="c:assignment_templates/0">
+
+  <div class="detail-header">
+    <a href="#c:assignment_templates/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">assignment_templates()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L105" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> assignment_templates() :: [<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>()]</pre>
+
+      </div>
+
+<p>The system's <a href="Systems.Assignment.TemplateExtension.html"><code class="inline">Systems.Assignment.TemplateExtension</code></a> modules: assignment
+templates offered next to the built-in <a href="Systems.Assignment.Templates.html"><code class="inline">Systems.Assignment.Templates</code></a>.</p>
+  </section>
+</section>
 <section class="detail" id="c:bff_pages/0">
 
   <div class="detail-header">
@@ -450,7 +488,7 @@ after the panels of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><cod
       <h1 class="signature" translate="no">bff_pages()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L104" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L112" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -480,7 +518,7 @@ mica-bff spec lists it (<a href="Systems.BFF.Blocks.html#pages/0"><code class="i
       <h1 class="signature" translate="no">children()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L110" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L118" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -509,7 +547,7 @@ mica-bff spec lists it (<a href="Systems.BFF.Blocks.html#pages/0"><code class="i
       <h1 class="signature" translate="no">desktop_sections()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L90" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L92" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -540,7 +578,7 @@ placement.</p>
       <h1 class="signature" translate="no">feature_flags()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L134" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L142" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -570,7 +608,7 @@ may declare the same flag.</p>
       <h1 class="signature" translate="no">grants()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L58" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -581,12 +619,18 @@ may declare the same flag.</p>
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@callback</span> grants() :: <a href="https://elixir.hexdocs.pm/Macro.html#t:t/0">Macro.t</a>()</pre>
+          <pre translate="no"><span class="attribute">@callback</span> grants() :: [
+  {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()] | %{required(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()) =&gt; [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()]}}
+  | {<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>(), [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()] | %{required(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()) =&gt; [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()]}, [{:widen, true}]}
+]</pre>
 
       </div>
 
-<p>Quoted list of page grants: <code class="inline">{module, roles}</code> for <code class="inline">grant_access/2</code>, or
-<code class="inline">{module, %{action =&gt; roles}}</code> for <code class="inline">grant_actions/2</code>.</p>
+<p>The system's page grants: <code class="inline">{module, roles}</code> as for <code class="inline">grant_access/2</code>, or
+<code class="inline">{module, %{action =&gt; roles}}</code> as for <code class="inline">grant_actions/2</code>. A permission is
+granted once; a grant that adds roles to a permission granted before says so
+with <code class="inline">widen: true</code> as a third element (<code class="inline">{module, roles, widen: true}</code>), and
+is logged at boot.</p>
   </section>
 </section>
 <section class="detail" id="c:migrations_path/0">
@@ -599,7 +643,7 @@ may declare the same flag.</p>
       <h1 class="signature" translate="no">migrations_path()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L149" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -629,7 +673,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">notifiers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L67" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L69" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -657,7 +701,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">notify_channels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L70" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L72" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -685,7 +729,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">oban_crons()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -717,7 +761,7 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       <h1 class="signature" translate="no">oban_queues()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L113" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -745,7 +789,7 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       <h1 class="signature" translate="no">override_routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L49" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -774,7 +818,7 @@ pages. Spliced at the top of <a href="MicaWeb.Router.html"><code class="inline">
       <h1 class="signature" translate="no">rate_quotas()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L127" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -803,7 +847,7 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
       <h1 class="signature" translate="no">routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L52" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -831,7 +875,7 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
       <h1 class="signature" translate="no">seeds(deploy_env)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L142" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -862,7 +906,7 @@ it must be idempotent.</p>
       <h1 class="signature" translate="no">sign_in_handoffs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L97" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L99" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -892,7 +936,7 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
       <h1 class="signature" translate="no">signal_handlers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L64" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L66" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

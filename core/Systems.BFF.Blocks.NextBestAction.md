@@ -1,15 +1,15 @@
-# `Systems.BFF.Blocks.Card`
-[🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks/card.ex#L2)
+# `Systems.BFF.Blocks.NextBestAction`
+[🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L0)
 
-Block `card`.
+Block `next_best_action`.
 
 # `t`
 
 ```elixir
-@type t() :: %Systems.BFF.Blocks.Card{
+@type t() :: %Systems.BFF.Blocks.NextBestAction{
   body: String.t() | nil,
   cta: String.t() | nil,
-  title: String.t() | nil,
+  title: String.t(),
   to: String.t() | nil
 }
 ```

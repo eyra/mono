@@ -12,11 +12,14 @@ committed in `next/test/snapshots/<saas>/`:
   * `signal.exs`: signal handlers (in order), notifiers and notify channels
   * `flags.exs`: the effective feature flags at compile time
   * `saas_config.exs`: the `Mica.SaaS` callbacks (start pages, menus, title,
-    signed-in pages), the SaaS app config and account and admin tab order
+    signed-in pages), the SaaS app config, account and admin tab order, Desktop
+    sections and assignment templates
   * `runtime.exs`: the children `Mica.Application` starts, and per env fixture
     of `mix config.snapshot` the Oban queues and plugins (crontab sorted), the
     unknown names in `ENABLED_OBAN_PLUGINS`, the rate quotas and the effective
     feature flags
+  * `schemas.exs`: the schemas `Mica.Repo.orphan?/2` scans and the schemas
+    that own an auth node (`Mica.Authorization.entities/0`), without test support
   * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
     the files `MicaWeb.Router` is compile-connected to
 
@@ -31,6 +34,9 @@ rendered as `storage_delivery_local_<node>`.
     mix nova.snapshot --update                     # rewrite the snapshots
 
 Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+Before rendering, the task runs the boot's composition checks
+(`Mica.SaaS.validate!/0`) and the Mica path check (`MicaWeb.PathCheck`): every
+`~m` must match a route of the build's router that Mica serves.
 
 Routes pass when the route set is identical and every two routes that can
 match the same request keep their relative order; other reordering is allowed.

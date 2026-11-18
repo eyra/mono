@@ -8,6 +8,8 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 
 # `admin_panels`
 
+# `assignment_templates`
+
 # `bff_pages`
 
 # `children`

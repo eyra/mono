@@ -16,7 +16,8 @@ Filter options (at least one required):
     * `correlation_id: "participation:42"` — match a specific correlation
     * `event_types: [:contribution_accepted, :contribution_declined]` — match by type
 
-Idempotent: messages already `:seen` are ignored.
+Idempotent: messages already `:seen` are ignored. A message whose channel the
+composition doesn't have is marked `:failed` instead and not counted.
 
 # `record_event`
 

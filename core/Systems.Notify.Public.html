@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -183,7 +183,7 @@ message status flips to <code class="inline">:seen</code> and <code class="inlin
       <h1 class="signature" translate="no">mark_seen(map, opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/notify/_public.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/notify/_public.ex#L85" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -195,7 +195,8 @@ message status flips to <code class="inline">:seen</code> and <code class="inlin
 <p>Mark messages as seen by the user. Each channel adapter's <code class="inline">mark_seen/1</code>
 callback (if implemented) runs the side effect (e.g. NA clears the NBA);
 message status flips to <code class="inline">:seen</code> and <code class="inline">seen_at</code> stamped.</p><p>Filter options (at least one required):</p><pre><code class="makeup elixir" translate="no"><span class="o">*</span><span class="w"> </span><span class="err">`</span><span class="ss">correlation_id</span><span class="p">:</span><span class="w"> </span><span class="s">&quot;participation:42&quot;</span><span class="err">`</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="n">match</span><span class="w"> </span><span class="n">a</span><span class="w"> </span><span class="n">specific</span><span class="w"> </span><span class="n">correlation</span><span class="w">
-</span><span class="o">*</span><span class="w"> </span><span class="err">`</span><span class="ss">event_types</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-1">[</span><span class="ss">:contribution_accepted</span><span class="p">,</span><span class="w"> </span><span class="ss">:contribution_declined</span><span class="p" data-group-id="group-1">]</span><span class="err">`</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="n">match</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">type</span></code></pre><p>Idempotent: messages already <code class="inline">:seen</code> are ignored.</p>
+</span><span class="o">*</span><span class="w"> </span><span class="err">`</span><span class="ss">event_types</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-1">[</span><span class="ss">:contribution_accepted</span><span class="p">,</span><span class="w"> </span><span class="ss">:contribution_declined</span><span class="p" data-group-id="group-1">]</span><span class="err">`</span><span class="w"> </span><span class="err">—</span><span class="w"> </span><span class="n">match</span><span class="w"> </span><span class="n">by</span><span class="w"> </span><span class="n">type</span></code></pre><p>Idempotent: messages already <code class="inline">:seen</code> are ignored. A message whose channel the
+composition doesn't have is marked <code class="inline">:failed</code> instead and not counted.</p>
   </section>
 </section>
 <section class="detail" id="record_event/1">

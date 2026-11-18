@@ -7,6 +7,8 @@ Self, the reference SaaS on Mica.
 
 # `sign_in_page`
 
+# `sign_up_page`
+
 ---
 
 *Consult [api-reference.md](api-reference.md) for complete listing*

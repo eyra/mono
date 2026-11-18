@@ -215,6 +215,8 @@ The model is considered orphaned if it has no associations with other models.
 ## Options
 - `ignore`: A list of modules to ignore when checking for associations.
 Generally, this is a list of association/link tables
+- `schemas`: The schemas to check, by default those of every application in
+the composition (`Mica.SaaS.schemas/0`)
 
 ## Example
 ```elixir

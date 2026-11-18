@@ -1,5 +1,5 @@
 # `Systems.BFF.Blocks.Section`
-[🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks/section.ex#L2)
+[🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L0)
 
 Block `section`.
 
@@ -8,6 +8,8 @@ Block `section`.
 ```elixir
 @type t() :: %Systems.BFF.Blocks.Section{
   body: String.t() | nil,
+  count: integer() | nil,
+  image_url: String.t() | nil,
   title: String.t() | nil,
   to: String.t() | nil
 }

@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -207,6 +207,9 @@ defmodule Post do
     <a href="Frameworks.Builder.LibraryItemModel.html" translate="no">Frameworks.<wbr />Builder.<wbr />LibraryItemModel</a>
 
   </div>
+
+    <div class="summary-synopsis"><p>An item a builder can add. <code class="inline">required?</code> is copied onto what is added: only required
+items count when deciding whether a participant finished their tasks.</p></div>
 
 </div>
 <div class="summary-row">
@@ -1655,6 +1658,15 @@ All operations must be idempotent.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="MicaSaasWeb.html" translate="no">MicaSaasWeb</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Self's web module. Self's code uses it instead of <a href="MicaWeb.html"><code class="inline">MicaWeb</code></a></p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="MicaSaasWeb.Layouts.Stripped.MenuBuilder.html" translate="no">MicaSaasWeb.<wbr />Layouts.<wbr />Stripped.<wbr />MenuBuilder</a>
 
   </div>
@@ -1687,8 +1699,8 @@ All operations must be idempotent.</p></div>
 
   </div>
 
-    <div class="summary-synopsis"><p>The entrypoint for defining your web interface, such
-as controllers, views, channels and so on.</p></div>
+    <div class="summary-synopsis"><p>Mica's web module: the entrypoint for defining Mica's web interface, such as
+controllers, views, channels and so on.</p></div>
 
 </div>
 <div class="summary-row">
@@ -2377,6 +2389,24 @@ framework.</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="MicaWeb.Path.html" translate="no">MicaWeb.<wbr />Path</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Mica's paths: <code class="inline">~m</code>, &quot;m for Mica path&quot;.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MicaWeb.PathCheck.html" translate="no">MicaWeb.<wbr />PathCheck</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Checks Mica's paths (<code class="inline">~m</code>, <a href="MicaWeb.Path.html"><code class="inline">MicaWeb.Path</code></a>) against a SaaS's router.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="MicaWeb.Plug.PersistLocale.html" translate="no">MicaWeb.<wbr />Plug.<wbr />PersistLocale</a>
 
   </div>
@@ -2591,6 +2621,18 @@ Prod never turns the feature on (see <a href="Mica.RuntimeConfig.html#features/2
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="MicaWeb.UI.StepProgress.html" translate="no">MicaWeb.<wbr />UI.<wbr />StepProgress</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>  Horizontal progress through a fixed number of steps: one Prism step indicator per
+  step on a track that fills up to the current step. The steps are not selectable.
+  A finished step shows a check, the current step its number, an upcoming step a
+  grey check.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="MicaWeb.UI.Timestamp.html" translate="no">MicaWeb.<wbr />UI.<wbr />Timestamp</a>
 
   </div>
@@ -2670,6 +2712,15 @@ Prod never turns the feature on (see <a href="Mica.RuntimeConfig.html#features/2
   </div>
 
     <div class="summary-synopsis"><p>Endpoint to wake up a suspended Fly Postgres database.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="MicaWeb.Web.html" translate="no">MicaWeb.<wbr />Web</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The blocks of a web module: controllers, views, components, channels and so on.</p></div>
 
 </div>
 <div class="summary-row">
@@ -3852,7 +3903,7 @@ only the texts differ. Behind the <code class="inline">:probe</code> feature fla
 
   </div>
 
-    <div class="summary-synopsis"><p>The Probe assignment template (<code class="inline">config :mica, assignment_templates:</code>).</p></div>
+    <div class="summary-synopsis"><p>The Probe assignment template.</p></div>
 
 </div>
 <div class="summary-row">
@@ -4232,6 +4283,15 @@ hand an identity-provider sign-in back to the app on this host
     <a href="Next.Systems.Zircon.System.html" translate="no">Next.<wbr />Systems.<wbr />Zircon.<wbr />System</a>
 
   </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="NextWeb.html" translate="no">NextWeb</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Next's web module. Next's code uses it instead of <a href="MicaWeb.html"><code class="inline">MicaWeb</code></a></p></div>
 
 </div>
 <div class="summary-row">
@@ -5739,6 +5799,16 @@ tool. The participant goes through the flow described below</p></div>
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="Systems.Assignment.ConsentPeriodModel.html" translate="no">Systems.<wbr />Assignment.<wbr />ConsentPeriodModel</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>A span of time in which consent was on for an assignment. <code class="inline">ended_at</code> is nil
+while consent is still on.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="Systems.Assignment.ContentPage.html" translate="no">Systems.<wbr />Assignment.<wbr />ContentPage</a>
 
   </div>
@@ -5823,6 +5893,30 @@ tool. The participant goes through the flow described below</p></div>
     <a href="Systems.Assignment.CrewTaskHelpers.html" translate="no">Systems.<wbr />Assignment.<wbr />CrewTaskHelpers</a>
 
   </div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.CrewTaskHorizontalListView.html" translate="no">Systems.<wbr />Assignment.<wbr />CrewTaskHorizontalListView</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The horizontal task list. Shows the participant's position in the tasks and
+the current task's intro below it. Its start button opens the tool in the same
+modal as the vertical task list. Tasks are done in order, without a done button:
+participation finishes when the last task is done.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.Assignment.CrewTaskHorizontalListViewBuilder.html" translate="no">Systems.<wbr />Assignment.<wbr />CrewTaskHorizontalListViewBuilder</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The horizontal task list: one step per task, done in order. The current task
+is the first one that isn't finished, so a participant who comes back lands on
+it. Its intro shows below the steps; its start button opens the tool in the same
+modal as the vertical task list, through the participant's <code class="inline">user_state</code> task.</p></div>
 
 </div>
 <div class="summary-row">
@@ -6387,16 +6481,43 @@ Currently has no flags defined.</p></div>
 
   </div>
 
-    <div class="summary-synopsis"><p>The BFF spec's pages: each is a GET at its path that returns a flat list of blocks.</p></div>
+    <div class="summary-synopsis"><p>The BFF blocks and pages, generated at compile time from the mica-bff spec.</p></div>
 
 </div>
 <div class="summary-row">
   <div class="summary-signature">
-    <a href="Systems.BFF.Blocks.Card.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />Card</a>
+    <a href="Systems.BFF.Blocks.Advert.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />Advert</a>
 
   </div>
 
-    <div class="summary-synopsis"><p>Block <code class="inline">card</code>.</p></div>
+    <div class="summary-synopsis"><p>Block <code class="inline">advert</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.BFF.Blocks.NextBestAction.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />NextBestAction</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Block <code class="inline">next_best_action</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.BFF.Blocks.Participation.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />Participation</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Block <code class="inline">participation</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.BFF.Blocks.RewardAmount.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />RewardAmount</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Block <code class="inline">reward_amount</code>.</p></div>
 
 </div>
 <div class="summary-row">
@@ -6406,6 +6527,24 @@ Currently has no flags defined.</p></div>
   </div>
 
     <div class="summary-synopsis"><p>Block <code class="inline">section</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.BFF.Blocks.SectionBegin.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />SectionBegin</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Block <code class="inline">section_begin</code>.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
+    <a href="Systems.BFF.Blocks.SectionEnd.html" translate="no">Systems.<wbr />BFF.<wbr />Blocks.<wbr />SectionEnd</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>Block <code class="inline">section_end</code>.</p></div>
 
 </div>
 <div class="summary-row">
@@ -6432,8 +6571,9 @@ Currently has no flags defined.</p></div>
 
     <div class="summary-synopsis"><p>The backend for frontend (BFF) of the native apps: <code class="inline">GET /bff/page/:page</code>
 answers <code class="inline">{&quot;blocks&quot;: [...]}</code> for a page of the mica-bff spec. Systems serve the
-pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks are the generated
-<code class="inline">Systems.BFF.Blocks.*</code> modules. The app sends the spec version it implements in
+pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks are the
+<code class="inline">Systems.BFF.Blocks.*</code> modules, generated at compile time by the mica_bff
+dependency. The app sends the spec version it implements in
 the <code class="inline">x-bff-spec</code> header, which is only recorded for now.</p></div>
 
 </div>
@@ -7502,7 +7642,9 @@ is threaded through and returned.</p></div>
 
   </div>
 
-    <div class="summary-synopsis"><p>The BFF's home page: the user's To-dos, one card each, in the To-do page's order.</p></div>
+    <div class="summary-synopsis"><p>The BFF's home page: what the web home shows a signed-in user, in the same order and
+behind the same feature flags (<a href="Systems.Home.PageBuilder.html#block_keys/1"><code class="inline">Systems.Home.PageBuilder.block_keys/1</code></a>), as a flat
+list of blocks. Pay out, Retry and Donate are not here yet.</p></div>
 
 </div>
 <div class="summary-row">
@@ -8164,6 +8306,17 @@ event, via the existing <code class="inline">Systems.NextAction</code> infrastru
 </div>
 <div class="summary-row">
   <div class="summary-signature">
+    <a href="Systems.Notify.ChannelName.html" translate="no">Systems.<wbr />Notify.<wbr />ChannelName</a>
+
+  </div>
+
+    <div class="summary-synopsis"><p>The channel of a <a href="Systems.Notify.MessageModel.html"><code class="inline">Systems.Notify.MessageModel</code></a>: a string column whose names
+are checked against <a href="Mica.SaaS.html#notify_channels/0"><code class="inline">Mica.SaaS.notify_channels/0</code></a> at runtime, not at compile
+time.</p></div>
+
+</div>
+<div class="summary-row">
+  <div class="summary-signature">
     <a href="Systems.Notify.Dispatcher.html" translate="no">Systems.<wbr />Notify.<wbr />Dispatcher</a>
 
   </div>
@@ -8208,7 +8361,9 @@ channels + timing are decided later by <a href="Systems.Notify.Scheduler.html"><
 
   </div>
 
-    <div class="summary-synopsis"><p>Global registry of notification event types → channel routing.</p></div>
+    <div class="summary-synopsis"><p>Notification event types and the channels each is routed to, from the
+notifiers of the SaaS's systems (<a href="Mica.SaaS.html#notify_events/0"><code class="inline">Mica.SaaS.notify_events/0</code></a>). Each notifier
+declares its events via <code class="inline">use Systems.Notify.EventDeclaration</code>.</p></div>
 
 </div>
 <div class="summary-row">

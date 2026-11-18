@@ -53,8 +53,6 @@ Expires all tasks of the crew whose identifier contains every element of
 
 # `expired_pending_started_tasks`
 
-# `finished?`
-
 # `get!`
 
 # `get_expired_member`

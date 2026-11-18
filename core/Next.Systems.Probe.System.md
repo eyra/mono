@@ -1,11 +1,13 @@
 # `Next.Systems.Probe.System`
 [🔗](https://github.com/eyra/mono/blob/main/next/systems/probe/_system.ex#L1)
 
-The Probe assignment template (`config :mica, assignment_templates:`).
+The Probe assignment template.
 
 # `account_tabs`
 
 # `admin_panels`
+
+# `assignment_templates`
 
 # `bff_pages`
 

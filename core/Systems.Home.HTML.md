@@ -13,6 +13,10 @@
 
 # `steps`
 
+## Attributes
+
+* `sign_up_url` (`:string`) (required)
+
 # `version`
 
 # `video`

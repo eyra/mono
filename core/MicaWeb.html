@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -118,13 +118,12 @@ mica
 
 
     <section id="moduledoc">
-<p>The entrypoint for defining your web interface, such
-as controllers, views, channels and so on.</p><p>This can be used in your application as:</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-1">{</span><span class="ss">:controller</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">[</span><span class="ss">formats</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">[</span><span class="ss">:html</span><span class="p">,</span><span class="w"> </span><span class="ss">:json</span><span class="p" data-group-id="group-3">]</span><span class="p">,</span><span class="w"> </span><span class="ss">layouts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-4">[</span><span class="ss">html</span><span class="p">:</span><span class="w"> </span><span class="nc">MicaWeb.Layouts</span><span class="p" data-group-id="group-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">namespace</span><span class="p">:</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p" data-group-id="group-2">]</span><span class="p" data-group-id="group-1">}</span><span class="w">
-</span><span class="kn">use</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p">,</span><span class="w"> </span><span class="ss">:html</span></code></pre><p>The definitions below will be executed for every view,
-controller, etc, so keep them short and clean, focused
-on imports, uses and aliases.</p><p>Do NOT define functions inside the quoted expressions
-below. Instead, define any helper function in modules
-and import those modules here.</p>
+<p>Mica's web module: the entrypoint for defining Mica's web interface, such as
+controllers, views, channels and so on.</p><pre><code class="makeup elixir" translate="no"><span class="kn">use</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-1">{</span><span class="ss">:controller</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-2">[</span><span class="ss">formats</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-3">[</span><span class="ss">:html</span><span class="p">,</span><span class="w"> </span><span class="ss">:json</span><span class="p" data-group-id="group-3">]</span><span class="p">,</span><span class="w"> </span><span class="ss">layouts</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-4">[</span><span class="ss">html</span><span class="p">:</span><span class="w"> </span><span class="nc">MicaWeb.Layouts</span><span class="p" data-group-id="group-4">]</span><span class="p">,</span><span class="w"> </span><span class="ss">namespace</span><span class="p">:</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p" data-group-id="group-2">]</span><span class="p" data-group-id="group-1">}</span><span class="w">
+</span><span class="kn">use</span><span class="w"> </span><span class="nc">MicaWeb</span><span class="p">,</span><span class="w"> </span><span class="ss">:html</span></code></pre><p>The blocks are defined in <a href="MicaWeb.Web.html"><code class="inline">MicaWeb.Web</code></a>. Mica has no router of its own, so its
+code builds paths with <code class="inline">~m</code> (<a href="MicaWeb.Path.html"><code class="inline">MicaWeb.Path</code></a>), which every SaaS checks against
+its router. Code of a SaaS uses its own web module (<a href="NextWeb.html"><code class="inline">NextWeb</code></a>, <a href="MicaSaasWeb.html"><code class="inline">MicaSaasWeb</code></a>),
+so its <code class="inline">~p</code> is verified against that SaaS's router.</p>
     </section>
 
 </div>
@@ -305,7 +304,7 @@ and import those modules here.</p>
         <span class="note">(macro)</span>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L275" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -327,7 +326,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">channel()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L240" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -349,7 +348,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">controller(opts)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L29" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -371,7 +370,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">embedded_live_view()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L171" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -393,7 +392,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">html()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L75" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -415,7 +414,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">live_component()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -437,7 +436,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">live_component_fabric()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L100" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -459,7 +458,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">live_features()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L217" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -481,7 +480,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">live_view_fabric()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L114" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -503,7 +502,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">modal_live_view()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L209" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -525,7 +524,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">pixel()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L68" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -547,7 +546,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">routed_live_view()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L146" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -569,7 +568,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">router()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L262" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -591,7 +590,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">static_paths()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L20" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L17" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -613,7 +612,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">ui()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L50" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -635,7 +634,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">utility()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L23" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -657,7 +656,7 @@ and import those modules here.</p>
       <h1 class="signature" translate="no">verified_routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L231" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica_web.ex#L15" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

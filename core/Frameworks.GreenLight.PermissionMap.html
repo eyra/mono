@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -209,6 +209,16 @@ permission.</p></div>
       </div>
 
         <div class="summary-synopsis"><p>Add a mapping for the given role and permission if does not already exist.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#granted?/2" data-no-tooltip="" translate="no">granted?(permission_map, permission)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Whether any role holds the given permission.</p></div>
 
     </div>
 
@@ -474,7 +484,7 @@ roles of both permission maps.</p></div>
       <h1 class="signature" translate="no">allowed?(permission_map, permission, principal_roles)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L69" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L73" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -505,7 +515,7 @@ permission.</p>
       <h1 class="signature" translate="no">grant(permission_map, permission, role)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -523,6 +533,34 @@ permission.</p>
 <p>Add a mapping for the given role and permission if does not already exist.</p>
   </section>
 </section>
+<section class="detail" id="granted?/2">
+
+  <div class="detail-header">
+    <a href="#granted?/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">granted?(permission_map, permission)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> granted?(<a href="#t:t/0">t</a>(), <a href="#t:permission/0">permission</a>()) :: <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">boolean</a>()</pre>
+
+      </div>
+
+<p>Whether any role holds the given permission.</p>
+  </section>
+</section>
 <section class="detail" id="list_permission_assignments/1">
 
   <div class="detail-header">
@@ -533,7 +571,7 @@ permission.</p>
       <h1 class="signature" translate="no">list_permission_assignments(permission_map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L48" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -555,7 +593,7 @@ permission.</p>
       <h1 class="signature" translate="no">merge(a, b)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/frameworks/green_light/permission_map.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

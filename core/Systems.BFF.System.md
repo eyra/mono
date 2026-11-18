@@ -3,13 +3,16 @@
 
 The backend for frontend (BFF) of the native apps: `GET /bff/page/:page`
 answers `{"blocks": [...]}` for a page of the mica-bff spec. Systems serve the
-pages through `c:Mica.System.bff_pages/0`; the blocks are the generated
-`Systems.BFF.Blocks.*` modules. The app sends the spec version it implements in
+pages through `c:Mica.System.bff_pages/0`; the blocks are the
+`Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
+dependency. The app sends the spec version it implements in
 the `x-bff-spec` header, which is only recorded for now.
 
 # `account_tabs`
 
 # `admin_panels`
+
+# `assignment_templates`
 
 # `bff_pages`
 

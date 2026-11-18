@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-84CBF401.js"></script>
+    <script defer src="dist/sidebar_items-90C3821C.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -119,7 +119,7 @@ mica
 
     <section id="moduledoc">
 <p>An assignment template that a SaaS adds next to the built-in
-<a href="Systems.Assignment.Templates.html"><code class="inline">Systems.Assignment.Templates</code></a>.</p><p>A SaaS registers its templates in config:</p><pre><code class="makeup elixir" translate="no"><span class="n">config</span><span class="w"> </span><span class="ss">:mica</span><span class="p">,</span><span class="w"> </span><span class="ss">:assignment_templates</span><span class="p">,</span><span class="w"> </span><span class="p" data-group-id="group-1">[</span><span class="nc">MySaaS.SomeTemplate</span><span class="p" data-group-id="group-1">]</span></code></pre><p>Each module defines the template struct (<code class="inline">defstruct [:id]</code>), implements
+<a href="Systems.Assignment.Templates.html"><code class="inline">Systems.Assignment.Templates</code></a>.</p><p>A system offers its templates with <a href="Mica.System.html#c:assignment_templates/0"><code class="inline">Mica.System.assignment_templates/0</code></a>:</p><pre><code class="makeup elixir" translate="no"><span class="kd">def</span><span class="w"> </span><span class="nf">assignment_templates</span><span class="p">,</span><span class="w"> </span><span class="ss">do</span><span class="p">:</span><span class="w"> </span><span class="p" data-group-id="group-1">[</span><span class="nc">MySaaS.Systems.Some.Template</span><span class="p" data-group-id="group-1">]</span></code></pre><p>Each module defines the template struct (<code class="inline">defstruct [:id]</code>), implements
 <a href="Systems.Assignment.Template.html"><code class="inline">Systems.Assignment.Template</code></a> for it and implements this behaviour.</p>
     </section>
 
