@@ -303,6 +303,24 @@ defmodule Next.Systems.BFF.PageControllerTest do
       assert Enum.reject(titles.(home), &is_binary/1) == []
     end
 
+    # Opening a study's content page makes its participant a tester too: two role rows.
+    test "a study the user takes part in and tests shows once on home and the history",
+         %{conn: conn, user: user} do
+      {_panl, assignment} = home_with_everything(user)
+      Assignment.Public.ensure_tester(assignment, user)
+
+      for page <- ["home", "history"] do
+        participations =
+          conn
+          |> get("/bff/page/#{page}")
+          |> json_response(200)
+          |> types()
+          |> Enum.count(&(&1 == "participation"))
+
+        assert participations == 1, page
+      end
+    end
+
     test "without panl_post_launch home shows only the next action, history and marketplace nothing",
          %{conn: conn, user: user} do
       home_with_everything(user)
