@@ -39,7 +39,7 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
 | D5 | Recruitment and rewards | Pool, advert and promotion (the recruitment machinery behind PaNL), together with assignment, fund and affiliate, go to Mica as **optional building blocks**. Instance specifics move to the SaaS: the PaNL name, panl.nl terms and privacy URLs, seeds such as the always-created `:panl` pool, hard-coded `participant?(:panl, …)` checks, and VU student codes. |
 | D6 | Banking proxy | `banking_proxy` is not deployed anywhere. It is retired, not ported. |
 | D7 | Names | Revised 2026-10-16. One decoupling step, code-rename, renames the OTP app `:core` to `:mica` and the module namespaces `Core.*` to `Mica.*` and `CoreWeb.*` to `MicaWeb.*`, after code-systems and before code-split, so `novasoftwarefoundation/mica` is published with Mica names. Modules added before then (`Core.System`, `Core.SaaS`, `Core.Env`, `Core.Systems`) move with the rest: `Core.Systems` becomes `Mica.Systems`. `Systems.*` and `Frameworks.*` keep their names. This replaces the earlier decision that the modules keep `Core.*`/`CoreWeb.*`. |
-| D8 | Database | One database per deployment. Every table has one owner (Mica or the SaaS), with migrations in the owner's repository. Foreign keys point only from the SaaS to Mica. `workflow_tool_refs` and `project_items` become open registry references. Historical migrations are squashed into a Mica baseline and a SaaS baseline, which are marked as applied in Eyra production after a dry run on a production snapshot. Separate Postgres schemas per owner remain an option for later. |
+| D8 | Database | One database per deployment. Every table has one owner (Mica or the SaaS), with migrations in the owner's repository. Foreign keys point only from the SaaS to Mica. `tool_refs` and `project_items` become open registry references. Historical migrations are squashed into a Mica baseline and a SaaS baseline, which are marked as applied in Eyra production after a dry run on a production snapshot. Separate Postgres schemas per owner remain an option for later. |
 | D9 | History | `novasoftwarefoundation/mica` starts with fresh git history. Its first commit points back to the `eyra/mono` commit it came from. `eyra/mono` is not deleted; Self deployments use it. |
 | D10 | Approach | Incremental, inside `eyra/mono` `develop`, in normal small PRs shipped through Next's milestones. No big-bang migration and no copy of core. Guardrails: an early visible layout, a CI boundary check that blocks Mica → Next references and new `:panl` hard-coding, and the rules communicated to the Next and Feldspar teams. |
 | D11 | Layout | `core/` is split with `git mv` into `mica/` (Mix project) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). `core/` disappears. Self is the reference SaaS on Mica, a sibling of Next and not part of Mica: since code-layout it lives in `core/mica_saas/` (decided 2026-10-14). In code-split it becomes the third Mix project, `mica_saas/`, and in repo-create its own repository, `novasoftwarefoundation/mica-saas`. It never lives in Mica's repository (decided 2026-10-30, m-0460). |
@@ -120,7 +120,7 @@ Made by the product owner on 2026-10-11/12 and recorded on Flux Next issue 10395
   - AppSignal name "Next"
 - **Hosting and release:**
   - `core/fly.*.toml` (`eyra-next-*`)
-  - the runtime configs (eyra.dev mail-domain fallback, Centerdata/SURFconext defaults, `STORAGE_SERVICES` default including Yoda)
+  - the runtime configs (Centerdata/SURFconext defaults, `STORAGE_SERVICES` default including Yoda). `APP_MAIL_DOMAIN` is required, with no fallback: each deployment sets it in its `fly.*.toml`.
   - the workflows
   - the e2e, smoke and load test hosts
   - the mix aliases
@@ -271,7 +271,7 @@ defmodule Core.System do
   @callback notify_channels() :: %{atom() => module()}
   @callback tools() :: [module()]           # Core.Tool implementations (§3.4)
   @callback project_items() :: [module()]
-  @callback pool_directors() :: [module()]
+  @callback directors() :: %{atom() => module()}   # code-registry: replaces pool_directors/0
   @callback admin_panels() :: [module()]
   @callback account_tabs() :: [module()]
   @callback desktop_sections() :: [module()]
@@ -308,7 +308,7 @@ end
 # (Next module names follow §3.1 once the systems move to Next)
 defmodule Systems.Citizen.System do
   use Core.System
-  def pool_directors, do: [Systems.Citizen.Director]
+  def directors, do: %{citizen: Systems.Citizen.Director}
 end
 
 defmodule Next.SaaS do
@@ -327,7 +327,7 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
 ```
 
 - **One system, one `Systems.X.System`.** Each system, in Mica or in a SaaS, has its `Systems.X.System` module in a `_system.ex` file in its folder. Mica's systems (Assignment, Feldspar, Manual, …) are listed in `Core.Systems.all/0`.
-- **Systems extend systems.** A system can use the extension points of other systems: Citizen registers a pool director with Pool, Zircon registers a tool with Workflow. A SaaS therefore extends Mica's systems through its own systems, not through SaaS-level hooks.
+- **Systems extend systems.** A system can use the extension points of other systems: Citizen registers a pool director (`directors/0`), Zircon registers a tool with Workflow. A SaaS therefore extends Mica's systems through its own systems, not through SaaS-level hooks.
 - **How the SaaS composes.** Config names one `Core.SaaS` module. Its `systems/0` returns Mica's systems plus its own. Each SaaS writes its own router and endpoint with Mica's macros, which splice its systems' routes in `systems/0` order. Grants, notify channels and the other collections are read at boot, cached, and checked by `validate!/0`. Mica has no router: it records its links with `~m`, and each SaaS checks them against its router (D15, plan step code-compose).
 - **SaaS-level config** lives in `Core.SaaS`: start pages, menus, feature-flag defaults and, from code-brand, the brand. The existing `CoreWeb.StartPageProvider`, `CoreWeb.Menu.ItemsProvider` and `CoreWeb.Menu.Builder` are reached through it.
 - **Graduation** (D3) moves a system from a SaaS's `systems/0` into `Core.Systems.all/0`, together with its code.
@@ -335,16 +335,18 @@ config :core, saas: Next.SaaS              # `config :mica, saas: Next.SaaS` aft
 
 ### 3.4 Tool and item registry
 
-- **`Core.Tool` behaviour:**
-  - `type/0`, `schema/0`, `prepare/1`
-  - form and view
-  - director support
-  - export/import
-  - icon and title
-- **Polymorphic references.** `workflow_tool_refs` gets `tool_type`/`tool_id` and `project_items` gets `item_type`/`item_id`, each with an index. They replace one nullable foreign key per tool type.
-- **Integrity.** Database-level referential integrity is replaced by signal-driven cleanup when a tool is deleted. This is the price of an open registry, accepted in D8.
-- **Migration path.** Backfill the new columns from the existing foreign keys, and drop the old columns later using the deferred-drop pattern.
-- **Directors** become strings validated against the registry, instead of a compile-time `Ecto.Enum`.
+Approved 2026-11-17 (d-0026); details in plan step [code-registry](./plan.md#code-registry--open-tool-and-item-registry-data-migration).
+
+- **`Mica.Tool` behaviour,** one module per tool type:
+  - `type/0`, `schema/0`, `prepare/2`, `view/0`
+  - optional `view_attrs/2`, `export/2`, `external_path/2`, `groups/0`
+  - Per-struct behaviour stays in the `Frameworks.Concept.ToolModel` protocol.
+  - **`Mica.ProjectItem`** is the item counterpart (`type/0`, `schema/0`, `card/1`).
+- **Registration.** Systems register them through `tools/0`, `project_items/0` and `directors/0` on `Mica.System`, collected and checked at boot.
+- **Polymorphic references.** `tool_refs` gets `tool_type`/`tool_id` and `project_items` gets `item_type`/`item_id`, with a unique index on each pair. They replace one nullable foreign key per type.
+- **Integrity** (decided 2026-11-17, d-0027 and d-0030). The application checks type and id. Today's existing deletes go through one guarded registry path, with no new deletes or cascades. A daily integrity check reports dangling rows and never removes them. There are no reverse foreign keys. Nothing assumes hard deletes, so a future archive feature keeps type/id references valid. This is the price of an open registry, accepted in D8.
+- **Migration path.** Three releases: add the columns, backfill, and keep them equal to the old ones with a temporary trigger; switch the code; drop the old columns one milestone later (deferred drop).
+- **Directors** become names checked against the registry (`Mica.Director`), instead of a compile-time `Ecto.Enum`.
 
 ### 3.5 Config, migrations, translations, assets, routing
 
@@ -456,4 +458,4 @@ Decided questions are in [Decisions](#decisions). Still open:
 
 The questions about release mechanics (binary name, `eyra/next` history) are listed in [plan.md](./plan.md#open-questions).
 
-<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001).</sub>
+<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; tool and item registry by t-0047).</sub>

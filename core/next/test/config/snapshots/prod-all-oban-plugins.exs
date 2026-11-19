@@ -30,7 +30,8 @@
        url:
          "ecto://DB_USER:DB_PASS@eyra-database-prod.abcdefghijkl.eu-central-1.rds.amazonaws.com/next"
      ]},
-    {MicaWeb.Endpoint,
+    {MicaWeb.FileUploader, [max_file_size: 200_000_000]},
+    {NextWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8080],
@@ -38,7 +39,6 @@
        server: true,
        url: [host: "APP_DOMAIN", port: 443, scheme: "https"]
      ]},
-    {MicaWeb.FileUploader, [max_file_size: 200_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],

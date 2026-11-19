@@ -25,7 +25,8 @@
         "./scripts/boundary_rules.ex",
         "./custom_credo_checks/mica_boundary.ex",
         "./custom_credo_checks/mica_env_access.ex",
-        "./custom_credo_checks/saas_web_module.ex"
+        "./custom_credo_checks/saas_web_module.ex",
+        "./custom_credo_checks/mica_test_needs_no_saas.ex"
       ],
       strict: false,
       parse_timeout: 5000,
@@ -38,6 +39,7 @@
         {Credo.Check.Warning.MicaBoundary, []},
         {Credo.Check.Warning.MicaEnvAccess, []},
         {Credo.Check.Warning.SaasWebModule, []},
+        {Credo.Check.Warning.MicaTestNeedsNoSaas, []},
 
         #
         ## Consistency Checks
@@ -135,9 +137,19 @@
         {Credo.Check.Consistency.UnusedVariableNames, false},
         # Self copies Next's OTP sign-in screens on purpose; whether they move into Mica is
         # decided in Nova migration step code-brand. Storybook stories are fixture files; their
-        # small per-story helpers stay local on purpose.
+        # small per-story helpers stay local on purpose. Next and Self each have their own
+        # copy of the router and endpoint test cases (ConnCase, FeatureCase) and of the test
+        # helper's setup, as d-0011 allows.
         {Credo.Check.Design.DuplicatedCode,
-         [files: %{excluded: [~r"/mica_saas/systems/account/auth_", ~r"/storybook/"]}]},
+         [
+           files: %{
+             excluded: [
+               ~r"/mica_saas/systems/account/auth_",
+               ~r"/storybook/",
+               ~r"/(next|mica_saas)/test/(support/|test_helper\.exs$)"
+             ]
+           }
+         ]},
         {Credo.Check.Readability.AliasAs, []},
         {Credo.Check.Readability.BlockPipe, false},
         {Credo.Check.Readability.ImplTrue, false},

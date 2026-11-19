@@ -38,7 +38,7 @@ defmodule Systems.Account.Auth.SSOHelpers do
     Enum.reduce(errors, conn, fn message, conn ->
       put_flash(conn, :error, message)
     end)
-    |> redirect(to: ~m"/user/signin")
+    |> redirect(to: Mica.SaaS.module().sign_in_options_page())
   end
 
   @doc """
@@ -63,7 +63,7 @@ defmodule Systems.Account.Auth.SSOHelpers do
     SignInHandoff.end_sign_in(conn, provider, :failed, fn conn ->
       conn
       |> put_flash(:error, error_message(error))
-      |> redirect(to: ~m"/user/signin")
+      |> redirect(to: Mica.SaaS.module().sign_in_options_page())
     end)
   end
 

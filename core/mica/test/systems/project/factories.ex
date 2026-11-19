@@ -3,7 +3,6 @@ defmodule Systems.Project.Factories do
   alias Systems.Project
   alias Systems.Alliance
   alias Systems.Assignment
-  alias Next.Systems.Graphite
   alias Systems.Storage
 
   @doc """
@@ -78,14 +77,6 @@ defmodule Systems.Project.Factories do
     })
   end
 
-  def build_item(%Graphite.LeaderboardModel{} = leaderboard, name) do
-    Factories.build(:project_item, %{
-      name: name,
-      project_path: [],
-      leaderboard: leaderboard
-    })
-  end
-
   def build_tool_ref(%Alliance.ToolModel{} = tool) do
     Factories.build(:tool_ref, %{
       alliance_tool: tool
@@ -94,7 +85,7 @@ defmodule Systems.Project.Factories do
 
   def build_tool() do
     Factories.build(:alliance_tool, %{
-      url: "https://eyra.co/alliance/123",
+      url: "https://example.org/alliance/123",
       director: :assignment
     })
   end

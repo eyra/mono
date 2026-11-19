@@ -130,3 +130,7 @@ msgstr "Iscriviti"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "Vedi tutto"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "Nessuno studio trovato."

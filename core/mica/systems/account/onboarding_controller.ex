@@ -27,15 +27,15 @@ defmodule Systems.Account.OnboardingController do
       {:error, _reason} ->
         conn
         |> put_flash(:error, dgettext("eyra-account", "onboarding.token.invalid"))
-        |> redirect(to: ~m"/user/signin")
+        |> redirect(to: Mica.SaaS.module().sign_in_options_page())
     end
   end
 
   defp verify_token(token) do
-    Phoenix.Token.verify(MicaWeb.Endpoint, @token_salt, token, max_age: @token_max_age)
+    Phoenix.Token.verify(Mica.SaaS.endpoint(), @token_salt, token, max_age: @token_max_age)
   end
 
   def generate_token(user) do
-    Phoenix.Token.sign(MicaWeb.Endpoint, @token_salt, user.id)
+    Phoenix.Token.sign(Mica.SaaS.endpoint(), @token_salt, user.id)
   end
 end

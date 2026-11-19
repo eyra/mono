@@ -215,3 +215,15 @@ msgstr "Mergi la %{to}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.onyx"
 msgstr "Onix"
+
+#, elixir-autogen, elixir-format
+msgid "action_menu.alt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr "Ascunde acțiunile"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr "Afișează acțiunile"

@@ -2,7 +2,7 @@
 # scripts/boundary_check.exs. Entries may only shrink. Format:
 # {file, kind, detail, reason}; detail is what the file had when it was listed:
 # the referenced files (*_reference), the module names (*_name) or the number of
-# literal matches. code: mica/, next/ and mica_saas/; config: config/.
+# literal matches. code: mica/, next/ and mica_saas/; config: config/; mica_test: mica/test/.
 [
   code: [
     {"mica/frameworks/pixel/components/footer.ex", :eyra_domain, 1,
@@ -35,29 +35,6 @@
      "loadtest@eyra.service named in moduledoc; code-instance synthetic accounts"},
     {"mica/lib/mica/seeds/test.ex", :eyra_service, 1,
      "e2e@eyra.service named in moduledoc; code-instance synthetic accounts"},
-    {"mica/lib/mica_web/router.ex", :next_reference,
-     [
-       "next/systems/account/auth_code_verify_page.ex",
-       "next/systems/account/auth_identify_page.ex",
-       "next/systems/account/auth_provider_page.ex",
-       "next/systems/account/native_provider_controller.ex",
-       "next/systems/account/native_signin_controller.ex",
-       "next/systems/account/session_controller.ex",
-       "next/systems/account/signin_page.ex",
-       "next/systems/announcement/_routes.ex",
-       "next/systems/announcement/compose_page.ex",
-       "next/systems/announcement/page.ex",
-       "next/systems/e2e/controller.ex",
-       "next/systems/graphite/_routes.ex",
-       "next/systems/graphite/export_controller.ex",
-       "next/systems/graphite/leaderboard_content_page.ex",
-       "next/systems/graphite/leaderboard_page.ex",
-       "next/systems/graphite/tool_controller.ex",
-       "next/systems/onyx/_routes.ex",
-       "next/systems/onyx/landing_page.ex",
-       "next/systems/well_known/controller.ex"
-     ],
-     "routes of Next's systems spliced by Mica.SaaS; spliced routes stay a compile-time reference until code-split"},
     {"mica/systems/account/auth/external.ex", :eyra_domain, 1,
      "external+…@eyra.co synthetic email; code-instance synthetic accounts"},
     {"mica/systems/account/features_model.ex", :next_reference, ["next/systems/student/codes.ex"],
@@ -119,6 +96,17 @@
     {"mica/systems/workflow/tool_ref_model.ex", :next_reference,
      ["next/systems/graphite/tool_model.ex", "next/systems/zircon/screening/tool_model.ex"],
      "workflow_tool_refs FKs to Graphite and Zircon tools; code-registry tool registry"},
+    {"mica_saas/lib/mica_saas_web/router.ex", :next_reference,
+     [
+       "next/systems/graphite/_routes.ex",
+       "next/systems/graphite/export_controller.ex",
+       "next/systems/graphite/leaderboard_content_page.ex",
+       "next/systems/graphite/leaderboard_page.ex",
+       "next/systems/graphite/tool_controller.ex",
+       "next/systems/onyx/_routes.ex",
+       "next/systems/onyx/landing_page.ex"
+     ],
+     "routes of the Next systems MicaSaas.SaaS keeps (E3), spliced into Self's router; goes with the mica_saas/lib/saas.ex entry (code-registry/code-instance)"},
     {"mica_saas/lib/saas.ex", :next_reference,
      [
        "next/systems/graphite/_system.ex",
@@ -139,7 +127,27 @@
      "*@eyra.co dev admins; code-split moves dev config per SaaS"},
     {"config/runtime.exs", :next_name, ["Next.Systems.Paper"],
      "config :mica, :paper import limits from env; runtime.exs moves to next/ in code-split"},
-    {"config/test.exs", :next_name, ["Next.SaaS", "Next.Systems.Paper"],
-     "tests always build Next.SaaS and set :paper limits; code-instance (Mica tests on MicaSaas.SaaS)"}
+    {"config/test.exs", :next_name, ["Next.Systems.Paper"],
+     "config :mica, :paper test limits for Next's Paper system; code-split moves test config per SaaS"}
+  ],
+  mica_test: [
+    {"mica/test/systems/account/page_builder_test.exs", :panl_string, 3,
+     "tests Mica's account page with the PaNL pool; moves to Next with the PaNL sign-up flow (code-instance)"},
+    {"mica/test/systems/affiliate/_public_test.exs", :eyra_domain, 4,
+     "asserts the @next.eyra.co synthetic affiliate email; code-instance synthetic accounts"},
+    {"mica/test/systems/assignment/crew_task_helpers_test.exs", :eyra_domain, 1,
+     "asserts the support@eyra.co support address of crew_task_helpers.ex; code-brand Next.Brand support email"},
+    {"mica/test/systems/assignment/finished_view_builder_test.exs", :panl_atom, 6,
+     "tests the finished-view Join PaNL call to action; code-instance PaNL"},
+    {"mica/test/systems/pool/_assembly_test.exs", :panl_string, 3,
+     "tests the PaNL pool seed of Pool.Assembly; code-instance get_or_create_panl"},
+    {"mica/test/systems/pool/_public_test.exs", :panl_atom, 11,
+     "tests participant?(:panl) and the PaNL pool lookup; code-instance PaNL"},
+    {"mica/test/systems/pool/_public_test.exs", :panl_string, 4,
+     "tests participant?(:panl) and the PaNL pool lookup; code-instance PaNL"},
+    {"mica/test/systems/pool/account_post_action_handler_test.exs", :panl_atom, 11,
+     "tests the add_to_panl post-action; code-instance PaNL sign-up flow"},
+    {"mica/test/systems/pool/criteria_model_test.exs", :vu_code, 2,
+     "VU study program codes in pool criteria; code-instance VU"}
   ]
 ]

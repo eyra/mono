@@ -114,8 +114,18 @@ jobs:
           cd core/assets && npm install
           cd .. && mix assets.build
 
-      - name: Unit tests
+      # Mica's own suite, core/mica/test, on a composition of Mica's systems with
+      # no SaaS. It has no feature tests.
+      - name: Unit tests (Mica)
         run: cd core && mix test.unit
+
+      # Next's suite, core/next/test, against Next's router and endpoint.
+      - name: Unit tests (Next)
+        run: cd core && BUNDLE=next mix test.unit
+
+      # Self's suite, core/mica_saas/test, against Self's router and endpoint.
+      - name: Unit tests (Self)
+        run: cd core && BUNDLE=self mix test.unit
 
       # Wallaby needs a chromedriver whose major version matches Chrome.
       - id: setup-chrome
@@ -125,8 +135,14 @@ jobs:
           install-chromedriver: true
           install-dependencies: true
 
-      - name: Feature tests
-        run: cd core && mix test.feature
+      - name: Feature tests (Next)
+        run: cd core && BUNDLE=next mix test.feature
+        env:
+          CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
+          CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
+
+      - name: Feature tests (Self)
+        run: cd core && BUNDLE=self mix test.feature
         env:
           CHROME_BINARY: ${{ steps.setup-chrome.outputs.chrome-path }}
           CHROMEDRIVER_PATH: ${{ steps.setup-chrome.outputs.chromedriver-path }}
@@ -159,15 +175,27 @@ jobs:
 
       # Routes, grants, handlers, SaaS config and counts of the Next build.
       - name: Nova snapshots (Next)
-        run: cd core && mix nova.snapshot
+        run: cd core && BUNDLE=next mix nova.snapshot
 
       - name: Dialyzer
         run: make dialyzer
 
-  # The Self build (BUNDLE=self) against its Nova snapshots. MIX_ENV=dev, because
-  # config/test.exs pins the bundle to Next. No database needed.
+  # The Self build (BUNDLE=self) against its Nova snapshots, and a smoke test
+  # that boots it. MIX_ENV=dev: Self's snapshots are of its dev build. Self's
+  # test suite runs in the test job. The database is for the smoke test
+  # (config/dev.exs: postgres/postgres, next_dev).
   snapshot-self:
     runs-on: ubuntu-26.04
+
+    services:
+      postgres:
+        image: postgres:18
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
     env:
       MIX_ENV: dev
       BUNDLE: self
@@ -199,3 +227,11 @@ jobs:
 
       - name: Nova snapshots (Self)
         run: cd core && mix nova.snapshot
+
+      # Boots Self and requests its home, sign-in and two Mica LiveView pages.
+      - name: Smoke test (Self)
+        run: |
+          cd core
+          mix ecto.create
+          mix ecto.migrate
+          scripts/smoke-pages

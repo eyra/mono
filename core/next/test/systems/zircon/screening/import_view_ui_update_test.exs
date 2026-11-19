@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.ImportViewUIUpdateTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Oban.Testing, repo: Mica.Repo
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper

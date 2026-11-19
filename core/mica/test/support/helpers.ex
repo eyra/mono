@@ -65,7 +65,7 @@ defmodule Mica.AuthTestHelpers do
 
     conn =
       conn
-      |> Phoenix.ConnTest.init_test_session(%{})
+      |> Plug.Test.init_test_session(%{})
       |> Plug.Conn.put_session(Cldr.Plug.PutLocale.session_key(), "en")
       |> Plug.Conn.put_session(:user_token, token)
       |> Plug.Conn.assign(:current_user, user)

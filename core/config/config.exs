@@ -82,9 +82,6 @@ config :plug, :statuses, %{
 
 config :mica, MicaWeb.FileUploader, max_file_size: 100_000_000
 
-# Maximum HTTP body size for uploads (Plug.Parsers)
-config :mica, MicaWeb.Endpoint, http_body_max_size: 210_000_000
-
 config :mica, :policy_urls,
   next_terms: "https://eyra.notion.site/Terms-of-Service-059c9ffa2ac044a9a888b2bc7fe7bf1c",
   next_privacy: "https://eyra.notion.site/Privacy-7acb32ac39514d68aa4d1b69717d0752",
@@ -101,8 +98,8 @@ config :mica,
   tool_directors: [:assignment]
 
 # Pool slugs for which a brand-mark SVG lives under priv/static/images/logos/pools/.
-# Compile-time list so Logo.pool doesn't stat the filesystem on every render.
-# Override per SaaS (see next/config/config.exs and mica_saas/config/config.exs).
+# A config list, read at runtime, so Logo.pool doesn't stat the filesystem on
+# every render. Override per SaaS (see next/config/config.exs).
 config :mica, :pixel, pool_assets: []
 
 # Generic compile-time flag for E2E support facilities baked into the build
@@ -177,24 +174,6 @@ config :mica, Mica.ImageCatalog.Unsplash,
 
 config :mica, :s3, bucket: "port"
 
-config :mica, MicaWeb.Endpoint,
-  url: [host: "localhost"],
-  secret_key_base: "QbAmUdYcDMMQ2e7wVp6PSXI8QdUjfDEGR0FTwjwkUIYS4lW1ledjE9Dkhr3pE4Qn",
-  server: true,
-  force_ssl: false,
-  render_errors: [
-    formats: [html: MicaWeb.ErrorHTML, json: MicaWeb.ErrorJSON],
-    layout: [html: {MicaWeb.Layouts, :error}]
-  ],
-  pubsub_server: Mica.PubSub,
-  live_view: [signing_salt: "U46ENwad8CDswjwuXgNZVpJjUlBjbmL9"],
-  http: [
-    port: 4000,
-    protocol_options: [
-      idle_timeout: :infinity
-    ]
-  ]
-
 config :mica, :ssl,
   client: :native,
   directory_url: {:internal, port: 4002},
@@ -215,19 +194,30 @@ config :mica, :storage,
 # Default built-in storage backend (can be overridden in runtime.exs for production)
 config :mica, Systems.Storage.BuiltIn, special: Systems.Storage.BuiltIn.LocalFS
 
+# The endpoints of all SaaSes. Until step code-split every build compiles them all.
+import_config "../next/config/endpoint.exs"
+import_config "../mica_saas/config/endpoint.exs"
+
 # The SaaS config, which names the SaaS module (`config :mica, saas:`). The
 # BUNDLE build argument (or a local `.bundle` file) picks the SaaS until step
-# code-split.
+# code-split. Tests take BUNDLE only: without it they configure no SaaS and
+# run Mica's own suite, mica/test (`mix test`); `BUNDLE=next mix test` runs
+# Next's, `BUNDLE=self mix test` Self's.
 default_bundle =
   case File.read(".bundle") do
     {:ok, bundle} -> String.trim(bundle)
     {:error, _} -> "next"
   end
 
-saas_dir =
-  Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, System.get_env("BUNDLE", default_bundle))
+bundle =
+  if config_env() == :test,
+    do: System.get_env("BUNDLE"),
+    else: System.get_env("BUNDLE", default_bundle)
 
-import_config "../#{saas_dir}/config/config.exs"
+if bundle do
+  saas_dir = Map.fetch!(%{"next" => "next", "self" => "mica_saas"}, bundle)
+  import_config "../#{saas_dir}/config/config.exs"
+end
 
 config :mica, :zircon,
   screening: [

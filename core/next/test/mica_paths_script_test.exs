@@ -12,7 +12,7 @@ defmodule Next.MicaPathsScriptTest do
 
     write(tmp_dir, "core/mica/systems/widget/page.ex", ~S'''
     defmodule Systems.Widget.Page do
-      use MicaWeb, :routed_live_view
+      use NextWeb, :routed_live_view
 
       def path(widget), do: ~p"/widget/#{widget}?#{[tab: "x"]}"
 

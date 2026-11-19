@@ -15,8 +15,13 @@ defmodule Mica.FeatureFlagsTest do
     test "return the SaaS default of a declared flag that is not configured" do
       Mica.Env.put(:features, [])
 
+      previous =
+        Mica.SaaS.put_composition(feature_flags: [password_sign_in: true, storybook: false])
+
+      on_exit(fn -> Mica.SaaS.put_composition(previous) end)
+
       assert feature_enabled?(:password_sign_in)
-      refute feature_enabled?(:probe)
+      refute feature_enabled?(:storybook)
     end
 
     test "allow configuration via the application env" do
@@ -87,7 +92,7 @@ defmodule Mica.FeatureFlagsTest do
     end
 
     test "leaves out declared flags" do
-      assert Mica.FeatureFlags.undeclared(otp: true, password_sign_in: false) == []
+      assert Mica.FeatureFlags.undeclared(centerdata_sign_in: true, password_sign_in: false) == []
     end
 
     test "names a flag configured twice once" do

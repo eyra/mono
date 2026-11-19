@@ -209,3 +209,11 @@ msgstr "To-do"
 #, elixir-autogen, elixir-format
 msgid "action_menu.alt"
 msgstr "Meer acties"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr "Acties verbergen"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr "Acties tonen"

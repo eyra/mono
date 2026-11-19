@@ -1,5 +1,5 @@
 defmodule Next.Systems.Announcement.ComposePageTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
   use Oban.Testing, repo: Mica.Repo
@@ -107,7 +107,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
   end
 
   defp sign_in(user) do
-    {:ok, conn: conn, user: _user} = login(user, %{conn: MicaWeb.ConnCase.build_conn()})
+    {:ok, conn: conn, user: _user} = login(user, %{conn: NextWeb.ConnCase.build_conn()})
     conn
   end
 
@@ -724,7 +724,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     test "asks a signed-out visitor to sign in", %{admin: admin} do
       %{id: id} = draft!(admin)
 
-      conn = get(MicaWeb.ConnCase.build_conn(), ~p"/admin/announcement/#{id}")
+      conn = get(NextWeb.ConnCase.build_conn(), ~p"/admin/announcement/#{id}")
 
       assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
     end

@@ -15,7 +15,7 @@ defmodule NextWeb.Features.PanlFinishedCTATest do
   plumbing on the finished page — the right block state renders and
   the CTA points at the right destination.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Affiliate

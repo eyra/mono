@@ -129,3 +129,7 @@ msgstr "Sign up"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "See all"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "No studies found."

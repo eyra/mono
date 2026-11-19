@@ -2,11 +2,11 @@ defmodule Next.Systems.Account.SessionControllerTest do
   @moduledoc """
   Integration coverage for the redeem step of the email-first OTP flow.
   """
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Next.Systems.Account.AuthCodeVerifyPage
 
   @token_salt "otp-redeem"
@@ -77,7 +77,7 @@ defmodule Next.Systems.Account.SessionControllerTest do
       Mica.Repo.update_all(Systems.Account.UserTokenModel, set: [last_used_at: last_used_at])
 
       conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/identify")
@@ -104,7 +104,7 @@ defmodule Next.Systems.Account.SessionControllerTest do
       %{value: signed_token} = mobile_conn.resp_cookies[@remember_me_cookie]
 
       conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> put_req_header("user-agent", @mobile_user_agent)
         |> delete("/user/session")
@@ -143,7 +143,7 @@ defmodule Next.Systems.Account.SessionControllerTest do
       %{value: signed_token} = mobile_conn.resp_cookies[@remember_me_cookie]
 
       conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
 

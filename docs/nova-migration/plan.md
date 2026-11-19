@@ -33,9 +33,9 @@ Paths in this document are relative to the repository root and refer to the layo
 | [build-image](#build-image--one-image-and-one-runtimeexs) | Build and development server | One image and one `runtime.exs` (code) | code-layout; M1 after the M32 cut | in progress (M0, M1 done) |
 | [code-systems](#code-systems--coresystem-coresaas-and-open-registries) | Decoupling | `Core.System`, `Core.SaaS` and open registries | code-layout; Oban-cron PR after build-image M1 | done (production checks with M34) |
 | [code-rename](#code-rename--rename-the-otp-app-and-the-namespaces-to-mica) | Decoupling | OTP app `:core` → `:mica`, modules `Core.*`/`CoreWeb.*` → `Mica.*`/`MicaWeb.*`, Next's and Self's modules into `Next.*`/`NextWeb.*` and `MicaSaas.*`/`MicaSaasWeb.*` | code-systems; ideally build-image; before code-split | done (mono#1989) |
-| [code-compose](#code-compose--no-router-and-no-saas-composition-in-micas-compiled-code) | Decoupling | No router in Mica: SaaS routers and endpoints, recorded Mica paths; grants and notify channels at runtime; Mica's tests without a SaaS | code-systems, code-rename | planned |
+| [code-compose](#code-compose--no-router-and-no-saas-composition-in-micas-compiled-code) | Decoupling | No router in Mica: SaaS routers and endpoints, recorded Mica paths; grants and notify channels at runtime; Mica's tests without a SaaS | code-systems, code-rename | done (mono#2082, merged 2026-11-17) |
 | [code-brand](#code-brand--brand-and-config-seams) | Decoupling | Brand and config seams | code-systems | planned |
-| [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | planned |
+| [code-registry](#code-registry--open-tool-and-item-registry-data-migration) | Decoupling | Tool and item registry | code-systems | in progress (design approved 2026-11-17, d-0026) |
 | [code-instance](#code-instance--move-instance-specifics-out-of-mica-fan-out) | Decoupling | PaNL/VU and other instance specifics out of Mica | code-systems; code-registry for Graphite and Zircon | planned |
 | [data-tables](#data-tables--table-ownership-migration-paths-and-baselines) | Decoupling | Table ownership, migration paths, baselines | code-registry, code-instance | planned |
 | [ops-prod-image](#ops-prod-image--one-image-on-aws-production) | Split and cutover | One image on AWS production | ops-mica-dev, build-image | planned |
@@ -73,13 +73,13 @@ flowchart LR
 
   code_systems --> code_rename[code-rename]:::done
   code_systems --> code_brand[code-brand]
-  code_systems --> code_registry[code-registry]
+  code_systems --> code_registry[code-registry]:::next
   code_systems --> code_instance[code-instance]
   code_registry -->|Graphite and Zircon| code_instance
   code_registry --> data_tables[data-tables]
   code_instance --> data_tables
 
-  code_rename --> code_compose[code-compose]:::next
+  code_rename --> code_compose[code-compose]:::done
   code_compose --> code_split[code-split]
   code_rename --> code_split
   code_brand --> code_split
@@ -93,10 +93,10 @@ flowchart LR
   feldspar_transfer -.-|not in the same window| ops_cutover
 ```
 
-- **Done:** code-guardrails, code-cleanup, code-layout, ops-mica-dev, code-systems (merged; its production checks ship with M34), code-rename (mono#1989, merged 2026-11-03).
-- **In progress:** build-image (M0 and M1 done; M2–M4 and the rehearsal R open).
-- **Next:** code-compose, on the critical path to code-split.
-- **Can start now:** code-brand, code-registry and the items of code-instance (Graphite and Zircon after code-registry), in parallel; feldspar-protocol; the first run of repo-assess.
+- **Done:** code-guardrails, code-cleanup, code-layout, ops-mica-dev, code-systems (merged; its production checks ship with M34), code-rename (mono#1989, merged 2026-11-03), code-compose (10 PRs, the last mono#2082, merged 2026-11-17; ships in M37).
+- **In progress:** build-image (M0 and M1 done; M2–M4 and the rehearsal R open); code-registry (design approved 2026-11-17, d-0026; release 1 in M38 at the earliest).
+- **Next:** code-registry and code-instance, on the critical path to code-split through data-tables.
+- **Can start now:** code-brand and the items of code-instance (Graphite and Zircon after code-registry's release 2), in parallel with code-registry; feldspar-protocol. repo-assess had its first run on 2026-11-17 (decisions d-0021 to d-0025).
 - **Recommended, not blocking:** ops-prod-image (D1, then P after the rehearsal R) before code-split, not in the release window of code-split or ops-cutover.
 - **Strictly sequential:** code-layout → code-systems → code-rename → code-compose, then data-tables → code-split → repo-create → ops-cutover.
 
@@ -155,7 +155,7 @@ Details and rationale are in [design.md](./design.md#decisions).
   - one database per deployment
   - every table has one owner, with its migrations in the owner's repository
   - foreign keys point only from the SaaS to Mica
-  - `workflow_tool_refs` and `project_items` become open registry references
+  - `tool_refs` and `project_items` become open registry references
   - at the split, the migrations are squashed into Mica and Next baselines, which are marked as applied in Eyra production after a dry run on a production snapshot
 - **Layout.** `core/` is split with `git mv` into three Mix projects: `mica/`, `mica_saas/` (the reference SaaS, Self) and `next/` (Phoenix app with `{:mica, path: "../mica"}`). Self is a sibling of Next, not part of Mica (`core/mica_saas/` since code-layout). It gets its own repository, `novasoftwarefoundation/mica-saas`, and never lives in Mica's repository (decided 2026-10-30, m-0460).
 - **Repositories:**
@@ -282,7 +282,9 @@ Details and rationale are in [design.md](./design.md#decisions).
   - A Fly Postgres database and a storage bucket. Machines stop when idle.
   - Auto-deploy from `develop`, like `eyra-next-dev`.
   - A smoke test after each deploy: the start page, sign-in and `/.status/health`.
-  - Dev-grade configuration: Eyra's dev Mailgun and `*@eyra.co` admins are accepted, because the server is Eyra-internal. The configuration is documented in `core/mica_saas/README.md`.
+  - Dev-grade configuration: Eyra's dev mail domain and `*@eyra.co` admins are accepted, because the server is Eyra-internal. The configuration is documented in `core/docs/nova-mica-dev.md` (until code-brand: `core/mica_saas/README.md`, d-0021).
+  - **Its own Mailgun key** (d-0022), not Next dev's: done 2026-11-17. It is a sending key for `next.dev.eyra.co` only, which can send but not manage keys. The mail domain is still shared with eyra-next-dev until Nova has its own domain and key.
+  - **After code-split the deployment stays with Eyra** (decided 2026-11-17, d-0022). `fly.mica-dev.toml`, `.github/workflows/fly-deploy-mica-dev.yml` and `core/docs/nova-mica-dev.md` live in an Eyra repository (eyra/next or eyra/devops, chosen in repo-create) that builds from the public `novasoftwarefoundation/mica-saas`. mica-saas holds no Eyra deployment config, Fly token or Eyra secret.
 - **Dependencies.** After code-layout. Ideally together with build-image: the app then deploys the private `ghcr.io/eyra/self` image by digest. Until then, it builds from `core/Dockerfile` with `BUNDLE=self`.
 - **Parallel with.** build-image, code-systems and later steps, track Feldspar. It doubles as the rehearsal environment for build-image (R).
 - **Eyra prod impact.** None. It is a separate Fly app with its own database, bucket and secrets.
@@ -461,7 +463,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - **Module scans.** `Repo.orphan?/2` and the authorization entity list see the schemas of every application in the composition (`Mica.SaaS.schemas/0`), not only Mica's.
   - **Test overrides** of handlers, notifiers and Desktop sections leave the production paths. They become one test hook, `Mica.SaaS.put_composition/1`. `assignment_templates` becomes a `Mica.System` callback.
   - **Sign-in pages belong to the SaaS** (decided 2026-10-29, d-0011).
-    - Mica links to them through required `Mica.SaaS` callbacks: `sign_in_page/0`, `member_sign_in_page/1`, `identify_page/1`, `session_path/0`.
+    - Mica links to them through required `Mica.SaaS` callbacks: `sign_in_page/0`, `member_sign_in_page/1`, `sign_in_options_page/0` (the page with every way to sign in, where Mica sends users after sign-out, a password reset or a failed provider sign-in), `identify_page/1`, `session_path/0`.
     - None of these has a default in Mica, and the `title/0` default goes too.
   - **Mica's tests need no SaaS** (decided 2026-10-30: m-0460, and d-0012 for the composition).
     - **What stays in `mica/test`:** only tests that need no router, endpoint or `Mica.SaaS` callback, on a composition of Mica's own systems. `mica/test/test_helper.exs` sets it in one line, `Mica.SaaS.put_composition(systems: Mica.Systems.all())`, with no SaaS module, router or endpoint. `Mica.SaaS` callbacks raise in it.
@@ -494,7 +496,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Decisions/authorizations.** None.
 - **Done when:**
   - no Mica module reads the SaaS at compile time: no `compile_env(:mica, :saas)`, no `Mica.SaaS` route, grant or channel macros
-  - the `router.ex` and `authorization.ex` allowlist entries are gone (code section 36 → 34)
+  - the `router.ex` and `authorization.ex` allowlist entries are gone; Self's router (`mica_saas/lib/mica_saas_web/router.ex`) gets an entry for the routes of the Next systems Self keeps (E3), which goes with the `mica_saas/lib/saas.ex` entry in code-registry/code-instance (40 entries after PR 8)
   - `core/mica` has no router module, no `~p` and no `Phoenix.VerifiedRoutes`
   - every SaaS's path-check test passes, and `Mica.SaaS` has no default that points to a SaaS page
   - `mica/test` runs with no SaaS in CI and holds no router, endpoint or SaaS-callback test
@@ -519,6 +521,11 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - Replace brand words in msgstrs with brand interpolation.
     - Give Next its own Gettext backend for the `eyra-next` and PaNL copy.
   - **De-brand Pixel:** the footer, the logo catalogue and the `__eyra_field_*` attributes.
+  - **Self too** (decided 2026-11-17, d-0021). Self (`core/mica_saas`) is published under Nova, so it is de-branded like Mica:
+    - eyra.co URLs, including `build_conn(:get, "https://eyra.co")` in its test support and the eyra.co image URLs in its tests
+    - `support@eyra.co` in its tests, and fixtures with an employee's name
+    - Eyra wording in its docs, such as the "Eyra payment flow" example in `test/features/CLAUDE.md`
+    - the nova-mica-dev infrastructure section of its README (lines 290–379): it moves to `core/docs/nova-mica-dev.md`, outside Self, and goes with nova-mica-dev's deployment to an Eyra repository at code-split (d-0022)
   - **Sign-in, OTP and identify pages stay with each SaaS.** The reference SaaS's pages do not graduate into Mica (d-0011).
 - **Dependencies.** code-systems.
 - **Parallel with.** code-registry and code-instance, track Feldspar. Schedule the gettext rename at a quiet moment, because it touches every `dgettext` call.
@@ -527,37 +534,130 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - Snapshot tests of every email template and of the app, workspace and website layouts for Next.
   - All 7 locales resolve.
   - On staging, manually check the sign-up email, the OTP email, the footer and the terms page.
-  - A case-insensitive `eyra` sweep of `core/mica` finds nothing outside gettext domain names (until their rename). That includes "Powered by Eyra" in the app layout, docstrings and comments, and links to `eyra/mono`.
+  - A case-insensitive `eyra` sweep of `core/mica` and `core/mica_saas` finds nothing outside gettext domain names (until their rename). That includes "Powered by Eyra" in the app layout, docstrings and comments, links to `eyra/mono`, and Self's README and tests (d-0021).
 - **Rollback.** Revert.
 - **Decisions/authorizations.** None. "Powered by Mica / Nova" (open question 7) is answered by d-0011: Mica shows nothing of its own, and a SaaS may show it through its brand.
 
 ### code-registry — Open tool and item registry (data migration)
 
 - **Goal.** Next, and later anyone, can add tools and project items without a Mica migration. This is required before Graphite and Zircon can live in Next.
-- **Scope.**
-  - **`Core.Tool` behaviour:** type, schema, prepare, form/view, director, export/import, icon/title.
-  - **Registry references.**
-    - Add `tool_type`/`tool_id` to `workflow_tool_refs` and `item_type`/`item_id` to `project_items`.
-    - Backfill them from the per-tool foreign-key columns, which are defined today in [`core/systems/workflow/tool_ref_model.ex`](../../core/systems/workflow/tool_ref_model.ex) and [`core/systems/project/item_model.ex`](../../core/systems/project/item_model.ex).
-    - Switch reads to the new columns, and put the old ones on deferred drop.
-  - **Directors** become registry-validated strings instead of compile-time `Ecto.Enum` values.
-  - **Assignment and Workflow** lose their hard-wired Zircon/Lab/Feldspar handling.
-  - **`Workflow.Platforms`** moves to the Feldspar side.
+  - **Why.** `tool_refs` has one foreign-key column per tool (alliance, document, feldspar, graphite, instruction, lab, manual, zircon_screening), and `project_items` one per item type (assignment, advert, leaderboard, storage_endpoint).
+  - Adding a type means a Mica migration, a schema change and new clauses in about ten Mica modules.
+  - Three of these columns are foreign keys from Mica tables to Next tables (`graphite_tools`, `zircon_screening_tool`, `graphite_leaderboards`).
+- **Scope.** The design, with the inventory, the production-shape SQL, the rehearsal and the options compared, is kept by the Nova migration project (thread t-0047, `registry-design.md`). Approved by Melle on 2026-11-17 (d-0026).
+  - **Registry references.** A tool ref stores `tool_type`/`tool_id`, a project item stores `item_type`/`item_id`.
+    - The type names are today's column stems, which are also what `Frameworks.Concept.ToolModel.key/1` returns.
+    - A name is data: it never follows a module rename.
+    - No list of types lives in the database.
+    - `Mica.Tool.Type` and `Mica.ProjectItem.Type` check the names against the composition at runtime, like the notify channel type. An unknown stored name loads; only its own row lacks a target.
+    - **The reserved type `none`** marks a row that references nothing (6 tool refs on production, left from 2023), with no id. No system may register it (`validate!/0` refuses), the types never cast it, and it loads with a `nil` target. The integrity check counts these rows separately, as expected, not as dangling.
+  - **`Mica.Tool`, one module per tool type:** `type/0`, `schema/0`, `prepare/2`, `view/0`, and optional `view_attrs/2`, `export/2`, `external_path/2`, `groups/0`.
+    - Per-struct behaviour (labels, `ready?`, `form/2`, …) stays in the `Frameworks.Concept.ToolModel` protocol.
+    - **`Mica.ProjectItem`:** `type/0`, `schema/0`, `card/1`.
+    - **Registry API:** `Mica.Tools` and `Mica.ProjectItems` (`fetch!/1`, `type_of/1`, `preload/1`).
+  - **Registration through the runtime composition.** Three new `Mica.System` callbacks:
+    - `tools/0`, `project_items/0` and `directors/0`, collected by `Mica.SaaS`;
+    - `validate!/0` fails the boot on a duplicate name or schema;
+    - the Nova snapshot lists them.
+    - Graphite and Zircon declare their tools (and Graphite its leaderboard item) from Next. `Next.Systems.Citizen` gets a `_system.ex` to declare its director.
+  - **Directors** become registry-checked names: `Mica.Director`, a runtime-checked type with a kind (`:tool`, `:pool`, `:promotion`), replaces the 8 compile-time `Ecto.Enum` fields.
+    - The modules come from `directors/0`, not from naming conventions.
+    - `config :mica, tool_directors:` goes, and so do Next's `:student`/`:citizen` values in Mica's `Pool.Model`.
+    - No data migration: the columns are strings already.
+  - **Referential integrity without per-type foreign keys** (decided 2026-11-17, d-0027: the application checks type and id, no reverse foreign keys):
+    - one ref per tool and one item per target, by unique indexes on `(type, id)`
+    - **no new deletes or cascades** (decided 2026-11-17, d-0030). Today's existing deletes go through one guarded registry path, with nothing added to it.
+      - **No tool delete remains.** The only one, `Alliance.Public.delete_tool/1`, has no callers. PR-1 removes it, with its test. Today deleting an alliance tool would cascade to its tool ref (`ON DELETE CASCADE`, `20230711100350`), so the cascade goes with it.
+      - **Deleting an advert** (`Advert.Assembly.delete/1`, used only in a test) refuses while a project item points to it, as its `NO ACTION` foreign key does today.
+      - **Deleting a workflow item** keeps leaving its tool and tool ref behind, as today.
+    - a daily integrity check (`mix mica.registry.check`, an Oban cron, and a test in each SaaS suite) **reports** refs and items whose target row is missing or whose type the composition doesn't have, and orphaned tools; it never removes anything
+    - **ready for an archive feature** (d-0030: Melle prefers archiving to deleting, so nothing gets deleted at all). A type/id reference to an archived target stays valid, and nothing in the registry assumes hard deletes: the integrity check counts a missing row only, never an archived one, and loading returns an archived target like any other.
+    - a dangling or unknown ref loads with a `nil` target and never crashes a page
+  - **Loading and writing.**
+    - `tool_ref.tool` and `item.target` are virtual fields, filled per type by `Mica.Tools.preload/1` (also from `Mica.Repo.preload/3`).
+    - A tool is inserted before its ref.
+    - Templates name tools by type (`"feldspar"`), not by field (`:feldspar_tool`).
+  - **Assignment and Workflow lose their hard-wired Zircon, Lab, Feldspar, Alliance, Manual and Instruction handling:**
+    - views, export, the Alliance URL and the Feldspar description become `Mica.Tool` callbacks;
+    - the Zircon import and criteria tabs are declared by the paper-screening template (`content_tabs/0`);
+    - tool signals become one generic `{:workflow_tool, event}`.
+  - **`Workflow.Platforms` moves to the Feldspar side** as `Systems.Feldspar.Platforms`, returned by Feldspar's `groups/0`. The 13 platform keys stay a list in Mica's Feldspar system, not in the Mica App Protocol (Feldspar coordinator, 2026-11-17): the key never crosses the app channel. If a later step makes it cross, it enters the protocol as an opaque string, not an enum.
+  - **The setup export** asks each tool's `export/2`. There is no setup importer (a missing feature, not a bug), so this step adds no import callback.
+  - **The project's storage item** (input: mono#1984, "Show and export a storage endpoint's donations per participant"). A project has one storage item ("Data"), recognised today by its name plus a non-nil `storage_endpoint_id`.
+    - The marker becomes the type: the item of type `storage_endpoint` on the project node, at most one per node (a partial unique index).
+    - `Project.Public.storage_item/1` and `Project.ItemModel.storage?/1` replace the name matches. The name is a translated label and stays one.
+    - **A project may have no storage item** (289 on production, 17 Nov): `storage_item/1` returns `nil`, as `Project.Public.get_storage_endpoint_by/1` already returns `{:error, {:storage_endpoint, :not_available}}`. Nothing in release 2 or in mono#1984's path assumes one exists; #1984's Data tab has its own `nil` clause.
+    - **mono#1984 can land at any point** (decided 2026-11-17, d-0029: there is no fixed moment). code-registry works in either order, and whichever lands second adapts:
+      - **Before release 1:** its migration (`20261110160000_link_project_storage_to_project_node.exs`, which links the storage endpoint's authorization node to the project node) and its `data?/1` merge as they are. Release 1's backfill, trigger and per-node index accept them: a project has one storage item, which `Project.Public.get_storage_endpoint_by/1` already assumes. PR-4 then replaces `data?/1`'s name match with `storage?/1`.
+      - **After release 1, before PR-4:** the same.
+      - **After PR-4:** use `storage?/1` and `storage_item/1` instead of the name match. From PR-8 on, `storage_endpoint_id` and `storage_endpoint` no longer exist on `ItemModel`, so `item.target` replaces them.
+      - **After release 3:** the migration reads `item_type = 'storage_endpoint'` and `item_id` instead of `storage_endpoint_id`, with a timestamp after release 3's migration.
+      - Rehearsed on a copy of the database: the migration links an unlinked endpoint before release 1, after release 1 and after release 2 as it is, and after release 3 rewritten.
 - **Dependencies.** code-systems.
 - **Parallel with.** code-brand, the parts of code-instance that don't touch tools, track Feldspar.
-- **Eyra prod impact.** **A data migration on live tables**, in three releases:
-  1. Add the columns, backfill and dual-write.
-  2. Switch reads.
-  3. Drop the old columns, at least one milestone later.
+- **Eyra prod impact.** **A data migration on live tables**, in three releases. Old and new columns are kept equal on every write by a temporary database trigger, from release 1 to release 3 (approved with the plan, d-0026): whichever side a writer sets, the trigger fills the other. So old and new code can run side by side during a deploy, and every PR of release 2 can be reverted on its own.
+  1. **Release 1, M38 at the earliest (cut Mon 30 Nov):**
+     - add the four columns;
+     - add the sync trigger;
+     - backfill. The backfill refuses to run if a row sets 2+ per-type columns. A row that sets none gets the reserved type `none` and no id: production has 6 such tool refs, left from the `data_donation_tool_id` column that a 2023 migration removed. Nothing is deleted (d-0030), and the application never writes `none`;
+     - add `CHECK` constraints (`tool_refs_tool_required`, `project_items_item_required`) that refuse a row without a type, or without an id outside `none`, added `NOT VALID` and then validated. A newly written row that references nothing is refused. They take over from the `must_have_at_least_one_*` checks, which never fire (`x <> NULL`; Next 10517294829);
+     - build the unique indexes concurrently.
 
-  Rehearse each release on a copy of production data and on staging.
+     No code reads the new columns yet.
+  2. **Release 2, M39 and M40:** reads and writes switch to the registry, PR by PR. The last PR removes the per-type associations from `ToolRefModel` and `ItemModel` and sets `tool_type` and `item_type` `NOT NULL`; the ids stay nullable for `none`, guarded by the checks. The per-type columns get deprecation comments and rows in [`core/docs/schema-deprecations.md`](../../core/docs/schema-deprecations.md).
+  3. **Release 3, M42 or later** (M41 and M42 fall in the Christmas weeks), at least one full milestone after release 2 without issues (decided 2026-11-17, d-0031): drop the trigger, the per-type columns with their foreign keys, and the old checks.
+
+  - **Size and shape: production, counted read-only on 2026-11-17** (Next a-0056; migration level 20261104084719, Postgres 15.17):
+    - **`tool_refs`:** 1,751 rows (424 kB). 1,745 set exactly one tool column, and 6 set none (the type `none`). No row sets two. 7 have `special` NULL: the 6 empty ones and 1 Feldspar ref. 468 belong to no workflow item, left over from deleted workflow items; they are reported, never removed.
+    - **`project_items`:** 1,157 rows (280 kB), each setting exactly one column: 665 assignments, 484 storage endpoints, 8 leaderboards, 0 adverts.
+    - **No orphans and no shared targets.** No project node has two storage items. 289 root nodes have none, so nothing may assume a project has one. 1 storage item is not named "Data".
+    - **Directors:** document, manual and 1 Feldspar tool have director NULL, which `Mica.Director` loads as nil.
+    - Every statement is sub-second at this size, so batching isn't needed.
+  - **Locks.**
+    - Adding columns, the checks (`NOT VALID`), the trigger and the drops take brief locks, with a 5 s `lock_timeout` so they never queue behind a long transaction.
+    - `VALIDATE` and the concurrent index builds let writes continue.
+    - `SET NOT NULL` uses the validated checks and skips the scan (Postgres 12+). The scripts use nothing newer than Postgres 12, and were rehearsed on 15 (production's version) and on 18.
+  - **Rehearsal** (decided 2026-11-17, d-0028):
+    - A restored copy of production, in a throwaway database, serves the rehearsals of all three releases.
+    - Next owns production data, so a Next thread restores it and runs the rehearsal scripts and the verification SQL (up, verify, down, up), then sends the outputs. The data never leaves Next.
+    - How (Next a-0060, approved by Melle): one of production's hourly encrypted `pg_dump`s, restored with a plain `pg_restore` into a throwaway local Postgres 15 on Next's backup server, and dropped the same day. One runner per release runs every step unattended, and writes only DDL messages, timings and counts.
+    - Staging rehearses each release too.
+    - Release 1 merges only after its production-copy rehearsal.
+  - **PRs, in order:**
+    - **Release 1:**
+      - PR-P, a mono test that pins a Feldspar item's platform group in the donation context and in the exact storage file name, unchanged through release 2;
+      - PR-1, the registry contract, behaviours and declarations, with no reads changed; it also removes the unused `Alliance.Public.delete_tool/1`;
+      - PR-2, the release-1 migrations, the integrity check and the verification SQL.
+    - **Release 2:**
+      - PR-3, tool reads;
+      - PR-4, item reads and the storage item;
+      - PR-5, writes;
+      - PR-6, the hard-wired cases, `Workflow.Platforms` and export;
+      - PR-7, directors;
+      - PR-8, which drops the per-type associations, sets `NOT NULL` and removes the five code-registry allowlist entries.
+    - **Release 3:** PR-9, the drop.
 - **Verification.**
-  - Backfill counts match.
-  - The integrity handling on tool delete is tested.
+  - After every migration step, the verification SQL shows 0 mismatches between old and new columns, 0 rows without a type or (outside `none`) without an id, and per-type counts equal to the production count.
+  - The guarded delete path is tested: a delete refuses while a reference exists, and no code path deletes more than today.
   - e2e passes for creating, running and exporting assignments with each tool type.
-  - The setup export/import round-trip works.
-- **Rollback.** For releases 1 and 2, revert the code; the old columns are still in sync. Release 3 happens only after a full milestone without issues.
-- **Decisions/authorizations.** The user approves the data migration plan before release 1.
+  - The setup export is unchanged for every tool type, before and after (replaces the export/import round-trip: there is no importer).
+  - PR-P's platform-key test passes unchanged through release 2.
+  - `mix mica.registry.check` reports 0 on production for a full milestone before release 3.
+  - After release 3, no Mica table has a foreign key to a Next table among `tool_refs` and `project_items`.
+- **Rollback.** Every release ships a working down migration, rehearsed up, down and up (Next's condition, 2026-11-17).
+  - **Release 1:** its deploy doc lists a two-step rollback:
+    1. Revert the code. Nothing reads the new columns, so this alone restores the old behaviour.
+    2. If needed, run the downs: drop the checks and indexes, then the trigger, then the columns. The trigger goes before the columns, or the next write fails.
+  - **Release 2:** revert the PR. The trigger fills the new columns for older code, so `NOT NULL` holds.
+  - **Release 3:** the down re-adds the columns and their foreign keys, fills them from type and id, and restores the trigger. No code needs reverting: since release 2 nothing reads the old columns.
+- **Decisions/authorizations.**
+  - **The data migration plan and the sync trigger:** approved 2026-11-17 (d-0026).
+  - **Integrity model:** decided 2026-11-17 (d-0027). The application checks type and id: unique `(type, id)`, deletes through the registry, a daily integrity check, no reverse foreign keys.
+  - **Rehearsal on a restored copy of production for all three releases,** in a throwaway database, run by Next: decided 2026-11-17 (d-0028).
+  - **mono#1984 has no fixed moment** (decided 2026-11-17, d-0029). code-registry works whichever lands first; see Scope.
+  - **No new deletes or cascades; the integrity check reports and never removes; archive-ready:** decided 2026-11-17 (d-0030). Deleting a workflow item keeps leaving its tool and tool ref behind. Melle prefers a future archive feature over deleting, so references to archived targets must stay valid.
+  - **Release 3 in M42 or later,** after one full milestone without issues: decided 2026-11-17 (d-0031).
+  - Each release-1 migration PR merges at a moment agreed with Next, after the read-only production count.
 
 ### code-instance — Move instance specifics out of Mica (fan-out)
 
@@ -572,14 +672,15 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - project item gating and advert marks
     - `get_or_create_panl` and the `:panl` pool seed in [`core/lib/core/seeds/base.ex`](../../core/lib/core/seeds/base.ex)
     - the PaNL e2e fixtures
+    - the PaNL tests in `core/mica_saas/test`, which move with the code they test to `next/test` (d-0021)
   - **VU:**
     - student codes and `generate_vu`
     - `VUDaySchedule`, which becomes Lab config supplied by Next
     - the student promotion next action
-  - **Pool directors.** Citizen and Student register as pool directors from Next.
+  - **Pool directors.** Citizen and Student register as pool directors from Next, through `directors/0` (code-registry).
   - **Admin and Org.** The citizen/pool admin settings and the Org pools tab become panels contributed by Next systems through Mica's extension points.
   - **Home.** Next's current home moves to Next and is set through start pages. Mica has no home of its own (d-0011); the reference SaaS gets its own in `mica_saas`.
-  - **Module lookups by name.** `Frameworks.Utility.Module` stops naming the `Next` and `Self`/`MicaSaas` namespaces and stops computing `Systems.#{system}.#{name}`; pool directors come from `pool_directors/0`.
+  - **Module lookups by name.** `Frameworks.Utility.Module` stops naming the `Next` and `Self`/`MicaSaas` namespaces and stops computing `Systems.#{system}.#{name}`; pool directors come from `directors/0` (code-registry).
   - **Eyra-domain synthetic accounts.** The `@eyra.service`, `external+…@eyra.co` and `@next.eyra.co` addresses become config with Next's values.
   - **External panel ids.** `liss` and `ioresearch` become Next config. Mica keeps `generic`.
   - **Integrations.** SURFconext and Centerdata auth, the OPP payment provider and Yoda storage move behind their behaviours. They go to `core/next/integrations` until their owner is decided (open question 5). Only Nova-governed code goes into Mica; they can graduate later.
@@ -604,6 +705,8 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - the allowlist is empty, including its `mica/test` section
   - `core/mica/**` compiles without `core/next/**` (a CI job does exactly this)
   - `MicaSaas.SaaS` lists no Next system: the entry for `mica_saas/lib/saas.ex` (decided 2026-10-16, E3) is gone
+  - the boundary check scans `core/mica_saas` with the same literal rules as Mica (PaNL, VU, `eyra.co`, `@eyra.service`), and the allowlist holds no `core/mica_saas` entry (decided 2026-11-17, d-0021). `core/scripts/boundary_rules.ex` no longer says that a SaaS may contain instance specifics.
+  - Self's tests hold no PaNL flows, `@eyra.service` accounts, `external_panel: :liss` or VU marks. They move to `next/test` with the code they test: the home, pool, onboarding, finished-view and account PaNL tests, the service-login tests, and the SURFconext, Centerdata, payment and storage integration tests (repo-assess, first run).
 
 ### data-tables — Table ownership, migration paths and baselines
 
@@ -627,11 +730,14 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Parallel with.** Rest of code-brand, track Feldspar, repo-assess. The baselines run in parallel with code-split.
 - **Eyra prod impact.** None. These are the same migration versions, already applied. The production snapshot contains personal data, so handle it with the same controls as backups.
 - **Verification.**
-  - A fresh database built from both paths matches today's [`core/priv/repo/structure.sql`](../../core/priv/repo/structure.sql).
+  - A fresh database built from both paths matches a schema dump of today's database. Refresh [`core/priv/repo/structure.sql`](../../core/priv/repo/structure.sql) first: it is a 2021 dump that holds none of today's tables.
   - On a production snapshot, nothing is pending.
   - The baseline dry-run evidence (schema diffs, pending-migrations output) goes on the Flux issue.
 - **Rollback.** Revert the file moves.
 - **Decisions/authorizations.** Using a production snapshot.
+- **Done when:**
+  - the Mica baseline and the Next baseline exist, and the dry run on the production snapshot shows nothing pending and an unchanged schema
+  - Mica's published migration path holds only the Mica baseline and the migrations after it, not the ~198 historical files; Next's holds its own baseline and its migrations after it (decided 2026-11-17, d-0025). The historical migrations, which seed Eyra and VU organisation data and VU programme codes, stay in `eyra/mono`.
 
 ---
 
@@ -663,7 +769,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Goal.** Three real Mix projects in this repository, with `core/` gone. This is the shape the repositories will have.
 - **Scope.**
   - **`git mv core/mica mica/`.** This is the Mix project `:mica`, with its own `mix.exs`, `priv`, gettext and the static assets its own components use. No router, no endpoint module, no SaaS.
-  - **`git mv core/mica_saas mica_saas/`.** This is the Mix project `:mica_saas` (the reference SaaS, Self), with `{:mica, path: "../mica"}` or `MICA_PATH`. It holds its router, endpoint, config, Dockerfile and `fly.mica-dev.toml`, and its own test suite, which includes the Mica tests that need a router or an endpoint (decided 2026-10-30, m-0460).
+  - **`git mv core/mica_saas mica_saas/`.** This is the Mix project `:mica_saas` (the reference SaaS, Self), with `{:mica, path: "../mica"}` or `MICA_PATH`. It holds its router, endpoint, config and Dockerfile, and its own test suite, which includes the Mica tests that need a router or an endpoint (decided 2026-10-30, m-0460). nova-mica-dev's deployment (`fly.mica-dev.toml`, `fly-deploy-mica-dev.yml`, `core/docs/nova-mica-dev.md`) does not move into `mica_saas/`: it stays with Eyra's files until repo-create places it (d-0022).
   - **`git mv core/next next/`.** This is the Phoenix app `:next`, with `{:mica, path: "../mica"}`. Next owns:
     - its router and endpoint (`NextWeb.Router`, `NextWeb.Endpoint`, built with Mica's macros since code-compose)
     - config, including `runtime.fly.exs` and `runtime.aws.exs`
@@ -672,7 +778,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - the e2e, smoke and load tests
   - **Mica keeps only the tests that need no SaaS.** They run on a composition of Mica's own systems (since code-compose). Mica's CI also runs mica-saas's suite against the Mica code of the same commit, as a required check.
   - **Workflows.**
-    - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`; nova-mica-dev builds from `mica_saas/`.
+    - Update `release.yml`, `docker_release.yml`, `fly-deploy-*.yml` and `e2e*.yml` to build from `next/`; nova-mica-dev's workflow, still Eyra's, builds from `mica_saas/`.
     - Add a Mica CI job that builds `mica/` on its own (warnings as errors) and runs `mica/test`, and a mica-saas job that runs `mica_saas/`'s suite.
     - The `BUNDLE` build argument disappears, and with it the bundle id `:self`.
     - If build-image has landed, this moves one `runtime.exs`, one Dockerfile and one build workflow instead.
@@ -704,9 +810,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - Eyra-private material: customer names, internal hosts, fixtures with real e-mail domains
     - docs and agent instructions that describe Eyra infrastructure
   - **History.** Mica and mica-saas start with fresh history, so only the trees are published. Confirm that pointing the first commit back to `eyra/mono`, which stays public, is acceptable.
-  - **Licence.** This repository and `eyra/feldspar` are AGPL-3.0 ([`COPYING.md`](../../COPYING.md)). Two questions need legal input, not an engineering answer:
-    - the copyright holder and notices under Nova, and a contributor agreement for non-Eyra contributors
-    - the consequences for operators, including for `eyra/next`
+  - **Licence.** This repository and `eyra/feldspar` are AGPL-3.0 ([`COPYING.md`](../../COPYING.md)). The first run (2026-11-17) found no copyright notice, no file headers, and `"license": "MIT"` in `core/assets/package.json`. Copyright and notices are decided (d-0023, see Decisions); the final run checks that the first commits carry them. Still open: the AGPL-3.0 consequences for operators, including for `eyra/next` (open question 9).
   - **Dependencies.** Mica would rely on these Eyra-owned forks: `bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`. Prism (`novasoftwarefoundation/prism`, a Mix git dependency pinned by tag) already belongs to Nova.
   - **GitHub setup:**
     - org access, teams and branch protection
@@ -719,7 +823,14 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Eyra prod impact.** None.
 - **Verification.** The user reviews the report.
 - **Rollback.** Not applicable.
-- **Decisions/authorizations.** Accepting the assessment, including the licence answer, before repo-create.
+- **Decisions/authorizations.**
+  - Accepting the assessment before repo-create.
+  - **Licence and copyright, decided 2026-11-17 (d-0023): "Nova gets the IP right."** Eyra's copyright in Mica and mica-saas goes to Nova Software Foundation; no lawyer round. Assumed, and Melle can still change them:
+    - AGPL-3.0 stays.
+    - The notice reads "Copyright Nova Software Foundation and contributors".
+    - SPDX headers or a NOTICE file go in the first commit.
+    - Outside contributions are accepted with a DCO sign-off.
+    - The `"license": "MIT"` in `core/assets/package.json` is fixed.
 
 ### repo-create — Create the repositories
 
@@ -727,7 +838,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
 - **Scope.**
   - **`novasoftwarefoundation/mica`:**
     - fresh history; the first commit is `mica/` at `eyra/mono` commit X, with a message pointing to `eyra/mono@X`
-    - the Mica baseline, CI and branch protection
+    - the Mica baseline, CI and branch protection. Migrations: only data-tables' Mica baseline and the migrations after it, not the historical files, which stay in `eyra/mono` (decided 2026-11-17, d-0025)
     - tag `v0.1.0`
     - CI, both jobs required checks on every pull request (decided 2026-10-30):
       - the `mica` job compiles Mica with warnings as errors and runs `mica/test`
@@ -737,13 +848,14 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
     - fresh history; the first commit is `mica_saas/` at `eyra/mono` commit X
     - `{:mica, github: "novasoftwarefoundation/mica", tag: "v0.1.0"}`, with a `MICA_PATH` override for Mica's CI
     - its own test suite and CI: against its pinned Mica tag on every push, and against Mica's `main` nightly
-    - nova-mica-dev deploys from here; its Fly secrets are re-created
+    - no Eyra deployment config: nova-mica-dev deploys from an Eyra repository (d-0022)
   - **`eyra/next`:**
     - built from `next/` plus the root files Eyra needs
     - history approach is open question 4
     - `{:mica, github: "novasoftwarefoundation/mica", tag: "v0.1.0"}`
-    - the Next baseline, workflows and Fly config; secrets are re-created in the new repository
+    - the Next baseline (its own; the historical migrations stay in `eyra/mono`, d-0025), workflows and Fly config; secrets are re-created in the new repository
     - Mica's CI does not check out `eyra/next`; Next tests a Mica upgrade in its own CI
+  - **nova-mica-dev's deployment** (d-0022): choose eyra/next or eyra/devops, move `fly.mica-dev.toml`, `fly-deploy-mica-dev.yml` and `core/docs/nova-mica-dev.md` there, build from a tag or commit of `novasoftwarefoundation/mica-saas`, and re-create its Fly secrets there.
   - **Sync window.** Changes on `eyra/mono` after X are replayed, or development pauses briefly. Keep the window to days.
 - **Dependencies.** code-split, repo-assess and the data-tables baselines.
 - **Parallel with.** Track Feldspar.
@@ -753,10 +865,15 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
   - mica-saas CI is green against `v0.1.0`.
   - `eyra/next` builds the same release as `eyra/mono@X`.
   - Full e2e passes on dev.
+  - A written assignment of Eyra's copyright in Mica and mica-saas to Nova Software Foundation exists (d-0023).
+  - The contracts of the contractors who committed to this code assigned their work to Eyra (repo-assess: commits from non-Eyra e-mail domains).
+  - The first commit of `novasoftwarefoundation/mica` and of `novasoftwarefoundation/mica-saas` carries the notice and the SPDX headers or NOTICE file; `package.json` no longer says MIT; the repositories require a DCO sign-off on pull requests.
 - **Rollback.** Archive the new repositories. Nothing depends on them yet.
 - **Decisions/authorizations.**
   - **The user authorizes creating `novasoftwarefoundation/mica` (public), `novasoftwarefoundation/mica-saas` (public) and `eyra/next`.**
   - The user decides who gets admin rights on the Nova repositories.
+  - **Licence and copyright as decided in repo-assess** (d-0023, assumed details): AGPL-3.0; "Copyright Nova Software Foundation and contributors"; SPDX headers or a NOTICE file in the first commit; outside contributions with a DCO sign-off; the `package.json` "MIT" fixed.
+  - Which Eyra repository hosts nova-mica-dev's deployment: eyra/next or eyra/devops (d-0022).
 
 ### ops-cutover — Cutover of Eyra production to `eyra/next`
 
@@ -770,7 +887,7 @@ code-systems and code-brand fix the contract, and code-registry, code-instance a
      - deploy the `eyra/next` release through the normal AWS flow
      - run `predeploy`; nothing should be pending
      - run the smoke tests
-  4. Point the Fly dev/staging workflows and the AWS release source at `eyra/next`, point the nova-mica-dev deploy at `novasoftwarefoundation/mica-saas`, and disable both in `eyra/mono`.
+  4. Point the Fly dev/staging workflows and the AWS release source at `eyra/next`, switch nova-mica-dev to its deploy in the Eyra repository chosen at repo-create, which builds from `novasoftwarefoundation/mica-saas`, and disable both in `eyra/mono`.
   5. Monitor AppSignal and the job queues for one milestone.
 - **Rollback plan.**
   - Before the baseline marking: abort and keep `eyra/mono`.
@@ -849,7 +966,7 @@ One step ID was renamed, on 2026-10-16, before any build work on that step had s
 6. **Generic cloud backends** (S3/Tigris, Azure storage, Mailgun/SES). Mica core or integration packages?
 7. **"Powered by Mica / Nova".** Answered 2026-10-29 (d-0011): nothing in Mica, which has no default brand. A SaaS may show it through its own brand.
 8. **Eyra-owned forks** used as Mica dependencies (`bamboo_phoenix`, `bamboo_ses`, `live_nest`, `packmatic`). Move them to Nova, upstream them, or keep them as Eyra-maintained?
-9. **Licence and copyright.** Copyright holder for Mica and Feldspar after the move, and the AGPL-3.0 consequences for operators. This needs legal input.
+9. **Licence and copyright.** Copyright in Mica and mica-saas: answered 2026-11-17 (d-0023): Nova gets it, under AGPL-3.0, with no lawyer round (details in repo-assess). Still open: Feldspar's copyright after the move (track Feldspar), and the AGPL-3.0 consequences for operators, including for `eyra/next`.
 10. **Translation overrides.** Do SaaS repositories need to override Mica's UI copy?
 
-<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; step IDs by t-0016; code-compose by t-0033).</sub>
+<sub>Written by an AI agent (Claude Code · Claude Opus 5.5, herdr-projects nova-migration · t-0001; step IDs by t-0016; code-compose by t-0033; code-registry and the repo-assess decisions by t-0047).</sub>

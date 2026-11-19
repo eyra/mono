@@ -8,17 +8,27 @@ defmodule Mica.SaaS do
 
       config :mica, saas: Next.SaaS
 
-  Mica reads the value at runtime. At boot `validate!/0` builds the
+  Mica reads the value at runtime only. At boot `validate!/0` builds the
   composition, the contributions of all systems, checks it and caches it; the
   readers below (`signal_handlers/0`, `grants/0`, ...) take their part from
-  that cache. Only `MicaWeb.Router` still reads the value at compile time, to
-  splice the routes of all systems (`override_routes/0`, `routes/0`). Never set
-  `:saas` in `runtime.exs`; a release refuses to boot when it differs from the
-  value the router was compiled with.
+  that cache. Each SaaS has its own router, which splices the routes of its
+  systems (`Mica.SaaS.Routes`), so no Mica module is compiled against the
+  configured SaaS. Set `:saas` only in the SaaS's config, not in `runtime.exs`:
+  the endpoint config of a build is the SaaS's.
   """
 
   @doc "The systems the SaaS is made of: `Mica.Systems.all() ++` its own systems."
   @callback systems() :: [module()]
+
+  @doc "The SaaS's endpoint, built with `use MicaWeb.Endpoint`."
+  @callback endpoint() :: module()
+
+  @doc """
+  The SaaS's router, `use Phoenix.Router` with Mica's pipelines and routes
+  (`MicaWeb.Pipelines`, `Mica.SaaS.Routes`, `MicaWeb.BaseRoutes`). The endpoint
+  plugs it.
+  """
+  @callback router() :: module()
 
   @doc "The `MicaWeb.StartPageProvider` implementation."
   @callback start_pages() :: module()
@@ -35,11 +45,34 @@ defmodule Mica.SaaS do
   @doc "Where a user lands after signing in, unless a return path is set."
   @callback signed_in_page(:creator | :member) :: String.t()
 
-  @doc "Where a signed-out user is sent to sign in."
+  @doc """
+  Where a signed-out user is sent to sign in. Mica has no sign-in pages of its
+  own: this callback and the four below name the SaaS's, and none has a default.
+  """
   @callback sign_in_page() :: String.t()
 
   @doc "Where a signed-out user is sent to sign in for a page participants open, which they return to."
   @callback member_sign_in_page(return_to :: String.t()) :: String.t()
+
+  @doc """
+  The page that offers every way the SaaS has to sign in (a password, identity
+  providers). Mica sends users there after they sign out, reset their password
+  or fail to sign in through a provider.
+  """
+  @callback sign_in_options_page() :: String.t()
+
+  @doc """
+  The page where a user enters an email address and is sent on to the way
+  they sign in (a one-time code or an identity provider), for a creator or a
+  participant. Mica appends a return path.
+  """
+  @callback identify_page(:creator | :participant) :: String.t()
+
+  @doc """
+  The path of the SaaS's session controller: the password sign-in form posts
+  to it, and signing out deletes it.
+  """
+  @callback session_path() :: String.t()
 
   @doc """
   Where a signed-out user is sent to sign up instead of the password sign-up
@@ -57,30 +90,17 @@ defmodule Mica.SaaS do
   """
   @callback feature_flags() :: keyword(boolean())
 
-  @optional_callbacks title: 0,
-                      sign_in_page: 0,
-                      member_sign_in_page: 1,
-                      sign_up_page: 2,
-                      feature_flags: 0
+  @optional_callbacks sign_up_page: 2, feature_flags: 0
 
   defmacro __using__(_opts) do
     quote do
       @behaviour Mica.SaaS
 
-      def title, do: "Mica"
       def feature_flags, do: []
-
-      def sign_in_page, do: "/user/signin"
-
-      def member_sign_in_page(_return_to), do: sign_in_page()
 
       def sign_up_page(_user_type, _post_signup_action), do: nil
 
-      defoverridable title: 0,
-                     sign_in_page: 0,
-                     member_sign_in_page: 1,
-                     sign_up_page: 2,
-                     feature_flags: 0
+      defoverridable sign_up_page: 2, feature_flags: 0
     end
   end
 
@@ -88,26 +108,55 @@ defmodule Mica.SaaS do
 
   @key {__MODULE__, :composition}
 
-  # Mica.Systems, by path: naming it here would make it a dependency of the callers.
-  @core_systems_source Path.expand("systems.ex", __DIR__)
+  @no_saas "no SaaS: this is a mica-saas test. Mica's own tests run on a composition of " <>
+             "Mica's systems; run a test that needs a SaaS in Self's suite (BUNDLE=self) " <>
+             "or Next's (BUNDLE=next)"
 
-  @doc "The configured SaaS module (`config :mica, saas:`)."
+  @doc """
+  The configured SaaS module (`config :mica, saas:`). Raises in the composition
+  of Mica's own tests, which has no SaaS (`put_composition/1`), so every
+  callback reached through it raises there.
+  """
   def module do
-    Mica.Env.get(:saas) ||
-      raise "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
-              "mica_saas/config/config.exs) names the SaaS module"
+    case Mica.Env.get(:saas) do
+      nil ->
+        if saas?(),
+          do:
+            raise(
+              "config :mica, saas: is not set; the SaaS config (next/config/config.exs, " <>
+                "mica_saas/config/config.exs) names the SaaS module"
+            ),
+          else: raise(@no_saas)
+
+      saas ->
+        saas
+    end
   end
+
+  @doc """
+  False in the composition of Mica's own tests, which has no SaaS module, router
+  or endpoint (`put_composition/1`); true otherwise.
+  """
+  def saas?, do: not match?(%{saas?: false}, :persistent_term.get(@key, nil))
 
   @doc """
   Builds the composition of the configured SaaS, checks it (`validate!/1`) and
   caches it. `Mica.Application` runs it at boot, before the children start, so
-  a broken composition stops the boot.
+  a broken composition stops the boot. With no SaaS configured it checks the
+  composition of Mica's own tests instead, which their test helper puts before
+  the boot.
   """
   def validate! do
-    saas = module()
-    composition = validate!(saas)
+    {name, composition} =
+      if saas?() or Mica.Env.get(:saas) do
+        saas = module()
+        {inspect(saas), validate!(saas)}
+      else
+        {"Mica, no SaaS,", check!(nil, composition())}
+      end
+
     :persistent_term.put(@key, composition)
-    Logger.info("#{inspect(saas)}: #{length(composition.systems)} systems, composition valid")
+    Logger.info("#{name}: #{length(composition.systems)} systems, composition valid")
     :ok
   end
 
@@ -115,6 +164,8 @@ defmodule Mica.SaaS do
   The composition of `saas`, after checking it. Raises on:
 
     * a SaaS module that is no `Mica.SaaS`, or a system that is no `Mica.System`
+    * an endpoint that is no `MicaWeb.Endpoint`, or a router that is no
+      `Phoenix.Router`
     * a system, signal handler, notifier, sign-in handoff or assignment template
       listed twice, or an event type that two notifiers declare
     * a notify channel, Oban queue, Oban cron, Desktop section id or BFF page
@@ -123,9 +174,15 @@ defmodule Mica.SaaS do
     * a permission granted twice, unless the later grant says `widen: true`;
       each widening is logged
     * a notifier event routed to a channel that no system declares
+    * a tool or project item type that is no `Mica.Tool` or `Mica.ProjectItem`,
+      whose name two of them declare or is reserved (`"none"`), or whose schema
+      two of them share; a tool whose `Frameworks.Concept.ToolModel.key/1` is not
+      its type
+    * a director name that two systems declare
   """
-  def validate!(saas) do
-    composition = build(saas)
+  def validate!(saas), do: check!(saas, build(saas))
+
+  defp check!(saas, composition) do
     collect_oban_queues(composition.systems)
     collect_oban_crons(composition.systems)
 
@@ -136,6 +193,7 @@ defmodule Mica.SaaS do
     unique!(Enum.map(composition.assignment_templates, & &1.id()), "assignment template id")
     check_event_channels!(composition)
     check_grants!(saas, composition.grants)
+    check_registry!(composition)
 
     composition
   end
@@ -166,10 +224,16 @@ defmodule Mica.SaaS do
 
   The result is not checked, so a test can put a broken composition. A test
   that calls it must not be `async`.
+
+  With no SaaS configured and no composition yet, `systems:` builds a
+  composition of those systems that is not a SaaS's: Mica's own tests run on
+  `put_composition(systems: Mica.Systems.all())`. It has no SaaS module, router
+  or endpoint: `module/0`, `endpoint/0` and `router/0` raise in it, and so does
+  every `Mica.SaaS` callback.
   """
   def put_composition(parts) do
-    previous = composition()
     parts = Map.new(parts)
+    previous = current_or_saas_less(parts)
 
     case Map.keys(parts) -- Map.keys(previous) do
       [] -> :persistent_term.put(@key, previous |> Map.merge(parts) |> derive())
@@ -179,10 +243,35 @@ defmodule Mica.SaaS do
     previous
   end
 
+  defp current_or_saas_less(%{systems: systems}) do
+    case {:persistent_term.get(@key, nil), Mica.Env.get(:saas)} do
+      {nil, nil} -> build_saas_less(systems)
+      _ -> composition()
+    end
+  end
+
+  defp current_or_saas_less(_parts), do: composition()
+
   @doc false
   def build(saas) do
     systems = checked_systems(saas)
 
+    saas
+    |> collect(systems)
+    |> Map.merge(%{saas?: true, endpoint: checked_endpoint(saas), router: checked_router(saas)})
+  end
+
+  defp build_saas_less(systems) do
+    for system <- systems do
+      ensure_implements!(system, :routes, "Mica.System", "Mica.SaaS.put_composition/1")
+    end
+
+    nil
+    |> collect(systems)
+    |> Map.merge(%{saas?: false, endpoint: nil, router: nil})
+  end
+
+  defp collect(saas, systems) do
     derive(%{
       systems: systems,
       signal_handlers: collect_signal_handlers(systems),
@@ -194,6 +283,9 @@ defmodule Mica.SaaS do
       sign_in_handoffs: Enum.flat_map(systems, & &1.sign_in_handoffs()),
       bff_pages: collect_bff_pages(systems),
       assignment_templates: Enum.flat_map(systems, & &1.assignment_templates()),
+      tools: Enum.flat_map(systems, & &1.tools()),
+      project_items: Enum.flat_map(systems, & &1.project_items()),
+      directors: Enum.flat_map(systems, &Enum.to_list(&1.directors())),
       feature_flags: collect_feature_flags(saas, systems),
       grants: collect_grants(systems),
       schemas: saas |> composition_apps(systems) |> collect_schemas()
@@ -233,6 +325,42 @@ defmodule Mica.SaaS do
     :ok
   end
 
+  # Tool and project item types are stored by name, so a name is unique, never
+  # reserved, and maps to one schema; a tool's protocol key is its type until
+  # code-registry's release 2 replaces the key with the type.
+  defp check_registry!(%{tools: tools, project_items: items, directors: directors}) do
+    for tool <- tools,
+        do: ensure_implements!(tool, :type, "Mica.Tool", "a system's tools/0")
+
+    for item <- items,
+        do: ensure_implements!(item, :type, "Mica.ProjectItem", "a system's project_items/0")
+
+    check_types!(tools, Mica.Tool.reserved(), "tool type")
+    check_types!(items, Mica.ProjectItem.reserved(), "project item type")
+
+    for tool <- tools,
+        key = to_string(Frameworks.Concept.ToolModel.key(struct(tool.schema()))),
+        key != tool.type() do
+      raise ArgumentError,
+            "tool #{inspect(tool)} has type #{inspect(tool.type())}, " <>
+              "but its schema's Frameworks.Concept.ToolModel.key/1 is #{inspect(key)}"
+    end
+
+    unique!(Enum.map(directors, &elem(&1, 0)), "director")
+    :ok
+  end
+
+  defp check_types!(modules, reserved, what) do
+    types = Enum.map(modules, & &1.type())
+    unique!(types, what)
+    unique!(Enum.map(modules, & &1.schema()), "#{what} schema")
+
+    case Enum.filter(types, &(&1 in reserved)) do
+      [] -> :ok
+      names -> raise ArgumentError, "#{what} #{inspect(names)} is reserved"
+    end
+  end
+
   # The merge `Mica.Authorization.permission_map/0` makes of its own grants and these.
   defp check_grants!(saas, grants) do
     Frameworks.GreenLight.Permissions.grants_permission_map(
@@ -242,12 +370,18 @@ defmodule Mica.SaaS do
 
     for {module, roles, widen: true} <- grants do
       Logger.info(
-        "#{inspect(saas)}: the grant of #{inspect(module)} to #{inspect(roles)} widens another grant"
+        "#{inspect(saas || Mica)}: the grant of #{inspect(module)} to #{inspect(roles)} widens another grant"
       )
     end
 
     :ok
   end
+
+  @doc "The endpoint of the SaaS (`c:endpoint/0`). Mica reaches the endpoint only through this."
+  def endpoint, do: fetch(:endpoint) || raise(@no_saas)
+
+  @doc "The router of the SaaS (`c:router/0`), which its endpoint plugs."
+  def router, do: fetch(:router) || raise(@no_saas)
 
   @doc "The systems the SaaS is made of, in `c:systems/0` order."
   def systems, do: fetch(:systems)
@@ -297,6 +431,15 @@ defmodule Mica.SaaS do
   @doc "The assignment templates of all systems, in `systems/0` order."
   def assignment_templates, do: fetch(:assignment_templates)
 
+  @doc "The `Mica.Tool` modules of all systems, in `systems/0` order. Read through `Mica.Tools`."
+  def tools, do: fetch(:tools)
+
+  @doc "The `Mica.ProjectItem` modules of all systems, in `systems/0` order. Read through `Mica.ProjectItems`."
+  def project_items, do: fetch(:project_items)
+
+  @doc "The directors of all systems as `{name, module}`, in `systems/0` order. Read through `Mica.Directors`."
+  def directors, do: fetch(:directors)
+
   @doc "The children of all systems, in `systems/0` order. Read once, at boot."
   def children, do: collect_children(systems())
 
@@ -333,7 +476,7 @@ defmodule Mica.SaaS do
 
   @doc false
   def composition_apps(saas, systems) do
-    [Mica.Env.app() | Enum.map([saas | systems], &Application.get_application/1)]
+    [Mica.Env.app() | Enum.map(List.wrap(saas) ++ systems, &Application.get_application/1)]
     |> Enum.reject(&is_nil/1)
     |> Enum.uniq()
   end
@@ -359,7 +502,7 @@ defmodule Mica.SaaS do
   @doc false
   def collect_feature_flags(saas, systems) do
     declared = systems |> Enum.flat_map(& &1.feature_flags()) |> Enum.uniq()
-    defaults = saas.feature_flags()
+    defaults = if saas, do: saas.feature_flags(), else: []
 
     case Keyword.keys(defaults) -- declared do
       [] ->
@@ -438,22 +581,6 @@ defmodule Mica.SaaS do
   end
 
   @doc """
-  Splices `override_routes/0` of all systems, and records their paths for
-  `MicaWeb.PathCheck` (a SaaS's own pages that shadow Mica's).
-  """
-  defmacro override_routes do
-    block = splice(:override_routes)
-
-    quote do
-      require MicaWeb.PathCheck
-      MicaWeb.PathCheck.overrides(do: unquote(block))
-    end
-  end
-
-  @doc "Splices `routes/0` of all systems, in `systems/0` order."
-  defmacro routes, do: splice(:routes)
-
-  @doc """
   The page grants of all systems, in `systems/0` order: `{module, roles}` or
   `{module, %{action => roles}}`, with `widen: true` as a third element when
   the grant widens another one. `Mica.Authorization` merges them into its
@@ -463,12 +590,6 @@ defmodule Mica.SaaS do
 
   @doc false
   def collect_grants(systems), do: Enum.flat_map(systems, &system_grants/1)
-
-  defp splice(callback) do
-    systems = checked_systems(module())
-    body = for system <- systems, code = call(system, callback), code != nil, do: code
-    {:__block__, [], external_resources(systems) ++ body}
-  end
 
   defp system_grants(system) do
     case system.grants() do
@@ -491,29 +612,6 @@ defmodule Mica.SaaS do
     end
   end
 
-  defp call(system, callback) do
-    apply(system, callback, [])
-  rescue
-    error ->
-      reraise ArgumentError,
-              "#{inspect(system)}.#{callback}/0 failed: #{Exception.message(error)}",
-              __STACKTRACE__
-  end
-
-  # The macros run while the router compiles, so they take no compile-time
-  # dependency on the SaaS module and its systems.
-  # Their source files are external resources instead: editing one recompiles
-  # the caller, without connecting the caller to everything the SaaS module
-  # names (start pages, menus).
-  defp external_resources(systems) do
-    sources =
-      for module <- [module() | systems],
-          do: module.module_info(:compile) |> Keyword.fetch!(:source) |> to_string()
-
-    for source <- [@core_systems_source | sources],
-        do: quote(do: @external_resource(unquote(source)))
-  end
-
   @doc false
   # The systems of `saas`, after checking that each entry is a `Mica.System`.
   def checked_systems(saas) do
@@ -533,6 +631,25 @@ defmodule Mica.SaaS do
         raise ArgumentError,
               "#{inspect(saas)}.systems/0 lists #{inspect(Enum.uniq(duplicates))} more than once"
     end
+  end
+
+  defp checked_endpoint(saas) do
+    endpoint = saas.endpoint()
+
+    ensure_implements!(
+      endpoint,
+      :__mica_endpoint__,
+      "MicaWeb.Endpoint",
+      "#{inspect(saas)}.endpoint/0"
+    )
+
+    endpoint
+  end
+
+  defp checked_router(saas) do
+    router = saas.router()
+    ensure_implements!(router, :__routes__, "Phoenix.Router", "#{inspect(saas)}.router/0")
+    router
   end
 
   # Checked by a callback, not by the behaviour attribute: naming the behaviour

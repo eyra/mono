@@ -206,3 +206,15 @@ msgstr "Vai a %{to}"
 #, elixir-autogen, elixir-format, fuzzy
 msgid "menu.item.onyx"
 msgstr "Da fare"
+
+#, elixir-autogen, elixir-format
+msgid "action_menu.alt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr "Nascondi azioni"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr "Mostra azioni"

@@ -1,6 +1,8 @@
 defmodule Next.Config.DevConfigTest do
-  # Sets environment variables while config/dev.exs is evaluated.
+  # Sets environment variables while config/dev.exs and config/runtime.exs are evaluated.
   use ExUnit.Case, async: false
+
+  alias Mica.RuntimeConfig.Snapshot
 
   @moduletag :tmp_dir
 
@@ -11,7 +13,7 @@ defmodule Next.Config.DevConfigTest do
   @dev_secret """
   import Config
 
-  config :mica, MicaWeb.Endpoint, http: [port: 4001]
+  config :mica, NextWeb.Endpoint, http: [port: 4001]
 
   config :mica, Systems.Account.Auth.Google,
     redirect_uri: "http://localhost:4001/auth/google/callback"
@@ -30,7 +32,8 @@ defmodule Next.Config.DevConfigTest do
   end
 
   # Evaluates a copy of config/dev.exs, so the result never depends on the
-  # dev.secret.exs of the machine running the test.
+  # dev.secret.exs of the machine running the test. The endpoint's config from
+  # config/runtime.exs, which sets its port, goes on top.
   defp dev_config(tmp_dir, env, opts \\ []) do
     File.cp!("config/dev.exs", Path.join(tmp_dir, "dev.exs"))
 
@@ -39,10 +42,12 @@ defmodule Next.Config.DevConfigTest do
     end
 
     System.put_env(env)
-    Config.Reader.read!(Path.join(tmp_dir, "dev.exs"), env: :dev)[:mica]
+    config = Config.Reader.read!(Path.join(tmp_dir, "dev.exs"), env: :dev)
+    runtime = Snapshot.evaluate("config/runtime.exs", System.get_env(), :dev)
+    Config.Reader.merge(config, mica: Keyword.take(runtime[:mica], [NextWeb.Endpoint]))[:mica]
   end
 
-  defp port(config), do: config[MicaWeb.Endpoint][:http][:port]
+  defp port(config), do: config[NextWeb.Endpoint][:http][:port]
   defp redirect_uri(config), do: config[Systems.Account.Auth.Google][:redirect_uri]
   defp open_url(config), do: config[Systems.Email.Mailer][:open_email_in_browser_url]
 

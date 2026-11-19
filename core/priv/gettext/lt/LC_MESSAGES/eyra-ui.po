@@ -215,3 +215,15 @@ msgstr "Eiti į %{to}"
 #, elixir-autogen, elixir-format
 msgid "menu.item.onyx"
 msgstr "Onyx"
+
+#, elixir-autogen, elixir-format
+msgid "action_menu.alt"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr "Slėpti veiksmus"
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr "Rodyti veiksmus"

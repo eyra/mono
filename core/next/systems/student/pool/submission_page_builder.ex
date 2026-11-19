@@ -24,7 +24,8 @@ defmodule Next.Systems.Student.Pool.SubmissionPageBuilder do
 
     byline = dgettext("eyra-submission", "byline", timestamp: update_at)
 
-    preview_path = ~p"/promotion/#{promotion.id}?preview=true"
+    # Self composes this system too: build the path for the running SaaS's endpoint.
+    preview_path = path(Mica.SaaS.endpoint(), ~p"/promotion/#{promotion.id}?preview=true")
 
     excluded_adverts =
       Advert.Public.list_excluded_adverts([advert], Advert.Model.preload_graph(:down))

@@ -1,0 +1,54 @@
+#!/bin/bash
+# Boots the dev server of the current build (BUNDLE picks the SaaS) and requests
+# a few pages. Fails when the server doesn't come up, a page doesn't answer 200,
+# or the server is gone afterwards. CI runs it for Self (snapshot-self), the one
+# place a Self build runs. Needs a migrated dev database.
+#
+# Usage (from core/): scripts/smoke-pages [path ...]
+set -u
+
+port="${HTTP_PORT:-4000}"
+url="http://localhost:$port"
+log="${SMOKE_LOG:-tmp/smoke-pages.log}"
+paths=("$@")
+if [ ${#paths[@]} -eq 0 ]; then
+  # The home page, the sign-in pages, and two of Mica's LiveView pages.
+  paths=(/ /user/signin /user/auth/identify /user/signup/participant /user/reset-password /.status/health)
+fi
+
+mkdir -p "$(dirname "$log")"
+HTTP_PORT="$port" OPEN_SENT_EMAILS=false mix phx.server > "$log" 2>&1 &
+server=$!
+trap 'kill $server 2> /dev/null' EXIT
+
+deadline=$((SECONDS + 300))
+until curl -fs -o /dev/null --max-time 5 "$url/.status/health"; do
+  if ! kill -0 $server 2> /dev/null || [ "$SECONDS" -ge "$deadline" ]; then
+    echo "::error::the server did not come up at $url"
+    tail -n 50 "$log"
+    exit 1
+  fi
+  sleep 3
+done
+grep -m1 "Running .*Endpoint" "$log"
+
+status=0
+for path in "${paths[@]}"; do
+  code=$(curl -s -o /dev/null -w '%{http_code}' --max-time 30 "$url$path")
+  echo "$path -> $code"
+  if [ "$code" != "200" ]; then
+    echo "::error::$url$path returned $code"
+    status=1
+  fi
+done
+
+if ! kill -0 $server 2> /dev/null; then
+  echo "::error::the server stopped"
+  status=1
+fi
+
+if [ $status -ne 0 ]; then
+  tail -n 50 "$log"
+fi
+
+exit $status

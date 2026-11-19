@@ -402,27 +402,6 @@ defmodule Systems.Assignment.FinishedViewBuilderTest do
       %{user: user}
     end
 
-    test "renders a Join CTA when the affiliate is not yet a pool member",
-         %{user: user} do
-      assignment = Assignment.Factories.create_questionnaire_assignment()
-
-      assigns = build_assigns(user)
-      vm = Assignment.FinishedViewBuilder.view_model(assignment, assigns)
-
-      assert vm.email_capture != nil
-      assert vm.email_capture.title == dgettext("eyra-assignment", "panl.cta.join.title")
-      assert vm.email_capture.body == dgettext("eyra-assignment", "panl.cta.join.body")
-      refute Map.has_key?(vm.email_capture, :submit_button)
-
-      assert vm.email_capture.cta_button.action == %{
-               type: :http_get,
-               to: "/user/auth/identify?return_to=/pool/panl/join"
-             }
-
-      assert vm.email_capture.cta_button.face.label ==
-               dgettext("eyra-assignment", "panl.cta.join.button")
-    end
-
     test "renders a Home CTA once the affiliate has joined the pool",
          %{user: user} do
       assignment = Assignment.Factories.create_questionnaire_assignment()

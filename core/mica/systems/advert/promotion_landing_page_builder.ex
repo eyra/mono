@@ -95,7 +95,10 @@ defmodule Systems.Advert.PromotionLandingPageBuilder do
     cond do
       is_nil(current_user) ->
         join_path = ReturnTo.append(~m"/pool/#{slug}/join", apply_path)
-        LiveView.push_navigate(socket, to: ReturnTo.append(~m"/user/auth/identify", join_path))
+
+        LiveView.push_navigate(socket,
+          to: ReturnTo.append(Mica.SaaS.module().identify_page(:creator), join_path)
+        )
 
       Pool.Public.participant?(pool, current_user) ->
         LiveView.push_navigate(socket, to: apply_path)

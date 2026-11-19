@@ -20,7 +20,7 @@ defmodule Systems.Assignment.Factories do
 
   def create_tool(auth_node) do
     Factories.insert!(:alliance_tool, %{
-      url: "https://eyra.co/alliance/123",
+      url: "https://example.org/alliance/123",
       auth_node: auth_node,
       director: :assignment
     })

@@ -5,13 +5,13 @@ defmodule Systems.Account.EmailRouterTest do
   alias Systems.Account.EmailRouter
 
   setup do
-    account = Application.get_env(:mica, :account, [])
-    original = Keyword.fetch!(account, :auth_methods)
+    # Mica's own suite configures no SaaS, so no account config.
+    account = Application.get_env(:mica, :account)
 
     Application.put_env(
       :mica,
       :account,
-      Keyword.put(account, :auth_methods, %{
+      Keyword.put(account || [], :auth_methods, %{
         surfconext: %{provider: true, satellite: true},
         google: %{provider: true, satellite: true, mx_provider: "google"},
         email: %{provider: false, satellite: true}
@@ -19,8 +19,9 @@ defmodule Systems.Account.EmailRouterTest do
     )
 
     on_exit(fn ->
-      account = Application.get_env(:mica, :account, [])
-      Application.put_env(:mica, :account, Keyword.put(account, :auth_methods, original))
+      if account,
+        do: Application.put_env(:mica, :account, account),
+        else: Application.delete_env(:mica, :account)
     end)
 
     :ok

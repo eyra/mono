@@ -7,7 +7,7 @@ defmodule NextWeb.Features.OnboardingTest do
   - Features step is displayed for PANL participants after profile
   - User can complete onboarding and navigate to home
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
 
   alias Systems.Pool
 

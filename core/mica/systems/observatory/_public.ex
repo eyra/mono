@@ -1,27 +1,26 @@
 defmodule Systems.Observatory.Public do
   use Mica, :public
-  alias MicaWeb.Endpoint
   alias Systems.Observatory.UpdateCollector
 
+  # On Mica's PubSub, not through the SaaS's endpoint: a SaaS endpoint's
+  # `pubsub_server` is `Mica.PubSub`, so its LiveViews get the same
+  # `Phoenix.Socket.Broadcast` the endpoint's `broadcast/3` sends.
   def subscribe(signal, key \\ []) do
-    Endpoint.subscribe(topic_key(signal, key))
+    Phoenix.PubSub.subscribe(Mica.PubSub, topic_key(signal, key))
   end
 
   def dispatch(signal, key, data) do
-    Endpoint.broadcast(
-      topic_key(signal, key),
-      "observation",
-      {signal, data}
-    )
+    topic = topic_key(signal, key)
+    Phoenix.PubSub.broadcast(Mica.PubSub, topic, observation(topic, signal, data))
   end
 
   def local_dispatch(signal, key, data) do
-    Endpoint.local_broadcast(
-      topic_key(signal, key),
-      "observation",
-      {signal, data}
-    )
+    topic = topic_key(signal, key)
+    Phoenix.PubSub.local_broadcast(Mica.PubSub, topic, observation(topic, signal, data))
   end
+
+  defp observation(topic, signal, data),
+    do: %Phoenix.Socket.Broadcast{topic: topic, event: "observation", payload: {signal, data}}
 
   defp topic_key(signal, key) when is_atom(signal) and is_list(key) do
     key_str = Enum.map_join(key, ":", &to_string/1)

@@ -3,13 +3,13 @@ defmodule Next.Systems.Account.SignInEntryTest do
   Where Next sends a signed-out person to sign in: the code page when
   sign-in codes (`:otp`) are on, the password page otherwise.
   """
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 
   import Phoenix.LiveViewTest
 
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
 
   @token_salt "otp-redeem"
 

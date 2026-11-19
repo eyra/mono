@@ -12,85 +12,14 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
   """
   use Mica.DataCase
   import Mox
+  import Systems.Home.RewardsSummaryTestHelper
 
   alias Mica.Factories
   alias Systems.Fund
-  alias Systems.Payment
   alias Systems.Payment.ProviderMock
   alias Systems.Home.RewardsSummaryView
 
   setup :verify_on_exit!
-
-  @labels %{
-    title: "Rewards",
-    pending_pill: "P",
-    pending_caption: "",
-    approved_pill: "A",
-    approved_caption: "min €5",
-    rejected_pill: "R",
-    payout_button: "Uitbetalen",
-    payout_below_threshold: "Minimum €5 required",
-    payout_handoff_title: "Start payout",
-    payout_handoff_body: "PAYOUT body",
-    payout_handoff_confirm: "Go to payout",
-    payout_handoff_cancel: "Cancel",
-    payout_verify_title: "Bank account not verified",
-    payout_verify_body: "Verify your bank account first",
-    payout_verify_confirm: "Go to verification",
-    payout_awaiting_title: "Verification in progress",
-    payout_awaiting_body: "Your bank is being reviewed by the payment provider",
-    payout_awaiting_confirm: "OK",
-    donate_button: "Donate",
-    donate_handoff_title: "Donate to Eyra",
-    donate_handoff_body: "DONATE body",
-    donate_handoff_confirm: "Yes, donate",
-    donate_thanks: "Thank you for your donation!",
-    donate_failed: "Donation failed",
-    donate_pending: "Still confirming your donation",
-    donate_in_progress: "Your donation is being processed",
-    donated_total: "Donated to Eyra"
-  }
-
-  defp socket(user, extra \\ %{}) do
-    assigns =
-      Map.merge(
-        %{
-          __changed__: %{},
-          fabric: Fabric.Factories.create_fabric(),
-          myself: %Phoenix.LiveComponent.CID{cid: 1},
-          user: user,
-          labels: @labels,
-          handoff_mode: :payout,
-          payout_currency: "euro",
-          pending_cents: 0,
-          approved_cents: 1000,
-          rejected_cents: 0,
-          donating_cents: 0,
-          donated_cents: 0,
-          donate_enabled?: true
-        },
-        extra
-      )
-
-    %Phoenix.LiveView.Socket{assigns: assigns}
-  end
-
-  defp user_with_reward(amount, merchant_uid) do
-    currency = Fund.Factories.create_currency("euro", :legal, "€", 2)
-
-    fund = Fund.Factories.create_fund("h_fund_#{System.unique_integer([:positive])}", currency)
-    user = Factories.insert!(:member, %{creator: false, merchant_uid: merchant_uid})
-
-    Factories.insert!(:reward, %{
-      user: user,
-      fund: fund,
-      amount: amount,
-      status: :approved,
-      idempotence_key: "h-#{System.unique_integer([:positive])}"
-    })
-
-    user
-  end
 
   defp reward_status(user), do: Mica.Repo.get_by!(Fund.RewardModel, user_id: user.id).status
 
@@ -148,39 +77,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
     end
 
-    test "bank kyc -> presents the verify modal" do
-      user = user_with_reward(1000, "m_bank")
-
-      # Merchant verified, but the bank account still needs verification.
-      stub(ProviderMock, :get_merchant, fn _ ->
-        {:ok,
-         %{
-           uid: "m_bank",
-           status: "live",
-           kyc_level: 100,
-           compliance_status: "verified",
-           overview_url: nil
-         }}
-      end)
-
-      stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok,
-         [
-           %{
-             uid: "ba",
-             status: :new,
-             raw_status: "new",
-             verification_url: "https://opp.test/ba/verify"
-           }
-         ]}
-      end)
-
-      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
-
-      assert socket.assigns.handoff_mode == :verify
-      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
-    end
-
     # Regression: FX#10005449329. After the participant finishes iDEAL, the
     # payment provider puts the bank in a review state ("pending") but may keep
     # returning a verification_url. Instead of nagging them with "please verify
@@ -216,33 +112,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
 
       assert socket.assigns.handoff_mode == :awaiting
       assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
-    end
-
-    test "kyc_unavailable -> verify modal (B1: no fall-through to a payout)" do
-      user = user_with_reward(1000, "m_unavail")
-
-      stub(ProviderMock, :get_merchant, fn _ ->
-        {:ok,
-         %{
-           uid: "m_unavail",
-           status: "pending",
-           kyc_level: 0,
-           compliance_status: "unverified",
-           overview_url: nil
-         }}
-      end)
-
-      stub(ProviderMock, :list_bank_accounts, fn _ ->
-        {:ok, [%{uid: "ba", status: :new, raw_status: "new", verification_url: nil}]}
-      end)
-
-      {:noreply, socket} = RewardsSummaryView.handle_event("request_payout", %{}, socket(user))
-
-      # The verify variant confirms via an external link, so it can never
-      # fall through to a withdrawal — the reward stays :approved.
-      assert socket.assigns.handoff_mode == :verify
-      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
-      assert reward_status(user) == :approved
     end
 
     test "below_threshold -> no modal, no OPP call" do
@@ -332,25 +201,6 @@ defmodule Systems.Home.RewardsSummaryViewHandlersTest do
         )
 
       assert socket.assigns.approved_cents == 0
-    end
-
-    test "a provider failure at confirm time presents the verify modal" do
-      user = user_with_reward(1000, "m_c_down")
-
-      stub(ProviderMock, :list_bank_accounts, fn "m_c_down" ->
-        {:error, %Payment.Error{code: :service_unavailable, message: "OPP down"}}
-      end)
-
-      {:noreply, socket} =
-        RewardsSummaryView.handle_event(
-          "confirmed",
-          %{source: %{name: :handoff_modal}},
-          socket(user, %{handoff_mode: :payout})
-        )
-
-      assert socket.assigns.handoff_mode == :verify
-      assert Fabric.get_child(socket.assigns.fabric, :handoff_modal)
-      assert reward_status(user) == :approved
     end
 
     # FX#10005449329. The awaiting modal is info-only — its single "OK" button

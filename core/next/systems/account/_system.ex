@@ -19,8 +19,7 @@ defmodule Next.Systems.Account.System do
         post("/user/session", Account.SessionController, :create)
       end
 
-      import Systems.Account.UserAuth, only: [fetch_current_user: 2]
-
+      # `:fetch_current_user` comes with Mica's pipelines (`MicaWeb.Pipelines`).
       pipeline :native_signin do
         plug(:accepts, ["json"])
         plug(:fetch_session)

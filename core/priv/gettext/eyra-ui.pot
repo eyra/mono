@@ -209,3 +209,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "action_menu.alt"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.hide"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "card.actions.show"
+msgstr ""

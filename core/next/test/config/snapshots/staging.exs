@@ -26,7 +26,8 @@
        url:
          "postgres://DB_USER:DB_PASS@eyra-next-staging-db.flycast:5432/eyra_next_staging?sslmode=disable"
      ]},
-    {MicaWeb.Endpoint,
+    {MicaWeb.FileUploader, [max_file_size: 100_000_000]},
+    {NextWeb.Endpoint,
      [
        cache_static_manifest: "priv/static/cache_manifest.json",
        http: [ip: {0, 0, 0, 0}, port: 8000],
@@ -34,7 +35,6 @@
        server: true,
        url: [host: "eyra-next-staging.fly.dev", port: 443, scheme: "https"]
      ]},
-    {MicaWeb.FileUploader, [max_file_size: 100_000_000]},
     {Systems.Account.Auth.Centerdata,
      [
        authorization_params: [scope: "email"],

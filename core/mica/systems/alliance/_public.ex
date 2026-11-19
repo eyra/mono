@@ -90,13 +90,6 @@ defmodule Systems.Alliance.Public do
   end
 
   @doc """
-  Deletes a alliance_tool.
-  """
-  def delete_tool(%Alliance.ToolModel{} = alliance_tool) do
-    Repo.delete(alliance_tool)
-  end
-
-  @doc """
   Returns an `%Ecto.Changeset{}` for tracking alliance_tool changes.
   """
   def change_tool(

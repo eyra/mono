@@ -19,13 +19,13 @@ defmodule Next.Systems.Account.NativeHandoffTest.FakeOIDC do
 end
 
 defmodule Next.Systems.Account.NativeHandoffTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Mica.FeatureFlags.Test
 
   import Ecto.Query, only: [from: 2]
 
   alias Mica.Repo
-  alias MicaWeb.Endpoint
+  alias NextWeb.Endpoint
   alias Next.Systems.Account.NativeHandoffTest.FakeGoogle
   alias Next.Systems.Account.NativeHandoffTest.FakeOIDC
   alias Systems.Account
@@ -240,7 +240,7 @@ defmodule Next.Systems.Account.NativeHandoffTest do
       assert %{value: signed_token} = redeem_conn.resp_cookies[@remember_me_cookie]
 
       status_conn =
-        MicaWeb.ConnCase.build_conn()
+        NextWeb.ConnCase.build_conn()
         |> put_req_header("user-agent", @mobile_user_agent)
         |> put_req_cookie(@remember_me_cookie, signed_token)
         |> get("/user/auth/status")
@@ -446,7 +446,7 @@ defmodule Next.Systems.Account.NativeHandoffTest do
   end
 
   defp native_conn do
-    MicaWeb.ConnCase.build_conn()
+    NextWeb.ConnCase.build_conn()
     |> put_req_header("user-agent", @mobile_user_agent)
     |> put_req_header("origin", "https://eyra.co")
     |> put_req_header("sec-fetch-site", "same-origin")

@@ -8,7 +8,7 @@ defmodule NextWeb.Features.AuthIdentifyErrorTest do
   error on screen keeps the field focused, so a phone's keyboard stays up, and
   keeps the message in its place.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Mica.Repo

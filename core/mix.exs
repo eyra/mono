@@ -19,7 +19,7 @@ defmodule Mica.MixProject do
       source_url: "https://github.com/eyra/mono",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
-      test_paths: ["mica/test", "next/test"],
+      test_paths: test_paths(System.get_env("BUNDLE")),
       compilers: [:phoenix_live_view] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       consolidate_protocols: Mix.env() != :test,
@@ -79,8 +79,15 @@ defmodule Mica.MixProject do
   # in one Mix project until Nova migration step code-split.
   @source_paths ~w(mica/lib mica/systems mica/frameworks next/lib next/systems mica_saas/lib mica_saas/systems)
 
-  defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test"]
+  defp elixirc_paths(:test), do: @source_paths ++ ["mica/test", "next/test", "mica_saas/test"]
   defp elixirc_paths(_), do: @source_paths
+
+  # One suite per run, on its own composition (config/config.exs): `mix test` runs
+  # Mica's, with no SaaS; `BUNDLE=next mix test` Next's and `BUNDLE=self mix test`
+  # Self's, each against its own router and endpoint.
+  defp test_paths(nil), do: ["mica/test"]
+  defp test_paths("next"), do: ["next/test"]
+  defp test_paths("self"), do: ["mica_saas/test"]
 
   # Specifies your project dependencies.
   #
@@ -125,7 +132,7 @@ defmodule Mica.MixProject do
       {:jason, "1.4.5"},
       {:libcluster, "== 3.6.0"},
       {:logger_json, "7.0.4"},
-      {:live_nest, github: "eyra/live_nest", ref: "ef441dec5e9f3b5f13b62130babf8cb453c90bbf"},
+      {:live_nest, github: "novasoftwarefoundation/live_nest", tag: "0.1.5"},
       {:mime, "2.0.7"},
       {:nimble_parsec, "1.4.2"},
       {:nimble_options, "== 1.2.0"},
@@ -148,7 +155,7 @@ defmodule Mica.MixProject do
       # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
       {:mica_bff,
        github: "novasoftwarefoundation/mica-bff",
-       ref: "7973601b6ac667d6ca9a36ed27ba50ddeedc1992",
+       ref: "32f0be94d53857aea32b8cab2b4d842cff4df72f",
        runtime: false},
       {:remote_ip, "== 1.3.0"},
       {:slugify, "1.3.1"},
@@ -214,8 +221,16 @@ defmodule Mica.MixProject do
         "test --only feature"
       ],
       "test.js": "cmd --cd assets npm test",
-      # Mix runs the `test` task once per invocation, so each half needs its own.
-      "test.ci": ["cmd mix test.unit", "cmd mix test.feature", "test.js"],
+      # Mix runs the `test` task once per invocation, so each suite and half needs
+      # its own: Mica's (no SaaS, no feature tests), Next's and Self's.
+      "test.ci": [
+        "cmd env -u BUNDLE mix test.unit",
+        "cmd env BUNDLE=next mix test.unit",
+        "cmd env BUNDLE=next mix test.feature",
+        "cmd env BUNDLE=self mix test.unit",
+        "cmd env BUNDLE=self mix test.feature",
+        "test.js"
+      ],
       "test.e2e": ["seed", "cmd ./test/e2e/run.sh"],
       "test.smoke": "cmd ./test/smoke/run.sh",
       # Usage: mix test.smoke dev | staging | prod
@@ -258,7 +273,27 @@ defmodule Mica.MixProject do
         "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --debug",
       "test.e2e.headed":
         "cmd --cd test/e2e npx playwright test --project webkit --repeat-each 10  --workers 1 --headed"
-    ]
+    ] ++ mica_suite_aliases(System.get_env("BUNDLE"))
+  end
+
+  # Mica's own suite (`mix test`, no BUNDLE) boots on the composition that
+  # mica/test/test_helper.exs puts, so its helper starts the app. A SaaS's test
+  # file needs its BUNDLE. The task module is run directly: running it by name
+  # would run this alias again.
+  defp mica_suite_aliases(nil), do: [test: &mica_suite_test/1]
+  defp mica_suite_aliases(_bundle), do: []
+
+  defp mica_suite_test(args) do
+    case Enum.find(args, &String.starts_with?(&1, ["next/", "mica_saas/"])) do
+      nil ->
+        Mix.Task.get!("test").run(["--no-start" | args])
+
+      "next/" <> _ = path ->
+        Mix.raise("#{path} is in Next's suite: run it with BUNDLE=next mix test")
+
+      path ->
+        Mix.raise("#{path} is in Self's suite: run it with BUNDLE=self mix test")
+    end
   end
 
   # Runs the Ecto task over `Mica.SaaS.migrations_paths/0`, the migrations of Mica
@@ -270,8 +305,15 @@ defmodule Mica.MixProject do
     paths =
       if Enum.any?(args, &String.starts_with?(&1, "--migrations-path")),
         do: [],
-        else: Enum.flat_map(Mica.SaaS.migrations_paths(), &["--migrations-path", &1])
+        else: Enum.flat_map(migrations_paths(), &["--migrations-path", &1])
 
     Mix.Task.get!(task).run(args ++ paths)
+  end
+
+  # Mica's own suite configures no SaaS (`mix test`): it migrates for the
+  # composition its test helper puts, Mica's systems.
+  defp migrations_paths do
+    unless Mica.Env.get(:saas), do: Mica.SaaS.put_composition(systems: Mica.Systems.all())
+    Mica.SaaS.migrations_paths()
   end
 end

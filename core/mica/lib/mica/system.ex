@@ -39,11 +39,15 @@ defmodule Mica.System do
 
   @doc """
   Routes that must match before every other route, such as a SaaS's own sign-in
-  pages. Spliced at the top of `MicaWeb.Router`, in `c:Mica.SaaS.systems/0` order.
+  pages. Spliced at the top of each SaaS router by
+  `Mica.SaaS.Routes.override_routes/1`, in `c:Mica.SaaS.systems/0` order.
   """
   @callback override_routes() :: Macro.t() | nil
 
-  @doc "The system's routes, spliced inside `MicaWeb.Routes` in `c:Mica.SaaS.systems/0` order."
+  @doc """
+  The system's routes, spliced into each SaaS router by
+  `Mica.SaaS.Routes.system_routes/1`, in `c:Mica.SaaS.systems/0` order.
+  """
   @callback routes() :: Macro.t() | nil
 
   @doc """
@@ -103,6 +107,25 @@ defmodule Mica.System do
   templates offered next to the built-in `Systems.Assignment.Templates`.
   """
   @callback assignment_templates() :: [module()]
+
+  @doc """
+  The system's `Mica.Tool` modules: the tool types a workflow item can hold.
+  Each type name is unique in the composition; `Mica.Tools` reads them.
+  """
+  @callback tools() :: [module()]
+
+  @doc """
+  The system's `Mica.ProjectItem` modules: the types a project item can hold.
+  Each type name is unique in the composition; `Mica.ProjectItems` reads them.
+  """
+  @callback project_items() :: [module()]
+
+  @doc """
+  The directors the system offers: name to module, for example
+  `%{assignment: Systems.Assignment.Director}`. The stored `director` of a tool,
+  pool or promotion names one of them; `Mica.Directors` reads them.
+  """
+  @callback directors() :: %{atom() => module()}
 
   @doc """
   The BFF pages the system serves: page name to `Systems.BFF.Page` module, for
@@ -171,6 +194,9 @@ defmodule Mica.System do
       def desktop_sections, do: []
       def sign_in_handoffs, do: []
       def assignment_templates, do: []
+      def tools, do: []
+      def project_items, do: []
+      def directors, do: %{}
       def bff_pages, do: %{}
       def children, do: []
       def oban_queues, do: []

@@ -41,7 +41,11 @@ defmodule Next.Systems.Graphite.ToolForm do
         %{assigns: %{entity: %{leaderboard: %{id: leaderboard_id}}}} = socket
       ) do
     leaderboard_button = %{
-      action: %{type: :redirect, to: ~p"/graphite/leaderboard/#{leaderboard_id}/content"},
+      action: %{
+        type: :redirect,
+        # Self composes this system too: build the path for the running SaaS's endpoint.
+        to: path(Mica.SaaS.endpoint(), ~p"/graphite/leaderboard/#{leaderboard_id}/content")
+      },
       face: %{
         type: :plain,
         icon: :forward,

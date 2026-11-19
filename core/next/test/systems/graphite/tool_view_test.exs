@@ -1,5 +1,5 @@
 defmodule Next.Systems.Graphite.ToolViewTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use Gettext, backend: MicaWeb.Gettext
   import Phoenix.LiveViewTest
   import Frameworks.Signal.TestHelper

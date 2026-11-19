@@ -69,15 +69,15 @@ defmodule Next.Config.AppsignalConfigTest do
         %{panel_info: %{participant: "participant-1"}}
       )
 
-    reason = {{%RuntimeError{message: "boom"}, []}, {MicaWeb.Endpoint, :call, [conn, []]}}
+    reason = {{%RuntimeError{message: "boom"}, []}, {NextWeb.Endpoint, :call, [conn, []]}}
 
     assert {:ok, _message, metadata} =
              Plug.Cowboy.Translator.translate(
                :error,
                :error,
                :format,
-               {~c"Ranch listener MicaWeb.Endpoint.HTTP terminated",
-                [MicaWeb.Endpoint.HTTP, self(), 1, self(), {reason, []}]}
+               {~c"Ranch listener NextWeb.Endpoint.HTTP terminated",
+                [NextWeb.Endpoint.HTTP, self(), 1, self(), {reason, []}]}
              )
 
     refute Keyword.has_key?(metadata, :conn)

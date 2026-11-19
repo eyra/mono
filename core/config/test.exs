@@ -75,11 +75,6 @@ config :mica, :paper,
   # Use smaller chunk size for tests (1KB)
   ris_stream_chunk_size: 1_024
 
-config :mica, MicaWeb.Endpoint,
-  http: [port: feature_test_port],
-  force_ssl: false,
-  server: true
-
 # Wallaby configuration
 config :wallaby,
   otp_app: :mica,
@@ -128,15 +123,6 @@ config :mica, :features,
 config :mica, Frameworks.UserCheck, client: Frameworks.UserCheck.MockClient
 
 config :mica, Oban, queues: false, plugins: false
-
-config :mica, Systems.Account.Auth.Surfconext,
-  oidc_module: Systems.Account.Auth.Surfconext.FakeOIDC
-
-config :mica, Systems.Account.Auth.Centerdata,
-  oidc_module: Systems.Account.Auth.Centerdata.FakeOIDC
-
-# Tests always build Next
-config :mica, saas: Next.SaaS
 
 # Logs a flag read that no system declares (Mica.FeatureFlags).
 config :mica, warn_undeclared_flag_reads: true

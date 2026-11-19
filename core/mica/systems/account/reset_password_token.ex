@@ -54,7 +54,7 @@ defmodule Systems.Account.ResetPasswordToken do
         {:noreply,
          socket
          |> put_flash(:info, dgettext("eyra-user", "password.reset.successfully"))
-         |> redirect(to: ~m"/user/signin")}
+         |> redirect(to: Mica.SaaS.module().sign_in_options_page())}
 
       {:error, changeset} ->
         {:noreply, assign(socket, changeset: changeset)}

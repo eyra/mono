@@ -1,5 +1,5 @@
 defmodule Next.Systems.Zircon.Screening.FileSelectorClearTest do
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   import Frameworks.Signal.TestHelper
 
   alias Mica.Repo

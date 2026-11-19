@@ -3,7 +3,7 @@ defmodule Next.Systems.Account.SignUpEntryTest do
   Where Next sends a signed-out person to sign up: the code page when
   sign-in codes (`:otp`) are on, the password sign-up page otherwise.
   """
-  use MicaWeb.ConnCase, async: false
+  use NextWeb.ConnCase, async: false
   use NextWeb, :verified_routes
   use Mica.FeatureFlags.Test
 

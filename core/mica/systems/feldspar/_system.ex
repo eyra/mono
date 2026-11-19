@@ -1,6 +1,8 @@
 defmodule Systems.Feldspar.System do
   use Mica.System
 
+  def tools, do: [Systems.Feldspar.Tool]
+
   def routes do
     quote do
       require Systems.Feldspar.Routes

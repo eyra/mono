@@ -3,7 +3,7 @@ defmodule NextWeb.Features.ProbeTaskListTest do
   Feature test for a participant doing a Cognitive screening (Probe) assignment in its
   horizontal task list, with a mock cognitive app in place of a real Feldspar app.
   """
-  use MicaWeb.FeatureCase
+  use NextWeb.FeatureCase
   use Mica.FeatureFlags.Test
 
   alias Systems.Assignment

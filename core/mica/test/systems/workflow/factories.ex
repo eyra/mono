@@ -1,7 +1,7 @@
 defmodule Systems.Workflow.Factories do
   alias Mica.Factories
   alias Systems.Document
-  alias Next.Systems.Graphite
+  alias Systems.Feldspar
 
   def create_tool() do
     Factories.insert!(:document_tool, %{
@@ -16,10 +16,10 @@ defmodule Systems.Workflow.Factories do
     })
   end
 
-  def create_tool_ref(%Graphite.ToolModel{} = tool, special) do
+  def create_tool_ref(%Feldspar.ToolModel{} = tool, special) do
     Factories.insert!(:tool_ref, %{
       special: special,
-      graphite_tool: tool
+      feldspar_tool: tool
     })
   end
 
