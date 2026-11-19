@@ -56,15 +56,17 @@ defmodule MicaSaasWeb.Features.CardKeyboardTest do
 
     session
     |> send_keys([:enter])
-    |> assert_connected("[data-testid='create-first-item-button']")
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_connected("[data-testid='add-item-button']")
+    |> click(Query.css("[data-testid='add-item-button']"))
     |> assert_has(Query.css("[data-testid='selector-item-data_donation']"))
     |> click(Query.css("[data-testid='selector-item-data_donation']"))
     |> click(Query.css("[data-testid='create-item-button']"))
-    |> assert_connected(@card_selector, count: 1)
+    |> assert_connected(@card_selector, count: 2)
 
     node_path = current_path(session)
 
+    # A new project already shows its Data card; the item's card is the next card in the Tab order.
+    _data_card = tab_to(session, "card_")
     item_card = tab_to(session, "card_")
     assert item_card["outline"], "No focus ring on #{item_card["element"]}"
 
