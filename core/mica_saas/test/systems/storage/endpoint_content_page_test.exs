@@ -1,5 +1,5 @@
-defmodule Systems.Storage.EndpointContentPageTest do
-  use MicaWeb.ConnCase, async: false
+defmodule MicaSaas.Systems.Storage.EndpointContentPageTest do
+  use MicaSaasWeb.ConnCase, async: false
 
   import Phoenix.LiveViewTest
 
