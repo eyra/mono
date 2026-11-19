@@ -79,7 +79,8 @@
               {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
-              {"0 3 * * *", Systems.Payment.ReconciliationWorker}
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"30 3 * * *", Mica.Registry.IntegrityWorker}
             ]
           ]}
        ],
@@ -287,7 +288,8 @@
               {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
-              {"0 3 * * *", Systems.Payment.ReconciliationWorker}
+              {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"30 3 * * *", Mica.Registry.IntegrityWorker}
             ]
           ]}
        ],

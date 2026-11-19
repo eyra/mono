@@ -39,6 +39,8 @@ defmodule Mica.Factories do
   alias Systems.Workflow
   alias Next.Systems.Zircon
 
+  @tool_ref_tools ~w(alliance_tool document_tool feldspar_tool graphite_tool instruction_tool lab_tool manual_tool zircon_screening_tool)a
+
   def valid_user_password, do: Faker.Util.format("%5d%5a%5A#")
 
   def build(:member) do
@@ -574,6 +576,13 @@ defmodule Mica.Factories do
   end
 
   def build(:tool_ref, %{} = attributes) do
+    # A tool ref always references a tool (`tool_refs_tool_required`): a document
+    # tool unless the test names one.
+    attributes =
+      if Enum.any?(Map.keys(attributes), &(&1 in @tool_ref_tools)),
+        do: attributes,
+        else: Map.put(attributes, :document_tool, build(:document_tool))
+
     {alliance_tool, attributes} = get_optional(:alliance_tool, attributes)
     {feldspar_tool, attributes} = get_optional(:feldspar_tool, attributes)
     {document_tool, attributes} = get_optional(:document_tool, attributes)
