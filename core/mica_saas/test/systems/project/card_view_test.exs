@@ -1,4 +1,4 @@
-defmodule Systems.Project.CardViewTest do
+defmodule MicaSaas.Systems.Project.CardViewTest do
   use ExUnit.Case, async: true
 
   import Phoenix.LiveViewTest

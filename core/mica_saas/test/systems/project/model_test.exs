@@ -1,4 +1,4 @@
-defmodule Systems.Project.ModelTest do
+defmodule MicaSaas.Systems.Project.ModelTest do
   alias Mica.Authorization
   use Mica.DataCase
 
