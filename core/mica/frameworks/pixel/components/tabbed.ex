@@ -266,6 +266,20 @@ defmodule Frameworks.Pixel.Tabbed do
   attr(:index, :integer, default: nil)
   attr(:opts, :string, default: "")
   attr(:testid, :string, default: nil)
+  attr(:path, :string, default: nil)
+
+  # A tab with a path leaves the page: no .tab class or data-tab-id, so TabBar ignores it.
+  def tab(%{path: path} = assigns) when is_binary(path) do
+    ~H"""
+    <.link
+      navigate={@path}
+      class={"flex flex-row items-center focus:outline-none #{@opts} #{idle_shape(@size, @type, @ready, @show_errors)}"}
+      data-testid={@testid}
+    >
+      <div class={"text-button font-button #{title_inset(@type)} #{idle_title(@ready, @show_errors)}"}><%= @title %></div>
+    </.link>
+    """
+  end
 
   def tab(assigns) do
     ~H"""

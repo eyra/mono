@@ -18,7 +18,7 @@ defmodule Systems.Storage.EndpointContentPage do
 
   @impl true
   def mount(%{"id" => id} = params, _session, socket) do
-    initial_tab = Map.get(params, "tab")
+    initial_tab = Map.get(params, "tab", "participants_view")
     tabbar_id = "storage_content/#{id}"
 
     {

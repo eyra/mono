@@ -16,6 +16,8 @@ defmodule NextWeb.Features.PanlStudyAdvertTest do
   alias Systems.Pool
 
   @card_selector "[data-testid^='card_']"
+  # A project also shows its Data card; unlike that one, an item's card has actions.
+  @item_card_selector "[id^='card-']:has([data-testid^='show_more__action__card_']) [data-testid^='card_']"
 
   @sessions 2
   @tag :feature
@@ -65,20 +67,20 @@ defmodule NextWeb.Features.PanlStudyAdvertTest do
     researcher_session
     |> assert_has(Query.css(@card_selector, count: 1))
     |> click(Query.css(@card_selector))
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
 
     # Create PaNL study (questionnaire assignment)
     researcher_session
-    |> assert_has(Query.css("[data-testid='create-first-item-button']"))
-    |> click(Query.css("[data-testid='create-first-item-button']"))
+    |> assert_has(Query.css("[data-testid='add-item-button']"))
+    |> click(Query.css("[data-testid='add-item-button']"))
     |> assert_has(Query.css("[data-testid='selector-item-questionnaire']"))
     |> click(Query.css("[data-testid='selector-item-questionnaire']"))
     |> click(Query.css("[data-testid='create-item-button']"))
 
     # Open the assignment CMS
     researcher_session
-    |> assert_has(Query.css(@card_selector, count: 1))
-    |> click(Query.css(@card_selector))
+    |> assert_has(Query.css(@item_card_selector, count: 1))
+    |> click(Query.css(@item_card_selector))
     |> assert_has(Query.css("[data-tab-fit]"))
 
     # Navigate to participants tab

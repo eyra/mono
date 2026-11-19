@@ -14,3 +14,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "items.overview"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "items.data"
+msgstr ""

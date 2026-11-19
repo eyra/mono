@@ -64,6 +64,12 @@ defmodule Systems.Project.ItemModel do
   def preload_graph(:storage_endpoint),
     do: [storage_endpoint: Storage.EndpointModel.preload_graph(:down)]
 
+  # The project's storage item is recognised by its name "Data".
+  def data?(%Project.ItemModel{name: "Data", storage_endpoint_id: id}) when not is_nil(id),
+    do: true
+
+  def data?(%Project.ItemModel{}), do: false
+
   def auth_tree(%Project.ItemModel{assignment: %Ecto.Association.NotLoaded{}} = item) do
     auth_tree(Repo.preload(item, :assignment))
   end
@@ -118,6 +124,34 @@ defmodule Systems.Project.ItemModel do
           {Project.NodePage, :item_card},
           %{timezone: timezone}
         ) do
+      if Project.ItemModel.data?(item),
+        do: data_card(item, id, name, timezone),
+        else: item_card(item, id, name, timezone)
+    end
+
+    # The Data card is dark with an illustration that shows whether donations have arrived.
+    defp data_card(%Project.ItemModel{storage_endpoint: endpoint} = item, id, name, timezone) do
+      has_data = Storage.EndpointModel.file_count(endpoint) > 0
+
+      %{
+        type: :data,
+        id: id,
+        title: name,
+        path: "/#{Concept.Leaf.resource_id(item)}/content",
+        illustration: "data_card_#{if has_data, do: "has_data", else: "no_data"}.png",
+        label: nil,
+        tags: [Concept.Leaf.tag(item)],
+        info:
+          if(has_data,
+            do: Concept.Leaf.info(item, timezone),
+            else: [dgettext("eyra-project", "label.no_data")]
+          ),
+        left_actions: [],
+        right_actions: []
+      }
+    end
+
+    defp item_card(item, id, name, timezone) do
       %{
         type: :secondary,
         id: id,
@@ -125,7 +159,7 @@ defmodule Systems.Project.ItemModel do
         path: "/#{Concept.Leaf.resource_id(item)}/content",
         image_info: image_info(item),
         icon_url: logo_url(item),
-        label: label(Concept.Leaf.status(item)),
+        label: card_label(item),
         tags: [Concept.Leaf.tag(item)],
         info: Concept.Leaf.info(item, timezone),
         left_actions: left_actions(item),
@@ -135,22 +169,22 @@ defmodule Systems.Project.ItemModel do
 
     # ACTIONS
 
-    defp left_actions(%Project.ItemModel{id: id}) do
-      edit = %{
+    defp left_actions(%Project.ItemModel{id: id}), do: [rename_action(id)]
+
+    defp rename_action(id) do
+      %{
         action: %{type: :send, event: "rename", item: id},
         face: %{type: :label, label: "Rename", wrap: true}
       }
-
-      [edit]
     end
 
-    defp right_actions(%Project.ItemModel{id: id}) do
-      delete = %{
+    defp right_actions(%Project.ItemModel{id: id}), do: [delete_action(id)]
+
+    defp delete_action(id) do
+      %{
         action: %{type: :send, event: "delete", item: id},
         face: %{type: :icon, icon: :delete}
       }
-
-      [delete]
     end
 
     # IMAGE
@@ -159,11 +193,7 @@ defmodule Systems.Project.ItemModel do
       image_info(Project.ItemModel.special(item))
     end
 
-    defp image_info(%Storage.EndpointModel{}) do
-      image_info(
-        "raw_url=https%3A%2F%2Fimages.unsplash.com%2Fphoto-1622986819498-60765a6e52c0%3Fixid%3DM3w1MzYyOTF8MHwxfHNlYXJjaHwzOXx8Zm9sZGVyc3xlbnwwfHx8fDE3MTg3OTEyOTB8MA%26ixlib%3Drb-4.0.3&username=_sycthe_&name=Tanay+Shah&blur_hash=LCH%5En%5DActRkV%2AH%25yM%7BsD%5BBNMkYkU"
-      )
-    end
+    defp image_info(%Storage.EndpointModel{}), do: nil
 
     defp image_info(%Assignment.Model{info: %{image_id: image_id}}) do
       image_info(image_id)
@@ -185,9 +215,7 @@ defmodule Systems.Project.ItemModel do
       logo_url(Project.ItemModel.special(item))
     end
 
-    defp logo_url(%Storage.EndpointModel{} = storage_endpoint) do
-      Storage.EndpointModel.asset_image_src(storage_endpoint, :icon)
-    end
+    defp logo_url(%Storage.EndpointModel{}), do: nil
 
     defp logo_url(%Assignment.Model{info: %{logo_url: logo_url}}) do
       logo_url
@@ -200,6 +228,8 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
+    defp card_label(item), do: label(Concept.Leaf.status(item))
+
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
       do: label(status)
 

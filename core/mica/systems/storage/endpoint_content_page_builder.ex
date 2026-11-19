@@ -4,7 +4,6 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
   alias Frameworks.Concept
   alias Systems.Storage
-  alias Systems.Monitor
 
   def view_model(
         %{id: id} = endpoint,
@@ -31,8 +30,8 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
 
     []
     |> append_if(:settings, special != :builtin)
+    |> append_if(:participants, special == :builtin)
     |> append_if(:data, special == :builtin)
-    |> append(:monitor)
   end
 
   defp create_tabs(
@@ -96,76 +95,25 @@ defmodule Systems.Storage.EndpointContentPageBuilder do
   end
 
   defp create_tab(
-         :monitor,
+         :participants,
          endpoint,
          show_errors,
-         %{fabric: fabric} = _assigns
+         %{fabric: fabric, timezone: timezone} = _assigns
        ) do
-    ready? = true
-
     child =
-      Fabric.prepare_child(fabric, :monitor_view, Storage.EndpointMonitorView, %{
-        number_widgets: number_widgets(endpoint)
+      Fabric.prepare_child(fabric, :participants_view, Storage.EndpointParticipantsView, %{
+        endpoint: endpoint,
+        timezone: timezone
       })
 
     %{
-      id: :monitor_view,
-      ready: ready?,
+      id: :participants_view,
+      ready: true,
       show_errors: show_errors,
-      title: dgettext("eyra-storage", "tabbar.item.monitor"),
-      forward_title: dgettext("eyra-storage", "tabbar.item.monitor.forward"),
+      title: dgettext("eyra-storage", "tabbar.item.participants"),
+      forward_title: dgettext("eyra-storage", "tabbar.item.participants.forward"),
       type: :fullpage,
       child: child
-    }
-  end
-
-  defp number_widgets(endpoint) do
-    [:files, :bytes]
-    |> Enum.map(&number_widget(&1, endpoint))
-  end
-
-  defp number_widget(:bytes, special) do
-    sum =
-      Monitor.Public.event({special, :bytes})
-      |> Monitor.Public.sum()
-
-    {label, metric} =
-      cond do
-        sum >= 1024 * 1024 ->
-          {
-            dgettext("eyra-storage", "bytes.mb.metric.label"),
-            Integer.floor_div(sum, 1024 * 1024)
-          }
-
-        sum >= 1024 ->
-          {
-            dgettext("eyra-storage", "bytes.kb.metric.label"),
-            Integer.floor_div(sum, 1024)
-          }
-
-        true ->
-          {
-            dgettext("eyra-storage", "bytes.metric.label"),
-            sum
-          }
-      end
-
-    %{
-      label: label,
-      metric: metric,
-      color: :primary
-    }
-  end
-
-  defp number_widget(:files, endpoint) do
-    metric =
-      Monitor.Public.event({endpoint, :files})
-      |> Monitor.Public.sum()
-
-    %{
-      label: dgettext("eyra-storage", "files.metric.label"),
-      metric: metric,
-      color: :primary
     }
   end
 end

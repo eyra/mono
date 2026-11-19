@@ -76,6 +76,8 @@ defmodule Systems.Project.Assembly do
       )
       |> Ecto.Changeset.put_assoc(:node, project.root)
     end)
+    |> EctoHelper.run(:project_node, &load_storage_node!/1)
+    |> Multi.merge(fn %{project_node: node} -> update_auth(Multi.new(), node) end)
     |> Repo.commit()
   end
 
@@ -98,6 +100,10 @@ defmodule Systems.Project.Assembly do
 
   defp load_node!(%{project_item: %{node_id: node_id}}) do
     {:ok, Project.Public.get_node!(node_id, Project.NodeModel.preload_graph(:down))}
+  end
+
+  defp load_storage_node!(%{storage_item: storage_item}) do
+    load_node!(%{project_item: storage_item})
   end
 
   # PREPARE

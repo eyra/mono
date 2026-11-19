@@ -32,7 +32,7 @@ defmodule Systems.Desktop.PageBuilder do
     user
     |> Project.Public.list_owned_projects(preload: Project.Model.preload_graph(:down))
     |> Enum.flat_map(& &1.root.items)
-    |> Enum.reject(&(&1.name == "Data"))
+    |> Enum.reject(&Project.ItemModel.data?/1)
     |> Enum.sort_by(& &1.updated_at, {:desc, NaiveDateTime})
     |> Enum.take(@recent_items_limit)
   end

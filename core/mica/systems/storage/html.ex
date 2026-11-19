@@ -31,6 +31,49 @@ defmodule Systems.Storage.Html do
     """
   end
 
+  attr(:participants, :list, required: true)
+
+  def participants_table(%{participants: participants} = assigns) do
+    head_cells = [
+      dgettext("eyra-storage", "table.participant.label"),
+      dgettext("eyra-storage", "table.sessions.label"),
+      dgettext("eyra-storage", "table.tools.label"),
+      dgettext("eyra-storage", "table.files.label"),
+      dgettext("eyra-storage", "table.last_donation.label")
+    ]
+
+    layout = [
+      %{type: :text, width: "flex-1", align: "text-left"},
+      %{type: :text, width: "w-28", align: "text-center"},
+      %{type: :text, width: "w-60", align: "text-left"},
+      %{type: :text, width: "w-28", align: "text-center"},
+      %{type: :text, width: "w-60", align: "text-right"}
+    ]
+
+    rows =
+      Enum.map(participants, fn %{
+                                  participant: participant,
+                                  sessions: sessions,
+                                  tools: tools,
+                                  files: files,
+                                  last_donation: last_donation
+                                } ->
+        [
+          participant || dgettext("eyra-storage", "participants.unknown"),
+          sessions,
+          Enum.join(tools, ", "),
+          files,
+          last_donation
+        ]
+      end)
+
+    assigns = assign(assigns, head_cells: head_cells, layout: layout, rows: rows)
+
+    ~H"""
+      <.table layout={@layout} head_cells={@head_cells} rows={@rows} border={false} />
+    """
+  end
+
   attr(:connected?, :boolean, required: true)
 
   def account_status(%{connected?: connected?} = assigns) do

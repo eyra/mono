@@ -12,7 +12,6 @@ defmodule Systems.Storage.EndpointModel do
   use Gettext, backend: MicaWeb.Gettext
 
   alias Frameworks.Concept
-  alias Frameworks.Pixel.Icon
   alias Frameworks.Pixel.Logo
 
   alias Systems.Storage
@@ -53,6 +52,11 @@ defmodule Systems.Storage.EndpointModel do
 
   def auth_tree(%{auth_node: auth_node}), do: auth_node
 
+  def file_count(%Storage.EndpointModel{} = endpoint) do
+    Monitor.Public.event({endpoint, :files})
+    |> Monitor.Public.sum()
+  end
+
   def ready?(endpoint) do
     if special = special(endpoint) do
       Concept.ContentModel.ready?(special)
@@ -65,9 +69,7 @@ defmodule Systems.Storage.EndpointModel do
     asset_image_src(special_field(endpoint), type)
   end
 
-  def asset_image_src(:builtin, :icon), do: Icon.path("next")
   def asset_image_src(:builtin, {:logo, type}), do: Logo.path(:next, type)
-  def asset_image_src(special, :icon), do: Icon.path("#{special}")
   def asset_image_src(special, {:logo, type}), do: Logo.path(:"#{special}", type)
 
   defimpl Frameworks.GreenLight.AuthorizationNode do
@@ -89,10 +91,7 @@ defmodule Systems.Storage.EndpointModel do
     def tag(_), do: dgettext("eyra-storage", "leaf.tag")
 
     def info(storage_endpoint, _timezone) do
-      file_count =
-        Monitor.Public.event({storage_endpoint, :files})
-        |> Monitor.Public.sum()
-
+      file_count = Storage.EndpointModel.file_count(storage_endpoint)
       [dngettext("eyra-storage", "1 file", "* files", file_count)]
     end
 
