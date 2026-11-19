@@ -37,4 +37,14 @@ defmodule Systems.Project.CardViewTest do
 
     refute html =~ ~s(data-testid="card-actions-placeholder")
   end
+
+  test "a data card shows the illustration and no label" do
+    data =
+      %{card([], []) | type: :data, label: nil} |> Map.put(:illustration, "data_card_no_data.png")
+
+    html = render_component(&Project.CardView.dynamic/1, card: data)
+
+    assert html =~ "data_card_no_data.png"
+    assert html =~ "0 files"
+  end
 end

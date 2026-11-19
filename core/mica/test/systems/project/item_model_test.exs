@@ -27,24 +27,22 @@ defmodule Systems.Project.ItemModelTest do
     creator = Factories.insert!(:creator)
     {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
 
-    assert %{icon_url: nil} = item_card(item)
+    refute Map.get(item_card(item), :icon_url)
   end
 
-  test "Data item card has no image" do
+  test "Data item card without donations shows the empty illustration and No data" do
     creator = Factories.insert!(:creator)
     {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
 
-    assert %{image_info: nil} = item_card(item)
+    assert %{
+             type: :data,
+             label: nil,
+             illustration: "data_card_no_data.png",
+             info: ["No data"]
+           } = item_card(item)
   end
 
-  test "Data item card without donations says No data" do
-    creator = Factories.insert!(:creator)
-    {:ok, %{storage_setup: %{item: item}}} = Project.Assembly.create("Project", creator, :empty)
-
-    assert %{label: %{type: :idle, text: "No data"}} = item_card(item)
-  end
-
-  test "Data item card with donations says Has data" do
+  test "Data item card with donations shows the illustration with data and the file count" do
     creator = Factories.insert!(:creator)
 
     {:ok, %{storage_setup: %{item: item, endpoint: endpoint}}} =
@@ -52,7 +50,12 @@ defmodule Systems.Project.ItemModelTest do
 
     Systems.Monitor.Public.log({endpoint, :files})
 
-    assert %{label: %{type: :success, text: "Has data"}} = item_card(item)
+    assert %{
+             type: :data,
+             label: nil,
+             illustration: "data_card_has_data.png",
+             info: ["1 file"]
+           } = item_card(item)
   end
 
   test "item named Data without storage keeps rename and delete" do

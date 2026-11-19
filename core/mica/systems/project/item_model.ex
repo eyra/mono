@@ -124,6 +124,34 @@ defmodule Systems.Project.ItemModel do
           {Project.NodePage, :item_card},
           %{timezone: timezone}
         ) do
+      if Project.ItemModel.data?(item),
+        do: data_card(item, id, name, timezone),
+        else: item_card(item, id, name, timezone)
+    end
+
+    # The Data card is dark with an illustration that shows whether donations have arrived.
+    defp data_card(%Project.ItemModel{storage_endpoint: endpoint} = item, id, name, timezone) do
+      has_data = Storage.EndpointModel.file_count(endpoint) > 0
+
+      %{
+        type: :data,
+        id: id,
+        title: name,
+        path: "/#{Concept.Leaf.resource_id(item)}/content",
+        illustration: "data_card_#{if has_data, do: "has_data", else: "no_data"}.png",
+        label: nil,
+        tags: [Concept.Leaf.tag(item)],
+        info:
+          if(has_data,
+            do: Concept.Leaf.info(item, timezone),
+            else: [dgettext("eyra-project", "label.no_data")]
+          ),
+        left_actions: [],
+        right_actions: []
+      }
+    end
+
+    defp item_card(item, id, name, timezone) do
       %{
         type: :secondary,
         id: id,
@@ -141,9 +169,7 @@ defmodule Systems.Project.ItemModel do
 
     # ACTIONS
 
-    defp left_actions(%Project.ItemModel{id: id} = item) do
-      if Project.ItemModel.data?(item), do: [], else: [rename_action(id)]
-    end
+    defp left_actions(%Project.ItemModel{id: id}), do: [rename_action(id)]
 
     defp rename_action(id) do
       %{
@@ -152,9 +178,7 @@ defmodule Systems.Project.ItemModel do
       }
     end
 
-    defp right_actions(%Project.ItemModel{id: id} = item) do
-      if Project.ItemModel.data?(item), do: [], else: [delete_action(id)]
-    end
+    defp right_actions(%Project.ItemModel{id: id}), do: [delete_action(id)]
 
     defp delete_action(id) do
       %{
@@ -204,25 +228,13 @@ defmodule Systems.Project.ItemModel do
     defp logo_url(nil), do: nil
 
     # LABEL
-    # The Data card shows whether donations have arrived; built-in storage is always online.
-    defp card_label(%Project.ItemModel{storage_endpoint: storage_endpoint} = item) do
-      cond do
-        not Project.ItemModel.data?(item) -> label(Concept.Leaf.status(item))
-        Storage.EndpointModel.file_count(storage_endpoint) == 0 -> label(:no_data)
-        true -> label(:has_data)
-      end
-    end
+    defp card_label(item), do: label(Concept.Leaf.status(item))
 
     defp label(%Frameworks.Concept.Leaf.Status{value: status}),
       do: label(status)
 
     defp label(:concept),
       do: %{type: :warning, text: dgettext("eyra-project", "label.concept")}
-
-    defp label(:no_data), do: %{type: :idle, text: dgettext("eyra-project", "label.no_data")}
-
-    defp label(:has_data),
-      do: %{type: :success, text: dgettext("eyra-project", "label.has_data")}
 
     defp label(:online), do: %{type: :success, text: dgettext("eyra-project", "label.online")}
 
