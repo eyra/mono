@@ -103,31 +103,53 @@ defmodule Next.Systems.BFF.PageControllerTest do
 
       assert types(page) == [
                "next_best_action",
-               "section_begin",
                "section",
                "reward_amount",
                "reward_amount",
                "reward_amount",
-               "section_end",
-               "section_begin",
                "section",
                "advert",
                "section",
-               "section_end",
-               "section_begin",
                "section",
-               "participation",
-               "section_end"
+               "participation"
              ]
 
-      %{"blocks" => blocks} = page
+      %{"blocks" => blocks, "markup" => markup} = page
+      participation_id = "participation/assignment/#{assignment_id}"
 
-      {groups, content} =
-        Enum.split_with(blocks, &(&1["type"] in ["section_begin", "section_end"]))
+      assert [
+               "next-best-action",
+               "rewards",
+               "rewards-pending",
+               "rewards-approved",
+               "rewards-rejected",
+               "marketplace",
+               "advert/promotion/" <> _,
+               "marketplace-see-all",
+               "history",
+               ^participation_id
+             ] = Enum.map(blocks, & &1["id"])
 
-      assert Enum.uniq(groups) == [
-               %{"type" => "section_begin", "props" => %{"border" => true}},
-               %{"type" => "section_end", "props" => %{}}
+      # As on the web home, the rewards, the marketplace and the history each sit in a box.
+      assert markup == [
+               %{
+                 "kind" => "border",
+                 "start" => "rewards",
+                 "end" => "rewards-rejected",
+                 "props" => %{}
+               },
+               %{
+                 "kind" => "border",
+                 "start" => "marketplace",
+                 "end" => "marketplace-see-all",
+                 "props" => %{}
+               },
+               %{
+                 "kind" => "border",
+                 "start" => "history",
+                 "end" => participation_id,
+                 "props" => %{}
+               }
              ]
 
       assert [
@@ -156,7 +178,7 @@ defmodule Next.Systems.BFF.PageControllerTest do
                %{"props" => %{"title" => "See all", "to" => "/bff/page/marketplace"}},
                %{"props" => %{"title" => "History", "count" => 1}},
                %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
-             ] = content
+             ] = blocks
 
       assert {pending, approved, rejected} == {"€2.50", "€12.00", "€3.00"}
       assert participation_to == "/assignment/#{assignment_id}"
@@ -242,7 +264,11 @@ defmodule Next.Systems.BFF.PageControllerTest do
       assert [%{"props" => %{"count" => 0}}, _filter, _search, no_studies] =
                marketplace.("?year=2025&query=sleep")
 
-      assert no_studies == %{"type" => "section", "props" => %{"body" => "No studies found."}}
+      assert no_studies == %{
+               "id" => "marketplace-none",
+               "type" => "section",
+               "props" => %{"body" => "No studies found."}
+             }
 
       # A year the marketplace doesn't have, or one that isn't a year, counts as All.
       for query <- ["?year=1999", "?year=next", "?year=&query="] do
@@ -286,12 +312,14 @@ defmodule Next.Systems.BFF.PageControllerTest do
                conn |> get("/bff/page/home") |> json_response(200)
 
       for page <- ["history", "marketplace"] do
-        assert %{"blocks" => []} = conn |> get("/bff/page/#{page}") |> json_response(200)
+        assert %{"blocks" => [], "markup" => []} =
+                 conn |> get("/bff/page/#{page}") |> json_response(200)
       end
     end
 
     test "home leaves out what the user doesn't have", %{conn: conn} do
-      assert %{"blocks" => []} = conn |> get("/bff/page/home") |> json_response(200)
+      assert %{"blocks" => [], "markup" => []} =
+               conn |> get("/bff/page/home") |> json_response(200)
     end
 
     test "a page the spec doesn't list is not found", %{conn: conn} do
