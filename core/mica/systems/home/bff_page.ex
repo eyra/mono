@@ -274,7 +274,7 @@ defmodule Systems.Home.BFFPage do
          tags: tags,
          info: info
        }) do
-    # The spec requires a title and the app drops an advert without one; show it anyway.
+    # The spec requires a title and the encoder raises on nil; an untitled study still shows.
     %Blocks.Advert{
       id: "advert" <> path,
       title: title || "",
