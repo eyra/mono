@@ -103,7 +103,7 @@ defmodule Mica.MixProject do
       {:bamboo_ses, github: "eyra/bamboo_ses", ref: "04627cf1264291bbe2512420acd07f2f972d5585"},
       {:bamboo, "== 2.5.1"},
       {:bcrypt_elixir, "3.3.2"},
-      {:cldr_utils, "== 2.29.7", override: true},
+      {:cldr_utils, "== 2.29.8", override: true},
       {:csv, "3.2.2"},
       {:ecto_sql, "== 3.14.0"},
       {:esbuild, "== 0.10.1", runtime: Mix.env() == :dev},
@@ -142,16 +142,16 @@ defmodule Mica.MixProject do
       {:phoenix_html, "4.4.0"},
       {:phoenix_html_helpers, "1.0.1"},
       {:phoenix_inline_svg, "1.4.0"},
-      {:phoenix_live_view, "1.1.33"},
+      {:phoenix_live_view, "== 1.1.34"},
       {:phoenix_storybook, "1.5.0"},
       {:phoenix_view, "2.0.4"},
-      {:phoenix, "1.8.16"},
+      {:phoenix, "== 1.8.17"},
       {:plug_cowboy, "2.9.0"},
       {:postgrex, "0.22.4"},
       # Prism's design: the components at compile time, and the CSS and the Tailwind
       # preset from deps/prism_design/targets/web, so one pin decides both.
       {:prism_design,
-       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.4.0", subdir: "design"},
+       git: "https://github.com/novasoftwarefoundation/prism.git", tag: "v0.5.0", subdir: "design"},
       # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
       {:mica_bff,
        github: "novasoftwarefoundation/mica-bff",
@@ -169,7 +169,7 @@ defmodule Mica.MixProject do
       {:tzdata, "== 1.2.2"},
       # i18n
       {:ex_cldr, "== 2.47.5"},
-      {:ex_cldr_numbers, "== 2.38.4"},
+      {:ex_cldr_numbers, "== 2.38.5"},
       {:ex_cldr_dates_times, "== 2.25.8"},
       {:ex_cldr_plugs, "== 1.4.0"},
       # Optional, but recommended for SSL validation with :httpc adapter
@@ -187,7 +187,7 @@ defmodule Mica.MixProject do
       {:wallaby, "0.31.0", only: :test, runtime: false},
       {:phoenix_live_reload, "== 1.7.0", only: :dev},
       {:credo, "1.7.19", only: [:dev, :test], runtime: false},
-      {:ex_doc, "== 0.40.4", only: [:dev, :test], runtime: false},
+      {:ex_doc, "== 0.40.5", only: [:dev, :test], runtime: false},
       {:table_rex, "4.1.0"},
       {:dialyxir, "== 1.4.9", only: [:dev, :test], runtime: false},
       {:browser, "0.5.5"}
