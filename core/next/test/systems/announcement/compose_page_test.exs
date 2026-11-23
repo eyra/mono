@@ -840,9 +840,13 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       assert %{published_at: nil} = copy
     end
 
-    test "is not found for an announcement that doesn't exist", %{conn: conn} do
+    test "is not found for an announcement that doesn't exist", %{conn: conn, original: original} do
       for id <- ["0", "latest", "9223372036854775808"] do
         assert_error_sent(404, fn -> get(conn, "/admin/announcement/new?copy=#{id}") end)
+      end
+
+      for query <- ["copy[]=#{original.id}", "copy[id]=#{original.id}"] do
+        assert_error_sent(404, fn -> get(conn, "/admin/announcement/new?#{query}") end)
       end
     end
   end

@@ -59,8 +59,10 @@ defmodule Next.Systems.Announcement.ComposePage do
 
   defp load(_params), do: %Announcement.Model{kind: :release_notes, priority: :normal}
 
+  # A query such as `?copy[]=5` gives a list or map rather than a string.
   defp get!(id) do
-    with {id, ""} when id in 1..@max_id <- Integer.parse(id),
+    with true <- is_binary(id),
+         {id, ""} when id in 1..@max_id <- Integer.parse(id),
          %Announcement.Model{} = announcement <- Announcement.Public.get_announcement(id) do
       announcement
     else
