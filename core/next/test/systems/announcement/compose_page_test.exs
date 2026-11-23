@@ -680,6 +680,173 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     end
   end
 
+  describe "copy as new announcement" do
+    # A test publication to one creator, then the intended audience.
+    setup %{admin: admin} do
+      tester = Factories.insert!(:creator, %{email: "tester@example.org"})
+      others = [Factories.insert!(:creator), Factories.insert!(:creator)]
+
+      {:ok, announcement} =
+        Announcement.Public.create_announcement(admin, %{
+          kind: :release_notes,
+          title: "March release",
+          summary: "What changed",
+          body: "<div>New features</div>",
+          priority: :high
+        })
+
+      {:ok, original} =
+        Announcement.Public.publish_announcement(announcement, [], ["tester@example.org"], 1)
+
+      {:ok, 1} = Announcement.Public.deliver_announcement(original.id)
+      [recipient] = Announcement.Public.list_recipients(original)
+      %{read_at: %DateTime{}} = Announcement.Public.mark_read(recipient)
+
+      %{tester: tester, others: others, original: original}
+    end
+
+    defp open_copy(conn, %{id: id}), do: open(conn, "/admin/announcement/new?copy=#{id}")
+
+    defp reload(%{id: id}) do
+      Repo.one(
+        from(a in Announcement.Model,
+          where: a.id == ^id,
+          select_merge: %{recipient_ids: a.recipient_ids}
+        )
+      )
+    end
+
+    test "a published announcement offers to copy it", %{conn: conn, original: original} do
+      view = open_existing(conn, original)
+
+      assert view
+             |> element("a[data-testid='copy-announcement-button']")
+             |> render() =~ ~s(href="/admin/announcement/new?copy=#{original.id}")
+
+      assert has_element?(
+               view,
+               "[data-testid='copy-announcement-button']",
+               "Copy as new announcement"
+             )
+    end
+
+    test "a draft offers no copy", %{conn: conn, admin: admin} do
+      view = open_existing(conn, draft!(admin))
+
+      refute has_element?(view, "[data-testid='copy-announcement-button']")
+    end
+
+    test "opens a new announcement with the original's fields and the audience to choose", %{
+      conn: conn,
+      original: original
+    } do
+      view = open_copy(conn, original)
+
+      assert has_element?(view, "[data-testid='announcement-compose-page']", "New announcement")
+
+      form = view |> element("[data-testid='announcement-form']") |> render()
+      assert form =~ ~s(value="March release")
+      assert form =~ ~s(value="What changed")
+      assert form =~ "New features"
+      assert has_element?(view, "input[name='announcement[kind]'][value='release_notes']")
+      assert has_element?(view, "input[name='announcement[priority]'][value='high']")
+
+      assert has_element?(view, "[data-testid='announcement-audience']")
+      refute has_element?(view, "[data-testid='announcement-published-notice']")
+      assert has_element?(view, "button[data-testid='publish-announcement-button']")
+      assert recipient_count_text(view) =~ "3 creators"
+
+      assert view |> element("#announcement_audience_search_form input") |> render() =~
+               ~s(value="")
+    end
+
+    test "Publish creates a new announcement for the new audience and leaves the original", %{
+      conn: conn,
+      admin: admin,
+      tester: tester,
+      others: others,
+      original: original
+    } do
+      [%{read_at: %DateTime{}} = recipient] = Announcement.Public.list_recipients(original)
+      view = open_copy(conn, original)
+      toggle_filter(view, "unverified")
+
+      publish(
+        view,
+        %{@attrs | "title" => "March release, for everyone"},
+        "<div>New features</div>"
+      )
+
+      assert_redirect(view, @list_path)
+
+      assert [_, _] = Repo.all(Announcement.Model)
+      copy = Repo.get_by!(Announcement.Model, title: "March release, for everyone")
+
+      assert %{
+               kind: :release_notes,
+               summary: "What changed",
+               body: "<div>New features</div>",
+               priority: :high,
+               published_at: %DateTime{}
+             } = copy
+
+      assert copy.id != original.id
+      assert copy.author_id == admin.id
+
+      assert Enum.sort(reload(copy).recipient_ids) ==
+               Enum.sort([tester.id | Enum.map(others, & &1.id)])
+
+      assert_enqueued(worker: Announcement.DeliverJob, args: %{"announcement_id" => copy.id})
+
+      assert %{
+               title: "March release",
+               body: "<div>New features</div>",
+               recipient_ids: recipient_ids,
+               published_at: published_at
+             } = reload(original)
+
+      assert recipient_ids == [tester.id]
+      assert DateTime.compare(published_at, original.published_at) == :eq
+      assert Announcement.Public.list_recipients(original) == [recipient]
+    end
+
+    test "Save keeps the copy as a draft and leaves the original", %{
+      conn: conn,
+      original: original
+    } do
+      view = open_copy(conn, original)
+
+      save(view, %{@attrs | "title" => "April release"}, "<div>Other text</div>")
+
+      assert_redirect(view, @list_path)
+
+      assert %{title: "April release", published_at: nil, recipient_ids: []} =
+               Repo.get_by!(Announcement.Model, title: "April release") |> reload()
+
+      assert %{title: "March release", body: "<div>New features</div>"} = reload(original)
+    end
+
+    test "a refused Publish of the copy moves to the copy's page, not the original's", %{
+      conn: conn,
+      original: original
+    } do
+      view = open_copy(conn, original)
+      search(view, "nobody@example.org")
+
+      publish(view, @attrs, "<div>New features</div>", "0")
+
+      [copy] = Repo.all(from(a in Announcement.Model, where: a.id != ^original.id))
+      assert_patch(view, "/admin/announcement/#{copy.id}")
+      assert %{published_at: nil} = copy
+    end
+
+    test "is not found for an announcement that doesn't exist", %{conn: conn} do
+      for id <- ["0", "latest", "9223372036854775808"] do
+        assert_error_sent(404, fn -> get(conn, "/admin/announcement/new?copy=#{id}") end)
+      end
+    end
+  end
+
   describe "access" do
     test "is not found while the flag is off", %{conn: conn, admin: admin} do
       %{id: id} = draft!(admin)
