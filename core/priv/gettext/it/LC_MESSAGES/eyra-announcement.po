@@ -182,3 +182,7 @@ msgstr "Mostra tutti"
 #, elixir-autogen, elixir-format
 msgid "list.empty"
 msgstr "Non hai ancora annunci."
+
+#, elixir-autogen, elixir-format
+msgid "form.copy.button"
+msgstr ""

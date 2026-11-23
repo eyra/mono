@@ -50,6 +50,12 @@ defmodule Next.Systems.Announcement.Model do
   """
   def fixed_after_publishing, do: @fixed_after_publishing
 
+  @doc """
+  A new, unsaved announcement with the kind, title, summary, body and priority
+  of `announcement`, and nothing else: no author, audience or publication.
+  """
+  def copy(%__MODULE__{} = announcement), do: struct(__MODULE__, Map.take(announcement, @fields))
+
   def changeset(announcement, attrs) do
     announcement
     |> cast(attrs, @fields)

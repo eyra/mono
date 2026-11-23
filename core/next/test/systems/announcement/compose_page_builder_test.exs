@@ -121,6 +121,56 @@ defmodule Next.Systems.Announcement.ComposePageBuilderTest do
                  "kunnen niet meer veranderen."
     end
 
+    test "offers a published announcement to copy as a new one", %{admin: admin} do
+      {:ok, %{id: id} = published} =
+        admin
+        |> create!(%{title: "Published"})
+        |> Announcement.Public.publish_announcement([], nil, 2)
+
+      path = "/admin/announcement/new?copy=#{id}"
+
+      assert %{
+               published: %{
+                 copy_button: %{
+                   action: %{type: :redirect, to: ^path},
+                   face: %{label: "Copy as new announcement"}
+                 }
+               }
+             } = composing(admin, %{announcement: published})
+
+      Gettext.put_locale(MicaWeb.Gettext, "nl")
+      on_exit(fn -> Gettext.put_locale(MicaWeb.Gettext, "en") end)
+
+      assert %{published: %{copy_button: %{face: %{label: "Kopiëren als nieuwe aankondiging"}}}} =
+               composing(admin, %{announcement: published})
+    end
+
+    test "builds a copy as a new announcement with the original's audience to choose", %{
+      admin: admin
+    } do
+      {:ok, published} =
+        admin
+        |> create!(%{title: "Published", priority: :high})
+        |> Announcement.Public.publish_announcement([], nil, 2)
+
+      copy = Announcement.Model.copy(published)
+
+      assert %Announcement.Model{
+               id: nil,
+               author_id: nil,
+               published_at: nil,
+               recipient_ids: [],
+               kind: :release_notes,
+               title: "Published",
+               summary: "What changed",
+               body: "<div>New features</div>",
+               priority: :high
+             } = copy
+
+      assert %{heading: "New announcement", audience: %{recipient_count: 2}, published: nil} =
+               composing(admin, %{announcement: copy})
+    end
+
     test "says a save was refused because it changed since it was opened", %{admin: admin} do
       draft = create!(admin, %{title: "Draft"})
       {:ok, published} = Announcement.Public.publish_announcement(draft, [], nil, 2)

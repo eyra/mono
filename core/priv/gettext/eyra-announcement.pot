@@ -182,3 +182,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "list.empty"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "form.copy.button"
+msgstr ""
