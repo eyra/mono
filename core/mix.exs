@@ -126,7 +126,7 @@ defmodule Mica.MixProject do
       #   unless written as references; character references are quadratic on
       #   bare `&` and raise above U+10FFFF.
       {:html_sanitize_ex, "== 1.5.6"},
-      {:mochiweb, "== 3.5.0"},
+      {:mochiweb, "== 3.6.1"},
       {:httpoison, "3.0.0"},
       {:image, "== 0.73.0"},
       {:jason, "1.4.5"},
