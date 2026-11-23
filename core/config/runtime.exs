@@ -346,6 +346,12 @@ if config_env() == :prod do
     config :mica, :service_login, key: service_login_key
   end
 
+  # SHA-256 fingerprints of the certificates the Android apps are signed with,
+  # separated by commas or whitespace; served at /.well-known/assetlinks.json.
+  if android_app_cert_fingerprints = System.get_env("ANDROID_APP_CERT_FINGERPRINTS") do
+    config :mica, :android_app_cert_fingerprints, android_app_cert_fingerprints
+  end
+
   # Unset means no fallback: an untranslated string renders its msgid, which in
   # this app is the raw dotted key. Deliberate on dev/test so gaps are visible.
   config :mica, :gettext_fallback_locale, System.get_env("GETTEXT_FALLBACK_LOCALE")
