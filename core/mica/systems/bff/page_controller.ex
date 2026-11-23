@@ -6,7 +6,8 @@ defmodule Systems.BFF.PageController do
   alias Systems.BFF
 
   @doc """
-  The blocks of `page` as `%{"blocks" => [...]}`, for the page's params in the query.
+  The view model of `page` as `%{"blocks" => [...], "markup" => [...]}`, for the page's
+  params in the query (`Systems.BFF.Blocks.view_model/2`, which raises on bad markup).
   401 when signed out, before the page is looked up; 404 for a page the spec doesn't
   list or no system serves.
   """
@@ -22,7 +23,8 @@ defmodule Systems.BFF.PageController do
 
       {user, {name, module}} ->
         params = BFF.Blocks.page_params(name, conn.query_params)
-        json(conn, %{blocks: Enum.map(module.blocks(user, params), &to_map/1)})
+        {blocks, markup} = module.view_model(user, params)
+        json(conn, BFF.Blocks.view_model(blocks, markup))
     end
   end
 
@@ -32,6 +34,4 @@ defmodule Systems.BFF.PageController do
       {page, module}
     end
   end
-
-  defp to_map(%module{} = block), do: module.to_map(block)
 end

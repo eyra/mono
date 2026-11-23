@@ -68,8 +68,10 @@ defmodule Systems.Assignment.Public do
     |> Repo.all()
   end
 
+  # A participant who is also a tester of the crew has two role rows: one assignment.
   def list_by_participant(%Account.User{} = user, preload \\ []) do
     assignment_query(user, :participant)
+    |> distinct(true)
     |> Repo.all()
     |> Repo.preload(preload)
   end

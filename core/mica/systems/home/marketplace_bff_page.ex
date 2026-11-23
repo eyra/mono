@@ -6,5 +6,5 @@ defmodule Systems.Home.MarketplaceBFFPage do
   @behaviour Systems.BFF.Page
 
   @impl true
-  defdelegate blocks(user, params), to: Systems.Home.BFFPage, as: :marketplace
+  def view_model(user, params), do: {Systems.Home.BFFPage.marketplace(user, params), []}
 end
