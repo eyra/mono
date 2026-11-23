@@ -231,6 +231,19 @@ defmodule Next.Systems.Announcement.EmailTest do
       assert url == NextWeb.Endpoint.url() <> "/announcement/#{id}"
     end
 
+    test "puts the link a blank line below the body, in the body's own style", %{
+      author: author
+    } do
+      assert %Email.Model{html_message: html} =
+               Announcement.EmailTemplate.email(announcement!(author))
+
+      # The email layout styles the first `p` as a larger lead paragraph.
+      refute html =~ "<p"
+
+      assert html =~
+               ~r|</div>\s*<div><br\s*/?><a href="[^"]+">Read this announcement in Next</a></div>\s*\z|
+    end
+
     test "a body stored before cleaning existed is sent cleaned", %{author: author} do
       announcement = %{
         announcement!(author)

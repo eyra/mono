@@ -4,6 +4,9 @@ defmodule Next.Systems.Announcement.EmailTemplate do
   the full body and a link to the announcement page, without the summary. The
   HTML part has the cleaned body; the plain-text part has its text.
 
+  The link follows the body a blank line down, in a `div` like the editor's
+  text: the email layout styles the first `p` as a larger lead paragraph.
+
   The link is the plain page address. Opening the email or following the link
   changes nothing in Next; only opening the page marks the announcement read.
   """
