@@ -32,8 +32,8 @@ defmodule Systems.Assignment.CrewTaskHelpers do
   @doc """
   Identifies one participant's task: their crew task, which belongs to the assignment's
   own crew. It stays the same across reloads and tabs, and differs for another
-  participant, another task and another assignment, a copy included. An opaque string,
-  so a tool only compares it.
+  participant, another task and another assignment, a copy included. The Feldspar tool
+  view gives a Tool a keyed hash of it, not the id.
   """
   def participant_task(%Crew.TaskModel{id: id}), do: Integer.to_string(id)
 
