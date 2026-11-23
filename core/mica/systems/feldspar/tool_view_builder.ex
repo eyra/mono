@@ -77,6 +77,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
        url: archive_ref <> "/index.html",
        locale: Gettext.get_locale(MicaWeb.Gettext),
        attempt_id: Map.get(assigns, :attempt_id),
+       participant_task: Map.get(assigns, :participant_task),
        upload_context: build_upload_context(assigns)
      ), nil}
   end

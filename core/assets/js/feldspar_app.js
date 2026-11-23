@@ -78,8 +78,14 @@ export const FeldsparApp = {
     if (!iframe?.contentWindow) return;
     if (!this.setupChannel()) return;
 
+    // participant_task is the same for one participant in one task, and differs
+    // for another participant, task or assignment. Absent when the host has none.
     iframe.contentWindow.postMessage(
-      { action: "live-init", locale: this.el.dataset.locale },
+      {
+        action: "live-init",
+        locale: this.el.dataset.locale,
+        participant_task: this.el.dataset.participantTask,
+      },
       "*",
       [this.channel.port2]
     );

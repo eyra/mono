@@ -17,6 +17,7 @@ defmodule Systems.Feldspar.ToolView do
       :assignment_id,
       :participant,
       :workflow_item_id,
+      :participant_task,
       :recovery,
       :description
     ]

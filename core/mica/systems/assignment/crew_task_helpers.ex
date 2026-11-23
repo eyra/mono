@@ -29,6 +29,14 @@ defmodule Systems.Assignment.CrewTaskHelpers do
 
   def recovery_context(_assignment, _user, nil), do: nil
 
+  @doc """
+  Identifies one participant's task: their crew task, which belongs to the assignment's
+  own crew. It stays the same across reloads and tabs, and differs for another
+  participant, another task and another assignment, a copy included. An opaque string,
+  so a tool only compares it.
+  """
+  def participant_task(%Crew.TaskModel{id: id}), do: Integer.to_string(id)
+
   defp support_url(assignment, workflow_item, task) do
     body =
       Enum.join(
