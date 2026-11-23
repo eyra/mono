@@ -112,6 +112,30 @@ defmodule MicaSaas.Systems.Desktop.PageTest do
       assert_redirect(view, "/todo")
     end
 
+    test "a section with a count shows it behind its title, like Recent items", %{conn: conn} do
+      contribute_test_section(message: "Preview", count: 3)
+      {:ok, _view, html} = live(conn, ~m"/desktop")
+
+      assert html =~ ~r/Test section\s*<span class="text-primary"> 3<\/span>/
+      assert html =~ ~r/Recent items\s*<span class="text-primary"> 0<\/span>/
+    end
+
+    test "a section without a count shows only its title", %{conn: conn} do
+      contribute_test_section(message: "Preview")
+      {:ok, view, _html} = live(conn, ~m"/desktop")
+
+      assert has_element?(
+               view,
+               "#desktop_section_test [data-testid=section-header]",
+               "Test section"
+             )
+
+      refute has_element?(
+               view,
+               "#desktop_section_test [data-testid=section-header] .text-primary"
+             )
+    end
+
     test "a section without a full-list destination has no header action", %{conn: conn} do
       contribute_test_section(message: "Preview")
       {:ok, view, _html} = live(conn, ~m"/desktop")
