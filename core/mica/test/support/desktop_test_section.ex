@@ -3,7 +3,8 @@ defmodule Systems.Desktop.TestSection do
   A Desktop section for tests. It shows the message in
   `config :mica, Systems.Desktop.TestSection, message: ...`, and hides when no
   message is set. `placement: ...` in the same config places it; without it the
-  section keeps the default placement. `Systems.Desktop.TestSection.Switch` refreshes it.
+  section keeps the default placement. `count: ...` sets the number behind its
+  title. `Systems.Desktop.TestSection.Switch` refreshes it.
   """
   use Systems.Desktop.Section
 
@@ -12,6 +13,9 @@ defmodule Systems.Desktop.TestSection do
 
   @impl true
   def title, do: "Test section"
+
+  @impl true
+  def count(_vm), do: Mica.Env.get(__MODULE__, []) |> Keyword.get(:count)
 
   @impl true
   def full_list(_vm), do: Mica.Env.get(__MODULE__, []) |> Keyword.get(:full_list)
