@@ -15,7 +15,7 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
     user = Factories.insert!(:member)
 
     context =
-      LiveContext.new(%{
+      %{
         title: "Test Feldspar App",
         icon: "TikTok",
         tool_ref: tool_ref,
@@ -30,16 +30,11 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
           on_entry: Map.get(test_context, :on_entry, :check),
           support_url: "mailto:support@eyra.co?subject=Help"
         }
-      })
+      }
+      |> Map.merge(Map.take(test_context, [:participant_task]))
+      |> LiveContext.new()
 
-    {:ok, view, _html} =
-      live_isolated(
-        Map.put(conn, :request_path, "/feldspar/tool"),
-        Feldspar.ToolView,
-        session: %{"live_context" => context}
-      )
-
-    %{view: view}
+    %{view: mount_tool_view(conn, context), conn: conn, context: context}
   end
 
   test "does not mount an iframe until checking recovery and explicitly starting", %{view: view} do
@@ -143,10 +138,64 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
     refute has_element?(view, "[data-testid='feldspar-autostart']")
   end
 
+  @tag participant_task: "81234"
+  test "the app gets a hash of the host's participant_task for live-init, not the id", %{
+    view: view
+  } do
+    start(view)
+
+    assert participant_task(view) =~ ~r/\A[A-Za-z0-9_-]{22}\z/
+    refute participant_task(view) =~ "81234"
+  end
+
+  @tag participant_task: "81234"
+  test "the app gets the same participant_task after a reload", %{
+    view: view,
+    conn: conn,
+    context: context
+  } do
+    start(view)
+    reloaded = mount_tool_view(conn, context)
+    start(reloaded)
+
+    assert participant_task(reloaded) == participant_task(view)
+  end
+
+  test "without a participant_task from the host, the app gets none", %{view: view} do
+    start(view)
+
+    assert has_element?(view, "[phx-hook='FeldsparApp']")
+    refute has_element?(view, "[data-participant-task]")
+  end
+
   test "without autostart, checking recovery doesn't start the app", %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
     refute has_element?(view, "iframe")
+  end
+
+  defp mount_tool_view(conn, context) do
+    {:ok, view, _html} =
+      live_isolated(
+        Map.put(conn, :request_path, "/feldspar/tool"),
+        Feldspar.ToolView,
+        session: %{"live_context" => context}
+      )
+
+    view
+  end
+
+  defp participant_task(view) do
+    [_, participant_task] =
+      Regex.run(~r/data-participant-task="([^"]+)"/, render(view))
+
+    participant_task
+  end
+
+  defp start(view) do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
   end
 end

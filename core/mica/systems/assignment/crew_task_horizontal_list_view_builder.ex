@@ -8,7 +8,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Assignment.CrewTaskHelpers,
-    only: [build_work_items: 2, get_participant: 3, recovery_context: 3]
+    only: [build_work_items: 2, get_participant: 3, participant_task: 1, recovery_context: 3]
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
@@ -99,12 +99,13 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
 
   # The tool opens in a modal once the participant starts the current task. Its intro
   # is on the page, so the tool starts without a start screen of its own.
-  defp build_tool_modal({%{id: id} = workflow_item, _task}, %{task: id}, context) do
+  defp build_tool_modal({%{id: id} = workflow_item, task}, %{task: id}, context) do
     %{tool_ref: tool_ref, title: title, group: icon} = workflow_item
 
     task_context =
       LiveContext.extend(context, %{
         workflow_item_id: id,
+        participant_task: participant_task(task),
         title: title,
         icon: icon,
         tool_ref: tool_ref,
