@@ -35,6 +35,10 @@ defmodule Next.Systems.Announcement.DesktopSection do
     end
   end
 
+  @doc "Counts the cards shown, like Recent items does."
+  @impl true
+  def count(%{items: items}), do: length(items)
+
   @impl true
   def full_list(_vm) do
     %{

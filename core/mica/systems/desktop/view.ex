@@ -40,10 +40,10 @@ defmodule Systems.Desktop.View do
             <.spacing value="XL" />
           </div>
         <% end %>
-        <Text.title2>
-          <%= dgettext("eyra-dashboard", "recent-items.title") %>
-          <span class="text-primary"> <%= Enum.count(@vm.content_items) %></span>
-        </Text.title2>
+        <.title
+          title={dgettext("eyra-dashboard", "recent-items.title")}
+          count={Enum.count(@vm.content_items)}
+        />
         <Margin.y id={:title2_bottom} />
         <Grid.dynamic>
           <%= for card <- @vm.content_items do %>
@@ -61,12 +61,24 @@ defmodule Systems.Desktop.View do
     """
   end
 
+  attr(:title, :string, required: true)
+  attr(:count, :integer, default: nil)
+
+  defp title(assigns) do
+    ~H"""
+    <Text.title2>
+      <%= @title %>
+      <span :if={@count} class="text-primary"> <%= @count %></span>
+    </Text.title2>
+    """
+  end
+
   attr(:section, :map, required: true)
 
   defp section(assigns) do
     ~H"""
     <div class="flex items-center justify-between gap-4" data-testid="section-header">
-      <div class="min-w-0"><Text.title2><%= @section.title %></Text.title2></div>
+      <div class="min-w-0"><.title title={@section.title} count={@section.count} /></div>
       <.link
         :if={@section.full_list}
         navigate={@section.full_list.to}
