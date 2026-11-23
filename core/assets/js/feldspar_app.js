@@ -78,17 +78,20 @@ export const FeldsparApp = {
     if (!iframe?.contentWindow) return;
     if (!this.setupChannel()) return;
 
-    // participant_task is the same for one participant in one task, and differs
-    // for another participant, task or assignment. Absent when the host has none.
-    iframe.contentWindow.postMessage(
-      {
-        action: "live-init",
-        locale: this.el.dataset.locale,
-        participant_task: this.el.dataset.participantTask,
-      },
-      "*",
-      [this.channel.port2]
-    );
+    iframe.contentWindow.postMessage(this.liveInitMessage(), "*", [
+      this.channel.port2,
+    ]);
+  },
+
+  // participant_task is the same for one participant in one task, and differs
+  // for another participant, task or assignment. Left out when the host has none.
+  liveInitMessage() {
+    const { locale, participantTask } = this.el.dataset;
+    const message = { action: "live-init", locale };
+    if (participantTask) {
+      message.participant_task = participantTask;
+    }
+    return message;
   },
 
   async handleMessage(e) {

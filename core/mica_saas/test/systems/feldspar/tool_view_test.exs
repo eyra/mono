@@ -22,7 +22,6 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
         assignment_id: 123,
         participant: "test_participant",
         workflow_item_id: 456,
-        participant_task: "789",
         description: Map.get(test_context, :description),
         autostart: Map.get(test_context, :autostart, false),
         current_user: user,

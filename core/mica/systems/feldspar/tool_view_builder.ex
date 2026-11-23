@@ -45,6 +45,10 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   defp autostart?(%{live_context: %{data: %{autostart: true}}}), do: true
   defp autostart?(_assigns), do: false
 
+  # Optional too: a host without one sends no participant_task in live-init
+  defp participant_task(%{live_context: %{data: %{participant_task: task}}}), do: task
+  defp participant_task(_assigns), do: nil
+
   defp build_recovery(true, support_url) do
     %{
       title: dgettext("eyra-feldspar", "recovery.title"),
@@ -77,7 +81,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
        url: archive_ref <> "/index.html",
        locale: Gettext.get_locale(MicaWeb.Gettext),
        attempt_id: Map.get(assigns, :attempt_id),
-       participant_task: Map.get(assigns, :participant_task),
+       participant_task: participant_task(assigns),
        upload_context: build_upload_context(assigns)
      ), nil}
   end

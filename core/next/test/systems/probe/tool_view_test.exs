@@ -39,7 +39,6 @@ defmodule Next.Systems.Probe.ToolViewTest do
         assignment_id: 123,
         participant: "participant",
         workflow_item_id: 456,
-        participant_task: "789",
         current_user: user,
         recovery: %{scope: "scope", on_entry: :check, support_url: "mailto:support@example.org"}
       })
