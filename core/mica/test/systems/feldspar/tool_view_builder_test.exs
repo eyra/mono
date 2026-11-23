@@ -1,6 +1,7 @@
 defmodule Systems.Feldspar.ToolViewBuilderTest do
   use Mica.DataCase
 
+  alias Frameworks.Concept.LiveContext
   alias Systems.Feldspar
 
   describe "view_model/2" do
@@ -40,6 +41,29 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
       assigns = build_assigns("Title", "INSTAGRAM")
       vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
       assert vm.icon == "instagram"
+    end
+  end
+
+  describe "participant_task" do
+    setup do
+      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+      %{tool: tool}
+    end
+
+    test "goes to the app view from the host's live context", %{tool: tool} do
+      assigns =
+        build_assigns("Test App", nil)
+        |> Map.put(:live_context, LiveContext.new(%{participant_task: "81234"}))
+
+      vm = Feldspar.ToolViewBuilder.view_model(tool, assigns)
+
+      assert vm.app_view.options[:participant_task] == "81234"
+    end
+
+    test "is nil when the host has none", %{tool: tool} do
+      vm = Feldspar.ToolViewBuilder.view_model(tool, build_assigns("Test App", nil))
+
+      assert vm.app_view.options[:participant_task] == nil
     end
   end
 

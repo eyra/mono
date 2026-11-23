@@ -230,6 +230,44 @@ defmodule MicaSaas.Systems.Assignment.CrewTaskListViewTest do
     })
   end
 
+  describe "participant_task" do
+    test "stays the same when the participant reloads the task list", %{conn: conn, user: user} do
+      assignment = Assignment.Factories.create_assignment_with_feldspar_tool()
+      assignment = Assignment.Factories.add_participant(assignment, user)
+      [%{id: item_id}] = Systems.Workflow.Model.ordered_items(assignment.workflow)
+
+      first = mounted_participant_task(conn, user, assignment, item_id)
+      reloaded = mounted_participant_task(conn, user, assignment, item_id)
+
+      assert is_binary(first)
+      assert reloaded == first
+    end
+
+    defp mounted_participant_task(conn, user, assignment, item_id) do
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          assignment_id: assignment.id,
+          current_user: user,
+          user_state: %{task: item_id},
+          panel_info: nil
+        })
+
+      {:ok, view, _html} =
+        conn
+        |> Map.put(:request_path, "/assignment/tasks")
+        |> live_isolated(Assignment.CrewTaskListView,
+          session: %{"live_context" => live_context}
+        )
+
+      %{vm: %{tool_modal: %{element: %{options: options}}}} =
+        :sys.get_state(view.pid).socket.assigns
+
+      %{participant_task: participant_task} = options[:live_context].data
+      GenServer.stop(view.pid)
+      participant_task
+    end
+  end
+
   describe "BUG: participant missing in upload_context" do
     setup %{user: user} do
       # Create assignment with Feldspar tool

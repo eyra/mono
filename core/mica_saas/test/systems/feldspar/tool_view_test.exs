@@ -15,7 +15,7 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
     user = Factories.insert!(:member)
 
     context =
-      LiveContext.new(%{
+      %{
         title: "Test Feldspar App",
         icon: "TikTok",
         tool_ref: tool_ref,
@@ -30,7 +30,9 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
           on_entry: Map.get(test_context, :on_entry, :check),
           support_url: "mailto:support@eyra.co?subject=Help"
         }
-      })
+      }
+      |> Map.merge(Map.take(test_context, [:participant_task]))
+      |> LiveContext.new()
 
     {:ok, view, _html} =
       live_isolated(
@@ -143,10 +145,30 @@ defmodule MicaSaas.Systems.Feldspar.ToolViewTest do
     refute has_element?(view, "[data-testid='feldspar-autostart']")
   end
 
+  @tag participant_task: "81234"
+  test "the app gets the host's participant_task for live-init", %{view: view} do
+    start(view)
+
+    assert has_element?(view, "[phx-hook='FeldsparApp'][data-participant-task='81234']")
+  end
+
+  test "without a participant_task from the host, the app gets none", %{view: view} do
+    start(view)
+
+    assert has_element?(view, "[phx-hook='FeldsparApp']")
+    refute has_element?(view, "[data-participant-task]")
+  end
+
   test "without autostart, checking recovery doesn't start the app", %{view: view} do
     render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
     render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
 
     refute has_element?(view, "iframe")
+  end
+
+  defp start(view) do
+    render_hook(view, "feldspar_recovery_checked", %{unfinished: false})
+    render_click(view, "prepare_start")
+    render_hook(view, "start", %{attempt_id: Ecto.UUID.generate()})
   end
 end
