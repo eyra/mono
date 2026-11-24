@@ -3,6 +3,8 @@
 [
   {:get, "/.well-known/apple-app-site-association", Next.Systems.WellKnown.Controller,
    :apple_app_site_association, "well_known", nil},
+  {:get, "/.well-known/assetlinks.json", Next.Systems.WellKnown.Controller, :assetlinks,
+   "well_known", nil},
   {:get, "/user/signin", Phoenix.LiveView.Plug, Next.Systems.Account.SigninPage, "live",
    Next.Systems.Account.SigninPage},
   {:get, "/user/signin/:user_type", Phoenix.LiveView.Plug, Next.Systems.Account.SigninPage,
