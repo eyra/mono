@@ -155,7 +155,7 @@ defmodule Mica.MixProject do
       # mica-bff's spec: the BFF blocks (Systems.BFF.Blocks) at compile time.
       {:mica_bff,
        github: "novasoftwarefoundation/mica-bff",
-       ref: "3bf8b69e67e10602c23750d4d0ddadcdb8ad6a73",
+       ref: "4884f4f47f567b6dc08193023992ff8d6cb9e3bd",
        runtime: false},
       {:remote_ip, "== 1.3.0"},
       {:slugify, "1.3.1"},
