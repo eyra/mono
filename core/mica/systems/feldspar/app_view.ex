@@ -12,7 +12,8 @@ defmodule Systems.Feldspar.AppView do
        url: url,
        locale: locale,
        upload_context: upload_context,
-       attempt_id: Map.get(params, :attempt_id)
+       attempt_id: Map.get(params, :attempt_id),
+       participant_task: Map.get(params, :participant_task)
      )}
   end
 
@@ -28,6 +29,7 @@ defmodule Systems.Feldspar.AppView do
           data-locale={@locale}
           data-src={@url}
           data-attempt-id={@attempt_id}
+          data-participant-task={@participant_task}
           data-upload-context={Jason.encode!(@upload_context)}>
           <iframe class="w-full outline-none"></iframe>
         </div>

@@ -143,6 +143,60 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
            )
   end
 
+  describe "header count" do
+    test "shows 1 for one announcement", %{conn: conn} = ctx do
+      insert_recipient!(create_announcement!(ctx.author, "Release notes", 1), ctx.creator)
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      assert header_count(view) == "1"
+    end
+
+    test "counts read and unread announcements", %{conn: conn} = ctx do
+      insert_recipient!(
+        create_announcement!(ctx.author, "Read one", 1),
+        ctx.creator,
+        ~U[2026-10-03 10:00:00Z]
+      )
+
+      insert_recipient!(create_announcement!(ctx.author, "Unread one", 2), ctx.creator)
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      assert header_count(view) == "2"
+    end
+
+    test "counts the six cards shown, like Recent items, when there are more",
+         %{conn: conn} = ctx do
+      for day <- 1..7 do
+        insert_recipient!(
+          create_announcement!(ctx.author, "Announcement #{day}", day),
+          ctx.creator
+        )
+      end
+
+      {:ok, view, html} = live(conn, ~p"/desktop")
+
+      assert header_count(view) == "6"
+      assert html =~ ~r/Announcements\s*<span class="text-primary"> 6<\/span>/
+    end
+
+    test "shows no header without announcements", %{conn: conn} do
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      refute has_element?(view, "#{@section} [data-testid=section-header]")
+    end
+
+    test "shows no header while the feature flag is off", %{conn: conn} = ctx do
+      set_feature_flag(:announcements, false)
+      insert_recipient!(create_announcement!(ctx.author, "Release notes", 1), ctx.creator)
+
+      {:ok, view, _html} = live(conn, ~p"/desktop")
+
+      refute has_element?(view, "#{@section} [data-testid=section-header]")
+    end
+  end
+
   describe "live" do
     test "an opened announcement turns read", %{conn: conn} = ctx do
       %{id: id} = announcement = create_announcement!(ctx.author, "Release notes", 1)
@@ -181,6 +235,15 @@ defmodule Next.Systems.Announcement.DesktopSectionTest do
       refute html =~ "What changed this month"
       assert has_element?(desktop, "#announcement_item_#{id}[data-unread=true]")
     end
+  end
+
+  defp header_count(view) do
+    view
+    |> element("#{@section} [data-testid=section-header] .text-primary")
+    |> render()
+    |> Floki.parse_fragment!()
+    |> Floki.text()
+    |> String.trim()
   end
 
   defp item_ids(view) do

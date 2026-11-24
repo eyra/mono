@@ -47,11 +47,12 @@ describe("FeldsparApp", () => {
       vi.unstubAllGlobals();
     });
 
-    function mount() {
+    function mount(dataset = {}) {
       const el = document.createElement("div");
       el.dataset.src = "about:blank";
       el.dataset.locale = "en";
       el.dataset.uploadContext = "{}";
+      Object.assign(el.dataset, dataset);
       const iframe = document.createElement("iframe");
       el.append(iframe);
       document.body.append(el);
@@ -151,6 +152,40 @@ describe("FeldsparApp", () => {
         [{ action: "live-init", locale: "en" }, "*", [retry.app.channel.port2]],
       ]);
       expect(retry.app.channel).not.toBe(first.app.channel);
+    });
+
+    it("sends the host's participant_task in live-init", () => {
+      const { app, iframe, init } = mount({ participantTask: "81234" });
+      notify(iframe, "app-loaded");
+      expect(init.mock.calls).toEqual([
+        [
+          { action: "live-init", locale: "en", participant_task: "81234" },
+          "*",
+          [app.channel.port2],
+        ],
+      ]);
+    });
+
+    it("sends the same participant_task again after a reload", () => {
+      const first = mount({ participantTask: "81234" });
+      notify(first.iframe, "app-loaded");
+      first.app.el.remove();
+      const reloaded = mount({ participantTask: "81234" });
+      notify(reloaded.iframe, "app-loaded");
+      const [[sent]] = first.init.mock.calls;
+      const [[resent]] = reloaded.init.mock.calls;
+      expect([sent.participant_task, resent.participant_task]).toEqual([
+        "81234",
+        "81234",
+      ]);
+    });
+
+    // toEqual would also pass with participant_task: undefined
+    it("leaves participant_task out of live-init when the host has none", () => {
+      const { iframe, init } = mount();
+      notify(iframe, "app-loaded");
+      const [[message]] = init.mock.calls;
+      expect(Object.keys(message)).not.toContain("participant_task");
     });
 
     it("does not reserve initialization before the iframe is available", () => {

@@ -1,6 +1,8 @@
 defmodule Systems.Feldspar.ToolViewBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
+  @participant_task_salt "feldspar participant_task"
+
   @doc """
   Builds view model for Feldspar tool view.
 
@@ -45,6 +47,27 @@ defmodule Systems.Feldspar.ToolViewBuilder do
   defp autostart?(%{live_context: %{data: %{autostart: true}}}), do: true
   defp autostart?(_assigns), do: false
 
+  # Optional too: a host without one sends no participant_task in live-init
+  defp participant_task(%{live_context: %{data: %{participant_task: task}}}) when is_binary(task),
+    do: opaque_participant_task(task)
+
+  defp participant_task(_assigns), do: nil
+
+  # Every Tool shares the origin a Tool saves its state on, so it gets a keyed hash of the
+  # host's id: the same for the same id on every node and after a deploy, and no id to read
+  defp opaque_participant_task(task) do
+    key =
+      Plug.Crypto.KeyGenerator.generate(secret_key_base(), @participant_task_salt,
+        cache: Plug.Crypto.Keys
+      )
+
+    :crypto.mac(:hmac, :sha256, key, task)
+    |> binary_part(0, 16)
+    |> Base.url_encode64(padding: false)
+  end
+
+  defp secret_key_base, do: Mica.SaaS.endpoint().config(:secret_key_base)
+
   defp build_recovery(true, support_url) do
     %{
       title: dgettext("eyra-feldspar", "recovery.title"),
@@ -77,6 +100,7 @@ defmodule Systems.Feldspar.ToolViewBuilder do
        url: archive_ref <> "/index.html",
        locale: Gettext.get_locale(MicaWeb.Gettext),
        attempt_id: Map.get(assigns, :attempt_id),
+       participant_task: participant_task(assigns),
        upload_context: build_upload_context(assigns)
      ), nil}
   end

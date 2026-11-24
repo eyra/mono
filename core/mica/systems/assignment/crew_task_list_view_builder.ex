@@ -2,7 +2,13 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
   use Gettext, backend: MicaWeb.Gettext
 
   import Systems.Assignment.CrewTaskHelpers,
-    only: [map_item: 1, build_work_items: 2, get_participant: 3, recovery_context: 3]
+    only: [
+      map_item: 1,
+      build_work_items: 2,
+      get_participant: 3,
+      participant_task: 1,
+      recovery_context: 3
+    ]
 
   alias Frameworks.Concept.LiveContext
   alias Systems.Assignment
@@ -53,12 +59,13 @@ defmodule Systems.Assignment.CrewTaskListViewBuilder do
 
   defp find_work_item(_, _), do: nil
 
-  defp build_tool_modal({workflow_item, _task}, context) do
+  defp build_tool_modal({workflow_item, task}, context) do
     %{tool_ref: tool_ref, id: workflow_item_id, title: title, group: icon} = workflow_item
 
     task_context =
       LiveContext.extend(context, %{
         workflow_item_id: workflow_item_id,
+        participant_task: participant_task(task),
         title: title,
         icon: icon,
         tool_ref: tool_ref,
