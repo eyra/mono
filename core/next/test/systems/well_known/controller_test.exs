@@ -65,6 +65,7 @@ defmodule Next.Systems.WellKnown.ControllerTest do
 
   defp query_matches?(query, params),
     do: Enum.all?(query, fn {key, value} -> params[key] == value end)
+
   describe "assetlinks.json" do
     test "lists every package with the configured fingerprints", %{conn: conn} do
       put_fingerprints("#{@fingerprint_a}, #{String.downcase(@fingerprint_b)}")
