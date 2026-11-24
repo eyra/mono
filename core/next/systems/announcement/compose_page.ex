@@ -10,7 +10,10 @@ defmodule Next.Systems.Announcement.ComposePage do
 
   A published announcement opens with only its title, summary and body:
   saving shows the changes to its recipients without sending it again
-  (`Next.Systems.Announcement.Public.update_announcement/2`).
+  (`Next.Systems.Announcement.Public.update_announcement/2`). Copy as new
+  announcement opens `/admin/announcement/new?copy=:id`: a new announcement
+  with its kind, priority and text, for an audience chosen anew, such as after
+  a test publication to the admin alone.
 
   Only system admins open it, and only while the `announcements` flag is on;
   every event checks both again.
@@ -48,16 +51,24 @@ defmodule Next.Systems.Announcement.ComposePage do
   # column, is an unknown announcement rather than a database error.
   @max_id 9_223_372_036_854_775_807
 
-  defp load(%{"id" => id}) do
-    with {id, ""} when id in 1..@max_id <- Integer.parse(id),
+  defp load(%{"id" => id}), do: get!(id)
+
+  # A copy is a new announcement: saving or publishing it creates one and
+  # leaves the original as it is.
+  defp load(%{"copy" => id}), do: id |> get!() |> Announcement.Model.copy()
+
+  defp load(_params), do: %Announcement.Model{kind: :release_notes, priority: :normal}
+
+  # A query such as `?copy[]=5` gives a list or map rather than a string.
+  defp get!(id) do
+    with true <- is_binary(id),
+         {id, ""} when id in 1..@max_id <- Integer.parse(id),
          %Announcement.Model{} = announcement <- Announcement.Public.get_announcement(id) do
       announcement
     else
       _ -> raise Ecto.NoResultsError, queryable: Announcement.Model
     end
   end
-
-  defp load(_params), do: %Announcement.Model{kind: :release_notes, priority: :normal}
 
   @impl true
   def mount(_params, _session, %{assigns: %{model: announcement}} = socket) do
@@ -271,7 +282,11 @@ defmodule Next.Systems.Announcement.ComposePage do
               </Text.body_medium>
               <.spacing value="S" />
             <% end %>
-            <.compose_buttons labels={@vm.form} publish?={false} />
+            <.compose_buttons
+              labels={@vm.form}
+              publish?={false}
+              copy_button={@vm.published.copy_button}
+            />
           <% end %>
 
           <%= if @vm.audience do %>
@@ -378,10 +393,11 @@ defmodule Next.Systems.Announcement.ComposePage do
   attr(:labels, :map, required: true)
   attr(:recipient_count, :integer, default: 0)
   attr(:publish?, :boolean, required: true)
+  attr(:copy_button, :map, default: nil)
 
   defp compose_buttons(assigns) do
     ~H"""
-    <div class="flex flex-row gap-4">
+    <div class="flex flex-row flex-wrap gap-4">
       <Button.dynamic
         action={%{type: :submit, form_id: "announcement_form"}}
         face={%{type: :secondary, label: @labels.save_button}}
@@ -398,6 +414,9 @@ defmodule Next.Systems.Announcement.ComposePage do
         >
           <Button.Face.primary label={@labels.publish_button} />
         </button>
+      <% end %>
+      <%= if @copy_button do %>
+        <Button.dynamic {@copy_button} testid="copy-announcement-button" />
       <% end %>
       <Button.dynamic
         action={%{type: :send, event: "cancel_announcement"}}

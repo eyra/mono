@@ -182,3 +182,7 @@ msgstr "Alles bekijken"
 #, elixir-autogen, elixir-format
 msgid "list.empty"
 msgstr "Je hebt nog geen aankondigingen."
+
+#, elixir-autogen, elixir-format
+msgid "form.copy.button"
+msgstr "Kopiëren als nieuwe aankondiging"

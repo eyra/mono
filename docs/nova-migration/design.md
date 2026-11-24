@@ -397,7 +397,8 @@ Approved 2026-11-17 (d-0026); details in plan step [code-registry](./plan.md#cod
 - **Packaging and serving.** A Feldspar app is a zip with `index.html`. It is served from the local filesystem or a public S3 prefix, which makes it cross-origin.
 - **Handshake:**
   - iframe → host: `{action: "app-loaded"}`
-  - host → iframe: `{action: "live-init", locale}`, plus a transferred `MessagePort`
+  - host → iframe: `{action: "live-init", locale, participant_task?}`, plus a transferred `MessagePort`
+    - `participant_task` (optional): an opaque string, the same for one participant in one task and different for another participant, task or assignment. A Tool keys the state it saves in the browser with it. Mica sends a keyed hash of the participant's crew task id, and leaves the field out when the host has none.
   - iframe → host: `{action: "resize", height}`
 - **Commands over the port:**
   - app → host:

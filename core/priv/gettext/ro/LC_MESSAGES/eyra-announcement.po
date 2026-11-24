@@ -184,3 +184,7 @@ msgstr "Vedeți toate"
 #, elixir-autogen, elixir-format
 msgid "list.empty"
 msgstr "Nu aveți încă anunțuri."
+
+#, elixir-autogen, elixir-format
+msgid "form.copy.button"
+msgstr ""

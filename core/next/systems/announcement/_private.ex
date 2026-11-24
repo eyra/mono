@@ -22,6 +22,9 @@ defmodule Next.Systems.Announcement.Private do
   def compose_path(:new), do: "/admin/announcement/new"
   def compose_path(announcement_id), do: "/admin/announcement/#{announcement_id}"
 
+  @doc "The path of the page to compose a new announcement as a copy of another (`compose_path/1`)."
+  def copy_path(announcement_id), do: "/admin/announcement/new?copy=#{announcement_id}"
+
   @doc "The publication date in `timezone` and the current locale, such as \"28 October 2026\"."
   def published_date(%DateTime{} = published_at, timezone) do
     published_at

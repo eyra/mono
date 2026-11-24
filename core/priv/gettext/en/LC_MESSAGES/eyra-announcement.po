@@ -182,3 +182,7 @@ msgstr "View all"
 #, elixir-autogen, elixir-format
 msgid "list.empty"
 msgstr "You have no announcements yet."
+
+#, elixir-autogen, elixir-format
+msgid "form.copy.button"
+msgstr "Copy as new announcement"
