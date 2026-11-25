@@ -8,6 +8,7 @@ defmodule Systems.Org.MemberViewBuilderTest do
   use Mica.DataCase
 
   alias Mica.Factories
+  alias Systems.Account
   alias Systems.Org
 
   setup do
@@ -49,6 +50,28 @@ defmodule Systems.Org.MemberViewBuilderTest do
       user_ids = Enum.map(vm.users, & &1.id)
       assert participant.id in user_ids
       assert creator.id in user_ids
+    end
+  end
+
+  describe "view_model/2 info" do
+    test "shows who added each member", %{org: org, assigns: assigns} do
+      support = Factories.insert!(:creator)
+      member = Factories.insert!(:creator, %{email: "researcher@builder-test.org"})
+      :ok = Org.Public.add_member(org, member, support)
+
+      vm = Org.MemberViewBuilder.view_model(org, assigns)
+
+      assert vm.info[member.id] =~ "Added by #{Account.User.label(support)}"
+    end
+
+    test "shows only when a member was added if nobody is recorded", %{org: org, assigns: assigns} do
+      member = Factories.insert!(:creator, %{email: "seeded@builder-test.org"})
+      :ok = Org.Public.add_member(org, member)
+
+      vm = Org.MemberViewBuilder.view_model(org, assigns)
+
+      assert vm.info[member.id] =~ "Added"
+      refute vm.info[member.id] =~ "Added by"
     end
   end
 

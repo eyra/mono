@@ -103,3 +103,27 @@ msgstr "Deelnemers"
 #, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Organisatie"
+
+#, elixir-autogen, elixir-format
+msgid "member.added.by.info"
+msgstr "Toegevoegd door %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "member.added.info"
+msgstr "Toegevoegd %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.label"
+msgstr "Onderzoeksinstituut"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.marked.note"
+msgstr "Gemarkeerd door %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.tag"
+msgstr "Onderzoeksinstituut"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.unknown.user"
+msgstr "een verwijderd account"

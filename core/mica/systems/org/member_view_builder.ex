@@ -19,6 +19,7 @@ defmodule Systems.Org.MemberViewBuilder do
   """
   use Gettext, backend: MicaWeb.Gettext
 
+  alias MicaWeb.UI.Timestamp
   alias Systems.Account
   alias Systems.Org
 
@@ -32,21 +33,21 @@ defmodule Systems.Org.MemberViewBuilder do
     query = Map.get(assigns, :query, [])
     query_string = Map.get(assigns, :query_string, "")
 
-    members_with_added_at = Org.Public.list_members_with_added_at(node)
+    memberships = Org.Public.list_memberships(node)
     owners = Org.Public.list_owners(node)
 
     filtered =
-      members_with_added_at
+      memberships
       |> filter_by_chips(active_filters, domains, week_start_naive())
       |> filter_by_query(query)
-      |> Enum.sort_by(fn {user, _} -> Account.User.label(user) end)
+      |> Enum.sort_by(fn %{user: user} -> Account.User.label(user) end)
 
-    members = Enum.map(filtered, fn {user, _} -> user end)
+    members = Enum.map(filtered, & &1.user)
     capped_members = Enum.take(members, @max_members)
 
     # All members (uncapped, unfiltered) — needed for "available users" and
     # the domain banner so they aren't affected by the filter UI.
-    all_members = Enum.map(members_with_added_at, fn {user, _} -> user end)
+    all_members = Enum.map(memberships, & &1.user)
 
     member_ids = Enum.map(all_members, & &1.id)
     owner_ids = Enum.map(owners, & &1.id)
@@ -67,6 +68,7 @@ defmodule Systems.Org.MemberViewBuilder do
     %{
       title: dgettext("eyra-org", "user.title"),
       people: capped_members,
+      info: Map.new(filtered, &{&1.user.id, added_info(&1)}),
       users: users,
       user_count: length(filtered),
       filter_labels: Org.MemberFilters.labels(active_filters),
@@ -84,10 +86,10 @@ defmodule Systems.Org.MemberViewBuilder do
     end)
   end
 
-  defp chip_matches?({user, _added_at}, :external, domains, _week_start),
+  defp chip_matches?(%{user: user}, :external, domains, _week_start),
     do: not domain_match?(user, domains)
 
-  defp chip_matches?({_user, added_at}, :recent, _domains, week_start),
+  defp chip_matches?(%{added_at: added_at}, :recent, _domains, week_start),
     do: NaiveDateTime.compare(added_at, week_start) != :lt
 
   defp chip_matches?(_row, _filter, _domains, _week_start), do: false
@@ -106,7 +108,18 @@ defmodule Systems.Org.MemberViewBuilder do
   defp filter_by_query(rows, nil), do: rows
 
   defp filter_by_query(rows, query) when is_list(query) do
-    Enum.filter(rows, fn {user, _} -> matches_query?(user, query) end)
+    Enum.filter(rows, fn %{user: user} -> matches_query?(user, query) end)
+  end
+
+  defp added_info(%{added_at: added_at, added_by: nil}) do
+    dgettext("eyra-org", "member.added.info", date: Timestamp.humanize(added_at))
+  end
+
+  defp added_info(%{added_at: added_at, added_by: added_by}) do
+    dgettext("eyra-org", "member.added.by.info",
+      name: Account.User.label(added_by),
+      date: Timestamp.humanize(added_at)
+    )
   end
 
   defp matches_query?(_user, []), do: true

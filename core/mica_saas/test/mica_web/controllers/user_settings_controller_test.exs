@@ -70,80 +70,27 @@ defmodule MicaSaas.Systems.Account.SettingsControllerTest do
     end
   end
 
-  describe "PUT /users/settings (change email form)" do
-    @tag :capture_log
-    test "updates the user email", %{conn: conn, user: user, password: password} do
-      conn =
+  describe "no email change on /user/settings" do
+    test "the settings page has no email form", %{conn: conn} do
+      response = conn |> get(~m"/user/settings") |> html_response(200)
+      refute response =~ "update_email"
+      refute response =~ "Change email"
+    end
+
+    test "an update_email action changes nothing", %{conn: conn, user: user, password: password} do
+      assert_error_sent(400, fn ->
         put(conn, ~m"/user/settings", %{
           "action" => "update_email",
           "current_password" => password,
           "user" => %{"email" => Faker.Internet.email()}
         })
-
-      assert redirected_to(conn) == ~m"/user/settings"
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "A link to confirm your email"
-      assert Account.Public.get_user_by_email(user.email)
-    end
-
-    test "does not update email on invalid data", %{conn: conn} do
-      conn =
-        put(conn, ~m"/user/settings", %{
-          "action" => "update_email",
-          "current_password" => "invalid",
-          "user" => %{"email" => "with spaces"}
-        })
-
-      response = html_response(conn, 200)
-      assert response =~ "<h1>Settings</h1>"
-      assert response =~ "must have the @ sign and no spaces"
-      assert response =~ "is not valid"
-    end
-  end
-
-  describe "GET /users/settings/activate-account/:token" do
-    setup %{user: user} do
-      email = Faker.Internet.email()
-
-      token =
-        extract_user_token(fn url ->
-          Account.Public.deliver_update_email_instructions(
-            %{user | email: email},
-            user.email,
-            url
-          )
-        end)
-
-      %{token: token, email: email}
-    end
-
-    test "updates the user email once", %{conn: conn, user: user, token: token, email: email} do
-      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == ~m"/user/settings"
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) =~ "Email address changed"
-      refute Account.Public.get_user_by_email(user.email)
-      assert Account.Public.get_user_by_email(email)
-
-      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == ~m"/user/settings"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               "Email change link is invalid or it has expired"
-    end
-
-    test "does not update email with invalid token", %{conn: conn, user: user} do
-      conn = get(conn, ~m"/user/settings/activate-account/oops")
-      assert redirected_to(conn) == ~m"/user/settings"
-
-      assert Phoenix.Flash.get(conn.assigns.flash, :error) =~
-               "Email change link is invalid or it has expired"
+      end)
 
       assert Account.Public.get_user_by_email(user.email)
     end
 
-    test "redirects if user is not logged in", %{token: token} do
-      conn = MicaSaasWeb.ConnCase.build_conn()
-      conn = get(conn, ~m"/user/settings/activate-account/#{token}")
-      assert redirected_to(conn) == Mica.SaaS.module().sign_in_page()
+    test "the email confirmation link is gone", %{conn: conn} do
+      assert %{status: 404} = get(conn, "/user/settings/activate-account/any-token")
     end
   end
 end

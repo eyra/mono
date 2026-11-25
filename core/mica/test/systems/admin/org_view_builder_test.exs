@@ -2,6 +2,7 @@ defmodule Systems.Admin.OrgViewBuilderTest do
   use Mica.DataCase
   use Gettext, backend: MicaWeb.Gettext
 
+  alias Mica.Factories
   alias Systems.Admin.OrgViewBuilder
   alias Systems.Org
 
@@ -191,6 +192,25 @@ defmodule Systems.Admin.OrgViewBuilderTest do
 
       assert "test.edu" in item.tags
       assert "example.org" in item.tags
+    end
+
+    test "tags a research institute" do
+      admin = Factories.insert!(:member, %{email: "admin1@example.org"})
+      org = Factories.insert!(:org_node, %{identifier: ["tagged_research_institute"]})
+      {:ok, org} = Org.Public.mark_research_institute(org, true, admin)
+
+      org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
+      item = OrgViewBuilder.build_organisation_item(org, :en, true)
+
+      assert "Research institute" in item.tags
+    end
+
+    test "doesn't tag an organisation without the mark" do
+      org = Factories.insert!(:org_node, %{identifier: ["untagged_org"]})
+      org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
+      item = OrgViewBuilder.build_organisation_item(org, :en, true)
+
+      refute "Research institute" in item.tags
     end
   end
 end

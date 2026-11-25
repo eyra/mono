@@ -11,6 +11,7 @@ defmodule Systems.Org.Public do
   }
 
   alias Systems.{
+    Admin,
     Content
   }
 
@@ -348,48 +349,99 @@ defmodule Systems.Org.Public do
   end
 
   @doc """
-  Like `list_members/1` but returns `{user, added_at}` tuples where
-  `added_at` is the timestamp at which the `:member` role was granted on
-  the org's auth_node. Used by the Members tab to power the "Recent"
-  filter.
+  The members of the organisation as `%{user: user, added_at: added_at,
+  added_by: user | nil}` maps, with their profiles preloaded.
+
+  `added_at` is the moment the `:member` role was granted on the org's
+  auth_node. `added_by` comes from the member's current
+  `Org.MembershipModel`; it is `nil` for members added before memberships
+  were recorded, or added by no one in particular (a seed, a script).
   """
-  def list_members_with_added_at(%Node{auth_node_id: nil}), do: []
+  def list_memberships(%Node{auth_node_id: nil}), do: []
 
-  def list_members_with_added_at(%Node{auth_node_id: auth_node_id}) do
-    rows =
-      from(ra in Mica.Authorization.RoleAssignment,
-        join: u in User,
-        on: u.id == ra.principal_id,
-        where: ra.node_id == ^auth_node_id and ra.role == :member,
-        select: {u, ra.inserted_at}
-      )
-      |> Repo.all()
+  def list_memberships(%Node{id: org_id, auth_node_id: auth_node_id}) do
+    from(ra in Mica.Authorization.RoleAssignment,
+      join: u in User,
+      on: u.id == ra.principal_id,
+      left_join: m in Org.MembershipModel,
+      on: m.org_id == ^org_id and m.user_id == u.id and is_nil(m.removed_at),
+      left_join: by in User,
+      on: by.id == m.added_by_id,
+      where: ra.node_id == ^auth_node_id and ra.role == :member,
+      select: %{user: u, added_at: ra.inserted_at, added_by: by}
+    )
+    |> Repo.all()
+    |> preload_profiles()
+  end
 
-    profiles_by_id =
-      rows
-      |> Enum.map(&elem(&1, 0))
-      |> Repo.preload(:profile)
-      |> Map.new(&{&1.id, &1.profile})
+  defp preload_profiles(memberships) do
+    users = Enum.flat_map(memberships, &[&1.user, &1.added_by]) |> Enum.reject(&is_nil/1)
+    profiles_by_id = users |> Repo.preload(:profile) |> Map.new(&{&1.id, &1.profile})
 
-    Enum.map(rows, fn {user, added_at} ->
-      {%{user | profile: Map.get(profiles_by_id, user.id)}, added_at}
+    with_profile = fn
+      nil -> nil
+      user -> %{user | profile: Map.get(profiles_by_id, user.id)}
+    end
+
+    Enum.map(memberships, fn membership ->
+      %{
+        membership
+        | user: with_profile.(membership.user),
+          added_by: with_profile.(membership.added_by)
+      }
     end)
   end
 
   @doc """
-  Assigns the :member role to a user for the given organisation.
+  Assigns the :member role to a user for the given organisation and records
+  who added them (`Org.MembershipModel`). Adding a member twice changes nothing.
   Auth roles are the source of truth for membership (Option C pattern).
   """
-  def add_member(%Node{} = org, %User{} = user) do
-    auth_module().assign_role(user, org, :member)
+  def add_member(%Node{} = org, %User{} = user, added_by \\ nil) do
+    if member?(org, user) do
+      :ok
+    else
+      Multi.new()
+      |> Multi.run(:role, fn _, _ ->
+        {auth_module().assign_role(user, org, :member), nil}
+      end)
+      |> Multi.insert(:membership, Org.MembershipModel.add_changeset(org, user, added_by))
+      |> Repo.commit()
+      |> case do
+        {:ok, _} -> :ok
+        {:error, _, _, _} -> :error
+      end
+    end
   end
 
   @doc """
-  Revokes the :member role from a user for the given organisation.
+  Revokes the :member role from a user for the given organisation and records
+  who removed them and when on the current `Org.MembershipModel`.
   Auth roles are the source of truth for membership (Option C pattern).
   """
-  def remove_member(%Node{} = org, %User{} = user) do
-    auth_module().remove_role!(user, org, :member)
+  def remove_member(%Node{id: org_id} = org, %User{id: user_id} = user, removed_by \\ nil) do
+    Multi.new()
+    |> Multi.run(:role, fn _, _ ->
+      {:ok, auth_module().remove_role!(user, org, :member)}
+    end)
+    |> Multi.run(:membership, fn _, _ ->
+      from(m in Org.MembershipModel,
+        where: m.org_id == ^org_id and m.user_id == ^user_id and is_nil(m.removed_at)
+      )
+      |> Repo.one()
+      |> case do
+        nil ->
+          {:ok, nil}
+
+        membership ->
+          membership |> Org.MembershipModel.remove_changeset(removed_by) |> Repo.update()
+      end
+    end)
+    |> Repo.commit()
+    |> case do
+      {:ok, %{role: role}} -> role
+      {:error, _, _, _} -> :error
+    end
   end
 
   @doc """
@@ -398,6 +450,55 @@ defmodule Systems.Org.Public do
   def member?(%Node{} = org, %User{} = user) do
     list_members(org)
     |> Enum.any?(&(&1.id == user.id))
+  end
+
+  # Research institutes
+
+  @doc """
+  Marks the organisation as a research institute, or removes the mark, and
+  records who did it and when. Only system admins may; anyone else gets
+  `{:error, :forbidden}`.
+  """
+  def mark_research_institute(%Node{} = org, research_institute?, %User{} = by)
+      when is_boolean(research_institute?) do
+    if Admin.Public.admin?(by) do
+      org
+      |> Node.research_institute_changeset(research_institute?, by)
+      |> Repo.update()
+      |> case do
+        {:ok, org} ->
+          org = Repo.preload(org, [research_institute_by: [:profile]], force: true)
+
+          Frameworks.Signal.Public.dispatch!({:org_node, :updated}, %{
+            org_node: org,
+            from_pid: self()
+          })
+
+          {:ok, org}
+
+        error ->
+          error
+      end
+    else
+      {:error, :forbidden}
+    end
+  end
+
+  @doc """
+  The research institutes the user is a member of: organisations with the
+  research-institute mark, not archived, on which the user has the `:member`
+  role. Owners who aren't members aren't counted.
+  """
+  def list_research_institutes(%User{} = user, preload \\ []) do
+    node_ids = auth_module().query_node_ids(role: :member, principal: user)
+
+    from(node in Node,
+      where: node.auth_node_id in subquery(node_ids),
+      where: not is_nil(node.research_institute_at),
+      preload: ^preload
+    )
+    |> exclude_archived()
+    |> Repo.all()
   end
 
   # NextAction sync for domain-matched users
@@ -486,8 +587,6 @@ defmodule Systems.Org.Public do
   defp domain_matches?(domains, user_domain) do
     Enum.any?(domains, &(String.downcase(&1) == user_domain))
   end
-
-  alias Systems.Admin
 
   @doc """
   Returns true when the user is allowed to manage the given organisation

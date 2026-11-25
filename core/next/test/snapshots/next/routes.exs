@@ -66,8 +66,6 @@
    Systems.Account.OnboardingPage},
   {:get, "/user/settings", Systems.Account.SettingsController, :edit, "settings", nil},
   {:put, "/user/settings", Systems.Account.SettingsController, :update, "settings", nil},
-  {:get, "/user/settings/activate-account/:token", Systems.Account.SettingsController,
-   :activate_account, "settings", nil},
   {:post, "/auth/:idp/transfer/confirm", Systems.Account.Auth.IdentityProviderTransferController,
    :confirm, "identity_provider_transfer", nil},
   {:post, "/auth/:idp/transfer/decline", Systems.Account.Auth.IdentityProviderTransferController,

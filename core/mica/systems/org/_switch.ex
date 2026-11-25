@@ -7,6 +7,7 @@ defmodule Systems.Org.Switch do
   def intercept({:org_node, _}, %{org_node: org_node, from_pid: from_pid}) do
     org_node = Mica.Repo.preload(org_node, Org.NodeModel.preload_graph(:full))
     update_routed(Org.ContentPage, org_node, from_pid)
+    update_embedded(Org.MemberView, org_node, from_pid)
     :ok
   end
 end

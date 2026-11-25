@@ -5,34 +5,10 @@ defmodule Systems.Account.SettingsController do
 
   alias Systems.Account
 
-  plug(:assign_email_and_password_changesets)
+  plug(:assign_password_changeset)
 
   def edit(conn, _params) do
     render(conn, "edit.html")
-  end
-
-  def update(conn, %{"action" => "update_email"} = params) do
-    %{"current_password" => password, "user" => user_params} = params
-    %{email: email} = user = conn.assigns.current_user
-
-    case Account.Public.apply_user_email(user, password, user_params) do
-      {:ok, applied_user} ->
-        Account.Public.deliver_update_email_instructions(
-          applied_user,
-          email,
-          &url(conn, ~m"/user/settings/activate-account/#{&1}")
-        )
-
-        conn
-        |> put_flash(
-          :info,
-          "A link to confirm your email change has been sent to the new address."
-        )
-        |> redirect(to: ~m"/user/settings")
-
-      {:error, changeset} ->
-        render(conn, "edit.html", email_changeset: changeset)
-    end
   end
 
   def update(conn, %{"action" => "update_password"} = params) do
@@ -51,25 +27,8 @@ defmodule Systems.Account.SettingsController do
     end
   end
 
-  def activate_account(conn, %{"token" => token}) do
-    case Account.Public.update_user_email(conn.assigns.current_user, token) do
-      :ok ->
-        conn
-        |> put_flash(:info, dgettext("eyra-user", "email.changed.successfully"))
-        |> redirect(to: ~m"/user/settings")
-
-      :error ->
-        conn
-        |> put_flash(:error, "Email change link is invalid or it has expired.")
-        |> redirect(to: ~m"/user/settings")
-    end
-  end
-
-  defp assign_email_and_password_changesets(conn, _opts) do
+  defp assign_password_changeset(conn, _opts) do
     user = conn.assigns.current_user
-
-    conn
-    |> assign(:email_changeset, Account.Public.change_user_email(user))
-    |> assign(:password_changeset, Account.Public.change_user_password(user))
+    assign(conn, :password_changeset, Account.Public.change_user_password(user))
   end
 end

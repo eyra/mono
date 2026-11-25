@@ -234,8 +234,13 @@ defmodule Systems.Admin.OrgViewBuilder do
   end
 
   defp build_tags(org, pools) do
+    research_institute_tag =
+      if Org.NodeModel.research_institute?(org),
+        do: [dgettext("eyra-org", "research.institute.tag")],
+        else: []
+
     panel_tag = if Enum.any?(pools), do: [dgettext("eyra-admin", "org.panel.tag")], else: []
-    panel_tag ++ domain_tags(org)
+    research_institute_tag ++ panel_tag ++ domain_tags(org)
   end
 
   defp domain_tags(%{domains: nil}), do: []

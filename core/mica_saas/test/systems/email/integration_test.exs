@@ -173,7 +173,6 @@ defmodule MicaSaas.Systems.Email.IntegrationTest do
       emails = [
         Factory.account_confirmation_instructions(user, url),
         Factory.reset_password_instructions(user, url),
-        Factory.update_email_instructions(user, url),
         Factory.already_activated_notification(user, url),
         Factory.account_created(user)
       ]
@@ -206,7 +205,6 @@ defmodule MicaSaas.Systems.Email.IntegrationTest do
       emails = [
         Factory.account_confirmation_instructions(user, url),
         Factory.reset_password_instructions(user, url),
-        Factory.update_email_instructions(user, url),
         Factory.already_activated_notification(user, url),
         Factory.account_created(user)
       ]
@@ -232,7 +230,7 @@ defmodule MicaSaas.Systems.Email.IntegrationTest do
       user = Factories.build(:member)
       url = "https://example.com/path?param=value"
 
-      email = Factory.update_email_instructions(user, url)
+      email = Factory.already_activated_notification(user, url)
 
       # URL should maintain its structure in HTML
       assert email.html_body =~ url

@@ -100,6 +100,7 @@
     Systems.Notify.EventModel,
     Systems.Notify.MessageModel,
     Systems.Org.LinkModel,
+    Systems.Org.MembershipModel,
     Systems.Org.NodeModel,
     Systems.Org.UserAssociation,
     Systems.Payment.ReconciliationFindingModel,

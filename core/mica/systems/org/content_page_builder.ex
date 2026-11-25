@@ -84,7 +84,8 @@ defmodule Systems.Org.ContentPageBuilder do
       show_errors: false,
       title: dgettext("eyra-org", "node.title"),
       type: :fullpage,
-      element: element
+      element: element,
+      testid: "org-tab-node"
     }
   end
 
@@ -102,7 +103,8 @@ defmodule Systems.Org.ContentPageBuilder do
       show_errors: false,
       title: dgettext("eyra-org", "user.title"),
       type: :fullpage,
-      element: element
+      element: element,
+      testid: "org-tab-users"
     }
   end
 

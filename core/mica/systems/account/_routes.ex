@@ -31,12 +31,6 @@ defmodule MicaWeb.Live.User.Routes do
 
         get("/user/settings", SettingsController, :edit)
         put("/user/settings", SettingsController, :update)
-
-        get(
-          "/user/settings/activate-account/:token",
-          SettingsController,
-          :activate_account
-        )
       end
 
       scope "/auth", Systems.Account.Auth do
