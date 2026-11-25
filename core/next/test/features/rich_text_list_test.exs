@@ -40,6 +40,33 @@ defmodule NextWeb.Features.RichTextListTest do
     |> assert_list_layout("[data-testid=announcement-body]")
   end
 
+  @tag :feature
+  feature "a wrapped line of a list item starts under the text of its first line", %{
+    session: session
+  } do
+    password = "RichTextListFeature123!"
+    admin = Factories.insert!(:admin, %{hashed_password: Bcrypt.hash_pwd_salt(password)})
+
+    {:ok, draft} =
+      Announcement.Public.create_announcement(admin, %{
+        kind: :release_notes,
+        title: "Long list draft",
+        summary: "Summary",
+        body: long_items_body()
+      })
+
+    published = published!(admin, long_items_body())
+
+    session
+    |> sign_in(admin, password)
+    |> visit("/admin/announcement/#{draft.id}")
+    |> assert_connected("trix-editor > ul")
+    |> assert_hanging_indent("trix-editor")
+    |> visit("/announcement/#{published.id}")
+    |> assert_connected("[data-testid=announcement-body] > ul")
+    |> assert_hanging_indent("[data-testid=announcement-body]")
+  end
+
   defp published!(author, body) do
     {:ok, announcement} =
       Announcement.Public.create_announcement(author, %{
@@ -74,6 +101,52 @@ defmodule NextWeb.Features.RichTextListTest do
     "<ol>#{Enum.join(items)}</ol>"
   end
 
+  @long_text String.duplicate("A list item long enough to wrap onto more lines. ", 12)
+
+  defp long_items_body do
+    numbered =
+      for n <- 1..12 do
+        cond do
+          n == 10 -> "<li>#{@long_text}<ol><li>#{@long_text}</li></ol></li>"
+          n == 11 -> "<li>#{@long_text}<ul><li>#{@long_text}</li></ul></li>"
+          n >= 9 -> "<li>#{@long_text}</li>"
+          true -> "<li>Item #{n}</li>"
+        end
+      end
+
+    bulleted = "<li>#{@long_text}</li><li>Short</li><li>#{@long_text}</li>"
+
+    "<ol>#{Enum.join(numbered)}</ol><ul>#{bulleted}</ul><ol><li>#{@long_text}</li></ol>"
+  end
+
+  # Every line of a long item's text starts where its first line's text starts.
+  defp assert_hanging_indent(session, container) do
+    execute_script(
+      session,
+      """
+      const texts = Array.from(document.querySelector(arguments[0]).querySelectorAll('li'))
+        .map((li) => Array.from(li.childNodes).find((n) => n.nodeType === 3 && n.textContent.length > 200))
+        .filter(Boolean);
+      return texts.map((text) => {
+        const range = document.createRange();
+        range.selectNodeContents(text);
+        return Array.from(range.getClientRects()).map((rect) => Math.round(rect.left));
+      });
+      """,
+      [container],
+      fn line_lefts ->
+        assert length(line_lefts) == 9
+
+        for [first | rest] = lefts <- line_lefts do
+          assert rest != [], "an item in #{container} doesn't wrap"
+
+          assert Enum.all?(rest, &(&1 == first)),
+                 "line starts of an item in #{container}: #{inspect(lefts, charlists: :as_lists)}"
+        end
+      end
+    )
+  end
+
   # Items without a sub-list are one line high, so a number that wraps onto a
   # second line makes its item taller than the others. A number that doesn't
   # wrap but is wider than its room runs into the text: its width, measured in
@@ -96,7 +169,8 @@ defmodule NextWeb.Features.RichTextListTest do
         const style = getComputedStyle(li, '::before');
         canvas.font = `${style.fontWeight} ${style.fontSize} ${style.fontFamily}`;
         canvas.letterSpacing = style.letterSpacing;
-        return left(li) + parseFloat(style.marginLeft) + canvas.measureText(`${number}.`).width;
+        const start = left(li) + parseFloat(getComputedStyle(li).paddingLeft) + parseFloat(style.marginLeft);
+        return start + canvas.measureText(`${number}.`).width;
       };
       const parent = items[arguments[1] - 1];
       const sub = parent.querySelector('ol > li');
