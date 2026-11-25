@@ -1,12 +1,20 @@
 # `Systems.BFF.Page`
 [🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/page.ex#L1)
 
-A page the BFF serves: the blocks it shows the signed-in `user`, in order.
+A page the BFF serves: the blocks it shows the signed-in `user`, in order, and the
+markup that groups them by block id (`Systems.BFF.Blocks.Border` and the other markup
+kinds of the mica-bff spec), for `params`, the page's params from the spec read from
+the query and typed (`Systems.BFF.Blocks.page_params/2`): `?year=2025` is
+`%{year: 2025}`. A param that is missing, empty or doesn't parse is not in `params`.
 
-# `blocks`
+# `view_model`
 
 ```elixir
-@callback blocks(user :: Systems.Account.User.t()) :: [struct()]
+@callback view_model(
+  user :: Systems.Account.User.t(),
+  params :: %{required(atom()) =&gt; term()}
+) ::
+  {blocks :: [struct()], markup :: [struct()]}
 ```
 
 ---

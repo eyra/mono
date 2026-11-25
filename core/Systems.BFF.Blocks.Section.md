@@ -9,6 +9,7 @@ Block `section`.
 @type t() :: %Systems.BFF.Blocks.Section{
   body: String.t() | nil,
   count: integer() | nil,
+  id: String.t(),
   image_url: String.t() | nil,
   title: String.t() | nil,
   to: String.t() | nil

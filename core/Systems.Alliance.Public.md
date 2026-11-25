@@ -35,10 +35,6 @@ Returns an `%Ecto.Changeset{}` for tracking alliance_tool changes.
 
 # `copy`
 
-# `delete_tool`
-
-Deletes a alliance_tool.
-
 # `get_tool`
 
 # `get_tool!`

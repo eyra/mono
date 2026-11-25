@@ -17,6 +17,8 @@ and move with that code in plan step code-instance.
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -33,6 +35,8 @@ and move with that code in plan step code-instance.
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -42,6 +46,8 @@ and move with that code in plan step code-instance.
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

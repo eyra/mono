@@ -15,6 +15,8 @@ Self's sign-in pages, which shadow Mica's sign-in routes.
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -31,6 +33,8 @@ Self's sign-in pages, which shadow Mica's sign-in routes.
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -40,6 +44,8 @@ Self's sign-in pages, which shadow Mica's sign-in routes.
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

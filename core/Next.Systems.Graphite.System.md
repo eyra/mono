@@ -13,6 +13,8 @@
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -29,6 +31,8 @@
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -38,6 +42,8 @@
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

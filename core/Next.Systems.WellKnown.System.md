@@ -15,6 +15,8 @@ The `/.well-known` files of Next's domains, such as the iOS app-site association
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -31,6 +33,8 @@ The `/.well-known` files of Next's domains, such as the iOS app-site association
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -40,6 +44,8 @@ The `/.well-known` files of Next's domains, such as the iOS app-site association
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

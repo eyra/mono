@@ -2,9 +2,9 @@
 [🔗](https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L1)
 
 The backend for frontend (BFF) of the native apps: `GET /bff/page/:page`
-answers `{"blocks": [...]}` for a page of the mica-bff spec. Systems serve the
-pages through `c:Mica.System.bff_pages/0`; the blocks are the
-`Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
+answers `{"blocks": [...], "markup": [...]}` for a page of the mica-bff spec.
+Systems serve the pages through `c:Mica.System.bff_pages/0`; the blocks and markup
+are the `Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
 dependency. The app sends the spec version it implements in
 the `x-bff-spec` header, which is only recorded for now.
 
@@ -19,6 +19,8 @@ the `x-bff-spec` header, which is only recorded for now.
 # `children`
 
 # `desktop_sections`
+
+# `directors`
 
 # `feature_flags`
 
@@ -36,6 +38,8 @@ the `x-bff-spec` header, which is only recorded for now.
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -45,6 +49,8 @@ the `x-bff-spec` header, which is only recorded for now.
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

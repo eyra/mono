@@ -7,6 +7,7 @@ Block `participation`.
 
 ```elixir
 @type t() :: %Systems.BFF.Blocks.Participation{
+  id: String.t(),
   reward: String.t() | nil,
   status_label: String.t() | nil,
   status_tone: (:accent | :success | :warning | :danger | :neutral) | nil,

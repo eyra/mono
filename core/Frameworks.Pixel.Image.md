@@ -10,6 +10,7 @@ An image with fancy features like blur-hash.
 * `id` (`:any`) (required)
 * `image` (`:any`) (required)
 * `style` (`:string`) - Defaults to `"fixed"`.
+* `alt` (`:string`) - `""` for a decorative image; nil adds no alt. Defaults to `nil`.
 
 # `grid`
 

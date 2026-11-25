@@ -1,97 +1,23 @@
 # `MicaWeb.Endpoint`
 [🔗](https://github.com/eyra/mono/blob/main/mica/lib/mica_web/endpoint.ex#L1)
 
-# `broadcast`
+Builds the endpoint of a SaaS. Each SaaS has its own:
 
-# `broadcast!`
+    defmodule NextWeb.Endpoint do
+      use MicaWeb.Endpoint, otp_app: :mica, router: NextWeb.Router
+    end
 
-# `broadcast_from`
+Every SaaS gets the same endpoint: the user and LiveView sockets, the WWW
+redirect, the Content and Feldspar plugs, the static files of `otp_app`, the
+parsers with the Payment body reader and the session, and `router:` as the
+last plug. Its config is the SaaS's: `config :mica, NextWeb.Endpoint, ...`.
 
-# `broadcast_from!`
+Mica reaches the endpoint of the running SaaS through `Mica.SaaS.endpoint/0`.
 
-# `call`
+# `session_options`
 
-# `child_spec`
-
-Returns the child specification to start the endpoint
-under a supervision tree.
-
-# `config`
-
-Returns the endpoint configuration for `key`
-
-Returns `default` if the key does not exist.
-
-# `config_change`
-
-Reloads the configuration given the application environment changes.
-
-# `host`
-
-Returns the host for the given endpoint.
-
-# `init`
-
-# `local_broadcast`
-
-# `local_broadcast_from`
-
-# `path`
-
-Generates the path information when routing to this endpoint.
-
-# `script_name`
-
-Generates the script name.
-
-# `server_info`
-
-Returns the address and port that the server is running on
-
-# `start_link`
-
-Starts the endpoint supervision tree.
-
-All other options are merged into the endpoint configuration.
-
-# `static_integrity`
-
-Generates a base64-encoded cryptographic hash (sha512) to a static file
-in `priv/static`. Meant to be used for Subresource Integrity with CDNs.
-
-# `static_lookup`
-
-Returns a two item tuple with the first item being the `static_path`
-and the second item being the `static_integrity`.
-
-# `static_path`
-
-Generates a route to a static file in `priv/static`.
-
-# `static_url`
-
-Generates the static URL without any path information.
-
-It uses the configuration under `:static_url` to generate
-such. It falls back to `:url` if `:static_url` is not set.
-
-# `struct_url`
-
-Generates the endpoint base URL but as a `URI` struct.
-
-It uses the configuration under `:url` to generate such.
-Useful for manipulating the URL data and passing it to
-URL helpers.
-
-# `subscribe`
-
-# `unsubscribe`
-
-# `url`
-
-Generates the endpoint base URL without any path information.
-
-It uses the configuration under `:url` to generate such.
+The session options of every SaaS endpoint. The session is stored in the
+cookie and signed: its contents can be read but not tampered with.
 
 ---
 

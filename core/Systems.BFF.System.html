@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -119,9 +119,9 @@ mica
 
     <section id="moduledoc">
 <p>The backend for frontend (BFF) of the native apps: <code class="inline">GET /bff/page/:page</code>
-answers <code class="inline">{&quot;blocks&quot;: [...]}</code> for a page of the mica-bff spec. Systems serve the
-pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks are the
-<code class="inline">Systems.BFF.Blocks.*</code> modules, generated at compile time by the mica_bff
+answers <code class="inline">{&quot;blocks&quot;: [...], &quot;markup&quot;: [...]}</code> for a page of the mica-bff spec.
+Systems serve the pages through <a href="Mica.System.html#c:bff_pages/0"><code class="inline">Mica.System.bff_pages/0</code></a>; the blocks and markup
+are the <code class="inline">Systems.BFF.Blocks.*</code> modules, generated at compile time by the mica_bff
 dependency. The app sends the spec version it implements in
 the <code class="inline">x-bff-spec</code> header, which is only recorded for now.</p>
     </section>
@@ -197,6 +197,16 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       </div>
 
         <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:desktop_sections/0"><code class="inline">Mica.System.desktop_sections/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#directors/0" data-no-tooltip="" translate="no">directors()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:directors/0"><code class="inline">Mica.System.directors/0</code></a>.</p></div>
 
     </div>
 
@@ -282,6 +292,16 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#project_items/0" data-no-tooltip="" translate="no">project_items()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:project_items/0"><code class="inline">Mica.System.project_items/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#rate_quotas/0" data-no-tooltip="" translate="no">rate_quotas()</a>
 
       </div>
@@ -327,6 +347,16 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
       </div>
 
         <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:signal_handlers/0"><code class="inline">Mica.System.signal_handlers/0</code></a>.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tools/0" data-no-tooltip="" translate="no">tools()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Callback implementation for <a href="Mica.System.html#c:tools/0"><code class="inline">Mica.System.tools/0</code></a>.</p></div>
 
     </div>
 
@@ -474,6 +504,28 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
   <section class="docstring">
 
 <p>Callback implementation for <a href="Mica.System.html#c:desktop_sections/0"><code class="inline">Mica.System.desktop_sections/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="directors/0">
+
+  <div class="detail-header">
+    <a href="#directors/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">directors()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Mica.System.html#c:directors/0"><code class="inline">Mica.System.directors/0</code></a>.</p>
   </section>
 </section>
 <section class="detail" id="feature_flags/0">
@@ -652,6 +704,28 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
 <p>Callback implementation for <a href="Mica.System.html#c:override_routes/0"><code class="inline">Mica.System.override_routes/0</code></a>.</p>
   </section>
 </section>
+<section class="detail" id="project_items/0">
+
+  <div class="detail-header">
+    <a href="#project_items/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">project_items()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Mica.System.html#c:project_items/0"><code class="inline">Mica.System.project_items/0</code></a>.</p>
+  </section>
+</section>
 <section class="detail" id="rate_quotas/0">
 
   <div class="detail-header">
@@ -760,6 +834,28 @@ the <code class="inline">x-bff-spec</code> header, which is only recorded for no
   <section class="docstring">
 
 <p>Callback implementation for <a href="Mica.System.html#c:signal_handlers/0"><code class="inline">Mica.System.signal_handlers/0</code></a>.</p>
+  </section>
+</section>
+<section class="detail" id="tools/0">
+
+  <div class="detail-header">
+    <a href="#tools/0" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tools()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/_system.ex#L10" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Callback implementation for <a href="Mica.System.html#c:tools/0"><code class="inline">Mica.System.tools/0</code></a>.</p>
   </section>
 </section>
 

@@ -16,6 +16,8 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -32,6 +34,8 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -41,6 +45,8 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

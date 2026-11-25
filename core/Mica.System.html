@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -230,6 +230,18 @@ placement.</p></div>
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#c:directors/0" data-no-tooltip="" translate="no">directors()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The directors the system offers: name to module, for example
+<code class="inline">%{assignment: Systems.Assignment.Director}</code>. The stored <code class="inline">director</code> of a tool,
+pool or promotion names one of them; <a href="Mica.Directors.html"><code class="inline">Mica.Directors</code></a> reads them.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#c:feature_flags/0" data-no-tooltip="" translate="no">feature_flags()</a>
 
       </div>
@@ -316,7 +328,19 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       </div>
 
         <div class="summary-synopsis"><p>Routes that must match before every other route, such as a SaaS's own sign-in
-pages. Spliced at the top of <a href="MicaWeb.Router.html"><code class="inline">MicaWeb.Router</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p></div>
+pages. Spliced at the top of each SaaS router by
+<a href="Mica.SaaS.Routes.html#override_routes/1"><code class="inline">Mica.SaaS.Routes.override_routes/1</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:project_items/0" data-no-tooltip="" translate="no">project_items()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The system's <a href="Mica.ProjectItem.html"><code class="inline">Mica.ProjectItem</code></a> modules: the types a project item can hold.
+Each type name is unique in the composition; <a href="Mica.ProjectItems.html"><code class="inline">Mica.ProjectItems</code></a> reads them.</p></div>
 
     </div>
 
@@ -337,7 +361,8 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
 
       </div>
 
-        <div class="summary-synopsis"><p>The system's routes, spliced inside <a href="MicaWeb.Routes.html"><code class="inline">MicaWeb.Routes</code></a> in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p></div>
+        <div class="summary-synopsis"><p>The system's routes, spliced into each SaaS router by
+<a href="Mica.SaaS.Routes.html#system_routes/1"><code class="inline">Mica.SaaS.Routes.system_routes/1</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p></div>
 
     </div>
 
@@ -377,6 +402,17 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
 
     </div>
 
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#c:tools/0" data-no-tooltip="" translate="no">tools()</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The system's <a href="Mica.Tool.html"><code class="inline">Mica.Tool</code></a> modules: the tool types a workflow item can hold.
+Each type name is unique in the composition; <a href="Mica.Tools.html"><code class="inline">Mica.Tools</code></a> reads them.</p></div>
+
+    </div>
+
 </div>
 
   </section>
@@ -401,7 +437,7 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
       <h1 class="signature" translate="no">account_tabs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L84" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L88" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -430,7 +466,7 @@ after the tabs of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code 
       <h1 class="signature" translate="no">admin_panels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L78" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L82" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -459,7 +495,7 @@ after the panels of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><cod
       <h1 class="signature" translate="no">assignment_templates()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L105" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L109" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -488,7 +524,7 @@ templates offered next to the built-in <a href="Systems.Assignment.Templates.htm
       <h1 class="signature" translate="no">bff_pages()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L112" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -518,7 +554,7 @@ mica-bff spec lists it (<a href="Systems.BFF.Blocks.html#pages/0"><code class="i
       <h1 class="signature" translate="no">children()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L118" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L141" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -547,7 +583,7 @@ mica-bff spec lists it (<a href="Systems.BFF.Blocks.html#pages/0"><code class="i
       <h1 class="signature" translate="no">desktop_sections()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L92" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L96" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -568,6 +604,36 @@ the sections of earlier systems in <a href="Mica.SaaS.html#c:systems/0"><code cl
 placement.</p>
   </section>
 </section>
+<section class="detail" id="c:directors/0">
+
+  <div class="detail-header">
+    <a href="#c:directors/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">directors()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L128" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> directors() :: %{required(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()) =&gt; <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>()}</pre>
+
+      </div>
+
+<p>The directors the system offers: name to module, for example
+<code class="inline">%{assignment: Systems.Assignment.Director}</code>. The stored <code class="inline">director</code> of a tool,
+pool or promotion names one of them; <a href="Mica.Directors.html"><code class="inline">Mica.Directors</code></a> reads them.</p>
+  </section>
+</section>
 <section class="detail" id="c:feature_flags/0">
 
   <div class="detail-header">
@@ -578,7 +644,7 @@ placement.</p>
       <h1 class="signature" translate="no">feature_flags()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L142" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L165" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -608,7 +674,7 @@ may declare the same flag.</p>
       <h1 class="signature" translate="no">grants()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L56" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L60" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -643,7 +709,7 @@ is logged at boot.</p>
       <h1 class="signature" translate="no">migrations_path()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L157" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L180" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -673,7 +739,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">notifiers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L69" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L73" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -701,7 +767,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">notify_channels()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L72" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L76" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -729,7 +795,7 @@ tables are in Mica's migrations. Migrated with Mica's, see
       <h1 class="signature" translate="no">oban_crons()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L129" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L152" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -761,7 +827,7 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       <h1 class="signature" translate="no">oban_queues()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L144" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -789,7 +855,7 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       <h1 class="signature" translate="no">override_routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L45" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -805,7 +871,37 @@ name is enabled (<a href="Mica.ObanConfig.html"><code class="inline">Mica.ObanCo
       </div>
 
 <p>Routes that must match before every other route, such as a SaaS's own sign-in
-pages. Spliced at the top of <a href="MicaWeb.Router.html"><code class="inline">MicaWeb.Router</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p>
+pages. Spliced at the top of each SaaS router by
+<a href="Mica.SaaS.Routes.html#override_routes/1"><code class="inline">Mica.SaaS.Routes.override_routes/1</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p>
+  </section>
+</section>
+<section class="detail" id="c:project_items/0">
+
+  <div class="detail-header">
+    <a href="#c:project_items/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">project_items()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L121" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> project_items() :: [<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>()]</pre>
+
+      </div>
+
+<p>The system's <a href="Mica.ProjectItem.html"><code class="inline">Mica.ProjectItem</code></a> modules: the types a project item can hold.
+Each type name is unique in the composition; <a href="Mica.ProjectItems.html"><code class="inline">Mica.ProjectItems</code></a> reads them.</p>
   </section>
 </section>
 <section class="detail" id="c:rate_quotas/0">
@@ -818,7 +914,7 @@ pages. Spliced at the top of <a href="MicaWeb.Router.html"><code class="inline">
       <h1 class="signature" translate="no">rate_quotas()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L135" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L158" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -847,7 +943,7 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
       <h1 class="signature" translate="no">routes()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L51" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -862,7 +958,8 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
 
       </div>
 
-<p>The system's routes, spliced inside <a href="MicaWeb.Routes.html"><code class="inline">MicaWeb.Routes</code></a> in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p>
+<p>The system's routes, spliced into each SaaS router by
+<a href="Mica.SaaS.Routes.html#system_routes/1"><code class="inline">Mica.SaaS.Routes.system_routes/1</code></a>, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.SaaS.systems/0</code></a> order.</p>
   </section>
 </section>
 <section class="detail" id="c:seeds/1">
@@ -875,7 +972,7 @@ lists: <code class="inline">[service: :signup, limit: 5, unit: :call, window: :m
       <h1 class="signature" translate="no">seeds(deploy_env)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L150" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L173" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -906,7 +1003,7 @@ it must be idempotent.</p>
       <h1 class="signature" translate="no">sign_in_handoffs()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L99" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L103" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -936,7 +1033,7 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
       <h1 class="signature" translate="no">signal_handlers()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L66" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L70" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -953,6 +1050,35 @@ of the site, in <a href="Mica.SaaS.html#c:systems/0"><code class="inline">Mica.S
 
 <p>The system's <a href="Frameworks.Signal.Handler.html"><code class="inline">Frameworks.Signal.Handler</code></a> modules (its <code class="inline">_switch.ex</code>).
 <code class="inline">c:Mica.SaaS.signal_handlers/0</code> dispatches to all of them, sorted by module name.</p>
+  </section>
+</section>
+<section class="detail" id="c:tools/0">
+
+  <div class="detail-header">
+    <a href="#c:tools/0" class="detail-link" data-no-tooltip="" aria-label="Link to this callback">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tools()</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/lib/mica/system.ex#L115" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@callback</span> tools() :: [<a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">module</a>()]</pre>
+
+      </div>
+
+<p>The system's <a href="Mica.Tool.html"><code class="inline">Mica.Tool</code></a> modules: the tool types a workflow item can hold.
+Each type name is unique in the composition; <a href="Mica.Tools.html"><code class="inline">Mica.Tools</code></a> reads them.</p>
   </section>
 </section>
 

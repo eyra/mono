@@ -71,6 +71,10 @@ Two environment variables change this:
 Set `HTTP_PORT` and `OPEN_SENT_EMAILS` in the shell that starts the server,
 not in `core/.env`: that file is only loaded after these settings are read.
 
+Endpoint settings in your `config/dev.secret.exs` go under the endpoint of the
+SaaS you run: `config :mica, NextWeb.Endpoint, …`, or `MicaSaasWeb.Endpoint`
+for Self. A `config :mica, MicaWeb.Endpoint` there is no longer read.
+
 Learn more about Phoenix by visiting the [official website](https://www.phoenixframework.org/)
 
 ## i18n

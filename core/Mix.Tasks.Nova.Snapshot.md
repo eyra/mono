@@ -21,7 +21,7 @@ committed in `next/test/snapshots/<saas>/`:
   * `schemas.exs`: the schemas `Mica.Repo.orphan?/2` scans and the schemas
     that own an auth node (`Mica.Authorization.entities/0`), without test support
   * `counts.exs`: boundary allowlist size, `no route path` compile warnings and
-    the files `MicaWeb.Router` is compile-connected to
+    the files the SaaS's router (`Mica.SaaS.router/0`) is compile-connected to
 
 Config-derived snapshots read `config/config.exs` as a prod build would
 (`Config.Reader`, env `:prod`). `runtime.exs` adds `config/runtime.exs` for each
@@ -33,15 +33,18 @@ rendered as `storage_delivery_local_<node>`.
     BUNDLE=self MIX_ENV=dev mix nova.snapshot      # Self: fail on drift
     mix nova.snapshot --update                     # rewrite the snapshots
 
-Self needs `MIX_ENV=dev`: `config/test.exs` pins `:saas` to `Next.SaaS`.
+Self's snapshots are of its dev build (`MIX_ENV=dev`); the test env adds `/test`
+routes.
 Before rendering, the task runs the boot's composition checks
 (`Mica.SaaS.validate!/0`) and the Mica path check (`MicaWeb.PathCheck`): every
-`~m` must match a route of the build's router that Mica serves.
+`~m` must match a route of the build's router (`Mica.SaaS.router/0`) that Mica
+serves.
 
 Routes pass when the route set is identical and every two routes that can
 match the same request keep their relative order; other reordering is allowed.
 Everything else must be identical. Next is also checked in `mix test`
-(`next/test/snapshots/nova_snapshot_test.exs`), Self in the `snapshot-self` CI job.
+(`next/test/snapshots/nova_snapshot_test.exs`), Self in the `snapshot-self` CI job,
+and its routes and permissions in `BUNDLE=self mix test` (`mica_saas/test/saas_test.exs`).
 
 # `compare`
 

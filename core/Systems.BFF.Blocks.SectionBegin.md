@@ -8,7 +8,8 @@ Block `section_begin`.
 ```elixir
 @type t() :: %Systems.BFF.Blocks.SectionBegin{
   background: String.t() | nil,
-  border: boolean() | nil
+  border: boolean() | nil,
+  id: String.t()
 }
 ```
 

@@ -7,6 +7,7 @@ Block `advert`.
 
 ```elixir
 @type t() :: %Systems.BFF.Blocks.Advert{
+  id: String.t(),
   image_url: String.t() | nil,
   info: String.t() | nil,
   logo_url: String.t() | nil,

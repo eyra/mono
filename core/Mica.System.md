@@ -94,6 +94,16 @@ before or after Recent items as each section's `placement/0` says, and after
 the sections of earlier systems in `c:Mica.SaaS.systems/0` with the same
 placement.
 
+# `directors`
+
+```elixir
+@callback directors() :: %{required(atom()) =&gt; module()}
+```
+
+The directors the system offers: name to module, for example
+`%{assignment: Systems.Assignment.Director}`. The stored `director` of a tool,
+pool or promotion names one of them; `Mica.Directors` reads them.
+
 # `feature_flags`
 
 ```elixir
@@ -172,7 +182,17 @@ The Oban queues the system's workers use, with their limits: `[email_delivery: 1
 ```
 
 Routes that must match before every other route, such as a SaaS's own sign-in
-pages. Spliced at the top of `MicaWeb.Router`, in `c:Mica.SaaS.systems/0` order.
+pages. Spliced at the top of each SaaS router by
+`Mica.SaaS.Routes.override_routes/1`, in `c:Mica.SaaS.systems/0` order.
+
+# `project_items`
+
+```elixir
+@callback project_items() :: [module()]
+```
+
+The system's `Mica.ProjectItem` modules: the types a project item can hold.
+Each type name is unique in the composition; `Mica.ProjectItems` reads them.
 
 # `rate_quotas`
 
@@ -189,7 +209,8 @@ lists: `[service: :signup, limit: 5, unit: :call, window: :minute, scope: :local
 @callback routes() :: Macro.t() | nil
 ```
 
-The system's routes, spliced inside `MicaWeb.Routes` in `c:Mica.SaaS.systems/0` order.
+The system's routes, spliced into each SaaS router by
+`Mica.SaaS.Routes.system_routes/1`, in `c:Mica.SaaS.systems/0` order.
 
 # `seeds`
 
@@ -220,6 +241,15 @@ of the site, in `c:Mica.SaaS.systems/0` order.
 
 The system's `Frameworks.Signal.Handler` modules (its `_switch.ex`).
 `c:Mica.SaaS.signal_handlers/0` dispatches to all of them, sorted by module name.
+
+# `tools`
+
+```elixir
+@callback tools() :: [module()]
+```
+
+The system's `Mica.Tool` modules: the tool types a workflow item can hold.
+Each type name is unique in the composition; `Mica.Tools` reads them.
 
 ---
 

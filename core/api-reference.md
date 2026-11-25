@@ -207,6 +207,7 @@ specific entity.
 
 - [Mica.Content.Nodes](Mica.Content.Nodes.md): 
 
+- [Mica.Directors](Mica.Directors.md): The directors of the composition (`c:Mica.System.directors/0`).
 - [Mica.Enums.Base](Mica.Enums.Base.md)
 - [Mica.Enums.Devices](Mica.Enums.Devices.md): Defines device categories for participants.
 
@@ -239,6 +240,9 @@ the queues and crons the systems declare (`c:Mica.System.oban_queues/0`,
 `c:Mica.System.oban_crons/0`) and the plugin names `config :mica, :oban_plugins`
 enables.
 - [Mica.Persister](Mica.Persister.md)
+- [Mica.ProjectItem](Mica.ProjectItem.md): A project item type: what a project item can hold. One module per type, listed
+by its system's `c:Mica.System.project_items/0`
+- [Mica.ProjectItems](Mica.ProjectItems.md): The project item types of the composition (`c:Mica.System.project_items/0`).
 - [Mica.Release](Mica.Release.md)
 - [Mica.Repo](Mica.Repo.md)
 - [Mica.RuntimeConfig](Mica.RuntimeConfig.md): Building blocks for a SaaS's `config/runtime.exs`.
@@ -248,6 +252,7 @@ the app or connecting to the database
 and renders the result as stable text, so a change in what an environment
 gets shows up as a diff.
 - [Mica.SaaS](Mica.SaaS.md): A SaaS built on Mica, and the composition of the configured one.
+- [Mica.SaaS.Routes](Mica.SaaS.Routes.md): Splices the routes of a SaaS's systems into the SaaS's router
 - [Mica.Seeder](Mica.Seeder.md)
 - [Mica.Seeds](Mica.Seeds.md): Idempotent seed orchestration.
 - [Mica.Seeds.Base](Mica.Seeds.Base.md): Seeds that must exist in every deploy environment (local, dev, test, staging, prod).
@@ -260,6 +265,9 @@ All operations must be idempotent.
 - [Mica.Seeds.Test](Mica.Seeds.Test.md): Seeds for the test servers (Fly, multiple testN environments).
 - [Mica.System](Mica.System.md): The contract of one system: what it contributes to the SaaS it is part of.
 - [Mica.Systems](Mica.Systems.md): Mica's own systems (`Mica.System`), the start of every `c:Mica.SaaS.systems/0`.
+- [Mica.Tool](Mica.Tool.md): A tool type: what a workflow item can hold. One module per type, listed by its
+system's `c:Mica.System.tools/0`
+- [Mica.Tools](Mica.Tools.md): The tool types of the composition (`c:Mica.System.tools/0`).
 - [MicaSaas.SaaS](MicaSaas.SaaS.md): Self, the reference SaaS on Mica.
 - [MicaSaas.StartPageTranslations](MicaSaas.StartPageTranslations.md)
 - [MicaSaas.StartPages](MicaSaas.StartPages.md)
@@ -269,12 +277,18 @@ All operations must be idempotent.
 - [MicaSaas.Systems.Account.SigninPage](MicaSaas.Systems.Account.SigninPage.md)
 - [MicaSaas.Systems.Account.System](MicaSaas.Systems.Account.System.md): Self's sign-in pages, which shadow Mica's sign-in routes.
 - [MicaSaasWeb](MicaSaasWeb.md): Self's web module. Self's code uses it instead of `MicaWeb`
+- [MicaSaasWeb.Endpoint](MicaSaasWeb.Endpoint.md): Self's endpoint, built by `MicaWeb.Endpoint`.
 - [MicaSaasWeb.Layouts.Stripped.MenuBuilder](MicaSaasWeb.Layouts.Stripped.MenuBuilder.md)
 - [MicaSaasWeb.Layouts.Website.MenuBuilder](MicaSaasWeb.Layouts.Website.MenuBuilder.md)
 - [MicaSaasWeb.Layouts.Workspace.MenuBuilder](MicaSaasWeb.Layouts.Workspace.MenuBuilder.md)
 - [MicaSaasWeb.Menu.Items](MicaSaasWeb.Menu.Items.md)
+- [MicaSaasWeb.Router](MicaSaasWeb.Router.md): Self's router: Mica's pipelines and routes and those of Self's systems, in
+Self's order. The route snapshot (`mix nova.snapshot`) shows any change.
+
 - [MicaWeb](MicaWeb.md): Mica's web module: the entrypoint for defining Mica's web interface, such as
 controllers, views, channels and so on.
+- [MicaWeb.BaseRoutes](MicaWeb.BaseRoutes.md): Mica's routes that belong to no system, for a SaaS router. The router puts
+them in its own order, around the systems' routes (`Mica.SaaS.Routes`)
 - [MicaWeb.Cldr](MicaWeb.Cldr.md): Provides the core functions to retrieve and manage
 the CLDR data that supports formatting and localisation.
 - [MicaWeb.Cldr.AcceptLanguage](MicaWeb.Cldr.AcceptLanguage.md): Parses HTTP `Accept-Language` header values as defined in
@@ -322,7 +336,7 @@ shorter and more natural format than "Jan 10, 2008 - Jan 12, 2008". They are des
 to take a start and end date, time or datetime plus a formatting pattern
 and use that information to produce a localized format.
 - [MicaWeb.Devices](MicaWeb.Devices.md): 
-- [MicaWeb.Endpoint](MicaWeb.Endpoint.md)
+- [MicaWeb.Endpoint](MicaWeb.Endpoint.md): Builds the endpoint of a SaaS. Each SaaS has its own
 - [MicaWeb.ErrorController](MicaWeb.ErrorController.md)
 - [MicaWeb.ErrorHTML](MicaWeb.ErrorHTML.md)
 - [MicaWeb.ErrorJSON](MicaWeb.ErrorJSON.md): JSON error responses for API endpoints.
@@ -390,6 +404,7 @@ framework.
 - [MicaWeb.Meta](MicaWeb.Meta.md)
 - [MicaWeb.Path](MicaWeb.Path.md): Mica's paths: `~m`, "m for Mica path".
 - [MicaWeb.PathCheck](MicaWeb.PathCheck.md): Checks Mica's paths (`~m`, `MicaWeb.Path`) against a SaaS's router.
+- [MicaWeb.Pipelines](MicaWeb.Pipelines.md): The pipelines Mica's routes `pipe_through`, for a SaaS router
 - [MicaWeb.Plug.PersistLocale](MicaWeb.Plug.PersistLocale.md): Persists the locale that Cldr.Plug.PutLocale just resolved into the
 session.
 - [MicaWeb.Plug.RemoteIp](MicaWeb.Plug.RemoteIp.md): Sets `conn.remote_ip` to the client's address, keeps it in the session as a
@@ -401,8 +416,6 @@ Gettext) resolves from Accept-Language.
 - [MicaWeb.ResourceExistsPlug](MicaWeb.ResourceExistsPlug.md): A plug that checks if a resource exists before continuing.
 - [MicaWeb.ReturnTo](MicaWeb.ReturnTo.md): Same-origin `return_to` handling shared across auth, onboarding, and
 pool-join flows.
-- [MicaWeb.Router](MicaWeb.Router.md)
-- [MicaWeb.Routes](MicaWeb.Routes.md)
 - [MicaWeb.StartPageProvider](MicaWeb.StartPageProvider.md)
 - [MicaWeb.Storybook](MicaWeb.Storybook.md): Component storybook for Pixel, served at `/admin/storybook`.
 - [MicaWeb.StorybookGuard](MicaWeb.StorybookGuard.md): Opens the component storybooks to admins, and only while the `:storybook` feature is on.
@@ -580,6 +593,7 @@ the announcement, its rich-text body and the users who received it.
 - [Next.Systems.Citizen.Pool.SubmissionPageBuilder](Next.Systems.Citizen.Pool.SubmissionPageBuilder.md)
 - [Next.Systems.Citizen.Presenter](Next.Systems.Citizen.Presenter.md)
 - [Next.Systems.Citizen.Public](Next.Systems.Citizen.Public.md)
+- [Next.Systems.Citizen.System](Next.Systems.Citizen.System.md)
 - [Next.Systems.E2E.System](Next.Systems.E2E.System.md): The E2E test API (`/api/e2e/*`) that the Playwright suite uses to set up its
 fixtures. The controller answers only when the `:e2e` feature is on.
 
@@ -588,6 +602,7 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 - [Next.Systems.Graphite.Gen](Next.Systems.Graphite.Gen.md)
 - [Next.Systems.Graphite.LeaderboardContentPage](Next.Systems.Graphite.LeaderboardContentPage.md)
 - [Next.Systems.Graphite.LeaderboardContentPageBuilder](Next.Systems.Graphite.LeaderboardContentPageBuilder.md)
+- [Next.Systems.Graphite.LeaderboardItem](Next.Systems.Graphite.LeaderboardItem.md): The `leaderboard` project item type (`Mica.ProjectItem`).
 - [Next.Systems.Graphite.LeaderboardModel](Next.Systems.Graphite.LeaderboardModel.md): Data model for the `graphite_leaderboard` table.
 # Fields
 - title: :string, Title of the leaderboard as will be displayed on the platform
@@ -631,6 +646,7 @@ fixtures. The controller answers only when the `:e2e` feature is on.
 - [Next.Systems.Graphite.SubmissionView](Next.Systems.Graphite.SubmissionView.md)
 - [Next.Systems.Graphite.Switch](Next.Systems.Graphite.Switch.md)
 - [Next.Systems.Graphite.System](Next.Systems.Graphite.System.md)
+- [Next.Systems.Graphite.Tool](Next.Systems.Graphite.Tool.md): The `graphite` tool type (`Mica.Tool`).
 - [Next.Systems.Graphite.ToolController](Next.Systems.Graphite.ToolController.md)
 - [Next.Systems.Graphite.ToolForm](Next.Systems.Graphite.ToolForm.md)
 - [Next.Systems.Graphite.ToolModel](Next.Systems.Graphite.ToolModel.md): The benchmark tool schema.
@@ -761,11 +777,16 @@ hand an identity-provider sign-in back to the app on this host
 - [Next.Systems.Zircon.Sqids](Next.Systems.Zircon.Sqids.md)
 - [Next.Systems.Zircon.Switch](Next.Systems.Zircon.Switch.md)
 - [Next.Systems.Zircon.System](Next.Systems.Zircon.System.md)
+- [Next.Systems.Zircon.Tool](Next.Systems.Zircon.Tool.md): The `zircon_screening` tool type (`Mica.Tool`).
 - [NextWeb](NextWeb.md): Next's web module. Next's code uses it instead of `MicaWeb`
+- [NextWeb.Endpoint](NextWeb.Endpoint.md): Next's endpoint, built by `MicaWeb.Endpoint`.
 - [NextWeb.Layouts.Stripped.MenuBuilder](NextWeb.Layouts.Stripped.MenuBuilder.md)
 - [NextWeb.Layouts.Website.MenuBuilder](NextWeb.Layouts.Website.MenuBuilder.md)
 - [NextWeb.Layouts.Workspace.MenuBuilder](NextWeb.Layouts.Workspace.MenuBuilder.md)
 - [NextWeb.Menu.Items](NextWeb.Menu.Items.md)
+- [NextWeb.Router](NextWeb.Router.md): Next's router: Mica's pipelines and routes and those of Next's systems, in
+Next's order. The route snapshot (`mix nova.snapshot`) shows any change.
+
 - [Systems.Account.Auth](Systems.Account.Auth.md): Orchestrates federated authentication against an external Identity
 Provider (IdP).
 - [Systems.Account.Auth.Apple](Systems.Account.Auth.Apple.md)
@@ -947,6 +968,7 @@ current user reference for use by event handlers.
 - [Systems.Advert.MonitorTableView](Systems.Advert.MonitorTableView.md)
 - [Systems.Advert.MonitorView](Systems.Advert.MonitorView.md)
 - [Systems.Advert.Presenter](Systems.Advert.Presenter.md)
+- [Systems.Advert.ProjectItem](Systems.Advert.ProjectItem.md): The `advert` project item type (`Mica.ProjectItem`).
 - [Systems.Advert.PromotionLandingPageBuilder](Systems.Advert.PromotionLandingPageBuilder.md)
 - [Systems.Advert.Public](Systems.Advert.Public.md): The Studies context.
 
@@ -986,6 +1008,7 @@ tool. The participant goes through the flow described below
 - [Systems.Alliance.Switch](Systems.Alliance.Switch.md)
 - [Systems.Alliance.System](Systems.Alliance.System.md)
 - [Systems.Alliance.TaskView](Systems.Alliance.TaskView.md)
+- [Systems.Alliance.Tool](Systems.Alliance.Tool.md): The `alliance` tool type (`Mica.Tool`).
 - [Systems.Alliance.ToolForm](Systems.Alliance.ToolForm.md)
 - [Systems.Alliance.ToolModel](Systems.Alliance.ToolModel.md): The alliance tool schema.
 
@@ -1092,6 +1115,7 @@ from the participant's perspective; no retry.
 - [Systems.Assignment.Presenter](Systems.Assignment.Presenter.md)
 - [Systems.Assignment.PrivacyForm](Systems.Assignment.PrivacyForm.md)
 - [Systems.Assignment.Private](Systems.Assignment.Private.md)
+- [Systems.Assignment.ProjectItem](Systems.Assignment.ProjectItem.md): The `assignment` project item type (`Mica.ProjectItem`).
 - [Systems.Assignment.Public](Systems.Assignment.Public.md): The assignment context.
 
 - [Systems.Assignment.Queries](Systems.Assignment.Queries.md)
@@ -1133,18 +1157,29 @@ Currently has no flags defined.
 
 - [Systems.BFF.Blocks](Systems.BFF.Blocks.md): The BFF blocks and pages, generated at compile time from the mica-bff spec.
 - [Systems.BFF.Blocks.Advert](Systems.BFF.Blocks.Advert.md): Block `advert`.
+- [Systems.BFF.Blocks.Background](Systems.BFF.Blocks.Background.md): Markup `background`.
+- [Systems.BFF.Blocks.Border](Systems.BFF.Blocks.Border.md): Markup `border`.
+- [Systems.BFF.Blocks.Filter](Systems.BFF.Blocks.Filter.md): Block `filter`.
+- [Systems.BFF.Blocks.FilterOption](Systems.BFF.Blocks.FilterOption.md): Type `filter_option`.
 - [Systems.BFF.Blocks.NextBestAction](Systems.BFF.Blocks.NextBestAction.md): Block `next_best_action`.
+- [Systems.BFF.Blocks.Part](Systems.BFF.Blocks.Part.md): Markup `part`.
 - [Systems.BFF.Blocks.Participation](Systems.BFF.Blocks.Participation.md): Block `participation`.
 - [Systems.BFF.Blocks.RewardAmount](Systems.BFF.Blocks.RewardAmount.md): Block `reward_amount`.
+- [Systems.BFF.Blocks.Search](Systems.BFF.Blocks.Search.md): Block `search`.
 - [Systems.BFF.Blocks.Section](Systems.BFF.Blocks.Section.md): Block `section`.
 - [Systems.BFF.Blocks.SectionBegin](Systems.BFF.Blocks.SectionBegin.md): Block `section_begin`.
 - [Systems.BFF.Blocks.SectionEnd](Systems.BFF.Blocks.SectionEnd.md): Block `section_end`.
-- [Systems.BFF.Page](Systems.BFF.Page.md): A page the BFF serves: the blocks it shows the signed-in `user`, in order.
+- [Systems.BFF.Page](Systems.BFF.Page.md): A page the BFF serves: the blocks it shows the signed-in `user`, in order, and the
+markup that groups them by block id (`Systems.BFF.Blocks.Border` and the other markup
+kinds of the mica-bff spec), for `params`, the page's params from the spec read from
+the query and typed (`Systems.BFF.Blocks.page_params/2`): `?year=2025` is
+`%{year: 2025}`. A param that is missing, empty or doesn't parse is not in `params`.
+
 - [Systems.BFF.PageController](Systems.BFF.PageController.md)
 - [Systems.BFF.System](Systems.BFF.System.md): The backend for frontend (BFF) of the native apps: `GET /bff/page/:page`
-answers `{"blocks": [...]}` for a page of the mica-bff spec. Systems serve the
-pages through `c:Mica.System.bff_pages/0`; the blocks are the
-`Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
+answers `{"blocks": [...], "markup": [...]}` for a page of the mica-bff spec.
+Systems serve the pages through `c:Mica.System.bff_pages/0`; the blocks and markup
+are the `Systems.BFF.Blocks.*` modules, generated at compile time by the mica_bff
 dependency. The app sends the spec version it implements in
 the `x-bff-spec` header, which is only recorded for now.
 
@@ -1217,6 +1252,7 @@ before them when `c:placement/0` says so.
 - [Systems.Document.Public](Systems.Document.Public.md)
 - [Systems.Document.Routes](Systems.Document.Routes.md)
 - [Systems.Document.System](Systems.Document.System.md)
+- [Systems.Document.Tool](Systems.Document.Tool.md): The `document` tool type (`Mica.Tool`).
 - [Systems.Document.ToolForm](Systems.Document.ToolForm.md)
 - [Systems.Document.ToolModel](Systems.Document.ToolModel.md)
 - [Systems.Document.ToolView](Systems.Document.ToolView.md)
@@ -1252,6 +1288,7 @@ sends to the delivering process during tests.
 - [Systems.Feldspar.S3](Systems.Feldspar.S3.md)
 - [Systems.Feldspar.Switch](Systems.Feldspar.Switch.md)
 - [Systems.Feldspar.System](Systems.Feldspar.System.md)
+- [Systems.Feldspar.Tool](Systems.Feldspar.Tool.md): The `feldspar` tool type (`Mica.Tool`).
 - [Systems.Feldspar.ToolForm](Systems.Feldspar.ToolForm.md)
 - [Systems.Feldspar.ToolModel](Systems.Feldspar.ToolModel.md)
 - [Systems.Feldspar.ToolView](Systems.Feldspar.ToolView.md)
@@ -1320,11 +1357,15 @@ is threaded through and returned.
 - [Systems.Home.AdvertsView](Systems.Home.AdvertsView.md)
 - [Systems.Home.BFFPage](Systems.Home.BFFPage.md): The BFF's home page: what the web home shows a signed-in user, in the same order and
 behind the same feature flags (`Systems.Home.PageBuilder.block_keys/1`), as a flat
-list of blocks. Pay out, Retry and Donate are not here yet.
-
+list of blocks with a `border` around each card after the next best action. Pay out,
+Retry and Donate are not here yet.
 - [Systems.Home.GuestView](Systems.Home.GuestView.md)
 - [Systems.Home.HTML](Systems.Home.HTML.md)
+- [Systems.Home.HistoryBFFPage](Systems.Home.HistoryBFFPage.md): The BFF's history page: every study the user took part in (`Systems.Home.BFFPage.history/1`).
 - [Systems.Home.LoggedInView](Systems.Home.LoggedInView.md)
+- [Systems.Home.MarketplaceBFFPage](Systems.Home.MarketplaceBFFPage.md): The BFF's marketplace page: every study open to the user, with a year filter and a
+search (`Systems.Home.BFFPage.marketplace/2`).
+
 - [Systems.Home.NextBestActionView](Systems.Home.NextBestActionView.md)
 - [Systems.Home.Page](Systems.Home.Page.md)
 - [Systems.Home.PageBuilder](Systems.Home.PageBuilder.md)
@@ -1348,6 +1389,7 @@ reload after webhook-driven state changes.
 - [Systems.Instruction.Queries](Systems.Instruction.Queries.md)
 - [Systems.Instruction.Switch](Systems.Instruction.Switch.md)
 - [Systems.Instruction.System](Systems.Instruction.System.md)
+- [Systems.Instruction.Tool](Systems.Instruction.Tool.md): The `instruction` tool type (`Mica.Tool`).
 - [Systems.Instruction.ToolModel](Systems.Instruction.ToolModel.md)
 - [Systems.Instruction.ToolView](Systems.Instruction.ToolView.md)
 - [Systems.Instruction.ToolViewBuilder](Systems.Instruction.ToolViewBuilder.md)
@@ -1371,6 +1413,7 @@ reload after webhook-driven state changes.
 - [Systems.Lab.System](Systems.Lab.System.md)
 - [Systems.Lab.TaskView](Systems.Lab.TaskView.md)
 - [Systems.Lab.TimeSlotModel](Systems.Lab.TimeSlotModel.md)
+- [Systems.Lab.Tool](Systems.Lab.Tool.md): The `lab` tool type (`Mica.Tool`). It has no participant `ToolView`, so `view/0` is `nil`.
 - [Systems.Lab.ToolForm](Systems.Lab.ToolForm.md)
 - [Systems.Lab.ToolModel](Systems.Lab.ToolModel.md)
 - [Systems.Lab.VUDaySchedule](Systems.Lab.VUDaySchedule.md)
@@ -1397,6 +1440,7 @@ reload after webhook-driven state changes.
 - [Systems.Manual.Routes](Systems.Manual.Routes.md)
 - [Systems.Manual.Switch](Systems.Manual.Switch.md)
 - [Systems.Manual.System](Systems.Manual.System.md)
+- [Systems.Manual.Tool](Systems.Manual.Tool.md): The `manual` tool type (`Mica.Tool`).
 - [Systems.Manual.ToolModel](Systems.Manual.ToolModel.md)
 - [Systems.Manual.ToolView](Systems.Manual.ToolView.md)
 - [Systems.Manual.ToolViewBuilder](Systems.Manual.ToolViewBuilder.md)
@@ -1670,6 +1714,7 @@ Wraps Oban to allow mocking in tests.
 
 - [Systems.Storage.Presenter](Systems.Storage.Presenter.md)
 - [Systems.Storage.Private](Systems.Storage.Private.md)
+- [Systems.Storage.ProjectItem](Systems.Storage.ProjectItem.md): The `storage_endpoint` project item type (`Mica.ProjectItem`).
 - [Systems.Storage.Public](Systems.Storage.Public.md)
 - [Systems.Storage.Routes](Systems.Storage.Routes.md)
 - [Systems.Storage.ServiceIds](Systems.Storage.ServiceIds.md): Defines list of supported storage services

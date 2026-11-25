@@ -3,10 +3,6 @@
 
 Self, the reference SaaS on Mica.
 
-# `member_sign_in_page`
-
-# `sign_in_page`
-
 # `sign_up_page`
 
 ---

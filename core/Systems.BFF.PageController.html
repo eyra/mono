@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -153,8 +153,10 @@ mica
 
       </div>
 
-        <div class="summary-synopsis"><p>The blocks of <code class="inline">page</code> as <code class="inline">%{&quot;blocks&quot; =&gt; [...]}</code>. 401 when signed out, before the
-page is looked up; 404 for a page the spec doesn't list or no system serves.</p></div>
+        <div class="summary-synopsis"><p>The view model of <code class="inline">page</code> as <code class="inline">%{&quot;blocks&quot; =&gt; [...], &quot;markup&quot; =&gt; [...]}</code>, for the page's
+params in the query (<a href="Systems.BFF.Blocks.html#view_model/2"><code class="inline">Systems.BFF.Blocks.view_model/2</code></a>, which raises on bad markup).
+401 when signed out, before the page is looked up; 404 for a page the spec doesn't
+list or no system serves.</p></div>
 
     </div>
 
@@ -226,7 +228,7 @@ page is looked up; 404 for a page the spec doesn't list or no system serves.</p>
       <h1 class="signature" translate="no">show(conn, map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/page_controller.ex#L12" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/page_controller.ex#L14" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -235,8 +237,10 @@ page is looked up; 404 for a page the spec doesn't list or no system serves.</p>
 
   <section class="docstring">
 
-<p>The blocks of <code class="inline">page</code> as <code class="inline">%{&quot;blocks&quot; =&gt; [...]}</code>. 401 when signed out, before the
-page is looked up; 404 for a page the spec doesn't list or no system serves.</p>
+<p>The view model of <code class="inline">page</code> as <code class="inline">%{&quot;blocks&quot; =&gt; [...], &quot;markup&quot; =&gt; [...]}</code>, for the page's
+params in the query (<a href="Systems.BFF.Blocks.html#view_model/2"><code class="inline">Systems.BFF.Blocks.view_model/2</code></a>, which raises on bad markup).
+401 when signed out, before the page is looked up; 404 for a page the spec doesn't
+list or no system serves.</p>
   </section>
 </section>
 

@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -120,8 +120,9 @@ mica
     <section id="moduledoc">
 <p>Evaluates <code class="inline">config/runtime.exs</code> with the environment variables of each
 deployment (fixtures in <code class="inline">next/test/config/env/</code>) and compares the result
-with the committed snapshots in <code class="inline">next/test/config/snapshots/</code>.</p><pre><code class="makeup elixir" translate="no"><span class="n">mix</span><span class="w"> </span><span class="n">config</span><span class="o">.</span><span class="n">snapshot</span><span class="w">            </span><span class="c1"># fail when a snapshot differs</span><span class="w">
-</span><span class="n">mix</span><span class="w"> </span><span class="n">config</span><span class="o">.</span><span class="n">snapshot</span><span class="w"> </span><span class="o">--</span><span class="n">update</span><span class="w">   </span><span class="c1"># rewrite the snapshots</span></code></pre><p>The same check runs in <a href="https://mix.hexdocs.pm/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> (<code class="inline">next/test/config/runtime_snapshot_test.exs</code>).
+with the committed snapshots in <code class="inline">next/test/config/snapshots/</code>.</p><pre><code class="makeup elixir" translate="no"><span class="nc">BUNDLE</span><span class="o">=</span><span class="n">next</span><span class="w"> </span><span class="n">mix</span><span class="w"> </span><span class="n">config</span><span class="o">.</span><span class="n">snapshot</span><span class="w">            </span><span class="c1"># fail when a snapshot differs</span><span class="w">
+</span><span class="nc">BUNDLE</span><span class="o">=</span><span class="n">next</span><span class="w"> </span><span class="n">mix</span><span class="w"> </span><span class="n">config</span><span class="o">.</span><span class="n">snapshot</span><span class="w"> </span><span class="o">--</span><span class="n">update</span><span class="w">   </span><span class="c1"># rewrite the snapshots</span></code></pre><p>It runs in the test env, which configures a SaaS only through BUNDLE. The
+snapshots are of Next's config, so it refuses to run without BUNDLE=next.</p><p>The same check runs in <a href="https://mix.hexdocs.pm/Mix.Tasks.Test.html"><code class="inline">mix test</code></a> (<code class="inline">next/test/config/runtime_snapshot_test.exs</code>).
 A changed snapshot, above all <code class="inline">prod</code>, is a change to what that environment
 runs: review the diff before committing it.</p>
     </section>
@@ -139,6 +140,17 @@ runs: review the diff before committing it.</p>
   <h3>
     <a href="#functions">Functions</a>
   </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#check_saas!/1" data-no-tooltip="" translate="no">check_saas!(saas)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>Refuses a build that is not Next's: without Next's config (<code class="inline">next/config/config.exs</code>,
+which only BUNDLE=next imports in the test env) the snapshots come out wrong.</p></div>
+
+    </div>
 
     <div class="summary-row">
       <div class="summary-signature">
@@ -170,6 +182,29 @@ runs: review the diff before committing it.</p>
     </h2>
 
     <div class="functions-list">
+<section class="detail" id="check_saas!/1">
+
+  <div class="detail-header">
+    <a href="#check_saas!/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">check_saas!(saas)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/config.snapshot.ex#L57" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>Refuses a build that is not Next's: without Next's config (<code class="inline">next/config/config.exs</code>,
+which only BUNDLE=next imports in the test env) the snapshots come out wrong.</p>
+  </section>
+</section>
 <section class="detail" id="fixtures/0">
 
   <div class="detail-header">
@@ -180,7 +215,7 @@ runs: review the diff before committing it.</p>
       <h1 class="signature" translate="no">fixtures()</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/config.snapshot.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/config.snapshot.ex#L36" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 
@@ -202,7 +237,7 @@ runs: review the diff before committing it.</p>
       <h1 class="signature" translate="no">render(map)</h1>
 
 
-        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/config.snapshot.ex#L44" class="icon-action" rel="help nofollow" aria-label="View Source">
+        <a href="https://github.com/eyra/mono/blob/main/next/lib/mix/tasks/config.snapshot.ex#L47" class="icon-action" rel="help nofollow" aria-label="View Source">
           <i class="ri-code-s-slash-line" aria-hidden="true"></i>
         </a>
 

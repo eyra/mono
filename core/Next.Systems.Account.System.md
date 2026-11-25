@@ -15,6 +15,8 @@ Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's s
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -31,6 +33,8 @@ Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's s
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -40,6 +44,8 @@ Next's sign-in pages, which shadow Mica's sign-in routes, and the native app's s
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

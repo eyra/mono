@@ -6,7 +6,7 @@ Block `section_end`.
 # `t`
 
 ```elixir
-@type t() :: %Systems.BFF.Blocks.SectionEnd{}
+@type t() :: %Systems.BFF.Blocks.SectionEnd{id: String.t()}
 ```
 
 # `to_map`

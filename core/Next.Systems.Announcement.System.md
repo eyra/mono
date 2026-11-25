@@ -20,6 +20,8 @@ first. The flag is off by default (`Next.SaaS.feature_flags/0`).
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -36,6 +38,8 @@ first. The flag is off by default (`Next.SaaS.feature_flags/0`).
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -45,6 +49,8 @@ first. The flag is off by default (`Next.SaaS.feature_flags/0`).
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

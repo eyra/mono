@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -120,11 +120,116 @@ mica
     <section id="moduledoc">
 <p>The BFF's home page: what the web home shows a signed-in user, in the same order and
 behind the same feature flags (<a href="Systems.Home.PageBuilder.html#block_keys/1"><code class="inline">Systems.Home.PageBuilder.block_keys/1</code></a>), as a flat
-list of blocks. Pay out, Retry and Donate are not here yet.</p>
+list of blocks with a <code class="inline">border</code> around each card after the next best action. Pay out,
+Retry and Donate are not here yet.</p><p>Home shows the first three studies of the marketplace and of the history, then a link
+to the BFF page with all of them (<a href="#history/1"><code class="inline">history/1</code></a>, <a href="#marketplace/2"><code class="inline">marketplace/2</code></a>). Every block's id
+names what it shows (<code class="inline">&quot;participation/assignment/7&quot;</code>), so it stays the same while the
+page shows the same thing.</p>
     </section>
 
 </div>
 
+  <section id="summary" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#summary">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Summary</span>
+    </h2>
+<div class="summary-functions summary">
+  <h3>
+    <a href="#functions">Functions</a>
+  </h3>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#history/1" data-no-tooltip="" translate="no">history(user)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The BFF's history page: every study the user took part in.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#marketplace/2" data-no-tooltip="" translate="no">marketplace(user, params)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The BFF's marketplace page: every study open to the user in the marketplace Home
+shows, behind the same flags, narrowed down as on the web marketplace
+(<a href="Systems.Pool.MarketplaceViewBuilder.html"><code class="inline">Systems.Pool.MarketplaceViewBuilder</code></a>): <code class="inline">year</code> keeps the studies published that
+year, <code class="inline">query</code> those whose title has every word. The filter's options and the
+search link back to this page, with the other param kept.</p></div>
+
+    </div>
+
+</div>
+
+  </section>
+
+
+  <section id="functions" class="details-list">
+    <h2 class="section-heading">
+      <a class="hover-link" href="#functions">
+        <i class="ri-link-m" aria-hidden="true"></i>
+      </a>
+      <span class="text">Functions</span>
+    </h2>
+
+    <div class="functions-list">
+<section class="detail" id="history/1">
+
+  <div class="detail-header">
+    <a href="#history/1" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">history(user)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/home/bff_page.ex#L33" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The BFF's history page: every study the user took part in.</p>
+  </section>
+</section>
+<section class="detail" id="marketplace/2">
+
+  <div class="detail-header">
+    <a href="#marketplace/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">marketplace(user, params)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/home/bff_page.ex#L46" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+<p>The BFF's marketplace page: every study open to the user in the marketplace Home
+shows, behind the same flags, narrowed down as on the web marketplace
+(<a href="Systems.Pool.MarketplaceViewBuilder.html"><code class="inline">Systems.Pool.MarketplaceViewBuilder</code></a>): <code class="inline">year</code> keeps the studies published that
+year, <code class="inline">query</code> those whose title has every word. The filter's options and the
+search link back to this page, with the other param kept.</p>
+  </section>
+</section>
+
+    </div>
+  </section>
 
     <footer class="footer">
 

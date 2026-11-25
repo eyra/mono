@@ -9,6 +9,7 @@ Block `next_best_action`.
 @type t() :: %Systems.BFF.Blocks.NextBestAction{
   body: String.t() | nil,
   cta: String.t() | nil,
+  id: String.t(),
   title: String.t(),
   to: String.t() | nil
 }

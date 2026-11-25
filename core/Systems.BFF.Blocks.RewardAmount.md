@@ -9,6 +9,7 @@ Block `reward_amount`.
 @type t() :: %Systems.BFF.Blocks.RewardAmount{
   amount: String.t(),
   caption: String.t() | nil,
+  id: String.t(),
   label: String.t(),
   tone: (:accent | :success | :warning | :danger | :neutral) | nil
 }

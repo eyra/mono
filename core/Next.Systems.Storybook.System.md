@@ -15,6 +15,8 @@ The component storybook of Next's own components (`Next.Storybook`), next to Mic
 
 # `desktop_sections`
 
+# `directors`
+
 # `feature_flags`
 
 # `grants`
@@ -31,6 +33,8 @@ The component storybook of Next's own components (`Next.Storybook`), next to Mic
 
 # `override_routes`
 
+# `project_items`
+
 # `rate_quotas`
 
 # `routes`
@@ -40,6 +44,8 @@ The component storybook of Next's own components (`Next.Storybook`), next to Mic
 # `sign_in_handoffs`
 
 # `signal_handlers`
+
+# `tools`
 
 ---
 

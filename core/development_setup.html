@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -124,7 +124,9 @@ content and payment return links) still defaults to port 4000.</p><pre><code cla
 (<code class="inline">http://localhost:4010/auth/google/callback</code>) with Google if you sign in
 with Google there.</p></li><li><p><code class="inline">OPEN_SENT_EMAILS=false</code>: sent emails no longer open in the browser; read
 them at <code class="inline">/sent_emails</code>.</p></li></ul><p>Set <code class="inline">HTTP_PORT</code> and <code class="inline">OPEN_SENT_EMAILS</code> in the shell that starts the server,
-not in <code class="inline">core/.env</code>: that file is only loaded after these settings are read.</p><p>Learn more about Phoenix by visiting the <a rel="nofollow" href="https://www.phoenixframework.org/">official website</a></p><h2 id="i18n" class="section-heading"><a href="#i18n" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">i18n</span></h2><p>This project makes use of <a href="https://gettext.hexdocs.pm/0.26.2/Gettext.html"><code class="inline">Gettext</code></a> and <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html"><code class="inline">Cldr</code></a> for internationalization. The
+not in <code class="inline">core/.env</code>: that file is only loaded after these settings are read.</p><p>Endpoint settings in your <code class="inline">config/dev.secret.exs</code> go under the endpoint of the
+SaaS you run: <code class="inline">config :mica, NextWeb.Endpoint, …</code>, or <a href="MicaSaasWeb.Endpoint.html"><code class="inline">MicaSaasWeb.Endpoint</code></a>
+for Self. A <code class="inline">config :mica, MicaWeb.Endpoint</code> there is no longer read.</p><p>Learn more about Phoenix by visiting the <a rel="nofollow" href="https://www.phoenixframework.org/">official website</a></p><h2 id="i18n" class="section-heading"><a href="#i18n" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">i18n</span></h2><p>This project makes use of <a href="https://gettext.hexdocs.pm/0.26.2/Gettext.html"><code class="inline">Gettext</code></a> and <a href="https://ex-cldr.hexdocs.pm/2.47.5/Cldr.html"><code class="inline">Cldr</code></a> for internationalization. The
 <code class="inline">PO</code> files can be found at <code class="inline">priv/gettext/*/LC_MESSAGES/*.po</code>. To extract new
 translation strings or to compile the <code class="inline">PO</code> files run:</p><pre><code class="makeup elixir" translate="no"><span class="n">mix</span><span class="w"> </span><span class="n">i18n</span></code></pre><h2 id="linting-style" class="section-heading"><a href="#linting-style" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Linting &amp; Style</span></h2><p>Several linting tools are available to ensure code quality. They are:</p><ul><li><a rel="nofollow" href="https://github.com/rrrene/credo">Credo</a> (<a href="https://credo.hexdocs.pm/1.7.19/Mix.Tasks.Credo.html"><code class="inline">mix credo</code></a>)</li><li><a href="https://hexdocs.pm/mix/master/Mix.Tasks.Format.html">mix format</a> (<a href="https://mix.hexdocs.pm/Mix.Tasks.Format.html"><code class="inline">mix format</code></a>)</li></ul><h1>Deployment</h1><h2 id="gigalixir" class="section-heading"><a href="#gigalixir" class="hover-link"><i class="ri-link-m" aria-hidden="true"></i></a><span class="text">Gigalixir</span></h2><p>Gigalixir is used for deployment. To be able to the run the commands open a
 terminal (within Visual Studio Code). Further explaination on how to login etc.

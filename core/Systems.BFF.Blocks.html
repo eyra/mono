@@ -12,7 +12,7 @@
 
     <link rel="stylesheet" href="dist/html-elixir-RXHHCTJW.css" />
 
-    <script defer src="dist/sidebar_items-90C3821C.js"></script>
+    <script defer src="dist/sidebar_items-26B149EA.js"></script>
     <script defer src="docs_config.js"></script>
     <script defer src="dist/html-MI33G4N7.js"></script>
 
@@ -137,11 +137,64 @@ mica
 
     <div class="summary-row">
       <div class="summary-signature">
+        <a href="#check/2" data-no-tooltip="" translate="no">check(ids, markup)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p><code class="inline">:ok</code> when <code class="inline">markup</code> holds for the blocks with <code class="inline">ids</code>, in page order, or
+<code class="inline">{:error, reason}</code> for the first entry that doesn't: one whose <code class="inline">start</code> or <code class="inline">end</code>
+is no block's id or an id two blocks have, one that ends before it starts, or one
+that crosses an entry before it. Markup nests as in XML: two entries share no
+block, or one covers all of the other. Two blocks with one id are fine as long as
+no markup names that id.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#page_params/2" data-no-tooltip="" translate="no">page_params(page, query)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The params of <code class="inline">page</code> in <code class="inline">query</code>, a request's query parameters, by name and typed:
+<code class="inline">page_params(:marketplace, %{&quot;year&quot; =&gt; &quot;2025&quot;})</code> is <code class="inline">%{year: 2025}</code>. One the page
+doesn't declare, one that is empty and one that doesn't parse are left out, as if
+absent: a stale link still opens the page.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
         <a href="#pages/0" data-no-tooltip="" translate="no">pages()</a>
 
       </div>
 
-        <div class="summary-synopsis"><p>The pages the BFF serves, in spec order: each is a GET at its path that returns a flat list of blocks.</p></div>
+        <div class="summary-synopsis"><p>The pages the BFF serves, in spec order: each is a GET at its path that returns its view model, blocks and markup.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#tree/2" data-no-tooltip="" translate="no">tree(ids, markup)</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The nested tree a client renders for the blocks with <code class="inline">ids</code>, in page order, and
+their <code class="inline">markup</code>: <code class="inline">{:block, id}</code> and <code class="inline">{:markup, entry, children}</code>. Entries over the
+same stretch nest in list order, the first outermost. Like a client, it leaves out
+an entry that <a href="#check/2"><code class="inline">check/2</code></a> refuses, and the blocks it covers still show.</p></div>
+
+    </div>
+
+    <div class="summary-row">
+      <div class="summary-signature">
+        <a href="#view_model/2" data-no-tooltip="" translate="no">view_model(blocks, markup \\ [])</a>
+
+      </div>
+
+        <div class="summary-synopsis"><p>The page as it goes on the wire, <code class="inline">%{&quot;blocks&quot; =&gt; [...], &quot;markup&quot; =&gt; [...]}</code>: the
+blocks in page order and the markup beside them. Raises <a href="https://elixir.hexdocs.pm/ArgumentError.html"><code class="inline">ArgumentError</code></a> when the
+markup is bad (<a href="#check/2"><code class="inline">check/2</code></a>): the server never sends bad markup.</p></div>
 
     </div>
 
@@ -159,6 +212,72 @@ mica
     </h2>
 
     <div class="functions-list">
+<section class="detail" id="check/2">
+
+  <div class="detail-header">
+    <a href="#check/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">check(ids, markup)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> check([<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil], [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()]) :: :ok | {:error, <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}</pre>
+
+      </div>
+
+<p><code class="inline">:ok</code> when <code class="inline">markup</code> holds for the blocks with <code class="inline">ids</code>, in page order, or
+<code class="inline">{:error, reason}</code> for the first entry that doesn't: one whose <code class="inline">start</code> or <code class="inline">end</code>
+is no block's id or an id two blocks have, one that ends before it starts, or one
+that crosses an entry before it. Markup nests as in XML: two entries share no
+block, or one covers all of the other. Two blocks with one id are fine as long as
+no markup names that id.</p>
+  </section>
+</section>
+<section class="detail" id="page_params/2">
+
+  <div class="detail-header">
+    <a href="#page_params/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">page_params(page, query)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> page_params(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(), %{required(<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) =&gt; <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">term</a>()}) :: %{
+  required(<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()) =&gt; <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">term</a>()
+}</pre>
+
+      </div>
+
+<p>The params of <code class="inline">page</code> in <code class="inline">query</code>, a request's query parameters, by name and typed:
+<code class="inline">page_params(:marketplace, %{&quot;year&quot; =&gt; &quot;2025&quot;})</code> is <code class="inline">%{year: 2025}</code>. One the page
+doesn't declare, one that is empty and one that doesn't parse are left out, as if
+absent: a stale link still opens the page.</p>
+  </section>
+</section>
 <section class="detail" id="pages/0">
 
   <div class="detail-header">
@@ -180,11 +299,78 @@ mica
 
       <div class="specs">
 
-          <pre translate="no"><span class="attribute">@spec</span> pages() :: [%{name: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(), path: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()}]</pre>
+          <pre translate="no"><span class="attribute">@spec</span> pages() :: [
+  %{name: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(), path: <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>(), params: [%{name: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>(), type: <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">atom</a>()}]}
+]</pre>
 
       </div>
 
-<p>The pages the BFF serves, in spec order: each is a GET at its path that returns a flat list of blocks.</p>
+<p>The pages the BFF serves, in spec order: each is a GET at its path that returns its view model, blocks and markup.</p>
+  </section>
+</section>
+<section class="detail" id="tree/2">
+
+  <div class="detail-header">
+    <a href="#tree/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">tree(ids, markup)</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> tree([<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil], [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()]) :: [
+  {:block, <a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>() | nil} | {:markup, <a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>(), <a href="https://elixir.hexdocs.pm/typespecs.html#built-in-types">list</a>()}
+]</pre>
+
+      </div>
+
+<p>The nested tree a client renders for the blocks with <code class="inline">ids</code>, in page order, and
+their <code class="inline">markup</code>: <code class="inline">{:block, id}</code> and <code class="inline">{:markup, entry, children}</code>. Entries over the
+same stretch nest in list order, the first outermost. Like a client, it leaves out
+an entry that <a href="#check/2"><code class="inline">check/2</code></a> refuses, and the blocks it covers still show.</p>
+  </section>
+</section>
+<section class="detail" id="view_model/2">
+
+    <span id="view_model/1"></span>
+
+  <div class="detail-header">
+    <a href="#view_model/2" class="detail-link" data-no-tooltip="" aria-label="Link to this function">
+      <i class="ri-link-m" aria-hidden="true"></i>
+    </a>
+    <div class="heading-with-actions">
+      <h1 class="signature" translate="no">view_model(blocks, markup \\ [])</h1>
+
+
+        <a href="https://github.com/eyra/mono/blob/main/mica/systems/bff/blocks.ex#L3" class="icon-action" rel="help nofollow" aria-label="View Source">
+          <i class="ri-code-s-slash-line" aria-hidden="true"></i>
+        </a>
+
+    </div>
+  </div>
+
+  <section class="docstring">
+
+      <div class="specs">
+
+          <pre translate="no"><span class="attribute">@spec</span> view_model([<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">struct</a>()], [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">struct</a>()]) :: %{required(<a href="https://elixir.hexdocs.pm/String.html#t:t/0">String.t</a>()) =&gt; [<a href="https://elixir.hexdocs.pm/typespecs.html#basic-types">map</a>()]}</pre>
+
+      </div>
+
+<p>The page as it goes on the wire, <code class="inline">%{&quot;blocks&quot; =&gt; [...], &quot;markup&quot; =&gt; [...]}</code>: the
+blocks in page order and the markup beside them. Raises <a href="https://elixir.hexdocs.pm/ArgumentError.html"><code class="inline">ArgumentError</code></a> when the
+markup is bad (<a href="#check/2"><code class="inline">check/2</code></a>): the server never sends bad markup.</p>
   </section>
 </section>
 
