@@ -26,4 +26,14 @@ defmodule Systems.Org.NodeViewBuilderTest do
     assert vm.research_institute?
     assert vm.research_institute_note =~ Account.User.label(admin)
   end
+
+  test "shows when the mark was set in Amsterdam time", %{admin: admin, org: org} do
+    {:ok, org} = Org.Public.mark_research_institute(org, true, admin)
+    # 23:30 UTC on a winter Thursday is 00:30 on Friday in Amsterdam.
+    org = %{org | research_institute_at: ~U[2026-01-15 23:30:00Z]}
+
+    vm = Org.NodeViewBuilder.view_model(org, %{is_admin?: true})
+
+    assert vm.research_institute_note =~ "Friday, January 16"
+  end
 end

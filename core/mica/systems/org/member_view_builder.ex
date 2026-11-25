@@ -112,15 +112,17 @@ defmodule Systems.Org.MemberViewBuilder do
   end
 
   defp added_info(%{added_at: added_at, added_by: nil}) do
-    dgettext("eyra-org", "member.added.info", date: Timestamp.humanize(added_at))
+    dgettext("eyra-org", "member.added.info", date: local_date(added_at))
   end
 
   defp added_info(%{added_at: added_at, added_by: added_by}) do
     dgettext("eyra-org", "member.added.by.info",
       name: Account.User.label(added_by),
-      date: Timestamp.humanize(added_at)
+      date: local_date(added_at)
     )
   end
+
+  defp local_date(added_at), do: added_at |> Timestamp.apply_timezone() |> Timestamp.humanize()
 
   defp matches_query?(_user, []), do: true
 

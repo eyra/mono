@@ -395,7 +395,9 @@ defmodule Systems.Org.Public do
   @doc """
   Assigns the :member role to a user for the given organisation and records
   who added them (`Org.MembershipModel`). Adding a member twice changes nothing.
-  Auth roles are the source of truth for membership (Option C pattern).
+  Auth roles are the source of truth for membership (Option C pattern): a
+  membership record left open after the role was removed some other way (older
+  code during a rolling deploy, a rollback) is closed before the new one starts.
   """
   def add_member(%Node{} = org, %User{} = user, added_by \\ nil) do
     if member?(org, user) do
@@ -405,6 +407,9 @@ defmodule Systems.Org.Public do
       |> Multi.run(:role, fn _, _ ->
         {auth_module().assign_role(user, org, :member), nil}
       end)
+      |> Multi.update_all(:stale_membership, current_membership_query(org, user),
+        set: [removed_at: DateTime.utc_now() |> DateTime.truncate(:second)]
+      )
       |> Multi.insert(:membership, Org.MembershipModel.add_changeset(org, user, added_by))
       |> Repo.commit()
       |> case do
@@ -419,15 +424,13 @@ defmodule Systems.Org.Public do
   who removed them and when on the current `Org.MembershipModel`.
   Auth roles are the source of truth for membership (Option C pattern).
   """
-  def remove_member(%Node{id: org_id} = org, %User{id: user_id} = user, removed_by \\ nil) do
+  def remove_member(%Node{} = org, %User{} = user, removed_by \\ nil) do
     Multi.new()
     |> Multi.run(:role, fn _, _ ->
       {:ok, auth_module().remove_role!(user, org, :member)}
     end)
     |> Multi.run(:membership, fn _, _ ->
-      from(m in Org.MembershipModel,
-        where: m.org_id == ^org_id and m.user_id == ^user_id and is_nil(m.removed_at)
-      )
+      current_membership_query(org, user)
       |> Repo.one()
       |> case do
         nil ->
@@ -442,6 +445,12 @@ defmodule Systems.Org.Public do
       {:ok, %{role: role}} -> role
       {:error, _, _, _} -> :error
     end
+  end
+
+  defp current_membership_query(%Node{id: org_id}, %User{id: user_id}) do
+    from(m in Org.MembershipModel,
+      where: m.org_id == ^org_id and m.user_id == ^user_id and is_nil(m.removed_at)
+    )
   end
 
   @doc """

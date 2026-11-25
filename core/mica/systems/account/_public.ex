@@ -553,10 +553,10 @@ defmodule Systems.Account.Public do
 
   ## Examples
 
-      iex> deliver_user_confirmation_instructions(user, &url(conn, ~m"/user/settings/activate-account/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(user, &url(conn, ~m"/user/onboarding/confirm/\#{&1}"))
       {:ok, %{to: ..., body: ...}}
 
-      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~m"/user/settings/activate-account/\#{&1}"))
+      iex> deliver_user_confirmation_instructions(confirmed_user, &url(conn, ~m"/user/onboarding/confirm/\#{&1}"))
       {:error, :already_confirmed}
 
   """

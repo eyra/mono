@@ -4,6 +4,11 @@ defmodule Mica.Repo.Migrations.AddResearchInstitutesToOrgs do
   # The :member role on the organisation's auth node stays the membership itself.
   # A row in org_memberships records who added the member and, once removed, who
   # removed them and when. Members added before this migration have no row.
+  #
+  # Rolling back drops org_memberships and both columns: who added and removed
+  # each member, which organisations are research institutes and who marked them
+  # are lost, and migrating up again doesn't bring them back. The :member roles,
+  # the memberships themselves, stay.
   def change do
     alter table(:org_nodes) do
       add(:research_institute_at, :utc_datetime)

@@ -543,6 +543,22 @@ defmodule Systems.Org.PublicTest do
       assert added_by_id == support.id
     end
 
+    test "a member whose role was removed some other way can be added again",
+         %{org: org, support: support, user: user} do
+      :ok = Public.add_member(org, user, support)
+      # What remove_member/2 did before memberships were recorded.
+      Mica.Authorization.remove_role!(user, org, :member)
+
+      assert :ok = Public.add_member(org, user, support)
+
+      assert Public.member?(org, user)
+      assert [%{added_by: %{id: added_by_id}}] = Public.list_memberships(org)
+      assert added_by_id == support.id
+
+      assert [%{removed_at: %DateTime{}}, %{removed_at: nil}] =
+               Repo.all(from(m in Org.MembershipModel, order_by: m.id))
+    end
+
     test "a member added again gets a new membership", %{org: org, support: support, user: user} do
       owner = Factories.insert!(:member)
       :ok = Public.add_member(org, user, support)

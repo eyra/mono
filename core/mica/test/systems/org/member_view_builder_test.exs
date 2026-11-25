@@ -64,6 +64,17 @@ defmodule Systems.Org.MemberViewBuilderTest do
       assert vm.info[member.id] =~ "Added by #{Account.User.label(support)}"
     end
 
+    test "shows when a member was added in Amsterdam time", %{org: org, assigns: assigns} do
+      member = Factories.insert!(:creator, %{email: "late@builder-test.org"})
+      :ok = Org.Public.add_member(org, member)
+      # 23:30 UTC on a winter Thursday is 00:30 on Friday in Amsterdam.
+      backdate_role_assignment!(org, member, ~N[2026-01-15 23:30:00])
+
+      vm = Org.MemberViewBuilder.view_model(org, assigns)
+
+      assert vm.info[member.id] =~ "Friday, January 16"
+    end
+
     test "shows only when a member was added if nobody is recorded", %{org: org, assigns: assigns} do
       member = Factories.insert!(:creator, %{email: "seeded@builder-test.org"})
       :ok = Org.Public.add_member(org, member)

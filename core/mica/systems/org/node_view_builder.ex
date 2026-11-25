@@ -21,7 +21,7 @@ defmodule Systems.Org.NodeViewBuilder do
   defp research_institute_note(%{research_institute_at: at, research_institute_by: by}) do
     dgettext("eyra-org", "research.institute.marked.note",
       name: by_name(by),
-      date: Timestamp.humanize(at)
+      date: at |> DateTime.to_naive() |> Timestamp.apply_timezone() |> Timestamp.humanize()
     )
   end
 
