@@ -364,25 +364,6 @@ defmodule Next.Systems.Account.NativeHandoffTest do
       assert_web_sign_in(conn, user)
     end
 
-    test "the sign-in after a password change signs in as before", %{conn: conn} do
-      password = Factories.valid_user_password()
-      user = Factories.insert!(:member, %{password: password})
-      {:ok, conn: conn, user: _} = login(user, %{conn: conn})
-
-      conn =
-        put(conn, "/user/settings", %{
-          "action" => "update_password",
-          "current_password" => password,
-          "user" => %{
-            "password" => "New-" <> password,
-            "password_confirmation" => "New-" <> password
-          }
-        })
-
-      assert redirected_to(conn) == "/user/settings"
-      assert_web_sign_in(conn, user)
-    end
-
     test "a sign-in through another provider signs in as before", %{conn: conn} do
       email = unique_email("other-provider", "mock.com")
 

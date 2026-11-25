@@ -75,9 +75,5 @@ msgid "password.reset.successfully"
 msgstr "Password changed"
 
 #, elixir-autogen, elixir-format
-msgid "password.updated.successfully"
-msgstr "Password updated"
-
-#, elixir-autogen, elixir-format
 msgid "auth.session.expired"
 msgstr "Your session has expired. Please sign in again."

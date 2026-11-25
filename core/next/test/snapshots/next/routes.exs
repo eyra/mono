@@ -64,8 +64,6 @@
    Systems.Account.Page},
   {:get, "/user/onboarding", Phoenix.LiveView.Plug, Systems.Account.OnboardingPage, "live",
    Systems.Account.OnboardingPage},
-  {:get, "/user/settings", Systems.Account.SettingsController, :edit, "settings", nil},
-  {:put, "/user/settings", Systems.Account.SettingsController, :update, "settings", nil},
   {:post, "/auth/:idp/transfer/confirm", Systems.Account.Auth.IdentityProviderTransferController,
    :confirm, "identity_provider_transfer", nil},
   {:post, "/auth/:idp/transfer/decline", Systems.Account.Auth.IdentityProviderTransferController,

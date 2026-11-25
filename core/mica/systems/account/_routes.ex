@@ -26,13 +26,6 @@ defmodule MicaWeb.Live.User.Routes do
         live("/user/onboarding", OnboardingPage)
       end
 
-      scope "/", Systems.Account do
-        pipe_through([:browser, :require_authenticated_user])
-
-        get("/user/settings", SettingsController, :edit)
-        put("/user/settings", SettingsController, :update)
-      end
-
       scope "/auth", Systems.Account.Auth do
         pipe_through([:browser])
         post("/:idp/transfer/confirm", IdentityProviderTransferController, :confirm)

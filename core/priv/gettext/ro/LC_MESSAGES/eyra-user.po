@@ -75,10 +75,6 @@ msgstr "Cont creat"
 msgid "password.reset.successfully"
 msgstr "Parola a fost schimbată"
 
-#, elixir-autogen, elixir-format, fuzzy
-msgid "password.updated.successfully"
-msgstr "Parola a fost actualizată"
-
 #, elixir-autogen, elixir-format
 msgid "auth.session.expired"
 msgstr ""
