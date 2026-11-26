@@ -131,6 +131,7 @@ defmodule Systems.Org.MemberView do
           people={@vm.people}
           info={@vm.info}
           keep_last={false}
+          show_match_profile={false}
           users={@vm.users}
           current_user={@current_user}
         />

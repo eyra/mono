@@ -127,3 +127,11 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "research.institute.unknown.user"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "domains.invalid.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.save.not.allowed"
+msgstr ""

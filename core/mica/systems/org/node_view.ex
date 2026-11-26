@@ -56,21 +56,32 @@ defmodule Systems.Org.NodeView do
     end
   end
 
+  # The page may have been opened before the user lost the right to manage
+  # the organisation, so the right is checked again on every save.
   defp save(%{assigns: %{current_user: user}} = socket, entity, attrs) do
-    changeset = changeset(entity, attrs, user)
+    if Org.Public.can_manage?(entity, user) do
+      persist(socket, entity, changeset(entity, attrs, user))
+    else
+      socket
+      |> hide_flash()
+      |> flash_error(dgettext("eyra-org", "node.save.not.allowed"))
+    end
+  end
 
+  defp persist(socket, entity, changeset) do
     case Mica.Persister.save(entity, changeset) do
       {:ok, updated_entity} ->
         socket
         |> hide_flash()
-        |> assign(model: updated_entity)
+        |> assign(model: updated_entity, changeset: nil)
         |> update_view_model()
         |> flash_persister_saved()
 
       {:error, changeset} ->
         socket
         |> hide_flash()
-        |> assign(changeset: changeset)
+        |> assign(changeset: %{changeset | action: :update})
+        |> update_view_model()
         |> flash_error()
     end
   end

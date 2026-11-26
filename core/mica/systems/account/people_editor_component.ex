@@ -22,9 +22,12 @@ defmodule Systems.Account.PeopleEditorComponent do
   ## Optional assigns
   - `info` - a map of user id to a short text shown next to that person
   - `keep_last` - when true (the default), the last person can't be removed
+  - `show_match_profile` - when false, a person found by email shows only that
+    email, without name or photo, until they're added (default true)
 
   ## Events sent to parent
-  - `{:add_user, %{user: user}}` - when a user is added
+  - `{:add_user, %{user: user}}` - when a user is added; the parent saves it
+    and passes the new `people` and `users`
   - `{:remove_user, %{user: user}}` - when a user is removed
   """
   use Phoenix.LiveComponent
@@ -56,6 +59,7 @@ defmodule Systems.Account.PeopleEditorComponent do
       |> assign_new(:total_count, fn -> nil end)
       |> assign_new(:info, fn -> %{} end)
       |> assign_new(:keep_last, fn -> true end)
+      |> assign_new(:show_match_profile, fn -> true end)
       |> assign_new(:query_string, fn -> "" end)
       |> assign_new(:confirm_removal_user_ids, fn -> MapSet.new() end)
       |> assign_new(:user_item, fn -> nil end)
@@ -70,24 +74,22 @@ defmodule Systems.Account.PeopleEditorComponent do
   @impl true
   def handle_event("add", %{"item" => user_id_string}, socket) do
     user_id = String.to_integer(user_id_string)
-    %{users: users, people: people} = socket.assigns
+    %{users: users, query_string: query_string} = socket.assigns
 
-    case Enum.find(users, &(&1.id == user_id)) do
-      nil ->
-        {:noreply, socket}
-
-      user ->
-        new_users = Enum.reject(users, &(&1.id == user_id))
-        new_people = people ++ [user]
-
+    # Only the account the current search found can be added, so an id sent
+    # without looking up its email adds nobody. The parent may refuse the add,
+    # so the list only changes when the parent passes the new people.
+    case find_user_by_email(users, query_string) do
+      %{id: ^user_id} = user ->
         send(self(), {:add_user, %{user: user}})
 
         {:noreply,
          socket
-         |> assign(users: new_users, people: new_people)
          |> assign(query_string: "", user_item: nil)
-         |> update_people_items()
          |> update_search_message()}
+
+      _ ->
+        {:noreply, socket}
     end
   end
 
@@ -159,10 +161,11 @@ defmodule Systems.Account.PeopleEditorComponent do
   end
 
   defp update_user_item(socket) do
-    %{query_string: qs, users: users, myself: target} = socket.assigns
+    %{query_string: qs, users: users, show_match_profile: show_profile?, myself: target} =
+      socket.assigns
 
     user = find_user_by_email(users, qs)
-    user_item = build_search_result_item(user, target)
+    user_item = build_search_result_item(user, show_profile?, target)
     assign(socket, user_item: user_item)
   end
 
@@ -222,15 +225,19 @@ defmodule Systems.Account.PeopleEditorComponent do
     ]
   end
 
-  defp build_search_result_item(nil, _target), do: nil
+  defp build_search_result_item(nil, _show_profile?, _target), do: nil
 
-  defp build_search_result_item(user, target) do
-    photo_url = ImageHelpers.get_photo_url(user.profile)
+  defp build_search_result_item(user, true, target) do
+    user
+    |> build_search_result_item(false, target)
+    |> Map.merge(%{photo_url: ImageHelpers.get_photo_url(user.profile), name: user.displayname})
+  end
 
+  defp build_search_result_item(user, false, target) do
     %{
       id: user.id,
-      photo_url: photo_url,
-      name: user.displayname,
+      photo_url: ImageHelpers.get_photo_url(nil),
+      name: nil,
       email: user.email,
       action_buttons: [
         %{
@@ -244,7 +251,7 @@ defmodule Systems.Account.PeopleEditorComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col h-full">
+    <div id={@id} class="flex flex-col h-full">
       <Text.title2><%= @title %> <span class="text-primary"><%= @total_count || Enum.count(@people) %></span></Text.title2>
 
       <div class="flex flex-col gap-8">
