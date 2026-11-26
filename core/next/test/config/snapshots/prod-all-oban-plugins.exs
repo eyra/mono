@@ -112,7 +112,8 @@
          "pay_in_expiration",
          "payment_reconciliation",
          "auth_code_cleanup",
-         "auto_approve"
+         "auto_approve",
+         "license_reminder"
        ],
        schedule_overrides: []
      ]},

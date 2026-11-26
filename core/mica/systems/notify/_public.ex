@@ -4,6 +4,8 @@ defmodule Systems.Notify.Public do
   wherever a notifiable thing happens; the scheduler + channels take it from
   there.
   """
+  use MicaWeb, :verified_routes
+
   require Logger
 
   import Ecto.Query
@@ -163,6 +165,77 @@ defmodule Systems.Notify.Public do
     error ->
       {:error, Exception.message(error)}
   end
+
+  @doc """
+  The button of a next action that a notification on the `:na` (Actions)
+  channel shows: it opens the notification (`open_message/2`), which marks it
+  seen and then leads to `to`. Without a notification in `params` (the next
+  action wasn't delivered through Notify), it leads to `to` directly.
+
+  Opening changes state, so it is a POST with the page's CSRF token
+  (`POST /notify/open/:id`): another site can't open a user's notifications.
+  The action also says where it leads (`destination`), for a client that
+  can't send that POST, such as the app's Home (`Home.BFFPage`).
+  """
+  def open_action(%{"notify_message_id" => message_id}, to),
+    do: %{type: :http_post, to: ~m"/notify/open/#{message_id}", destination: to}
+
+  def open_action(_params, to), do: %{type: :redirect, to: to}
+
+  @doc """
+  Opens `user`'s notification message `message_id` on the `:na` channel: marks
+  it seen, which clears its next action (`mark_seen/2`), and returns
+  `{:ok, to}` with where the next action's button leads. `:error` when `user`
+  has no such message.
+  """
+  def open_message(user, message_id) do
+    with %MessageModel{payload: payload} = message <- get_message(user, message_id),
+         {:ok, to} <- Notify.Channel.NA.target(payload) do
+      if message.status != :seen, do: mark_message_seen(message)
+      {:ok, to}
+    else
+      _ -> :error
+    end
+  end
+
+  @doc """
+  Where the button of `user`'s notification message `message_id` on the `:na`
+  channel leads, without marking it seen: `{:ok, to}`, or `:error` when `user`
+  has no such message. For a GET of `/notify/open/:id`, such as the button
+  opened in a new tab: only a click (the POST) marks it seen.
+  """
+  def message_target(user, message_id) do
+    case get_message(user, message_id) do
+      %MessageModel{payload: payload} -> Notify.Channel.NA.target(payload)
+      nil -> :error
+    end
+  end
+
+  defp get_message(%{id: user_id}, message_id) do
+    from(m in MessageModel,
+      join: e in EventModel,
+      on: e.id == m.event_id,
+      where: m.id == ^message_id and m.channel == ^:na and e.subject_user_id == ^user_id
+    )
+    |> Repo.one()
+  end
+
+  @doc """
+  The events of `type` with `correlation_id` recorded so far, of all users or
+  of the user with `subject_user_id`: `%{subject_user_id: id, metadata: map}`
+  each, also those already seen.
+  """
+  def list_recorded(type, correlation_id, subject_user_id \\ nil) do
+    from(e in EventModel,
+      where: e.type == ^to_string(type) and e.correlation_id == ^correlation_id,
+      select: %{subject_user_id: e.subject_user_id, metadata: e.metadata}
+    )
+    |> where_subject(subject_user_id)
+    |> Repo.all()
+  end
+
+  defp where_subject(query, nil), do: query
+  defp where_subject(query, user_id), do: from(e in query, where: e.subject_user_id == ^user_id)
 
   # Fire-and-forget metric log. A failure here shouldn't roll back the event.
   defp log_to_monitor(%EventModel{type: type, subject_user_id: user_id}) do
