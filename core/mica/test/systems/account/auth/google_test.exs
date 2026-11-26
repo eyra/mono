@@ -17,7 +17,7 @@ defmodule Systems.Account.Auth.Google.Test do
       assert attrs.email == "user@example.com"
       assert attrs.displayname == "Re"
       assert attrs.fullname == "Re Searcher"
-      assert %NaiveDateTime{} = attrs.verified_at
+      refute Map.has_key?(attrs, :verified_at)
       refute Map.has_key?(attrs, :creator)
     end
   end

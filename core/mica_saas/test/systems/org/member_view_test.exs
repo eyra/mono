@@ -54,6 +54,40 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       refute candidate.id in member_ids
     end
 
+    test "an Add refused after the owner role is revoked shows no row, name or photo",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, researcher)
+      refute html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+    end
+
     test "handle_info {:remove_user, ...} no-ops after owner role is revoked",
          %{conn: conn, owner: owner, org: org, context: context} do
       member = Factories.insert!(:creator)
@@ -69,6 +103,28 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
 
       member_ids = Enum.map(Org.Public.list_members(org), & &1.id)
       assert member.id in member_ids
+    end
+
+    test "a Remove refused after the owner role is revoked keeps the member's row",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      member = Factories.insert!(:creator, %{email: "kept@gmail.test"})
+      :ok = Org.Public.add_member(org, member, owner)
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{member.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      assert Org.Public.member?(org, member)
+      assert html =~ member.email
+      assert has_element?(view, "[phx-click='remove'][phx-value-item='#{member.id}']")
     end
 
     test "handle_event add_all_domain_matched no-ops after owner role is revoked",
@@ -229,6 +285,40 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       # The component tells the view with a message; render/1 waits for it.
       _ = render(view)
       refute Org.Public.member?(org, member)
+    end
+
+    test "an owner's Add and Remove show in the list at once",
+         %{conn: conn, org: org, context: context} do
+      researcher = Factories.insert!(:creator, %{email: "added@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      refute has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      _ = render(view)
+
+      assert Org.Public.member?(org, researcher)
+      assert has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      html = render(view)
+
+      refute Org.Public.member?(org, researcher)
+      refute html =~ researcher.email
+      refute has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
     end
   end
 

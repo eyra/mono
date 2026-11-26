@@ -142,10 +142,11 @@ defmodule Systems.Account.PublicTest do
       refute Account.Public.activated?(user)
     end
 
-    test "marks email as verified (OTP code proved possession)" do
+    test "gives neither license" do
       {:ok, user} = Account.Public.register_user_with_email(Faker.Internet.email())
 
-      assert %NaiveDateTime{} = user.verified_at
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
     end
 
     test "validates email format" do
@@ -174,8 +175,7 @@ defmodule Systems.Account.PublicTest do
         email: existing_email,
         displayname: "Test User",
         profile: %{fullname: "Test User"},
-        creator: true,
-        verified_at: NaiveDateTime.utc_now()
+        creator: true
       }
 
       changeset = User.sso_changeset(%User{}, sso_attrs)
@@ -193,8 +193,7 @@ defmodule Systems.Account.PublicTest do
         email: Faker.Internet.email(),
         displayname: "SSO Test User",
         profile: %{fullname: "SSO Test User"},
-        creator: true,
-        verified_at: NaiveDateTime.utc_now()
+        creator: true
       }
 
       changeset = User.sso_changeset(%User{}, sso_attrs)

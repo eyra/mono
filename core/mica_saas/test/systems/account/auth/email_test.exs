@@ -9,7 +9,8 @@ defmodule MicaSaas.Systems.Account.Auth.EmailTest do
       assert user.email == "valid@example.com"
       assert user.hashed_password == "no-password-set"
       assert user.creator == false
-      assert user.verified_at != nil
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
 
       satellite = Systems.Account.Auth.Email.get_by_user(user)
       assert satellite != nil

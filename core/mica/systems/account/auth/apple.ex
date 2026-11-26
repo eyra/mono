@@ -16,8 +16,7 @@ defmodule Systems.Account.Auth.Apple do
     %{
       email: userinfo["email"],
       displayname: fullname,
-      fullname: fullname,
-      verified_at: NaiveDateTime.utc_now()
+      fullname: fullname
     }
   end
 
@@ -65,8 +64,7 @@ defmodule Systems.Account.Auth.Apple do
     sso_info = %{
       email: attrs.email,
       displayname: display_name,
-      profile: %{fullname: fullname},
-      verified_at: NaiveDateTime.utc_now()
+      profile: %{fullname: fullname}
     }
 
     user = User.sso_changeset(%User{}, sso_info)

@@ -17,10 +17,10 @@ defmodule Next.Systems.Announcement.PublishTest do
   setup do
     author = Factories.insert!(:admin)
 
-    verified =
-      creator!("anna.verified@example.org", "Anna de Vries", verified_at: @now)
+    publisher = creator!("anna.publisher@example.org", "Anna de Vries")
+    Factories.insert!(:license, %{user: publisher})
 
-    unverified = creator!("bram.unverified@example.org", "Bram Jansen")
+    unlicensed = creator!("bram.unlicensed@example.org", "Bram Jansen")
     deactivated = creator!("carla.gone@example.org", "Carla Gone", confirmed_at: nil)
 
     member =
@@ -31,8 +31,8 @@ defmodule Next.Systems.Announcement.PublishTest do
 
     %{
       author: author,
-      verified: verified,
-      unverified: unverified,
+      publisher: publisher,
+      unlicensed: unlicensed,
       deactivated: deactivated,
       member: member
     }
@@ -99,27 +99,22 @@ defmodule Next.Systems.Announcement.PublishTest do
   describe "list_audience_ids/2" do
     test "has every creator with a confirmed account", ctx do
       assert Enum.sort(Announcement.Public.list_audience_ids([], nil)) ==
-               ids([ctx.verified, ctx.unverified])
+               ids([ctx.publisher, ctx.unlicensed])
     end
 
-    test "Verified and Unverified narrow it", %{verified: verified, unverified: unverified} do
-      assert Announcement.Public.list_audience_ids([:verified], nil) == [verified.id]
-      assert Announcement.Public.list_audience_ids([:unverified], nil) == [unverified.id]
-    end
-
-    test "filters combine with AND" do
-      assert Announcement.Public.list_audience_ids([:verified, :unverified], nil) == []
+    test "Publish narrows it to creators with a Publish license", %{publisher: publisher} do
+      assert Announcement.Public.list_audience_ids([:publish], nil) == [publisher.id]
     end
 
     test "search matches the email or the full name, every word", ctx do
-      assert Announcement.Public.list_audience_ids([], ["ANNA"]) == [ctx.verified.id]
-      assert Announcement.Public.list_audience_ids([], ["jansen"]) == [ctx.unverified.id]
+      assert Announcement.Public.list_audience_ids([], ["ANNA"]) == [ctx.publisher.id]
+      assert Announcement.Public.list_audience_ids([], ["jansen"]) == [ctx.unlicensed.id]
 
-      assert Announcement.Public.list_audience_ids([], ["bram", "verified"]) == [
-               ctx.unverified.id
+      assert Announcement.Public.list_audience_ids([], ["bram", "unlicensed"]) == [
+               ctx.unlicensed.id
              ]
 
-      assert Announcement.Public.list_audience_ids([:verified], ["bram"]) == []
+      assert Announcement.Public.list_audience_ids([:publish], ["bram"]) == []
     end
 
     test "search never reaches deactivated accounts or non-creators" do
@@ -129,18 +124,18 @@ defmodule Next.Systems.Announcement.PublishTest do
 
     test "ignores the participant filters", ctx do
       assert Enum.sort(Announcement.Public.list_audience_ids([:affiliate, :in_pool], nil)) ==
-               ids([ctx.verified, ctx.unverified])
+               ids([ctx.publisher, ctx.unlicensed])
     end
   end
 
   describe "publish_announcement/3" do
-    test "fixes the audience and queues the delivery", %{author: author, verified: verified} do
+    test "fixes the audience and queues the delivery", %{author: author, publisher: publisher} do
       announcement = announcement!(author)
 
       assert {:ok, %Announcement.Model{published_at: %DateTime{}, recipient_ids: recipient_ids}} =
-               publish(announcement, [:verified], nil)
+               publish(announcement, [:publish], nil)
 
-      assert recipient_ids == [verified.id]
+      assert recipient_ids == [publisher.id]
 
       assert_enqueued(
         worker: Announcement.DeliverJob,
@@ -148,7 +143,7 @@ defmodule Next.Systems.Announcement.PublishTest do
       )
 
       assert %{published_at: %DateTime{}} = Announcement.Public.get_announcement!(announcement.id)
-      assert stored_recipient_ids(announcement) == [verified.id]
+      assert stored_recipient_ids(announcement) == [publisher.id]
     end
 
     test "an empty audience leaves it unpublished", %{author: author} do
@@ -226,11 +221,11 @@ defmodule Next.Systems.Announcement.PublishTest do
 
     test "sends nothing again and keeps every read status", %{
       author: author,
-      verified: verified,
-      unverified: unverified
+      publisher: publisher,
+      unlicensed: unlicensed
     } do
       published = publish!(announcement!(author))
-      read = Announcement.Public.get_received(verified, published.id)
+      read = Announcement.Public.get_received(publisher, published.id)
       %{read_at: read_at} = Announcement.Public.mark_read(read)
       enqueued = all_enqueued()
 
@@ -238,11 +233,11 @@ defmodule Next.Systems.Announcement.PublishTest do
                Announcement.Public.update_announcement(published, %{title: "Corrected"})
 
       assert [%{read_at: ^read_at}] =
-               Repo.all(from(r in Announcement.RecipientModel, where: r.user_id == ^verified.id))
+               Repo.all(from(r in Announcement.RecipientModel, where: r.user_id == ^publisher.id))
 
-      assert %{read_at: nil} = Announcement.Public.get_received(unverified, published.id)
-      assert to_dos(verified) == []
-      assert [%{key: key}] = to_dos(unverified)
+      assert %{read_at: nil} = Announcement.Public.get_received(unlicensed, published.id)
+      assert to_dos(publisher) == []
+      assert [%{key: key}] = to_dos(unlicensed)
       assert key == ReadAnnouncement.key(published.id)
 
       assert all_enqueued() == enqueued
@@ -307,8 +302,8 @@ defmodule Next.Systems.Announcement.PublishTest do
                Announcement.Public.get_announcement!(loaded.id)
     end
 
-    test "never changes the audience", %{author: author, verified: verified, member: member} do
-      published = publish!(announcement!(author), [:verified])
+    test "never changes the audience", %{author: author, publisher: publisher, member: member} do
+      published = publish!(announcement!(author), [:publish])
 
       {:ok, _} =
         Announcement.Public.update_announcement(published, %{
@@ -316,7 +311,7 @@ defmodule Next.Systems.Announcement.PublishTest do
           published_at: nil
         })
 
-      assert stored_recipient_ids(published) == [verified.id]
+      assert stored_recipient_ids(published) == [publisher.id]
       assert %{published_at: %DateTime{}} = Announcement.Public.get_announcement!(published.id)
     end
 
@@ -358,9 +353,9 @@ defmodule Next.Systems.Announcement.PublishTest do
     test "gives each recipient a recipient row and one To-do", ctx do
       %{id: id} = announcement = publish!(announcement!(ctx.author))
 
-      assert recipient_ids(announcement) == ids([ctx.verified, ctx.unverified])
+      assert recipient_ids(announcement) == ids([ctx.publisher, ctx.unlicensed])
 
-      for user <- [ctx.verified, ctx.unverified] do
+      for user <- [ctx.publisher, ctx.unlicensed] do
         assert [%NextAction.Model{action: action, key: key, params: params, count: 1}] =
                  to_dos(user)
 
@@ -380,32 +375,32 @@ defmodule Next.Systems.Announcement.PublishTest do
     end
 
     test "the recipient count shown before publishing is the number of recipients", ctx do
-      count = length(Announcement.Public.list_audience_ids([:unverified], nil))
-      announcement = publish!(announcement!(ctx.author), [:unverified])
+      count = length(Announcement.Public.list_audience_ids([:publish], nil))
+      announcement = publish!(announcement!(ctx.author), [:publish])
 
       assert length(recipient_ids(announcement)) == count
     end
 
     test "a high announcement's To-do has high priority", ctx do
-      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
+      publish!(announcement!(ctx.author, %{priority: :high}), [:publish])
 
-      assert [%NextAction.Model{priority: :high}] = to_dos(ctx.verified)
+      assert [%NextAction.Model{priority: :high}] = to_dos(ctx.publisher)
     end
 
     test "a normal announcement's To-do has low priority", ctx do
-      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:publish])
 
-      assert [%NextAction.Model{priority: :low}] = to_dos(ctx.verified)
+      assert [%NextAction.Model{priority: :low}] = to_dos(ctx.publisher)
     end
 
     test "other To-dos keep their priority", ctx do
-      NextAction.Public.create_next_action(ctx.verified, PendingContributions, key: "other")
+      NextAction.Public.create_next_action(ctx.publisher, PendingContributions, key: "other")
 
-      publish!(announcement!(ctx.author, %{priority: :high}), [:verified])
-      publish!(announcement!(ctx.author, %{priority: :normal}), [:verified])
+      publish!(announcement!(ctx.author, %{priority: :high}), [:publish])
+      publish!(announcement!(ctx.author, %{priority: :normal}), [:publish])
 
       assert %NextAction.Model{priority: :normal} =
-               Repo.get_by!(NextAction.Model, user_id: ctx.verified.id, key: "other")
+               Repo.get_by!(NextAction.Model, user_id: ctx.publisher.id, key: "other")
     end
 
     test "publishing to yourself reaches only your account", %{author: author} do
@@ -417,13 +412,13 @@ defmodule Next.Systems.Announcement.PublishTest do
     end
 
     test "publishing twice to the same audience gives two To-dos", ctx do
-      first = publish!(announcement!(ctx.author, %{title: "First"}), [:verified])
-      second = publish!(announcement!(ctx.author, %{title: "Second"}), [:verified])
+      first = publish!(announcement!(ctx.author, %{title: "First"}), [:publish])
+      second = publish!(announcement!(ctx.author, %{title: "Second"}), [:publish])
 
-      assert Enum.map(to_dos(ctx.verified), & &1.key) ==
+      assert Enum.map(to_dos(ctx.publisher), & &1.key) ==
                Enum.sort([ReadAnnouncement.key(first.id), ReadAnnouncement.key(second.id)])
 
-      assert ctx.verified
+      assert ctx.publisher
              |> NextAction.Public.list_next_actions()
              |> Enum.map(& &1.title)
              |> Enum.sort() ==
@@ -442,26 +437,26 @@ defmodule Next.Systems.Announcement.PublishTest do
       assert to_dos(later) == []
     end
 
-    test "skips recipients whose account is gone", %{author: author, verified: verified} do
+    test "skips recipients whose account is gone", %{author: author, publisher: publisher} do
       {:ok, announcement} =
-        publish(announcement!(author), [:verified], nil)
+        publish(announcement!(author), [:publish], nil)
 
       gone_id = Repo.aggregate(Account.User, :max, :id) + 1
 
       from(a in Announcement.Model, where: a.id == ^announcement.id)
-      |> Repo.update_all(set: [recipient_ids: [verified.id, gone_id]])
+      |> Repo.update_all(set: [recipient_ids: [publisher.id, gone_id]])
 
       assert :ok = perform_job(Announcement.DeliverJob, %{"announcement_id" => announcement.id})
 
-      assert recipient_ids(announcement) == [verified.id]
+      assert recipient_ids(announcement) == [publisher.id]
     end
 
-    test "running it again adds nothing", %{author: author, verified: verified} do
+    test "running it again adds nothing", %{author: author, publisher: publisher} do
       announcement = publish!(announcement!(author))
 
       assert {:ok, 0} = Announcement.Public.deliver_announcement(announcement.id)
 
-      assert [%NextAction.Model{count: 1}] = to_dos(verified)
+      assert [%NextAction.Model{count: 1}] = to_dos(publisher)
       assert length(recipient_ids(announcement)) == 2
     end
 

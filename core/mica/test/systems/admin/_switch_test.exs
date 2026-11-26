@@ -40,10 +40,26 @@ defmodule Systems.Admin.SwitchTest do
     test "broadcasts an Admin.AccountView observation" do
       topic = "signal:#{Systems.Admin.AccountView}:singleton"
       Phoenix.PubSub.subscribe(Mica.PubSub, topic)
-      user = Factories.insert!(:member, %{creator: true, verified_at: nil})
+      user = Factories.insert!(:member, %{creator: true, confirmed_at: nil})
 
-      {:ok, _} =
-        Systems.Account.Public.admin_update_user(user, %{verified_at: NaiveDateTime.utc_now()})
+      {:ok, _} = Systems.Account.Public.admin_update_user(user, %{confirmed_at: now()})
+
+      assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
+    end
+  end
+
+  describe "a change to a user's licenses" do
+    test "broadcasts an Admin.AccountView observation" do
+      topic = "signal:#{Systems.Admin.AccountView}:singleton"
+      Phoenix.PubSub.subscribe(Mica.PubSub, topic)
+
+      admin = Factories.insert!(:admin)
+      user = Factories.insert!(:creator)
+
+      :ok =
+        Systems.License.Public.save(admin, user, %{
+          publish: {:on, Systems.License.Public.end_date(:year_1)}
+        })
 
       assert_receive %Phoenix.Socket.Broadcast{topic: ^topic, event: "observation"}
     end
@@ -64,7 +80,7 @@ defmodule Systems.Admin.SwitchTest do
 
       user =
         Sandbox.unboxed_run(Repo, fn ->
-          Factories.insert!(:member, %{creator: true, verified_at: nil, confirmed_at: now()})
+          Factories.insert!(:member, %{creator: true, confirmed_at: nil})
         end)
 
       on_exit(fn -> Sandbox.unboxed_run(Repo, fn -> delete_user(user) end) end)
@@ -94,10 +110,10 @@ defmodule Systems.Admin.SwitchTest do
       assert_receive :subscribed
 
       Sandbox.unboxed_run(Repo, fn ->
-        {:ok, _} = Account.Public.admin_update_user(user, %{verified_at: now()})
+        {:ok, _} = Account.Public.admin_update_user(user, %{confirmed_at: now()})
       end)
 
-      assert_receive {:labels, ["Deactivate", "Unverify"]}, 6_000
+      assert_receive {:labels, ["Deactivate", "Licenses"]}, 6_000
     end
   end
 

@@ -283,8 +283,8 @@ defmodule Systems.Account.Public do
   @doc """
   Registers a new user from an SSO-provided attrs map. The IdP (SURFconext,
   Google, …) has already proven email ownership, so the account is created
-  with `confirmed_at`/`verified_at` set by the caller's attrs and is
-  immediately usable. Dispatches `{:user, :created}`.
+  with `confirmed_at` set by the caller's attrs and is immediately usable.
+  Dispatches `{:user, :created}`. It gives no licenses (`Systems.License`).
 
   `attrs` is the flat normalized map produced by a `Systems.Account.Auth.Provider`'s
   `user_attrs/1` callback — the User vs Profile schema split is an internal
@@ -310,17 +310,15 @@ defmodule Systems.Account.Public do
 
   @doc """
   Registers a new user from just an email (OTP-only auth flow). Creates a
-  passwordless account (`hashed_password: "no-password-set"`) with email
-  ownership marked as verified (the OTP code itself proves possession of
-  the inbox). The account stays unconfirmed until the user accepts terms
-  & privacy in the onboarding step.
+  passwordless account (`hashed_password: "no-password-set"`); the OTP code
+  itself proves possession of the inbox. The account stays unconfirmed until
+  the user accepts terms & privacy in the onboarding step. It gives no
+  licenses (`Systems.License`).
   """
   def register_user_with_email(email, creator? \\ true)
       when is_binary(email) and is_boolean(creator?) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
     %User{}
-    |> User.sso_changeset(%{email: email, creator: creator?, verified_at: now})
+    |> User.sso_changeset(%{email: email, creator: creator?})
     |> User.validate_email()
     |> Repo.insert()
   end

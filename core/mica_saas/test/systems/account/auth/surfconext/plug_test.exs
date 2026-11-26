@@ -117,7 +117,8 @@ defmodule MicaSaas.Systems.Account.Auth.Surfconext.CallbackController.Test do
       assert redirected_to(conn) == "/user/onboarding"
 
       assert [user] = Mica.Repo.all(Systems.Account.User)
-      assert user.verified_at == nil
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
       assert user.confirmed_at != nil
       assert user.creator == true
     end
