@@ -113,3 +113,51 @@ msgstr "De onderzoeker heeft je bijdrage afgewezen."
 #, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.declined.title"
 msgstr "Bijdrage afgewezen"
+
+#, elixir-autogen, elixir-format
+msgid "license.given.cta"
+msgstr "Naar projecten"
+
+#, elixir-autogen, elixir-format
+msgid "license.given.pay_in.description"
+msgstr "Je kunt tot dan pay-ins doen voor studies. Voordat de licentie afloopt, krijg je een herinnering."
+
+#, elixir-autogen, elixir-format
+msgid "license.given.publish.description"
+msgstr "Je kunt tot dan studies publiceren. Voordat de licentie afloopt, krijg je een herinnering."
+
+#, elixir-autogen, elixir-format
+msgid "license.given.title"
+msgstr "Je hebt de licentie %{license} tot %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "license.helpdesk.cta"
+msgstr "Naar de helpdesk"
+
+#, elixir-autogen, elixir-format
+msgid "license.pay_in"
+msgstr "Pay-in"
+
+#, elixir-autogen, elixir-format
+msgid "license.publish"
+msgstr "Publiceren"
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.description"
+msgstr "Vraag support via de helpdesk om je licentie te verlengen."
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.title"
+msgstr "Je licentie %{license} loopt af op %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.pay_in.description"
+msgstr "Nieuwe pay-ins worden geweigerd. Lopende studies lopen gewoon door. Vraag support via de helpdesk als je de licentie weer nodig hebt."
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.publish.description"
+msgstr "Je kunt geen nieuwe studies publiceren. Lopende studies lopen gewoon door. Vraag support via de helpdesk als je de licentie weer nodig hebt."
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.title"
+msgstr "Je licentie %{license} staat uit"

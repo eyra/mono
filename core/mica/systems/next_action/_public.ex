@@ -87,6 +87,15 @@ defmodule Systems.NextAction.Public do
     |> Enum.map(&to_view_model(&1))
   end
 
+  @doc "The ids of the users who have the next action of type `action` with `key`."
+  def list_user_ids(action, key) when is_atom(action) do
+    action_string = to_string(action)
+
+    from(na in NextAction.Model, where: na.action == ^action_string, select: na.user_id)
+    |> where_key_is(key)
+    |> Repo.all()
+  end
+
   @doc """
   Creates a next action for the audience.
 

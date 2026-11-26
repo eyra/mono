@@ -209,6 +209,5 @@ defmodule Systems.Admin.LicensesModalViewBuilder do
   defp format_date(%DateTime{} = datetime),
     do: datetime |> License.Public.today() |> format_date()
 
-  defp format_date(%Date{} = date),
-    do: date |> Timex.format!("%e %b %Y", :strftime) |> String.trim()
+  defp format_date(%Date{} = date), do: License.Public.format_date(date)
 end

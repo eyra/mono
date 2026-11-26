@@ -114,3 +114,51 @@ msgstr "Jūsų indėlis buvo atmestas."
 #, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.declined.title"
 msgstr "Indėlis atmestas"
+
+#, elixir-autogen, elixir-format
+msgid "license.given.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.given.pay_in.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.given.publish.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.given.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.helpdesk.cta"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.pay_in"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.publish"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.pay_in.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.publish.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.title"
+msgstr ""

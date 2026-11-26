@@ -24,6 +24,7 @@ defmodule Mica.Systems do
       Systems.Feldspar.System,
       Systems.Home.System,
       Systems.Lab.System,
+      Systems.License.System,
       Systems.Manual.System,
       Systems.NextAction.System,
       Systems.Payment.System,
