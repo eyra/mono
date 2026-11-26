@@ -2,8 +2,6 @@ defmodule Systems.Admin.AccountPanel do
   use Systems.Admin.Panel
   use Gettext, backend: MicaWeb.Gettext
 
-  alias Frameworks.Concept.LiveContext
-  alias Systems.Account
   alias Systems.Admin
 
   @impl true
@@ -17,9 +15,4 @@ defmodule Systems.Admin.AccountPanel do
 
   @impl true
   def live_view, do: Admin.AccountView
-
-  @impl true
-  def live_context(context) do
-    LiveContext.extend(context, %{creators: Account.Public.list_creators()})
-  end
 end

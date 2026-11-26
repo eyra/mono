@@ -19,7 +19,7 @@ defmodule Systems.Org.ContentPageBuilder do
     live_context =
       LiveContext.new(%{
         node_id: node_id,
-        current_user: user,
+        current_user_id: user.id,
         locale: locale,
         is_admin?: is_admin?
       })

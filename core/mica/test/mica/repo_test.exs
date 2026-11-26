@@ -53,6 +53,67 @@ defmodule Mica.RepoTest do
     end
   end
 
+  describe "after_commit/1" do
+    defp register(multi, name) do
+      test_pid = self()
+
+      Multi.run(multi, name, fn _, _ ->
+        {:ok, Repo.after_commit(fn -> send(test_pid, {:after_commit, name}) end)}
+      end)
+    end
+
+    test "runs the functions in order once the transaction commits" do
+      {:ok, _} =
+        Multi.new()
+        |> register(:first)
+        |> register(:second)
+        |> Repo.commit()
+
+      assert {:messages, [{:after_commit, :first}, {:after_commit, :second}]} =
+               Process.info(self(), :messages)
+    end
+
+    test "drops the functions when a step fails" do
+      {:error, :fail, _, _} =
+        Multi.new()
+        |> register(:first)
+        |> Multi.run(:fail, fn _, _ -> {:error, :rollback} end)
+        |> Repo.commit()
+
+      {:ok, _} = Repo.commit(Multi.new())
+
+      refute_received {:after_commit, _}
+    end
+
+    test "drops the functions when a step raises" do
+      assert_raise RuntimeError, fn ->
+        Multi.new()
+        |> register(:first)
+        |> Multi.run(:raise, fn _, _ -> raise "rollback" end)
+        |> Repo.commit()
+      end
+
+      {:ok, _} = Repo.commit(Multi.new())
+
+      refute_received {:after_commit, _}
+    end
+
+    test "a nested commit runs its functions only after the outer commit" do
+      {:ok, _} =
+        Multi.new()
+        |> register(:outer)
+        |> Multi.run(:nested, fn _, _ ->
+          result = Multi.new() |> register(:nested) |> Repo.commit()
+          refute_received {:after_commit, _}
+          result
+        end)
+        |> Repo.commit()
+
+      assert_received {:after_commit, :outer}
+      assert_received {:after_commit, :nested}
+    end
+  end
+
   describe "orphan?" do
     test "returns true if the entity is not referred to by any other entity" do
       node = Factories.insert!(:org_node, %{identifier: ["orphan_test_node"]})

@@ -10,6 +10,8 @@ defmodule Mica.Repo do
 
   require Logger
 
+  @after_commit_key :mica_repo_after_commit
+
   def multi_update(multi, name, changeset) do
     multi
     |> multi_update_guard(name, changeset.data)
@@ -118,6 +120,9 @@ defmodule Mica.Repo do
   and you want to ensure they are only dispatched after the database changes
   are committed.
 
+  Functions registered with `after_commit/1` during the transaction run the
+  same way: after it commits, never after a rollback.
+
   ## Examples
 
       Multi.new()
@@ -145,6 +150,49 @@ defmodule Mica.Repo do
   @spec commit(Ecto.Multi.t(), Keyword.t()) ::
           {:ok, any()} | {:error, any()} | Ecto.Multi.failure()
   def commit(multi, opts \\ []) do
+    pending = Process.put(@after_commit_key, []) || []
+
+    try do
+      commit_transaction(multi, opts)
+    catch
+      kind, reason ->
+        Process.put(@after_commit_key, pending)
+        :erlang.raise(kind, reason, __STACKTRACE__)
+    else
+      {:ok, _} = result ->
+        run_after_commit(pending)
+        result
+
+      error ->
+        Process.put(@after_commit_key, pending)
+        error
+    end
+  end
+
+  @doc """
+  Runs `fun` once the outermost `commit/2` of this process has committed.
+
+  Call it from a step of the Multi, so it is only registered when that step runs.
+  A rollback drops it. A `commit/2` nested in another transaction hands its
+  functions to the outer one, so they run only when the outer one commits too.
+  """
+  def after_commit(fun) when is_function(fun, 0) do
+    Process.put(@after_commit_key, [fun | Process.get(@after_commit_key, [])])
+    :ok
+  end
+
+  defp run_after_commit(pending) do
+    committed = Process.get(@after_commit_key, [])
+
+    if in_transaction?() do
+      Process.put(@after_commit_key, committed ++ pending)
+    else
+      Process.delete(@after_commit_key)
+      committed |> Enum.reverse() |> Enum.each(& &1.())
+    end
+  end
+
+  defp commit_transaction(multi, opts) do
     # credo:disable-for-next-line Credo.Check.Warning.NoRepoTransaction
     case transaction(multi, opts) do
       {:ok, result} ->

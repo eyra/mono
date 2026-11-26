@@ -32,7 +32,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
     |> Enum.map(&create_tab(&1, vm, assigns))
   end
 
-  defp create_tab(:concept, _, %{current_user: user}) do
+  defp create_tab(:concept, _, %{current_user: %{id: user_id}}) do
     title = dgettext("eyra-onyx", "concept.tab.title")
     concepts = Ontology.Public.list_concepts([:entity])
 
@@ -42,7 +42,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
         Onyx.ConceptTab,
         title: title,
         concepts: concepts,
-        user: user,
+        user_id: user_id,
         depth: 1
       )
 
@@ -57,7 +57,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
     }
   end
 
-  defp create_tab(:predicate, _, %{current_user: user}) do
+  defp create_tab(:predicate, _, %{current_user: %{id: user_id}}) do
     title = dgettext("eyra-onyx", "predicate.tab.title")
     predicates = Ontology.Public.list_predicates([:entity, :subject, :type, :object])
 
@@ -67,7 +67,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
         Onyx.PredicateTab,
         title: title,
         predicates: predicates,
-        user: user,
+        user_id: user_id,
         depth: 1
       )
 
@@ -82,7 +82,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
     }
   end
 
-  defp create_tab(:annotation, %{entities: entities}, %{current_user: user}) do
+  defp create_tab(:annotation, %{entities: entities}, %{current_user: %{id: user_id}}) do
     title = dgettext("eyra-onyx", "annotation.tab.title")
 
     annotations =
@@ -94,7 +94,7 @@ defmodule Next.Systems.Onyx.LandingPageBuilder do
         Onyx.AnnotationTab,
         title: title,
         annotations: annotations,
-        user: user,
+        user_id: user_id,
         depth: 1
       )
 

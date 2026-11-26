@@ -13,7 +13,6 @@ defmodule Systems.Pool.ContentPageBuilder do
     live_context =
       LiveContext.new(%{
         pool_id: pool_id,
-        current_user: user,
         locale: locale,
         is_admin?: is_admin?
       })
