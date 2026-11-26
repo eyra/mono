@@ -61,6 +61,7 @@ defmodule Systems.Workflow.ToolRefModel do
 
   # Task lists only need the tool record to choose and launch its view.
   # Loading each tool's full graph makes that context part of the LiveView session.
+  # A tool view that shows the tool's nested data loads it itself.
   def preload_graph(:tool), do: @tools
 
   def preload_graph(tool_id_field) when is_atom(tool_id_field) do
