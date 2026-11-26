@@ -12,7 +12,8 @@ defmodule Next.Systems.Announcement.ComposePageBuilder do
   `compose_notice` (`:already_published`, `:changed_since_loaded`,
   `:audience_changed` or `:no_recipients` after a refused save or publish).
   A published one has no audience to choose, only `published`: what saving it
-  does, and the notice of a refused save.
+  does, the notice of a refused save and the button to copy it as a new
+  announcement.
 
   Only system admins with the `announcements` flag on (`allowed?`) get the
   audience or `published`.
@@ -34,7 +35,7 @@ defmodule Next.Systems.Announcement.ComposePageBuilder do
       heading: heading(announcement),
       form: form_labels(),
       audience: audience(allowed? and not published?(announcement), assigns),
-      published: published(allowed? and published?(announcement), assigns)
+      published: published(allowed? and published?(announcement), announcement, assigns)
     }
   end
 
@@ -63,12 +64,20 @@ defmodule Next.Systems.Announcement.ComposePageBuilder do
     }
   end
 
-  defp published(false, _assigns), do: nil
+  defp published(false, _announcement, _assigns), do: nil
 
-  defp published(true, assigns) do
+  defp published(true, %Announcement.Model{id: id}, assigns) do
     %{
       text: dgettext("eyra-announcement", "form.published.notice"),
-      notice: notice(Map.get(assigns, :compose_notice), 0)
+      notice: notice(Map.get(assigns, :compose_notice), 0),
+      copy_button: copy_button(id)
+    }
+  end
+
+  defp copy_button(id) do
+    %{
+      action: %{type: :redirect, to: Announcement.Private.copy_path(id)},
+      face: %{type: :secondary, label: dgettext("eyra-announcement", "form.copy.button")}
     }
   end
 

@@ -1,5 +1,8 @@
 defmodule Next.Systems.WellKnown.System do
-  @moduledoc "The `/.well-known` files of Next's domains, such as the iOS app-site association."
+  @moduledoc """
+  The `/.well-known` files of Next's domains: the iOS app-site association and
+  the Android Digital Asset Links.
+  """
   use Mica.System
 
   def override_routes do
@@ -11,6 +14,8 @@ defmodule Next.Systems.WellKnown.System do
           :apple_app_site_association,
           as: :well_known
         )
+
+        get("/.well-known/assetlinks.json", WellKnown.Controller, :assetlinks, as: :well_known)
       end
     end
   end

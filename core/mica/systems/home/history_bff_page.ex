@@ -3,5 +3,5 @@ defmodule Systems.Home.HistoryBFFPage do
   @behaviour Systems.BFF.Page
 
   @impl true
-  defdelegate blocks(user), to: Systems.Home.BFFPage, as: :history
+  def view_model(user, _params), do: {Systems.Home.BFFPage.history(user), []}
 end

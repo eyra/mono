@@ -70,6 +70,12 @@ defmodule Systems.Desktop.Section do
   @doc "Where the section goes relative to Recent items. Defaults to `:after_recent_items`."
   @callback placement() :: placement()
 
+  @doc """
+  The number shown behind the section's title, like the one behind Recent
+  items. `nil`, the default, shows no number.
+  """
+  @callback count(vm :: map()) :: non_neg_integer() | nil
+
   @doc "Optional navigation from a preview section to its full list."
   @callback full_list(vm :: map()) :: %{label: String.t(), to: String.t()} | nil
 
@@ -85,12 +91,15 @@ defmodule Systems.Desktop.Section do
       def placement, do: :after_recent_items
 
       @impl Systems.Desktop.Section
+      def count(_vm), do: nil
+
+      @impl Systems.Desktop.Section
       def full_list(_vm), do: nil
 
       @impl Systems.Desktop.Section
       def full_view_model(_user, _assigns), do: nil
 
-      defoverridable placement: 0, full_list: 1, full_view_model: 2
+      defoverridable placement: 0, count: 1, full_list: 1, full_view_model: 2
     end
   end
 end

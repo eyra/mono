@@ -44,14 +44,23 @@ defmodule Next.Systems.BFF.PageControllerTest do
   end
 
   # An online advert in Panl that is open to the user; reward_value 0 skips the funding check.
-  defp create_panl_advert(panl) do
+  defp create_panl_advert(panl, opts \\ []) do
     advert = Advert.Factories.create_advert(Factories.insert!(:creator), :accepted, 1)
     {:ok, advert} = advert |> Ecto.Changeset.change(status: :online) |> Repo.update()
 
     {:ok, _} =
       advert.submission
-      |> Ecto.Changeset.change(reward_value: 0, pool_id: panl.id)
+      |> Ecto.Changeset.change(
+        reward_value: 0,
+        pool_id: panl.id,
+        submitted_at: opts[:submitted_at]
+      )
       |> Repo.update()
+
+    if title = opts[:title] do
+      %{promotion: promotion} = Repo.preload(advert, :promotion)
+      promotion |> Ecto.Changeset.change(title: title) |> Repo.update!()
+    end
 
     advert
   end
@@ -94,30 +103,53 @@ defmodule Next.Systems.BFF.PageControllerTest do
 
       assert types(page) == [
                "next_best_action",
-               "section_begin",
                "section",
                "reward_amount",
                "reward_amount",
                "reward_amount",
-               "section_end",
-               "section_begin",
                "section",
                "advert",
-               "section_end",
-               "section_begin",
                "section",
-               "participation",
-               "section_end"
+               "section",
+               "participation"
              ]
 
-      %{"blocks" => blocks} = page
+      %{"blocks" => blocks, "markup" => markup} = page
+      participation_id = "participation/assignment/#{assignment_id}"
 
-      {groups, content} =
-        Enum.split_with(blocks, &(&1["type"] in ["section_begin", "section_end"]))
+      assert [
+               "next-best-action",
+               "rewards",
+               "rewards-pending",
+               "rewards-approved",
+               "rewards-rejected",
+               "marketplace",
+               "advert/promotion/" <> _,
+               "marketplace-see-all",
+               "history",
+               ^participation_id
+             ] = Enum.map(blocks, & &1["id"])
 
-      assert Enum.uniq(groups) == [
-               %{"type" => "section_begin", "props" => %{"border" => true}},
-               %{"type" => "section_end", "props" => %{}}
+      # As on the web home, the rewards, the marketplace and the history each sit in a box.
+      assert markup == [
+               %{
+                 "kind" => "border",
+                 "start" => "rewards",
+                 "end" => "rewards-rejected",
+                 "props" => %{}
+               },
+               %{
+                 "kind" => "border",
+                 "start" => "marketplace",
+                 "end" => "marketplace-see-all",
+                 "props" => %{}
+               },
+               %{
+                 "kind" => "border",
+                 "start" => "history",
+                 "end" => participation_id,
+                 "props" => %{}
+               }
              ]
 
       assert [
@@ -143,9 +175,10 @@ defmodule Next.Systems.BFF.PageControllerTest do
                  }
                },
                %{"props" => %{"to" => "/promotion/" <> _, "info" => "Duration: " <> _}},
+               %{"props" => %{"title" => "See all", "to" => "/bff/page/marketplace"}},
                %{"props" => %{"title" => "History", "count" => 1}},
                %{"props" => %{"reward" => "Reward: " <> _, "to" => participation_to}}
-             ] = content
+             ] = blocks
 
       assert {pending, approved, rejected} == {"€2.50", "€12.00", "€3.00"}
       assert participation_to == "/assignment/#{assignment_id}"
@@ -174,10 +207,79 @@ defmodule Next.Systems.BFF.PageControllerTest do
              ] = for(%{"type" => "section", "props" => props} <- home["blocks"], do: props)
 
       assert types(conn |> get("/bff/page/marketplace") |> json_response(200)) ==
-               ["section" | List.duplicate("advert", 4)]
+               ["section", "filter", "search" | List.duplicate("advert", 4)]
 
       assert types(conn |> get("/bff/page/history") |> json_response(200)) ==
                ["section" | List.duplicate("participation", 4)]
+    end
+
+    test "the marketplace filters on the year a study was published and searches its title, as on the web, through links to itself",
+         %{conn: conn, user: user} do
+      {panl, _assignment} = home_with_everything(user)
+      create_panl_advert(panl, title: "Sleep and screens", submitted_at: ~N[2024-06-15 12:00:00])
+      create_panl_advert(panl, title: "Screens at night", submitted_at: ~N[2025-03-01 09:00:00])
+      this_year = "#{NaiveDateTime.utc_now().year}"
+      page = "/bff/page/marketplace"
+
+      marketplace = fn query ->
+        %{"blocks" => blocks} = conn |> get(page <> query) |> json_response(200)
+        blocks
+      end
+
+      assert [
+               %{"props" => %{"title" => "Marketplace", "count" => 3}},
+               %{"type" => "filter", "props" => %{"label" => "Filter:", "options" => options}},
+               %{"type" => "search", "props" => search} | adverts
+             ] = marketplace.("")
+
+      assert options == [
+               %{"label" => "All", "to" => page, "selected" => true},
+               %{"label" => this_year, "to" => "#{page}?year=#{this_year}", "selected" => false},
+               %{"label" => "2025", "to" => "#{page}?year=2025", "selected" => false},
+               %{"label" => "2024", "to" => "#{page}?year=2024", "selected" => false}
+             ]
+
+      assert search == %{"name" => "query", "to" => page, "placeholder" => "Search"}
+      assert length(adverts) == 3
+
+      # Each link keeps the other param: a year keeps the search, the search keeps the year.
+      assert [
+               %{"props" => %{"count" => 1}},
+               %{"props" => %{"options" => [all | _] = options}},
+               %{"props" => search},
+               %{"type" => "advert", "props" => %{"title" => "Screens at night"}}
+             ] = marketplace.("?year=2025&query=+screens+")
+
+      assert all == %{"label" => "All", "to" => "#{page}?query=screens", "selected" => false}
+
+      assert %{"label" => "2025", "to" => "#{page}?query=screens&year=2025", "selected" => true} in options
+
+      assert search == %{
+               "name" => "query",
+               "to" => "#{page}?year=2025",
+               "placeholder" => "Search",
+               "value" => "screens"
+             }
+
+      assert [%{"props" => %{"count" => 0}}, _filter, _search, no_studies] =
+               marketplace.("?year=2025&query=sleep")
+
+      assert no_studies == %{
+               "id" => "marketplace-none",
+               "type" => "section",
+               "props" => %{"body" => "No studies found."}
+             }
+
+      # A year the marketplace doesn't have, or one that isn't a year, counts as All.
+      for query <- ["?year=1999", "?year=next", "?year=&query="] do
+        assert [%{"props" => %{"count" => 3}} | _] = marketplace.(query)
+      end
+
+      # The search text is encoded in the links.
+      assert [_heading, %{"props" => %{"options" => [all | _]}} | _] =
+               marketplace.("?query=c%2B%2B+%26+more")
+
+      assert all["to"] == "#{page}?query=c%2B%2B%20%26%20more"
     end
 
     test "an advert without a title shows with an empty title on home and the marketplace page",
@@ -201,6 +303,24 @@ defmodule Next.Systems.BFF.PageControllerTest do
       assert Enum.reject(titles.(home), &is_binary/1) == []
     end
 
+    # Opening a study's content page makes its participant a tester too: two role rows.
+    test "a study the user takes part in and tests shows once on home and the history",
+         %{conn: conn, user: user} do
+      {_panl, assignment} = home_with_everything(user)
+      Assignment.Public.ensure_tester(assignment, user)
+
+      for page <- ["home", "history"] do
+        participations =
+          conn
+          |> get("/bff/page/#{page}")
+          |> json_response(200)
+          |> types()
+          |> Enum.count(&(&1 == "participation"))
+
+        assert participations == 1, page
+      end
+    end
+
     test "without panl_post_launch home shows only the next action, history and marketplace nothing",
          %{conn: conn, user: user} do
       home_with_everything(user)
@@ -210,12 +330,14 @@ defmodule Next.Systems.BFF.PageControllerTest do
                conn |> get("/bff/page/home") |> json_response(200)
 
       for page <- ["history", "marketplace"] do
-        assert %{"blocks" => []} = conn |> get("/bff/page/#{page}") |> json_response(200)
+        assert %{"blocks" => [], "markup" => []} =
+                 conn |> get("/bff/page/#{page}") |> json_response(200)
       end
     end
 
     test "home leaves out what the user doesn't have", %{conn: conn} do
-      assert %{"blocks" => []} = conn |> get("/bff/page/home") |> json_response(200)
+      assert %{"blocks" => [], "markup" => []} =
+               conn |> get("/bff/page/home") |> json_response(200)
     end
 
     test "a page the spec doesn't list is not found", %{conn: conn} do

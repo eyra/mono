@@ -43,6 +43,19 @@ defmodule Systems.Feldspar.ToolViewBuilderTest do
     end
   end
 
+  describe "participant_task" do
+    setup do
+      tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})
+      %{tool: tool}
+    end
+
+    test "is nil when the host has none", %{tool: tool} do
+      vm = Feldspar.ToolViewBuilder.view_model(tool, build_assigns("Test App", nil))
+
+      assert vm.app_view.options[:participant_task] == nil
+    end
+  end
+
   describe "upload_context participant" do
     setup do
       tool = Factories.insert!(:feldspar_tool, %{archive_ref: "https://example.com/app"})

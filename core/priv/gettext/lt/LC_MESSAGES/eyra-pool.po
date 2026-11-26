@@ -130,3 +130,7 @@ msgstr "Prisijunkite"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "Rodyti visus"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "Tyrimų nerasta."

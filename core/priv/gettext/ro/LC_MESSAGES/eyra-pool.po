@@ -130,3 +130,7 @@ msgstr "Înscrieți-vă"
 #, elixir-autogen, elixir-format
 msgid "marketplace.see_all"
 msgstr "Vezi toate"
+
+#, elixir-autogen, elixir-format
+msgid "marketplace.filter.none"
+msgstr "Nu au fost găsite studii."
