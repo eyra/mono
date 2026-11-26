@@ -1,14 +1,14 @@
 defmodule Mica.RegistryRefsMigrationTest do
   @moduledoc """
   code-registry, release 1: the sync trigger, the checks and the indexes of
-  `20261117140000`..`20261117140300`, and the backfill. Raw SQL, because these test
+  `20261127090000`..`20261127090300`, and the backfill. Raw SQL, because these test
   what the database does whichever code writes.
   """
   use Mica.DataCase, async: false
 
-  @backfill_version 20_261_117_140_200
+  @backfill_version 20_261_127_090_200
   @backfill Mica.Repo.Migrations.BackfillRegistryRefs
-  @backfill_file "priv/repo/migrations/20261117140200_backfill_registry_refs.exs"
+  @backfill_file "priv/repo/migrations/20261127090200_backfill_registry_refs.exs"
 
   setup_all do
     unless Code.ensure_loaded?(@backfill), do: Code.compile_file(@backfill_file)
