@@ -19,7 +19,6 @@ defmodule Systems.Account.User do
     field(:password, :string, virtual: true)
     field(:hashed_password, :string)
     field(:confirmed_at, :naive_datetime)
-    field(:verified_at, :naive_datetime)
     field(:displayname, :string)
     field(:visited_pages, {:array, :string})
     field(:creator, :boolean)
@@ -39,7 +38,6 @@ defmodule Systems.Account.User do
           password: String.t() | nil,
           hashed_password: String.t() | nil,
           confirmed_at: NaiveDateTime.t() | nil,
-          verified_at: NaiveDateTime.t() | nil,
           displayname: String.t() | nil,
           visited_pages: list(String.t()) | nil,
           creator: boolean() | nil,
@@ -191,7 +189,7 @@ defmodule Systems.Account.User do
 
   def admin_changeset(user, attrs) do
     user
-    |> cast(attrs, [:creator, :verified_at, :confirmed_at])
+    |> cast(attrs, [:creator, :confirmed_at])
   end
 
   @doc """
@@ -224,7 +222,7 @@ defmodule Systems.Account.User do
   """
   def sso_changeset(user, attrs) do
     user
-    |> cast(attrs, [:email, :displayname, :creator, :confirmed_at, :verified_at])
+    |> cast(attrs, [:email, :displayname, :creator, :confirmed_at])
     |> cast_assoc(:profile)
     |> put_change(:hashed_password, "no-password-set")
     |> unique_constraint(:email)

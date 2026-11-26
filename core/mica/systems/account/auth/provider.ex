@@ -26,7 +26,6 @@ defmodule Systems.Account.Auth.Provider do
           optional(:displayname) => String.t(),
           optional(:creator) => boolean(),
           optional(:confirmed_at) => NaiveDateTime.t(),
-          optional(:verified_at) => NaiveDateTime.t(),
           optional(:fullname) => String.t(),
           optional(:title) => String.t(),
           optional(:photo_url) => String.t()

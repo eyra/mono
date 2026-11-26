@@ -21,6 +21,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
 
   setup %{conn: conn} do
     set_feature_flag(:announcements, true)
+    set_feature_flag(:panl_post_launch, true)
     {:ok, conn: conn, user: admin} = login_as_admin(%{conn: conn})
     %{conn: conn, admin: admin}
   end
@@ -416,7 +417,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     } do
       draft = draft!(admin)
       view = open_existing(conn, draft)
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
       {:ok, _} = Announcement.Public.publish_announcement(draft, [], nil, 2)
 
       publish(view, %{@attrs | "title" => "Changed after publish"}, "<div>X</div>")
@@ -434,11 +435,14 @@ defmodule Next.Systems.Announcement.ComposePageTest do
 
   describe "publishing" do
     setup do
-      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      publisher = Factories.insert!(:creator, %{email: "anna@example.org"})
+      Factories.insert!(:license, %{user: publisher, license: :publish})
+      payer = Factories.insert!(:creator, %{email: "bram@example.org"})
+      Factories.insert!(:license, %{user: payer, license: :pay_in})
 
       %{
-        verified: Factories.insert!(:creator, %{email: "anna@example.org", verified_at: now}),
-        unverified: Factories.insert!(:creator, %{email: "bram@example.org"}),
+        publisher: publisher,
+        payer: payer,
         deactivated:
           Factories.insert!(:creator, %{email: "carla@example.org", confirmed_at: nil}),
         member: Factories.insert!(:member, %{email: "dirk@example.org"})
@@ -468,7 +472,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     test "Verified narrows the count", %{conn: conn} do
       view = open_new(conn)
 
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
 
       assert recipient_count_text(view) =~ "1 creator will receive this announcement."
     end
@@ -485,17 +489,17 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     test "a chosen filter is shown as chosen", %{conn: conn} do
       view = open_new(conn)
 
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
 
-      assert has_element?(view, "[data-testid='audience-filter-verified'] .bg-primary")
-      refute has_element?(view, "[data-testid='audience-filter-unverified'] .bg-primary")
+      assert has_element?(view, "[data-testid='audience-filter-publish'] .bg-primary")
+      refute has_element?(view, "[data-testid='audience-filter-pay_in'] .bg-primary")
     end
 
     test "choosing a filter again drops it", %{conn: conn} do
       view = open_new(conn)
 
-      toggle_filter(view, "verified")
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
+      toggle_filter(view, "publish")
 
       assert recipient_count_text(view) =~ "2 creators will receive this announcement."
     end
@@ -519,10 +523,10 @@ defmodule Next.Systems.Announcement.ComposePageTest do
 
     test "publishes to the chosen audience and goes back to the list", %{
       conn: conn,
-      unverified: unverified
+      payer: payer
     } do
       view = open_new(conn)
-      toggle_filter(view, "unverified")
+      toggle_filter(view, "pay_in")
 
       publish(view, @attrs, "<div>Text</div>")
 
@@ -531,17 +535,17 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       assert [%Announcement.Model{id: id, published_at: %DateTime{}}] =
                Repo.all(Announcement.Model)
 
-      assert stored_recipient_ids() == [[unverified.id]]
+      assert stored_recipient_ids() == [[payer.id]]
       assert_enqueued(worker: Announcement.DeliverJob, args: %{"announcement_id" => id})
     end
 
     test "the browser can't choose the recipients", %{
       conn: conn,
-      verified: verified,
+      publisher: publisher,
       member: member
     } do
       view = open_new(conn)
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
 
       publish(
         view,
@@ -549,7 +553,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
         "<div>Text</div>"
       )
 
-      assert stored_recipient_ids() == [[verified.id]]
+      assert stored_recipient_ids() == [[publisher.id]]
     end
 
     test "with nobody in the audience, Publish says what to change and publishes nothing", %{
@@ -619,13 +623,13 @@ defmodule Next.Systems.Announcement.ComposePageTest do
 
     test "when the audience emptied since it was shown, nothing is published", %{
       conn: conn,
-      unverified: unverified
+      payer: payer
     } do
       view = open_new(conn)
       search(view, "bram")
       assert recipient_count_text(view) =~ "1 creator will receive this announcement."
 
-      unverified |> Ecto.Changeset.change(confirmed_at: nil) |> Repo.update!()
+      payer |> Ecto.Changeset.change(confirmed_at: nil) |> Repo.update!()
       publish(view, @attrs, "<div>Text</div>", "1")
 
       assert [%Announcement.Model{published_at: nil}] = Repo.all(Announcement.Model)
@@ -643,7 +647,7 @@ defmodule Next.Systems.Announcement.ComposePageTest do
       view = open_new(conn)
 
       assert has_element?(view, "button[data-testid='publish-announcement-button'][value='2']")
-      toggle_filter(view, "verified")
+      toggle_filter(view, "publish")
       assert has_element?(view, "button[data-testid='publish-announcement-button'][value='1']")
     end
 
@@ -769,7 +773,6 @@ defmodule Next.Systems.Announcement.ComposePageTest do
     } do
       [%{read_at: %DateTime{}} = recipient] = Announcement.Public.list_recipients(original)
       view = open_copy(conn, original)
-      toggle_filter(view, "unverified")
 
       publish(
         view,

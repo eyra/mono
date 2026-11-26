@@ -1,4 +1,7 @@
 defmodule Mica.Release do
+  alias Systems.Account
+  alias Systems.License
+
   @app Mica.Env.app()
 
   @doc "Runs the migrations of Mica and the SaaS's systems (`Mica.SaaS.migrations_paths/0`)."
@@ -37,7 +40,8 @@ defmodule Mica.Release do
   end
 
   @doc """
-  Seeds a test creator account for Playwright tests.
+  Seeds a test creator account for Playwright tests, with a Publish license.
+  An existing test creator whose Publish license has ended gets a new one.
   Only use on dev/test environments, never on production.
   """
   def seed_test_user do
@@ -45,41 +49,52 @@ defmodule Mica.Release do
 
     {:ok, _, _} =
       Ecto.Migrator.with_repo(Mica.Repo, fn _repo ->
-        alias Systems.Account
-
-        email = "test-creator@eyra.co"
-        password = "TestCreator123!"
-
-        case Mica.Repo.get_by(Account.User, email: email) do
-          nil ->
-            now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-            hashed_password = Bcrypt.hash_pwd_salt(password)
-
-            {:ok, user} =
-              %Account.User{}
-              |> Ecto.Changeset.change(%{
-                email: email,
-                hashed_password: hashed_password,
-                creator: true,
-                confirmed_at: now,
-                verified_at: now
-              })
-              |> Mica.Repo.insert()
-
-            IO.puts("Created test user: #{user.email}")
-
-          existing ->
-            IO.puts("Test user already exists: #{existing.email}")
-        end
+        ensure_test_user(Mica.Repo.get_by(Account.User, email: test_user_email()))
       end)
   end
+
+  @doc "The email address of the test creator `seed_test_user/0` seeds."
+  def test_user_email, do: "test-creator@eyra.co"
+
+  defp ensure_test_user(nil) do
+    {:ok, %{user: user}} =
+      Ecto.Multi.new()
+      |> Ecto.Multi.insert(:user, test_user_changeset(test_user_email()))
+      |> Ecto.Multi.run(:license, fn _repo, %{user: user} -> give_publish(user) end)
+      |> Mica.Repo.commit()
+
+    IO.puts("Created test user: #{user.email}")
+  end
+
+  defp ensure_test_user(existing) do
+    ensure_publish(existing)
+    IO.puts("Test user already exists: #{existing.email}")
+  end
+
+  defp test_user_changeset(email) do
+    Ecto.Changeset.change(%Account.User{}, %{
+      email: email,
+      hashed_password: Bcrypt.hash_pwd_salt("TestCreator123!"),
+      creator: true,
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    })
+  end
+
+  defp ensure_publish(user) do
+    unless License.Public.active?(user, :publish), do: {:ok, _} = give_publish(user)
+  end
+
+  defp give_publish(user),
+    do: License.Public.grant(user, :publish, License.Public.end_date(:year_1))
 
   defp repos do
     Application.fetch_env!(@app, :ecto_repos)
   end
 
+  # A release task starts no apps; license end dates need the time zone data.
   defp load_app do
     :ssl.start()
     Application.load(@app)
+    {:ok, _} = Application.ensure_all_started(:tzdata)
   end
 end

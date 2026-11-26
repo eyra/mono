@@ -91,6 +91,7 @@
     Systems.Lab.ReservationModel,
     Systems.Lab.TimeSlotModel,
     Systems.Lab.ToolModel,
+    Systems.License.Model,
     Systems.Manual.ChapterModel,
     Systems.Manual.Model,
     Systems.Manual.PageModel,
