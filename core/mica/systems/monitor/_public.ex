@@ -8,6 +8,11 @@ defmodule Systems.Monitor.Public do
 
   require Logger
 
+  # Identifier keys whose value points at one person: a user, or a model with one
+  # row per user. They stay out of the telemetry metadata, so a metric doesn't get
+  # a series per participant.
+  @person_keys ["user", "account_features"]
+
   def log(_, opts \\ [])
 
   def log(tuple, opts) when is_tuple(tuple) do
@@ -31,7 +36,8 @@ defmodule Systems.Monitor.Public do
   @doc """
   Adds the event to the Multi. Once it commits, the event is also emitted as the
   telemetry event `[:monitor, :event, :count]` with the value as `count` and the
-  identifier's keys as metadata, without `user` (see `Mica.AppSignal.TelemetryHandler`).
+  identifier's keys as metadata, without the keys that point at one person, such as
+  `user` and `account_features` (see `Mica.AppSignal.TelemetryHandler`).
   """
   def multi_log(multi, event, opts) when is_list(event) do
     Logger.info("MONITOR: #{inspect(event)}", ansi_color: :magenta)
@@ -51,7 +57,7 @@ defmodule Systems.Monitor.Public do
   defp telemetry_metadata(event) do
     for entry <- event,
         [key, value] <- [String.split(entry, "=", parts: 2)],
-        key != "user",
+        key not in @person_keys,
         into: %{},
         do: {key, value}
   end

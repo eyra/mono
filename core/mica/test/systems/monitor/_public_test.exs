@@ -124,6 +124,15 @@ defmodule Systems.Monitor.PublicTest do
       refute Map.has_key?(metadata, "user")
     end
 
+    test "log/2 emits no key that identifies the participant" do
+      features = %Systems.Account.FeaturesModel{id: 7, user_id: 3}
+
+      Monitor.Public.log({features, :updated, features.user_id})
+
+      assert_received {:monitor_telemetry, %{count: 1}, metadata}
+      assert metadata == %{"topic" => "updated"}
+    end
+
     test "multi_log/3 emits the value once its transaction commits" do
       multi = Monitor.Public.multi_log(Multi.new(), ["storage=1", "topic=bytes"], value: 1024)
 
