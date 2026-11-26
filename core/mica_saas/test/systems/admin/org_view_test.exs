@@ -25,8 +25,7 @@ defmodule MicaSaas.Systems.Admin.OrgViewTest do
         LiveContext.new(%{
           current_user: user,
           locale: :en,
-          is_admin?: true,
-          governable_orgs: [org]
+          is_admin?: true
         })
 
       conn = ctx[:conn] |> Map.put(:request_path, "/admin/orgs")
@@ -160,8 +159,7 @@ defmodule MicaSaas.Systems.Admin.OrgViewTest do
         LiveContext.new(%{
           current_user: owner,
           locale: :en,
-          is_admin?: false,
-          governable_orgs: [org]
+          is_admin?: false
         })
 
       conn = ctx[:conn] |> Map.put(:request_path, "/admin/orgs")

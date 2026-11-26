@@ -29,17 +29,16 @@ defmodule Systems.Admin.ConfigPageBuilder do
   def view_model(%{id: :singleton}, %{current_user: user} = assigns) do
     locale = Map.get(assigns, :locale, :en)
     is_admin? = Admin.Public.admin?(user)
-    governable_orgs = Org.Public.list_orgs(user, Org.NodeModel.preload_graph(:full))
+    governable_orgs = Org.Public.list_orgs(user)
 
     # Sync NextActions as fallback when opening admin page
     Org.Public.sync_all_domain_match_next_actions(user)
 
     live_context =
       LiveContext.new(%{
-        current_user: user,
+        current_user_id: user.id,
         locale: locale,
-        is_admin?: is_admin?,
-        governable_orgs: governable_orgs
+        is_admin?: is_admin?
       })
 
     %{

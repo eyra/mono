@@ -15,7 +15,7 @@ defmodule Systems.Admin.OrgView do
 
   import Org.ItemView
 
-  def dependencies(), do: [:current_user, :locale, :is_admin?, :governable_orgs]
+  def dependencies(), do: [:current_user, :locale, :is_admin?]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()

@@ -65,6 +65,29 @@ defmodule Next.Systems.Graphite.ToolViewTest do
     end
   end
 
+  describe "rendering from a tool ref id" do
+    test "shows the leaderboard button of a closed tool", %{conn: conn, user: user} do
+      deadline = DateTime.utc_now() |> DateTime.add(-1, :day) |> DateTime.truncate(:second)
+      tool = Factories.insert!(:graphite_tool, %{deadline: deadline})
+      Graphite.Factories.create_leaderboard(tool, %{status: :online})
+      tool_ref = Factories.insert!(:tool_ref, %{graphite_tool: tool})
+
+      conn = conn |> Map.put(:request_path, "/graphite/tool")
+
+      live_context =
+        Frameworks.Concept.LiveContext.new(%{
+          current_user: user,
+          timezone: "UTC",
+          tool_ref_id: tool_ref.id
+        })
+
+      {:ok, _view, html} =
+        live_isolated(conn, Graphite.ToolView, session: %{"live_context" => live_context})
+
+      assert html =~ dgettext("eyra-graphite", "leaderboard.published.message")
+    end
+  end
+
   describe "event handlers" do
     setup do
       tool = Graphite.Factories.create_tool()

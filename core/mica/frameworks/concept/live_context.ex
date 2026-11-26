@@ -5,6 +5,11 @@ defmodule Frameworks.Concept.LiveContext do
   Backed by a map for maximum flexibility - can store any data at any level.
   All contexts are stored under the "live_context" session key.
 
+  The session of an embedded LiveView is in the page's HTML: signed, not
+  encrypted. A context therefore never holds a user or another record with
+  private fields, only its id: `current_user_id` and `tool_ref_id` give the view
+  `current_user` and `tool_ref` (`MicaWeb.Live.Hook.Context` loads them).
+
   ## Two Context Patterns
 
   LiveContext supports two patterns for managing data ownership:
@@ -16,7 +21,6 @@ defmodule Frameworks.Concept.LiveContext do
       context = LiveContext.new(%{
         assignment: assignment,     # Full object
         crew: crew,                 # Full object
-        current_user: user,         # Full object
         user_state_data: data
       })
 
@@ -95,15 +99,15 @@ defmodule Frameworks.Concept.LiveContext do
   @doc """
   Extends a parent context with new data, inheriting all parent values.
 
-  This enables automatic flow of common context data (timezone, current_user, user_state_data)
+  This enables automatic flow of common context data (timezone, current_user_id, user_state_data)
   through the view hierarchy without explicit pass-through at each level.
 
   ## Examples
 
-      # Parent context has timezone, current_user, user_state_data
+      # Parent context has timezone, current_user_id, user_state_data
       parent_context = LiveContext.new(%{
         timezone: "UTC",
-        current_user: user,
+        current_user_id: user.id,
         user_state_data: %{tab: "overview"}
       })
 
@@ -115,7 +119,7 @@ defmodule Frameworks.Concept.LiveContext do
 
       # Result: child_context.data == %{
       #   timezone: "UTC",           # inherited
-      #   current_user: user,        # inherited
+      #   current_user_id: 789,      # inherited
       #   user_state_data: %{...},   # inherited
       #   assignment_id: 123,        # new
       #   crew_id: 456               # new
