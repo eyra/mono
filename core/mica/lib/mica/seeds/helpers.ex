@@ -10,6 +10,7 @@ defmodule Mica.Seeds.Helpers do
   require Logger
 
   alias Systems.Account
+  alias Systems.License
 
   @doc """
   Returns the existing user with the given email or inserts a confirmed user.
@@ -53,12 +54,18 @@ defmodule Mica.Seeds.Helpers do
         displayname: name,
         creator: creator?,
         confirmed_at: now,
-        verified_at: now,
         profile: %Account.UserProfileModel{fullname: name}
       })
       |> Mica.Repo.insert()
 
+    if creator?, do: give_publish_license!(user)
+
     Logger.info("[Seeds] Created user: #{user.email} (creator=#{creator?})")
     user
+  end
+
+  # A seeded creator can publish for a year.
+  defp give_publish_license!(user) do
+    {:ok, _} = License.Public.grant(user, :publish, License.Public.end_date(:year_1))
   end
 end

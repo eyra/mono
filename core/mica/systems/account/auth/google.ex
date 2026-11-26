@@ -28,7 +28,6 @@ defmodule Systems.Account.Auth.Google do
     %{
       email: Map.get(userinfo, "email"),
       displayname: Map.get(userinfo, "given_name", fullname),
-      verified_at: NaiveDateTime.utc_now(),
       fullname: fullname
     }
   end

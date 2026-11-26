@@ -30,6 +30,7 @@ defmodule Next.Frameworks.E2E.Controller do
   alias Systems.Assignment
   alias Systems.Content
   alias Systems.Feldspar
+  alias Systems.License
   alias Systems.Org
   alias Systems.Pool
   alias Systems.Storage
@@ -160,16 +161,17 @@ defmodule Next.Frameworks.E2E.Controller do
   defp get_or_create_researcher do
     case Account.Public.get_user_by_email(@researcher_email) do
       nil -> create_researcher()
-      user -> ensure_verified(user)
+      user -> ensure_publish_license(user)
     end
   end
 
-  defp ensure_verified(%{verified_at: nil} = user) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-    user |> Ecto.Changeset.change(%{verified_at: now}) |> Repo.update!()
-  end
+  defp ensure_publish_license(user) do
+    unless License.Public.active?(user, :publish) do
+      {:ok, _} = License.Public.grant(user, :publish, License.Public.end_date(:year_1))
+    end
 
-  defp ensure_verified(user), do: user
+    user
+  end
 
   defp create_researcher do
     now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
@@ -178,15 +180,15 @@ defmodule Next.Frameworks.E2E.Controller do
       email: @researcher_email,
       password: @e2e_password,
       creator: true,
-      confirmed_at: now,
-      verified_at: now
+      confirmed_at: now
     })
+    |> ensure_publish_license()
   end
 
   defp get_or_create_researcher_b do
     case Account.Public.get_user_by_email(@researcher_b_email) do
       nil -> create_researcher_b()
-      user -> ensure_verified(user)
+      user -> ensure_publish_license(user)
     end
   end
 
@@ -197,9 +199,9 @@ defmodule Next.Frameworks.E2E.Controller do
       email: @researcher_b_email,
       password: @e2e_password,
       creator: true,
-      confirmed_at: now,
-      verified_at: now
+      confirmed_at: now
     })
+    |> ensure_publish_license()
   end
 
   defp get_or_create_participant do

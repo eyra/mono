@@ -15,6 +15,21 @@ defmodule MicaSaas.Systems.Account.Auth.Apple.Test do
   end
 
   describe "register_apple_user/1" do
+    test "gives neither license" do
+      {:ok, %{user: user}} =
+        Systems.Account.Auth.Apple.register_user(%{
+          sub: Faker.UUID.v4(),
+          email: Faker.Internet.email(),
+          is_private_email: false,
+          first_name: Faker.Person.first_name(),
+          middle_name: nil,
+          last_name: Faker.Person.last_name()
+        })
+
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
+    end
+
     test "creates a user with a profile" do
       for middle_name? <- [false, true] do
         middle_name = if middle_name?, do: Faker.Person.first_name(), else: nil

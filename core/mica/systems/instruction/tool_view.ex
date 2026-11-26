@@ -7,6 +7,7 @@ defmodule Systems.Instruction.ToolView do
 
   def dependencies(), do: [:tool_ref]
 
+  # The host gives the tool without its pages
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     %{id: tool_id} = Workflow.ToolRefModel.tool(tool_ref)
     Instruction.Public.get_tool!(tool_id, Instruction.ToolModel.preload_graph(:pages))

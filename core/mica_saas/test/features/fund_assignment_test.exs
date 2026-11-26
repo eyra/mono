@@ -60,7 +60,6 @@ defmodule MicaSaasWeb.Features.FundAssignmentTest do
       Factories.insert!(:member, %{
         password: password,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
         creator: true,
         # Pre-populated so create_pay_in skips ensure_merchant_for and
         # uses the mocked `get_merchant/1` path.

@@ -1,5 +1,6 @@
 defmodule Systems.Admin.AccountViewBuilderTest do
   use Mica.DataCase
+  use Mica.FeatureFlags.Test
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.Admin.AccountViewBuilder
@@ -21,102 +22,112 @@ defmodule Systems.Admin.AccountViewBuilderTest do
 
       assert vm.user_count == length(vm.users)
     end
+
+    test "has a filter per license and none for Verified" do
+      set_feature_flag(:panl_post_launch, true)
+
+      ids = Enum.map(AccountViewBuilder.view_model(nil, %{}).filter_labels, & &1.id)
+
+      assert :publish in ids
+      assert :pay_in in ids
+      refute :verified in ids
+      refute :unverified in ids
+    end
+
+    test "has no Pay-in filter without :panl_post_launch" do
+      set_feature_flag(:panl_post_launch, false)
+
+      ids = Enum.map(AccountViewBuilder.view_model(nil, %{}).filter_labels, & &1.id)
+
+      assert :publish in ids
+      refute :pay_in in ids
+    end
   end
 
   describe "build_user_items/2" do
     setup do
-      # Create test users with different states
-      creator_verified =
-        Factories.insert!(:member, %{
-          creator: true,
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
+      publisher = creator!()
+      Factories.insert!(:license, %{user: publisher, license: :publish})
 
-      creator_unverified =
-        Factories.insert!(:member, %{
-          creator: true,
-          verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
+      payer = creator!()
+      Factories.insert!(:license, %{user: payer, license: :pay_in})
+
+      ended = creator!()
+
+      Factories.insert!(:license, %{
+        user: ended,
+        license: :publish,
+        valid_until: Date.add(Date.utc_today(), -1)
+      })
+
+      revoked = creator!()
+
+      Factories.insert!(:license, %{
+        user: revoked,
+        license: :publish,
+        revoked_at: DateTime.utc_now() |> DateTime.truncate(:second)
+      })
 
       non_creator =
         Factories.insert!(:member, %{
           creator: false,
-          verified_at: nil,
           confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
 
       %{
-        creator_verified: creator_verified,
-        creator_unverified: creator_unverified,
+        publisher: publisher,
+        payer: payer,
+        ended: ended,
+        revoked: revoked,
         non_creator: non_creator
       }
     end
 
-    test "filters by :creator filter", %{
-      creator_verified: creator_verified,
-      non_creator: non_creator
-    } do
-      items = AccountViewBuilder.build_user_items([:creator], [])
+    test "filters by :creator filter", %{publisher: publisher, non_creator: non_creator} do
+      emails = emails([:creator])
 
-      emails = Enum.map(items, & &1.email)
-
-      assert creator_verified.email in emails
+      assert publisher.email in emails
       refute non_creator.email in emails
     end
 
-    test "filters by :unverified filter", %{
-      creator_verified: creator_verified,
-      creator_unverified: creator_unverified,
-      non_creator: non_creator
-    } do
-      items = AccountViewBuilder.build_user_items([:unverified], [])
+    test "filters by :publish: only users whose Publish license counts today", ctx do
+      emails = emails([:publish])
 
-      emails = Enum.map(items, & &1.email)
+      assert ctx.publisher.email in emails
+      refute ctx.payer.email in emails
+      refute ctx.ended.email in emails
+      refute ctx.revoked.email in emails
+    end
 
-      refute creator_verified.email in emails
-      assert creator_unverified.email in emails
-      assert non_creator.email in emails
+    test "filters by :pay_in: only users whose Pay-in license counts today", ctx do
+      emails = emails([:pay_in])
+
+      assert ctx.payer.email in emails
+      refute ctx.publisher.email in emails
     end
 
     test "filters by search query" do
-      user =
-        Factories.insert!(:member, %{
-          creator: true,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
+      user = creator!()
 
-      # Search by email
-      items = AccountViewBuilder.build_user_items([], [user.email])
-
-      emails = Enum.map(items, & &1.email)
-      assert user.email in emails
+      assert user.email in emails([], [user.email])
     end
   end
 
   describe "build_user_item/1" do
-    test "builds correct item structure for verified creator" do
-      user =
-        Factories.insert!(:member, %{
-          creator: true,
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
+    test "builds correct item structure for a creator" do
+      user = creator!()
+      Factories.insert!(:license, %{user: user})
 
       user = Account.Public.get_user!(user.id, [:profile])
       item = AccountViewBuilder.build_user_item(user)
 
       assert item.email == user.email
       assert item.name == user.displayname
-      assert is_binary(item.info)
-      assert item.info =~ "Verified"
+      assert item.info == ""
       assert length(item.action_buttons) == 2
 
-      # Verified creator should have unverify button
-      verify_button = Enum.find(item.action_buttons, &(&1.action.event == "unverify_creator"))
-      assert verify_button != nil
-      assert verify_button.face.label == "Unverify"
+      licenses_button = Enum.find(item.action_buttons, &(&1.action.event == "licenses"))
+      assert licenses_button.face.label == "Licenses"
 
       # Confirmed user should have deactivate button
       activate_button = Enum.find(item.action_buttons, &(&1.action.event == "deactivate_user"))
@@ -124,30 +135,10 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       assert activate_button.face.label == "Deactivate"
     end
 
-    test "builds correct item structure for unverified creator" do
-      user =
-        Factories.insert!(:member, %{
-          creator: true,
-          verified_at: nil,
-          confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
-
-      user = Account.Public.get_user!(user.id, [:profile])
-      item = AccountViewBuilder.build_user_item(user)
-
-      assert item.info == ""
-
-      # Unverified creator should have verify button
-      verify_button = Enum.find(item.action_buttons, &(&1.action.event == "verify_creator"))
-      assert verify_button != nil
-      assert verify_button.face.label == "Verify"
-    end
-
     test "builds correct item structure for non-creator" do
       user =
         Factories.insert!(:member, %{
           creator: false,
-          verified_at: nil,
           confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
 
@@ -158,15 +149,11 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       creator_button = Enum.find(item.action_buttons, &(&1.action.event == "make_creator"))
       assert creator_button != nil
       assert creator_button.face.label == "Make creator"
+      refute Enum.find(item.action_buttons, &(&1.action.event == "licenses"))
     end
 
     test "builds correct item structure for unconfirmed user" do
-      user =
-        Factories.insert!(:member, %{
-          creator: true,
-          verified_at: nil,
-          confirmed_at: nil
-        })
+      user = Factories.insert!(:member, %{creator: true, confirmed_at: nil})
 
       user = Account.Public.get_user!(user.id, [:profile])
       item = AccountViewBuilder.build_user_item(user)
@@ -213,5 +200,18 @@ defmodule Systems.Admin.AccountViewBuilderTest do
       assert affiliate.email in emails
       refute non_affiliate.email in emails
     end
+  end
+
+  defp creator! do
+    Factories.insert!(:member, %{
+      creator: true,
+      confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+    })
+  end
+
+  defp emails(filters, query \\ []) do
+    filters
+    |> AccountViewBuilder.build_user_items(query)
+    |> Enum.map(& &1.email)
   end
 end

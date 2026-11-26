@@ -15,8 +15,7 @@ defmodule MicaSaas.Systems.Account.TermsAndPrivacyViewTest do
       |> Account.User.sso_changeset(%{
         email: "sso-#{System.unique_integer([:positive])}@example.com",
         displayname: "SSO User",
-        creator: true,
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+        creator: true
       })
       |> Repo.insert()
 

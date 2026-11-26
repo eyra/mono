@@ -8,6 +8,7 @@ defmodule Systems.Admin.Public do
   alias Systems.Admin
   alias Systems.Affiliate
   alias Systems.Assignment
+  alias Systems.License
   alias Systems.Org
   alias Systems.Pool
 
@@ -94,9 +95,10 @@ defmodule Systems.Admin.Public do
   sorted by label, with their profile preloaded. This is the matching of the
   Admin → Users tab.
 
-  Filters combine with AND, so `:verified` together with `:unverified` matches
-  nobody. A `nil` or empty query matches everyone. Affiliate and pool
-  membership are looked up with one query per filter, not one per user.
+  Filters combine with AND. `:publish` and `:pay_in` match the users who have
+  that license today. A `nil` or empty query matches everyone. Licenses,
+  affiliate and pool membership are looked up with one query per filter, not
+  one per user.
   """
   def list_matching_users(filters, query) do
     Account.Public.list_users([:profile])
@@ -115,10 +117,15 @@ defmodule Systems.Admin.Public do
         index
       end
 
-    if :in_pool in filters do
-      Map.put(index, :pool_user_ids, MapSet.new(Pool.Public.list_participant_ids()))
-    else
-      index
+    index =
+      if :in_pool in filters do
+        Map.put(index, :pool_user_ids, MapSet.new(Pool.Public.list_participant_ids()))
+      else
+        index
+      end
+
+    for license <- License.Model.licenses(), license in filters, into: index do
+      {license, MapSet.new(License.Public.list_user_ids(license))}
     end
   end
 
@@ -144,14 +151,11 @@ defmodule Systems.Admin.Public do
   defp matches_filter?(%Account.User{id: id}, :in_pool, %{pool_user_ids: ids}),
     do: MapSet.member?(ids, id)
 
+  defp matches_filter?(%Account.User{id: id}, license, index) when is_map_key(index, license),
+    do: MapSet.member?(Map.fetch!(index, license), id)
+
   defp matches_filter?(user, filter, _index) when is_atom(filter),
     do: matches_filter?(user, filter)
-
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :verified),
-    do: verified_at != nil
-
-  defp matches_filter?(%Account.User{verified_at: verified_at}, :unverified),
-    do: verified_at == nil
 
   defp matches_filter?(%Account.User{creator: creator}, :creator) when not is_nil(creator),
     do: creator

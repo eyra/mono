@@ -10,6 +10,7 @@ defmodule Next.Systems.Graphite.ToolView do
 
   def dependencies(), do: [:current_user, :timezone, :tool_ref]
 
+  # The host gives the tool without its leaderboard
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
     %{id: tool_id} = Workflow.ToolRefModel.tool(tool_ref)
     Graphite.Public.get_tool!(tool_id, Graphite.ToolModel.preload_graph(:leaderboard))
