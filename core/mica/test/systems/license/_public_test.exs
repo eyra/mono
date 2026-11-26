@@ -8,6 +8,7 @@ defmodule Systems.License.PublicTest do
   alias Systems.License
 
   @today ~D[2026-11-26]
+  @now ~U[2026-11-26 12:00:00Z]
 
   setup do
     set_feature_flag(:panl_post_launch, true)
@@ -103,7 +104,7 @@ defmodule Systems.License.PublicTest do
     end
 
     test "records a custom end date in the future", %{admin: admin, researcher: researcher} do
-      end_date = Date.add(Date.utc_today(), 17)
+      end_date = Date.add(License.Public.today(), 17)
 
       assert :ok = License.Public.save(admin, researcher, %{publish: {:on, end_date}})
 
@@ -112,13 +113,13 @@ defmodule Systems.License.PublicTest do
 
     test "refuses an end date of today", %{admin: admin, researcher: researcher} do
       assert {:error, {:end_date_not_in_future, :publish}} =
-               License.Public.save(admin, researcher, %{publish: {:on, Date.utc_today()}})
+               License.Public.save(admin, researcher, %{publish: {:on, License.Public.today()}})
 
       assert current(researcher, :publish) == nil
     end
 
     test "refuses an end date in the past", %{admin: admin, researcher: researcher} do
-      past = Date.add(Date.utc_today(), -3)
+      past = Date.add(License.Public.today(), -3)
 
       assert {:error, {:end_date_not_in_future, :publish}} =
                License.Public.save(admin, researcher, %{publish: {:on, past}})
@@ -131,7 +132,7 @@ defmodule Systems.License.PublicTest do
       assert {:error, {:end_date_not_in_future, :pay_in}} =
                License.Public.save(admin, researcher, %{
                  publish: {:on, License.Public.end_date(:year_1)},
-                 pay_in: {:on, Date.utc_today()}
+                 pay_in: {:on, License.Public.today()}
                })
 
       assert current(researcher, :publish) == nil
@@ -239,13 +240,13 @@ defmodule Systems.License.PublicTest do
     test "counts on its end date", %{researcher: researcher} do
       Factories.insert!(:license, %{user: researcher, valid_until: @today})
 
-      assert License.Public.active?(researcher, :publish, @today)
+      assert License.Public.active?(researcher, :publish, @now)
     end
 
     test "is off the day after its end date, without anyone acting", %{researcher: researcher} do
       Factories.insert!(:license, %{user: researcher, valid_until: @today})
 
-      refute License.Public.active?(researcher, :publish, Date.add(@today, 1))
+      refute License.Public.active?(researcher, :publish, DateTime.add(@now, 1, :day))
     end
 
     test "is off for a user who never had it", %{researcher: researcher} do
@@ -259,13 +260,59 @@ defmodule Systems.License.PublicTest do
     end
   end
 
+  # End dates count in Amsterdam time. In UTC it is still 30 November for the
+  # first hour (two in summer) of 1 December in Amsterdam; these fail with UTC.
+  describe "around midnight in Amsterdam" do
+    @last_minute ~U[2026-11-30 22:59:00Z]
+    @first_minute_after ~U[2026-11-30 23:00:00Z]
+
+    setup %{researcher: researcher} do
+      Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-11-30]})
+      :ok
+    end
+
+    test "today is Amsterdam's date" do
+      assert License.Public.today(@first_minute_after) == ~D[2026-12-01]
+    end
+
+    test "today is Amsterdam's date in summer time" do
+      assert License.Public.today(~U[2026-06-30 22:00:00Z]) == ~D[2026-07-01]
+    end
+
+    test "a license until 30 November is on at 23:59 Amsterdam time", %{researcher: researcher} do
+      assert License.Public.active?(researcher, :publish, @last_minute)
+    end
+
+    test "a license until 30 November is off at 00:00 on 1 December Amsterdam time",
+         %{researcher: researcher} do
+      refute License.Public.active?(researcher, :publish, @first_minute_after)
+    end
+
+    test "the filter leaves it out from 00:00 on 1 December Amsterdam time" do
+      assert License.Public.list_user_ids(:publish, @first_minute_after) == []
+    end
+
+    test "a custom end date of 1 December is refused from 00:00 on 1 December Amsterdam time",
+         %{admin: admin} do
+      other = Factories.insert!(:creator)
+
+      assert {:error, {:end_date_not_in_future, :publish}} =
+               License.Public.save(
+                 admin,
+                 other,
+                 %{publish: {:on, ~D[2026-12-01]}},
+                 @first_minute_after
+               )
+    end
+  end
+
   describe "list_user_ids/2" do
     test "has the users whose license counts on the day", %{researcher: researcher} do
       ended = Factories.insert!(:creator)
       Factories.insert!(:license, %{user: researcher, valid_until: Date.add(@today, 1)})
       Factories.insert!(:license, %{user: ended, valid_until: Date.add(@today, -1)})
 
-      assert License.Public.list_user_ids(:publish, @today) == [researcher.id]
+      assert License.Public.list_user_ids(:publish, @now) == [researcher.id]
     end
 
     test "reads only the newest record", %{researcher: researcher} do
@@ -282,7 +329,7 @@ defmodule Systems.License.PublicTest do
         revoked_at: ~U[2026-03-01 10:00:00Z]
       })
 
-      assert License.Public.list_user_ids(:publish, @today) == []
+      assert License.Public.list_user_ids(:publish, @now) == []
     end
   end
 
@@ -305,7 +352,10 @@ defmodule Systems.License.PublicTest do
     end
 
     test "a Publish license past its end date doesn't", %{researcher: researcher} do
-      Factories.insert!(:license, %{user: researcher, valid_until: Date.add(Date.utc_today(), -1)})
+      Factories.insert!(:license, %{
+        user: researcher,
+        valid_until: Date.add(License.Public.today(), -1)
+      })
 
       refute Content.Private.can_user_publish?(researcher)
     end

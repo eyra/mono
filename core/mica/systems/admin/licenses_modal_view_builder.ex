@@ -20,7 +20,7 @@ defmodule Systems.Admin.LicensesModalViewBuilder do
     draft = Map.get(assigns, :draft, %{})
     show_errors? = Map.get(assigns, :show_errors?, false)
     locale = Map.get(assigns, :locale, :en)
-    today = Map.get(assigns, :today, Date.utc_today())
+    today = License.Public.today(Map.get(assigns, :now, DateTime.utc_now()))
 
     items =
       Enum.map(License.Public.licenses(), fn license ->
@@ -198,7 +198,8 @@ defmodule Systems.Admin.LicensesModalViewBuilder do
 
   defp institutes(_license, _user, _locale), do: nil
 
-  defp format_date(%DateTime{} = datetime), do: datetime |> DateTime.to_date() |> format_date()
+  defp format_date(%DateTime{} = datetime),
+    do: datetime |> License.Public.today() |> format_date()
 
   defp format_date(%Date{} = date),
     do: date |> Timex.format!("%e %b %Y", :strftime) |> String.trim()

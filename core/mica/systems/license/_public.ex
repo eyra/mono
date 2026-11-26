@@ -1,8 +1,10 @@
 defmodule Systems.License.Public do
   @moduledoc """
   Licenses support gives a user, each until an end date: `:publish` and
-  `:pay_in`. A license counts until the end of its end date, unless support
-  switched it off; after that it is off until support gives it again.
+  `:pay_in`. A license counts until the end of its end date in Amsterdam time,
+  unless support switched it off; after that it is off until support gives it
+  again. A license until 30 November is on through 30 November 23:59 and off
+  from 1 December 00:00, Amsterdam time.
 
   Pay-in is behind the `:panl_post_launch` flag: without it, only Publish is
   shown or saved.
@@ -19,27 +21,32 @@ defmodule Systems.License.Public do
   alias Systems.License
 
   @periods [:days_30, :days_60, :days_90, :year_1]
+  @timezone "Europe/Amsterdam"
 
   @doc "The licenses support gives here: Publish, and Pay-in behind `:panl_post_launch`."
   def licenses do
     if feature_enabled?(:panl_post_launch), do: [:publish, :pay_in], else: [:publish]
   end
 
+  @doc "The date in Amsterdam at `now`: the day end dates are counted in."
+  def today(%DateTime{} = now \\ DateTime.utc_now()),
+    do: now |> DateTime.shift_zone!(@timezone) |> DateTime.to_date()
+
   @doc "The periods support picks a license's end date from, besides a custom date."
   def periods, do: @periods
 
   @doc "The end date of a license given on `today` for `period`."
-  def end_date(period, today \\ Date.utc_today())
+  def end_date(period, today \\ today())
   def end_date(:days_30, today), do: Date.add(today, 30)
   def end_date(:days_60, today), do: Date.add(today, 60)
   def end_date(:days_90, today), do: Date.add(today, 90)
   def end_date(:year_1, today), do: Date.shift(today, year: 1)
 
-  @doc "Whether `user` has `license` on `today`: given, not switched off, not past its end date."
-  def active?(%User{} = user, license, today \\ Date.utc_today()) do
+  @doc "Whether `user` has `license` at `now`: given, not switched off, not past its end date."
+  def active?(%User{} = user, license, %DateTime{} = now \\ DateTime.utc_now()) do
     case get_current(user, license) do
       nil -> false
-      record -> License.Model.active?(record, today)
+      record -> License.Model.active?(record, today(now))
     end
   end
 
@@ -64,8 +71,10 @@ defmodule Systems.License.Public do
     |> Repo.all()
   end
 
-  @doc "The ids of the users who have `license` on `today`."
-  def list_user_ids(license, today \\ Date.utc_today()) do
+  @doc "The ids of the users who have `license` at `now`."
+  def list_user_ids(license, %DateTime{} = now \\ DateTime.utc_now()) do
+    today = today(now)
+
     current =
       from(l in License.Model,
         where: l.license == ^license,
@@ -83,7 +92,7 @@ defmodule Systems.License.Public do
   @doc """
   Gives `user` `license` until `valid_until`, recorded as given by `granted_by`
   (`nil`: given by no one, such as a seed or the transition). Doesn't check who
-  gives it; support goes through `save/3`.
+  gives it; support goes through `save/4`.
   """
   def grant(%User{} = user, license, %Date{} = valid_until, granted_by \\ nil) do
     user
@@ -94,16 +103,18 @@ defmodule Systems.License.Public do
   @doc """
   Saves the changes support made to `user`'s licenses in the Licenses dialog:
   `%{license => {:on, end_date} | :off}`. `{:on, end_date}` gives the license,
-  or gives it again, until `end_date`, which must lie after today; `:off`
-  switches it off when it is on. Each change is recorded with `by` and the time.
+  or gives it again, until `end_date`, which must lie after today in
+  Amsterdam; `:off` switches it off when it is on. Each change is recorded with `by` and the time.
 
   Only system admins save licenses: anyone else gets `{:error, :forbidden}`
   and nothing changes. A license not in `licenses/0` (Pay-in without
   `:panl_post_launch`) is `{:error, {:unknown_license, license}}`, an end date
   that isn't after today `{:error, {:end_date_not_in_future, license}}`.
   """
-  def save(%User{} = by, %User{} = user, changes, today \\ Date.utc_today())
+  def save(%User{} = by, %User{} = user, changes, %DateTime{} = now \\ DateTime.utc_now())
       when is_map(changes) do
+    today = today(now)
+
     with :ok <- check_admin(by),
          :ok <- validate(changes, today) do
       changes

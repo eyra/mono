@@ -45,7 +45,7 @@ defmodule Mica.GiveCreatorsATransitionPublishLicenseTest do
     assert %License.Model{granted_by_id: nil, revoked_at: nil, valid_until: valid_until} =
              License.Public.get_current(creator, :publish)
 
-    assert valid_until == Date.add(Date.utc_today(), 90)
+    assert valid_until == Date.add(License.Public.today(), 90)
   end
 
   test "the creator can publish after the migration" do

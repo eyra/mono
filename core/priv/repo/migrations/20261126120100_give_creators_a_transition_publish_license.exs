@@ -3,15 +3,16 @@ defmodule Mica.Repo.Migrations.GiveCreatorsATransitionPublishLicense do
 
   # Every creator who can publish before licenses (`creator` and `verified_at`
   # set, the old publish check) gets a Publish license until 90 days after this
-  # migration runs, so support has time to give them the license. Nobody gets
-  # Pay-in. Given by no one: `granted_by_id` stays empty.
+  # migration runs, counted in Amsterdam like every end date, so support has
+  # time to give them the license. Nobody gets Pay-in. Given by no one:
+  # `granted_by_id` stays empty.
   #
   # `verified_at` is read here in SQL; the schema field is gone, the column is
   # dropped in a later migration, which must run after this one.
   def up do
     execute("""
     INSERT INTO licenses (user_id, license, valid_until, granted_at, inserted_at, updated_at)
-    SELECT id, 'publish', (now() AT TIME ZONE 'UTC')::date + 90,
+    SELECT id, 'publish', (now() AT TIME ZONE 'Europe/Amsterdam')::date + 90,
       date_trunc('second', now() AT TIME ZONE 'UTC'),
       date_trunc('second', now() AT TIME ZONE 'UTC'),
       date_trunc('second', now() AT TIME ZONE 'UTC')
@@ -32,7 +33,7 @@ defmodule Mica.Repo.Migrations.GiveCreatorsATransitionPublishLicense do
     execute("""
     DELETE FROM licenses
     WHERE license = 'publish' AND granted_by_id IS NULL
-      AND valid_until = granted_at::date + 90
+      AND valid_until = (granted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Amsterdam')::date + 90
     """)
   end
 end

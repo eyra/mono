@@ -103,7 +103,7 @@ defmodule MicaSaas.Systems.Admin.LicensesModalViewTest do
     end
 
     test "gives Publish until a custom date", %{conn: conn, researcher: researcher} do
-      end_date = Date.add(Date.utc_today(), 45)
+      end_date = Date.add(License.Public.today(), 45)
       view = open(conn, researcher)
 
       render_click(view, "toggle", %{"license" => "publish"})

@@ -5,7 +5,7 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
   alias Systems.Admin.LicensesModalViewBuilder
   alias Systems.Org
 
-  @today ~D[2026-11-26]
+  @now ~U[2026-11-26 12:00:00Z]
 
   setup do
     set_feature_flag(:panl_post_launch, true)
@@ -13,7 +13,7 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
   end
 
   defp vm(user, assigns \\ %{}),
-    do: LicensesModalViewBuilder.view_model(user, Map.put_new(assigns, :today, @today))
+    do: LicensesModalViewBuilder.view_model(user, Map.put_new(assigns, :now, @now))
 
   defp item(vm, license), do: Enum.find(vm.items, &(&1.id == license))
   defp draft(license, draft), do: %{draft: %{license => draft}}
@@ -57,6 +57,14 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
       Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-11-25]})
 
       assert %{on?: false, status: "Ended on 25 Nov 2026"} = item(vm(researcher), :publish)
+    end
+
+    test "show a license as ended from 00:00 the day after its end date, Amsterdam time",
+         %{researcher: researcher} do
+      Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-11-30]})
+
+      assert %{on?: false, status: "Ended on 30 Nov 2026"} =
+               item(vm(researcher, %{now: ~U[2026-11-30 23:00:00Z]}), :publish)
     end
   end
 

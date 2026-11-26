@@ -56,7 +56,7 @@ Remove the entry once the drop-migration lands on `develop`.
 | `crew_tasks.rejected_category` | `40dfa20a3` (2026-08-03) | 1 production release with Participation-driven review live | Categorized reject UI removed; the current decline form captures free-text only | — |
 | `crew_tasks.rejected_message` | `40dfa20a3` (2026-08-03) | 1 production release with Participation-driven review live | Same as above; free-text reason now on `assignment_participation.rejected_message` | — |
 | `fund_rewards.rejection_reason` | `40dfa20a3` (2026-08-03) | 1 production release with Participation-driven review live | Rejection reason moved to `assignment_participation.rejected_message` — Fund only records the outcome | — |
-| `users.verified_at` | `c21cd4f23` (2026-11-26) | After the transition Publish licenses (`*_give_creators_a_transition_publish_license.exs`) have run on every deployment, so 1 production release with licenses live | Licenses (`Systems.License`) replace it: the publish check reads the Publish license, and no sign-up or admin action writes it any more | — |
+| `users.verified_at` | `c21cd4f23` (2026-11-26) | After the transition Publish licenses (`*_give_creators_a_transition_publish_license.exs`) have run on every deployment, so 1 production release with licenses live | Licenses (`Systems.License`) replace it: the publish check reads the Publish license, and no sign-up or admin action writes it any more | FX#10549586216 |
 
 ## Deprecated tables
 
