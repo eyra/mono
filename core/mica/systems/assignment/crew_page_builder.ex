@@ -26,7 +26,7 @@ defmodule Systems.Assignment.CrewPageBuilder do
       LiveContext.new(%{
         assignment_id: assignment_id,
         user_id: user.id,
-        current_user: user,
+        current_user_id: user.id,
         timezone: Map.get(assigns, :timezone),
         panel_info: panel_info,
         user_state: user_state,

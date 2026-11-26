@@ -41,6 +41,8 @@ defmodule MicaWeb.Live.Hook.Context do
 
   alias Frameworks.Concept.LiveContext
   alias Frameworks.UserState
+  alias Systems.Account
+  alias Systems.Workflow
 
   @session_key "live_context"
 
@@ -131,9 +133,27 @@ defmodule MicaWeb.Live.Hook.Context do
     assign(socket, :user_state, user_state)
   end
 
+  # The context is in the page's HTML, so records ride in it as ids and the view loads them
+  defp assign_dependency(%LiveContext{data: %{current_user_id: user_id}}, :current_user, socket) do
+    assign(socket, :current_user, current_user(socket, user_id))
+  end
+
+  defp assign_dependency(%LiveContext{data: %{tool_ref_id: tool_ref_id}}, :tool_ref, socket) do
+    tool_ref =
+      Workflow.Public.get_tool_ref!(tool_ref_id, Workflow.ToolRefModel.preload_graph(:tool))
+
+    assign(socket, :tool_ref, tool_ref)
+  end
+
   # Regular atom dependency
   defp assign_dependency(context, dep, socket) when is_atom(dep) do
     value = LiveContext.retrieve(context, dep, socket)
     assign(socket, dep, value)
   end
+
+  # `MicaWeb.Live.Hook.User` already loaded the signed-in user from the session
+  defp current_user(%{assigns: %{current_user: %Account.User{id: user_id} = user}}, user_id),
+    do: user
+
+  defp current_user(_socket, user_id), do: Account.Public.get_user!(user_id)
 end

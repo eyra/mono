@@ -326,12 +326,11 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, _content_flags},
          _workflow_config,
          show_errors,
-         %{current_user: user}
+         _assigns
        ) do
     element =
       MicaWeb.Live.Element.prepare_live_view(:import, Zircon.Screening.ImportView,
         tool: zircon_screening_tool,
-        user: user,
         title: title
       )
 
@@ -360,7 +359,7 @@ defmodule Systems.Assignment.ContentPageBuilder do
          {title, _content_flags},
          _workflow_config,
          show_errors,
-         %{current_user: user}
+         _assigns
        ) do
     zircon_screening_tool =
       Repo.preload(zircon_screening_tool, annotations: Annotation.Model.preload_graph(:down))
@@ -368,7 +367,6 @@ defmodule Systems.Assignment.ContentPageBuilder do
     element =
       MicaWeb.Live.Element.prepare_live_view(:criteria, Zircon.Screening.CriteriaView,
         tool: zircon_screening_tool,
-        user: user,
         title: title
       )
 
