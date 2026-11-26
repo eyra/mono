@@ -157,6 +157,31 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       assert render(view) =~ "https://photos.test/ada.png"
     end
 
+    test "an owner can't add an account they didn't look up",
+         %{conn: conn, org: org, context: context} do
+      looked_up = Factories.insert!(:creator, %{email: "looked-up@gmail.test"})
+      other = Factories.insert!(:creator, %{email: "other@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      editor = with_target(view, "#members_editor")
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: looked_up.email})
+      |> render_change()
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, other)
+      refute html =~ other.email
+    end
+
     test "add all domain-matched records the owner for each member",
          %{conn: conn, owner: owner, org: org, context: context} do
       Factories.insert!(:creator, %{email: "one@uni.test"})

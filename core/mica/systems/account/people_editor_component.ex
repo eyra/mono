@@ -73,13 +73,12 @@ defmodule Systems.Account.PeopleEditorComponent do
   @impl true
   def handle_event("add", %{"item" => user_id_string}, socket) do
     user_id = String.to_integer(user_id_string)
-    %{users: users, people: people} = socket.assigns
+    %{users: users, people: people, query_string: query_string} = socket.assigns
 
-    case Enum.find(users, &(&1.id == user_id)) do
-      nil ->
-        {:noreply, socket}
-
-      user ->
+    # Only the account the current search found can be added, so an id sent
+    # without looking up its email adds nobody.
+    case find_user_by_email(users, query_string) do
+      %{id: ^user_id} = user ->
         new_users = Enum.reject(users, &(&1.id == user_id))
         new_people = people ++ [user]
 
@@ -91,6 +90,9 @@ defmodule Systems.Account.PeopleEditorComponent do
          |> assign(query_string: "", user_item: nil)
          |> update_people_items()
          |> update_search_message()}
+
+      _ ->
+        {:noreply, socket}
     end
   end
 
@@ -252,7 +254,7 @@ defmodule Systems.Account.PeopleEditorComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class="flex flex-col h-full">
+    <div id={@id} class="flex flex-col h-full">
       <Text.title2><%= @title %> <span class="text-primary"><%= @total_count || Enum.count(@people) %></span></Text.title2>
 
       <div class="flex flex-col gap-8">
