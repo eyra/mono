@@ -17,9 +17,9 @@ defmodule Systems.Monitor.Public do
   end
 
   def log(event, opts) when is_list(event) do
-    Logger.info("MONITOR: #{inspect(event)}", ansi_color: :magenta)
-    value = Keyword.get(opts, :value, 1)
-    Queries.upsert_event(event, value)
+    Multi.new()
+    |> multi_log(event, opts)
+    |> Repo.commit()
   end
 
   def multi_log(_, _, opts \\ [])
@@ -28,10 +28,32 @@ defmodule Systems.Monitor.Public do
     multi_log(multi, event(tuple), opts)
   end
 
+  @doc """
+  Adds the event to the Multi. Once it commits, the event is also emitted as the
+  telemetry event `[:monitor, :event, :count]` with the value as `count` and the
+  identifier's keys as metadata, without `user` (see `Mica.AppSignal.TelemetryHandler`).
+  """
   def multi_log(multi, event, opts) when is_list(event) do
     Logger.info("MONITOR: #{inspect(event)}", ansi_color: :magenta)
     value = Keyword.get(opts, :value, 1)
-    Queries.upsert_event(multi, event, value)
+
+    multi
+    |> Queries.upsert_event(event, value)
+    |> Multi.run("telemetry_#{Ecto.UUID.generate()}", fn _, _ ->
+      {:ok, Repo.after_commit(fn -> execute_telemetry(event, value) end)}
+    end)
+  end
+
+  defp execute_telemetry(event, value) do
+    :telemetry.execute([:monitor, :event, :count], %{count: value}, telemetry_metadata(event))
+  end
+
+  defp telemetry_metadata(event) do
+    for entry <- event,
+        [key, value] <- [String.split(entry, "=", parts: 2)],
+        key != "user",
+        into: %{},
+        do: {key, value}
   end
 
   def event(%model{id: id}) do
@@ -75,7 +97,9 @@ defmodule Systems.Monitor.Public do
       {:ok, sum(event_template)}
     end)
     |> Multi.run(event_name, fn _, %{^sum_name => sum} ->
-      log(event_template ++ ["action=reset"], value: -sum)
+      reset_event = event_template ++ ["action=reset"]
+      Logger.info("MONITOR: #{inspect(reset_event)}", ansi_color: :magenta)
+      Queries.upsert_event(reset_event, -sum)
     end)
   end
 

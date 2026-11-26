@@ -16,6 +16,20 @@ defmodule Mica.AppSignal.TelemetryHandlerTest do
 
       handlers = :telemetry.list_handlers([:feldspar, :log, :stop])
       assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
+
+      handlers = :telemetry.list_handlers([:monitor, :event, :count])
+      assert Enum.any?(handlers, &(&1.id == "appsignal-telemetry-handler"))
+    end
+  end
+
+  describe "handle_event/4 :count" do
+    test "does not crash on count event" do
+      TelemetryHandler.handle_event(
+        [:monitor, :event, :count],
+        %{count: 1024},
+        %{"storage_endpoint" => "1", "topic" => "bytes"},
+        nil
+      )
     end
   end
 
