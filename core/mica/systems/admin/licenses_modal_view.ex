@@ -2,7 +2,7 @@ defmodule Systems.Admin.LicensesModalView do
   @moduledoc """
   The Licenses dialog of a researcher on Admin → Users: Publish and Pay-in,
   each switched on or off, with an end date picked from a period or a custom
-  date. Saving goes through `License.Public.save/3`, which only system admins
+  date. Saving goes through `License.Public.save/4`, which only system admins
   pass.
   """
   use MicaWeb, :modal_live_view
@@ -71,15 +71,23 @@ defmodule Systems.Admin.LicensesModalView do
           into: %{},
           do: {license, change}
 
+    if changes == %{}, do: {:noreply, close(socket)}, else: save(socket, by, user, changes)
+  end
+
+  # Saved, the dialog shows the saved state, so a second Save before it closes
+  # changes nothing.
+  defp save(socket, by, user, changes) do
     case License.Public.save(by, user, changes) do
       :ok ->
-        {:noreply, publish_event(socket, {:close_modal, %{modal_id: @modal_id}})}
+        {:noreply, socket |> assign(draft: %{}) |> update_view_model() |> close()}
 
       {:error, reason} ->
         {:noreply,
          socket |> assign(show_errors?: true, save_error: reason) |> update_view_model()}
     end
   end
+
+  defp close(socket), do: publish_event(socket, {:close_modal, %{modal_id: @modal_id}})
 
   defp item(%{assigns: %{vm: %{items: items}}}, license),
     do: Enum.find(items, &(to_string(&1.id) == license))

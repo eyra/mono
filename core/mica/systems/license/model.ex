@@ -4,6 +4,8 @@ defmodule Systems.License.Model do
   it counts), with who gave it and when, and once switched off, who switched it
   off and when. The newest record of a user and license is that license's
   state; giving it again adds a record, so earlier ones stay as its history.
+  `granted_by_system` marks a license given by no one (the transition, a seed):
+  without it, an empty `granted_by` means the giver deleted their account.
   """
   use Ecto.Schema
   import Ecto.Changeset
@@ -18,6 +20,7 @@ defmodule Systems.License.Model do
     field(:valid_until, :date)
     field(:granted_at, :utc_datetime)
     belongs_to(:granted_by, User)
+    field(:granted_by_system, :boolean, default: false)
     field(:revoked_at, :utc_datetime)
     belongs_to(:revoked_by, User)
 
@@ -35,7 +38,8 @@ defmodule Systems.License.Model do
       license: license,
       valid_until: valid_until,
       granted_at: now(),
-      granted_by_id: id(granted_by)
+      granted_by_id: id(granted_by),
+      granted_by_system: is_nil(granted_by)
     })
     |> validate_inclusion(:license, @licenses)
   end

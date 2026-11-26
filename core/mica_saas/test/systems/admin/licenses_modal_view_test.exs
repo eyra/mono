@@ -146,6 +146,18 @@ defmodule MicaSaas.Systems.Admin.LicensesModalViewTest do
       assert License.Public.get_current(researcher, :publish) == nil
     end
 
+    test "a second Save before the dialog closes adds no second record",
+         %{conn: conn, researcher: researcher} do
+      view = open(conn, researcher)
+
+      render_click(view, "toggle", %{"license" => "pay_in"})
+      pick(view, "pay_in", "year_1")
+      render_click(view, "save", %{})
+      render_click(view, "save", %{})
+
+      assert [_] = License.Public.list_records(researcher)
+    end
+
     test "the save button is never disabled", %{conn: conn, researcher: researcher} do
       view = open(conn, researcher)
       render_click(view, "toggle", %{"license" => "publish"})

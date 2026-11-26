@@ -18,6 +18,10 @@ config :mime, :types, %{
 # defaulting to :prod for safety.
 config :mica, :deploy_env, :local
 
+# Time zones (license end dates count in Amsterdam time) come from tzdata, also in
+# a release task that starts no apps (`Mica.Release`), where Timex doesn't set it.
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+
 # UserCheck email validation. Default to real HTTP client; dev/test override to mock.
 config :mica, Frameworks.UserCheck,
   client: Frameworks.UserCheck.HTTPClient,

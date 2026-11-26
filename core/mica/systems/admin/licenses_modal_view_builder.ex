@@ -114,6 +114,13 @@ defmodule Systems.Admin.LicensesModalViewBuilder do
 
   defp note(nil), do: nil
 
+  defp note(%{revoked_at: nil, granted_at: granted_at, granted_by: nil, granted_by_system: true}) do
+    dgettext("eyra-admin", "licenses.note.granted",
+      name: dgettext("eyra-admin", "licenses.note.no_one"),
+      date: format_date(granted_at)
+    )
+  end
+
   defp note(%{revoked_at: nil, granted_at: granted_at, granted_by: granted_by}) do
     dgettext("eyra-admin", "licenses.note.granted",
       name: by_name(granted_by),
@@ -128,8 +135,9 @@ defmodule Systems.Admin.LicensesModalViewBuilder do
     )
   end
 
+  # Who gave or switched off a license is emptied when they delete their account.
   defp by_name(%Account.User{} = user), do: Account.User.label(user)
-  defp by_name(_), do: dgettext("eyra-admin", "licenses.note.no_one")
+  defp by_name(nil), do: dgettext("eyra-admin", "licenses.note.deleted_account")
 
   # The end date: a period or a custom date. Shown while the license is on.
 

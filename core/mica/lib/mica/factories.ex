@@ -474,10 +474,11 @@ defmodule Mica.Factories do
     |> struct!(attributes)
   end
 
-  # A Publish license for a year, given by no one; pass `user:`.
+  # A Publish license for a year, given by no one (`granted_by_system`); pass `user:`.
   def build(:license, %{} = attributes) do
     %License.Model{
       license: :publish,
+      granted_by_system: true,
       valid_until: Date.add(Date.utc_today(), 365),
       granted_at: DateTime.utc_now() |> DateTime.truncate(:second)
     }

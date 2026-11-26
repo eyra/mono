@@ -2,7 +2,9 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
   use Mica.DataCase, async: false
   use Mica.FeatureFlags.Test
 
+  alias Systems.Account
   alias Systems.Admin.LicensesModalViewBuilder
+  alias Systems.License
   alias Systems.Org
 
   @now ~U[2026-11-26 12:00:00Z]
@@ -17,6 +19,17 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
 
   defp item(vm, license), do: Enum.find(vm.items, &(&1.id == license))
   defp draft(license, draft), do: %{draft: %{license => draft}}
+
+  # A system admin with no rows of their own beside the user, so the row can go.
+  defp admin_without_features! do
+    Mica.Repo.insert!(%Account.User{
+      email: "admin2@example.org",
+      displayname: "Admin",
+      hashed_password: "no-password-set"
+    })
+  end
+
+  defp delete!(user), do: Mica.Repo.delete!(user)
 
   describe "the items" do
     test "are Publish and Pay-in", %{researcher: researcher} do
@@ -51,6 +64,33 @@ defmodule Systems.Admin.LicensesModalViewBuilderTest do
 
       assert item(vm(researcher), :publish).note =~ "Given by "
       assert item(vm(researcher), :publish).note =~ "20 Nov 2026"
+    end
+
+    test "show a license given by no one as given by the system", %{researcher: researcher} do
+      Factories.insert!(:license, %{user: researcher, granted_at: ~U[2026-11-20 10:00:00Z]})
+
+      assert item(vm(researcher), :publish).note == "Given by the system, 20 Nov 2026"
+    end
+
+    test "show a license whose giver deleted their account as given by a deleted account",
+         %{researcher: researcher} do
+      admin = admin_without_features!()
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}})
+
+      delete!(admin)
+
+      assert item(vm(researcher), :publish).note =~ "Given by a deleted account, "
+    end
+
+    test "show a license switched off by someone who deleted their account",
+         %{researcher: researcher} do
+      admin = admin_without_features!()
+      Factories.insert!(:license, %{user: researcher, valid_until: ~D[2027-11-26]})
+      :ok = License.Public.save(admin, researcher, %{publish: :off})
+
+      delete!(admin)
+
+      assert item(vm(researcher), :publish).note =~ "Switched off by a deleted account, "
     end
 
     test "show a license past its end date as ended", %{researcher: researcher} do

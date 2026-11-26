@@ -303,3 +303,7 @@ msgstr "Licenses"
 #, elixir-autogen, elixir-format
 msgid "licenses.institute.none.note"
 msgstr "Their pay-ins are refused until they're added to one."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.deleted_account"
+msgstr "a deleted account"

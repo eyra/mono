@@ -4,6 +4,7 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
 
   require LiveNest.Constants
 
+  alias Frameworks.Concept.LiveContext
   alias Systems.Admin
 
   describe "AccountView" do
@@ -190,6 +191,45 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
       rendered = render(view)
       assert rendered =~ a_creator.email
       refute rendered =~ other_creator.email
+    end
+  end
+
+  # Only a system admin opens the Licenses dialog. Isolated, the view presents the
+  # modal to itself, so the test traces what the view receives.
+  describe "opening the Licenses dialog" do
+    setup %{conn: conn} do
+      %{
+        conn: conn |> Map.put(:request_path, "/admin/accounts"),
+        researcher: insert_creator(%{})
+      }
+    end
+
+    defp click_licenses(conn, current_user, researcher) do
+      context = LiveContext.new(%{current_user: current_user})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Admin.AccountView, session: %{"live_context" => context})
+
+      :erlang.trace(view.pid, true, [:receive])
+      render_click(view, "licenses", %{"item" => "#{researcher.id}"})
+      view
+    end
+
+    test "a system admin opens it", %{conn: conn, researcher: researcher} do
+      %{pid: pid} = click_licenses(conn, Factories.insert!(:admin), researcher)
+
+      assert_receive {:trace, ^pid, :receive,
+                      {:live_nest_event, %LiveNest.Event{name: :present_modal}}}
+    end
+
+    test "a crafted event from someone else opens nothing", %{
+      conn: conn,
+      researcher: researcher
+    } do
+      %{pid: pid} = click_licenses(conn, Factories.insert!(:creator), researcher)
+
+      refute_receive {:trace, ^pid, :receive,
+                      {:live_nest_event, %LiveNest.Event{name: :present_modal}}}
     end
   end
 

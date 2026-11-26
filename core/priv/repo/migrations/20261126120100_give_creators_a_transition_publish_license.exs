@@ -11,8 +11,9 @@ defmodule Mica.Repo.Migrations.GiveCreatorsATransitionPublishLicense do
   # dropped in a later migration, which must run after this one.
   def up do
     execute("""
-    INSERT INTO licenses (user_id, license, valid_until, granted_at, inserted_at, updated_at)
+    INSERT INTO licenses (user_id, license, valid_until, granted_by_system, granted_at, inserted_at, updated_at)
     SELECT id, 'publish', (now() AT TIME ZONE 'Europe/Amsterdam')::date + 90,
+      true,
       date_trunc('second', now() AT TIME ZONE 'UTC'),
       date_trunc('second', now() AT TIME ZONE 'UTC'),
       date_trunc('second', now() AT TIME ZONE 'UTC')
@@ -32,7 +33,7 @@ defmodule Mica.Repo.Migrations.GiveCreatorsATransitionPublishLicense do
 
     execute("""
     DELETE FROM licenses
-    WHERE license = 'publish' AND granted_by_id IS NULL
+    WHERE license = 'publish' AND granted_by_system
       AND valid_until = (granted_at AT TIME ZONE 'UTC' AT TIME ZONE 'Europe/Amsterdam')::date + 90
     """)
   end

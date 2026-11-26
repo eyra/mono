@@ -304,3 +304,7 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "licenses.institute.none.note"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.deleted_account"
+msgstr ""
