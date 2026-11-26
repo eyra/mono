@@ -53,10 +53,10 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
   # Opening changes state, so another site must not be able to trigger it: an
   # <img> or a link to it is a GET, a forged form has no valid CSRF token.
   describe "opening a notification from another site" do
-    test "with a GET doesn't exist and marks nothing seen", %{conn: conn, user: user} do
+    test "with a GET marks nothing seen", %{conn: conn, user: user} do
       id = notify(user, :license_given, :publish)
 
-      assert get(conn, "/notify/open/#{id}").status == 404
+      get(conn, ~m"/notify/open/#{id}")
 
       assert %{status: :sent} = message(id)
       assert [_] = NextAction.Public.list_next_actions(user)
@@ -73,6 +73,29 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
 
       assert %{status: :sent} = message(id)
       assert [_] = NextAction.Public.list_next_actions(user)
+    end
+  end
+
+  # A middle click or "Open in new tab" on the button: the browser GETs it.
+  describe "the button opened in a new tab" do
+    test "goes where the next action's button leads, without marking it seen",
+         %{conn: conn, user: user} do
+      id = notify(user, :license_given, :publish)
+
+      assert redirected_to(get(conn, ~m"/notify/open/#{id}")) == "/project"
+      assert %{status: :sent} = message(id)
+    end
+
+    test "of another user goes to the To-do page and changes nothing", %{conn: conn} do
+      other = Factories.insert!(:creator)
+      id = notify(other, :license_given, :publish)
+
+      assert redirected_to(get(conn, ~m"/notify/open/#{id}")) == "/todo"
+      assert %{status: :sent} = message(id)
+    end
+
+    test "with an id that isn't a number goes to the To-do page", %{conn: conn} do
+      assert redirected_to(get(conn, "/notify/open/abc")) == "/todo"
     end
   end
 

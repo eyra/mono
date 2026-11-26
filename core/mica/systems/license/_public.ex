@@ -122,8 +122,9 @@ defmodule Systems.License.Public do
   `:panl_post_launch`) is `{:error, {:unknown_license, license}}`, an end date
   that isn't after today `{:error, {:end_date_not_in_future, license}}`.
 
-  Once saved, `user` is told about each license given or switched off
-  (`tell_current/3`).
+  Each license given or switched off is told to `user` by a job inserted in
+  the same transaction (`License.TellWorker`, `tell_current/3`): it runs once
+  the save is committed, and not at all when the save is rolled back.
   """
   def save(%User{} = by, %User{} = user, changes, %DateTime{} = now \\ DateTime.utc_now())
       when is_map(changes) do
@@ -133,13 +134,15 @@ defmodule Systems.License.Public do
          :ok <- validate(changes, today) do
       changes
       |> Enum.reduce(Multi.new(), fn {license, change}, multi ->
-        add_change(multi, user, license, change, by, today)
+        multi
+        |> add_change(user, license, change, by, today)
+        |> add_tell(user, license, by)
       end)
       |> Signal.Public.multi_dispatch({:license, :updated}, message: %{user: user})
       |> Repo.commit()
       |> case do
-        {:ok, results} ->
-          tell_saved(user, by, Map.keys(changes), results)
+        {:ok, _results} ->
+          :ok
 
         {:error, _operation, reason, _changes} ->
           {:error, reason}
@@ -188,34 +191,53 @@ defmodule Systems.License.Public do
       else: {:ok, nil}
   end
 
-  # Each license the save changed (a result that isn't `nil`).
-  defp tell_saved(user, by, licenses, results) do
-    for license <- licenses, Map.fetch!(results, license) != nil do
-      tell_current(user, license, by)
-    end
-
-    :ok
+  # A license the save changed (its change has a result) is told by a job
+  # inserted in the same transaction (`License.TellWorker`).
+  defp add_tell(multi, user, license, by) do
+    Multi.run(multi, {:tell, license}, fn _repo, changes ->
+      case Map.fetch!(changes, license) do
+        nil -> {:ok, nil}
+        _changed -> Oban.insert(License.TellWorker.new_tell(user, license, by))
+      end
+    end)
   end
 
   @doc """
   Tells `user` how their `license` stands now that `by` changed it: given
   until its end date, or switched off (`License.Notify`, shown as a To-do).
-  The current record is read under the license's lock (`with_lock/3`), so of
-  two saves at once the user is told the newest state, once it is saved.
+  Run by `License.TellWorker` after a save. The current record is read under
+  the license's lock (`with_lock/3`), so of two saves at once the user is told
+  the newest state; a record already told about isn't told again, so running
+  it twice tells once.
   """
   def tell_current(%User{} = user, license, by \\ nil) do
     with_lock(user, license, fn ->
       case get_current(user, license) do
-        %License.Model{revoked_at: nil, valid_until: valid_until} ->
-          tell(user, license, {:given, valid_until}, by)
+        %License.Model{revoked_at: nil, valid_until: valid_until} = record ->
+          tell_once(user, license, {:given, valid_until}, record, by)
 
-        %License.Model{} ->
-          tell(user, license, :switched_off, by)
+        %License.Model{} = record ->
+          tell_once(user, license, :switched_off, record, by)
 
         nil ->
           :ok
       end
     end)
+  end
+
+  defp tell_once(user, license, message, %License.Model{id: record_id}, by) do
+    unless told_record?(user, license, message, record_id),
+      do: tell(user, license, message, record_id, by)
+
+    :ok
+  end
+
+  defp told_record?(%User{id: user_id}, license, message, record_id) do
+    {type, _metadata} = event(message)
+
+    type
+    |> Notify.Public.list_recorded(correlation_id(license), user_id)
+    |> Enum.any?(&match?(%{metadata: %{"record_id" => ^record_id}}, &1))
   end
 
   @doc """
@@ -230,7 +252,7 @@ defmodule Systems.License.Public do
     with_lock(user, license, fn ->
       with %License.Model{id: ^record_id, revoked_at: nil} <- get_current(user, license),
            false <- told?(user, license, type, valid_until) do
-        tell(user, license, message, nil)
+        tell(user, license, message, record_id, nil)
         :told
       else
         _ -> :skipped
@@ -239,21 +261,22 @@ defmodule Systems.License.Public do
   end
 
   # Tells `user` about their `license`: a notification (`License.Notify`)
-  # shown as a To-do (`License.NextActions`), recorded as from `by` (`nil`: the
-  # daily job). The notifications about that license the user hasn't seen yet
+  # shown as a To-do (`License.NextActions`) about the license record
+  # `record_id`, recorded as from `by` (`nil`: the daily job). The notifications about that license the user hasn't seen yet
   # are marked seen first, so it replaces the To-do they had about it. Only
   # called under the license's lock.
-  defp tell(user, license, message, by) do
+  defp tell(user, license, message, record_id, by) do
     correlation_id = correlation_id(license)
     {:ok, _} = Notify.Public.mark_seen(user, correlation_id: correlation_id)
     {type, metadata} = event(message)
+    metadata = Map.merge(metadata, %{"license" => to_string(license), "record_id" => record_id})
 
     Notify.Public.record_event(%Notify.EventAttrs{
       type: type,
       subject_user: user,
       actor_user: by,
       correlation_id: correlation_id,
-      metadata: Map.put(metadata, "license", to_string(license)),
+      metadata: metadata,
       source: __MODULE__
     })
   end

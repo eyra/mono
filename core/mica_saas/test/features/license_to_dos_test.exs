@@ -22,6 +22,21 @@ defmodule MicaSaasWeb.Features.LicenseToDosTest do
     "a[href='/notify/open/#{message_id}']"
   end
 
+  # Waits for the save to enqueue its tell, then runs it.
+  defp run_tell_job(attempts \\ 50) do
+    case Oban.drain_queue(queue: :default) do
+      %{success: 0} when attempts > 0 ->
+        Process.sleep(100)
+        run_tell_job(attempts - 1)
+
+      %{success: 0} ->
+        flunk("the save enqueued no tell")
+
+      _drained ->
+        :ok
+    end
+  end
+
   @sessions 2
   @tag :feature
   feature "the researcher is told about the license and reminded before it ends",
@@ -49,6 +64,9 @@ defmodule MicaSaasWeb.Features.LicenseToDosTest do
     |> click(Query.css("[data-testid='license-publish-select']"))
     |> click(Query.css("[data-testid='license-publish-period-days_30']"))
     |> click(Query.css("[data-testid='licenses-save']"))
+
+    # The save's tell is a job (`License.TellWorker`); run it as Oban would.
+    run_tell_job()
 
     researcher_session
     |> assert_has(Query.css("#next-actions a[href^='/notify/open/']"))

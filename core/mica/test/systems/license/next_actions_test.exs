@@ -39,7 +39,12 @@ defmodule Systems.License.NextActionsTest do
     end)
   end
 
-  defp give(admin, researcher, changes), do: License.Public.save(admin, researcher, changes, @now)
+  # A save, and the tell it enqueued (`License.TellWorker`) run as Oban would.
+  defp give(admin, researcher, changes) do
+    result = License.Public.save(admin, researcher, changes, @now)
+    Oban.drain_queue(queue: :default)
+    result
+  end
 
   # As clicking the To-do's button does (`Notify.Public.open_message/2`, tested
   # in Self's suite, which can build the button's path).
@@ -430,6 +435,58 @@ defmodule Systems.License.NextActionsTest do
       :ok = give(admin, researcher, %{pay_in: :off})
 
       assert Enum.count(notifications(researcher), &(&1.status == :seen)) == 1
+    end
+  end
+
+  # The save's tell is a job inserted in the save's transaction, so it can't be
+  # lost after the save, and isn't done for a save that was rolled back.
+  describe "the tell of a save" do
+    test "is enqueued with the save", %{admin: admin, researcher: researcher} do
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}}, @now)
+
+      assert_enqueued(
+        worker: License.TellWorker,
+        args: %{"user_id" => researcher.id, "license" => "publish", "by_id" => admin.id}
+      )
+
+      assert to_dos(researcher) == []
+    end
+
+    test "is rolled back with the save", %{admin: admin, researcher: researcher} do
+      {:error, :fail, :rolled_back, _} =
+        Ecto.Multi.new()
+        |> Ecto.Multi.run(:save, fn _repo, _ ->
+          {:ok, License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}}, @now)}
+        end)
+        |> Ecto.Multi.run(:fail, fn _repo, _ -> {:error, :rolled_back} end)
+        |> Repo.commit()
+
+      refute_enqueued(worker: License.TellWorker)
+      assert License.Public.list_records(researcher) == []
+    end
+
+    test "isn't enqueued for a switch-off that changes nothing",
+         %{admin: admin, researcher: researcher} do
+      :ok = License.Public.save(admin, researcher, %{publish: :off}, @now)
+
+      refute_enqueued(worker: License.TellWorker)
+    end
+
+    test "running it twice tells once", %{admin: admin, researcher: researcher} do
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}}, @now)
+      args = %{"user_id" => researcher.id, "license" => "publish", "by_id" => admin.id}
+
+      assert :ok = perform_job(License.TellWorker, args)
+      assert :ok = perform_job(License.TellWorker, args)
+
+      assert to_dos(researcher) == [{Given, :publish, "2027-11-26"}]
+      assert [%{type: "license_given", status: :sent}] = notifications(researcher)
+    end
+
+    test "of a user who deleted their account does nothing", %{admin: admin} do
+      args = %{"user_id" => -1, "license" => "publish", "by_id" => admin.id}
+
+      assert :ok = perform_job(License.TellWorker, args)
     end
   end
 

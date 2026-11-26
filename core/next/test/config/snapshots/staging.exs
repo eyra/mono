@@ -111,7 +111,8 @@
     {:feldspar_data_donation, [path: "/app/data/datadonation", retention_hours: 336]},
     {:gettext_fallback_locale, nil},
     {:name, "Next [staging]"},
-    {:oban_plugins, [enabled: ["pruner", "lifeline"], schedule_overrides: []]},
+    {:oban_plugins,
+     [enabled: ["pruner", "lifeline", "license_reminder"], schedule_overrides: []]},
     {:paper,
      [
        import_batch_size: 100,

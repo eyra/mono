@@ -182,6 +182,7 @@
   {:post, "/user/account/native/photo", Systems.Account.NativeController, :photo, "native", nil},
   {:delete, "/user/account/native/session", Systems.Account.NativeController, :sign_out, "native",
    nil},
+  {:get, "/notify/open/:id", Systems.Notify.Controller, :show, "", nil},
   {:post, "/notify/open/:id", Systems.Notify.Controller, :open, "", nil},
   {:post, "/api/e2e/bootstrap", Next.Frameworks.E2E.Controller, :bootstrap, "", nil},
   {:post, "/api/e2e/activate_user", Next.Frameworks.E2E.Controller, :activate_user, "", nil},

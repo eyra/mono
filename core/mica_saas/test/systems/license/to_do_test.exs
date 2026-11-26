@@ -26,6 +26,13 @@ defmodule MicaSaas.Systems.License.ToDoTest do
     %{admin: Factories.insert!(:admin, %{email: "admin1@example.org"})}
   end
 
+  # A save, and the tell it enqueued (`License.TellWorker`) run as Oban would.
+  defp save(admin, user, changes) do
+    result = License.Public.save(admin, user, changes)
+    Oban.drain_queue(queue: :default)
+    result
+  end
+
   defp end_date(period), do: License.Public.end_date(period)
 
   defp date(period), do: License.Public.format_date(end_date(period))
@@ -50,7 +57,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
     {:ok, view, _html} = live(conn, ~m"/todo")
     assert has_element?(view, "#zero-todos")
 
-    :ok = License.Public.save(admin, user, %{pay_in: {:on, end_date(:year_1)}})
+    :ok = save(admin, user, %{pay_in: {:on, end_date(:year_1)}})
 
     assert has_element?(
              view,
@@ -64,12 +71,12 @@ defmodule MicaSaas.Systems.License.ToDoTest do
     user: user,
     admin: admin
   } do
-    :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
+    :ok = save(admin, user, %{publish: {:on, end_date(:year_1)}})
     {:ok, view, _html} = live(conn, ~m"/todo")
     given = to_do(user, Given)
     assert has_element?(view, given)
 
-    :ok = License.Public.save(admin, user, %{publish: :off})
+    :ok = save(admin, user, %{publish: :off})
 
     assert has_element?(
              view,
@@ -96,7 +103,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
              "Your Publish license ends on #{License.Public.format_date(valid_until)}"
            )
 
-    :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
+    :ok = save(admin, user, %{publish: {:on, end_date(:year_1)}})
 
     refute has_element?(view, reminder)
 
@@ -123,7 +130,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
       user: user,
       admin: admin
     } do
-      :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
+      :ok = save(admin, user, %{publish: {:on, end_date(:year_1)}})
 
       assert redirected_to(post(conn, button(user, Given))) == "/project"
       assert NextAction.Public.list_next_actions(user) == []
@@ -134,8 +141,8 @@ defmodule MicaSaas.Systems.License.ToDoTest do
       user: user,
       admin: admin
     } do
-      :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
-      :ok = License.Public.save(admin, user, %{publish: :off})
+      :ok = save(admin, user, %{publish: {:on, end_date(:year_1)}})
+      :ok = save(admin, user, %{publish: :off})
 
       assert redirected_to(post(conn, button(user, SwitchedOff))) == "/support/helpdesk"
       assert NextAction.Public.list_next_actions(user) == []
@@ -164,7 +171,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
       user: user,
       admin: admin
     } do
-      :ok = License.Public.save(admin, user, %{pay_in: {:on, end_date(:year_1)}})
+      :ok = save(admin, user, %{pay_in: {:on, end_date(:year_1)}})
 
       Factories.insert!(:license, %{user: user, valid_until: Date.add(License.Public.today(), 14)})
 

@@ -186,23 +186,36 @@ defmodule Systems.Notify.Public do
   `{:ok, to}` with where the next action's button leads. `:error` when `user`
   has no such message.
   """
-  def open_message(%{id: user_id}, message_id) do
+  def open_message(user, message_id) do
+    with %MessageModel{payload: payload} = message <- get_message(user, message_id),
+         {:ok, to} <- Notify.Channel.NA.target(payload) do
+      if message.status != :seen, do: mark_message_seen(message)
+      {:ok, to}
+    else
+      _ -> :error
+    end
+  end
+
+  @doc """
+  Where the button of `user`'s notification message `message_id` on the `:na`
+  channel leads, without marking it seen: `{:ok, to}`, or `:error` when `user`
+  has no such message. For a GET of `/notify/open/:id`, such as the button
+  opened in a new tab: only a click (the POST) marks it seen.
+  """
+  def message_target(user, message_id) do
+    case get_message(user, message_id) do
+      %MessageModel{payload: payload} -> Notify.Channel.NA.target(payload)
+      nil -> :error
+    end
+  end
+
+  defp get_message(%{id: user_id}, message_id) do
     from(m in MessageModel,
       join: e in EventModel,
       on: e.id == m.event_id,
       where: m.id == ^message_id and m.channel == ^:na and e.subject_user_id == ^user_id
     )
     |> Repo.one()
-    |> open_found()
-  end
-
-  defp open_found(nil), do: :error
-
-  defp open_found(%MessageModel{payload: payload} = message) do
-    with {:ok, to} <- Notify.Channel.NA.target(payload) do
-      if message.status != :seen, do: mark_message_seen(message)
-      {:ok, to}
-    end
   end
 
   @doc """

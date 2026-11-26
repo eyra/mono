@@ -156,7 +156,8 @@
        ],
        oban_plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron, [crontab: [{"5 23 * * *", Systems.License.ReminderWorker}]]}
        ],
        oban_unknown_plugins: [],
        rate_quotas: [
