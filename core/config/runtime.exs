@@ -346,10 +346,29 @@ if config_env() == :prod do
     config :mica, :service_login, key: service_login_key
   end
 
-  # SHA-256 fingerprints of the certificates the Android apps are signed with,
-  # separated by commas or whitespace; served at /.well-known/assetlinks.json.
-  if android_app_cert_fingerprints = System.get_env("ANDROID_APP_CERT_FINGERPRINTS") do
-    config :mica, :android_app_cert_fingerprints, android_app_cert_fingerprints
+  # The Android apps this host vouches for at /.well-known/assetlinks.json:
+  # `<package>=<SHA-256 fingerprint>` per signing certificate, separated by commas or
+  # whitespace. Each environment lists only its own app (prod: the production app
+  # with its Play App Signing certificate). A malformed entry stops the release here.
+  if android_app_links = System.get_env("ANDROID_APP_CERT_FINGERPRINTS") do
+    entry = ~r/\A([a-z][a-z0-9_]*(?:\.[a-z][a-z0-9_]*)+)=([0-9A-F]{2}(?::[0-9A-F]{2}){31})\z/i
+
+    links =
+      android_app_links
+      |> String.split([",", " ", "\t", "\n", "\r"], trim: true)
+      |> Enum.with_index(1)
+      |> Enum.map(fn {link, n} ->
+        case Regex.run(entry, link) do
+          [_, package, fingerprint] ->
+            {package, String.upcase(fingerprint)}
+
+          nil ->
+            raise "ANDROID_APP_CERT_FINGERPRINTS: entry #{n} is not " <>
+                    "<package>=<SHA-256 fingerprint as 32 colon-separated hex pairs>"
+        end
+      end)
+
+    config :mica, :android_app_links, links
   end
 
   # Unset means no fallback: an untranslated string renders its msgid, which in

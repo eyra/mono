@@ -37,6 +37,16 @@ defmodule Next.Systems.WellKnown.ControllerTest do
     assert claimed?(components, "/assignment/#{id}/invite")
   end
 
+  # A panel participant returns from an external survey here in the browser they are
+  # signed in in; in the app the task wouldn't be marked done (Flux 10541358390).
+  test "the app leaves the survey return link to the browser" do
+    components = app_link_components(NextWeb.ConnCase.build_conn())
+
+    refute claimed?(components, "/assignment/callback/7")
+    refute claimed?(components, "/assignment/callback/7?p=panel-1")
+    assert claimed?(components, "/assignment/7")
+  end
+
   defp app_link_components(conn) do
     %{"applinks" => %{"details" => [%{"components" => components}]}} =
       conn |> get("/.well-known/apple-app-site-association") |> json_response(200)
@@ -67,43 +77,43 @@ defmodule Next.Systems.WellKnown.ControllerTest do
     do: Enum.all?(query, fn {key, value} -> params[key] == value end)
 
   describe "assetlinks.json" do
-    test "lists every package with the configured fingerprints", %{conn: conn} do
-      put_fingerprints("#{@fingerprint_a}, #{String.downcase(@fingerprint_b)}")
+    test "vouches for each configured package with its own fingerprints", %{conn: conn} do
+      put_links([
+        {"co.eyra.next", @fingerprint_a},
+        {"co.eyra.next.dev", @fingerprint_b},
+        {"co.eyra.next", @fingerprint_b}
+      ])
 
       conn = get(conn, "/.well-known/assetlinks.json")
 
       assert ["application/json" <> _] = get_resp_header(conn, "content-type")
       assert get_resp_header(conn, "set-cookie") == []
 
-      statements = json_response(conn, 200)
-
-      assert Enum.map(statements, & &1["target"]["package_name"]) ==
-               ["co.eyra.next", "co.eyra.next.dev", "co.eyra.next.staging"]
-
-      for statement <- statements do
-        assert statement["relation"] == ["delegate_permission/common.handle_all_urls"]
-        assert statement["target"]["namespace"] == "android_app"
-        assert statement["target"]["sha256_cert_fingerprints"] == [@fingerprint_a, @fingerprint_b]
-      end
+      assert [
+               %{
+                 "relation" => ["delegate_permission/common.handle_all_urls"],
+                 "target" => %{
+                   "namespace" => "android_app",
+                   "package_name" => "co.eyra.next",
+                   "sha256_cert_fingerprints" => [@fingerprint_a, @fingerprint_b]
+                 }
+               },
+               %{
+                 "target" => %{
+                   "package_name" => "co.eyra.next.dev",
+                   "sha256_cert_fingerprints" => [@fingerprint_b]
+                 }
+               }
+             ] = json_response(conn, 200)
     end
 
-    test "drops malformed fingerprints", %{conn: conn} do
-      put_fingerprints("AB:CD\n#{@fingerprint_a} #{@fingerprint_a}:AB,#{@fingerprint_b}x")
-
-      assert [%{"target" => %{"sha256_cert_fingerprints" => [@fingerprint_a]}} | _] =
-               conn |> get("/.well-known/assetlinks.json") |> json_response(200)
-    end
-
-    test "is not found without a well-formed fingerprint", %{conn: conn} do
-      assert conn |> get("/.well-known/assetlinks.json") |> response(404) == ""
-
-      put_fingerprints("nonsense")
+    test "is not found without a configured app", %{conn: conn} do
       assert conn |> get("/.well-known/assetlinks.json") |> response(404) == ""
     end
   end
 
-  defp put_fingerprints(value) do
-    Mica.Env.put(:android_app_cert_fingerprints, value)
-    on_exit(fn -> Application.delete_env(:mica, :android_app_cert_fingerprints) end)
+  defp put_links(links) do
+    Mica.Env.put(:android_app_links, links)
+    on_exit(fn -> Application.delete_env(:mica, :android_app_links) end)
   end
 end
