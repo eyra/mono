@@ -5,12 +5,14 @@ defmodule Next.Systems.Graphite.ToolView do
 
   import Frameworks.Pixel.Line
 
+  alias Next.Systems.Graphite
   alias Systems.Workflow
 
   def dependencies(), do: [:current_user, :timezone, :tool_ref]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{tool_ref: tool_ref}}) do
-    Workflow.ToolRefModel.tool(tool_ref)
+    %{id: tool_id} = Workflow.ToolRefModel.tool(tool_ref)
+    Graphite.Public.get_tool!(tool_id, Graphite.ToolModel.preload_graph(:leaderboard))
   end
 
   @impl true
