@@ -72,16 +72,8 @@ msgid "account.created.successfully"
 msgstr "Cont creat"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "email.changed.successfully"
-msgstr "Adresa de e-mail a fost modificată"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
 msgstr "Parola a fost schimbată"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "password.updated.successfully"
-msgstr "Parola a fost actualizată"
 
 #, elixir-autogen, elixir-format
 msgid "auth.session.expired"

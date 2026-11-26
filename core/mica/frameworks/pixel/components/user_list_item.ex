@@ -54,9 +54,14 @@ defmodule Frameworks.Pixel.UserListItem do
         </td>
         <td>
           <Text.body_small><%= @email %></Text.body_small>
+          <%= if @info do %>
+            <div class="sm:hidden">
+              <Text.body_small color="text-grey2"><%= @info %></Text.body_small>
+            </div>
+          <% end %>
         </td>
         <%= if @info do %>
-          <td>
+          <td class="hidden sm:table-cell">
             <Text.body_small color="text-grey2"><%= @info %></Text.body_small>
           </td>
         <% end %>

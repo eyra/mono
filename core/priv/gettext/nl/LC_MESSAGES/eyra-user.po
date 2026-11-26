@@ -71,16 +71,8 @@ msgid "account.created.successfully"
 msgstr "Account aangemaakt"
 
 #, elixir-autogen, elixir-format
-msgid "email.changed.successfully"
-msgstr "E-mail aangepast"
-
-#, elixir-autogen, elixir-format
 msgid "password.reset.successfully"
 msgstr "Wachtwoord veranderd"
-
-#, elixir-autogen, elixir-format
-msgid "password.updated.successfully"
-msgstr "Wachtwoord aangepast"
 
 #, elixir-autogen, elixir-format
 msgid "auth.session.expired"

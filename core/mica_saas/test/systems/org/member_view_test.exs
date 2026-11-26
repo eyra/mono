@@ -11,6 +11,7 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
 
   alias Mica.Factories
   alias Frameworks.Concept.LiveContext
+  alias Systems.Account
   alias Systems.Org
 
   describe "MemberView authorization" do
@@ -83,6 +84,92 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
 
       member_ids = Enum.map(Org.Public.list_members(org), & &1.id)
       refute candidate.id in member_ids
+    end
+  end
+
+  describe "MemberView records who adds and removes members" do
+    setup ctx do
+      owner = Factories.insert!(:creator)
+      {:ok, ctx} = login(owner, ctx)
+      conn = ctx[:conn] |> Map.put(:request_path, "/org/node")
+
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["member_view_added_by"],
+          domains: ["uni.test"]
+        })
+
+      :ok = Org.Public.assign_owner(org, owner)
+
+      context = LiveContext.new(%{node_id: org.id, current_user: owner, locale: :en})
+      {:ok, conn: conn, owner: owner, org: org, context: context}
+    end
+
+    test "an owner adds a researcher by hand and shows as who added them",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      researcher = Factories.insert!(:creator, %{email: "researcher@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      send(view.pid, {:add_user, %{user: researcher}})
+
+      assert render(view) =~ "Added by #{Account.User.label(owner)}"
+
+      assert [%{user: %{id: user_id}, added_by: %{id: added_by_id}}] =
+               Org.Public.list_memberships(org)
+
+      assert user_id == researcher.id
+      assert added_by_id == owner.id
+    end
+
+    test "add all domain-matched records the owner for each member",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      Factories.insert!(:creator, %{email: "one@uni.test"})
+      Factories.insert!(:creator, %{email: "two@uni.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      render_click(view, "add_all_domain_matched", %{})
+
+      memberships = Org.Public.list_memberships(org)
+      assert length(memberships) == 2
+      assert Enum.all?(memberships, &(&1.added_by.id == owner.id))
+    end
+
+    test "offers the researchers on a domain as soon as support enters it",
+         %{conn: conn, org: org, context: context} do
+      Factories.insert!(:creator, %{email: "new@lab.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      refute has_element?(view, "[phx-click='add_all_domain_matched']")
+
+      org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
+
+      {:ok, _} =
+        Mica.Persister.save(org, Org.NodeModel.changeset(org, %{domains_string: "lab.test"}))
+
+      assert has_element?(view, "[phx-click='add_all_domain_matched']")
+    end
+
+    test "the only member can be removed",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      member = Factories.insert!(:creator)
+      :ok = Org.Public.add_member(org, member, owner)
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{member.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      _ = render(view)
+      refute Org.Public.member?(org, member)
     end
   end
 

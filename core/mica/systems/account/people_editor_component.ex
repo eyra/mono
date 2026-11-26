@@ -19,6 +19,10 @@ defmodule Systems.Account.PeopleEditorComponent do
         current_user={@current_user}
       />
 
+  ## Optional assigns
+  - `info` - a map of user id to a short text shown next to that person
+  - `keep_last` - when true (the default), the last person can't be removed
+
   ## Events sent to parent
   - `{:add_user, %{user: user}}` - when a user is added
   - `{:remove_user, %{user: user}}` - when a user is removed
@@ -50,6 +54,8 @@ defmodule Systems.Account.PeopleEditorComponent do
       socket
       |> assign(assigns)
       |> assign_new(:total_count, fn -> nil end)
+      |> assign_new(:info, fn -> %{} end)
+      |> assign_new(:keep_last, fn -> true end)
       |> assign_new(:query_string, fn -> "" end)
       |> assign_new(:confirm_removal_user_ids, fn -> MapSet.new() end)
       |> assign_new(:user_item, fn -> nil end)
@@ -139,9 +145,14 @@ defmodule Systems.Account.PeopleEditorComponent do
     %{people: people, current_user: me, confirm_removal_user_ids: ids, myself: target} =
       socket.assigns
 
+    %{info: info, keep_last: keep_last} = socket.assigns
+    removable? = not keep_last or Enum.count(people) > 1
+
     people_items =
       Enum.map(people, fn person ->
-        build_person_item(person, me, Enum.count(people), ids, target)
+        person
+        |> build_person_item(me, removable?, ids, target)
+        |> Map.put(:info, Map.get(info, person.id))
       end)
 
     assign(socket, people_items: people_items)
@@ -181,7 +192,7 @@ defmodule Systems.Account.PeopleEditorComponent do
     Enum.find(users, &(&1.email == String.trim(email)))
   end
 
-  defp build_person_item(user, me, people_count, confirm_ids, target) do
+  defp build_person_item(user, me, removable?, confirm_ids, target) do
     photo_url = ImageHelpers.get_photo_url(user.profile)
 
     base_item = %{
@@ -196,13 +207,13 @@ defmodule Systems.Account.PeopleEditorComponent do
       |> Map.put(:action_buttons, [])
       |> Map.merge(PeopleHelpers.build_confirm_row(user.id, target))
     else
-      Map.put(base_item, :action_buttons, build_remove_buttons(user, people_count, target))
+      Map.put(base_item, :action_buttons, build_remove_buttons(user, removable?, target))
     end
   end
 
-  defp build_remove_buttons(_user, 1, _target), do: []
+  defp build_remove_buttons(_user, false, _target), do: []
 
-  defp build_remove_buttons(user, _count, target) do
+  defp build_remove_buttons(user, true, target) do
     [
       %{
         action: %{type: :send, event: "remove", item: user.id, target: target},

@@ -2,14 +2,16 @@ defmodule Systems.Org.NodeView do
   use MicaWeb, :embedded_live_view
   use MicaWeb.Live.FlashHelpers
 
+  alias Frameworks.Pixel
   alias Frameworks.Pixel.Text
+  alias Systems.Admin
   alias Systems.Content
   alias Systems.Org
 
   import Content.TextBundleInput
   import Frameworks.Pixel.Form
 
-  def dependencies(), do: [:node_id, :is_admin?]
+  def dependencies(), do: [:node_id, :is_admin?, :current_user]
 
   def get_model(:not_mounted_at_router, _session, %{assigns: %{node_id: node_id}}) do
     Org.Public.get_node!(node_id, Org.NodeModel.preload_graph(:full))
@@ -29,8 +31,33 @@ defmodule Systems.Org.NodeView do
     }
   end
 
-  defp save(socket, entity, attrs) do
-    changeset = Org.NodeModel.changeset(entity, attrs)
+  @impl true
+  def handle_event(
+        "toggle_research_institute",
+        _,
+        %{assigns: %{model: org, current_user: user}} = socket
+      ) do
+    case Org.Public.mark_research_institute(org, not Org.NodeModel.research_institute?(org), user) do
+      {:ok, org} ->
+        {:noreply, socket |> assign(model: org) |> update_view_model() |> flash_persister_saved()}
+
+      {:error, _} ->
+        {:noreply, socket |> update_view_model() |> flash_error()}
+    end
+  end
+
+  # Identifier and domains decide who joins as a member, so only system admins
+  # change them; everyone else who can manage the organisation changes its names.
+  defp changeset(entity, attrs, user) do
+    if Admin.Public.admin?(user) do
+      Org.NodeModel.changeset(entity, attrs)
+    else
+      Org.NodeModel.names_changeset(entity, attrs)
+    end
+  end
+
+  defp save(%{assigns: %{current_user: user}} = socket, entity, attrs) do
+    changeset = changeset(entity, attrs, user)
 
     case Mica.Persister.save(entity, changeset) do
       {:ok, updated_entity} ->
@@ -69,6 +96,23 @@ defmodule Systems.Org.NodeView do
           <.text_input form={form} field={:domains_string} label_text={dgettext("eyra-org", "domains.label")} />
         <% end %>
       </.form>
+      <%= if @vm.is_admin? do %>
+        <.spacing value="S" />
+        <label class="flex flex-row gap-3 items-center cursor-pointer w-fit">
+          <Pixel.checkbox
+            checked={@vm.research_institute?}
+            phx-click="toggle_research_institute"
+            data-testid="research-institute-checkbox"
+          />
+          <Text.label><%= dgettext("eyra-org", "research.institute.label") %></Text.label>
+        </label>
+        <%= if @vm.research_institute_note do %>
+          <.spacing value="XXS" />
+          <div data-testid="research-institute-note">
+            <Text.body_small color="text-grey2"><%= @vm.research_institute_note %></Text.body_small>
+          </div>
+        <% end %>
+      <% end %>
       </Area.content>
     </div>
     """

@@ -72,16 +72,8 @@ msgid "account.created.successfully"
 msgstr "Paskyra sukurta"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "email.changed.successfully"
-msgstr "El. pašto adresas pakeistas"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
 msgstr "Slaptažodis pakeistas"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "password.updated.successfully"
-msgstr "Slaptažodis atnaujintas"
 
 #, elixir-autogen, elixir-format
 msgid "auth.session.expired"

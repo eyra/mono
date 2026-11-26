@@ -494,6 +494,183 @@ defmodule Systems.Org.PublicTest do
     end
   end
 
+  describe "memberships" do
+    setup do
+      org = Factories.insert!(:org_node, %{identifier: ["memberships_org"]})
+      %{org: org, support: Factories.insert!(:member), user: Factories.insert!(:member)}
+    end
+
+    test "add_member/3 records who added the member and when",
+         %{org: org, support: support, user: user} do
+      assert :ok = Public.add_member(org, user, support)
+
+      assert [%{user: %{id: user_id}, added_by: %{id: added_by_id}, added_at: %NaiveDateTime{}}] =
+               Public.list_memberships(org)
+
+      assert user_id == user.id
+      assert added_by_id == support.id
+    end
+
+    test "adding a member twice keeps one membership", %{org: org, support: support, user: user} do
+      assert :ok = Public.add_member(org, user, support)
+      assert :ok = Public.add_member(org, user, support)
+
+      assert [_] = Public.list_memberships(org)
+      assert [_] = Repo.all(Org.MembershipModel)
+    end
+
+    test "a member added before memberships were recorded has no added_by",
+         %{org: org, user: user} do
+      :ok = Mica.Authorization.assign_role(user, org, :member)
+
+      assert [%{added_by: nil, added_at: %NaiveDateTime{}}] = Public.list_memberships(org)
+    end
+
+    test "remove_member/3 records who removed the member and when",
+         %{org: org, support: support, user: user} do
+      remover = Factories.insert!(:member)
+      :ok = Public.add_member(org, user, support)
+
+      Public.remove_member(org, user, remover)
+
+      refute Public.member?(org, user)
+      assert [] = Public.list_memberships(org)
+
+      assert [%{removed_at: %DateTime{}, removed_by_id: removed_by_id, added_by_id: added_by_id}] =
+               Repo.all(Org.MembershipModel)
+
+      assert removed_by_id == remover.id
+      assert added_by_id == support.id
+    end
+
+    test "a member whose role was removed some other way can be added again",
+         %{org: org, support: support, user: user} do
+      :ok = Public.add_member(org, user, support)
+      # What remove_member/2 did before memberships were recorded.
+      Mica.Authorization.remove_role!(user, org, :member)
+
+      assert :ok = Public.add_member(org, user, support)
+
+      assert Public.member?(org, user)
+      assert [%{added_by: %{id: added_by_id}}] = Public.list_memberships(org)
+      assert added_by_id == support.id
+
+      assert [%{removed_at: %DateTime{}}, %{removed_at: nil}] =
+               Repo.all(from(m in Org.MembershipModel, order_by: m.id))
+    end
+
+    test "a member added again gets a new membership", %{org: org, support: support, user: user} do
+      owner = Factories.insert!(:member)
+      :ok = Public.add_member(org, user, support)
+      Public.remove_member(org, user, support)
+      :ok = Public.add_member(org, user, owner)
+
+      assert [%{added_by: %{id: added_by_id}}] = Public.list_memberships(org)
+      assert added_by_id == owner.id
+      assert 2 == Repo.aggregate(Org.MembershipModel, :count)
+    end
+  end
+
+  describe "research institutes" do
+    setup do
+      admin = Factories.insert!(:member, %{email: "admin1@example.org"})
+      org = Factories.insert!(:org_node, %{identifier: ["research_institute_org"]})
+      %{admin: admin, org: org}
+    end
+
+    test "a system admin marks an organisation and the mark records who and when",
+         %{admin: admin, org: org} do
+      assert {:ok, %{research_institute_at: %DateTime{}, research_institute_by_id: by_id} = org} =
+               Public.mark_research_institute(org, true, admin)
+
+      assert by_id == admin.id
+      assert Org.NodeModel.research_institute?(org)
+    end
+
+    test "a system admin removes the mark", %{admin: admin, org: org} do
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+
+      assert {:ok, %{research_institute_at: nil, research_institute_by_id: nil}} =
+               Public.mark_research_institute(org, false, admin)
+    end
+
+    test "an organisation owner can't set the mark", %{org: org} do
+      owner = Factories.insert!(:member)
+      :ok = Public.assign_owner(org, owner)
+
+      assert {:error, :forbidden} = Public.mark_research_institute(org, true, owner)
+      refute Org.NodeModel.research_institute?(Public.get_node!(org.id))
+    end
+
+    test "list_research_institutes/1 lists the marked organisations the user is a member of",
+         %{admin: admin, org: org} do
+      user = Factories.insert!(:member)
+      other = Factories.insert!(:org_node, %{identifier: ["not_a_research_institute"]})
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+      :ok = Public.add_member(org, user, admin)
+      :ok = Public.add_member(other, user, admin)
+
+      assert [%{id: org_id}] = Public.list_research_institutes(user)
+      assert org_id == org.id
+    end
+
+    test "a removed member no longer belongs to the research institute",
+         %{admin: admin, org: org} do
+      user = Factories.insert!(:member)
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+      :ok = Public.add_member(org, user, admin)
+
+      Public.remove_member(org, user, admin)
+
+      assert [] = Public.list_research_institutes(user)
+    end
+
+    test "removing the mark ends membership of a research institute",
+         %{admin: admin, org: org} do
+      user = Factories.insert!(:member)
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+      :ok = Public.add_member(org, user, admin)
+
+      {:ok, _} = Public.mark_research_institute(org, false, admin)
+
+      assert [] = Public.list_research_institutes(user)
+      assert Public.member?(org, user)
+    end
+
+    test "an archived research institute doesn't count", %{admin: admin, org: org} do
+      user = Factories.insert!(:member)
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+      :ok = Public.add_member(org, user, admin)
+
+      {:ok, _} = Public.archive(org)
+
+      assert [] = Public.list_research_institutes(user)
+    end
+
+    test "an owner who isn't a member doesn't belong to the research institute",
+         %{admin: admin, org: org} do
+      owner = Factories.insert!(:member)
+      {:ok, org} = Public.mark_research_institute(org, true, admin)
+      :ok = Public.assign_owner(org, owner)
+
+      assert [] = Public.list_research_institutes(owner)
+    end
+  end
+
+  describe "NodeModel.names_changeset/2" do
+    test "leaves identifier and domains unchanged" do
+      org = Factories.insert!(:org_node, %{identifier: ["names_only"], domains: ["uni.test"]})
+
+      changeset =
+        Org.NodeModel.names_changeset(org, %{
+          "identifier_string" => "other",
+          "domains_string" => "gmail.com"
+        })
+
+      assert changeset.changes == %{}
+    end
+  end
+
   describe "domain matching" do
     test "find_domain_matched_users finds users by email domain" do
       user1 = Factories.insert!(:member, %{email: "test@vu.nl"})

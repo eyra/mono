@@ -7,7 +7,7 @@ defmodule Frameworks.Storybook.Pixel.Button.Delete do
     [
       %Variation{
         id: :default,
-        attributes: %{label: "Delete account", path: "/user/settings"},
+        attributes: %{label: "Delete account", path: "/user/account"},
         slots: []
       }
     ]

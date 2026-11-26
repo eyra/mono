@@ -9,7 +9,6 @@ defmodule Systems.Account.UserTokenModel do
   # since someone with access to the email may take over the account.
   @reset_password_validity_in_days 1
   @confirm_validity_in_days 7
-  @change_email_validity_in_days 7
   @session_validity_in_days 60
 
   @session_context "session"
@@ -143,28 +142,6 @@ defmodule Systems.Account.UserTokenModel do
 
   defp days_for_context("confirm"), do: @confirm_validity_in_days
   defp days_for_context("reset_password"), do: @reset_password_validity_in_days
-
-  @doc """
-  Checks if the token is valid and returns its underlying lookup query.
-
-  The query returns the user token record.
-  """
-  def verify_change_email_token_query(token, context) do
-    case Base.url_decode64(token, padding: false) do
-      {:ok, decoded_token} ->
-        hashed_token = :crypto.hash(@hash_algorithm, decoded_token)
-
-        query =
-          from(token in token_and_context_query(hashed_token, context),
-            where: token.inserted_at > ago(@change_email_validity_in_days, "day")
-          )
-
-        {:ok, query}
-
-      :error ->
-        :error
-    end
-  end
 
   @doc """
   Builds a token for a one-time step of `context`, such as handing a sign-in
