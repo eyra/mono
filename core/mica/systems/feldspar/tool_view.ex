@@ -204,7 +204,7 @@ defmodule Systems.Feldspar.ToolView do
           <div
             data-testid="app-container"
             inert={not @initialized}
-            class={"w-full h-full #{if @started and @initialized, do: "block", else: "opacity-0 pointer-events-none absolute inset-0 overflow-hidden"}"}
+            class={"w-full h-full pt-2 sm:pt-4 #{if @started and @initialized, do: "block", else: "opacity-0 pointer-events-none absolute inset-0 overflow-hidden"}"}
           >
             <.element {Map.from_struct(@vm.app_view)} socket={@socket} />
           </div>

@@ -339,7 +339,7 @@ defmodule Frameworks.Pixel.ModalView do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
     <div class={"modal-full p-4 xl:px-20 xl:py-8 w-full h-full"}>
-      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full overflow-hidden #{unless Keyword.get(@modal.options, :flush), do: "pt-4 sm:pt-8"}"}>
+      <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- HEADER --%>
           <%!-- OPTIONAL LIGHT GREY TITLE THAT DESCRIBES THE CONTEXT OF THE MODAL --%>
           <div :if={Keyword.get(@modal.element.options, :header)} class="px-4 sm:px-8">

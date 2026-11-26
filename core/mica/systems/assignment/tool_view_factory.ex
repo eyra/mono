@@ -43,7 +43,6 @@ defmodule Systems.Assignment.ToolViewFactory do
       modal_id,
       view_module,
       style: :full,
-      flush: match?(%Systems.Feldspar.ToolModel{}, tool),
       session: [live_context: task_context]
     )
   end
