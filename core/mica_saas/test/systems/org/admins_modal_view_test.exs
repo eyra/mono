@@ -80,5 +80,46 @@ defmodule MicaSaas.Systems.Org.AdminsModalViewTest do
       # Now no owners
       assert Enum.empty?(Org.Public.list_owners(org))
     end
+
+    test "Add and Remove show in the list at once", %{conn: conn} do
+      owner = Factories.insert!(:creator, %{email: "first-owner@gmail.test"})
+      new_owner = Factories.insert!(:creator, %{email: "new-owner@gmail.test"})
+      org = Factories.insert!(:org_node, %{identifier: ["add_remove_owner_org"]})
+      :ok = Org.Public.assign_owner(org, owner)
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.AdminsModalView,
+          session: %{
+            "org_id" => org.id,
+            "locale" => "en"
+          }
+        )
+
+      refute render(view) =~ new_owner.email
+
+      view
+      |> form("#org_admins_editor_search_bar_form", %{query: new_owner.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{new_owner.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      _ = render(view)
+
+      assert new_owner.id in Enum.map(Org.Public.list_owners(org), & &1.id)
+      assert has_element?(view, "[phx-click='remove'][phx-value-item='#{new_owner.id}']")
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{new_owner.id}']")
+      |> render_click()
+
+      html = render(view)
+
+      refute new_owner.id in Enum.map(Org.Public.list_owners(org), & &1.id)
+      refute html =~ new_owner.email
+      refute has_element?(view, "[phx-click='remove'][phx-value-item='#{new_owner.id}']")
+    end
   end
 end

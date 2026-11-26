@@ -28,7 +28,8 @@ defmodule Systems.Account.PeopleEditorComponent do
   ## Events sent to parent
   - `{:add_user, %{user: user}}` - when a user is added; the parent saves it
     and passes the new `people` and `users`
-  - `{:remove_user, %{user: user}}` - when a user is removed
+  - `{:remove_user, %{user: user}}` - when a user is removed; the parent saves
+    it and passes the new `people` and `users`
   """
   use Phoenix.LiveComponent
   use Gettext, backend: MicaWeb.Gettext
@@ -127,20 +128,17 @@ defmodule Systems.Account.PeopleEditorComponent do
      |> update_people_items()}
   end
 
+  # The parent may refuse the remove, so the list only changes when the parent
+  # passes the new people.
   defp finalize_remove(socket, user) do
-    %{users: users, people: people, confirm_removal_user_ids: ids} = socket.assigns
-
-    new_people = Enum.reject(people, &(&1.id == user.id))
-    new_users = users ++ [user]
+    %{confirm_removal_user_ids: ids} = socket.assigns
 
     send(self(), {:remove_user, %{user: user}})
 
     {:noreply,
      socket
      |> assign(:confirm_removal_user_ids, MapSet.delete(ids, user.id))
-     |> assign(users: new_users, people: new_people)
-     |> update_people_items()
-     |> update_search_message()}
+     |> update_people_items()}
   end
 
   defp update_people_items(socket) do
