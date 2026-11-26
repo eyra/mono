@@ -46,6 +46,7 @@ defmodule Mica.Release do
     {:ok, _, _} =
       Ecto.Migrator.with_repo(Mica.Repo, fn _repo ->
         alias Systems.Account
+        alias Systems.License
 
         email = "test-creator@eyra.co"
         password = "TestCreator123!"
@@ -61,10 +62,11 @@ defmodule Mica.Release do
                 email: email,
                 hashed_password: hashed_password,
                 creator: true,
-                confirmed_at: now,
-                verified_at: now
+                confirmed_at: now
               })
               |> Mica.Repo.insert()
+
+            {:ok, _} = License.Public.grant(user, :publish, License.Public.end_date(:year_1))
 
             IO.puts("Created test user: #{user.email}")
 

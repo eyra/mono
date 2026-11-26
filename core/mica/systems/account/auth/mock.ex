@@ -9,7 +9,7 @@ defmodule Systems.Account.Auth.Mock do
 
   @impl true
   def user_attrs(%{"email" => email}),
-    do: %{email: email, creator: true, verified_at: NaiveDateTime.utc_now()}
+    do: %{email: email, creator: true}
 
   defmodule UserModel do
     defstruct [:user_id]

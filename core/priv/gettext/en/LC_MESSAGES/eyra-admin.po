@@ -187,3 +187,119 @@ msgstr "Team"
 #, elixir-autogen, elixir-format
 msgid "client_activity.title"
 msgstr "Client activity"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.button"
+msgstr "Licenses"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.custom_date.label"
+msgstr "Custom end date"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.choose"
+msgstr "Choose an end date"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.keep"
+msgstr "Keep %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.label"
+msgstr "End date"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.end_date_not_in_future"
+msgstr "Choose a date after today."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.forbidden"
+msgstr "Only system admins can change licenses."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_custom_date"
+msgstr "Enter the end date."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_end_date"
+msgstr "Choose when the license ends."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.not_saved"
+msgstr "The licenses weren't saved. Try again."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.names"
+msgstr "Research institute: %{names}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none"
+msgstr "No research institute"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.granted"
+msgstr "Given by %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.no_one"
+msgstr "the system"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.revoked"
+msgstr "Switched off by %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.pay_in"
+msgstr "Pay-in"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.custom"
+msgstr "Custom date"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_30"
+msgstr "30 days"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_60"
+msgstr "60 days"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_90"
+msgstr "90 days"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.until"
+msgstr "%{period}, until %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.year_1"
+msgstr "1 year"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.publish"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.save"
+msgstr "Save"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.ended"
+msgstr "Ended on %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.off"
+msgstr "Off"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.on"
+msgstr "On until %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.title"
+msgstr "Licenses"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none.note"
+msgstr "Their pay-ins are refused until they're added to one."

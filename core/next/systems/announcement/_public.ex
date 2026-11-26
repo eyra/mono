@@ -17,6 +17,7 @@ defmodule Next.Systems.Announcement.Public do
   alias Next.Systems.Announcement
   alias Next.Systems.Announcement.NextActions.ReadAnnouncement
   alias Systems.Email
+  alias Systems.License
   alias Systems.NextAction
 
   @doc "Creates an announcement by `author`."
@@ -151,13 +152,12 @@ defmodule Next.Systems.Announcement.Public do
     |> Repo.preload(preload)
   end
 
-  @audience_filters [:verified, :unverified]
-
   @doc """
-  The filters that narrow the audience of an announcement. The audience is
-  always creators; these come on top, combined with AND.
+  The filters that narrow the audience of an announcement: one per license
+  (`Systems.License.Public.licenses/0`, so Pay-in only behind its flag). The
+  audience is always creators; these come on top, combined with AND.
   """
-  def audience_filters, do: @audience_filters
+  def audience_filters, do: License.Public.licenses()
 
   @doc """
   The ids of the users an announcement for the audience of `filters` and
@@ -167,7 +167,8 @@ defmodule Next.Systems.Announcement.Public do
   `audience_filters/0` are ignored.
   """
   def list_audience_ids(filters, query) do
-    filters = [:creator | Enum.filter(filters, &(&1 in @audience_filters))]
+    audience_filters = audience_filters()
+    filters = [:creator | Enum.filter(filters, &(&1 in audience_filters))]
 
     Admin.Public.list_matching_users(filters, query)
     |> Enum.filter(&confirmed?/1)

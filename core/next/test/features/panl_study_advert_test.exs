@@ -32,9 +32,10 @@ defmodule NextWeb.Features.PanlStudyAdvertTest do
       Factories.insert!(:member, %{
         password: researcher_password,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
         creator: true
       })
+
+    Factories.insert!(:license, %{user: researcher})
 
     participant =
       Factories.insert!(:member, %{

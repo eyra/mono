@@ -388,10 +388,6 @@ msgid "templates.questionnaire"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "admin_user_filters.verified"
-msgstr ""
-
-#, elixir-autogen, elixir-format
 msgid "admin_user_filters.creator"
 msgstr ""
 
@@ -500,13 +496,17 @@ msgid "org_member_filters.recent"
 msgstr ""
 
 #, elixir-autogen, elixir-format
-msgid "admin_user_filters.unverified"
-msgstr "Nepatvirtinta"
-
-#, elixir-autogen, elixir-format
 msgid "admin_client_activity_filters.published"
 msgstr ""
 
 #, elixir-autogen, elixir-format
 msgid "admin_client_activity_filters.this_year"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.pay_in"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.publish"
 msgstr ""

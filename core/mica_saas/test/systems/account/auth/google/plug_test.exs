@@ -114,6 +114,16 @@ defmodule MicaSaas.Systems.Account.Auth.Google.CallbackPlug.Test do
       assert user.id
     end
 
+    test "gives the new user neither license" do
+      user =
+        conn(:get, "/google")
+        |> init_test_session(%{"google_sign_in" => %{state: "test-state"}})
+        |> CallbackPlug.call(:test)
+
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
+    end
+
     test "authenticates an existing user" do
       email = MicaSaas.Systems.Account.Auth.Google.FakeGoogle.email()
 

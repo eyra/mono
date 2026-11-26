@@ -189,3 +189,119 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "client_activity.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.button"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.custom_date.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.choose"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.keep"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.end_date_not_in_future"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.forbidden"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_custom_date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_end_date"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.not_saved"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.names"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.granted"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.no_one"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.revoked"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.pay_in"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.custom"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_30"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_60"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_90"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.until"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.year_1"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.publish"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.save"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.ended"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.off"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.on"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.title"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none.note"
+msgstr ""

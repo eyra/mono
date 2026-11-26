@@ -71,7 +71,8 @@ defmodule MicaSaas.Systems.Account.Auth.MockTest do
       user = Repo.get_by(User, email: "example@mock.com")
       assert user
       assert user.creator == true
-      assert user.verified_at != nil
+      refute Systems.License.Public.active?(user, :publish)
+      refute Systems.License.Public.active?(user, :pay_in)
       assert user.confirmed_at == nil
     end
 

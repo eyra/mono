@@ -12,7 +12,6 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
       creator =
         Factories.insert!(:member, %{
           creator: true,
-          verified_at: nil,
           confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
         })
 
@@ -59,18 +58,13 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
       assert html =~ "text-primary"
     end
 
-    test "verify_creator event updates user", %{conn: conn, creator: creator} do
+    test "a creator's row offers Licenses", %{conn: conn, creator: creator} do
       conn = conn |> Map.put(:request_path, "/admin/accounts")
 
-      session = %{}
+      {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: %{})
 
-      {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
-
-      # Click verify button
-      view |> render_click("verify_creator", %{"item" => "#{creator.id}"})
-
-      # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
+      assert has_element?(view, button_selector("licenses", creator), label("Licenses"))
+      refute render(view) =~ "Verified"
     end
 
     test "make_creator event updates user", %{conn: conn} do
@@ -110,28 +104,6 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
 
       # Click activate button
       view |> render_click("activate_user", %{"item" => "#{unconfirmed.id}"})
-
-      # View should still be rendered
-      assert view |> has_element?("[data-testid='account-view']")
-    end
-
-    test "unverify_creator event updates user", %{conn: conn, creator: creator} do
-      # First verify the creator
-      verified_creator =
-        creator
-        |> Ecto.Changeset.change(%{
-          verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-        })
-        |> Mica.Repo.update!()
-
-      conn = conn |> Map.put(:request_path, "/admin/accounts")
-
-      session = %{}
-
-      {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: session)
-
-      # Click unverify button
-      view |> render_click("unverify_creator", %{"item" => "#{verified_creator.id}"})
 
       # View should still be rendered
       assert view |> has_element?("[data-testid='account-view']")
@@ -227,29 +199,6 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
       %{conn: conn |> Map.put(:request_path, "/admin/accounts")}
     end
 
-    test "Verify switches the button to Unverify", %{conn: conn} do
-      user = insert_creator(verified_at: nil)
-      {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: %{})
-
-      view |> button("verify_creator", user) |> render_click()
-
-      assert has_element?(view, button_selector("unverify_creator", user), label("Unverify"))
-      refute has_element?(view, button_selector("verify_creator", user))
-      assert render(view) =~ "Verified "
-    end
-
-    test "Unverify switches the button to Verify", %{conn: conn} do
-      user = insert_creator(verified_at: now())
-      {:ok, view, html} = live_isolated(conn, Admin.AccountView, session: %{})
-      assert html =~ "Verified "
-
-      view |> button("unverify_creator", user) |> render_click()
-
-      assert has_element?(view, button_selector("verify_creator", user), label("Verify"))
-      refute has_element?(view, button_selector("unverify_creator", user))
-      refute render(view) =~ "Verified "
-    end
-
     test "Activate switches the button to Deactivate", %{conn: conn} do
       user = insert_creator(confirmed_at: nil)
       {:ok, view, _html} = live_isolated(conn, Admin.AccountView, session: %{})
@@ -274,7 +223,7 @@ defmodule MicaSaas.Systems.Admin.AccountViewTest do
   defp insert_creator(attrs) do
     Factories.insert!(
       :member,
-      Map.merge(%{creator: true, verified_at: nil, confirmed_at: now()}, Map.new(attrs))
+      Map.merge(%{creator: true, confirmed_at: now()}, Map.new(attrs))
     )
   end
 

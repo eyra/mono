@@ -38,6 +38,17 @@ defmodule Systems.Admin.Switch do
   end
 
   @impl true
+  def intercept({:license, :updated}, %{from_pid: from_pid}) do
+    Observatory.Public.collect_update(
+      {:embedded_live_view, Admin.AccountView},
+      [:singleton],
+      %{model: Observatory.SingletonModel.instance(), from_pid: from_pid}
+    )
+
+    :ok
+  end
+
+  @impl true
   def intercept({:next_action, _}, %{from_pid: from_pid}) do
     update_embedded(Admin.OrgView, Observatory.SingletonModel.instance(), from_pid)
     :ok

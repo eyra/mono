@@ -76,12 +76,14 @@ defmodule Next.Systems.Announcement.ComposePageBuilderTest do
 
   describe "audience" do
     setup do
-      now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
+      set_feature_flag(:panl_post_launch, true)
 
-      %{
-        verified: Factories.insert!(:creator, %{email: "anna@example.org", verified_at: now}),
-        unverified: Factories.insert!(:creator, %{email: "bram@example.org"})
-      }
+      publisher = Factories.insert!(:creator, %{email: "anna@example.org"})
+      Factories.insert!(:license, %{user: publisher, license: :publish})
+      payer = Factories.insert!(:creator, %{email: "bram@example.org"})
+      Factories.insert!(:license, %{user: payer, license: :pay_in})
+
+      %{publisher: publisher, payer: payer}
     end
 
     test "is built for a new announcement", %{admin: admin} do
@@ -204,7 +206,7 @@ defmodule Next.Systems.Announcement.ComposePageBuilderTest do
 
     test "counts one creator in the singular", %{admin: admin} do
       assert %{audience: %{recipient_text: "1 creator will receive this announcement."}} =
-               composing(admin, %{audience_filters: [:verified]})
+               composing(admin, %{audience_filters: [:publish]})
     end
 
     test "search narrows the count", %{admin: admin} do
@@ -213,16 +215,24 @@ defmodule Next.Systems.Announcement.ComposePageBuilderTest do
 
     test "says when nobody matches", %{admin: admin} do
       assert %{audience: %{recipient_count: 0, recipient_text: text}} =
-               composing(admin, %{audience_filters: [:verified, :unverified]})
+               composing(admin, %{audience_filters: [:publish, :pay_in]})
 
       assert text == "No creators match these filters and search."
     end
 
-    test "offers Verified and Unverified, not Creator, Affiliate or Pool", %{admin: admin} do
+    test "offers Publish and Pay-in, not Creator, Affiliate or Pool", %{admin: admin} do
       assert %{audience: %{filter_labels: labels, creators_label: "Creators"}} =
-               composing(admin, %{audience_filters: [:verified]})
+               composing(admin, %{audience_filters: [:publish]})
 
-      assert Enum.map(labels, &{&1.id, &1.active}) == [verified: true, unverified: false]
+      assert Enum.map(labels, &{&1.id, &1.active}) == [publish: true, pay_in: false]
+    end
+
+    test "offers no Pay-in without :panl_post_launch", %{admin: admin} do
+      set_feature_flag(:panl_post_launch, false)
+
+      assert %{audience: %{filter_labels: labels}} = composing(admin)
+
+      assert Enum.map(labels, & &1.id) == [:publish]
     end
 
     test "says that a high-priority announcement is also emailed", %{admin: admin} do

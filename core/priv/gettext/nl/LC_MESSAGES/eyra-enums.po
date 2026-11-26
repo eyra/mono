@@ -386,10 +386,6 @@ msgstr ""
 msgid "templates.questionnaire"
 msgstr "Online studie"
 
-#, elixir-autogen, elixir-format
-msgid "admin_user_filters.verified"
-msgstr ""
-
 #, elixir-autogen, elixir-format, fuzzy
 msgid "admin_user_filters.creator"
 msgstr ""
@@ -499,13 +495,17 @@ msgid "org_member_filters.recent"
 msgstr "Recent"
 
 #, elixir-autogen, elixir-format
-msgid "admin_user_filters.unverified"
-msgstr "Niet geverifieerd"
-
-#, elixir-autogen, elixir-format
 msgid "admin_client_activity_filters.published"
 msgstr "Gepubliceerd"
 
 #, elixir-autogen, elixir-format
 msgid "admin_client_activity_filters.this_year"
 msgstr "Dit jaar"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.pay_in"
+msgstr "Pay-in"
+
+#, elixir-autogen, elixir-format
+msgid "admin_user_filters.publish"
+msgstr "Publiceren"

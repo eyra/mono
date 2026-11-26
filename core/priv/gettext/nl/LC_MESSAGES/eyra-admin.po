@@ -187,3 +187,119 @@ msgstr "Team"
 #, elixir-autogen, elixir-format
 msgid "client_activity.title"
 msgstr "Klantactiviteit"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.button"
+msgstr "Licenties"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.custom_date.label"
+msgstr "Eigen einddatum"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.choose"
+msgstr "Kies een einddatum"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.keep"
+msgstr "%{date} houden"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.end_date.label"
+msgstr "Einddatum"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.end_date_not_in_future"
+msgstr "Kies een datum na vandaag."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.forbidden"
+msgstr "Alleen systeembeheerders kunnen licenties wijzigen."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_custom_date"
+msgstr "Vul de einddatum in."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.no_end_date"
+msgstr "Kies wanneer de licentie afloopt."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.error.not_saved"
+msgstr "De licenties zijn niet opgeslagen. Probeer het opnieuw."
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.names"
+msgstr "Onderzoeksinstituut: %{names}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none"
+msgstr "Geen onderzoeksinstituut"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.granted"
+msgstr "Gegeven door %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.no_one"
+msgstr "het systeem"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.note.revoked"
+msgstr "Uitgezet door %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.pay_in"
+msgstr "Pay-in"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.custom"
+msgstr "Eigen datum"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_30"
+msgstr "30 dagen"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_60"
+msgstr "60 dagen"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.days_90"
+msgstr "90 dagen"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.until"
+msgstr "%{period}, tot %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.period.year_1"
+msgstr "1 jaar"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.publish"
+msgstr "Publiceren"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.save"
+msgstr "Opslaan"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.ended"
+msgstr "Afgelopen op %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.off"
+msgstr "Uit"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.status.on"
+msgstr "Aan tot %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.title"
+msgstr "Licenties"
+
+#, elixir-autogen, elixir-format
+msgid "licenses.institute.none.note"
+msgstr "Pay-ins worden geweigerd tot die aan een instituut is toegevoegd."
