@@ -174,9 +174,11 @@ defmodule Systems.Notify.Public do
 
   Opening changes state, so it is a POST with the page's CSRF token
   (`POST /notify/open/:id`): another site can't open a user's notifications.
+  The action also says where it leads (`destination`), for a client that
+  can't send that POST, such as the app's Home (`Home.BFFPage`).
   """
-  def open_action(%{"notify_message_id" => message_id}, _to),
-    do: %{type: :http_post, to: ~m"/notify/open/#{message_id}"}
+  def open_action(%{"notify_message_id" => message_id}, to),
+    do: %{type: :http_post, to: ~m"/notify/open/#{message_id}", destination: to}
 
   def open_action(_params, to), do: %{type: :redirect, to: to}
 
