@@ -54,6 +54,40 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       refute candidate.id in member_ids
     end
 
+    test "an Add refused after the owner role is revoked shows no row, name or photo",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, researcher)
+      refute html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+    end
+
     test "handle_info {:remove_user, ...} no-ops after owner role is revoked",
          %{conn: conn, owner: owner, org: org, context: context} do
       member = Factories.insert!(:creator)
