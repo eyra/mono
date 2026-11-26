@@ -4,6 +4,7 @@ defmodule Systems.NextAction.Public do
   """
   # This is a macro that imports the Mica module and the public macro from the Mica module.
   use Mica, :public
+  require Logger
   import Ecto.Query, warn: false
   alias Mica.Repo
   alias Systems.Account.User
@@ -24,16 +25,16 @@ defmodule Systems.NextAction.Public do
     from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 10)
     |> by_priority()
     |> Repo.all()
-    |> Enum.map(&to_view_model(&1))
+    |> view_models()
   end
 
   @doc """
   """
   def next_best_action(%User{} = user) do
-    from(na in NextAction.Model, where: na.user_id == ^user.id, limit: 1)
+    from(na in NextAction.Model, where: na.user_id == ^user.id)
     |> by_priority()
-    |> Repo.one()
-    |> to_view_model()
+    |> Repo.all()
+    |> Enum.find_value(&to_view_model/1)
   end
 
   @doc """
@@ -84,7 +85,7 @@ defmodule Systems.NextAction.Public do
     )
     |> by_priority()
     |> Repo.all()
-    |> Enum.map(&to_view_model(&1))
+    |> view_models()
   end
 
   @doc """
@@ -181,6 +182,15 @@ defmodule Systems.NextAction.Public do
   defp conflict_target_fragment(nil), do: "(user_id,action) WHERE key is NULL"
   defp conflict_target_fragment(_key), do: "(user_id,action,key) WHERE key is not NULL"
 
+  @doc """
+  Clears the next action of type `action` of the audience.
+
+  Options:
+    * `:key` - the key it was created with
+    * `:params` - only a next action whose params hold these values, or don't
+      hold such a param at all (one stored before it was). Clears nothing that
+      was created again for something else in the meantime.
+  """
   def clear_next_action(audience, action, opts \\ [])
 
   def clear_next_action([_ | _] = users, action, opts) do
@@ -193,6 +203,7 @@ defmodule Systems.NextAction.Public do
 
     from(na in NextAction.Model, where: na.user_id == ^user.id and na.action == ^action_string)
     |> where_key_is(key)
+    |> where_params(Keyword.get(opts, :params, %{}))
     |> Repo.delete_all()
     |> tap(fn _ ->
       Signal.Public.dispatch!({:next_action, :cleared}, %{
@@ -212,12 +223,47 @@ defmodule Systems.NextAction.Public do
   defp where_key_is(query, nil), do: from(na in query, where: is_nil(na.key))
   defp where_key_is(query, key), do: from(na in query, where: na.key == ^key)
 
+  # A row whose params hold each value, or don't hold that param at all (a row
+  # stored before the param was).
+  defp where_params(query, params) do
+    Enum.reduce(params, query, fn {name, value}, query ->
+      value = to_string(value)
+
+      from(na in query,
+        where: fragment("coalesce(? ->> ?, ?) = ?", na.params, ^name, ^value, ^value)
+      )
+    end)
+  end
+
+  defp view_models(next_actions), do: Enum.flat_map(next_actions, &List.wrap(to_view_model(&1)))
+
+  @doc """
+  The view model of a stored next action, or `nil`. A next action whose type
+  this release doesn't have (stored by a later release, before a rollback or
+  during a rolling deploy) is `nil` too, so lists leave it out instead of
+  failing.
+  """
   def to_view_model(nil), do: nil
 
   def to_view_model(%NextAction.Model{action: action, count: count, params: params}) do
+    case action_type(action) do
+      {:ok, action_type} ->
+        action_type.to_view_model(count, params)
+        |> Map.put(:action_type, action_type)
+
+      :error ->
+        Logger.warning("[NextAction] skipped next action of unknown type #{action}")
+        nil
+    end
+  end
+
+  defp action_type(action) do
     action_type = String.to_existing_atom(action)
 
-    action_type.to_view_model(count, params)
-    |> Map.put(:action_type, action_type)
+    if Code.ensure_loaded?(action_type) and function_exported?(action_type, :to_view_model, 2),
+      do: {:ok, action_type},
+      else: :error
+  rescue
+    ArgumentError -> :error
   end
 end

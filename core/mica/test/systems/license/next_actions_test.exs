@@ -433,6 +433,93 @@ defmodule Systems.License.NextActionsTest do
     end
   end
 
+  # Saves and the daily job tell one after the other per user and license, and
+  # each tells what the license is when its turn comes. Real overlap can't run
+  # under the test sandbox (one connection), so these replay the interleavings
+  # in order: a tell that arrives late, after a newer save.
+  describe "tells about one license, one at a time" do
+    test "the tell of an earlier save that arrives late tells the current end date",
+         %{admin: admin, researcher: researcher} do
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-01-01]}})
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-06-01]}})
+
+      License.Public.tell_current(researcher, :publish, admin)
+
+      assert to_dos(researcher) == [{Given, :publish, "2027-06-01"}]
+      assert Enum.count(notifications(researcher), &(&1.status == :sent)) == 1
+    end
+
+    test "the tell of a give that arrives after a switch-off tells it is switched off",
+         %{admin: admin, researcher: researcher} do
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-01-01]}})
+      :ok = give(admin, researcher, %{publish: :off})
+
+      License.Public.tell_current(researcher, :publish, admin)
+
+      assert to_dos(researcher) == [{SwitchedOff, :publish, nil}]
+    end
+
+    test "the daily job skips a license support gave again after the job read it",
+         %{admin: admin, researcher: researcher} do
+      read = Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-12-05]})
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-11-26]}})
+
+      assert :skipped =
+               License.Public.tell_if_current(
+                 researcher,
+                 :publish,
+                 read.id,
+                 {:reminder, ~D[2026-12-05]}
+               )
+
+      assert to_dos(researcher) == [{Given, :publish, "2027-11-26"}]
+    end
+
+    test "the daily job skips a license support switched off after the job read it",
+         %{admin: admin, researcher: researcher} do
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2026-12-10]}})
+      read = License.Public.get_current(researcher, :publish)
+      :ok = give(admin, researcher, %{publish: :off})
+
+      assert :skipped =
+               License.Public.tell_if_current(
+                 researcher,
+                 :publish,
+                 read.id,
+                 {:reminder, ~D[2026-12-10]}
+               )
+
+      assert to_dos(researcher) == [{SwitchedOff, :publish, nil}]
+    end
+
+    test "the daily job tells a license that is still as it read it", %{researcher: researcher} do
+      read = Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-12-05]})
+
+      assert :told =
+               License.Public.tell_if_current(
+                 researcher,
+                 :publish,
+                 read.id,
+                 {:reminder, ~D[2026-12-05]}
+               )
+
+      assert to_dos(researcher) == [{Reminder, :publish, "2026-12-05"}]
+    end
+
+    test "the daily job tells an end date once, also when two runs read it",
+         %{researcher: researcher} do
+      read = Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-12-05]})
+
+      tell = fn ->
+        License.Public.tell_if_current(researcher, :publish, read.id, {:reminder, ~D[2026-12-05]})
+      end
+
+      assert :told = tell.()
+      assert :skipped = tell.()
+      assert [_] = notifications(researcher)
+    end
+  end
+
   describe "License.ReminderWorker" do
     test "tells the users whose license has ended", %{researcher: researcher} do
       valid_until = Date.add(License.Public.today(), -1)

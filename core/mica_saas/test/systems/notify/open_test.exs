@@ -43,10 +43,36 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
     test "opens the notification", %{user: user} do
       id = notify(user, :license_given, :publish)
 
-      assert [%{cta_action: %{type: :http_get, to: to}}] =
+      assert [%{cta_action: %{type: :http_post, to: to}}] =
                NextAction.Public.list_next_actions(user)
 
       assert to == "/notify/open/#{id}"
+    end
+  end
+
+  # Opening changes state, so another site must not be able to trigger it: an
+  # <img> or a link to it is a GET, a forged form has no valid CSRF token.
+  describe "opening a notification from another site" do
+    test "with a GET doesn't exist and marks nothing seen", %{conn: conn, user: user} do
+      id = notify(user, :license_given, :publish)
+
+      assert get(conn, "/notify/open/#{id}").status == 404
+
+      assert %{status: :sent} = message(id)
+      assert [_] = NextAction.Public.list_next_actions(user)
+    end
+
+    test "with a POST without a valid CSRF token is refused and marks nothing seen",
+         %{conn: conn, user: user} do
+      id = notify(user, :license_given, :publish)
+      conn = Plug.Conn.put_private(conn, :plug_skip_csrf_protection, false)
+
+      assert_raise Plug.CSRFProtection.InvalidCSRFTokenError, fn ->
+        post(conn, ~m"/notify/open/#{id}", %{"_csrf_token" => "forged"})
+      end
+
+      assert %{status: :sent} = message(id)
+      assert [_] = NextAction.Public.list_next_actions(user)
     end
   end
 
@@ -55,7 +81,7 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
          %{conn: conn, user: user} do
       id = notify(user, :license_given, :publish)
 
-      conn = get(conn, ~m"/notify/open/#{id}")
+      conn = post(conn, ~m"/notify/open/#{id}")
 
       assert redirected_to(conn) == "/project"
       assert %{status: :seen, seen_at: %DateTime{}} = message(id)
@@ -65,7 +91,7 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
          %{conn: conn, user: user} do
       id = notify(user, :license_given, :publish)
 
-      get(conn, ~m"/notify/open/#{id}")
+      post(conn, ~m"/notify/open/#{id}")
 
       assert NextAction.Public.list_next_actions(user) == []
       assert NextAction.Public.count_next_actions(user) == 0
@@ -79,7 +105,7 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
       assert %{action_type: Systems.License.NextActions.Reminder} =
                NextAction.Public.next_best_action(user)
 
-      get(conn, ~m"/notify/open/#{reminder}")
+      post(conn, ~m"/notify/open/#{reminder}")
 
       assert %{action_type: Systems.License.NextActions.Given} =
                NextAction.Public.next_best_action(user)
@@ -87,22 +113,22 @@ defmodule MicaSaas.Systems.Notify.OpenTest do
 
     test "a second time still goes where the button leads", %{conn: conn, user: user} do
       id = notify(user, :license_given, :publish)
-      get(conn, ~m"/notify/open/#{id}")
+      post(conn, ~m"/notify/open/#{id}")
 
-      assert redirected_to(get(conn, ~m"/notify/open/#{id}")) == "/project"
+      assert redirected_to(post(conn, ~m"/notify/open/#{id}")) == "/project"
     end
 
     test "of another user goes to the To-do page and changes nothing", %{conn: conn} do
       other = Factories.insert!(:creator)
       id = notify(other, :license_given, :publish)
 
-      assert redirected_to(get(conn, ~m"/notify/open/#{id}")) == "/todo"
+      assert redirected_to(post(conn, ~m"/notify/open/#{id}")) == "/todo"
       assert %{status: :sent} = message(id)
       assert [_] = NextAction.Public.list_next_actions(other)
     end
 
     test "with an id that isn't a number goes to the To-do page", %{conn: conn} do
-      assert redirected_to(get(conn, "/notify/open/abc")) == "/todo"
+      assert redirected_to(post(conn, "/notify/open/abc")) == "/todo"
     end
   end
 

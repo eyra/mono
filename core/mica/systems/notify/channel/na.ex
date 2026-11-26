@@ -137,11 +137,17 @@ defmodule Systems.Notify.Channel.NA do
   end
 
   @impl true
-  def mark_seen(%MessageModel{event_id: event_id, payload: payload}) do
+  # Clears only the next action this message created: a next action created
+  # again since then, for a newer message with the same key, stays.
+  def mark_seen(%MessageModel{id: message_id, event_id: event_id, payload: payload}) do
     with {:ok, event} <- fetch_event(event_id),
          {:ok, user} <- fetch_user(event.subject_user_id),
          {:ok, action_module} <- resolve_module(payload["action_module"]) do
-      NextAction.Public.clear_next_action(user, action_module, key: payload["key"])
+      NextAction.Public.clear_next_action(user, action_module,
+        key: payload["key"],
+        params: %{"notify_message_id" => message_id}
+      )
+
       :ok
     end
   end

@@ -95,6 +95,44 @@ defmodule Systems.Notify.DeclaredNextActionTest do
     end
   end
 
+  describe "marking a message seen that was replaced in the meantime" do
+    # A click that read message A just before a newer message B about the same
+    # thing replaced it: marking A seen keeps B's next action.
+    test "keeps the next action of the newer message" do
+      user = Factories.insert!(:creator)
+
+      {:ok, _} =
+        record(user, :license_given, %{"license" => "publish", "valid_until" => "2027-01-01"})
+
+      [first] = Repo.all(Notify.MessageModel)
+
+      {:ok, 1} = Notify.Public.mark_seen(user, correlation_id: "license:publish")
+
+      {:ok, _} =
+        record(user, :license_given, %{"license" => "publish", "valid_until" => "2027-06-01"})
+
+      :ok = NA.mark_seen(first)
+
+      assert [%NextAction.Model{params: %{"valid_until" => "2027-06-01"}}] =
+               Repo.all(NextAction.Model)
+    end
+
+    test "clears a next action stored before it carried its message" do
+      user = Factories.insert!(:creator)
+
+      {:ok, _} =
+        record(user, :license_given, %{"license" => "publish", "valid_until" => "2027-01-01"})
+
+      [message] = Repo.all(Notify.MessageModel)
+
+      Repo.update_all(NextAction.Model, set: [params: %{"license" => "publish"}])
+
+      :ok = NA.mark_seen(message)
+
+      assert Repo.all(NextAction.Model) == []
+    end
+  end
+
   describe "list_recorded/2" do
     test "has the events of the type and correlation, also seen ones" do
       user = Factories.insert!(:creator)

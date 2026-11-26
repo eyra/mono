@@ -171,9 +171,12 @@ defmodule Systems.Notify.Public do
   channel shows: it opens the notification (`open_message/2`), which marks it
   seen and then leads to `to`. Without a notification in `params` (the next
   action wasn't delivered through Notify), it leads to `to` directly.
+
+  Opening changes state, so it is a POST with the page's CSRF token
+  (`POST /notify/open/:id`): another site can't open a user's notifications.
   """
   def open_action(%{"notify_message_id" => message_id}, _to),
-    do: %{type: :http_get, to: ~m"/notify/open/#{message_id}"}
+    do: %{type: :http_post, to: ~m"/notify/open/#{message_id}"}
 
   def open_action(_params, to), do: %{type: :redirect, to: to}
 
@@ -203,16 +206,21 @@ defmodule Systems.Notify.Public do
   end
 
   @doc """
-  The events of `type` with `correlation_id` recorded so far:
-  `%{subject_user_id: id, metadata: map}` each, also those already seen.
+  The events of `type` with `correlation_id` recorded so far, of all users or
+  of the user with `subject_user_id`: `%{subject_user_id: id, metadata: map}`
+  each, also those already seen.
   """
-  def list_recorded(type, correlation_id) do
+  def list_recorded(type, correlation_id, subject_user_id \\ nil) do
     from(e in EventModel,
       where: e.type == ^to_string(type) and e.correlation_id == ^correlation_id,
       select: %{subject_user_id: e.subject_user_id, metadata: e.metadata}
     )
+    |> where_subject(subject_user_id)
     |> Repo.all()
   end
+
+  defp where_subject(query, nil), do: query
+  defp where_subject(query, user_id), do: from(e in query, where: e.subject_user_id == ^user_id)
 
   # Fire-and-forget metric log. A failure here shouldn't roll back the event.
   defp log_to_monitor(%EventModel{type: type, subject_user_id: user_id}) do

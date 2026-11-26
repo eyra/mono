@@ -6,7 +6,7 @@ defmodule Systems.License.NextActions do
   its end date, and `Ended` once its end date has passed. Their params are the
   notification's metadata (`"license"`, `"valid_until"`). A user has at most
   one of them per license: each new one marks the earlier ones seen
-  (`License.Public.tell/4`). Clicking the button opens the notification, which
+  (`License.Public.tell_current/3`). Clicking the button opens the notification, which
   marks it seen and clears the To-do (`Notify.Public.open_action/2`).
   """
   use Gettext, backend: MicaWeb.Gettext

@@ -1,6 +1,6 @@
 defmodule Systems.License.Notify do
   @moduledoc """
-  The notifications about a user's license (`License.Public.tell/4`), each
+  The notifications about a user's license (`License.Public.tell_current/3`), each
   shown as a next action on the Actions channel (`:na`).
   """
   use Systems.Notify.EventDeclaration

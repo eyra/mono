@@ -125,7 +125,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
     } do
       :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
 
-      assert redirected_to(get(conn, button(user, Given))) == "/project"
+      assert redirected_to(post(conn, button(user, Given))) == "/project"
       assert NextAction.Public.list_next_actions(user) == []
     end
 
@@ -137,7 +137,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
       :ok = License.Public.save(admin, user, %{publish: {:on, end_date(:year_1)}})
       :ok = License.Public.save(admin, user, %{publish: :off})
 
-      assert redirected_to(get(conn, button(user, SwitchedOff))) == "/support/helpdesk"
+      assert redirected_to(post(conn, button(user, SwitchedOff))) == "/support/helpdesk"
       assert NextAction.Public.list_next_actions(user) == []
     end
 
@@ -146,7 +146,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
 
       1 = License.Public.remind()
 
-      assert redirected_to(get(conn, button(user, Reminder))) == "/support/helpdesk"
+      assert redirected_to(post(conn, button(user, Reminder))) == "/support/helpdesk"
       assert NextAction.Public.list_next_actions(user) == []
     end
 
@@ -155,7 +155,7 @@ defmodule MicaSaas.Systems.License.ToDoTest do
 
       1 = License.Public.tell_ended()
 
-      assert redirected_to(get(conn, button(user, Ended))) == "/support/helpdesk"
+      assert redirected_to(post(conn, button(user, Ended))) == "/support/helpdesk"
       assert NextAction.Public.list_next_actions(user) == []
     end
 

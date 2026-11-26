@@ -160,7 +160,7 @@
   {:post, "/user/account/native/photo", Systems.Account.NativeController, :photo, "native", nil},
   {:delete, "/user/account/native/session", Systems.Account.NativeController, :sign_out, "native",
    nil},
-  {:get, "/notify/open/:id", Systems.Notify.Controller, :open, "", nil},
+  {:post, "/notify/open/:id", Systems.Notify.Controller, :open, "", nil},
   {:get, "/graphite/leaderboard/:id/content", Phoenix.LiveView.Plug,
    Next.Systems.Graphite.LeaderboardContentPage, "live",
    Next.Systems.Graphite.LeaderboardContentPage},

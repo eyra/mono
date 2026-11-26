@@ -123,7 +123,7 @@ defmodule Systems.License.Public do
   that isn't after today `{:error, {:end_date_not_in_future, license}}`.
 
   Once saved, `user` is told about each license given or switched off
-  (`tell/4`).
+  (`tell_current/3`).
   """
   def save(%User{} = by, %User{} = user, changes, %DateTime{} = now \\ DateTime.utc_now())
       when is_map(changes) do
@@ -188,29 +188,62 @@ defmodule Systems.License.Public do
       else: {:ok, nil}
   end
 
-  defp tell_saved(user, by, licenses, results),
-    do: Enum.each(licenses, &tell_saved(user, by, Map.fetch!(results, &1)))
+  # Each license the save changed (a result that isn't `nil`).
+  defp tell_saved(user, by, licenses, results) do
+    for license <- licenses, Map.fetch!(results, license) != nil do
+      tell_current(user, license, by)
+    end
 
-  defp tell_saved(_user, _by, nil), do: :ok
-
-  defp tell_saved(user, by, %License.Model{
-         license: license,
-         revoked_at: nil,
-         valid_until: valid_until
-       }),
-       do: tell(user, license, {:given, valid_until}, by)
-
-  defp tell_saved(user, by, %License.Model{license: license}),
-    do: tell(user, license, :switched_off, by)
+    :ok
+  end
 
   @doc """
-  Tells `user` about their `license`: a notification (`License.Notify`) shown
-  as a To-do (`License.NextActions`), `{:given, end_date}`, `:switched_off`,
-  `{:reminder, end_date}` or `{:ended, end_date}`, recorded as from `by` (`nil`:
-  the daily job). The notifications about that license the user hasn't seen
-  yet are marked seen first, so it replaces the To-do they had about it.
+  Tells `user` how their `license` stands now that `by` changed it: given
+  until its end date, or switched off (`License.Notify`, shown as a To-do).
+  The current record is read under the license's lock (`with_lock/3`), so of
+  two saves at once the user is told the newest state, once it is saved.
   """
-  def tell(%User{} = user, license, message, by \\ nil) do
+  def tell_current(%User{} = user, license, by \\ nil) do
+    with_lock(user, license, fn ->
+      case get_current(user, license) do
+        %License.Model{revoked_at: nil, valid_until: valid_until} ->
+          tell(user, license, {:given, valid_until}, by)
+
+        %License.Model{} ->
+          tell(user, license, :switched_off, by)
+
+        nil ->
+          :ok
+      end
+    end)
+  end
+
+  @doc """
+  The daily job's tell: tells `user` `message` (`{:reminder, end_date}` or
+  `{:ended, end_date}`) about the record `record_id` it read, unless, under the
+  license's lock, that record is no longer the license's current one, was
+  switched off, or was told this already. So a license support gives again or
+  switches off while the job runs keeps the To-do the save told. Returns
+  `:told` or `:skipped`.
+  """
+  def tell_if_current(%User{} = user, license, record_id, {type, valid_until} = message) do
+    with_lock(user, license, fn ->
+      with %License.Model{id: ^record_id, revoked_at: nil} <- get_current(user, license),
+           false <- told?(user, license, type, valid_until) do
+        tell(user, license, message, nil)
+        :told
+      else
+        _ -> :skipped
+      end
+    end)
+  end
+
+  # Tells `user` about their `license`: a notification (`License.Notify`)
+  # shown as a To-do (`License.NextActions`), recorded as from `by` (`nil`: the
+  # daily job). The notifications about that license the user hasn't seen yet
+  # are marked seen first, so it replaces the To-do they had about it. Only
+  # called under the license's lock.
+  defp tell(user, license, message, by) do
     correlation_id = correlation_id(license)
     {:ok, _} = Notify.Public.mark_seen(user, correlation_id: correlation_id)
     {type, metadata} = event(message)
@@ -225,6 +258,27 @@ defmodule Systems.License.Public do
     })
   end
 
+  # Runs `fun` holding a Postgres advisory lock on `user`'s `license`, so the
+  # tells about one license, from saves on any machine and from the daily job,
+  # happen one after the other. A session lock on this process's connection,
+  # not a transaction: each step commits as it happens, so the signals that
+  # refresh open pages never see uncommitted rows.
+  defp with_lock(%User{id: user_id}, license, fun) do
+    lock = [lock_key(license), user_id]
+
+    Repo.checkout(fn ->
+      Repo.query!("SELECT pg_advisory_lock($1::int, $2::int)", lock)
+
+      try do
+        fun.()
+      after
+        Repo.query!("SELECT pg_advisory_unlock($1::int, $2::int)", lock)
+      end
+    end)
+  end
+
+  defp lock_key(license), do: :erlang.phash2({__MODULE__, license})
+
   defp correlation_id(license), do: "license:#{license}"
 
   defp event({:given, valid_until}), do: {:license_given, end_date_metadata(valid_until)}
@@ -232,20 +286,32 @@ defmodule Systems.License.Public do
   defp event({:reminder, valid_until}), do: {:license_reminder, end_date_metadata(valid_until)}
   defp event({:ended, valid_until}), do: {:license_ended, end_date_metadata(valid_until)}
 
+  defp event_type(:reminder), do: :license_reminder
+  defp event_type(:ended), do: :license_ended
+
   defp end_date_metadata(valid_until), do: %{"valid_until" => Date.to_iso8601(valid_until)}
+
+  defp told?(%User{id: user_id}, license, type, valid_until) do
+    end_date = Date.to_iso8601(valid_until)
+
+    type
+    |> event_type()
+    |> Notify.Public.list_recorded(correlation_id(license), user_id)
+    |> Enum.any?(&match?(%{metadata: %{"valid_until" => ^end_date}}, &1))
+  end
 
   @doc """
   Reminds each user whose license ends within 14 days, counted in Amsterdam
   at `now`, and who wasn't reminded of that end date yet: a To-do that opens
-  the helpdesk page (`tell/4`). Every license counts, also one given by no one
-  (the transition). Run daily by `License.ReminderWorker`; returns the number
-  of users reminded.
+  the helpdesk page (`tell_if_current/4`). Every license counts, also one
+  given by no one (the transition). Run daily by `License.ReminderWorker`;
+  returns the number of users reminded.
   """
   def remind(%DateTime{} = now \\ DateTime.utc_now()) do
     today = today(now)
     until = Date.add(today, @reminder_days)
 
-    tell_each(:license_reminder, :reminder, fn query ->
+    tell_each(:reminder, fn query ->
       from(l in query, where: l.valid_until >= ^today and l.valid_until <= ^until)
     end)
   end
@@ -253,38 +319,41 @@ defmodule Systems.License.Public do
   @doc """
   Tells each user whose license has passed its end date, counted in Amsterdam
   at `now`, and who wasn't told yet: a To-do that says which license ended and
-  opens the helpdesk page. It replaces the reminder (`tell/4`). A license
-  support switched off isn't told again. Run daily by
+  opens the helpdesk page. It replaces the reminder (`tell_if_current/4`). A
+  license support switched off isn't told again. Run daily by
   `License.ReminderWorker`; returns the number of users told.
   """
   def tell_ended(%DateTime{} = now \\ DateTime.utc_now()) do
     today = today(now)
 
-    tell_each(:license_ended, :ended, fn query ->
+    tell_each(:ended, fn query ->
       from(l in query, where: l.valid_until < ^today)
     end)
   end
 
-  # Tells `message` about each license in `licenses/0` whose current record
-  # is on and passes `filter`, unless an `event_type` notification about that
-  # end date was recorded before (seen or not).
-  defp tell_each(event_type, message, filter) do
-    for license <- licenses(), reduce: 0 do
-      count ->
-        told = told(event_type, license)
-
-        for %{user: user, valid_until: valid_until} <- list_current(license, filter),
-            not MapSet.member?(told, {user.id, Date.to_iso8601(valid_until)}),
-            reduce: count do
-          count ->
-            tell(user, license, {message, valid_until})
-            count + 1
-        end
-    end
+  # Tells `type` about each license in `licenses/0` whose current record is on
+  # and passes `filter`. The users already told about that end date are left
+  # out up front (seen or not); `tell_if_current/4` checks again under the lock.
+  defp tell_each(type, filter) do
+    licenses()
+    |> Enum.map(&tell_each(type, &1, filter))
+    |> Enum.sum()
   end
 
-  defp told(event_type, license) do
-    event_type
+  defp tell_each(type, license, filter) do
+    told = told(type, license)
+
+    license
+    |> list_current(filter)
+    |> Enum.reject(&MapSet.member?(told, {&1.user.id, Date.to_iso8601(&1.valid_until)}))
+    |> Enum.count(fn %{user: user, id: id, valid_until: valid_until} ->
+      tell_if_current(user, license, id, {type, valid_until}) == :told
+    end)
+  end
+
+  defp told(type, license) do
+    type
+    |> event_type()
     |> Notify.Public.list_recorded(correlation_id(license))
     |> MapSet.new(fn %{subject_user_id: user_id, metadata: metadata} ->
       {user_id, metadata["valid_until"]}
@@ -303,7 +372,7 @@ defmodule Systems.License.Public do
       join: u in User,
       on: u.id == l.user_id,
       where: is_nil(l.revoked_at),
-      select: %{user: u, valid_until: l.valid_until}
+      select: %{user: u, id: l.id, valid_until: l.valid_until}
     )
     |> filter.()
     |> Repo.all()
