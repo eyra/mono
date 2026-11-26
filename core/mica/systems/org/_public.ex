@@ -324,7 +324,7 @@ defmodule Systems.Org.Public do
 
   def find_domain_matched_users(domains, current_members) when is_list(domains) do
     current_member_ids = Enum.map(current_members, & &1.id)
-    domain_patterns = Enum.map(domains, &"%@#{&1}")
+    domain_patterns = Enum.map(domains, &"%@#{escape_like(&1)}")
 
     from(user in User,
       where: fragment("? ILIKE ANY(?)", user.email, ^domain_patterns),
@@ -332,6 +332,10 @@ defmodule Systems.Org.Public do
     )
     |> Repo.all()
   end
+
+  # A domain is matched literally: `%`, `_` and `\` are wildcards or the
+  # escape character in a LIKE pattern.
+  defp escape_like(text), do: String.replace(text, ["\\", "%", "_"], &"\\#{&1}")
 
   # Member role management (Option C pattern - auth roles as source of truth)
 

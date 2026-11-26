@@ -5,6 +5,7 @@ defmodule MicaSaas.Systems.Org.NodeViewTest do
 
   alias Mica.Factories
   alias Frameworks.Concept.LiveContext
+  alias Systems.Content
   alias Systems.Org
 
   defp mount_node_view(conn, org, user, is_admin?) do
@@ -17,6 +18,21 @@ defmodule MicaSaas.Systems.Org.NodeViewTest do
   end
 
   defp reload(org), do: Org.Public.get_node!(org.id)
+
+  defp full_name(org) do
+    org.id
+    |> Org.Public.get_node!(Org.NodeModel.preload_graph(:full))
+    |> Map.fetch!(:full_name_bundle)
+    |> Content.TextBundleModel.text("en", nil, nil)
+  end
+
+  defp rename_params(name) do
+    %{
+      "node_model" => %{
+        "full_name_bundle" => %{"items" => %{"0" => %{"locale" => "en", "text" => name}}}
+      }
+    }
+  end
 
   defp insert_org do
     Factories.insert!(:org_node, %{identifier: ["node_view_org"], domains: ["uni.test"]})
@@ -53,6 +69,24 @@ defmodule MicaSaas.Systems.Org.NodeViewTest do
       })
 
       assert %{domains: ["uni.test"], identifier: ["node_view_org"]} = reload(org)
+    end
+
+    test "renames the organisation", %{conn: conn, org: org, owner: owner} do
+      view = mount_node_view(conn, org, owner, false)
+
+      render_change(view, "save", rename_params("Renamed"))
+
+      assert full_name(org) == "Renamed"
+    end
+
+    test "can't rename the organisation once no longer an owner",
+         %{conn: conn, org: org, owner: owner} do
+      view = mount_node_view(conn, org, owner, false)
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      render_change(view, "save", rename_params("Renamed"))
+
+      refute full_name(org) == "Renamed"
     end
 
     test "can't change domains even when the page was opened as admin",
@@ -93,6 +127,15 @@ defmodule MicaSaas.Systems.Org.NodeViewTest do
       render_change(view, "save", %{"node_model" => %{"domains_string" => "uni.test lab.test"}})
 
       assert %{domains: ["uni.test", "lab.test"]} = reload(org)
+    end
+
+    test "sees what to fix when a domain isn't a domain", %{conn: conn, org: org, admin: admin} do
+      view = mount_node_view(conn, org, admin, true)
+
+      html = render_change(view, "save", %{"node_model" => %{"domains_string" => "uni.test %"}})
+
+      assert html =~ "Enter domain names only"
+      assert %{domains: ["uni.test"]} = reload(org)
     end
   end
 end

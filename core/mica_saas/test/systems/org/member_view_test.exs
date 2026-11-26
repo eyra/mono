@@ -123,6 +123,65 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       assert added_by_id == owner.id
     end
 
+    test "an owner looking up an account sees only the email they typed until it's added",
+         %{conn: conn, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      # The search bar updates the editor with send_update; render/1 waits for it.
+      html = render(view)
+
+      assert has_element?(view, "[phx-click='add'][phx-value-item='#{researcher.id}']")
+      assert html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      assert render(view) =~ "https://photos.test/ada.png"
+    end
+
+    test "an owner can't add an account they didn't look up",
+         %{conn: conn, org: org, context: context} do
+      looked_up = Factories.insert!(:creator, %{email: "looked-up@gmail.test"})
+      other = Factories.insert!(:creator, %{email: "other@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      editor = with_target(view, "#members_editor")
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: looked_up.email})
+      |> render_change()
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, other)
+      refute html =~ other.email
+    end
+
     test "add all domain-matched records the owner for each member",
          %{conn: conn, owner: owner, org: org, context: context} do
       Factories.insert!(:creator, %{email: "one@uni.test"})
