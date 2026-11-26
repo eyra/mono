@@ -123,6 +123,40 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       assert added_by_id == owner.id
     end
 
+    test "an owner looking up an account sees only the email they typed until it's added",
+         %{conn: conn, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      # The search bar updates the editor with send_update; render/1 waits for it.
+      html = render(view)
+
+      assert has_element?(view, "[phx-click='add'][phx-value-item='#{researcher.id}']")
+      assert html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      assert render(view) =~ "https://photos.test/ada.png"
+    end
+
     test "add all domain-matched records the owner for each member",
          %{conn: conn, owner: owner, org: org, context: context} do
       Factories.insert!(:creator, %{email: "one@uni.test"})
