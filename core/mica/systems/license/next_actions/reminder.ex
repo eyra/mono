@@ -9,18 +9,19 @@ defmodule Systems.License.NextActions.Reminder do
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.License.NextActions
+  alias Systems.Notify
 
   @impl Systems.NextAction.ViewModel
-  def to_view_model(_count, %{"license" => key, "valid_until" => valid_until}) do
+  def to_view_model(_count, %{"valid_until" => valid_until} = params) do
     %{
       title:
         dgettext("eyra-nextaction", "license.reminder.title",
-          license: NextActions.name(NextActions.license(key)),
+          license: NextActions.name(NextActions.license(params)),
           date: NextActions.format_date(valid_until)
         ),
       description: dgettext("eyra-nextaction", "license.reminder.description"),
       cta_label: dgettext("eyra-nextaction", "license.helpdesk.cta"),
-      cta_action: %{type: :redirect, to: ~m"/support/helpdesk"}
+      cta_action: Notify.Public.open_action(params, ~m"/support/helpdesk")
     }
   end
 end

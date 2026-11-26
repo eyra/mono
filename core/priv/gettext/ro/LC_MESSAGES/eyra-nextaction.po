@@ -162,3 +162,15 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "license.switched_off.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.pay_in.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.publish.description"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.title"
+msgstr ""

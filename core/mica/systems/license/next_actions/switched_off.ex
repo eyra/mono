@@ -9,10 +9,11 @@ defmodule Systems.License.NextActions.SwitchedOff do
   use Gettext, backend: MicaWeb.Gettext
 
   alias Systems.License.NextActions
+  alias Systems.Notify
 
   @impl Systems.NextAction.ViewModel
-  def to_view_model(_count, %{"license" => key}) do
-    license = NextActions.license(key)
+  def to_view_model(_count, params) do
+    license = NextActions.license(params)
 
     %{
       title:
@@ -21,7 +22,7 @@ defmodule Systems.License.NextActions.SwitchedOff do
         ),
       description: description(license),
       cta_label: dgettext("eyra-nextaction", "license.helpdesk.cta"),
-      cta_action: %{type: :redirect, to: ~m"/support/helpdesk"}
+      cta_action: Notify.Public.open_action(params, ~m"/support/helpdesk")
     }
   end
 

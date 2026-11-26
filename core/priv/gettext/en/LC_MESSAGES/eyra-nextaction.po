@@ -161,3 +161,15 @@ msgstr "You can't publish new studies. Running studies keep running. Ask support
 #, elixir-autogen, elixir-format
 msgid "license.switched_off.title"
 msgstr "Your %{license} license is switched off"
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.pay_in.description"
+msgstr "It ended on %{date}. New pay-ins are refused. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.publish.description"
+msgstr "It ended on %{date}. You can't publish new studies. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.title"
+msgstr "Your %{license} license has ended"

@@ -161,3 +161,15 @@ msgstr "Je kunt geen nieuwe studies publiceren. Lopende studies lopen gewoon doo
 #, elixir-autogen, elixir-format
 msgid "license.switched_off.title"
 msgstr "Je licentie %{license} staat uit"
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.pay_in.description"
+msgstr "Hij is afgelopen op %{date}. Nieuwe pay-ins worden geweigerd. Lopende studies lopen gewoon door. Vraag support via de helpdesk als je de licentie weer nodig hebt."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.publish.description"
+msgstr "Hij is afgelopen op %{date}. Je kunt geen nieuwe studies publiceren. Lopende studies lopen gewoon door. Vraag support via de helpdesk als je de licentie weer nodig hebt."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.title"
+msgstr "Je licentie %{license} is afgelopen"

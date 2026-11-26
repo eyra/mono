@@ -12,4 +12,13 @@ defmodule Systems.Notify.EventType do
   def channels_for(type) when is_atom(type), do: channels_for(Atom.to_string(type))
 
   def all, do: Map.keys(Mica.SaaS.notify_events())
+
+  @doc "The options `type` is declared with (`Systems.Notify.EventDeclaration`), or `[]`."
+  def options_for(type) do
+    type = to_string(type)
+
+    Mica.SaaS.notifiers()
+    |> Enum.flat_map(& &1.notify_events())
+    |> Enum.find_value([], fn {declared, opts} -> if to_string(declared) == type, do: opts end)
+  end
 end

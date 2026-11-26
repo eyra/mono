@@ -16,6 +16,7 @@ defmodule Systems.Notify.Channel.NA do
   alias Systems.Account
   alias Systems.NextAction
   alias Systems.Notify.EventModel
+  alias Systems.Notify.EventType
   alias Systems.Notify.MessageModel
 
   @impl true
@@ -51,21 +52,66 @@ defmodule Systems.Notify.Channel.NA do
      }}
   end
 
-  def build_payload(_event), do: :skip
+  # An event whose declaration names its next action
+  # (`Systems.Notify.EventDeclaration`): keyed by its correlation, with its
+  # metadata as params.
+  def build_payload(%EventModel{type: type, correlation_id: key, metadata: metadata}) do
+    options = EventType.options_for(type)
 
+    case Keyword.fetch(options, :next_action) do
+      {:ok, action_module} ->
+        {:ok,
+         %{
+           "action_module" => to_string(action_module),
+           "key" => key,
+           "params" => metadata,
+           "priority" => options |> Keyword.get(:priority, :normal) |> to_string()
+         }}
+
+      :error ->
+        :skip
+    end
+  end
+
+  # The next action's params carry the message (`notify_message_id`), so its
+  # button can open it through `Notify.Public.open_action/2`.
   @impl true
-  def deliver(%MessageModel{event_id: event_id, payload: payload}) do
+  def deliver(%MessageModel{id: message_id, event_id: event_id, payload: payload}) do
     with {:ok, event} <- fetch_event(event_id),
          {:ok, user} <- fetch_user(event.subject_user_id),
          {:ok, action_module} <- resolve_module(payload["action_module"]) do
-      NextAction.Public.create_next_action(user, action_module,
-        key: payload["key"],
-        params: payload["params"]
+      NextAction.Public.create_next_action(
+        user,
+        action_module,
+        [
+          key: payload["key"],
+          params: Map.put(payload["params"] || %{}, "notify_message_id", message_id)
+        ] ++ priority(payload)
       )
 
       :ok
     end
   end
+
+  defp priority(%{"priority" => priority}) when priority in ["low", "normal", "high"],
+    do: [priority: String.to_existing_atom(priority)]
+
+  defp priority(_payload), do: []
+
+  @doc """
+  Where the button of the next action in `payload` leads: `{:ok, path}` for a
+  redirect, else `:error`.
+  """
+  def target(%{"action_module" => module_string, "params" => params}) do
+    with {:ok, action_module} <- resolve_module(module_string),
+         %{cta_action: %{type: :redirect, to: to}} <- action_module.to_view_model(1, params) do
+      {:ok, to}
+    else
+      _ -> :error
+    end
+  end
+
+  def target(_payload), do: :error
 
   defp fetch_event(event_id) do
     case Repo.get(EventModel, event_id) do

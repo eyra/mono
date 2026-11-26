@@ -4,6 +4,8 @@ defmodule Systems.Notify.Public do
   wherever a notifiable thing happens; the scheduler + channels take it from
   there.
   """
+  use MicaWeb, :verified_routes
+
   require Logger
 
   import Ecto.Query
@@ -162,6 +164,54 @@ defmodule Systems.Notify.Public do
   rescue
     error ->
       {:error, Exception.message(error)}
+  end
+
+  @doc """
+  The button of a next action that a notification on the `:na` (Actions)
+  channel shows: it opens the notification (`open_message/2`), which marks it
+  seen and then leads to `to`. Without a notification in `params` (the next
+  action wasn't delivered through Notify), it leads to `to` directly.
+  """
+  def open_action(%{"notify_message_id" => message_id}, _to),
+    do: %{type: :http_get, to: ~m"/notify/open/#{message_id}"}
+
+  def open_action(_params, to), do: %{type: :redirect, to: to}
+
+  @doc """
+  Opens `user`'s notification message `message_id` on the `:na` channel: marks
+  it seen, which clears its next action (`mark_seen/2`), and returns
+  `{:ok, to}` with where the next action's button leads. `:error` when `user`
+  has no such message.
+  """
+  def open_message(%{id: user_id}, message_id) do
+    from(m in MessageModel,
+      join: e in EventModel,
+      on: e.id == m.event_id,
+      where: m.id == ^message_id and m.channel == ^:na and e.subject_user_id == ^user_id
+    )
+    |> Repo.one()
+    |> open_found()
+  end
+
+  defp open_found(nil), do: :error
+
+  defp open_found(%MessageModel{payload: payload} = message) do
+    with {:ok, to} <- Notify.Channel.NA.target(payload) do
+      if message.status != :seen, do: mark_message_seen(message)
+      {:ok, to}
+    end
+  end
+
+  @doc """
+  The events of `type` with `correlation_id` recorded so far:
+  `%{subject_user_id: id, metadata: map}` each, also those already seen.
+  """
+  def list_recorded(type, correlation_id) do
+    from(e in EventModel,
+      where: e.type == ^to_string(type) and e.correlation_id == ^correlation_id,
+      select: %{subject_user_id: e.subject_user_id, metadata: e.metadata}
+    )
+    |> Repo.all()
   end
 
   # Fire-and-forget metric log. A failure here shouldn't roll back the event.

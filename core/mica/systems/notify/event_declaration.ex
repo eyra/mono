@@ -16,6 +16,20 @@ defmodule Systems.Notify.EventDeclaration do
       def notifiers, do: [Systems.Assignment.Notify]
 
   Only systems that actually publish events need a `_notify.ex`.
+
+  An event on the `:na` (Actions) channel can name the next action it shows as
+  (`Systems.NextAction.ViewModel`) and its priority; the channel then builds
+  that next action from the event itself, keyed by its `correlation_id`, with
+  its `metadata` as params:
+
+      event(:license_reminder,
+        channels: [:na],
+        next_action: Systems.License.NextActions.Reminder,
+        priority: :high
+      )
+
+  Its button opens the notification through `Systems.Notify.Public.open_action/2`,
+  so a click marks it seen.
   """
 
   defmacro __using__(_opts) do
