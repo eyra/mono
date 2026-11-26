@@ -306,6 +306,15 @@ trix-editor ul,
   @apply mb-4 sm:mb-8 list-none;
 }
 
+/* Hanging indent: an item is indented by its marker's room and the marker is
+   pulled back into it, so wrapped lines and sub-lists start under the text */
+trix-editor ul > li,
+.wysiwyg ul > li,
+trix-editor ol > li,
+.wysiwyg ol > li {
+  padding-left: 36px;
+}
+
 trix-editor ul > li::before,
 .wysiwyg ul > li::before {
   @apply bg-wysiwyg-bullet text-primary;
@@ -313,7 +322,7 @@ trix-editor ul > li::before,
   content: "\2022"; /* Add content: \2022 is the CSS Code/unicode for a bullet */
   display: inline-block; /* Needed to add space between the bullet and the text */
   width: 30px; /* Also needed for space (tweak if needed) */
-  margin-left: 6px; /* Also needed for space (tweak if needed) */
+  margin-left: -30px;
   background-size: 10px 10px;
   background-repeat: no-repeat;
   background-position: left center;
@@ -334,7 +343,7 @@ trix-editor ol > li::before,
   white-space: nowrap;
   min-width: 30px; /* Grows for numbers of two or more digits */
   padding-right: 6px;
-  margin-left: 6px; /* Also needed for space (tweak if needed) */
+  margin-left: -30px;
 }
 
 trix-editor ol > li,
@@ -347,20 +356,18 @@ trix-editor li > ol,
 .wysiwyg li > ul,
 .wysiwyg li > ol {
   @apply mb-0;
-  margin-left: 36px; /* The marker's margin and width, so it starts under the text */
 }
 
 /* From ten items on, every number gets room for two digits, so the texts line up */
+trix-editor ol:has(> li:nth-child(10)) > li,
+.wysiwyg ol:has(> li:nth-child(10)) > li {
+  padding-left: 48px;
+}
+
 trix-editor ol:has(> li:nth-child(10)) > li::before,
 .wysiwyg ol:has(> li:nth-child(10)) > li::before {
   min-width: 42px;
-}
-
-trix-editor ol:has(> li:nth-child(10)) > li > ul,
-trix-editor ol:has(> li:nth-child(10)) > li > ol,
-.wysiwyg ol:has(> li:nth-child(10)) > li > ul,
-.wysiwyg ol:has(> li:nth-child(10)) > li > ol {
-  margin-left: 48px;
+  margin-left: -42px;
 }
 
 trix-editor pre,
