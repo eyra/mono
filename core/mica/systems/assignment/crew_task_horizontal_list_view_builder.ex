@@ -108,7 +108,7 @@ defmodule Systems.Assignment.CrewTaskHorizontalListViewBuilder do
         participant_task: participant_task(task),
         title: title,
         icon: icon,
-        tool_ref: tool_ref,
+        tool_ref_id: tool_ref.id,
         presentation: :modal,
         autostart: true
       })

@@ -11,6 +11,7 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
 
   alias Mica.Factories
   alias Frameworks.Concept.LiveContext
+  alias Systems.Account
   alias Systems.Org
 
   describe "MemberView authorization" do
@@ -53,6 +54,40 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       refute candidate.id in member_ids
     end
 
+    test "an Add refused after the owner role is revoked shows no row, name or photo",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, researcher)
+      refute html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+    end
+
     test "handle_info {:remove_user, ...} no-ops after owner role is revoked",
          %{conn: conn, owner: owner, org: org, context: context} do
       member = Factories.insert!(:creator)
@@ -70,6 +105,28 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
       assert member.id in member_ids
     end
 
+    test "a Remove refused after the owner role is revoked keeps the member's row",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      member = Factories.insert!(:creator, %{email: "kept@gmail.test"})
+      :ok = Org.Public.add_member(org, member, owner)
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      :ok = Org.Public.revoke_owner(org, owner)
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{member.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      assert Org.Public.member?(org, member)
+      assert html =~ member.email
+      assert has_element?(view, "[phx-click='remove'][phx-value-item='#{member.id}']")
+    end
+
     test "handle_event add_all_domain_matched no-ops after owner role is revoked",
          %{conn: conn, owner: owner, org: org, context: context} do
       candidate = Factories.insert!(:creator, %{email: "candidate@user-view-auth.test"})
@@ -83,6 +140,185 @@ defmodule MicaSaas.Systems.Org.MemberViewTest do
 
       member_ids = Enum.map(Org.Public.list_members(org), & &1.id)
       refute candidate.id in member_ids
+    end
+  end
+
+  describe "MemberView records who adds and removes members" do
+    setup ctx do
+      owner = Factories.insert!(:creator)
+      {:ok, ctx} = login(owner, ctx)
+      conn = ctx[:conn] |> Map.put(:request_path, "/org/node")
+
+      org =
+        Factories.insert!(:org_node, %{
+          identifier: ["member_view_added_by"],
+          domains: ["uni.test"]
+        })
+
+      :ok = Org.Public.assign_owner(org, owner)
+
+      context = LiveContext.new(%{node_id: org.id, current_user: owner, locale: :en})
+      {:ok, conn: conn, owner: owner, org: org, context: context}
+    end
+
+    test "an owner adds a researcher by hand and shows as who added them",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      researcher = Factories.insert!(:creator, %{email: "researcher@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      send(view.pid, {:add_user, %{user: researcher}})
+
+      assert render(view) =~ "Added by #{Account.User.label(owner)}"
+
+      assert [%{user: %{id: user_id}, added_by: %{id: added_by_id}}] =
+               Org.Public.list_memberships(org)
+
+      assert user_id == researcher.id
+      assert added_by_id == owner.id
+    end
+
+    test "an owner looking up an account sees only the email they typed until it's added",
+         %{conn: conn, context: context} do
+      researcher =
+        Factories.insert!(:creator, %{
+          email: "ada@gmail.test",
+          displayname: "Ada",
+          profile: %Account.UserProfileModel{
+            fullname: "Ada Lovelace",
+            photo_url: "https://photos.test/ada.png"
+          }
+        })
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      # The search bar updates the editor with send_update; render/1 waits for it.
+      html = render(view)
+
+      assert has_element?(view, "[phx-click='add'][phx-value-item='#{researcher.id}']")
+      assert html =~ researcher.email
+      refute html =~ "Ada"
+      refute html =~ "https://photos.test/ada.png"
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      assert render(view) =~ "https://photos.test/ada.png"
+    end
+
+    test "an owner can't add an account they didn't look up",
+         %{conn: conn, org: org, context: context} do
+      looked_up = Factories.insert!(:creator, %{email: "looked-up@gmail.test"})
+      other = Factories.insert!(:creator, %{email: "other@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      editor = with_target(view, "#members_editor")
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: looked_up.email})
+      |> render_change()
+
+      render_click(editor, "add", %{"item" => to_string(other.id)})
+
+      # The component tells the view with a message; render/1 waits for it.
+      html = render(view)
+
+      refute Org.Public.member?(org, other)
+      refute html =~ other.email
+    end
+
+    test "add all domain-matched records the owner for each member",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      Factories.insert!(:creator, %{email: "one@uni.test"})
+      Factories.insert!(:creator, %{email: "two@uni.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      render_click(view, "add_all_domain_matched", %{})
+
+      memberships = Org.Public.list_memberships(org)
+      assert length(memberships) == 2
+      assert Enum.all?(memberships, &(&1.added_by.id == owner.id))
+    end
+
+    test "offers the researchers on a domain as soon as support enters it",
+         %{conn: conn, org: org, context: context} do
+      Factories.insert!(:creator, %{email: "new@lab.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      refute has_element?(view, "[phx-click='add_all_domain_matched']")
+
+      org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
+
+      {:ok, _} =
+        Mica.Persister.save(org, Org.NodeModel.changeset(org, %{domains_string: "lab.test"}))
+
+      assert has_element?(view, "[phx-click='add_all_domain_matched']")
+    end
+
+    test "the only member can be removed",
+         %{conn: conn, owner: owner, org: org, context: context} do
+      member = Factories.insert!(:creator)
+      :ok = Org.Public.add_member(org, member, owner)
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{member.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      _ = render(view)
+      refute Org.Public.member?(org, member)
+    end
+
+    test "an owner's Add and Remove show in the list at once",
+         %{conn: conn, org: org, context: context} do
+      researcher = Factories.insert!(:creator, %{email: "added@gmail.test"})
+
+      {:ok, view, _html} =
+        live_isolated(conn, Org.MemberView, session: %{"live_context" => context})
+
+      refute has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
+
+      view
+      |> form("#members_editor_search_bar_form", %{query: researcher.email})
+      |> render_change()
+
+      view
+      |> element("[phx-click='add'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      # The component tells the view with a message; render/1 waits for it.
+      _ = render(view)
+
+      assert Org.Public.member?(org, researcher)
+      assert has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
+
+      view
+      |> element("[phx-click='remove'][phx-value-item='#{researcher.id}']")
+      |> render_click()
+
+      html = render(view)
+
+      refute Org.Public.member?(org, researcher)
+      refute html =~ researcher.email
+      refute has_element?(view, "[phx-click='remove'][phx-value-item='#{researcher.id}']")
     end
   end
 

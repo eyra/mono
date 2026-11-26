@@ -30,20 +30,6 @@ defmodule MicaSaas.Systems.Email.Factory.Test do
     end
   end
 
-  describe("update_email_instructions/2") do
-    test "has all the fields filled properly" do
-      user = Factories.build(:member)
-      url = Faker.Internet.url()
-      email = Factory.update_email_instructions(user, url)
-      assert email.to == user.email
-      assert email.subject == "Update email"
-      assert email.html_body =~ user.displayname
-      assert email.text_body =~ user.displayname
-      assert email.html_body =~ url
-      assert email.text_body =~ url
-    end
-  end
-
   describe("already_activated_notification/2") do
     test "has all the fields filled properly" do
       user = Factories.build(:member)

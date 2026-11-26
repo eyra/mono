@@ -104,3 +104,35 @@ msgstr ""
 #, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "member.added.by.info"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "member.added.info"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.label"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.marked.note"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.tag"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.unknown.user"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "domains.invalid.error"
+msgstr ""
+
+#, elixir-autogen, elixir-format
+msgid "node.save.not.allowed"
+msgstr ""

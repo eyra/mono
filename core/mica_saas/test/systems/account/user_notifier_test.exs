@@ -23,15 +23,6 @@ defmodule MicaSaas.Systems.Account.UserNotifierTest do
     end
   end
 
-  describe("deliver_update_email_instructions/2") do
-    test "mail is delivered" do
-      user = Factories.build(:member)
-      url = Faker.Internet.url()
-      {:ok, _} = UserNotifier.deliver_update_email_instructions(user, url)
-      assert_email_delivered_with(subject: "Update email")
-    end
-  end
-
   describe("deliver_already_activated_notification/2") do
     test "mail is delivered" do
       user = Factories.build(:member)

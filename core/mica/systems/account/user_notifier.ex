@@ -32,14 +32,6 @@ defmodule Systems.Account.UserNotifier do
   end
 
   @doc """
-  Deliver instructions to update a user email.
-  """
-  def deliver_update_email_instructions(user, url) do
-    Email.Factory.update_email_instructions(user, url)
-    |> deliver_later()
-  end
-
-  @doc """
   Deliver instructions to users that are already activated.
   """
   def deliver_already_activated_notification(user, url) do

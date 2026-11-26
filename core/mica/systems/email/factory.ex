@@ -35,12 +35,6 @@ defmodule Systems.Email.Factory do
     |> render(:reset_password_instructions, url: url)
   end
 
-  def update_email_instructions(user, url) do
-    mail_user(user)
-    |> subject("Update email")
-    |> render(:update_email_instructions, url: url)
-  end
-
   def already_activated_notification(user, url) do
     mail_user(user)
     |> subject("Already activated")

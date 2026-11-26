@@ -1,5 +1,6 @@
 defmodule Systems.Org.NodeModel do
   use Ecto.Schema
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Changeset
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
@@ -19,7 +20,9 @@ defmodule Systems.Org.NodeModel do
     field(:domains, {:array, :string})
     field(:domains_string, :string, virtual: true)
     field(:archived_at, :utc_datetime)
+    field(:research_institute_at, :utc_datetime)
 
+    belongs_to(:research_institute_by, User)
     belongs_to(:auth_node, Mica.Authorization.Node)
     belongs_to(:short_name_bundle, Content.TextBundleModel, on_replace: :update)
     belongs_to(:full_name_bundle, Content.TextBundleModel, on_replace: :update)
@@ -55,6 +58,7 @@ defmodule Systems.Org.NodeModel do
       :links,
       :reverse_links,
       :auth_node,
+      research_institute_by: [:profile],
       short_name_bundle: Content.TextBundleModel.preload_graph(:full),
       full_name_bundle: Content.TextBundleModel.preload_graph(:full)
     ]
@@ -84,7 +88,35 @@ defmodule Systems.Org.NodeModel do
     |> apply_virtual_changes()
     |> validate_required(@required_fields)
     |> validate_length(:identifier, min: 1)
+    |> validate_change(:domains, &validate_domains/2)
     |> unique_constraint(:identifier)
+  end
+
+  # Labels of letters, digits and inner hyphens, ending in a label that starts
+  # with a letter: `uni.nl`, `mail.uni-a.nl`, `xn--80ak6aa92e.com`.
+  @domain_format ~r/\A(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?\z/i
+
+  # The error goes on `domains_string`, the field the form shows.
+  defp validate_domains(:domains, domains) do
+    if Enum.all?(domains, &domain?/1) do
+      []
+    else
+      [domains_string: dgettext("eyra-org", "domains.invalid.error")]
+    end
+  end
+
+  defp domain?(domain), do: String.length(domain) <= 253 and domain =~ @domain_format
+
+  @doc """
+  Changes only the names. Identifier and domains are left out: domains decide
+  who can join as a member, so only system admins change them (`changeset/2`).
+  """
+  def names_changeset(node, attrs) do
+    node
+    |> prepare_virtual()
+    |> change()
+    |> apply_text_bundle_changes(attrs, :full_name_bundle)
+    |> apply_text_bundle_changes(attrs, :short_name_bundle)
   end
 
   defp prepare_virtual(%{identifier: identifier, domains: domains} = node) do
@@ -119,6 +151,20 @@ defmodule Systems.Org.NodeModel do
   def restore_changeset(node) do
     node
     |> change(%{archived_at: nil})
+  end
+
+  def research_institute?(%{research_institute_at: nil}), do: false
+  def research_institute?(%{research_institute_at: _}), do: true
+
+  def research_institute_changeset(node, true, %User{id: by_id}) do
+    change(node, %{
+      research_institute_at: DateTime.utc_now() |> DateTime.truncate(:second),
+      research_institute_by_id: by_id
+    })
+  end
+
+  def research_institute_changeset(node, false, _by) do
+    change(node, %{research_institute_at: nil, research_institute_by_id: nil})
   end
 
   defimpl Frameworks.GreenLight.AuthorizationNode do

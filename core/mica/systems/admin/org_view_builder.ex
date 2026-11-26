@@ -8,6 +8,7 @@ defmodule Systems.Admin.OrgViewBuilder do
   """
   use Gettext, backend: MicaWeb.Gettext
 
+  alias Systems.Account
   alias Systems.Content
   alias Systems.NextAction
   alias Systems.Org
@@ -27,9 +28,7 @@ defmodule Systems.Admin.OrgViewBuilder do
     active_filters = Map.get(assigns, :active_filters, [])
     current_user = Map.get(assigns, :current_user)
     is_admin? = Map.get(assigns, :is_admin?, false)
-    governable_orgs = Map.get(assigns, :governable_orgs)
-
-    base_orgs = get_base_orgs(is_admin?, governable_orgs)
+    base_orgs = get_base_orgs(is_admin?, current_user)
     organisations = build_organisation_items(base_orgs, query, active_filters, locale, is_admin?)
     next_action_banners = build_next_action_banners(current_user)
     archived_count = if is_admin?, do: count_archived_nodes(), else: 0
@@ -50,7 +49,10 @@ defmodule Systems.Admin.OrgViewBuilder do
   end
 
   defp get_base_orgs(true, _), do: Org.Public.list_nodes(Org.NodeModel.preload_graph(:full))
-  defp get_base_orgs(_, orgs) when is_list(orgs), do: orgs
+
+  defp get_base_orgs(_, %Account.User{} = user),
+    do: Org.Public.list_orgs(user, Org.NodeModel.preload_graph(:full))
+
   defp get_base_orgs(_, _), do: []
 
   defp build_next_action_banners(nil), do: []
@@ -234,8 +236,13 @@ defmodule Systems.Admin.OrgViewBuilder do
   end
 
   defp build_tags(org, pools) do
+    research_institute_tag =
+      if Org.NodeModel.research_institute?(org),
+        do: [dgettext("eyra-org", "research.institute.tag")],
+        else: []
+
     panel_tag = if Enum.any?(pools), do: [dgettext("eyra-admin", "org.panel.tag")], else: []
-    panel_tag ++ domain_tags(org)
+    research_institute_tag ++ panel_tag ++ domain_tags(org)
   end
 
   defp domain_tags(%{domains: nil}), do: []

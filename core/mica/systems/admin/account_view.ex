@@ -7,9 +7,10 @@ defmodule Systems.Admin.AccountView do
   alias Frameworks.Pixel.UserListItem
 
   alias Systems.Account
+  alias Systems.Admin
   alias Systems.Observatory
 
-  def dependencies(), do: []
+  def dependencies(), do: [:current_user]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -38,19 +39,13 @@ defmodule Systems.Admin.AccountView do
   end
 
   @impl true
-  def handle_event("verify_creator", %{"item" => user_id_string}, socket) do
-    {
-      :noreply,
-      socket |> save(user_id_string, %{creator: true, verified_at: NaiveDateTime.utc_now()})
-    }
-  end
-
-  @impl true
-  def handle_event("unverify_creator", %{"item" => user_id_string}, socket) do
-    {
-      :noreply,
-      socket |> save(user_id_string, %{verified_at: nil})
-    }
+  def handle_event("licenses", %{"item" => user_id_string}, socket) do
+    if Admin.Public.admin?(socket.assigns.current_user) do
+      modal = Admin.AccountViewBuilder.build_licenses_modal(String.to_integer(user_id_string))
+      {:noreply, socket |> present_modal(modal)}
+    else
+      {:noreply, socket}
+    end
   end
 
   @impl true

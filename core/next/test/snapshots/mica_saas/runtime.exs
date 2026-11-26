@@ -74,7 +74,8 @@
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-              {"30 3 * * *", Mica.Registry.IntegrityWorker}
+              {"30 3 * * *", Mica.Registry.IntegrityWorker},
+              {"5 23 * * *", Systems.License.ReminderWorker}
             ]
           ]}
        ],
@@ -156,7 +157,8 @@
        ],
        oban_plugins: [
          {Oban.Plugins.Pruner, [max_age: 3600]},
-         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]}
+         {Oban.Plugins.Lifeline, [rescue_after: 3_600_000]},
+         {Oban.Plugins.Cron, [crontab: [{"5 23 * * *", Systems.License.ReminderWorker}]]}
        ],
        oban_unknown_plugins: [],
        rate_quotas: [
@@ -207,6 +209,7 @@
               {"0 * * * *", Systems.Account.AuthCodeCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"5 23 * * *", Systems.License.ReminderWorker},
               {"FELDSPAR_CLEANUP_SCHEDULE", Systems.Feldspar.DataDonationCleanupWorker}
             ]
           ]}
@@ -262,7 +265,8 @@
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
-              {"30 3 * * *", Mica.Registry.IntegrityWorker}
+              {"30 3 * * *", Mica.Registry.IntegrityWorker},
+              {"5 23 * * *", Systems.License.ReminderWorker}
             ]
           ]}
        ],

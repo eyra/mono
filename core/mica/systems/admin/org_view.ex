@@ -15,7 +15,7 @@ defmodule Systems.Admin.OrgView do
 
   import Org.ItemView
 
-  def dependencies(), do: [:current_user, :locale, :is_admin?, :governable_orgs]
+  def dependencies(), do: [:current_user, :locale, :is_admin?]
 
   def get_model(:not_mounted_at_router, _session, _assigns) do
     Observatory.SingletonModel.instance()
@@ -38,6 +38,31 @@ defmodule Systems.Admin.OrgView do
 
   @impl true
   def handle_event("create_org", _, socket) do
+    admin_only(socket, &create_org/1)
+  end
+
+  @impl true
+  def handle_event("show_archived", _, socket) do
+    admin_only(socket, &show_archived/1)
+  end
+
+  @impl true
+  def handle_event("archive_org", %{"item" => org_id_string}, socket) do
+    admin_only(socket, &archive_org(&1, String.to_integer(org_id_string)))
+  end
+
+  @impl true
+  def handle_event("setup_admins", %{"item" => org_id_string}, socket) do
+    admin_only(socket, &setup_admins(&1, String.to_integer(org_id_string)))
+  end
+
+  # The page also lists organisation owners' own organisations; creating,
+  # archiving and choosing owners are for system admins only.
+  defp admin_only(%{assigns: %{current_user: user}} = socket, fun) do
+    if Admin.Public.admin?(user), do: fun.(socket), else: {:noreply, socket}
+  end
+
+  defp create_org(socket) do
     timestamp = Timestamp.now() |> DateTime.to_unix()
 
     {:ok, %{org: %{id: org_id}}} =
@@ -54,28 +79,19 @@ defmodule Systems.Admin.OrgView do
     }
   end
 
-  @impl true
-  def handle_event("show_archived", _, %{assigns: %{locale: locale}} = socket) do
+  defp show_archived(%{assigns: %{locale: locale}} = socket) do
     modal = Admin.OrgViewBuilder.build_archived_orgs_modal(locale)
     {:noreply, socket |> present_modal(modal)}
   end
 
-  @impl true
-  def handle_event("archive_org", %{"item" => org_id_string}, socket) do
-    org_id = String.to_integer(org_id_string)
+  defp archive_org(socket, org_id) do
     org = Org.Public.get_node!(org_id)
     {:ok, _} = Org.Public.archive(org)
 
     {:noreply, update_view_model(socket)}
   end
 
-  @impl true
-  def handle_event(
-        "setup_admins",
-        %{"item" => org_id_string},
-        %{assigns: %{locale: locale}} = socket
-      ) do
-    org_id = String.to_integer(org_id_string)
+  defp setup_admins(%{assigns: %{locale: locale}} = socket, org_id) do
     org = Org.Public.get_node!(org_id, Org.NodeModel.preload_graph(:full))
     org_name = Systems.Content.TextBundleModel.text(org.full_name_bundle, locale)
     modal = Admin.OrgViewBuilder.build_admins_modal(org_id, org_name)

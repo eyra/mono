@@ -37,6 +37,7 @@ defmodule Next.SaaSTest do
              :pay_in_expiration,
              :auto_approve,
              :data_donation_cleanup,
+             :license_reminder,
              :payment_reconciliation,
              :auth_code_cleanup,
              :registry_integrity

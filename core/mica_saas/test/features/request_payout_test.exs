@@ -60,7 +60,6 @@ defmodule MicaSaasWeb.Features.RequestPayoutTest do
       Factories.insert!(:member, %{
         password: password,
         confirmed_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
-        verified_at: NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second),
         creator: false,
         merchant_uid: merchant_uid
       })

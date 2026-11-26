@@ -26,6 +26,7 @@ defmodule Mica.Factories do
   alias Systems.Feldspar
   alias Next.Systems.Graphite
   alias Systems.Lab
+  alias Systems.License
   alias Systems.Manual
   alias Systems.Monitor
   alias Next.Systems.Ontology
@@ -471,6 +472,17 @@ defmodule Mica.Factories do
     %Monitor.EventModel{
       identifier: identifier,
       value: value
+    }
+    |> struct!(attributes)
+  end
+
+  # A Publish license for a year, given by no one (`granted_by_system`); pass `user:`.
+  def build(:license, %{} = attributes) do
+    %License.Model{
+      license: :publish,
+      granted_by_system: true,
+      valid_until: Date.add(Date.utc_today(), 365),
+      granted_at: DateTime.utc_now() |> DateTime.truncate(:second)
     }
     |> struct!(attributes)
   end

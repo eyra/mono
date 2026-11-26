@@ -3,6 +3,7 @@ defmodule Systems.Monitor.PublicTest do
 
   import Ecto.Query
 
+  alias Ecto.Multi
   alias Mica.Factories
   alias Mica.Repo
   alias Systems.Monitor
@@ -97,6 +98,104 @@ defmodule Systems.Monitor.PublicTest do
                  value: -4_776_318_715
                }
              ] = from(Monitor.EventModel) |> Repo.all()
+    end
+  end
+
+  describe "Monitor telemetry" do
+    setup do
+      handler_id = "monitor-telemetry-test-#{inspect(self())}"
+
+      :telemetry.attach(
+        handler_id,
+        [:monitor, :event, :count],
+        &__MODULE__.forward_telemetry/4,
+        self()
+      )
+
+      on_exit(fn -> :telemetry.detach(handler_id) end)
+    end
+
+    test "log/2 emits the value with the identifier's keys except user" do
+      Monitor.Public.log(["assignment=1", "topic=declined", "user=1"])
+
+      assert_received {:monitor_telemetry, %{count: 1},
+                       %{"assignment" => "1", "topic" => "declined"} = metadata}
+
+      refute Map.has_key?(metadata, "user")
+    end
+
+    test "log/2 emits no key that identifies the participant" do
+      features = %Systems.Account.FeaturesModel{id: 7, user_id: 3}
+
+      Monitor.Public.log({features, :updated, features.user_id})
+
+      assert_received {:monitor_telemetry, %{count: 1}, metadata}
+      assert metadata == %{"topic" => "updated"}
+    end
+
+    test "multi_log/3 emits the value once its transaction commits" do
+      multi = Monitor.Public.multi_log(Multi.new(), ["storage=1", "topic=bytes"], value: 1024)
+
+      refute_received {:monitor_telemetry, _, _}
+
+      {:ok, _} = Repo.commit(multi)
+
+      assert_received {:monitor_telemetry, %{count: 1024},
+                       %{"storage" => "1", "topic" => "bytes"}}
+    end
+
+    test "multi_log/3 emits nothing when its transaction rolls back" do
+      {:error, :fail, :rollback, _} =
+        Multi.new()
+        |> Monitor.Public.multi_log(["storage=1", "topic=files"])
+        |> Multi.run(:fail, fn _, _ -> {:error, :rollback} end)
+        |> Repo.commit()
+
+      refute_received {:monitor_telemetry, _, _}
+      assert [] = from(Monitor.EventModel) |> Repo.all()
+
+      {:ok, _} = Repo.commit(Multi.new())
+      refute_received {:monitor_telemetry, _, _}
+    end
+
+    test "multi_log/3 in a nested commit emits nothing when the outer transaction rolls back" do
+      {:error, :fail, :rollback, _} =
+        Multi.new()
+        |> Multi.run(:nested, fn _, _ -> Monitor.Public.log(["storage=1", "topic=files"]) end)
+        |> Multi.run(:fail, fn _, _ -> {:error, :rollback} end)
+        |> Repo.commit()
+
+      refute_received {:monitor_telemetry, _, _}
+    end
+
+    test "multi_log/3 in a nested commit emits once the outer transaction commits" do
+      {:ok, _} =
+        Multi.new()
+        |> Multi.run(:nested, fn _, _ ->
+          result = Monitor.Public.log(["storage=1", "topic=files"])
+          refute_received {:monitor_telemetry, _, _}
+          result
+        end)
+        |> Repo.commit()
+
+      assert_received {:monitor_telemetry, %{count: 1}, %{"storage" => "1", "topic" => "files"}}
+      refute_received {:monitor_telemetry, _, _}
+    end
+
+    test "reset/1 emits nothing" do
+      Monitor.Public.log(["storage=1", "topic=bytes"], value: 10)
+      assert_received {:monitor_telemetry, %{count: 10}, _}
+
+      Monitor.Public.reset(["storage=1", "topic=bytes"])
+
+      refute_received {:monitor_telemetry, _, _}
+      assert 0 = Monitor.Public.sum(["storage=1", "topic=bytes"])
+    end
+  end
+
+  def forward_telemetry(_event, measurements, metadata, test_pid) do
+    if self() == test_pid do
+      send(test_pid, {:monitor_telemetry, measurements, metadata})
     end
   end
 

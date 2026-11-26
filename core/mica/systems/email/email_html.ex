@@ -45,12 +45,6 @@ defmodule Systems.Email.EmailHTML do
   def reset_password_instructions("text", assigns),
     do: reset_password_instructions_text(assigns) |> to_binary()
 
-  def update_email_instructions("html", assigns),
-    do: update_email_instructions_html(assigns) |> to_binary()
-
-  def update_email_instructions("text", assigns),
-    do: update_email_instructions_text(assigns) |> to_binary()
-
   def contribution_accepted("html", assigns),
     do: contribution_accepted_html(assigns) |> to_binary()
 

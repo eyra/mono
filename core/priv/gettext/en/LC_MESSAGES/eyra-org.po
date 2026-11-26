@@ -103,3 +103,35 @@ msgstr "Participants"
 #, elixir-autogen, elixir-format
 msgid "content.title"
 msgstr "Organisation"
+
+#, elixir-autogen, elixir-format
+msgid "member.added.by.info"
+msgstr "Added by %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "member.added.info"
+msgstr "Added %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.label"
+msgstr "Research institute"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.marked.note"
+msgstr "Marked by %{name}, %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.tag"
+msgstr "Research institute"
+
+#, elixir-autogen, elixir-format
+msgid "research.institute.unknown.user"
+msgstr "a deleted account"
+
+#, elixir-autogen, elixir-format
+msgid "domains.invalid.error"
+msgstr "Enter domain names only, such as uni.nl, separated by spaces."
+
+#, elixir-autogen, elixir-format
+msgid "node.save.not.allowed"
+msgstr "Not saved: you can no longer manage this organisation. Reload the page."

@@ -164,14 +164,7 @@ defmodule Systems.Account.Auth.Email do
   end
 
   defp create_user_with_satellite(email, validation_attrs) do
-    now = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
-
-    user_changeset =
-      User.sso_changeset(%User{}, %{
-        email: email,
-        creator: false,
-        verified_at: now
-      })
+    user_changeset = User.sso_changeset(%User{}, %{email: email, creator: false})
 
     Multi.new()
     |> Multi.insert(:user, user_changeset)

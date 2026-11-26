@@ -72,16 +72,8 @@ msgid "account.created.successfully"
 msgstr "Konto erstellt"
 
 #, elixir-autogen, elixir-format, fuzzy
-msgid "email.changed.successfully"
-msgstr "E-Mail-Adresse geändert"
-
-#, elixir-autogen, elixir-format, fuzzy
 msgid "password.reset.successfully"
 msgstr "Passwort geändert"
-
-#, elixir-autogen, elixir-format, fuzzy
-msgid "password.updated.successfully"
-msgstr "Passwort aktualisiert"
 
 #, elixir-autogen, elixir-format
 msgid "auth.session.expired"

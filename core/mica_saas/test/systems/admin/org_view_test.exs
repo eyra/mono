@@ -9,7 +9,7 @@ defmodule MicaSaas.Systems.Admin.OrgViewTest do
 
   describe "OrgView" do
     setup ctx do
-      user = Factories.insert!(:member)
+      user = Factories.insert!(:member, %{email: "admin1@example.org"})
       {:ok, ctx} = login(user, ctx)
 
       {:ok, %{org: org}} =
@@ -25,8 +25,7 @@ defmodule MicaSaas.Systems.Admin.OrgViewTest do
         LiveContext.new(%{
           current_user: user,
           locale: :en,
-          is_admin?: true,
-          governable_orgs: [org]
+          is_admin?: true
         })
 
       conn = ctx[:conn] |> Map.put(:request_path, "/admin/orgs")
@@ -131,6 +130,59 @@ defmodule MicaSaas.Systems.Admin.OrgViewTest do
       )
 
       refute render(view) =~ "Manage members"
+    end
+
+    test "shows the research-institute tag", %{
+      conn: conn,
+      user: admin,
+      org: org,
+      context: context
+    } do
+      {:ok, _} = Org.Public.mark_research_institute(org, true, admin)
+
+      {:ok, _view, html} =
+        live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
+
+      assert html =~ "Research institute"
+    end
+  end
+
+  describe "OrgView for an organisation owner" do
+    setup ctx do
+      owner = Factories.insert!(:creator)
+      {:ok, ctx} = login(owner, ctx)
+      org = Factories.insert!(:org_node, %{identifier: ["owner_view_org"]})
+      :ok = Org.Public.assign_owner(org, owner)
+      org = Org.Public.get_node!(org.id, Org.NodeModel.preload_graph(:full))
+
+      context =
+        LiveContext.new(%{
+          current_user: owner,
+          locale: :en,
+          is_admin?: false
+        })
+
+      conn = ctx[:conn] |> Map.put(:request_path, "/admin/orgs")
+      {:ok, conn: conn, owner: owner, org: org, context: context}
+    end
+
+    test "a crafted create_org creates nothing", %{conn: conn, context: context} do
+      {:ok, view, _html} =
+        live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
+
+      count = length(Org.Public.list_all_nodes([]))
+      render_click(view, "create_org")
+
+      assert length(Org.Public.list_all_nodes([])) == count
+    end
+
+    test "a crafted archive_org archives nothing", %{conn: conn, org: org, context: context} do
+      {:ok, view, _html} =
+        live_isolated(conn, Admin.OrgView, session: %{"live_context" => context})
+
+      render_click(view, "archive_org", %{"item" => "#{org.id}"})
+
+      refute Org.NodeModel.archived?(Org.Public.get_node!(org.id))
     end
   end
 end

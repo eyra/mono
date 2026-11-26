@@ -113,3 +113,63 @@ msgstr "The researcher declined your contribution."
 #, elixir-autogen, elixir-format
 msgid "assignment.contribution_reviewed.declined.title"
 msgstr "Contribution declined"
+
+#, elixir-autogen, elixir-format
+msgid "license.given.cta"
+msgstr "Go to projects"
+
+#, elixir-autogen, elixir-format
+msgid "license.given.pay_in.description"
+msgstr "You can pay in for studies until then. You'll get a reminder before it ends."
+
+#, elixir-autogen, elixir-format
+msgid "license.given.publish.description"
+msgstr "You can publish studies until then. You'll get a reminder before it ends."
+
+#, elixir-autogen, elixir-format
+msgid "license.given.title"
+msgstr "You have the %{license} license until %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "license.helpdesk.cta"
+msgstr "Go to helpdesk"
+
+#, elixir-autogen, elixir-format
+msgid "license.pay_in"
+msgstr "Pay-in"
+
+#, elixir-autogen, elixir-format
+msgid "license.publish"
+msgstr "Publish"
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.description"
+msgstr "Ask support through the helpdesk to extend it."
+
+#, elixir-autogen, elixir-format
+msgid "license.reminder.title"
+msgstr "Your %{license} license ends on %{date}"
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.pay_in.description"
+msgstr "New pay-ins are refused. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.publish.description"
+msgstr "You can't publish new studies. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.switched_off.title"
+msgstr "Your %{license} license is switched off"
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.pay_in.description"
+msgstr "It ended on %{date}. New pay-ins are refused. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.publish.description"
+msgstr "It ended on %{date}. You can't publish new studies. Running studies keep running. Ask support through the helpdesk if you need it again."
+
+#, elixir-autogen, elixir-format
+msgid "license.ended.title"
+msgstr "Your %{license} license has ended"

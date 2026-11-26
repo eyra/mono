@@ -27,13 +27,13 @@ defmodule Systems.Org.MemberView do
 
   @impl true
   def handle_event("add_all_domain_matched", _, socket) do
-    authorize(socket, fn %{assigns: %{model: org}} = socket ->
+    authorize(socket, fn %{assigns: %{model: org, current_user: me}} = socket ->
       members = Org.Public.list_members(org)
       owners = Org.Public.list_owners(org)
       domain_matched = Org.Public.find_domain_matched_users(org.domains, members ++ owners)
 
       Enum.each(domain_matched, fn user ->
-        Org.Public.add_member(org, user)
+        Org.Public.add_member(org, user, me)
       end)
 
       {:noreply, update_view_model(socket)}
@@ -42,16 +42,16 @@ defmodule Systems.Org.MemberView do
 
   @impl true
   def handle_info({:add_user, %{user: user}}, socket) do
-    authorize(socket, fn %{assigns: %{model: org}} = socket ->
-      Org.Public.add_member(org, user)
+    authorize(socket, fn %{assigns: %{model: org, current_user: me}} = socket ->
+      Org.Public.add_member(org, user, me)
       {:noreply, update_view_model(socket)}
     end)
   end
 
   @impl true
   def handle_info({:remove_user, %{user: user}}, socket) do
-    authorize(socket, fn %{assigns: %{model: org}} = socket ->
-      Org.Public.remove_member(org, user)
+    authorize(socket, fn %{assigns: %{model: org, current_user: me}} = socket ->
+      Org.Public.remove_member(org, user, me)
       {:noreply, update_view_model(socket)}
     end)
   end
@@ -129,6 +129,9 @@ defmodule Systems.Org.MemberView do
           title={@vm.title}
           total_count={@vm.user_count}
           people={@vm.people}
+          info={@vm.info}
+          keep_last={false}
+          show_match_profile={false}
           users={@vm.users}
           current_user={@current_user}
         />
