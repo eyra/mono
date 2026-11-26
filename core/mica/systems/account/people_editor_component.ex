@@ -22,6 +22,8 @@ defmodule Systems.Account.PeopleEditorComponent do
   ## Optional assigns
   - `info` - a map of user id to a short text shown next to that person
   - `keep_last` - when true (the default), the last person can't be removed
+  - `show_match_profile` - when false, a person found by email shows only that
+    email, without name or photo, until they're added (default true)
 
   ## Events sent to parent
   - `{:add_user, %{user: user}}` - when a user is added
@@ -56,6 +58,7 @@ defmodule Systems.Account.PeopleEditorComponent do
       |> assign_new(:total_count, fn -> nil end)
       |> assign_new(:info, fn -> %{} end)
       |> assign_new(:keep_last, fn -> true end)
+      |> assign_new(:show_match_profile, fn -> true end)
       |> assign_new(:query_string, fn -> "" end)
       |> assign_new(:confirm_removal_user_ids, fn -> MapSet.new() end)
       |> assign_new(:user_item, fn -> nil end)
@@ -159,10 +162,11 @@ defmodule Systems.Account.PeopleEditorComponent do
   end
 
   defp update_user_item(socket) do
-    %{query_string: qs, users: users, myself: target} = socket.assigns
+    %{query_string: qs, users: users, show_match_profile: show_profile?, myself: target} =
+      socket.assigns
 
     user = find_user_by_email(users, qs)
-    user_item = build_search_result_item(user, target)
+    user_item = build_search_result_item(user, show_profile?, target)
     assign(socket, user_item: user_item)
   end
 
@@ -222,15 +226,19 @@ defmodule Systems.Account.PeopleEditorComponent do
     ]
   end
 
-  defp build_search_result_item(nil, _target), do: nil
+  defp build_search_result_item(nil, _show_profile?, _target), do: nil
 
-  defp build_search_result_item(user, target) do
-    photo_url = ImageHelpers.get_photo_url(user.profile)
+  defp build_search_result_item(user, true, target) do
+    user
+    |> build_search_result_item(false, target)
+    |> Map.merge(%{photo_url: ImageHelpers.get_photo_url(user.profile), name: user.displayname})
+  end
 
+  defp build_search_result_item(user, false, target) do
     %{
       id: user.id,
-      photo_url: photo_url,
-      name: user.displayname,
+      photo_url: ImageHelpers.get_photo_url(nil),
+      name: nil,
       email: user.email,
       action_buttons: [
         %{

@@ -127,3 +127,11 @@ msgstr "Research institute"
 #, elixir-autogen, elixir-format
 msgid "research.institute.unknown.user"
 msgstr "a deleted account"
+
+#, elixir-autogen, elixir-format
+msgid "domains.invalid.error"
+msgstr "Enter domain names only, such as uni.nl, separated by spaces."
+
+#, elixir-autogen, elixir-format
+msgid "node.save.not.allowed"
+msgstr "Not saved: you can no longer manage this organisation. Reload the page."

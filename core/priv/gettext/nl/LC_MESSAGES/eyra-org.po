@@ -127,3 +127,11 @@ msgstr "Onderzoeksinstituut"
 #, elixir-autogen, elixir-format
 msgid "research.institute.unknown.user"
 msgstr "een verwijderd account"
+
+#, elixir-autogen, elixir-format
+msgid "domains.invalid.error"
+msgstr "Vul alleen domeinnamen in, zoals uni.nl, gescheiden door spaties."
+
+#, elixir-autogen, elixir-format
+msgid "node.save.not.allowed"
+msgstr "Niet opgeslagen: je kunt deze organisatie niet meer beheren. Laad de pagina opnieuw."

@@ -702,6 +702,42 @@ defmodule Systems.Org.PublicTest do
     test "find_domain_matched_users returns empty for empty domains" do
       assert Public.find_domain_matched_users([], []) == []
     end
+
+    test "find_domain_matched_users matches a domain literally" do
+      Factories.insert!(:member, %{email: "one@uni.test"})
+      Factories.insert!(:member, %{email: "two@uniXtest"})
+      Factories.insert!(:member, %{email: "three@uni\\test"})
+
+      assert [] = Public.find_domain_matched_users(["%"], [])
+      assert [] = Public.find_domain_matched_users(["uni_test"], [])
+      assert [] = Public.find_domain_matched_users(["uni\\\\test"], [])
+      assert [%{email: "three@uni\\test"}] = Public.find_domain_matched_users(["uni\\test"], [])
+    end
+  end
+
+  describe "NodeModel.changeset/2 domains" do
+    setup do
+      %{org: Factories.insert!(:org_node, %{identifier: ["domains_org"], domains: ["uni.test"]})}
+    end
+
+    test "takes domain names", %{org: org} do
+      changeset =
+        Org.NodeModel.changeset(org, %{
+          "domains_string" => "uni.nl mail.uni-a.nl, xn--80ak6aa92e.com"
+        })
+
+      assert changeset.valid?
+      assert changeset.changes.domains == ["uni.nl", "mail.uni-a.nl", "xn--80ak6aa92e.com"]
+    end
+
+    test "refuses what isn't a domain name", %{org: org} do
+      for domains <- ["%", "uni_test.nl", "@uni.nl", "uni", "uni..nl", "-uni.nl", "uni.nl %"] do
+        changeset = Org.NodeModel.changeset(org, %{"domains_string" => domains})
+
+        refute changeset.valid?, "#{domains} was taken as a domain"
+        assert Keyword.has_key?(changeset.errors, :domains_string)
+      end
+    end
   end
 
   describe "sync_next_actions_for_new_user/1" do

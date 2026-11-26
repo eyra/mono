@@ -1,5 +1,6 @@
 defmodule Systems.Org.NodeModel do
   use Ecto.Schema
+  use Gettext, backend: MicaWeb.Gettext
   import Ecto.Changeset
   import Frameworks.Utility.EctoHelper, only: [apply_virtual_change: 4]
 
@@ -87,8 +88,24 @@ defmodule Systems.Org.NodeModel do
     |> apply_virtual_changes()
     |> validate_required(@required_fields)
     |> validate_length(:identifier, min: 1)
+    |> validate_change(:domains, &validate_domains/2)
     |> unique_constraint(:identifier)
   end
+
+  # Labels of letters, digits and inner hyphens, ending in a label that starts
+  # with a letter: `uni.nl`, `mail.uni-a.nl`, `xn--80ak6aa92e.com`.
+  @domain_format ~r/\A(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?\z/i
+
+  # The error goes on `domains_string`, the field the form shows.
+  defp validate_domains(:domains, domains) do
+    if Enum.all?(domains, &domain?/1) do
+      []
+    else
+      [domains_string: dgettext("eyra-org", "domains.invalid.error")]
+    end
+  end
+
+  defp domain?(domain), do: String.length(domain) <= 253 and domain =~ @domain_format
 
   @doc """
   Changes only the names. Identifier and domains are left out: domains decide
