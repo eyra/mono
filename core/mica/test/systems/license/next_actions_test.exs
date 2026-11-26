@@ -54,6 +54,11 @@ defmodule Systems.License.NextActionsTest do
     end
   end
 
+  defp xmin(table, id) do
+    %{rows: [[xmin]]} = Repo.query!("SELECT xmin::text FROM #{table} WHERE id = $1", [id])
+    xmin
+  end
+
   defp notifications(%{id: user_id}) do
     from(m in Notify.MessageModel,
       join: e in Notify.EventModel,
@@ -188,6 +193,33 @@ defmodule Systems.License.NextActionsTest do
 
       assert License.Public.remind(@now) == 1
       assert to_dos(researcher) == [{Reminder, :publish, "2026-12-10"}]
+    end
+
+    # As with the transition: every creator's license ends on the same day.
+    test "reminds every user whose license ends on that day", %{researcher: researcher} do
+      other = Factories.insert!(:creator)
+      Factories.insert!(:license, %{user: researcher, valid_until: ~D[2026-12-10]})
+      Factories.insert!(:license, %{user: other, valid_until: ~D[2026-12-10]})
+
+      assert License.Public.remind(@now) == 2
+      assert to_dos(researcher) == [{Reminder, :publish, "2026-12-10"}]
+      assert to_dos(other) == [{Reminder, :publish, "2026-12-10"}]
+      assert License.Public.remind(~U[2026-11-27 12:00:00Z]) == 0
+    end
+
+    test "reminds again of the new end date after support extended the license",
+         %{admin: admin, researcher: researcher} do
+      Factories.insert!(:license, %{
+        user: researcher,
+        valid_until: ~D[2026-12-05],
+        granted_at: ~U[2026-01-01 12:00:00Z]
+      })
+
+      1 = License.Public.remind(@now)
+      :ok = give(admin, researcher, %{publish: {:on, ~D[2026-12-20]}})
+
+      assert License.Public.remind(~U[2026-12-07 12:00:00Z]) == 1
+      assert to_dos(researcher) == [{Reminder, :publish, "2026-12-20"}]
     end
 
     test "the reminder comes before the researcher's other To-dos", %{researcher: researcher} do
@@ -452,17 +484,16 @@ defmodule Systems.License.NextActionsTest do
       assert to_dos(researcher) == []
     end
 
-    test "is rolled back with the save", %{admin: admin, researcher: researcher} do
-      {:error, :fail, :rolled_back, _} =
-        Ecto.Multi.new()
-        |> Ecto.Multi.run(:save, fn _repo, _ ->
-          {:ok, License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}}, @now)}
-        end)
-        |> Ecto.Multi.run(:fail, fn _repo, _ -> {:error, :rolled_back} end)
-        |> Repo.commit()
+    # Rows written in one transaction share its id (`xmin`). Under the test
+    # sandbox the save's transaction is a savepoint with an id of its own, so a
+    # job inserted after the save's commit would carry the test's id instead.
+    test "is written in the save's own transaction", %{admin: admin, researcher: researcher} do
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-11-26]}}, @now)
 
-      refute_enqueued(worker: License.TellWorker)
-      assert License.Public.list_records(researcher) == []
+      [%{id: record_id}] = License.Public.list_records(researcher)
+      [%Oban.Job{id: job_id}] = all_enqueued(worker: License.TellWorker)
+
+      assert xmin("licenses", record_id) == xmin("oban_jobs", job_id)
     end
 
     test "isn't enqueued for a switch-off that changes nothing",
@@ -495,25 +526,26 @@ defmodule Systems.License.NextActionsTest do
   # under the test sandbox (one connection), so these replay the interleavings
   # in order: a tell that arrives late, after a newer save.
   describe "tells about one license, one at a time" do
-    test "the tell of an earlier save that arrives late tells the current end date",
+    test "two saves, then their tells: one To-do about the current end date",
          %{admin: admin, researcher: researcher} do
-      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-01-01]}})
-      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-06-01]}})
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-01-01]}}, @now)
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-06-01]}}, @now)
 
-      License.Public.tell_current(researcher, :publish, admin)
+      Oban.drain_queue(queue: :default)
 
       assert to_dos(researcher) == [{Given, :publish, "2027-06-01"}]
-      assert Enum.count(notifications(researcher), &(&1.status == :sent)) == 1
+      assert [%{type: "license_given", status: :sent}] = notifications(researcher)
     end
 
-    test "the tell of a give that arrives after a switch-off tells it is switched off",
+    test "a give and a switch-off, then their tells: one To-do that it is switched off",
          %{admin: admin, researcher: researcher} do
-      :ok = give(admin, researcher, %{publish: {:on, ~D[2027-01-01]}})
-      :ok = give(admin, researcher, %{publish: :off})
+      :ok = License.Public.save(admin, researcher, %{publish: {:on, ~D[2027-01-01]}}, @now)
+      :ok = License.Public.save(admin, researcher, %{publish: :off}, @now)
 
-      License.Public.tell_current(researcher, :publish, admin)
+      Oban.drain_queue(queue: :default)
 
       assert to_dos(researcher) == [{SwitchedOff, :publish, nil}]
+      assert [%{type: "license_switched_off", status: :sent}] = notifications(researcher)
     end
 
     test "the daily job skips a license support gave again after the job read it",
