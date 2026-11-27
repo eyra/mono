@@ -31,7 +31,7 @@ defmodule Systems.Feldspar.AppView do
           data-attempt-id={@attempt_id}
           data-participant-task={@participant_task}
           data-upload-context={Jason.encode!(@upload_context)}>
-          <iframe class="w-full outline-none"></iframe>
+          <iframe class="w-full outline-none" allow="microphone"></iframe>
         </div>
       </div>
     """

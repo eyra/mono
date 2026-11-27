@@ -8,6 +8,11 @@ defmodule MicaSaas.Systems.Feldspar.AppPageTest do
       {:ok, _view, html} = live(conn, ~m"/feldspar/apps/test")
       assert html =~ "<iframe"
     end
+
+    test "lets the app use the microphone", %{conn: conn} do
+      {:ok, _view, html} = live(conn, ~m"/feldspar/apps/test")
+      assert html =~ ~s(allow="microphone")
+    end
   end
 
   describe "handle app_event" do
