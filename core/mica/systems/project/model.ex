@@ -106,8 +106,6 @@ defmodule Systems.Project.Model do
     end
 
     defp info(items) when is_list(items) do
-      items = Enum.reject(items, fn item -> item.name == "Data" end)
-
       count = Enum.count(items)
       item_label = if count > 1 || count == 0, do: "items", else: "item"
       "#{count} #{item_label}"

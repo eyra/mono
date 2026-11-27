@@ -14,6 +14,7 @@ defmodule Systems.Project.CardView do
         function:
           case card do
             %{type: :primary} -> &primary/1
+            %{type: :data} -> &data/1
             _ -> &secondary/1
           end
       })
@@ -40,6 +41,14 @@ defmodule Systems.Project.CardView do
 
   attr(:card, :any, required: true)
 
+  def data(assigns) do
+    ~H"""
+    <.basic {@card} info1_color="text-white" />
+    """
+  end
+
+  attr(:card, :any, required: true)
+
   def secondary(assigns) do
     ~H"""
     <.basic
@@ -60,6 +69,7 @@ defmodule Systems.Project.CardView do
   attr(:label, :map, required: true)
   attr(:tags, :list, default: [])
   attr(:image_info, :map, default: nil)
+  attr(:illustration, :string, default: nil)
   attr(:icon_url, :string, default: nil)
 
   attr(:bg_color, :string, default: "grey1")
@@ -79,6 +89,7 @@ defmodule Systems.Project.CardView do
         id={@id}
         left_actions={@left_actions}
         right_actions={@right_actions}
+        reserve_actions_space={true}
       >
         <:top>
           <div class="relative">
@@ -91,6 +102,12 @@ defmodule Systems.Project.CardView do
             <%= if @icon_url do %>
               <div class="absolute top-6 right-6 z-[12]">
                 <Icon.card url={@icon_url} />
+              </div>
+            <% end %>
+
+            <%= if @illustration do %>
+              <div class="h-image-card">
+                <img class="w-full h-full object-cover" src={~m"/images/illustrations/#{@illustration}"} alt="" />
               </div>
             <% end %>
 

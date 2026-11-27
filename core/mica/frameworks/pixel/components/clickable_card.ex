@@ -92,6 +92,8 @@ defmodule Frameworks.Pixel.ClickableCard do
 
   attr(:left_actions, :list, default: [])
   attr(:right_actions, :list, default: [])
+  # Keeps cards in a grid aligned when only some of them have actions.
+  attr(:reserve_actions_space, :boolean, default: false)
 
   slot(:inner_block, required: true)
   slot(:top)
@@ -157,6 +159,12 @@ defmodule Frameworks.Pixel.ClickableCard do
             <% end %>
           </div>
         </div>
+        <% else %>
+          <%= if @reserve_actions_space do %>
+            <div class="invisible pl-22px pr-22px pb-22px lg:pl-30px lg:pr-30px lg:pb-30px" data-testid="card-actions-placeholder">
+              <Button.Face.icon icon={:more_horizontal} />
+            </div>
+          <% end %>
         <% end %>
       </div>
     </div>

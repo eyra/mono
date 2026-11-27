@@ -1,10 +1,23 @@
-defmodule Systems.Project.ModelTest do
+defmodule MicaSaas.Systems.Project.ModelTest do
   alias Mica.Authorization
   use Mica.DataCase
 
   alias Systems.{
     Project
   }
+
+  test "overview card counts the Data item" do
+    creator = Factories.insert!(:creator)
+    {:ok, %{project: project}} = Project.Assembly.create("Project", creator, :empty)
+    project = Repo.preload(project, [root: :items], force: true)
+
+    assert %{info: ["1 item"]} =
+             Frameworks.Utility.ViewModelBuilder.view_model(
+               project,
+               {Project.OverviewPage, :card},
+               %{current_user: creator}
+             )
+  end
 
   test "auth_tree/1 succeeds with assignment item" do
     project =
