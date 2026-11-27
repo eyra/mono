@@ -156,7 +156,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   # Padding classes per width type
   # :max = minimal padding for maximum content area
-  # :full = larger padding for comfortable viewing
+  # :full = larger side padding for comfortable viewing
   # others = standard padding
   @padding_classes %{
     max: "p-4 lg:p-8",
