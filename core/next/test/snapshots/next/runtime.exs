@@ -80,6 +80,7 @@
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"30 3 * * *", Mica.Registry.IntegrityWorker},
               {"5 23 * * *", Systems.License.ReminderWorker}
             ]
           ]}
@@ -291,6 +292,7 @@
               {"0 * * * *", Systems.Feldspar.DataDonationCleanupWorker},
               {"0 * * * *", Systems.Fund.AutoApproveWorker},
               {"0 3 * * *", Systems.Payment.ReconciliationWorker},
+              {"30 3 * * *", Mica.Registry.IntegrityWorker},
               {"5 23 * * *", Systems.License.ReminderWorker}
             ]
           ]}

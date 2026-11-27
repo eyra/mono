@@ -66,7 +66,7 @@ defmodule Next.Config.RuntimeSnapshotTest do
     assert [{Oban.Plugins.Cron, crontab: crontab}] =
              Enum.filter(plugins, &match?({Oban.Plugins.Cron, _}, &1))
 
-    assert length(crontab) == 7
+    assert length(crontab) == 8
     assert Mica.ObanConfig.unknown_plugins(Mica.SaaS.oban_crons(), oban_plugins) == []
     assert :ok = Oban.Config.validate(oban)
   end

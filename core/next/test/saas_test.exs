@@ -39,7 +39,8 @@ defmodule Next.SaaSTest do
              :data_donation_cleanup,
              :license_reminder,
              :payment_reconciliation,
-             :auth_code_cleanup
+             :auth_code_cleanup,
+             :registry_integrity
            ]
 
     assert [service: :signup, limit: 5, unit: :call, window: :minute, scope: :local] in Mica.SaaS.rate_quotas()

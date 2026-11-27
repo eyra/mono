@@ -113,7 +113,8 @@
          "payment_reconciliation",
          "auth_code_cleanup",
          "auto_approve",
-         "license_reminder"
+         "license_reminder",
+         "registry_integrity"
        ],
        schedule_overrides: []
      ]},
