@@ -76,7 +76,7 @@ defmodule Frameworks.Pixel.ModalView do
   # Modal presets - common aspect combinations
   # Note: :max and :full both use full width but different padding/controls
   # :max = minimal padding (p-4 lg:p-8), close button only
-  # :full = large padding (p-4 xl:p-20), toolbar
+  # :full = side padding (p-4 xl:px-20), 32px above and below on wide screens, toolbar
   @presets %{
     max: [controls: :close, width: :max, height: :full],
     full: [controls: :tools, width: :full, height: :full],
@@ -130,7 +130,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   # Width classes
   # :max = truly full width with minimal padding (p-4 lg:p-8)
-  # :full = full width with larger padding (p-4 xl:p-20)
+  # :full = full width with side padding (p-4 xl:px-20 xl:py-8)
   # others = max-width with full width fallback for small screens
   @width_classes %{
     narrow: "w-full max-w-[500px]",
@@ -156,13 +156,13 @@ defmodule Frameworks.Pixel.ModalView do
 
   # Padding classes per width type
   # :max = minimal padding for maximum content area
-  # :full = larger padding for comfortable viewing
+  # :full = larger side padding for comfortable viewing
   # others = standard padding
   @padding_classes %{
     max: "p-4 lg:p-8",
-    full: "p-4 xl:p-20",
-    wide: "p-4 sm:px-10 sm:py-20",
-    medium: "p-4 sm:px-10 sm:py-20",
+    full: "p-4 xl:px-20 xl:py-8",
+    wide: "p-4 sm:px-10 sm:py-8",
+    medium: "p-4 sm:px-10 sm:py-8",
     narrow: "px-4 sm:px-10"
   }
 
@@ -170,7 +170,7 @@ defmodule Frameworks.Pixel.ModalView do
   defp width_class(width), do: Map.get(@width_classes, width, "")
   defp height_class(height), do: Map.get(@height_classes, height, "")
   defp inner_height_class(height), do: Map.get(@inner_height_classes, height, "")
-  defp padding_class(width), do: Map.get(@padding_classes, width, "p-4 sm:px-10 sm:py-20")
+  defp padding_class(width), do: Map.get(@padding_classes, width, "p-4 sm:px-10 sm:py-8")
 
   attr(:socket, :map, required: true)
   attr(:modal, :map, required: true)
@@ -338,7 +338,7 @@ defmodule Frameworks.Pixel.ModalView do
   def full(assigns) do
     ~H"""
     <div class="flex flex-row items-center justify-center w-full h-full">
-    <div class={"modal-full p-4 xl:p-20 w-full h-full"}>
+    <div class={"modal-full p-4 xl:px-20 xl:py-8 w-full h-full"}>
       <div class={"relative flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8 overflow-hidden"}>
           <%!-- HEADER --%>
           <%!-- OPTIONAL LIGHT GREY TITLE THAT DESCRIBES THE CONTEXT OF THE MODAL --%>
@@ -374,7 +374,7 @@ defmodule Frameworks.Pixel.ModalView do
 
   def page(assigns) do
     ~H"""
-      <div class={"modal-page w-[960px] p-4 sm:px-10 sm:py-20 h-full"}>
+      <div class={"modal-page w-[960px] p-4 sm:px-10 sm:py-8 h-full"}>
         <div class={"flex flex-col w-full bg-white rounded shadow-floating h-full pt-4 sm:pt-8"}>
           <%!-- BODY --%>
           <div class="h-full overflow-y-scroll px-8">
@@ -403,7 +403,7 @@ defmodule Frameworks.Pixel.ModalView do
     assigns = assign(assigns, :context, context)
 
     ~H"""
-      <div class={"modal-sheet w-[960px] p-4 sm:px-10 sm:py-20"}>
+      <div class={"modal-sheet w-[960px] p-4 sm:px-10 sm:py-8"}>
         <div class={"relative flex flex-col w-full bg-white rounded shadow-floating pt-8 pb-8"}>
           <%!-- Header with optional context --%>
           <div :if={@context} class="px-8 pb-4">

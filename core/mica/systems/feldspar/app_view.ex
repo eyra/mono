@@ -20,18 +20,18 @@ defmodule Systems.Feldspar.AppView do
   @impl true
   def render(assigns) do
     ~H"""
-      <div class="feldspar-tool lg:px-4 lg:pb-4">
+      <div class="feldspar-tool h-full lg:px-4 lg:pb-4">
         <%!-- Ensure that updates don't alter the hierarchy in front of the iframe.
         Changing the preceding siblings of the iframe would result in a reload of the iframe
         due to Morphdom (https://github.com/patrick-steele-idem/morphdom/issues/200).
           --%>
-        <div phx-update="ignore" id={@key} phx-hook="FeldsparApp"
+        <div class="h-full" phx-update="ignore" id={@key} phx-hook="FeldsparApp"
           data-locale={@locale}
           data-src={@url}
           data-attempt-id={@attempt_id}
           data-participant-task={@participant_task}
           data-upload-context={Jason.encode!(@upload_context)}>
-          <iframe class="w-full outline-none"></iframe>
+          <iframe class="block w-full outline-none [.modal-full_&]:min-h-full"></iframe>
         </div>
       </div>
     """
