@@ -24,7 +24,10 @@ defmodule Next.Systems.WellKnown.Controller do
   signing certificate, and has no team ID, so each environment vouches only for
   its own app: `ANDROID_APP_CERT_FINGERPRINTS` lists
   `<package>=<SHA-256 fingerprint>` per certificate (`config/runtime.exs` refuses
-  a malformed entry). Without one, the file is not found.
+  a malformed entry). Without one, the file is not found. The file vouches for
+  every path (`handle_all_urls`); which ones open in the app is the manifest's
+  choice. Set the fingerprints only once the Android build in use claims no
+  `/assignment/` links (next-android#6).
   """
   use NextWeb, {:controller, [formats: [:json]]}
 
