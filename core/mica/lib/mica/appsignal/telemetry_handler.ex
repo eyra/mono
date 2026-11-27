@@ -7,11 +7,12 @@ defmodule Mica.AppSignal.TelemetryHandler do
       :telemetry.execute([:system, :action, :stop], %{duration: d}, metadata)
       :telemetry.execute([:system, :action, :exception], %{duration: d}, metadata)
       :telemetry.execute([:system, :action, :rate_limited], %{count: 1}, metadata)
+      :telemetry.execute([:system, :action, :count], %{count: n}, metadata)
 
   This handler converts them to AppSignal metrics:
 
   Counters:
-  - `system_action_count` — incremented on :stop
+  - `system_action_count` — incremented on :stop, and by `count` on :count
   - `system_action_error_count` — incremented on :exception
   - `system_action_rate_limited_count` — incremented on :rate_limited
 
@@ -31,7 +32,8 @@ defmodule Mica.AppSignal.TelemetryHandler do
     [:feldspar, :donate],
     [:feldspar, :log],
     [:payment, :reconciliation],
-    [:fund, :auto_approve]
+    [:fund, :auto_approve],
+    [:monitor, :event]
   ]
 
   def attach do
@@ -41,7 +43,12 @@ defmodule Mica.AppSignal.TelemetryHandler do
   def attach(event_prefixes) when is_list(event_prefixes) do
     events =
       Enum.flat_map(event_prefixes, fn prefix ->
-        [prefix ++ [:stop], prefix ++ [:exception], prefix ++ [:rate_limited]]
+        [
+          prefix ++ [:stop],
+          prefix ++ [:exception],
+          prefix ++ [:rate_limited],
+          prefix ++ [:count]
+        ]
       end)
 
     :telemetry.attach_many(
@@ -67,6 +74,9 @@ defmodule Mica.AppSignal.TelemetryHandler do
 
       :rate_limited ->
         Appsignal.increment_counter("#{metric_prefix}_rate_limited_count", 1, tags)
+
+      :count ->
+        Appsignal.increment_counter("#{metric_prefix}_count", measurements.count, tags)
     end
   end
 

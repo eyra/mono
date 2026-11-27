@@ -314,4 +314,69 @@ defmodule Systems.NextAction.PublicTest do
       assert [_] = Public.list_next_actions(user)
     end
   end
+
+  describe "clear_next_action/3 with :params" do
+    test "clears the next action whose params hold the values", %{user: user} do
+      Public.create_next_action(user, TitledAction,
+        key: "k",
+        params: %{"title" => "A", "message" => 1}
+      )
+
+      Public.clear_next_action(user, TitledAction, key: "k", params: %{"message" => 1})
+
+      assert Public.list_next_actions(user) == []
+    end
+
+    test "keeps a next action whose params hold another value", %{user: user} do
+      Public.create_next_action(user, TitledAction,
+        key: "k",
+        params: %{"title" => "B", "message" => 2}
+      )
+
+      Public.clear_next_action(user, TitledAction, key: "k", params: %{"message" => 1})
+
+      assert [%{title: "B"}] = Public.list_next_actions(user)
+    end
+
+    test "clears a next action whose params don't hold the param", %{user: user} do
+      Public.create_next_action(user, TitledAction, key: "k", params: %{"title" => "A"})
+
+      Public.clear_next_action(user, TitledAction, key: "k", params: %{"message" => 1})
+
+      assert Public.list_next_actions(user) == []
+    end
+  end
+
+  # A next action stored by a later release whose type this release doesn't
+  # have (after a rollback, or on an old machine during a rolling deploy).
+  describe "a next action of a type this release doesn't have" do
+    setup %{user: user} do
+      Public.create_next_action(user, TitledAction, params: %{"title" => "Known"})
+
+      Repo.insert!(%NextAction.Model{
+        user_id: user.id,
+        action: "Elixir.Systems.NotInThisRelease.NextActions.Unknown",
+        params: %{},
+        count: 1,
+        priority: :high
+      })
+
+      :ok
+    end
+
+    test "is left out of the list", %{user: user} do
+      assert [%{title: "Known"}] = Public.list_next_actions(user)
+    end
+
+    test "isn't the next best action; the next known one is", %{user: user} do
+      assert %{title: "Known"} = Public.next_best_action(user)
+    end
+
+    test "nor is a module that isn't a next action type", %{user: user} do
+      from(na in NextAction.Model, where: na.action != ^to_string(TitledAction))
+      |> Repo.update_all(set: [action: "Elixir.Systems.NextAction.Model"])
+
+      assert [%{title: "Known"}] = Public.list_next_actions(user)
+    end
+  end
 end

@@ -45,8 +45,8 @@ defmodule Systems.Admin.Panel do
   @callback live_view() :: module()
 
   @doc """
-  The live context of the live view: the page's context (`current_user`,
-  `locale`, `is_admin?`, `governable_orgs`), extended with what the view needs.
+  The live context of the live view: the page's context (`current_user_id`,
+  `locale`, `is_admin?`), extended with what the view needs.
   """
   @callback live_context(live_context()) :: live_context()
 

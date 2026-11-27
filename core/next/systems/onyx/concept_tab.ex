@@ -12,7 +12,7 @@ defmodule Next.Systems.Onyx.ConceptTab do
   @impl true
   def mount(
         :not_mounted_at_router,
-        %{"title" => title, "concepts" => concepts, "user" => user, "depth" => depth},
+        %{"title" => title, "concepts" => concepts, "user_id" => user_id, "depth" => depth},
         socket
       ) do
     {
@@ -21,7 +21,7 @@ defmodule Next.Systems.Onyx.ConceptTab do
       |> assign(
         title: title,
         concepts: concepts,
-        user: user,
+        user_id: user_id,
         depth: depth
       )
       |> update_cards()
@@ -37,7 +37,7 @@ defmodule Next.Systems.Onyx.ConceptTab do
   def handle_event(
         "card_clicked",
         %{"item" => id},
-        %{assigns: %{user: user, depth: depth}} = socket
+        %{assigns: %{user_id: user_id, depth: depth}} = socket
       ) do
     concept_id = id |> String.split("-") |> List.last() |> String.to_integer()
 
@@ -45,7 +45,7 @@ defmodule Next.Systems.Onyx.ConceptTab do
       LiveNest.Modal.prepare_live_view(
         "concept-modal",
         Next.Systems.Onyx.ConceptView,
-        session: [id: concept_id, user: user, depth: depth + 1],
+        session: [id: concept_id, user_id: user_id, depth: depth + 1],
         style: :full
       )
 

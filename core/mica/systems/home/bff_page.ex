@@ -321,5 +321,8 @@ defmodule Systems.Home.BFFPage do
   end
 
   defp to(%{type: :redirect, to: to}), do: to
+  # A notification's button POSTs on the web (`Notify.Public.open_action/2`); the
+  # app opens where it leads, which marks nothing seen.
+  defp to(%{type: :http_post, destination: destination}), do: destination
   defp to(_action), do: nil
 end
